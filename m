@@ -1,172 +1,98 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD1B20FE
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:19:32 +0000 (UTC)
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-63cfd68086dso26328406d6.1
-        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 09:19:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEA420FE
+	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:50:59 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-583d1d0de65so56992947b3.0
+        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 09:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691425171; x=1692029971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LPJnGrRfrqTcFmM1+fKcLOPow/cxlZkJNS27itglHYY=;
-        b=p9f8T/0c2mLFtWQTlr7f8LDvoDunJVOgB6fGL1rGBgdw1Pfh0bq1W2adT1arcPAPss
-         GxDg9zHzK6ZsiKW6CV8daCmVtwVMVoJtxylgiMAg2V/QvuHKdR3V8J78dU2GuqzImcz+
-         BrPvvXG33syUZEhv1Bkc8AUNC2Oj5B3aZIIAwBsaKBsw1igREq1Of5NtiW3HMAfmByO4
-         azORNELxRrYfxDRHi8p7C+P8GzFLPVh/aSdkvI3thYbbap/oPFKf7vADq3UkA+o7eJnx
-         y42w9ElPwpDuqDF8gAqTqCSGgOcJ9pcymUu4GvhVZNpy4V2RCXM2ymmx8JFkGXTvE8QX
-         +UpA==
+        d=google.com; s=20221208; t=1691427059; x=1692031859;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+DH1RGsmuAo7vrM49oUA1O8QELPBtiixKmknDzKlrMs=;
+        b=UcHqa2R41JL5C38LwWIBt1mJ8uByZE/Xlbtryhjq0yCeZ6PnmszUdnIGGJIDIeCLi8
+         izw5ctPRXAuigX+MwUivoQlyykmafMQntoahk+xwngh3F3EGGkXCPyGtgs7pDJHUztcc
+         KgP4bdF8yo/CXbiMEgD74mER7n9AKk1iGRVqBEq7wfXQoeiJ+xiH7ifIbrHM4f5b2k4l
+         IOoba3EUMrJutY0FqS3n3c6i49D0hNSdz7Q+U3XzX3L9+0JhBUN87PvlQGHGV67XrqX6
+         aqL2eFZEpykmK3Mg3eJCmPZlMl3hQE0z+z7JMNgBk1YUtISVT/vwtxVMll1SH7S/k/41
+         l7ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691425171; x=1692029971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LPJnGrRfrqTcFmM1+fKcLOPow/cxlZkJNS27itglHYY=;
-        b=J8PUUt4q58hqUOQF8iTihGFbZkECM+3ydD4fmDLdSncpGCPhA9kEH8Cxf6VwuAGNsd
-         XEPTGCKxA4zY+JDlWYUG6CeVDk9UCcmc736RSlOTQR7r5aoufsdJFnAcTRJbScAMz0Nk
-         Pk1ka2R7LenX/VWqtPo7Jl7l3/RFOmTPpjafecVtCoU17OHWnVcL+rHFneOnFziarbFY
-         jrlMOBmOgQyTk/onWRa7uu2o68ig25RLWUXDDYGqwsdAyhIAECLQN33fE6v7V4H/37aq
-         YKLN/5Fd820sQ5JNZ+Fw/dBYlTuOLt4Vehs637TGIs5OeyJ5nZS5sUQOxDMwdsm2amug
-         WY6w==
-X-Gm-Message-State: AOJu0Yw41eZ1YhRBNpKCboGH/livDwwI1VBrGnbN+GC/hv6N2RWKTiLj
-	IV9wnDgD8ViTYcG/4tszIx1Rl5ZuP2CHRypejkpYBCXJzsjgqzoZx3s=
-X-Google-Smtp-Source: AGHT+IEoEDNA6GxnW+ViDsmeCqIO9Q5P6sp4c349+g/L2BJWZ2fenuHgxtv40V7icYfhg/FegnnWJ0s5h88o+1Fs71k=
-X-Received: by 2002:a0c:9ccc:0:b0:630:7a8:f602 with SMTP id
- j12-20020a0c9ccc000000b0063007a8f602mr7673549qvf.7.1691425170989; Mon, 07 Aug
- 2023 09:19:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691427059; x=1692031859;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+DH1RGsmuAo7vrM49oUA1O8QELPBtiixKmknDzKlrMs=;
+        b=cyUfu00XdtcP6Ms+/eogsId/Q2jS2QVCCvCe72GQHwg9uhym2waGQg3wH26+oFMt75
+         uE1NjfOk34LOUBNcvOQZNbH8TDTWSgmcNoNoVpM5X9zQDYpXRh1WftX7p6wLCfSD2P/X
+         4u1hm6erLMkiS0CEXFYjwTwO2JvcB63LAwDAbllRtOfxStjAjxmiSiX4bbC1r6V5uxRi
+         txO9qDzDmOq3vG+UBRc/pX/pGWQNSxEoFH/hPaVwl66V4O1rc6QkftXgQ45QhloIaAVH
+         Nv9oZhv0j/6i2RhLe4jpOdNZIQ+dztgSncuyi7GU4gHemiLTWc+rpTyRpH0Sd9Q7QvXw
+         rzaQ==
+X-Gm-Message-State: AOJu0YyGrbb3pYhlG52kuwSvUe8XI5srX8zE6hpl6frbcscxPjIK5hky
+	DdqAWBH76arK4Z4IFvTjplyJsK9fnIgmOwtmMw0=
+X-Google-Smtp-Source: AGHT+IGuAP8rnQ8ZbxkJ9M/ve9RTC6jY6Usa6MkjZJQMxI+QRocRxszMBKkMFRYH6dyg+LQrAT7iExlQ5heullsOMDA=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:4746:957d:1a28:5104])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:b144:0:b0:56f:f77c:3c7d with SMTP
+ id p65-20020a81b144000000b0056ff77c3c7dmr77675ywh.3.1691427058981; Mon, 07
+ Aug 2023 09:50:58 -0700 (PDT)
+Date: Mon, 07 Aug 2023 09:50:32 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202308040553.nMR9oB8v-lkp@intel.com> <20230804153749.GA2148888@dev-arch.thelio-3990X>
- <CAKwvOdk7VrGMy95heyyLhdhgNWb1LyV48WmzvhpNUrqaYBin_A@mail.gmail.com> <2a1061fb250905545c4a514b5328e3d36ab6f8f7.camel@intel.com>
-In-Reply-To: <2a1061fb250905545c4a514b5328e3d36ab6f8f7.camel@intel.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIANcg0WQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDCwNz3dzM4uLMvPT4gqL8knxdg+QkS4PUZDMTU5NkJaCegqLUtMwKsHn RsbW1AANxIeRfAAAA
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691427057; l=1415;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=3s6B3WRHZwONDqr660gEy+YqAcQ7kOQd/SC/ue2x6Kc=; b=o9mPOXezO1m1peqnQnJ9Xh9NmpG6OGUleGqyCPai/FHu3L5j1iHQdxfIhbIC4aYIa1C1emYrj
+ fT1jBNQi6XgDsLGtvc8W9xWd9BF1MF+sBN52XQfIibvFQNPns+iYt/y
+X-Mailer: b4 0.12.3
+Message-ID: <20230807-missing_proto-v1-1-7f566b7ba5ca@google.com>
+Subject: [PATCH] Makefile.extrawarn: enable -Wmissing-variable-declarations
+ for W=1
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 7 Aug 2023 09:19:20 -0700
-Message-ID: <CAKwvOd=LMeeeA68ydcQtFgzd1vv0F4i=DJYCxEiHahN7+OP5_A@mail.gmail.com>
-Subject: Re: [stable:linux-4.14.y 4459/9999] lib/mpi/mpih-div.c:142:20: error:
- invalid use of a cast in a inline asm context requiring an lvalue: remove the
- cast or build with -fheinous-gnu-extensions
-To: "Liu, Yujie" <yujie.liu@intel.com>
-Cc: "nathan@kernel.org" <nathan@kernel.org>, lkp <lkp@intel.com>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Sun, Aug 6, 2023 at 11:52=E2=80=AFPM Liu, Yujie <yujie.liu@intel.com> wr=
-ote:
->
-> On Fri, 2023-08-04 at 08:41 -0700, Nick Desaulniers wrote:
-> > On Fri, Aug 4, 2023 at 8:37=E2=80=AFAM Nathan Chancellor <nathan@kernel=
-.org>
-> > wrote:
-> > >
-> > > On Fri, Aug 04, 2023 at 05:32:55AM +0800, kernel test robot wrote:
-> > > > Hi Fangrui,
-> > > >
-> > > > First bad commit (maybe !=3D root cause):
-> > > >
-> > > > tree:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
-.git
-> > > >  linux-4.14.y
-> > > > head:   60a6e3043cc8b918c989707a5eba5fd6830a08a4
-> > > > commit: 71749b1181eca12af96654a781cabcd058c37c8f [4459/9999]
-> > > > Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross
-> > > > compilation
-> > > > config: mips-randconfig-r035-20230731
-> > > > (https://download.01.org/0day-ci/archive/20230804/202308040553.nM
-> > > > R9oB8v-lkp@intel.com/config)
-> > > > compiler: clang version 17.0.0
-> > > > (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1
-> > > > ffa0299048db4c88a)
-> > > > reproduce:
-> > > > (https://download.01.org/0day-ci/archive/20230804/202308040553.nM
-> > > > R9oB8v-lkp@intel.com/reproduce)
-> > > >
-> > > > If you fix the issue in a separate patch/commit (i.e. not just a
-> > > > new version of
-> > > > the same patch/commit), kindly add following tags
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > Closes:
-> > > > > https://lore.kernel.org/oe-kbuild-all/202308040553.nMR9oB8v-lkp@i=
-ntel.com/
-> > > >
-> > > > All errors (new ones prefixed by >>):
-> > > >
-> > > > > > lib/mpi/mpih-div.c:142:20: error: invalid use of a cast in a
-> > > > > > inline asm context requiring an lvalue: remove the cast or
-> > > > > > build with -fheinous-gnu-extensions
-> > > >      142 |                                         umul_ppmm(n1,
-> > > > n0, d0, q);
-> > > >          |
-> > > > ~~~~~~~~~~~~~~^~~~~~~~~~
-> > > >    lib/mpi/longlong.h:652:20: note: expanded from macro
-> > > > 'umul_ppmm'
-> > > >      652 |         : "=3Dl" ((USItype)(w0)), \
-> > > >          |                 ~~~~~~~~~~^~~
-> > >
-> > > This is the same as [1] but the upstream solution (b0c091ae04f6)
-> > > could
-> > > cause breakage in 4.14 for compilers older than GCC 4.4; 4.14
-> > > claims to
-> > > support GCC 3.2 as a minimum version. An alternative solution if we
-> > > care
-> > > about fixing this issue in 4.14 without any regression possiblity
-> > > would
-> > > be something like:
-> >
-> > In our own CI, we don't test mips until 5.4.
-> > https://github.com/ClangBuiltLinux/continuous-integration2/blob/main/ge=
-nerator.yml#L1691-L1698
-> >
-> > Another solution is perhaps to ask kindly that the kernel test robot
-> > team not test branches of stable w/ clang for ARCH=3Dmips.
+I noticed Tom was sending patches where smatch was recommending
+annotating functions as static when no previous declaration existed.
+Surely the compiler could make such recommendations as well, I thought.
 
-^ specifically branches linux-4.19.y and linux-4.14.y.  Newer branches
-should be tested for ARCH=3Dmips LLVM=3D1.
+Looks like -Wmissing-variable-declarations can make such
+recommendations.
 
->
-> Thanks for this info. We've configured the kernel test robot to do so.
->
-> --
-> Best Regards,
-> Yujie
->
-> >
-> > >
-> > > diff --git a/lib/mpi/longlong.h b/lib/mpi/longlong.h
-> > > index 6c5229f98c9e..42076c124e23 100644
-> > > --- a/lib/mpi/longlong.h
-> > > +++ b/lib/mpi/longlong.h
-> > > @@ -639,7 +639,7 @@ do { \
-> > >         **************  MIPS  *****************
-> > >         ***************************************/
-> > >  #if defined(__mips__) && W_TYPE_SIZE =3D=3D 32
-> > > -#if (__GNUC__ >=3D 5) || (__GNUC__ >=3D 4 && __GNUC_MINOR__ >=3D 4)
-> > > +#if (__GNUC__ >=3D 5) || (__GNUC__ >=3D 4 && __GNUC_MINOR__ >=3D 4) =
-||
-> > > defined(__clang__)
-> > >  #define umul_ppmm(w1, w0, u, v)                        \
-> > >  do {                                           \
-> > >         UDItype __ll =3D (UDItype)(u) * (v);      \
-> > >
-> > > [1]:
-> > > https://lore.kernel.org/20230801202602.GA2589710@dev-arch.thelio-3990=
-X/
-> > >
-> > > Cheers,
-> > > Nathan
-> > >
-> >
-> >
->
+GCC just added support for this warning (gcc 14.1.0 will ship with
+support), and all versions of clang relevant to building the kernel
+support this flag.
 
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ scripts/Makefile.extrawarn | 1 +
+ 1 file changed, 1 insertion(+)
 
---=20
-Thanks,
-~Nick Desaulniers
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index 40cd13eca82e..617739eb84e2 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -32,6 +32,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wunused-but-set-variable)
+ KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
+ KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
+ KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
++KBUILD_CFLAGS += $(call cc-option, -Wmissing-varibale-declarations)
+ # The following turn off the warnings enabled by -Wextra
+ KBUILD_CFLAGS += -Wno-missing-field-initializers
+ KBUILD_CFLAGS += -Wno-sign-compare
+
+---
+base-commit: 52a93d39b17dc7eb98b6aa3edb93943248e03b2f
+change-id: 20230807-missing_proto-0cb90ec6454c
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
+
