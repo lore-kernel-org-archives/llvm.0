@@ -1,125 +1,187 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx1.mythic-beasts.com (mx1.mythic-beasts.com [46.235.224.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFE03C2B
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 17:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691430621;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RVWpo9dtMcfXZikIWm7EwJE5j8tZz3W+DliGXUaIHIo=;
-	b=ihbGsTRKrRW8kOqHwF61gxrc+knnerqVyEmP1a0zczcaU6lac+GeDU4f5n17cCSfY35r5T
-	OBGFCUjZEim04bx6EKM2bzgmb3tXx2auegG1YGgDZ3+1YuLSefnvg/XbrxQ2fv6NjfWRbe
-	gCIUqCxnSOycU8+uuKkNP1dHaf4563o=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-MrU7dk2OOt-BQHAz2u6qBw-1; Mon, 07 Aug 2023 13:50:20 -0400
-X-MC-Unique: MrU7dk2OOt-BQHAz2u6qBw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 855CA3801F66
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 17:50:19 +0000 (UTC)
-Received: from [172.64.4.35] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 72B4840D2839;
-	Mon,  7 Aug 2023 17:50:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 15 of 328): Test report for master
- (6.5.0-rc5, mainline.kernel.org-clang, 52a93d39)
-Date: Mon, 07 Aug 2023 17:50:19 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9837C15ACD;
+	Mon,  7 Aug 2023 19:53:03 +0000 (UTC)
+Received: by mailhub-cam-d.mythic-beasts.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <jic23@jic23.retrosnub.co.uk>)
+	id 1qT603-006bGM-IH; Mon, 07 Aug 2023 20:34:44 +0100
+Date: Mon, 7 Aug 2023 20:34:21 +0100
+From: Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
+To: kernel test robot <lkp@intel.com>
+Cc: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>
+Subject: Re: drivers/iio/light/opt4001.c:215:9: error: call to
+ '__compiletime_assert_355' declared with 'error' attribute: FIELD_PREP:
+ value too large for the field
+Message-ID: <20230807203421.4b62f931@jic23-huawei>
+In-Reply-To: <202308061902.0gVz6bSe-lkp@intel.com>
+References: <202308061902.0gVz6bSe-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <07063.123080713502000503@us-mta-648.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-BlackCat-Spam-Score: 4
+X-Spam-Status: No, score=0.4
 
-Hi, we tested your kernel and here are the results:
+On Sun, 6 Aug 2023 20:00:10 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   f0ab9f34e59e0c01a1c31142e0b336245367fd86
+> commit: 9a9608418292bb8733805c3f3123dfe0454fadac iio: light: Add support for TI OPT4001 light sensor
+> date:   3 months ago
+> config: s390-randconfig-r034-20230806 (https://download.01.org/0day-ci/archive/20230806/202308061902.0gVz6bSe-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230806/202308061902.0gVz6bSe-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308061902.0gVz6bSe-lkp@intel.com/
+> 	
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/iio/light/opt4001.c:16:
+>    In file included from include/linux/regmap.h:20:
+>    In file included from include/linux/iopoll.h:14:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/s390/include/asm/io.h:75:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      547 |         val = __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+>          |                                                           ^
+>    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+>      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>          |                                                      ^
+>    In file included from drivers/iio/light/opt4001.c:16:
+>    In file included from include/linux/regmap.h:20:
+>    In file included from include/linux/iopoll.h:14:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/s390/include/asm/io.h:75:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+>          |                                                           ^
+>    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+>      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+>          |                                                      ^
+>    In file included from drivers/iio/light/opt4001.c:16:
+>    In file included from include/linux/regmap.h:20:
+>    In file included from include/linux/iopoll.h:14:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/s390/include/asm/io.h:75:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      692 |         readsb(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      700 |         readsw(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      708 |         readsl(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      717 |         writesb(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      726 |         writesw(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      735 |         writesl(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+> >> drivers/iio/light/opt4001.c:215:9: error: call to '__compiletime_assert_355' declared with 'error' attribute: FIELD_PREP: value too large for the field  
+>      215 |         reg |= FIELD_PREP(OPT4001_CTRL_CONV_TIME_MASK, chip->int_time);
+>          |                ^
+>    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+>      114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+>          |                 ^
+>    include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
+>       68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+>          |                 ^
+>    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+>       39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>          |                                     ^
+>    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>    include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
+>      385 |         __compiletime_assert(condition, msg, prefix, suffix)
+>          |         ^
+>    include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
+>      378 |                         prefix ## suffix();                             \
+>          |                         ^
+>    <scratch space>:55:1: note: expanded from here
+>       55 | __compiletime_assert_355
+>          | ^
+>    12 warnings and 1 error generated.
+> 
+> 
+> vim +215 drivers/iio/light/opt4001.c
+> 
+>    207	
+>    208	static int opt4001_set_conf(struct opt4001_chip *chip)
+>    209	{
+>    210		struct device *dev = &chip->client->dev;
+>    211		u16 reg;
+>    212		int ret;
+>    213	
+>    214		reg = FIELD_PREP(OPT4001_CTRL_RANGE_MASK, OPT4001_CTRL_LIGHT_SCALE_AUTO);
+>  > 215		reg |= FIELD_PREP(OPT4001_CTRL_CONV_TIME_MASK, chip->int_time);  
+>    216		reg |= FIELD_PREP(OPT4001_CTRL_OPER_MODE_MASK, OPT4001_CTRL_OPER_MODE_CONTINUOUS);
+>    217	
+>    218		ret = regmap_write(chip->regmap, OPT4001_CTRL, reg);
+>    219		if (ret)
+>    220			dev_err(dev, "Failed to set configuration\n");
+>    221	
+>    222		return ret;
+>    223	}
+>    224	
+
+This took me a few mins to conjecture what it might be finding.
+I think it's managing to spot the missing divide by 2 in here which ends up in int_time
+and could potentially go as high as 21 - overflowing the field,
+
+static int opt4001_als_time_to_index(const u32 als_integration_time)
+{
+	int i;
+
+	for (i = 0; i < ARRAY_SIZE(opt4001_int_time_available); i++) {
+		if (als_integration_time == opt4001_int_time_available[i][1])
+			return i;
+	}
+
+	return -EINVAL;
+}
+
+ARRAY_SIZE is applied to an Nx2 array so that should be ARRAY_SIZE()/2 to index over just
+the first dimension as intended.  I'll send a patch shortly once I've checked with the
+reproducer.  It's a bug either way (I think!)
+
+Jonathan
 
 
-Kernel information:
-    Commit message: Linux 6.5-rc5
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/98750
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9035475
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+> 
 
