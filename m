@@ -1,128 +1,240 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE3B1B7F5
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 19:46:13 +0000 (UTC)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1bb7a1c2fe5so4538480fac.2
-        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 12:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691523972; x=1692128772;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9KuQiWPsMzezA39YuUytzgBke/H6T7Lw4RPBi8dLsgA=;
-        b=56/3BFdV+0rwUpOMoe531qh++L8MmFT1ipNBnSW8Xe8QNIXT7OVFGKaOg0Hr214itN
-         ZMPJDVGf3yKENuno6lyzVe7IPKuYb82/Sr8hvy46/dIHfm4iZ4LxLVaaxoY9+3ixb5PP
-         ukeucFJPAKftlQCmLUw30G2LdKS6KlKzDhMHAqE4B1dIRvGWKpFhBLP7cXgllYtl3Do9
-         1/0IciTaTcMjaf3LcvAbmhMx/+h3XM0sgCQmZyKjh8uZSlf4ww3T4ETDdhsnFZPiTtyj
-         KmGSNABwCu92WU12R68IIYRE29esfPQuN0PaCdpwm8rNH/XfvCOxOZEBxLkdOXISvFCI
-         kdXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691523972; x=1692128772;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9KuQiWPsMzezA39YuUytzgBke/H6T7Lw4RPBi8dLsgA=;
-        b=XHgYY4lsG6N+bdzt1P3chksiOQjrfhjJOBl2Wry7TwJj9hzz8vsLSU0Ww5/8TeD9dy
-         RCcyMy8z6o3KmwNwPDvNpRPmdowgQbRdEStLCDvFDsd0BnAVyJydWTpFjvOkNlwCiSYb
-         CFz+CFubNPZHxKG4FVu551avVS8vy1ln+V0Kh1xFcXL+eCD/3DNU9ZMFMMePSS2cUHWu
-         Lu0zSOJG0xEVpX2zEZqqAfdc2KtDvVJ9/wlFo9Fnb3yQMtK6umP9zdUSsdRJDpBd2IkI
-         EZhEVnEye0xEq1mR7ZrYtU4ajXRnymPl55/uYkM+2vNwpe/TL2wk9Wj17t7ldWLhjZwX
-         AIjA==
-X-Gm-Message-State: AOJu0YzA31E1PhWZiZ0AYaNcwkr1QCsOYiXQLjh3UaWBSZHaVSVMBe7h
-	bSGnRL3Rtvy8EJKpbl2iJ3rzoSTuOBrB6gk3eMPSaw==
-X-Google-Smtp-Source: AGHT+IEvWYAo0QTg3GG3URcdRygFfW2mZOSxH7bMv/QiDMQKFQEFeTj6BymrA13gIhuMptvBR0owPOqjpwaiVZIOhqw=
-X-Received: by 2002:a05:6870:b604:b0:1b3:977b:8201 with SMTP id
- cm4-20020a056870b60400b001b3977b8201mr756728oab.7.1691523971998; Tue, 08 Aug
- 2023 12:46:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8858F69;
+	Tue,  8 Aug 2023 20:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691525869; x=1723061869;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Es2qusPBI+Upp+gjA6iZyfm+jjbTtNkyAFCBl7xskTc=;
+  b=aTgTeL69dlcjh8Y/jeH7kTIE4yNAWqlfB1iXvsgULEygCUANrHFJrkrX
+   plbnPBbpFjtwXFi8Rfr66n+D+l5WvNPq7goAW6UUJAVytRQvHPuH8aRJr
+   DQ9OcT+OX4hjNtPL4bjGKRRK2GiOsTfQ8OGhpKekKDFcADoqd3foKVeu8
+   sAyGYl9PekmbW+2JdDJZOBLylcjrno4HfodwXaEVXvTr2UZi8o3YIa5sv
+   2xEHSEmNRlAn7tXCJBdnTZz8swOq6OEqFncl2MXH4pVHIUdJC82Cxe7An
+   EkX6nIpBOXsYngb1JSoO5NLYyMeMoS+IveQELyER1SJeQMz033wsWMvqB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="355903485"
+X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
+   d="scan'208";a="355903485"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 13:17:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="708401073"
+X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
+   d="scan'208";a="708401073"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Aug 2023 13:17:12 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTT8g-0005aM-2e;
+	Tue, 08 Aug 2023 20:17:10 +0000
+Date: Wed, 9 Aug 2023 04:16:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Kan Liang <kan.liang@linux.intel.com>, Like Xu <likexu@tencent.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Zhenyu Wang <zhenyuw@linux.intel.com>,
+	Zhang Xiong <xiong.y.zhang@intel.com>,
+	Lv Zhiyuan <zhiyuan.lv@intel.com>,
+	Yang Weijiang <weijiang.yang@intel.com>,
+	Dapeng Mi <dapeng1.mi@intel.com>
+Subject: Re: [PATCH RFV v2 08/13] perf/core: Add new function
+ perf_event_topdown_metrics()
+Message-ID: <202308090418.vTakFy6e-lkp@intel.com>
+References: <20230808063111.1870070-9-dapeng1.mi@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202308090204.9yZffBWo-lkp@intel.com>
-In-Reply-To: <202308090204.9yZffBWo-lkp@intel.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 8 Aug 2023 12:46:00 -0700
-Message-ID: <CAKwvOd=c94gknBq7TUsQEyC095+1iRW540=xD3zRkf3+Q4vn5Q@mail.gmail.com>
-Subject: Re: error: A dwo section may not contain relocations
-To: kernel test robot <lkp@intel.com>, Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>, Conor Dooley <conor@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230808063111.1870070-9-dapeng1.mi@linux.intel.com>
 
-On Tue, Aug 8, 2023 at 12:02=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   02aee814d37c563e24b73bcd0f9cb608fbd403d4
-> commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBU=
-G_INFO selectable from a choice
-> date:   1 year, 5 months ago
-> config: riscv-randconfig-r001-20230808 (https://download.01.org/0day-ci/a=
-rchive/20230809/202308090204.9yZffBWo-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git =
-f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Dapeng,
 
-FWIW, I wasn't able to reproduce with the provided config and
-clang-17.  Perhaps this is a bug for older clang releases (the bot
-tested with clang-14).
+kernel test robot noticed the following build warnings:
 
-> reproduce: (https://download.01.org/0day-ci/archive/20230809/202308090204=
-.9yZffBWo-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308090204.9yZffBWo-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
-> >> error: A dwo section may not contain relocations
->    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
->    20 errors generated.
->    make[2]: *** [scripts/Makefile.build:288: arch/riscv/kernel/vdso/vgett=
-imeofday.o] Error 1 shuffle=3D3686795728
->    make[2]: Target 'include/generated/vdso-offsets.h' not remade because =
-of errors.
->    make[1]: *** [arch/riscv/Makefile:120: vdso_prepare] Error 2 shuffle=
-=3D3686795728
->    make[1]: Target 'prepare' not remade because of errors.
->    make: *** [Makefile:219: __sub-make] Error 2 shuffle=3D3686795728
->    make: Target 'prepare' not remade because of errors.
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+[auto build test WARNING on next-20230808]
+[cannot apply to kvm/queue acme/perf/core tip/perf/core kvm/linux-next v6.5-rc5 v6.5-rc4 v6.5-rc3 linus/master v6.5-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dapeng-Mi/KVM-x86-pmu-Support-PMU-fixed-counter-3/20230809-030457
+base:   next-20230808
+patch link:    https://lore.kernel.org/r/20230808063111.1870070-9-dapeng1.mi%40linux.intel.com
+patch subject: [PATCH RFV v2 08/13] perf/core: Add new function perf_event_topdown_metrics()
+config: arm-randconfig-r046-20230808 (https://download.01.org/0day-ci/archive/20230809/202308090418.vTakFy6e-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230809/202308090418.vTakFy6e-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308090418.vTakFy6e-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/sched/build_policy.c:34:
+   In file included from kernel/sched/sched.h:61:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1793:18: warning: declaration of 'struct td_metrics' will not be visible outside of this function [-Wvisibility]
+                                                struct td_metrics *value)
+                                                       ^
+   1 warning generated.
+--
+   In file included from kernel/sched/fair.c:56:
+   In file included from kernel/sched/sched.h:61:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1793:18: warning: declaration of 'struct td_metrics' will not be visible outside of this function [-Wvisibility]
+                                                struct td_metrics *value)
+                                                       ^
+   kernel/sched/fair.c:702:6: warning: no previous prototype for function 'update_entity_lag' [-Wmissing-prototypes]
+   void update_entity_lag(struct cfs_rq *cfs_rq, struct sched_entity *se)
+        ^
+   kernel/sched/fair.c:702:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void update_entity_lag(struct cfs_rq *cfs_rq, struct sched_entity *se)
+   ^
+   static 
+   kernel/sched/fair.c:12732:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
+   void free_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12732:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void free_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:12734:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+       ^
+   kernel/sched/fair.c:12734:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+   ^
+   static 
+   kernel/sched/fair.c:12739:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
+   void online_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12739:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void online_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:12741:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
+   void unregister_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12741:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void unregister_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:503:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
+   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
+                      ^
+   kernel/sched/fair.c:524:19: warning: unused function 'tg_is_idle' [-Wunused-function]
+   static inline int tg_is_idle(struct task_group *tg)
+                     ^
+   kernel/sched/fair.c:548:19: warning: unused function 'max_vruntime' [-Wunused-function]
+   static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
+                     ^
+   kernel/sched/fair.c:1262:20: warning: unused function 'is_core_idle' [-Wunused-function]
+   static inline bool is_core_idle(int cpu)
+                      ^
+   kernel/sched/fair.c:3452:20: warning: unused function 'account_numa_enqueue' [-Wunused-function]
+   static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
+                      ^
+   kernel/sched/fair.c:3456:20: warning: unused function 'account_numa_dequeue' [-Wunused-function]
+   static inline void account_numa_dequeue(struct rq *rq, struct task_struct *p)
+                      ^
+   kernel/sched/fair.c:3460:20: warning: unused function 'update_scan_period' [-Wunused-function]
+   static inline void update_scan_period(struct task_struct *p, int new_cpu)
+                      ^
+   kernel/sched/fair.c:4872:20: warning: unused function 'cfs_rq_is_decayed' [-Wunused-function]
+   static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+                      ^
+   kernel/sched/fair.c:4887:20: warning: unused function 'remove_entity_load_avg' [-Wunused-function]
+   static inline void remove_entity_load_avg(struct sched_entity *se) {}
+                      ^
+   kernel/sched/fair.c:6259:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
+   static inline bool cfs_bandwidth_used(void)
+                      ^
+   kernel/sched/fair.c:6267:20: warning: unused function 'sync_throttle' [-Wunused-function]
+   static inline void sync_throttle(struct task_group *tg, int cpu) {}
+                      ^
+   kernel/sched/fair.c:6280:19: warning: unused function 'throttled_lb_pair' [-Wunused-function]
+   static inline int throttled_lb_pair(struct task_group *tg,
+                     ^
+   kernel/sched/fair.c:6291:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
+   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+                                       ^
+   kernel/sched/fair.c:6295:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
+   static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+                      ^
+   kernel/sched/fair.c:6296:20: warning: unused function 'update_runtime_enabled' [-Wunused-function]
+   static inline void update_runtime_enabled(struct rq *rq) {}
+                      ^
+   kernel/sched/fair.c:6297:20: warning: unused function 'unthrottle_offline_cfs_rqs' [-Wunused-function]
+   static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
+                      ^
+   22 warnings generated.
+--
+   In file included from kernel/sched/core.c:13:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1793:18: warning: declaration of 'struct td_metrics' will not be visible outside of this function [-Wvisibility]
+                                                struct td_metrics *value)
+                                                       ^
+   kernel/sched/core.c:3695:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
+   static inline bool rq_has_pinned_tasks(struct rq *rq)
+                      ^
+   kernel/sched/core.c:5822:20: warning: unused function 'sched_tick_start' [-Wunused-function]
+   static inline void sched_tick_start(int cpu) { }
+                      ^
+   kernel/sched/core.c:5823:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
+   static inline void sched_tick_stop(int cpu) { }
+                      ^
+   kernel/sched/core.c:6523:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
+   static inline void sched_core_cpu_starting(unsigned int cpu) {}
+                      ^
+   kernel/sched/core.c:6524:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
+   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
+                      ^
+   kernel/sched/core.c:6525:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
+   static inline void sched_core_cpu_dying(unsigned int cpu) {}
+                      ^
+   7 warnings generated.
 
 
+vim +1793 include/linux/perf_event.h
 
---=20
-Thanks,
-~Nick Desaulniers
+  1791	
+  1792	static inline int perf_event_topdown_metrics(struct perf_event *event,
+> 1793						     struct td_metrics *value)
+  1794	{
+  1795		return 0;
+  1796	}
+  1797	#endif
+  1798	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
