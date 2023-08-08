@@ -1,93 +1,149 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA3B100A1
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 11:41:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691494875;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LpOwTgxUQueKTTwOJlS9a4DMbQJlgeLRkDEjrIokCAc=;
-	b=gAXqmIRTwa0m3jEFUCWB6hqFpkJjJAVxX7IlVunOnMqmK05eh8tPHnDv9Y7Q352hrhAYSt
-	WPdWqxzLNMI7DtnZxMIJ3RWYegiMr3KzOcyui80uS8q3x4+LMsyTWjgb0ArjDI+beGrOTN
-	WqMUCrMx1EcPgpTl/rR3S3CU14cQ9VY=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-678-x_BVl-L4N6OBZSXsqfsgqg-1; Tue, 08 Aug 2023 07:41:11 -0400
-X-MC-Unique: x_BVl-L4N6OBZSXsqfsgqg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CFA37381AE42;
-	Tue,  8 Aug 2023 11:41:09 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.12])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 462E41121314;
-	Tue,  8 Aug 2023 11:41:06 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Marco Elver <elver@google.com>,  Andrew Morton
- <akpm@linux-foundation.org>,  Kees Cook <keescook@chromium.org>,  Guenter
- Roeck <linux@roeck-us.net>,  Mark Rutland <mark.rutland@arm.com>,  Steven
- Rostedt <rostedt@goodmis.org>,  Marc Zyngier <maz@kernel.org>,  Oliver
- Upton <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,
-  Suzuki K Poulose <suzuki.poulose@arm.com>,  Zenghui Yu
- <yuzenghui@huawei.com>,  Catalin Marinas <catalin.marinas@arm.com>,  Will
- Deacon <will@kernel.org>,  Nathan Chancellor <nathan@kernel.org>,  Nick
- Desaulniers <ndesaulniers@google.com>,  Tom Rix <trix@redhat.com>,  Miguel
- Ojeda <ojeda@kernel.org>,  linux-arm-kernel@lists.infradead.org,
-  kvmarm@lists.linux.dev,  linux-kernel@vger.kernel.org,
-  llvm@lists.linux.dev,  Dmitry Vyukov <dvyukov@google.com>,  Alexander
- Potapenko <glider@google.com>,  kasan-dev@googlegroups.com,
-  linux-toolchains@vger.kernel.org,  Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v2 1/3] compiler_types: Introduce the Clang
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC93EED1;
+	Tue,  8 Aug 2023 12:35:39 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 681661576;
+	Tue,  8 Aug 2023 05:36:21 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.148])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36E633F59C;
+	Tue,  8 Aug 2023 05:35:35 -0700 (PDT)
+Date: Tue, 8 Aug 2023 13:35:29 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Marco Elver <elver@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] compiler_types: Introduce the Clang
  __preserve_most function attribute
-References: <20230804090621.400-1-elver@google.com>
-	<87il9rgjvw.fsf@oldenburg.str.redhat.com>
-	<20230808105705.GB212435@hirez.programming.kicks-ass.net>
-Date: Tue, 08 Aug 2023 13:41:05 +0200
-In-Reply-To: <20230808105705.GB212435@hirez.programming.kicks-ass.net> (Peter
-	Zijlstra's message of "Tue, 8 Aug 2023 12:57:05 +0200")
-Message-ID: <87pm3xhicu.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Message-ID: <ZNI2kStGIPInDYIK@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230808102049.465864-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230808102049.465864-1-elver@google.com>
 
-* Peter Zijlstra:
+On Tue, Aug 08, 2023 at 12:17:25PM +0200, Marco Elver wrote:
+> [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
+> convention of a function. The preserve_most calling convention attempts
+> to make the code in the caller as unintrusive as possible. This
+> convention behaves identically to the C calling convention on how
+> arguments and return values are passed, but it uses a different set of
+> caller/callee-saved registers. This alleviates the burden of saving and
+> recovering a large register set before and after the call in the caller.
+> If the arguments are passed in callee-saved registers, then they will be
+> preserved by the callee across the call. This doesn't apply for values
+> returned in callee-saved registers.
+> 
+>  * On X86-64 the callee preserves all general purpose registers, except
+>    for R11. R11 can be used as a scratch register. Floating-point
+>    registers (XMMs/YMMs) are not preserved and need to be saved by the
+>    caller.
+> 
+>  * On AArch64 the callee preserve all general purpose registers, except
+>    x0-X8 and X16-X18."
+> 
+> [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
+> 
+> Introduce the attribute to compiler_types.h as __preserve_most.
+> 
+> Use of this attribute results in better code generation for calls to
+> very rarely called functions, such as error-reporting functions, or
+> rarely executed slow paths.
+> 
+> Beware that the attribute conflicts with instrumentation calls inserted
+> on function entry which do not use __preserve_most themselves. Notably,
+> function tracing which assumes the normal C calling convention for the
+> given architecture.  Where the attribute is supported, __preserve_most
+> will imply notrace. It is recommended to restrict use of the attribute
+> to functions that should or already disable tracing.
+> 
+> The attribute may be supported by a future GCC version (see
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110899).
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-> Now, the problem with __preserve_most is that it makes it really easy to
-> deviate from this pattern, you can trivially write a function that is
-> not a trivial wrapper and then does not show up on unwind. This might
-> indeed be a problem.
+So long as this implies notrace I believe it is safe, so:
 
-Backtrace generation shouldn't be impacted by a compiler implementation
-of __preserve_most__.  If unwinding implies restoring register contents,
-the question becomes whether the unwinder can be taught to do this
-natively.  For .eh_frame/PT_GNU_EH_FRAME-based unwinders and
-__preserve_most__, I think that's true because they already support
-custom ABIs (and GCC uses them for local functions).  In other cases, if
-the unwinder does not support the extra registers, then it might still
-be possible to compensate for that via code generation (e.g., setjmp
-won't be __preserve_most__, so the compiler would have to preserve
-register contents by other means, also accounting for the returns-twice
-nature, likewise for exception handling landing pads).
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-But __preserve_all__ is a completely different beast.  I *think* it is
-possible to do this with helpers (state size, state save, state restore)
-and strategically placed restores after returns-twice functions and the
-like, but people disagree.  This has come up before in the context of
-the s390x vector ABI and the desire to add new callee-saved registers.
-We just couldn't make that work at the time.  On the other hand,
-__preserve_all__ goes into the other direction (opt-in of extra saves),
-so it may be conceptually easier.
+Mark.
 
-Thanks,
-Florian
-
+> ---
+> v3:
+> * Quote more from LLVM documentation about which registers are
+>   callee/caller with preserve_most.
+> * Code comment to restrict use where tracing is meant to be disabled.
+> 
+> v2:
+> * Imply notrace, to avoid any conflicts with tracing which is inserted
+>   on function entry. See added comments.
+> ---
+>  include/linux/compiler_types.h | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 547ea1ff806e..c88488715a39 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -106,6 +106,34 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+>  #define __cold
+>  #endif
+>  
+> +/*
+> + * On x86-64 and arm64 targets, __preserve_most changes the calling convention
+> + * of a function to make the code in the caller as unintrusive as possible. This
+> + * convention behaves identically to the C calling convention on how arguments
+> + * and return values are passed, but uses a different set of caller- and callee-
+> + * saved registers.
+> + *
+> + * The purpose is to alleviates the burden of saving and recovering a large
+> + * register set before and after the call in the caller.  This is beneficial for
+> + * rarely taken slow paths, such as error-reporting functions that may be called
+> + * from hot paths.
+> + *
+> + * Note: This may conflict with instrumentation inserted on function entry which
+> + * does not use __preserve_most or equivalent convention (if in assembly). Since
+> + * function tracing assumes the normal C calling convention, where the attribute
+> + * is supported, __preserve_most implies notrace.  It is recommended to restrict
+> + * use of the attribute to functions that should or already disable tracing.
+> + *
+> + * Optional: not supported by gcc.
+> + *
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#preserve-most
+> + */
+> +#if __has_attribute(__preserve_most__)
+> +# define __preserve_most notrace __attribute__((__preserve_most__))
+> +#else
+> +# define __preserve_most
+> +#endif
+> +
+>  /* Builtins */
+>  
+>  /*
+> -- 
+> 2.41.0.640.ga95def55d0-goog
+> 
