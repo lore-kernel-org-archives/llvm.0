@@ -1,135 +1,95 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F014A801
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 03:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691466077;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dci/s/Bmv+dXgk5q2NqydGDfxbAHk5AqnQTbc326dOc=;
-	b=AhYqP/7//shyZU7dBPqrDsDPP+6CDOw4rHmdDupilub2IvqlGIIjETvnMbyYtxGF7rdJoh
-	0GkDr32E+adXfZErnaggXXhlR3WYIFujMY0yUWz8mbxG9oyUuPsOmxJrNI5NLJSOr4SDZp
-	NlPQWXHHvZHzuW3fSIktLp+fOXK2XWA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-QAGyRiyrOGSBknPhMF_79Q-1; Mon, 07 Aug 2023 23:41:15 -0400
-X-MC-Unique: QAGyRiyrOGSBknPhMF_79Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 719808DC671
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 03:41:15 +0000 (UTC)
-Received: from [172.64.4.35] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 53420403166;
-	Tue,  8 Aug 2023 03:41:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 11 of 328): Test report for master
- (6.5.0-rc5, mainline.kernel.org-clang, a027b2ec)
-Date: Tue, 08 Aug 2023 03:41:15 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8B310F3
+	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 06:22:25 +0000 (UTC)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4871b63e001so1358721e0c.0
+        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 23:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691475743; x=1692080543;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WtP3QmQ06KLYCn3fAjdrUm58sT7iL6sP3yIXJVoycmo=;
+        b=LemQPuxXO1F1IIucHyy5MO2W44vAf3kHADapC9mtA1kIwVHrwKIqVX+5Ftme1fyO53
+         jw7K9Xqm6T7pMwroqAac1BLb2cHFITyDxwPLqCCzKYo73ykCJfMjXx2slfrEJWSA82Dr
+         7fiaStKe5kpvS4ByBP2eZAga48w/E3KB+GmyfE6k1nmaB0Ka0pw4QPXJZKYduDInkXFc
+         h0TioSJkwyXl/j+AKjaZWOZfxpnWIq9/+5h/P8BMpZ1MibFZiDIt1KRk8woEgMvDXL8O
+         RAeDnI1veyqqClJ9/o+hrSXeaQl4A6/uUVVHtblAo9TfJ5tI5u1vS0qfn6oL+3M9/bJV
+         AzeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691475743; x=1692080543;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WtP3QmQ06KLYCn3fAjdrUm58sT7iL6sP3yIXJVoycmo=;
+        b=aU2Vdxj2j4FcT7gWF2f9eNVLt3nRLw1aKNRgt3bT9yMeIv5DVOw3W72CyIVU+nP3Um
+         V6Cj4XcCm0KY6FkghP/IzW8WhzmevpSA8IJzM5KbluKxfVpYSbElNlBLq84YPPOzEPBU
+         x6npv6jpttgzfxIo0ITaN4XjidrHWaSOybksfK7rylK81JH4bauxn/tBMRvX1pVTZjfN
+         T1UdQFq2QjJvV7FmrZLDdCGNTlMJFnZv2urT2oih0lPpO685Ad8T7JVhxdYwVhpacShI
+         hzV3KkFKM8xPVCkWe7om99UkfrAxGPgpwInHWSQGSi2nS7VWbRUNhPo0xAOSQ7hEKGQz
+         q/Hg==
+X-Gm-Message-State: AOJu0YwS8yUzS90o1Gm7KOFXL1GNlAatU3sMDiIAoExAfOsPK+FzCIM6
+	QEMyhXjX1EY5ON0TJ/L+51n7bTSTizHcdx/Dg+6dWAqshD/l+pebe4w=
+X-Google-Smtp-Source: AGHT+IH/ORLoGie8DSR0aDG7zISc2zQiLB0y2ZgDzy1zX6u9DHOqSzd5mzl7lV+J6rvARjvfxypUn+SUccjUySihP8U=
+X-Received: by 2002:a1f:c405:0:b0:471:2aa6:41f6 with SMTP id
+ u5-20020a1fc405000000b004712aa641f6mr5042329vkf.2.1691475743677; Mon, 07 Aug
+ 2023 23:22:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <72708.123080723411500523@us-mta-326.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 8 Aug 2023 11:52:12 +0530
+Message-ID: <CA+G9fYv-fRa2n+8WC3tE5a9Kdu7M0i8jpzU0=BEGV_krDuyctA@mail.gmail.com>
+Subject: stable-rc 5.15: clang-17: davinci_all_defconfig failed -
+ arch/arm/include/asm/tlbflush.h:420:85: error: use of logical '&&' with
+ constant operand [-Werror,-Wconstant-logical-operand]
+To: clang-built-linux <llvm@lists.linux.dev>, linux-stable <stable@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+LKFT build plans upgraded to clang-17 and found this failure,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+While building stable-rc 5.15 arm davinci_all_defconfig with clang-17 failed
+with below warnings and errors.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Build log:
+----------
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/98911
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+arch/arm/include/asm/tlbflush.h:420:85: error: use of logical '&&'
+with constant operand [-Werror,-Wconstant-logical-operand]
+  420 |         if (possible_tlb_flags &
+(TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
+      |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^
+arch/arm/include/asm/tlbflush.h:420:85: note: use '&' for a bitwise operation
+  420 |         if (possible_tlb_flags &
+(TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
+      |
+                            ^~
+      |
+                            &
 
 
+  Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.124-80-g6a5dd0772845/testrun/18863110/suite/build/test/clang-17-davinci_all_defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.124-80-g6a5dd0772845/testrun/18863110/suite/build/test/clang-17-davinci_all_defconfig/details/
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Steps to reproduce:
+ tuxmake --runtime podman --target-arch arm --toolchain clang-17
+--kconfig davinci_all_defconfig LLVM=1 LLVM_IAS=1
 
+  Links:
+    - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TeUCTfH6lMKlORLREGhmvLic52/tuxmake_reproducer.sh
+
+--
+Linaro LKFT
+https://lkft.linaro.org
