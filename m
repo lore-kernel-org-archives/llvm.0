@@ -1,44 +1,35 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B755100B2;
-	Tue,  8 Aug 2023 14:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691504102; x=1723040102;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=koJeytz2OrBgZwGQb7XyRybkdw5v4dIM48GGAu6UucI=;
-  b=kbQmKY1qOEAB6jz2PHG+KQEdMLtX+a/mNus+G4QrziEU2iUfDdp3uFNU
-   Mrbe637RpoKB74UAYoGtNEz3qDAINF0JSmevwuhOPB8svpvXGvW5sUK7J
-   3t4bjBJM6N44M1E7Sr1GNBtoo4NCUKwSwkHEpWYwRf6+z9T1b/T2tQnSK
-   +Z7CPi9LEtI5fUk0bCMxZRrdh+Th4xPM0mbfmLW8Rct98JgrXwS0NCaU9
-   viC6S0PjWaioZ2oBxfRaW6MeLGPCwc4XHrPDS1tkTvBC2QoMADRmLKujI
-   konHN7YKy7ixZ1pKxWqgcGCwt+RA/KriNiOl2jdjoTZpEo99ZD0OZLD7M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="350423698"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="350423698"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 07:15:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="760901613"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="760901613"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Aug 2023 07:14:59 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTNUA-0005Nk-1m;
-	Tue, 08 Aug 2023 14:14:58 +0000
-Date: Tue, 8 Aug 2023 22:14:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/020-dart 13/13] drivers/iommu/apple-dart.c:779:16:
- warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka
- 'unsigned int') changes value from 18446744073709551615 to 4294967295
-Message-ID: <202308082218.yGjSIIUU-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9323212B6C
+	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 15:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4CBFC433C8;
+	Tue,  8 Aug 2023 15:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691507635;
+	bh=kDFAlSbkJ936J8VHhHrXEcGboI/qSbJqIJs3esWiWco=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=K/WFexBR1seFJuZsSKS7NUz6Q4ih5cU2tvXfND6RKuYWqtUk+OaDkjhLil5Kols1Z
+	 yIh2tP4lgeOUTrmNEkGKtEkfzAaz8pYOW2bLb9F8vka0eMSum/jlbaRmJMXs44UwRb
+	 aPIi+T29eYq9f2OrKggEiMCMyuytJN7/CHDLUi/wAhTNL5rXAsCYwewvE6N7Or69SN
+	 Xzjo862RE65RG7zS/qIq9Libtgjc/+kpsx5JKCtylCikzH2X7AsYIqosm1d8mffa2l
+	 0BHD625aoDABSPAlpIZrxmXGqUsdeCBLkjME1jL0/r1gAqWLF2KOGsgVVUnN3hBlUD
+	 mVtJ4uJnXpb8g==
+Date: Tue, 8 Aug 2023 08:13:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: stable-rc 5.15: clang-17: davinci_all_defconfig failed -
+ arch/arm/include/asm/tlbflush.h:420:85: error: use of logical '&&' with
+ constant operand [-Werror,-Wconstant-logical-operand]
+Message-ID: <20230808151353.GA798905@dev-arch.thelio-3990X>
+References: <CA+G9fYv-fRa2n+8WC3tE5a9Kdu7M0i8jpzU0=BEGV_krDuyctA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,141 +38,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CA+G9fYv-fRa2n+8WC3tE5a9Kdu7M0i8jpzU0=BEGV_krDuyctA@mail.gmail.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/020-dart
-head:   cb0b356d0c09b50ed669ae17f2b238289ff6c03d
-commit: cb0b356d0c09b50ed669ae17f2b238289ff6c03d [13/13] iommu: apple-dart: Support specifying the DMA aperture in the DT
-config: i386-buildonly-randconfig-r006-20230808 (https://download.01.org/0day-ci/archive/20230808/202308082218.yGjSIIUU-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230808/202308082218.yGjSIIUU-lkp@intel.com/reproduce)
+Hi Naresh,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308082218.yGjSIIUU-lkp@intel.com/
+On Tue, Aug 08, 2023 at 11:52:12AM +0530, Naresh Kamboju wrote:
+> LKFT build plans upgraded to clang-17 and found this failure,
+> 
+> While building stable-rc 5.15 arm davinci_all_defconfig with clang-17 failed
+> with below warnings and errors.
+> 
+> Build log:
+> ----------
+> 
+> arch/arm/include/asm/tlbflush.h:420:85: error: use of logical '&&'
+> with constant operand [-Werror,-Wconstant-logical-operand]
+>   420 |         if (possible_tlb_flags &
+> (TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
+>       |
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ^
+> arch/arm/include/asm/tlbflush.h:420:85: note: use '&' for a bitwise operation
+>   420 |         if (possible_tlb_flags &
+> (TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
+>       |
+>                             ^~
+>       |
+>                             &
 
-All warnings (new ones prefixed by >>):
+Thanks for the report. This is "fixed" in mainline with commit
+cb32c285cc10 ("cpumask: change return types to bool where appropriate"),
+which causes the warning not to fire because the right hand side is a
+boolean, rather than an integer. That change picks cleanly back to at
+least 5.4 with commit 1dc01abad654 ("cpumask: Always inline helpers
+which use bit manipulation functions") applied before it.
 
->> drivers/iommu/apple-dart.c:779:16: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-                                           dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
-                                                   ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                          ^~~~~
-   drivers/iommu/apple-dart.c:1347:18: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-           dart->dma_max = DMA_BIT_MASK(dart->ias);
-                         ~ ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                          ^~~~~
-   2 warnings generated.
+However, the change to -Wconstant-logical-operand in clang that causes
+this in the first place is being reverted in both clang-18 and clang-17,
+so this will disappear shortly:
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OF_IOMMU
-   Depends on [n]: IOMMU_SUPPORT [=y] && OF [=n] && IOMMU_API [=y]
-   Selected by [y]:
-   - APPLE_DART [=y] && IOMMU_SUPPORT [=y] && (ARCH_APPLE || COMPILE_TEST [=y]) && !GENERIC_ATOMIC64 [=n]
+https://github.com/llvm/llvm-project/commit/a84525233776a716e2c6291993f0b33fd1c76f7c
+https://github.com/llvm/llvm-project/issues/64515
 
+There is some discussion about the warning coming back and the suggested
+change to the warning does not seem like it fix this instance so
+applying those couple of changes may not be a bad idea anyways:
 
-vim +779 drivers/iommu/apple-dart.c
+https://github.com/llvm/llvm-project/issues/64356
 
-   721	
-   722	static int apple_dart_finalize_domain(struct iommu_domain *domain,
-   723					      struct device *dev,
-   724					      struct apple_dart_master_cfg *cfg)
-   725	{
-   726		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
-   727		struct apple_dart *dart = cfg->stream_maps[0].dart;
-   728		struct io_pgtable_cfg pgtbl_cfg;
-   729		dma_addr_t dma_max = dart->dma_max;
-   730		u32 ias = min_t(u32, dart->ias, fls64(dma_max));
-   731		int ret = 0;
-   732		int i, j;
-   733	
-   734		mutex_lock(&dart_domain->init_lock);
-   735	
-   736		if (dart_domain->finalized)
-   737			goto done;
-   738	
-   739		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
-   740			dart_domain->stream_maps[i].dart = cfg->stream_maps[i].dart;
-   741			for (j = 0; j < BITS_TO_LONGS(dart->num_streams); j++)
-   742				atomic_long_set(&dart_domain->stream_maps[i].sidmap[j],
-   743						cfg->stream_maps[i].sidmap[j]);
-   744		}
-   745	
-   746		pgtbl_cfg = (struct io_pgtable_cfg){
-   747			.pgsize_bitmap = dart->pgsize,
-   748			.ias = ias,
-   749			.oas = dart->oas,
-   750			.coherent_walk = 1,
-   751			.iommu_dev = dart->dev,
-   752		};
-   753	
-   754		if (dart->locked) {
-   755			unsigned long *sidmap;
-   756			int sid;
-   757			u32 ttbr;
-   758	
-   759			/* Locked DARTs can only have a single stream bound */
-   760			sidmap = cfg->stream_maps[0].sidmap;
-   761			sid = find_first_bit(sidmap, dart->num_streams);
-   762	
-   763			WARN_ON((sid < 0) || bitmap_weight(sidmap, dart->num_streams) > 1);
-   764			ttbr = readl(dart->regs + DART_TTBR(dart, sid, 0));
-   765	
-   766			WARN_ON(!(ttbr & dart->hw->ttbr_valid));
-   767	
-   768			/* If the DART is locked, we need to keep the translation level count. */
-   769			if (dart->hw->tcr_4level && dart->ias > 36) {
-   770				if (readl(dart->regs + DART_TCR(dart, sid)) & dart->hw->tcr_4level) {
-   771					if (ias < 37) {
-   772						dev_info(dart->dev, "Expanded to ias=37 due to lock\n");
-   773						pgtbl_cfg.ias = 37;
-   774					}
-   775				} else if (ias > 36) {
-   776					dev_info(dart->dev, "Limited to ias=36 due to lock\n");
-   777					pgtbl_cfg.ias = 36;
-   778					if (dart->dma_min == 0 && dma_max == DMA_BIT_MASK(dart->ias)) {
- > 779						dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
-   780					} else if ((dart->dma_min ^ dma_max) & ~DMA_BIT_MASK(36)) {
-   781						dev_err(dart->dev,
-   782							"Invalid DMA range for locked 3-level PT\n");
-   783						ret = -ENOMEM;
-   784						goto done;
-   785					}
-   786				}
-   787			}
-   788		}
-   789	
-   790		dart_domain->pgtbl_ops =
-   791			alloc_io_pgtable_ops(dart->hw->fmt, &pgtbl_cfg, domain);
-   792		if (!dart_domain->pgtbl_ops) {
-   793			ret = -ENOMEM;
-   794			goto done;
-   795		}
-   796	
-   797		if (pgtbl_cfg.pgsize_bitmap == SZ_4K)
-   798			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 32));
-   799		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 3)
-   800			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 36));
-   801		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 4)
-   802			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 47));
-   803	
-   804		domain->pgsize_bitmap = pgtbl_cfg.pgsize_bitmap;
-   805		domain->geometry.aperture_start = dart->dma_min;
-   806		domain->geometry.aperture_end = dma_max;
-   807		domain->geometry.force_aperture = true;
-   808	
-   809		dart_domain->finalized = true;
-   810	
-   811		ret = apple_dart_setup_resv_locked(domain, dev, dart->pgsize);
-   812	done:
-   813		mutex_unlock(&dart_domain->init_lock);
-   814		return ret;
-   815	}
-   816	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
