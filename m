@@ -1,113 +1,93 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB548F9D5;
-	Tue,  8 Aug 2023 11:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691494260; x=1723030260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n+5QGUNq96Zzb5hprHduqLPIugcCxfucZViugpqDUbY=;
-  b=lyOrJBEJiAlWc/b+ayV+J9kvvHR96prtxrAPT++TYg3UGso8hqkhuBQw
-   J6FNSk2ftpFk132kKI09tgFx59JtbBS07b+6YAwZYewmFaKZWpSh+HOWj
-   KM6ufTwiYAykumsV6F1s9zoqgg0d/yxWKg6xpW9Gpjkcy5SKAapHn3Jga
-   pquY9SRRnaGw/VQFmzWo7tIco0UiLnhGmKU24fzeVdvhmi/EI1BjMvc8z
-   Y1dYIdE5S+OXQmIG6JJmfeiKc5ANspcJUJeHEavLXuzJwHsL3+ksulvci
-   8tmYQ2Vk7uazg9Y6PL1s41MIkT7hTMQwEVLMz+TatE5ALl8yJimPh1rUv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="401755393"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="401755393"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 04:31:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="905192031"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="905192031"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Aug 2023 04:30:56 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTKvQ-0005JY-0G;
-	Tue, 08 Aug 2023 11:30:56 +0000
-Date: Tue, 8 Aug 2023 19:30:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Guenter Roeck <linux@roeck-us.net>, Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-Message-ID: <202308081918.CVuUdaXs-lkp@intel.com>
-References: <20230728110942.485358-3-dmitry.baryshkov@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA3B100A1
+	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 11:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1691494875;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LpOwTgxUQueKTTwOJlS9a4DMbQJlgeLRkDEjrIokCAc=;
+	b=gAXqmIRTwa0m3jEFUCWB6hqFpkJjJAVxX7IlVunOnMqmK05eh8tPHnDv9Y7Q352hrhAYSt
+	WPdWqxzLNMI7DtnZxMIJ3RWYegiMr3KzOcyui80uS8q3x4+LMsyTWjgb0ArjDI+beGrOTN
+	WqMUCrMx1EcPgpTl/rR3S3CU14cQ9VY=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-678-x_BVl-L4N6OBZSXsqfsgqg-1; Tue, 08 Aug 2023 07:41:11 -0400
+X-MC-Unique: x_BVl-L4N6OBZSXsqfsgqg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CFA37381AE42;
+	Tue,  8 Aug 2023 11:41:09 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.12])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 462E41121314;
+	Tue,  8 Aug 2023 11:41:06 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Marco Elver <elver@google.com>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Kees Cook <keescook@chromium.org>,  Guenter
+ Roeck <linux@roeck-us.net>,  Mark Rutland <mark.rutland@arm.com>,  Steven
+ Rostedt <rostedt@goodmis.org>,  Marc Zyngier <maz@kernel.org>,  Oliver
+ Upton <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,
+  Suzuki K Poulose <suzuki.poulose@arm.com>,  Zenghui Yu
+ <yuzenghui@huawei.com>,  Catalin Marinas <catalin.marinas@arm.com>,  Will
+ Deacon <will@kernel.org>,  Nathan Chancellor <nathan@kernel.org>,  Nick
+ Desaulniers <ndesaulniers@google.com>,  Tom Rix <trix@redhat.com>,  Miguel
+ Ojeda <ojeda@kernel.org>,  linux-arm-kernel@lists.infradead.org,
+  kvmarm@lists.linux.dev,  linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev,  Dmitry Vyukov <dvyukov@google.com>,  Alexander
+ Potapenko <glider@google.com>,  kasan-dev@googlegroups.com,
+  linux-toolchains@vger.kernel.org,  Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v2 1/3] compiler_types: Introduce the Clang
+ __preserve_most function attribute
+References: <20230804090621.400-1-elver@google.com>
+	<87il9rgjvw.fsf@oldenburg.str.redhat.com>
+	<20230808105705.GB212435@hirez.programming.kicks-ass.net>
+Date: Tue, 08 Aug 2023 13:41:05 +0200
+In-Reply-To: <20230808105705.GB212435@hirez.programming.kicks-ass.net> (Peter
+	Zijlstra's message of "Tue, 8 Aug 2023 12:57:05 +0200")
+Message-ID: <87pm3xhicu.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230728110942.485358-3-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 
-Hi Dmitry,
+* Peter Zijlstra:
 
-kernel test robot noticed the following build errors:
+> Now, the problem with __preserve_most is that it makes it really easy to
+> deviate from this pattern, you can trivially write a function that is
+> not a trivial wrapper and then does not show up on unwind. This might
+> indeed be a problem.
 
-[auto build test ERROR on usb/usb-linus]
-[also build test ERROR on linus/master v6.5-rc5 next-20230808]
-[cannot apply to usb/usb-testing usb/usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Backtrace generation shouldn't be impacted by a compiler implementation
+of __preserve_most__.  If unwinding implies restoring register contents,
+the question becomes whether the unwinder can be taught to do this
+natively.  For .eh_frame/PT_GNU_EH_FRAME-based unwinders and
+__preserve_most__, I think that's true because they already support
+custom ABIs (and GCC uses them for local functions).  In other cases, if
+the unwinder does not support the extra registers, then it might still
+be possible to compensate for that via code generation (e.g., setjmp
+won't be __preserve_most__, so the compiler would have to preserve
+register contents by other means, also accounting for the returns-twice
+nature, likewise for exception handling landing pads).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/usb-typec-altmodes-displayport-add-support-for-embedded-DP-cases/20230728-191207
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-patch link:    https://lore.kernel.org/r/20230728110942.485358-3-dmitry.baryshkov%40linaro.org
-patch subject: [PATCH v4 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-config: i386-buildonly-randconfig-r006-20230808 (https://download.01.org/0day-ci/archive/20230808/202308081918.CVuUdaXs-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230808/202308081918.CVuUdaXs-lkp@intel.com/reproduce)
+But __preserve_all__ is a completely different beast.  I *think* it is
+possible to do this with helpers (state size, state save, state restore)
+and strategically placed restores after returns-twice functions and the
+like, but people disagree.  This has come up before in the context of
+the s390x vector ABI and the desire to add new callee-saved registers.
+We just couldn't make that work at the time.  On the other hand,
+__preserve_all__ goes into the other direction (opt-in of extra saves),
+so it may be conceptually easier.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308081918.CVuUdaXs-lkp@intel.com/
+Thanks,
+Florian
 
-All errors (new ones prefixed by >>):
-
->> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c:167:15: error: no member named 'of_node' in 'struct drm_bridge'
-           tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
-           ~~~~~~~~~~~~ ^
-   1 error generated.
-
-
-vim +167 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-
-   163	
-   164	static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-   165	{
-   166		tcpm->bridge.funcs = &qcom_pmic_typec_bridge_funcs;
- > 167		tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
-   168		tcpm->bridge.ops = DRM_BRIDGE_OP_HPD;
-   169		tcpm->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
-   170	
-   171		return devm_drm_bridge_add(tcpm->dev, &tcpm->bridge);
-   172	}
-   173	#else
-   174	static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-   175	{
-   176		return 0;
-   177	}
-   178	#endif
-   179	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
