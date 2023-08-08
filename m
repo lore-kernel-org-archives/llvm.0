@@ -1,144 +1,127 @@
 Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FAF1B7C3
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 16:43:13 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d4b1c8f2d91so3709496276.0
-        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 09:43:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935A61B7C3
+	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 16:56:19 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d1ebc896bd7so6737712276.2
+        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 09:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691512992; x=1692117792;
+        d=google.com; s=20221208; t=1691513778; x=1692118578;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=OBiU5cpEymtSFa0lJKPFUvBh/2b8Gf4WF5QO44qLmLU=;
-        b=5p7S+cLnEHd/fXCmhE+uQ/kiLmkMXjGinO6FUB18zkN6dfsuuG1McKRj3ZAg6NxW66
-         jDjHe/hPVjGqq+EZGuFhiMF/oL6bFNJAqmaEMLy2KgxcdEobwXBl7MTwj4MYqUCtCnuO
-         kBAQoPTu7rsyD9UsNRnK4elMl73GZldAivfgdXvmrDH0UUhjwHzZuehUhryIccUswFoq
-         rtFN9pQMWqLZVAM3RGmuoYM5SYGYK92g8IaDPahxvKehy/aHRz0CD9MGlQPBYpUPaWYI
-         wcXKWYXO3MIMv6KrigQwwzVR7rxwYzWhdJG+d7/Y6SLxjgoWpvVa+++K5zHdf1FOG33V
-         4oNQ==
+        bh=zRGROs0prSq9MFh0VojzEm9/faHihdz2gNY33winOk0=;
+        b=ZwuzzdZO9kYs2Oc/mNbJfARuvGlMIC3UUvNeZoKIvfQ2VX/159UeLD1ZOmH/QRku2q
+         UdxijLS1nyzh4vJapMPxBdB8Mw0I7WhzdZN5HIP1q4KkrgtgqCuWf6ebvKHNXq6l9tGA
+         r/JobYflpqEJayDjQmiSyLfBHt9cttoaedbWNQRVokc8GdBH1nN1OhMM71m5X6bnIFOX
+         jGZafbBDftxnGbVwxScApAzdztO3THQLw8zbAAexjzipo9xfZrido1s5h4shka1W8pRA
+         mt9oD6/q/ha3W6CQK/O/WueGTnREmrbLW/46ftFn+1ehcZRoL4uLnQTtAg2+1kfrNN1r
+         1RaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512992; x=1692117792;
+        d=1e100.net; s=20221208; t=1691513778; x=1692118578;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OBiU5cpEymtSFa0lJKPFUvBh/2b8Gf4WF5QO44qLmLU=;
-        b=def9NH8OJwPqRn9JZ1BkzL0iUP0vI+Lr/kVVFavZiD5Wc0QzHCdfkZ78Aj+lZIwcoG
-         6WHoqzJr27YbhEBh21IfOxasYJ5Nx/5Ti1i66j3PW0eJ3Wrc07P2/H20+TwzDcCFvtyE
-         5B9J2//3hM4KoI9Z0cx2ZjqFQnc/aKsHqUIJfzYFrN13UA4e8NnUr4yvdE2BdCJL3I83
-         /GK+BBMKiOVwaS1VTelt7/t1RfLWtt7cdgk5EgvaCRJ3PWzX6mCQSndtEhL37d3x801L
-         NXoJREyzNek0yTgm43msB6Mg1MlrJHOUhIbfe+mjYlrlcOgyuBxujtr0QKFbAy9jIAnQ
-         EWqg==
-X-Gm-Message-State: AOJu0YyxsOt/uIzmC+pZ3eJLsS5taUWg15q/8zH5w4E3bzG4125pT7Xw
-	SHVbsky8/MYcBdSL2DheaJxmExABVx7Ufjg2DFQ=
-X-Google-Smtp-Source: AGHT+IGjuJqezd5qjQwP0YWEA1rZcmYCDvPAP6MuVBFDZpSKoy0gNLyehpvsSCwku5oYFzZCna0CwimGyjH3LDhA6Ik=
+        bh=zRGROs0prSq9MFh0VojzEm9/faHihdz2gNY33winOk0=;
+        b=UNBu3FplWcfgfo8sQS20Xjd73Dfh47FMW7B8LHN+CmdC3CFdl4Dv3IZWQcbGXo5j2N
+         4Y+erdAcmBxashOnOkK8NrESQT8CokaaSh+L6pKNdRwC3xxpIm1cOhUg8IF+wPIuWKSc
+         bPfiIPaYL5Ov/2u7GPEfHAI0RCw4k8vijBS11GqjmChBx+jbg+SbNU6mPy4rGNETsxNW
+         WVyThCOqCO09dU33EE+36fgKRMU4ES8ioNL0k5kJ18P+kpFwrTayft3ytjRbbHQPH3el
+         r42eBpZC1/T9ZdvR+pWO10VI3TEMMSGJiAAkeSc17hZZfcwoxf8swhxvSDZHpFIcIxkF
+         +nUg==
+X-Gm-Message-State: AOJu0YyNRuvRx4aLmqf2XMuvZVr3uH6Kq/xfzzWVkSZBJzy2ah+hEU5k
+	d5YkArsKJvWHsleIdCYgehT4Q8329hTj7pO2+Zg=
+X-Google-Smtp-Source: AGHT+IHvp4RVooOae7EfRvNoe9ojEueuoOpKM3VV7FgRuePNPnjR9K9MVCvuT9PpaD6qBvXfpS2T7QcKSQIpYFkLMfU=
 X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:cc03:38d0:9718:e90b])
- (user=ndesaulniers job=sendgmr) by 2002:a25:6884:0:b0:d18:73fc:40af with SMTP
- id d126-20020a256884000000b00d1873fc40afmr1538ybc.5.1691512992070; Tue, 08
- Aug 2023 09:43:12 -0700 (PDT)
-Date: Tue, 08 Aug 2023 09:43:09 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a25:860e:0:b0:d5d:511b:16da with SMTP
+ id y14-20020a25860e000000b00d5d511b16damr1793ybk.2.1691513778422; Tue, 08 Aug
+ 2023 09:56:18 -0700 (PDT)
+Date: Tue, 08 Aug 2023 09:56:16 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAJxw0mQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2MDCwML3Zyc5PjiksSSzGTdlFSTlJSU5GQzkyQTJaCGgqLUtMwKsGHRsbW 1AMp0+6FcAAAA
+X-B4-Tracking: v=1; b=H4sIAK9z0mQC/x3MQQqAIBBA0avIrBPUiqSrRISMU80iC40IxLsnL
+ d/i/wyJIlOCUWSI9HDiM1ToRgDuLmwk2VeDUaZVVlnJBqU7/JJudzNKq6lHMzjbIUGNrkgrv/9 wmkv5AFb2g4hgAAAA
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691512990; l=3123;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691513776; l=2427;
  i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
- bh=ULYFBK9Xx9ov9cv3SaccplqC+dWtT9P4vNAPt+juZOk=; b=x3UcI6Ljs8gOpumBOkSLWbhNNjNfVFpG3MxM6+CcDUZTVSmRzfTmK5ZgiH48jbyCoaoSfPddQ
- sZe5t5A5r1TA2xyN5chFck1l3DgqFYfntxS8aG4Ao5mKH4wSurIR0ad
+ bh=si09L+ne/76nNtqRPQQNA8vh+v/vSOpRLqSBS/7yXBU=; b=rVdUpEz91pDMvj2lTvd62ib7crXJtBOPX1kW9foKJV39T/d9Twit/ju7Ur4Jw4tv+AsMmMlNb
+ X1Dlt6TmZSeDalyhdGjGC+BA2Yko/jKs/08sEV2wsETgddvbzoMAjbW
 X-Mailer: b4 0.12.3
-Message-ID: <20230808-llc_static-v1-1-c140c4c297e4@google.com>
-Subject: [PATCH] net/llc/llc_conn.c: fix 4 instances of -Wmissing-variable-declarations
+Message-ID: <20230808-i2c-amd_static-v1-1-1902f608bba1@google.com>
+Subject: [PATCH] i2c/busses: fix -Wmissing-variable-declarations
 From: Nick Desaulniers <ndesaulniers@google.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, llvm@lists.linux.dev, 
 	kernel test robot <lkp@intel.com>, Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="utf-8"
 
 I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
-bot spotted the following instances:
+bot spotted the following instance:
 
-  net/llc/llc_conn.c:44:5: warning: no previous extern declaration for
-  non-static variable 'sysctl_llc2_ack_timeout'
+  drivers/i2c/busses/i2c-amd756.c:286:20: warning: no previous extern
+  declaration for non-static variable 'amd756_smbus'
   [-Wmissing-variable-declarations]
-  44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
-     |     ^
-  net/llc/llc_conn.c:44:1: note: declare 'static' if the variable is not
-  intended to be used outside of this translation unit
-  44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
-     | ^
-  net/llc/llc_conn.c:45:5: warning: no previous extern declaration for
-  non-static variable 'sysctl_llc2_p_timeout'
-  [-Wmissing-variable-declarations]
-  45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
-     |     ^
-  net/llc/llc_conn.c:45:1: note: declare 'static' if the variable is not
-  intended to be used outside of this translation unit
-  45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
-     | ^
-  net/llc/llc_conn.c:46:5: warning: no previous extern declaration for
-  non-static variable 'sysctl_llc2_rej_timeout'
-  [-Wmissing-variable-declarations]
-  46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
-     |     ^
-  net/llc/llc_conn.c:46:1: note: declare 'static' if the variable is not
-  intended to be used outside of this translation unit
-  46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
-     | ^
-  net/llc/llc_conn.c:47:5: warning: no previous extern declaration for
-  non-static variable 'sysctl_llc2_busy_timeout'
-  [-Wmissing-variable-declarations]
-  47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
-     |     ^
-  net/llc/llc_conn.c:47:1: note: declare 'static' if the variable is not
-  intended to be used outside of this translation unit
-  47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
-     | ^
+  286 | struct i2c_adapter amd756_smbus = {
+      |                    ^
+  drivers/i2c/busses/i2c-amd756.c:286:1: note: declare 'static' if the
+  variable is not intended to be used outside of this translation unit
+  286 | struct i2c_adapter amd756_smbus = {
+      | ^
 
-These symbols are referenced by more than one translation unit, so make
-include the correct header for their declarations. Finally, sort the
-list of includes to help keep them tidy.
+This symbol is referenced by more than one translation unit, so create
+then include the correct header for their declarations.
 
 Reported-by: kernel test robot <lkp@intel.com>
 Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- net/llc/llc_conn.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-amd756-s4882.c | 3 +--
+ drivers/i2c/busses/i2c-amd756.c       | 1 +
+ drivers/i2c/busses/i2c-amd756.h       | 3 +++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/net/llc/llc_conn.c b/net/llc/llc_conn.c
-index d037009ee10f..0a3f5e0bec00 100644
---- a/net/llc/llc_conn.c
-+++ b/net/llc/llc_conn.c
-@@ -14,14 +14,15 @@
- 
+diff --git a/drivers/i2c/busses/i2c-amd756-s4882.c b/drivers/i2c/busses/i2c-amd756-s4882.c
+index 063274388a75..8156cfc43df3 100644
+--- a/drivers/i2c/busses/i2c-amd756-s4882.c
++++ b/drivers/i2c/busses/i2c-amd756-s4882.c
+@@ -26,8 +26,7 @@
  #include <linux/init.h>
- #include <linux/slab.h>
--#include <net/llc_sap.h>
--#include <net/llc_conn.h>
--#include <net/sock.h>
--#include <net/tcp_states.h>
--#include <net/llc_c_ev.h>
-+#include <net/llc.h>
- #include <net/llc_c_ac.h>
-+#include <net/llc_c_ev.h>
- #include <net/llc_c_st.h>
-+#include <net/llc_conn.h>
- #include <net/llc_pdu.h>
-+#include <net/llc_sap.h>
-+#include <net/sock.h>
-+#include <net/tcp_states.h>
+ #include <linux/i2c.h>
+ #include <linux/mutex.h>
+-
+-extern struct i2c_adapter amd756_smbus;
++#include "i2c-amd756.h"
  
- #if 0
- #define dprintk(args...) printk(KERN_DEBUG args)
+ static struct i2c_adapter *s4882_adapter;
+ static struct i2c_algorithm *s4882_algo;
+diff --git a/drivers/i2c/busses/i2c-amd756.c b/drivers/i2c/busses/i2c-amd756.c
+index ef1307a258e9..af77374d2ab3 100644
+--- a/drivers/i2c/busses/i2c-amd756.c
++++ b/drivers/i2c/busses/i2c-amd756.c
+@@ -31,6 +31,7 @@
+ #include <linux/i2c.h>
+ #include <linux/acpi.h>
+ #include <linux/io.h>
++#include "i2c-amd756.h"
+ 
+ /* AMD756 SMBus address offsets */
+ #define SMB_ADDR_OFFSET		0xE0
+diff --git a/drivers/i2c/busses/i2c-amd756.h b/drivers/i2c/busses/i2c-amd756.h
+new file mode 100644
+index 000000000000..88698266d6d8
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-amd756.h
+@@ -0,0 +1,3 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <linux/i2c.h>
++extern struct i2c_adapter amd756_smbus;
 
 ---
 base-commit: 14f9643dc90adea074a0ffb7a17d337eafc6a5cc
-change-id: 20230808-llc_static-de4dddcc64b4
+change-id: 20230808-i2c-amd_static-81e5c27a84ce
 
 Best regards,
 -- 
