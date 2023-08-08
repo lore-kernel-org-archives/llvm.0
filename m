@@ -1,155 +1,144 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB1C14A86
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 16:35:08 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-583fe0f84a5so69094167b3.3
-        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 09:35:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FAF1B7C3
+	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 16:43:13 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d4b1c8f2d91so3709496276.0
+        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 09:43:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691512507; x=1692117307;
+        d=google.com; s=20221208; t=1691512992; x=1692117792;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=nTM81EZMZbsGROKqkK+2bQm1mxf+detNdwYuQiVhiKI=;
-        b=NLhu0LP53J4D4l9J4feCfPU5/l3uqoArpZHJ0ECEL6xFUd0tcpgZfboT0p/kOcrv1i
-         XurwyVIyJVvh9OLoEaf6pP9EgBzqx+ayApgGh3mgBpvOf8w6olcj27SbvaSxITbSMqMN
-         CgZIpuMxyfhJyCSjXwTvGkaVdAxYLJF3xZxoaQMDQ1UZxjr4Q22jzvvMcQCFf6tLqeH7
-         1dEKTsxQeURWUr5SVN0EFpwesJP3bx+hG1gUlPCXdsSwapIam0tuneLG1tBKmOCqJyjW
-         1Y55eWM+4i5zr9j8RJ8Sbzv34OO4Vxei1vpJY8o02jLQT9JQrGXhAGl7FUdxFgOn6p1t
-         BbFg==
+        bh=OBiU5cpEymtSFa0lJKPFUvBh/2b8Gf4WF5QO44qLmLU=;
+        b=5p7S+cLnEHd/fXCmhE+uQ/kiLmkMXjGinO6FUB18zkN6dfsuuG1McKRj3ZAg6NxW66
+         jDjHe/hPVjGqq+EZGuFhiMF/oL6bFNJAqmaEMLy2KgxcdEobwXBl7MTwj4MYqUCtCnuO
+         kBAQoPTu7rsyD9UsNRnK4elMl73GZldAivfgdXvmrDH0UUhjwHzZuehUhryIccUswFoq
+         rtFN9pQMWqLZVAM3RGmuoYM5SYGYK92g8IaDPahxvKehy/aHRz0CD9MGlQPBYpUPaWYI
+         wcXKWYXO3MIMv6KrigQwwzVR7rxwYzWhdJG+d7/Y6SLxjgoWpvVa+++K5zHdf1FOG33V
+         4oNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512507; x=1692117307;
+        d=1e100.net; s=20221208; t=1691512992; x=1692117792;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nTM81EZMZbsGROKqkK+2bQm1mxf+detNdwYuQiVhiKI=;
-        b=kDfQdNP6eFU8LCm4n/V/ak11DUyL3OXqEdK5Dz22+qf+Sy17NVX+OZ0T7S0t49luAB
-         DWWSHwoBNNEJ0IbPERSXHqUD15ybea9dvholbtcsVwsqvicWn2zeDYfbPqhfHK5/dsYY
-         j8X7hWhR0/yAi8YS4BjbFzTd1JYn38+XKJDF6/S2e9Rm/rekNZV7kUgPtTQbkj2wc7EL
-         1mBOqcAhkqK5LL6HXq1luQT3V8KUQEC6LVkT2iAXx3+hXpNdENfjNkchi458BsmDdGXe
-         ATMOfCrPPNAZ3FCwhTiWY3+5B2bNkXlUbdkj9B93r3po3wRAQbmZh8bLPrH+BhI33YDL
-         E9iA==
-X-Gm-Message-State: AOJu0Yw+1mRR/6HOrQK01qOVGhRgnK+oW92a9u3Oi/6YPu5evc7neo9U
-	4B8o8xTkSZxkWK8nrMd5UottPXAdUBJB89KC8NE=
-X-Google-Smtp-Source: AGHT+IGra8Wwc+HhL5o0pTOnXN44VrV3kTC7GbKyzGjGnaN9IQv8EY6FCqvWavWJO404OgNolWFZn+285BMePOXRcxo=
+        bh=OBiU5cpEymtSFa0lJKPFUvBh/2b8Gf4WF5QO44qLmLU=;
+        b=def9NH8OJwPqRn9JZ1BkzL0iUP0vI+Lr/kVVFavZiD5Wc0QzHCdfkZ78Aj+lZIwcoG
+         6WHoqzJr27YbhEBh21IfOxasYJ5Nx/5Ti1i66j3PW0eJ3Wrc07P2/H20+TwzDcCFvtyE
+         5B9J2//3hM4KoI9Z0cx2ZjqFQnc/aKsHqUIJfzYFrN13UA4e8NnUr4yvdE2BdCJL3I83
+         /GK+BBMKiOVwaS1VTelt7/t1RfLWtt7cdgk5EgvaCRJ3PWzX6mCQSndtEhL37d3x801L
+         NXoJREyzNek0yTgm43msB6Mg1MlrJHOUhIbfe+mjYlrlcOgyuBxujtr0QKFbAy9jIAnQ
+         EWqg==
+X-Gm-Message-State: AOJu0YyxsOt/uIzmC+pZ3eJLsS5taUWg15q/8zH5w4E3bzG4125pT7Xw
+	SHVbsky8/MYcBdSL2DheaJxmExABVx7Ufjg2DFQ=
+X-Google-Smtp-Source: AGHT+IGjuJqezd5qjQwP0YWEA1rZcmYCDvPAP6MuVBFDZpSKoy0gNLyehpvsSCwku5oYFzZCna0CwimGyjH3LDhA6Ik=
 X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:cc03:38d0:9718:e90b])
- (user=ndesaulniers job=sendgmr) by 2002:a81:764a:0:b0:586:b4e9:753 with SMTP
- id j10-20020a81764a000000b00586b4e90753mr2137ywk.4.1691512507357; Tue, 08 Aug
- 2023 09:35:07 -0700 (PDT)
-Date: Tue, 08 Aug 2023 09:35:00 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a25:6884:0:b0:d18:73fc:40af with SMTP
+ id d126-20020a256884000000b00d1873fc40afmr1538ybc.5.1691512992070; Tue, 08
+ Aug 2023 09:43:12 -0700 (PDT)
+Date: Tue, 08 Aug 2023 09:43:09 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIALNu0mQC/3XMwQoCIRSF4VcZ7jrD0Sht1XvEEKJX50KNg4oUg
- ++ezb7lf+B8G2RMhBmuwwYJK2WKSw9xGMDOZgnIyPUGwYXkiiuWKNv6yMUUskyeFJdndNbgBfp lTejpvXP3qfdMucT02fU6/tY/UB3ZyLSXzmrtjEd1CzGGJx5tfMHUWvsClxODhakAAAA=
+X-B4-Tracking: v=1; b=H4sIAJxw0mQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDCwML3Zyc5PjiksSSzGTdlFSTlJSU5GQzkyQTJaCGgqLUtMwKsGHRsbW 1AMp0+6FcAAAA
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691512501; l=3558;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691512990; l=3123;
  i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
- bh=0g7k5Ub/PaWtkHDnipVyOF/RYqCFfg6Kly4NdhVJ1+4=; b=Ug/yXmBRV7rjndULD++FZYy1jLinoPsNkkAK8t9L3JV7U5XhMf8DHNpIh7iNPIn8X5mPxvKoJ
- dRaQj3ShdkZADTxwuBmiZkSOcXfBMna7SC6UFCfavkMC+GX9BFqJcFd
+ bh=ULYFBK9Xx9ov9cv3SaccplqC+dWtT9P4vNAPt+juZOk=; b=x3UcI6Ljs8gOpumBOkSLWbhNNjNfVFpG3MxM6+CcDUZTVSmRzfTmK5ZgiH48jbyCoaoSfPddQ
+ sZe5t5A5r1TA2xyN5chFck1l3DgqFYfntxS8aG4Ao5mKH4wSurIR0ad
 X-Mailer: b4 0.12.3
-Message-ID: <20230808-riscv_static-v2-1-2a1e2d2c7a4f@google.com>
-Subject: [PATCH v2] riscv: mm: fix 2 instances of -Wmissing-variable-declarations
+Message-ID: <20230808-llc_static-v1-1-c140c4c297e4@google.com>
+Subject: [PATCH] net/llc/llc_conn.c: fix 4 instances of -Wmissing-variable-declarations
 From: Nick Desaulniers <ndesaulniers@google.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel test robot <lkp@intel.com>, Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="utf-8"
 
 I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
-bot spotted the following instance in ARCH=riscv builds:
+bot spotted the following instances:
 
-  arch/riscv/mm/init.c:276:7: warning: no previous extern declaration
-  for non-static variable 'trampoline_pg_dir'
+  net/llc/llc_conn.c:44:5: warning: no previous extern declaration for
+  non-static variable 'sysctl_llc2_ack_timeout'
   [-Wmissing-variable-declarations]
-  276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
-      |       ^
-  arch/riscv/mm/init.c:276:1: note: declare 'static' if the variable is
-  not intended to be used outside of this translation unit
-  276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
-      | ^
-  arch/riscv/mm/init.c:279:7: warning: no previous extern declaration
-  for non-static variable 'early_pg_dir'
+  44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+     |     ^
+  net/llc/llc_conn.c:44:1: note: declare 'static' if the variable is not
+  intended to be used outside of this translation unit
+  44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+     | ^
+  net/llc/llc_conn.c:45:5: warning: no previous extern declaration for
+  non-static variable 'sysctl_llc2_p_timeout'
   [-Wmissing-variable-declarations]
-  279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
-      |       ^
-  arch/riscv/mm/init.c:279:1: note: declare 'static' if the variable is
-  not intended to be used outside of this translation unit
-  279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
-      | ^
+  45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+     |     ^
+  net/llc/llc_conn.c:45:1: note: declare 'static' if the variable is not
+  intended to be used outside of this translation unit
+  45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+     | ^
+  net/llc/llc_conn.c:46:5: warning: no previous extern declaration for
+  non-static variable 'sysctl_llc2_rej_timeout'
+  [-Wmissing-variable-declarations]
+  46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+     |     ^
+  net/llc/llc_conn.c:46:1: note: declare 'static' if the variable is not
+  intended to be used outside of this translation unit
+  46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+     | ^
+  net/llc/llc_conn.c:47:5: warning: no previous extern declaration for
+  non-static variable 'sysctl_llc2_busy_timeout'
+  [-Wmissing-variable-declarations]
+  47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+     |     ^
+  net/llc/llc_conn.c:47:1: note: declare 'static' if the variable is not
+  intended to be used outside of this translation unit
+  47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+     | ^
 
 These symbols are referenced by more than one translation unit, so make
-sure they're both declared and include the correct header for their
-declarations. Finally, sort the list of includes to help keep them tidy.
+include the correct header for their declarations. Finally, sort the
+list of includes to help keep them tidy.
 
 Reported-by: kernel test robot <lkp@intel.com>
 Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-Changes in v2:
-- Forward declare early_pg_dir, too.
-- Remove declaration of early_pg_dir from arch/riscv/mm/kasan_init.c.
-- Link to v1: https://lore.kernel.org/r/20230808-riscv_static-v1-1-9f3dc99dafe8@google.com
----
- arch/riscv/include/asm/pgtable.h | 2 ++
- arch/riscv/mm/init.c             | 9 +++++----
- arch/riscv/mm/kasan_init.c       | 1 -
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ net/llc/llc_conn.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 75970ee2bda2..b5680c940c1e 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -188,6 +188,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
- #define PAGE_KERNEL_IO		__pgprot(_PAGE_IOREMAP)
+diff --git a/net/llc/llc_conn.c b/net/llc/llc_conn.c
+index d037009ee10f..0a3f5e0bec00 100644
+--- a/net/llc/llc_conn.c
++++ b/net/llc/llc_conn.c
+@@ -14,14 +14,15 @@
  
- extern pgd_t swapper_pg_dir[];
-+extern pgd_t trampoline_pg_dir[];
-+extern pgd_t early_pg_dir[];
+ #include <linux/init.h>
+ #include <linux/slab.h>
+-#include <net/llc_sap.h>
+-#include <net/llc_conn.h>
+-#include <net/sock.h>
+-#include <net/tcp_states.h>
+-#include <net/llc_c_ev.h>
++#include <net/llc.h>
+ #include <net/llc_c_ac.h>
++#include <net/llc_c_ev.h>
+ #include <net/llc_c_st.h>
++#include <net/llc_conn.h>
+ #include <net/llc_pdu.h>
++#include <net/llc_sap.h>
++#include <net/sock.h>
++#include <net/tcp_states.h>
  
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- static inline int pmd_present(pmd_t pmd)
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 9ce504737d18..cc0e06b4f223 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -26,12 +26,13 @@
- #include <linux/kfence.h>
- 
- #include <asm/fixmap.h>
--#include <asm/tlbflush.h>
--#include <asm/sections.h>
--#include <asm/soc.h>
- #include <asm/io.h>
--#include <asm/ptdump.h>
- #include <asm/numa.h>
-+#include <asm/pgtable.h>
-+#include <asm/ptdump.h>
-+#include <asm/sections.h>
-+#include <asm/soc.h>
-+#include <asm/tlbflush.h>
- 
- #include "../kernel/head.h"
- 
-diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
-index 8fc0efcf905c..a01bc15dce24 100644
---- a/arch/riscv/mm/kasan_init.c
-+++ b/arch/riscv/mm/kasan_init.c
-@@ -22,7 +22,6 @@
-  * region is not and then we have to go down to the PUD level.
-  */
- 
--extern pgd_t early_pg_dir[PTRS_PER_PGD];
- pgd_t tmp_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- p4d_t tmp_p4d[PTRS_PER_P4D] __page_aligned_bss;
- pud_t tmp_pud[PTRS_PER_PUD] __page_aligned_bss;
+ #if 0
+ #define dprintk(args...) printk(KERN_DEBUG args)
 
 ---
 base-commit: 14f9643dc90adea074a0ffb7a17d337eafc6a5cc
-change-id: 20230808-riscv_static-348036edcae7
+change-id: 20230808-llc_static-de4dddcc64b4
 
 Best regards,
 -- 
