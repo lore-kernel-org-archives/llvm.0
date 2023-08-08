@@ -1,98 +1,189 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7810B134C9
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 15:44:43 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09EC21576;
-	Tue,  8 Aug 2023 08:45:19 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01CE53F64C;
-	Tue,  8 Aug 2023 08:44:34 -0700 (PDT)
-Date: Tue, 8 Aug 2023 16:44:32 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Cristian Marussi <cristian.marussi@arm.com>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: stable-rc 5.15: clang-17: drivers/firmware/arm_scmi/smc.c:39:6:
- error: duplicate member 'irq'
-Message-ID: <20230808154432.nwq3yg5xtbtet4rl@bogus>
-References: <CA+G9fYvPn4N6yPEQauHLXw22AWihQFxyA=twQMDCEwDjXZyYAg@mail.gmail.com>
- <ZNIdrd+SQ0KjYWKA@e120937-lin>
- <CAKwvOdmoPUJXT3-+nwYdOBOpcp30zvxapDmvYAt+_wUQj98O8A@mail.gmail.com>
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD3613AC7;
+	Tue,  8 Aug 2023 15:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691509763; x=1723045763;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xt+OmJttArpLgLmeIgolXCyyljnAE+nZHLFNt39Ca3Q=;
+  b=FfQfF/HjaLAmjNDSMj/klbFuDjg6OkN/Rf50uaLQexdIyXAF+W1IbH6F
+   8rUj+2v+FklhgcOI8ZsqWJkdOIpRBOVfNUzrMcw0v4S1g/tP0bf+E+TYb
+   8uOaT+etDJSYsst5DqxLfC+Wkbg3pCc4BTFoPuXeQ3OFgEGVsJ2LAPBXm
+   D4xR99CgiTTFq2R5LMR31TYHtRjXBt8VSu+DIwnIOOxrslOGjwiwLzass
+   +goKddvFZXYKwIte/q6KnUzS1Za6kqgVmhnULsh279aeYL5qTlObJHaMQ
+   QZ63DwMwWuwDhqpvzbvJSiLIqCS1h+TIZ7Q5rft2cEjtnTsDSLYq5/VgX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="434711478"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="434711478"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 08:49:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="724966905"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="724966905"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 08 Aug 2023 08:49:04 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTOxD-0005Qy-1R;
+	Tue, 08 Aug 2023 15:49:03 +0000
+Date: Tue, 8 Aug 2023 23:48:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:b4/virt-to-phys-hexagon 2/2]
+ arch/hexagon/include/asm/page.h:138:19: error: invalid operands to binary
+ expression ('void *' and 'int')
+Message-ID: <202308082337.adRwHQB4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdmoPUJXT3-+nwYdOBOpcp30zvxapDmvYAt+_wUQj98O8A@mail.gmail.com>
 
-On Tue, Aug 08, 2023 at 08:30:30AM -0700, Nick Desaulniers wrote:
-> On Tue, Aug 8, 2023 at 3:49 AM Cristian Marussi
-> <cristian.marussi@arm.com> wrote:
-> >
-> > On Tue, Aug 08, 2023 at 11:59:22AM +0530, Naresh Kamboju wrote:
-> > > LKFT build plans upgraded to clang-17 and found this failure,
-> > >
-> > > While building stable-rc 5.15 arm with clang-17 failed with below
-> > > warnings and errors.
-> > >
-> > > Build log:
-> > > ----------
-> > >
-> > > drivers/firmware/arm_scmi/smc.c:39:6: error: duplicate member 'irq'
-> > >    39 |         int irq;
-> > >       |             ^
-> > > drivers/firmware/arm_scmi/smc.c:34:6: note: previous declaration is here
-> > >    34 |         int irq;
-> > >       |             ^
-> > > drivers/firmware/arm_scmi/smc.c:118:20: error: use of undeclared
-> > > identifier 'irq'
-> > >   118 |                 scmi_info->irq = irq;
-> > >       |                                  ^
-> > > 2 errors generated.
-> > >
-> > >   Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Links:
-> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.124-80-g6a5dd0772845/testrun/18864721/suite/build/test/clang-lkftconfig/log
-> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.124-80-g6a5dd0772845/testrun/18864721/suite/build/test/clang-lkftconfig/details/
-> > >
-> >
-> > Hi Naresh and Sasha,
-> >
-> > so this fix (unluckily) applies cleanly to v5.15 but fails to build since the
-> > logic and code around it was different in v5.15.
-> >
-> > While looking at backporting it properly, though, I realized that the fix is
-> > NOT needed really in v5.15 due to the different context and logic, so I ask you
-> > to DROP this fix in v5.15.
-> 
-> What's the SHA of the patch that you are referring to (in
-> linux-5.15.y) that you're suggesting the stable maintainers revert?
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/virt-to-phys-hexagon
+head:   6646b27652fd8a19e0c1435d6eeffc947e5c20f3
+commit: 6646b27652fd8a19e0c1435d6eeffc947e5c20f3 [2/2] Hexagon: Make pfn accessors statics inlines
+config: hexagon-randconfig-r041-20230808 (https://download.01.org/0day-ci/archive/20230808/202308082337.adRwHQB4-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230808/202308082337.adRwHQB4-lkp@intel.com/reproduce)
 
-8482711670fdfc8f89d437284a6ad159ee88615f
-Commit 8482711670fd ("firmware: arm_scmi: Fix chan_free cleanup on SMC")
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308082337.adRwHQB4-lkp@intel.com/
 
-For reference upstream commit 
-d1ff11d7ad87 ("firmware: arm_scmi: Fix chan_free cleanup on SMC")
+All errors (new ones prefixed by >>):
 
-Note this is only in
-git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/hexagon/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/hexagon/include/asm/thread_info.h:16:
+>> arch/hexagon/include/asm/page.h:138:19: error: invalid operands to binary expression ('void *' and 'int')
+           return __va(pfn) << PAGE_SHIFT;
+                  ~~~~~~~~~ ^  ~~~~~~~~~~
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+                   a3 = a->sig[3]; a2 = a->sig[2];                         \
+                        ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
+                   a3 = a->sig[3]; a2 = a->sig[2];                         \
 
-And not in
 
-git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git linux-5.15.y
+vim +138 arch/hexagon/include/asm/page.h
+
+   135	
+   136	static inline void * pfn_to_virt(unsigned long pfn)
+   137	{
+ > 138		return __va(pfn) << PAGE_SHIFT;
+   139	}
+   140	
 
 -- 
-Regards,
-Sudeep
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
