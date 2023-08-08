@@ -1,43 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0311097B;
-	Tue,  8 Aug 2023 13:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B755100B2;
+	Tue,  8 Aug 2023 14:15:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691500381; x=1723036381;
+  t=1691504102; x=1723040102;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R14eUOJNlfzrsN2RP/Lfrkg2AOCKW/Urf1D7/yTtpiw=;
-  b=FK/LIrwKOTA5i/PDt48VJnYGQWLivkcSCge7xU7OEc9qBPpGxZw+iIWQ
-   l8WEUDkdt9XOz/mONBELjmWLSN5t3PVFauLBK7BVpFc9bSELGpXPiYlwc
-   7UiYUPgRqxQwLIzz08TM4OEoFUV2GV88CBozHgOUqzueBCagvbbg8Km3n
-   mkIP7YFvxLs8mf4yuH4Tyk5b4Cx54EQ2Xn4eKk7nkmWvUcfIyqMbno4ZF
-   eT0XEhXGl+eoNbNWebX02Yxj76wrQ6PmNAGJpd6ucL7MT9hZIBmImMKJc
-   nBtcoALJt8g+KBUCmD3wdjuQI//020ZlnA5n5lnBj36AM2pSSX4/ZHC9U
+  bh=koJeytz2OrBgZwGQb7XyRybkdw5v4dIM48GGAu6UucI=;
+  b=kbQmKY1qOEAB6jz2PHG+KQEdMLtX+a/mNus+G4QrziEU2iUfDdp3uFNU
+   Mrbe637RpoKB74UAYoGtNEz3qDAINF0JSmevwuhOPB8svpvXGvW5sUK7J
+   3t4bjBJM6N44M1E7Sr1GNBtoo4NCUKwSwkHEpWYwRf6+z9T1b/T2tQnSK
+   +Z7CPi9LEtI5fUk0bCMxZRrdh+Th4xPM0mbfmLW8Rct98JgrXwS0NCaU9
+   viC6S0PjWaioZ2oBxfRaW6MeLGPCwc4XHrPDS1tkTvBC2QoMADRmLKujI
+   konHN7YKy7ixZ1pKxWqgcGCwt+RA/KriNiOl2jdjoTZpEo99ZD0OZLD7M
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="374491593"
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="350423698"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="374491593"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 06:13:00 -0700
+   d="scan'208";a="350423698"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 07:15:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="977856608"
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="760901613"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="977856608"
+   d="scan'208";a="760901613"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Aug 2023 06:12:58 -0700
+  by orsmga008.jf.intel.com with ESMTP; 08 Aug 2023 07:14:59 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qTMW9-0005MS-2g;
-	Tue, 08 Aug 2023 13:12:57 +0000
-Date: Tue, 8 Aug 2023 21:12:16 +0800
+	id 1qTNUA-0005Nk-1m;
+	Tue, 08 Aug 2023 14:14:58 +0000
+Date: Tue, 8 Aug 2023 22:14:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org
-Subject: [vbabka:slub-percpu-caches-v1 2/5] mm/slub.c:3568:12: error: call to
- undeclared function 'alloc_from_pca'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202308082130.CSS5uQs2-lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Janne Grunau <j@jannau.net>
+Subject: [asahilinux:bits/020-dart 13/13] drivers/iommu/apple-dart.c:779:16:
+ warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka
+ 'unsigned int') changes value from 18446744073709551615 to 4294967295
+Message-ID: <202308082218.yGjSIIUU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,139 +48,139 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-percpu-caches-v1
-head:   23793c9cd4b2fc31144dba68dd67554b8e4308e9
-commit: 88f3fc9382220fb76fbd700a74cce623dadf8138 [2/5] mm, slub: add opt-in slub_percpu_array
-config: hexagon-randconfig-r016-20230808 (https://download.01.org/0day-ci/archive/20230808/202308082130.CSS5uQs2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230808/202308082130.CSS5uQs2-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux bits/020-dart
+head:   cb0b356d0c09b50ed669ae17f2b238289ff6c03d
+commit: cb0b356d0c09b50ed669ae17f2b238289ff6c03d [13/13] iommu: apple-dart: Support specifying the DMA aperture in the DT
+config: i386-buildonly-randconfig-r006-20230808 (https://download.01.org/0day-ci/archive/20230808/202308082218.yGjSIIUU-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230808/202308082218.yGjSIIUU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308082130.CSS5uQs2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308082218.yGjSIIUU-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/slub.c:14:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/slub.c:14:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/slub.c:14:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   mm/slub.c:2351:15: warning: variable 'partial_slabs' set but not used [-Wunused-but-set-variable]
-    2351 |         unsigned int partial_slabs = 0;
-         |                      ^
->> mm/slub.c:3568:12: error: call to undeclared function 'alloc_from_pca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3568 |                 object = alloc_from_pca(s);
-         |                          ^
->> mm/slub.c:3568:10: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-    3568 |                 object = alloc_from_pca(s);
-         |                        ^ ~~~~~~~~~~~~~~~~~
-   7 warnings and 2 errors generated.
+>> drivers/iommu/apple-dart.c:779:16: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+                                           dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
+                                                   ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   drivers/iommu/apple-dart.c:1347:18: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+           dart->dma_max = DMA_BIT_MASK(dart->ias);
+                         ~ ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   2 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OF_IOMMU
+   Depends on [n]: IOMMU_SUPPORT [=y] && OF [=n] && IOMMU_API [=y]
+   Selected by [y]:
+   - APPLE_DART [=y] && IOMMU_SUPPORT [=y] && (ARCH_APPLE || COMPILE_TEST [=y]) && !GENERIC_ATOMIC64 [=n]
 
 
-vim +/alloc_from_pca +3568 mm/slub.c
+vim +779 drivers/iommu/apple-dart.c
 
-  3541	
-  3542	/*
-  3543	 * Inlined fastpath so that allocation functions (kmalloc, kmem_cache_alloc)
-  3544	 * have the fastpath folded into their functions. So no function call
-  3545	 * overhead for requests that can be satisfied on the fastpath.
-  3546	 *
-  3547	 * The fastpath works by first checking if the lockless freelist can be used.
-  3548	 * If not then __slab_alloc is called for slow processing.
-  3549	 *
-  3550	 * Otherwise we can simply pick the next object from the lockless free list.
-  3551	 */
-  3552	static __fastpath_inline void *slab_alloc_node(struct kmem_cache *s, struct list_lru *lru,
-  3553			gfp_t gfpflags, int node, unsigned long addr, size_t orig_size)
-  3554	{
-  3555		void *object;
-  3556		struct obj_cgroup *objcg = NULL;
-  3557		bool init = false;
-  3558	
-  3559		s = slab_pre_alloc_hook(s, lru, &objcg, 1, gfpflags);
-  3560		if (!s)
-  3561			return NULL;
-  3562	
-  3563		object = kfence_alloc(s, orig_size, gfpflags);
-  3564		if (unlikely(object))
-  3565			goto out;
-  3566	
-  3567		if (s->cpu_array)
-> 3568			object = alloc_from_pca(s);
-  3569	
-  3570		if (!object)
-  3571			object = __slab_alloc_node(s, gfpflags, node, addr, orig_size);
-  3572	
-  3573		maybe_wipe_obj_freeptr(s, object);
-  3574		init = slab_want_init_on_alloc(gfpflags, s);
-  3575	
-  3576	out:
-  3577		/*
-  3578		 * When init equals 'true', like for kzalloc() family, only
-  3579		 * @orig_size bytes might be zeroed instead of s->object_size
-  3580		 */
-  3581		slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init, orig_size);
-  3582	
-  3583		return object;
-  3584	}
-  3585	
+   721	
+   722	static int apple_dart_finalize_domain(struct iommu_domain *domain,
+   723					      struct device *dev,
+   724					      struct apple_dart_master_cfg *cfg)
+   725	{
+   726		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
+   727		struct apple_dart *dart = cfg->stream_maps[0].dart;
+   728		struct io_pgtable_cfg pgtbl_cfg;
+   729		dma_addr_t dma_max = dart->dma_max;
+   730		u32 ias = min_t(u32, dart->ias, fls64(dma_max));
+   731		int ret = 0;
+   732		int i, j;
+   733	
+   734		mutex_lock(&dart_domain->init_lock);
+   735	
+   736		if (dart_domain->finalized)
+   737			goto done;
+   738	
+   739		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
+   740			dart_domain->stream_maps[i].dart = cfg->stream_maps[i].dart;
+   741			for (j = 0; j < BITS_TO_LONGS(dart->num_streams); j++)
+   742				atomic_long_set(&dart_domain->stream_maps[i].sidmap[j],
+   743						cfg->stream_maps[i].sidmap[j]);
+   744		}
+   745	
+   746		pgtbl_cfg = (struct io_pgtable_cfg){
+   747			.pgsize_bitmap = dart->pgsize,
+   748			.ias = ias,
+   749			.oas = dart->oas,
+   750			.coherent_walk = 1,
+   751			.iommu_dev = dart->dev,
+   752		};
+   753	
+   754		if (dart->locked) {
+   755			unsigned long *sidmap;
+   756			int sid;
+   757			u32 ttbr;
+   758	
+   759			/* Locked DARTs can only have a single stream bound */
+   760			sidmap = cfg->stream_maps[0].sidmap;
+   761			sid = find_first_bit(sidmap, dart->num_streams);
+   762	
+   763			WARN_ON((sid < 0) || bitmap_weight(sidmap, dart->num_streams) > 1);
+   764			ttbr = readl(dart->regs + DART_TTBR(dart, sid, 0));
+   765	
+   766			WARN_ON(!(ttbr & dart->hw->ttbr_valid));
+   767	
+   768			/* If the DART is locked, we need to keep the translation level count. */
+   769			if (dart->hw->tcr_4level && dart->ias > 36) {
+   770				if (readl(dart->regs + DART_TCR(dart, sid)) & dart->hw->tcr_4level) {
+   771					if (ias < 37) {
+   772						dev_info(dart->dev, "Expanded to ias=37 due to lock\n");
+   773						pgtbl_cfg.ias = 37;
+   774					}
+   775				} else if (ias > 36) {
+   776					dev_info(dart->dev, "Limited to ias=36 due to lock\n");
+   777					pgtbl_cfg.ias = 36;
+   778					if (dart->dma_min == 0 && dma_max == DMA_BIT_MASK(dart->ias)) {
+ > 779						dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
+   780					} else if ((dart->dma_min ^ dma_max) & ~DMA_BIT_MASK(36)) {
+   781						dev_err(dart->dev,
+   782							"Invalid DMA range for locked 3-level PT\n");
+   783						ret = -ENOMEM;
+   784						goto done;
+   785					}
+   786				}
+   787			}
+   788		}
+   789	
+   790		dart_domain->pgtbl_ops =
+   791			alloc_io_pgtable_ops(dart->hw->fmt, &pgtbl_cfg, domain);
+   792		if (!dart_domain->pgtbl_ops) {
+   793			ret = -ENOMEM;
+   794			goto done;
+   795		}
+   796	
+   797		if (pgtbl_cfg.pgsize_bitmap == SZ_4K)
+   798			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 32));
+   799		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 3)
+   800			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 36));
+   801		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 4)
+   802			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 47));
+   803	
+   804		domain->pgsize_bitmap = pgtbl_cfg.pgsize_bitmap;
+   805		domain->geometry.aperture_start = dart->dma_min;
+   806		domain->geometry.aperture_end = dma_max;
+   807		domain->geometry.force_aperture = true;
+   808	
+   809		dart_domain->finalized = true;
+   810	
+   811		ret = apple_dart_setup_resv_locked(domain, dev, dart->pgsize);
+   812	done:
+   813		mutex_unlock(&dart_domain->init_lock);
+   814		return ret;
+   815	}
+   816	
 
 -- 
 0-DAY CI Kernel Test Service
