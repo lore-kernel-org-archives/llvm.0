@@ -1,57 +1,388 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C789659;
-	Tue,  8 Aug 2023 02:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EEB8C433C8;
-	Tue,  8 Aug 2023 02:16:59 +0000 (UTC)
-Date: Mon, 7 Aug 2023 22:16:58 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Florian Weimer <fweimer@redhat.com>, Marco Elver <elver@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Kees Cook
- <keescook@chromium.org>, Guenter Roeck <linux@roeck-us.net>, Mark Rutland
- <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, Miguel Ojeda
- <ojeda@kernel.org>, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko
- <glider@google.com>, kasan-dev@googlegroups.com,
- linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] compiler_types: Introduce the Clang
- __preserve_most function attribute
-Message-ID: <20230807221658.1d65ee28@gandalf.local.home>
-In-Reply-To: <20230807123137.GA564305@hirez.programming.kicks-ass.net>
-References: <20230804090621.400-1-elver@google.com>
-	<87il9rgjvw.fsf@oldenburg.str.redhat.com>
-	<20230807123137.GA564305@hirez.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA7E37E;
+	Tue,  8 Aug 2023 02:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691461428; x=1722997428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q7npmpsHRBPQceHeeiMRXcb5INCBFSr1nYwKql1PF7I=;
+  b=VcSo0j34/hGYfhC5F1Atkw2KF23BBmHKCmzCIV8Aro4mHhaWDNO7sWK9
+   hFrg7DI00SUikZ72qXmYzus/8p6XYE8FC3kAf9xD/UDp81Ogm240WwN66
+   DZFjqWPMLPfwxeGpbqGA3UUASXckTUpoEE++M/2bNXwTLgMc3YALsseCw
+   RxhyZJIgOs9WczpW4m96LhJUVpg6rrdSLdn8rIbMrSWpznLxJXyyvtwl0
+   PdL7ULJUuqiIHwSiVV3yYvH0P0vev+DuOvshIgDWaGCVzm0M7qj4658iK
+   XT7mMVuKG7USv/eIy3hnKMcd/xvanlMnQBkuW/rlOQF2m6W6BByWFkhG1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="360788173"
+X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
+   d="scan'208";a="360788173"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 19:23:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="731196850"
+X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
+   d="scan'208";a="731196850"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 07 Aug 2023 19:23:33 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTCNg-00051R-1Y;
+	Tue, 08 Aug 2023 02:23:32 +0000
+Date: Tue, 8 Aug 2023 10:23:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v2] Makefile.extrawarn: enable
+ -Wmissing-variable-declarations for W=1
+Message-ID: <202308081000.tTL1ElTr-lkp@intel.com>
+References: <20230807-missing_proto-v2-1-3ae2e188bb0c@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230807-missing_proto-v2-1-3ae2e188bb0c@google.com>
 
-On Mon, 7 Aug 2023 14:31:37 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+Hi Nick,
 
-> > that this is not a compilation for a module.  Otherwise modules built
-> > with a compiler with __preserve_most__ attribute support are
-> > incompatible with kernels built with a compiler without that attribute.  
-> 
-> We have a metric ton of options that can break module ABI. If you're
-> daft enough to not build with the exact same compiler and .config you
-> get to keep the pieces.
+kernel test robot noticed the following build warnings:
 
-I believe there's enough checks for various compiler options in order to
-enable features during the build that trying to load a module built with
-another compiler is pretty much guaranteed to fail today.
+[auto build test WARNING on 52a93d39b17dc7eb98b6aa3edb93943248e03b2f]
 
--- Steve
+url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/Makefile-extrawarn-enable-Wmissing-variable-declarations-for-W-1/20230808-005859
+base:   52a93d39b17dc7eb98b6aa3edb93943248e03b2f
+patch link:    https://lore.kernel.org/r/20230807-missing_proto-v2-1-3ae2e188bb0c%40google.com
+patch subject: [PATCH v2] Makefile.extrawarn: enable -Wmissing-variable-declarations for W=1
+config: riscv-randconfig-r014-20230807 (https://download.01.org/0day-ci/archive/20230808/202308081000.tTL1ElTr-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230808/202308081000.tTL1ElTr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308081000.tTL1ElTr-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   2 warnings generated.
+--
+   In file included from arch/riscv/kernel/process.c:10:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:15:
+   In file included from include/linux/dev_printk.h:16:
+   In file included from include/linux/ratelimit.h:6:
+   In file included from include/linux/sched.h:12:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+>> arch/riscv/kernel/process.c:29:24: warning: no previous extern declaration for non-static variable 'gp_in_global' [-Wmissing-variable-declarations]
+      29 | register unsigned long gp_in_global __asm__("gp");
+         |                        ^
+   arch/riscv/kernel/process.c:29:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      29 | register unsigned long gp_in_global __asm__("gp");
+         |          ^
+   3 warnings generated.
+--
+   In file included from arch/riscv/mm/init.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+>> arch/riscv/mm/init.c:276:7: warning: no previous extern declaration for non-static variable 'trampoline_pg_dir' [-Wmissing-variable-declarations]
+     276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+         |       ^
+   arch/riscv/mm/init.c:276:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+     276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+         | ^
+>> arch/riscv/mm/init.c:279:7: warning: no previous extern declaration for non-static variable 'early_pg_dir' [-Wmissing-variable-declarations]
+     279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+         |       ^
+   arch/riscv/mm/init.c:279:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+     279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+         | ^
+   4 warnings generated.
+--
+   drivers/char/ipmi/ipmi_si_platform.c:272:15: warning: cast to smaller integer type 'enum si_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     272 |         io.si_type      = (enum si_type) match->data;
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/char/ipmi/ipmi_si_platform.c:13:
+   In file included from include/linux/module.h:14:
+   In file included from include/linux/buildid.h:5:
+   In file included from include/linux/mm_types.h:8:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   3 warnings generated.
+--
+>> net/atm/mpc.c:123:21: warning: no previous extern declaration for non-static variable 'mpcs' [-Wmissing-variable-declarations]
+     123 | struct mpoa_client *mpcs = NULL; /* FIXME */
+         |                     ^
+   net/atm/mpc.c:123:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+     123 | struct mpoa_client *mpcs = NULL; /* FIXME */
+         | ^
+   In file included from net/atm/mpc.c:6:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   3 warnings generated.
+--
+>> net/llc/llc_conn.c:44:5: warning: no previous extern declaration for non-static variable 'sysctl_llc2_ack_timeout' [-Wmissing-variable-declarations]
+      44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+         |     ^
+   net/llc/llc_conn.c:44:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+         | ^
+>> net/llc/llc_conn.c:45:5: warning: no previous extern declaration for non-static variable 'sysctl_llc2_p_timeout' [-Wmissing-variable-declarations]
+      45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+         |     ^
+   net/llc/llc_conn.c:45:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+         | ^
+>> net/llc/llc_conn.c:46:5: warning: no previous extern declaration for non-static variable 'sysctl_llc2_rej_timeout' [-Wmissing-variable-declarations]
+      46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+         |     ^
+   net/llc/llc_conn.c:46:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+         | ^
+>> net/llc/llc_conn.c:47:5: warning: no previous extern declaration for non-static variable 'sysctl_llc2_busy_timeout' [-Wmissing-variable-declarations]
+      47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+         |     ^
+   net/llc/llc_conn.c:47:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+         | ^
+   In file included from net/llc/llc_conn.c:16:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   6 warnings generated.
+--
+   drivers/i2c/busses/i2c-bcm-iproc.c:1039:3: warning: cast to smaller integer type 'enum bcm_iproc_i2c_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+    1039 |                 (enum bcm_iproc_i2c_type)of_device_get_match_data(&pdev->dev);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/i2c/busses/i2c-bcm-iproc.c:4:
+   In file included from include/linux/delay.h:23:
+   In file included from include/linux/sched.h:12:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   3 warnings generated.
+--
+>> drivers/i2c/busses/i2c-amd756.c:286:20: warning: no previous extern declaration for non-static variable 'amd756_smbus' [-Wmissing-variable-declarations]
+     286 | struct i2c_adapter amd756_smbus = {
+         |                    ^
+   drivers/i2c/busses/i2c-amd756.c:286:1: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+     286 | struct i2c_adapter amd756_smbus = {
+         | ^
+   In file included from drivers/i2c/busses/i2c-amd756.c:25:
+   In file included from include/linux/module.h:14:
+   In file included from include/linux/buildid.h:5:
+   In file included from include/linux/mm_types.h:8:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   3 warnings generated.
+--
+   drivers/i2c/busses/i2c-rcar.c:1066:18: warning: cast to smaller integer type 'enum rcar_i2c_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+    1066 |         priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/i2c/busses/i2c-rcar.c:15:
+   In file included from include/linux/clk.h:14:
+   In file included from include/linux/notifier.h:14:
+   In file included from include/linux/mutex.h:14:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   3 warnings generated.
+--
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+>> arch/riscv/include/asm/current.h:20:30: warning: no previous extern declaration for non-static variable 'riscv_current_is_tp' [-Wmissing-variable-declarations]
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |                              ^
+   arch/riscv/include/asm/current.h:20:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      20 | register struct task_struct *riscv_current_is_tp __asm__("tp");
+         |          ^
+>> arch/riscv/include/asm/current.h:36:24: warning: no previous extern declaration for non-static variable 'current_stack_pointer' [-Wmissing-variable-declarations]
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |                        ^
+   arch/riscv/include/asm/current.h:36:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
+      36 | register unsigned long current_stack_pointer __asm__("sp");
+         |          ^
+   2 warnings generated.
+
+
+vim +/riscv_current_is_tp +20 arch/riscv/include/asm/current.h
+
+7db91e57a0acde Palmer Dabbelt 2017-07-10  19  
+52e7c52d2ded59 Palmer Dabbelt 2020-02-27 @20  register struct task_struct *riscv_current_is_tp __asm__("tp");
+52e7c52d2ded59 Palmer Dabbelt 2020-02-27  21  
+7db91e57a0acde Palmer Dabbelt 2017-07-10  22  /*
+7db91e57a0acde Palmer Dabbelt 2017-07-10  23   * This only works because "struct thread_info" is at offset 0 from "struct
+7db91e57a0acde Palmer Dabbelt 2017-07-10  24   * task_struct".  This constraint seems to be necessary on other architectures
+7db91e57a0acde Palmer Dabbelt 2017-07-10  25   * as well, but __switch_to enforces it.  We can't check TASK_TI here because
+7db91e57a0acde Palmer Dabbelt 2017-07-10  26   * <asm/asm-offsets.h> includes this, and I can't get the definition of "struct
+7db91e57a0acde Palmer Dabbelt 2017-07-10  27   * task_struct" here due to some header ordering problems.
+7db91e57a0acde Palmer Dabbelt 2017-07-10  28   */
+7db91e57a0acde Palmer Dabbelt 2017-07-10  29  static __always_inline struct task_struct *get_current(void)
+7db91e57a0acde Palmer Dabbelt 2017-07-10  30  {
+52e7c52d2ded59 Palmer Dabbelt 2020-02-27  31  	return riscv_current_is_tp;
+7db91e57a0acde Palmer Dabbelt 2017-07-10  32  }
+7db91e57a0acde Palmer Dabbelt 2017-07-10  33  
+7db91e57a0acde Palmer Dabbelt 2017-07-10  34  #define current get_current()
+7db91e57a0acde Palmer Dabbelt 2017-07-10  35  
+fdecfea09328b3 Kees Cook      2022-02-23 @36  register unsigned long current_stack_pointer __asm__("sp");
+fdecfea09328b3 Kees Cook      2022-02-23  37  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
