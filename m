@@ -1,90 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9323212B6C
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 15:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4CBFC433C8;
-	Tue,  8 Aug 2023 15:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691507635;
-	bh=kDFAlSbkJ936J8VHhHrXEcGboI/qSbJqIJs3esWiWco=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K/WFexBR1seFJuZsSKS7NUz6Q4ih5cU2tvXfND6RKuYWqtUk+OaDkjhLil5Kols1Z
-	 yIh2tP4lgeOUTrmNEkGKtEkfzAaz8pYOW2bLb9F8vka0eMSum/jlbaRmJMXs44UwRb
-	 aPIi+T29eYq9f2OrKggEiMCMyuytJN7/CHDLUi/wAhTNL5rXAsCYwewvE6N7Or69SN
-	 Xzjo862RE65RG7zS/qIq9Libtgjc/+kpsx5JKCtylCikzH2X7AsYIqosm1d8mffa2l
-	 0BHD625aoDABSPAlpIZrxmXGqUsdeCBLkjME1jL0/r1gAqWLF2KOGsgVVUnN3hBlUD
-	 mVtJ4uJnXpb8g==
-Date: Tue, 8 Aug 2023 08:13:53 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
-	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: stable-rc 5.15: clang-17: davinci_all_defconfig failed -
- arch/arm/include/asm/tlbflush.h:420:85: error: use of logical '&&' with
- constant operand [-Werror,-Wconstant-logical-operand]
-Message-ID: <20230808151353.GA798905@dev-arch.thelio-3990X>
-References: <CA+G9fYv-fRa2n+8WC3tE5a9Kdu7M0i8jpzU0=BEGV_krDuyctA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995B7100B9
+	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 15:30:42 +0000 (UTC)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-63d0d38ff97so26112176d6.1
+        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 08:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691508641; x=1692113441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TxRMXJiuQK91+yRpddjAZKkzZLy1vbif8oXNnv4g/Ag=;
+        b=tYFGdNGHYqgo6K2VUU1Lgnk2kwQYyBUGZFALgJeJzPxX62F05fGgHBFNlrhcDDBZOK
+         in2PiYokDXKqbkU6f2pk2jJsMtLhdHu9bM2q3VtvfLtTukCWj+g+5bTP2rabNUEqsEyz
+         YS7U6XHVFZ/MKZqxl+Gdnnsvcc7i5j1ohsZvHe1KiTtHI8KcmY6pxsbfrp0oMfitsPkZ
+         Ih3KxbZy4WTofKMjtTAdOYcu6xWXkAlfYyQoLNLMoNzjBPlOHeNBu1bYKfqPC8vDq8sz
+         w7JQsfd/2NRjVRzKCgh3WFUEeKpNUHiC0ow1KBxiPM5GFWqyyqw2wqOnnLXnohrhfagT
+         0Fmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691508641; x=1692113441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TxRMXJiuQK91+yRpddjAZKkzZLy1vbif8oXNnv4g/Ag=;
+        b=A5sOPt0t4JvZnZ7IhR5OaZbHJSeOoQhsmHo3YRR4linYeObS7wHqj8iEvF5bO9t9b9
+         6YNe7gVLQ1xtYn3uHV9wfiV0xWnLUi0vPkYrjvXVPAAQU7aSgrCw64YOkiYpGKZ4ButE
+         aw35ccNU0forBRs53aldtQDDv18CPYH0FKQhFkCfbV6hNXT0fQIfI+BCSno+dQUfPJQG
+         MOKLfQLkBr55GqADtgZoG6uyoLQnNd4ahkaRxQt/wGZcyvm2idWcHhgr+orBvPjNmU9P
+         RBVv6FC3Vq0TmsYvOLZE4422T2xihIyDjYrCf2SyaPEfH6rjMUS9sgbLB7P+Q69Fb6m3
+         MGwg==
+X-Gm-Message-State: AOJu0YxR8Sq+qAM/wOXAavCUOM2ZftCasoAA9i9IsTtGmYGrFyoPcTU7
+	RCAFLUKLkUhA2qZaMa+5j3G8lUZb+iXprMM9whOe9g==
+X-Google-Smtp-Source: AGHT+IGzx0RFgswgLrJMymfJnb2FD9jwg77jDF19tcueBiV97W9Lx+X3sLD3o5vXHt2lMPaogA6T3mfELdxFD7EAdOI=
+X-Received: by 2002:a0c:b20c:0:b0:625:aa49:ea0d with SMTP id
+ x12-20020a0cb20c000000b00625aa49ea0dmr192621qvd.32.1691508641145; Tue, 08 Aug
+ 2023 08:30:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYv-fRa2n+8WC3tE5a9Kdu7M0i8jpzU0=BEGV_krDuyctA@mail.gmail.com>
+References: <CA+G9fYvPn4N6yPEQauHLXw22AWihQFxyA=twQMDCEwDjXZyYAg@mail.gmail.com>
+ <ZNIdrd+SQ0KjYWKA@e120937-lin>
+In-Reply-To: <ZNIdrd+SQ0KjYWKA@e120937-lin>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 8 Aug 2023 08:30:30 -0700
+Message-ID: <CAKwvOdmoPUJXT3-+nwYdOBOpcp30zvxapDmvYAt+_wUQj98O8A@mail.gmail.com>
+Subject: Re: stable-rc 5.15: clang-17: drivers/firmware/arm_scmi/smc.c:39:6:
+ error: duplicate member 'irq'
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, Sasha Levin <sashal@kernel.org>, 
+	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	clang-built-linux <llvm@lists.linux.dev>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Naresh,
+On Tue, Aug 8, 2023 at 3:49=E2=80=AFAM Cristian Marussi
+<cristian.marussi@arm.com> wrote:
+>
+> On Tue, Aug 08, 2023 at 11:59:22AM +0530, Naresh Kamboju wrote:
+> > LKFT build plans upgraded to clang-17 and found this failure,
+> >
+> > While building stable-rc 5.15 arm with clang-17 failed with below
+> > warnings and errors.
+> >
+> > Build log:
+> > ----------
+> >
+> > drivers/firmware/arm_scmi/smc.c:39:6: error: duplicate member 'irq'
+> >    39 |         int irq;
+> >       |             ^
+> > drivers/firmware/arm_scmi/smc.c:34:6: note: previous declaration is her=
+e
+> >    34 |         int irq;
+> >       |             ^
+> > drivers/firmware/arm_scmi/smc.c:118:20: error: use of undeclared
+> > identifier 'irq'
+> >   118 |                 scmi_info->irq =3D irq;
+> >       |                                  ^
+> > 2 errors generated.
+> >
+> >   Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Links:
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/buil=
+d/v5.15.124-80-g6a5dd0772845/testrun/18864721/suite/build/test/clang-lkftco=
+nfig/log
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/buil=
+d/v5.15.124-80-g6a5dd0772845/testrun/18864721/suite/build/test/clang-lkftco=
+nfig/details/
+> >
+>
+> Hi Naresh and Sasha,
+>
+> so this fix (unluckily) applies cleanly to v5.15 but fails to build since=
+ the
+> logic and code around it was different in v5.15.
+>
+> While looking at backporting it properly, though, I realized that the fix=
+ is
+> NOT needed really in v5.15 due to the different context and logic, so I a=
+sk you
+> to DROP this fix in v5.15.
 
-On Tue, Aug 08, 2023 at 11:52:12AM +0530, Naresh Kamboju wrote:
-> LKFT build plans upgraded to clang-17 and found this failure,
-> 
-> While building stable-rc 5.15 arm davinci_all_defconfig with clang-17 failed
-> with below warnings and errors.
-> 
-> Build log:
-> ----------
-> 
-> arch/arm/include/asm/tlbflush.h:420:85: error: use of logical '&&'
-> with constant operand [-Werror,-Wconstant-logical-operand]
->   420 |         if (possible_tlb_flags &
-> (TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
->       |
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ^
-> arch/arm/include/asm/tlbflush.h:420:85: note: use '&' for a bitwise operation
->   420 |         if (possible_tlb_flags &
-> (TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
->       |
->                             ^~
->       |
->                             &
+What's the SHA of the patch that you are referring to (in
+linux-5.15.y) that you're suggesting the stable maintainers revert?
 
-Thanks for the report. This is "fixed" in mainline with commit
-cb32c285cc10 ("cpumask: change return types to bool where appropriate"),
-which causes the warning not to fire because the right hand side is a
-boolean, rather than an integer. That change picks cleanly back to at
-least 5.4 with commit 1dc01abad654 ("cpumask: Always inline helpers
-which use bit manipulation functions") applied before it.
+>
+> I suppose the patch has been automatically applied because the Fixes refe=
+rred
+> a commit that was on v5.15 too since some of those lines were indeed impa=
+cted
+> and were present also in later versions, but the logic around it has
+> changed afterwards, so the original code (up to v5.17) was not really aff=
+ected
+> by the bug addressed by this fix...only later versions from v5.18 (includ=
+ed)
+> onwards needs it.
+>
+> Moreover note that the whole SMC ISR logic was introduced in v5.12 (and w=
+as
+> good up to v5.17 as said) so v5.15 is really the only stable release that=
+ needs
+> to drop this fix.
+>
+> Thanks and sorry for the noise,
+> Cristian
+>
+> >
+> > Steps to reproduce:
+> >  tuxmake --runtime podman --target-arch arm --toolchain clang-17
+> > --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2TeTE3=
+iE8aq4t1kv169LcMmd9jo/config
+> > LLVM=3D1 LLVM_IAS=3D1
+> >
+> >   Links:
+> >     - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TeTE3iE8a=
+q4t1kv169LcMmd9jo/tuxmake_reproducer.sh
+> >
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
+>
 
-However, the change to -Wconstant-logical-operand in clang that causes
-this in the first place is being reverted in both clang-18 and clang-17,
-so this will disappear shortly:
 
-https://github.com/llvm/llvm-project/commit/a84525233776a716e2c6291993f0b33fd1c76f7c
-https://github.com/llvm/llvm-project/issues/64515
-
-There is some discussion about the warning coming back and the suggested
-change to the warning does not seem like it fix this instance so
-applying those couple of changes may not be a bad idea anyways:
-
-https://github.com/llvm/llvm-project/issues/64356
-
-Cheers,
-Nathan
+--=20
+Thanks,
+~Nick Desaulniers
