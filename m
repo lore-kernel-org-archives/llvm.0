@@ -1,127 +1,104 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935A61B7C3
-	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 16:56:19 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d1ebc896bd7so6737712276.2
-        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 09:56:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA39514A9C
+	for <llvm@lists.linux.dev>; Tue,  8 Aug 2023 17:21:30 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-583c49018c6so69615477b3.0
+        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 10:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691513778; x=1692118578;
+        d=google.com; s=20221208; t=1691515289; x=1692120089;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=zRGROs0prSq9MFh0VojzEm9/faHihdz2gNY33winOk0=;
-        b=ZwuzzdZO9kYs2Oc/mNbJfARuvGlMIC3UUvNeZoKIvfQ2VX/159UeLD1ZOmH/QRku2q
-         UdxijLS1nyzh4vJapMPxBdB8Mw0I7WhzdZN5HIP1q4KkrgtgqCuWf6ebvKHNXq6l9tGA
-         r/JobYflpqEJayDjQmiSyLfBHt9cttoaedbWNQRVokc8GdBH1nN1OhMM71m5X6bnIFOX
-         jGZafbBDftxnGbVwxScApAzdztO3THQLw8zbAAexjzipo9xfZrido1s5h4shka1W8pRA
-         mt9oD6/q/ha3W6CQK/O/WueGTnREmrbLW/46ftFn+1ehcZRoL4uLnQTtAg2+1kfrNN1r
-         1RaA==
+        bh=A52RibxNLEy97VBVqOrueH6EOuxfxLmE/sIUm+aEQ+w=;
+        b=uVZmnYoriE+9+Mq+YaugxJfh0MQ3WQB2B4J81xX5KW9BbHnW4WVpsihYMg+oVitArc
+         dx2Qw47nhPdh50lsb/VLRbzhiv+TdKPdfWmhCkwr58jLsVwWiQHY0t1zutf3qfLgtZhG
+         HhedOLVGzDFThVbo75z1hWiM+TCa5xtkbKT6GNy4MgmqFajMKu/HBRVKDcxoBQd+nwi/
+         EgddBBgIs67pmSf8wQB90OD4iDNjLPBS5fFXz3c5Ac+8K3kImH9TwWvqh/lYgMQBzoJY
+         Z6BHKA9s8oK/dPuSdLxZsgd0iuYaXfo0rXRGIHewy4wiO+Uv+SFo4jNVwHONPa6U3zC4
+         YC0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691513778; x=1692118578;
+        d=1e100.net; s=20221208; t=1691515289; x=1692120089;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zRGROs0prSq9MFh0VojzEm9/faHihdz2gNY33winOk0=;
-        b=UNBu3FplWcfgfo8sQS20Xjd73Dfh47FMW7B8LHN+CmdC3CFdl4Dv3IZWQcbGXo5j2N
-         4Y+erdAcmBxashOnOkK8NrESQT8CokaaSh+L6pKNdRwC3xxpIm1cOhUg8IF+wPIuWKSc
-         bPfiIPaYL5Ov/2u7GPEfHAI0RCw4k8vijBS11GqjmChBx+jbg+SbNU6mPy4rGNETsxNW
-         WVyThCOqCO09dU33EE+36fgKRMU4ES8ioNL0k5kJ18P+kpFwrTayft3ytjRbbHQPH3el
-         r42eBpZC1/T9ZdvR+pWO10VI3TEMMSGJiAAkeSc17hZZfcwoxf8swhxvSDZHpFIcIxkF
-         +nUg==
-X-Gm-Message-State: AOJu0YyNRuvRx4aLmqf2XMuvZVr3uH6Kq/xfzzWVkSZBJzy2ah+hEU5k
-	d5YkArsKJvWHsleIdCYgehT4Q8329hTj7pO2+Zg=
-X-Google-Smtp-Source: AGHT+IHvp4RVooOae7EfRvNoe9ojEueuoOpKM3VV7FgRuePNPnjR9K9MVCvuT9PpaD6qBvXfpS2T7QcKSQIpYFkLMfU=
+        bh=A52RibxNLEy97VBVqOrueH6EOuxfxLmE/sIUm+aEQ+w=;
+        b=XaF9rSCp25wVYar9FGby5LG5LXh2OG7l0kQkjtY9Rng9GzCLzCFyr8dabtLZIc/jmj
+         OTWEHF0uCPcLE0n2HmbWoN16thSajAEVJOIqR5nLiyc398cypQXy3Riw3lxdPIG9c+NV
+         dloDIe6QXJBbVCBZIwrMEOi1nl4n6dDYO25ieETlZcP5Ej3I98MtEeDVzx1PUzT+wpru
+         ExA6Y6B2TrPXltvfVF/JKhN3S05Gnb7eDn2SPpZiqtzE0dDTesh0lb+b8Qu/rFimYlco
+         cmAAg3flFk2xlNWH70wkIIxaeugzaY5hgRIYQP2HjSMk6OE8ApqJs5+W7VnOuJOHLFEm
+         6nsg==
+X-Gm-Message-State: AOJu0YxuX6blfx9d7kR0/DsBW4AAq0kN+cz2H3jTEAGqLkknN1XGd6mh
+	ryehajlBEqdDmfCR34++qbSb1fD7yf7ezeNlOKw=
+X-Google-Smtp-Source: AGHT+IGJqMAAiUXBHcdyYGpY4t2f1wB6tRaSHDofaAQJaQYlmWAQhsPJY+NqguyPoETN/GUldNNfV/ngPqHKxSm1btI=
 X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:cc03:38d0:9718:e90b])
- (user=ndesaulniers job=sendgmr) by 2002:a25:860e:0:b0:d5d:511b:16da with SMTP
- id y14-20020a25860e000000b00d5d511b16damr1793ybk.2.1691513778422; Tue, 08 Aug
- 2023 09:56:18 -0700 (PDT)
-Date: Tue, 08 Aug 2023 09:56:16 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a81:cb0a:0:b0:560:d237:43dc with SMTP
+ id q10-20020a81cb0a000000b00560d23743dcmr5515ywi.3.1691515289533; Tue, 08 Aug
+ 2023 10:21:29 -0700 (PDT)
+Date: Tue, 08 Aug 2023 10:21:27 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAK9z0mQC/x3MQQqAIBBA0avIrBPUiqSrRISMU80iC40IxLsnL
- d/i/wyJIlOCUWSI9HDiM1ToRgDuLmwk2VeDUaZVVlnJBqU7/JJudzNKq6lHMzjbIUGNrkgrv/9 wmkv5AFb2g4hgAAAA
+X-B4-Tracking: v=1; b=H4sIAJZ50mQC/x3MQQqAIBBA0avErBPUFkpXiQhpppxFGloRiHdPW
+ r7F/wUyJaYMY1cg0cOZY2hQfQerd2EnwdgMWupBWmnFfSw+5svdyFFohUZLg+QIoSVnoo3ffzf NtX53Zd2YXgAAAA==
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691513776; l=2427;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691515287; l=1420;
  i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
- bh=si09L+ne/76nNtqRPQQNA8vh+v/vSOpRLqSBS/7yXBU=; b=rVdUpEz91pDMvj2lTvd62ib7crXJtBOPX1kW9foKJV39T/d9Twit/ju7Ur4Jw4tv+AsMmMlNb
- X1Dlt6TmZSeDalyhdGjGC+BA2Yko/jKs/08sEV2wsETgddvbzoMAjbW
+ bh=EVNrQJhfphmof8sUAyFcvsNS+eeuJ4/HQslsOrxMtGA=; b=ZF1X+Fz/2ksGP4RCvzO1mQ60oyrQbavwKrExZxs1egjFcWlVZhzv2is/dJNtgP47UleLNYUpW
+ mQqLD5mRDVyBSMNL6JDv1NR2+E9ZEW19aD5kwtN+l1Yqfv981OQX4qC
 X-Mailer: b4 0.12.3
-Message-ID: <20230808-i2c-amd_static-v1-1-1902f608bba1@google.com>
-Subject: [PATCH] i2c/busses: fix -Wmissing-variable-declarations
+Message-ID: <20230808-um_hostaudio-v1-1-3d40fbe1fb1e@google.com>
+Subject: [PATCH] uml: audio: fix -Wmissing-variable-declarations
 From: Nick Desaulniers <ndesaulniers@google.com>
-To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, llvm@lists.linux.dev, 
+To: Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-um@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
 	kernel test robot <lkp@intel.com>, Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="utf-8"
 
 I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
 bot spotted the following instance:
 
-  drivers/i2c/busses/i2c-amd756.c:286:20: warning: no previous extern
-  declaration for non-static variable 'amd756_smbus'
+  arch/um/drivers/hostaudio_kern.c:316:3: warning: no previous extern
+  declaration for non-static variable 'module_data'
   [-Wmissing-variable-declarations]
-  286 | struct i2c_adapter amd756_smbus = {
-      |                    ^
-  drivers/i2c/busses/i2c-amd756.c:286:1: note: declare 'static' if the
+  } module_data;
+    ^
+  arch/um/drivers/hostaudio_kern.c:313:1: note: declare 'static' if the
   variable is not intended to be used outside of this translation unit
-  286 | struct i2c_adapter amd756_smbus = {
-      | ^
+  struct {
+  ^
 
-This symbol is referenced by more than one translation unit, so create
-then include the correct header for their declarations.
+This symbol is not referenced by more than one translation unit, so give
+it static storage.
 
 Reported-by: kernel test robot <lkp@intel.com>
 Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- drivers/i2c/busses/i2c-amd756-s4882.c | 3 +--
- drivers/i2c/busses/i2c-amd756.c       | 1 +
- drivers/i2c/busses/i2c-amd756.h       | 3 +++
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ arch/um/drivers/hostaudio_kern.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-amd756-s4882.c b/drivers/i2c/busses/i2c-amd756-s4882.c
-index 063274388a75..8156cfc43df3 100644
---- a/drivers/i2c/busses/i2c-amd756-s4882.c
-+++ b/drivers/i2c/busses/i2c-amd756-s4882.c
-@@ -26,8 +26,7 @@
- #include <linux/init.h>
- #include <linux/i2c.h>
- #include <linux/mutex.h>
--
--extern struct i2c_adapter amd756_smbus;
-+#include "i2c-amd756.h"
+diff --git a/arch/um/drivers/hostaudio_kern.c b/arch/um/drivers/hostaudio_kern.c
+index 5b064d360cb7..c42b793bce65 100644
+--- a/arch/um/drivers/hostaudio_kern.c
++++ b/arch/um/drivers/hostaudio_kern.c
+@@ -310,7 +310,7 @@ static const struct file_operations hostmixer_fops = {
+ 	.release        = hostmixer_release,
+ };
  
- static struct i2c_adapter *s4882_adapter;
- static struct i2c_algorithm *s4882_algo;
-diff --git a/drivers/i2c/busses/i2c-amd756.c b/drivers/i2c/busses/i2c-amd756.c
-index ef1307a258e9..af77374d2ab3 100644
---- a/drivers/i2c/busses/i2c-amd756.c
-+++ b/drivers/i2c/busses/i2c-amd756.c
-@@ -31,6 +31,7 @@
- #include <linux/i2c.h>
- #include <linux/acpi.h>
- #include <linux/io.h>
-+#include "i2c-amd756.h"
- 
- /* AMD756 SMBus address offsets */
- #define SMB_ADDR_OFFSET		0xE0
-diff --git a/drivers/i2c/busses/i2c-amd756.h b/drivers/i2c/busses/i2c-amd756.h
-new file mode 100644
-index 000000000000..88698266d6d8
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-amd756.h
-@@ -0,0 +1,3 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/i2c.h>
-+extern struct i2c_adapter amd756_smbus;
+-struct {
++static struct {
+ 	int dev_audio;
+ 	int dev_mixer;
+ } module_data;
 
 ---
 base-commit: 14f9643dc90adea074a0ffb7a17d337eafc6a5cc
-change-id: 20230808-i2c-amd_static-81e5c27a84ce
+change-id: 20230808-um_hostaudio-21d7207deaed
 
 Best regards,
 -- 
