@@ -1,247 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9737B24537;
-	Wed,  9 Aug 2023 20:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F1C2453A;
+	Wed,  9 Aug 2023 20:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691611975; x=1723147975;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fs2CuDabQsngcISk0Gf+yvNpACfpPh+pxFBgVjZD5aY=;
-  b=TaPcrdtIqipUGyFqjFEbGvnWfyMj36CU200pcymOG51VV2mqr3hD4EuC
-   DR8oHdobWcmOurDNH7Wc3THF8StFtCke5dju35EKDs2Pvw0B5ggV6HMDv
-   10nq9o/uIzqfTTrZO19pdLmEFkb1KSDhUnOlpX1XBH+qGG/cYESPHyJT+
-   xHtVzksh0ztQN9FBMgKq4TBc5q7Emeg/k/lJrFOBsZDtULgpyUpNFpz+J
-   Tovj6IBf8iPIW5b7aESWv7Qo3DCB2fSFz95vAYP7EHGLE5c9yyEg2QZFJ
-   ijhPaKckZyxiscKvmcIih3ynkDW81IA7HnPIhxniWDuW+0FlF9WesoJ8R
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="356186956"
+  t=1691613767; x=1723149767;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gvyh+YMZyzw6l1AUm6s4evm1s8qrAk/50sEjOO8oAAs=;
+  b=ftmIsX0USGMpBPRbdVPVZE4aC061+iSMEGUBxEfRw5tR2J4TK/4EcNFj
+   R+QyV4rAn1ydKG6DLXYYOx5Zz2mI01kld0eFsK/DC0BYvLMGylZMPz+5B
+   Zsz7eWYVKefzkk2gyylmVq1X9ho7WAJe9mstMzqhw8BRLB5487EafYLFq
+   SnFQ/Pg9tU4iZCPKBA2PQQrV2gdNOPBTntKutU+c/bJ7dDy7EiwSd3uq6
+   DV4jkLOSdkcmEckJGRrXNN6UGngtg2ovC5KMSaLAUnRvOum+mJfxn1WNl
+   bFrueuo3czr9mxaE/uKqhefUpi0235yPG+5RCCo+5dsrQh5xnDYKRTXsy
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="402185179"
 X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="356186956"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 13:12:47 -0700
+   d="scan'208";a="402185179"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 13:42:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="905782624"
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="1062626796"
 X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="905782624"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2023 13:12:44 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTpXu-0006MP-0a;
-	Wed, 09 Aug 2023 20:12:42 +0000
-Date: Thu, 10 Aug 2023 04:11:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:x86/srso 11/17] arch/x86/kernel/cpu/bugs.c:2611:7:
- warning: data argument not used by format string
-Message-ID: <202308100405.9dZ1Lxqy-lkp@intel.com>
+   d="scan'208";a="1062626796"
+Received: from jcaminer-mobl.amr.corp.intel.com (HELO [10.212.58.36]) ([10.212.58.36])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 13:42:45 -0700
+Message-ID: <d224ef41-373f-186b-1ba2-86f00ea8fbce@linux.intel.com>
+Date: Wed, 9 Aug 2023 15:42:44 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/srso
-head:   c11a8b2bc1bb3ad76d8d28b283552768d665208c
-commit: 11c0071d430e8287450563655600f52ec302d1f0 [11/17] x86/cpu: Remove all SRSO interface nonsense
-config: i386-randconfig-r024-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100405.9dZ1Lxqy-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100405.9dZ1Lxqy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308100405.9dZ1Lxqy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/x86/kernel/cpu/bugs.c:680:6: warning: no previous prototype for function 'gds_ucode_mitigated' [-Wmissing-prototypes]
-   bool gds_ucode_mitigated(void)
-        ^
-   arch/x86/kernel/cpu/bugs.c:680:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool gds_ucode_mitigated(void)
-   ^
-   static 
->> arch/x86/kernel/cpu/bugs.c:2611:7: warning: data argument not used by format string [-Wformat-extra-args]
-                                     cpu_has_ibpb_brtype_microcode() ? "" : "; no SRSO microcode");
-                                     ^
->> arch/x86/kernel/cpu/bugs.c:2742:9: warning: no previous prototype for function 'cpu_show_spec_rstack_overflow' [-Wmissing-prototypes]
-   ssize_t cpu_show_spec_rstack_overflow(struct device *dev, struct device_attribute *attr, char *buf)
-           ^
-   arch/x86/kernel/cpu/bugs.c:2742:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cpu_show_spec_rstack_overflow(struct device *dev, struct device_attribute *attr, char *buf)
-   ^
-   static 
-   arch/x86/kernel/cpu/bugs.c:2747:9: warning: no previous prototype for function 'cpu_show_gds' [-Wmissing-prototypes]
-   ssize_t cpu_show_gds(struct device *dev, struct device_attribute *attr, char *buf)
-           ^
-   arch/x86/kernel/cpu/bugs.c:2747:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cpu_show_gds(struct device *dev, struct device_attribute *attr, char *buf)
-   ^
-   static 
-   4 warnings generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH] ASoC: SOF: Intel: Initialize chip in
+ hda_sdw_check_wakeen_irq()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: broonie@kernel.org, lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
+ yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
+ daniel.baluta@nxp.com, kai.vehmanen@linux.intel.com,
+ ndesaulniers@google.com, trix@redhat.com, rander.wang@intel.com,
+ sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
+ <8eed2099-2853-df8d-92db-921d0702f512@linux.intel.com>
+ <20230809190212.GB3355565@dev-arch.thelio-3990X>
+ <2a2de1b5-4dd5-f170-bb0b-61d39230c3a7@linux.intel.com>
+ <20230809200906.GA4016444@dev-arch.thelio-3990X>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230809200906.GA4016444@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +2611 arch/x86/kernel/cpu/bugs.c
+> Ah, I still think you will need to pass CC to make directly, rather than
+> through the environment but you should be able to prevent
+> merge_config.sh from getting in the way by passing '-m' to avoid having
+> it invoke make itself, then you can add a 'make olddefconfig' step after
+> that, perhaps something like this?
+> 
+>   - name: build start
+>     run: |
+>       export ARCH=x86_64 KCFLAGS="-Wall -Werror"
+>       export MAKEFLAGS=j"$(nproc)"
+>       bash kconfig/kconfig-sof-default.sh -m
 
-  2595	
-  2596	static ssize_t retbleed_show_state(char *buf)
-  2597	{
-  2598		if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
-  2599		    retbleed_mitigation == RETBLEED_MITIGATION_UNRET_SRSO ||
-  2600		    retbleed_mitigation == RETBLEED_MITIGATION_UNRET_SRSO_ALIAS ||
-  2601		    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
-  2602			if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
-  2603			    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
-  2604				return sysfs_emit(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
-  2605	
-  2606			return sysfs_emit(buf, "%s; SMT %s\n", retbleed_strings[retbleed_mitigation],
-  2607					  !sched_smt_active() ? "disabled" :
-  2608					  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT ||
-  2609					  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT_PREFERRED ?
-  2610					  "enabled with STIBP protection" : "vulnerable",
-> 2611					  cpu_has_ibpb_brtype_microcode() ? "" : "; no SRSO microcode");
-  2612	
-  2613		}
-  2614	
-  2615		return sysfs_emit(buf, "%s%s\n", retbleed_strings[retbleed_mitigation],
-  2616				  (boot_cpu_data.x86_vendor != X86_VENDOR_AMD ||
-  2617				   cpu_has_ibpb_brtype_microcode()) ? "" : "; no SRSO microcode");
-  2618	}
-  2619	
-  2620	static ssize_t gds_show_state(char *buf)
-  2621	{
-  2622		return sysfs_emit(buf, "%s\n", gds_strings[gds_mitigation]);
-  2623	}
-  2624	
-  2625	static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr,
-  2626				       char *buf, unsigned int bug)
-  2627	{
-  2628		if (!boot_cpu_has_bug(bug))
-  2629			return sysfs_emit(buf, "Not affected\n");
-  2630	
-  2631		switch (bug) {
-  2632		case X86_BUG_CPU_MELTDOWN:
-  2633			if (boot_cpu_has(X86_FEATURE_PTI))
-  2634				return sysfs_emit(buf, "Mitigation: PTI\n");
-  2635	
-  2636			if (hypervisor_is_type(X86_HYPER_XEN_PV))
-  2637				return sysfs_emit(buf, "Unknown (XEN PV detected, hypervisor mitigation required)\n");
-  2638	
-  2639			break;
-  2640	
-  2641		case X86_BUG_SPECTRE_V1:
-  2642			return sysfs_emit(buf, "%s\n", spectre_v1_strings[spectre_v1_mitigation]);
-  2643	
-  2644		case X86_BUG_SPECTRE_V2:
-  2645			return spectre_v2_show_state(buf);
-  2646	
-  2647		case X86_BUG_SPEC_STORE_BYPASS:
-  2648			return sysfs_emit(buf, "%s\n", ssb_strings[ssb_mode]);
-  2649	
-  2650		case X86_BUG_L1TF:
-  2651			if (boot_cpu_has(X86_FEATURE_L1TF_PTEINV))
-  2652				return l1tf_show_state(buf);
-  2653			break;
-  2654	
-  2655		case X86_BUG_MDS:
-  2656			return mds_show_state(buf);
-  2657	
-  2658		case X86_BUG_TAA:
-  2659			return tsx_async_abort_show_state(buf);
-  2660	
-  2661		case X86_BUG_ITLB_MULTIHIT:
-  2662			return itlb_multihit_show_state(buf);
-  2663	
-  2664		case X86_BUG_SRBDS:
-  2665			return srbds_show_state(buf);
-  2666	
-  2667		case X86_BUG_MMIO_STALE_DATA:
-  2668		case X86_BUG_MMIO_UNKNOWN:
-  2669			return mmio_stale_data_show_state(buf);
-  2670	
-  2671		case X86_BUG_RETBLEED:
-  2672			return retbleed_show_state(buf);
-  2673	
-  2674		case X86_BUG_GDS:
-  2675			return gds_show_state(buf);
-  2676	
-  2677		default:
-  2678			break;
-  2679		}
-  2680	
-  2681		return sysfs_emit(buf, "Vulnerable\n");
-  2682	}
-  2683	
-  2684	ssize_t cpu_show_meltdown(struct device *dev, struct device_attribute *attr, char *buf)
-  2685	{
-  2686		return cpu_show_common(dev, attr, buf, X86_BUG_CPU_MELTDOWN);
-  2687	}
-  2688	
-  2689	ssize_t cpu_show_spectre_v1(struct device *dev, struct device_attribute *attr, char *buf)
-  2690	{
-  2691		return cpu_show_common(dev, attr, buf, X86_BUG_SPECTRE_V1);
-  2692	}
-  2693	
-  2694	ssize_t cpu_show_spectre_v2(struct device *dev, struct device_attribute *attr, char *buf)
-  2695	{
-  2696		return cpu_show_common(dev, attr, buf, X86_BUG_SPECTRE_V2);
-  2697	}
-  2698	
-  2699	ssize_t cpu_show_spec_store_bypass(struct device *dev, struct device_attribute *attr, char *buf)
-  2700	{
-  2701		return cpu_show_common(dev, attr, buf, X86_BUG_SPEC_STORE_BYPASS);
-  2702	}
-  2703	
-  2704	ssize_t cpu_show_l1tf(struct device *dev, struct device_attribute *attr, char *buf)
-  2705	{
-  2706		return cpu_show_common(dev, attr, buf, X86_BUG_L1TF);
-  2707	}
-  2708	
-  2709	ssize_t cpu_show_mds(struct device *dev, struct device_attribute *attr, char *buf)
-  2710	{
-  2711		return cpu_show_common(dev, attr, buf, X86_BUG_MDS);
-  2712	}
-  2713	
-  2714	ssize_t cpu_show_tsx_async_abort(struct device *dev, struct device_attribute *attr, char *buf)
-  2715	{
-  2716		return cpu_show_common(dev, attr, buf, X86_BUG_TAA);
-  2717	}
-  2718	
-  2719	ssize_t cpu_show_itlb_multihit(struct device *dev, struct device_attribute *attr, char *buf)
-  2720	{
-  2721		return cpu_show_common(dev, attr, buf, X86_BUG_ITLB_MULTIHIT);
-  2722	}
-  2723	
-  2724	ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *buf)
-  2725	{
-  2726		return cpu_show_common(dev, attr, buf, X86_BUG_SRBDS);
-  2727	}
-  2728	
-  2729	ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
-  2730	{
-  2731		if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-  2732			return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_UNKNOWN);
-  2733		else
-  2734			return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
-  2735	}
-  2736	
-  2737	ssize_t cpu_show_retbleed(struct device *dev, struct device_attribute *attr, char *buf)
-  2738	{
-  2739		return cpu_show_common(dev, attr, buf, X86_BUG_RETBLEED);
-  2740	}
-  2741	
-> 2742	ssize_t cpu_show_spec_rstack_overflow(struct device *dev, struct device_attribute *attr, char *buf)
-  2743	{
-  2744		return cpu_show_common(dev, attr, buf, X86_BUG_SRSO);
-  2745	}
-  2746	
+The -m doesn't work since it's added last, but it's not even needed. The
+sequence below re-adds clang, that's just fine.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>       make CC=clang olddefconfig
+>       make CC=clang sound/
+>       make CC=clang drivers/soundwire/
+>       make CC=clang
+The fun part now is that I get tons of unrelated errors - but at least
+that's a sign we're using the clang compiler
+
+https://github.com/thesofproject/linux/actions/runs/5813817494/job/15762178568?pr=4518
+
+
+sound/pci/hda/hda_bind.c:232:18: error: format string is not a string
+literal (potentially insecure) [-Werror,-Wformat-security]
+2151
+                request_module(mod);
+2152
+                               ^~~
+2153
+./include/linux/kmod.h:25:55: note: expanded from macro 'request_module'
+2154
+#define request_module(mod...) __request_module(true, mod)
+2155
+                                                      ^~~
+2156
+sound/pci/hda/hda_bind.c:232:18: note: treat the string as an argument
+to avoid this
+2157
+                request_module(mod);
+2158
+                               ^
+2159
+                               "%s",
+2160
+./include/linux/kmod.h:25:55: note: expanded from macro 'request_module'
+2161
+#define request_module(mod...) __request_module(true, mod)
+2162
+                                                      ^
+2163
+1 error generated.
