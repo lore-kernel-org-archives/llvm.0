@@ -1,128 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3D81AA83;
-	Wed,  9 Aug 2023 17:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691603331; x=1723139331;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7FSDQVji1xABO9IEkRawkeJz7reVCHJK8vYRjGzlpN0=;
-  b=Yx+/uWn8OrOLu/nGSEr+k23MbrObxOAdoWspeJAjNDjAbollti6qEhT2
-   LHuEo6b80SEuCGleVZVpPD0xezuOdp83BYYpjiuIBO5LRY0fwucf8zemW
-   ByGVJGZcQ3prygsNLInrd+GqdC4lnQYGYk/tL+cmZwRzyZFk5ztdLjWfC
-   zYh5nkH2IrnVvI9knQnGcStrQ/qJp4fleJ0rXyTAtbEz9uKrEk8vl0k8n
-   MpS61QPCdQv7wHtjnNHgUbncF2+KEQPAajSS9Fr3WDM2AGkIgLBNzc935
-   alfUmUY98tByIuaahLspZ40uoYtKIycZx1GHnUj9+l1MiuD4yLwlwfYxy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="361321228"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="361321228"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 10:48:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="766923798"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="766923798"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Aug 2023 10:48:41 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTnIW-0006Ia-1H;
-	Wed, 09 Aug 2023 17:48:40 +0000
-Date: Thu, 10 Aug 2023 01:48:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hugh Dickins <hughd@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
-Subject: [brauner-vfs:vfs.tmpfs 17/19] mm/shmem.c:1262:36: warning: variable
- 'freed' is used uninitialized whenever '?:' condition is false
-Message-ID: <202308100156.k9Am1eAy-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A31D2E8;
+	Wed,  9 Aug 2023 18:12:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CCE1C433C8;
+	Wed,  9 Aug 2023 18:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691604737;
+	bh=dQSxAwTg/Ur8+g1iyJEmUIHV6QtyBHM7QCfl22I5E88=;
+	h=From:Date:Subject:To:Cc:From;
+	b=QExAzpIxW8VIhUg0Dx3HmURl8L8cDXikq01/z7xjlsz992JPeLyzHZatsyZdgx8Fe
+	 SD8Jaca7/bbEOVQeWY8qiEF9DyRf6lkHZya2xYqHWJQZ9AAEkKTXQ7lG2YsoiYcl8Q
+	 76wMGGYPqhdnyqpsLlxdglMv9nWYzowNf3LllrA5d/HNTRUnr9UnCbQhLK5wC34dSu
+	 UfPqScmBzgYm68ZLPTVQCa8BzvWtK8SWHZGwk4w2rBG3bChG2LGjWxh4A9RmibSyab
+	 QwEapEYqjVHdo1kvwUIrf/LUQNK+H28VSI4xvdTjvushDEew3K+PsYEsgH3ESQJaE3
+	 xko1vLC9gP0VA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 09 Aug 2023 11:12:07 -0700
+Subject: [PATCH] ASoC: SOF: Intel: Initialize chip in
+ hda_sdw_check_wakeen_irq()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPbW02QC/x3MQQqDMBBG4avIrB1I1Urbq4iLOJmaH9pUMiKCe
+ HdDl99bvINMM9ToVR2UdYPhlwpudUUSfZqVEYqpcU3rHu7JSKt+OAbPX5ghzSwRS8lYOYjIpH3
+ b331H5bBkfWP/34fxPC/UGTIgbQAAAA==
+To: broonie@kernel.org, pierre-louis.bossart@linux.intel.com, 
+ lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com, 
+ yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com, 
+ daniel.baluta@nxp.com
+Cc: kai.vehmanen@linux.intel.com, ndesaulniers@google.com, trix@redhat.com, 
+ rander.wang@intel.com, sound-open-firmware@alsa-project.org, 
+ alsa-devel@alsa-project.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1494; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=dQSxAwTg/Ur8+g1iyJEmUIHV6QtyBHM7QCfl22I5E88=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCmXrzPYTvdaPP30JJdUySrx88FcXYe+p3ScPHqfSdrV/
+ KerY21vRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZgItxwjw6kXaxRKy0pFy15t
+ nhx3bf6RacFfap7fl8itvCgl8+Rc+z2GP1w5N62F+FcE1HD3HLvlE+dx4MH1mxsbXsi8YFB5N8d
+ akRUA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.tmpfs
-head:   0e83f68294d865ae63db70041879673aa3209cbb
-commit: 0d0fe11e86e1a005db49d5c59cf9d1c83777f857 [17/19] tmpfs,xattr: enable limited user extended attributes
-config: x86_64-randconfig-r015-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100156.k9Am1eAy-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100156.k9Am1eAy-lkp@intel.com/reproduce)
+Clang warns (or errors with CONFIG_WERROR):
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308100156.k9Am1eAy-lkp@intel.com/
+  sound/soc/sof/intel/hda.c:423:6: error: variable 'chip' is uninitialized when used here [-Werror,-Wuninitialized]
+    423 |         if (chip && chip->check_sdw_wakeen_irq)
+        |             ^~~~
+  sound/soc/sof/intel/hda.c:418:39: note: initialize the variable 'chip' to silence this warning
+    418 |         const struct sof_intel_dsp_desc *chip;
+        |                                              ^
+        |                                               = NULL
+  1 error generated.
 
-All warnings (new ones prefixed by >>):
+Add the missing initialization, following the pattern of the other irq
+functions.
 
->> mm/shmem.c:1262:36: warning: variable 'freed' is used uninitialized whenever '?:' condition is false [-Wsometimes-uninitialized]
-           simple_xattrs_free(&info->xattrs, sbinfo->max_inodes ? &freed : NULL);
-                                             ^~~~~~~~~~~~~~~~~~
-   mm/shmem.c:1263:32: note: uninitialized use occurs here
-           shmem_free_inode(inode->i_sb, freed);
-                                         ^~~~~
-   mm/shmem.c:1262:36: note: remove the '?:' if its condition is always true
-           simple_xattrs_free(&info->xattrs, sbinfo->max_inodes ? &freed : NULL);
-                                             ^~~~~~~~~~~~~~~~~~~~~      ~~~~~~~
-   mm/shmem.c:1235:14: note: initialize the variable 'freed' to silence this warning
-           size_t freed;
-                       ^
-                        = 0
-   1 warning generated.
+Fixes: 9362ab78f175 ("ASoC: SOF: Intel: add abstraction for SoundWire wake-ups")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ sound/soc/sof/intel/hda.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
+index 04c748a72b13..15e6779efaa3 100644
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -420,6 +420,7 @@ static bool hda_sdw_check_wakeen_irq(struct snd_sof_dev *sdev)
+ 	if (!(interface_mask & BIT(SOF_DAI_INTEL_ALH)))
+ 		return false;
+ 
++	chip = get_chip_info(sdev->pdata);
+ 	if (chip && chip->check_sdw_wakeen_irq)
+ 		return chip->check_sdw_wakeen_irq(sdev);
+ 
 
-vim +1262 mm/shmem.c
+---
+base-commit: 59146c3cd326a622e9041614842346aada11ca99
+change-id: 20230809-intel-hda-missing-chip-init-dcccbe6365a4
 
-  1230	
-  1231	static void shmem_evict_inode(struct inode *inode)
-  1232	{
-  1233		struct shmem_inode_info *info = SHMEM_I(inode);
-  1234		struct shmem_sb_info *sbinfo = SHMEM_SB(inode->i_sb);
-  1235		size_t freed;
-  1236	
-  1237		if (shmem_mapping(inode->i_mapping)) {
-  1238			shmem_unacct_size(info->flags, inode->i_size);
-  1239			inode->i_size = 0;
-  1240			mapping_set_exiting(inode->i_mapping);
-  1241			shmem_truncate_range(inode, 0, (loff_t)-1);
-  1242			if (!list_empty(&info->shrinklist)) {
-  1243				spin_lock(&sbinfo->shrinklist_lock);
-  1244				if (!list_empty(&info->shrinklist)) {
-  1245					list_del_init(&info->shrinklist);
-  1246					sbinfo->shrinklist_len--;
-  1247				}
-  1248				spin_unlock(&sbinfo->shrinklist_lock);
-  1249			}
-  1250			while (!list_empty(&info->swaplist)) {
-  1251				/* Wait while shmem_unuse() is scanning this inode... */
-  1252				wait_var_event(&info->stop_eviction,
-  1253					       !atomic_read(&info->stop_eviction));
-  1254				mutex_lock(&shmem_swaplist_mutex);
-  1255				/* ...but beware of the race if we peeked too early */
-  1256				if (!atomic_read(&info->stop_eviction))
-  1257					list_del_init(&info->swaplist);
-  1258				mutex_unlock(&shmem_swaplist_mutex);
-  1259			}
-  1260		}
-  1261	
-> 1262		simple_xattrs_free(&info->xattrs, sbinfo->max_inodes ? &freed : NULL);
-  1263		shmem_free_inode(inode->i_sb, freed);
-  1264		WARN_ON(inode->i_blocks);
-  1265		clear_inode(inode);
-  1266	#ifdef CONFIG_TMPFS_QUOTA
-  1267		dquot_free_inode(inode);
-  1268		dquot_drop(inode);
-  1269	#endif
-  1270	}
-  1271	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
