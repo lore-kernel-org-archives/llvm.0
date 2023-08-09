@@ -1,222 +1,377 @@
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2087.outbound.protection.outlook.com [40.107.12.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE85654;
-	Wed,  9 Aug 2023 08:04:05 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Akxd/cvnufhwc+U9q/KODUZW4WdKbs1fSpeEz7Ed3omVKo+XVqWQIfJ2FwkRs8mkMKNXq3Igs3lswK2tnhbxKy+riEKzcarnGAEm6ICfQod821XLLlPGal/om9ypfB9gqHPPvW6qccU8IhRUaHS8jtJiudYX9h9hghQTHQu6PzJ9Irhf+0mc+L9/ce62xCEd565LGhh7Mpwf9t/yy0b0sv8y8Y9ROgi6Antr04bv/q8eY4lkBNy7xVFFB6sgAKHQNsr1rHCFRPuiEKkmJnM3trCznbsCGdh7ldKzbZzcMJX9hxuwOOYmgZtkTNFN+k4RemXBOBv/U6WvLkVaiiChcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/cfyiG2XUdtajm5S83LL6pbIUZaFGz17lB8HVJjQrPw=;
- b=SfOsRflCTs4vfYAFmz9lSjJKzMq2d0sAOXBJrAJiCFgNEyD6Df0P8X6Be6SFwiPdbmh+DbEejadzGayUHBm0z9KUjSs1O99k1kRJ9E/nqESCmO149pEM2m70iyWktjdcfGIWeHbvf6mKpkf/fXLV/DPtxd0pHR701jozDDgzU8LA37PBOsdb97AsLUlAgIWdBlJWiTOioy5OVZ15p7bIvt0VBJ3pPGDa6brQ8o/I+l/ad6VayIogc/3hSVGhfItmuSBiwmGcsDnVN9WVnih8Gj093yqt2L5jZdQ735/XVgwSYG4py8xv9OUU+0UXrDzQOTdncjzELnDVj12IEa109w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/cfyiG2XUdtajm5S83LL6pbIUZaFGz17lB8HVJjQrPw=;
- b=QrWiqB7ax94M/eIEZrEURZwa1n26N9n9I5c7lBiFpoVOVRGOgcSW1OncdeKBAM57r3L7zk29sBivNnNGElDiXwqSnai+4cbSDVjU76h+3tY1IqfwPaviKzv7IBaZvhUzN3qw4otzC9DBWdL8zirvmZFyek5OxYySqdGgUHV1szq4yBX6pDphgsscEI5nMd50xf8HvQl4EJZjK11Q1p3tb7Q10cGZ3e0Ah16d/LnR7swcLewFJzC1JCA2TUWDEpI9K4SdAUkkMLbW1/uDgTE3f8NEN5m7MDBCzpECsAO22ErRNEfkkruyqfy6n8WxVUPW1c2YobOYE96gJ8nHLn7AWg==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB1878.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.28; Wed, 9 Aug
- 2023 08:04:02 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2820:d3a6:1cdf:c60e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2820:d3a6:1cdf:c60e%6]) with mapi id 15.20.6652.028; Wed, 9 Aug 2023
- 08:04:02 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: kernel test robot <lkp@intel.com>, Anders Roxell
-	<anders.roxell@linaro.org>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Michael
- Ellerman <mpe@ellerman.id.au>, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: arch/powerpc/mm/book3s64/radix_tlb.c:419:20: error: unused
- function '_tlbie_pid_lpid'
-Thread-Topic: arch/powerpc/mm/book3s64/radix_tlb.c:419:20: error: unused
- function '_tlbie_pid_lpid'
-Thread-Index: AQHZv13d/0XUx+YwZUKf9MLZFpJJmK/hsWGA
-Date: Wed, 9 Aug 2023 08:04:02 +0000
-Message-ID: <edbde3c9-7a02-1903-e760-75c3834a303f@csgroup.eu>
-References: <202307260802.Mjr99P5O-lkp@intel.com>
-In-Reply-To: <202307260802.Mjr99P5O-lkp@intel.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB1878:EE_
-x-ms-office365-filtering-correlation-id: 37fd00fd-b6fe-4c7a-de23-08db98af31a4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 9sxg+byxiOi1ylixGjXutGmgxDogRffWgFSRXcpKITuMB/xt6v86EtafnepoI0oD+ASPB1kmlYBuTw7+yiaSrNubwyTJkEnDyH6mHVNHlh44CVAoP/Y2Q5ehkvKBesbmhOwUUgQ95CCuTLSrhx98vwMD13aujATa9prW0TJ7pM7Ysa5eO4f68mmUYAkSpljjksgepI2yeMvWy0OLC8yFdwpPd+jYqVKx541ls32nXkqokFKxcxb131yhGZwLhoFQq/RSQXhSVPq6Sif6C6oNdkRqjXkL5gMIsx5nUSet6mmjQuoXeOhoqsQCqYydCmh84PTAXxwjGsNXS4jbeJ2aeZFjpQvVt3NaiyDT3VbQepIFa+5VRPoDY2NMHbvMUEXKpdM1jkFEHepOsUkpw42sgoSK8tb9a+if8rSxDalFrKkGSBcmv19+9qQGE6qhLZ7edazV/VTLbZ3uojzzbQoyBdOb/TFrMYSbv9hJ06sdY/DOPXZjoUFFcsL2KqAr2Hba5bZfiz9Fgc9y5xbS8hzRDI7433U2sH9RWke455rBOdd9Y1ZG7Wfqb6t0rF1GWh9n28yUaQzGZyRf7Ucdtuogd9SUA4TeirAq3/n99guRSEB4Agt/tP/KLI+BhRhA3ivm3iOGIluF4pauw/8wEFQXjrnwzq8EFVAx9w0pqY6QgEQ=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39850400004)(376002)(396003)(136003)(366004)(346002)(1800799006)(186006)(451199021)(41300700001)(110136005)(6486002)(966005)(6512007)(122000001)(71200400001)(38100700002)(66574015)(83380400001)(2616005)(6506007)(26005)(316002)(54906003)(2906002)(38070700005)(86362001)(31696002)(36756003)(66476007)(66556008)(4326008)(91956017)(64756008)(66446008)(66946007)(76116006)(31686004)(8676002)(8936002)(478600001)(44832011)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?QnJSeVp4MGMzNlg5dEdSaUVVYjBhNkFBR0lyTjJzaGdIdGRnWlBTMWVTSDdr?=
- =?utf-8?B?UTBTWlhCNFAxeUJQSVE2SVpvdE1jTXlrdGc1YVcxVFhORFVPRlhCcmpzQ0hZ?=
- =?utf-8?B?VitKYWd4UUxLb09BbEhGY3EwbEg0WHhidHZHVUsyb2RqR3ZQdThzRjd6Z2Vl?=
- =?utf-8?B?MEc4SFNaVFp2NTRZemdVMUxxZHlZRkNmRDhBYTNQaW5FeCszcmROdXhKVFpB?=
- =?utf-8?B?L0c0cHlobXpCd1pRTDJ2NzE5R3pOYnR5U3RBeUxIRm04WGo3Z2I1R29GdW00?=
- =?utf-8?B?cWdZNFpsVXpzUUZGSmkvMTkrYkRBcXBFMTJIYU5SbDJlQTE4UWc1SnArN2lU?=
- =?utf-8?B?VTBlTGQ2WUpmN1dVV1dBVC83aG90M2RlWUc0S0dkbDhTeFpWZGowZ3JSUlJ0?=
- =?utf-8?B?T2t6eVpsamptc01STnlZNnRUMUZUZXZvYVZoa0NKVnUzMCtjZndZV2I4aDNr?=
- =?utf-8?B?d1hlWFA5UnpGQmRFSXppNTBZTFpLQ01Nd3JvN0FnVjNSOG9xTXFuMk9LVFIv?=
- =?utf-8?B?TWFTRGQ4c2UwNzRvT1RpOElwcjJPQjh1Z2pDMUFZVUxMNERJSThqNEhuMTRk?=
- =?utf-8?B?c1NCU0NuNnd0R3JzWUkrZ1FQVVpWcldMMnBsbXdrcmErQXJFMUVKYTlpRFJa?=
- =?utf-8?B?VGFmWERNRmxyc3hHdkg5U25SZlFncGZpaWZuN3YvemZZbGl6Q2d3bkFDK0Ix?=
- =?utf-8?B?TVJVb2lsQzJLNVB2UGp5ek55V2FmUS9TV2pyNVVCMVV6MTRkVHRTSEFMa3RR?=
- =?utf-8?B?M3huK2s1ZjFRZ2k1SEUyRGxlSHh1YldEeUJ0VFVKT3FrejBUdE1EbDJmbGdB?=
- =?utf-8?B?S3JsbVdiWjNweml4dE16K0k4Sk11VHlJSXFTcGUra2tjcU5vaitUd2twZDl1?=
- =?utf-8?B?bkpEeFJYUzgvRkIzb3c5aU1HZVF6UGFtdnQ4VXJlR3VQdWdJS0VjcU9rbEQ2?=
- =?utf-8?B?ZkhUa1hxYmM1emEzcndSdjFxZDRzaE5LM2dSdUtENkRsRTFvdXA4cWw4eFhX?=
- =?utf-8?B?WHZvSVhvVWJ6dWdxUWw0Qmo0RXdDN05pUGI3eUU0MFcxSjM4UjBBbjQ2dlRG?=
- =?utf-8?B?eWdydnVjN0lNZnFkY2xrZHNkZ2JZOHFiYzE5ZjJVbVhHdHJIUGswVVI1Ujdm?=
- =?utf-8?B?TmxuYVZ1eW1CTWhSZSt0MmM1ODdIdnJPTEtlajZFOTdvV2QzTGt2ODRRV3h3?=
- =?utf-8?B?aFg0MGJqVDBvWHY2YWJRWFdSWXJ6ME1kMVV1Z1daS0pMYVgrTjBtM0lJbXlt?=
- =?utf-8?B?S0pDczkwZmtUVHpLTUExeXNPUDdGQVlOTWhUZG9IaVNKNmxydWhyWGM0MDlX?=
- =?utf-8?B?WEltdUVjUHhMR0NRdjVtZDdLTVFsVjZ0U0hycSs4MndGaXlJd3IzbE0rb2NR?=
- =?utf-8?B?eWI3bjB0YWJ6ampvd3JaWkM3YmJ0TVV2L2NSb0tBYTN3QVVwU1ZZRXJTUVQz?=
- =?utf-8?B?R1AzbzF5WmdoLytKUEpOMmdrNWJwclZrYWNVNDIyUmhvQUJWWmswY01MTlBE?=
- =?utf-8?B?eS9lQnRFNDhka3ZEZDZZczJqamVSa0d1SXBjOWU3VllRZnZjNXVhYUdNbGNM?=
- =?utf-8?B?N1MxS0hzV2tWd1RxTDkwcFRBUHZQZHV5SWdVME5yQVVDZmRZSmxMdEphVlpL?=
- =?utf-8?B?bEVNeVZkTlRxZ2E4RVY5RUlWNVRqMEN0MkI0UmpWQnFJWkl5UU1wdWhCTFly?=
- =?utf-8?B?M3ZkUElPT0hUOVI4aEQwYmJVMFd1UThLZlhGclM1NGhWME5QYzFzRVVta2l2?=
- =?utf-8?B?VnhFK1JkTk8xVXRVWUVpQ2p2eW81Rm9mNEo4aFVWTEhnQWxMMy93cHV6SlZZ?=
- =?utf-8?B?NS9EQ3JaNjBjeTBwaEJ4eHZyRmUrK0x3UE5rTFNHQXkzc2pLd2RnQ2tXT1Ja?=
- =?utf-8?B?aE90N1UrRFMycDlmRlY4VjZDRXNXN3ByaVg1Q1E2VS9DclFoZkp5T1JacERm?=
- =?utf-8?B?aE5ISWhXaE9kTTN0WVhtTldvWDlmdTVtdno2T09WRHI0cHo2M1REdmZQVTBG?=
- =?utf-8?B?cGFNZ01KV2dvMk4veXQ0KzE3YkkrMEhFSFV2Q1RNN0FrcEx3Z09rckFiY0VF?=
- =?utf-8?B?Zm1ZUzNhNVVySUQ2QjY5Q0xKR3hkdjE4RWpaNzN5TGlDQXhpblhkRHp2R1NH?=
- =?utf-8?Q?rIZDqAhc4O15HGb3yw4tOiSyj?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FFB54EDFAB144042BAF624DD5F2EA5A5@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BAB53B7
+	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 09:57:28 +0000 (UTC)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3fbd33a57b6so63419885e9.2
+        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 02:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691575047; x=1692179847;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/rmEnk1g8Unm9TjBDd1nYGxjvPpnWaZtUFtYH71EmO0=;
+        b=zrFX/lyuS1Z8xnbtzpce6hDvet9q21gy05mTvo4dzgluuV4jCIVRZIwM8DpAqVr0je
+         SpPAtnaNykmtJAJskcZE1CjzOBYUYMDZ4MPRS0Mpph+AF3KqGHKMcljIjwkmtyXpgac/
+         qbfOnGiT2TIUCvLuGutLmvJSBHRHdDBrWmIZIg0067XZT0qzwS/luicPD1WTBZzYLK09
+         OmJww5lDhce1XMbLUtQfPE67fvA7nvDB938XQm5cXu8jkz3BJaCoIrt+FPTK/bSeFgXh
+         iYyN0BSUyxlTNCJrYNUrkJ9H9vnqvb9Blzx7BBJVUyomhmeDTTGbUu66BxxipYS/U7w+
+         dbbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691575047; x=1692179847;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/rmEnk1g8Unm9TjBDd1nYGxjvPpnWaZtUFtYH71EmO0=;
+        b=AC4vf9rHmOmYXZ+a3SxWpizwtD6dFAUpvPzU9851wMDQPzoRCQVnzeTJJxVRBB6EgU
+         Qbj+2JoXj+5p3Svy/b0iJljD93r7XewhBXWW1zRZpiP2DV9EYjuPQkOHgj5loNT/Pakx
+         YVB1bfX52aUnBrcWFUaMQJclfryG7C26ieo6qSUiOXKON31lKtS+IRVC6WRUCoYm5b+V
+         dmLeEgkBJoOkAeuJ2hYVlu8OdFthV0JrpX99Rwiptd3RyNTWWYEkWpjcH31s4QVO/b91
+         9slr0nQY3oJ5Nm4tV64CczjpgeRIX3qj0ZBQ6FPPv8MKc8lS839i6fS/AD+GBsoMf0cl
+         62lA==
+X-Gm-Message-State: AOJu0YxFf4qysp3SUJsiNIC9EAPGm5OZYn/BBPLKXSQPYlld6RmMjGQ+
+	M+NGCEeU7fCnvwhum1+hWnODng==
+X-Google-Smtp-Source: AGHT+IHn+CGz9CoURGc+L1iYofdZgIMRwp6uPgN5OhPNo0J4iMMDCIEPm6uBtj2a9yAjeaEWUXS37g==
+X-Received: by 2002:a05:600c:210:b0:3fe:ad3:b066 with SMTP id 16-20020a05600c021000b003fe0ad3b066mr1884370wmi.41.1691575046903;
+        Wed, 09 Aug 2023 02:57:26 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:9ce0:327a:6e5a:3533])
+        by smtp.gmail.com with ESMTPSA id h18-20020a1ccc12000000b003fbd9e390e1sm1479988wmb.47.2023.08.09.02.57.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Aug 2023 02:57:25 -0700 (PDT)
+Date: Wed, 9 Aug 2023 11:57:19 +0200
+From: Marco Elver <elver@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
+Message-ID: <ZNNi/4L1mD8XPNix@elver.google.com>
+References: <20230808102049.465864-1-elver@google.com>
+ <20230808102049.465864-3-elver@google.com>
+ <202308081424.1DC7AA4AE3@keescook>
+ <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37fd00fd-b6fe-4c7a-de23-08db98af31a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2023 08:04:02.2069
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ggdZfd5h19PFKyYrYvz7Z5fkGKy/ozm4PtCurg35TgkAFVo0LRk+OJrSag5voZSQAiwKhIhjFL0QOhT+LXv3/oS7YNm3cXEFX+bye/2UagQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1878
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 
-DQoNCkxlIDI2LzA3LzIwMjMgw6AgMDM6MDgsIGtlcm5lbCB0ZXN0IHJvYm90IGEgw6ljcml0wqA6
-DQo+IHRyZWU6ICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9n
-aXQvdG9ydmFsZHMvbGludXguZ2l0IG1hc3Rlcg0KPiBoZWFkOiAgIDE4YjQ0YmM1YTY3Mjc1NjQx
-ZmIyNmYyYzU0YmE3ZWVmODBhYzU5NTANCj4gY29tbWl0OiBkNzhjOGUzMjg5MGVmN2VjYTc5ZmZk
-NjdjOTYwMjJjN2Y5ZDhjY2U0IHBvd2VycGMvbW06IFJlYXJyYW5nZSBpZi1lbHNlIGJsb2NrIHRv
-IGF2b2lkIGNsYW5nIHdhcm5pbmcNCg0KQ3VscHJpdCBjb21taXQgaXMgZjBjNmZiYmI5MDUwICgi
-S1ZNOiBQUEM6IEJvb2szUyBIVjogQWRkIHN1cHBvcnQgZm9yIA0KSF9SUFRfSU5WQUxJREFURSIp
-DQoNClByb3Bvc2VkIGZpeDogDQpodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3Qv
-bGludXhwcGMtZGV2L3BhdGNoLzNkNzJlZmQzOWY5ODZlZTkzOWQwNjhhZjY5ZmRjZTI4YmQ2MDA3
-NjYuMTY5MTU2ODA5My5naXQuY2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Lw0KDQoNCj4gZGF0
-ZTogICA1IG1vbnRocyBhZ28NCj4gY29uZmlnOiBwb3dlcnBjLXNraXJvb3RfZGVmY29uZmlnICho
-dHRwczovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2FyY2hpdmUvMjAyMzA3MjYvMjAyMzA3MjYw
-ODAyLk1qcjk5UDVPLWxrcEBpbnRlbC5jb20vY29uZmlnKQ0KPiBjb21waWxlcjogY2xhbmcgdmVy
-c2lvbiAxNy4wLjAgKGh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVjdC5naXQgNGE1
-YWMxNGVlOTY4ZmYwYWQ1ZDJjYzFmZmEwMjk5MDQ4ZGI0Yzg4YSkNCj4gcmVwcm9kdWNlOiAoaHR0
-cHM6Ly9kb3dubG9hZC4wMS5vcmcvMGRheS1jaS9hcmNoaXZlLzIwMjMwNzI2LzIwMjMwNzI2MDgw
-Mi5NanI5OVA1Ty1sa3BAaW50ZWwuY29tL3JlcHJvZHVjZSkNCj4gDQo+IElmIHlvdSBmaXggdGhl
-IGlzc3VlIGluIGEgc2VwYXJhdGUgcGF0Y2gvY29tbWl0IChpLmUuIG5vdCBqdXN0IGEgbmV3IHZl
-cnNpb24gb2YNCj4gdGhlIHNhbWUgcGF0Y2gvY29tbWl0KSwga2luZGx5IGFkZCBmb2xsb3dpbmcg
-dGFncw0KPiB8IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4N
-Cj4gfCBDbG9zZXM6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyMzA3
-MjYwODAyLk1qcjk5UDVPLWxrcEBpbnRlbC5jb20vDQo+IA0KPiBBbGwgZXJyb3JzIChuZXcgb25l
-cyBwcmVmaXhlZCBieSA+Pik6DQo+IA0KPj4+IGFyY2gvcG93ZXJwYy9tbS9ib29rM3M2NC9yYWRp
-eF90bGIuYzo0MTk6MjA6IGVycm9yOiB1bnVzZWQgZnVuY3Rpb24gJ190bGJpZV9waWRfbHBpZCcg
-Wy1XZXJyb3IsLVd1bnVzZWQtZnVuY3Rpb25dDQo+ICAgICAgIDQxOSB8IHN0YXRpYyBpbmxpbmUg
-dm9pZCBfdGxiaWVfcGlkX2xwaWQodW5zaWduZWQgbG9uZyBwaWQsIHVuc2lnbmVkIGxvbmcgbHBp
-ZCwNCj4gICAgICAgICAgIHwgICAgICAgICAgICAgICAgICAgIF4NCj4+PiBhcmNoL3Bvd2VycGMv
-bW0vYm9vazNzNjQvcmFkaXhfdGxiLmM6NjYzOjIwOiBlcnJvcjogdW51c2VkIGZ1bmN0aW9uICdf
-dGxiaWVfdmFfcmFuZ2VfbHBpZCcgWy1XZXJyb3IsLVd1bnVzZWQtZnVuY3Rpb25dDQo+ICAgICAg
-IDY2MyB8IHN0YXRpYyBpbmxpbmUgdm9pZCBfdGxiaWVfdmFfcmFuZ2VfbHBpZCh1bnNpZ25lZCBs
-b25nIHN0YXJ0LCB1bnNpZ25lZCBsb25nIGVuZCwNCj4gICAgICAgICAgIHwgICAgICAgICAgICAg
-ICAgICAgIF4NCj4gICAgIDIgZXJyb3JzIGdlbmVyYXRlZC4NCj4gDQo+IA0KPiB2aW0gKy9fdGxi
-aWVfcGlkX2xwaWQgKzQxOSBhcmNoL3Bvd2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMNCj4g
-DQo+IDFhNDcyYzlkYmE2Yjk2IGFyY2gvcG93ZXJwYy9tbS90bGItcmFkaXguYyAgICAgICAgICBB
-bmVlc2ggS3VtYXIgSy5WIDIwMTYtMDQtMjkgIDQxOA0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNoL3Bv
-d2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2LTIx
-IEA0MTkgIHN0YXRpYyBpbmxpbmUgdm9pZCBfdGxiaWVfcGlkX2xwaWQodW5zaWduZWQgbG9uZyBw
-aWQsIHVuc2lnbmVkIGxvbmcgbHBpZCwNCj4gZjBjNmZiYmI5MDUwNGYgYXJjaC9wb3dlcnBjL21t
-L2Jvb2szczY0L3JhZGl4X3RsYi5jIEJoYXJhdGEgQiBSYW8gICAgMjAyMS0wNi0yMSAgNDIwICAJ
-CQkJICAgdW5zaWduZWQgbG9uZyByaWMpDQo+IGYwYzZmYmJiOTA1MDRmIGFyY2gvcG93ZXJwYy9t
-bS9ib29rM3M2NC9yYWRpeF90bGIuYyBCaGFyYXRhIEIgUmFvICAgIDIwMjEtMDYtMjEgIDQyMSAg
-ew0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNoL3Bvd2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMg
-QmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2LTIxICA0MjIgIAlhc20gdm9sYXRpbGUoInB0ZXN5bmMi
-IDogOiA6ICJtZW1vcnkiKTsNCj4gZjBjNmZiYmI5MDUwNGYgYXJjaC9wb3dlcnBjL21tL2Jvb2sz
-czY0L3JhZGl4X3RsYi5jIEJoYXJhdGEgQiBSYW8gICAgMjAyMS0wNi0yMSAgNDIzDQo+IGYwYzZm
-YmJiOTA1MDRmIGFyY2gvcG93ZXJwYy9tbS9ib29rM3M2NC9yYWRpeF90bGIuYyBCaGFyYXRhIEIg
-UmFvICAgIDIwMjEtMDYtMjEgIDQyNCAgCS8qDQo+IGYwYzZmYmJiOTA1MDRmIGFyY2gvcG93ZXJw
-Yy9tbS9ib29rM3M2NC9yYWRpeF90bGIuYyBCaGFyYXRhIEIgUmFvICAgIDIwMjEtMDYtMjEgIDQy
-NSAgCSAqIFdvcmthcm91bmQgdGhlIGZhY3QgdGhhdCB0aGUgInJpYyIgYXJndW1lbnQgdG8gX190
-bGJpZV9waWQNCj4gZjBjNmZiYmI5MDUwNGYgYXJjaC9wb3dlcnBjL21tL2Jvb2szczY0L3JhZGl4
-X3RsYi5jIEJoYXJhdGEgQiBSYW8gICAgMjAyMS0wNi0yMSAgNDI2ICAJICogbXVzdCBiZSBhIGNv
-bXBpbGUtdGltZSBjb250cmFpbnQgdG8gbWF0Y2ggdGhlICJpIiBjb25zdHJhaW50DQo+IGYwYzZm
-YmJiOTA1MDRmIGFyY2gvcG93ZXJwYy9tbS9ib29rM3M2NC9yYWRpeF90bGIuYyBCaGFyYXRhIEIg
-UmFvICAgIDIwMjEtMDYtMjEgIDQyNyAgCSAqIGluIHRoZSBhc20gc3RhdGVtZW50Lg0KPiBmMGM2
-ZmJiYjkwNTA0ZiBhcmNoL3Bvd2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBC
-IFJhbyAgICAyMDIxLTA2LTIxICA0MjggIAkgKi8NCj4gZjBjNmZiYmI5MDUwNGYgYXJjaC9wb3dl
-cnBjL21tL2Jvb2szczY0L3JhZGl4X3RsYi5jIEJoYXJhdGEgQiBSYW8gICAgMjAyMS0wNi0yMSAg
-NDI5ICAJc3dpdGNoIChyaWMpIHsNCj4gZjBjNmZiYmI5MDUwNGYgYXJjaC9wb3dlcnBjL21tL2Jv
-b2szczY0L3JhZGl4X3RsYi5jIEJoYXJhdGEgQiBSYW8gICAgMjAyMS0wNi0yMSAgNDMwICAJY2Fz
-ZSBSSUNfRkxVU0hfVExCOg0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNoL3Bvd2VycGMvbW0vYm9vazNz
-NjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2LTIxICA0MzEgIAkJX190bGJp
-ZV9waWRfbHBpZChwaWQsIGxwaWQsIFJJQ19GTFVTSF9UTEIpOw0KPiBmMGM2ZmJiYjkwNTA0ZiBh
-cmNoL3Bvd2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIx
-LTA2LTIxICA0MzIgIAkJZml4dXBfdGxiaWVfcGlkX2xwaWQocGlkLCBscGlkKTsNCj4gZjBjNmZi
-YmI5MDUwNGYgYXJjaC9wb3dlcnBjL21tL2Jvb2szczY0L3JhZGl4X3RsYi5jIEJoYXJhdGEgQiBS
-YW8gICAgMjAyMS0wNi0yMSAgNDMzICAJCWJyZWFrOw0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNoL3Bv
-d2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2LTIx
-ICA0MzQgIAljYXNlIFJJQ19GTFVTSF9QV0M6DQo+IGYwYzZmYmJiOTA1MDRmIGFyY2gvcG93ZXJw
-Yy9tbS9ib29rM3M2NC9yYWRpeF90bGIuYyBCaGFyYXRhIEIgUmFvICAgIDIwMjEtMDYtMjEgIDQz
-NSAgCQlfX3RsYmllX3BpZF9scGlkKHBpZCwgbHBpZCwgUklDX0ZMVVNIX1BXQyk7DQo+IGYwYzZm
-YmJiOTA1MDRmIGFyY2gvcG93ZXJwYy9tbS9ib29rM3M2NC9yYWRpeF90bGIuYyBCaGFyYXRhIEIg
-UmFvICAgIDIwMjEtMDYtMjEgIDQzNiAgCQlicmVhazsNCj4gZjBjNmZiYmI5MDUwNGYgYXJjaC9w
-b3dlcnBjL21tL2Jvb2szczY0L3JhZGl4X3RsYi5jIEJoYXJhdGEgQiBSYW8gICAgMjAyMS0wNi0y
-MSAgNDM3ICAJY2FzZSBSSUNfRkxVU0hfQUxMOg0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNoL3Bvd2Vy
-cGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2LTIxICA0
-MzggIAlkZWZhdWx0Og0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNoL3Bvd2VycGMvbW0vYm9vazNzNjQv
-cmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2LTIxICA0MzkgIAkJX190bGJpZV9w
-aWRfbHBpZChwaWQsIGxwaWQsIFJJQ19GTFVTSF9BTEwpOw0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNo
-L3Bvd2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2
-LTIxICA0NDAgIAkJZml4dXBfdGxiaWVfcGlkX2xwaWQocGlkLCBscGlkKTsNCj4gZjBjNmZiYmI5
-MDUwNGYgYXJjaC9wb3dlcnBjL21tL2Jvb2szczY0L3JhZGl4X3RsYi5jIEJoYXJhdGEgQiBSYW8g
-ICAgMjAyMS0wNi0yMSAgNDQxICAJfQ0KPiBmMGM2ZmJiYjkwNTA0ZiBhcmNoL3Bvd2VycGMvbW0v
-Ym9vazNzNjQvcmFkaXhfdGxiLmMgQmhhcmF0YSBCIFJhbyAgICAyMDIxLTA2LTIxICA0NDIgIAlh
-c20gdm9sYXRpbGUoImVpZWlvOyB0bGJzeW5jOyBwdGVzeW5jIiA6IDogOiAibWVtb3J5Iik7DQo+
-IGYwYzZmYmJiOTA1MDRmIGFyY2gvcG93ZXJwYy9tbS9ib29rM3M2NC9yYWRpeF90bGIuYyBCaGFy
-YXRhIEIgUmFvICAgIDIwMjEtMDYtMjEgIDQ0MyAgfQ0KPiAyMjc1ZDdiNTc1NGE1NyBhcmNoL3Bv
-d2VycGMvbW0vYm9vazNzNjQvcmFkaXhfdGxiLmMgTmljaG9sYXMgUGlnZ2luICAyMDE5LTA5LTAz
-ICA0NDQgIHN0cnVjdCB0bGJpZWxfcGlkIHsNCj4gMjI3NWQ3YjU3NTRhNTcgYXJjaC9wb3dlcnBj
-L21tL2Jvb2szczY0L3JhZGl4X3RsYi5jIE5pY2hvbGFzIFBpZ2dpbiAgMjAxOS0wOS0wMyAgNDQ1
-ICAJdW5zaWduZWQgbG9uZyBwaWQ7DQo+IDIyNzVkN2I1NzU0YTU3IGFyY2gvcG93ZXJwYy9tbS9i
-b29rM3M2NC9yYWRpeF90bGIuYyBOaWNob2xhcyBQaWdnaW4gIDIwMTktMDktMDMgIDQ0NiAgCXVu
-c2lnbmVkIGxvbmcgcmljOw0KPiAyMjc1ZDdiNTc1NGE1NyBhcmNoL3Bvd2VycGMvbW0vYm9vazNz
-NjQvcmFkaXhfdGxiLmMgTmljaG9sYXMgUGlnZ2luICAyMDE5LTA5LTAzICA0NDcgIH07DQo+IDIy
-NzVkN2I1NzU0YTU3IGFyY2gvcG93ZXJwYy9tbS9ib29rM3M2NC9yYWRpeF90bGIuYyBOaWNob2xh
-cyBQaWdnaW4gIDIwMTktMDktMDMgIDQ0OA0KPiANCj4gOjo6Ojo6IFRoZSBjb2RlIGF0IGxpbmUg
-NDE5IHdhcyBmaXJzdCBpbnRyb2R1Y2VkIGJ5IGNvbW1pdA0KPiA6Ojo6OjogZjBjNmZiYmI5MDUw
-NGZiN2U5ZGJmMDg2NTQ2M2QzYzJiNGRlNDllNSBLVk06IFBQQzogQm9vazNTIEhWOiBBZGQgc3Vw
-cG9ydCBmb3IgSF9SUFRfSU5WQUxJREFURQ0KPiANCj4gOjo6Ojo6IFRPOiBCaGFyYXRhIEIgUmFv
-IDxiaGFyYXRhQGxpbnV4LmlibS5jb20+DQo+IDo6Ojo6OiBDQzogTWljaGFlbCBFbGxlcm1hbiA8
-bXBlQGVsbGVybWFuLmlkLmF1Pg0KPiANCg==
+On Wed, Aug 09, 2023 at 09:35AM +0200, Marco Elver wrote:
+
+> > I'd really like to get away from calling this "DEBUG", since it's used
+> > more for hardening (CONFIG_LIST_HARDENED?). Will Deacon spent some time
+> > making this better a while back, but the series never landed. Do you
+> > have a bit of time to look through it?
+> >
+> > https://github.com/KSPP/linux/issues/10
+> > https://lore.kernel.org/lkml/20200324153643.15527-1-will@kernel.org/
+> 
+> I'm fine renaming this one. But there are other issues that Will's
+> series solves, which I don't want this series to depend on. We can try
+> to sort them out separately.
+> 
+> The main problem here is that DEBUG_LIST has been designed to be
+> friendly for debugging (incl. checking poison values and NULL). Some
+> kernel devs may still want that, but for production use is pointless
+> and wasteful.
+> 
+> So what I can propose is to introduce CONFIG_LIST_HARDENED that
+> doesn't depend on CONFIG_DEBUG_LIST, but instead selects it, because
+> we still use that code to produce a report.
+
+How about the below?
+
+We'll add CONFIG_HARDEN_LIST (in Kconfig.hardening), which is
+independent of CONFIG_DEBUG_LIST. For the implementation it selects
+DEBUG_LIST, but irrelevant for users.
+
+This will get us the best of both worlds: a version for hardening that
+should remain as fast as possible, and one for debugging with better
+reports.
+
+------ >8 ------
+
+From: Marco Elver <elver@google.com>
+Date: Thu, 27 Jul 2023 22:19:02 +0200
+Subject: [PATCH v4 3/3] list: Introduce CONFIG_HARDEN_LIST
+
+Numerous production kernel configs (see [1, 2]) are choosing to enable
+CONFIG_DEBUG_LIST, which is also being recommended by KSPP for hardened
+configs [3]. The motivation behind this is that the option can be used
+as a security hardening feature (e.g. CVE-2019-2215 and CVE-2019-2025
+are mitigated by the option [4]).
+
+The feature has never been designed with performance in mind, yet common
+list manipulation is happening across hot paths all over the kernel.
+
+Introduce CONFIG_HARDEN_LIST, which performs list pointer checking
+inline, and only upon list corruption calls the reporting slow path.
+
+To generate optimal machine code with CONFIG_HARDEN_LIST:
+
+  1. Elide checking for pointer values which upon dereference would
+     result in an immediate access fault -- therefore "minimal" checks.
+     The trade-off is lower-quality error reports.
+
+  2. Use the newly introduced __preserve_most function attribute
+     (available with Clang, but not yet with GCC) to minimize the code
+     footprint for calling the reporting slow path. As a result,
+     function size of callers is reduced by avoiding saving registers
+     before calling the rarely called reporting slow path.
+
+     Note that all TUs in lib/Makefile already disable function tracing,
+     including list_debug.c, and __preserve_most's implied notrace has
+     no effect in this case.
+
+  3. Because the inline checks are a subset of the full set of checks in
+     __list_*_valid_or_report(), always return false if the inline
+     checks failed.  This avoids redundant compare and conditional
+     branch right after return from the slow path.
+
+As a side-effect of the checks being inline, if the compiler can prove
+some condition to always be true, it can completely elide some checks.
+
+Running netperf with CONFIG_HARDEN_LIST (using a Clang compiler with
+"preserve_most") shows throughput improvements, in my case of ~7% on
+average (up to 20-30% on some test cases).
+
+Link: https://r.android.com/1266735 [1]
+Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/blob/main/config [2]
+Link: https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings [3]
+Link: https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html [4]
+Signed-off-by: Marco Elver <elver@google.com>
+---
+v4:
+* Rename to CONFIG_HARDEN_LIST, which can independently be selected from
+  CONFIG_DEBUG_LIST.
+
+v3:
+* Rename ___list_*_valid() to __list_*_valid_or_report().
+* More comments.
+
+v2:
+* Note that lib/Makefile disables function tracing for everything and
+  __preserve_most's implied notrace is a noop here.
+---
+ arch/arm64/kvm/hyp/nvhe/list_debug.c |  2 +
+ include/linux/list.h                 | 64 +++++++++++++++++++++++++---
+ lib/Kconfig.debug                    | 12 ++++--
+ lib/list_debug.c                     |  2 +
+ security/Kconfig.hardening           | 14 ++++++
+ 5 files changed, 84 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm64/kvm/hyp/nvhe/list_debug.c b/arch/arm64/kvm/hyp/nvhe/list_debug.c
+index 16266a939a4c..46a2d4f2b3c6 100644
+--- a/arch/arm64/kvm/hyp/nvhe/list_debug.c
++++ b/arch/arm64/kvm/hyp/nvhe/list_debug.c
+@@ -26,6 +26,7 @@ static inline __must_check bool nvhe_check_data_corruption(bool v)
+ 
+ /* The predicates checked here are taken from lib/list_debug.c. */
+ 
++__list_valid_slowpath
+ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ 				struct list_head *next)
+ {
+@@ -37,6 +38,7 @@ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ 	return true;
+ }
+ 
++__list_valid_slowpath
+ bool __list_del_entry_valid_or_report(struct list_head *entry)
+ {
+ 	struct list_head *prev, *next;
+diff --git a/include/linux/list.h b/include/linux/list.h
+index 130c6a1bb45c..1c7f70b7cc7a 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -39,38 +39,90 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
+ }
+ 
+ #ifdef CONFIG_DEBUG_LIST
++
++#ifdef CONFIG_HARDEN_LIST
++# define __list_valid_slowpath __cold __preserve_most
++#else
++# define __list_valid_slowpath
++#endif
++
+ /*
+  * Performs the full set of list corruption checks before __list_add().
+  * On list corruption reports a warning, and returns false.
+  */
+-extern bool __list_add_valid_or_report(struct list_head *new,
+-				       struct list_head *prev,
+-				       struct list_head *next);
++extern bool __list_valid_slowpath __list_add_valid_or_report(struct list_head *new,
++							     struct list_head *prev,
++							     struct list_head *next);
+ 
+ /*
+  * Performs list corruption checks before __list_add(). Returns false if a
+  * corruption is detected, true otherwise.
++ *
++ * With CONFIG_HARDEN_LIST set, performs minimal list integrity checking (that
++ * do not result in a fault) inline, and only if a corruption is detected calls
++ * the reporting function __list_add_valid_or_report().
+  */
+ static __always_inline bool __list_add_valid(struct list_head *new,
+ 					     struct list_head *prev,
+ 					     struct list_head *next)
+ {
+-	return __list_add_valid_or_report(new, prev, next);
++	bool ret = true;
++
++	if (IS_ENABLED(CONFIG_HARDEN_LIST)) {
++		/*
++		 * With the hardening version, elide checking if next and prev
++		 * are NULL, since the immediate dereference of them below would
++		 * result in a fault if NULL.
++		 *
++		 * With the reduced set of checks, we can afford to inline the
++		 * checks, which also gives the compiler a chance to elide some
++		 * of them completely if they can be proven at compile-time. If
++		 * one of the pre-conditions does not hold, the slow-path will
++		 * show a report which pre-condition failed.
++		 */
++		if (likely(next->prev == prev && prev->next == next && new != prev && new != next))
++			return true;
++		ret = false;
++	}
++
++	ret &= __list_add_valid_or_report(new, prev, next);
++	return ret;
+ }
+ 
+ /*
+  * Performs the full set of list corruption checks before __list_del_entry().
+  * On list corruption reports a warning, and returns false.
+  */
+-extern bool __list_del_entry_valid_or_report(struct list_head *entry);
++extern bool __list_valid_slowpath __list_del_entry_valid_or_report(struct list_head *entry);
+ 
+ /*
+  * Performs list corruption checks before __list_del_entry(). Returns false if a
+  * corruption is detected, true otherwise.
++ *
++ * With CONFIG_HARDEN_LIST set, performs minimal list integrity checking (that
++ * do not result in a fault) inline, and only if a corruption is detected calls
++ * the reporting function __list_del_entry_valid_or_report().
+  */
+ static __always_inline bool __list_del_entry_valid(struct list_head *entry)
+ {
+-	return __list_del_entry_valid_or_report(entry);
++	bool ret = true;
++
++	if (IS_ENABLED(CONFIG_HARDEN_LIST)) {
++		struct list_head *prev = entry->prev;
++		struct list_head *next = entry->next;
++
++		/*
++		 * With the hardening version, elide checking if next and prev
++		 * are NULL, LIST_POISON1 or LIST_POISON2, since the immediate
++		 * dereference of them below would result in a fault.
++		 */
++		if (likely(prev->next == entry && next->prev == entry))
++			return true;
++		ret = false;
++	}
++
++	ret &= __list_del_entry_valid_or_report(entry);
++	return ret;
+ }
+ #else
+ static inline bool __list_add_valid(struct list_head *new,
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index fbc89baf7de6..6b0de78fb2da 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1672,11 +1672,15 @@ config HAVE_DEBUG_BUGVERBOSE
+ menu "Debug kernel data structures"
+ 
+ config DEBUG_LIST
+-	bool "Debug linked list manipulation"
+-	depends on DEBUG_KERNEL || BUG_ON_DATA_CORRUPTION
++	bool "Debug linked list manipulation" if !HARDEN_LIST
++	depends on DEBUG_KERNEL || BUG_ON_DATA_CORRUPTION || HARDEN_LIST
+ 	help
+-	  Enable this to turn on extended checks in the linked-list
+-	  walking routines.
++	  Enable this to turn on extended checks in the linked-list walking
++	  routines.
++
++	  If you care about performance, you should enable CONFIG_HARDEN_LIST
++	  instead.  This option alone trades better quality error reports for
++	  worse performance, and is more suitable for debugging.
+ 
+ 	  If unsure, say N.
+ 
+diff --git a/lib/list_debug.c b/lib/list_debug.c
+index 2def33b1491f..0ff547910dd0 100644
+--- a/lib/list_debug.c
++++ b/lib/list_debug.c
+@@ -17,6 +17,7 @@
+  * attempt).
+  */
+ 
++__list_valid_slowpath
+ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ 				struct list_head *next)
+ {
+@@ -39,6 +40,7 @@ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ }
+ EXPORT_SYMBOL(__list_add_valid_or_report);
+ 
++__list_valid_slowpath
+ bool __list_del_entry_valid_or_report(struct list_head *entry)
+ {
+ 	struct list_head *prev, *next;
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index 0f295961e773..a8aef895f13d 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -279,6 +279,20 @@ config ZERO_CALL_USED_REGS
+ 
+ endmenu
+ 
++menu "Hardening of kernel data structures"
++
++config HARDEN_LIST
++	bool "Check integrity of linked list manipulation"
++	select DEBUG_LIST
++	help
++	  Minimal integrity checking in the linked-list manipulation routines
++	  to catch memory corruptions that are not guaranteed to result in an
++	  immediate access fault.
++
++	  If unsure, say N.
++
++endmenu
++
+ config CC_HAS_RANDSTRUCT
+ 	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
+ 	# Randstruct was first added in Clang 15, but it isn't safe to use until
+-- 
+2.41.0.640.ga95def55d0-goog
+
