@@ -1,107 +1,83 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565B86124
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 07:36:08 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3fe4cdb72b9so36253545e9.0
-        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 00:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691566566; x=1692171366;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9g6zXd3UY6FR9mRGo0YLbshWp2Mg0VfIdE8xLRYTWgY=;
-        b=P1SYKGJXzgRZvbTDBewiHnTDquAXRziX7UWB26is7h3/LiMwXhLXRCePcZ3BDl0Sdj
-         fGD27F0jvYX2V3fWhgm1uCi12Ht843Bi32gcSGtXanIH5Hx5/pexhNmOSzgbpLWi4B7m
-         /4hLuvXBj4TEiOHNyQZwWu/AVVFiKdfUXkSu7SNllyLWulMGPQg9OE5dIggbyXyCk09q
-         bpQKrrWKWejpp32CDgXVZ7+1vppAq+IKuCSWsE+FVd61SVP0/wF9DO/zFGxrJCeBHPZF
-         rKQmmGEeST4P24Ouz360dDEJmLUdlYaDL3MrtkgZfo4m7py3CJALHORTe/3Iag5hWYOg
-         CbiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691566566; x=1692171366;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9g6zXd3UY6FR9mRGo0YLbshWp2Mg0VfIdE8xLRYTWgY=;
-        b=avCl2UCMFFSN1dmOLeL5nn15q6qkQvQn30WyCsYTXVwHZeaEuVZUZV+Q7wJ3DGetzS
-         bIeJlcC0sC3ZWvK1+NNI/QH6lnnXp2FFl5hv/mTNKVVT+gobhX447tEXx2NpZohFOLDz
-         MP9N6VSJrZkWIgx61z6sDVgaxsOuL4PH4uVgInFL92kibno96QIdoajx5AaGzEkcFqLp
-         fnBmto/g0+oGFk4KAFbJ5X73oaB9Wovp/MkLnJoXVSjSRZynFRHADl0HhjFLDZoUQTjt
-         tddUT5fqfnwuV1LOu7ib4FrgCBW0NvH6zZRMScg0ihExgPaLOuCzkMxqv2Dd6vA8/K7M
-         DQOg==
-X-Gm-Message-State: AOJu0YzEP2JOQe03JzMB6vaWix8jvkm/MrPgGrIqn0ypnBPm+VT/45V2
-	PHHuNd/VK+6+v0k7SgBM3cgD4TP4RDsejYeor0zY1g==
-X-Google-Smtp-Source: AGHT+IFLVn1NeZhNSR4e0f4XwgaZlOp0UJWCsTWtrzAtLWAsvsgQTICHpp1h8SPYP0VKCEaRvXTAkpih5U8qZmKLx5g=
-X-Received: by 2002:a05:600c:ac4:b0:3f9:c0f2:e1a4 with SMTP id
- c4-20020a05600c0ac400b003f9c0f2e1a4mr1498745wmr.34.1691566566341; Wed, 09 Aug
- 2023 00:36:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE491B7EA;
+	Wed,  9 Aug 2023 07:44:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691567067; x=1723103067;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=tctWKCpq59L9BOs5P7jDXh4fWnrBE27aAbNNVRN38gk=;
+  b=djZWdYyGEuN+ZCQX4s7ADAFWvESkCp9ambfg0xL82ixVlM0Ef6zkVCyk
+   LwcsepmXNL5DNdJ6a5PL4NlZVebK+Ip1OepbSMpUG5VZO0okeFmvQfCnt
+   7DG9g4B6K4NbxiJVihYMx5Bu5wTFdqdv+ibM2FHJEk2T5B9ey6Unl7U2J
+   cDysL3oN9xp+GHVM/lLu7/XBy6QM4W/x1J1edJcflAVMlw+teEMDYC/Uw
+   PLppqFNh1fQgXzEeW/Sp2ydM8Uc6Db1+qgcXSCs6Ii6WXEzRG3Wf71lvP
+   XSPlOAchfASZRMl/qPkyFbHZk1y6oUj5KhTw9MzJreSZsYOBUpzy4OGW4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="373833794"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="373833794"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 00:44:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="855423534"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="855423534"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 09 Aug 2023 00:44:26 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTdrl-0005vY-27;
+	Wed, 09 Aug 2023 07:44:25 +0000
+Date: Wed, 9 Aug 2023 15:44:09 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [PATCH net v2 06/17] selftests: forwarding: Add a helper to skip
+ test when using veth pairs
+Message-ID: <202308091512.SuOL2n62-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230808102049.465864-1-elver@google.com> <20230808102049.465864-3-elver@google.com>
- <202308081424.1DC7AA4AE3@keescook>
-In-Reply-To: <202308081424.1DC7AA4AE3@keescook>
-From: Marco Elver <elver@google.com>
-Date: Wed, 9 Aug 2023 09:35:29 +0200
-Message-ID: <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 8 Aug 2023 at 23:27, Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, Aug 08, 2023 at 12:17:27PM +0200, Marco Elver wrote:
-> > Numerous production kernel configs (see [1, 2]) are choosing to enable
-> > CONFIG_DEBUG_LIST, which is also being recommended by KSPP for hardened
-> > configs [3]. The feature has never been designed with performance in
-> > mind, yet common list manipulation is happening across hot paths all
-> > over the kernel.
-> >
-> > Introduce CONFIG_DEBUG_LIST_MINIMAL, which performs list pointer
-> > checking inline, and only upon list corruption delegates to the
-> > reporting slow path.
->
-> I'd really like to get away from calling this "DEBUG", since it's used
-> more for hardening (CONFIG_LIST_HARDENED?). Will Deacon spent some time
-> making this better a while back, but the series never landed. Do you
-> have a bit of time to look through it?
->
-> https://github.com/KSPP/linux/issues/10
-> https://lore.kernel.org/lkml/20200324153643.15527-1-will@kernel.org/
+In-Reply-To: <20230808141503.4060661-7-idosch@nvidia.com>
+References: <20230808141503.4060661-7-idosch@nvidia.com>
+TO: Ido Schimmel <idosch@nvidia.com>
 
-I'm fine renaming this one. But there are other issues that Will's
-series solves, which I don't want this series to depend on. We can try
-to sort them out separately.
+Hi Ido,
 
-The main problem here is that DEBUG_LIST has been designed to be
-friendly for debugging (incl. checking poison values and NULL). Some
-kernel devs may still want that, but for production use is pointless
-and wasteful.
+kernel test robot noticed the following build errors:
 
-So what I can propose is to introduce CONFIG_LIST_HARDENED that
-doesn't depend on CONFIG_DEBUG_LIST, but instead selects it, because
-we still use that code to produce a report.
+[auto build test ERROR on net/main]
 
-If there are other list types that have similar debug checks, but
-where we can optimize performance by eliding some and moving them
-inline, we can do the same (CONFIG_*_HARDENED). If the checks are
-already optimized, we could just rename it to CONFIG_*_HARDENED and
-remove the DEBUG-name.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ido-Schimmel/selftests-forwarding-Skip-test-when-no-interfaces-are-specified/20230809-000303
+base:   net/main
+patch link:    https://lore.kernel.org/r/20230808141503.4060661-7-idosch%40nvidia.com
+patch subject: [PATCH net v2 06/17] selftests: forwarding: Add a helper to skip test when using veth pairs
+config: riscv-randconfig-r031-20230808 (https://download.01.org/0day-ci/archive/20230809/202308091512.SuOL2n62-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230809/202308091512.SuOL2n62-lkp@intel.com/reproduce)
 
-I'm not a big fan of the 2 modes either, but that's what we get if we
-want to support the debugging and hardening usecases. Inlining the
-full set of checks does not work for performance and size.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308091512.SuOL2n62-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0x4c0): relocation R_RISCV_HI20 out of range: 527723 is not in [-524288, 524287]; references 'trace_initcall_start.______f'
+   >>> referenced by rcupdate.h:777 (include/linux/rcupdate.h:777)
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0x518): relocation R_RISCV_HI20 out of range: 527723 is not in [-524288, 524287]; references 'trace_initcall_start.______f.82'
+   >>> referenced by rcupdate.h:777 (include/linux/rcupdate.h:777)
+   >>> defined in vmlinux.a(init/main.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
