@@ -1,90 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D1D24512;
-	Wed,  9 Aug 2023 21:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691615632; x=1723151632;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DGY+Ebdjceb0GEAHe2jqRRlpj7TTaBCkl+ciV1zjV7I=;
-  b=eYLBmdIK/hCnFoIHYsirAL35X8Y/4v6KFE7jTFqFlrQjiFWq/Mta6Bwh
-   j1M6LbYxwd83OvdiL3TX+A6gLUoZcQ3bV9sz5qkx+LkLX1DTstiwtHhJm
-   VEOmhSu7VNujFfhp2idlinBKeLnZqofvOapjLdPSWHWJOImN0cjGQuYAR
-   AMeuYA7KoglTFMz65BGqn8AAVUPin7h6MW05oirAZ1brGo1zBBjiZi+d6
-   mYo3FFIQ3pEEwwmCHIK8/jF6saOO398xPTXxLohAaBnQmUqR/xYI2O0+L
-   Fm2pk2LcWh/SvHHJLSH0YJu94I6dSKpfMfjhXfKU5s18ggIVsS5TqTDwh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="374014177"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="374014177"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 14:13:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="681844719"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="681844719"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 Aug 2023 14:13:45 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTqUy-0006PO-2G;
-	Wed, 09 Aug 2023 21:13:44 +0000
-Date: Thu, 10 Aug 2023 05:13:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:locking/core 5/7] kernel/sched/core.c:7068:18: error:
- invalid application of 'typeof' to bit-field
-Message-ID: <202308100502.Q4h5VfV2-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6F824512
+	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 21:25:44 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-569e7aec37bso4287067b3.2
+        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 14:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691616344; x=1692221144;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=f9IA4VRf5s9KilAL2p48TkUCprDEkC/a1VvexeDrj98=;
+        b=dOATPQ7iS0JO1AkunR0tNZolLIVjYX20xMbVpRiVQxbFjNbwKDpDUwmUHtnq1rRLIs
+         rRbW5LuSwKJTXSY3xDE4OLA4ayGjaxlEhEuoRE3YlPGi11TT57pSZtPSHr8godYXp0kw
+         BWXwerfHy7E1qgSv0FlTrmk7Kem16dJ5by84hFfYhgNuhblD0JRUa8g5aFywyUAP4jl+
+         ZQSLz5U7Wi2slTxcm15/0rbtNUiCuryagC6MkITnPK9FwsVOkSRcOV49s34S6+sTspd3
+         FcTALFpb6ZrZHorIUhL0kpB9RRzfRqu09Z0Hl/XZLsxu6y4Bd6aJasAzoITLI2Z6DOl0
+         mNlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691616344; x=1692221144;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f9IA4VRf5s9KilAL2p48TkUCprDEkC/a1VvexeDrj98=;
+        b=OtuVY3nfCBlI94Yvr2YDWjRPcUeI7Wk0JFcaFDeemqi6KG6G3ebGZQlstn72VllLLG
+         2hyfn+9bxkrKm6S8GlYNKnf1S77vH57xAzPJvkM/x4Mr8M3rZRENyoOJ3IUwFz8+PfCQ
+         C2vlevp4PP6tC8R1ZIdPoQeuVxHyrb1YEKlsyqhgPZeIaNljFNu1b1/NmF3eXad9wrl/
+         YllG7bbiEz9nzvTa6dJhRx/VC8aOYMixE/I7WJefD6OKtR/cNKp+BoNduyCKNnE/EvRZ
+         T73wZh8sYWDjVlbCxE4Y1F8eAMh/HLqNB/peq5gUsK/1hlBwmHEukqfKfYAFLBgPbAhy
+         J+PQ==
+X-Gm-Message-State: AOJu0YzbfTfNgta6CxtYU3vT2qj77SIP0/DFYSKNv74r87v/1OGtc38Z
+	ObuEs1+A8DPBeaTzqJYui3Wm0zzlv+KUZAN5Jg==
+X-Google-Smtp-Source: AGHT+IHmWhQRw7zjLbA6uwLJAyfMzKym8d1VFdTg3xFVzdhsVwo+jvguNBI/0YxEPsma+8E69eIZjuvHAaG/iklJmw==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a81:ae5d:0:b0:555:cd45:bc3a with SMTP
+ id g29-20020a81ae5d000000b00555cd45bc3amr7686ywk.9.1691616344006; Wed, 09 Aug
+ 2023 14:25:44 -0700 (PDT)
+Date: Wed, 09 Aug 2023 21:25:34 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAE4E1GQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDCwNL3eSkHF1DSwNj3URzA0NzA0sTUwtTYyWg8oKi1LTMCrBR0bG1tQC XJFjoWgAAAA==
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691616342; l=752;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=FtW6hZH73XFuu5e5Bpu5qUCSAUpxVZ9gts49xFeXa4Y=; b=584daAHzX1kV9qkGHNMgA2HBkKPc5hKMsPR4KiLUys8HQpD5yUnwspzdsha0Gy6gZR7BdvZkB
+ p8rXNK6PBvFCdqmnguTz/nBrsuZILkc2amvwPxEbIFpSco/Odd6npVK
+X-Mailer: b4 0.12.3
+Message-ID: <20230809-cbl-1903-v1-0-df9d66a3ba3e@google.com>
+Subject: [PATCH 0/2] i2c: fix -Wvoid-pointer-to-enum-cast warnings
+From: Justin Stitt <justinstitt@google.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-head:   47a35f56e63994577fabd8fbc58b6551416f8250
-commit: 876dda04d9e0849c1d112180ec0e35cab6fbe494 [5/7] sched: Provide rt_mutex specific scheduler helpers
-config: arm-randconfig-r003-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100502.Q4h5VfV2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100502.Q4h5VfV2-lkp@intel.com/reproduce)
+This patch series fixes two instances of -Wvoid-pointer-to-enum-cast
+warnings present when building with W=1
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308100502.Q4h5VfV2-lkp@intel.com/
+Link: https://github.com/ClangBuiltLinux/linux/issues/1903
+Link: https://github.com/ClangBuiltLinux/linux/issues/1904
+Link: https://github.com/ClangBuiltLinux/linux/issues/1910
 
-All errors (new ones prefixed by >>):
+---
+Justin Stitt (2):
+      i2c: i2c-bcm-iproc: fix -Wvoid-pointer-to-enum-cast warning
+      i2c: i2c-rcar: fix -Wvoid-pointer-to-enum-cast warning
 
->> kernel/sched/core.c:7068:18: error: invalid application of 'typeof' to bit-field
-    7068 |         lockdep_assert(!fetch_and_set(current->sched_rt_mutex, 1));
-         |                         ^
-   kernel/sched/core.c:7064:38: note: expanded from macro 'fetch_and_set'
-    7064 | #define fetch_and_set(x, v) ({ typeof(x) _x = (x); (x) = (v); _x; })
-         |                                      ^
-   kernel/sched/core.c:7081:17: error: invalid application of 'typeof' to bit-field
-    7081 |         lockdep_assert(fetch_and_set(current->sched_rt_mutex, 0));
-         |                        ^
-   kernel/sched/core.c:7064:38: note: expanded from macro 'fetch_and_set'
-    7064 | #define fetch_and_set(x, v) ({ typeof(x) _x = (x); (x) = (v); _x; })
-         |                                      ^
-   2 errors generated.
+ drivers/i2c/busses/i2c-bcm-iproc.c | 2 +-
+ drivers/i2c/busses/i2c-rcar.c      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+---
+base-commit: c1a515d3c0270628df8ae5f5118ba859b85464a2
+change-id: 20230809-cbl-1903-a70170945853
 
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
 
-vim +/typeof +7068 kernel/sched/core.c
-
-  7065	
-  7066	void rt_mutex_pre_schedule(void)
-  7067	{
-> 7068		lockdep_assert(!fetch_and_set(current->sched_rt_mutex, 1));
-  7069		sched_submit_work(current);
-  7070	}
-  7071	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
