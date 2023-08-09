@@ -1,36 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AF124505;
-	Wed,  9 Aug 2023 20:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3F8C433C7;
-	Wed,  9 Aug 2023 20:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691611748;
-	bh=g6rYgy+MPs3unR3QlJahG1JrUzUL0BpSkhQKnWPcIdo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sm8ESXXBEE1sOdivUjr4ohxWdrxwfJyjliUAyV3ATjwPV/ayS88fq4alKDBYxkt5d
-	 sIex/4I4P0AyCcueQVlwSHnkrxZjV19Ha86LMmltS1Z3lWmzV1sW51aPUQp124aHkD
-	 2apFExEONxiJ6I3GLe0AHEIiByQewI2kRPytVDTPCvZtgtQYibhlX7wqAzNVSH6eJj
-	 osk3LzzEYAECZGKNBu7JAa3pN55l+7BTWPKBNDI6wu3mv1joKPJ3QCiL/piCip7vNo
-	 7fZSzfNZrqjcqzTVGxaIhQfrs3CXC/jvxSGie1I+tDdrtf/SAqvT7Konp5ZD3qQObe
-	 TdsUotB6LgHKQ==
-Date: Wed, 9 Aug 2023 13:09:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: broonie@kernel.org, lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
-	yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-	daniel.baluta@nxp.com, kai.vehmanen@linux.intel.com,
-	ndesaulniers@google.com, trix@redhat.com, rander.wang@intel.com,
-	sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] ASoC: SOF: Intel: Initialize chip in
- hda_sdw_check_wakeen_irq()
-Message-ID: <20230809200906.GA4016444@dev-arch.thelio-3990X>
-References: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
- <8eed2099-2853-df8d-92db-921d0702f512@linux.intel.com>
- <20230809190212.GB3355565@dev-arch.thelio-3990X>
- <2a2de1b5-4dd5-f170-bb0b-61d39230c3a7@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84EC24523;
+	Wed,  9 Aug 2023 20:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691611972; x=1723147972;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a593atNLjvTW6wTIgjDpm2hsb2frCamf/mhHkQRmPdg=;
+  b=do5EAWn6KZWB3pvBpQbCmEI9PdAwZtRKBr/Aq61fNPGFx3Y8S79zWEOf
+   qb2iHaGHX3zyW00jSVWYRslkgcLEuDG1g8Erwcal+Qa3v7Hdts9W9Ynxv
+   W6PCO7E9PfFFPZTWdgoGutwM9dIdfhZykz2tcqeYhu/vXqhViliJuknzf
+   PSOsF84pLrPsSlJ41DDtWg8/qbF2BFCQCR+amM+YtWL9YSGw2nMZ9v3yj
+   XkFaMv2702ZV+eU4DGZ/Agn9bUik3Z7C929jlKpJiqJ3/YhJEiwkHozNr
+   bR5F9cE9Zt1iwIDrOXA+wJz7fJRdJjsKx/j+ybbB+JdgvzQBtGQ55rgsW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="356186951"
+X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
+   d="scan'208";a="356186951"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 13:12:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="905782621"
+X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
+   d="scan'208";a="905782621"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2023 13:12:43 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTpXu-0006MM-0X;
+	Wed, 09 Aug 2023 20:12:42 +0000
+Date: Thu, 10 Aug 2023 04:11:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:x86/srso 11/17] arch/x86/kernel/cpu/bugs.c:2611:7:
+ warning: data argument not used by format string
+Message-ID: <202308100428.pHrKXj0P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,61 +45,203 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2a2de1b5-4dd5-f170-bb0b-61d39230c3a7@linux.intel.com>
 
-On Wed, Aug 09, 2023 at 02:57:13PM -0500, Pierre-Louis Bossart wrote:
-> > Looking at your GitHub Actions files, I am not sure exporting CC works
-> > correctly so I don't think you are building with clang. If I do it
-> 
-> D'oh. I did not see this one coming... nice.
-> 
-> > locally:
-> > 
-> > $ export CC=clang
-> > 
-> > $ make -j$(nproc) defconfig
-> > 
-> > $ grep -E 'CONFIG_(CC_IS|CLANG|GCC)' .config
-> > CONFIG_CC_IS_GCC=y
-> > CONFIG_GCC_VERSION=130201
-> > CONFIG_CLANG_VERSION=0
-> > CONFIG_GCC11_NO_ARRAY_BOUNDS=y
-> > CONFIG_GCC_PLUGINS=y
-> > # CONFIG_GCC_PLUGIN_LATENT_ENTROPY is not set
-> > # CONFIG_GCC_PLUGIN_STACKLEAK is not set
-> > 
-> > $ make -j$(nproc) sound/soc/sof/intel/hda.o
-> > 
-> > $ head -1 sound/soc/sof/intel/.hda.o.cmd
-> > savedcmd_sound/soc/sof/intel/hda.o := gcc ...
-> > 
-> > This was brought up some time ago and Masahiro made a decent point that
-> > this might not be a desirable behavior change.
-> > 
-> > https://lore.kernel.org/CAK7LNAT6Yp3oemUxSst+htnmM-St8WmSv+UZ2x2XF23cw-kU-Q@mail.gmail.com/
-> > 
-> > Switching to passing CC via the actual make command should fix that.
-> 
-> Not quite. We generate our .config using "make defconfig" as a baseline
-> and then "merge_config.sh" to add a bunch of fragments we need [1]. And
-> of course the latter script does not understand CC=clang and switches
-> back to GCC.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/srso
+head:   c11a8b2bc1bb3ad76d8d28b283552768d665208c
+commit: 11c0071d430e8287450563655600f52ec302d1f0 [11/17] x86/cpu: Remove all SRSO interface nonsense
+config: x86_64-randconfig-x003-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100428.pHrKXj0P-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100428.pHrKXj0P-lkp@intel.com/reproduce)
 
-Ah, I still think you will need to pass CC to make directly, rather than
-through the environment but you should be able to prevent
-merge_config.sh from getting in the way by passing '-m' to avoid having
-it invoke make itself, then you can add a 'make olddefconfig' step after
-that, perhaps something like this?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308100428.pHrKXj0P-lkp@intel.com/
 
-  - name: build start
-    run: |
-      export ARCH=x86_64 KCFLAGS="-Wall -Werror"
-      export MAKEFLAGS=j"$(nproc)"
-      bash kconfig/kconfig-sof-default.sh -m
-      make CC=clang olddefconfig
-      make CC=clang sound/
-      make CC=clang drivers/soundwire/
-      make CC=clang
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Nathan
+   arch/x86/kernel/cpu/bugs.c:680:6: warning: no previous prototype for function 'gds_ucode_mitigated' [-Wmissing-prototypes]
+   bool gds_ucode_mitigated(void)
+        ^
+   arch/x86/kernel/cpu/bugs.c:680:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool gds_ucode_mitigated(void)
+   ^
+   static 
+>> arch/x86/kernel/cpu/bugs.c:2611:7: warning: data argument not used by format string [-Wformat-extra-args]
+                                     cpu_has_ibpb_brtype_microcode() ? "" : "; no SRSO microcode");
+                                     ^
+>> arch/x86/kernel/cpu/bugs.c:2742:9: warning: no previous prototype for function 'cpu_show_spec_rstack_overflow' [-Wmissing-prototypes]
+   ssize_t cpu_show_spec_rstack_overflow(struct device *dev, struct device_attribute *attr, char *buf)
+           ^
+   arch/x86/kernel/cpu/bugs.c:2742:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t cpu_show_spec_rstack_overflow(struct device *dev, struct device_attribute *attr, char *buf)
+   ^
+   static 
+   arch/x86/kernel/cpu/bugs.c:2747:9: warning: no previous prototype for function 'cpu_show_gds' [-Wmissing-prototypes]
+   ssize_t cpu_show_gds(struct device *dev, struct device_attribute *attr, char *buf)
+           ^
+   arch/x86/kernel/cpu/bugs.c:2747:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t cpu_show_gds(struct device *dev, struct device_attribute *attr, char *buf)
+   ^
+   static 
+   4 warnings generated.
+
+
+vim +2611 arch/x86/kernel/cpu/bugs.c
+
+  2595	
+  2596	static ssize_t retbleed_show_state(char *buf)
+  2597	{
+  2598		if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
+  2599		    retbleed_mitigation == RETBLEED_MITIGATION_UNRET_SRSO ||
+  2600		    retbleed_mitigation == RETBLEED_MITIGATION_UNRET_SRSO_ALIAS ||
+  2601		    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
+  2602			if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+  2603			    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+  2604				return sysfs_emit(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
+  2605	
+  2606			return sysfs_emit(buf, "%s; SMT %s\n", retbleed_strings[retbleed_mitigation],
+  2607					  !sched_smt_active() ? "disabled" :
+  2608					  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT ||
+  2609					  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT_PREFERRED ?
+  2610					  "enabled with STIBP protection" : "vulnerable",
+> 2611					  cpu_has_ibpb_brtype_microcode() ? "" : "; no SRSO microcode");
+  2612	
+  2613		}
+  2614	
+  2615		return sysfs_emit(buf, "%s%s\n", retbleed_strings[retbleed_mitigation],
+  2616				  (boot_cpu_data.x86_vendor != X86_VENDOR_AMD ||
+  2617				   cpu_has_ibpb_brtype_microcode()) ? "" : "; no SRSO microcode");
+  2618	}
+  2619	
+  2620	static ssize_t gds_show_state(char *buf)
+  2621	{
+  2622		return sysfs_emit(buf, "%s\n", gds_strings[gds_mitigation]);
+  2623	}
+  2624	
+  2625	static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr,
+  2626				       char *buf, unsigned int bug)
+  2627	{
+  2628		if (!boot_cpu_has_bug(bug))
+  2629			return sysfs_emit(buf, "Not affected\n");
+  2630	
+  2631		switch (bug) {
+  2632		case X86_BUG_CPU_MELTDOWN:
+  2633			if (boot_cpu_has(X86_FEATURE_PTI))
+  2634				return sysfs_emit(buf, "Mitigation: PTI\n");
+  2635	
+  2636			if (hypervisor_is_type(X86_HYPER_XEN_PV))
+  2637				return sysfs_emit(buf, "Unknown (XEN PV detected, hypervisor mitigation required)\n");
+  2638	
+  2639			break;
+  2640	
+  2641		case X86_BUG_SPECTRE_V1:
+  2642			return sysfs_emit(buf, "%s\n", spectre_v1_strings[spectre_v1_mitigation]);
+  2643	
+  2644		case X86_BUG_SPECTRE_V2:
+  2645			return spectre_v2_show_state(buf);
+  2646	
+  2647		case X86_BUG_SPEC_STORE_BYPASS:
+  2648			return sysfs_emit(buf, "%s\n", ssb_strings[ssb_mode]);
+  2649	
+  2650		case X86_BUG_L1TF:
+  2651			if (boot_cpu_has(X86_FEATURE_L1TF_PTEINV))
+  2652				return l1tf_show_state(buf);
+  2653			break;
+  2654	
+  2655		case X86_BUG_MDS:
+  2656			return mds_show_state(buf);
+  2657	
+  2658		case X86_BUG_TAA:
+  2659			return tsx_async_abort_show_state(buf);
+  2660	
+  2661		case X86_BUG_ITLB_MULTIHIT:
+  2662			return itlb_multihit_show_state(buf);
+  2663	
+  2664		case X86_BUG_SRBDS:
+  2665			return srbds_show_state(buf);
+  2666	
+  2667		case X86_BUG_MMIO_STALE_DATA:
+  2668		case X86_BUG_MMIO_UNKNOWN:
+  2669			return mmio_stale_data_show_state(buf);
+  2670	
+  2671		case X86_BUG_RETBLEED:
+  2672			return retbleed_show_state(buf);
+  2673	
+  2674		case X86_BUG_GDS:
+  2675			return gds_show_state(buf);
+  2676	
+  2677		default:
+  2678			break;
+  2679		}
+  2680	
+  2681		return sysfs_emit(buf, "Vulnerable\n");
+  2682	}
+  2683	
+  2684	ssize_t cpu_show_meltdown(struct device *dev, struct device_attribute *attr, char *buf)
+  2685	{
+  2686		return cpu_show_common(dev, attr, buf, X86_BUG_CPU_MELTDOWN);
+  2687	}
+  2688	
+  2689	ssize_t cpu_show_spectre_v1(struct device *dev, struct device_attribute *attr, char *buf)
+  2690	{
+  2691		return cpu_show_common(dev, attr, buf, X86_BUG_SPECTRE_V1);
+  2692	}
+  2693	
+  2694	ssize_t cpu_show_spectre_v2(struct device *dev, struct device_attribute *attr, char *buf)
+  2695	{
+  2696		return cpu_show_common(dev, attr, buf, X86_BUG_SPECTRE_V2);
+  2697	}
+  2698	
+  2699	ssize_t cpu_show_spec_store_bypass(struct device *dev, struct device_attribute *attr, char *buf)
+  2700	{
+  2701		return cpu_show_common(dev, attr, buf, X86_BUG_SPEC_STORE_BYPASS);
+  2702	}
+  2703	
+  2704	ssize_t cpu_show_l1tf(struct device *dev, struct device_attribute *attr, char *buf)
+  2705	{
+  2706		return cpu_show_common(dev, attr, buf, X86_BUG_L1TF);
+  2707	}
+  2708	
+  2709	ssize_t cpu_show_mds(struct device *dev, struct device_attribute *attr, char *buf)
+  2710	{
+  2711		return cpu_show_common(dev, attr, buf, X86_BUG_MDS);
+  2712	}
+  2713	
+  2714	ssize_t cpu_show_tsx_async_abort(struct device *dev, struct device_attribute *attr, char *buf)
+  2715	{
+  2716		return cpu_show_common(dev, attr, buf, X86_BUG_TAA);
+  2717	}
+  2718	
+  2719	ssize_t cpu_show_itlb_multihit(struct device *dev, struct device_attribute *attr, char *buf)
+  2720	{
+  2721		return cpu_show_common(dev, attr, buf, X86_BUG_ITLB_MULTIHIT);
+  2722	}
+  2723	
+  2724	ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *buf)
+  2725	{
+  2726		return cpu_show_common(dev, attr, buf, X86_BUG_SRBDS);
+  2727	}
+  2728	
+  2729	ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
+  2730	{
+  2731		if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
+  2732			return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_UNKNOWN);
+  2733		else
+  2734			return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
+  2735	}
+  2736	
+  2737	ssize_t cpu_show_retbleed(struct device *dev, struct device_attribute *attr, char *buf)
+  2738	{
+  2739		return cpu_show_common(dev, attr, buf, X86_BUG_RETBLEED);
+  2740	}
+  2741	
+> 2742	ssize_t cpu_show_spec_rstack_overflow(struct device *dev, struct device_attribute *attr, char *buf)
+  2743	{
+  2744		return cpu_show_common(dev, attr, buf, X86_BUG_SRSO);
+  2745	}
+  2746	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
