@@ -1,43 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8E11AA83;
-	Wed,  9 Aug 2023 16:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691597114; x=1723133114;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tV9kx4lRBM0Fr/e/Nh+Jeal6/5Xk3/+aqAgnGZh05Js=;
-  b=VTtxfmo8FQiTfzrKSJkPafWj2lp+RCam6EPqxwnCnW3ia5bWLF3H9h+T
-   sPqKAStQ+OPjOKrsDK3TM/aHo98IRLPOJrhUKfTI3VhBqzwrauThkCEm8
-   xnzzBx3BNN4Ofr+dhtjAWbU36+1y3U/QbPxuJXiM4CGht+1/Rnia1LT1D
-   Xfxh//l5ThXc6oapGbppKJ9gt9p82syTzLbPxvpgc4LRck2/uSGPiRBYH
-   zhLFZSK8uDB5jH6ZC/h+eOthohd0IuVF1Sm6NxqC68bU2rh/EhSM+1auH
-   FWvxQPL0YKHF51eUh+OzsiYGvmD/BCN9wn7PYrkT/2vid3Zt3EJkCrHkn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="356128824"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="356128824"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 09:04:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="731872894"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="731872894"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Aug 2023 09:04:37 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTlfp-0006E4-0P;
-	Wed, 09 Aug 2023 16:04:37 +0000
-Date: Thu, 10 Aug 2023 00:03:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:virt-to-pfn-v6.5-rc1 11/12]
- arch/s390/include/asm/kfence.h:38:34: error: incompatible integer to pointer
- conversion passing 'unsigned long' to parameter of type 'const void *'
-Message-ID: <202308100032.TNd9PEFv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5764D1E522
+	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 16:32:45 +0000 (UTC)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-317716a4622so57861f8f.1
+        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 09:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691598763; x=1692203563;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fUKdVS5/N5qQkJwAZJURTrzizTk+EoulthkFub9h71Q=;
+        b=LbvtTy/FLD0wzImORvHKE16saLu0nwLV93T+6LbYf8pYhsLhS5zapolbw8ClDY4ku0
+         FAGVzYJzteO97NgGOnBEEPDlI4o/J0VY5PvCMCvJKa3qSoUVEqUyO+7Q86tk3pQerMtk
+         JYLxe3o3CIAUkcm/XPb5fAit9O3p/gAVNqqJ83JYfxg1p+5abXG9yl53yQlkafUu2qiR
+         sCg5G24XshN+TJCHRtJvtOomCKnERp03MBMIma5jqNawRjea5gGz+6SPtv5yFWqOvaHJ
+         z3DutLswTotTQXmdM5xOUh+6FaQie+rGM8K3wHUcNgwnmr1bhUXGT6BjG5wCwjj28VUp
+         0cBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691598763; x=1692203563;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fUKdVS5/N5qQkJwAZJURTrzizTk+EoulthkFub9h71Q=;
+        b=NEOO/QCtIh5KcSB7QBMZDakLPWILmF1prwmVkPKNwKIgmtJtE/bYt1ct6KRwvb2Jdt
+         c9CVL3BFm+ZvvubPdi5jUTKBhOL0Z5SwLfszjd0J8I8jN6HjrP3RWDombW09lnSKDEDX
+         n8hXMN393SQaLmKcznXWN+IqzFkYKrt//2tPrhwJlx6YGjSFRVZvagcT84K93ktdBar1
+         mW+uZkop+W+1SQxgIb6CAwXY3J3C7dqrvnSF8mRmCAicD5kufzS6LaXiYEWMR/9URJdh
+         NRwqWl5M+uSwGfRD7mpBRtV+Rz8nLLytAqk70BAk+jqrQ89i8OEgDKWvMRJTB/Rguyuc
+         MYrQ==
+X-Gm-Message-State: AOJu0YzUjuaAV6Iq+boogo4IAYNibjDCtv7vzrpT/+eG4BbWZdpNcKEO
+	xqL4xKBexf4VMEux9GpG4mncXg==
+X-Google-Smtp-Source: AGHT+IGdswAaush01nujfKLZz/6i7q9b1IdjA+301m8PBrxWscy8pmA9yLp4Rst9KIrsmBjxos6XvA==
+X-Received: by 2002:adf:ea4d:0:b0:317:9537:d73f with SMTP id j13-20020adfea4d000000b003179537d73fmr2324254wrn.30.1691598763235;
+        Wed, 09 Aug 2023 09:32:43 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:9ce0:327a:6e5a:3533])
+        by smtp.gmail.com with ESMTPSA id d10-20020adffd8a000000b003143ba62cf4sm17138365wrr.86.2023.08.09.09.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Aug 2023 09:32:42 -0700 (PDT)
+Date: Wed, 9 Aug 2023 18:32:37 +0200
+From: Marco Elver <elver@google.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
+Message-ID: <ZNO/pf/pH5jJAZI0@elver.google.com>
+References: <20230808102049.465864-1-elver@google.com>
+ <20230808102049.465864-3-elver@google.com>
+ <202308081424.1DC7AA4AE3@keescook>
+ <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
+ <ZNNi/4L1mD8XPNix@elver.google.com>
+ <20230809113021.63e5ef66@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,235 +77,335 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230809113021.63e5ef66@gandalf.local.home>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git virt-to-pfn-v6.5-rc1
-head:   b6a25d37eca4850c246b94d73bd2e3c75860d265
-commit: b8edce3ddc7647f7d66a7d322afe9954fa707ee8 [11/12] s390/mm: Make virt_to_pfn() a static inline
-config: s390-randconfig-r044-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100032.TNd9PEFv-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100032.TNd9PEFv-lkp@intel.com/reproduce)
+On Wed, Aug 09, 2023 at 11:30AM -0400, Steven Rostedt wrote:
+[...]
+> 
+> I would actually prefer DEBUG_LIST to select HARDEN_LIST and not the other
+> way around. It logically doesn't make sense that HARDEN_LIST would select
+> DEBUG_LIST. That is, I could by default want HARDEN_LIST always on, but not
+> DEBUG_LIST (because who knows, it may add other features I don't want). But
+> then, I may have stumbled over something and want more info, and enable
+> DEBUG_LIST (while still having HARDEN_LIST) enabled.
+> 
+> I think you are looking at this from an implementation perspective and not
+> the normal developer one.
+> 
+[...]
+> 
+> That is, if DEBUG_LIST is enabled, we always call the
+> __list_add_valid_or_report(), but if only HARDEN_LIST is enabled, then we
+> do the shortcut.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308100032.TNd9PEFv-lkp@intel.com/
+Good point - I think this is better. See below tentative v4.
 
-All errors (new ones prefixed by >>):
+Kees: Does that also look more like what you had in mind?
 
-   In file included from arch/s390/mm/init.c:25:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/mm/init.c:25:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/mm/init.c:25:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from arch/s390/mm/init.c:38:
->> arch/s390/include/asm/kfence.h:38:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-      38 |         __kernel_map_pages(virt_to_page(addr), 1, !protect);
-         |                                         ^~~~
-   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
-     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-         |                                                         ^~~~~
-   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
-      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
-         |                                             ^~~
-   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
-     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
-         |                                                     ^
-   12 warnings and 1 error generated.
---
-   In file included from arch/s390/mm/pageattr.c:13:
->> arch/s390/include/asm/kfence.h:38:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-      38 |         __kernel_map_pages(virt_to_page(addr), 1, !protect);
-         |                                         ^~~~
-   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
-     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-         |                                                         ^~~~~
-   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
-      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
-         |                                             ^~~
-   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
-     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
-         |                                                     ^
-   1 error generated.
---
-   In file included from arch/s390/mm/vmem.c:7:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/mm/vmem.c:7:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/mm/vmem.c:7:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> arch/s390/mm/vmem.c:39:45: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-      39 |             WARN_ON_ONCE(PageReserved(virt_to_page(addr))))
-         |                                                    ^~~~
-   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
-     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-         |                                                         ^~~~~
-   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
-      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
-         |                                             ^~~
-   include/asm-generic/bug.h:181:41: note: expanded from macro 'WARN_ON_ONCE'
-     181 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
-         |                                         ^~~~~~~~~
-   include/asm-generic/bug.h:168:25: note: expanded from macro 'WARN_ON'
-     168 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
-     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
-         |                                                     ^
-   arch/s390/mm/vmem.c:514:6: warning: no previous prototype for function 'vmemmap_free' [-Wmissing-prototypes]
-     514 | void vmemmap_free(unsigned long start, unsigned long end,
-         |      ^
-   arch/s390/mm/vmem.c:514:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     514 | void vmemmap_free(unsigned long start, unsigned long end,
-         | ^
-         | static 
-   13 warnings and 1 error generated.
---
->> drivers/s390/char/vmcp.c:92:23: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-      92 |                 page = virt_to_page((unsigned long)session->response);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
-     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-         |                                                         ^~~~~
-   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
-      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
-         |                                             ^~~
-   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
-     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
-         |                                                     ^
-   1 error generated.
+Thanks,
+-- Marco
 
+------ >8 ------
 
-vim +38 arch/s390/include/asm/kfence.h
+From: Marco Elver <elver@google.com>
+Date: Thu, 27 Jul 2023 22:19:02 +0200
+Subject: [PATCH] list: Introduce CONFIG_HARDEN_LIST
 
-e41ba1115a351d Sven Schnelle 2021-07-28  35  
-e41ba1115a351d Sven Schnelle 2021-07-28  36  static inline bool kfence_protect_page(unsigned long addr, bool protect)
-e41ba1115a351d Sven Schnelle 2021-07-28  37  {
-e41ba1115a351d Sven Schnelle 2021-07-28 @38  	__kernel_map_pages(virt_to_page(addr), 1, !protect);
-e41ba1115a351d Sven Schnelle 2021-07-28  39  	return true;
-e41ba1115a351d Sven Schnelle 2021-07-28  40  }
-e41ba1115a351d Sven Schnelle 2021-07-28  41  
+Numerous production kernel configs (see [1, 2]) are choosing to enable
+CONFIG_DEBUG_LIST, which is also being recommended by KSPP for hardened
+configs [3]. The motivation behind this is that the option can be used
+as a security hardening feature (e.g. CVE-2019-2215 and CVE-2019-2025
+are mitigated by the option [4]).
 
-:::::: The code at line 38 was first introduced by commit
-:::::: e41ba1115a351dd037c21ac75660638219d51485 s390: add support for KFENCE
+The feature has never been designed with performance in mind, yet common
+list manipulation is happening across hot paths all over the kernel.
 
-:::::: TO: Sven Schnelle <svens@linux.ibm.com>
-:::::: CC: Heiko Carstens <hca@linux.ibm.com>
+Introduce CONFIG_HARDEN_LIST, which performs list pointer checking
+inline, and only upon list corruption calls the reporting slow path.
 
+Since DEBUG_LIST is functionally a superset of HARDEN_LIST, the Kconfig
+variables are designed to reflect that: DEBUG_LIST selects HARDEN_LIST,
+whereas HARDEN_LIST itself has no dependency on DEBUG_LIST.
+
+To generate optimal machine code with CONFIG_HARDEN_LIST:
+
+  1. Elide checking for pointer values which upon dereference would
+     result in an immediate access fault -- therefore "minimal" checks.
+     The trade-off is lower-quality error reports.
+
+  2. Use the newly introduced __preserve_most function attribute
+     (available with Clang, but not yet with GCC) to minimize the code
+     footprint for calling the reporting slow path. As a result,
+     function size of callers is reduced by avoiding saving registers
+     before calling the rarely called reporting slow path.
+
+     Note that all TUs in lib/Makefile already disable function tracing,
+     including list_debug.c, and __preserve_most's implied notrace has
+     no effect in this case.
+
+  3. Because the inline checks are a subset of the full set of checks in
+     __list_*_valid_or_report(), always return false if the inline
+     checks failed.  This avoids redundant compare and conditional
+     branch right after return from the slow path.
+
+As a side-effect of the checks being inline, if the compiler can prove
+some condition to always be true, it can completely elide some checks.
+
+Running netperf with CONFIG_HARDEN_LIST (using a Clang compiler with
+"preserve_most") shows throughput improvements, in my case of ~7% on
+average (up to 20-30% on some test cases).
+
+Link: https://r.android.com/1266735 [1]
+Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/blob/main/config [2]
+Link: https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings [3]
+Link: https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html [4]
+Signed-off-by: Marco Elver <elver@google.com>
+---
+v4:
+* Rename to CONFIG_HARDEN_LIST, which can independently be selected from
+  CONFIG_DEBUG_LIST.
+
+v3:
+* Rename ___list_*_valid() to __list_*_valid_or_report().
+* More comments.
+
+v2:
+* Note that lib/Makefile disables function tracing for everything and
+  __preserve_most's implied notrace is a noop here.
+---
+ arch/arm64/kvm/hyp/nvhe/Makefile     |  2 +-
+ arch/arm64/kvm/hyp/nvhe/list_debug.c |  2 +
+ include/linux/list.h                 | 64 +++++++++++++++++++++++++---
+ lib/Kconfig.debug                    |  9 +++-
+ lib/Makefile                         |  2 +-
+ lib/list_debug.c                     |  5 ++-
+ security/Kconfig.hardening           | 13 ++++++
+ 7 files changed, 86 insertions(+), 11 deletions(-)
+
+diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+index 9ddc025e4b86..c89c85a41ac4 100644
+--- a/arch/arm64/kvm/hyp/nvhe/Makefile
++++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+@@ -25,7 +25,7 @@ hyp-obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o
+ 	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o stacktrace.o ffa.o
+ hyp-obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
+ 	 ../fpsimd.o ../hyp-entry.o ../exception.o ../pgtable.o
+-hyp-obj-$(CONFIG_DEBUG_LIST) += list_debug.o
++hyp-obj-$(CONFIG_HARDEN_LIST) += list_debug.o
+ hyp-obj-y += $(lib-objs)
+ 
+ ##
+diff --git a/arch/arm64/kvm/hyp/nvhe/list_debug.c b/arch/arm64/kvm/hyp/nvhe/list_debug.c
+index 16266a939a4c..46a2d4f2b3c6 100644
+--- a/arch/arm64/kvm/hyp/nvhe/list_debug.c
++++ b/arch/arm64/kvm/hyp/nvhe/list_debug.c
+@@ -26,6 +26,7 @@ static inline __must_check bool nvhe_check_data_corruption(bool v)
+ 
+ /* The predicates checked here are taken from lib/list_debug.c. */
+ 
++__list_valid_slowpath
+ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ 				struct list_head *next)
+ {
+@@ -37,6 +38,7 @@ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ 	return true;
+ }
+ 
++__list_valid_slowpath
+ bool __list_del_entry_valid_or_report(struct list_head *entry)
+ {
+ 	struct list_head *prev, *next;
+diff --git a/include/linux/list.h b/include/linux/list.h
+index 130c6a1bb45c..ef899c27c68b 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -38,39 +38,91 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
+ 	WRITE_ONCE(list->prev, list);
+ }
+ 
++#ifdef CONFIG_HARDEN_LIST
++
+ #ifdef CONFIG_DEBUG_LIST
++# define __list_valid_slowpath
++#else
++# define __list_valid_slowpath __cold __preserve_most
++#endif
++
+ /*
+  * Performs the full set of list corruption checks before __list_add().
+  * On list corruption reports a warning, and returns false.
+  */
+-extern bool __list_add_valid_or_report(struct list_head *new,
+-				       struct list_head *prev,
+-				       struct list_head *next);
++extern bool __list_valid_slowpath __list_add_valid_or_report(struct list_head *new,
++							     struct list_head *prev,
++							     struct list_head *next);
+ 
+ /*
+  * Performs list corruption checks before __list_add(). Returns false if a
+  * corruption is detected, true otherwise.
++ *
++ * With CONFIG_HARDEN_LIST only, performs minimal list integrity checking (that
++ * do not result in a fault) inline, and only if a corruption is detected calls
++ * the reporting function __list_add_valid_or_report().
+  */
+ static __always_inline bool __list_add_valid(struct list_head *new,
+ 					     struct list_head *prev,
+ 					     struct list_head *next)
+ {
+-	return __list_add_valid_or_report(new, prev, next);
++	bool ret = true;
++
++	if (!IS_ENABLED(CONFIG_DEBUG_LIST)) {
++		/*
++		 * With the hardening version, elide checking if next and prev
++		 * are NULL, since the immediate dereference of them below would
++		 * result in a fault if NULL.
++		 *
++		 * With the reduced set of checks, we can afford to inline the
++		 * checks, which also gives the compiler a chance to elide some
++		 * of them completely if they can be proven at compile-time. If
++		 * one of the pre-conditions does not hold, the slow-path will
++		 * show a report which pre-condition failed.
++		 */
++		if (likely(next->prev == prev && prev->next == next && new != prev && new != next))
++			return true;
++		ret = false;
++	}
++
++	ret &= __list_add_valid_or_report(new, prev, next);
++	return ret;
+ }
+ 
+ /*
+  * Performs the full set of list corruption checks before __list_del_entry().
+  * On list corruption reports a warning, and returns false.
+  */
+-extern bool __list_del_entry_valid_or_report(struct list_head *entry);
++extern bool __list_valid_slowpath __list_del_entry_valid_or_report(struct list_head *entry);
+ 
+ /*
+  * Performs list corruption checks before __list_del_entry(). Returns false if a
+  * corruption is detected, true otherwise.
++ *
++ * With CONFIG_HARDEN_LIST only, performs minimal list integrity checking (that
++ * do not result in a fault) inline, and only if a corruption is detected calls
++ * the reporting function __list_del_entry_valid_or_report().
+  */
+ static __always_inline bool __list_del_entry_valid(struct list_head *entry)
+ {
+-	return __list_del_entry_valid_or_report(entry);
++	bool ret = true;
++
++	if (!IS_ENABLED(CONFIG_DEBUG_LIST)) {
++		struct list_head *prev = entry->prev;
++		struct list_head *next = entry->next;
++
++		/*
++		 * With the hardening version, elide checking if next and prev
++		 * are NULL, LIST_POISON1 or LIST_POISON2, since the immediate
++		 * dereference of them below would result in a fault.
++		 */
++		if (likely(prev->next == entry && next->prev == entry))
++			return true;
++		ret = false;
++	}
++
++	ret &= __list_del_entry_valid_or_report(entry);
++	return ret;
+ }
+ #else
+ static inline bool __list_add_valid(struct list_head *new,
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index fbc89baf7de6..9e38956d6f50 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1674,9 +1674,14 @@ menu "Debug kernel data structures"
+ config DEBUG_LIST
+ 	bool "Debug linked list manipulation"
+ 	depends on DEBUG_KERNEL || BUG_ON_DATA_CORRUPTION
++	select HARDEN_LIST
+ 	help
+-	  Enable this to turn on extended checks in the linked-list
+-	  walking routines.
++	  Enable this to turn on extended checks in the linked-list walking
++	  routines.
++
++	  This option trades better quality error reports for performance, and
++	  is more suitable for kernel debugging. If you care about performance,
++	  you should only enable CONFIG_HARDEN_LIST instead.
+ 
+ 	  If unsure, say N.
+ 
+diff --git a/lib/Makefile b/lib/Makefile
+index 42d307ade225..a7ebc9090f04 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -161,7 +161,7 @@ obj-$(CONFIG_BTREE) += btree.o
+ obj-$(CONFIG_INTERVAL_TREE) += interval_tree.o
+ obj-$(CONFIG_ASSOCIATIVE_ARRAY) += assoc_array.o
+ obj-$(CONFIG_DEBUG_PREEMPT) += smp_processor_id.o
+-obj-$(CONFIG_DEBUG_LIST) += list_debug.o
++obj-$(CONFIG_HARDEN_LIST) += list_debug.o
+ obj-$(CONFIG_DEBUG_OBJECTS) += debugobjects.o
+ 
+ obj-$(CONFIG_BITREVERSE) += bitrev.o
+diff --git a/lib/list_debug.c b/lib/list_debug.c
+index 2def33b1491f..38ddc7c01eab 100644
+--- a/lib/list_debug.c
++++ b/lib/list_debug.c
+@@ -2,7 +2,8 @@
+  * Copyright 2006, Red Hat, Inc., Dave Jones
+  * Released under the General Public License (GPL).
+  *
+- * This file contains the linked list validation for DEBUG_LIST.
++ * This file contains the linked list validation and error reporting for
++ * HARDEN_LIST and DEBUG_LIST.
+  */
+ 
+ #include <linux/export.h>
+@@ -17,6 +18,7 @@
+  * attempt).
+  */
+ 
++__list_valid_slowpath
+ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ 				struct list_head *next)
+ {
+@@ -39,6 +41,7 @@ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
+ }
+ EXPORT_SYMBOL(__list_add_valid_or_report);
+ 
++__list_valid_slowpath
+ bool __list_del_entry_valid_or_report(struct list_head *entry)
+ {
+ 	struct list_head *prev, *next;
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index 0f295961e773..19aa2b7d2f64 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -279,6 +279,19 @@ config ZERO_CALL_USED_REGS
+ 
+ endmenu
+ 
++menu "Hardening of kernel data structures"
++
++config HARDEN_LIST
++	bool "Check integrity of linked list manipulation"
++	help
++	  Minimal integrity checking in the linked-list manipulation routines
++	  to catch memory corruptions that are not guaranteed to result in an
++	  immediate access fault.
++
++	  If unsure, say N.
++
++endmenu
++
+ config CC_HAS_RANDSTRUCT
+ 	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
+ 	# Randstruct was first added in Clang 15, but it isn't safe to use until
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0.640.ga95def55d0-goog
+
