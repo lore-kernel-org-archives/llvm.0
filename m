@@ -1,155 +1,60 @@
-Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE5019BB4
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 15:41:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1691595683; x=1723131683;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PXQIZ+fPIH3bc8gxDN+g8b0rmUv7zu4isFxQBbk0R64=;
-  b=RWHUR5AU2neKK1Dao+3Xl+RDofILNU6QUn4QkKGhaLIqhxYV3dE1G4Yu
-   Nn2mBUVkdNycqcBrrHj10/HiW2GN03dprZYukEC3JFsWojZ6UYMau7hkR
-   FkurAnEPw+8G7WkfFwZQ/sBSJzR4MBYPfl9lwUcluDpB8tHW9RHT8ciCU
-   U=;
-X-IronPort-AV: E=Sophos;i="6.01,159,1684800000"; 
-   d="scan'208";a="147543119"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 15:41:20 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-	by email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com (Postfix) with ESMTPS id B516146BA6;
-	Wed,  9 Aug 2023 15:41:17 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 9 Aug 2023 15:41:16 +0000
-Received: from 88665a182662.ant.amazon.com (10.106.100.32) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 9 Aug 2023 15:41:13 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <horms@kernel.org>
-CC: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>, <lkp@intel.com>,
-	<llvm@lists.linux.dev>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <trix@redhat.com>
-Subject: Re: [PATCH] net/llc/llc_conn.c: fix 4 instances of -Wmissing-variable-declarations
-Date: Wed, 9 Aug 2023 08:41:04 -0700
-Message-ID: <20230809154104.64963-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <ZNONx8N1/NFqmP6b@vergenet.net>
-References: <ZNONx8N1/NFqmP6b@vergenet.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657F019BB4;
+	Wed,  9 Aug 2023 15:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4347CC433C7;
+	Wed,  9 Aug 2023 15:42:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691595767;
+	bh=tPmCD3hLfEfuWygG5x8Az6XzX5lGDP9qkbyRMrIY9mY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iEzcSNNGnjgubucOpEHZfT0qtx6wcxq6bPjiSSPTFYhvT+GY4ORnpgg+BC/vLX1u5
+	 KQEH6K+CzpitQiFM54CHLCkurgJI4W/BN/2biVuRJaMIYVQQD98TXkDu83jPAwooC4
+	 znMjKysEhOO5FcTKLY08NQzWYNaKvO5qscfqohp1Y6fPsNgCa66QuDvkygKVsN1x9+
+	 rZGX+ZYxx6UvmGfh6p1DatA8F4GmP2u0r5/qTbFamOMqBB9X2fzTpO0hUqv4AdcyWO
+	 AOPiIigMlXIIW7myvelKpsZ5JUPafCs9CmgXtBEhK5afBAXFK3hQUNLYwLii/lPwx2
+	 BY0v9jubrNsFw==
+Date: Wed, 9 Aug 2023 08:42:45 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH v2] Makefile.extrawarn: enable
+ -Wmissing-variable-declarations for W=1
+Message-ID: <20230809154245.GB832145@dev-arch.thelio-3990X>
+References: <20230807-missing_proto-v2-1-3ae2e188bb0c@google.com>
+ <202308081508.EI3CRzQo-lkp@intel.com>
+ <CAKwvOdnDEaZt-mD2PvMDmCY1WyaqtrH+oM3M5JgZaiOOWA_0YQ@mail.gmail.com>
+ <20230808161707.GA2171444@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.100.32]
-X-ClientProxiedBy: EX19D039UWA002.ant.amazon.com (10.13.139.32) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-Precedence: Bulk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230808161707.GA2171444@dev-arch.thelio-3990X>
 
-From: Simon Horman <horms@kernel.org>
-Date: Wed, 9 Aug 2023 14:59:51 +0200
-> + Kuniyuki Iwashima
+On Tue, Aug 08, 2023 at 09:17:07AM -0700, Nathan Chancellor wrote:
+> I think the register storage issue should be resolved in at least clang
+> before this patch is accepted, as that seems to be where the majority of
+> warnings are coming from so far. Like we talked about, I'll take a shot
+> at fixing that. Once that is fixed, I'll build mainline with
+> -Wmissing-variable-declarations to see how many instances there are and
+> if there are any other interesting edge cases that should be fixed in
+> the compiler. After that, I think this should be good to go in. Does
+> that sound reasonable?
 
-Thanks Simon.
+I don't think there are any other edge cases from the brief glance I
+gave my build logs but my matrix counts 700+ unique instances of this
+(give or take some, due to interleaving issues). Quite a few but I see
+several in certain files so it might not actually be too bad.
 
-> 
-> On Tue, Aug 08, 2023 at 09:43:09AM -0700, Nick Desaulniers wrote:
-> > I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
-> > bot spotted the following instances:
-> > 
-> >   net/llc/llc_conn.c:44:5: warning: no previous extern declaration for
-> >   non-static variable 'sysctl_llc2_ack_timeout'
-> >   [-Wmissing-variable-declarations]
-> >   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
-> >      |     ^
-> >   net/llc/llc_conn.c:44:1: note: declare 'static' if the variable is not
-> >   intended to be used outside of this translation unit
-> >   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
-> >      | ^
-> >   net/llc/llc_conn.c:45:5: warning: no previous extern declaration for
-> >   non-static variable 'sysctl_llc2_p_timeout'
-> >   [-Wmissing-variable-declarations]
-> >   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
-> >      |     ^
-> >   net/llc/llc_conn.c:45:1: note: declare 'static' if the variable is not
-> >   intended to be used outside of this translation unit
-> >   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
-> >      | ^
-> >   net/llc/llc_conn.c:46:5: warning: no previous extern declaration for
-> >   non-static variable 'sysctl_llc2_rej_timeout'
-> >   [-Wmissing-variable-declarations]
-> >   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
-> >      |     ^
-> >   net/llc/llc_conn.c:46:1: note: declare 'static' if the variable is not
-> >   intended to be used outside of this translation unit
-> >   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
-> >      | ^
-> >   net/llc/llc_conn.c:47:5: warning: no previous extern declaration for
-> >   non-static variable 'sysctl_llc2_busy_timeout'
-> >   [-Wmissing-variable-declarations]
-> >   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
-> >      |     ^
-> >   net/llc/llc_conn.c:47:1: note: declare 'static' if the variable is not
-> >   intended to be used outside of this translation unit
-> >   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
-> >      | ^
-> > 
-> > These symbols are referenced by more than one translation unit, so make
-> > include the correct header for their declarations. Finally, sort the
-> > list of includes to help keep them tidy.
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> Reviewed-by: Simon Horman <horms@kernel.org>
-
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-
-Thanks!
-
-> 
-> > ---
-> >  net/llc/llc_conn.c | 11 ++++++-----
-> >  1 file changed, 6 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/net/llc/llc_conn.c b/net/llc/llc_conn.c
-> > index d037009ee10f..0a3f5e0bec00 100644
-> > --- a/net/llc/llc_conn.c
-> > +++ b/net/llc/llc_conn.c
-> > @@ -14,14 +14,15 @@
-> >  
-> >  #include <linux/init.h>
-> >  #include <linux/slab.h>
-> > -#include <net/llc_sap.h>
-> > -#include <net/llc_conn.h>
-> > -#include <net/sock.h>
-> > -#include <net/tcp_states.h>
-> > -#include <net/llc_c_ev.h>
-> > +#include <net/llc.h>
-> >  #include <net/llc_c_ac.h>
-> > +#include <net/llc_c_ev.h>
-> >  #include <net/llc_c_st.h>
-> > +#include <net/llc_conn.h>
-> >  #include <net/llc_pdu.h>
-> > +#include <net/llc_sap.h>
-> > +#include <net/sock.h>
-> > +#include <net/tcp_states.h>
-> >  
-> >  #if 0
-> >  #define dprintk(args...) printk(KERN_DEBUG args)
-> > 
-> > ---
-> > base-commit: 14f9643dc90adea074a0ffb7a17d337eafc6a5cc
-> > change-id: 20230808-llc_static-de4dddcc64b4
-> > 
-> > Best regards,
-> > -- 
-> > Nick Desaulniers <ndesaulniers@google.com>
+Cheers,
+Nathan
