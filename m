@@ -1,137 +1,280 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73611BB41
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 16:02:36 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-586a684e85aso258447b3.2
-        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 09:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691596955; x=1692201755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4tKqb+VoRgkyWgmeNFWtovmLOzkdpjBGuYz84vUiz14=;
-        b=cl7uddFcOnIu7w5QvmJMhCP2TPFmiphgljl8sVLW/3ITHXYcm/LktBT9ux/A//kZiu
-         un4f8rp9dwj3cuQtYLJIUHG1syEnmGSDYzfMPJCfF/OSy4fxtKDjL9GKdTfSXWmsEOvN
-         GTFgF0K5M1ohSMMb1wW4YwKbZiorHYgGeaDkZaaOvcz06Ac1VK1ybzJIr6y6Mt/IO/tR
-         bnSUSuVmI0ykkbKhIQ9T5j33CSb4aoNHCJhGP2tYn0BRjabqvsxkgbsyNh4nE6QUeoTA
-         Y9rddU2ramsLU6puvtuuxbYo7WPSeI2clkh7j591ikQCVFJEgiAbl4T3+V+eTNW3MIJo
-         MidQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691596955; x=1692201755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4tKqb+VoRgkyWgmeNFWtovmLOzkdpjBGuYz84vUiz14=;
-        b=Orkn+aSd0fpGpSWUprSwPrC4+oOpncmm/E85qXgMzqEOhCO9qdwPlBPhfj3R0bXrzB
-         hbXlf1V+u8VuqRF/8H7+ZUdK7vutZnejqt5MBRGMF8sESsGRys4c7GeaARNp85l7lVbn
-         IcsG92ZIXJ++9MvRcXyUPozAHjOuTHFaO8N/RI5q34tYxZ1DDTXKLM51blOhee47VY7i
-         RrSoMukn6Fj8z1frZy1mafzVv3PsjDjQPKHmSon+cQTC3CZ8i6TRMz+A5tuVxStmayk0
-         jKSKCqJQLVk3WyCtb0IdW5RqYr3UxoZliyPE9N0JGKVoqkYz1dk5aoYviI7sTTB6Wpig
-         9W9Q==
-X-Gm-Message-State: AOJu0Yz6Zj9AvHeQnSJ9VIAayi7VH1QVYsDnmpY//f6r9ygq7yFlq013
-	kLwNm7cMav5+s+DA18dlENiTHnV2IvGti/UjCeLwAg==
-X-Google-Smtp-Source: AGHT+IEJHCBuYvPAfDXNsCccpldXJM7/ZZSeEoKWg7p0fPwNbnjMZI1B07adbpNP2nm2kJgA6JxwZjQDo9BOL/0iL1s=
-X-Received: by 2002:a0d:fc84:0:b0:579:f8f2:b5b5 with SMTP id
- m126-20020a0dfc84000000b00579f8f2b5b5mr3512624ywf.41.1691596955218; Wed, 09
- Aug 2023 09:02:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8E11AA83;
+	Wed,  9 Aug 2023 16:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691597114; x=1723133114;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tV9kx4lRBM0Fr/e/Nh+Jeal6/5Xk3/+aqAgnGZh05Js=;
+  b=VTtxfmo8FQiTfzrKSJkPafWj2lp+RCam6EPqxwnCnW3ia5bWLF3H9h+T
+   sPqKAStQ+OPjOKrsDK3TM/aHo98IRLPOJrhUKfTI3VhBqzwrauThkCEm8
+   xnzzBx3BNN4Ofr+dhtjAWbU36+1y3U/QbPxuJXiM4CGht+1/Rnia1LT1D
+   Xfxh//l5ThXc6oapGbppKJ9gt9p82syTzLbPxvpgc4LRck2/uSGPiRBYH
+   zhLFZSK8uDB5jH6ZC/h+eOthohd0IuVF1Sm6NxqC68bU2rh/EhSM+1auH
+   FWvxQPL0YKHF51eUh+OzsiYGvmD/BCN9wn7PYrkT/2vid3Zt3EJkCrHkn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="356128824"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="356128824"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 09:04:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="731872894"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="731872894"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 09 Aug 2023 09:04:37 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTlfp-0006E4-0P;
+	Wed, 09 Aug 2023 16:04:37 +0000
+Date: Thu, 10 Aug 2023 00:03:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:virt-to-pfn-v6.5-rc1 11/12]
+ arch/s390/include/asm/kfence.h:38:34: error: incompatible integer to pointer
+ conversion passing 'unsigned long' to parameter of type 'const void *'
+Message-ID: <202308100032.TNd9PEFv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202308091820.0dPY7D6f-lkp@intel.com> <ZNN1WdZ5J/e5OPAt@elver.google.com>
- <CAKwvOd=hgqas-kMxvOgviff43XBmwgERrfGi-ZO45DOcEuG_yw@mail.gmail.com> <CANpmjNNjzeKyB7V7r73qW9zzqYeMEEK27pfFV9aBm6yfLjJeng@mail.gmail.com>
-In-Reply-To: <CANpmjNNjzeKyB7V7r73qW9zzqYeMEEK27pfFV9aBm6yfLjJeng@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 9 Aug 2023 09:02:24 -0700
-Message-ID: <CAKwvOd=0WV0aTMhLya3gxdm+i761iXyhUMgDRa96riEDh2NyFQ@mail.gmail.com>
-Subject: Re: [linux-next:master 8173/8441] include/linux/list.h:53:13:
- warning: '__preserve_most__' calling convention is not supported for this target
-To: Marco Elver <elver@google.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Miguel Ojeda <ojeda@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Aug 9, 2023 at 9:01=E2=80=AFAM Marco Elver <elver@google.com> wrote=
-:
->
-> On Wed, 9 Aug 2023 at 17:53, Nick Desaulniers <ndesaulniers@google.com> w=
-rote:
-> >
-> > On Wed, Aug 9, 2023 at 4:15=E2=80=AFAM Marco Elver <elver@google.com> w=
-rote:
-> > >
-> > > On Wed, Aug 09, 2023 at 06:27PM +0800, kernel test robot wrote:
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-=
-next.git master
-> > > > head:   21ef7b1e17d039053edaeaf41142423810572741
-> > > > commit: fee8feb67f0b2954eb7a2a259122e43a15cf3a52 [8173/8441] list_d=
-ebug: introduce CONFIG_DEBUG_LIST_MINIMAL
-> > > > config: hexagon-randconfig-r041-20230808 (https://download.01.org/0=
-day-ci/archive/20230809/202308091820.0dPY7D6f-lkp@intel.com/config)
-> > > > compiler: clang version 15.0.7 (https://github.com/llvm/llvm-projec=
-t.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> > > > reproduce: (https://download.01.org/0day-ci/archive/20230809/202308=
-091820.0dPY7D6f-lkp@intel.com/reproduce)
-> > > >
-> > > > If you fix the issue in a separate patch/commit (i.e. not just a ne=
-w version of
-> > > > the same patch/commit), kindly add following tags
-> > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202308091820.0dPY7D=
-6f-lkp@intel.com/
-> > > >
-> > > > All warnings (new ones prefixed by >>):
-> > > >
-> > > >    In file included from arch/hexagon/kernel/asm-offsets.c:12:
-> > > >    In file included from include/linux/compat.h:14:
-> > > >    In file included from include/linux/sem.h:5:
-> > > >    In file included from include/uapi/linux/sem.h:5:
-> > > >    In file included from include/linux/ipc.h:5:
-> > > >    In file included from include/linux/spinlock.h:56:
-> > > >    In file included from include/linux/preempt.h:12:
-> > > > >> include/linux/list.h:53:13: warning: '__preserve_most__' calling=
- convention is not supported for this target [-Wignored-attributes]
-> > > >    extern bool __list_valid_slowpath __list_add_valid_or_report(str=
-uct list_head *new,
-> > > >                ^
-> > > >    include/linux/list.h:44:39: note: expanded from macro '__list_va=
-lid_slowpath'
-> > > >    # define __list_valid_slowpath __cold __preserve_most
-> > > >                                          ^
-> > > >    include/linux/compiler_types.h:132:49: note: expanded from macro=
- '__preserve_most'
-> > > >    # define __preserve_most notrace __attribute__((__preserve_most_=
-_))
-> > >
-> > > To silence this warning, we can just guard it based on known-supporte=
-d architectures:
-> >
-> > As a band-aid, sure.
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Long term, perhaps we can fix in clang what __has_attribute evaluates
-> > to for this attribute depending on the target.  Filed:
-> > https://github.com/ClangBuiltLinux/linux/issues/1908
-> > ^ Consider adding a comment linking to that in the sources.
->
-> I will fold it into patch 1/3 of the original series. May I apply your
-> Reviewed-by there?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git virt-to-pfn-v6.5-rc1
+head:   b6a25d37eca4850c246b94d73bd2e3c75860d265
+commit: b8edce3ddc7647f7d66a7d322afe9954fa707ee8 [11/12] s390/mm: Make virt_to_pfn() a static inline
+config: s390-randconfig-r044-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100032.TNd9PEFv-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100032.TNd9PEFv-lkp@intel.com/reproduce)
 
-Sure! Thanks for checking.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308100032.TNd9PEFv-lkp@intel.com/
 
-> I think there needs to be a v4, also because of some other change request=
-s, too.
->
-> Andrew, please shout if you'd rather have them as fix patches.
->
-> Thanks!
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/mm/init.c:25:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/mm/init.c:25:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/mm/init.c:25:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from arch/s390/mm/init.c:38:
+>> arch/s390/include/asm/kfence.h:38:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+      38 |         __kernel_map_pages(virt_to_page(addr), 1, !protect);
+         |                                         ^~~~
+   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
+     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
+         |                                                         ^~~~~
+   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
+      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+         |                                             ^~~
+   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
+     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
+         |                                                     ^
+   12 warnings and 1 error generated.
+--
+   In file included from arch/s390/mm/pageattr.c:13:
+>> arch/s390/include/asm/kfence.h:38:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+      38 |         __kernel_map_pages(virt_to_page(addr), 1, !protect);
+         |                                         ^~~~
+   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
+     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
+         |                                                         ^~~~~
+   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
+      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+         |                                             ^~~
+   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
+     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
+         |                                                     ^
+   1 error generated.
+--
+   In file included from arch/s390/mm/vmem.c:7:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/mm/vmem.c:7:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/mm/vmem.c:7:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/s390/mm/vmem.c:39:45: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+      39 |             WARN_ON_ONCE(PageReserved(virt_to_page(addr))))
+         |                                                    ^~~~
+   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
+     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
+         |                                                         ^~~~~
+   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
+      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+         |                                             ^~~
+   include/asm-generic/bug.h:181:41: note: expanded from macro 'WARN_ON_ONCE'
+     181 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
+         |                                         ^~~~~~~~~
+   include/asm-generic/bug.h:168:25: note: expanded from macro 'WARN_ON'
+     168 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
+     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
+         |                                                     ^
+   arch/s390/mm/vmem.c:514:6: warning: no previous prototype for function 'vmemmap_free' [-Wmissing-prototypes]
+     514 | void vmemmap_free(unsigned long start, unsigned long end,
+         |      ^
+   arch/s390/mm/vmem.c:514:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     514 | void vmemmap_free(unsigned long start, unsigned long end,
+         | ^
+         | static 
+   13 warnings and 1 error generated.
+--
+>> drivers/s390/char/vmcp.c:92:23: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+      92 |                 page = virt_to_page((unsigned long)session->response);
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/include/asm/page.h:201:53: note: expanded from macro 'virt_to_page'
+     201 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
+         |                                                         ^~~~~
+   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
+      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+         |                                             ^~~
+   arch/s390/include/asm/page.h:195:53: note: passing argument to parameter 'kaddr' here
+     195 | static inline unsigned long virt_to_pfn(const void *kaddr)
+         |                                                     ^
+   1 error generated.
 
 
+vim +38 arch/s390/include/asm/kfence.h
 
---=20
-Thanks,
-~Nick Desaulniers
+e41ba1115a351d Sven Schnelle 2021-07-28  35  
+e41ba1115a351d Sven Schnelle 2021-07-28  36  static inline bool kfence_protect_page(unsigned long addr, bool protect)
+e41ba1115a351d Sven Schnelle 2021-07-28  37  {
+e41ba1115a351d Sven Schnelle 2021-07-28 @38  	__kernel_map_pages(virt_to_page(addr), 1, !protect);
+e41ba1115a351d Sven Schnelle 2021-07-28  39  	return true;
+e41ba1115a351d Sven Schnelle 2021-07-28  40  }
+e41ba1115a351d Sven Schnelle 2021-07-28  41  
+
+:::::: The code at line 38 was first introduced by commit
+:::::: e41ba1115a351dd037c21ac75660638219d51485 s390: add support for KFENCE
+
+:::::: TO: Sven Schnelle <svens@linux.ibm.com>
+:::::: CC: Heiko Carstens <hca@linux.ibm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
