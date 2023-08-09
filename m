@@ -1,72 +1,45 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BAB53B7
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 09:57:28 +0000 (UTC)
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3fbd33a57b6so63419885e9.2
-        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 02:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691575047; x=1692179847;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/rmEnk1g8Unm9TjBDd1nYGxjvPpnWaZtUFtYH71EmO0=;
-        b=zrFX/lyuS1Z8xnbtzpce6hDvet9q21gy05mTvo4dzgluuV4jCIVRZIwM8DpAqVr0je
-         SpPAtnaNykmtJAJskcZE1CjzOBYUYMDZ4MPRS0Mpph+AF3KqGHKMcljIjwkmtyXpgac/
-         qbfOnGiT2TIUCvLuGutLmvJSBHRHdDBrWmIZIg0067XZT0qzwS/luicPD1WTBZzYLK09
-         OmJww5lDhce1XMbLUtQfPE67fvA7nvDB938XQm5cXu8jkz3BJaCoIrt+FPTK/bSeFgXh
-         iYyN0BSUyxlTNCJrYNUrkJ9H9vnqvb9Blzx7BBJVUyomhmeDTTGbUu66BxxipYS/U7w+
-         dbbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691575047; x=1692179847;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rmEnk1g8Unm9TjBDd1nYGxjvPpnWaZtUFtYH71EmO0=;
-        b=AC4vf9rHmOmYXZ+a3SxWpizwtD6dFAUpvPzU9851wMDQPzoRCQVnzeTJJxVRBB6EgU
-         Qbj+2JoXj+5p3Svy/b0iJljD93r7XewhBXWW1zRZpiP2DV9EYjuPQkOHgj5loNT/Pakx
-         YVB1bfX52aUnBrcWFUaMQJclfryG7C26ieo6qSUiOXKON31lKtS+IRVC6WRUCoYm5b+V
-         dmLeEgkBJoOkAeuJ2hYVlu8OdFthV0JrpX99Rwiptd3RyNTWWYEkWpjcH31s4QVO/b91
-         9slr0nQY3oJ5Nm4tV64CczjpgeRIX3qj0ZBQ6FPPv8MKc8lS839i6fS/AD+GBsoMf0cl
-         62lA==
-X-Gm-Message-State: AOJu0YxFf4qysp3SUJsiNIC9EAPGm5OZYn/BBPLKXSQPYlld6RmMjGQ+
-	M+NGCEeU7fCnvwhum1+hWnODng==
-X-Google-Smtp-Source: AGHT+IHn+CGz9CoURGc+L1iYofdZgIMRwp6uPgN5OhPNo0J4iMMDCIEPm6uBtj2a9yAjeaEWUXS37g==
-X-Received: by 2002:a05:600c:210:b0:3fe:ad3:b066 with SMTP id 16-20020a05600c021000b003fe0ad3b066mr1884370wmi.41.1691575046903;
-        Wed, 09 Aug 2023 02:57:26 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:9ce0:327a:6e5a:3533])
-        by smtp.gmail.com with ESMTPSA id h18-20020a1ccc12000000b003fbd9e390e1sm1479988wmb.47.2023.08.09.02.57.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 02:57:25 -0700 (PDT)
-Date: Wed, 9 Aug 2023 11:57:19 +0200
-From: Marco Elver <elver@google.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
-	linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
-Message-ID: <ZNNi/4L1mD8XPNix@elver.google.com>
-References: <20230808102049.465864-1-elver@google.com>
- <20230808102049.465864-3-elver@google.com>
- <202308081424.1DC7AA4AE3@keescook>
- <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40BD53B7;
+	Wed,  9 Aug 2023 10:28:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691576911; x=1723112911;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yeOT0cS6QMPvAXxUJ9nK2LD91TvI/FtdDjHmYUtB1Zg=;
+  b=B/PuVx6sy7C1RuBb450x5WG7WiF2KG/JARixwXYjb//O4bOLj6CCy5vp
+   wi8KYYyCsxpnAgaAtP38qiBcOChRu/xdurzs+ZKzwgVrIHFT8xeR9bzN4
+   iwBTvgmquLFiaP7nyyoOxacO/FKUMADMC99Jb22Ou8mUqYH6o/5S8TcZA
+   YNkeaANZik4ClI9JVClebF6es1oaSVKHyXhPBSPO1IM5neMyeye0N+/ex
+   I+eT4e01EzWsUpe36suRoOWVTlv+S8JWTSW0zCZ7fnnmyUwvIxRt8XreX
+   1+GBOfGtOmufcvVev7GBBQ+b6ac4IRh1XrGxl+KH0QRKYOrO/vWnDqLkR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="373867950"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="373867950"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 03:28:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="875188410"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Aug 2023 03:28:32 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTgQW-00060Y-1K;
+	Wed, 09 Aug 2023 10:28:28 +0000
+Date: Wed, 9 Aug 2023 18:27:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Artur Weber <aweber.kernel@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Lee Jones <lee@kernel.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>
+Subject: [linux-next:master 4727/8441]
+ drivers/video/backlight/lp855x_bl.c:252:7: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202308091728.NEJhgUPP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,303 +48,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
 
-On Wed, Aug 09, 2023 at 09:35AM +0200, Marco Elver wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   21ef7b1e17d039053edaeaf41142423810572741
+commit: 5145531be5fbad0e914d1dc1cbd392d7b756abaa [4727/8441] backlight: lp855x: Catch errors when changing brightness
+config: x86_64-buildonly-randconfig-r002-20230808 (https://download.01.org/0day-ci/archive/20230809/202308091728.NEJhgUPP-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230809/202308091728.NEJhgUPP-lkp@intel.com/reproduce)
 
-> > I'd really like to get away from calling this "DEBUG", since it's used
-> > more for hardening (CONFIG_LIST_HARDENED?). Will Deacon spent some time
-> > making this better a while back, but the series never landed. Do you
-> > have a bit of time to look through it?
-> >
-> > https://github.com/KSPP/linux/issues/10
-> > https://lore.kernel.org/lkml/20200324153643.15527-1-will@kernel.org/
-> 
-> I'm fine renaming this one. But there are other issues that Will's
-> series solves, which I don't want this series to depend on. We can try
-> to sort them out separately.
-> 
-> The main problem here is that DEBUG_LIST has been designed to be
-> friendly for debugging (incl. checking poison values and NULL). Some
-> kernel devs may still want that, but for production use is pointless
-> and wasteful.
-> 
-> So what I can propose is to introduce CONFIG_LIST_HARDENED that
-> doesn't depend on CONFIG_DEBUG_LIST, but instead selects it, because
-> we still use that code to produce a report.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308091728.NEJhgUPP-lkp@intel.com/
 
-How about the below?
+All warnings (new ones prefixed by >>):
 
-We'll add CONFIG_HARDEN_LIST (in Kconfig.hardening), which is
-independent of CONFIG_DEBUG_LIST. For the implementation it selects
-DEBUG_LIST, but irrelevant for users.
+>> drivers/video/backlight/lp855x_bl.c:252:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           else if (lp->mode == REGISTER_BASED)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/video/backlight/lp855x_bl.c:256:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/video/backlight/lp855x_bl.c:252:7: note: remove the 'if' if its condition is always true
+           else if (lp->mode == REGISTER_BASED)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   drivers/video/backlight/lp855x_bl.c:244:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-This will get us the best of both worlds: a version for hardening that
-should remain as fast as possible, and one for debugging with better
-reports.
 
------- >8 ------
+vim +252 drivers/video/backlight/lp855x_bl.c
 
-From: Marco Elver <elver@google.com>
-Date: Thu, 27 Jul 2023 22:19:02 +0200
-Subject: [PATCH v4 3/3] list: Introduce CONFIG_HARDEN_LIST
+8cc9764c9c7d01 Kim, Milo    2012-12-17  239  
+7be865ab8634d4 Kim, Milo    2012-03-23  240  static int lp855x_bl_update_status(struct backlight_device *bl)
+7be865ab8634d4 Kim, Milo    2012-03-23  241  {
+7be865ab8634d4 Kim, Milo    2012-03-23  242  	struct lp855x *lp = bl_get_data(bl);
+61c1c6147f69d8 Sean Paul    2015-05-11  243  	int brightness = bl->props.brightness;
+5145531be5fbad Artur Weber  2023-07-14  244  	int ret;
+7be865ab8634d4 Kim, Milo    2012-03-23  245  
+9f0a511f4a227c Shingo Nakao 2013-07-02  246  	if (bl->props.state & (BL_CORE_SUSPENDED | BL_CORE_FBBLANK))
+61c1c6147f69d8 Sean Paul    2015-05-11  247  		brightness = 0;
+7be865ab8634d4 Kim, Milo    2012-03-23  248  
+61c1c6147f69d8 Sean Paul    2015-05-11  249  	if (lp->mode == PWM_BASED)
+5145531be5fbad Artur Weber  2023-07-14  250  		ret = lp855x_pwm_ctrl(lp, brightness,
+5145531be5fbad Artur Weber  2023-07-14  251  				      bl->props.max_brightness);
+61c1c6147f69d8 Sean Paul    2015-05-11 @252  	else if (lp->mode == REGISTER_BASED)
+5145531be5fbad Artur Weber  2023-07-14  253  		ret = lp855x_write_byte(lp, lp->cfg->reg_brightness,
+5145531be5fbad Artur Weber  2023-07-14  254  					(u8)brightness);
+7be865ab8634d4 Kim, Milo    2012-03-23  255  
+5145531be5fbad Artur Weber  2023-07-14  256  	return ret;
+7be865ab8634d4 Kim, Milo    2012-03-23  257  }
+7be865ab8634d4 Kim, Milo    2012-03-23  258  
 
-Numerous production kernel configs (see [1, 2]) are choosing to enable
-CONFIG_DEBUG_LIST, which is also being recommended by KSPP for hardened
-configs [3]. The motivation behind this is that the option can be used
-as a security hardening feature (e.g. CVE-2019-2215 and CVE-2019-2025
-are mitigated by the option [4]).
+:::::: The code at line 252 was first introduced by commit
+:::::: 61c1c6147f69d8dea31fd133d2ec0b1594c9a3eb backlight: lp855x: Don't clear level on suspend/blank
 
-The feature has never been designed with performance in mind, yet common
-list manipulation is happening across hot paths all over the kernel.
+:::::: TO: Sean Paul <seanpaul@chromium.org>
+:::::: CC: Lee Jones <lee.jones@linaro.org>
 
-Introduce CONFIG_HARDEN_LIST, which performs list pointer checking
-inline, and only upon list corruption calls the reporting slow path.
-
-To generate optimal machine code with CONFIG_HARDEN_LIST:
-
-  1. Elide checking for pointer values which upon dereference would
-     result in an immediate access fault -- therefore "minimal" checks.
-     The trade-off is lower-quality error reports.
-
-  2. Use the newly introduced __preserve_most function attribute
-     (available with Clang, but not yet with GCC) to minimize the code
-     footprint for calling the reporting slow path. As a result,
-     function size of callers is reduced by avoiding saving registers
-     before calling the rarely called reporting slow path.
-
-     Note that all TUs in lib/Makefile already disable function tracing,
-     including list_debug.c, and __preserve_most's implied notrace has
-     no effect in this case.
-
-  3. Because the inline checks are a subset of the full set of checks in
-     __list_*_valid_or_report(), always return false if the inline
-     checks failed.  This avoids redundant compare and conditional
-     branch right after return from the slow path.
-
-As a side-effect of the checks being inline, if the compiler can prove
-some condition to always be true, it can completely elide some checks.
-
-Running netperf with CONFIG_HARDEN_LIST (using a Clang compiler with
-"preserve_most") shows throughput improvements, in my case of ~7% on
-average (up to 20-30% on some test cases).
-
-Link: https://r.android.com/1266735 [1]
-Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/blob/main/config [2]
-Link: https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings [3]
-Link: https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html [4]
-Signed-off-by: Marco Elver <elver@google.com>
----
-v4:
-* Rename to CONFIG_HARDEN_LIST, which can independently be selected from
-  CONFIG_DEBUG_LIST.
-
-v3:
-* Rename ___list_*_valid() to __list_*_valid_or_report().
-* More comments.
-
-v2:
-* Note that lib/Makefile disables function tracing for everything and
-  __preserve_most's implied notrace is a noop here.
----
- arch/arm64/kvm/hyp/nvhe/list_debug.c |  2 +
- include/linux/list.h                 | 64 +++++++++++++++++++++++++---
- lib/Kconfig.debug                    | 12 ++++--
- lib/list_debug.c                     |  2 +
- security/Kconfig.hardening           | 14 ++++++
- 5 files changed, 84 insertions(+), 10 deletions(-)
-
-diff --git a/arch/arm64/kvm/hyp/nvhe/list_debug.c b/arch/arm64/kvm/hyp/nvhe/list_debug.c
-index 16266a939a4c..46a2d4f2b3c6 100644
---- a/arch/arm64/kvm/hyp/nvhe/list_debug.c
-+++ b/arch/arm64/kvm/hyp/nvhe/list_debug.c
-@@ -26,6 +26,7 @@ static inline __must_check bool nvhe_check_data_corruption(bool v)
- 
- /* The predicates checked here are taken from lib/list_debug.c. */
- 
-+__list_valid_slowpath
- bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
- 				struct list_head *next)
- {
-@@ -37,6 +38,7 @@ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
- 	return true;
- }
- 
-+__list_valid_slowpath
- bool __list_del_entry_valid_or_report(struct list_head *entry)
- {
- 	struct list_head *prev, *next;
-diff --git a/include/linux/list.h b/include/linux/list.h
-index 130c6a1bb45c..1c7f70b7cc7a 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -39,38 +39,90 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
- }
- 
- #ifdef CONFIG_DEBUG_LIST
-+
-+#ifdef CONFIG_HARDEN_LIST
-+# define __list_valid_slowpath __cold __preserve_most
-+#else
-+# define __list_valid_slowpath
-+#endif
-+
- /*
-  * Performs the full set of list corruption checks before __list_add().
-  * On list corruption reports a warning, and returns false.
-  */
--extern bool __list_add_valid_or_report(struct list_head *new,
--				       struct list_head *prev,
--				       struct list_head *next);
-+extern bool __list_valid_slowpath __list_add_valid_or_report(struct list_head *new,
-+							     struct list_head *prev,
-+							     struct list_head *next);
- 
- /*
-  * Performs list corruption checks before __list_add(). Returns false if a
-  * corruption is detected, true otherwise.
-+ *
-+ * With CONFIG_HARDEN_LIST set, performs minimal list integrity checking (that
-+ * do not result in a fault) inline, and only if a corruption is detected calls
-+ * the reporting function __list_add_valid_or_report().
-  */
- static __always_inline bool __list_add_valid(struct list_head *new,
- 					     struct list_head *prev,
- 					     struct list_head *next)
- {
--	return __list_add_valid_or_report(new, prev, next);
-+	bool ret = true;
-+
-+	if (IS_ENABLED(CONFIG_HARDEN_LIST)) {
-+		/*
-+		 * With the hardening version, elide checking if next and prev
-+		 * are NULL, since the immediate dereference of them below would
-+		 * result in a fault if NULL.
-+		 *
-+		 * With the reduced set of checks, we can afford to inline the
-+		 * checks, which also gives the compiler a chance to elide some
-+		 * of them completely if they can be proven at compile-time. If
-+		 * one of the pre-conditions does not hold, the slow-path will
-+		 * show a report which pre-condition failed.
-+		 */
-+		if (likely(next->prev == prev && prev->next == next && new != prev && new != next))
-+			return true;
-+		ret = false;
-+	}
-+
-+	ret &= __list_add_valid_or_report(new, prev, next);
-+	return ret;
- }
- 
- /*
-  * Performs the full set of list corruption checks before __list_del_entry().
-  * On list corruption reports a warning, and returns false.
-  */
--extern bool __list_del_entry_valid_or_report(struct list_head *entry);
-+extern bool __list_valid_slowpath __list_del_entry_valid_or_report(struct list_head *entry);
- 
- /*
-  * Performs list corruption checks before __list_del_entry(). Returns false if a
-  * corruption is detected, true otherwise.
-+ *
-+ * With CONFIG_HARDEN_LIST set, performs minimal list integrity checking (that
-+ * do not result in a fault) inline, and only if a corruption is detected calls
-+ * the reporting function __list_del_entry_valid_or_report().
-  */
- static __always_inline bool __list_del_entry_valid(struct list_head *entry)
- {
--	return __list_del_entry_valid_or_report(entry);
-+	bool ret = true;
-+
-+	if (IS_ENABLED(CONFIG_HARDEN_LIST)) {
-+		struct list_head *prev = entry->prev;
-+		struct list_head *next = entry->next;
-+
-+		/*
-+		 * With the hardening version, elide checking if next and prev
-+		 * are NULL, LIST_POISON1 or LIST_POISON2, since the immediate
-+		 * dereference of them below would result in a fault.
-+		 */
-+		if (likely(prev->next == entry && next->prev == entry))
-+			return true;
-+		ret = false;
-+	}
-+
-+	ret &= __list_del_entry_valid_or_report(entry);
-+	return ret;
- }
- #else
- static inline bool __list_add_valid(struct list_head *new,
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index fbc89baf7de6..6b0de78fb2da 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1672,11 +1672,15 @@ config HAVE_DEBUG_BUGVERBOSE
- menu "Debug kernel data structures"
- 
- config DEBUG_LIST
--	bool "Debug linked list manipulation"
--	depends on DEBUG_KERNEL || BUG_ON_DATA_CORRUPTION
-+	bool "Debug linked list manipulation" if !HARDEN_LIST
-+	depends on DEBUG_KERNEL || BUG_ON_DATA_CORRUPTION || HARDEN_LIST
- 	help
--	  Enable this to turn on extended checks in the linked-list
--	  walking routines.
-+	  Enable this to turn on extended checks in the linked-list walking
-+	  routines.
-+
-+	  If you care about performance, you should enable CONFIG_HARDEN_LIST
-+	  instead.  This option alone trades better quality error reports for
-+	  worse performance, and is more suitable for debugging.
- 
- 	  If unsure, say N.
- 
-diff --git a/lib/list_debug.c b/lib/list_debug.c
-index 2def33b1491f..0ff547910dd0 100644
---- a/lib/list_debug.c
-+++ b/lib/list_debug.c
-@@ -17,6 +17,7 @@
-  * attempt).
-  */
- 
-+__list_valid_slowpath
- bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
- 				struct list_head *next)
- {
-@@ -39,6 +40,7 @@ bool __list_add_valid_or_report(struct list_head *new, struct list_head *prev,
- }
- EXPORT_SYMBOL(__list_add_valid_or_report);
- 
-+__list_valid_slowpath
- bool __list_del_entry_valid_or_report(struct list_head *entry)
- {
- 	struct list_head *prev, *next;
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index 0f295961e773..a8aef895f13d 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -279,6 +279,20 @@ config ZERO_CALL_USED_REGS
- 
- endmenu
- 
-+menu "Hardening of kernel data structures"
-+
-+config HARDEN_LIST
-+	bool "Check integrity of linked list manipulation"
-+	select DEBUG_LIST
-+	help
-+	  Minimal integrity checking in the linked-list manipulation routines
-+	  to catch memory corruptions that are not guaranteed to result in an
-+	  immediate access fault.
-+
-+	  If unsure, say N.
-+
-+endmenu
-+
- config CC_HAS_RANDSTRUCT
- 	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
- 	# Randstruct was first added in Clang 15, but it isn't safe to use until
 -- 
-2.41.0.640.ga95def55d0-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
