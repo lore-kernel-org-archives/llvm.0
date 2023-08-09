@@ -1,84 +1,83 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321673FC4B
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 18:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691605865;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=a7IXA8YZvhnPpWkKptVDdAcvFYxpvezXQLkWr7Q5DX4=;
-	b=VeBreU+cXReokXrlDUWmCJ9D/v6WDR17DBKDqtImHPU99oBqVPCipO3pgsl8c0uhvEtDvA
-	3kY608rruosAZldpF1PwwxFrdQ9jbQjObaf7f3PvS/ucQpl3q6xgarDPLH6OFs0lxmgILP
-	BDObX8rFDdovcOMWnUEcRo+60vJD9gw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-583-pswU0huKOrOC94wp4lIwng-1; Wed, 09 Aug 2023 14:31:04 -0400
-X-MC-Unique: pswU0huKOrOC94wp4lIwng-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F013C805AF6
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 18:31:03 +0000 (UTC)
-Received: from [172.64.4.35] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DC6392166B27;
-	Wed,  9 Aug 2023 18:31:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.5.0-rc5,
- mainline.kernel.org-clang, cacc6e22)
-Date: Wed, 09 Aug 2023 18:31:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECCD1CC85;
+	Wed,  9 Aug 2023 18:33:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E28C433C7;
+	Wed,  9 Aug 2023 18:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691605999;
+	bh=7i+9CZK9MTaE9M7KFWMrFjix2XVGqj+IDgNiugKyaT0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S1w2TlePhvk7HcDcIsb7svaPCa819NKHF12VKGYF+kbx591ztOJhOO9E3aZ75AiPX
+	 GVbd4rNdohVfZoiN5SuSo3K90Su1q0WWLw3VywIRAJMbcTfWRPpx4EqYGe2E2uFxpV
+	 DgFNn0aEK45zvRrAbqat2Qnun2Kei3vYCQc3Rn2FxrKDzXwnHcGuBs1+bh8Hkde+aq
+	 Krk9BzyQudSbXU8+rBDMKbJJDyKyya+1NnWzS/0JGxk0OJ8V7ya3brQUon0SoXqtQQ
+	 2X+GVs69kK7VOJNuTvAK39oOH0l+J7v3Cy8pKU+wDIOEdCZp7MDGL4c2Is2IMA3K4v
+	 UnmCayoG4kA6g==
+Date: Wed, 9 Aug 2023 11:33:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Marco Elver <elver@google.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [linux-next:master 8173/8441] warning: unsafe strcpy() usage
+ lacked '__write_overflow' warning in
+ lib/test_fortify/write_overflow-strcpy.c
+Message-ID: <20230809183317.GA3355565@dev-arch.thelio-3990X>
+References: <202308100247.oHTlRKLx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <06134.123080914310401112@us-mta-583.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202308100247.oHTlRKLx-lkp@intel.com>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Aug 10, 2023 at 02:29:07AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   21ef7b1e17d039053edaeaf41142423810572741
+> commit: fee8feb67f0b2954eb7a2a259122e43a15cf3a52 [8173/8441] list_debug: introduce CONFIG_DEBUG_LIST_MINIMAL
+> config: arm-randconfig-r005-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100247.oHTlRKLx-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100247.oHTlRKLx-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308100247.oHTlRKLx-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> warning: unsafe strcpy() usage lacked '__write_overflow' warning in lib/test_fortify/write_overflow-strcpy.c
+> --
+> >> warning: unsafe memcpy() usage lacked '__write_overflow' warning in lib/test_fortify/write_overflow-memcpy.c
+> --
+> >> warning: unsafe memcmp() usage lacked '__read_overflow2' warning in lib/test_fortify/read_overflow2-memcmp.c
+> --
+> >> warning: unsafe strlcpy() usage lacked '__write_overflow' warning in lib/test_fortify/write_overflow-strlcpy-src.c
+> --
+> >> warning: unsafe memmove() usage lacked '__read_overflow2_field' warning in lib/test_fortify/read_overflow2_field-memmove.c
+> --
+> >> warning: unsafe strncpy() usage lacked '__write_overflow' warning in lib/test_fortify/write_overflow-strncpy-src.c
+> --
+> >> warning: unsafe memset() usage lacked '__write_overflow_field' warning in lib/test_fortify/write_overflow_field-memset.c
+> --
+> >> warning: unsafe memcmp() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memcmp.c
+> --
+> >> warning: unsafe memmove() usage lacked '__read_overflow2' warning in lib/test_fortify/read_overflow2-memmove.c
+> --
+> >> warning: unsafe strlcpy() usage lacked '__write_overflow' warning in lib/test_fortify/write_overflow-strlcpy.c
+> --
+> >> warning: unsafe memscan() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memscan.c
+> ..
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+I suspect this is a symptom of
+https://lore.kernel.org/all/202308092009.dDIMqss4-lkp@intel.com/, as the
+fortify tests build with -Werror.
 
-
-Kernel information:
-    Commit message: tpm: Add a helper for checking hwrng enabled
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/99357
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/38343=
-1
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/383432
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
