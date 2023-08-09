@@ -1,101 +1,107 @@
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E2484693
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 06:25:11 +0000 (UTC)
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-44768737671so2484841137.2
-        for <llvm@lists.linux.dev>; Tue, 08 Aug 2023 23:25:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565B86124
+	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 07:36:08 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3fe4cdb72b9so36253545e9.0
+        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 00:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691562311; x=1692167111;
+        d=google.com; s=20221208; t=1691566566; x=1692171366;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CH4TGJEPAdBC6NjBXoK01yC3B5N+WMqmtilRzRbkims=;
-        b=f41qEX0W5lLISZ0Nfjc46G7zq/I6E34u/BND0DyKao8ZtoIeCJNHB9tivdYif2qObT
-         egfnFaMP3JtWgLS3I0zr7+PPi9NIXZBqvDmRw/k28hztr4io0Agt8lMoxOJ07jAJ/bc5
-         tff/XVcVWmkAzVr6cZwX1GVE4Pjt7zo4smTb5ZVbBmLIOVPHO970rQJaQaTOODytR+Od
-         ohyo95yl5/+HRm7dIilW7DjUfhaao/zPZzPAIQXsyLaFHe/z5zelyb4alx0d9sPEonkB
-         +/+pvYsu3XOIBMSHiM4z958wB3dfpCLqoljlYMf5G92rC5Qagx9/+8S28M7n8IaSuLe+
-         bWbQ==
+        bh=9g6zXd3UY6FR9mRGo0YLbshWp2Mg0VfIdE8xLRYTWgY=;
+        b=P1SYKGJXzgRZvbTDBewiHnTDquAXRziX7UWB26is7h3/LiMwXhLXRCePcZ3BDl0Sdj
+         fGD27F0jvYX2V3fWhgm1uCi12Ht843Bi32gcSGtXanIH5Hx5/pexhNmOSzgbpLWi4B7m
+         /4hLuvXBj4TEiOHNyQZwWu/AVVFiKdfUXkSu7SNllyLWulMGPQg9OE5dIggbyXyCk09q
+         bpQKrrWKWejpp32CDgXVZ7+1vppAq+IKuCSWsE+FVd61SVP0/wF9DO/zFGxrJCeBHPZF
+         rKQmmGEeST4P24Ouz360dDEJmLUdlYaDL3MrtkgZfo4m7py3CJALHORTe/3Iag5hWYOg
+         CbiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691562311; x=1692167111;
+        d=1e100.net; s=20221208; t=1691566566; x=1692171366;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CH4TGJEPAdBC6NjBXoK01yC3B5N+WMqmtilRzRbkims=;
-        b=OBArVt+rdRhcFoJuD1XMn/alaRcdEow+/vtcUtD1WtkOFlzvkAkAMvk242icrE6903
-         vGduE5SsaGsgKDK1fnMWigeH+HaHwba71kXR+OLkGqRDgmUvl7aKbsaSdXASIcStmezY
-         xQ2l9c2hWkwAJI3IPKQy9xBpZwPFRewkPFUfe8aUIz0/Ij8vYjTU3V4peVJM/oi+IVH4
-         XvGX2vUtNdX9V7NZi2mLASr2Xrzs7iSbW217wq5TitdPTd6Jts/vEm6jvhjQW4egkP7t
-         k257id8NQg/BQLTdlhHcLZ17HKmh5/mfAr3VC8cpkFCz9z+vxDhMZsct/aMKtC4bGn5w
-         VSdw==
-X-Gm-Message-State: AOJu0YzlmtgYooJ5MzVeGtYK3iF55N1iaYjaUT2A1jHEt3HguC7HFMwk
-	BD1KfHX7jAw1ArLwdL/WGSJy/cEwWqIzfnoW104CIw==
-X-Google-Smtp-Source: AGHT+IEollPvCnxSCgZPUkQFllEv9ntre1aTV2g6cdDF/eJM4k4KOdW/tK4KVfKouozYky01aD7Wp2qDzz/Xi+cjCLc=
-X-Received: by 2002:a05:6102:3168:b0:443:8a7b:f76d with SMTP id
- l8-20020a056102316800b004438a7bf76dmr2057531vsm.28.1691562310886; Tue, 08 Aug
- 2023 23:25:10 -0700 (PDT)
+        bh=9g6zXd3UY6FR9mRGo0YLbshWp2Mg0VfIdE8xLRYTWgY=;
+        b=avCl2UCMFFSN1dmOLeL5nn15q6qkQvQn30WyCsYTXVwHZeaEuVZUZV+Q7wJ3DGetzS
+         bIeJlcC0sC3ZWvK1+NNI/QH6lnnXp2FFl5hv/mTNKVVT+gobhX447tEXx2NpZohFOLDz
+         MP9N6VSJrZkWIgx61z6sDVgaxsOuL4PH4uVgInFL92kibno96QIdoajx5AaGzEkcFqLp
+         fnBmto/g0+oGFk4KAFbJ5X73oaB9Wovp/MkLnJoXVSjSRZynFRHADl0HhjFLDZoUQTjt
+         tddUT5fqfnwuV1LOu7ib4FrgCBW0NvH6zZRMScg0ihExgPaLOuCzkMxqv2Dd6vA8/K7M
+         DQOg==
+X-Gm-Message-State: AOJu0YzEP2JOQe03JzMB6vaWix8jvkm/MrPgGrIqn0ypnBPm+VT/45V2
+	PHHuNd/VK+6+v0k7SgBM3cgD4TP4RDsejYeor0zY1g==
+X-Google-Smtp-Source: AGHT+IFLVn1NeZhNSR4e0f4XwgaZlOp0UJWCsTWtrzAtLWAsvsgQTICHpp1h8SPYP0VKCEaRvXTAkpih5U8qZmKLx5g=
+X-Received: by 2002:a05:600c:ac4:b0:3f9:c0f2:e1a4 with SMTP id
+ c4-20020a05600c0ac400b003f9c0f2e1a4mr1498745wmr.34.1691566566341; Wed, 09 Aug
+ 2023 00:36:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYsdUeNu-gwbs0+T6XHi4hYYk=Y9725-wFhZ7gJMspLDRA@mail.gmail.com>
-In-Reply-To: <CA+G9fYsdUeNu-gwbs0+T6XHi4hYYk=Y9725-wFhZ7gJMspLDRA@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 9 Aug 2023 11:54:59 +0530
-Message-ID: <CA+G9fYvDa-u22+gXt7VRWcQkCJFHvt2FPnjFmbwLX0bY__QrLg@mail.gmail.com>
-Subject: Re: ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one
- side of the expression must be absolute
-To: linux-stable <stable@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Anders Roxell <anders.roxell@linaro.org>, Arnd Bergmann <arnd@arndb.de>
+References: <20230808102049.465864-1-elver@google.com> <20230808102049.465864-3-elver@google.com>
+ <202308081424.1DC7AA4AE3@keescook>
+In-Reply-To: <202308081424.1DC7AA4AE3@keescook>
+From: Marco Elver <elver@google.com>
+Date: Wed, 9 Aug 2023 09:35:29 +0200
+Message-ID: <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
+To: Kees Cook <keescook@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
+	linux-toolchains@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-also noticed on stable-rc 5.15 and 5.10.
+On Tue, 8 Aug 2023 at 23:27, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Aug 08, 2023 at 12:17:27PM +0200, Marco Elver wrote:
+> > Numerous production kernel configs (see [1, 2]) are choosing to enable
+> > CONFIG_DEBUG_LIST, which is also being recommended by KSPP for hardened
+> > configs [3]. The feature has never been designed with performance in
+> > mind, yet common list manipulation is happening across hot paths all
+> > over the kernel.
+> >
+> > Introduce CONFIG_DEBUG_LIST_MINIMAL, which performs list pointer
+> > checking inline, and only upon list corruption delegates to the
+> > reporting slow path.
+>
+> I'd really like to get away from calling this "DEBUG", since it's used
+> more for hardening (CONFIG_LIST_HARDENED?). Will Deacon spent some time
+> making this better a while back, but the series never landed. Do you
+> have a bit of time to look through it?
+>
+> https://github.com/KSPP/linux/issues/10
+> https://lore.kernel.org/lkml/20200324153643.15527-1-will@kernel.org/
 
-On Wed, 9 Aug 2023 at 11:40, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> While building Linux stable rc 6.1 x86_64 with clang-17 failed due to
-> following warnings / errors.
->
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/2/build ARCH=x86_64 SRCARCH=x86
-> CROSS_COMPILE=x86_64-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-> clang' LLVM=1 LLVM_IAS=1
->
-> arch/x86/lib/retpoline.o: warning: objtool: .altinstr_replacement:
-> unexpected end of section
-> ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one side of
-> the expression must be absolute
-> ld.lld: error: ./arch/x86/kernel/vmlinux.lds:192: at least one side of
-> the expression must be absolute
-> ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one side of
-> the expression must be absolute
-> ld.lld: error: ./arch/x86/kernel/vmlinux.lds:192: at least one side of
-> the expression must be absolute
-> ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one side of
-> the expression must be absolute
-> ld.lld: error: ./arch/x86/kernel/vmlinux.lds:192: at least one side of
-> the expression must be absolute
-> make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
-> make[2]: Target '__default' not remade because of errors.
-> make[1]: *** [Makefile:1255: vmlinux] Error 2
->
->
-> Build links,
->  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TiTUgExGs7SrTm9Lb4fakgeTfw/
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.44-117-g74848b090997/testrun/18917095/suite/build/test/clang-lkftconfig/details/
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.44-117-g74848b090997/testrun/18917095/suite/build/test/clang-lkftconfig/history/
->
-> Steps to reproduce:
->   tuxmake --runtime podman --target-arch x86_64 --toolchain clang-17
-> --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2TiTUgExGs7SrTm9Lb4fakgeTfw/config
-> LLVM=1 LLVM_IAS=1
->   https://storage.tuxsuite.com/public/linaro/lkft/builds/2TiTUgExGs7SrTm9Lb4fakgeTfw/tuxmake_reproducer.sh
->
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+I'm fine renaming this one. But there are other issues that Will's
+series solves, which I don't want this series to depend on. We can try
+to sort them out separately.
+
+The main problem here is that DEBUG_LIST has been designed to be
+friendly for debugging (incl. checking poison values and NULL). Some
+kernel devs may still want that, but for production use is pointless
+and wasteful.
+
+So what I can propose is to introduce CONFIG_LIST_HARDENED that
+doesn't depend on CONFIG_DEBUG_LIST, but instead selects it, because
+we still use that code to produce a report.
+
+If there are other list types that have similar debug checks, but
+where we can optimize performance by eliding some and moving them
+inline, we can do the same (CONFIG_*_HARDENED). If the checks are
+already optimized, we could just rename it to CONFIG_*_HARDENED and
+remove the DEBUG-name.
+
+I'm not a big fan of the 2 modes either, but that's what we get if we
+want to support the debugging and hardening usecases. Inlining the
+full set of checks does not work for performance and size.
