@@ -1,103 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DFC18AE1
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 15:37:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A0EC433C7;
-	Wed,  9 Aug 2023 15:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691595477;
-	bh=WtwZJ1Fe2B9YZNQyWrRTevJYcAwGYbXVhx6d93V0dH0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jeKVVoRe03yN2mg6Ns582tsXkMjzwQfmj2HWfEgnb25JctXW++eASY8RCpKpe9mfJ
-	 3pRGggNgMBLK+XBci8sj8av1+4dH6gSMFkEaYy4lEbkX2wgwDpWju3VEaNtkLWD1if
-	 YESyDKppTByV7p22M+/u7dYKLVOCwBNOUg6ST2CM+0uXmFK7ustv49LN8yLNfDP/t4
-	 v1lkyz9NfWjDNkoiVysBFIkj+TNZkhyfkXnAbrImnKuBaXn0KY8vyZ69/f5bIpZg1B
-	 HZuffKh+ViTC4vccvGQkjCi5XsI6me2P11urUN91wKTEUuZ/UyAaR1F/HWOEWrVocs
-	 HYD7fzr+oBnmw==
-Date: Wed, 9 Aug 2023 08:37:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc: boris.brezillon@collabora.com, ndesaulniers@google.com,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-	trix@redhat.com, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	naresh.kamboju@linaro.org, dakr@redhat.com
-Subject: Re: [PATCH 1/2] drm/exec: use unique instead of local label
-Message-ID: <20230809153755.GA832145@dev-arch.thelio-3990X>
-References: <20230731123625.3766-1-christian.koenig@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE5019BB4
+	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 15:41:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1691595683; x=1723131683;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PXQIZ+fPIH3bc8gxDN+g8b0rmUv7zu4isFxQBbk0R64=;
+  b=RWHUR5AU2neKK1Dao+3Xl+RDofILNU6QUn4QkKGhaLIqhxYV3dE1G4Yu
+   Nn2mBUVkdNycqcBrrHj10/HiW2GN03dprZYukEC3JFsWojZ6UYMau7hkR
+   FkurAnEPw+8G7WkfFwZQ/sBSJzR4MBYPfl9lwUcluDpB8tHW9RHT8ciCU
+   U=;
+X-IronPort-AV: E=Sophos;i="6.01,159,1684800000"; 
+   d="scan'208";a="147543119"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 15:41:20 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+	by email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com (Postfix) with ESMTPS id B516146BA6;
+	Wed,  9 Aug 2023 15:41:17 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 9 Aug 2023 15:41:16 +0000
+Received: from 88665a182662.ant.amazon.com (10.106.100.32) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 9 Aug 2023 15:41:13 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <horms@kernel.org>
+CC: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>, <lkp@intel.com>,
+	<llvm@lists.linux.dev>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <trix@redhat.com>
+Subject: Re: [PATCH] net/llc/llc_conn.c: fix 4 instances of -Wmissing-variable-declarations
+Date: Wed, 9 Aug 2023 08:41:04 -0700
+Message-ID: <20230809154104.64963-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <ZNONx8N1/NFqmP6b@vergenet.net>
+References: <ZNONx8N1/NFqmP6b@vergenet.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230731123625.3766-1-christian.koenig@amd.com>
+Content-Type: text/plain
+X-Originating-IP: [10.106.100.32]
+X-ClientProxiedBy: EX19D039UWA002.ant.amazon.com (10.13.139.32) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Precedence: Bulk
 
-Hi Christian,
+From: Simon Horman <horms@kernel.org>
+Date: Wed, 9 Aug 2023 14:59:51 +0200
+> + Kuniyuki Iwashima
 
-Can this be applied to drm-misc? Other drivers are starting to make use
-of this API and our builds with clang-17 and clang-18 have been broken
-for some time due to this.
+Thanks Simon.
 
-Cheers,
-Nathan
+> 
+> On Tue, Aug 08, 2023 at 09:43:09AM -0700, Nick Desaulniers wrote:
+> > I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
+> > bot spotted the following instances:
+> > 
+> >   net/llc/llc_conn.c:44:5: warning: no previous extern declaration for
+> >   non-static variable 'sysctl_llc2_ack_timeout'
+> >   [-Wmissing-variable-declarations]
+> >   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+> >      |     ^
+> >   net/llc/llc_conn.c:44:1: note: declare 'static' if the variable is not
+> >   intended to be used outside of this translation unit
+> >   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+> >      | ^
+> >   net/llc/llc_conn.c:45:5: warning: no previous extern declaration for
+> >   non-static variable 'sysctl_llc2_p_timeout'
+> >   [-Wmissing-variable-declarations]
+> >   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+> >      |     ^
+> >   net/llc/llc_conn.c:45:1: note: declare 'static' if the variable is not
+> >   intended to be used outside of this translation unit
+> >   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+> >      | ^
+> >   net/llc/llc_conn.c:46:5: warning: no previous extern declaration for
+> >   non-static variable 'sysctl_llc2_rej_timeout'
+> >   [-Wmissing-variable-declarations]
+> >   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+> >      |     ^
+> >   net/llc/llc_conn.c:46:1: note: declare 'static' if the variable is not
+> >   intended to be used outside of this translation unit
+> >   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+> >      | ^
+> >   net/llc/llc_conn.c:47:5: warning: no previous extern declaration for
+> >   non-static variable 'sysctl_llc2_busy_timeout'
+> >   [-Wmissing-variable-declarations]
+> >   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+> >      |     ^
+> >   net/llc/llc_conn.c:47:1: note: declare 'static' if the variable is not
+> >   intended to be used outside of this translation unit
+> >   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+> >      | ^
+> > 
+> > These symbols are referenced by more than one translation unit, so make
+> > include the correct header for their declarations. Finally, sort the
+> > list of includes to help keep them tidy.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> Reviewed-by: Simon Horman <horms@kernel.org>
 
-On Mon, Jul 31, 2023 at 02:36:24PM +0200, Christian König wrote:
-> GCC forbids to jump to labels in loop conditions and a new clang
-> check stumbled over this.
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+
+Thanks!
+
 > 
-> So instead using a local label inside the loop condition use an
-> unique label outside of it.
-> 
-> Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1890
-> Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> CC: Boris Brezillon <boris.brezillon@collabora.com>
-> Signed-off-by: Christian König <christian.koenig@amd.com>
-> ---
->  include/drm/drm_exec.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
-> index 73205afec162..e0462361adf9 100644
-> --- a/include/drm/drm_exec.h
-> +++ b/include/drm/drm_exec.h
-> @@ -3,6 +3,7 @@
->  #ifndef __DRM_EXEC_H__
->  #define __DRM_EXEC_H__
->  
-> +#include <linux/compiler.h>
->  #include <linux/ww_mutex.h>
->  
->  #define DRM_EXEC_INTERRUPTIBLE_WAIT	BIT(0)
-> @@ -74,13 +75,12 @@ struct drm_exec {
->   * Since labels can't be defined local to the loops body we use a jump pointer
->   * to make sure that the retry is only used from within the loops body.
->   */
-> -#define drm_exec_until_all_locked(exec)				\
-> -	for (void *__drm_exec_retry_ptr; ({			\
-> -		__label__ __drm_exec_retry;			\
-> -__drm_exec_retry:						\
-> -		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
-> -		(void)__drm_exec_retry_ptr;			\
-> -		drm_exec_cleanup(exec);				\
-> +#define drm_exec_until_all_locked(exec)					\
-> +__PASTE(__drm_exec_, __LINE__):						\
-> +	for (void *__drm_exec_retry_ptr; ({				\
-> +		__drm_exec_retry_ptr = &&__PASTE(__drm_exec_, __LINE__);\
-> +		(void)__drm_exec_retry_ptr;				\
-> +		drm_exec_cleanup(exec);					\
->  	});)
->  
->  /**
-> -- 
-> 2.34.1
-> 
+> > ---
+> >  net/llc/llc_conn.c | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/net/llc/llc_conn.c b/net/llc/llc_conn.c
+> > index d037009ee10f..0a3f5e0bec00 100644
+> > --- a/net/llc/llc_conn.c
+> > +++ b/net/llc/llc_conn.c
+> > @@ -14,14 +14,15 @@
+> >  
+> >  #include <linux/init.h>
+> >  #include <linux/slab.h>
+> > -#include <net/llc_sap.h>
+> > -#include <net/llc_conn.h>
+> > -#include <net/sock.h>
+> > -#include <net/tcp_states.h>
+> > -#include <net/llc_c_ev.h>
+> > +#include <net/llc.h>
+> >  #include <net/llc_c_ac.h>
+> > +#include <net/llc_c_ev.h>
+> >  #include <net/llc_c_st.h>
+> > +#include <net/llc_conn.h>
+> >  #include <net/llc_pdu.h>
+> > +#include <net/llc_sap.h>
+> > +#include <net/sock.h>
+> > +#include <net/tcp_states.h>
+> >  
+> >  #if 0
+> >  #define dprintk(args...) printk(KERN_DEBUG args)
+> > 
+> > ---
+> > base-commit: 14f9643dc90adea074a0ffb7a17d337eafc6a5cc
+> > change-id: 20230808-llc_static-de4dddcc64b4
+> > 
+> > Best regards,
+> > -- 
+> > Nick Desaulniers <ndesaulniers@google.com>
