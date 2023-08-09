@@ -1,44 +1,34 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E5B17FE2;
-	Wed,  9 Aug 2023 12:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691583214; x=1723119214;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/9OzKVyM0NRNd6zOxOAtBXjfpdX3XMfSLce3m0fLoAA=;
-  b=UZ/4woBtn1q+teqf416CdKnPl9DJ6FLJa5+3P0tOqVe2roeY6l/FaMhU
-   Kpz8jwE11cc8pWZP49Tb2Ae6clyFDUiEeeTkFCyl6PK7qPSrMdc3+nU7r
-   7X0WWoJda8dGu+FyYLJllyjbPRZSgAREkI9LYREFnckLULdWr3+Ukv+3s
-   yDsNyMvtrsSAQaEmw+xtq+p9KpR/u9ig+sWacLZQNmbYQfNz2V6shhL8x
-   T5VT5LiMCLt6Ni3wiom8B0AHDsIhMVcPeFAsxMlpCmSLfiVOCQWVJQg3r
-   /2Y92t+ivfasrYomxMaVdkRXH2TNl7Wxo3jfHG2Je9VJDxYz85u2tz89O
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="402070058"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="402070058"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 05:13:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="761356893"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="761356893"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Aug 2023 05:13:32 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTi4B-00065q-2s;
-	Wed, 09 Aug 2023 12:13:31 +0000
-Date: Wed, 9 Aug 2023 20:12:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tianyu Lan <tiala@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Kelley <mikelley@microsoft.com>
-Subject: [lantianyu:test 18/29] arch/x86/kernel/cpu/mshyperv.c:543:3: error:
- call to undeclared function 'hv_sev_init_mem_and_cpu'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202308092032.xNConEC0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F9018AF1;
+	Wed,  9 Aug 2023 12:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37995C433CB;
+	Wed,  9 Aug 2023 12:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691585996;
+	bh=Kjv7BSip4U2Z76k+hApURRKL4hnouy3m/W2QpYLKPo0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iuvplUmmZ1qTGk7obsCf7HGiIbt84kz89KMj6mvs5v/+GanHGU1RtChVxT8efOgtk
+	 8hiIfTVQIeTv8orz5OihFkQV9+5M5V3jXJVpS/S4cO/5nO2DWIwDB7OhPpQlKh7lzt
+	 quPlOgcWfab/fApuBTWEQWMFXP1uVgjSYyvAB09xdLI0Q7EhuoTe31W8iH7dHk1cJx
+	 Bqz8N6o/F6XcHQHEwmBS4ahEf7xuSw772NleWQUwA9Owx+ZKQB86wur6kb0WVnlV1X
+	 xIhx1GkBVTEJVnPJAZ5kyH7RppmjqxIeSgNjWfM4CUPcdoZ6/OmfCX5M3x+GBiFhGW
+	 rPJGbVo0hS6nw==
+Date: Wed, 9 Aug 2023 14:59:51 +0200
+From: Simon Horman <horms@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: Re: [PATCH] net/llc/llc_conn.c: fix 4 instances of
+ -Wmissing-variable-declarations
+Message-ID: <ZNONx8N1/NFqmP6b@vergenet.net>
+References: <20230808-llc_static-v1-1-c140c4c297e4@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,49 +37,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230808-llc_static-v1-1-c140c4c297e4@google.com>
 
-tree:   https://github.com/lantianyu/linux test
-head:   1f50b51d0f25cf6e93d994fbc0ec9e2f1cb3b911
-commit: b1fb0b5fda3b4d47523c15ad6817f5111e3ba898 [18/29] x86/hyperv: Initialize cpu and memory for SEV-SNP enlightened guest
-config: x86_64-randconfig-x003-20230809 (https://download.01.org/0day-ci/archive/20230809/202308092032.xNConEC0-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230809/202308092032.xNConEC0-lkp@intel.com/reproduce)
++ Kuniyuki Iwashima
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308092032.xNConEC0-lkp@intel.com/
+On Tue, Aug 08, 2023 at 09:43:09AM -0700, Nick Desaulniers wrote:
+> I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
+> bot spotted the following instances:
+> 
+>   net/llc/llc_conn.c:44:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_ack_timeout'
+>   [-Wmissing-variable-declarations]
+>   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:44:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+>      | ^
+>   net/llc/llc_conn.c:45:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_p_timeout'
+>   [-Wmissing-variable-declarations]
+>   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:45:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+>      | ^
+>   net/llc/llc_conn.c:46:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_rej_timeout'
+>   [-Wmissing-variable-declarations]
+>   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:46:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+>      | ^
+>   net/llc/llc_conn.c:47:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_busy_timeout'
+>   [-Wmissing-variable-declarations]
+>   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:47:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+>      | ^
+> 
+> These symbols are referenced by more than one translation unit, so make
+> include the correct header for their declarations. Finally, sort the
+> list of includes to help keep them tidy.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Simon Horman <horms@kernel.org>
 
->> arch/x86/kernel/cpu/mshyperv.c:543:3: error: call to undeclared function 'hv_sev_init_mem_and_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   hv_sev_init_mem_and_cpu();
-                   ^
-   1 error generated.
-
-
-vim +/hv_sev_init_mem_and_cpu +543 arch/x86/kernel/cpu/mshyperv.c
-
-   529	
-   530		/* Register Hyper-V specific clocksource */
-   531		hv_init_clocksource();
-   532		hv_vtl_init_platform();
-   533	#endif
-   534		/*
-   535		 * TSC should be marked as unstable only after Hyper-V
-   536		 * clocksource has been initialized. This ensures that the
-   537		 * stability of the sched_clock is not altered.
-   538		 */
-   539		if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT))
-   540			mark_tsc_unstable("running on Hyper-V");
-   541	
-   542		if (hv_isolation_type_en_snp())
- > 543			hv_sev_init_mem_and_cpu();
-   544	
-   545		hardlockup_detector_disable();
-   546	}
-   547	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  net/llc/llc_conn.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/llc/llc_conn.c b/net/llc/llc_conn.c
+> index d037009ee10f..0a3f5e0bec00 100644
+> --- a/net/llc/llc_conn.c
+> +++ b/net/llc/llc_conn.c
+> @@ -14,14 +14,15 @@
+>  
+>  #include <linux/init.h>
+>  #include <linux/slab.h>
+> -#include <net/llc_sap.h>
+> -#include <net/llc_conn.h>
+> -#include <net/sock.h>
+> -#include <net/tcp_states.h>
+> -#include <net/llc_c_ev.h>
+> +#include <net/llc.h>
+>  #include <net/llc_c_ac.h>
+> +#include <net/llc_c_ev.h>
+>  #include <net/llc_c_st.h>
+> +#include <net/llc_conn.h>
+>  #include <net/llc_pdu.h>
+> +#include <net/llc_sap.h>
+> +#include <net/sock.h>
+> +#include <net/tcp_states.h>
+>  
+>  #if 0
+>  #define dprintk(args...) printk(KERN_DEBUG args)
+> 
+> ---
+> base-commit: 14f9643dc90adea074a0ffb7a17d337eafc6a5cc
+> change-id: 20230808-llc_static-de4dddcc64b4
+> 
+> Best regards,
+> -- 
+> Nick Desaulniers <ndesaulniers@google.com>
+> 
+> 
