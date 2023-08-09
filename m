@@ -1,42 +1,42 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84EC24523;
-	Wed,  9 Aug 2023 20:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9737B24537;
+	Wed,  9 Aug 2023 20:12:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691611972; x=1723147972;
+  t=1691611975; x=1723147975;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a593atNLjvTW6wTIgjDpm2hsb2frCamf/mhHkQRmPdg=;
-  b=do5EAWn6KZWB3pvBpQbCmEI9PdAwZtRKBr/Aq61fNPGFx3Y8S79zWEOf
-   qb2iHaGHX3zyW00jSVWYRslkgcLEuDG1g8Erwcal+Qa3v7Hdts9W9Ynxv
-   W6PCO7E9PfFFPZTWdgoGutwM9dIdfhZykz2tcqeYhu/vXqhViliJuknzf
-   PSOsF84pLrPsSlJ41DDtWg8/qbF2BFCQCR+amM+YtWL9YSGw2nMZ9v3yj
-   XkFaMv2702ZV+eU4DGZ/Agn9bUik3Z7C929jlKpJiqJ3/YhJEiwkHozNr
-   bR5F9cE9Zt1iwIDrOXA+wJz7fJRdJjsKx/j+ybbB+JdgvzQBtGQ55rgsW
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="356186951"
+  bh=fs2CuDabQsngcISk0Gf+yvNpACfpPh+pxFBgVjZD5aY=;
+  b=TaPcrdtIqipUGyFqjFEbGvnWfyMj36CU200pcymOG51VV2mqr3hD4EuC
+   DR8oHdobWcmOurDNH7Wc3THF8StFtCke5dju35EKDs2Pvw0B5ggV6HMDv
+   10nq9o/uIzqfTTrZO19pdLmEFkb1KSDhUnOlpX1XBH+qGG/cYESPHyJT+
+   xHtVzksh0ztQN9FBMgKq4TBc5q7Emeg/k/lJrFOBsZDtULgpyUpNFpz+J
+   Tovj6IBf8iPIW5b7aESWv7Qo3DCB2fSFz95vAYP7EHGLE5c9yyEg2QZFJ
+   ijhPaKckZyxiscKvmcIih3ynkDW81IA7HnPIhxniWDuW+0FlF9WesoJ8R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="356186956"
 X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="356186951"
+   d="scan'208";a="356186956"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 13:12:44 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 13:12:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="905782621"
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="905782624"
 X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="905782621"
+   d="scan'208";a="905782624"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2023 13:12:43 -0700
+  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2023 13:12:44 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qTpXu-0006MM-0X;
+	id 1qTpXu-0006MP-0a;
 	Wed, 09 Aug 2023 20:12:42 +0000
-Date: Thu, 10 Aug 2023 04:11:51 +0800
+Date: Thu, 10 Aug 2023 04:11:50 +0800
 From: kernel test robot <lkp@intel.com>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [peterz-queue:x86/srso 11/17] arch/x86/kernel/cpu/bugs.c:2611:7:
  warning: data argument not used by format string
-Message-ID: <202308100428.pHrKXj0P-lkp@intel.com>
+Message-ID: <202308100405.9dZ1Lxqy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,14 +49,14 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/srso
 head:   c11a8b2bc1bb3ad76d8d28b283552768d665208c
 commit: 11c0071d430e8287450563655600f52ec302d1f0 [11/17] x86/cpu: Remove all SRSO interface nonsense
-config: x86_64-randconfig-x003-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100428.pHrKXj0P-lkp@intel.com/config)
+config: i386-randconfig-r024-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100405.9dZ1Lxqy-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100428.pHrKXj0P-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100405.9dZ1Lxqy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308100428.pHrKXj0P-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308100405.9dZ1Lxqy-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
