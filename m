@@ -1,89 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8771C9E1;
-	Wed,  9 Aug 2023 22:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691619952; x=1723155952;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z0glSc8LY2LtLuJc7hMlmzjpzI22Dwm4Qp6bntrmsak=;
-  b=d8wgbsNfl5bNGjursqx1FNIqjIbah3TFhOaR/HEnEEf39qhXCvDYnjIt
-   3BUqfG3MQgGfwRYWF9RcXJGnAQ2UUocxcExIDYHupd9+SKNYtH8uzZPFJ
-   5Bqu9iZSguYzK2XV/vKSM1tQW77bhlYhQg30C4esXwRvxi5OeZ3OWrk2k
-   OT8hQmHKhzq2QclGLjSaNTphr9h8m4di+oaBLkaUHwbUldBTqTEpZ2NEC
-   ZuJT+tNJp2W90P1DMAkYbmS4ZuyD4W7z+iH3Mkj+hP7J/ZaZKaYHT8egJ
-   CDE6RvhDWsNwEfMKtv1XGT5z5bVG0DirJedOJvpte9Qiez987rdVCHNyV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="374959931"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="374959931"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 15:25:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="875458453"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Aug 2023 15:25:51 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTrch-0006SC-1D;
-	Wed, 09 Aug 2023 22:25:47 +0000
-Date: Thu, 10 Aug 2023 06:25:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gustavo Luiz Duarte <gustavold@gmail.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>, Breno Leitao <leitao@debian.org>,
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ipmr: Call ipmr_ioctl() directly from
- ipmr_sk_ioctl()
-Message-ID: <202308100626.gj6rvqoB-lkp@intel.com>
-References: <20230731145713.178509-1-gustavold@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB8A1DDF9;
+	Wed,  9 Aug 2023 23:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 438B3C43395;
+	Wed,  9 Aug 2023 23:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691622024;
+	bh=SC28URfATJ/48zq55kLBaKJ4jexX3dzrTDKzwwnOLDc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=W9rlgpJDHEMDOmZlpYkXRFJmV7mD4fSfy0yuGEem6gd3BThUduO4h+QFOdNB6ec4c
+	 EohIwyW6oQ7Ox0Kk8Rge6Hdm1VH60dy1hmV51xivlK36zquJmbjyqxX8ngTV5SNFWr
+	 efVZsgZG3S50EBhKkX9FiuZVt1QY8ZIlRINgbmIvjUJ4f+NveJlEJcbJZWV1uzjw2Z
+	 GY206shRvfwsAHs4dPG9Ir31jWTCx7YTx+NHcSp6GbmH9a2mTo9Pbt52a/NlaHDq8Y
+	 NTIXvT/YjLq3Pk2vTloVaCTBuyQeFaiBfLNzEy1of0LfMdmve1zxqNphhFH/IRINNJ
+	 WdJ8kcNHD9gCw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24041E33093;
+	Wed,  9 Aug 2023 23:00:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731145713.178509-1-gustavold@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net/llc/llc_conn.c: fix 4 instances of
+ -Wmissing-variable-declarations
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169162202414.2325.16732635656228825555.git-patchwork-notify@kernel.org>
+Date: Wed, 09 Aug 2023 23:00:24 +0000
+References: <20230808-llc_static-v1-1-c140c4c297e4@google.com>
+In-Reply-To: <20230808-llc_static-v1-1-c140c4c297e4@google.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, nathan@kernel.org, trix@redhat.com,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ lkp@intel.com
 
-Hi Gustavo,
+Hello:
 
-kernel test robot noticed the following build errors:
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test ERROR on net/main]
-[also build test ERROR on net-next/main linus/master v6.5-rc5 next-20230809]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Tue, 08 Aug 2023 09:43:09 -0700 you wrote:
+> I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
+> bot spotted the following instances:
+> 
+>   net/llc/llc_conn.c:44:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_ack_timeout'
+>   [-Wmissing-variable-declarations]
+>   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:44:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   44 | int sysctl_llc2_ack_timeout = LLC2_ACK_TIME * HZ;
+>      | ^
+>   net/llc/llc_conn.c:45:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_p_timeout'
+>   [-Wmissing-variable-declarations]
+>   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:45:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   45 | int sysctl_llc2_p_timeout = LLC2_P_TIME * HZ;
+>      | ^
+>   net/llc/llc_conn.c:46:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_rej_timeout'
+>   [-Wmissing-variable-declarations]
+>   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:46:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   46 | int sysctl_llc2_rej_timeout = LLC2_REJ_TIME * HZ;
+>      | ^
+>   net/llc/llc_conn.c:47:5: warning: no previous extern declaration for
+>   non-static variable 'sysctl_llc2_busy_timeout'
+>   [-Wmissing-variable-declarations]
+>   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+>      |     ^
+>   net/llc/llc_conn.c:47:1: note: declare 'static' if the variable is not
+>   intended to be used outside of this translation unit
+>   47 | int sysctl_llc2_busy_timeout = LLC2_BUSY_TIME * HZ;
+>      | ^
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gustavo-Luiz-Duarte/net-ipmr-Call-ipmr_ioctl-directly-from-ipmr_sk_ioctl/20230731-225918
-base:   net/main
-patch link:    https://lore.kernel.org/r/20230731145713.178509-1-gustavold%40gmail.com
-patch subject: [PATCH] net: ipmr: Call ipmr_ioctl() directly from ipmr_sk_ioctl()
-config: i386-randconfig-i011-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100626.gj6rvqoB-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100626.gj6rvqoB-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - net/llc/llc_conn.c: fix 4 instances of -Wmissing-variable-declarations
+    https://git.kernel.org/netdev/net-next/c/fa1891aeb762
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308100626.gj6rvqoB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: ip6mr_ioctl
-   >>> referenced by mroute6.h:115 (include/linux/mroute6.h:115)
-   >>>               net/core/sock.o:(sk_ioctl) in archive vmlinux.a
-   >>> referenced by mroute6.h:130 (include/linux/mroute6.h:130)
-   >>>               net/core/sock.o:(sk_ioctl) in archive vmlinux.a
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
