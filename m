@@ -1,34 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76A224505;
-	Wed,  9 Aug 2023 19:02:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465ECC433C8;
-	Wed,  9 Aug 2023 19:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF5B24505
+	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 19:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B1DC433C8;
+	Wed,  9 Aug 2023 19:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691607735;
-	bh=DLaLQ4nsUMcnLJe2hdcXxiDEkHoG+vblKTViNjeTKig=;
+	s=k20201202; t=1691608394;
+	bh=LeVB41u38/bhZJrLFYAIuDBKlGLS2oWJkoZGthUq6Jo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WsbhmUVDxxUU5AKtdMD+ld8irEp2+G7gGwMG+Jm/l7wEg5dHrvhMEq15+Llc/EpZ1
-	 p4D062pr/7mTSZCfmNcTjTZ+yUEheVFNafMCMV858mlMKUA2uuJfeA7EX2R3TpIIul
-	 vyMSJ5DHoN8DfD/jGXZQEZ4KcEa2lfkrEtWrE/GH2o1QxCa9I2MzMJKtInJQ/ecSY2
-	 dDfbHj8dsaRTvTcYtYmc39Laz9Ka63tuAB1cQA4PvmsmoP4Pu60Xz+/OGRzOB5pd3a
-	 GIce1u/nAXFqQkEBqomqIdqjvuPZCm65jnPGbyN44kacqajdoMQJCBkNC2zUGn8C4t
-	 Sq0SoEWPCVuqA==
-Date: Wed, 9 Aug 2023 12:02:12 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: broonie@kernel.org, lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
-	yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-	daniel.baluta@nxp.com, kai.vehmanen@linux.intel.com,
-	ndesaulniers@google.com, trix@redhat.com, rander.wang@intel.com,
-	sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] ASoC: SOF: Intel: Initialize chip in
- hda_sdw_check_wakeen_irq()
-Message-ID: <20230809190212.GB3355565@dev-arch.thelio-3990X>
-References: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
- <8eed2099-2853-df8d-92db-921d0702f512@linux.intel.com>
+	b=foNa56/Lvq4BCC02Q0ZTTK/jrSpYteAeDNQMdVNsyuFpsa9NA9veVhr1OryMX+6Y1
+	 5eo69vm1HvoiTG/+RFjyCQUESdxy1N0V+PJuoo1I77HXUdV3RoOcJFCZST144usBxk
+	 UqEJUWXAf0J7zQ9DhyHWd2jZwqL+H5iiHiKzAPlCHjXM+t4Kc8ZU3QdqHoA9saStRU
+	 Pnz4Y7aXVJn7GLkEWc2VbOhGhLklgpJvPd9SppbWmrEeCxXm3cUUU3eFiZoNv7QEqV
+	 x4aWcmFpjm9Wc5o5cBSbEX5yduts81Vog3ta1qctnKYw0yuKy+UFvwlpdkybvwANvG
+	 8jGt+6GCg8oFw==
+Date: Wed, 9 Aug 2023 21:13:10 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] i2c/busses: fix -Wmissing-variable-declarations
+Message-ID: <20230809191310.atpqztlpgdbdvc5m@intel.intel>
+References: <20230808-i2c-amd_static-v1-1-1902f608bba1@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,73 +33,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8eed2099-2853-df8d-92db-921d0702f512@linux.intel.com>
+In-Reply-To: <20230808-i2c-amd_static-v1-1-1902f608bba1@google.com>
 
-On Wed, Aug 09, 2023 at 01:41:18PM -0500, Pierre-Louis Bossart wrote:
+Hi Nick,
+
+On Tue, Aug 08, 2023 at 09:56:16AM -0700, Nick Desaulniers wrote:
+> I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
+> bot spotted the following instance:
 > 
+>   drivers/i2c/busses/i2c-amd756.c:286:20: warning: no previous extern
+>   declaration for non-static variable 'amd756_smbus'
+>   [-Wmissing-variable-declarations]
+>   286 | struct i2c_adapter amd756_smbus = {
+>       |                    ^
+>   drivers/i2c/busses/i2c-amd756.c:286:1: note: declare 'static' if the
+>   variable is not intended to be used outside of this translation unit
+>   286 | struct i2c_adapter amd756_smbus = {
+>       | ^
 > 
-> On 8/9/23 13:12, Nathan Chancellor wrote:
-> > Clang warns (or errors with CONFIG_WERROR):
-> > 
-> >   sound/soc/sof/intel/hda.c:423:6: error: variable 'chip' is uninitialized when used here [-Werror,-Wuninitialized]
-> >     423 |         if (chip && chip->check_sdw_wakeen_irq)
-> >         |             ^~~~
-> >   sound/soc/sof/intel/hda.c:418:39: note: initialize the variable 'chip' to silence this warning
-> >     418 |         const struct sof_intel_dsp_desc *chip;
-> >         |                                              ^
-> >         |                                               = NULL
-> >   1 error generated.
-> > 
-> > Add the missing initialization, following the pattern of the other irq
-> > functions.
-> > 
-> > Fixes: 9362ab78f175 ("ASoC: SOF: Intel: add abstraction for SoundWire wake-ups")
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> This symbol is referenced by more than one translation unit, so create
+> then include the correct header for their declarations.
 > 
-> Indeed, thanks Nathan for flagging this obvious mistake. I must have
-> done something wrong when extracting the patches.
-> 
-> Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Thanks for the quick response!
+You might want to have a Fixes tag here and
 
-> That said, we DO compile with clang and there was no warning
-> https://github.com/thesofproject/linux/actions/runs/5542372669/job/15010818307
-> 
-> Is this dependent on a specific version of clang? I'd like to make sure
-> our tools and tests are updated.
+Cc: Jean Delvare <jdelvare@suse.com>
 
-It should not be, I can reproduce it with all the versions of clang that
-the kernel supports (11.x+).
+[...]
 
-Looking at your GitHub Actions files, I am not sure exporting CC works
-correctly so I don't think you are building with clang. If I do it
-locally:
+> --- /dev/null
+> +++ b/drivers/i2c/busses/i2c-amd756.h
+> @@ -0,0 +1,3 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 
-$ export CC=clang
+Please, leave a space here.
 
-$ make -j$(nproc) defconfig
+And you might also want to have something like:
 
-$ grep -E 'CONFIG_(CC_IS|CLANG|GCC)' .config
-CONFIG_CC_IS_GCC=y
-CONFIG_GCC_VERSION=130201
-CONFIG_CLANG_VERSION=0
-CONFIG_GCC11_NO_ARRAY_BOUNDS=y
-CONFIG_GCC_PLUGINS=y
-# CONFIG_GCC_PLUGIN_LATENT_ENTROPY is not set
-# CONFIG_GCC_PLUGIN_STACKLEAK is not set
+#ifndef __I2C_AMD_756_H__
+#define __I2C_AMD_756_H__
 
-$ make -j$(nproc) sound/soc/sof/intel/hda.o
+> +#include <linux/i2c.h>
 
-$ head -1 sound/soc/sof/intel/.hda.o.cmd
-savedcmd_sound/soc/sof/intel/hda.o := gcc ...
+space here.
 
-This was brought up some time ago and Masahiro made a decent point that
-this might not be a desirable behavior change.
+> +extern struct i2c_adapter amd756_smbus;
 
-https://lore.kernel.org/CAK7LNAT6Yp3oemUxSst+htnmM-St8WmSv+UZ2x2XF23cw-kU-Q@mail.gmail.com/
+#endif /* __I2C_AMD_756_H__ */
 
-Switching to passing CC via the actual make command should fix that.
+Jean, any opinion on this patch, I don't really know this driver,
+but is there a way to avoid this extern declaration.
 
-Cheers,
-Nathan
+Thanks,
+Andi
