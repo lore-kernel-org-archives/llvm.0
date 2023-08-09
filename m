@@ -1,92 +1,89 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B589924512
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 21:25:47 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d4db57d2982so263093276.3
-        for <llvm@lists.linux.dev>; Wed, 09 Aug 2023 14:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691616346; x=1692221146;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TeHUuHfRgnWDPuFH4hkEU5fzn9hCBRBVrCadOWnm/dY=;
-        b=m3F8/0ulUMYTwL9xFOJ0hLRUE0yTJsXtRqAWzCWvR8A+u4BtSF1Y9J//7l8oh0HeNF
-         d5qEkunwkS56Mz1cw7IUxuZVEOW2FD/UTOgzMNQJmPWQHyJ05/0wM/x6SuBrfs27Jrnt
-         qUklp3oTnJ7R4SapRrWPkfff8qOSLDGr1ld2cj9x3iq+oq3psVc6yx8Uk7alFVQLOTC7
-         FXHyjmZP0uT9Fi12AOmKZle93xdSLL1acnmz/8ctRZCUx4WiU1KuNlsM4s+l6BcfmLmd
-         +0n++QJDHSgrwWPxPCHclEP51dI4/IAC4TY6UkzLXJbTD3a9ekMpmCia1UX6FTucRJgY
-         pE0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691616346; x=1692221146;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TeHUuHfRgnWDPuFH4hkEU5fzn9hCBRBVrCadOWnm/dY=;
-        b=W0pnAmgILRzd3n/l1+ctNBeKOOZGszxyQadA0h+X0tunESRDAVGWF0Yr4QyzatVEQK
-         oX11id1ExWoWrC+ou5nEi3FMyBVnvEw5d4oxQqn6Ir5klYwW3oi+MhehmvYDoZosaorH
-         eFtWRDFefTlpb7w50NzZEc92W6iItHMPqeHVVJ7cuJbf+j0AnaraN2blYNMljZZapJBK
-         3sD1j1YMvwgV6mjSeFDhl5yGo7PCpd6GfiACCwPaPiu+hVu7h82As6UaWBcUDB2ZsBJV
-         q2IzgYo4VCCDAmLSWKar2z40uqNmnfEj8PjHJgScVw1hNDnPitbbUv0XEmZ0sW+LZvmp
-         PEzg==
-X-Gm-Message-State: AOJu0YzsuexxQwsv/IqveAXHG5uW0tfDdj+THRNiabPqf2Xb9zD86hZP
-	IkgwUo+PiSfQV107x8xVs62sl7vf75cIxlxO4w==
-X-Google-Smtp-Source: AGHT+IER7CD8SLhYDzqAvYfXBz6YfQlFaQpKeWFvIJE3aWUQIYc8I61MFtiEi6h9Vzp0vHtlu9BcD3BOdPTotW/zYw==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a25:1409:0:b0:c6a:caf1:e601 with SMTP
- id 9-20020a251409000000b00c6acaf1e601mr9823ybu.13.1691616346561; Wed, 09 Aug
- 2023 14:25:46 -0700 (PDT)
-Date: Wed, 09 Aug 2023 21:25:36 +0000
-In-Reply-To: <20230809-cbl-1903-v1-0-df9d66a3ba3e@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8771C9E1;
+	Wed,  9 Aug 2023 22:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691619952; x=1723155952;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z0glSc8LY2LtLuJc7hMlmzjpzI22Dwm4Qp6bntrmsak=;
+  b=d8wgbsNfl5bNGjursqx1FNIqjIbah3TFhOaR/HEnEEf39qhXCvDYnjIt
+   3BUqfG3MQgGfwRYWF9RcXJGnAQ2UUocxcExIDYHupd9+SKNYtH8uzZPFJ
+   5Bqu9iZSguYzK2XV/vKSM1tQW77bhlYhQg30C4esXwRvxi5OeZ3OWrk2k
+   OT8hQmHKhzq2QclGLjSaNTphr9h8m4di+oaBLkaUHwbUldBTqTEpZ2NEC
+   ZuJT+tNJp2W90P1DMAkYbmS4ZuyD4W7z+iH3Mkj+hP7J/ZaZKaYHT8egJ
+   CDE6RvhDWsNwEfMKtv1XGT5z5bVG0DirJedOJvpte9Qiez987rdVCHNyV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="374959931"
+X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
+   d="scan'208";a="374959931"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 15:25:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="875458453"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Aug 2023 15:25:51 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTrch-0006SC-1D;
+	Wed, 09 Aug 2023 22:25:47 +0000
+Date: Thu, 10 Aug 2023 06:25:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gustavo Luiz Duarte <gustavold@gmail.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: ipmr: Call ipmr_ioctl() directly from
+ ipmr_sk_ioctl()
+Message-ID: <202308100626.gj6rvqoB-lkp@intel.com>
+References: <20230731145713.178509-1-gustavold@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230809-cbl-1903-v1-0-df9d66a3ba3e@google.com>
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691616343; l=1145;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=8JnGtAd2EouEzprwFG0EpWdSWssM4tBnJ8iYInUW3tw=; b=y/bJoUJDpUrl23oM/z5FEe37aFVYK4HTaD9RQ9C+npAsantOFJJouIu1r+p30Gfq3nlCbIx8G
- DhPci9Ygy+cDBvibVqeQG0Mi40YPg54DPSndE/L8i0YHBy2nhk5+ZJD
-X-Mailer: b4 0.12.3
-Message-ID: <20230809-cbl-1903-v1-2-df9d66a3ba3e@google.com>
-Subject: [PATCH 2/2] i2c: i2c-rcar: fix -Wvoid-pointer-to-enum-cast warning
-From: Justin Stitt <justinstitt@google.com>
-To: Andi Shyti <andi.shyti@kernel.org>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-Cc: linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Nathan Chancellor <nathan@kernel.org>, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230731145713.178509-1-gustavold@gmail.com>
 
-Fix the following warning:
+Hi Gustavo,
 
-|  drivers/i2c/busses/i2c-rcar.c:1066:18: error: cast to smaller integer type \
-|       'enum rcar_i2c_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
-|   1066 |         priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-|        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kernel test robot noticed the following build errors:
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1904
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- drivers/i2c/busses/i2c-rcar.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[auto build test ERROR on net/main]
+[also build test ERROR on net-next/main linus/master v6.5-rc5 next-20230809]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index 2d9c37410ebd..ae4072bc96dc 100644
---- a/drivers/i2c/busses/i2c-rcar.c
-+++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -1063,7 +1063,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->io))
- 		return PTR_ERR(priv->io);
- 
--	priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-+	priv->devtype = (unsigned long) of_device_get_match_data(dev);
- 	init_waitqueue_head(&priv->wait);
- 
- 	adap = &priv->adap;
+url:    https://github.com/intel-lab-lkp/linux/commits/Gustavo-Luiz-Duarte/net-ipmr-Call-ipmr_ioctl-directly-from-ipmr_sk_ioctl/20230731-225918
+base:   net/main
+patch link:    https://lore.kernel.org/r/20230731145713.178509-1-gustavold%40gmail.com
+patch subject: [PATCH] net: ipmr: Call ipmr_ioctl() directly from ipmr_sk_ioctl()
+config: i386-randconfig-i011-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100626.gj6rvqoB-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100626.gj6rvqoB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308100626.gj6rvqoB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: ip6mr_ioctl
+   >>> referenced by mroute6.h:115 (include/linux/mroute6.h:115)
+   >>>               net/core/sock.o:(sk_ioctl) in archive vmlinux.a
+   >>> referenced by mroute6.h:130 (include/linux/mroute6.h:130)
+   >>>               net/core/sock.o:(sk_ioctl) in archive vmlinux.a
 
 -- 
-2.41.0.640.ga95def55d0-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
