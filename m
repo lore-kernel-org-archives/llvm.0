@@ -1,124 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820561BB23
-	for <llvm@lists.linux.dev>; Wed,  9 Aug 2023 15:53:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF8DC433C7;
-	Wed,  9 Aug 2023 15:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691596395;
-	bh=ALLjYqZbkmaGE+rNCuSF7+oeLIjD7AcQvqF7AIT3qqs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UVzbUwHl+K6Nn8L5+3YuHWczmQEg73MEzwODZHOixeOvmqhrNBpEk7hQAL7mm+YRI
-	 0mYMuBCQSjAr59mWtSokDYqA8lAdk0xGiAaUXXKlwrEmZ6isAQowzmi8sWW7N+ZlGd
-	 zOoarJtHXOtTCYsEO1TWaMxMSwUmuU/IDwajwgTKXRSgEHsjZxScc6u9a76t6bRvY3
-	 rpf0joPfv2kjB7ZZXb/x3L42kRgpJVQqBwUH6EVlTcqHiwJYANHRQ+Y/QkBpMvt+vF
-	 KEm6QMY7L0ZCziC0IB9PDWXod1HlexoJCE4uUI7s16ZkxQtmJLCrRTIoMdr+jmaBo+
-	 TbPqxk4rkhkLg==
-Date: Wed, 9 Aug 2023 08:53:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	linux-stable <stable@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one
- side of the expression must be absolute
-Message-ID: <20230809155313.GA835802@dev-arch.thelio-3990X>
-References: <CA+G9fYsdUeNu-gwbs0+T6XHi4hYYk=Y9725-wFhZ7gJMspLDRA@mail.gmail.com>
- <CA+G9fYvDa-u22+gXt7VRWcQkCJFHvt2FPnjFmbwLX0bY__QrLg@mail.gmail.com>
- <CAKwvOdmjAZ9BacrNYHEgGcs=6PExfZkNYe4VWrCwkDCk_pOmyg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4F61BB23;
+	Wed,  9 Aug 2023 15:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691596419; x=1723132419;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bsQ9ZjckG22Zhho+1DpkMyvju/+w9wud73wEEEKzQ7U=;
+  b=HwWSgmVG4mxEeiE+rtP8nAMJJOjmbwdY0vBE8RQ7WPBXom3yImXxCURX
+   kAEUo2/YOZWApyNJIMjCJvjoVRZKAZWI9A4ivwVJ0ihJplyAtIqJlOSJy
+   BkuGzoegrCsumnkAtSqY7Uxr6O5HK5eyS6jiDCvbU9jpfJ1MmGL6+st1X
+   tTq3inglFTrYUgYx494rUz8bzVaxQVUQC143ftSUSeAWSWmXReKddpOKb
+   rDTEFLLunXX+yFWjBxFrvfb2TE5t9Y9uGQgUVSmKfQv7QPow0lH4Lb3BM
+   GkbqQgU48nmXP4YUoDCFNKV1LzVi/MmugLl1zAI/Kc4md5bqXSGo44uEz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="371148225"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="371148225"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 08:53:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="821910146"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="821910146"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Aug 2023 08:53:37 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTlVA-0006DC-2F;
+	Wed, 09 Aug 2023 15:53:36 +0000
+Date: Wed, 9 Aug 2023 23:53:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:b4/virt-to-phys-kfence 2/2] mm/kfence/core.c:111:13:
+ error: redefinition of '__kfence_pool' with a different type: 'const void *'
+ vs 'char *'
+Message-ID: <202308092347.Y1oLTk1z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdmjAZ9BacrNYHEgGcs=6PExfZkNYe4VWrCwkDCk_pOmyg@mail.gmail.com>
 
-On Wed, Aug 09, 2023 at 08:47:08AM -0700, Nick Desaulniers wrote:
-> Thanks for the report. We're tracking this here
-> https://github.com/ClangBuiltLinux/linux/issues/1907
-> It was pointed out that PeterZ has a series reworking this code entirely:
-> https://lore.kernel.org/lkml/20230809071218.000335006@infradead.org/
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/virt-to-phys-kfence
+head:   1d8567fb084df07151b6dbf6337f7e909b3576f3
+commit: 1d8567fb084df07151b6dbf6337f7e909b3576f3 [2/2] kfence: Use a const void * for page pool
+config: riscv-randconfig-r042-20230809 (https://download.01.org/0day-ci/archive/20230809/202308092347.Y1oLTk1z-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230809/202308092347.Y1oLTk1z-lkp@intel.com/reproduce)
 
-As I pointed out in that issue, I don't think that series helps us with
-this issue but I will try to test shortly (the patches did not apply
-cleanly but I have not looked into why yet).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308092347.Y1oLTk1z-lkp@intel.com/
 
-> On Tue, Aug 8, 2023 at 11:25 PM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > also noticed on stable-rc 5.15 and 5.10.
-> 
-> That's troubling if stable is already picking up patches that are
-> breaking the build!
+All errors (new ones prefixed by >>):
 
-Those patches are already released in stable, they were basically
-released at the same time as they were merged into mainline:
+>> mm/kfence/core.c:111:13: error: redefinition of '__kfence_pool' with a different type: 'const void *' vs 'char *'
+   const void *__kfence_pool __read_mostly;
+               ^
+   include/linux/kfence.h:28:14: note: previous declaration is here
+   extern char *__kfence_pool;
+                ^
+   1 error generated.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/?h=linux-6.4.y
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/?h=linux-6.1.y
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/?h=linux-5.15.y
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/?h=linux-5.10.y
 
-Cheers,
-Nathan
+vim +111 mm/kfence/core.c
 
-> > On Wed, 9 Aug 2023 at 11:40, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > While building Linux stable rc 6.1 x86_64 with clang-17 failed due to
-> > > following warnings / errors.
-> > >
-> > > make --silent --keep-going --jobs=8
-> > > O=/home/tuxbuild/.cache/tuxmake/builds/2/build ARCH=x86_64 SRCARCH=x86
-> > > CROSS_COMPILE=x86_64-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-> > > clang' LLVM=1 LLVM_IAS=1
-> > >
-> > > arch/x86/lib/retpoline.o: warning: objtool: .altinstr_replacement:
-> > > unexpected end of section
-> > > ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one side of
-> > > the expression must be absolute
-> > > ld.lld: error: ./arch/x86/kernel/vmlinux.lds:192: at least one side of
-> > > the expression must be absolute
-> > > ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one side of
-> > > the expression must be absolute
-> > > ld.lld: error: ./arch/x86/kernel/vmlinux.lds:192: at least one side of
-> > > the expression must be absolute
-> > > ld.lld: error: ./arch/x86/kernel/vmlinux.lds:191: at least one side of
-> > > the expression must be absolute
-> > > ld.lld: error: ./arch/x86/kernel/vmlinux.lds:192: at least one side of
-> > > the expression must be absolute
-> > > make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
-> > > make[2]: Target '__default' not remade because of errors.
-> > > make[1]: *** [Makefile:1255: vmlinux] Error 2
-> > >
-> > >
-> > > Build links,
-> > >  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TiTUgExGs7SrTm9Lb4fakgeTfw/
-> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.44-117-g74848b090997/testrun/18917095/suite/build/test/clang-lkftconfig/details/
-> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.44-117-g74848b090997/testrun/18917095/suite/build/test/clang-lkftconfig/history/
-> > >
-> > > Steps to reproduce:
-> > >   tuxmake --runtime podman --target-arch x86_64 --toolchain clang-17
-> > > --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2TiTUgExGs7SrTm9Lb4fakgeTfw/config
-> > > LLVM=1 LLVM_IAS=1
-> > >   https://storage.tuxsuite.com/public/linaro/lkft/builds/2TiTUgExGs7SrTm9Lb4fakgeTfw/tuxmake_reproducer.sh
-> > >
-> > >
-> > > --
-> > > Linaro LKFT
-> > > https://lkft.linaro.org
-> 
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+   109	
+   110	/* The pool of pages used for guard pages and objects. */
+ > 111	const void *__kfence_pool __read_mostly;
+   112	EXPORT_SYMBOL(__kfence_pool); /* Export for test modules. */
+   113	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
