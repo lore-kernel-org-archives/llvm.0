@@ -1,210 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DC71100;
-	Thu, 10 Aug 2023 06:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691648706; x=1723184706;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HMmHtpCBwtu5DVRpOr49y3nxHCbn5kS4/gN9pxr6j6E=;
-  b=Gv6ymt0aUA6MS+0D73Nw9Fhg7KwXhlX55DKdJN0YKNWspzfH71LQFD7z
-   IWMXe8Ahe+UyaJabgIZM5epq9533a5eGH3Hu0ZbPI8UcXWBfxputiYXy1
-   sgeZxdf9ffQ5BUdVnSrum/KTaCKn/AsZFXm2UfoyD+Wxa1ptV95nNYkPb
-   LQZ0rDpNChXhHh7OKUwVHMk6X7EkgTNxo7nf03+qrxoU3xpz+Jr/TxAc4
-   022aI2fGdGUYwr/2jg+SuYZhY1aM6FFquY1ksFf7w9Pw263Qn7/mgoNpF
-   +JeOxlzkqrynyqufboK+1hpaj5qc8kyQEFlO/CIHnwyBKDMBhow5v+XUs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="457666766"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="457666766"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 23:25:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="797485828"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="797485828"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Aug 2023 23:25:02 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qTz6T-0006nk-2B;
-	Thu, 10 Aug 2023 06:25:01 +0000
-Date: Thu, 10 Aug 2023 14:24:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
-	tzimmermann@suse.de, airlied@redhat.com,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	daniel@ffwll.ch, javierm@redhat.com, bluescreen_avenger@verizon.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jocelyn Falempe <jfalempe@redhat.com>
-Subject: Re: [PATCH 1/2] drm/panic: Add a drm panic handler
-Message-ID: <202308101423.GSvLgbbe-lkp@intel.com>
-References: <20230809192514.158062-2-jfalempe@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEAC1C16
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 06:40:08 +0000 (UTC)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bbrezillon)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 52FB26607214;
+	Thu, 10 Aug 2023 07:40:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1691649606;
+	bh=uOhqG4fispv1HyT2wcQA5GUwaFe6s8niX9CF29QCBcU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=or8l/s2hclUj6kLR9o2yS5mQ0v212t2y9IL2hyekXL5y/QRFsn/r/gWKOJmhkXFTk
+	 dpbClVxX715GI5WgilckC5gJzAt/ZG93CUo9LAaV8VFGbWD8V8TQMQkSRqknXIR56k
+	 ybaSjGUW3QNhQ8/A8QLeRq7JrCrpv+MogMLOr+5PKaGQvThzk+GK21iBpYND1RCsnc
+	 ODYv5POT0b5o+du806UAiaSYD9huuZXyWgsTMyc9YIWIrJc9AIoXbKw7LtqtlTEML8
+	 WgzYDtJcBA/vuSZIhu9EqDIa0Z7wrEjpQwQ2pjZGiHjs1J2HsnS/D44VrSFmUsIs1O
+	 MBZnw3JUzcvTQ==
+Date: Thu, 10 Aug 2023 08:40:02 +0200
+From: Boris Brezillon <boris.brezillon@collabora.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+ ndesaulniers@google.com, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+ daniel@ffwll.ch, trix@redhat.com, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ naresh.kamboju@linaro.org, dakr@redhat.com
+Subject: Re: [PATCH 1/2] drm/exec: use unique instead of local label
+Message-ID: <20230810084002.636cc827@collabora.com>
+In-Reply-To: <20230809153755.GA832145@dev-arch.thelio-3990X>
+References: <20230731123625.3766-1-christian.koenig@amd.com>
+	<20230809153755.GA832145@dev-arch.thelio-3990X>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230809192514.158062-2-jfalempe@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Jocelyn,
+On Wed, 9 Aug 2023 08:37:55 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-kernel test robot noticed the following build warnings:
+> Hi Christian,
+> 
+> Can this be applied to drm-misc? Other drivers are starting to make use
+> of this API and our builds with clang-17 and clang-18 have been broken
+> for some time due to this.
 
-[auto build test WARNING on 6995e2de6891c724bfeb2db33d7b87775f913ad1]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-panic-Add-a-drm-panic-handler/20230810-032733
-base:   6995e2de6891c724bfeb2db33d7b87775f913ad1
-patch link:    https://lore.kernel.org/r/20230809192514.158062-2-jfalempe%40redhat.com
-patch subject: [PATCH 1/2] drm/panic: Add a drm panic handler
-config: s390-randconfig-r044-20230809 (https://download.01.org/0day-ci/archive/20230810/202308101423.GSvLgbbe-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308101423.GSvLgbbe-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308101423.GSvLgbbe-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/drm_panic.c:9:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/drm_panic.c:9:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/drm_panic.c:9:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/gpu/drm/drm_panic.c:246:6: warning: no previous prototype for function 'drm_panic_init_client' [-Wmissing-prototypes]
-     246 | void drm_panic_init_client(struct drm_device *dev)
-         |      ^
-   drivers/gpu/drm/drm_panic.c:246:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     246 | void drm_panic_init_client(struct drm_device *dev)
-         | ^
-         | static 
->> drivers/gpu/drm/drm_panic.c:272:6: warning: no previous prototype for function 'drm_panic_init' [-Wmissing-prototypes]
-     272 | void drm_panic_init(void)
-         |      ^
-   drivers/gpu/drm/drm_panic.c:272:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     272 | void drm_panic_init(void)
-         | ^
-         | static 
->> drivers/gpu/drm/drm_panic.c:282:6: warning: no previous prototype for function 'drm_panic_exit' [-Wmissing-prototypes]
-     282 | void drm_panic_exit(void)
-         |      ^
-   drivers/gpu/drm/drm_panic.c:282:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     282 | void drm_panic_exit(void)
-         | ^
-         | static 
-   15 warnings generated.
---
->> drivers/gpu/drm/drm_panic.c:28: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * This module displays a user friendly message on screen when a kernel panic
-   drivers/gpu/drm/drm_panic.c:36: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * List of drm clients
->> drivers/gpu/drm/drm_panic.c:283: warning: expecting prototype for drm_log_exit(). Prototype was for drm_panic_exit() instead
-
-
-vim +/drm_panic_init_client +246 drivers/gpu/drm/drm_panic.c
-
-   245	
- > 246	void drm_panic_init_client(struct drm_device *dev)
-   247	{
-   248		struct dpanic_drm_client *new;
-   249		int ret;
-   250	
-   251		new = kzalloc(sizeof(*new), GFP_KERNEL);
-   252		if (!new)
-   253			return;
-   254	
-   255		ret = drm_client_init(dev, &new->client, "drm_panic", NULL);
-   256		if (ret < 0) {
-   257			kfree(new);
-   258			return;
-   259		}
-   260		drm_client_register(&new->client);
-   261		list_add_tail(&new->head, &dpanic_clients);
-   262	
-   263		drm_info(dev, "Registered with drm panic\n");
-   264	}
-   265	EXPORT_SYMBOL(drm_panic_init_client);
-   266	
-   267	/**
-   268	 * drm_panic_init() - Initialize drm-panic subsystem
-   269	 *
-   270	 * register the panic notifier
-   271	 */
- > 272	void drm_panic_init(void)
-   273	{
-   274		/* register panic handler */
-   275		atomic_notifier_chain_register(&panic_notifier_list,
-   276					       &drm_panic_notifier);
-   277	}
-   278	
-   279	/**
-   280	 * drm_log_exit() - Shutdown drm-panic subsystem
-   281	 */
- > 282	void drm_panic_exit(void)
- > 283	{
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Queued to drm-misc-next.
