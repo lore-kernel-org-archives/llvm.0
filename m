@@ -1,44 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D0720CA8;
-	Thu, 10 Aug 2023 20:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691698101; x=1723234101;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bg3xogSxtU/nagQmvH34qkEPpcNfmAXYADW0CtBun5k=;
-  b=PydubZobjz1DfLH/9u/UGUK8x0O0ziV3chVWpJ9CudgvUchKVJ09mqlo
-   +x9LY2rMRsZHZ9yIAHdcY6ZC2uQSFca4ckGKFws9FpW3cQZfR31ZfLku7
-   vkH30tJ0LU7nDT63BqBNW1gcT/sBNBumqGI9dVq+Ih9H87VxJEZxasJcC
-   mFeHTQJ2TpO0xoSyNAitHYL3vomgcf6rFxpT4oUAzMWB2uqvMUW2PTKx1
-   No7ubs7cevGMko8PcEQAcSvpCVIx1XdWHol8VBboDhP4s94f2rldzEQMf
-   3eA5RxzLMjH+wSoo9Yd0ib+0zTtF6f0XUW2TddeTRzrGZ4mZWpAMdRHma
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="361649005"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="361649005"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 13:08:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="875868782"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Aug 2023 13:08:22 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qUBxC-0007Do-0T;
-	Thu, 10 Aug 2023 20:08:18 +0000
-Date: Fri, 11 Aug 2023 04:07:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishnanand Prabhu <krishnanand.prabhu@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Johannes Berg <johannes.berg@intel.com>,
-	Luca Coelho <luciano.coelho@intel.com>,
-	Gregory Greenman <gregory.greenman@intel.com>
-Subject: ld.lld: error: undefined symbol: ptp_clock_register
-Message-ID: <202308110447.4QSJHmFH-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5663820CA8
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 20:12:01 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-26b1adbd655so323263a91.1
+        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 13:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1691698320; x=1692303120;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgXTJGJNIG5brUNilbYvmAufJFTfjCt86nj6wBgTVtw=;
+        b=fyUQ4xBfwdZ9Y1ncwPWe8KTy87SugAY04QbysuNfCKESxljSeA//xKB0ll7SV9MfBn
+         Qolk9WYlCPFGiQVFIlruea5ANAIMyj2MFfbdlKAdMKJ07nVHWugx38DTOanRdd2Cvm89
+         JEkZdTPYMsehHWh3x07+sxbrflynbDh3hIrFU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691698320; x=1692303120;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YgXTJGJNIG5brUNilbYvmAufJFTfjCt86nj6wBgTVtw=;
+        b=dEyUk8LBAj6kYTAD6UWMCzCplsadORnSyAuxp3lEHH8vll1xgEPWcymT6LBHx/3llB
+         iNEzU2uUIlyTj+XcQpGvB23YLptB+Und1Q6m9VBn7T+6HKyyUzu+5JE4TxJdVsvSPHu/
+         GpxAPKeJOFV1z/ufpsWdBApFvV+LxFZ92bWkC2RXcMo/n+O1o00eFMPC3JW5uYKHfDe9
+         dEXmsTh32DRKO1DqLa6QCLiYThjdQP8iuNencYhJpbOvvA6GTUnlC/qYfgkE11LFCECc
+         BkMRZUltkSBCtnimx/QsE3QANhBXfTuVfzhzQt0TK7SSkzgD2V7dCOUjoEmqcpnyxbLr
+         MjlA==
+X-Gm-Message-State: AOJu0YyOzmJiKNROJjToD6HKMyitTdG/gqOM4xZezr2906Ayuq3MtFn5
+	60+tZew1bInhv8BZjmuLKa9RRw==
+X-Google-Smtp-Source: AGHT+IFPUbfQ62us+66kx+c9LMghiGBoteLeh6oMSfQPptLuZm4cxwBZSfUhKnCZaZrURJ2FlP0dLA==
+X-Received: by 2002:a17:90a:5d91:b0:262:f09c:e73d with SMTP id t17-20020a17090a5d9100b00262f09ce73dmr2794613pji.34.1691698320688;
+        Thu, 10 Aug 2023 13:12:00 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 5-20020a17090a1a4500b00263f446d432sm4004127pjl.43.2023.08.10.13.11.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 13:11:59 -0700 (PDT)
+Date: Thu, 10 Aug 2023 13:11:58 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Marco Elver <elver@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
+Message-ID: <202308101259.D2C4C72F8@keescook>
+References: <20230808102049.465864-1-elver@google.com>
+ <20230808102049.465864-3-elver@google.com>
+ <202308081424.1DC7AA4AE3@keescook>
+ <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
+ <ZNNi/4L1mD8XPNix@elver.google.com>
+ <20230809113021.63e5ef66@gandalf.local.home>
+ <ZNO/pf/pH5jJAZI0@elver.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,36 +74,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZNO/pf/pH5jJAZI0@elver.google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   374a7f47bf401441edff0a64465e61326bf70a82
-commit: 1595ecce1cf32688760281f40b58b7a1d4a69aa9 wifi: iwlwifi: mvm: add support for PTP HW clock (PHC)
-date:   5 months ago
-config: arm64-randconfig-r011-20230810 (https://download.01.org/0day-ci/archive/20230811/202308110447.4QSJHmFH-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230811/202308110447.4QSJHmFH-lkp@intel.com/reproduce)
+On Wed, Aug 09, 2023 at 06:32:37PM +0200, Marco Elver wrote:
+> On Wed, Aug 09, 2023 at 11:30AM -0400, Steven Rostedt wrote:
+> [...]
+> > 
+> > I would actually prefer DEBUG_LIST to select HARDEN_LIST and not the other
+> > way around. It logically doesn't make sense that HARDEN_LIST would select
+> > DEBUG_LIST. That is, I could by default want HARDEN_LIST always on, but not
+> > DEBUG_LIST (because who knows, it may add other features I don't want). But
+> > then, I may have stumbled over something and want more info, and enable
+> > DEBUG_LIST (while still having HARDEN_LIST) enabled.
+> > 
+> > I think you are looking at this from an implementation perspective and not
+> > the normal developer one.
+> > 
+> [...]
+> > 
+> > That is, if DEBUG_LIST is enabled, we always call the
+> > __list_add_valid_or_report(), but if only HARDEN_LIST is enabled, then we
+> > do the shortcut.
+> 
+> Good point - I think this is better. See below tentative v4.
+> 
+> Kees: Does that also look more like what you had in mind?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308110447.4QSJHmFH-lkp@intel.com/
+Yeah, this looks good. My only nit would be a naming one. All the
+other hardening features are named "HARDENED", but perhaps the "ED"
+is redundant in the others. Still, consistency seems nicer. What do you
+think of CONFIG_LIST_HARDENED ? (The modern trend for Kconfig naming tends
+to keep the subsystem name first and then apply optional elements after.)
 
-All errors (new ones prefixed by >>):
+One note: do the LKDTM list hardening tests still pass? i.e.
+CORRUPT_LIST_ADD
+CORRUPT_LIST_DEL
 
->> ld.lld: error: undefined symbol: ptp_clock_register
-   >>> referenced by ptp.c:99 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:99)
-   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_init) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: ptp_clock_index
-   >>> referenced by ptp.c:106 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:106)
-   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_init) in archive vmlinux.a
-   >>> referenced by ptp.c:120 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:120)
-   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_remove) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: ptp_clock_unregister
-   >>> referenced by ptp.c:124 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:124)
-   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_remove) in archive vmlinux.a
+> [...]
+> +		/*
+> +		 * With the hardening version, elide checking if next and prev
+> +		 * are NULL, LIST_POISON1 or LIST_POISON2, since the immediate
+> +		 * dereference of them below would result in a fault.
+> +		 */
+> +		if (likely(prev->next == entry && next->prev == entry))
+> +			return true;
+
+I'm not super excited about skipping those checks, since they are
+values that can be reached through kernel list management confusion. If
+an attacker is using a system where the zero-page has been mapped
+and is accessible (i.e. lacking SMAP etc), then attacks could still
+be constructed. However, I do recognize this chain of exploitation
+prerequisites is getting rather long, so probably this is a reasonable
+trade off on modern systems.
+
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
