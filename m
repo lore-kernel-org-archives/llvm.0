@@ -1,72 +1,172 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D54320CB3
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 18:43:01 +0000 (UTC)
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3fe2048c910so11017385e9.1
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 11:43:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897C462A
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 18:49:03 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5868992ddd4so16442417b3.0
+        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 11:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691692980; x=1692297780;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SdKouwlT/oGIo6LiqvsGWbbls1AGv3uLOH1vnufr9x8=;
-        b=oV8U1Ycd24HVmZnohFnkQmWKmGg4biBV/LAKF4bVcDXwWYqS4zrvEU0OGthGm/sLjE
-         O/fZ/orxxveE9C9NE9YPPm05xd5QKpMfITBvjD4x6ESBe0xQCGFFaDufMQE/uf9qHOum
-         Vg2mRl/k5u3m6H51m+6gpjskKLwYVCunlorEIGCw9G58IQzmd5fkQB4qCoodR9FwxaRU
-         CKvSuUCbY0Iro+y286MZRFcSsgL8pOyP+SDt2Mxun3zYlvhOG4qCfzH4V75PVcFJL2Kv
-         TwddvMqBbLxVXiLcfx7urC+YUIn+jGBqIZZ3i1emMEgUyVNMFpf/vUTJ1TemLn8UNv+9
-         iCUw==
+        d=google.com; s=20221208; t=1691693342; x=1692298142;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2WWD5RZ7txT2y+bELeSkVRhqrv7guu+AZxZ+/B7ig64=;
+        b=o6wAtGQZ+EMExEpuZahj/6wsFfkHVecrBuxbrUbdt4kWtVVWlsOch4CjsXbTwhXhxH
+         zxl0RCAPlpLOCS/l8jd8aiJFY1P8RgMKDRhXUzHclXHUuM+GygFj1DEKAOeIRB29b1kv
+         oSeQOZkYAoO6O808GInBOzO56yOKAMbzQf+rjffwfV5gfWwSX32XkyriMgY3psluxqNV
+         X9novVdNaiywNUONa6PhYsD787KsL9D2WtcSr+O3ajPI/SXxFqoYCiE8Zd5o782PqCaL
+         ALWFZ6CXNi2XIkKbUQHNSTnO6EGNfwEFqaEi04rZCxhtRHiWuOOQOkp/5m+co1mjQcXY
+         ttqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691692980; x=1692297780;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SdKouwlT/oGIo6LiqvsGWbbls1AGv3uLOH1vnufr9x8=;
-        b=Wh/HK9l+puWEHs1NtOO6TUprEoVjtdngOPmKj6b7GY4CPco8bG1G6wIOpxg2tBXycN
-         gayctSvA8dubIIYIgc+fd3SoSZqLG5fRwW2CuPk+YSufbtOqHFWTWoB2tkrHrwhfkS1Q
-         3ANEvo3/sOTMlmM3vnCXsd6hhS21xWLiG9pQ1UUwqn56izUCGtvAPi5Hr5Oh3IvtHOkg
-         ghoGRXSEguSO+qFET8ye+k9SJFihepEK5bGGNLDJv1i1Q8lLhZuzFggIocxe+uCue0hO
-         6cDD1PsprE2LX1Dzow/4Dc9G5Az9MNjArE94Hc/vf/W4zv7STsEci/TqWKb2af9xILI/
-         Kuaw==
-X-Gm-Message-State: AOJu0YzLlxbVnXG6AJN+gStfv14gyLmUV1AvbEN63t6aMT7nrWAmkgGO
-	LWK4+GzRL/1CU+NIPpozu66ZAD0tghFQjfD5ASU9gg==
-X-Google-Smtp-Source: AGHT+IED2Ly4+y2WT66WMkUIU7qKftUG+xMNqKoJ7MinlsMHH0j1IJVgE0xbZn7OOFcOR4mUH90tJAV6k1Y1fSGSX90=
-X-Received: by 2002:a05:600c:2181:b0:3fe:45e7:1d6f with SMTP id
- e1-20020a05600c218100b003fe45e71d6fmr2676148wme.21.1691692980051; Thu, 10 Aug
- 2023 11:43:00 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691693342; x=1692298142;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2WWD5RZ7txT2y+bELeSkVRhqrv7guu+AZxZ+/B7ig64=;
+        b=FUJgKJ3PO/yCDakdoGMky3VXCaNltDPL8iw5al91iy3hI7BjWh2txygfH7C7pm/BTE
+         7O+ISENlfSMK1OyHccX3Z6kCZotR6CglV+HKiStqB6F1vqOw4bV+aAtBKnWXBjC+0CpN
+         qvhGqeJHROyq5yLYCITNTT49vBGbgpAg7e0pnxvKyzNZRg+OgPZI1UPfrSUjEP/h03a3
+         iOWJkQrUUeVX2Jd2M2r6aIQo8uBFU9FwRYpBR6bd76Hx9xCnaqj10wSib0jsPaP6TQel
+         oV0p6NNIILZxLL1GvTm4MB9QTFh5b5vG0MjmBsUcsDcYvXtIuRLMK9kMTqIJ6wP50K3E
+         wHGw==
+X-Gm-Message-State: AOJu0YxJf0BDqVjoAu2EK3fb9JgW9BWNF1J85JmPPD1ZN/PNnmjLaPwL
+	J7HpJYeg3Y6OloBvdfzdkKBuZSpaDNBB
+X-Google-Smtp-Source: AGHT+IFE9EYsPE6iA3GxYy5BS/jQkuwPyiISjc4pFGXsdQlHdsFatosLNj3Mf8IlBuDHO64S2yFQbFam0TmK
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:797f:302e:992f:97f2])
+ (user=irogers job=sendgmr) by 2002:a81:af06:0:b0:581:7b58:5e70 with SMTP id
+ n6-20020a81af06000000b005817b585e70mr68906ywh.5.1691693342432; Thu, 10 Aug
+ 2023 11:49:02 -0700 (PDT)
+Date: Thu, 10 Aug 2023 11:48:49 -0700
+Message-Id: <20230810184853.2860737-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202308091820.0dPY7D6f-lkp@intel.com> <ZNN1WdZ5J/e5OPAt@elver.google.com>
- <CAKwvOd=hgqas-kMxvOgviff43XBmwgERrfGi-ZO45DOcEuG_yw@mail.gmail.com>
- <CANpmjNNjzeKyB7V7r73qW9zzqYeMEEK27pfFV9aBm6yfLjJeng@mail.gmail.com> <20230810100202.93059f4ba94e4400e9a63b39@linux-foundation.org>
-In-Reply-To: <20230810100202.93059f4ba94e4400e9a63b39@linux-foundation.org>
-From: Marco Elver <elver@google.com>
-Date: Thu, 10 Aug 2023 20:42:23 +0200
-Message-ID: <CANpmjNMDMmmbgvkHqDRurBmkdyMENDejfg+Vp+VHoO_Maaap0w@mail.gmail.com>
-Subject: Re: [linux-next:master 8173/8441] include/linux/list.h:53:13:
- warning: '__preserve_most__' calling convention is not supported for this target
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Miguel Ojeda <ojeda@kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
+Subject: [PATCH v1 0/4] Remove BPF event support
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Fangrui Song <maskray@google.com>, Anshuman Khandual <anshuman.khandual@arm.com>, 
+	Andi Kleen <ak@linux.intel.com>, Leo Yan <leo.yan@linaro.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, James Clark <james.clark@arm.com>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>, Rob Herring <robh@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, Wang Nan <wangnan0@huawei.com>, 
+	Wang ShaoBo <bobo.shaobowang@huawei.com>, YueHaibing <yuehaibing@huawei.com>, 
+	He Kuang <hekuang@huawei.com>, Brendan Gregg <brendan.d.gregg@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 10 Aug 2023 at 19:02, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed, 9 Aug 2023 18:00:32 +0200 Marco Elver <elver@google.com> wrote:
->
-> > Andrew, please shout if you'd rather have them as fix patches.
->
-> I grabbed it, thanks.
+The patch series removes BPF event support as past commits have shown
+the support has bit rotten:
+https://lore.kernel.org/lkml/20230728001212.457900-1-irogers@google.com/
 
-Thanks! This should help with more -next testing. But as a heads up,
-there will be a v4, which includes this but also because of the
-Kconfig renaming that Kees asked for. I intend to send it by EOD
-tomorrow.
+Similar functionality is now available via the --filter option, that
+uses a BPF skeleton, and is therefore more compact and simpler to
+use. The simplicity coming from not having to build BPF object files.
 
-Thanks,
--- Marco
+A different use case for the events was for syscall augmentation in
+perf trace. So that this isn't broken, and to make its use
+significantly simpler, the support is migrated to use a BPF
+skeleton. This means perf trace is much more likely to augment
+syscalls for users.
+
+Removal of BPF events was raised on LKML two weeks ago with the
+original authors cc-ed:
+https://lore.kernel.org/lkml/CAP-5=fXxGimJRXKf7bcaPqfjxxGcn1k3CspY_iSjQnpAKs3uFQ@mail.gmail.com/
+
+BPF events are described publicly in very few places but one is:
+https://www.brendangregg.com/perf.html#eBPF
+"eBPF is currently a little restricted and difficult to use from
+perf. It's getting better all the time. A different and currently
+easier way to access eBPF is via the bcc Python interface, which is
+described on my eBPF Tools page. On this page, I'll discuss perf."
+
+I don't think the "getting better all the time" is any longer true as
+BPF features are being added to perf primarily by using BPF
+skeletons. The given example is a filter and would be better supported
+via "perf record --filter".
+
+Ian Rogers (4):
+  perf parse-events: Remove BPF event support
+  perf trace: Migrate BPF augmentation to use a skeleton
+  perf bpf examples: With no BPF events remove examples
+  perf trace: Tidy comments
+
+ tools/perf/Documentation/perf-config.txt      |   33 -
+ tools/perf/Documentation/perf-record.txt      |   22 -
+ tools/perf/Makefile.config                    |   43 -
+ tools/perf/Makefile.perf                      |   19 +-
+ tools/perf/builtin-record.c                   |   45 -
+ tools/perf/builtin-trace.c                    |  310 +--
+ tools/perf/examples/bpf/5sec.c                |   53 -
+ tools/perf/examples/bpf/empty.c               |   12 -
+ tools/perf/examples/bpf/hello.c               |   27 -
+ tools/perf/examples/bpf/sys_enter_openat.c    |   33 -
+ tools/perf/perf.c                             |    2 -
+ tools/perf/tests/.gitignore                   |    5 -
+ tools/perf/tests/Build                        |   31 -
+ tools/perf/tests/bpf-script-example.c         |   60 -
+ tools/perf/tests/bpf-script-test-kbuild.c     |   21 -
+ tools/perf/tests/bpf-script-test-prologue.c   |   49 -
+ tools/perf/tests/bpf-script-test-relocation.c |   51 -
+ tools/perf/tests/bpf.c                        |  390 ----
+ tools/perf/tests/builtin-test.c               |    3 -
+ tools/perf/tests/clang.c                      |   32 -
+ tools/perf/tests/llvm.c                       |  219 --
+ tools/perf/tests/llvm.h                       |   31 -
+ tools/perf/tests/make                         |    2 -
+ tools/perf/tests/tests.h                      |    2 -
+ tools/perf/trace/beauty/beauty.h              |   15 +-
+ tools/perf/util/Build                         |    8 +-
+ tools/perf/util/bpf-loader.c                  | 2006 -----------------
+ tools/perf/util/bpf-loader.h                  |  216 --
+ .../bpf_skel/augmented_raw_syscalls.bpf.c}    |   35 +-
+ tools/perf/util/c++/Build                     |    5 -
+ tools/perf/util/c++/clang-c.h                 |   43 -
+ tools/perf/util/c++/clang-test.cpp            |   67 -
+ tools/perf/util/c++/clang.cpp                 |  225 --
+ tools/perf/util/c++/clang.h                   |   27 -
+ tools/perf/util/config.c                      |    4 -
+ tools/perf/util/llvm-utils.c                  |  612 -----
+ tools/perf/util/llvm-utils.h                  |   69 -
+ tools/perf/util/parse-events.c                |  268 ---
+ tools/perf/util/parse-events.h                |   15 -
+ tools/perf/util/parse-events.l                |   31 -
+ tools/perf/util/parse-events.y                |   44 +-
+ 41 files changed, 133 insertions(+), 5052 deletions(-)
+ delete mode 100644 tools/perf/examples/bpf/5sec.c
+ delete mode 100644 tools/perf/examples/bpf/empty.c
+ delete mode 100644 tools/perf/examples/bpf/hello.c
+ delete mode 100644 tools/perf/examples/bpf/sys_enter_openat.c
+ delete mode 100644 tools/perf/tests/.gitignore
+ delete mode 100644 tools/perf/tests/bpf-script-example.c
+ delete mode 100644 tools/perf/tests/bpf-script-test-kbuild.c
+ delete mode 100644 tools/perf/tests/bpf-script-test-prologue.c
+ delete mode 100644 tools/perf/tests/bpf-script-test-relocation.c
+ delete mode 100644 tools/perf/tests/bpf.c
+ delete mode 100644 tools/perf/tests/clang.c
+ delete mode 100644 tools/perf/tests/llvm.c
+ delete mode 100644 tools/perf/tests/llvm.h
+ delete mode 100644 tools/perf/util/bpf-loader.c
+ delete mode 100644 tools/perf/util/bpf-loader.h
+ rename tools/perf/{examples/bpf/augmented_raw_syscalls.c => util/bpf_skel/augmented_raw_syscalls.bpf.c} (93%)
+ delete mode 100644 tools/perf/util/c++/Build
+ delete mode 100644 tools/perf/util/c++/clang-c.h
+ delete mode 100644 tools/perf/util/c++/clang-test.cpp
+ delete mode 100644 tools/perf/util/c++/clang.cpp
+ delete mode 100644 tools/perf/util/c++/clang.h
+ delete mode 100644 tools/perf/util/llvm-utils.c
+ delete mode 100644 tools/perf/util/llvm-utils.h
+
+-- 
+2.41.0.640.ga95def55d0-goog
+
