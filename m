@@ -1,778 +1,239 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA68A29A8;
-	Thu, 10 Aug 2023 07:17:00 +0000 (UTC)
-Received: from [IPV6:2001:861:4a40:8620:8ec6:a7f6:c8cb:a10d] (unknown [IPv6:2001:861:4a40:8620:8ec6:a7f6:c8cb:a10d])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: gtucker)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 1765966071DF;
-	Thu, 10 Aug 2023 08:16:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1691651819;
-	bh=lcD3NUwEsqYPBgQmGeJcvTNH9A3+zYataTIYQ1YxJ2k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jo6JnVZWBmwUF7sGIZ4t8X/bprgJutVozoTI96kSlFg/X2OdaQbq8b1ojEJM0QJ5X
-	 jIVvHY0ZwWg4QWMJS+lc9Jh71DU4f7keKlYaCKnTIdSwFpuRseyR+yeyk9ggyZB6e3
-	 HbwMmj4Mpwc2JVBTE+q8n7H13UhdkydtuF0wtAscdl2hxuVZknzHhM4jRnUl1/lgh8
-	 bvapcN4wazmbd07vZBBUGjaLM71LiDOW8zTiN62V3Qs7/epebkrSDyHwjolSGf/8Nq
-	 4/iddj7Jihs+AC+WuELwWKd9GbIinIhYLtH1BL5Z99WaGvsSxBL7jppDsDyM/jPhbU
-	 eSsP0YGV51gPg==
-Message-ID: <4bc752d5-6b36-bafd-0a51-693527fc1db3@collabora.com>
-Date: Thu, 10 Aug 2023 09:16:52 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61ED04C91;
+	Thu, 10 Aug 2023 07:43:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691653390; x=1723189390;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dKy7mwmPFBwZ2LYDUuqKy0yI1zE3l+vLPVJsVtkZ/7o=;
+  b=QkDjau5dMR1HQ+4/QwV8rCgz8b+3Op3og0cmZZ625BtrBtY+oC/a80DL
+   5PtNs66uU3MT4TpkTd+TfzTzaJAad/uajBtzB4kK4jFH69m9J57rQ/A0g
+   UW/ht/tGjw0JLNlPcB+Uu/MOk8QR+itI/O7aACj1TLcZxv1RUFGxR/mFt
+   G+jZw6DeB/6qxSMsj9NqULFfZQrYSjLKTj+ShXQ2XCxNrAGpX2UJXt2Rf
+   z1yrmWgwAR4GQv1S1TokHhUn/z1vZ/kosyuLsSLlbD/y5rmd9Co65s13c
+   iRxxQG+n2kZ0MvkHtK4tdIqJ0wVPnhXVGCC5rFBat8VJCZuCxXbaVzrSK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="351625939"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="351625939"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 00:43:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="905950466"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="905950466"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Aug 2023 00:43:03 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qU0Jy-0006pY-1o;
+	Thu, 10 Aug 2023 07:43:02 +0000
+Date: Thu, 10 Aug 2023 15:41:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Vernet <void@manifault.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, tj@kernel.org,
+	roman.gushchin@linux.dev, gautham.shenoy@amd.com,
+	kprateek.nayak@amd.com, aaron.lu@intel.com,
+	wuyun.abel@bytedance.com, kernel-team@meta.com
+Subject: Re: [PATCH v3 6/7] sched: Implement shared runqueue in CFS
+Message-ID: <202308101547.1n2K9PyC-lkp@intel.com>
+References: <20230809221218.163894-7-void@manifault.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: next/master build: 188 builds: 4 failed, 184 passed, 4 errors, 22
- warnings (next-20230802)
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>, kernelci@lists.linux.dev
-Cc: llvm@lists.linux.dev
-References: <64c9ef5e.170a0220.c258a.0ec6@mx.google.com>
- <CAKwvOdmuXnChEiZ-VOPbhYd_VzqjCJ0+Jc_38hwWMCDDDNM3uA@mail.gmail.com>
-From: Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <CAKwvOdmuXnChEiZ-VOPbhYd_VzqjCJ0+Jc_38hwWMCDDDNM3uA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230809221218.163894-7-void@manifault.com>
 
-Hi Nick,
+Hi David,
 
-Sorry for the slow reply, it's the holiday season again.
+kernel test robot noticed the following build errors:
 
-On 02/08/2023 19:06, Nick Desaulniers wrote:
-> Hi KernelCI team.  Thanks for these reports, as always, they are my
-> "morning paper."
+[auto build test ERROR on tip/sched/core]
+[cannot apply to linus/master v6.5-rc5 next-20230809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thank you so much!  Hope it doesn't bring too much terrible news ;)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/sched-Expose-move_queued_task-from-core-c/20230810-061611
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20230809221218.163894-7-void%40manifault.com
+patch subject: [PATCH v3 6/7] sched: Implement shared runqueue in CFS
+config: hexagon-randconfig-r045-20230809 (https://download.01.org/0day-ci/archive/20230810/202308101547.1n2K9PyC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308101547.1n2K9PyC-lkp@intel.com/reproduce)
 
-> Is it possible to filter out `1 warning generated.` in these reports
-> (guessing that can be more than 1)?  Otherwise that's showing up in
-> the diagnostic list at the top, then for individual build reports is
-> showing up as 2 warnings instead of 1.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308101547.1n2K9PyC-lkp@intel.com/
 
-Ah, yes.  In principle we're not making changes to the old
-codebase that's generating these email reports but this looks
-like a bug that's impacting users (at least you) so we should be
-able to roll out a fix.  I guess the compiler output has changed
-since when the parser was implemented several years ago.
+All error/warnings (new ones prefixed by >>):
 
-With the new KernelCI API and pipeline, we'll be doing builds
-differently and we'll have a much more flexible way of reporting
-errors and warnings like this.  We could even have a specific way
-of parsing the output for LLVM builds.  Out of interest, are you
-doing any post-processing on these email reports or just manual
-inspection and text search?
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> kernel/sched/core.c:9768:6: warning: no previous prototype for function 'sched_update_domains' [-Wmissing-prototypes]
+    9768 | void sched_update_domains(void)
+         |      ^
+   kernel/sched/core.c:9768:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    9768 | void sched_update_domains(void)
+         | ^
+         | static 
+   kernel/sched/core.c:2467:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
+    2467 | static inline bool rq_has_pinned_tasks(struct rq *rq)
+         |                    ^
+   kernel/sched/core.c:5818:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
+    5818 | static inline void sched_tick_stop(int cpu) { }
+         |                    ^
+   kernel/sched/core.c:6519:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
+    6519 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
+         |                    ^
+   kernel/sched/core.c:6520:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
+    6520 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
+         |                    ^
+   kernel/sched/core.c:9570:20: warning: unused function 'balance_hotplug_wait' [-Wunused-function]
+    9570 | static inline void balance_hotplug_wait(void)
+         |                    ^
+   12 warnings generated.
+--
+   In file included from kernel/sched/build_utility.c:15:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/sched/build_utility.c:15:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/sched/build_utility.c:15:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_utility.c:89:
+>> kernel/sched/topology.c:2580:3: error: call to undeclared function 'sched_update_domains'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2580 |                 sched_update_domains();
+         |                 ^
+   kernel/sched/topology.c:2746:2: error: call to undeclared function 'sched_update_domains'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2746 |         sched_update_domains();
+         |         ^
+   6 warnings and 2 errors generated.
 
-Thanks,
-Guillaume
 
-> On Tue, Aug 1, 2023 at 10:53 PM kernelci.org bot <bot@kernelci.org> wrote:
->>
->> next/master build: 188 builds: 4 failed, 184 passed, 4 errors, 22 warnings (next-20230802)
->>
->> Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/next-20230802/
->>
->> Tree: next
->> Branch: master
->> Git Describe: next-20230802
->> Git Commit: 626c67169f9972fffcdf3bc3864de421f162ebf5
->> Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->> Built: 8 unique architectures
->>
->> Build Failures Detected:
->>
->> arc:
->>     haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
->>
->> arm:
->>     rpc_defconfig: (gcc-10) FAIL
->>
->> x86_64:
->>     x86_64_defconfig+kselftest: (rustc-1.70) FAIL
->>     x86_64_defconfig+rust: (rustc-1.70) FAIL
->>
->> Errors and Warnings Detected:
->>
->> arc:
->>     haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
->>
->> arm64:
->>     defconfig (clang-17): 2 warnings
->>     defconfig+CONFIG_ARM64_64K_PAGES=y (clang-17): 2 warnings
->>
->> arm:
->>     h3600_defconfig (gcc-10): 1 warning
->>     rpc_defconfig (gcc-10): 2 errors
->>
->> i386:
->>
->> mips:
->>
->> riscv:
->>     defconfig (clang-17): 2 warnings
->>     rv32_defconfig (clang-17): 2 warnings
->>
->> sparc:
->>     allnoconfig (gcc-10): 1 warning
->>     sparc32_defconfig (gcc-10): 2 warnings
->>     sparc64_defconfig (gcc-10): 4 warnings
->>     sparc64_defconfig+debug (gcc-10): 2 warnings
->>     sparc64_defconfig+kselftest (gcc-10): 2 warnings
->>     tinyconfig (gcc-10): 1 warning
->>
->> x86_64:
->>     x86_64_defconfig+kselftest (rustc-1.70): 1 error, 1 warning
->>
->> Errors summary:
->>
->>     1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or directory
->>     1    fs/btrfs/extent_io.c:232:16: error: variable 'pages_processed' set but not used [-Werror,-Wunused-but-set-variable]
->>     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=0x'
->>     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=0x'
->>
->> Warnings summary:
->>
->>     10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>     4    fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set but not used [-Wunused-but-set-variable]
->>     4    1 warning generated.
->>     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.
->>     1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: .text+0x1395ab
->>     1    drivers/mfd/ipaq-micro.c:81:6: warning: unused variable ‘i’ [-Wunused-variable]
->>
->> ================================================================================
->>
->> Detailed per-defconfig build reports:
->>
->> --------------------------------------------------------------------------------
->> 32r2el_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> 32r2el_defconfig+debug (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> 32r2el_defconfig+kselftest (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> allnoconfig (i386, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> allnoconfig (x86_64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> allnoconfig (sparc, gcc-10) — PASS, 0 errors, 1 warning, 0 section mismatches
->>
->> Warnings:
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>
->> --------------------------------------------------------------------------------
->> allnoconfig (x86_64, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> allnoconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> allnoconfig (i386, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> am200epdkit_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ar7_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> aspeed_g4_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> aspeed_g5_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> aspeed_g5_defconfig (arm, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> assabet_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> at91_dt_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ath25_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ath79_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> axm55xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> axs103_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> axs103_smp_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> bcm2835_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> bcm47xx_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> bcm63xx_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> bigsur_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> bmips_be_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> bmips_stb_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> cavium_octeon_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ci20_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> cobalt_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> collie_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> cu1000-neo_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> cu1830-neo_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> davinci_all_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> db1xxx_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> decstation_64_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> decstation_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> decstation_r4k_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig (riscv, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig (riscv, clang-17) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>     fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set but not used [-Wunused-but-set-variable]
->>     1 warning generated.
->>
->> --------------------------------------------------------------------------------
->> defconfig (arm64, clang-17) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>     fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set but not used [-Wunused-but-set-variable]
->>     1 warning generated.
->>
->> --------------------------------------------------------------------------------
->> defconfig+CONFIG_ARM64_16K_PAGES=y (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+CONFIG_ARM64_64K_PAGES=y (arm64, clang-17) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>     fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set but not used [-Wunused-but-set-variable]
->>     1 warning generated.
->>
->> --------------------------------------------------------------------------------
->> defconfig+CONFIG_ARM64_64K_PAGES=y (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+CONFIG_CPU_BIG_ENDIAN=y (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+CONFIG_RANDOMIZE_BASE=y (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+arm64-chromebook (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+arm64-chromebook+kselftest (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+arm64-chromebook+videodec (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+debug (riscv, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+debug (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+kselftest (riscv, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+kselftest (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> defconfig+videodec (arm64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> exynos_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> footbridge_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> fuloong2e_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> gcw0_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> gemini_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> gpr_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> h3600_defconfig (arm, gcc-10) — PASS, 0 errors, 1 warning, 0 section mismatches
->>
->> Warnings:
->>     drivers/mfd/ipaq-micro.c:81:6: warning: unused variable ‘i’ [-Wunused-variable]
->>
->> --------------------------------------------------------------------------------
->> haps_hs_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> haps_hs_smp_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> haps_hs_smp_defconfig+debug (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> haps_hs_smp_defconfig+kselftest (arc, gcc-10) — FAIL, 1 error, 0 warnings, 0 section mismatches
->>
->> Errors:
->>     net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or directory
->>
->> --------------------------------------------------------------------------------
->> hisi_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> hsdk_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> i386_defconfig (i386, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> i386_defconfig (i386, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> i386_defconfig+debug (i386, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> i386_defconfig+kselftest (i386, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> imx_v4_v5_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> imx_v6_v7_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> imxrt_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> integrator_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ip22_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ip27_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ip28_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ip32_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> ixp4xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> jazz_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> jornada720_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> keystone_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> lemote2f_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> loongson1b_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> loongson1c_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> loongson2k_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> loongson3_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> lpc18xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> lpc32xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> malta_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> malta_kvm_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> malta_qemu_32r6_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> maltaaprp_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> maltasmvp_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> maltasmvp_eva_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> maltaup_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> maltaup_xpa_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> milbeaut_m10v_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> mmp2_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> moxart_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> mps2_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> mtx1_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v4t_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v5_defconfig (arm, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v5_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig (arm, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=y (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig+CONFIG_EFI=y+CONFIG_ARM_LPAE=y (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig+CONFIG_SMP=n (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig+CONFIG_THUMB2_KERNEL=y (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig+debug (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig+kselftest (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> mvebu_v5_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> mvebu_v7_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> mxs_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> neponset_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> netwinder_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> nhk8815_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> nommu_k210_defconfig (riscv, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> nommu_k210_defconfig (riscv, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> nommu_k210_sdcard_defconfig (riscv, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> nommu_k210_sdcard_defconfig (riscv, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> nsimosci_hs_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> nsimosci_hs_smp_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> omap2plus_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> omega2p_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> orion5x_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> pic32mzda_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> pxa168_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> pxa3xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> pxa910_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> pxa_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> qcom_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> qi_lb60_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> rb532_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> rbtx49xx_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> realview_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> rm200_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> rpc_defconfig (arm, gcc-10) — FAIL, 2 errors, 0 warnings, 0 section mismatches
->>
->> Errors:
->>     arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=0x'
->>     arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=0x'
->>
->> --------------------------------------------------------------------------------
->> rs90_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> rt305x_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> rv32_defconfig (riscv, clang-17) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>     fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set but not used [-Wunused-but-set-variable]
->>     1 warning generated.
->>
->> --------------------------------------------------------------------------------
->> rv32_defconfig (riscv, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> s3c6400_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> s5pv210_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> sama5_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> sama7_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> sb1250_swarm_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> shmobile_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> socfpga_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> sp7021_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> sparc32_defconfig (sparc, gcc-10) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>
->> --------------------------------------------------------------------------------
->> sparc64_defconfig (sparc, gcc-10) — PASS, 0 errors, 4 warnings, 0 section mismatches
->>
->> Warnings:
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>     WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>     WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.
->>
->> --------------------------------------------------------------------------------
->> sparc64_defconfig+debug (sparc, gcc-10) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>
->> --------------------------------------------------------------------------------
->> sparc64_defconfig+kselftest (sparc, gcc-10) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>
->> --------------------------------------------------------------------------------
->> spear13xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> spear3xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> spear6xx_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> spitz_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> stm32_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> sunxi_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> tegra_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> tinyconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> tinyconfig (i386, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> tinyconfig (x86_64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> tinyconfig (sparc, gcc-10) — PASS, 0 errors, 1 warning, 0 section mismatches
->>
->> Warnings:
->>     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>
->> --------------------------------------------------------------------------------
->> u8500_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> vdk_hs38_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> vdk_hs38_smp_defconfig (arc, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> versatile_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> vexpress_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> vf610m4_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> vocore2_defconfig (mips, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> vt8500_v6_v7_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> wpcm450_defconfig (arm, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig (x86_64, rustc-1.70) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig (x86_64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig (x86_64, clang-17) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig+debug (x86_64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig+kselftest (x86_64, rustc-1.70) — FAIL, 1 error, 1 warning, 0 section mismatches
->>
->> Errors:
->>     fs/btrfs/extent_io.c:232:16: error: variable 'pages_processed' set but not used [-Werror,-Wunused-but-set-variable]
->>
->> Warnings:
->>     vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: .text+0x1395ab
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig+kselftest (x86_64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig+rust (x86_64, rustc-1.70) — FAIL, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig+rust-samples (x86_64, rustc-1.70) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig+x86-chromebook (x86_64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> ---
->> For more info write to <info@kernelci.org>
->>
-> 
-> 
+vim +/sched_update_domains +2580 kernel/sched/topology.c
 
+  2558	
+  2559	/*
+  2560	 * Set up scheduler domains and groups.  For now this just excludes isolated
+  2561	 * CPUs, but could be used to exclude other special cases in the future.
+  2562	 */
+  2563	int __init sched_init_domains(const struct cpumask *cpu_map)
+  2564	{
+  2565		int err;
+  2566	
+  2567		zalloc_cpumask_var(&sched_domains_tmpmask, GFP_KERNEL);
+  2568		zalloc_cpumask_var(&sched_domains_tmpmask2, GFP_KERNEL);
+  2569		zalloc_cpumask_var(&fallback_doms, GFP_KERNEL);
+  2570	
+  2571		arch_update_cpu_topology();
+  2572		asym_cpu_capacity_scan();
+  2573		ndoms_cur = 1;
+  2574		doms_cur = alloc_sched_domains(ndoms_cur);
+  2575		if (!doms_cur)
+  2576			doms_cur = &fallback_doms;
+  2577		cpumask_and(doms_cur[0], cpu_map, housekeeping_cpumask(HK_TYPE_DOMAIN));
+  2578		err = build_sched_domains(doms_cur[0], NULL);
+  2579		if (!err)
+> 2580			sched_update_domains();
+  2581	
+  2582		return err;
+  2583	}
+  2584	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
