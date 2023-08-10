@@ -1,138 +1,77 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3ED1E1A2
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 15:13:18 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09EA1E1A2
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 15:14:23 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 740BA40E01A0;
+	Thu, 10 Aug 2023 15:14:21 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Oh8NazHFxDwj; Thu, 10 Aug 2023 15:14:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1691680458; bh=A6xFfUpRho6D8k1f+ST5DHr3WVBXqj26i9AmyFnvDuM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VIndakUbhIA8ftcyjCcKuR7UKrZzgxv3j/NfOHXP5yzAakEz0bmUAYHfAjFQyJiRF
+	 DJffiujRk+blxEGGCB357omme2HbucAR3N/VRfChePtVGTTybpL8ovm15QAR4s2jIN
+	 +D1Y2ODJVghZ2BxSj9IziViwTaXCUbjw0A3qwqYvsfPDnXi0mue5P6Gw39wzY8KI1s
+	 g6+JvbsnsexHzZOPu34RNMIyguvm77ZR5bztabp66NgKs29IfE7mlfiTsP+f0XCocD
+	 fwbuxl7r4FeofsIKkox1u1tG+ElghM32k8WjK0r/EY3y7bhHUl/ZAhu/yTB1RcQuH1
+	 Oj2pzBtJzrWsktDLdWD2/CmxWcK4qMPKhqgussRfn/jgTzAJw+hRzi/qUTTdf5GJdq
+	 UpC0ylmI7oKGk7h2YEaoHpIh+IXZi3yNuO/3Skd+jZf6zxzFBQaOtygW9NIuxIhFMA
+	 4xh3d6o856MZAPzAneUePLIKQNyqq0Kv/BxpvtM/PJhk2+qtnmcdTaXUiJ45WCRNs/
+	 PKPcB7qC2tOJMw6b1wtrMbGf4OwlVlQx+7IwQ9mYqv2+I2H3Ny1N1nyvDpOkpXP3Wc
+	 7pKfm5I5NTQoDanHSsx4TPao4XN+Fat6MaJmVxqBtYJbdhDhri7BOwWYxnbjxdqCFz
+	 2NFXUT+buiYIEguLNu6Up7Rs=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id F18701F74B;
-	Thu, 10 Aug 2023 15:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1691680390; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gt5T9KAX6h0xqCfiUcP6I8u8wZkJ21yXv35iTl4Gtdk=;
-	b=Ap8G5lRCd2wrOy6xvgHmqXqWCfoS+MTJoF9k4fGqt8/bVMgNRM/h5rd6lAa89jo9l02d4M
-	VxlCz/JQuhiQhdxNL5YYQufPPih2NecJDetK3i4T6B4xbKMUnJxyJpMRCJlWN8+cItVGyc
-	poi7r0Qip1fH02ygYWbWF+LJjt2YFmI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1691680390;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gt5T9KAX6h0xqCfiUcP6I8u8wZkJ21yXv35iTl4Gtdk=;
-	b=gm+mwcTKzKMut/jWo7SFLu/BRNuvnbbvx35QJ40kTSsPvScaYMWAGm54Wado4gonb8jvGO
-	xkkpFndpcFjYM/Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AF6EF138E2;
-	Thu, 10 Aug 2023 15:13:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id jCg4KYb+1GSHGQAAMHmgww
-	(envelope-from <jdelvare@suse.de>); Thu, 10 Aug 2023 15:13:10 +0000
-Date: Thu, 10 Aug 2023 17:13:08 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor
- <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] i2c/busses: fix -Wmissing-variable-declarations
-Message-ID: <20230810171308.5d5c591f@endymion.delvare>
-In-Reply-To: <20230809191310.atpqztlpgdbdvc5m@intel.intel>
-References: <20230808-i2c-amd_static-v1-1-1902f608bba1@google.com>
-	<20230809191310.atpqztlpgdbdvc5m@intel.intel>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9BD6840E0185;
+	Thu, 10 Aug 2023 15:14:14 +0000 (UTC)
+Date: Thu, 10 Aug 2023 17:14:10 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: Hang when booting guest kernels compiled with clang after SRSO
+ mitigations
+Message-ID: <20230810151410.GNZNT+wn/cLBWiU6dO@fat_crate.local>
+References: <20230810013334.GA5354@dev-arch.thelio-3990X>
+ <20230810081038.GAZNSbftb6DOgg/U7e@fat_crate.local>
+ <20230810090835.GBZNSpE6tCw+Ci+9yh@fat_crate.local>
+ <20230810101649.GA1795474@dev-arch.thelio-3990X>
+ <20230810125122.GIZNTdSuFvA3Cjfexq@fat_crate.local>
+ <20230810132706.GA3805855@dev-arch.thelio-3990X>
+ <20230810133216.GKZNTm4KpohRR4gVsT@fat_crate.local>
+ <20230810134056.GA130730@dev-arch.thelio-3990X>
+ <20230810144344.GLZNT3oM6MLVdzGlyd@fat_crate.local>
+ <20230810150706.GA42856@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230810150706.GA42856@dev-arch.thelio-3990X>
 
-Hi Andi, Nick,
+On Thu, Aug 10, 2023 at 08:07:06AM -0700, Nathan Chancellor wrote:
+>   [    2.408527] microcode: microcode updated early to new patch_level=0x0830107a
 
-On Wed, 09 Aug 2023 21:13:10 +0200, Andi Shyti wrote:
-> On Tue, Aug 08, 2023 at 09:56:16AM -0700, Nick Desaulniers wrote:
-> > I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
-> > bot spotted the following instance:
-> > 
-> >   drivers/i2c/busses/i2c-amd756.c:286:20: warning: no previous extern
-> >   declaration for non-static variable 'amd756_smbus'
-> >   [-Wmissing-variable-declarations]
-> >   286 | struct i2c_adapter amd756_smbus = {
-> >       |                    ^
-> >   drivers/i2c/busses/i2c-amd756.c:286:1: note: declare 'static' if the
-> >   variable is not intended to be used outside of this translation unit
-> >   286 | struct i2c_adapter amd756_smbus = {
-> >       | ^
-> > 
-> > This symbol is referenced by more than one translation unit, so create
-> > then include the correct header for their declarations.
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>  
-> 
-> You might want to have a Fixes tag here and
-> 
-> Cc: Jean Delvare <jdelvare@suse.com>
+Hm, a wild guess: can you boot the *host* with "dis_ucode_ldr" on the
+kernel cmdline and see if it still reproduces?
 
-Fixes tag would cause unnecessary worry, with people backporting the
-patch while it doesn't actually fix anything. No need for that.
+Also, can you bisect rc5..master to see which exact patch is causing
+this?
 
-> 
-> [...]
-> 
-> > --- /dev/null
-> > +++ b/drivers/i2c/busses/i2c-amd756.h
-> > @@ -0,0 +1,3 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */  
-> 
-> Please, leave a space here.
-> 
-> And you might also want to have something like:
-> 
-> #ifndef __I2C_AMD_756_H__
-> #define __I2C_AMD_756_H__
-> 
-> > +#include <linux/i2c.h>  
-> 
-> space here.
-> 
-> > +extern struct i2c_adapter amd756_smbus;  
-> 
-> #endif /* __I2C_AMD_756_H__ */
-> 
-> Jean, any opinion on this patch, I don't really know this driver,
-> but is there a way to avoid this extern declaration.
-
-Thanks for your review. I would personally not bother with a header
-file, this is unnecessary burden. Just add the extern declaration to
-i2c-amd756.c as was already done in i2c-amd756-s4882.c. The whole thing
-is a horrible hack anyway and there won't be more occurrences of it, so
-the more simple it stays, the better.
-
-Some history: I wrote the pseudo-driver i2c-amd756-s4882 when the
-i2c-core did not yet support multiplexing. Nowadays, proper support
-would be implemented using i2c-mux-* and i2c-amd756-s4882.c would go
-away entirely. Actually, I very much doubt any of these 2007 Tyan
-server boards is still in activity today, so maybe we should just
-delete the driver.
-
-Note that i2c-nforce2.c will need the same fix as struct i2c_adapter
-nforce2_smbus is extern as well.
+Thx.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
