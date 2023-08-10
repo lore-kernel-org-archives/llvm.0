@@ -1,97 +1,82 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4802820CA8
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 19:44:19 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1bbc06f830aso9579425ad.0
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 12:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1691696659; x=1692301459;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Y7zOvxXwIuA5rgiamcnWYKungJc3z5komgZPppKVkg=;
-        b=D0sQojkFas15jrjLj99bibUCBLyzaQ7EgzRCtjHmB2i4oUZHoeNZLK12l/pTqSvM0T
-         q6y/4jjDt61peozlrloDOuif9MPZG/sgfEQLyRBiA5oLQNfPwLqYTbYMqTNzSEvc+vrc
-         83aOhjzfayJEp76O/mjpCco4pZPBabArlbwQnjtw8WfLRWhwz97rli2Y+wH4/C/Q33xs
-         WQw9CYmYUTxikLEWcV2Q25ZtcBWMP9U/CmM73HHATYmRnGCFa8K5dEtcgkWln8nclwub
-         vqiEVq4AMBdLcoqur0nyjBxwgKeqG7aze6fs0uZjelm6XtXjvGb5cEhAvGoB/PEohCEq
-         oQgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691696659; x=1692301459;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Y7zOvxXwIuA5rgiamcnWYKungJc3z5komgZPppKVkg=;
-        b=K2HtMAjtphGiqNJhtf3GK9QOCJCQGWw/uUbO9Z3YN8bBMzUDdhx7YeuABSu367BLwA
-         RvOww/bYR82ZnjKAaouClRxnk/DZUCKVbjmIPfS0kF35T69o1FTOLlabN9hGJDCKtz2C
-         fZe94SaBIzDBlJE5JBomZu5IOFQpC/dDTlkogo9phjQ1TQ3Tns7wYvtL4FcBZptEo2h9
-         NPOgfLcRvE4MasOQL7C6SU8AGeuGhr5Z8/zmJimZP+9r0UGRI+9uYc7krHTcg1WySVAN
-         4HefxPpEajHZCMy6zz8gOhZc/Lh6zF3WdxqCESVEehyH4nWp7UmSOI4yjMS8fd8TWtuD
-         jhOw==
-X-Gm-Message-State: AOJu0YzZGZ2Re4g8wgp2JPuAJq9/m1NGE1oZL0ydTqGh7lyqfwgO5rss
-	Ke4g0YAXM66XjFbcm+6VmY+ggg==
-X-Google-Smtp-Source: AGHT+IE2eIz04tQ3tBDeTsX6jx4bnSOGfuo5x1j5j2oFvlwLIMiEXDUvEPMKiaI3BkU4/JtlhziMaQ==
-X-Received: by 2002:a17:902:a40f:b0:1bd:9c43:c887 with SMTP id p15-20020a170902a40f00b001bd9c43c887mr3338597plq.10.1691696659289;
-        Thu, 10 Aug 2023 12:44:19 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id je1-20020a170903264100b001bb9aadfb04sm2160601plb.220.2023.08.10.12.44.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 12:44:18 -0700 (PDT)
-In-Reply-To: <20230808-riscv_static-v2-1-2a1e2d2c7a4f@google.com>
-References: <20230808-riscv_static-v2-1-2a1e2d2c7a4f@google.com>
-Subject: Re: [PATCH v2] riscv: mm: fix 2 instances of
- -Wmissing-variable-declarations
-Message-Id: <169169664361.3729.4946663711060334827.b4-ty@rivosinc.com>
-Date: Thu, 10 Aug 2023 12:44:03 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D0720CA8;
+	Thu, 10 Aug 2023 20:08:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691698101; x=1723234101;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bg3xogSxtU/nagQmvH34qkEPpcNfmAXYADW0CtBun5k=;
+  b=PydubZobjz1DfLH/9u/UGUK8x0O0ziV3chVWpJ9CudgvUchKVJ09mqlo
+   +x9LY2rMRsZHZ9yIAHdcY6ZC2uQSFca4ckGKFws9FpW3cQZfR31ZfLku7
+   vkH30tJ0LU7nDT63BqBNW1gcT/sBNBumqGI9dVq+Ih9H87VxJEZxasJcC
+   mFeHTQJ2TpO0xoSyNAitHYL3vomgcf6rFxpT4oUAzMWB2uqvMUW2PTKx1
+   No7ubs7cevGMko8PcEQAcSvpCVIx1XdWHol8VBboDhP4s94f2rldzEQMf
+   3eA5RxzLMjH+wSoo9Yd0ib+0zTtF6f0XUW2TddeTRzrGZ4mZWpAMdRHma
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="361649005"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="361649005"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 13:08:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="875868782"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Aug 2023 13:08:22 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qUBxC-0007Do-0T;
+	Thu, 10 Aug 2023 20:08:18 +0000
+Date: Fri, 11 Aug 2023 04:07:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krishnanand Prabhu <krishnanand.prabhu@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Johannes Berg <johannes.berg@intel.com>,
+	Luca Coelho <luciano.coelho@intel.com>,
+	Gregory Greenman <gregory.greenman@intel.com>
+Subject: ld.lld: error: undefined symbol: ptp_clock_register
+Message-ID: <202308110447.4QSJHmFH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-901c5
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-  llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-From: Palmer Dabbelt <palmer@rivosinc.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-  Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-  Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   374a7f47bf401441edff0a64465e61326bf70a82
+commit: 1595ecce1cf32688760281f40b58b7a1d4a69aa9 wifi: iwlwifi: mvm: add support for PTP HW clock (PHC)
+date:   5 months ago
+config: arm64-randconfig-r011-20230810 (https://download.01.org/0day-ci/archive/20230811/202308110447.4QSJHmFH-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230811/202308110447.4QSJHmFH-lkp@intel.com/reproduce)
 
-On Tue, 08 Aug 2023 09:35:00 -0700, Nick Desaulniers wrote:
-> I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
-> bot spotted the following instance in ARCH=riscv builds:
-> 
->   arch/riscv/mm/init.c:276:7: warning: no previous extern declaration
->   for non-static variable 'trampoline_pg_dir'
->   [-Wmissing-variable-declarations]
->   276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->       |       ^
->   arch/riscv/mm/init.c:276:1: note: declare 'static' if the variable is
->   not intended to be used outside of this translation unit
->   276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->       | ^
->   arch/riscv/mm/init.c:279:7: warning: no previous extern declaration
->   for non-static variable 'early_pg_dir'
->   [-Wmissing-variable-declarations]
->   279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
->       |       ^
->   arch/riscv/mm/init.c:279:1: note: declare 'static' if the variable is
->   not intended to be used outside of this translation unit
->   279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
->       | ^
-> 
-> [...]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308110447.4QSJHmFH-lkp@intel.com/
 
-Applied, thanks!
+All errors (new ones prefixed by >>):
 
-[1/1] riscv: mm: fix 2 instances of -Wmissing-variable-declarations
-      https://git.kernel.org/palmer/c/d2402048bc8a
+>> ld.lld: error: undefined symbol: ptp_clock_register
+   >>> referenced by ptp.c:99 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:99)
+   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_init) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: ptp_clock_index
+   >>> referenced by ptp.c:106 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:106)
+   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_init) in archive vmlinux.a
+   >>> referenced by ptp.c:120 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:120)
+   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_remove) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: ptp_clock_unregister
+   >>> referenced by ptp.c:124 (drivers/net/wireless/intel/iwlwifi/mvm/ptp.c:124)
+   >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_ptp_remove) in archive vmlinux.a
 
-Best regards,
 -- 
-Palmer Dabbelt <palmer@rivosinc.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
