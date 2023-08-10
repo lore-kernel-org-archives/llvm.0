@@ -1,83 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB341DDF0;
-	Thu, 10 Aug 2023 11:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16513C433CA;
-	Thu, 10 Aug 2023 11:39:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691667577;
-	bh=PHQToYDN1jJ253CQ1B38WCDAhcL8w2XEWsk0JX64JF0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=iKw0G5u57xT52/doYQByyteDSqEIXToTy58H40JTM9AKefIzbpdknnu96l1NY2FqZ
-	 8f0fA4wFVZ/nsRmOJ9tdrTHQDSQ23sUonoZTfA24FDIPJeUpVoAxWcqkg/UqaQsowy
-	 5QswTGSOgoCvVLQSHoM/m18QMSTfPLlncZSUMGJ5A7eUpvRG68PYipLvdIwgvTGriC
-	 55f83nvabRzEMZLucdbIEt7Q0rZwsoQ0aaZN+IgC1EkZdHOzTVeauuYNa2gK+d0Xqh
-	 sOKabj9U0LKI1TfsSjOwtkrMXxiWr79KIauyzNnoXD/YG26HoBiT+S9ZqgUdRkYpic
-	 UvGxSqZT+jSIg==
-From: Mark Brown <broonie@kernel.org>
-To: pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com, 
- peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com, 
- ranjani.sridharan@linux.intel.com, daniel.baluta@nxp.com, 
- Nathan Chancellor <nathan@kernel.org>
-Cc: kai.vehmanen@linux.intel.com, ndesaulniers@google.com, trix@redhat.com, 
- rander.wang@intel.com, sound-open-firmware@alsa-project.org, 
- alsa-devel@alsa-project.org, llvm@lists.linux.dev, patches@lists.linux.dev
-In-Reply-To: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
-References: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
-Subject: Re: [PATCH] ASoC: SOF: Intel: Initialize chip in
- hda_sdw_check_wakeen_irq()
-Message-Id: <169166757481.31924.7230160819556948759.b4-ty@kernel.org>
-Date: Thu, 10 Aug 2023 12:39:34 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8551E1A1
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 12:51:36 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 47D2B40E01A0;
+	Thu, 10 Aug 2023 12:51:34 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Ea89pFpdl3we; Thu, 10 Aug 2023 12:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1691671892; bh=E7oT9arX/kjdLffGRAnKE53sSXpKCypTPGvWWboVfMg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vqcufvc4wgeA2lN5TDP/YKIIDg8piONGBF1kQ+2xcl/wPnrRt6Z7xs9G7iMAK1Zeb
+	 6BuoEM4Dv8Ks3M/7/UayY3IqCs4jpBMPcLlnra+Tjg+jzW0c5VOwskf5C70VdlDeFd
+	 MRXMsTSaG2zbcfAXFa/hu308PbrWZ2OL45OIUMBofA7/Tra/ClvXYX08QUd2j7ybHQ
+	 zdQh+6KSYybH63gRSCz1YalB+Ecq8ZcxN1OpaLjMZ7HwJf6o2IhDvXXLp/WhBWAos2
+	 FHRT5ELJ0a2jB9bQqyGJaFaeXmrCFdLqwO/p2P3odw9mrKflKtAFfDsFskk/1MU27F
+	 Y4mukUKJWZkQMBGWMmdUWdr0aGdVtXsHRwCdfosf5rdZK77OcnX4IOrUlDaXiw66jG
+	 WmPkP2f//lZkhrJL19ASmuLITi3KFm5ELIcaEwL+LOV25HNQLdKOodZFFhwElBY3Ae
+	 i25qOqcAoLECTNmCF+fFpO6XIWmcRxlT6MwWFO8kotEdJA61UrMsUIEDtOzn+HBacG
+	 M1VSoc8pZNpyWPjyTj5Hu1P3rQ8ieu64++LKz93k1HKASoJKkv8yuCyxcNEUcxmN+x
+	 WLhsCGBcthyOkIMKX3WXHEPgcs4sa1FOMe+B37Ta3fDFBySkUijo1WPyJPKK5hbdwO
+	 nSqXyN0VYHGX23tHSo/iGTPk=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DD2E840E0185;
+	Thu, 10 Aug 2023 12:51:27 +0000 (UTC)
+Date: Thu, 10 Aug 2023 14:51:22 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: Hang when booting guest kernels compiled with clang after SRSO
+ mitigations
+Message-ID: <20230810125122.GIZNTdSuFvA3Cjfexq@fat_crate.local>
+References: <20230810013334.GA5354@dev-arch.thelio-3990X>
+ <20230810081038.GAZNSbftb6DOgg/U7e@fat_crate.local>
+ <20230810090835.GBZNSpE6tCw+Ci+9yh@fat_crate.local>
+ <20230810101649.GA1795474@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-034f2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230810101649.GA1795474@dev-arch.thelio-3990X>
 
-On Wed, 09 Aug 2023 11:12:07 -0700, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR):
-> 
->   sound/soc/sof/intel/hda.c:423:6: error: variable 'chip' is uninitialized when used here [-Werror,-Wuninitialized]
->     423 |         if (chip && chip->check_sdw_wakeen_irq)
->         |             ^~~~
->   sound/soc/sof/intel/hda.c:418:39: note: initialize the variable 'chip' to silence this warning
->     418 |         const struct sof_intel_dsp_desc *chip;
->         |                                              ^
->         |                                               = NULL
->   1 error generated.
-> 
-> [...]
+On Thu, Aug 10, 2023 at 03:16:49AM -0700, Nathan Chancellor wrote:
+> Just to clarify, this is the guest kernel at -rc5 and the host kernel
+> with the SRSO mitigations applied? If so, that's the problem. The guest
+> kernel does not have to have the SRSO mitigations applied to see this
+> problem. Sorry I should have made that more clear! If not though, that's
+> interesting because I was running -rc5 on the host without issues.
 
-Applied to
+Well, how do you even build CPU_SRSO with clang?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config CPU_SRSO
+        bool "Mitigate speculative RAS overflow on AMD"
+        depends on CPU_SUP_AMD && X86_64 && RETHUNK
+					    ^^^^^^^
 
-Thanks!
+config RETHUNK
+        bool "Enable return-thunks"
+        depends on RETPOLINE && CC_HAS_RETURN_THUNK
+				^^^^^^^^^^^^^^^^^^^
 
-[1/1] ASoC: SOF: Intel: Initialize chip in hda_sdw_check_wakeen_irq()
-      commit: 9c28423d3caae63e665e2b8d704fa41ac823b2a6
+config CC_HAS_RETURN_THUNK
+        def_bool $(cc-option,-mfunction-return=thunk-extern)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+$ clang -mfunction-return=thunk-extern
+clang: error: unknown argument: '-mfunction-return=thunk-extern'
+clang: error: no input files
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+$ clang --version
+Debian clang version 14.0.6
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Hmmm.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-- 
+Regards/Gruss,
+    Boris.
 
-Thanks,
-Mark
-
+https://people.kernel.org/tglx/notes-about-netiquette
