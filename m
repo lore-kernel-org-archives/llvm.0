@@ -1,97 +1,83 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F163C1D2FE
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 10:48:04 +0000 (UTC)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5231410ab27so953216a12.0
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 03:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691664483; x=1692269283;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qzMSq7HLSHN1HFLKAp83kiHFzC/dRhYUs++4UrDqaOA=;
-        b=ClILBq+MRAloWpJfwnTeCf1bHZEDnZelIoj+A/axjmW1s+j+dR7FOxDjEF9I8PXXMG
-         Tc/C6Gx1scvwjkKx98djoORst6Cl/ycaIodat9D0KfilMBRvN/MaESoqI9Ak9Z8YOvq8
-         Drt7RbTwvMya7Xn2ck8jDeLdI/Z7sUH7nVGyIWw72YyEu8FIwQyDUF2+604OgUg5Qlo8
-         KTzw8odQYPl7LwA7/7fNEKKen26+y7OwDK4lXPT/WxmIVFxgAll4Bs74be7u4YK0EZSR
-         uDWOkSy5IvuHT6ViBxshwTxcHfylLOROqvd7FmX+lup7xXId0mPOyWI9lt1jUGL3LnMp
-         YXlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691664483; x=1692269283;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qzMSq7HLSHN1HFLKAp83kiHFzC/dRhYUs++4UrDqaOA=;
-        b=QSDavKwevcklBUFPZ9Y8hZJw3vA6oytYe+nN7dLDMMhcA6LvIvkQBXdCY1cBqgjRdp
-         DLA7+UGAugndJsHPqil9mGqainKdXi3dU66tKxxxXXw1WiTR1ytGvtSUwMhi9UdRXMAu
-         xGcW99GfR5UJpHEmfeC7XY4nS1Ax4Tu9inmxnZ/W9zmXGYJsWAAPZ8pqg7goHMEKQdSD
-         F+sQabmp7m8ca3QHa3/TEEBMkLS2MFQhTYg4DN66yEbLXAREXhstkMeMCJXlAtLnW4w7
-         anKngz89WXzYxA47NmiO1MwiezFA4SbHD+KpmPV4LAgqDiIg3A7GEsaauai9/Bu9BGu7
-         /myQ==
-X-Gm-Message-State: AOJu0YysiMJk+SYnwUSsST1Sw9WmC2SYPqgULerOaf6mks3ggb5KRX7Q
-	O+84CnoP4VsAExh3l0THTJ1m7g==
-X-Google-Smtp-Source: AGHT+IEm4GcDsfGX7LdWBqE4b5IJZoo0ChzDs3csIlSh1GyolAoj+48i33/6cKTWLD7egpAVJdszfA==
-X-Received: by 2002:a50:fa84:0:b0:51e:2305:931 with SMTP id w4-20020a50fa84000000b0051e23050931mr1511310edr.22.1691664483233;
-        Thu, 10 Aug 2023 03:48:03 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id x20-20020aa7cd94000000b0051dfa2e30b2sm653854edv.9.2023.08.10.03.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 03:48:02 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org,
-	patches@opensource.cirrus.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	llvm@lists.linux.dev
-Cc: Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/4] ASoC: rockchip: Fix Wvoid-pointer-to-enum-cast warning
-Date: Thu, 10 Aug 2023 12:47:49 +0200
-Message-Id: <20230810104749.164827-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
-References: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB341DDF0;
+	Thu, 10 Aug 2023 11:39:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16513C433CA;
+	Thu, 10 Aug 2023 11:39:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691667577;
+	bh=PHQToYDN1jJ253CQ1B38WCDAhcL8w2XEWsk0JX64JF0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=iKw0G5u57xT52/doYQByyteDSqEIXToTy58H40JTM9AKefIzbpdknnu96l1NY2FqZ
+	 8f0fA4wFVZ/nsRmOJ9tdrTHQDSQ23sUonoZTfA24FDIPJeUpVoAxWcqkg/UqaQsowy
+	 5QswTGSOgoCvVLQSHoM/m18QMSTfPLlncZSUMGJ5A7eUpvRG68PYipLvdIwgvTGriC
+	 55f83nvabRzEMZLucdbIEt7Q0rZwsoQ0aaZN+IgC1EkZdHOzTVeauuYNa2gK+d0Xqh
+	 sOKabj9U0LKI1TfsSjOwtkrMXxiWr79KIauyzNnoXD/YG26HoBiT+S9ZqgUdRkYpic
+	 UvGxSqZT+jSIg==
+From: Mark Brown <broonie@kernel.org>
+To: pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com, 
+ peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com, 
+ ranjani.sridharan@linux.intel.com, daniel.baluta@nxp.com, 
+ Nathan Chancellor <nathan@kernel.org>
+Cc: kai.vehmanen@linux.intel.com, ndesaulniers@google.com, trix@redhat.com, 
+ rander.wang@intel.com, sound-open-firmware@alsa-project.org, 
+ alsa-devel@alsa-project.org, llvm@lists.linux.dev, patches@lists.linux.dev
+In-Reply-To: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
+References: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
+Subject: Re: [PATCH] ASoC: SOF: Intel: Initialize chip in
+ hda_sdw_check_wakeen_irq()
+Message-Id: <169166757481.31924.7230160819556948759.b4-ty@kernel.org>
+Date: Thu, 10 Aug 2023 12:39:34 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
 
-'version' is an enum, thus cast of pointer on 64-bit compile test with
-W=1 causes:
+On Wed, 09 Aug 2023 11:12:07 -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR):
+> 
+>   sound/soc/sof/intel/hda.c:423:6: error: variable 'chip' is uninitialized when used here [-Werror,-Wuninitialized]
+>     423 |         if (chip && chip->check_sdw_wakeen_irq)
+>         |             ^~~~
+>   sound/soc/sof/intel/hda.c:418:39: note: initialize the variable 'chip' to silence this warning
+>     418 |         const struct sof_intel_dsp_desc *chip;
+>         |                                              ^
+>         |                                               = NULL
+>   1 error generated.
+> 
+> [...]
 
-  rockchip_pdm.c:587:18: error: cast to smaller integer type 'enum rk_pdm_version' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+Applied to
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- sound/soc/rockchip/rockchip_pdm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-diff --git a/sound/soc/rockchip/rockchip_pdm.c b/sound/soc/rockchip/rockchip_pdm.c
-index 52f9aae60be8..678989b25e57 100644
---- a/sound/soc/rockchip/rockchip_pdm.c
-+++ b/sound/soc/rockchip/rockchip_pdm.c
-@@ -584,7 +584,7 @@ static int rockchip_pdm_probe(struct platform_device *pdev)
- 
- 	match = of_match_device(rockchip_pdm_match, &pdev->dev);
- 	if (match)
--		pdm->version = (enum rk_pdm_version)match->data;
-+		pdm->version = (uintptr_t)match->data;
- 
- 	if (pdm->version == RK_PDM_RK3308) {
- 		pdm->reset = devm_reset_control_get(&pdev->dev, "pdm-m");
--- 
-2.34.1
+Thanks!
+
+[1/1] ASoC: SOF: Intel: Initialize chip in hda_sdw_check_wakeen_irq()
+      commit: 9c28423d3caae63e665e2b8d704fa41ac823b2a6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
