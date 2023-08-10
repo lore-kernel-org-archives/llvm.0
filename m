@@ -1,71 +1,45 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5663820CA8
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 20:12:01 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-26b1adbd655so323263a91.1
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 13:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1691698320; x=1692303120;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YgXTJGJNIG5brUNilbYvmAufJFTfjCt86nj6wBgTVtw=;
-        b=fyUQ4xBfwdZ9Y1ncwPWe8KTy87SugAY04QbysuNfCKESxljSeA//xKB0ll7SV9MfBn
-         Qolk9WYlCPFGiQVFIlruea5ANAIMyj2MFfbdlKAdMKJ07nVHWugx38DTOanRdd2Cvm89
-         JEkZdTPYMsehHWh3x07+sxbrflynbDh3hIrFU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691698320; x=1692303120;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YgXTJGJNIG5brUNilbYvmAufJFTfjCt86nj6wBgTVtw=;
-        b=dEyUk8LBAj6kYTAD6UWMCzCplsadORnSyAuxp3lEHH8vll1xgEPWcymT6LBHx/3llB
-         iNEzU2uUIlyTj+XcQpGvB23YLptB+Und1Q6m9VBn7T+6HKyyUzu+5JE4TxJdVsvSPHu/
-         GpxAPKeJOFV1z/ufpsWdBApFvV+LxFZ92bWkC2RXcMo/n+O1o00eFMPC3JW5uYKHfDe9
-         dEXmsTh32DRKO1DqLa6QCLiYThjdQP8iuNencYhJpbOvvA6GTUnlC/qYfgkE11LFCECc
-         BkMRZUltkSBCtnimx/QsE3QANhBXfTuVfzhzQt0TK7SSkzgD2V7dCOUjoEmqcpnyxbLr
-         MjlA==
-X-Gm-Message-State: AOJu0YyOzmJiKNROJjToD6HKMyitTdG/gqOM4xZezr2906Ayuq3MtFn5
-	60+tZew1bInhv8BZjmuLKa9RRw==
-X-Google-Smtp-Source: AGHT+IFPUbfQ62us+66kx+c9LMghiGBoteLeh6oMSfQPptLuZm4cxwBZSfUhKnCZaZrURJ2FlP0dLA==
-X-Received: by 2002:a17:90a:5d91:b0:262:f09c:e73d with SMTP id t17-20020a17090a5d9100b00262f09ce73dmr2794613pji.34.1691698320688;
-        Thu, 10 Aug 2023 13:12:00 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 5-20020a17090a1a4500b00263f446d432sm4004127pjl.43.2023.08.10.13.11.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 13:11:59 -0700 (PDT)
-Date: Thu, 10 Aug 2023 13:11:58 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Marco Elver <elver@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
-	linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
-Message-ID: <202308101259.D2C4C72F8@keescook>
-References: <20230808102049.465864-1-elver@google.com>
- <20230808102049.465864-3-elver@google.com>
- <202308081424.1DC7AA4AE3@keescook>
- <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
- <ZNNi/4L1mD8XPNix@elver.google.com>
- <20230809113021.63e5ef66@gandalf.local.home>
- <ZNO/pf/pH5jJAZI0@elver.google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BBC1877;
+	Thu, 10 Aug 2023 23:22:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691709745; x=1723245745;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w1NqH99URcvZijFhz1+HJ654z8iqcpWy/gy0gDsKpls=;
+  b=daskoEqh54/aEaUfNe3XedHFFv7SLNqz314chDVgmvPwUvv/LPbZ8XDs
+   Rw+B/RoZ3Y5WtpRHN9SoCPn892WaHjvt5PsUfYb6sT23V5uXfvGfwbu+J
+   1juvuwjAnkhK64f70unOtrhQE5UTtDNEOHl2uZiV+6+hIAmQ7oMFjJg26
+   hmTWOCEqLK8xCHQ/UcNfR3nCZT1D8lKoi83+yLdY81fOYGJgurLKwIN/u
+   t2mXp1w8tzpzmzsSq/VLZClLNwwz5ZJFA/TEgfDh2Zlxhx4apQ6EMw8U1
+   RT6lf+v4kpb5Ek7lKQ54/DcvekMumMNfTwT2si3fVxgYlPKnZTzKtFLdX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="361682644"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="361682644"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 16:22:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="856083755"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="856083755"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 10 Aug 2023 16:22:23 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qUEz0-0007Jc-1L;
+	Thu, 10 Aug 2023 23:22:22 +0000
+Date: Fri, 11 Aug 2023 07:22:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Li Lingfeng <lilingfeng3@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jens Axboe <axboe@kernel.dk>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: [axboe-block:for-6.6/block 43/44] block/blk-iolatency.c:849:2:
+ error: member reference type 'struct mutex' is not a pointer; did you mean
+ to use '.'?
+Message-ID: <202308110738.mCDvdKZ1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,60 +48,128 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZNO/pf/pH5jJAZI0@elver.google.com>
 
-On Wed, Aug 09, 2023 at 06:32:37PM +0200, Marco Elver wrote:
-> On Wed, Aug 09, 2023 at 11:30AM -0400, Steven Rostedt wrote:
-> [...]
-> > 
-> > I would actually prefer DEBUG_LIST to select HARDEN_LIST and not the other
-> > way around. It logically doesn't make sense that HARDEN_LIST would select
-> > DEBUG_LIST. That is, I could by default want HARDEN_LIST always on, but not
-> > DEBUG_LIST (because who knows, it may add other features I don't want). But
-> > then, I may have stumbled over something and want more info, and enable
-> > DEBUG_LIST (while still having HARDEN_LIST) enabled.
-> > 
-> > I think you are looking at this from an implementation perspective and not
-> > the normal developer one.
-> > 
-> [...]
-> > 
-> > That is, if DEBUG_LIST is enabled, we always call the
-> > __list_add_valid_or_report(), but if only HARDEN_LIST is enabled, then we
-> > do the shortcut.
-> 
-> Good point - I think this is better. See below tentative v4.
-> 
-> Kees: Does that also look more like what you had in mind?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.6/block
+head:   d21fed50c523d87af6456697ad09378060c4f09a
+commit: 4eb44d10766ac0fae5973998fd2a0103df1d3fe1 [43/44] block: remove init_mutex and open-code blk_iolatency_try_init
+config: x86_64-randconfig-x002-20230810 (https://download.01.org/0day-ci/archive/20230811/202308110738.mCDvdKZ1-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230811/202308110738.mCDvdKZ1-lkp@intel.com/reproduce)
 
-Yeah, this looks good. My only nit would be a naming one. All the
-other hardening features are named "HARDENED", but perhaps the "ED"
-is redundant in the others. Still, consistency seems nicer. What do you
-think of CONFIG_LIST_HARDENED ? (The modern trend for Kconfig naming tends
-to keep the subsystem name first and then apply optional elements after.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308110738.mCDvdKZ1-lkp@intel.com/
 
-One note: do the LKDTM list hardening tests still pass? i.e.
-CORRUPT_LIST_ADD
-CORRUPT_LIST_DEL
+All errors (new ones prefixed by >>):
 
-> [...]
-> +		/*
-> +		 * With the hardening version, elide checking if next and prev
-> +		 * are NULL, LIST_POISON1 or LIST_POISON2, since the immediate
-> +		 * dereference of them below would result in a fault.
-> +		 */
-> +		if (likely(prev->next == entry && next->prev == entry))
-> +			return true;
+>> block/blk-iolatency.c:849:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
+           lockdep_assert_held(ctx.bdev->bd_queue->rq_qos_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:324:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:291:52: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                               ^
+   include/linux/lockdep.h:318:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+>> block/blk-iolatency.c:849:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
+           lockdep_assert_held(ctx.bdev->bd_queue->rq_qos_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:324:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:291:45: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                        ^
+   include/linux/lockdep.h:318:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   2 errors generated.
 
-I'm not super excited about skipping those checks, since they are
-values that can be reached through kernel list management confusion. If
-an attacker is using a system where the zero-page has been mapped
-and is accessible (i.e. lacking SMAP etc), then attacks could still
-be constructed. However, I do recognize this chain of exploitation
-prerequisites is getting rather long, so probably this is a reasonable
-trade off on modern systems.
 
--Kees
+vim +849 block/blk-iolatency.c
+
+   826	
+   827	static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
+   828				     size_t nbytes, loff_t off)
+   829	{
+   830		struct blkcg *blkcg = css_to_blkcg(of_css(of));
+   831		struct blkcg_gq *blkg;
+   832		struct blkg_conf_ctx ctx;
+   833		struct iolatency_grp *iolat;
+   834		char *p, *tok;
+   835		u64 lat_val = 0;
+   836		u64 oldval;
+   837		int ret;
+   838	
+   839		blkg_conf_init(&ctx, buf);
+   840	
+   841		ret = blkg_conf_open_bdev(&ctx);
+   842		if (ret)
+   843			goto out;
+   844	
+   845		/*
+   846		 * blk_iolatency_init() may fail after rq_qos_add() succeeds which can
+   847		 * confuse iolat_rq_qos() test. Make the test and init atomic.
+   848		 */
+ > 849		lockdep_assert_held(ctx.bdev->bd_queue->rq_qos_mutex);
+   850		if (!iolat_rq_qos(ctx.bdev->bd_queue))
+   851			ret = blk_iolatency_init(ctx.bdev->bd_disk);
+   852		if (ret)
+   853			goto out;
+   854	
+   855		ret = blkg_conf_prep(blkcg, &blkcg_policy_iolatency, &ctx);
+   856		if (ret)
+   857			goto out;
+   858	
+   859		iolat = blkg_to_lat(ctx.blkg);
+   860		p = ctx.body;
+   861	
+   862		ret = -EINVAL;
+   863		while ((tok = strsep(&p, " "))) {
+   864			char key[16];
+   865			char val[21];	/* 18446744073709551616 */
+   866	
+   867			if (sscanf(tok, "%15[^=]=%20s", key, val) != 2)
+   868				goto out;
+   869	
+   870			if (!strcmp(key, "target")) {
+   871				u64 v;
+   872	
+   873				if (!strcmp(val, "max"))
+   874					lat_val = 0;
+   875				else if (sscanf(val, "%llu", &v) == 1)
+   876					lat_val = v * NSEC_PER_USEC;
+   877				else
+   878					goto out;
+   879			} else {
+   880				goto out;
+   881			}
+   882		}
+   883	
+   884		/* Walk up the tree to see if our new val is lower than it should be. */
+   885		blkg = ctx.blkg;
+   886		oldval = iolat->min_lat_nsec;
+   887	
+   888		iolatency_set_min_lat_nsec(blkg, lat_val);
+   889		if (oldval != iolat->min_lat_nsec)
+   890			iolatency_clear_scaling(blkg);
+   891		ret = 0;
+   892	out:
+   893		blkg_conf_exit(&ctx);
+   894		return ret ?: nbytes;
+   895	}
+   896	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
