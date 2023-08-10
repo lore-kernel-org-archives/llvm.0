@@ -1,38 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132D4200AC;
-	Thu, 10 Aug 2023 14:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C7B6C433C7;
-	Thu, 10 Aug 2023 14:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECAA1E1A2;
+	Thu, 10 Aug 2023 14:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B61CC433C7;
+	Thu, 10 Aug 2023 14:35:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691678004;
-	bh=IKeq5Z2PbwGi23k/nvlp7YWjgFV2LYLVb7jhG7tG1lg=;
+	s=k20201202; t=1691678113;
+	bh=l7iX2EFXiiKalApDOgrMA9KciL+YR2kWW6FuOaN5oXo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QbrDaeXcavNd7O6sJOBertdJqILy71c2hhn2rB/wwEj8QW3rxy7TXvVe6NovYdA1B
-	 O0XO1sJAHzH18kOm7Vyi7m59Qir3sVomJ/bCV0iwnWfrXFw0ZzyGChQ3RrAKUDmb4E
-	 sHLt4D/mo6IIIuxi/BxLUTwtN9U7uaG8VRGQTgmbHdttTsBiURo3cGv1Xy024RBYP9
-	 fzCcztjzVYyEqUdi95AVqEYqlsVzfdQSDfOSZA0YCqgb47K3R2dS8XAqaoQrsTsjZi
-	 9ACHR0ImHce4PkFNASr13ujsCbtyYj0mBdS8WLgFx7XL2F8NwvdmylvkiFKBzipbYy
-	 SOubf9/oAuxoQ==
-Date: Thu, 10 Aug 2023 07:33:21 -0700
+	b=I62Nd4+MWtex1Kqp9IwKczgKaZxjLl4uwfpI+9RKlMS9gah1cJZaGCNLwzGR1rEOY
+	 RFsjtWDXbanVmYxezCl+eTUt1dSHDtGXgfM13CcBaaR2dnSCorr+o7ka9/b5WSdhRE
+	 XRV0ry1YbnyoJlU5C8tlCDvEJQrk18j8CKrDzBrr2iGYf73rnccTlWlJ91LLNwRgrv
+	 F8Lsi3x7I4xTd79G1wXEeLKib48kiFHjuL6EhAdGQ6k5bE2cFjXiFkg/N3roY03tNC
+	 8pwapyCbF9piGqDPakbkcBZfBfIZ189zlA8DmBQC6L+0o4Mn9SorQNvZGR3aBti1BH
+	 5vK8/N8OlKIwA==
+Date: Thu, 10 Aug 2023 07:35:11 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: broonie@kernel.org, lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
-	yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-	daniel.baluta@nxp.com, kai.vehmanen@linux.intel.com,
-	ndesaulniers@google.com, trix@redhat.com, rander.wang@intel.com,
-	sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] ASoC: SOF: Intel: Initialize chip in
- hda_sdw_check_wakeen_irq()
-Message-ID: <20230810143321.GA1549244@dev-arch.thelio-3990X>
-References: <20230809-intel-hda-missing-chip-init-v1-1-61557ca6fa8a@kernel.org>
- <8eed2099-2853-df8d-92db-921d0702f512@linux.intel.com>
- <20230809190212.GB3355565@dev-arch.thelio-3990X>
- <2a2de1b5-4dd5-f170-bb0b-61d39230c3a7@linux.intel.com>
- <20230809200906.GA4016444@dev-arch.thelio-3990X>
- <d224ef41-373f-186b-1ba2-86f00ea8fbce@linux.intel.com>
+To: Yujie Liu <yujie.liu@intel.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Tony Luck <tony.luck@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-ia64@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [aegl:resctrl2_v65rc4 2/2]
+ fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top
+ level declarator
+Message-ID: <20230810143511.GB1549244@dev-arch.thelio-3990X>
+References: <202308040650.ayL6ExhZ-lkp@intel.com>
+ <ZNSFUHra6FTSxFLF@yujie-X299>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,42 +36,351 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d224ef41-373f-186b-1ba2-86f00ea8fbce@linux.intel.com>
+In-Reply-To: <ZNSFUHra6FTSxFLF@yujie-X299>
 
-On Wed, Aug 09, 2023 at 03:42:44PM -0500, Pierre-Louis Bossart wrote:
+Hi Yujie,
+
+On Thu, Aug 10, 2023 at 02:36:00PM +0800, Yujie Liu wrote:
+> Hi Nathan, Hi Nick,
 > 
-> > Ah, I still think you will need to pass CC to make directly, rather than
-> > through the environment but you should be able to prevent
-> > merge_config.sh from getting in the way by passing '-m' to avoid having
-> > it invoke make itself, then you can add a 'make olddefconfig' step after
-> > that, perhaps something like this?
-> > 
-> >   - name: build start
-> >     run: |
-> >       export ARCH=x86_64 KCFLAGS="-Wall -Werror"
-> >       export MAKEFLAGS=j"$(nproc)"
-> >       bash kconfig/kconfig-sof-default.sh -m
+> Could you kindly help to take a look at this report?
 > 
-> The -m doesn't work since it's added last, but it's not even needed. The
-> sequence below re-adds clang, that's just fine.
+> Quote Tony's comment:
+> 
+> > It seems that some/all of the combination of CLANG, ARCH=i386, and
+> > building with CONFIG_XXX=y rather than CONFIG_XXX=m makes clang freak
+> > out.
+> > GCC seems able to build the files in fs/resctrl2/arch/x86/ as either
+> > modules or built-in, x86_64 or i386 without problems.
+> 
+> We re-tested this case and got the same result as Tony's. GCC can build
+> this without problems, while various versions of clang (clang
+> 17/16/15/14) throw this error. Could you help do a quick check to see if
+> necessary to track an issue? Thanks.
 
-Ah right!
-
-> >       make CC=clang olddefconfig
-> >       make CC=clang sound/
-> >       make CC=clang drivers/soundwire/
-> >       make CC=clang
-> The fun part now is that I get tons of unrelated errors - but at least
-> that's a sign we're using the clang compiler
-
-> sound/pci/hda/hda_bind.c:232:18: error: format string is not a string
-> literal (potentially insecure) [-Werror,-Wformat-security]
-
-Heh, I suppose that is somewhat self inflicted with the '-Wall -Wextra',
-as '-Wformat-security' gets re-enabled after being disabled in the main
-Makefile. May be worth sticking a '-Wno-format-security' back on there.
-Glad to hear that it is working now and thank you for testing with clang
-to help catch issues before they make it to a tree :)
+I'll do my best to take a look at this either today/tomorrow or early
+next week. We're dealing with some fallout from the SRSO mitigations, so
+that has been priority 0 at the moment.
 
 Cheers,
 Nathan
+
+> On Fri, Aug 04, 2023 at 06:45:45AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git resctrl2_v65rc4
+> > head:   36621209814f9810feed9af60d278a198847c117
+> > commit: 36621209814f9810feed9af60d278a198847c117 [2/2] resctrl2: Arch x86 modules for most of the legacy control/monitor functions
+> > config: i386-randconfig-r032-20230804 (https://download.01.org/0day-ci/archive/20230804/202308040650.ayL6ExhZ-lkp@intel.com/config)
+> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> > reproduce: (https://download.01.org/0day-ci/archive/20230804/202308040650.ayL6ExhZ-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202308040650.ayL6ExhZ-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: warning: '__cold__' attribute only applies to functions [-Wignored-attributes]
+> >    module_init(cat_init);
+> >    ^
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/init.h:243:6: note: expanded from macro '__define_initcall_stub'
+> >            int __init __stub(void);                                \
+> >                ^
+> >    include/linux/init.h:52:41: note: expanded from macro '__init'
+> >    #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
+> >                                                    ^
+> >    include/linux/compiler_types.h:104:34: note: expanded from macro '__cold'
+> >    #define __cold                          __attribute__((__cold__))
+> >                                                           ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
+> >            __unique_initcall(fn, id, __sec, __initcall_id(fn))
+> >                                             ^
+> >    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
+> >            __PASTE(__KBUILD_MODNAME,                               \
+> >                    ^
+> >    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
+> >    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
+> >                                                   ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:15:1: note: expanded from here
+> >    rdt_l3_pseudolock__215_569_cat_init6
+> >    ^
+> >    fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: warning: '__cold__' attribute only applies to functions [-Wignored-attributes]
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/init.h:244:6: note: expanded from macro '__define_initcall_stub'
+> >            int __init __stub(void)                                 \
+> >                ^
+> >    include/linux/init.h:52:41: note: expanded from macro '__init'
+> >    #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
+> >                                                    ^
+> >    include/linux/compiler_types.h:104:34: note: expanded from macro '__cold'
+> >    #define __cold                          __attribute__((__cold__))
+> >                                                           ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
+> >            __unique_initcall(fn, id, __sec, __initcall_id(fn))
+> >                                             ^
+> >    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
+> >            __PASTE(__KBUILD_MODNAME,                               \
+> >                    ^
+> >    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
+> >    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
+> >                                                   ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:15:1: note: expanded from here
+> >    rdt_l3_pseudolock__215_569_cat_init6
+> >    ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
+> >            __unique_initcall(fn, id, __sec, __initcall_id(fn))
+> >                                             ^
+> >    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
+> >            __PASTE(__KBUILD_MODNAME,                               \
+> >                    ^
+> >    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
+> >    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
+> >                                                   ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 8 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:28:1: note: expanded from here
+> >    rdt_l3_pseudolock__215_569_cat_init6216
+> >    ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: incompatible pointer to integer conversion initializing 'int' with an expression of type 'void *' [-Wint-conversion]
+> >    module_init(cat_init);
+> >    ^~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^~~~~~~~~~~~~
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^~~~~~~~~~~~~~~~~~~
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^~~~~~~~~~~~~~~~~~~~~~~~
+> >    note: (skipping 8 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:28:1: note: expanded from here
+> >    rdt_l3_pseudolock__215_569_cat_init6216
+> >    ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
+> >            __unique_initcall(fn, id, __sec, __initcall_id(fn))
+> >                                             ^
+> >    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
+> >            __PASTE(__KBUILD_MODNAME,                               \
+> >                    ^
+> >    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
+> >    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
+> >                                                   ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:15:1: note: expanded from here
+> >    rdt_l3_pseudolock__215_569_cat_init6
+> >    ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: redefinition of 'rdt_l3_pseudolock__215_569_cat_init6' as different kind of symbol
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:15:1: note: expanded from here
+> >    rdt_l3_pseudolock__215_569_cat_init6
+> >    ^
+> >    fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: note: previous definition is here
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:15:1: note: expanded from here
+> >    rdt_l3_pseudolock__215_569_cat_init6
+> >    ^
+> > >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: '__initstub__kmod_rdt_l2_pseudolock' causes a section type conflict with 'init_rootfs'
+> >    module_init(cat_init);
+> >    ^
+> >    include/linux/module.h:88:24: note: expanded from macro 'module_init'
+> >    #define module_init(x)  __initcall(x);
+> >                            ^
+> >    include/linux/init.h:316:24: note: expanded from macro '__initcall'
+> >    #define __initcall(fn) device_initcall(fn)
+> >                           ^
+> >    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
+> >    #define device_initcall(fn)             __define_initcall(fn, 6)
+> >                                            ^
+> >    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:18:1: note: expanded from here
+> >    __initstub__kmod_rdt_l2_pseudolock
+> >    ^
+> >    include/linux/init.h:154:13: note: declared here
+> >    void __init init_rootfs(void);
+> >                ^
+> >    2 warnings and 11 errors generated.
+> > 
+> > 
+> > vim +569 fs/resctrl2/arch/x86/l3_pseudolock.c
+> > 
+> >    568	
+> >  > 569	module_init(cat_init);
+> >    570	module_exit(cat_cleanup);
+> >    571	
+> > 
+> > -- 
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests/wiki
+> > 
+> 
