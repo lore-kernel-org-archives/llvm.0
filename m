@@ -1,43 +1,37 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA751E1D2;
-	Thu, 10 Aug 2023 16:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691683216; x=1723219216;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=k/MPJp1u9TphAcYX0hucr/4Bs5tpP3S2KWUOObFclVU=;
-  b=f4db0kbQLYygEZ68ZzV6kObmEGGvHGTIOS3AcGaP+4fEu1J08L/z/iR7
-   XgdHO+M+hBlYN3yeNcbAFm06ymluaCRTjNUBFncFFXdPTLni4JvqxyBxL
-   rtZ5Wa8kB/9DxCelELtszhl89WchNQnk35Ldl1GrJvjVgQaDWPV0YvPUg
-   4sS34E2fS/trmUAuLDoay4mMl/0Ohdvj0lSbDWCQAsUnGPJL8c8pOjLZD
-   9oUJEjgrSdRjvqKz9w1UpC8/pDD5ab6pIElXfSsaQ9J08QfrzE33DwCtl
-   +LFjNqjEkauI2ozeV18fyn9towqo4YOwE8AB4GUQgQ7PcnZiOhDRYSmwg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="351761385"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="351761385"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 09:00:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="732316459"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="732316459"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 10 Aug 2023 09:00:13 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qU856-00075s-2m;
-	Thu, 10 Aug 2023 16:00:12 +0000
-Date: Fri, 11 Aug 2023 00:00:07 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [tip:x86/misc 3/3] ld.lld: error:
- vmlinux.a(crypto/sm3_generic.o):(function sm3_base_init: .text+0x8):
- relocation R_RISCV_HI20 out of range: 531264 is not in [-524288, 524287];
- references '.LCPI2_0'
-Message-ID: <202308102305.SCqhsrps-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6C21E1D2
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 16:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA4AC433C7;
+	Thu, 10 Aug 2023 16:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691684056;
+	bh=6Go2WKLDy7qs3VXcLqunmrgEAcs368VHPXxDDUvIZdA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BNmJh8ejT0OJ1yT4jlibcttZCrelUwschOkdscxlbLOyujWYBDTGLucM7AZdeuLK8
+	 mrT59CBhO8sI+7Ka/BbH8m3MOVh520b83y6U0j1kMzV2SN7DczFYKcwVGtx3a078dZ
+	 5/C/x/DqgSPE8XajXC+JHDAQsr/kQl+/hL62Yf/Ueoea6LAyMzNJaJKMoQE3B51Vrk
+	 HUlmZzrrdGxnKidb4sJ6Txxy7prj9ypD7cGZwMW1G0fYiMvFhI3XxskGTJqHsvC57W
+	 dMCnu2YXyt7qxkpmPRFwmO/d11Dd5+f0mWDcUKVvq9MBd2G7l/2Y+oZ4+trcH8PXtu
+	 23B/pkMoOQGlQ==
+Date: Thu, 10 Aug 2023 09:14:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: Hang when booting guest kernels compiled with clang after SRSO
+ mitigations
+Message-ID: <20230810161414.GA4000@dev-arch.thelio-3990X>
+References: <20230810090835.GBZNSpE6tCw+Ci+9yh@fat_crate.local>
+ <20230810101649.GA1795474@dev-arch.thelio-3990X>
+ <20230810125122.GIZNTdSuFvA3Cjfexq@fat_crate.local>
+ <20230810132706.GA3805855@dev-arch.thelio-3990X>
+ <20230810133216.GKZNTm4KpohRR4gVsT@fat_crate.local>
+ <20230810134056.GA130730@dev-arch.thelio-3990X>
+ <20230810144344.GLZNT3oM6MLVdzGlyd@fat_crate.local>
+ <20230810150706.GA42856@dev-arch.thelio-3990X>
+ <20230810151410.GNZNT+wn/cLBWiU6dO@fat_crate.local>
+ <20230810154831.GA38495@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,42 +40,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230810154831.GA38495@dev-arch.thelio-3990X>
 
-CC: linux-kernel@vger.kernel.org
-CC: x86@kernel.org
-TO: Avadhut Naik <Avadhut.Naik@amd.com>
-CC: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Thu, Aug 10, 2023 at 08:48:31AM -0700, Nathan Chancellor wrote:
+> On Thu, Aug 10, 2023 at 05:14:10PM +0200, Borislav Petkov wrote:
+> > Also, can you bisect rc5..master to see which exact patch is causing
+> > this?
+> 
+> Sure thing. I at least isolated it to the SRSO merge, so I will just
+> bisect that to see the exact commit that causes this.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/misc
-head:   c4d07c371283cb0453c8ce187551e4d064cc407e
-commit: c4d07c371283cb0453c8ce187551e4d064cc407e [3/3] EDAC/amd64: Add support for AMD family 1Ah models 00h-1Fh and 40h-4Fh
-config: riscv-randconfig-r024-20230810 (https://download.01.org/0day-ci/archive/20230810/202308102305.SCqhsrps-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308102305.SCqhsrps-lkp@intel.com/reproduce)
+Heh, figured this would be the case:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308102305.SCqhsrps-lkp@intel.com/
+# bad: [138bcddb86d8a4f842e4ed6f0585abc9b1a764ff] Merge tag 'x86_bugs_srso' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+# good: [14f9643dc90adea074a0ffb7a17d337eafc6a5cc] Merge tag 'wq-for-6.5-rc5-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq
+git bisect start '138bcddb86d8a4f842e4ed6f0585abc9b1a764ff' '14f9643dc90adea074a0ffb7a17d337eafc6a5cc'
+# bad: [233d6f68b98d480a7c42ebe78c38f79d44741ca9] x86/srso: Add IBPB
+git bisect bad 233d6f68b98d480a7c42ebe78c38f79d44741ca9
+# bad: [fb3bd914b3ec28f5fb697ac55c4846ac2d542855] x86/srso: Add a Speculative RAS Overflow mitigation
+git bisect bad fb3bd914b3ec28f5fb697ac55c4846ac2d542855
+# good: [0e52740ffd10c6c316837c6c128f460f1aaba1ea] x86/bugs: Increase the x86 bugs vector size to two u32s
+git bisect good 0e52740ffd10c6c316837c6c128f460f1aaba1ea
+# first bad commit: [fb3bd914b3ec28f5fb697ac55c4846ac2d542855] x86/srso: Add a Speculative RAS Overflow mitigation
 
-All errors (new ones prefixed by >>):
+Not sure how helpful that will be...
 
->> ld.lld: error: vmlinux.a(crypto/sm3_generic.o):(function sm3_base_init: .text+0x8): relocation R_RISCV_HI20 out of range: 531264 is not in [-524288, 524287]; references '.LCPI2_0'
-   >>> referenced by sm3_base.h:0 (include/crypto/sm3_base.h:0)
-   >>> defined in vmlinux.a(crypto/sm3_generic.o)
---
->> ld.lld: error: vmlinux.a(crypto/sm3_generic.o):(function sm3_base_init: .text+0x20): relocation R_RISCV_HI20 out of range: 531264 is not in [-524288, 524287]; references '.LCPI2_3'
-   >>> referenced by sm3_base.h:0 (include/crypto/sm3_base.h:0)
-   >>> defined in vmlinux.a(crypto/sm3_generic.o)
---
->> ld.lld: error: vmlinux.a(crypto/sm3_generic.o):(function sm3_base_init: .text+0x10): relocation R_RISCV_HI20 out of range: 531264 is not in [-524288, 524287]; references '.LCPI2_1'
-   >>> referenced by sm3_base.h:0 (include/crypto/sm3_base.h:0)
-   >>> defined in vmlinux.a(crypto/sm3_generic.o)
---
->> ld.lld: error: vmlinux.a(crypto/sm3_generic.o):(function sm3_base_init: .text+0x18): relocation R_RISCV_HI20 out of range: 531264 is not in [-524288, 524287]; references '.LCPI2_2'
-   >>> referenced by sm3_base.h:0 (include/crypto/sm3_base.h:0)
-   >>> defined in vmlinux.a(crypto/sm3_generic.o)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
