@@ -1,46 +1,36 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60ED1E1A2;
-	Thu, 10 Aug 2023 14:58:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691679511; x=1723215511;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J4L+XZ5vyS6b+zkA6MyEDrIq6Ora2t8EO//Tfz+qR3I=;
-  b=X7eD8VivEd+603UbEs/zUj8Unw60P1FKz6tR+UsaxyNkuYz5OJ5K39h0
-   ZYe5Fsa8vz6i8AS8QKqYOYuGZ1FfOkq4oXDcPhFtgY5Fl7mtBpj0cck1F
-   RuGRhp3C/GsQeMfFMZYbU+66MS+zcaO/9WgEeYcRRNVG/AM8wsyPk+Nk1
-   sh1g/pd3NMh22F9Q0wGa1974BJwhvCTYB6QbNOi6/P+c5MI0Km2aQwEL3
-   2O9c/i7nIbiCQ+eXIrrPrXwcskCOkHfaDJ765sI4EbWyvS3Xpj3BPJBhe
-   zUs21NXD+fNssKZib0L6A6jXrWYXy70QhTS1Bh8o5iQHOJhHFh671ECIM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="402400488"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="402400488"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 07:58:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="846427107"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="846427107"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Aug 2023 07:58:12 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qU775-00074S-2f;
-	Thu, 10 Aug 2023 14:58:11 +0000
-Date: Thu, 10 Aug 2023 22:57:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maximilian Luz <luzmaximilian@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steev Klimaszewski <steev@kali.org>,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: [steev:lenovo-x13s-v6.5-rc5-clover 64/115] fastrpc.c:(.text+0x0):
- multiple definition of `qcom_scm_qseecom_app_get_id';
- drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x0): first
- defined here
-Message-ID: <202308102228.DcMmeX4t-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40484200A0
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 15:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57933C433BB;
+	Thu, 10 Aug 2023 15:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691680028;
+	bh=SedsBJA7SDym526YfYO6tDp0uAlB3IbI+3hK27IRyn0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vh2iW70QikbFOmOMjfuRuJ82L+EQsQ7E2UItOn6c8tGPwj+E527RBDc9QNoRPQ0Cr
+	 AMGUQxSCCaagQqYpnTzurzo3bEYvDmkOxeqBh2jVkOzITP/9U/EIAA7pmXPJ2uQbPT
+	 1ml0UXYb5/s7ZdVrMsmlsPCj5G9/7MP9Gq6blwPIhIC+JV5o3ziGW9j6Q2Tg14Jitv
+	 QzhiPWCSjlGKq7oUO7UxI/VtrEr6V5GFWZf0dRk90aWzSi7tMkfROxmjeiybrI+6HO
+	 lBETbgyVLF4PvUFcsxXqDE5LJ/qpkEgn5PsTsA19/9azcBlaRy1lwHVvQmTFDbQ3Cl
+	 4wjr2NZlPpKrg==
+Date: Thu, 10 Aug 2023 08:07:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: Hang when booting guest kernels compiled with clang after SRSO
+ mitigations
+Message-ID: <20230810150706.GA42856@dev-arch.thelio-3990X>
+References: <20230810013334.GA5354@dev-arch.thelio-3990X>
+ <20230810081038.GAZNSbftb6DOgg/U7e@fat_crate.local>
+ <20230810090835.GBZNSpE6tCw+Ci+9yh@fat_crate.local>
+ <20230810101649.GA1795474@dev-arch.thelio-3990X>
+ <20230810125122.GIZNTdSuFvA3Cjfexq@fat_crate.local>
+ <20230810132706.GA3805855@dev-arch.thelio-3990X>
+ <20230810133216.GKZNTm4KpohRR4gVsT@fat_crate.local>
+ <20230810134056.GA130730@dev-arch.thelio-3990X>
+ <20230810144344.GLZNT3oM6MLVdzGlyd@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,38 +39,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230810144344.GLZNT3oM6MLVdzGlyd@fat_crate.local>
 
-tree:   https://github.com/steev/linux lenovo-x13s-v6.5-rc5-clover
-head:   5d47ba475cde92b762751035d1d4faa8f696eec7
-commit: 5edf9aaedeb63806137481219aa793fd06dd5afe [64/115] firmware: qcom_scm: Add support for Qualcomm Secure Execution Environment SCM interface
-config: s390-randconfig-r044-20230809 (https://download.01.org/0day-ci/archive/20230810/202308102228.DcMmeX4t-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308102228.DcMmeX4t-lkp@intel.com/reproduce)
+On Thu, Aug 10, 2023 at 04:43:44PM +0200, Borislav Petkov wrote:
+> On Thu, Aug 10, 2023 at 06:40:56AM -0700, Nathan Chancellor wrote:
+> Linux version 6.5.0-rc5+ (root@vh) (gcc (Debian 10.2.1-3) 10.2.1 20201224, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Thu Aug 10 16:13:54 CEST 2023
+> 
+> ...
+> 
+> [    0.083541] Speculative Return Stack Overflow: Mitigation: safe RET
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308102228.DcMmeX4t-lkp@intel.com/
+I just tried
 
-All errors (new ones prefixed by >>):
+  Linux version 6.5.0-rc5-00039-g138bcddb86d8 (nathan@dev-arch.thelio-3990X) (x86_64-linux-gcc (GCC) 10.4.0, GNU ld (GNU Binutils) 2.39) #1 SMP PREEMPT_DYNAMIC Thu Aug 10 07:48:28 MST 2023
 
-   s390x-linux-ld: drivers/misc/fastrpc.o: in function `qcom_scm_qseecom_app_get_id':
->> fastrpc.c:(.text+0x0): multiple definition of `qcom_scm_qseecom_app_get_id'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x0): first defined here
-   s390x-linux-ld: drivers/misc/fastrpc.o: in function `qcom_scm_qseecom_app_send':
->> fastrpc.c:(.text+0x40): multiple definition of `qcom_scm_qseecom_app_send'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x40): first defined here
-   s390x-linux-ld: drivers/firmware/qcom_scm.o: in function `qcom_scm_qseecom_app_get_id':
-   qcom_scm.c:(.text+0x0): multiple definition of `qcom_scm_qseecom_app_get_id'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x0): first defined here
-   s390x-linux-ld: drivers/firmware/qcom_scm.o: in function `qcom_scm_qseecom_app_send':
-   qcom_scm.c:(.text+0x40): multiple definition of `qcom_scm_qseecom_app_send'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x40): first defined here
-   s390x-linux-ld: drivers/firmware/qcom_scm-smc.o: in function `qcom_scm_qseecom_app_get_id':
-   qcom_scm-smc.c:(.text+0x0): multiple definition of `qcom_scm_qseecom_app_get_id'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x0): first defined here
-   s390x-linux-ld: drivers/firmware/qcom_scm-smc.o: in function `qcom_scm_qseecom_app_send':
-   qcom_scm-smc.c:(.text+0x40): multiple definition of `qcom_scm_qseecom_app_send'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x40): first defined here
-   s390x-linux-ld: drivers/firmware/qcom_scm-legacy.o: in function `qcom_scm_qseecom_app_get_id':
-   qcom_scm-legacy.c:(.text+0x0): multiple definition of `qcom_scm_qseecom_app_get_id'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x0): first defined here
-   s390x-linux-ld: drivers/firmware/qcom_scm-legacy.o: in function `qcom_scm_qseecom_app_send':
-   qcom_scm-legacy.c:(.text+0x40): multiple definition of `qcom_scm_qseecom_app_send'; drivers/iommu/arm/arm-smmu/qcom_iommu.o:qcom_iommu.c:(.text+0x40): first defined here
+  [    0.000259] Speculative Return Stack Overflow: Mitigation: safe RET
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+on the host...
+
+> [    0.000000] Linux version 6.5.0-rc5 (root@vh) (Debian clang version 14.0.6, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Thu Aug 10 13:22:30 CEST 2023
+
+with
+
+  [    0.000000] Linux version 6.5.0-rc5 (nathan@distrobox-6Sw1jticKJ.thelio-3990X) (Debian clang version 14.0.6, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Thu Aug 10 07:58:56 MST 2023
+
+in the guest and I see the same problem.
+
+> Guest and host are up and running.
+> 
+> There's something else missing.
+
+Configuration difference? Here is the one from the most recent build:
+
+https://gist.github.com/nathanchance/2d7ad0b9440a6a2ec5ba0b88e3e673a9
+
+Is there any other information that could be relevant here? My microcode
+version according to dmesg, in case that matters.
+
+  [    2.408527] microcode: microcode updated early to new patch_level=0x0830107a
+
+Is that machine Zen 2? I see this issue on my Ryzen 3 4300G as well,
+which is also Zen 2.
+
+> Your host gcc is 13, maybe I should update...
+
+Seems like I can reproduce it with earlier versions of GCC (and I could
+reproduce it with clang) so it does not seem like it is toolchain
+related on the host side but might be interesting to test.
+
+I just use https://mirrors.edge.kernel.org/pub/tools/crosstool/ for easy
+access to multiple versions.
+
+Cheers,
+Nathan
