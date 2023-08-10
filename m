@@ -1,83 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2058.outbound.protection.outlook.com [40.107.244.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0A31113;
-	Thu, 10 Aug 2023 06:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691649608; x=1723185608;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=64nfHyTyY/gGfhpxsvyw1u/hWAbT9w9x9kn69mNL3Ac=;
-  b=mzikEgD/rS2X77Ew0DsNTCryRiyEXXfz2GIu5u/tRTDXOrGfUjBGoon6
-   pPAxVTIpAUY1OkC+nQ9NCsI0gXQfjT09A0V8L6rfIaa3Jh04e4qY9ZJNX
-   vNlP8yeKQ5iYmfmY4Yi6vqnVN+2GGLIMT/PwU6qAsVsqQcTOaFjxvE+2W
-   mS1ea35uRQYLx+XwBQ/opaIhb7FWwAoBw2r3t8ni162kRZWrsSUgUxdBf
-   M2dVdaAXUT2GRdBRKZDEHwXsiF2BqqtOfaYX2uYdC74cJGJgkDucDMaiG
-   eSFhDtxbbeIG/y7SbtL8wPO2x2wTjATnKS+EOSSYY9AuevQeTGfytTo+A
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="374089440"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="374089440"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 23:40:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="767159929"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="767159929"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga001.jf.intel.com with ESMTP; 09 Aug 2023 23:40:07 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 9 Aug 2023 23:40:06 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 9 Aug 2023 23:40:06 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 9 Aug 2023 23:40:06 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365761107
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 06:48:13 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q1AH6Dhx47lxx+GI0X7qmQMD11ptSCHEF4z3ngGlnj56EHZJGa7ebmCbfFKT2qsVVN4YVkup9jipciTtxN4Z0pkxljeFfJV1uDS7wP3gEcXXlPHCyxXjSRCBt0DWSw/U/OhKE4tuNxKAuFFOnHDXii7jzDH6vLlolDPG1Y4xF0VzwycInphh69uhP24CKihvXPFUWlpWrcb9cDPgI7Jd1dANVxSreNaIlJ5Ideedq8JdPdm8/qc0OzKimYWQ9+gGU5a5IWAQVuHH2l5jyyO9RZl0kI5TcDFh7CC1K7dqZLwFZZCaMIRHEvFXmqTKXqIte8NUbeLLemtHhdRlEWTyrg==
+ b=aehJlIY5qbW6yaNFN9X+YBEP+JuRDROa/BtNx793relpDhfx/O+96NHuZIKLTkCgQq595CsuvCPKAWUN/FQenNm+50ZfB8CrF6yYGvl5y2YelgON1ECtCIA9rgM1tqFY/iHCeMJbWep2wQAOx5xc7qAzUU6vCQdWFE8DcacnCJ8lGB4Va0WylNprkAJpLFq5NGcY/5rDxUFzTPxgrvCDACFeJl6EVpp5jvkeX6G7at+pevmDAbNfEFAUxjdVtd/wIIozaMjNHNEOoztKAF0h1rMRAhR+H43eGrq1RSHxeAtq7io+x2eoMkMjd2wvSSIydwy3RQtC5UR5Vuj2agzSYA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/3H93lpvqmDSgxgyiRnlZf4Rr1OLhv0B+3WvsAYlif4=;
- b=cy3wQQwV+gHz4HpMAeFhFL4IaH0d30WPQDv5LXyPgQltLZOZTrzZO65OkTFQPH0bWbzYOKKrjnehhk03BO7JHlhB8CgozXIIohmhxPqn3nqT49MxJ+0Lj8V96ZDXthUY3FeS8PHx22gcvlrJmBbJSOZS2rBbMsNULtPQ431K27oVIATxvm3o+TMYg5t57chNl+Zte7MIX9JTqOjoKRqiXQsAqh1Tl+BMZcqCHy8RBtbOZOAvvqKQhLREwsGIYSg/t58csrzR9JUL5g6D/tEhYCYqQ2h4bzjYG3S3lPQacvhNgnvu2i6ShsLcbdoEnYm9i4S2+8BLcIdEaai2R+4NhQ==
+ bh=IL451NG7+9aE6D3twBbE88KeBc9Hogd/YqizHwzFg/Q=;
+ b=OqCEMonCStuyUCRMe0CcfpJzqh7IL1YO0a/oBcinEj8g/hYSOvnLbMGrDn//i+rUfsh625rKXZrtsSw5a6ZQJIiecJIZudv4JP5xsHT9Ft8VOKIafI8uJzrNlTF2s6RqUfOwjFQLe6oJWlz+hKaGuX4aQAF633G0gXEjL2ecx4tpsZZSq7BLoCowbZjLw4jSrlFp+IHTe+9KPp0t4hfl6rhaSmLxAZaD4zHpoEuI2ougJL/7gJsQun+SSvfQv8XA+W2zr6tpvESJupEiFwuMy7OgaftEDVKNBZjQncYTU5zvZUYJNCk6z/eRwy4t6n/DMXoearfZEf6R4SK0mYuAdg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IL451NG7+9aE6D3twBbE88KeBc9Hogd/YqizHwzFg/Q=;
+ b=kil9tCwUeiKOj7fxzNdTE1cymQCwfo3UZDg2iCFeNzvSEHs0FgMt/DLKYRV0kpEWiWyXsmZAjzC2YwMxF7PcgCLSPzQmNiWeI5qVcOo33qSGyKZJNUOBsg1XCXiFsKW8MobiOZbEfXlh2SLzv/HfpEcT4I53mTJciqpl1LqqTwQ=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by BL1PR11MB5544.namprd11.prod.outlook.com (2603:10b6:208:314::19) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DS0PR12MB6487.namprd12.prod.outlook.com (2603:10b6:8:c4::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
- 2023 06:40:04 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::c407:a2ef:2fde:f6d1]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::c407:a2ef:2fde:f6d1%4]) with mapi id 15.20.6652.029; Thu, 10 Aug 2023
- 06:40:04 +0000
-Date: Thu, 10 Aug 2023 14:36:00 +0800
-From: Yujie Liu <yujie.liu@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>
-CC: Tony Luck <tony.luck@intel.com>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <linux-ia64@vger.kernel.org>, "kernel test
- robot" <lkp@intel.com>
-Subject: Re: [aegl:resctrl2_v65rc4 2/2]
- fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top
- level declarator
-Message-ID: <ZNSFUHra6FTSxFLF@yujie-X299>
-References: <202308040650.ayL6ExhZ-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202308040650.ayL6ExhZ-lkp@intel.com>
-X-ClientProxiedBy: SI1PR02CA0050.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::12) To CY5PR11MB6392.namprd11.prod.outlook.com
- (2603:10b6:930:37::15)
+ 2023 06:48:11 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::3d:c14:667a:1c81]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::3d:c14:667a:1c81%4]) with mapi id 15.20.6652.028; Thu, 10 Aug 2023
+ 06:48:11 +0000
+Message-ID: <7a09909a-4c94-2e4b-dd9a-4bd019b67585@amd.com>
+Date: Thu, 10 Aug 2023 08:48:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/2] drm/exec: use unique instead of local label
+Content-Language: en-US
+To: Boris Brezillon <boris.brezillon@collabora.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: ndesaulniers@google.com, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+ trix@redhat.com, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ naresh.kamboju@linaro.org, dakr@redhat.com
+References: <20230731123625.3766-1-christian.koenig@amd.com>
+ <20230809153755.GA832145@dev-arch.thelio-3990X>
+ <20230810084002.636cc827@collabora.com>
+From: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230810084002.636cc827@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0069.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::10) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,389 +58,79 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|BL1PR11MB5544:EE_
-X-MS-Office365-Filtering-Correlation-Id: a06d5b7c-e0e6-4261-5317-08db996ca0b9
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DS0PR12MB6487:EE_
+X-MS-Office365-Filtering-Correlation-Id: 06db5ac5-a2e5-45c4-7aa0-08db996dc38b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U1duqV3ICnVKjAval5JvrLuj5/hS5r6g286W8b/e0DBIzStpUqQdDvQjh7j5FWYz/TlsfrxgOofMK53FgJWyc6lF0lSQNYHZ0IZx1WwMPB1VUd5mlRArnLq+fCqWUj3N6wjoyZ36Xl4Jb+doO1xHUVCITqgkEIr8wJHMIL2neplE4PasfRwWbhg8bnugCu4u98gxuYBQpvlPJ1baVVcdO2zJ1tOt1voq8In37mNfC4Hi/36JAgz1P6F/XEO2nbXFPsdX7uxnrVEct8aoMZCh/6Oskas5apsO8B4M+MJDlB/TKlgKBPH/4dkZlDYkkdpTP2STmns5vhhfpYAq1Co06qiJMd0igBD2GNp3roCg0leRHqz3QbpU7OyhGDEmjXfC/Adk0XrqZbB7XEvtEkA0e51stWr3JvM4+pCjO3K+Mo8vdx8yZ5ow/oEPhQmWaFlbJZhCzncLFrT/G2cSbYWmAgqS0lW9Ln6z/hrci/4hk30BABOjUOK70xc0Xcw6HP5w0y+UqIbKl9UhjKaqsIZJ0C7/uit0MmUPWI7nrxlWyUBTjripWWoFsMegM/WWxrOPmj2xI7kIv19ms9gCGHX/0pn5FBHwXR2a+JRKlu+vPqaD4oT4tRwkztrOB8GtoHdG4GkLCgaucXakBrfujeiK6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(136003)(39860400002)(366004)(346002)(376002)(451199021)(186006)(1800799006)(6666004)(478600001)(110136005)(66556008)(66946007)(6506007)(107886003)(26005)(54906003)(66476007)(6512007)(6486002)(9686003)(4326008)(966005)(30864003)(316002)(2906002)(41300700001)(33716001)(44832011)(82960400001)(8676002)(5660300002)(38100700002)(86362001)(8936002)(83380400001)(21314003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info:
+	ND57KDUzqRID6DrDW/yhZJDTGVi0nNAKSnvzcb2gen0bXvKKjJ5hJZuccsEGZ2HJ7pgbpdF/4YZZ+y29YtEKoQm18plbgIUiW+bsrJiLntWb1gt119U0fNdDt6Cx9oCnE7zAcOhMM3CnS+IuVXbmweMohSi9KoNjWjTCcMFTNHF3Jabyt3t+jjXvlOtyBON3giooxcb0qhM2oXJpFyzovW2kOfL7fbGeCr9qOjcPAMSMHgMslIe7WgKdvQUx4XZ7KLEVPY2G6qYB+Gck+4S9Ni1QY5NNX2tcHO76RzsqeYod9S/ohgBR9saMXyn/xUyU62XuVm0LsApIFFjlFGq96h2D/BhIVdrCOJ/HUWsjxEMrFUzgo+oKR3IphmQ7067/HvqXPtBoAmE6PQc88Cm8g2W1A62qy9y8l5Mk09dVCwWWGSzs5gxHqt/8eCI63vKRKSwGZpkIAh+tIAzF7/DJD52jh800ZWcPIhoKKHgnKZ3QzaA1OvFB1h3fkjHF9rMVKk8LdZb6HA8otoRDY/t62odHn9BwTSR9+g+B65N3iJ5lSOVSZYbCUkoTlPRi4H53QIWDAVHZBTeGeOG/MSDjn9CAF0P18YoOponvW4bVW0EF7DGhA1xTQKvEpW/rVlcFWwdMJrw70+3UXxDkWg6Tug==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(186006)(1800799006)(451199021)(31686004)(316002)(41300700001)(4326008)(38100700002)(110136005)(8676002)(5660300002)(8936002)(66476007)(66946007)(66556008)(2616005)(86362001)(31696002)(6512007)(478600001)(7416002)(6506007)(6666004)(36756003)(2906002)(4744005)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d4nO8FxrKMB6HftNB5tDrFzs4GJNVnC3Ez+67aV9QxypCQavK3IDLtUAlAwY?=
- =?us-ascii?Q?KnPoddfnPSNL67aDFJapo7Q1J8yaKBbPfDicswQVlAWeOLbQNurCGgF9+u2h?=
- =?us-ascii?Q?lvlWYYbyvQGhy8WC+tpVEUju29cf6v4Hhbk8ScG1F1ZSpOZjn34jKpUWPL7x?=
- =?us-ascii?Q?IsOksvcJAwLw9ZIN2/zMdd/I5IME1rJ7+5HtcCvlJfRPlBHIPwywZM6aRJIR?=
- =?us-ascii?Q?OOUjzNY1sHnpzPJePIf3OZX5YOI8Eu16WwhK9rMYJsFoohLNjOF4AC8+1cHf?=
- =?us-ascii?Q?b4696HZ8fXvoCyUPvx0HWyEK2EV8nRK9Nwyp96c97TS2nNYxGHq4/2KiEq8v?=
- =?us-ascii?Q?EwAAxzS92joTdazCQYwlzxSKhVKww+Kc0TnH4yBKxB6HI1efukRMxhRztMF9?=
- =?us-ascii?Q?uj6LfR+yHr5QHRxFOVVNpg5CvYrU84M7gT66KXcvSKaqDUpYlqtloby7yOhC?=
- =?us-ascii?Q?aNX6DmHJRCG4ZbDX7ka7EDCO300fTEugSa+KYTfRnzAlGgfPSI/ERRGowEuB?=
- =?us-ascii?Q?UIhb1qS+/JxDC1N1InvTaxO+qWkjpYHNF4cbk+5Wl3Rz9Td71FE+wiiLPzLB?=
- =?us-ascii?Q?E1Y59LdJAdDz06UaS9xdTJNIcSPC7DF5IRBfUl7tXSIGrJbhCsRu8Og0zf8k?=
- =?us-ascii?Q?euPmjAuswa2w7u7ejVB7QVZaF+shsy1duKsYlbC/CEWK8z9v7oRgee9jEvDg?=
- =?us-ascii?Q?QFE4r9i6AkxbhCRZnUwgd+rC0mwhGAGSLiiVk3QwBCfy1DgolHZNWHcM/2Y9?=
- =?us-ascii?Q?2uUI/h/4g9xIjE+X/D0QVTh+mFaDWtfBtHJDY4fUEzPuYzjQSGdbzUBIUJpB?=
- =?us-ascii?Q?No3BgJYopFTkaKZE0viV0pvNHuy4MKoFqRkvGtEiEzeAOELKaFUQFp/mvC97?=
- =?us-ascii?Q?ATO3AhKkuCaazm2hMRn8jCswpqNH+PaPA2rX62jKNsxnKTLufGA3NidjqFDd?=
- =?us-ascii?Q?2VTwVh9QWLkfp/WWbXpuuKt1JBsM4aVkbIanmiL4NV+2l6HgXesldsDAaKwh?=
- =?us-ascii?Q?LTVE8J4fO7MwuanC5nBkrjtcUNkMHu2silQANB7b+uYR6q5J0hCgvGYfK3R/?=
- =?us-ascii?Q?1nQu1/UkQcn4ClkFjUO6I6sZwNs2md2L85+DNfytXXnkQU9ItYrl9YIfS8Gk?=
- =?us-ascii?Q?uaDWTfK2o0uxw2UVfSRUNTdLUPSi2sTVFIlFfLgh+DUqUj8UjF9K1PpnarFE?=
- =?us-ascii?Q?wtIkP7l3XReHpkOT9vrdA+cbtQSs1KIbW8OHJKPt7ZMfgMYqK3hIR7JRPZjO?=
- =?us-ascii?Q?j1Hg/oTCrHylxEmN8HOVnRTGTSUTAp2bDR+zBEnQSl/1Z/jyeteoF3WVui0O?=
- =?us-ascii?Q?nrNicQCPW/8ycMJmaMsL/BMjVnPihSITrpFeyuNavde5amtIYKCfenn1uMvr?=
- =?us-ascii?Q?kOz0GYoKdUhO5pTfKhJiYy5tV1ZEIYsFcgzQ41c2m8ZjUjP1UZ8thIrZCW21?=
- =?us-ascii?Q?pc2nN2qsnlYNM87qsoRtJGY6Octl7nyW0uhQvMFY0k6J9BzhxrKYx3fc7U/P?=
- =?us-ascii?Q?QFhV4KRecdOCJnHUHsZ5re9m8K+ZG3N/H/9FKAYdJI2gvAljAHT8Sobdi/cO?=
- =?us-ascii?Q?AfbmMKiawfNeipGqv1Z72lWyPuBEnjTfteYAZZfh?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a06d5b7c-e0e6-4261-5317-08db996ca0b9
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cXFlcHJHM1RJenFTbGRUYVAwdlRWcmJJM1ZqNlpaUXdiYUVJN0dzeTNpb3Rh?=
+ =?utf-8?B?elNKUG5CL0p0WXgvRDA3MXdmbVhOOVVpT1pLMW9UbThoUHV2YjArdC8zdWVP?=
+ =?utf-8?B?Q2h6UHJwV3IyZ3pWQVEwMFgvUzExUHd4UTRxWEFUZlNFZnAwMFZQRHRjNW5n?=
+ =?utf-8?B?UzFJVXAwQWk2KzJuS3dxTE9hajRnWEVWUG5CWGhpajJkTFdDcW9odnY1Q2xF?=
+ =?utf-8?B?Z1ZMU0hBM3RRVVZ1WThBVU5VdWR0UlR2SHl0aW16VlljZFYvMFgxK0d0bTNz?=
+ =?utf-8?B?c09MWWRiLzNFZ3JxMkdGdDNwb2RJaFNROElCZmt4U0phT1JnZ2NEMGtYUUxm?=
+ =?utf-8?B?dnhFRlE2cXkzZkdwNGRvY0E3YkpZK0ZMWG5MdzBwYndJS3RtY0R4ZUMzc0RO?=
+ =?utf-8?B?dm00NzRZRVF4aVJYbjlmZ2ZiQWt5aXA5K1FQSnBkeGd1SWtZOVNuQzgzSS91?=
+ =?utf-8?B?UjByTnNLV1pzVTdNSVlLK3BjMHpVMkhhM2tVWjlJOXNFSnRhS3J5M3VLT0xY?=
+ =?utf-8?B?alBuNThXTnZ0M2ZFMk1FUkthcGdRVk1oMDNPa3B1eW92Wi9oUUtMN0dqMi9k?=
+ =?utf-8?B?QnhCVk5kRzIxc3ppZEFXd2ZiV2J4M2lURnVKeGd2MHBXUWgraUZTTDZGcXlw?=
+ =?utf-8?B?aEduMWczK2laYUtLR2dYRzZxRXAvVUVBYXNaaWZVZTc0djlyV2hpVGJBdGlS?=
+ =?utf-8?B?U0ltbDdobEIxRDM4ZkEvUEVuQzVOWlQvajFBSnhBcnZuU1pTRTZLdGxubHZW?=
+ =?utf-8?B?TXZkUG5lMURoS2sxYjgrMzVrZTBtdzNrUDlycDBjMzZ2U1lmbHVnZmNzeHN5?=
+ =?utf-8?B?eGtsb3l3dXZyZmtPcGhjamQrR2JwRnZWZTU5cktwV0UzUEw2ejVoZXZMeWZF?=
+ =?utf-8?B?S2JMeFdlN1krR1lTbDN3QkRuZHBRR0Y4ZU53YXBUOEwvQko4dzBxa0hvM1hh?=
+ =?utf-8?B?V0FQcGVNbU1MYUVTeVgweldma1JQcHB6OFpwY05EQ1ZIeldFcVZSVTBic2dP?=
+ =?utf-8?B?YzZDUkV0b1A4V0hTQnRPMU9rSk9LUGxPQzRJVkdMVXZKM2NXc0k4MzBHOXdP?=
+ =?utf-8?B?akFIVEc5OGsrYTBjRlhwclpEVEE1ODh1ZUZZR3NjQWJkZ2tKS0dWVlZldEpk?=
+ =?utf-8?B?Sm9Oa1FSTmRRcTNOQjNvaXRpRUZxYWl5Kyt0bkgxNkJPSE9PWVNyTU9zTWpr?=
+ =?utf-8?B?cEd2NEhJRGNSOXVsSEdRUzc1VVZqNmI2b2hDTHBycm8yQmRJcFNxMmFTSUox?=
+ =?utf-8?B?Y3hnWisvRElHR0FmaEczSVZXVjROeWdjenFoeVJSS3Jsc2tPMG1jeCtkWS9Z?=
+ =?utf-8?B?YnpxSU8xWCtITEVOTmkxcjlvbmFxWTdpTmxUZk9DS0l5Zi9BT1ErRGlIeEc4?=
+ =?utf-8?B?M3pYZHFvcGFUdDJaeUJtYkYwWTFSRVBYUVA4ZC8reGJVNFN1SWpWSGlGSXF4?=
+ =?utf-8?B?M1hMcHZieXJ2NGJaUERnUUx3RHVUS0t3RlFWNDBFbXVhWDBac244c0FpOENp?=
+ =?utf-8?B?NkxpWi9ZZGQ3cC9mdXE2L05mOGFjK2FFVnU5a1crdVZ2WDVRZ29aeDhFbUYz?=
+ =?utf-8?B?elFsSE4xckJndG9PQkJBeFNXQWdaTitDbG5HVVVXRDJqRUJaL1Y0RW4xeG1z?=
+ =?utf-8?B?dks2QXZ2WWpXYWJkYllzbmtBVjlQZFJ2ZFJFakU0OFowbThyTDhlbWwyUlVq?=
+ =?utf-8?B?cHBEQVlYd0NDSnRXUEJKMGNTWi9yb1ExeTVWc01KdUJWakViM3N6K1hPVVVS?=
+ =?utf-8?B?WWl0dWhJQlR5UXRPZkY0WGRvVVg4RUhYVjRlalB3MnhpTE1ncVpqWDdPY2ND?=
+ =?utf-8?B?bUVEVmFESVhjSVpxWWZncVcvcEh1eGpWcDdzZk12VDZLNDRtczlQSGp1UkVj?=
+ =?utf-8?B?a0xNSE02a3hLSmQwdGYvb3M3TnFSOGJ4UVlhMG1xK01UVVdyYUN1QTAxeGhK?=
+ =?utf-8?B?WUJoYlRCSkx5NjZ4VTgwQVJaZUNOc2ZIeVE0MmtZeXVVR3c1SDZyQTN4bzdh?=
+ =?utf-8?B?NGZrMW1Sd3YwT3pjUUozbUFNUndGWXdzUmsvYUNDaHV0TlhtNUtBbytkaDFF?=
+ =?utf-8?B?Tit0WlE2L2drVC9ZU25IRVhLK0pwUDNrSVpwRDZJYnFXMWpBUnR1Mi81S2o4?=
+ =?utf-8?B?d1Y2QXR3MTU0dHUvN0J3aTZBdFhhMWM2M0FzZmJxa2p0d2NpKzRHaU00b0Ex?=
+ =?utf-8?Q?C+if9zknvYajGQsylIpu8sAfrYOGLk85ola59nfm12Gs?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06db5ac5-a2e5-45c4-7aa0-08db996dc38b
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2023 06:40:04.1152
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2023 06:48:11.6475
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7yt8r9Kj3feqiQLkdBrIAGhVqverq0+XjGh6HB2MCDMuAUFTlD/sbxFEPKkXTDybMo9Y1O7d5vVSb4C/EQExhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5544
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: 40RRlXFxWyV44ymvOiy/AurI5+/itT5l3/P8H+2+qv6TtdXoO6udURdwrufDIYw9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6487
 
-Hi Nathan, Hi Nick,
+Am 10.08.23 um 08:40 schrieb Boris Brezillon:
+> On Wed, 9 Aug 2023 08:37:55 -0700
+> Nathan Chancellor <nathan@kernel.org> wrote:
+>
+>> Hi Christian,
+>>
+>> Can this be applied to drm-misc? Other drivers are starting to make use
+>> of this API and our builds with clang-17 and clang-18 have been broken
+>> for some time due to this.
+> Queued to drm-misc-next.
 
-Could you kindly help to take a look at this report?
+Sorry for the delay I have been on vacation last week and haven't yet 
+catched up to this point in my mails.
 
-Quote Tony's comment:
-
-> It seems that some/all of the combination of CLANG, ARCH=i386, and
-> building with CONFIG_XXX=y rather than CONFIG_XXX=m makes clang freak
-> out.
-> GCC seems able to build the files in fs/resctrl2/arch/x86/ as either
-> modules or built-in, x86_64 or i386 without problems.
-
-We re-tested this case and got the same result as Tony's. GCC can build
-this without problems, while various versions of clang (clang
-17/16/15/14) throw this error. Could you help do a quick check to see if
-necessary to track an issue? Thanks.
-
-Best Regards,
-Yujie
-
-On Fri, Aug 04, 2023 at 06:45:45AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git resctrl2_v65rc4
-> head:   36621209814f9810feed9af60d278a198847c117
-> commit: 36621209814f9810feed9af60d278a198847c117 [2/2] resctrl2: Arch x86 modules for most of the legacy control/monitor functions
-> config: i386-randconfig-r032-20230804 (https://download.01.org/0day-ci/archive/20230804/202308040650.ayL6ExhZ-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce: (https://download.01.org/0day-ci/archive/20230804/202308040650.ayL6ExhZ-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308040650.ayL6ExhZ-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: warning: '__cold__' attribute only applies to functions [-Wignored-attributes]
->    module_init(cat_init);
->    ^
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/init.h:243:6: note: expanded from macro '__define_initcall_stub'
->            int __init __stub(void);                                \
->                ^
->    include/linux/init.h:52:41: note: expanded from macro '__init'
->    #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
->                                                    ^
->    include/linux/compiler_types.h:104:34: note: expanded from macro '__cold'
->    #define __cold                          __attribute__((__cold__))
->                                                           ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
->            __unique_initcall(fn, id, __sec, __initcall_id(fn))
->                                             ^
->    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
->            __PASTE(__KBUILD_MODNAME,                               \
->                    ^
->    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
->    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
->                                                   ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:15:1: note: expanded from here
->    rdt_l3_pseudolock__215_569_cat_init6
->    ^
->    fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: warning: '__cold__' attribute only applies to functions [-Wignored-attributes]
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/init.h:244:6: note: expanded from macro '__define_initcall_stub'
->            int __init __stub(void)                                 \
->                ^
->    include/linux/init.h:52:41: note: expanded from macro '__init'
->    #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
->                                                    ^
->    include/linux/compiler_types.h:104:34: note: expanded from macro '__cold'
->    #define __cold                          __attribute__((__cold__))
->                                                           ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
->            __unique_initcall(fn, id, __sec, __initcall_id(fn))
->                                             ^
->    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
->            __PASTE(__KBUILD_MODNAME,                               \
->                    ^
->    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
->    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
->                                                   ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:15:1: note: expanded from here
->    rdt_l3_pseudolock__215_569_cat_init6
->    ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
->            __unique_initcall(fn, id, __sec, __initcall_id(fn))
->                                             ^
->    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
->            __PASTE(__KBUILD_MODNAME,                               \
->                    ^
->    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
->    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
->                                                   ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 8 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:28:1: note: expanded from here
->    rdt_l3_pseudolock__215_569_cat_init6216
->    ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: incompatible pointer to integer conversion initializing 'int' with an expression of type 'void *' [-Wint-conversion]
->    module_init(cat_init);
->    ^~~~~~~~~~~~~~~~~~~~~
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^~~~~~~~~~~~~
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^~~~~~~~~~~~~~~~~~~
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^~~~~~~~~~~~~~~~~~~~~~~~
->    note: (skipping 8 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:28:1: note: expanded from here
->    rdt_l3_pseudolock__215_569_cat_init6216
->    ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: expected ';' after top level declarator
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/init.h:280:35: note: expanded from macro '___define_initcall'
->            __unique_initcall(fn, id, __sec, __initcall_id(fn))
->                                             ^
->    include/linux/init.h:209:10: note: expanded from macro '__initcall_id'
->            __PASTE(__KBUILD_MODNAME,                               \
->                    ^
->    <command line>:9:48: note: expanded from macro '__KBUILD_MODNAME'
->    #define __KBUILD_MODNAME kmod_rdt_l2_pseudolock:rdt_l3_pseudolock
->                                                   ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:15:1: note: expanded from here
->    rdt_l3_pseudolock__215_569_cat_init6
->    ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: redefinition of 'rdt_l3_pseudolock__215_569_cat_init6' as different kind of symbol
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:15:1: note: expanded from here
->    rdt_l3_pseudolock__215_569_cat_init6
->    ^
->    fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: note: previous definition is here
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:15:1: note: expanded from here
->    rdt_l3_pseudolock__215_569_cat_init6
->    ^
-> >> fs/resctrl2/arch/x86/l3_pseudolock.c:569:1: error: '__initstub__kmod_rdt_l2_pseudolock' causes a section type conflict with 'init_rootfs'
->    module_init(cat_init);
->    ^
->    include/linux/module.h:88:24: note: expanded from macro 'module_init'
->    #define module_init(x)  __initcall(x);
->                            ^
->    include/linux/init.h:316:24: note: expanded from macro '__initcall'
->    #define __initcall(fn) device_initcall(fn)
->                           ^
->    include/linux/init.h:311:30: note: expanded from macro 'device_initcall'
->    #define device_initcall(fn)             __define_initcall(fn, 6)
->                                            ^
->    note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
->    #define __PASTE(a,b) ___PASTE(a,b)
->                         ^
->    include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
->    #define ___PASTE(a,b) a##b
->                          ^
->    <scratch space>:18:1: note: expanded from here
->    __initstub__kmod_rdt_l2_pseudolock
->    ^
->    include/linux/init.h:154:13: note: declared here
->    void __init init_rootfs(void);
->                ^
->    2 warnings and 11 errors generated.
-> 
-> 
-> vim +569 fs/resctrl2/arch/x86/l3_pseudolock.c
-> 
->    568	
->  > 569	module_init(cat_init);
->    570	module_exit(cat_cleanup);
->    571	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
+Thanks for taking care of this,
+Christian.
