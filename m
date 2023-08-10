@@ -1,43 +1,43 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803511D2FE
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 10:47:56 +0000 (UTC)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5236a9788a7so987382a12.0
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 03:47:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA0E1D2FE
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 10:47:58 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4fe2d152f62so1154777e87.0
+        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 03:47:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691664474; x=1692269274;
+        d=linaro.org; s=google; t=1691664476; x=1692269276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=wdCk7OUtlyVla0geNv76Vk4CNU64Mjej9PSyuuwP9Mg=;
-        b=cq1kU20nMj6zkP5dpHC0Hptq8NDMOxwqXMIyqFGDLtXHdhylP/8FUA5sLq0QpIHQIn
-         R6aRN019gA0L336WxdmXNVzP9H5PB795+pAKYjntNoFZwliERBALI2KEdPDDN4h7yJ7k
-         /wNGeKxG5ZUdAKtmwd8Uql/mAj42Wkd4FeXd2mE1g6+aCRY0H/Xydvfx2LngX62guhQf
-         Q3Z92vB+nZf827DmAqmBMJJSv+FPrc1lHcIoILW7T4qVr2jlt1WlRwYv9JKmis44Xg5e
-         rzrcwyp8+z1Pk2cZktUcFxabe/SEpMY1Ukio/T9ZiJOfp3w6zfgY3FbqF8SAGFn+Ty6n
-         R/1Q==
+        b=zfeXdylhcEBVDrqAny1SLIvN9Crr5v54nzF3ZLf3W/Eif1dNWT9wNlCKgPCQL/o0/E
+         iYzjBPH3863DIk4aENP9BsmFOE0Y+EpLU2SlozYtRxJb4GQaDpNAA33nYUQsy3M2dVsT
+         OpxZyOWl5CCCLP6aJa0vYV6RmTQxA+wi4TcMmhitHOdEobpn5o5vLFCXEirr7/Qm+DMr
+         G5Rpk7tIg24B9EHXKP/uHgwg1ZuSYKfYQmoOFP6aLTRJty/VCoAZStEIc29/gNuUHg5E
+         VwUyx6TO9alL/BcefRo7HnARKktyocMZXCzb007Et2yQXMf/XrlEBt21mzzwDFc17QPK
+         ar7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691664474; x=1692269274;
+        d=1e100.net; s=20221208; t=1691664476; x=1692269276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=wdCk7OUtlyVla0geNv76Vk4CNU64Mjej9PSyuuwP9Mg=;
-        b=RxlTVN2DocHNmfqMXV58WvyG2ID88ZJYvZGX18LFFyTnqiVoYC0hLgNIRy7ElMwU7E
-         LZkLe3wrjTCxBBNK894h3Z6SdLOs0q4YsjxLwJD5nEmmD8SwNjgCvi9CO/Gel8z7KWzh
-         ADcthH/WLpVIlymygmGsY6axjyPKjGaiY8Yu8Et/HYTJTuX0Hishvsik4/P/ZGekerSO
-         eSVnHSN3w7a7zoxSMdFUiQ1rM6tvJLhG4+5uQDS5fGyvPWJ5R+99iwL3Tc7Zv7BN6LpW
-         LK4Gfqt+jjDbelW9vKL4QYBWJjfvqTmPyd0VPik7jZssMlWXzZhq1PBRYrvX6BMS7wYC
-         1EWw==
-X-Gm-Message-State: AOJu0Yyd5HNuHYh0kzG3uVDfYc9Js9ynKUBeLZxsXbZXVhGrF2AtYeKD
-	sZ6ovdA/SyN57AWLuH3kaXKKKQ==
-X-Google-Smtp-Source: AGHT+IEnAtHjVByssGhPTqQELF84XSx5/0DHEL7BVsY09r1D07osAN5bMweLFHfpBNKn1GaFZacbBg==
-X-Received: by 2002:a50:fb91:0:b0:523:102f:3ce0 with SMTP id e17-20020a50fb91000000b00523102f3ce0mr1833711edq.21.1691664474683;
-        Thu, 10 Aug 2023 03:47:54 -0700 (PDT)
+        b=ciZ1EVM7ne05UptOptPyJHO2vqPsXQsrIqNCw2IUUCvriY3js3noRUhOoWjIhseXgE
+         OLP2zDoeH0vyz/Gz6SLRB48IPZtXZ2K7M0xR8VuiE+hreBz3rEOZq8bawKp6H6QjitbY
+         Z1smNvA4dvLSsia01Y7ZgrYVBxxhwX6Q0abRB6Mb60WgKjKl4RkDSHf6TprJwNfvaeXk
+         spPLo+C+5h6CIYb9ZUNxl+Irhy7V1b+W2UqJ1Z17Jeri8qBxRXvivp69gPfPHdRxmo9M
+         0duXOTOtlG9GaRO+AMEqZsmio2WdH2fsQwb9vE6UnbdfsLhCOgUHsKqRKOSJE+7iYmOX
+         +MVA==
+X-Gm-Message-State: AOJu0YzP1BzFOUe/dGGFnNqw/qmegFqvI2duM6dOCA3vTdkeH/kOYym2
+	AprJ6MnISNZrtjBqTgvRQntGbA==
+X-Google-Smtp-Source: AGHT+IER0Z61HNUztY8QpmTryefpq33DBRiWMkpaT+UcHCgK4QowLfvk76l0MXCWns6xcZPsgfbbnw==
+X-Received: by 2002:a05:6512:4013:b0:4fe:c6c:ac95 with SMTP id br19-20020a056512401300b004fe0c6cac95mr1693259lfb.35.1691664476514;
+        Thu, 10 Aug 2023 03:47:56 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id x20-20020aa7cd94000000b0051dfa2e30b2sm653854edv.9.2023.08.10.03.47.53
+        by smtp.gmail.com with ESMTPSA id x20-20020aa7cd94000000b0051dfa2e30b2sm653854edv.9.2023.08.10.03.47.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 03:47:54 -0700 (PDT)
+        Thu, 10 Aug 2023 03:47:56 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Liam Girdwood <lgirdwood@gmail.com>,
 	Mark Brown <broonie@kernel.org>,
@@ -55,9 +55,9 @@ To: Liam Girdwood <lgirdwood@gmail.com>,
 	llvm@lists.linux.dev
 Cc: Andi Shyti <andi.shyti@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/4] ASoC: codecs: tlv320aic32x4: fix Wvoid-pointer-to-enum-cast warning
-Date: Thu, 10 Aug 2023 12:47:44 +0200
-Message-Id: <20230810104749.164827-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/4] ASoC: codecs: tlv320aic32x4: Fix Wvoid-pointer-to-enum-cast warning
+Date: Thu, 10 Aug 2023 12:47:45 +0200
+Message-Id: <20230810104749.164827-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
 References: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
