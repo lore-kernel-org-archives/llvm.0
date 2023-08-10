@@ -1,90 +1,69 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485611E1A2
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 14:43:57 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7D6AB40E01A1;
-	Thu, 10 Aug 2023 14:43:55 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id aLHMl40-ushH; Thu, 10 Aug 2023 14:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1691678633; bh=ArANne49dbxlITExbmt0RFdovHJvV5KiGYWWtf+AXvQ=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293EE1E1A2
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 14:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B7D5C433C9;
+	Thu, 10 Aug 2023 14:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691678694;
+	bh=U7AHW5DtWbmAG9Eg70mB7kcvRN4oEw4Uh2afJWCAUTI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HJ84YJBdNJOsIe+5ijOAb2er/oeG0LLswEeXg7BiXbyBFGIU3dYNzjJJVVNd6qmy8
-	 aKfpj44MXC79QZogRJod9zDQQeH3QYWcp2WEqnMNI19kQrYE3Bn8zZ9u1i4/6Yjxvu
-	 zW3Vt/KFKe+uZ9oqJmkLU2KfQh7RvCsX4rop99vc4zJeELFm9LBy4UrpKN7OA8nHWU
-	 F6B+Ep45EowlGuGeba4JQnDwJbdpdKaMfosJymfQOGfvJj2C4SFa3VsFhXhaubS488
-	 HbZ5alq7EQ4+b03+xR9RZXmXG1ERz8h+SQSOCkci6gHM+NhvlAC5vbjkHopElCcA/F
-	 kYftPd48jrFc096fOOuIJyGHAVY0lHB6JocE7tCK2AvqMYgTh/XKnUfs25yaX7CBXK
-	 hzCnY9zLJkHxnSS7bnO/Umq93+0Y+ZquKWYo7QHTwIixPK0CRrpageMTOZmN/hph50
-	 cSQGLoU7KEAf51oFWi6m41gDA5r9m4YevG56ZC6zJ7NofVRGpRw0KiaTNaxEFIIYxN
-	 ClK6hiTiwiKTkj7b766OJERD/tu1ckw/mA3FZK4YfiVQhB2Vu6pqguGCqmFRoVQ6At
-	 +iMc7E9gQLyEqEtaNHuXrz2Ce+I8tAd78vrMBmfx9AN5OL7SryIJke9vaMh7l7umV2
-	 Rr81vziKIOSCsrIEyhtrU/7w=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1C0F040E0140;
-	Thu, 10 Aug 2023 14:43:49 +0000 (UTC)
-Date: Thu, 10 Aug 2023 16:43:44 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: Hang when booting guest kernels compiled with clang after SRSO
- mitigations
-Message-ID: <20230810144344.GLZNT3oM6MLVdzGlyd@fat_crate.local>
-References: <20230810013334.GA5354@dev-arch.thelio-3990X>
- <20230810081038.GAZNSbftb6DOgg/U7e@fat_crate.local>
- <20230810090835.GBZNSpE6tCw+Ci+9yh@fat_crate.local>
- <20230810101649.GA1795474@dev-arch.thelio-3990X>
- <20230810125122.GIZNTdSuFvA3Cjfexq@fat_crate.local>
- <20230810132706.GA3805855@dev-arch.thelio-3990X>
- <20230810133216.GKZNTm4KpohRR4gVsT@fat_crate.local>
- <20230810134056.GA130730@dev-arch.thelio-3990X>
+	b=VyaKpQ2+7cui0XWCAAhqdAd+VGbWec7bzimuAwAjPgzEFN63rEAeDsZZdIWCS8pJo
+	 pBDMGxn7/3SG9+wcDy3QkA77PM5h4+w+nhNNV/DdvUebflEYS0/G+zPZmoVrMDW7ID
+	 b0oEIcFtoHFOVY4ileOspjUBbzcxg0iMxQlGtv1CQV1FH8rs9Ph3vOpPR8n9ph22Pa
+	 EG1ybYbPodLdCB9lKN+8vsxuslM5fAaPiCIJ47zgIU2T8sZZt5KQEQdrnT5uj1fTmZ
+	 o/8PoBnNCHWAT1nBClRKzpSy7HRaKEzjTGZJnf2EGH9DfTSP0e78b/F1+/V7Al6Bpn
+	 G5Y9257lvrD1w==
+Date: Thu, 10 Aug 2023 07:44:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Justin Stitt <justinstitt@google.com>, Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] i2c: i2c-bcm-iproc: fix -Wvoid-pointer-to-enum-cast
+ warning
+Message-ID: <20230810144452.GD1549244@dev-arch.thelio-3990X>
+References: <20230809-cbl-1903-v1-0-df9d66a3ba3e@google.com>
+ <20230809-cbl-1903-v1-1-df9d66a3ba3e@google.com>
+ <20230810085632.xzonkmse27mu4yew@intel.intel>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230810134056.GA130730@dev-arch.thelio-3990X>
+In-Reply-To: <20230810085632.xzonkmse27mu4yew@intel.intel>
 
-On Thu, Aug 10, 2023 at 06:40:56AM -0700, Nathan Chancellor wrote:
->   6.5.0-rc5-00039-g138bcddb86d8 (nathan@dev-arch.thelio-3990X) (x86_64-linux-gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1 SMP PREEMPT_DYNAMIC Wed Aug  9 17:34:43 MST 2023
+Hi Andi,
 
-Mine:
-
-Linux version 6.5.0-rc5+ (root@vh) (gcc (Debian 10.2.1-3) 10.2.1 20201224, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Thu Aug 10 16:13:54 CEST 2023
-
-...
-
-[    0.083541] Speculative Return Stack Overflow: Mitigation: safe RET
-
-> Guest kernel string:
+On Thu, Aug 10, 2023 at 10:56:32AM +0200, Andi Shyti wrote:
+> Hi Justin,
 > 
->   6.5.0-rc5 (nathan@dev-arch.thelio-3990X) (ClangBuiltLinux clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6), GNU ld (GNU Binutils) 2.41.50.20230809) #1 SMP PREEMPT_DYNAMIC Wed Aug  9 16:54:33 MST 2023
+> > @@ -1036,7 +1036,7 @@ static int bcm_iproc_i2c_probe(struct platform_device *pdev)
+> >  	platform_set_drvdata(pdev, iproc_i2c);
+> >  	iproc_i2c->device = &pdev->dev;
+> >  	iproc_i2c->type =
+> > -		(enum bcm_iproc_i2c_type)of_device_get_match_data(&pdev->dev);
+> > +		(unsigned long) of_device_get_match_data(&pdev->dev);
 > 
+> I think this should be uintptr_t, as defined in types.h:
+> 
+>     typedef unsigned long uintptr_t;
 
-Mine:
+Yes, that is a valid comment, although I will say that I have seen some
+developers/maintainers prefer 'unsigned long' over 'uintptr_t', so it is
+really a crapshoot which one to pick :)
 
-[    0.000000] Linux version 6.5.0-rc5 (root@vh) (Debian clang version 14.0.6, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Thu Aug 10 13:22:30 CEST 2023
+> (I'm a bit puzzled to see a void *data cast to a 0/1 value.)
 
-Guest and host are up and running.
+It is an odd pattern but as far as I understand it, the kernel uses it a
+lot to pass platform specific data around (just grepping for
+'.data = (void *)' shows a lot of instances.
 
-There's something else missing.
-
-Your host gcc is 13, maybe I should update...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Cheers,
+Nathan
