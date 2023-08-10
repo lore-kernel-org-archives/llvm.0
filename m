@@ -1,94 +1,72 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3517D1E1C0
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 17:26:59 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 8E20E1F45B;
-	Thu, 10 Aug 2023 17:26:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1691688418;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sTBWbPbXMOVYOXKs1knmD/Ua0aninMPvw3zHQajoZoM=;
-	b=EAJv1GifSX55JIxLJWRtpi1/vGB70r+PtQKBuuHRDZtOVCgY/3Y1TLzbhhvX4yxNfgPOHe
-	UyOPa9cyLLiX53uE/o0shQkLnqTGjqg6FdpH6HoS8qGCbQwoTACc4RdswXGbuxgZDbKZsH
-	/0aHFWHKji81ooFw28y8MdDqX7l4hoU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1691688418;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sTBWbPbXMOVYOXKs1knmD/Ua0aninMPvw3zHQajoZoM=;
-	b=eyCzHc36a4VL1ccd4dA90gNeJ6TnT/f8zB2OtdrWSK7TMmHi1PBlAF0Bxq8KhSm90XI1GO
-	+GoQgZrDHAC1UdBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4824F138E2;
-	Thu, 10 Aug 2023 17:26:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id QLGOEOId1WSGUQAAMHmgww
-	(envelope-from <dsterba@suse.cz>); Thu, 10 Aug 2023 17:26:58 +0000
-Date: Thu, 10 Aug 2023 19:20:33 +0200
-From: David Sterba <dsterba@suse.cz>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-	kernel test robot <lkp@intel.com>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	Qu Wenruo <wqu@suse.com>, Anand Jain <anand.jain@oracle.com>,
-	Filipe Manana <fdmanana@suse.com>, linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Arnd Bergmann <arnd@kernel.org>, linux@leemhuis.info
-Subject: Re: [PATCH] btrfs: remove unused pages_processed variable
-Message-ID: <20230810172033.GK2420@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230724121934.1406807-1-arnd@kernel.org>
- <ZMBDWbHiJVOt03u5@google.com>
- <CAKwvOdm9CS0FRrWA9LaWw74enydbTMFUk_WYWXJvNxgLwQBzOQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D54320CB3
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 18:43:01 +0000 (UTC)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3fe2048c910so11017385e9.1
+        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 11:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691692980; x=1692297780;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SdKouwlT/oGIo6LiqvsGWbbls1AGv3uLOH1vnufr9x8=;
+        b=oV8U1Ycd24HVmZnohFnkQmWKmGg4biBV/LAKF4bVcDXwWYqS4zrvEU0OGthGm/sLjE
+         O/fZ/orxxveE9C9NE9YPPm05xd5QKpMfITBvjD4x6ESBe0xQCGFFaDufMQE/uf9qHOum
+         Vg2mRl/k5u3m6H51m+6gpjskKLwYVCunlorEIGCw9G58IQzmd5fkQB4qCoodR9FwxaRU
+         CKvSuUCbY0Iro+y286MZRFcSsgL8pOyP+SDt2Mxun3zYlvhOG4qCfzH4V75PVcFJL2Kv
+         TwddvMqBbLxVXiLcfx7urC+YUIn+jGBqIZZ3i1emMEgUyVNMFpf/vUTJ1TemLn8UNv+9
+         iCUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691692980; x=1692297780;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SdKouwlT/oGIo6LiqvsGWbbls1AGv3uLOH1vnufr9x8=;
+        b=Wh/HK9l+puWEHs1NtOO6TUprEoVjtdngOPmKj6b7GY4CPco8bG1G6wIOpxg2tBXycN
+         gayctSvA8dubIIYIgc+fd3SoSZqLG5fRwW2CuPk+YSufbtOqHFWTWoB2tkrHrwhfkS1Q
+         3ANEvo3/sOTMlmM3vnCXsd6hhS21xWLiG9pQ1UUwqn56izUCGtvAPi5Hr5Oh3IvtHOkg
+         ghoGRXSEguSO+qFET8ye+k9SJFihepEK5bGGNLDJv1i1Q8lLhZuzFggIocxe+uCue0hO
+         6cDD1PsprE2LX1Dzow/4Dc9G5Az9MNjArE94Hc/vf/W4zv7STsEci/TqWKb2af9xILI/
+         Kuaw==
+X-Gm-Message-State: AOJu0YzLlxbVnXG6AJN+gStfv14gyLmUV1AvbEN63t6aMT7nrWAmkgGO
+	LWK4+GzRL/1CU+NIPpozu66ZAD0tghFQjfD5ASU9gg==
+X-Google-Smtp-Source: AGHT+IED2Ly4+y2WT66WMkUIU7qKftUG+xMNqKoJ7MinlsMHH0j1IJVgE0xbZn7OOFcOR4mUH90tJAV6k1Y1fSGSX90=
+X-Received: by 2002:a05:600c:2181:b0:3fe:45e7:1d6f with SMTP id
+ e1-20020a05600c218100b003fe45e71d6fmr2676148wme.21.1691692980051; Thu, 10 Aug
+ 2023 11:43:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdm9CS0FRrWA9LaWw74enydbTMFUk_WYWXJvNxgLwQBzOQ@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+References: <202308091820.0dPY7D6f-lkp@intel.com> <ZNN1WdZ5J/e5OPAt@elver.google.com>
+ <CAKwvOd=hgqas-kMxvOgviff43XBmwgERrfGi-ZO45DOcEuG_yw@mail.gmail.com>
+ <CANpmjNNjzeKyB7V7r73qW9zzqYeMEEK27pfFV9aBm6yfLjJeng@mail.gmail.com> <20230810100202.93059f4ba94e4400e9a63b39@linux-foundation.org>
+In-Reply-To: <20230810100202.93059f4ba94e4400e9a63b39@linux-foundation.org>
+From: Marco Elver <elver@google.com>
+Date: Thu, 10 Aug 2023 20:42:23 +0200
+Message-ID: <CANpmjNMDMmmbgvkHqDRurBmkdyMENDejfg+Vp+VHoO_Maaap0w@mail.gmail.com>
+Subject: Re: [linux-next:master 8173/8441] include/linux/list.h:53:13:
+ warning: '__preserve_most__' calling convention is not supported for this target
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>, Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Aug 03, 2023 at 09:45:27AM -0700, Nick Desaulniers wrote:
-> On Tue, Jul 25, 2023 at 2:49 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Mon, Jul 24, 2023 at 02:19:15PM +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > The only user of pages_processed was removed, so it's now a local write-only
-> > > variable that can be eliminated as well:
-> > >
-> > > fs/btrfs/extent_io.c:214:16: error: variable 'pages_processed' set but not used [-Werror,-Wunused-but-set-variable]
-> > >
-> > > Fixes: 9480af8687200 ("btrfs: split page locking out of __process_pages_contig")
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes: https://lore.kernel.org/oe-kbuild-all/202307241541.8w52nEnt-lkp@intel.com/
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Thanks for the patch!
-> > Reported-by: kernelci.org bot <bot@kernelci.org>
-> > Link: https://lore.kernel.org/llvm/64c00cd4.630a0220.6ad79.0eac@mx.google.com/
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> Friendly ping the btrfs maintainers to please pick this up.
+On Thu, 10 Aug 2023 at 19:02, Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Wed, 9 Aug 2023 18:00:32 +0200 Marco Elver <elver@google.com> wrote:
+>
+> > Andrew, please shout if you'd rather have them as fix patches.
+>
+> I grabbed it, thanks.
 
-Fix folded to the original patch, thanks.
+Thanks! This should help with more -next testing. But as a heads up,
+there will be a v4, which includes this but also because of the
+Kconfig renaming that Kees asked for. I intend to send it by EOD
+tomorrow.
+
+Thanks,
+-- Marco
