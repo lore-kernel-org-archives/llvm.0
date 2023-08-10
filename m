@@ -1,43 +1,43 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FAE1EA6E
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 10:48:01 +0000 (UTC)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-52256241c66so1575988a12.1
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 03:48:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC4E1EA6E
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 10:48:03 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4fe11652b64so1132864e87.0
+        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 03:48:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691664480; x=1692269280;
+        d=linaro.org; s=google; t=1691664481; x=1692269281;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UpZqgVo2zkbi2B7sOh6o48YWO5812KC5/SRbTNsfhC4=;
-        b=KMQ/zCzP8/TnQe3Wo6hhI2Ivi3DhHc4D2lLfGnt9ciA00FsL4hsZH4u87Vx04WxQ3x
-         RRedSie2gJxhgIafqOtTPolui5SRF7Ic4Vh/1ssUoRFIsFqtay8eJwiP2rP/GE3d5CyF
-         1U8Y8epFOGqz1GAfIaPLFw4D8jQ7FzptURDIlo29y/NLoTttT7zN4Y6JjqzQPpmgZ3DI
-         qkoSxsWbdO4WWARabNALqhZfBleorwPNeLZ6txLHzT3GrZ2hyPwlbJS1fKPvwSxXIh1h
-         MoL9oTYywO4hnzh8dJ90rVwUuNJGIvdY3mBw5BAQWHGNEzJ2+JwSpH+gwOi61e2xzoIM
-         byWg==
+        bh=qzMSq7HLSHN1HFLKAp83kiHFzC/dRhYUs++4UrDqaOA=;
+        b=UGqNEmNN1GRZd/cQPQ8BSIM/P3HO1mpPaFsq5qWJJQp/cf2hqFCbXFb+QeRHXLlMKG
+         7zasTTRuG7one9GfxqSB1uSZzw6Wy2owDcgscp2LVQ0ZEYKU/dIgcZ2X7SMvcCIuMvnP
+         fT+UGY1nG6W+GX8JH8DDyNGJS0INeWEZe/xIc7W7rVuY1LUon1MxyAMsMXy/QaIJnAs5
+         yOJES8JPBZNK0XFRdKrYta4LXxKYP8bpG35w5ltlkGbEGVbpp3kh+yoIZax3cM3SBv4E
+         PjezXo8hgAwGpuJ1o+WPULiVfbGjx4KGX4Oer/736Jql6eOYkB/sibEnHmDbRKKrJh36
+         Xrxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691664480; x=1692269280;
+        d=1e100.net; s=20221208; t=1691664481; x=1692269281;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UpZqgVo2zkbi2B7sOh6o48YWO5812KC5/SRbTNsfhC4=;
-        b=XOEu0sgT80uRt06Zrw8ZeDqiLw7cL3Bu04i6ZeIofPhkNHLvakuTduem0yqP8gvckk
-         pepsFV2JimnEmY2ZY1TaxaOii4LYN231Wx+6nPjGRUyHtXQwrShT+i/yhA/uOK5Y6gW0
-         ARUnUIC510MUQ6t/Y2jO4oX1zJ0f4m1wnytVhOulqjCBVLHLmDC5gwvU32NCOKcjO0pm
-         jNzrj6XakYx+bCC5gwY+5db2nF35QceRIOuYjFX13/msF0OcSlAfQ1azOsckMtNet/r4
-         Z8pZ1/T+CJ1C31vbrH3PwJMXvatwGRPvPBqP791xLqKVjszJcYb7mhLxXMu8y4vR1SPr
-         HODg==
-X-Gm-Message-State: AOJu0YwTQeeULtqk1bUU+fHf4/5MZarNsKIDbW0MYeVMX05urdSGtY8H
-	ZRGfjf1T0PU+AKi4GK9P0ASroA==
-X-Google-Smtp-Source: AGHT+IFqyvPfsZCXo/1EPc3mjODI47QAw0qLpl21vWUgc1bNs1yO0pXM9KolaKHhD7miC+E9pkUSwg==
-X-Received: by 2002:aa7:d343:0:b0:522:2add:5841 with SMTP id m3-20020aa7d343000000b005222add5841mr2074582edr.7.1691664479840;
-        Thu, 10 Aug 2023 03:47:59 -0700 (PDT)
+        bh=qzMSq7HLSHN1HFLKAp83kiHFzC/dRhYUs++4UrDqaOA=;
+        b=J40DB0dcnONqBeCnDsDFO1X5NkRXbIiD1qMZNVArYcoMEZBN7NZcaZyThH7x93+QJG
+         z5nzTtW4idsRTMEg9Kuvlhm7FrNGKSDvgxEOGCtNVv9LIuHeZ42rCqbV2kcvLzV4xCCV
+         5Wp9MC/G5MRdmH/Bqvmu6wKbVm1wzJFtOA6rn5JFtH6DXW/vTa17WRfpJCHcvTD83304
+         IcdICDNZ6IWVfmVGvzFk9i7ZSmj/jaCz4Und/FtniAzlAuQqMDnCUNWAA20Q8RpWrc/c
+         PQBPFRYenEaFJLxKSYGn8UMf+3x6ulJvHP23VmTIVPZxT8cQHFR04qX/xoOBaxZlVIzq
+         EcqQ==
+X-Gm-Message-State: AOJu0YxsbMyTX2KIaIPxlA/l5iY9sYbzTjXTCoi8CXxcviB1uk1zpCto
+	Lo/dlAvt6wFR5TyU2rRltrbzIA==
+X-Google-Smtp-Source: AGHT+IEP9ckwBL1/0mfPqosWIWOXy9uevpV0Iq3ArH10HdVvSOvTyx5j3EETKE0Mzgr1fyviNz4aeA==
+X-Received: by 2002:a19:9159:0:b0:4fe:a2e:890c with SMTP id y25-20020a199159000000b004fe0a2e890cmr1439491lfj.49.1691664481535;
+        Thu, 10 Aug 2023 03:48:01 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id x20-20020aa7cd94000000b0051dfa2e30b2sm653854edv.9.2023.08.10.03.47.58
+        by smtp.gmail.com with ESMTPSA id x20-20020aa7cd94000000b0051dfa2e30b2sm653854edv.9.2023.08.10.03.48.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 03:47:59 -0700 (PDT)
+        Thu, 10 Aug 2023 03:48:01 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Liam Girdwood <lgirdwood@gmail.com>,
 	Mark Brown <broonie@kernel.org>,
@@ -55,9 +55,9 @@ To: Liam Girdwood <lgirdwood@gmail.com>,
 	llvm@lists.linux.dev
 Cc: Andi Shyti <andi.shyti@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/4] ASoC: codecs: wm8904: Fix Wvoid-pointer-to-enum-cast warning
-Date: Thu, 10 Aug 2023 12:47:47 +0200
-Message-Id: <20230810104749.164827-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/4] ASoC: rockchip: fix Wvoid-pointer-to-enum-cast warning
+Date: Thu, 10 Aug 2023 12:47:48 +0200
+Message-Id: <20230810104749.164827-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
 References: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
@@ -69,29 +69,29 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-'devtype' is an enum, thus cast of pointer on 64-bit compile test with
+'version' is an enum, thus cast of pointer on 64-bit compile test with
 W=1 causes:
 
-  wm8904.c:2205:21: error: cast to smaller integer type 'enum wm8904_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+  rockchip_pdm.c:587:18: error: cast to smaller integer type 'enum rk_pdm_version' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/codecs/wm8904.c | 2 +-
+ sound/soc/rockchip/rockchip_pdm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wm8904.c b/sound/soc/codecs/wm8904.c
-index 60319b468fb2..829bf055622a 100644
---- a/sound/soc/codecs/wm8904.c
-+++ b/sound/soc/codecs/wm8904.c
-@@ -2202,7 +2202,7 @@ static int wm8904_i2c_probe(struct i2c_client *i2c)
- 		match = of_match_node(wm8904_of_match, i2c->dev.of_node);
- 		if (match == NULL)
- 			return -EINVAL;
--		wm8904->devtype = (enum wm8904_type)match->data;
-+		wm8904->devtype = (uintptr_t)match->data;
- 	} else {
- 		const struct i2c_device_id *id =
- 			i2c_match_id(wm8904_i2c_id, i2c);
+diff --git a/sound/soc/rockchip/rockchip_pdm.c b/sound/soc/rockchip/rockchip_pdm.c
+index 52f9aae60be8..678989b25e57 100644
+--- a/sound/soc/rockchip/rockchip_pdm.c
++++ b/sound/soc/rockchip/rockchip_pdm.c
+@@ -584,7 +584,7 @@ static int rockchip_pdm_probe(struct platform_device *pdev)
+ 
+ 	match = of_match_device(rockchip_pdm_match, &pdev->dev);
+ 	if (match)
+-		pdm->version = (enum rk_pdm_version)match->data;
++		pdm->version = (uintptr_t)match->data;
+ 
+ 	if (pdm->version == RK_PDM_RK3308) {
+ 		pdm->reset = devm_reset_control_get(&pdev->dev, "pdm-m");
 -- 
 2.34.1
 
