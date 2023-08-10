@@ -1,136 +1,150 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2058.outbound.protection.outlook.com [40.107.244.58])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365761107
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 06:48:13 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aehJlIY5qbW6yaNFN9X+YBEP+JuRDROa/BtNx793relpDhfx/O+96NHuZIKLTkCgQq595CsuvCPKAWUN/FQenNm+50ZfB8CrF6yYGvl5y2YelgON1ECtCIA9rgM1tqFY/iHCeMJbWep2wQAOx5xc7qAzUU6vCQdWFE8DcacnCJ8lGB4Va0WylNprkAJpLFq5NGcY/5rDxUFzTPxgrvCDACFeJl6EVpp5jvkeX6G7at+pevmDAbNfEFAUxjdVtd/wIIozaMjNHNEOoztKAF0h1rMRAhR+H43eGrq1RSHxeAtq7io+x2eoMkMjd2wvSSIydwy3RQtC5UR5Vuj2agzSYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IL451NG7+9aE6D3twBbE88KeBc9Hogd/YqizHwzFg/Q=;
- b=OqCEMonCStuyUCRMe0CcfpJzqh7IL1YO0a/oBcinEj8g/hYSOvnLbMGrDn//i+rUfsh625rKXZrtsSw5a6ZQJIiecJIZudv4JP5xsHT9Ft8VOKIafI8uJzrNlTF2s6RqUfOwjFQLe6oJWlz+hKaGuX4aQAF633G0gXEjL2ecx4tpsZZSq7BLoCowbZjLw4jSrlFp+IHTe+9KPp0t4hfl6rhaSmLxAZaD4zHpoEuI2ougJL/7gJsQun+SSvfQv8XA+W2zr6tpvESJupEiFwuMy7OgaftEDVKNBZjQncYTU5zvZUYJNCk6z/eRwy4t6n/DMXoearfZEf6R4SK0mYuAdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IL451NG7+9aE6D3twBbE88KeBc9Hogd/YqizHwzFg/Q=;
- b=kil9tCwUeiKOj7fxzNdTE1cymQCwfo3UZDg2iCFeNzvSEHs0FgMt/DLKYRV0kpEWiWyXsmZAjzC2YwMxF7PcgCLSPzQmNiWeI5qVcOo33qSGyKZJNUOBsg1XCXiFsKW8MobiOZbEfXlh2SLzv/HfpEcT4I53mTJciqpl1LqqTwQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DS0PR12MB6487.namprd12.prod.outlook.com (2603:10b6:8:c4::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
- 2023 06:48:11 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::3d:c14:667a:1c81]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::3d:c14:667a:1c81%4]) with mapi id 15.20.6652.028; Thu, 10 Aug 2023
- 06:48:11 +0000
-Message-ID: <7a09909a-4c94-2e4b-dd9a-4bd019b67585@amd.com>
-Date: Thu, 10 Aug 2023 08:48:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/2] drm/exec: use unique instead of local label
-Content-Language: en-US
-To: Boris Brezillon <boris.brezillon@collabora.com>,
- Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, maarten.lankhorst@linux.intel.com,
- mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
- trix@redhat.com, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- naresh.kamboju@linaro.org, dakr@redhat.com
-References: <20230731123625.3766-1-christian.koenig@amd.com>
- <20230809153755.GA832145@dev-arch.thelio-3990X>
- <20230810084002.636cc827@collabora.com>
-From: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230810084002.636cc827@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0069.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9a::10) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B173FC2;
+	Thu, 10 Aug 2023 07:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691651528; x=1723187528;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HpXk6lf+DPs83MnTkS+O6f3ycna/RzMKZErXzP88Kx4=;
+  b=d17kQRTM+2ep1tWlieldikTtCcvsZx/t/c9+mN6GtBb6EuAP953GaWF/
+   afUWTKyCDzkD6CstOyhaSU4TP7exiEU76Qs+BzkxYPpjUKZw72EIM33bf
+   tUEJJSs5ejdIG/XRPl9hf2ZtbVj/Tg6Sf9CAicRSX7+haP4WUE3EbyCa4
+   0cqbVcX66rLICP30Bt3eakem6eSqhjcHfrCrnygQbNg8xWKFz9Zk9dluy
+   oLtZkdu36l5aUfLR8r9ZnZMfYMOaTaJelvfniuKX3WGb5Yks9ko5aHMiV
+   bja9350JzSG2LYxPQSe/Eub4H47FTGNxQ9941IxMZfORQ1ysEROLCRW0F
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="361453905"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="361453905"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 00:12:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="1062784366"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="1062784366"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Aug 2023 00:12:03 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qTzpy-0006p0-0u;
+	Thu, 10 Aug 2023 07:12:02 +0000
+Date: Thu, 10 Aug 2023 15:11:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Vernet <void@manifault.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, tj@kernel.org,
+	roman.gushchin@linux.dev, gautham.shenoy@amd.com,
+	kprateek.nayak@amd.com, aaron.lu@intel.com,
+	wuyun.abel@bytedance.com, kernel-team@meta.com
+Subject: Re: [PATCH v3 7/7] sched: Shard per-LLC shared runqueues
+Message-ID: <202308101540.7XQCJ2ea-lkp@intel.com>
+References: <20230809221218.163894-8-void@manifault.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DS0PR12MB6487:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06db5ac5-a2e5-45c4-7aa0-08db996dc38b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ND57KDUzqRID6DrDW/yhZJDTGVi0nNAKSnvzcb2gen0bXvKKjJ5hJZuccsEGZ2HJ7pgbpdF/4YZZ+y29YtEKoQm18plbgIUiW+bsrJiLntWb1gt119U0fNdDt6Cx9oCnE7zAcOhMM3CnS+IuVXbmweMohSi9KoNjWjTCcMFTNHF3Jabyt3t+jjXvlOtyBON3giooxcb0qhM2oXJpFyzovW2kOfL7fbGeCr9qOjcPAMSMHgMslIe7WgKdvQUx4XZ7KLEVPY2G6qYB+Gck+4S9Ni1QY5NNX2tcHO76RzsqeYod9S/ohgBR9saMXyn/xUyU62XuVm0LsApIFFjlFGq96h2D/BhIVdrCOJ/HUWsjxEMrFUzgo+oKR3IphmQ7067/HvqXPtBoAmE6PQc88Cm8g2W1A62qy9y8l5Mk09dVCwWWGSzs5gxHqt/8eCI63vKRKSwGZpkIAh+tIAzF7/DJD52jh800ZWcPIhoKKHgnKZ3QzaA1OvFB1h3fkjHF9rMVKk8LdZb6HA8otoRDY/t62odHn9BwTSR9+g+B65N3iJ5lSOVSZYbCUkoTlPRi4H53QIWDAVHZBTeGeOG/MSDjn9CAF0P18YoOponvW4bVW0EF7DGhA1xTQKvEpW/rVlcFWwdMJrw70+3UXxDkWg6Tug==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(186006)(1800799006)(451199021)(31686004)(316002)(41300700001)(4326008)(38100700002)(110136005)(8676002)(5660300002)(8936002)(66476007)(66946007)(66556008)(2616005)(86362001)(31696002)(6512007)(478600001)(7416002)(6506007)(6666004)(36756003)(2906002)(4744005)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cXFlcHJHM1RJenFTbGRUYVAwdlRWcmJJM1ZqNlpaUXdiYUVJN0dzeTNpb3Rh?=
- =?utf-8?B?elNKUG5CL0p0WXgvRDA3MXdmbVhOOVVpT1pLMW9UbThoUHV2YjArdC8zdWVP?=
- =?utf-8?B?Q2h6UHJwV3IyZ3pWQVEwMFgvUzExUHd4UTRxWEFUZlNFZnAwMFZQRHRjNW5n?=
- =?utf-8?B?UzFJVXAwQWk2KzJuS3dxTE9hajRnWEVWUG5CWGhpajJkTFdDcW9odnY1Q2xF?=
- =?utf-8?B?Z1ZMU0hBM3RRVVZ1WThBVU5VdWR0UlR2SHl0aW16VlljZFYvMFgxK0d0bTNz?=
- =?utf-8?B?c09MWWRiLzNFZ3JxMkdGdDNwb2RJaFNROElCZmt4U0phT1JnZ2NEMGtYUUxm?=
- =?utf-8?B?dnhFRlE2cXkzZkdwNGRvY0E3YkpZK0ZMWG5MdzBwYndJS3RtY0R4ZUMzc0RO?=
- =?utf-8?B?dm00NzRZRVF4aVJYbjlmZ2ZiQWt5aXA5K1FQSnBkeGd1SWtZOVNuQzgzSS91?=
- =?utf-8?B?UjByTnNLV1pzVTdNSVlLK3BjMHpVMkhhM2tVWjlJOXNFSnRhS3J5M3VLT0xY?=
- =?utf-8?B?alBuNThXTnZ0M2ZFMk1FUkthcGdRVk1oMDNPa3B1eW92Wi9oUUtMN0dqMi9k?=
- =?utf-8?B?QnhCVk5kRzIxc3ppZEFXd2ZiV2J4M2lURnVKeGd2MHBXUWgraUZTTDZGcXlw?=
- =?utf-8?B?aEduMWczK2laYUtLR2dYRzZxRXAvVUVBYXNaaWZVZTc0djlyV2hpVGJBdGlS?=
- =?utf-8?B?U0ltbDdobEIxRDM4ZkEvUEVuQzVOWlQvajFBSnhBcnZuU1pTRTZLdGxubHZW?=
- =?utf-8?B?TXZkUG5lMURoS2sxYjgrMzVrZTBtdzNrUDlycDBjMzZ2U1lmbHVnZmNzeHN5?=
- =?utf-8?B?eGtsb3l3dXZyZmtPcGhjamQrR2JwRnZWZTU5cktwV0UzUEw2ejVoZXZMeWZF?=
- =?utf-8?B?S2JMeFdlN1krR1lTbDN3QkRuZHBRR0Y4ZU53YXBUOEwvQko4dzBxa0hvM1hh?=
- =?utf-8?B?V0FQcGVNbU1MYUVTeVgweldma1JQcHB6OFpwY05EQ1ZIeldFcVZSVTBic2dP?=
- =?utf-8?B?YzZDUkV0b1A4V0hTQnRPMU9rSk9LUGxPQzRJVkdMVXZKM2NXc0k4MzBHOXdP?=
- =?utf-8?B?akFIVEc5OGsrYTBjRlhwclpEVEE1ODh1ZUZZR3NjQWJkZ2tKS0dWVlZldEpk?=
- =?utf-8?B?Sm9Oa1FSTmRRcTNOQjNvaXRpRUZxYWl5Kyt0bkgxNkJPSE9PWVNyTU9zTWpr?=
- =?utf-8?B?cEd2NEhJRGNSOXVsSEdRUzc1VVZqNmI2b2hDTHBycm8yQmRJcFNxMmFTSUox?=
- =?utf-8?B?Y3hnWisvRElHR0FmaEczSVZXVjROeWdjenFoeVJSS3Jsc2tPMG1jeCtkWS9Z?=
- =?utf-8?B?YnpxSU8xWCtITEVOTmkxcjlvbmFxWTdpTmxUZk9DS0l5Zi9BT1ErRGlIeEc4?=
- =?utf-8?B?M3pYZHFvcGFUdDJaeUJtYkYwWTFSRVBYUVA4ZC8reGJVNFN1SWpWSGlGSXF4?=
- =?utf-8?B?M1hMcHZieXJ2NGJaUERnUUx3RHVUS0t3RlFWNDBFbXVhWDBac244c0FpOENp?=
- =?utf-8?B?NkxpWi9ZZGQ3cC9mdXE2L05mOGFjK2FFVnU5a1crdVZ2WDVRZ29aeDhFbUYz?=
- =?utf-8?B?elFsSE4xckJndG9PQkJBeFNXQWdaTitDbG5HVVVXRDJqRUJaL1Y0RW4xeG1z?=
- =?utf-8?B?dks2QXZ2WWpXYWJkYllzbmtBVjlQZFJ2ZFJFakU0OFowbThyTDhlbWwyUlVq?=
- =?utf-8?B?cHBEQVlYd0NDSnRXUEJKMGNTWi9yb1ExeTVWc01KdUJWakViM3N6K1hPVVVS?=
- =?utf-8?B?WWl0dWhJQlR5UXRPZkY0WGRvVVg4RUhYVjRlalB3MnhpTE1ncVpqWDdPY2ND?=
- =?utf-8?B?bUVEVmFESVhjSVpxWWZncVcvcEh1eGpWcDdzZk12VDZLNDRtczlQSGp1UkVj?=
- =?utf-8?B?a0xNSE02a3hLSmQwdGYvb3M3TnFSOGJ4UVlhMG1xK01UVVdyYUN1QTAxeGhK?=
- =?utf-8?B?WUJoYlRCSkx5NjZ4VTgwQVJaZUNOc2ZIeVE0MmtZeXVVR3c1SDZyQTN4bzdh?=
- =?utf-8?B?NGZrMW1Sd3YwT3pjUUozbUFNUndGWXdzUmsvYUNDaHV0TlhtNUtBbytkaDFF?=
- =?utf-8?B?Tit0WlE2L2drVC9ZU25IRVhLK0pwUDNrSVpwRDZJYnFXMWpBUnR1Mi81S2o4?=
- =?utf-8?B?d1Y2QXR3MTU0dHUvN0J3aTZBdFhhMWM2M0FzZmJxa2p0d2NpKzRHaU00b0Ex?=
- =?utf-8?Q?C+if9zknvYajGQsylIpu8sAfrYOGLk85ola59nfm12Gs?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06db5ac5-a2e5-45c4-7aa0-08db996dc38b
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2023 06:48:11.6475
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 40RRlXFxWyV44ymvOiy/AurI5+/itT5l3/P8H+2+qv6TtdXoO6udURdwrufDIYw9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6487
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230809221218.163894-8-void@manifault.com>
 
-Am 10.08.23 um 08:40 schrieb Boris Brezillon:
-> On Wed, 9 Aug 2023 08:37:55 -0700
-> Nathan Chancellor <nathan@kernel.org> wrote:
->
->> Hi Christian,
->>
->> Can this be applied to drm-misc? Other drivers are starting to make use
->> of this API and our builds with clang-17 and clang-18 have been broken
->> for some time due to this.
-> Queued to drm-misc-next.
+Hi David,
 
-Sorry for the delay I have been on vacation last week and haven't yet 
-catched up to this point in my mails.
+kernel test robot noticed the following build warnings:
 
-Thanks for taking care of this,
-Christian.
+[auto build test WARNING on tip/sched/core]
+[cannot apply to linus/master v6.5-rc5 next-20230809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/sched-Expose-move_queued_task-from-core-c/20230810-061611
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20230809221218.163894-8-void%40manifault.com
+patch subject: [PATCH v3 7/7] sched: Shard per-LLC shared runqueues
+config: hexagon-randconfig-r041-20230809 (https://download.01.org/0day-ci/archive/20230810/202308101540.7XQCJ2ea-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308101540.7XQCJ2ea-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308101540.7XQCJ2ea-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/sched/fair.c:198: warning: expecting prototype for struct shared_runq. Prototype was for struct shared_runq_shard instead
+
+
+vim +198 kernel/sched/fair.c
+
+05289b90c2e40ae Thara Gopinath 2020-02-21  141  
+7cc7fb0f3200dd3 David Vernet   2023-08-09  142  /**
+7cc7fb0f3200dd3 David Vernet   2023-08-09  143   * struct shared_runq - Per-LLC queue structure for enqueuing and migrating
+7cc7fb0f3200dd3 David Vernet   2023-08-09  144   * runnable tasks within an LLC.
+7cc7fb0f3200dd3 David Vernet   2023-08-09  145   *
+54c971b941e0bd0 David Vernet   2023-08-09  146   * struct shared_runq_shard - A structure containing a task list and a spinlock
+54c971b941e0bd0 David Vernet   2023-08-09  147   * for a subset of cores in a struct shared_runq.
+54c971b941e0bd0 David Vernet   2023-08-09  148   *
+7cc7fb0f3200dd3 David Vernet   2023-08-09  149   * WHAT
+7cc7fb0f3200dd3 David Vernet   2023-08-09  150   * ====
+7cc7fb0f3200dd3 David Vernet   2023-08-09  151   *
+7cc7fb0f3200dd3 David Vernet   2023-08-09  152   * This structure enables the scheduler to be more aggressively work
+54c971b941e0bd0 David Vernet   2023-08-09  153   * conserving, by placing waking tasks on a per-LLC FIFO queue shard that can
+54c971b941e0bd0 David Vernet   2023-08-09  154   * then be pulled from when another core in the LLC is going to go idle.
+54c971b941e0bd0 David Vernet   2023-08-09  155   *
+54c971b941e0bd0 David Vernet   2023-08-09  156   * struct rq stores two pointers in its struct cfs_rq:
+54c971b941e0bd0 David Vernet   2023-08-09  157   *
+54c971b941e0bd0 David Vernet   2023-08-09  158   * 1. The per-LLC struct shared_runq which contains one or more shards of
+54c971b941e0bd0 David Vernet   2023-08-09  159   *    enqueued tasks.
+7cc7fb0f3200dd3 David Vernet   2023-08-09  160   *
+54c971b941e0bd0 David Vernet   2023-08-09  161   * 2. The shard inside of the per-LLC struct shared_runq which contains the
+54c971b941e0bd0 David Vernet   2023-08-09  162   *    list of runnable tasks for that shard.
+54c971b941e0bd0 David Vernet   2023-08-09  163   *
+54c971b941e0bd0 David Vernet   2023-08-09  164   * Waking tasks are enqueued in the calling CPU's struct shared_runq_shard in
+54c971b941e0bd0 David Vernet   2023-08-09  165   * __enqueue_entity(), and are opportunistically pulled from the shared_runq in
+54c971b941e0bd0 David Vernet   2023-08-09  166   * newidle_balance(). Pulling from shards is an O(# shards) operation.
+7cc7fb0f3200dd3 David Vernet   2023-08-09  167   *
+7cc7fb0f3200dd3 David Vernet   2023-08-09  168   * There is currently no task-stealing between shared_runqs in different LLCs,
+7cc7fb0f3200dd3 David Vernet   2023-08-09  169   * which means that shared_runq is not fully work conserving. This could be
+7cc7fb0f3200dd3 David Vernet   2023-08-09  170   * added at a later time, with tasks likely only being stolen across
+7cc7fb0f3200dd3 David Vernet   2023-08-09  171   * shared_runqs on the same NUMA node to avoid violating NUMA affinities.
+7cc7fb0f3200dd3 David Vernet   2023-08-09  172   *
+7cc7fb0f3200dd3 David Vernet   2023-08-09  173   * HOW
+7cc7fb0f3200dd3 David Vernet   2023-08-09  174   * ===
+7cc7fb0f3200dd3 David Vernet   2023-08-09  175   *
+54c971b941e0bd0 David Vernet   2023-08-09  176   * A struct shared_runq_shard is comprised of a list, and a spinlock for
+54c971b941e0bd0 David Vernet   2023-08-09  177   * synchronization.  Given that the critical section for a shared_runq is
+54c971b941e0bd0 David Vernet   2023-08-09  178   * typically a fast list operation, and that the shared_runq_shard is localized
+54c971b941e0bd0 David Vernet   2023-08-09  179   * to a subset of cores on a single LLC (plus other cores in the LLC that pull
+54c971b941e0bd0 David Vernet   2023-08-09  180   * from the shard in newidle_balance()), the spinlock will typically only be
+54c971b941e0bd0 David Vernet   2023-08-09  181   * contended on workloads that do little else other than hammer the runqueue.
+7cc7fb0f3200dd3 David Vernet   2023-08-09  182   *
+7cc7fb0f3200dd3 David Vernet   2023-08-09  183   * WHY
+7cc7fb0f3200dd3 David Vernet   2023-08-09  184   * ===
+7cc7fb0f3200dd3 David Vernet   2023-08-09  185   *
+7cc7fb0f3200dd3 David Vernet   2023-08-09  186   * As mentioned above, the main benefit of shared_runq is that it enables more
+7cc7fb0f3200dd3 David Vernet   2023-08-09  187   * aggressive work conservation in the scheduler. This can benefit workloads
+7cc7fb0f3200dd3 David Vernet   2023-08-09  188   * that benefit more from CPU utilization than from L1/L2 cache locality.
+7cc7fb0f3200dd3 David Vernet   2023-08-09  189   *
+7cc7fb0f3200dd3 David Vernet   2023-08-09  190   * shared_runqs are segmented across LLCs both to avoid contention on the
+7cc7fb0f3200dd3 David Vernet   2023-08-09  191   * shared_runq spinlock by minimizing the number of CPUs that could contend on
+7cc7fb0f3200dd3 David Vernet   2023-08-09  192   * it, as well as to strike a balance between work conservation, and L3 cache
+7cc7fb0f3200dd3 David Vernet   2023-08-09  193   * locality.
+7cc7fb0f3200dd3 David Vernet   2023-08-09  194   */
+54c971b941e0bd0 David Vernet   2023-08-09  195  struct shared_runq_shard {
+7cc7fb0f3200dd3 David Vernet   2023-08-09  196  	struct list_head list;
+7cc7fb0f3200dd3 David Vernet   2023-08-09  197  	raw_spinlock_t lock;
+7cc7fb0f3200dd3 David Vernet   2023-08-09 @198  } ____cacheline_aligned;
+7cc7fb0f3200dd3 David Vernet   2023-08-09  199  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
