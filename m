@@ -1,51 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE811111A;
-	Thu, 10 Aug 2023 06:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DC71100;
+	Thu, 10 Aug 2023 06:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691647990; x=1723183990;
+  t=1691648706; x=1723184706;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rKnBU8rlIUEGB9TtDq6P/7AAb8/0Sgt0qJecWPjF/Rs=;
-  b=fkjS2dkfYg9e66tkXL+t5cQnnDRA7jFKJonTJsNPErfxnyf1cp6RE+E3
-   7pM6qUZsqTZ4cdQW4xT2BXNX4SiA+c1pluQtuyKmvqLjog0kkSCgw1evu
-   21YW2Sdrsepfm0YtGRZizzii37qfKGReyE3viaOl+QIZvypS9v7ADy++n
-   iKT8RGw0VcFC1Y/K6WnqcuUsye9PiXkyEU4nsfx+N5IZpLD4C25FTkiNq
-   zEQ239L/IJz1wQISOBjv0BOt6IaujkmC+Wq4ZYg56ZcLNsPpQYr0WARB0
-   Q6HGZzAGBdJXrWl88bX29fB+dIfSLsq+yCViTYGi181D4QQPjLyBjgm++
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="368764333"
+  bh=HMmHtpCBwtu5DVRpOr49y3nxHCbn5kS4/gN9pxr6j6E=;
+  b=Gv6ymt0aUA6MS+0D73Nw9Fhg7KwXhlX55DKdJN0YKNWspzfH71LQFD7z
+   IWMXe8Ahe+UyaJabgIZM5epq9533a5eGH3Hu0ZbPI8UcXWBfxputiYXy1
+   sgeZxdf9ffQ5BUdVnSrum/KTaCKn/AsZFXm2UfoyD+Wxa1ptV95nNYkPb
+   LQZ0rDpNChXhHh7OKUwVHMk6X7EkgTNxo7nf03+qrxoU3xpz+Jr/TxAc4
+   022aI2fGdGUYwr/2jg+SuYZhY1aM6FFquY1ksFf7w9Pw263Qn7/mgoNpF
+   +JeOxlzkqrynyqufboK+1hpaj5qc8kyQEFlO/CIHnwyBKDMBhow5v+XUs
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="457666766"
 X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="368764333"
+   d="scan'208";a="457666766"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 23:13:07 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 23:25:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="797484221"
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="797485828"
 X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="797484221"
+   d="scan'208";a="797485828"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Aug 2023 23:13:02 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 09 Aug 2023 23:25:02 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qTyur-0006my-0k;
-	Thu, 10 Aug 2023 06:13:01 +0000
-Date: Thu, 10 Aug 2023 14:12:19 +0800
+	id 1qTz6T-0006nk-2B;
+	Thu, 10 Aug 2023 06:25:01 +0000
+Date: Thu, 10 Aug 2023 14:24:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	jolsa@kernel.org, kuba@kernel.org, toke@kernel.org,
-	willemb@google.com, dsahern@kernel.org, magnus.karlsson@intel.com,
-	bjorn@kernel.org, maciej.fijalkowski@intel.com, hawk@kernel.org,
-	netdev@vger.kernel.org, xdp-hints@xdp-project.net
-Subject: Re: [PATCH bpf-next 2/9] xsk: add TX timestamp and TX checksum
- offload support
-Message-ID: <202308101330.Z7cRgzuH-lkp@intel.com>
-References: <20230809165418.2831456-3-sdf@google.com>
+To: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
+	tzimmermann@suse.de, airlied@redhat.com,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	daniel@ffwll.ch, javierm@redhat.com, bluescreen_avenger@verizon.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH 1/2] drm/panic: Add a drm panic handler
+Message-ID: <202308101423.GSvLgbbe-lkp@intel.com>
+References: <20230809192514.158062-2-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,200 +50,160 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230809165418.2831456-3-sdf@google.com>
+In-Reply-To: <20230809192514.158062-2-jfalempe@redhat.com>
 
-Hi Stanislav,
+Hi Jocelyn,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on 6995e2de6891c724bfeb2db33d7b87775f913ad1]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/xsk-Support-XDP_TX_METADATA_LEN/20230810-010031
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230809165418.2831456-3-sdf%40google.com
-patch subject: [PATCH bpf-next 2/9] xsk: add TX timestamp and TX checksum offload support
-config: arm-randconfig-r003-20230809 (https://download.01.org/0day-ci/archive/20230810/202308101330.Z7cRgzuH-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-panic-Add-a-drm-panic-handler/20230810-032733
+base:   6995e2de6891c724bfeb2db33d7b87775f913ad1
+patch link:    https://lore.kernel.org/r/20230809192514.158062-2-jfalempe%40redhat.com
+patch subject: [PATCH 1/2] drm/panic: Add a drm panic handler
+config: s390-randconfig-r044-20230809 (https://download.01.org/0day-ci/archive/20230810/202308101423.GSvLgbbe-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308101330.Z7cRgzuH-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308101423.GSvLgbbe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308101330.Z7cRgzuH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308101423.GSvLgbbe-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/intel/igc/igc_main.c:13:
-   In file included from include/net/xdp_sock_drv.h:10:
->> include/net/xsk_buff_pool.h:237:49: error: must use 'struct' tag to refer to type 'xdp_buff_xsk'
-     237 | static inline bool xp_tx_metadata_enabled(const xdp_buff_xsk *xskb)
-         |                                                 ^
-         |                                                 struct 
->> include/net/xsk_buff_pool.h:239:9: error: use of undeclared identifier 'sq'
-     239 |         return sq->xsk_pool->tx_metadata_len > 0;
-         |                ^
->> drivers/net/ethernet/intel/igc/igc_main.c:1267:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    1267 |         cmd_type |= IGC_SET_FLAG(tx_flags, IGC_TX_FLAGS_VLAN,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1268 |                                  IGC_ADVTXD_DCMD_VLE);
-         |                                  ~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:1257:30: note: expanded from macro 'IGC_SET_FLAG'
-    1257 |          ((u32)((_input) & (_flag)) / ((_flag) / (_result))))
-         |                                     ^ ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:1271:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    1271 |         cmd_type |= IGC_SET_FLAG(tx_flags, IGC_TX_FLAGS_TSO,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1272 |                                  (IGC_ADVTXD_DCMD_TSE));
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:1257:30: note: expanded from macro 'IGC_SET_FLAG'
-    1257 |          ((u32)((_input) & (_flag)) / ((_flag) / (_result))))
-         |                                     ^ ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:1275:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    1275 |         cmd_type |= IGC_SET_FLAG(tx_flags, IGC_TX_FLAGS_TSTAMP,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1276 |                                  (IGC_ADVTXD_MAC_TSTAMP));
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:1257:30: note: expanded from macro 'IGC_SET_FLAG'
-    1257 |          ((u32)((_input) & (_flag)) / ((_flag) / (_result))))
-         |                                     ^ ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:1279:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    1279 |         cmd_type ^= IGC_SET_FLAG(skb->no_fcs, 1, IGC_ADVTXD_DCMD_IFCS);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:1257:30: note: expanded from macro 'IGC_SET_FLAG'
-    1257 |          ((u32)((_input) & (_flag)) / ((_flag) / (_result))))
-         |                                     ^ ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:6692:46: warning: shift count >= width of type [-Wshift-count-overflow]
-    6692 |         err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-         |                                                     ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   5 warnings and 2 errors generated.
+   In file included from drivers/gpu/drm/drm_panic.c:9:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/drm_panic.c:9:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/drm_panic.c:9:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/gpu/drm/drm_panic.c:246:6: warning: no previous prototype for function 'drm_panic_init_client' [-Wmissing-prototypes]
+     246 | void drm_panic_init_client(struct drm_device *dev)
+         |      ^
+   drivers/gpu/drm/drm_panic.c:246:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     246 | void drm_panic_init_client(struct drm_device *dev)
+         | ^
+         | static 
+>> drivers/gpu/drm/drm_panic.c:272:6: warning: no previous prototype for function 'drm_panic_init' [-Wmissing-prototypes]
+     272 | void drm_panic_init(void)
+         |      ^
+   drivers/gpu/drm/drm_panic.c:272:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     272 | void drm_panic_init(void)
+         | ^
+         | static 
+>> drivers/gpu/drm/drm_panic.c:282:6: warning: no previous prototype for function 'drm_panic_exit' [-Wmissing-prototypes]
+     282 | void drm_panic_exit(void)
+         |      ^
+   drivers/gpu/drm/drm_panic.c:282:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     282 | void drm_panic_exit(void)
+         | ^
+         | static 
+   15 warnings generated.
 --
-   In file included from drivers/net/ethernet/intel/igc/igc_xdp.c:5:
-   In file included from include/net/xdp_sock_drv.h:10:
->> include/net/xsk_buff_pool.h:237:49: error: must use 'struct' tag to refer to type 'xdp_buff_xsk'
-     237 | static inline bool xp_tx_metadata_enabled(const xdp_buff_xsk *xskb)
-         |                                                 ^
-         |                                                 struct 
->> include/net/xsk_buff_pool.h:239:9: error: use of undeclared identifier 'sq'
-     239 |         return sq->xsk_pool->tx_metadata_len > 0;
-         |                ^
-   2 errors generated.
---
-   In file included from drivers/net/ethernet/intel/i40e/i40e_main.c:16:
-   In file included from include/net/xdp_sock_drv.h:10:
->> include/net/xsk_buff_pool.h:237:49: error: must use 'struct' tag to refer to type 'xdp_buff_xsk'
-     237 | static inline bool xp_tx_metadata_enabled(const xdp_buff_xsk *xskb)
-         |                                                 ^
-         |                                                 struct 
->> include/net/xsk_buff_pool.h:239:9: error: use of undeclared identifier 'sq'
-     239 |         return sq->xsk_pool->tx_metadata_len > 0;
-         |                ^
-   drivers/net/ethernet/intel/i40e/i40e_main.c:15666:46: warning: shift count >= width of type [-Wshift-count-overflow]
-    15666 |         err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-          |                                                     ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:40:
-   In file included from include/net/xdp_sock_drv.h:10:
->> include/net/xsk_buff_pool.h:237:49: error: must use 'struct' tag to refer to type 'xdp_buff_xsk'
-     237 | static inline bool xp_tx_metadata_enabled(const xdp_buff_xsk *xskb)
-         |                                                 ^
-         |                                                 struct 
->> include/net/xsk_buff_pool.h:239:9: error: use of undeclared identifier 'sq'
-     239 |         return sq->xsk_pool->tx_metadata_len > 0;
-         |                ^
->> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8219:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8219 |         cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_HW_VLAN,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    8220 |                                    IXGBE_ADVTXD_DCMD_VLE);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8223:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8223 |         cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSO,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    8224 |                                    IXGBE_ADVTXD_DCMD_TSE);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8227:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8227 |         cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSTAMP,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    8228 |                                    IXGBE_ADVTXD_MAC_TSTAMP);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8231:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8231 |         cmd_type ^= IXGBE_SET_FLAG(skb->no_fcs, 1, IXGBE_ADVTXD_DCMD_IFCS);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8242:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8242 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8243 |                                         IXGBE_TX_FLAGS_CSUM,
-         |                                         ~~~~~~~~~~~~~~~~~~~~
-    8244 |                                         IXGBE_ADVTXD_POPTS_TXSM);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8247:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8247 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8248 |                                         IXGBE_TX_FLAGS_IPV4,
-         |                                         ~~~~~~~~~~~~~~~~~~~~
-    8249 |                                         IXGBE_ADVTXD_POPTS_IXSM);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8252:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8252 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8253 |                                         IXGBE_TX_FLAGS_IPSEC,
-         |                                         ~~~~~~~~~~~~~~~~~~~~~
-    8254 |                                         IXGBE_ADVTXD_POPTS_IPSEC);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8260:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8260 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8261 |                                         IXGBE_TX_FLAGS_CC,
-         |                                         ~~~~~~~~~~~~~~~~~~
-    8262 |                                         IXGBE_ADVTXD_CC);
-         |                                         ~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8209:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8209 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:10789:46: warning: shift count >= width of type [-Wshift-count-overflow]
-    10789 |         err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-          |                                                     ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   9 warnings and 2 errors generated.
+>> drivers/gpu/drm/drm_panic.c:28: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * This module displays a user friendly message on screen when a kernel panic
+   drivers/gpu/drm/drm_panic.c:36: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * List of drm clients
+>> drivers/gpu/drm/drm_panic.c:283: warning: expecting prototype for drm_log_exit(). Prototype was for drm_panic_exit() instead
 
 
-vim +237 include/net/xsk_buff_pool.h
+vim +/drm_panic_init_client +246 drivers/gpu/drm/drm_panic.c
 
-   236	
- > 237	static inline bool xp_tx_metadata_enabled(const xdp_buff_xsk *xskb)
-   238	{
- > 239		return sq->xsk_pool->tx_metadata_len > 0;
-   240	}
-   241	
+   245	
+ > 246	void drm_panic_init_client(struct drm_device *dev)
+   247	{
+   248		struct dpanic_drm_client *new;
+   249		int ret;
+   250	
+   251		new = kzalloc(sizeof(*new), GFP_KERNEL);
+   252		if (!new)
+   253			return;
+   254	
+   255		ret = drm_client_init(dev, &new->client, "drm_panic", NULL);
+   256		if (ret < 0) {
+   257			kfree(new);
+   258			return;
+   259		}
+   260		drm_client_register(&new->client);
+   261		list_add_tail(&new->head, &dpanic_clients);
+   262	
+   263		drm_info(dev, "Registered with drm panic\n");
+   264	}
+   265	EXPORT_SYMBOL(drm_panic_init_client);
+   266	
+   267	/**
+   268	 * drm_panic_init() - Initialize drm-panic subsystem
+   269	 *
+   270	 * register the panic notifier
+   271	 */
+ > 272	void drm_panic_init(void)
+   273	{
+   274		/* register panic handler */
+   275		atomic_notifier_chain_register(&panic_notifier_list,
+   276					       &drm_panic_notifier);
+   277	}
+   278	
+   279	/**
+   280	 * drm_log_exit() - Shutdown drm-panic subsystem
+   281	 */
+ > 282	void drm_panic_exit(void)
+ > 283	{
 
 -- 
 0-DAY CI Kernel Test Service
