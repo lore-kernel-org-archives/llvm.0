@@ -1,31 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBBB1E51F
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 10:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36606C433C8;
-	Thu, 10 Aug 2023 10:23:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691662984;
-	bh=0AUFiGR+5OFS3aCcZhGl1NOGXtJMosrbpUypmoX+TZQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q7WmiOzDPWLoCIx4m3FmL5Ymn5awlI0D51e3FZF6asXAmGual9jdBONbaHBvTBisY
-	 iPf8Fg6crF4zewXaTnO2i+E07dY2SNchOnPtn5UppN9N1y/SMB7FYSM+KUdAh1WcZl
-	 tztV9ipOzNxOjWHqVA6cnMN6ffCWpFOQwdCTc1OZdH63f7sqA4js8mXqrIAjyTb9zv
-	 RRbhmcKsOmJxHgcTuqNEKBFv2LGX402oS/+24RUFBOdiTO2RuCxh0pxIAW7/IJ7phZ
-	 FIU5BSYQaal3TMYkcb0D1slplvatJvEsT8ZdJInFMtkSZh/jEDBpv2WKg5hIT2XALu
-	 y/0OD5QDrX0ag==
-Date: Thu, 10 Aug 2023 03:23:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
-	Linux-Next Mailing List <linux-next@vger.kernel.org>,
-	lkft-triage@lists.linaro.org, Dave Airlie <airlied@redhat.com>,
-	Danilo Krummrich <dakr@redhat.com>
-Subject: Re: drivers/gpu/drm/nouveau/nouveau_exec.c:114:4: error: cannot jump
- from this indirect goto statement to one of its possible targets
-Message-ID: <20230810102302.GA1795773@dev-arch.thelio-3990X>
-References: <CA+G9fYtQGmwYHYf5suRMyCzQmKmQ1kx31gxGJ-7CT-NTLrxYoA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2F61F955;
+	Thu, 10 Aug 2023 10:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691663473; x=1723199473;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PMrRyI3wHHwgDhdj9UI4XGzA7mO9eIIOADBUbe4YCiA=;
+  b=OvvaML0AAZ0bwkp9fE9eMgaSigT/261NuR4emaggcRXldiU1NStygEWt
+   ulW5J9JV823LEAivsfCcL3T1YEOSdgyI+pxsPJlw4QJVhs8wWFrGHj7tp
+   jz22t5cDhGWA+b5qbF5VosX677/mXhct6HOthtlVzX4Z7+0/ppdR1xARF
+   Eoyl9TTazUCq+D/NavCKc2G85Mwr4ZMemvDFlY+q/x6ivxa3udWX3XjC5
+   alJLO2Kq6SEAJREdCiPrdjhN7X4fIi+cE4Xos+TKAA61+lB9sQ7LXNbyF
+   BlnQ5tOOXtE69FE09Vw+eHd23kLtMU8jCn6fHYkxlxXZ05lGhThhi3zOT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="375079300"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="375079300"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 03:31:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="732171552"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="732171552"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 10 Aug 2023 03:31:07 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qU2wd-0006vy-0t;
+	Thu, 10 Aug 2023 10:31:07 +0000
+Date: Thu, 10 Aug 2023 18:30:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Huacai Chen <chenhuacai@loongson.cn>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>, John Stultz <jstultz@google.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	chenhuacai@kernel.org, rcu@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V2 1/2] tick: Rename tick_do_update_jiffies64() and allow
+ external usage
+Message-ID: <202308101853.wOMMd0Tf-lkp@intel.com>
+References: <20230810062527.3700080-1-chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,39 +63,171 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYtQGmwYHYf5suRMyCzQmKmQ1kx31gxGJ-7CT-NTLrxYoA@mail.gmail.com>
+In-Reply-To: <20230810062527.3700080-1-chenhuacai@loongson.cn>
 
-Hi Naresh,
+Hi Huacai,
 
-On Thu, Aug 10, 2023 at 02:11:41PM +0530, Naresh Kamboju wrote:
-> drivers/gpu/drm/nouveau/nouveau_exec.c:114:4: error: cannot jump from
-> this indirect goto statement to one of its possible targets
->   114 |                         drm_exec_retry_on_contention(exec);
->       |                         ^
-> include/drm/drm_exec.h:96:4: note: expanded from macro
-> 'drm_exec_retry_on_contention'
->    96 |                         goto *__drm_exec_retry_ptr;             \
->       |                         ^
-> drivers/gpu/drm/nouveau/nouveau_exec.c:106:2: note: possible target of
-> indirect goto statement
->   106 |         drm_exec_until_all_locked(exec) {
->       |         ^
-> include/drm/drm_exec.h:79:33: note: expanded from macro
-> 'drm_exec_until_all_locked'
->    79 |                 __label__ __drm_exec_retry;                     \
->       |                                                                 ^
-> drivers/gpu/drm/nouveau/nouveau_exec.c:106:2: note: jump enters a
-> statement expression
-> include/drm/drm_exec.h:78:35: note: expanded from macro
-> 'drm_exec_until_all_locked'
->    78 |         for (void *__drm_exec_retry_ptr; ({                     \
->       |                                          ^
-> 1 error generated.
+kernel test robot noticed the following build errors:
 
-Thanks for the report. This is now fixed in drm-misc-next, so it should
-be resolved in the next -next:
+[auto build test ERROR on paulmck-rcu/dev]
+[also build test ERROR on linus/master]
+[cannot apply to tip/timers/nohz]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-https://cgit.freedesktop.org/drm/drm-misc/commit/?id=616bceae250d0bab7ab2cbcb0791d820434ffb71
+url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/rcu-Update-jiffies-in-rcu_cpu_stall_reset/20230810-142629
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+patch link:    https://lore.kernel.org/r/20230810062527.3700080-1-chenhuacai%40loongson.cn
+patch subject: [PATCH V2 1/2] tick: Rename tick_do_update_jiffies64() and allow external usage
+config: powerpc-randconfig-r013-20230809 (https://download.01.org/0day-ci/archive/20230810/202308101853.wOMMd0Tf-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308101853.wOMMd0Tf-lkp@intel.com/reproduce)
 
-Cheers,
-Nathan
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308101853.wOMMd0Tf-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      45 | DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      46 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:49:1: note: expanded from here
+      49 | __do_insw
+         | ^
+   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
+     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from kernel/time/tick-sched.c:14:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      48 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:51:1: note: expanded from here
+      51 | __do_insl
+         | ^
+   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
+     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from kernel/time/tick-sched.c:14:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      50 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:53:1: note: expanded from here
+      53 | __do_outsb
+         | ^
+   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
+     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from kernel/time/tick-sched.c:14:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      52 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:55:1: note: expanded from here
+      55 | __do_outsw
+         | ^
+   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
+     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from kernel/time/tick-sched.c:14:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      54 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:57:1: note: expanded from here
+      57 | __do_outsl
+         | ^
+   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
+     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+>> kernel/time/tick-sched.c:114:4: error: call to undeclared function 'tick_do_update_jiffies_64'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     114 |                         tick_do_update_jiffies_64(now);
+         |                         ^
+   kernel/time/tick-sched.c:114:4: note: did you mean 'do_update_jiffies_64'?
+   include/linux/jiffies.h:91:6: note: 'do_update_jiffies_64' declared here
+      91 | void do_update_jiffies_64(s64 now); /* typedef s64 ktime_t */
+         |      ^
+   6 warnings and 1 error generated.
+
+
+vim +/tick_do_update_jiffies_64 +114 kernel/time/tick-sched.c
+
+   100	
+   101		/* Check, if the jiffies need an update */
+   102		if (tick_do_timer_cpu == cpu)
+   103			do_update_jiffies_64(now);
+   104	
+   105		/*
+   106		 * If jiffies update stalled for too long (timekeeper in stop_machine()
+   107		 * or VMEXIT'ed for several msecs), force an update.
+   108		 */
+   109		if (ts->last_tick_jiffies != jiffies) {
+   110			ts->stalled_jiffies = 0;
+   111			ts->last_tick_jiffies = READ_ONCE(jiffies);
+   112		} else {
+   113			if (++ts->stalled_jiffies == MAX_STALLED_JIFFIES) {
+ > 114				tick_do_update_jiffies_64(now);
+   115				ts->stalled_jiffies = 0;
+   116				ts->last_tick_jiffies = READ_ONCE(jiffies);
+   117			}
+   118		}
+   119	
+   120		if (ts->inidle)
+   121			ts->got_idle_tick = 1;
+   122	}
+   123	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
