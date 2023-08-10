@@ -1,130 +1,97 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D28214FE
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 18:49:12 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5840614b13cso23344327b3.0
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 11:49:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4802820CA8
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 19:44:19 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1bbc06f830aso9579425ad.0
+        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 12:44:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691693352; x=1692298152;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAsvNbJV0xewLpRF082FT5wNDwT03/+fiaT2qH1TeCM=;
-        b=LTICTcE8hNlmMkRTMYp+FBqxbDFL9VxGqxqFwVsETwRzlpfMVOHp4IwneSAJSBQkLW
-         MR9vE7Rjc9bd3DeFHvMQP8MwP5RYD6a5WxQ3dvG5GDrq+CGWGrooh8LRg0e42SkY6AzY
-         6VEb/wJdzpqLgkk7j+sSRWYsx/L83/0hyDnfCC3mfVYVYkiWjp5yPKYVIcDaoxKO4sYN
-         dglRXksLGO1i0EsXt+LFA2SUAFs0jvlz62kG4mmRiThp2m1ODYM0xMJnyFu+1XmNkv5n
-         smJbqbdBAdyl8ANQVK3LF4L8WuTZxBBNYLJN95pwCuwjNk36KloINZCo8EMe0Pt9vGEe
-         Fg0g==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1691696659; x=1692301459;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Y7zOvxXwIuA5rgiamcnWYKungJc3z5komgZPppKVkg=;
+        b=D0sQojkFas15jrjLj99bibUCBLyzaQ7EgzRCtjHmB2i4oUZHoeNZLK12l/pTqSvM0T
+         q6y/4jjDt61peozlrloDOuif9MPZG/sgfEQLyRBiA5oLQNfPwLqYTbYMqTNzSEvc+vrc
+         83aOhjzfayJEp76O/mjpCco4pZPBabArlbwQnjtw8WfLRWhwz97rli2Y+wH4/C/Q33xs
+         WQw9CYmYUTxikLEWcV2Q25ZtcBWMP9U/CmM73HHATYmRnGCFa8K5dEtcgkWln8nclwub
+         vqiEVq4AMBdLcoqur0nyjBxwgKeqG7aze6fs0uZjelm6XtXjvGb5cEhAvGoB/PEohCEq
+         oQgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691693352; x=1692298152;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAsvNbJV0xewLpRF082FT5wNDwT03/+fiaT2qH1TeCM=;
-        b=KiF0LzZqhOYGvSZRr/mc/+Z9f5Lbf4nm3j4iSpdLKOmvae5V9/OHTevDXpudk+hwoX
-         WjEL41P8k6C5qiiKH5OrzJUCVv9PEm5xiZoVy2SufaqJepQErohgfhCcqaZUXmusDotz
-         uZoMWRp4ryYaSUHWfgq/u3lYD40gI7e0nWp2x4nrYXtherUncfgRetSWlZ19PpbGplzd
-         gsqCVHcADFnUsUlReQZ9YgAcNvwI4Lb1KBnZQkTYr2YtwG2SXmVG2m1yd38baeDpjEWL
-         QN8o/2jwuRrBGPv5OhMylJx5amPt8vSuatSPkdIX9AlCTwpwmIcDvlDpXvKqKwYVxOMy
-         lIaA==
-X-Gm-Message-State: AOJu0YwlySCaHOmTvlxRP0YjuB1qJ8MMDDxSAIM5aa+1IcnGdRb0F6D8
-	Rw0SLAP4JaVcEXOX63s3BQjaOqbJ8hl9
-X-Google-Smtp-Source: AGHT+IHBdD4d2FEkNC8Rl2S0IuPwZraSrCdQGQrFkVvxGTI5IiXMSHQJ/2/nwp5UpXIZ9kZNRHwcozJrils6
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:797f:302e:992f:97f2])
- (user=irogers job=sendgmr) by 2002:a81:7855:0:b0:586:e91a:46c2 with SMTP id
- t82-20020a817855000000b00586e91a46c2mr62264ywc.4.1691693351912; Thu, 10 Aug
- 2023 11:49:11 -0700 (PDT)
-Date: Thu, 10 Aug 2023 11:48:53 -0700
-In-Reply-To: <20230810184853.2860737-1-irogers@google.com>
-Message-Id: <20230810184853.2860737-5-irogers@google.com>
+        d=1e100.net; s=20221208; t=1691696659; x=1692301459;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Y7zOvxXwIuA5rgiamcnWYKungJc3z5komgZPppKVkg=;
+        b=K2HtMAjtphGiqNJhtf3GK9QOCJCQGWw/uUbO9Z3YN8bBMzUDdhx7YeuABSu367BLwA
+         RvOww/bYR82ZnjKAaouClRxnk/DZUCKVbjmIPfS0kF35T69o1FTOLlabN9hGJDCKtz2C
+         fZe94SaBIzDBlJE5JBomZu5IOFQpC/dDTlkogo9phjQ1TQ3Tns7wYvtL4FcBZptEo2h9
+         NPOgfLcRvE4MasOQL7C6SU8AGeuGhr5Z8/zmJimZP+9r0UGRI+9uYc7krHTcg1WySVAN
+         4HefxPpEajHZCMy6zz8gOhZc/Lh6zF3WdxqCESVEehyH4nWp7UmSOI4yjMS8fd8TWtuD
+         jhOw==
+X-Gm-Message-State: AOJu0YzZGZ2Re4g8wgp2JPuAJq9/m1NGE1oZL0ydTqGh7lyqfwgO5rss
+	Ke4g0YAXM66XjFbcm+6VmY+ggg==
+X-Google-Smtp-Source: AGHT+IE2eIz04tQ3tBDeTsX6jx4bnSOGfuo5x1j5j2oFvlwLIMiEXDUvEPMKiaI3BkU4/JtlhziMaQ==
+X-Received: by 2002:a17:902:a40f:b0:1bd:9c43:c887 with SMTP id p15-20020a170902a40f00b001bd9c43c887mr3338597plq.10.1691696659289;
+        Thu, 10 Aug 2023 12:44:19 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id je1-20020a170903264100b001bb9aadfb04sm2160601plb.220.2023.08.10.12.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 12:44:18 -0700 (PDT)
+In-Reply-To: <20230808-riscv_static-v2-1-2a1e2d2c7a4f@google.com>
+References: <20230808-riscv_static-v2-1-2a1e2d2c7a4f@google.com>
+Subject: Re: [PATCH v2] riscv: mm: fix 2 instances of
+ -Wmissing-variable-declarations
+Message-Id: <169169664361.3729.4946663711060334827.b4-ty@rivosinc.com>
+Date: Thu, 10 Aug 2023 12:44:03 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230810184853.2860737-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
-Subject: [PATCH v1 4/4] perf trace: Tidy comments
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Fangrui Song <maskray@google.com>, Anshuman Khandual <anshuman.khandual@arm.com>, 
-	Andi Kleen <ak@linux.intel.com>, Leo Yan <leo.yan@linaro.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, James Clark <james.clark@arm.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>, Rob Herring <robh@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, Wang Nan <wangnan0@huawei.com>, 
-	Wang ShaoBo <bobo.shaobowang@huawei.com>, YueHaibing <yuehaibing@huawei.com>, 
-	He Kuang <hekuang@huawei.com>, Brendan Gregg <brendan.d.gregg@gmail.com>
-Cc: Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-901c5
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+From: Palmer Dabbelt <palmer@rivosinc.com>
+To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+  Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+  Nick Desaulniers <ndesaulniers@google.com>
 
-Now tools/perf/examples/bpf/augmented_syscalls.c is
-tools/perf/util/bpf_skel/augmented_syscalls.bpf.c and not enabled as a
-BPF event, tidy the comments to reflect this.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/trace/beauty/beauty.h                  | 15 +++++++--------
- .../util/bpf_skel/augmented_raw_syscalls.bpf.c    |  8 --------
- 2 files changed, 7 insertions(+), 16 deletions(-)
+On Tue, 08 Aug 2023 09:35:00 -0700, Nick Desaulniers wrote:
+> I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
+> bot spotted the following instance in ARCH=riscv builds:
+> 
+>   arch/riscv/mm/init.c:276:7: warning: no previous extern declaration
+>   for non-static variable 'trampoline_pg_dir'
+>   [-Wmissing-variable-declarations]
+>   276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+>       |       ^
+>   arch/riscv/mm/init.c:276:1: note: declare 'static' if the variable is
+>   not intended to be used outside of this translation unit
+>   276 | pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+>       | ^
+>   arch/riscv/mm/init.c:279:7: warning: no previous extern declaration
+>   for non-static variable 'early_pg_dir'
+>   [-Wmissing-variable-declarations]
+>   279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+>       |       ^
+>   arch/riscv/mm/init.c:279:1: note: declare 'static' if the variable is
+>   not intended to be used outside of this translation unit
+>   279 | pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+>       | ^
+> 
+> [...]
 
-diff --git a/tools/perf/trace/beauty/beauty.h b/tools/perf/trace/beauty/beauty.h
-index 3d12bf0f6d07..788e8f6bd90e 100644
---- a/tools/perf/trace/beauty/beauty.h
-+++ b/tools/perf/trace/beauty/beauty.h
-@@ -67,15 +67,14 @@ extern struct strarray strarray__socket_level;
- /**
-  * augmented_arg: extra payload for syscall pointer arguments
-  
-- * If perf_sample->raw_size is more than what a syscall sys_enter_FOO puts,
-- * then its the arguments contents, so that we can show more than just a
-+ * If perf_sample->raw_size is more than what a syscall sys_enter_FOO puts, then
-+ * its the arguments contents, so that we can show more than just a
-  * pointer. This will be done initially with eBPF, the start of that is at the
-- * tools/perf/examples/bpf/augmented_syscalls.c example for the openat, but
-- * will eventually be done automagically caching the running kernel tracefs
-- * events data into an eBPF C script, that then gets compiled and its .o file
-- * cached for subsequent use. For char pointers like the ones for 'open' like
-- * syscalls its easy, for the rest we should use DWARF or better, BTF, much
-- * more compact.
-+ * tools/perf/util/bpf_skel/augmented_syscalls.bpf.c that will eventually be
-+ * done automagically caching the running kernel tracefs events data into an
-+ * eBPF C script, that then gets compiled and its .o file cached for subsequent
-+ * use. For char pointers like the ones for 'open' like syscalls its easy, for
-+ * the rest we should use DWARF or better, BTF, much more compact.
-  *
-  * @size: 8 if all we need is an integer, otherwise all of the augmented arg.
-  * @int_arg: will be used for integer like pointer contents, like 'accept's 'upeer_addrlen'
-diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-index 70478b9460ee..0586c4118656 100644
---- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-+++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-@@ -2,16 +2,8 @@
- /*
-  * Augment the raw_syscalls tracepoints with the contents of the pointer arguments.
-  *
-- * Test it with:
-- *
-- * perf trace -e tools/perf/examples/bpf/augmented_raw_syscalls.c cat /etc/passwd > /dev/null
-- *
-  * This exactly matches what is marshalled into the raw_syscall:sys_enter
-  * payload expected by the 'perf trace' beautifiers.
-- *
-- * For now it just uses the existing tracepoint augmentation code in 'perf
-- * trace', in the next csets we'll hook up these with the sys_enter/sys_exit
-- * code that will combine entry/exit in a strace like way.
-  */
- 
- #include <linux/bpf.h>
+Applied, thanks!
+
+[1/1] riscv: mm: fix 2 instances of -Wmissing-variable-declarations
+      https://git.kernel.org/palmer/c/d2402048bc8a
+
+Best regards,
 -- 
-2.41.0.640.ga95def55d0-goog
+Palmer Dabbelt <palmer@rivosinc.com>
 
