@@ -1,151 +1,56 @@
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BFC186C
-	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 08:41:54 +0000 (UTC)
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-79a2216a22fso191154241.0
-        for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 01:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691656913; x=1692261713;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BIQvytKlPHV61L4Nl1TShTCcBaBoBzuMm/JZ+epP++U=;
-        b=fWueKhKZp/KlvAjBql5/gcufDl2eUlY/f98Ahh/jmMf9VG1DzkfEubma08Qf4MOU7h
-         aSZwv7axEYR4OdkFtDP62/PStXtmje8dMFM5UGb7LcfvKs3Nh9CgSXXsCBr7e0zyeEBv
-         bRAMVsckeIlS3Kg5m9XeBGJG1kLCYalN606LCd+FhajQ4DMAxUd05U3VHbxxhw7YKlsx
-         fYUgNdn3ptlS9XVU6BqPW8Sn7U/JA5kp/lDbk8U/WNtJVJVDyKmVwh0WhA/Yklrhlfk6
-         0tYVjt3D+KmTzC1O3EbbmWbOaHbYLfn6hF6UUeRgNC7ul/JNhrVeCg3Kur2LiwNXCcn9
-         seJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691656913; x=1692261713;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BIQvytKlPHV61L4Nl1TShTCcBaBoBzuMm/JZ+epP++U=;
-        b=jgG1IjYe/jUTmAdwh9GEDmax1PwKD5ya7gLXtXTiQw4VvyKarTTYRdxZlymhfCcxaC
-         3phlGmdsvWS23zDWqla0m2jk8IqXZO3Uq2RRBMNzxn22NE74yp5NseCLMakS2Zoc2reJ
-         0Npl2GQFLDk0LPaVUBmRRN9lXK5m+uT5ZyFNVTldJC7vgWtC6JTKV2PHc9pDAXFNcOuz
-         dW0wc0QcHa6o3K6XpvFGAPSXk1jZezNVa/eHgeHAgM7Hunj/ZLYk7cSipJ0/cBQT1S/C
-         ST9tcvS0ZgxLcCR8ZXgd0mK1a0u3wBkzi/lzNkEOU4XWgpt5zY35vyOwsITfCL+vi3ub
-         G7UA==
-X-Gm-Message-State: AOJu0Yx8eNjW3l8d754JGIchvg/efOitrdQEr38FSf7+VkulNMo9rimI
-	zaASMPYS7Xvmni0VUFaEmiQVm7ozbYiPnI5U5ewfzfVVWIuKccTUP9o=
-X-Google-Smtp-Source: AGHT+IE6xFgpOmRru++MINEnnoF5fh8e0YFDyWoZ5seECl++8hTyx/CXJypK5KyWrfhmRiDyC8pkNhRum5XwhhnE11U=
-X-Received: by 2002:a67:fada:0:b0:447:68a0:a121 with SMTP id
- g26-20020a67fada000000b0044768a0a121mr982100vsq.2.1691656912738; Thu, 10 Aug
- 2023 01:41:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE74E186C
+	for <llvm@lists.linux.dev>; Thu, 10 Aug 2023 08:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD84BC433C8;
+	Thu, 10 Aug 2023 08:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691657795;
+	bh=JnhEH4wMc8AeDCC0VFoQzQrj+iXNdjqhUQZWI00aVz4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rr8FrM0ZIPljqAf/YtTP0nPqKVf0SAWcJYosFK7Q2LQ+ppagF7NZsocOKvKfWW8Iv
+	 tOcB+r+K6DXD4L5lCrPuff4QCziSJERHeTikodP0HTpOD/bXibzsloh9hziKLqC7c3
+	 r6so+GeqiVHXchJPSJ5b2diWokVjVvkYHEbSSQUrfFe4WgAHFuJcDA8gM2FSKercB5
+	 6Yx7rg5ZQmO2uPu73ODAdx1gchqSnOzzoxs17BUMrfEqcUOV+NKYP1cLbIV4qtQr48
+	 SkZ7r50kj9j3QHeeuRJEHBgoFHEHqE2Y5lz4RT294C8Y8Z9vYMsA47Ne6KJqBVh8sz
+	 vRP4RsDiE8sKQ==
+Date: Thu, 10 Aug 2023 10:56:32 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH 1/2] i2c: i2c-bcm-iproc: fix -Wvoid-pointer-to-enum-cast
+ warning
+Message-ID: <20230810085632.xzonkmse27mu4yew@intel.intel>
+References: <20230809-cbl-1903-v1-0-df9d66a3ba3e@google.com>
+ <20230809-cbl-1903-v1-1-df9d66a3ba3e@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 10 Aug 2023 14:11:41 +0530
-Message-ID: <CA+G9fYtQGmwYHYf5suRMyCzQmKmQ1kx31gxGJ-7CT-NTLrxYoA@mail.gmail.com>
-Subject: drivers/gpu/drm/nouveau/nouveau_exec.c:114:4: error: cannot jump from
- this indirect goto statement to one of its possible targets
-To: clang-built-linux <llvm@lists.linux.dev>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org
-Cc: Dave Airlie <airlied@redhat.com>, Danilo Krummrich <dakr@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230809-cbl-1903-v1-1-df9d66a3ba3e@google.com>
 
-Following clang-17 build failures noticed on Linux next-20230810
+Hi Justin,
 
-Build log:
--------
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=arm64
-CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-clang' LLVM=1 LLVM_IAS=1
-drivers/video/backlight/lp855x_bl.c:252:11: warning: variable 'ret' is
-used uninitialized whenever 'if' condition is false
-[-Wsometimes-uninitialized]
-  252 |         else if (lp->mode == REGISTER_BASED)
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/video/backlight/lp855x_bl.c:256:9: note: uninitialized use occurs here
-  256 |         return ret;
-      |                ^~~
-drivers/video/backlight/lp855x_bl.c:252:7: note: remove the 'if' if
-its condition is always true
-  252 |         else if (lp->mode == REGISTER_BASED)
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  253 |                 ret = lp855x_write_byte(lp, lp->cfg->reg_brightness,
-drivers/video/backlight/lp855x_bl.c:244:9: note: initialize the
-variable 'ret' to silence this warning
-  244 |         int ret;
-      |                ^
-      |                 = 0
-1 warning generated.
-fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set
-but not used [-Wunused-but-set-variable]
-  232 |         unsigned long pages_processed = 0;
-      |                       ^
-1 warning generated.
-drivers/gpu/drm/nouveau/nouveau_exec.c:114:4: error: cannot jump from
-this indirect goto statement to one of its possible targets
-  114 |                         drm_exec_retry_on_contention(exec);
-      |                         ^
-include/drm/drm_exec.h:96:4: note: expanded from macro
-'drm_exec_retry_on_contention'
-   96 |                         goto *__drm_exec_retry_ptr;             \
-      |                         ^
-drivers/gpu/drm/nouveau/nouveau_exec.c:106:2: note: possible target of
-indirect goto statement
-  106 |         drm_exec_until_all_locked(exec) {
-      |         ^
-include/drm/drm_exec.h:79:33: note: expanded from macro
-'drm_exec_until_all_locked'
-   79 |                 __label__ __drm_exec_retry;                     \
-      |                                                                 ^
-drivers/gpu/drm/nouveau/nouveau_exec.c:106:2: note: jump enters a
-statement expression
-include/drm/drm_exec.h:78:35: note: expanded from macro
-'drm_exec_until_all_locked'
-   78 |         for (void *__drm_exec_retry_ptr; ({                     \
-      |                                          ^
-1 error generated.
-make[7]: *** [scripts/Makefile.build:243:
-drivers/gpu/drm/nouveau/nouveau_exec.o] Error 1
-drivers/gpu/drm/nouveau/nouveau_uvmm.c:1305:5: error: cannot jump from
-this indirect goto statement to one of its possible targets
- 1305 |                                 drm_exec_retry_on_contention(exec);
-      |                                 ^
-include/drm/drm_exec.h:96:4: note: expanded from macro
-'drm_exec_retry_on_contention'
-   96 |                         goto *__drm_exec_retry_ptr;             \
-      |                         ^
-drivers/gpu/drm/nouveau/nouveau_uvmm.c:1291:2: note: possible target
-of indirect goto statement
- 1291 |         drm_exec_until_all_locked(exec) {
-      |         ^
-include/drm/drm_exec.h:79:33: note: expanded from macro
-'drm_exec_until_all_locked'
-   79 |                 __label__ __drm_exec_retry;                     \
-      |                                                                 ^
-drivers/gpu/drm/nouveau/nouveau_uvmm.c:1291:2: note: jump enters a
-statement expression
-include/drm/drm_exec.h:78:35: note: expanded from macro
-'drm_exec_until_all_locked'
-   78 |         for (void *__drm_exec_retry_ptr; ({                     \
-      |                                          ^
-1 error generated.
-make[7]: *** [scripts/Makefile.build:243:
-drivers/gpu/drm/nouveau/nouveau_uvmm.o] Error 1
+> @@ -1036,7 +1036,7 @@ static int bcm_iproc_i2c_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, iproc_i2c);
+>  	iproc_i2c->device = &pdev->dev;
+>  	iproc_i2c->type =
+> -		(enum bcm_iproc_i2c_type)of_device_get_match_data(&pdev->dev);
+> +		(unsigned long) of_device_get_match_data(&pdev->dev);
 
+I think this should be uintptr_t, as defined in types.h:
 
-  Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+    typedef unsigned long uintptr_t;
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230809/testrun/18940123/suite/build/test/clang-17-lkftconfig/log
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TjhxEjDSquzvxYvC8eD8VWx9dV/
+(I'm a bit puzzled to see a void *data cast to a 0/1 value.)
 
-Steps to reproduce:
-   tuxmake --runtime podman --target-arch arm64 --toolchain clang-17
---kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2TjhxEjDSquzvxYvC8eD8VWx9dV/config
-LLVM=1 LLVM_IAS=1
-   https://storage.tuxsuite.com/public/linaro/lkft/builds/2TjhxEjDSquzvxYvC8eD8VWx9dV/tuxmake_reproducer.sh
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Andi
