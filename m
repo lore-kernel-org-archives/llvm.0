@@ -1,104 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830D21877;
-	Thu, 10 Aug 2023 23:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691711609; x=1723247609;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5JIN1Yu4mUkxQTHvXnfAGLOJxcyhh/wZyopkkYQtIuo=;
-  b=BWPMnJsvMnVIYYpedyzApsgjIYSZdbRVOH5nMnIK/TrxN0oiblcVwIc2
-   qHSTvHEjU74Td9rTVjkRE9ACkfAk7O45tO0b0vKnhOZDqMVAqybR6uRCA
-   DqdPs0K4Y7z1evCXDKVdL/Y1cyH7yqp78Cz4uDaS/k8J37i/gsYt/2oki
-   ornh9EEnIQO+nz9VJXXAPBKn0EyyKnFqfYYOs16YAujBO6Po6HYrzAt5K
-   RvUAXpnqB7VM45fxXA90fvbfkALiU3qpEqhOyNtSLCagE8vBvjvgMBJFh
-   +ZyMgMK2Va21bpTwyO3qoUQ9kWCtsCGtVJJIC4UlJRmm/cWCv4R9pzqAp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="351872275"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="351872275"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 16:53:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="856092397"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="856092397"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Aug 2023 16:53:24 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qUFT1-0007LM-0U;
-	Thu, 10 Aug 2023 23:53:23 +0000
-Date: Fri, 11 Aug 2023 07:53:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxime Coquelin <maxime.coquelin@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-	netdev@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [mst-vhost:vhost 34/46] drivers/vdpa/vdpa_user/vduse_dev.c:1812:23:
- error: use of undeclared identifier 'VIRTIO_RING_F_INDIRECT_DESC'
-Message-ID: <202308110712.wCQoOG00-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74A6A29;
+	Fri, 11 Aug 2023 01:58:06 +0000 (UTC)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RMRjs3rD5zrSHN;
+	Fri, 11 Aug 2023 09:56:49 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 11 Aug 2023 09:58:03 +0800
+Subject: Re: [linux-next:master 7083/7933] ld.lld: error: assignment to symbol
+ __init_end does not converge
+To: kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Linux Memory
+ Management List <linux-mm@kvack.org>, Andrew Morton
+	<akpm@linux-foundation.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>
+References: <202308090338.AqDF9eEK-lkp@intel.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <95122552-df11-c75c-4957-911e58ec9410@huawei.com>
+Date: Fri, 11 Aug 2023 09:58:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <202308090338.AqDF9eEK-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git vhost
-head:   bb59e1f960bd07f70a4b3d8de99bfd8d71835199
-commit: 334f48a83105ebe129a660d1ea1a0c29f87d50c7 [34/46] vduse: Temporarily disable control queue features
-config: x86_64-buildonly-randconfig-r001-20230811 (https://download.01.org/0day-ci/archive/20230811/202308110712.wCQoOG00-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230811/202308110712.wCQoOG00-lkp@intel.com/reproduce)
+On 2023/8/9 3:26, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   71cd4fc492ec41e4acd85e98bbf7a13753fc1e03
+> commit: 489dcf298fbc8c0be81d98a6477ddeadc7327858 [7083/7933] mm/mm_init.c: remove obsolete macro HASH_SMALL
+> config: arm64-randconfig-r032-20230808 (https://download.01.org/0day-ci/archive/20230809/202308090338.AqDF9eEK-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230809/202308090338.AqDF9eEK-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308090338.AqDF9eEK-lkp@intel.com/
+> 
+> Note: the linux-next/master HEAD 71cd4fc492ec41e4acd85e98bbf7a13753fc1e03 builds fine.
+>       It may have been fixed somewhere.
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: assignment to symbol __init_end does not converge
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308110712.wCQoOG00-lkp@intel.com/
+Thanks for your report. It seems that commit is irrelevant to the problem and I have no idea what
+this error means. Could you please give me some more information?
 
-All errors (new ones prefixed by >>):
+Thanks!
 
->> drivers/vdpa/vdpa_user/vduse_dev.c:1812:23: error: use of undeclared identifier 'VIRTIO_RING_F_INDIRECT_DESC'
-                   config->features &= VDUSE_NET_VALID_FEATURES_MASK;
-                                       ^
-   drivers/vdpa/vdpa_user/vduse_dev.c:66:11: note: expanded from macro 'VDUSE_NET_VALID_FEATURES_MASK'
-            BIT_ULL(VIRTIO_RING_F_INDIRECT_DESC) | \
-                    ^
->> drivers/vdpa/vdpa_user/vduse_dev.c:1812:23: error: use of undeclared identifier 'VIRTIO_F_EVENT_IDX'
-   drivers/vdpa/vdpa_user/vduse_dev.c:67:11: note: expanded from macro 'VDUSE_NET_VALID_FEATURES_MASK'
-            BIT_ULL(VIRTIO_F_EVENT_IDX) |          \
-                    ^
->> drivers/vdpa/vdpa_user/vduse_dev.c:1812:23: error: use of undeclared identifier 'VIRTIO_F_IOMMU_PLATFORM'
-   drivers/vdpa/vdpa_user/vduse_dev.c:69:11: note: expanded from macro 'VDUSE_NET_VALID_FEATURES_MASK'
-            BIT_ULL(VIRTIO_F_IOMMU_PLATFORM) |     \
-                    ^
-   drivers/vdpa/vdpa_user/vduse_dev.c:2007:51: warning: shift count >= width of type [-Wshift-count-overflow]
-           ret = dma_set_mask_and_coherent(&vdev->vdpa.dev, DMA_BIT_MASK(64));
-                                                            ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 3 errors generated.
-
-
-vim +/VIRTIO_RING_F_INDIRECT_DESC +1812 drivers/vdpa/vdpa_user/vduse_dev.c
-
-  1804	
-  1805	static void vduse_dev_features_filter(struct vduse_dev_config *config)
-  1806	{
-  1807		/*
-  1808		 * Temporarily filter out virtio-net's control virtqueue and features
-  1809		 * that depend on it while CVQ is being made more robust for VDUSE.
-  1810		 */
-  1811		if (config->device_id == VIRTIO_ID_NET)
-> 1812			config->features &= VDUSE_NET_VALID_FEATURES_MASK;
-  1813	}
-  1814	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
