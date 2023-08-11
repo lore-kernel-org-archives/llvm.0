@@ -1,126 +1,81 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC6C5692
-	for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 15:02:23 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 285815C00FE;
-	Fri, 11 Aug 2023 11:02:23 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 11 Aug 2023 11:02:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1691766143; x=1691852543; bh=F9D7PZ0hU2tHmahvQKpgIwdFWy4Ot1Q9fLn
-	ltmunggE=; b=s0NGs1DvL7dPmIgXuhCKQhK5nHT3QdoltzGiw7QiM0/OZ21PmjD
-	gwAs7BIh5m7DxcmxPUWYoq1ND4bmewxrlf0VnW3rta4Idkm8MOCPiWRUWZQfIx5Q
-	mYr4U4qoJdZVXQ/Mj+77MgE9Uj64sufSF7OunS76msNY7YtEMr0oypl2cBLX/C/7
-	K1UfcWK7wHYQGesYeYUCasECJYehXWVF2byszqg+uWB5EnKwEmgpCWC2mmHwAnah
-	0OQQ7EWH5n0rbOavVYEGXaN1/QWuhnrvEuwRsWHoZDPRmBZ9lv98cvasB2tIdWCL
-	ZvpG9HDkcNBI2M3vsi50i9WhtIWScEfl4hg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1691766143; x=1691852543; bh=F9D7PZ0hU2tHmahvQKpgIwdFWy4Ot1Q9fLn
-	ltmunggE=; b=TaZws5a9pgfjZmfmfaS0f3x7J/gNZQmj6t64N/fwVxwdLpMp8rN
-	G3lBUxnBzvZncOxlnchOScifpjcjXXRlYYPN2F8oyCkD/YeB/dtYHbRlmT+Er3sQ
-	4eqv6nfzBjpD9YSF5Oco6CKzZtBZriR9qJYGZHBIuRoPbrs1INbdTJvRRicz7u50
-	1aJ8lRHU6xs///e/ggo7R8uI3SNtYDnNYQ4eY62Stx67SwxByRR3njJZILs7BMOd
-	AG6d5EtOs4GhGli+OJQ9qLZToaOX73h65s4L1bUF5JHqu8Hb1I1MxoenpAGLI216
-	YVASgcF6hOMNaMYRhoKBjt50ePXbynyz9pw==
-X-ME-Sender: <xms:fk3WZM40Q1ZUwX5YJK6MF-G73WnEi7VgxNMtfpZVpMiPODcSSx4CoQ>
-    <xme:fk3WZN6r7LXuob6Nz-n0Pkj_b_e4vbydqsIX7jmidnm-tg8BuWHxJDzPv3sDSlRZ2
-    szwskF2CUK7Ufk7Htc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrleekgdekvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:fk3WZLf5NgT4cxwFwQIrZ4nsIHr0yVTcAOMOA23VL_5wd-gcG5OQ8w>
-    <xmx:fk3WZBIpWlsLcE_bJmQ2HMv7lYxP6OY7UPzsGkZQMT53CvNW5a5P5A>
-    <xmx:fk3WZAJtJZtVNbcaDL0Uhj8dhv3J-_tPb6IRYLM29FkWga3Vt9ljcw>
-    <xmx:f03WZOzHPAdA6e9FuYvlOJSNdCNp-Na29yAEJ8OYoLrwJ8gCYm1Law>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3F16CB60089; Fri, 11 Aug 2023 11:02:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F1463B6;
+	Fri, 11 Aug 2023 15:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BE5C433C7;
+	Fri, 11 Aug 2023 15:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691766414;
+	bh=x9/6qPE0ahOZQaLwoxBTxd9SGZCAAaS1X7FH7xekC3E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rhIDV5tX3UpkogZmDz/UGhXNsPdjLYb+TPRfoJGSDVHnMj0OSSKTRgqo5Sz/WexcW
+	 5riHcZC3CUSoEYzQ/ND0nGwbI9a15vMS4dsoNtKZlLYlCqvP4S/QaB8Gyx0TUjEGIH
+	 qXCuzKMJgRgeooMbfYMjmjXRdU+WkOcMt68UGi3ZSd3HVQcOt1kisx0wfnHWuN+ETC
+	 CXA9jtQl2ROSChDpN9etivDJOXX6whMQTSSSbdvRSPelaoAEFLLTOWLlCsN+MeE9Yy
+	 1cLX1KqNvI66C38ed1PPi2dEYv3sQwbtdsY8yV4aMowBoLjCxzWt0OVf6e3Fog/uo2
+	 BBoNafQT3v82w==
+Date: Fri, 11 Aug 2023 20:36:44 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
+	Jeffrey Hugo <quic_jhugo@quicinc.com>,
+	Vivek Pernamitta <quic_vpernami@quicinc.com>,
+	Carl Vanderlip <quic_carlv@quicinc.com>,
+	Qiang Yu <quic_qianyu@quicinc.com>, mhi@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] bus: mhi: host: remove unused-but-set parameter
+Message-ID: <20230811150644.GB5296@thinkpad>
+References: <20230811134547.3231160-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <ef7d94a4-9f65-47fb-906a-4fed4480d020@app.fastmail.com>
-In-Reply-To: <97764bad-7091-e9ed-6f49-d31861fc622f@linux.intel.com>
-References: <20230811130948.2211800-1-arnd@kernel.org>
- <97764bad-7091-e9ed-6f49-d31861fc622f@linux.intel.com>
-Date: Fri, 11 Aug 2023 17:02:01 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Hans de Goede" <hdegoede@redhat.com>,
- "Mark Gross" <markgross@kernel.org>, "xingtong.wu" <xingtong.wu@siemens.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- "Henning Schild" <henning.schild@siemens.com>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Lee Jones" <lee@kernel.org>, platform-driver-x86@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] platform/x86/siemens: simatic-ipc: fix nonsensical condition
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230811134547.3231160-1-arnd@kernel.org>
 
-On Fri, Aug 11, 2023, at 15:17, Ilpo J=C3=A4rvinen wrote:
-> On Fri, 11 Aug 2023, Arnd Bergmann wrote:
->
->> From: Arnd Bergmann <arnd@arndb.de>
->>=20
->> The condition checking for a constant SIMATIC_IPC_DEVICE_BX_59A value
->> clearly makes no sense, as clang warns:
->>=20
->> drivers/platform/x86/siemens/simatic-ipc.c:132:42: error: use of logi=
-cal '||' with constant operand [-Werror,-Wconstant-logical-operand]
->>                 if (ledmode =3D=3D SIMATIC_IPC_DEVICE_227G || SIMATIC=
-_IPC_DEVICE_BX_59A)
->>                                                        ^  ~~~~~~~~~~~=
-~~~~~~~~~~~~~~
->> drivers/platform/x86/siemens/simatic-ipc-batt.c:197:49: error: use of=
- logical '||' with constant operand [-Werror,-Wconstant-logical-operand]
->>                 if (priv.devmode =3D=3D SIMATIC_IPC_DEVICE_BX_21A || =
-SIMATIC_IPC_DEVICE_BX_59A)
->>                                                               ^  ~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->>=20
->> Most likely, this was meant to check ledmode to be one of the two val=
-ues,
->> so change it to that.
->>=20
->> Fixes: b8af77951941e ("platform/x86/siemens: simatic-ipc: add new mod=
-els BX-56A/BX-59A")
->> Fixes: c56beff203754 ("platform/x86/siemens: simatic-ipc-batt: add su=
-pport for module BX-59A")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Aug 11, 2023 at 03:45:41PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Clang warns about a parameter that is decremented but never evaluated heere:
+> 
+> bus/mhi/host/main.c:803:13: error: parameter 'event_quota' set but not used [-Werror,-Wunused-but-set-parameter]
+>                              u32 event_quota)
+> 
+> Remove the access to the variable to avoid that warning.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Ok, I see. I missed those as there is hasn't been a new linux-next in
-a few days.
+Applied to mhi-next!
 
-I suppose this one is also fixed then?
+- Mani
 
-WARNING: unmet direct dependencies detected for P2SB
-  Depends on [n]: PCI [=3Dn] && X86 [=3Dy]
-  Selected by [m]:
-  - SIEMENS_SIMATIC_IPC_WDT [=3Dm] && WATCHDOG [=3Dy] && SIEMENS_SIMATIC=
-_IPC [=3Dy]
-drivers/platform/x86/p2sb.c:68:9: error: call to undeclared function 'pc=
-i_scan_single_device'; ISO C99 and later do not support implicit functio=
-n declarations [-Wimplicit-function-declaration]
+> ---
+>  drivers/bus/mhi/host/main.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+> index 74a75439c7130..dcf627b36e829 100644
+> --- a/drivers/bus/mhi/host/main.c
+> +++ b/drivers/bus/mhi/host/main.c
+> @@ -938,7 +938,6 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+>  				if (!mhi_chan->configured)
+>  					break;
+>  				parse_xfer_event(mhi_cntrl, local_rp, mhi_chan);
+> -				event_quota--;
+>  			}
+>  			break;
+>  		default:
+> -- 
+> 2.39.2
+> 
 
-     Arnd
+-- 
+மணிவண்ணன் சதாசிவம்
