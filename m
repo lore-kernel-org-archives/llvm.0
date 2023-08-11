@@ -1,44 +1,45 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3229D10F1;
-	Fri, 11 Aug 2023 05:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D5C1869;
+	Fri, 11 Aug 2023 09:10:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691731416; x=1723267416;
+  t=1691745052; x=1723281052;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nbw9T50fg3WVytWg7YdtoE5+5VQCcf5Uu+SVqPrnCVc=;
-  b=gRbSGuYX53vUVCjgpLkXwy7MW9Ap5tyWT3do3w4v28UZZJeIEh8QRL/l
-   0DNMzU5EAT3pGB7Mh9LRxlSYxLvZIf3eNE3bBLmVWpGeA/U76VoEmud/D
-   DcyVA8mB/OyJEaNTQGMAdvWcHX7ouF4xQzK4vutJaZpj+NWdviXeqXs1m
-   pLn/CyzhGr+UypvbNW3ROF72Q67ZoSOAPvIMp+knyrxtFRobvqUyqTaXm
-   ju+5LJMPoKLPELA2ZfqZiL4Bez47hNo34QYzPuijmLBPh9VvNwLWTvRMn
-   3KwE7XaPJSjVfPnWCB2DI7jCZo+eUb4+ziOBFiHp1LnQd/4w+2XByQ/z/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="375311459"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="375311459"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 22:23:35 -0700
+  bh=34A13lgBgtVodLG5J4KXeIyraaHm8BajR+D9zSX6nww=;
+  b=LrzuGMttJjYqq5S8UFhUpeZuYdXU544NH7eQfBQUscDWiZ+hLGcOYAOz
+   RTPqHiAeglbnMNPw9utI7aTF75zafkGpDliEoydHyMNv9Lqs7NePphSsM
+   xsE8xUZAUoBUWBnlJzXjNrJu2JyVQ0RrleTbuo0/qWWkPpRszdQM+k6+n
+   a0iHH1B4I4MzKLMAaMiAO1BEhEiEyIm45ayIYiLgx9yYSt2nhnjZDRY7e
+   6n86TpC4tahusHRqMCHneT46xxmwq4RCbtJKlHBs++SXixLEvsLckHX9U
+   gcxjv9QzFNuJq1RDGOojt8AcETQqMTuxTkZ6LeCrYQJo0A7ust4ZBaBHt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="375349995"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="375349995"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 02:10:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="856171618"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="856171618"
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="797958364"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="797958364"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Aug 2023 22:23:32 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 11 Aug 2023 02:10:38 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qUKcU-0007X6-1x;
-	Fri, 11 Aug 2023 05:23:30 +0000
-Date: Fri, 11 Aug 2023 13:23:27 +0800
+	id 1qUOAH-0007fK-1O;
+	Fri, 11 Aug 2023 09:10:37 +0000
+Date: Fri, 11 Aug 2023 17:10:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dexuan Cui <decui@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dcui-tdx:decui/upstream-hyperv/hyperv-next/TDX/0810 13/25]
- drivers/hv/vmbus_drv.c:2001:25: warning: result of comparison of constant
- 18446744073709551615 with expression of type 'resource_size_t' (aka
- 'unsigned int') is always false
-Message-ID: <202308111330.Wd2uKUwq-lkp@intel.com>
+To: Eric DeVolder <eric.devolder@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Sourabh Jain <sourabhjain@linux.ibm.com>
+Subject: [akpm-mm:mm-nonmm-unstable 56/78] kernel/crash_core.c:331:16: error:
+ incomplete definition of type 'struct crash_mem'
+Message-ID: <202308111736.VWdS2xfs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,161 +49,237 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/dcui/tdx decui/upstream-hyperv/hyperv-next/TDX/0810
-head:   104f836a5da361eec57916007c24e43c4d247951
-commit: 02b4b7edb053ee20a72cc6962333e246d684a264 [13/25] Drivers: hv: vmbus:  Hardcode MMIO resources in vmbus_walk_resources() when necessary
-config: i386-buildonly-randconfig-r005-20230811 (https://download.01.org/0day-ci/archive/20230811/202308111330.Wd2uKUwq-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+head:   0f6b2c125ce19074c1086a70119b02dd30b089a4
+commit: 3f1eba00ee9d93b66f1859d40537befe44ceb1cd [56/78] crash: move a few code bits to setup support of crash hotplug
+config: x86_64-buildonly-randconfig-r003-20230811 (https://download.01.org/0day-ci/archive/20230811/202308111736.VWdS2xfs-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230811/202308111330.Wd2uKUwq-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230811/202308111736.VWdS2xfs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308111330.Wd2uKUwq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308111736.VWdS2xfs-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hv/vmbus_drv.c:2001:25: warning: result of comparison of constant 18446744073709551615 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-                   if (start == 0 && end == 0xFFFFFFFFFFFFFFFF) {
-                                     ~~~ ^  ~~~~~~~~~~~~~~~~~~
->> drivers/hv/vmbus_drv.c:2002:12: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68182605824 to 3758096384 [-Wconstant-conversion]
-                           start = 0xFE0000000;
-                                 ~ ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2003:10: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68719476735 to 4294967295 [-Wconstant-conversion]
-                           end = 0xFFFFFFFFF;
-                               ~ ^~~~~~~~~~~
-   In file included from drivers/hv/vmbus_drv.c:40:
-   arch/x86/include/asm/mshyperv.h:249:12: warning: unused function 'hv_snp_boot_ap' [-Wunused-function]
-   static int hv_snp_boot_ap(int cpu, unsigned long start_ip) { return 0; }
-              ^
-   4 warnings generated.
+   kernel/crash_core.c:318:40: warning: declaration of 'struct crash_mem' will not be visible outside of this function [-Wvisibility]
+   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+                                          ^
+>> kernel/crash_core.c:331:16: error: incomplete definition of type 'struct crash_mem'
+           nr_phdr += mem->nr_ranges;
+                      ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+                                          ^
+>> kernel/crash_core.c:343:25: error: use of undeclared identifier 'ELF_CORE_HEADER_ALIGN'
+           elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
+                                  ^
+>> kernel/crash_core.c:343:25: error: use of undeclared identifier 'ELF_CORE_HEADER_ALIGN'
+   kernel/crash_core.c:393:21: error: incomplete definition of type 'struct crash_mem'
+           for (i = 0; i < mem->nr_ranges; i++) {
+                           ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+                                          ^
+   kernel/crash_core.c:394:15: error: incomplete definition of type 'struct crash_mem'
+                   mstart = mem->ranges[i].start;
+                            ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+                                          ^
+   kernel/crash_core.c:395:13: error: incomplete definition of type 'struct crash_mem'
+                   mend = mem->ranges[i].end;
+                          ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+                                          ^
+   kernel/crash_core.c:318:5: warning: no previous prototype for function 'crash_prepare_elf64_headers' [-Wmissing-prototypes]
+   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+       ^
+   kernel/crash_core.c:318:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+   ^
+   static 
+   kernel/crash_core.c:417:36: warning: declaration of 'struct crash_mem' will not be visible outside of this function [-Wvisibility]
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:424:21: error: incomplete definition of type 'struct crash_mem'
+           for (i = 0; i < mem->nr_ranges; i++) {
+                           ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:425:14: error: incomplete definition of type 'struct crash_mem'
+                   start = mem->ranges[i].start;
+                           ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:426:12: error: incomplete definition of type 'struct crash_mem'
+                   end = mem->ranges[i].end;
+                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:441:7: error: incomplete definition of type 'struct crash_mem'
+                           mem->ranges[i].start = 0;
+                           ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:442:7: error: incomplete definition of type 'struct crash_mem'
+                           mem->ranges[i].end = 0;
+                           ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:443:15: error: incomplete definition of type 'struct crash_mem'
+                           if (i < mem->nr_ranges - 1) {
+                                   ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:445:24: error: incomplete definition of type 'struct crash_mem'
+                                   for (j = i; j < mem->nr_ranges - 1; j++) {
+                                                   ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:446:9: error: incomplete definition of type 'struct crash_mem'
+                                           mem->ranges[j].start =
+                                           ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:447:10: error: incomplete definition of type 'struct crash_mem'
+                                                   mem->ranges[j+1].start;
+                                                   ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:448:9: error: incomplete definition of type 'struct crash_mem'
+                                           mem->ranges[j].end =
+                                           ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:449:11: error: incomplete definition of type 'struct crash_mem'
+                                                           mem->ranges[j+1].end;
+                                                           ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
+   kernel/crash_core.c:458:8: error: incomplete definition of type 'struct crash_mem'
+                                   mem->nr_ranges--;
+                                   ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+   int crash_exclude_mem_range(struct crash_mem *mem,
+                                      ^
 
 
-vim +2001 drivers/hv/vmbus_drv.c
+vim +331 kernel/crash_core.c
 
-  1965	
-  1966	#ifdef CONFIG_ACPI
-  1967	/*
-  1968	 * VMBUS is an acpi enumerated device. Get the information we
-  1969	 * need from DSDT.
-  1970	 */
-  1971	static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
-  1972	{
-  1973		resource_size_t start = 0;
-  1974		resource_size_t end = 0;
-  1975		struct resource *new_res;
-  1976		struct resource **old_res = &hyperv_mmio;
-  1977		struct resource **prev_res = NULL;
-  1978		struct resource r;
-  1979	
-  1980		switch (res->type) {
-  1981	
-  1982		/*
-  1983		 * "Address" descriptors are for bus windows. Ignore
-  1984		 * "memory" descriptors, which are for registers on
-  1985		 * devices.
-  1986		 */
-  1987		case ACPI_RESOURCE_TYPE_ADDRESS32:
-  1988			start = res->data.address32.address.minimum;
-  1989			end = res->data.address32.address.maximum;
-  1990			if (start == 0 && end == 0xFFFFFFFF) {
-  1991				start = 0xF8000000;
-  1992				end = 0xFFFFFFFF;
-  1993				pr_warn("vmbus_walk_resources: using a default 32-bit MMIO range\n");
-  1994			}
-  1995			break;
-  1996	
-  1997		case ACPI_RESOURCE_TYPE_ADDRESS64:
-  1998			start = res->data.address64.address.minimum;
-  1999			end = res->data.address64.address.maximum;
-  2000	
-> 2001			if (start == 0 && end == 0xFFFFFFFFFFFFFFFF) {
-> 2002				start = 0xFE0000000;
-  2003				end = 0xFFFFFFFFF;
-  2004				pr_warn("vmbus_walk_resources: using a default 64-bit MMIO range\n");
-  2005			}
-  2006			break;
-  2007	
-  2008		/*
-  2009		 * The IRQ information is needed only on ARM64, which Hyper-V
-  2010		 * sets up in the extended format. IRQ information is present
-  2011		 * on x86/x64 in the non-extended format but it is not used by
-  2012		 * Linux. So don't bother checking for the non-extended format.
-  2013		 */
-  2014		case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
-  2015			if (!acpi_dev_resource_interrupt(res, 0, &r)) {
-  2016				pr_err("Unable to parse Hyper-V ACPI interrupt\n");
-  2017				return AE_ERROR;
-  2018			}
-  2019			/* ARM64 INTID for VMbus */
-  2020			vmbus_interrupt = res->data.extended_irq.interrupts[0];
-  2021			/* Linux IRQ number */
-  2022			vmbus_irq = r.start;
-  2023			return AE_OK;
-  2024	
-  2025		default:
-  2026			/* Unused resource type */
-  2027			return AE_OK;
-  2028	
-  2029		}
-  2030		/*
-  2031		 * Ignore ranges that are below 1MB, as they're not
-  2032		 * necessary or useful here.
-  2033		 */
-  2034		if (end < 0x100000)
-  2035			return AE_OK;
-  2036	
-  2037		new_res = kzalloc(sizeof(*new_res), GFP_ATOMIC);
-  2038		if (!new_res)
-  2039			return AE_NO_MEMORY;
-  2040	
-  2041		/* If this range overlaps the virtual TPM, truncate it. */
-  2042		if (end > VTPM_BASE_ADDRESS && start < VTPM_BASE_ADDRESS)
-  2043			end = VTPM_BASE_ADDRESS;
-  2044	
-  2045		new_res->name = "hyperv mmio";
-  2046		new_res->flags = IORESOURCE_MEM;
-  2047		new_res->start = start;
-  2048		new_res->end = end;
-  2049	
-  2050		/*
-  2051		 * If two ranges are adjacent, merge them.
-  2052		 */
-  2053		do {
-  2054			if (!*old_res) {
-  2055				*old_res = new_res;
-  2056				break;
-  2057			}
-  2058	
-  2059			if (((*old_res)->end + 1) == new_res->start) {
-  2060				(*old_res)->end = new_res->end;
-  2061				kfree(new_res);
-  2062				break;
-  2063			}
-  2064	
-  2065			if ((*old_res)->start == new_res->end + 1) {
-  2066				(*old_res)->start = new_res->start;
-  2067				kfree(new_res);
-  2068				break;
-  2069			}
-  2070	
-  2071			if ((*old_res)->start > new_res->end) {
-  2072				new_res->sibling = *old_res;
-  2073				if (prev_res)
-  2074					(*prev_res)->sibling = new_res;
-  2075				*old_res = new_res;
-  2076				break;
-  2077			}
-  2078	
-  2079			prev_res = old_res;
-  2080			old_res = &(*old_res)->sibling;
-  2081	
-  2082		} while (1);
-  2083	
-  2084		return AE_OK;
-  2085	}
-  2086	#endif
-  2087	
+   317	
+ > 318	int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+   319				  void **addr, unsigned long *sz)
+   320	{
+   321		Elf64_Ehdr *ehdr;
+   322		Elf64_Phdr *phdr;
+   323		unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
+   324		unsigned char *buf;
+   325		unsigned int cpu, i;
+   326		unsigned long long notes_addr;
+   327		unsigned long mstart, mend;
+   328	
+   329		/* extra phdr for vmcoreinfo ELF note */
+   330		nr_phdr = nr_cpus + 1;
+ > 331		nr_phdr += mem->nr_ranges;
+   332	
+   333		/*
+   334		 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
+   335		 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
+   336		 * I think this is required by tools like gdb. So same physical
+   337		 * memory will be mapped in two ELF headers. One will contain kernel
+   338		 * text virtual addresses and other will have __va(physical) addresses.
+   339		 */
+   340	
+   341		nr_phdr++;
+   342		elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
+ > 343		elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
+   344	
+   345		buf = vzalloc(elf_sz);
+   346		if (!buf)
+   347			return -ENOMEM;
+   348	
+   349		ehdr = (Elf64_Ehdr *)buf;
+   350		phdr = (Elf64_Phdr *)(ehdr + 1);
+   351		memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
+   352		ehdr->e_ident[EI_CLASS] = ELFCLASS64;
+   353		ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
+   354		ehdr->e_ident[EI_VERSION] = EV_CURRENT;
+   355		ehdr->e_ident[EI_OSABI] = ELF_OSABI;
+   356		memset(ehdr->e_ident + EI_PAD, 0, EI_NIDENT - EI_PAD);
+   357		ehdr->e_type = ET_CORE;
+   358		ehdr->e_machine = ELF_ARCH;
+   359		ehdr->e_version = EV_CURRENT;
+   360		ehdr->e_phoff = sizeof(Elf64_Ehdr);
+   361		ehdr->e_ehsize = sizeof(Elf64_Ehdr);
+   362		ehdr->e_phentsize = sizeof(Elf64_Phdr);
+   363	
+   364		/* Prepare one phdr of type PT_NOTE for each present CPU */
+   365		for_each_present_cpu(cpu) {
+   366			phdr->p_type = PT_NOTE;
+   367			notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
+   368			phdr->p_offset = phdr->p_paddr = notes_addr;
+   369			phdr->p_filesz = phdr->p_memsz = sizeof(note_buf_t);
+   370			(ehdr->e_phnum)++;
+   371			phdr++;
+   372		}
+   373	
+   374		/* Prepare one PT_NOTE header for vmcoreinfo */
+   375		phdr->p_type = PT_NOTE;
+   376		phdr->p_offset = phdr->p_paddr = paddr_vmcoreinfo_note();
+   377		phdr->p_filesz = phdr->p_memsz = VMCOREINFO_NOTE_SIZE;
+   378		(ehdr->e_phnum)++;
+   379		phdr++;
+   380	
+   381		/* Prepare PT_LOAD type program header for kernel text region */
+   382		if (need_kernel_map) {
+   383			phdr->p_type = PT_LOAD;
+   384			phdr->p_flags = PF_R|PF_W|PF_X;
+   385			phdr->p_vaddr = (unsigned long) _text;
+   386			phdr->p_filesz = phdr->p_memsz = _end - _text;
+   387			phdr->p_offset = phdr->p_paddr = __pa_symbol(_text);
+   388			ehdr->e_phnum++;
+   389			phdr++;
+   390		}
+   391	
+   392		/* Go through all the ranges in mem->ranges[] and prepare phdr */
+   393		for (i = 0; i < mem->nr_ranges; i++) {
+   394			mstart = mem->ranges[i].start;
+   395			mend = mem->ranges[i].end;
+   396	
+   397			phdr->p_type = PT_LOAD;
+   398			phdr->p_flags = PF_R|PF_W|PF_X;
+   399			phdr->p_offset  = mstart;
+   400	
+   401			phdr->p_paddr = mstart;
+   402			phdr->p_vaddr = (unsigned long) __va(mstart);
+   403			phdr->p_filesz = phdr->p_memsz = mend - mstart + 1;
+   404			phdr->p_align = 0;
+   405			ehdr->e_phnum++;
+   406			pr_debug("Crash PT_LOAD ELF header. phdr=%p vaddr=0x%llx, paddr=0x%llx, sz=0x%llx e_phnum=%d p_offset=0x%llx\n",
+   407				phdr, phdr->p_vaddr, phdr->p_paddr, phdr->p_filesz,
+   408				ehdr->e_phnum, phdr->p_offset);
+   409			phdr++;
+   410		}
+   411	
+   412		*addr = buf;
+   413		*sz = elf_sz;
+   414		return 0;
+   415	}
+   416	
 
 -- 
 0-DAY CI Kernel Test Service
