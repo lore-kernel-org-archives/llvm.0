@@ -1,41 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3E810E4;
-	Fri, 11 Aug 2023 04:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A10C433C8;
-	Fri, 11 Aug 2023 04:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691727223;
-	bh=0nMtbzOF+FHXauK0+1lynfoqJs/CmuWuApidsAPL4Yg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QZEPlKVXnMT6PdNqCejEdN8xt8B7ZnRZoyuyAcA5iByxOs2UZyPF0VfY98bo7fvtJ
-	 pwHJpZH7FX6SBz8xgixVRkwWqNZaw8RSEeHkWODws0kwWFG9JV7q61aTb9lJSBC58k
-	 FMuzriXzy/bNzj6kDXPCMk5a46LuWZBSE3m1Zm75fHNq4LjY/gFZKzDo/KaHUkHsRJ
-	 dkuFTt8qQrPepxna1jsNlcBDqVAh6Xp6vWG/cT6F9tdSSsNYyqPJJrTl6dsJ758bud
-	 0L2OX52rG/AB1EA2jfGVfpXRqJbXMTHuAMg5DddCcix1vfatC3DILt9EFnY+4+3O6t
-	 Tp38pzAMu5E/A==
-Date: Thu, 10 Aug 2023 21:13:39 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	clang-built-linux <llvm@lists.linux.dev>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sven Volkinsfeld <thyrc@gmx.net>,
-	Daniel Kolesa <daniel@octaforge.org>,
-	Borislav Petkov <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH 6.1 000/127] 6.1.45-rc1 review
-Message-ID: <20230811041339.GA193223@dev-arch.thelio-3990X>
-References: <20230809103636.615294317@linuxfoundation.org>
- <CA+G9fYvQdQqTqCgbS4sit_Y2AtKtDiWMOkGZjoeSEFhc=M_jKw@mail.gmail.com>
- <078d6e3d-9572-a624-2c5a-e2d58473e6d0@roeck-us.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D987E10F1;
+	Fri, 11 Aug 2023 05:12:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691730754; x=1723266754;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=le3dy2YIW/UZ8qPnF0S96wj9K2nU9aZ6bTQc22LYiB4=;
+  b=m5qu3f/I15JgTlY9+9VEMizBTLlGG4y1gU6pSBq+JcaJ50esoDPy9jee
+   /bdG9wjb8O5/iXb362SVS0RAXPMwg5c5eXbtm6irS5uIUTctJ7YOHnP23
+   jFmqVuuQoaip5HAzaI8SaVWhRXohtvILy4mcrre96SMR/4GEfvMMhKn1c
+   Fg9TzzzK+wIrRqNduEhhgl/fXwkm5n8MjCrdSb9A2nq9JV0EUEIT44uH7
+   WG+TQKZCix85kR6ElHSvkSYO1FpvqlR25B/zckDlAP2cwWrsOL6FQ2h+6
+   Kpfxr5hp7FuG0S6J3hvwk2rPLdI4YbIMMCo6jRdbWX8TReg8KLof2E4tR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="371605604"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="371605604"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 22:12:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="797876951"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="797876951"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Aug 2023 22:12:31 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qUKRq-0007Wm-1S;
+	Fri, 11 Aug 2023 05:12:30 +0000
+Date: Fri, 11 Aug 2023 13:12:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dexuan Cui <decui@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Michael Kelley <mikelley@microsoft.com>,
+	Tianyu Lan <tiala@microsoft.com>
+Subject: [dcui-tdx:decui/upstream-hyperv/hyperv-next/TDX/0810 2/25]
+ arch/x86/hyperv/hv_init.c:392:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202308111314.Ze67fL6a-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,51 +48,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <078d6e3d-9572-a624-2c5a-e2d58473e6d0@roeck-us.net>
 
-On Thu, Aug 10, 2023 at 08:41:42PM -0700, Guenter Roeck wrote:
-> On 8/10/23 20:22, Naresh Kamboju wrote:
-> > Build errors:
-> > -----
-> > ld.lld: error: ./arch/x86/kernel/vmlinux.lds:193: at least one side of
-> > the expression must be absolute
-> > make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
-> > 
-> 
-> We see that with v5.10.y, v5.15.y, and v6.1.y when building ChromeOS images with
-> clang/lld. There are additional problems with LTO and the built-in assembler. See
-> https://www.linuxquestions.org/questions/slackware-14/error-building-kernel-6-1-44-on-current-with-clang-4175727865/
-> for a summary.
+tree:   https://github.com/dcui/tdx decui/upstream-hyperv/hyperv-next/TDX/0810
+head:   104f836a5da361eec57916007c24e43c4d247951
+commit: 4663943bdbd128de739f3d4d4ca9b7a55f7cdac3 [2/25] [PATCH V5 2/8] x86/hyperv: Set Virtual Trust Level in VMBus init message
+config: x86_64-buildonly-randconfig-r003-20230811 (https://download.01.org/0day-ci/archive/20230811/202308111314.Ze67fL6a-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230811/202308111314.Ze67fL6a-lkp@intel.com/reproduce)
 
-Yup, we have issues open for all of those:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308111314.Ze67fL6a-lkp@intel.com/
 
-https://github.com/ClangBuiltLinux/linux/issues/1907
-https://github.com/ClangBuiltLinux/linux/issues/1909
-https://github.com/ClangBuiltLinux/linux/issues/1911
+All warnings (new ones prefixed by >>):
 
-1907 is fixed in -tip and I am sure it will make -rc6 [1].
+>> arch/x86/hyperv/hv_init.c:392:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!input) {
+               ^~~~~~
+   arch/x86/hyperv/hv_init.c:413:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   arch/x86/hyperv/hv_init.c:392:2: note: remove the 'if' if its condition is always false
+           if (!input) {
+           ^~~~~~~~~~~~~
+   arch/x86/hyperv/hv_init.c:387:9: note: initialize the variable 'ret' to silence this warning
+           u64 ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-1909 is fixed with [2] but it is sitting in x86/core (i.e., slated for
-next merge window). I am guessing at the time it was picked up, it was
-not fixing a noticeable issue, which is obviously not the case now. Nick
-reached out to the -tip folks on IRC to inquire about getting that
-applied to a branch that is going to Linus soon, as it is more of a
-process issue since it has conflicts with SRSO and an separate issue
-that was pointed out post-acceptance (which I addressed and pushed to
-[3] for testing). I never saw a response there (which is understandable,
-it is a busy time...) so looping the -tip folks in now, just to make
-sure it does not get lost (apologies if this is noise).
 
-1911 is still being investigated (some additional eyes on it would not
-hurt).
+vim +392 arch/x86/hyperv/hv_init.c
 
-[1]: https://git.kernel.org/tip/cbe8ded48b939b9d55d2c5589ab56caa7b530709
-[2]: https://git.kernel.org/tip/973ab2d61f33dc85212c486e624af348c4eeb5c9
-[3]: https://github.com/ClangBuiltLinux/linux/commit/150c42407f87463c27a2459e06845965291d9973
+   380	
+   381	static u8 __init get_vtl(void)
+   382	{
+   383		u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
+   384		struct hv_get_vp_registers_input *input;
+   385		struct hv_get_vp_registers_output *output;
+   386		unsigned long flags;
+   387		u64 ret;
+   388	
+   389		local_irq_save(flags);
+   390		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+   391		output = (struct hv_get_vp_registers_output *)input;
+ > 392		if (!input) {
+   393			local_irq_restore(flags);
+   394			goto done;
+   395		}
+   396	
+   397		memset(input, 0, struct_size(input, element, 1));
+   398		input->header.partitionid = HV_PARTITION_ID_SELF;
+   399		input->header.vpindex = HV_VP_INDEX_SELF;
+   400		input->header.inputvtl = 0;
+   401		input->element[0].name0 = HV_X64_REGISTER_VSM_VP_STATUS;
+   402	
+   403		ret = hv_do_hypercall(control, input, output);
+   404		if (hv_result_success(ret)) {
+   405			ret = output->as64.low & HV_X64_VTL_MASK;
+   406		} else {
+   407			pr_err("Failed to get VTL and set VTL to zero by default.\n");
+   408			ret = 0;
+   409		}
+   410	
+   411		local_irq_restore(flags);
+   412	done:
+   413		return ret;
+   414	}
+   415	
 
-> As far as I can see none of those problems has been fixed in the upstream kernel.
-
-Indeed, embargos are fun... :)
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
