@@ -1,103 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047D411701;
-	Fri, 11 Aug 2023 16:10:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB00C433C7;
-	Fri, 11 Aug 2023 16:10:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691770239;
-	bh=71MKhu1fvjLDJVDqx6mDJu7KGaWozmoNqaavj43sioQ=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=YfHi0Jm1JFhlt9l7OuaywkfyZOHcZ5NLQmBC7Uhg5XzLJOKO8c/DN1kdtCFD6sQ/Q
-	 rgAH/zX11sTwf4OSWAGLdhHTd7ZXmIpqoygl6JGRl17cFr3TocgqcDGuwzC8XR5DxT
-	 oZab6JnmXE3Uht6Fox8QTboKefoGY4knIEPyTXbcfv92Kds+uX2ipG9BI9PefR36rq
-	 6FOEef82++cFZxxNIiB4NTtkIjGI1mGSVYSojAyVt2aKQqQQbncYmXf/Aed49rWbg0
-	 IDJQEuprN70fqVsNKGor5FZ7N2Ik6Ea86Q447rMObnDKSi6PfxLhFFvccAxCrkgRUg
-	 mMDxS3uttXXqw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 0E55BCE0593; Fri, 11 Aug 2023 09:10:39 -0700 (PDT)
-Date: Fri, 11 Aug 2023 09:10:39 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [linux-next:master 5658/8441] kernel/rcu/update.c:529:6:
- warning: no previous prototype for function 'torture_sched_setaffinity'
-Message-ID: <d73b2fa1-fc12-4e1c-9dc6-a0505ea96ec1@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202308111926.gYjAUtn4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0745911701
+	for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 16:12:36 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 77E3640E01A2;
+	Fri, 11 Aug 2023 16:12:34 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id EIC00tw8V5eQ; Fri, 11 Aug 2023 16:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1691770352; bh=ZWCswt3p1t2FvPWcU+CW0VBcDZIt5mj/ZBsforpyaIM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aAyPNa3cHGvngGF+lVn2/cbLxOpOFftRCG2Ca07nrLvSdmwDEPDar1/GH/k5tLCZM
+	 gtU/num0/D7I2ld6RfuvFR5wdnmV+LgFQz8fCq+oDRsgBuePOu0fNcoW4bzntxntko
+	 PN1p7TZHvi6r5IXpAQGWEMBe8kWUGcVkFRhPjnOcC76rPxRFJ2HUWW0a2x1S2hkEVD
+	 lKvwWAmIn4EqWzEs8IBnRqK03MQaxkeUWsnuIrNP+XkStetjOXeYgcOF3vckdslBqz
+	 bYOoRxwLvT4ifGUtDiUHJDlVJYPTdl+aL4cBEe6vRatxcPfRKRbh4N5MZ2BZB1tKqY
+	 Z87opq4uuiwEZ/iJYqIXDem9/qRZxGIx8Ngo8R9yulm06JWpsuHgGVy8UJ9Ke70MPy
+	 Yg+NESJovLJ1BWJuySJ9KK8NvjhN9IP89AMvVJ8JXKshrzKvA+yBoCW7p5vU6FBWFQ
+	 MOybolvlq00Ky1zs5xgsYyLth7k09bPEeM/SlNYovWSlX3xCxTQCRSMbx0n5H1EGO2
+	 liSeGoFF0dcUBInDnuNL/Kalzic5szd1Uhh3ySjgrKXSWrPCBYBK+Xsc0NQwKACS6j
+	 bM+SnxDfqBOA7G0Pdp6OiFKHhW1aEcJyZTVnsJlhLUs8XvBIjtGJatQAzS1RYRe8r4
+	 nvVOVUc66E43mrERdJRZRLXw=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E71040E0194;
+	Fri, 11 Aug 2023 16:12:26 +0000 (UTC)
+Date: Fri, 11 Aug 2023 18:12:25 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: Hang when booting guest kernels compiled with clang after SRSO
+ mitigations
+Message-ID: <20230811161225.GIZNZd6QfLUoZv9TLO@fat_crate.local>
+References: <20230810133216.GKZNTm4KpohRR4gVsT@fat_crate.local>
+ <20230810134056.GA130730@dev-arch.thelio-3990X>
+ <20230810144344.GLZNT3oM6MLVdzGlyd@fat_crate.local>
+ <20230810150706.GA42856@dev-arch.thelio-3990X>
+ <20230810151410.GNZNT+wn/cLBWiU6dO@fat_crate.local>
+ <20230810154831.GA38495@dev-arch.thelio-3990X>
+ <20230810161414.GA4000@dev-arch.thelio-3990X>
+ <20230811101456.GDZNYKIHs1k7ri8hrI@fat_crate.local>
+ <20230811140941.GB193223@dev-arch.thelio-3990X>
+ <ZNZbxhL5ZJD1Sd9P@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202308111926.gYjAUtn4-lkp@intel.com>
+In-Reply-To: <ZNZbxhL5ZJD1Sd9P@google.com>
 
-On Fri, Aug 11, 2023 at 07:13:48PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   21ef7b1e17d039053edaeaf41142423810572741
-> commit: 521ec59e5453e03a255e183ccee844fe3612f1b4 [5658/8441] torture: Move rcutorture_sched_setaffinity() out of rcutorture
-> config: x86_64-randconfig-x012-20230811 (https://download.01.org/0day-ci/archive/20230811/202308111926.gYjAUtn4-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce: (https://download.01.org/0day-ci/archive/20230811/202308111926.gYjAUtn4-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308111926.gYjAUtn4-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> kernel/rcu/update.c:529:6: warning: no previous prototype for function 'torture_sched_setaffinity' [-Wmissing-prototypes]
->    long torture_sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
->         ^
->    kernel/rcu/update.c:529:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    long torture_sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
->    ^
->    static 
->    1 warning generated.
-> 
-> 
-> vim +/torture_sched_setaffinity +529 kernel/rcu/update.c
-> 
->    526	
->    527	#if IS_ENABLED(CONFIG_RCU_TORTURE_TEST) || IS_MODULE(CONFIG_RCU_TORTURE_TEST) || IS_ENABLED(CONFIG_LOCK_TORTURE_TEST) || IS_MODULE(CONFIG_LOCK_TORTURE_TEST)
->    528	/* Get rcutorture access to sched_setaffinity(). */
->  > 529	long torture_sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
->    530	{
->    531		int ret;
->    532	
->    533		ret = sched_setaffinity(pid, in_mask);
->    534		WARN_ONCE(ret, "%s: sched_setaffinity(%d) returned %d\n", __func__, pid, ret);
->    535		return ret;
->    536	}
->    537	EXPORT_SYMBOL_GPL(torture_sched_setaffinity);
->    538	#endif
->    539	
+On Fri, Aug 11, 2023 at 09:03:18AM -0700, Sean Christopherson wrote:
+> Might be the flags bug that borks KVM's fastop() emulation.  If that fixes things,
+> my guess is that bringing APs out of WFS somehow triggers emulation.
 
-Hmmm...  The update.c source file includes torture.h which provides the
-declaration with the same set of #if conditions as the definition.
+I was just about to connect you two guys, thanks Sean!
 
-But does this diff help?
+> https://lore.kernel.org/all/20230811155255.250835-1-seanjc@google.com
 
-							Thanx, Paul
+Nathan, if you could test, that would be cool.
 
------------------------------------------------------------------------
+Also, Nick has another patch for -mno-shared, it probably isn't fixing
+yours but it would be good to test it too, just in case:
 
-diff --git a/include/linux/torture.h b/include/linux/torture.h
-index c98d0c83d117..7d2c070e66d2 100644
---- a/include/linux/torture.h
-+++ b/include/linux/torture.h
-@@ -128,8 +128,6 @@ void _torture_stop_kthread(char *m, struct task_struct **tp);
- #define torture_preempt_schedule()	do { } while (0)
- #endif
- 
--#if IS_ENABLED(CONFIG_RCU_TORTURE_TEST) || IS_MODULE(CONFIG_RCU_TORTURE_TEST) || IS_ENABLED(CONFIG_LOCK_TORTURE_TEST) || IS_MODULE(CONFIG_LOCK_TORTURE_TEST)
- long torture_sched_setaffinity(pid_t pid, const struct cpumask *in_mask);
--#endif
- 
- #endif /* __LINUX_TORTURE_H */
+https://github.com/ClangBuiltLinux/linux/issues/1911#issuecomment-1674993796
+
+Thx!
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
