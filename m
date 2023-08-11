@@ -1,70 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536BD8833;
-	Fri, 11 Aug 2023 21:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691790358; x=1723326358;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VVnLf4Rv5GN0a5KasCdZ1bV4WOrPhFHkuXXwce9MMjM=;
-  b=Y77CV9MFrW2rc7QCGjY5RO+MHyKf1ipheNqsSBr6C1bfr6/+XS7fmheq
-   pgggBNyW6pzTv28hga/aVOibzXByhZcUdi/zrWUKeHtt9E0sC55Yjf1N9
-   mq6EO+hAuDB2AGJwDlOscOGbHG7ZfoNcv5u6BvsTtBg/BlGwyZIWN4bb8
-   mnEtiQQrA++oZelYd1LlyLoIIdZwG1KC2aJDelhT8VIClzIYrhE5UEQIv
-   6tRyPfCsr7eD7sPHzP/AsBZMTI6FJqKX8kYsgcbBUYCmjIW4HbHrLpGca
-   5UIIdYoT+nT+QDZQ5CnNw4ZNycNXncYpS3KTNGYadmAB2yz6wfsb4XOmL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="375482455"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="375482455"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 14:45:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="1063435891"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="1063435891"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2023 14:45:53 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qUZxA-00083w-1i;
-	Fri, 11 Aug 2023 21:45:52 +0000
-Date: Sat, 12 Aug 2023 05:45:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yosry Ahmed <yosryahmed@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Hao Luo <haoluo@google.com>
-Subject: Cannot find symbol for section 8: .text.bpf_rstat_flush.
-Message-ID: <202308120553.IRzzfaXL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058C92F4E
+	for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 22:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1691793664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JacEY/XUEHbAJEFsdFJb13w+3Q9rU2QV+WjA2BojWYM=;
+	b=Um9HyCrMufkvHJjHj+lEkKmWDpheGyk4i9GykmRe9h0kGRGT/0/f4MIldDuoJplSzAL9dZ
+	ljBPVa7trbMPPHtFGpeOFnKAVvn/4LNIwOskXER/1Df6kX7lVAugRJGsFO1wjhlBCbMVQX
+	Wu/B9l4P8DZleLHvdFtgwJJK8yiNQVE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-424-E1bRE5IwNzuB_1FWlkCKDg-1; Fri, 11 Aug 2023 18:41:02 -0400
+X-MC-Unique: E1bRE5IwNzuB_1FWlkCKDg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D310101A528
+	for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 22:41:02 +0000 (UTC)
+Received: from [172.64.13.56] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7C2B3492C13;
+	Fri, 11 Aug 2023 22:41:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.5.0-rc5,
+ mainline.kernel.org-clang, 190bf7b1)
+Date: Fri, 11 Aug 2023 22:41:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <50980.123081118410200527@us-mta-424.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   29d99aae13cf2713b85bc26a37921e231676ba48
-commit: a319185be9f5ad13c2a296d448ac52ffe45d194c cgroup: bpf: enable bpf programs to integrate with rstat
-date:   12 months ago
-config: mips-randconfig-r014-20230811 (https://download.01.org/0day-ci/archive/20230812/202308120553.IRzzfaXL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120553.IRzzfaXL-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308120553.IRzzfaXL-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-All errors (new ones prefixed by >>):
 
->> Cannot find symbol for section 8: .text.bpf_rstat_flush.
-   kernel/cgroup/rstat.o: failed
+Kernel information:
+    Commit message: Merge tag 'mm-hotfixes-stable-2023-08-11-13-44' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/99791
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/38474=
+0
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/384741
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
