@@ -1,286 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D5C1869;
-	Fri, 11 Aug 2023 09:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691745052; x=1723281052;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=34A13lgBgtVodLG5J4KXeIyraaHm8BajR+D9zSX6nww=;
-  b=LrzuGMttJjYqq5S8UFhUpeZuYdXU544NH7eQfBQUscDWiZ+hLGcOYAOz
-   RTPqHiAeglbnMNPw9utI7aTF75zafkGpDliEoydHyMNv9Lqs7NePphSsM
-   xsE8xUZAUoBUWBnlJzXjNrJu2JyVQ0RrleTbuo0/qWWkPpRszdQM+k6+n
-   a0iHH1B4I4MzKLMAaMiAO1BEhEiEyIm45ayIYiLgx9yYSt2nhnjZDRY7e
-   6n86TpC4tahusHRqMCHneT46xxmwq4RCbtJKlHBs++SXixLEvsLckHX9U
-   gcxjv9QzFNuJq1RDGOojt8AcETQqMTuxTkZ6LeCrYQJo0A7ust4ZBaBHt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="375349995"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="375349995"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 02:10:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="797958364"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="797958364"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Aug 2023 02:10:38 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qUOAH-0007fK-1O;
-	Fri, 11 Aug 2023 09:10:37 +0000
-Date: Fri, 11 Aug 2023 17:10:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric DeVolder <eric.devolder@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Sourabh Jain <sourabhjain@linux.ibm.com>
-Subject: [akpm-mm:mm-nonmm-unstable 56/78] kernel/crash_core.c:331:16: error:
- incomplete definition of type 'struct crash_mem'
-Message-ID: <202308111736.VWdS2xfs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DE9566E
+	for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 09:11:28 +0000 (UTC)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fe8242fc4dso8758925e9.1
+        for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 02:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691745087; x=1692349887;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=msB7XSMQKNAACWPZ/GwjszE60e79zmFAGxGoY+G/BRc=;
+        b=xOeEvMhu065euw6JTBbCi3NKxbF/ibI3VYKQjJsXrN9eEzAcwPJa9ZnxTQ4z2asNNl
+         6JO361GRMRLAA/RszIe37D1XCr3KY5GikzAht8IKRTkCGL1HuBWAVjX8uMv/uXUmdaEF
+         ohsEPaFCEMuvHl7Hj7ImY++OTJHHmo00++qYLerpnk7AeTnwUoDqBokIfCxZVUOo1KHQ
+         nr7U1Ygo3yHCNooJDk8UqFM/Nd7f6Nyf5UVqd4GYsgcbkQycExptlTRFpeau/CbUcmYu
+         TlTjVMC/gUileFVwC++uirf7cUiAh+Hy3KU2OVxSmhLfUOx/srqqi4uydryT+0Uoz5sX
+         Cg+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691745087; x=1692349887;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=msB7XSMQKNAACWPZ/GwjszE60e79zmFAGxGoY+G/BRc=;
+        b=jOBsyLOaXna8EQ028BWhXQcO521TqbM+O4Gc432siUYuShSkJewHiohyb+QnvETEO0
+         DoB83IxDgnZ4cD0hGe3VZt7FfmEUaH7lfJopyod1Ru/3w00HHcT3rQkbKIKUaS62Pq5b
+         QKF2FZ7DRJ36yLWQxeZZ5reWs0x32r0XTcC4oreKQFAe4Cw4ni5hnrcIP6rWoneyZOcu
+         +jtF4JyhpG7mEaIpEUeBV10kTVVAb5eQZp8FmnTimXWJUrC3fQUN7pQciiwWRxrzwNpY
+         r22bNimDKw7z2ir7Jz9jg12iSaARQA0yRGOCkxTA98Wt1a49dxXcau6oy34LeOhYLyw6
+         mLPg==
+X-Gm-Message-State: AOJu0Yz1nkZMnf4Z6NkXEVho5NLhhcXjl5WHR5lZshGml0OgUKoAnzbM
+	MPVw96uR2pOYrCRmxCe1DWE0niyfAYTtf/MMzPjjHg==
+X-Google-Smtp-Source: AGHT+IG0mmKs/Ojd86c5RsrBdtIz3U/1JKmzd/I7IPgCTgOgVi6XjJz1KDzwaNq3PIN/DCWY1JE0vE3/JbnwdiJ7T7c=
+X-Received: by 2002:a7b:cbcc:0:b0:3fe:10d8:e7fa with SMTP id
+ n12-20020a7bcbcc000000b003fe10d8e7famr1164390wmi.41.1691745086680; Fri, 11
+ Aug 2023 02:11:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230808102049.465864-1-elver@google.com> <20230808102049.465864-3-elver@google.com>
+ <202308081424.1DC7AA4AE3@keescook> <CANpmjNM3rc8ih7wvFc2GLuMDLpWcdA8uWfut-5tOajqtVG952A@mail.gmail.com>
+ <ZNNi/4L1mD8XPNix@elver.google.com> <20230809113021.63e5ef66@gandalf.local.home>
+ <ZNO/pf/pH5jJAZI0@elver.google.com> <202308101259.D2C4C72F8@keescook>
+In-Reply-To: <202308101259.D2C4C72F8@keescook>
+From: Marco Elver <elver@google.com>
+Date: Fri, 11 Aug 2023 11:10:49 +0200
+Message-ID: <CANpmjNN84DGUSutk1FxcVmPGDhgVa2PrOuFTzGYu92mv+WXUeQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
+To: Kees Cook <keescook@chromium.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Peter Zijlstra <peterz@infradead.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
+	linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-head:   0f6b2c125ce19074c1086a70119b02dd30b089a4
-commit: 3f1eba00ee9d93b66f1859d40537befe44ceb1cd [56/78] crash: move a few code bits to setup support of crash hotplug
-config: x86_64-buildonly-randconfig-r003-20230811 (https://download.01.org/0day-ci/archive/20230811/202308111736.VWdS2xfs-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230811/202308111736.VWdS2xfs-lkp@intel.com/reproduce)
+On Thu, 10 Aug 2023 at 22:12, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Aug 09, 2023 at 06:32:37PM +0200, Marco Elver wrote:
+> > On Wed, Aug 09, 2023 at 11:30AM -0400, Steven Rostedt wrote:
+> > [...]
+> > >
+> > > I would actually prefer DEBUG_LIST to select HARDEN_LIST and not the other
+> > > way around. It logically doesn't make sense that HARDEN_LIST would select
+> > > DEBUG_LIST. That is, I could by default want HARDEN_LIST always on, but not
+> > > DEBUG_LIST (because who knows, it may add other features I don't want). But
+> > > then, I may have stumbled over something and want more info, and enable
+> > > DEBUG_LIST (while still having HARDEN_LIST) enabled.
+> > >
+> > > I think you are looking at this from an implementation perspective and not
+> > > the normal developer one.
+> > >
+> > [...]
+> > >
+> > > That is, if DEBUG_LIST is enabled, we always call the
+> > > __list_add_valid_or_report(), but if only HARDEN_LIST is enabled, then we
+> > > do the shortcut.
+> >
+> > Good point - I think this is better. See below tentative v4.
+> >
+> > Kees: Does that also look more like what you had in mind?
+>
+> Yeah, this looks good. My only nit would be a naming one. All the
+> other hardening features are named "HARDENED", but perhaps the "ED"
+> is redundant in the others. Still, consistency seems nicer. What do you
+> think of CONFIG_LIST_HARDENED ? (The modern trend for Kconfig naming tends
+> to keep the subsystem name first and then apply optional elements after.)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308111736.VWdS2xfs-lkp@intel.com/
+Naming is a bit all over. :-/
+I agree with the <subsystem>_<suboption> scheme, generally. I think
+initially I tried to keep the name shorter, and also find a good
+counter-part to DEBUG_<suboption>, therefore HARDEN_LIST.
 
-All errors (new ones prefixed by >>):
+Let's just change it to CONFIG_LIST_HARDENED, given the existing
+"HARDENED" options.
 
-   kernel/crash_core.c:318:40: warning: declaration of 'struct crash_mem' will not be visible outside of this function [-Wvisibility]
-   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-                                          ^
->> kernel/crash_core.c:331:16: error: incomplete definition of type 'struct crash_mem'
-           nr_phdr += mem->nr_ranges;
-                      ~~~^
-   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
-   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-                                          ^
->> kernel/crash_core.c:343:25: error: use of undeclared identifier 'ELF_CORE_HEADER_ALIGN'
-           elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
-                                  ^
->> kernel/crash_core.c:343:25: error: use of undeclared identifier 'ELF_CORE_HEADER_ALIGN'
-   kernel/crash_core.c:393:21: error: incomplete definition of type 'struct crash_mem'
-           for (i = 0; i < mem->nr_ranges; i++) {
-                           ~~~^
-   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
-   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-                                          ^
-   kernel/crash_core.c:394:15: error: incomplete definition of type 'struct crash_mem'
-                   mstart = mem->ranges[i].start;
-                            ~~~^
-   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
-   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-                                          ^
-   kernel/crash_core.c:395:13: error: incomplete definition of type 'struct crash_mem'
-                   mend = mem->ranges[i].end;
-                          ~~~^
-   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
-   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-                                          ^
-   kernel/crash_core.c:318:5: warning: no previous prototype for function 'crash_prepare_elf64_headers' [-Wmissing-prototypes]
-   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-       ^
-   kernel/crash_core.c:318:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-   ^
-   static 
-   kernel/crash_core.c:417:36: warning: declaration of 'struct crash_mem' will not be visible outside of this function [-Wvisibility]
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:424:21: error: incomplete definition of type 'struct crash_mem'
-           for (i = 0; i < mem->nr_ranges; i++) {
-                           ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:425:14: error: incomplete definition of type 'struct crash_mem'
-                   start = mem->ranges[i].start;
-                           ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:426:12: error: incomplete definition of type 'struct crash_mem'
-                   end = mem->ranges[i].end;
-                         ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:441:7: error: incomplete definition of type 'struct crash_mem'
-                           mem->ranges[i].start = 0;
-                           ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:442:7: error: incomplete definition of type 'struct crash_mem'
-                           mem->ranges[i].end = 0;
-                           ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:443:15: error: incomplete definition of type 'struct crash_mem'
-                           if (i < mem->nr_ranges - 1) {
-                                   ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:445:24: error: incomplete definition of type 'struct crash_mem'
-                                   for (j = i; j < mem->nr_ranges - 1; j++) {
-                                                   ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:446:9: error: incomplete definition of type 'struct crash_mem'
-                                           mem->ranges[j].start =
-                                           ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:447:10: error: incomplete definition of type 'struct crash_mem'
-                                                   mem->ranges[j+1].start;
-                                                   ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:448:9: error: incomplete definition of type 'struct crash_mem'
-                                           mem->ranges[j].end =
-                                           ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:449:11: error: incomplete definition of type 'struct crash_mem'
-                                                           mem->ranges[j+1].end;
-                                                           ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
-   kernel/crash_core.c:458:8: error: incomplete definition of type 'struct crash_mem'
-                                   mem->nr_ranges--;
-                                   ~~~^
-   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
-   int crash_exclude_mem_range(struct crash_mem *mem,
-                                      ^
+I don't have a strong preference.
 
+> One note: do the LKDTM list hardening tests still pass? i.e.
+> CORRUPT_LIST_ADD
+> CORRUPT_LIST_DEL
 
-vim +331 kernel/crash_core.c
+Yes, they do. Though I need to also adjust BUG_ON_DATA_CORRUPTION to
+select LIST_HARDENED, and the test should check for the new option
+(which is implied by DEBUG_LIST now). There will be an additional
+patch to adjust that.
 
-   317	
- > 318	int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-   319				  void **addr, unsigned long *sz)
-   320	{
-   321		Elf64_Ehdr *ehdr;
-   322		Elf64_Phdr *phdr;
-   323		unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
-   324		unsigned char *buf;
-   325		unsigned int cpu, i;
-   326		unsigned long long notes_addr;
-   327		unsigned long mstart, mend;
-   328	
-   329		/* extra phdr for vmcoreinfo ELF note */
-   330		nr_phdr = nr_cpus + 1;
- > 331		nr_phdr += mem->nr_ranges;
-   332	
-   333		/*
-   334		 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
-   335		 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
-   336		 * I think this is required by tools like gdb. So same physical
-   337		 * memory will be mapped in two ELF headers. One will contain kernel
-   338		 * text virtual addresses and other will have __va(physical) addresses.
-   339		 */
-   340	
-   341		nr_phdr++;
-   342		elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
- > 343		elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
-   344	
-   345		buf = vzalloc(elf_sz);
-   346		if (!buf)
-   347			return -ENOMEM;
-   348	
-   349		ehdr = (Elf64_Ehdr *)buf;
-   350		phdr = (Elf64_Phdr *)(ehdr + 1);
-   351		memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
-   352		ehdr->e_ident[EI_CLASS] = ELFCLASS64;
-   353		ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
-   354		ehdr->e_ident[EI_VERSION] = EV_CURRENT;
-   355		ehdr->e_ident[EI_OSABI] = ELF_OSABI;
-   356		memset(ehdr->e_ident + EI_PAD, 0, EI_NIDENT - EI_PAD);
-   357		ehdr->e_type = ET_CORE;
-   358		ehdr->e_machine = ELF_ARCH;
-   359		ehdr->e_version = EV_CURRENT;
-   360		ehdr->e_phoff = sizeof(Elf64_Ehdr);
-   361		ehdr->e_ehsize = sizeof(Elf64_Ehdr);
-   362		ehdr->e_phentsize = sizeof(Elf64_Phdr);
-   363	
-   364		/* Prepare one phdr of type PT_NOTE for each present CPU */
-   365		for_each_present_cpu(cpu) {
-   366			phdr->p_type = PT_NOTE;
-   367			notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
-   368			phdr->p_offset = phdr->p_paddr = notes_addr;
-   369			phdr->p_filesz = phdr->p_memsz = sizeof(note_buf_t);
-   370			(ehdr->e_phnum)++;
-   371			phdr++;
-   372		}
-   373	
-   374		/* Prepare one PT_NOTE header for vmcoreinfo */
-   375		phdr->p_type = PT_NOTE;
-   376		phdr->p_offset = phdr->p_paddr = paddr_vmcoreinfo_note();
-   377		phdr->p_filesz = phdr->p_memsz = VMCOREINFO_NOTE_SIZE;
-   378		(ehdr->e_phnum)++;
-   379		phdr++;
-   380	
-   381		/* Prepare PT_LOAD type program header for kernel text region */
-   382		if (need_kernel_map) {
-   383			phdr->p_type = PT_LOAD;
-   384			phdr->p_flags = PF_R|PF_W|PF_X;
-   385			phdr->p_vaddr = (unsigned long) _text;
-   386			phdr->p_filesz = phdr->p_memsz = _end - _text;
-   387			phdr->p_offset = phdr->p_paddr = __pa_symbol(_text);
-   388			ehdr->e_phnum++;
-   389			phdr++;
-   390		}
-   391	
-   392		/* Go through all the ranges in mem->ranges[] and prepare phdr */
-   393		for (i = 0; i < mem->nr_ranges; i++) {
-   394			mstart = mem->ranges[i].start;
-   395			mend = mem->ranges[i].end;
-   396	
-   397			phdr->p_type = PT_LOAD;
-   398			phdr->p_flags = PF_R|PF_W|PF_X;
-   399			phdr->p_offset  = mstart;
-   400	
-   401			phdr->p_paddr = mstart;
-   402			phdr->p_vaddr = (unsigned long) __va(mstart);
-   403			phdr->p_filesz = phdr->p_memsz = mend - mstart + 1;
-   404			phdr->p_align = 0;
-   405			ehdr->e_phnum++;
-   406			pr_debug("Crash PT_LOAD ELF header. phdr=%p vaddr=0x%llx, paddr=0x%llx, sz=0x%llx e_phnum=%d p_offset=0x%llx\n",
-   407				phdr, phdr->p_vaddr, phdr->p_paddr, phdr->p_filesz,
-   408				ehdr->e_phnum, phdr->p_offset);
-   409			phdr++;
-   410		}
-   411	
-   412		*addr = buf;
-   413		*sz = elf_sz;
-   414		return 0;
-   415	}
-   416	
+> > [...]
+> > +             /*
+> > +              * With the hardening version, elide checking if next and prev
+> > +              * are NULL, LIST_POISON1 or LIST_POISON2, since the immediate
+> > +              * dereference of them below would result in a fault.
+> > +              */
+> > +             if (likely(prev->next == entry && next->prev == entry))
+> > +                     return true;
+>
+> I'm not super excited about skipping those checks, since they are
+> values that can be reached through kernel list management confusion. If
+> an attacker is using a system where the zero-page has been mapped
+> and is accessible (i.e. lacking SMAP etc), then attacks could still
+> be constructed. However, I do recognize this chain of exploitation
+> prerequisites is getting rather long, so probably this is a reasonable
+> trade off on modern systems.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sure, it's a trade-off for systems which do have the bare minimum of
+modern hardware security features.
