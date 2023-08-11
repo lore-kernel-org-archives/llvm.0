@@ -1,70 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338D9A46
-	for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 13:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E982C433C7;
-	Fri, 11 Aug 2023 13:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691759428;
-	bh=pcelJUzS2twcARW8O86PiBrVO0sL2055vkOVNT1w1Zw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RnT17tLslKfdp5lRCrKNH0H4zXXGnRfEJA/OJumqoa4BDWfwW7/EANNMhLm2fmwvb
-	 b7KlU2acWiBhdOz11UGndZ8Mq2ChIveuyJXXztrXQpQGdaxcqxV2gWFHyN2dX91EnD
-	 NVh0yTtNaIhF7xGPHhaGib6S5KSLr0sqlJLW+Jg+Qm+/ebYkDx9ltjEg/KbGJpAUjo
-	 UpdLWzlYiugW8iIc++pJ5LGXk3snXckvC86U8eTNV9SiHPZagjQPmjF6VFIy6HofX7
-	 Edh89b9zE0VM4iPTCuUxgoughC1Ocv65K85n5ksvGG6UsAAY0N1b3Z9T5Euq7gyls6
-	 k3pztFNntl00g==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Peng Zhang <zhangpeng.00@bytedance.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] radix tree: remove unused variable
-Date: Fri, 11 Aug 2023 15:10:13 +0200
-Message-Id: <20230811131023.2226509-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B180663B3
+	for <llvm@lists.linux.dev>; Fri, 11 Aug 2023 13:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691759874; x=1723295874;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=UtEU+TMPBT1c10GjY9uMrXkMmC6y0n8ZdxPYDC6jDys=;
+  b=N6bhm8frt3Ww6pUHuqelDfZegYOBE4QL6wjybnyM0vZa7+2P1RX/rf4u
+   Vh8DD3FWGZ2bw4GiU4wKdqhRPfbiihMTgjsdL1OOCh9+KeOsXyqKJZa5+
+   nwKStPRI1areQUwsVwqIU1SoEPWsNXANMj3ruE1h+gN10Me4E6weDrpIm
+   0F2qkLpNdCjV+fBjfmbftr2a8SDH1M7XdTXBRTtOROo2f6c3529WfrcBU
+   m68wU5A/qGOi9az4v0gl92mwVzfAfQ/Pcy7mfEuLQuQY7ufhl8W3c3WoI
+   z8be14COX1VBPpp4nMhaUBFzJxUxicY7fdlFu4H3Lvw6V0f3HtizaTsHl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="370572251"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="370572251"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 06:17:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="726264645"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="726264645"
+Received: from aberko-mobl1.ger.corp.intel.com ([10.252.51.87])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 06:17:43 -0700
+Date: Fri, 11 Aug 2023 16:17:41 +0300 (EEST)
+From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Arnd Bergmann <arnd@kernel.org>
+cc: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>, 
+    "xingtong.wu" <xingtong.wu@siemens.com>, Arnd Bergmann <arnd@arndb.de>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+    Henning Schild <henning.schild@siemens.com>, 
+    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+    Lee Jones <lee@kernel.org>, platform-driver-x86@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] platform/x86/siemens: simatic-ipc: fix nonsensical
+ condition
+In-Reply-To: <20230811130948.2211800-1-arnd@kernel.org>
+Message-ID: <97764bad-7091-e9ed-6f49-d31861fc622f@linux.intel.com>
+References: <20230811130948.2211800-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, 11 Aug 2023, Arnd Bergmann wrote:
 
-Recent versions of clang warn about an unused variable, though older
-versions saw the 'slot++' as a use and did not warn:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The condition checking for a constant SIMATIC_IPC_DEVICE_BX_59A value
+> clearly makes no sense, as clang warns:
+> 
+> drivers/platform/x86/siemens/simatic-ipc.c:132:42: error: use of logical '||' with constant operand [-Werror,-Wconstant-logical-operand]
+>                 if (ledmode == SIMATIC_IPC_DEVICE_227G || SIMATIC_IPC_DEVICE_BX_59A)
+>                                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/platform/x86/siemens/simatic-ipc-batt.c:197:49: error: use of logical '||' with constant operand [-Werror,-Wconstant-logical-operand]
+>                 if (priv.devmode == SIMATIC_IPC_DEVICE_BX_21A || SIMATIC_IPC_DEVICE_BX_59A)
+>                                                               ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Most likely, this was meant to check ledmode to be one of the two values,
+> so change it to that.
+> 
+> Fixes: b8af77951941e ("platform/x86/siemens: simatic-ipc: add new models BX-56A/BX-59A")
+> Fixes: c56beff203754 ("platform/x86/siemens: simatic-ipc-batt: add support for module BX-59A")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/platform/x86/siemens/simatic-ipc-batt.c | 3 ++-
+>  drivers/platform/x86/siemens/simatic-ipc.c      | 3 ++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/siemens/simatic-ipc-batt.c b/drivers/platform/x86/siemens/simatic-ipc-batt.c
+> index d66b9969234bf..e6c12c52843ca 100644
+> --- a/drivers/platform/x86/siemens/simatic-ipc-batt.c
+> +++ b/drivers/platform/x86/siemens/simatic-ipc-batt.c
+> @@ -194,7 +194,8 @@ int simatic_ipc_batt_probe(struct platform_device *pdev, struct gpiod_lookup_tab
+>  
+>  	if (table->table[2].key) {
+>  		flags = GPIOD_OUT_HIGH;
+> -		if (priv.devmode == SIMATIC_IPC_DEVICE_BX_21A || SIMATIC_IPC_DEVICE_BX_59A)
+> +		if (priv.devmode == SIMATIC_IPC_DEVICE_BX_21A ||
+> +		    priv.devmode == SIMATIC_IPC_DEVICE_BX_59A)
+>  			flags = GPIOD_OUT_LOW;
+>  		priv.gpios[2] = devm_gpiod_get_index(dev, "CMOSBattery meter", 2, flags);
+>  		if (IS_ERR(priv.gpios[2])) {
+> diff --git a/drivers/platform/x86/siemens/simatic-ipc.c b/drivers/platform/x86/siemens/simatic-ipc.c
+> index 02c540cf40702..e11d28ffac604 100644
+> --- a/drivers/platform/x86/siemens/simatic-ipc.c
+> +++ b/drivers/platform/x86/siemens/simatic-ipc.c
+> @@ -129,7 +129,8 @@ static int register_platform_devices(u32 station_id)
+>  		pdevname = KBUILD_MODNAME "_leds";
+>  		if (ledmode == SIMATIC_IPC_DEVICE_127E)
+>  			pdevname = KBUILD_MODNAME "_leds_gpio_apollolake";
+> -		if (ledmode == SIMATIC_IPC_DEVICE_227G || SIMATIC_IPC_DEVICE_BX_59A)
+> +		if (ledmode == SIMATIC_IPC_DEVICE_227G ||
+> +		    ledmode == SIMATIC_IPC_DEVICE_BX_59A)
+>  			pdevname = KBUILD_MODNAME "_leds_gpio_f7188x";
+>  		if (ledmode == SIMATIC_IPC_DEVICE_BX_21A)
+>  			pdevname = KBUILD_MODNAME "_leds_gpio_elkhartlake";
 
-radix-tree.c:1136:50: error: parameter 'slot' set but not used [-Werror,-Wunused-but-set-parameter]
+Thank you for the patch but these are already fixed by commits:
 
-It's clearly not needed any more, so just remove it.
+7abf253afa5c ("platform/x86/siemens: simatic-ipc-batt: fix logical error for BX-59A")
+b01c1e022f7f ("platform/x86/siemens: simatic-ipc: fix logical error for BX-59A")
 
-Fixes: 3a08cd52c37c7 ("radix tree: Remove multiorder support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- lib/radix-tree.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/lib/radix-tree.c b/lib/radix-tree.c
-index 1a31065b2036a..976b9bd02a1b5 100644
---- a/lib/radix-tree.c
-+++ b/lib/radix-tree.c
-@@ -1136,7 +1136,6 @@ static void set_iter_tags(struct radix_tree_iter *iter,
- void __rcu **radix_tree_iter_resume(void __rcu **slot,
- 					struct radix_tree_iter *iter)
- {
--	slot++;
- 	iter->index = __radix_tree_iter_add(iter, 1);
- 	iter->next_index = iter->index;
- 	iter->tags = 0;
 -- 
-2.39.2
+ i.
 
