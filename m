@@ -1,41 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7771867;
-	Sat, 12 Aug 2023 07:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4971D8C0F;
+	Sat, 12 Aug 2023 09:34:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691826609; x=1723362609;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e3PLem7UORvCwHrwfMYi8BWIgfkOqSmAqZBFFhGLuMA=;
-  b=L3rLGeenCEOU7ac8GvJwZba1MPWUE+0UnE+mMiZ1GCT4bMR688+GCj5l
-   tvMVvitlvvb8kg9rexQ9D1bmzBwDvwCHc+smkValO8x5EzCBg/flJ/uO2
-   p+wTgfvN6BxIfOH2RQ0EMLKX6dnVxhTSOPU8BFHcB9Ypa1M/ELfy2zfFA
-   /tS+GB7gI/D7ZugaKDptxlieg99P9Ur7kDeGiSht+xFWubhViBSpHAGxU
-   9Pv3Umgyog3w92XkoKD5uQIbYPvmYltwtTVHuHW6ipzeoam1d5mChdwu4
-   IczkudtNpui0EIn5vXn8ttxfQhA3eBOUjrv3XmX4PLnotC6WTr2PBch+i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="375521191"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="375521191"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2023 00:50:08 -0700
+  t=1691832851; x=1723368851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Miwj/S4yFvABO0rpgtOz7gtFIXVICX6zNXzgRsx24h8=;
+  b=XtO7udSTLPaZ6YRKTmx1H3x3PT7ZOSDPy3PqeK15glvZcL6suVNboKDz
+   oH4I88jmdSSuDmYUd5UluDXUXuKrOnFeU3DPYgp3hjXFzLY9k8BrfpmaX
+   8oMY0Unq/w1NMavQWHs62axBdN9Sv7bpXHxXbHMoKDrEoe27dBHSQlwmW
+   ElTRHSTR9V3zlyZebtJXEtmP5QbP7PaMvkfAcPrvIlO8leqXfrW2FHTTl
+   3tus6GwFWFBXcAFmSW4DXZiWT6fOhP2JxvFIZH19ycDfVJdbHmK01MXkr
+   sCxvSX/3mhlisz1qxLcxJBE4BVDKVKOJvHZIbPmwnpYfqcqPsGxVkPAk6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="371822553"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="371822553"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2023 02:34:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="876415081"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="736003181"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="736003181"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2023 00:50:10 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2023 02:34:09 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qUjNu-0008O5-0e;
-	Sat, 12 Aug 2023 07:50:06 +0000
-Date: Sat, 12 Aug 2023 15:49:16 +0800
+	id 1qUl0a-0008Ru-1E;
+	Sat, 12 Aug 2023 09:34:08 +0000
+Date: Sat, 12 Aug 2023 17:33:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zhen Lei <thunder.leizhen@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
-Subject: Cannot find symbol for section 10: .text.kallsyms_test_func_weak.
-Message-ID: <202308121535.otQuZept-lkp@intel.com>
+To: Gabriel Krisman Bertazi <krisman@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v5 05/10] fs: Add DCACHE_CASEFOLDED_NAME flag
+Message-ID: <202308121727.Nz2wb72n-lkp@intel.com>
+References: <20230812004146.30980-6-krisman@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,24 +46,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230812004146.30980-6-krisman@suse.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f8de32cc060ba3f63171aaa0e8764d22d8c37978
-commit: 30f3bb09778de64ef9f23fb4bb5f868c4728a071 kallsyms: Add self-test facility
-date:   9 months ago
-config: mips-randconfig-r014-20230811 (https://download.01.org/0day-ci/archive/20230812/202308121535.otQuZept-lkp@intel.com/config)
+Hi Gabriel,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tytso-ext4/dev]
+[also build test ERROR on linus/master]
+[cannot apply to tyhicks-ecryptfs/next ericvh-v9fs/for-next viro-vfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gabriel-Krisman-Bertazi/fs-Expose-helper-to-check-if-a-directory-needs-casefolding/20230812-084506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230812004146.30980-6-krisman%40suse.de
+patch subject: [PATCH v5 05/10] fs: Add DCACHE_CASEFOLDED_NAME flag
+config: arm64-randconfig-r013-20230812 (https://download.01.org/0day-ci/archive/20230812/202308121727.Nz2wb72n-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230812/202308121535.otQuZept-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230812/202308121727.Nz2wb72n-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308121535.otQuZept-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308121727.Nz2wb72n-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> Cannot find symbol for section 10: .text.kallsyms_test_func_weak.
-   kernel/kallsyms_selftest.o: failed
+>> fs/dcache.c:1967:15: error: use of undeclared identifier 'd_set_casefold_lookup'; did you mean 'd_set_casefolded_name'?
+    1967 | EXPORT_SYMBOL(d_set_casefold_lookup);
+         |               ^~~~~~~~~~~~~~~~~~~~~
+         |               d_set_casefolded_name
+   include/linux/export.h:86:44: note: expanded from macro 'EXPORT_SYMBOL'
+      86 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+         |                                                        ^
+   include/linux/export.h:83:54: note: expanded from macro '_EXPORT_SYMBOL'
+      83 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                                         ^
+   include/linux/export.h:74:16: note: expanded from macro '__EXPORT_SYMBOL'
+      74 |         extern typeof(sym) sym;                                 \
+         |                       ^
+   fs/dcache.c:1961:6: note: 'd_set_casefolded_name' declared here
+    1961 | void d_set_casefolded_name(struct dentry *dentry)
+         |      ^
+   1 error generated.
+
+
+vim +1967 fs/dcache.c
+
+  1960	
+  1961	void d_set_casefolded_name(struct dentry *dentry)
+  1962	{
+  1963		spin_lock(&dentry->d_lock);
+  1964		dentry->d_flags |= DCACHE_CASEFOLDED_NAME;
+  1965		spin_unlock(&dentry->d_lock);
+  1966	}
+> 1967	EXPORT_SYMBOL(d_set_casefold_lookup);
+  1968	
 
 -- 
 0-DAY CI Kernel Test Service
