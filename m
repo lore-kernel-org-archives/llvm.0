@@ -1,42 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E3E2AB2E;
-	Fri, 11 Aug 2023 23:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF186110B;
+	Sat, 12 Aug 2023 00:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691797208; x=1723333208;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=vEXi8lVvqK15v8eV4f8Xl4YWcViUfjJ0IEVqGSZo3wM=;
-  b=hIdVLZ/pBP90ImO6wqukwCgfoi+CEHIOepw/9qqnrfOIg7Y22Ioi6tMG
-   ZvuzGFbYai6qNLJVVohOe4aYNdGGwqOO9WqREGtVEG4R6a5kp+G8QkUiG
-   qGnXo+pJKmpZt/9gdgrAV9KRKbMAZ7wmp2xA5LygU/FD4eLrcjzQJ0Qf9
-   BzZ9RYhFh+7IqInT8D64/UdYXa8qwABqqdSDbrRgsqIA2E2k5cKkF9y3P
-   uqj3xMEYXb5XC30ERyyGE1SCuvNbo83lFTfcO7Llvnx9wgsfEr/S+7PXm
-   N+IplnM3/z5l9tk9oRznADoDWL2xjDl8fsLOnoxkz/oaKY7enPrYtnpPY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="356745673"
+  t=1691800257; x=1723336257;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1x2P4E8j/zpafgm3RPuB/Lf62dZ486F/xTO92Iio97w=;
+  b=XTEBk4d+4SmfiYSBHUbQa/3HNgmKDDWoNyg/L7LQ4TnQ7eXDWwCpkOFV
+   Hx9xI6uCEfgdUYgUV2wsxiYUBkONbYNbWEsFVvpCe8/3lcKfyk0LWS541
+   jpcBG2DItzFBTmBwr8QclY368IKI7Y9pDq84MikjnvvC799bq5VVFxCeu
+   D9tJqGBla5jPOGh/pPtjKclrNWjaHd8DvVLtBum5LZRaCbuoVwbu/BEI7
+   rXWe+owjI2yWrIE/ImQJ3AnfX1Sg2WrcDopB5qG72Z8imrBnhHkn32qHQ
+   hEiQLW4ysdVDYfQImBwEshQMCqdoWbwvBHI7xa0tTe1hX9yu/sF+zVSjf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="402768333"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="356745673"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 16:39:55 -0700
+   d="scan'208";a="402768333"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 17:30:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="802848797"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="846948744"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="802848797"
+   d="scan'208";a="846948744"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2023 16:39:54 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 11 Aug 2023 17:30:55 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qUbjW-00086Z-0A;
-	Fri, 11 Aug 2023 23:39:54 +0000
-Date: Sat, 12 Aug 2023 07:39:23 +0800
+	id 1qUcWt-00088s-14;
+	Sat, 12 Aug 2023 00:30:55 +0000
+Date: Sat, 12 Aug 2023 08:30:22 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [frederic-dynticks:timers/idle 3/10] vmlinux.o: warning: objtool:
- poll_idle+0x21: call to tick_nohz_tick_stopped() leaves .noinstr.text
- section
-Message-ID: <202308120736.DKHxncy2-lkp@intel.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davejiang:cxl-ide 15/24] include/linux/pci.h:352:32: error:
+ variable has incomplete type 'enum pci_ide_stream_type'
+Message-ID: <202308120818.3XfeoT0R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,90 +46,132 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Frederic Weisbecker <frederic@kernel.org>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/idle
-head:   b66dd12bb29cca558b9323f2b270a7dae8f56c48
-commit: eda30678a7c64885469b2dc17d540f42727c38ea [3/10] cpuidle: Report illegal tick stopped while polling
-config: x86_64-randconfig-x002-20230812 (https://download.01.org/0day-ci/archive/20230812/202308120736.DKHxncy2-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120736.DKHxncy2-lkp@intel.com/reproduce)
+tree:   https://github.com/davejiang/linux.git cxl-ide
+head:   3e25c6d783287d7b5807e5df623589e7d53b64a8
+commit: cba36ee4e7f4d5d50334a59f5a5af09605bfdde6 [15/24] pci: Add basic support for discovery of IDE on PCIe device
+config: s390-randconfig-r012-20230812 (https://download.01.org/0day-ci/archive/20230812/202308120818.3XfeoT0R-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120818.3XfeoT0R-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308120736.DKHxncy2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308120818.3XfeoT0R-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: amd_spi_master_transfer() falls through to next function __cfi_amd_spi_max_transfer_size()
-   vmlinux.o: warning: objtool: bmi160_setup_irq() falls through to next function __cfi_bmi160_data_rdy_trigger_set_state()
->> vmlinux.o: warning: objtool: poll_idle+0x21: call to tick_nohz_tick_stopped() leaves .noinstr.text section
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:609:
+   In file included from arch/s390/include/asm/hw_irq.h:6:
+>> include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+>> include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                                                   ^
+   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+   13 warnings and 1 error generated.
+   make[3]: *** [scripts/Makefile.build:116: arch/s390/kernel/asm-offsets.s] Error 1 shuffle=139011430
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1287: prepare0] Error 2 shuffle=139011430
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:234: __sub-make] Error 2 shuffle=139011430
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:234: __sub-make] Error 2 shuffle=139011430
+   make: Target 'prepare' not remade because of errors.
 
 
-objdump-func vmlinux.o poll_idle:
-0000 0000000000000735 <poll_idle>:
-0000  735:	f3 0f 1e fa          	endbr64
-0004  739:	41 57                	push   %r15
-0006  73b:	41 56                	push   %r14
-0008  73d:	41 55                	push   %r13
-000a  73f:	41 54                	push   %r12
-000c  741:	53                   	push   %rbx
-000d  742:	89 d3                	mov    %edx,%ebx
-000f  744:	49 89 f4             	mov    %rsi,%r12
-0012  747:	49 89 fe             	mov    %rdi,%r14
-0015  74a:	e8 00 00 00 00       	call   74f <poll_idle+0x1a>	74b: R_X86_64_PLT32	local_clock_noinstr-0x4
-001a  74f:	49 89 c7             	mov    %rax,%r15
-001d  752:	41 80 26 fb          	andb   $0xfb,(%r14)
-0021  756:	e8 00 00 00 00       	call   75b <poll_idle+0x26>	757: R_X86_64_PLT32	tick_nohz_tick_stopped-0x4
-0026  75b:	84 c0                	test   %al,%al
-0028  75d:	0f 85 8c 00 00 00    	jne    7ef <poll_idle+0xba>
-002e  763:	fb                   	sti
-002f  764:	4c 8b 2d 00 00 00 00 	mov    0x0(%rip),%r13        # 76b <poll_idle+0x36>	767: R_X86_64_PC32	pcpu_hot-0x4
-0036  76b:	41 80 4d 02 20       	orb    $0x20,0x2(%r13)
-003b  770:	49 f7 45 00 08 00 00 00 	testq  $0x8,0x0(%r13)
-0043  778:	75 47                	jne    7c1 <poll_idle+0x8c>
-0045  77a:	4c 89 e7             	mov    %r12,%rdi
-0048  77d:	4c 89 f6             	mov    %r14,%rsi
-004b  780:	e8 00 00 00 00       	call   785 <poll_idle+0x50>	781: R_X86_64_PLT32	cpuidle_poll_time-0x4
-0050  785:	49 f7 45 00 08 00 00 00 	testq  $0x8,0x0(%r13)
-0058  78d:	75 32                	jne    7c1 <poll_idle+0x8c>
-005a  78f:	49 89 c4             	mov    %rax,%r12
-005d  792:	31 c9                	xor    %ecx,%ecx
-005f  794:	f3 90                	pause
-0061  796:	81 f9 c7 00 00 00    	cmp    $0xc7,%ecx
-0067  79c:	77 04                	ja     7a2 <poll_idle+0x6d>
-0069  79e:	ff c1                	inc    %ecx
-006b  7a0:	eb 0f                	jmp    7b1 <poll_idle+0x7c>
-006d  7a2:	e8 00 00 00 00       	call   7a7 <poll_idle+0x72>	7a3: R_X86_64_PLT32	local_clock_noinstr-0x4
-0072  7a7:	4c 29 f8             	sub    %r15,%rax
-0075  7aa:	31 c9                	xor    %ecx,%ecx
-0077  7ac:	4c 39 e0             	cmp    %r12,%rax
-007a  7af:	77 0c                	ja     7bd <poll_idle+0x88>
-007c  7b1:	49 f7 45 00 08 00 00 00 	testq  $0x8,0x0(%r13)
-0084  7b9:	74 d9                	je     794 <poll_idle+0x5f>
-0086  7bb:	eb 04                	jmp    7c1 <poll_idle+0x8c>
-0088  7bd:	41 80 0e 04          	orb    $0x4,(%r14)
-008c  7c1:	fa                   	cli
-008d  7c2:	41 80 65 02 df       	andb   $0xdf,0x2(%r13)
-0092  7c7:	49 f7 45 00 08 00 00 00 	testq  $0x8,0x0(%r13)
-009a  7cf:	74 0a                	je     7db <poll_idle+0xa6>
-009c  7d1:	81 25 00 00 00 00 ff ff ff 7f 	andl   $0x7fffffff,0x0(%rip)        # 7db <poll_idle+0xa6>	7d3: R_X86_64_PC32	pcpu_hot
-00a6  7db:	89 d8                	mov    %ebx,%eax
-00a8  7dd:	5b                   	pop    %rbx
-00a9  7de:	41 5c                	pop    %r12
-00ab  7e0:	41 5d                	pop    %r13
-00ad  7e2:	41 5e                	pop    %r14
-00af  7e4:	41 5f                	pop    %r15
-00b1  7e6:	31 c9                	xor    %ecx,%ecx
-00b3  7e8:	31 ff                	xor    %edi,%edi
-00b5  7ea:	31 d2                	xor    %edx,%edx
-00b7  7ec:	31 f6                	xor    %esi,%esi
-00b9  7ee:	c3                   	ret
-00ba  7ef:	90                   	nop
-00bb  7f0:	0f 0b                	ud2
-00bd  7f2:	90                   	nop
-00be  7f3:	e9 6b ff ff ff       	jmp    763 <poll_idle+0x2e>
+vim +352 include/linux/pci.h
+
+   338	
+   339	struct pci_ide {
+   340		unsigned int			link_num;
+   341		unsigned int			select_num;
+   342		struct ida			stream_pos_ids;
+   343		struct ida			stream_ids;
+   344		int				stream_min;
+   345		int				stream_max;
+   346		const struct pci_ide_ops	*ops;
+   347		enum pci_ide_stream_type	stream_type;
+   348	};
+   349	#else
+   350	static inline int pcie_ide_stream_create(struct pci_dev *pdev1,
+   351						 struct pci_dev *pdev2,
+ > 352						 enum pci_ide_stream_type type)
+   353	{
+   354		return -EOPNOTSUPP;
+   355	}
+   356	
 
 -- 
 0-DAY CI Kernel Test Service
