@@ -1,101 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4869F63C9;
-	Sat, 12 Aug 2023 12:12:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691842336; x=1723378336;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KVO4hsD/RslKKAku1fAA6oMnkGGznWFu+8b9a6iCYto=;
-  b=GT5WQxrfYj+Xv4B1kaVxr73uASO/Pp+Hh1Sw86NmrbcDpG2hm+/wxXvE
-   sUz86h/fTJIEXzQ7wr0W7ZKxhzwnb9dq0+15jiu4A0R+QPDeXMLwsTtAO
-   luunj/b+fBdkINlJvoe9F4SBF7Zqwyq0oxeIGPbWvdCJs/qQ5V5lfizog
-   EdZams+JKbdjeoREyrR/O8XNVxq89vPwQPVOxhiXFgv7b48TgP7W+JW0I
-   HQMgIYkX3xQ22c2a0e40MD5k0CEx/o51AjAyF+Ej6HZj/hW9ha68FXh6H
-   V8WRk9BDJwI3Q7bbcbQeF7INDPuYnBgEngpXcn3N/39Gosn5IRQ2P87H6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="458193438"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="458193438"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2023 05:12:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="682814020"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="682814020"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 12 Aug 2023 05:12:13 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qUnTZ-0008ZE-02;
-	Sat, 12 Aug 2023 12:12:13 +0000
-Date: Sat, 12 Aug 2023 20:12:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mhiramat:topic/fprobe-ftrace-regs 4/8]
- arch/riscv/kernel/probes/rethook.h:6:6: error: conflicting types for
- 'arch_rethook_prepare'
-Message-ID: <202308122010.4qEiutvg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7429A1CCDE
+	for <llvm@lists.linux.dev>; Sat, 12 Aug 2023 13:47:02 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A008840E019C;
+	Sat, 12 Aug 2023 13:46:54 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id FtWfINdBjqMX; Sat, 12 Aug 2023 13:46:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1691848012; bh=KKJmPDhFaDUed9OkAVAyosuXrrOmKC/WxDhHEMXXWQI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DtFXAh/elVWXuq9gmEYUU7nZ8IjYnqxVnMVbYS8Rg/h6GtMblDWhHgdDSAmn5/f0z
+	 6r3rMNvEYQxiy8rpbTbMt+BjRsCLASMaQ8hkRS4aHTNmMkZ/RxMFWmUmXWgg/81ZuV
+	 SbSKTOPZBe/DR/vQA6ruDRMN6bQ9XA7WHwf6HqjLiH7sOmkieX6AxHZcFmx90Hih0E
+	 PMrv3pMLsUaIyS2KYP5ceD/qunMMDbk+XWMMc8WlUsBPfRNDimGFFwyyPpy+sNqDVK
+	 rsmgZEML9VKM7i8Tb4Nq/St6V/h2R5EfhcgANcSbXozMvveTCrFp8gh95XMadjxH9H
+	 DHzo4JaW2MlS4uAgwPxq1evbPo9TzXW6+jAZlospC+Q/OK5Di0WoVEOqF2GrLHXynr
+	 sMvlbpT5L9vjGjqI4Al3UZ4u6ti+AX1jLsquw+BtD3gW6+Zy14jq9Rp6dmykTb05FB
+	 +buIUUX7kKrRgma0LTuQIuUtnWLBQmFyUv+lagbwZn8ZzLwUMInPWGKKzjDBI5i6Sk
+	 4Oga2uJxYpdDv7Ng9TPQ34IzvLOcBwCf/AT2kfY0p2yZ3CdC1zDhMgOd5x44okgLtk
+	 Prxj2qxTLl8HvA4oAuCSlRvAt5KMaZywj6zMWHxhsOYxx08tMoJ6ET2Ii2vokjOtSg
+	 75JEaVWw0hqfLL0RY6bSrO2M=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8AF3940E0185;
+	Sat, 12 Aug 2023 13:46:46 +0000 (UTC)
+Date: Sat, 12 Aug 2023 15:46:42 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sean Christopherson <seanjc@google.com>,
+	Nathan Chancellor <nathan@kernel.org>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: Hang when booting guest kernels compiled with clang after SRSO
+ mitigations
+Message-ID: <20230812134642.GGZNeNQpebzu3H3NDh@fat_crate.local>
+References: <20230810144344.GLZNT3oM6MLVdzGlyd@fat_crate.local>
+ <20230810150706.GA42856@dev-arch.thelio-3990X>
+ <20230810151410.GNZNT+wn/cLBWiU6dO@fat_crate.local>
+ <20230810154831.GA38495@dev-arch.thelio-3990X>
+ <20230810161414.GA4000@dev-arch.thelio-3990X>
+ <20230811101456.GDZNYKIHs1k7ri8hrI@fat_crate.local>
+ <20230811140941.GB193223@dev-arch.thelio-3990X>
+ <ZNZbxhL5ZJD1Sd9P@google.com>
+ <20230811161225.GIZNZd6QfLUoZv9TLO@fat_crate.local>
+ <CAKwvOdmejxO=_KBuw1WZGgh=MXNNbfWH03TpEFO47vkKWq04Cg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <CAKwvOdmejxO=_KBuw1WZGgh=MXNNbfWH03TpEFO47vkKWq04Cg@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-ftrace-regs
-head:   0403b5414401a0aa4ad3baf00cc543dc01608a6b
-commit: f8fc919bb672d73f7cfee02b249965933b1adebf [4/8] fprobe: rethook: Use ftrace_regs in fprobe exit handler and rethook
-config: riscv-randconfig-r025-20230812 (https://download.01.org/0day-ci/archive/20230812/202308122010.4qEiutvg-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230812/202308122010.4qEiutvg-lkp@intel.com/reproduce)
+On Fri, Aug 11, 2023 at 05:42:04PM -0700, Nick Desaulniers wrote:
+> So far it looks like it's working for folks. Fixing that issue is the
+> lowest priority issue of the three we found; I'll send it formally
+> next week.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308122010.4qEiutvg-lkp@intel.com/
+Ok. Also, it might not be needed as some of PeterZ's stuff do simplify
+that code more so I'm thinking of taking them and will make your fix not
+needed. But we'll talk.
 
-All errors (new ones prefixed by >>):
+> I literally just had my hard drive fail on my main dev box (that's two
+> machines fail in one week; laptop wont power on anymore; down to one
+> machine left).
 
-   In file included from arch/riscv/kernel/probes/rethook.c:8:
->> arch/riscv/kernel/probes/rethook.h:6:6: error: conflicting types for 'arch_rethook_prepare'
-       6 | void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount);
-         |      ^
-   include/linux/rethook.h:73:6: note: previous declaration is here
-      73 | void arch_rethook_prepare(struct rethook_node *node, struct ftrace_regs *regs, bool mcount);
-         |      ^
->> arch/riscv/kernel/probes/rethook.c:13:36: error: incompatible pointer types passing 'struct pt_regs *' to parameter of type 'struct ftrace_regs *' [-Werror,-Wincompatible-pointer-types]
-      13 |         return rethook_trampoline_handler(regs, regs->s0);
-         |                                           ^~~~
-   include/linux/rethook.h:92:62: note: passing argument to parameter 'regs' here
-      92 | unsigned long rethook_trampoline_handler(struct ftrace_regs *regs,
-         |                                                              ^
->> arch/riscv/kernel/probes/rethook.c:18:6: error: conflicting types for 'arch_rethook_prepare'
-      18 | void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
-         |      ^
-   include/linux/rethook.h:73:6: note: previous declaration is here
-      73 | void arch_rethook_prepare(struct rethook_node *node, struct ftrace_regs *regs, bool mcount);
-         |      ^
-   3 errors generated.
+Sounds like Murphy came to visit. I hate that.
 
+> Going to see if fsck can help at all; worst case I may
+> need Nathan to formally send it for me next week.  Let's see if I can
+> recover this machine first...what a way to end the week. SMH
 
-vim +/arch_rethook_prepare +6 arch/riscv/kernel/probes/rethook.h
+Yeah, I can scrape it off some gitgub issue page too - that's not
+a problem.
 
-b57c2f12409845 Binglei Wang 2022-10-25  4  
-b57c2f12409845 Binglei Wang 2022-10-25  5  unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs);
-b57c2f12409845 Binglei Wang 2022-10-25 @6  void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount);
-b57c2f12409845 Binglei Wang 2022-10-25  7  
+Btw, this:
 
-:::::: The code at line 6 was first introduced by commit
-:::::: b57c2f124098459a4acc15d5044f87cba31c87f0 riscv: add riscv rethook implementation
+https://github.com/ClangBuiltLinux/linux/commit/150c42407f87463c27a2459e06845965291d9973
 
-:::::: TO: Binglei Wang <l3b2w1@gmail.com>
-:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+Is this fixing a current issue and so it needs to go to Linus now?
+
+If so, I'll expedite it too.
+
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
