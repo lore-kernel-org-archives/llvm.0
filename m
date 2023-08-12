@@ -1,43 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491DE20EE;
-	Sat, 12 Aug 2023 17:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495681CCCC;
+	Sat, 12 Aug 2023 18:46:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691859686; x=1723395686;
+  t=1691865984; x=1723401984;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bv2DjArMLt4rY331DW/7VSC5xJ7FQ4d5pVniM5s/2k4=;
-  b=XcZxR+EWh1bBHxjp5LGv1d1VexczBi2gC+BmVfTdwhlTLCzffhEe1C7Q
-   kcarfS9LszhNwSKaCNV80sZ9GTXHk2UmbRecOfo95nSpq2r3zzwXjEVCl
-   XT/59Fhbgb2zxSt7mCQ0TQ41vDCnesBWkOb/KV0GPujkKe49z8IxyCkTZ
-   U4lsBo7iaRiJlg0KRZ7frnx7Gpf7tph4QGKx/AeRSQJCX0VltfKPm3Dvz
-   btOZ6soO028gdVBlzk/T4k4TxJHcb8/y+RBs2LF9YQIBa3R8dKxMZ8InO
-   XlCnhRH8V9ZIRNz6G41TKKHJQuu2TUchiuZ8+sf8BLlQye6jyB2qtQqUW
+  bh=34tRD8ohJc7MZ6k9xJhASxpxo0NGFJn8XECEPwq0ntw=;
+  b=eDYmBYvTnDRXVTU5pbahXaV18CLrt6pSdyPdD4z4GRJWwBEWvXVtdn6Z
+   hKICYL+i/qEO5cD+jlhN8jJX8OKDmPFvywnMUH4O9sXVRIBzBsjrdQZCo
+   Ea6i5tImu93IhB4Gac1UH735vdqoxPEDPrSYgHriG1osg2Np5Yp3qBqHc
+   XR8+3ou95JBqDNu9Lf9oH3ekLf8n57f2+IRhVxNCsDuVRQK7340YKDjig
+   iQ0c7E0/N6ObHoiYem65EzA7LPjSEwYXQYGDYTtOiACT/HcyPpOrKdRti
+   q1EjpLxkADuVKe1iZQGoth5SnqfWNu9T+FmVKEBsemz0WWG6FxKrFpDh+
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10800"; a="375545543"
+X-IronPort-AV: E=McAfee;i="6600,9927,10800"; a="374609493"
 X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="375545543"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2023 10:01:20 -0700
+   d="scan'208";a="374609493"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2023 11:46:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10800"; a="847109478"
+X-IronPort-AV: E=McAfee;i="6600,9927,10800"; a="762505662"
 X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="847109478"
+   d="scan'208";a="762505662"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Aug 2023 10:01:19 -0700
+  by orsmga008.jf.intel.com with ESMTP; 12 Aug 2023 11:46:21 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qUrzK-0008hI-1V;
-	Sat, 12 Aug 2023 17:01:18 +0000
-Date: Sun, 13 Aug 2023 01:01:12 +0800
+	id 1qUtcy-0008jY-1z;
+	Sat, 12 Aug 2023 18:46:20 +0000
+Date: Sun, 13 Aug 2023 02:46:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
+To: Guillaume Plourde <gplourde@protonmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davejiang:cxl-ide 15/24] include/linux/pci.h:352:12: error:
- declaration of 'enum pci_ide_stream_type' will not be visible outside of
- this function
-Message-ID: <202308130058.O4VPBROF-lkp@intel.com>
+Subject: [asahilinux:pr/173 1/1] drivers/iommu/Kconfig:10:error: recursive
+ dependency detected!
+Message-ID: <202308130255.xFTSvMMC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,375 +46,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/davejiang/linux.git cxl-ide
-head:   5e3487a17fbf6e33d8ddd60444073ff0bc59b35e
-commit: 6908950a8afc72c0e7e4131658994a3cd384c95c [15/24] pci: Add basic support for discovery of IDE on PCIe device
-config: powerpc-mpc866_ads_defconfig (https://download.01.org/0day-ci/archive/20230813/202308130058.O4VPBROF-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230813/202308130058.O4VPBROF-lkp@intel.com/reproduce)
+Hi Guillaume,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://github.com/AsahiLinux/linux pr/173
+head:   1f19eaee9273fecb39d62f50b8f217580716c384
+commit: 1f19eaee9273fecb39d62f50b8f217580716c384 [1/1] Update DRM_ASAHI deps
+config: i386-randconfig-i013-20230812 (attached as .config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230813/202308130255.xFTSvMMC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308130058.O4VPBROF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308130255.xFTSvMMC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:95:1: note: expanded from here
-      95 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
-     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/irq.c:31:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:97:1: note: expanded from here
-      97 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/irq.c:31:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:99:1: note: expanded from here
-      99 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
-     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/irq.c:31:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:101:1: note: expanded from here
-     101 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
-     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/irq.c:31:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:103:1: note: expanded from here
-     103 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
-     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/irq.c:49:
->> include/linux/pci.h:352:12: error: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Werror,-Wvisibility]
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                                                   ^
-   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   8 errors generated.
---
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:84:1: note: expanded from here
-      84 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
-     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/prom.c:20:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:86:1: note: expanded from here
-      86 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/prom.c:20:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:88:1: note: expanded from here
-      88 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
-     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/prom.c:20:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:90:1: note: expanded from here
-      90 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
-     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/prom.c:20:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:92:1: note: expanded from here
-      92 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
-     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/prom.c:20:
->> include/linux/pci.h:352:12: error: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Werror,-Wvisibility]
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                                                   ^
-   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   8 errors generated.
---
-     178 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
-     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/setup-common.c:31:
-   In file included from include/linux/serial_8250.h:11:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:180:1: note: expanded from here
-     180 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/setup-common.c:31:
-   In file included from include/linux/serial_8250.h:11:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:182:1: note: expanded from here
-     182 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
-     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/setup-common.c:31:
-   In file included from include/linux/serial_8250.h:11:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:184:1: note: expanded from here
-     184 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
-     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/setup-common.c:31:
-   In file included from include/linux/serial_8250.h:11:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:186:1: note: expanded from here
-     186 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
-     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/setup-common.c:54:
-   In file included from arch/powerpc/include/asm/iommu.h:19:
-   In file included from arch/powerpc/include/asm/pci-bridge.h:7:
->> include/linux/pci.h:352:12: error: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Werror,-Wvisibility]
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                                                   ^
-   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   8 errors generated.
+>> drivers/iommu/Kconfig:10:error: recursive dependency detected!
+   drivers/iommu/Kconfig:10:	symbol IOMMU_SUPPORT is selected by DRM_ASAHI
+   drivers/gpu/drm/asahi/Kconfig:16:	symbol DRM_ASAHI depends on OF
+   drivers/of/Kconfig:5:	symbol OF is selected by X86_INTEL_CE
+   arch/x86/Kconfig:601:	symbol X86_INTEL_CE depends on X86_IO_APIC
+   arch/x86/Kconfig:1114:	symbol X86_IO_APIC depends on X86_LOCAL_APIC
+   arch/x86/Kconfig:1109:	symbol X86_LOCAL_APIC depends on X86_UP_APIC
+   arch/x86/Kconfig:1084:	symbol X86_UP_APIC prompt is visible depending on PCI_MSI
+   drivers/pci/Kconfig:39:	symbol PCI_MSI is selected by AMD_IOMMU
+   drivers/iommu/amd/Kconfig:3:	symbol AMD_IOMMU depends on IOMMU_SUPPORT
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
 
 
-vim +352 include/linux/pci.h
+vim +10 drivers/iommu/Kconfig
 
-   338	
-   339	struct pci_ide {
-   340		unsigned int			link_num;
-   341		unsigned int			select_num;
-   342		struct ida			stream_pos_ids;
-   343		struct ida			stream_ids;
-   344		int				stream_min;
-   345		int				stream_max;
-   346		const struct pci_ide_ops	*ops;
-   347		enum pci_ide_stream_type	stream_type;
-   348	};
-   349	#else
-   350	static inline int pcie_ide_stream_create(struct pci_dev *pdev1,
-   351						 struct pci_dev *pdev2,
- > 352						 enum pci_ide_stream_type type)
-   353	{
-   354		return -EOPNOTSUPP;
-   355	}
-   356	
+68255b628776df Joerg Roedel    2011-06-14 @10  menuconfig IOMMU_SUPPORT
+68255b628776df Joerg Roedel    2011-06-14  11  	bool "IOMMU Hardware Support"
+e5144c93758519 Arnd Bergmann   2015-01-28  12  	depends on MMU
+68255b628776df Joerg Roedel    2011-06-14  13  	default y
+a7f7f6248d9740 Masahiro Yamada 2020-06-14  14  	help
+68255b628776df Joerg Roedel    2011-06-14  15  	  Say Y here if you want to compile device drivers for IO Memory
+68255b628776df Joerg Roedel    2011-06-14  16  	  Management Units into the kernel. These devices usually allow to
+68255b628776df Joerg Roedel    2011-06-14  17  	  remap DMA requests and/or remap interrupts from other devices on the
+68255b628776df Joerg Roedel    2011-06-14  18  	  system.
+68255b628776df Joerg Roedel    2011-06-14  19  
+
+:::::: The code at line 10 was first introduced by commit
+:::::: 68255b628776dfafa7f67ca3afd66bd4ba377307 iommu: Move iommu Kconfig entries to submenu
+
+:::::: TO: Joerg Roedel <joerg.roedel@amd.com>
+:::::: CC: Joerg Roedel <joerg.roedel@amd.com>
 
 -- 
 0-DAY CI Kernel Test Service
