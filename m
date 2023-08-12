@@ -1,85 +1,71 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E3A15B6
-	for <llvm@lists.linux.dev>; Sat, 12 Aug 2023 04:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691812865;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=hQMBKtA3QI3w6UfDaX5mHCtaAyqKCTdDJHmBOAS5j6A=;
-	b=DTiEbxYtsQXmpnzDmZ4cOwG4qAHAhtS+kL/a6SwE2sIIDDn+U6J6Y8HUqnExIQGbqD26Bq
-	IT6sL9Z9/lH6uxlayDz9ORC6sn1GwM6Qp1JqI34Wl41teCixZDz6VAOfDLIXZA3MfPYjuV
-	LAgAwg4Ey/8Mu2/MtRoRexlOKtWs/UM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-m1p-CR3GPLacYNz4BUjXlg-1; Sat, 12 Aug 2023 00:01:03 -0400
-X-MC-Unique: m1p-CR3GPLacYNz4BUjXlg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 331F68011AD
-	for <llvm@lists.linux.dev>; Sat, 12 Aug 2023 04:01:03 +0000 (UTC)
-Received: from [172.64.13.56] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 21205492C13;
-	Sat, 12 Aug 2023 04:01:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.5.0-rc5,
- mainline.kernel.org-clang, f8de32cc)
-Date: Sat, 12 Aug 2023 04:01:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3AC1849;
+	Sat, 12 Aug 2023 04:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691815988; x=1723351988;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rizJ4PqVdeBbOLj83uv+7ejLAmRCgZnwdpA1u0ZQkVY=;
+  b=dbBmedV8zQ/P7mJl9BvEm9pLPGEiGObSqt5SxGBrR09bPzkpADOezq45
+   g8c6lNr9lmNB9ktcR1GzRb+enkJVE72f6YhwBd5/1QBwrdxmpcGBvfY7D
+   FTXYWYjespEyBmQ1T8nBkT7Ioh4R4wroFZkKM6eHrIsYjWliLCGJBOotx
+   sPFuVj/sN054aZAu+W7D7ufKraGIcqk+YXdI10dgMK6daVKEKTOmH/5Ce
+   QdcNqVNWPwJ6Q1A8xLC/ePrx4Dfl4lXuQ+ZJ+nLjKc+oFVm8PqmAUmzmj
+   d0SM9SGHSCBp91DZXxZwgCGjATD6WNpH5Qwd4PxaunmCyUG/DOiEGSpJQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="375513440"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="375513440"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 21:53:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="767871956"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="767871956"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 11 Aug 2023 21:53:03 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qUgcY-0008Gj-0W;
+	Sat, 12 Aug 2023 04:53:02 +0000
+Date: Sat, 12 Aug 2023 12:52:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Cannot find symbol for section 13: .text.release_thread.
+Message-ID: <202308121246.0TYkHC1K-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <80509.123081200010300445@us-mta-631.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f8de32cc060ba3f63171aaa0e8764d22d8c37978
+commit: 2be9880dc87342dc7ae459c9ea5c9ee2a45b33d8 kernel: exit: cleanup release_thread()
+date:   11 months ago
+config: mips-randconfig-r014-20230811 (https://download.01.org/0day-ci/archive/20230812/202308121246.0TYkHC1K-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230812/202308121246.0TYkHC1K-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308121246.0TYkHC1K-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'tpmdd-v6.5-rc7' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/jarkko/linux-tpmdd
+>> Cannot find symbol for section 13: .text.release_thread.
+   kernel/exit.o: failed
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/99813
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/38481=
-3
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/384814
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
