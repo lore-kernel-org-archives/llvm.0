@@ -1,52 +1,42 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E0BEA2;
-	Sat, 12 Aug 2023 00:52:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5CF64B;
+	Sat, 12 Aug 2023 00:51:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691801520; x=1723337520;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T9Daikl/u2ztX3eAdSfiNU9UYztQtRvgl1jmh5MBy9c=;
-  b=ZYbnQo50404GipztWdkGXfqpXZQTol1kNO0/zzXSuloGh9hiauAgvnG4
-   Q37x4aiIdvdbowdgHvTI/bkYizCEJDn2fPf2Bv+cgZM1T4DDpEcNI/wWS
-   3pQqlnPPaVuytRPjLPcy48zhUopNWbuW1CiJ7LAs1Q04c1a4nd7SGRLwk
-   pBZ1FD3IVA9eycpc9Kv28Omr5sUAn+Ho1ByRta2T2uxPIMqeUWDkvpouk
-   +aLC3k3rP8OF/sTnn5m0fvlTpmAw6JDCTxGkdFgQageQJAjUGvytM1UPT
-   baHSDJTmlnxUWTTtwIe2z9+A6EGXBMj4EowFwcEtuoellJyx1DoDTCJtZ
+  t=1691801519; x=1723337519;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E8pr+6DLH8hgx88uWfEvaQYySeAvhfUW/3m6NWKF+YY=;
+  b=CoHpL5tD0Y9L2URsHJwejp8s7tjNbzAiqKLY+i90Ts2I8fPys63lon/7
+   2h8xxd2+ziqMZQxTBr/v6O/WI2w/QU7PoTBiHIH0ZNgaPZwm4eyOSWkZ0
+   sUuxFMQF6jnIhxMZ9Ttgz/hH3wo4dXp5KsmpU7d7uDCjOAEkwV4saSxMd
+   e8njaSxNfJZio30DdcW9l/wqUHUF6twJQnQoG5dnWveFZYzVtfAaF062K
+   ubkIQOYU3QyJsKGjauleS1bSwgBHZXmoP828Zwvhkhr3+36ykyUwmcYlw
+   I2rPBKBlV1ZtyFRYFRnD1iTd9nMHv/X8mdh0imnvVSU5RGNroaIW3TbaI
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="438123417"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="438123410"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="438123417"
+   d="scan'208";a="438123410"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 17:51:58 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 17:51:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="735936589"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="735936596"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="735936589"
+   d="scan'208";a="735936596"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
   by fmsmga007.fm.intel.com with ESMTP; 11 Aug 2023 17:51:56 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qUcrD-00089h-2E;
+	id 1qUcrD-00089e-2A;
 	Sat, 12 Aug 2023 00:51:55 +0000
-Date: Sat, 12 Aug 2023 08:51:00 +0800
+Date: Sat, 12 Aug 2023 08:51:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nikunj A Dadhania <nikunj@amd.com>, kvm@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [PATCH] KVM: SVM: Add exception to disable objtool warning for
- kvm-amd.o
-Message-ID: <202308120845.gkEMVH5a-lkp@intel.com>
-References: <20230802091107.1160320-1-nikunj@amd.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davejiang:cxl-ide 15/24] include/linux/pci.h:352:32: error:
+ variable has incomplete type 'enum pci_ide_stream_type'
+Message-ID: <202308120820.QxMYDf5J-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,82 +45,435 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230802091107.1160320-1-nikunj@amd.com>
 
-Hi Nikunj,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on mst-vhost/linux-next linus/master v6.5-rc5 next-20230809]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/KVM-SVM-Add-exception-to-disable-objtool-warning-for-kvm-amd-o/20230802-171219
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20230802091107.1160320-1-nikunj%40amd.com
-patch subject: [PATCH] KVM: SVM: Add exception to disable objtool warning for kvm-amd.o
-config: i386-randconfig-i013-20230812 (https://download.01.org/0day-ci/archive/20230812/202308120845.gkEMVH5a-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120845.gkEMVH5a-lkp@intel.com/reproduce)
+tree:   https://github.com/davejiang/linux.git cxl-ide
+head:   3e25c6d783287d7b5807e5df623589e7d53b64a8
+commit: cba36ee4e7f4d5d50334a59f5a5af09605bfdde6 [15/24] pci: Add basic support for discovery of IDE on PCIe device
+config: hexagon-randconfig-r041-20230812 (https://download.01.org/0day-ci/archive/20230812/202308120820.QxMYDf5J-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120820.QxMYDf5J-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308120845.gkEMVH5a-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308120820.QxMYDf5J-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/svm/vmenter.S:392:1: error: invalid instruction mnemonic 'stack_frame_non_standard_fp'
-   STACK_FRAME_NON_STANDARD_FP(__svm_sev_es_vcpu_run)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/video/fbdev/core/fbmon.c:29:
+   In file included from include/linux/fb.h:6:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/video/fbdev/core/fbmon.c:29:
+   In file included from include/linux/fb.h:6:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/video/fbdev/core/fbmon.c:29:
+   In file included from include/linux/fb.h:6:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/video/fbdev/core/fbmon.c:31:
+>> include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+>> include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                                                   ^
+   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+   7 warnings and 1 error generated.
+--
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+>> include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+>> include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                                                   ^
+   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal-video.c:16:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+--
+   In file included from drivers/media/platform/ti/cal/cal.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/ti/cal/cal.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/ti/cal/cal.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/platform/ti/cal/cal.c:23:
+   In file included from include/media/media-device.h:16:
+>> include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+>> include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                                                   ^
+   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+   In file included from drivers/media/platform/ti/cal/cal.c:23:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal.c:23:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal.c:23:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal.c:23:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal.c:23:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/media/platform/ti/cal/cal.c:23:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2653:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1007:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+..
 
 
-vim +/stack_frame_non_standard_fp +392 arch/x86/kvm/svm/vmenter.S
+vim +352 include/linux/pci.h
 
-   352	
-   353		/* Clobbers RAX, RCX, RDX.  */
-   354		RESTORE_HOST_SPEC_CTRL
-   355	
-   356		/*
-   357		 * Mitigate RETBleed for AMD/Hygon Zen uarch. RET should be
-   358		 * untrained as soon as we exit the VM and are back to the
-   359		 * kernel. This should be done before re-enabling interrupts
-   360		 * because interrupt handlers won't sanitize RET if the return is
-   361		 * from the kernel.
-   362		 */
-   363		UNTRAIN_RET
-   364	
-   365		/* "Pop" @spec_ctrl_intercepted.  */
-   366		pop %_ASM_BX
-   367	
-   368		pop %_ASM_BX
-   369	
-   370	#ifdef CONFIG_X86_64
-   371		pop %r12
-   372		pop %r13
-   373		pop %r14
-   374		pop %r15
-   375	#else
-   376		pop %esi
-   377		pop %edi
-   378	#endif
-   379		pop %_ASM_BP
-   380		RET
-   381	
-   382		RESTORE_GUEST_SPEC_CTRL_BODY
-   383		RESTORE_HOST_SPEC_CTRL_BODY
-   384	
-   385	3:	cmpb $0, kvm_rebooting
-   386		jne 2b
-   387		ud2
-   388	
-   389		_ASM_EXTABLE(1b, 3b)
-   390	
-   391	SYM_FUNC_END(__svm_sev_es_vcpu_run)
- > 392	STACK_FRAME_NON_STANDARD_FP(__svm_sev_es_vcpu_run)
+   338	
+   339	struct pci_ide {
+   340		unsigned int			link_num;
+   341		unsigned int			select_num;
+   342		struct ida			stream_pos_ids;
+   343		struct ida			stream_ids;
+   344		int				stream_min;
+   345		int				stream_max;
+   346		const struct pci_ide_ops	*ops;
+   347		enum pci_ide_stream_type	stream_type;
+   348	};
+   349	#else
+   350	static inline int pcie_ide_stream_create(struct pci_dev *pdev1,
+   351						 struct pci_dev *pdev2,
+ > 352						 enum pci_ide_stream_type type)
+   353	{
+   354		return -EOPNOTSUPP;
+   355	}
+   356	
 
 -- 
 0-DAY CI Kernel Test Service
