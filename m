@@ -1,44 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3435FEA2;
-	Sat, 12 Aug 2023 01:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1334DEDD;
+	Sat, 12 Aug 2023 01:43:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691802732; x=1723338732;
+  t=1691804640; x=1723340640;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1Gxa8xaru17736R93LnjyTlrZlp8J/PogAt727PFvhs=;
-  b=asRBGkrwTMwFHDoyd3JOQTw/uu9RlaW6u1in/xn+aZjXtCzbwV1rq9eR
-   AoDFVoQzd+zO3pW+cf4fe0R+0koY85wnpgQJBOqv8VfZJ3whoX7D5HzFW
-   XuTxpupc2Zy7e/iX604zZ4fosrlQ8q6oxRsK6FaBEQLKvtyaIYH1rpRA6
-   yWOzy2dxCFk/vQDi7H0YkwLwjCqRJ3aavBtMWMI102vfPRvw7y3Dh3UiW
-   ngl7Q6PPy4JI9dvL+GIpl3ZQlyzSeL0fS4GjRcm2AlGU+kG6qVOVz7w6o
-   Q7JX8up0loJL/LHFLP8caLnAk7BJnj23f5k1opsgXjEErs9DGSof5GNDc
+  bh=dszFT3kcYKxoCFqeBmPYQUnrqzL/NMdOb3HKjC/H10c=;
+  b=FuByuHaHr3adv/w/FkxXCJfDswkfvBtvvzIuCmFPi84z2yvWxcwPvjxA
+   fBWTaq+CgxOJy+527wSEMVA6jICgKvKdb+9ino8OPE0K9WZlaI78sZqnh
+   Cw5wQDGiomQDRVReq+uyENl2Fdoy7a5KNSiMsU6oqN6q42ELnx6+AnaUs
+   oP8MtILy+8psZ76FwHShS2U6S0Ce+o+D9Ie0v6RbxNnwBQm+C5phhpj8q
+   8VvSfNhxsu9ppT7HELv92mQPLZrf3xZxMidqlMTyiIic+EPXbhIUcYsIU
+   UxfL0Kb5haVmVlUkZR1fepbEN7AxRHwlx7i3IAt/G0eCqCkWSH87BtO79
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="435686225"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="435686225"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="370695355"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="370695355"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 18:11:58 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 18:43:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="846957870"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="846957870"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="846965485"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="846965485"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Aug 2023 18:11:56 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 11 Aug 2023 18:43:57 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qUdAZ-0008AC-31;
-	Sat, 12 Aug 2023 01:11:55 +0000
-Date: Sat, 12 Aug 2023 09:11:32 +0800
+	id 1qUdfZ-0008BU-0S;
+	Sat, 12 Aug 2023 01:43:57 +0000
+Date: Sat, 12 Aug 2023 09:43:04 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [davejiang:cxl-ide 15/24]
- drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:206:52: warning: implicit
- conversion from 'unsigned long long' to 'unsigned int' changes value from
- 18446744073709551615 to 4294967295
-Message-ID: <202308120941.MiHDMooo-lkp@intel.com>
+ drivers/firmware/efi/libstub/x86-stub.c:865:47: warning: result of
+ comparison of constant 70368744177664 with expression of type 'unsigned
+ long' is always false
+Message-ID: <202308120958.MZkonPmw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,498 +49,125 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://github.com/davejiang/linux.git cxl-ide
-head:   3e25c6d783287d7b5807e5df623589e7d53b64a8
+head:   5e3487a17fbf6e33d8ddd60444073ff0bc59b35e
 commit: cba36ee4e7f4d5d50334a59f5a5af09605bfdde6 [15/24] pci: Add basic support for discovery of IDE on PCIe device
-config: hexagon-randconfig-r045-20230812 (https://download.01.org/0day-ci/archive/20230812/202308120941.MiHDMooo-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120941.MiHDMooo-lkp@intel.com/reproduce)
+config: i386-randconfig-i016-20230812 (https://download.01.org/0day-ci/archive/20230812/202308120958.MZkonPmw-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120958.MZkonPmw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308120941.MiHDMooo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308120958.MZkonPmw-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:21:
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.h:12:
-   In file included from include/media/v4l2-ctrls.h:14:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:2653:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:1007:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:173:27: note: expanded from macro '_SIG_SET_OP'
-     173 |         case 4: set->sig[3] = op(set->sig[3]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
-     185 | #define _sig_not(x)     (~(x))
-         |                            ^
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:21:
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.h:12:
-   In file included from include/media/v4l2-ctrls.h:14:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:2653:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:1007:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:173:10: note: expanded from macro '_SIG_SET_OP'
-     173 |         case 4: set->sig[3] = op(set->sig[3]);                          \
-         |                 ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:21:
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.h:12:
-   In file included from include/media/v4l2-ctrls.h:14:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:2653:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:1007:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:20: note: expanded from macro '_SIG_SET_OP'
-     174 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
-     185 | #define _sig_not(x)     (~(x))
-         |                            ^
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:21:
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.h:12:
-   In file included from include/media/v4l2-ctrls.h:14:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:2653:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:1007:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:3: note: expanded from macro '_SIG_SET_OP'
-     174 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                 ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:206:52: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     206 |         ret = vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   36 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/samsung/exynos-gsc/gsc-core.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/samsung/exynos-gsc/gsc-core.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/samsung/exynos-gsc/gsc-core.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/media/platform/samsung/exynos-gsc/gsc-core.c:26:
-   In file included from drivers/media/platform/samsung/exynos-gsc/gsc-core.h:20:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:20:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
+   In file included from drivers/firmware/efi/libstub/x86-stub.c:10:
    include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
+                                            enum pci_ide_stream_type type)
+                                                 ^
    include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                                                   ^
+                                            enum pci_ide_stream_type type)
+                                                                     ^
    include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
->> drivers/media/platform/samsung/exynos-gsc/gsc-core.c:1187:39: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-    1187 |         vb2_dma_contig_set_max_seg_size(dev, DMA_BIT_MASK(32));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   8 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/samsung/s5p-g2d/g2d.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/samsung/s5p-g2d/g2d.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/samsung/s5p-g2d/g2d.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/media/platform/samsung/s5p-g2d/g2d.c:19:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:20:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                                                   ^
-   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
->> drivers/media/platform/samsung/s5p-g2d/g2d.c:679:46: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     679 |         vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   8 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c:11:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c:11:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c:11:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c:23:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:20:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
-   include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                                                   ^
-   include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
-     352 |                                          enum pci_ide_stream_type type)
-         |                                               ^
->> drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c:1183:6: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-    1183 |         vb2_dma_contig_set_max_seg_size(mfc_dev->mem_dev[BANK_L_CTX],
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1184 |                                         DMA_BIT_MASK(32));
-         |                                         ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c:1185:6: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-    1185 |         vb2_dma_contig_set_max_seg_size(mfc_dev->mem_dev[BANK_R_CTX],
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1186 |                                         DMA_BIT_MASK(32));
-         |                                         ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c:1241:39: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-    1241 |         vb2_dma_contig_set_max_seg_size(dev, DMA_BIT_MASK(32));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   10 warnings and 1 error generated.
+                                            enum pci_ide_stream_type type)
+                                                 ^
+>> drivers/firmware/efi/libstub/x86-stub.c:865:47: warning: result of comparison of constant 70368744177664 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+               (IS_ENABLED(CONFIG_X86_64) && buffer_end > MAXMEM_X86_64_4LEVEL) ||
+                                             ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 1 error generated.
 
 
-vim +206 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+vim +865 drivers/firmware/efi/libstub/x86-stub.c
 
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  104  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  105  static int mtk_mdp_probe(struct platform_device *pdev)
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  106  {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  107  	struct mtk_mdp_dev *mdp;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  108  	struct device *dev = &pdev->dev;
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  109  	struct device_node *node, *parent;
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  110  	struct mtk_mdp_comp *comp, *comp_temp;
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  111  	int ret = 0;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  112  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  113  	mdp = devm_kzalloc(dev, sizeof(*mdp), GFP_KERNEL);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  114  	if (!mdp)
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  115  		return -ENOMEM;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  116  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  117  	mdp->id = pdev->id;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  118  	mdp->pdev = pdev;
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  119  	INIT_LIST_HEAD(&mdp->comp_list);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  120  	INIT_LIST_HEAD(&mdp->ctx_list);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  121  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  122  	mutex_init(&mdp->lock);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  123  	mutex_init(&mdp->vpulock);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  124  
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  125  	/* Old dts had the components as child nodes */
-864919ea0380e6 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Matthias Brugger      2019-06-21  126  	node = of_get_next_child(dev->of_node, NULL);
-864919ea0380e6 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Matthias Brugger      2019-06-21  127  	if (node) {
-864919ea0380e6 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Matthias Brugger      2019-06-21  128  		of_node_put(node);
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  129  		parent = dev->of_node;
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  130  		dev_warn(dev, "device tree is out of date\n");
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  131  	} else {
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  132  		parent = dev->of_node->parent;
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  133  	}
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  134  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  135  	/* Iterate over sibling MDP function blocks */
-ba1f1f70c2c08f drivers/media/platform/mtk-mdp/mtk_mdp_core.c Daniel Kurtz          2017-05-23  136  	for_each_child_of_node(parent, node) {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  137  		const struct of_device_id *of_id;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  138  		enum mtk_mdp_comp_type comp_type;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  139  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  140  		of_id = of_match_node(mtk_mdp_comp_dt_ids, node);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  141  		if (!of_id)
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  142  			continue;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  143  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  144  		if (!of_device_is_available(node)) {
-68d9c47b1679ec drivers/media/platform/mtk-mdp/mtk_mdp_core.c Rob Herring           2017-07-21  145  			dev_err(dev, "Skipping disabled component %pOF\n",
-68d9c47b1679ec drivers/media/platform/mtk-mdp/mtk_mdp_core.c Rob Herring           2017-07-21  146  				node);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  147  			continue;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  148  		}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  149  
-440aae04f38bf5 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Mauro Carvalho Chehab 2021-11-24  150  		comp_type = (uintptr_t)of_id->data;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  151  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  152  		comp = devm_kzalloc(dev, sizeof(*comp), GFP_KERNEL);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  153  		if (!comp) {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  154  			ret = -ENOMEM;
-22ff7d4ca3f748 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Nishka Dasgupta       2019-07-09  155  			of_node_put(node);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  156  			goto err_comp;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  157  		}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  158  
-37e278c801078d drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  159  		ret = mtk_mdp_comp_init(dev, node, comp, comp_type);
-22ff7d4ca3f748 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Nishka Dasgupta       2019-07-09  160  		if (ret) {
-22ff7d4ca3f748 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Nishka Dasgupta       2019-07-09  161  			of_node_put(node);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  162  			goto err_comp;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  163  		}
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  164  
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  165  		mtk_mdp_register_component(mdp, comp);
-22ff7d4ca3f748 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Nishka Dasgupta       2019-07-09  166  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  167  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  168  	mdp->job_wq = create_singlethread_workqueue(MTK_MDP_MODULE_NAME);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  169  	if (!mdp->job_wq) {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  170  		dev_err(&pdev->dev, "unable to alloc job workqueue\n");
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  171  		ret = -ENOMEM;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  172  		goto err_alloc_job_wq;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  173  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  174  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  175  	mdp->wdt_wq = create_singlethread_workqueue("mdp_wdt_wq");
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  176  	if (!mdp->wdt_wq) {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  177  		dev_err(&pdev->dev, "unable to alloc wdt workqueue\n");
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  178  		ret = -ENOMEM;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  179  		goto err_alloc_wdt_wq;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  180  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  181  	INIT_WORK(&mdp->wdt_work, mtk_mdp_wdt_worker);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  182  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  183  	ret = v4l2_device_register(dev, &mdp->v4l2_dev);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  184  	if (ret) {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  185  		dev_err(&pdev->dev, "Failed to register v4l2 device\n");
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  186  		ret = -EINVAL;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  187  		goto err_dev_register;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  188  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  189  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  190  	ret = mtk_mdp_register_m2m_device(mdp);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  191  	if (ret) {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  192  		v4l2_err(&mdp->v4l2_dev, "Failed to init mem2mem device\n");
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  193  		goto err_m2m_register;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  194  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  195  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  196  	mdp->vpu_dev = vpu_get_plat_device(pdev);
-ee18fc7b0b9517 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  197  	ret = vpu_wdt_reg_handler(mdp->vpu_dev, mtk_mdp_reset_handler, mdp,
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  198  				  VPU_RST_MDP);
-ee18fc7b0b9517 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  199  	if (ret) {
-ee18fc7b0b9517 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  200  		dev_err(&pdev->dev, "Failed to register reset handler\n");
-ee18fc7b0b9517 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  201  		goto err_m2m_register;
-ee18fc7b0b9517 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  202  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  203  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  204  	platform_set_drvdata(pdev, mdp);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  205  
-256a12e1a343e1 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07 @206  	ret = vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-256a12e1a343e1 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  207  	if (ret) {
-256a12e1a343e1 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  208  		dev_err(&pdev->dev, "Failed to set vb2 dma mag seg size\n");
-256a12e1a343e1 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  209  		goto err_m2m_register;
-256a12e1a343e1 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  210  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  211  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  212  	pm_runtime_enable(dev);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  213  	dev_dbg(dev, "mdp-%d registered successfully\n", mdp->id);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  214  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  215  	return 0;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  216  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  217  err_m2m_register:
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  218  	v4l2_device_unregister(&mdp->v4l2_dev);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  219  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  220  err_dev_register:
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  221  	destroy_workqueue(mdp->wdt_wq);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  222  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  223  err_alloc_wdt_wq:
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  224  	destroy_workqueue(mdp->job_wq);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  225  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  226  err_alloc_job_wq:
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  227  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  228  err_comp:
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  229  	list_for_each_entry_safe(comp, comp_temp, &mdp->comp_list, node) {
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  230  		mtk_mdp_unregister_component(mdp, comp);
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  231  		mtk_mdp_comp_deinit(dev, comp);
-86698b9505bbc9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Eizan Miyamoto        2020-05-07  232  	}
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  233  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  234  	dev_dbg(dev, "err %d\n", ret);
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  235  	return ret;
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  236  }
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai         2016-09-08  237  
+291f36325f9f25 arch/x86/boot/compressed/eboot.c        Matt Fleming   2011-12-12  805  
+9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  806  /*
+8acf63efa1712f drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  807   * On success, we return the address of startup_32, which has potentially been
+8acf63efa1712f drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  808   * relocated by efi_relocate_kernel.
+8acf63efa1712f drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  809   * On failure, we exit to the firmware via efi_exit instead of returning.
+9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  810   */
+db14655ad7854b drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-10-14  811  asmlinkage unsigned long efi_main(efi_handle_t handle,
+c3710de5065d63 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2019-12-24  812  				  efi_system_table_t *sys_table_arg,
+796eb8d26a57f9 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-01-13  813  				  struct boot_params *boot_params)
+9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  814  {
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  815  	unsigned long bzimage_addr = (unsigned long)startup_32;
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  816  	unsigned long buffer_start, buffer_end;
+9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  817  	struct setup_header *hdr = &boot_params->hdr;
+f4dc7fffa9873d drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-09-16  818  	const struct linux_efi_initrd *initrd = NULL;
+9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  819  	efi_status_t status;
+54b52d87268034 arch/x86/boot/compressed/eboot.c        Matt Fleming   2014-01-10  820  
+ccc27ae7749425 drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2020-04-16  821  	efi_system_table = sys_table_arg;
+9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  822  	/* Check if we were booted by the EFI firmware */
+ccc27ae7749425 drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2020-04-16  823  	if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
+3b8f44fc0810d5 drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2020-02-16  824  		efi_exit(handle, EFI_INVALID_PARAMETER);
+9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  825  
+3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  826  	efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
+3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  827  	if (efi_dxe_table &&
+3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  828  	    efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
+3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  829  		efi_warn("Ignoring DXE services table: invalid signature\n");
+3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  830  		efi_dxe_table = NULL;
+3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  831  	}
+3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  832  
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  833  	/*
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  834  	 * If the kernel isn't already loaded at a suitable address,
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  835  	 * relocate it.
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  836  	 *
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  837  	 * It must be loaded above LOAD_PHYSICAL_ADDR.
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  838  	 *
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  839  	 * The maximum address for 64-bit is 1 << 46 for 4-level paging. This
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  840  	 * is defined as the macro MAXMEM, but unfortunately that is not a
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  841  	 * compile-time constant if 5-level paging is configured, so we instead
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  842  	 * define our own macro for use here.
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  843  	 *
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  844  	 * For 32-bit, the maximum address is complicated to figure out, for
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  845  	 * now use KERNEL_IMAGE_SIZE, which will be 512MiB, the same as what
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  846  	 * KASLR uses.
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  847  	 *
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  848  	 * Also relocate it if image_offset is zero, i.e. the kernel wasn't
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  849  	 * loaded by LoadImage, but rather by a bootloader that called the
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  850  	 * handover entry. The reason we must always relocate in this case is
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  851  	 * to handle the case of systemd-boot booting a unified kernel image,
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  852  	 * which is a PE executable that contains the bzImage and an initrd as
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  853  	 * COFF sections. The initrd section is placed after the bzImage
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  854  	 * without ensuring that there are at least init_size bytes available
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  855  	 * for the bzImage, and thus the compressed kernel's startup code may
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  856  	 * overwrite the initrd unless it is moved out of the way.
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  857  	 */
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  858  
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  859  	buffer_start = ALIGN(bzimage_addr - image_offset,
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  860  			     hdr->kernel_alignment);
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  861  	buffer_end = buffer_start + hdr->init_size;
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  862  
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  863  	if ((buffer_start < LOAD_PHYSICAL_ADDR)				     ||
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  864  	    (IS_ENABLED(CONFIG_X86_32) && buffer_end > KERNEL_IMAGE_SIZE)    ||
+d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08 @865  	    (IS_ENABLED(CONFIG_X86_64) && buffer_end > MAXMEM_X86_64_4LEVEL) ||
+21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  866  	    (image_offset == 0)) {
+688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  867  		extern char _bss[];
+688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  868  
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  869  		status = efi_relocate_kernel(&bzimage_addr,
+688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  870  					     (unsigned long)_bss - bzimage_addr,
+688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  871  					     hdr->init_size,
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  872  					     hdr->pref_address,
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  873  					     hdr->kernel_alignment,
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  874  					     LOAD_PHYSICAL_ADDR);
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  875  		if (status != EFI_SUCCESS) {
+36bdd0a78d5683 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  876  			efi_err("efi_relocate_kernel() failed!\n");
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  877  			goto fail;
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  878  		}
+1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  879  		/*
+1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  880  		 * Now that we've copied the kernel elsewhere, we no longer
+1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  881  		 * have a set up block before startup_32(), so reset image_offset
+1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  882  		 * to zero in case it was set earlier.
+1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  883  		 */
+1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  884  		image_offset = 0;
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  885  	}
+04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  886  
 
-:::::: The code at line 206 was first introduced by commit
-:::::: 256a12e1a343e1efff00a9065063f0846d219336 media: mtk-mdp: handle vb2_dma_contig_set_max_seg_size errors during probe
+:::::: The code at line 865 was first introduced by commit
+:::::: d5cdf4cfeac914617ca22866bd4685fd7f876dec efi/x86: Don't relocate the kernel unless necessary
 
-:::::: TO: Eizan Miyamoto <eizan@chromium.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+:::::: TO: Arvind Sankar <nivedita@alum.mit.edu>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
