@@ -1,44 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1334DEDD;
-	Sat, 12 Aug 2023 01:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA77EA1;
+	Sat, 12 Aug 2023 02:45:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691804640; x=1723340640;
+  t=1691808303; x=1723344303;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dszFT3kcYKxoCFqeBmPYQUnrqzL/NMdOb3HKjC/H10c=;
-  b=FuByuHaHr3adv/w/FkxXCJfDswkfvBtvvzIuCmFPi84z2yvWxcwPvjxA
-   fBWTaq+CgxOJy+527wSEMVA6jICgKvKdb+9ino8OPE0K9WZlaI78sZqnh
-   Cw5wQDGiomQDRVReq+uyENl2Fdoy7a5KNSiMsU6oqN6q42ELnx6+AnaUs
-   oP8MtILy+8psZ76FwHShS2U6S0Ce+o+D9Ie0v6RbxNnwBQm+C5phhpj8q
-   8VvSfNhxsu9ppT7HELv92mQPLZrf3xZxMidqlMTyiIic+EPXbhIUcYsIU
-   UxfL0Kb5haVmVlUkZR1fepbEN7AxRHwlx7i3IAt/G0eCqCkWSH87BtO79
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="370695355"
+  bh=19v3zaR/R42x9KUdyekK6wggLHlvloniLGaAy/6x6fM=;
+  b=TeUDE8guXcs52LoqQ4Vv9GburfKPL/bRRayL5UPwagz1xRiJmWzLumZr
+   Uobj7LyG2DvsU0GM5KbWEiK+RD7ub09ZjgUHdWUX2FY+EoBrx1bJAccrd
+   uiDZhRuwLcxmEYMtsMeNmzU0+eIyuQJ8nit26c+/hjRm2E4AQWwdWnEh/
+   rVtmcJniYGNB8Cl0Mtl3tGPGJIVKiRun1HLxpKW66/SzVk5D6Vhcrpjlm
+   pVv02Q7tAzDBY5IkojaGzSxdxc2YTtpn9FjctFwauKGgKm4cpFZzOz3uU
+   pN2dA8ApkRnQgPBzQWQuwuKovAhvjm/g5IAVrD7IZsdNNQGBE0zZXBuXB
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="458167831"
 X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="370695355"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 18:43:59 -0700
+   d="scan'208";a="458167831"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 19:45:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="846965485"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="762380106"
 X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="846965485"
+   d="scan'208";a="762380106"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Aug 2023 18:43:57 -0700
+  by orsmga008.jf.intel.com with ESMTP; 11 Aug 2023 19:45:00 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qUdfZ-0008BU-0S;
-	Sat, 12 Aug 2023 01:43:57 +0000
-Date: Sat, 12 Aug 2023 09:43:04 +0800
+	id 1qUecd-0008Cu-34;
+	Sat, 12 Aug 2023 02:44:59 +0000
+Date: Sat, 12 Aug 2023 10:44:55 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [davejiang:cxl-ide 15/24]
- drivers/firmware/efi/libstub/x86-stub.c:865:47: warning: result of
- comparison of constant 70368744177664 with expression of type 'unsigned
- long' is always false
-Message-ID: <202308120958.MZkonPmw-lkp@intel.com>
+ drivers/staging/media/rkvdec/rkvdec.c:1035:46: warning: implicit conversion
+ from 'unsigned long long' to 'unsigned int' changes value from
+ 18446744073709551615 to 4294967295
+Message-ID: <202308121025.P9XAT2bj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,124 +50,119 @@ Content-Disposition: inline
 
 tree:   https://github.com/davejiang/linux.git cxl-ide
 head:   5e3487a17fbf6e33d8ddd60444073ff0bc59b35e
-commit: cba36ee4e7f4d5d50334a59f5a5af09605bfdde6 [15/24] pci: Add basic support for discovery of IDE on PCIe device
-config: i386-randconfig-i016-20230812 (https://download.01.org/0day-ci/archive/20230812/202308120958.MZkonPmw-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120958.MZkonPmw-lkp@intel.com/reproduce)
+commit: 6908950a8afc72c0e7e4131658994a3cd384c95c [15/24] pci: Add basic support for discovery of IDE on PCIe device
+config: mips-randconfig-r034-20230812 (https://download.01.org/0day-ci/archive/20230812/202308121025.P9XAT2bj-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230812/202308121025.P9XAT2bj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308120958.MZkonPmw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308121025.P9XAT2bj-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/firmware/efi/libstub/x86-stub.c:10:
+   In file included from drivers/staging/media/rkvdec/rkvdec.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:20:
+   In file included from include/media/media-request.h:20:
+   In file included from include/media/media-device.h:16:
    include/linux/pci.h:352:12: warning: declaration of 'enum pci_ide_stream_type' will not be visible outside of this function [-Wvisibility]
-                                            enum pci_ide_stream_type type)
-                                                 ^
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
    include/linux/pci.h:352:32: error: variable has incomplete type 'enum pci_ide_stream_type'
-                                            enum pci_ide_stream_type type)
-                                                                     ^
+     352 |                                          enum pci_ide_stream_type type)
+         |                                                                   ^
    include/linux/pci.h:352:12: note: forward declaration of 'enum pci_ide_stream_type'
-                                            enum pci_ide_stream_type type)
-                                                 ^
->> drivers/firmware/efi/libstub/x86-stub.c:865:47: warning: result of comparison of constant 70368744177664 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-               (IS_ENABLED(CONFIG_X86_64) && buffer_end > MAXMEM_X86_64_4LEVEL) ||
-                                             ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+     352 |                                          enum pci_ide_stream_type type)
+         |                                               ^
+>> drivers/staging/media/rkvdec/rkvdec.c:1035:46: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+    1035 |         vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                        ^~~~~
    2 warnings and 1 error generated.
 
 
-vim +865 drivers/firmware/efi/libstub/x86-stub.c
+vim +1035 drivers/staging/media/rkvdec/rkvdec.c
 
-291f36325f9f25 arch/x86/boot/compressed/eboot.c        Matt Fleming   2011-12-12  805  
-9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  806  /*
-8acf63efa1712f drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  807   * On success, we return the address of startup_32, which has potentially been
-8acf63efa1712f drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  808   * relocated by efi_relocate_kernel.
-8acf63efa1712f drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  809   * On failure, we exit to the firmware via efi_exit instead of returning.
-9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  810   */
-db14655ad7854b drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-10-14  811  asmlinkage unsigned long efi_main(efi_handle_t handle,
-c3710de5065d63 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2019-12-24  812  				  efi_system_table_t *sys_table_arg,
-796eb8d26a57f9 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-01-13  813  				  struct boot_params *boot_params)
-9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  814  {
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  815  	unsigned long bzimage_addr = (unsigned long)startup_32;
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  816  	unsigned long buffer_start, buffer_end;
-9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  817  	struct setup_header *hdr = &boot_params->hdr;
-f4dc7fffa9873d drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-09-16  818  	const struct linux_efi_initrd *initrd = NULL;
-9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  819  	efi_status_t status;
-54b52d87268034 arch/x86/boot/compressed/eboot.c        Matt Fleming   2014-01-10  820  
-ccc27ae7749425 drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2020-04-16  821  	efi_system_table = sys_table_arg;
-9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  822  	/* Check if we were booted by the EFI firmware */
-ccc27ae7749425 drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2020-04-16  823  	if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
-3b8f44fc0810d5 drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2020-02-16  824  		efi_exit(handle, EFI_INVALID_PARAMETER);
-9ca8f72a9297f2 arch/x86/boot/compressed/eboot.c        Matt Fleming   2012-07-19  825  
-3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  826  	efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  827  	if (efi_dxe_table &&
-3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  828  	    efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
-3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  829  		efi_warn("Ignoring DXE services table: invalid signature\n");
-3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  830  		efi_dxe_table = NULL;
-3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  831  	}
-3ba75c1316390b drivers/firmware/efi/libstub/x86-stub.c Baskov Evgeniy 2022-03-03  832  
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  833  	/*
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  834  	 * If the kernel isn't already loaded at a suitable address,
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  835  	 * relocate it.
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  836  	 *
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  837  	 * It must be loaded above LOAD_PHYSICAL_ADDR.
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  838  	 *
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  839  	 * The maximum address for 64-bit is 1 << 46 for 4-level paging. This
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  840  	 * is defined as the macro MAXMEM, but unfortunately that is not a
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  841  	 * compile-time constant if 5-level paging is configured, so we instead
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  842  	 * define our own macro for use here.
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  843  	 *
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  844  	 * For 32-bit, the maximum address is complicated to figure out, for
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  845  	 * now use KERNEL_IMAGE_SIZE, which will be 512MiB, the same as what
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  846  	 * KASLR uses.
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  847  	 *
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  848  	 * Also relocate it if image_offset is zero, i.e. the kernel wasn't
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  849  	 * loaded by LoadImage, but rather by a bootloader that called the
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  850  	 * handover entry. The reason we must always relocate in this case is
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  851  	 * to handle the case of systemd-boot booting a unified kernel image,
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  852  	 * which is a PE executable that contains the bzImage and an initrd as
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  853  	 * COFF sections. The initrd section is placed after the bzImage
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  854  	 * without ensuring that there are at least init_size bytes available
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  855  	 * for the bzImage, and thus the compressed kernel's startup code may
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  856  	 * overwrite the initrd unless it is moved out of the way.
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  857  	 */
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  858  
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  859  	buffer_start = ALIGN(bzimage_addr - image_offset,
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  860  			     hdr->kernel_alignment);
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  861  	buffer_end = buffer_start + hdr->init_size;
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  862  
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  863  	if ((buffer_start < LOAD_PHYSICAL_ADDR)				     ||
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  864  	    (IS_ENABLED(CONFIG_X86_32) && buffer_end > KERNEL_IMAGE_SIZE)    ||
-d5cdf4cfeac914 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08 @865  	    (IS_ENABLED(CONFIG_X86_64) && buffer_end > MAXMEM_X86_64_4LEVEL) ||
-21cb9b414301c7 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-09  866  	    (image_offset == 0)) {
-688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  867  		extern char _bss[];
-688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  868  
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  869  		status = efi_relocate_kernel(&bzimage_addr,
-688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  870  					     (unsigned long)_bss - bzimage_addr,
-688eb28211abdf drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-10-11  871  					     hdr->init_size,
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  872  					     hdr->pref_address,
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  873  					     hdr->kernel_alignment,
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  874  					     LOAD_PHYSICAL_ADDR);
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  875  		if (status != EFI_SUCCESS) {
-36bdd0a78d5683 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  876  			efi_err("efi_relocate_kernel() failed!\n");
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  877  			goto fail;
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  878  		}
-1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  879  		/*
-1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  880  		 * Now that we've copied the kernel elsewhere, we no longer
-1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  881  		 * have a set up block before startup_32(), so reset image_offset
-1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  882  		 * to zero in case it was set earlier.
-1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  883  		 */
-1887c9b653f995 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-03-08  884  		image_offset = 0;
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  885  	}
-04a7d0e1560676 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2020-02-10  886  
+cd33c830448baf Boris Brezillon 2020-04-04   996  
+cd33c830448baf Boris Brezillon 2020-04-04   997  static int rkvdec_probe(struct platform_device *pdev)
+cd33c830448baf Boris Brezillon 2020-04-04   998  {
+cd33c830448baf Boris Brezillon 2020-04-04   999  	struct rkvdec_dev *rkvdec;
+cd33c830448baf Boris Brezillon 2020-04-04  1000  	unsigned int i;
+cd33c830448baf Boris Brezillon 2020-04-04  1001  	int ret, irq;
+cd33c830448baf Boris Brezillon 2020-04-04  1002  
+cd33c830448baf Boris Brezillon 2020-04-04  1003  	rkvdec = devm_kzalloc(&pdev->dev, sizeof(*rkvdec), GFP_KERNEL);
+cd33c830448baf Boris Brezillon 2020-04-04  1004  	if (!rkvdec)
+cd33c830448baf Boris Brezillon 2020-04-04  1005  		return -ENOMEM;
+cd33c830448baf Boris Brezillon 2020-04-04  1006  
+cd33c830448baf Boris Brezillon 2020-04-04  1007  	platform_set_drvdata(pdev, rkvdec);
+cd33c830448baf Boris Brezillon 2020-04-04  1008  	rkvdec->dev = &pdev->dev;
+cd33c830448baf Boris Brezillon 2020-04-04  1009  	mutex_init(&rkvdec->vdev_lock);
+cd33c830448baf Boris Brezillon 2020-04-04  1010  	INIT_DELAYED_WORK(&rkvdec->watchdog_work, rkvdec_watchdog_func);
+cd33c830448baf Boris Brezillon 2020-04-04  1011  
+cd33c830448baf Boris Brezillon 2020-04-04  1012  	rkvdec->clocks = devm_kcalloc(&pdev->dev, ARRAY_SIZE(rkvdec_clk_names),
+cd33c830448baf Boris Brezillon 2020-04-04  1013  				      sizeof(*rkvdec->clocks), GFP_KERNEL);
+cd33c830448baf Boris Brezillon 2020-04-04  1014  	if (!rkvdec->clocks)
+cd33c830448baf Boris Brezillon 2020-04-04  1015  		return -ENOMEM;
+cd33c830448baf Boris Brezillon 2020-04-04  1016  
+cd33c830448baf Boris Brezillon 2020-04-04  1017  	for (i = 0; i < ARRAY_SIZE(rkvdec_clk_names); i++)
+cd33c830448baf Boris Brezillon 2020-04-04  1018  		rkvdec->clocks[i].id = rkvdec_clk_names[i];
+cd33c830448baf Boris Brezillon 2020-04-04  1019  
+cd33c830448baf Boris Brezillon 2020-04-04  1020  	ret = devm_clk_bulk_get(&pdev->dev, ARRAY_SIZE(rkvdec_clk_names),
+cd33c830448baf Boris Brezillon 2020-04-04  1021  				rkvdec->clocks);
+cd33c830448baf Boris Brezillon 2020-04-04  1022  	if (ret)
+cd33c830448baf Boris Brezillon 2020-04-04  1023  		return ret;
+cd33c830448baf Boris Brezillon 2020-04-04  1024  
+5a3683d60e56f4 Cai Huoqing     2021-09-08  1025  	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
+cd33c830448baf Boris Brezillon 2020-04-04  1026  	if (IS_ERR(rkvdec->regs))
+cd33c830448baf Boris Brezillon 2020-04-04  1027  		return PTR_ERR(rkvdec->regs);
+cd33c830448baf Boris Brezillon 2020-04-04  1028  
+cd33c830448baf Boris Brezillon 2020-04-04  1029  	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+cd33c830448baf Boris Brezillon 2020-04-04  1030  	if (ret) {
+cd33c830448baf Boris Brezillon 2020-04-04  1031  		dev_err(&pdev->dev, "Could not set DMA coherent mask.\n");
+cd33c830448baf Boris Brezillon 2020-04-04  1032  		return ret;
+cd33c830448baf Boris Brezillon 2020-04-04  1033  	}
+cd33c830448baf Boris Brezillon 2020-04-04  1034  
+cd33c830448baf Boris Brezillon 2020-04-04 @1035  	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+cd33c830448baf Boris Brezillon 2020-04-04  1036  
+cd33c830448baf Boris Brezillon 2020-04-04  1037  	irq = platform_get_irq(pdev, 0);
+121ca877c1e870 YueHaibing      2020-09-09  1038  	if (irq <= 0)
+cd33c830448baf Boris Brezillon 2020-04-04  1039  		return -ENXIO;
+cd33c830448baf Boris Brezillon 2020-04-04  1040  
+cd33c830448baf Boris Brezillon 2020-04-04  1041  	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+cd33c830448baf Boris Brezillon 2020-04-04  1042  					rkvdec_irq_handler, IRQF_ONESHOT,
+cd33c830448baf Boris Brezillon 2020-04-04  1043  					dev_name(&pdev->dev), rkvdec);
+cd33c830448baf Boris Brezillon 2020-04-04  1044  	if (ret) {
+cd33c830448baf Boris Brezillon 2020-04-04  1045  		dev_err(&pdev->dev, "Could not request vdec IRQ\n");
+cd33c830448baf Boris Brezillon 2020-04-04  1046  		return ret;
+cd33c830448baf Boris Brezillon 2020-04-04  1047  	}
+cd33c830448baf Boris Brezillon 2020-04-04  1048  
+cd33c830448baf Boris Brezillon 2020-04-04  1049  	pm_runtime_set_autosuspend_delay(&pdev->dev, 100);
+cd33c830448baf Boris Brezillon 2020-04-04  1050  	pm_runtime_use_autosuspend(&pdev->dev);
+cd33c830448baf Boris Brezillon 2020-04-04  1051  	pm_runtime_enable(&pdev->dev);
+cd33c830448baf Boris Brezillon 2020-04-04  1052  
+cd33c830448baf Boris Brezillon 2020-04-04  1053  	ret = rkvdec_v4l2_init(rkvdec);
+cd33c830448baf Boris Brezillon 2020-04-04  1054  	if (ret)
+cd33c830448baf Boris Brezillon 2020-04-04  1055  		goto err_disable_runtime_pm;
+cd33c830448baf Boris Brezillon 2020-04-04  1056  
+cd33c830448baf Boris Brezillon 2020-04-04  1057  	return 0;
+cd33c830448baf Boris Brezillon 2020-04-04  1058  
+cd33c830448baf Boris Brezillon 2020-04-04  1059  err_disable_runtime_pm:
+cd33c830448baf Boris Brezillon 2020-04-04  1060  	pm_runtime_dont_use_autosuspend(&pdev->dev);
+cd33c830448baf Boris Brezillon 2020-04-04  1061  	pm_runtime_disable(&pdev->dev);
+cd33c830448baf Boris Brezillon 2020-04-04  1062  	return ret;
+cd33c830448baf Boris Brezillon 2020-04-04  1063  }
+cd33c830448baf Boris Brezillon 2020-04-04  1064  
 
-:::::: The code at line 865 was first introduced by commit
-:::::: d5cdf4cfeac914617ca22866bd4685fd7f876dec efi/x86: Don't relocate the kernel unless necessary
+:::::: The code at line 1035 was first introduced by commit
+:::::: cd33c830448baf7b1e94da72eca069e3e1d050c9 media: rkvdec: Add the rkvdec driver
 
-:::::: TO: Arvind Sankar <nivedita@alum.mit.edu>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+:::::: TO: Boris Brezillon <boris.brezillon@collabora.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
