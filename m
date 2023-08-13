@@ -1,98 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8B42C9D;
-	Sun, 13 Aug 2023 13:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691933618; x=1723469618;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=3fsuS2cZrrxQ+GJ05ci/tzz/A5l/7RVo4L3JP/TY5hQ=;
-  b=mmBnWyKGFNW2aULQvodQ8ywWBsMQBQmAWAOJgyVbAKYZ3r3cZC1qfA27
-   Exz0NM9GluvpYw0UqLm0Tip55z0aOez7y4BGATrxauBtm3t00Lp7Ykbyg
-   IeipkvDVtmCngSiN82je0lF/mHreytiou17BXI8zSWrir9GbP9027oA92
-   ACTNWxifPZskpyugYaIBteKBNLD3DUNKwGrgyv3OAXXZIVxY+q1VU9uo/
-   HScbnBz9XXbfBqD2/3fD1EE+lMp0iXXMd9jJuIVjAwxrdpSyfqwVA97LH
-   t1TOGFLS2zrjXCLGGJBQ0NCaopBQC8iFpTicRzTDajc1/oGGmhR8El2v8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10801"; a="356856800"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="356856800"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2023 06:33:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10801"; a="762687984"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="762687984"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 13 Aug 2023 06:33:36 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qVBDs-00095g-0B;
-	Sun, 13 Aug 2023 13:33:36 +0000
-Date: Sun, 13 Aug 2023 21:33:21 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH] platform: sps: Fix an unsigned comparison that can
-Message-ID: <202308132112.y4njrGsc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0212C9D
+	for <llvm@lists.linux.dev>; Sun, 13 Aug 2023 13:38:30 +0000 (UTC)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1bb98659f3cso41017955ad.3
+        for <llvm@lists.linux.dev>; Sun, 13 Aug 2023 06:38:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691933909; x=1692538709;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=neJnpZX6yQ9QkvvT9QAkP8Ws3ecBujJ1QULkPMiV29E=;
+        b=TBicTw0xO4y6s0UrTv/IxMnYk5PrRfad/kCtQBvdvgOItpB4cIzJlRkt0RHVnHCiav
+         Itomg/YNI+GwUY4Rumh7QnaZDJt7gtPmyAjgfGhGfBnUTkuYWIg+laitNHMbUaNFaKEe
+         UIwdB/BmNcfwSbi02cuaS/nuc8PlWbOB+1t2FxG7DsOYG92uw7QgF/SC16/4hVacBPJu
+         teC0JWM4dNtkst4akt5Hk6+VTHZDDAYlWADDVtP53Va6ooXog+A1X0e9ikcsf+IHalxp
+         UZklAjVv5gQdViWXlPkEdRr08rDtVmOTSwZivehZY76qgHuovmCzw4oClzSHa5HCZypT
+         9/QA==
+X-Gm-Message-State: AOJu0YyjwOmjOChf9np+vV35eoLL5FlquHJXyOZ04QReoPvvHjjVBE/f
+	lDPNdMu07FfSu//Ez7gUUmDNIml8fM54aWDxBTmkTfvOgNbc
+X-Google-Smtp-Source: AGHT+IFvUtqXr76zu2wT3itQvPjtzRoxdBW7cC6qINSUywu2YLhPJ1DCvGf+u/vcRaSITgKK9wNgpHfjYiUe7vo70HM9pGod+tZJ
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a17:902:d4c4:b0:1bb:a78c:7a3e with SMTP id
+ o4-20020a170902d4c400b001bba78c7a3emr2668812plg.3.1691933909651; Sun, 13 Aug
+ 2023 06:38:29 -0700 (PDT)
+Date: Sun, 13 Aug 2023 06:38:29 -0700
+In-Reply-To: <00000000000094ac8b05ffae2bf2@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab16cf0602ce0f9d@google.com>
+Subject: Re: [syzbot] [modules?] general protection fault in sys_finit_module
+From: syzbot <syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com>
+To: bpf@vger.kernel.org, chris@chrisdown.name, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev, mcgrof@kernel.org, 
+	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
+	torvalds@linux-foundation.org, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-In-Reply-To: <20230813110122.129793-1-coolrrsh@gmail.com>
-References: <20230813110122.129793-1-coolrrsh@gmail.com>
-TO: coolrrsh@gmail.com
-TO: Shyam-sundar.S-k@amd.com
-TO: hdegoede@redhat.com
-TO: markgross@kernel.org
-TO: platform-driver-x86@vger.kernel.org
-TO: linux-kernel@vger.kernel.org
-CC: linux-kernel-mentees@lists.linuxfoundation.org
-CC: Rajeshwar R Shinde <coolrrsh@gmail.com>
+syzbot suspects this issue was fixed by commit:
 
-Hi,
+commit f1962207150c8b602e980616f04b37ea4e64bb9f
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue Jul 4 13:37:32 2023 +0000
 
-kernel test robot noticed the following build errors:
+    module: fix init_module_from_file() error handling
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.5-rc5]
-[cannot apply to next-20230809]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=148a0a03a80000
+start commit:   995b406c7e97 Merge tag 'csky-for-linus-6.5' of https://git..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=71a52faf60231bc7
+dashboard link: https://syzkaller.appspot.com/bug?extid=9e4e94a2689427009d35
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d6670ca80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103be50b280000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/coolrrsh-gmail-com/platform-sps-Fix-an-unsigned-comparison-that-can/20230813-190307
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230813110122.129793-1-coolrrsh%40gmail.com
-patch subject: [PATCH] platform: sps: Fix an unsigned comparison that can
-config: riscv-randconfig-r005-20230813 (https://download.01.org/0day-ci/archive/20230813/202308132112.y4njrGsc-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230813/202308132112.y4njrGsc-lkp@intel.com/reproduce)
+If the result looks correct, please mark the issue as fixed by replying with:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308132112.y4njrGsc-lkp@intel.com/
+#syz fix: module: fix init_module_from_file() error handling
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: vmlinux.a(lib/dynamic_queue_limits.o):(function dql_completed: .text+0x54): relocation R_RISCV_HI20 out of range: 527922 is not in [-524288, 524287]; references 'jiffies'
-   >>> referenced by dynamic_queue_limits.c:31 (lib/dynamic_queue_limits.c:31)
-   >>> defined in ./arch/riscv/kernel/vmlinux.lds:4
---
->> ld.lld: error: vmlinux.a(lib/dynamic_queue_limits.o):(function dql_reset: .text+0x19c): relocation R_RISCV_HI20 out of range: 527922 is not in [-524288, 524287]; references 'jiffies'
-   >>> referenced by dynamic_queue_limits.c:34 (lib/dynamic_queue_limits.c:34)
-   >>> defined in ./arch/riscv/kernel/vmlinux.lds:4
---
->> ld.lld: error: vmlinux.a(lib/dynamic_queue_limits.o):(function dql_init: .text+0x1d4): relocation R_RISCV_HI20 out of range: 527922 is not in [-524288, 524287]; references 'jiffies'
-   >>> referenced by dynamic_queue_limits.c:37 (lib/dynamic_queue_limits.c:37)
-   >>> defined in ./arch/riscv/kernel/vmlinux.lds:4
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
