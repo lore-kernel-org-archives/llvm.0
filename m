@@ -1,159 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BC317C5
-	for <llvm@lists.linux.dev>; Sun, 13 Aug 2023 08:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691913673;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4yKmWQ+lmMb/vXbjeHGTSWWhwSrdU7L1P9t1CvAR2FI=;
-	b=cFkyVmn4FQBNS6jHrGVQgsr45J7z6gripv2M7mDxqkJFyVpT9ut6cxvLMbXLn1+PC96Lg6
-	15ClJmsW+mXGGcEMuAYXyNzxWO5P1WaCrg4Hc84XU0HwHpdhPMIy2LToYf3THJmbawuZJO
-	FQBE5fOgHfYH2wNjmy2hPB8x53YM8hw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-481-K-MBPw5HNlyDQrrQ6rjWkQ-1; Sun, 13 Aug 2023 04:01:11 -0400
-X-MC-Unique: K-MBPw5HNlyDQrrQ6rjWkQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40D964A;
+	Sun, 13 Aug 2023 11:03:28 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AC51F40E0185;
+	Sun, 13 Aug 2023 11:03:25 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 5C8xwSiMocF3; Sun, 13 Aug 2023 11:03:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1691924603; bh=NElFY/m1+ArvR7Gho78vQn1P8OB5nFajoABT/fHSVYA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MRlyieZkkSnHX2qmgUCdPajG3wE+LhKL9EsOB5ghL6RcBk7UjCyxuTsq54EXTR82A
+	 lf9MoTnC2aO9NLeAktosNGdKOdbzw8mILDzR76SatBUFdFULvrxWMI38b1ObZL4N92
+	 yYnINJkF2fNHWIA8UCNzh7FW/TNhpFDX3Ri0m0hq8l36VOm4Q/VPfWAgNe0tTN7jCY
+	 MDTYvlC6o97swoJ0GkuP2zQV+SJO86xRDHUTeJMUPSlWJqQfPPzicavmrxl4ZqlWih
+	 /Z+nbuMxVqUH/LZ1Ao4WzaKbVstz+bzCnhQzXr8g1IeX5cWqMKMZ2ec+AYzmaIckJ/
+	 MnzW/w3ZNECsSqzEFPyYZX+AZGlfv/R69CHqs/KH0cSI+wP8QLBTTSHjRUGNd6Lr9t
+	 lFh1aqt1gLVWpwjTBlPEXEQon4Hd7/B0GW6uHk0ga6UUW+F7NJibcEm4K8Y5STsD/z
+	 f+eMkUXc9zmL1radgTCguaJY9+Yv3bDYq24QcnMixrdrnM+e/rXWYNYVdTlKt+SjXM
+	 noGRqPmEOcIJHzYFD/LV2VrMSrQuMqUwQXFJ1qiHMklqz37BwSGHLZ6MgX3QcY5A2w
+	 3w7xDqv05uSIbUskK7k6MBVlYdmmeT/b7xhmnypBZwnkwta0R3hZxu2+vn9ievDLuI
+	 weBr1CoqeYEuDDIBgiPug//Y=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40073101A528
-	for <llvm@lists.linux.dev>; Sun, 13 Aug 2023 08:01:11 +0000 (UTC)
-Received: from [172.64.13.56] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2425B40C6E8A;
-	Sun, 13 Aug 2023 08:01:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 15 of 267): Test report for master
- (6.5.0-rc5, mainline.kernel.org-clang, a785fd28)
-Date: Sun, 13 Aug 2023 08:01:11 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F03740E00B0;
+	Sun, 13 Aug 2023 11:02:59 +0000 (UTC)
+Date: Sun, 13 Aug 2023 13:02:54 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	clang-built-linux <llvm@lists.linux.dev>, stable@vger.kernel.org,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	torvalds@linux-foundation.org, akpm@linux-foundation.org,
+	shuah@kernel.org, patches@kernelci.org,
+	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sven Volkinsfeld <thyrc@gmx.net>,
+	Daniel Kolesa <daniel@octaforge.org>, x86@kernel.org
+Subject: Re: [PATCH 6.1 000/127] 6.1.45-rc1 review
+Message-ID: <20230813110254.GDZNi4XhHjY4xlNdBJ@fat_crate.local>
+References: <20230809103636.615294317@linuxfoundation.org>
+ <CA+G9fYvQdQqTqCgbS4sit_Y2AtKtDiWMOkGZjoeSEFhc=M_jKw@mail.gmail.com>
+ <078d6e3d-9572-a624-2c5a-e2d58473e6d0@roeck-us.net>
+ <20230811041339.GA193223@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <83463.123081304011100365@us-mta-481.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230811041339.GA193223@dev-arch.thelio-3990X>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Aug 10, 2023 at 09:13:39PM -0700, Nathan Chancellor wrote:
+> 1911 is still being investigated (some additional eyes on it would not
+> hurt).
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I'm hoping that we can take this one:
 
+https://lore.kernel.org/r/20230809072200.543939260@infradead.org
 
-Kernel information:
-    Commit message: Merge tag 'for-6.5-rc5-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
+which should resolve this issue, right?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/99855
+-- 
+Regards/Gruss,
+    Boris.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9138634
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:558 =
-apply_returns+0x1bf/0x210
-            URL: https://lore.kernel.org/all/Ys58BxHxoDZ7rfpr@xsang-OptiPle=
-x-9020/
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests generic/173 failing on ark-eln aarch64
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
-amdgpu]
-            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
-33a3db@linux.intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+https://people.kernel.org/tglx/notes-about-netiquette
