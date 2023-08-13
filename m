@@ -1,81 +1,122 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40D964A;
-	Sun, 13 Aug 2023 11:03:28 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AC51F40E0185;
-	Sun, 13 Aug 2023 11:03:25 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 5C8xwSiMocF3; Sun, 13 Aug 2023 11:03:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1691924603; bh=NElFY/m1+ArvR7Gho78vQn1P8OB5nFajoABT/fHSVYA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MRlyieZkkSnHX2qmgUCdPajG3wE+LhKL9EsOB5ghL6RcBk7UjCyxuTsq54EXTR82A
-	 lf9MoTnC2aO9NLeAktosNGdKOdbzw8mILDzR76SatBUFdFULvrxWMI38b1ObZL4N92
-	 yYnINJkF2fNHWIA8UCNzh7FW/TNhpFDX3Ri0m0hq8l36VOm4Q/VPfWAgNe0tTN7jCY
-	 MDTYvlC6o97swoJ0GkuP2zQV+SJO86xRDHUTeJMUPSlWJqQfPPzicavmrxl4ZqlWih
-	 /Z+nbuMxVqUH/LZ1Ao4WzaKbVstz+bzCnhQzXr8g1IeX5cWqMKMZ2ec+AYzmaIckJ/
-	 MnzW/w3ZNECsSqzEFPyYZX+AZGlfv/R69CHqs/KH0cSI+wP8QLBTTSHjRUGNd6Lr9t
-	 lFh1aqt1gLVWpwjTBlPEXEQon4Hd7/B0GW6uHk0ga6UUW+F7NJibcEm4K8Y5STsD/z
-	 f+eMkUXc9zmL1radgTCguaJY9+Yv3bDYq24QcnMixrdrnM+e/rXWYNYVdTlKt+SjXM
-	 noGRqPmEOcIJHzYFD/LV2VrMSrQuMqUwQXFJ1qiHMklqz37BwSGHLZ6MgX3QcY5A2w
-	 3w7xDqv05uSIbUskK7k6MBVlYdmmeT/b7xhmnypBZwnkwta0R3hZxu2+vn9ievDLuI
-	 weBr1CoqeYEuDDIBgiPug//Y=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F03740E00B0;
-	Sun, 13 Aug 2023 11:02:59 +0000 (UTC)
-Date: Sun, 13 Aug 2023 13:02:54 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	clang-built-linux <llvm@lists.linux.dev>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sven Volkinsfeld <thyrc@gmx.net>,
-	Daniel Kolesa <daniel@octaforge.org>, x86@kernel.org
-Subject: Re: [PATCH 6.1 000/127] 6.1.45-rc1 review
-Message-ID: <20230813110254.GDZNi4XhHjY4xlNdBJ@fat_crate.local>
-References: <20230809103636.615294317@linuxfoundation.org>
- <CA+G9fYvQdQqTqCgbS4sit_Y2AtKtDiWMOkGZjoeSEFhc=M_jKw@mail.gmail.com>
- <078d6e3d-9572-a624-2c5a-e2d58473e6d0@roeck-us.net>
- <20230811041339.GA193223@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259021FCC
+	for <llvm@lists.linux.dev>; Sun, 13 Aug 2023 12:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1691931597;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xx6IS/2QmZwgaFnutuM14/dSOdQ9YI2iAsu/U1we0B4=;
+	b=YPPZZwanZX+8uOYhZmR2PkvtgIJx4z6o8n5+aWlkEC1D0bAOe+yrlIA6DbtVbYwJ1w70Uv
+	ICvpakexG1W6/ETMGLJ6+IPorP8R/qdsmZ0kdmukNy84R7e2+X4F6CIuYgCUiJBXaRsOSx
+	v0KXCKu8+S2NXUkMQGjA7rR19r7QmwY=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-86-RCXk5kuRPBezhiw3yOCcFQ-1; Sun, 13 Aug 2023 08:59:55 -0400
+X-MC-Unique: RCXk5kuRPBezhiw3yOCcFQ-1
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4fe32cab9b7so3260209e87.1
+        for <llvm@lists.linux.dev>; Sun, 13 Aug 2023 05:59:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691931593; x=1692536393;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xx6IS/2QmZwgaFnutuM14/dSOdQ9YI2iAsu/U1we0B4=;
+        b=QEQGM6cEf0OeCB4qjqU4p11h1uwD9PLmbrQH8v8MQNrQJ+mzGn1pwLRqc8JiGz8GJH
+         6wlFV8YIEu9Z7OoN4BrTr+2l2eF/c2yHv+58eMSAh3w3fHjaaj9Qw2vznCK5LlHeCPEa
+         1jRYr4AY6qBIrVBgbEvf2zXUjhDzjiCTXEQDgObr6KHNa6nSKs8Qpd7+cKP88/QroBRK
+         2e4QEAzkApzty5UZMe2fPTNndYAjirqn301wvKVhILVX8oegzNAigW1lme8OZFiy0RKw
+         5g8TxaQC1qkWgbWCgtOc3zjhA6lndjSXQ2fO+vfXZQbSqJt0wA35LqmHf0QkkFLnNBgs
+         Vggg==
+X-Gm-Message-State: AOJu0YwP9CJShziiLDdSSCZ+5L3EmEAJdwh6Koc/rxM8ow5ffWRpZOk5
+	hsXo8m1e5TLydJ8hSYHofY2AwFiNEShL1aqYEFL3n1qk4cMs0evRuCuW42fV+F7HC94H/HvM02r
+	PHotXgL7hm5ypUQ==
+X-Received: by 2002:a05:6512:703:b0:4f8:49a7:2deb with SMTP id b3-20020a056512070300b004f849a72debmr3342617lfs.8.1691931593760;
+        Sun, 13 Aug 2023 05:59:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEYOgMTF9w4RxpDr/YwX5EdgnQ8YlkvmBjUKO1Nsu7whTwP2ooxmuiYVX4g2c/9uHKGSebWBg==
+X-Received: by 2002:a05:6512:703:b0:4f8:49a7:2deb with SMTP id b3-20020a056512070300b004f849a72debmr3342608lfs.8.1691931593439;
+        Sun, 13 Aug 2023 05:59:53 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id i23-20020a1709061cd700b0099293cdbc98sm4595094ejh.145.2023.08.13.05.59.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Aug 2023 05:59:52 -0700 (PDT)
+Message-ID: <68b690bd-f232-0637-a621-9126a189dd0d@redhat.com>
+Date: Sun, 13 Aug 2023 14:59:52 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230811041339.GA193223@dev-arch.thelio-3990X>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] platform/x86/siemens: simatic-ipc: fix nonsensical
+ condition
+To: Arnd Bergmann <arnd@arndb.de>,
+ =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Arnd Bergmann <arnd@kernel.org>
+Cc: Mark Gross <markgross@kernel.org>, "xingtong.wu"
+ <xingtong.wu@siemens.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Henning Schild <henning.schild@siemens.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Lee Jones <lee@kernel.org>, platform-driver-x86@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230811130948.2211800-1-arnd@kernel.org>
+ <97764bad-7091-e9ed-6f49-d31861fc622f@linux.intel.com>
+ <ef7d94a4-9f65-47fb-906a-4fed4480d020@app.fastmail.com>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <ef7d94a4-9f65-47fb-906a-4fed4480d020@app.fastmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US, nl
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 10, 2023 at 09:13:39PM -0700, Nathan Chancellor wrote:
-> 1911 is still being investigated (some additional eyes on it would not
-> hurt).
+Hi,
 
-I'm hoping that we can take this one:
+On 8/11/23 17:02, Arnd Bergmann wrote:
+> On Fri, Aug 11, 2023, at 15:17, Ilpo Järvinen wrote:
+>> On Fri, 11 Aug 2023, Arnd Bergmann wrote:
+>>
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> The condition checking for a constant SIMATIC_IPC_DEVICE_BX_59A value
+>>> clearly makes no sense, as clang warns:
+>>>
+>>> drivers/platform/x86/siemens/simatic-ipc.c:132:42: error: use of logical '||' with constant operand [-Werror,-Wconstant-logical-operand]
+>>>                 if (ledmode == SIMATIC_IPC_DEVICE_227G || SIMATIC_IPC_DEVICE_BX_59A)
+>>>                                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/platform/x86/siemens/simatic-ipc-batt.c:197:49: error: use of logical '||' with constant operand [-Werror,-Wconstant-logical-operand]
+>>>                 if (priv.devmode == SIMATIC_IPC_DEVICE_BX_21A || SIMATIC_IPC_DEVICE_BX_59A)
+>>>                                                               ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>
+>>> Most likely, this was meant to check ledmode to be one of the two values,
+>>> so change it to that.
+>>>
+>>> Fixes: b8af77951941e ("platform/x86/siemens: simatic-ipc: add new models BX-56A/BX-59A")
+>>> Fixes: c56beff203754 ("platform/x86/siemens: simatic-ipc-batt: add support for module BX-59A")
+>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Ok, I see. I missed those as there is hasn't been a new linux-next in
+> a few days.
+> 
+> I suppose this one is also fixed then?
+> 
+> WARNING: unmet direct dependencies detected for P2SB
+>   Depends on [n]: PCI [=n] && X86 [=y]
+>   Selected by [m]:
+>   - SIEMENS_SIMATIC_IPC_WDT [=m] && WATCHDOG [=y] && SIEMENS_SIMATIC_IPC [=y]
+> drivers/platform/x86/p2sb.c:68:9: error: call to undeclared function 'pci_scan_single_device'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
 
-https://lore.kernel.org/r/20230809072200.543939260@infradead.org
+No that one has not been fixed yet. This is the first time I've heard of this one. It seems to not have been caught by the LKP bot.
 
-which should resolve this issue, right?
+Regards,
 
--- 
-Regards/Gruss,
-    Boris.
+Hans
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
