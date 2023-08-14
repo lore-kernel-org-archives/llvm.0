@@ -1,292 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from chg.server2.ideacentral.com (unknown [108.163.232.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66321842;
-	Mon, 14 Aug 2023 07:45:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0E5C433C8;
-	Mon, 14 Aug 2023 07:45:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691999120;
-	bh=UKxzW+x4Bhe85PmCQpAj1NUbjaWZu2yOxA+zzBepsrE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=U+fU3YxMeUFcSIo7V3KmCJ2QTEc3AnZCdoNWjSghgVde7qgMy8l/dQzOTbk/ntBDP
-	 3KTqYUep+CFqdzcV07x8MUYit4roChSFCHX6BgrPdiuEkcuCgyDRI/27/95in9IG/R
-	 et6Rjp00/KXHufGqRtds2Abh1OPpVrCzcc+ivyhDtw1hSt/Ww/WaR1GZ6iy6zTrcw1
-	 EWrFsr1nRABg/B8Gk0YSJwHYN4pDoWwovImdPgnVoY/8yFg7hB0zLZ8azajnGM2qp7
-	 AByvzbPvevMO2D6vwg8gPSO0W8bbHCxQ9Xra2yTG02aGO2B0ve32Ry+tWrtqqIPcjn
-	 cfHJ2sd0PE8qw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Ariel Elior <aelior@marvell.com>,
-	Manish Chopra <manishc@marvell.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Yuval Mintz <Yuval.Mintz@qlogic.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] qed: remove unused 'resp_size' calculation
-Date: Mon, 14 Aug 2023 09:45:03 +0200
-Message-Id: <20230814074512.1067715-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C459A945
+	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 09:27:34 +0000 (UTC)
+Received: from mailnull by ns-196.awsdns-24.com with local (Exim 4.96)
+	id 1qVTrJ-0029iR-1a
+	for llvm@lists.linux.dev;
+	Mon, 14 Aug 2023 04:27:33 -0500
+X-Failed-Recipients: llvm@lists.linux.dev
+Auto-Submitted: auto-replied
+From: Mail Delivery System <Mailer-Daemon@ns-196.awsdns-24.com>
+To: llvm@lists.linux.dev
+References: <20230814102730.62A81ABA2617AADC@lists.linux.dev>
+Content-Type: multipart/report; report-type=delivery-status; boundary=1692005253-eximdsn-1067522046
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Mail delivery failed: returning message to sender
+Message-Id: <E1qVTrJ-0029iR-1a@ns-196.awsdns-24.com>
+Date: Mon, 14 Aug 2023 04:27:33 -0500
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - ns-196.awsdns-24.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - 
+X-Get-Message-Sender-Via: ns-196.awsdns-24.com: sender_ident via received_protocol == local: mailnull/primary_hostname/system user
+X-Authenticated-Sender: ns-196.awsdns-24.com: mailnull
 
-From: Arnd Bergmann <arnd@arndb.de>
+--1692005253-eximdsn-1067522046
+Content-type: text/plain; charset=us-ascii
 
-Newer versions of clang warn about this variable being assigned but
-never used:
+This message was created automatically by mail delivery software.
 
-drivers/net/ethernet/qlogic/qed/qed_vf.c:63:67: error: parameter 'resp_size' set but not used [-Werror,-Wunused-but-set-parameter]
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
 
-There is no indication in the git history on how this was ever
-meant to be used, so just remove the entire calculation and argument
-passing for it to avoid the warning.
+  llvm@lists.linux.dev
+    host smtp.subspace.kernel.org [44.238.234.78]
+    SMTP error from remote mail server after end of data:
+    550 5.7.1 Blocked by SpamAssassin
 
-Fixes: 1408cc1fa48c5 ("qed: Introduce VFs")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ethernet/qlogic/qed/qed_vf.c | 45 +++++++++---------------
- 1 file changed, 17 insertions(+), 28 deletions(-)
+--1692005253-eximdsn-1067522046
+Content-type: message/delivery-status
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.c b/drivers/net/ethernet/qlogic/qed/qed_vf.c
-index 7b0e390c0b07d..0e265ed1f501c 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_vf.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_vf.c
-@@ -60,7 +60,7 @@ static void qed_vf_pf_req_end(struct qed_hwfn *p_hwfn, int req_status)
- #define QED_VF_CHANNEL_MSLEEP_ITERATIONS	10
- #define QED_VF_CHANNEL_MSLEEP_DELAY		25
- 
--static int qed_send_msg2pf(struct qed_hwfn *p_hwfn, u8 *done, u32 resp_size)
-+static int qed_send_msg2pf(struct qed_hwfn *p_hwfn, u8 *done)
- {
- 	union vfpf_tlvs *p_req = p_hwfn->vf_iov_info->vf2pf_request;
- 	struct ustorm_trigger_vf_zone trigger;
-@@ -72,9 +72,6 @@ static int qed_send_msg2pf(struct qed_hwfn *p_hwfn, u8 *done, u32 resp_size)
- 	/* output tlvs list */
- 	qed_dp_tlv_list(p_hwfn, p_req);
- 
--	/* need to add the END TLV to the message size */
--	resp_size += sizeof(struct channel_list_end_tlv);
--
- 	/* Send TLVs over HW channel */
- 	memset(&trigger, 0, sizeof(struct ustorm_trigger_vf_zone));
- 	trigger.vf_pf_msg_valid = 1;
-@@ -172,7 +169,7 @@ static int _qed_vf_pf_release(struct qed_hwfn *p_hwfn, bool b_final)
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 
- 	if (!rc && resp->hdr.status != PFVF_STATUS_SUCCESS)
- 		rc = -EAGAIN;
-@@ -301,7 +298,7 @@ static int qed_vf_pf_acquire(struct qed_hwfn *p_hwfn)
- 		memset(p_iov->pf2vf_reply, 0, sizeof(union pfvf_tlvs));
- 
- 		/* send acquire request */
--		rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+		rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 
- 		/* Re-try acquire in case of vf-pf hw channel timeout */
- 		if (retry_cnt && rc == -EBUSY) {
-@@ -705,7 +702,7 @@ int qed_vf_pf_tunnel_param_update(struct qed_hwfn *p_hwfn,
- 		    sizeof(struct channel_list_end_tlv));
- 
- 	p_resp = &p_iov->pf2vf_reply->tunn_param_resp;
--	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status, sizeof(*p_resp));
-+	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status);
- 
- 	if (rc)
- 		goto exit;
-@@ -772,7 +769,7 @@ qed_vf_pf_rxq_start(struct qed_hwfn *p_hwfn,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->queue_start;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -822,7 +819,7 @@ int qed_vf_pf_rxq_stop(struct qed_hwfn *p_hwfn,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -867,7 +864,7 @@ qed_vf_pf_txq_start(struct qed_hwfn *p_hwfn,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->queue_start;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -918,7 +915,7 @@ int qed_vf_pf_txq_stop(struct qed_hwfn *p_hwfn, struct qed_queue_cid *p_cid)
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -968,7 +965,7 @@ int qed_vf_pf_vport_start(struct qed_hwfn *p_hwfn,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -997,7 +994,7 @@ int qed_vf_pf_vport_stop(struct qed_hwfn *p_hwfn)
- 	qed_add_tlv(p_hwfn, &p_iov->offset,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -1075,12 +1072,10 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 	struct vfpf_vport_update_tlv *req;
- 	struct pfvf_def_resp_tlv *resp;
- 	u8 update_rx, update_tx;
--	u32 resp_size = 0;
- 	u16 size, tlv;
- 	int rc;
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	resp_size = sizeof(*resp);
- 
- 	update_rx = p_params->update_vport_active_rx_flg;
- 	update_tx = p_params->update_vport_active_tx_flg;
-@@ -1096,7 +1091,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 		p_act_tlv = qed_add_tlv(p_hwfn, &p_iov->offset,
- 					CHANNEL_TLV_VPORT_UPDATE_ACTIVATE,
- 					size);
--		resp_size += sizeof(struct pfvf_def_resp_tlv);
- 
- 		if (update_rx) {
- 			p_act_tlv->update_rx = update_rx;
-@@ -1116,7 +1110,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 		tlv = CHANNEL_TLV_VPORT_UPDATE_TX_SWITCH;
- 		p_tx_switch_tlv = qed_add_tlv(p_hwfn, &p_iov->offset,
- 					      tlv, size);
--		resp_size += sizeof(struct pfvf_def_resp_tlv);
- 
- 		p_tx_switch_tlv->tx_switching = p_params->tx_switching_flg;
- 	}
-@@ -1127,7 +1120,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 		size = sizeof(struct vfpf_vport_update_mcast_bin_tlv);
- 		p_mcast_tlv = qed_add_tlv(p_hwfn, &p_iov->offset,
- 					  CHANNEL_TLV_VPORT_UPDATE_MCAST, size);
--		resp_size += sizeof(struct pfvf_def_resp_tlv);
- 
- 		memcpy(p_mcast_tlv->bins, p_params->bins,
- 		       sizeof(u32) * ETH_MULTICAST_MAC_BINS_IN_REGS);
-@@ -1142,7 +1134,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 		tlv = CHANNEL_TLV_VPORT_UPDATE_ACCEPT_PARAM;
- 		size = sizeof(struct vfpf_vport_update_accept_param_tlv);
- 		p_accept_tlv = qed_add_tlv(p_hwfn, &p_iov->offset, tlv, size);
--		resp_size += sizeof(struct pfvf_def_resp_tlv);
- 
- 		if (update_rx) {
- 			p_accept_tlv->update_rx_mode = update_rx;
-@@ -1166,7 +1157,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 		p_rss_tlv = qed_add_tlv(p_hwfn,
- 					&p_iov->offset,
- 					CHANNEL_TLV_VPORT_UPDATE_RSS, size);
--		resp_size += sizeof(struct pfvf_def_resp_tlv);
- 
- 		if (rss_params->update_rss_config)
- 			p_rss_tlv->update_rss_flags |=
-@@ -1203,7 +1193,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 		tlv = CHANNEL_TLV_VPORT_UPDATE_ACCEPT_ANY_VLAN;
- 		p_any_vlan_tlv = qed_add_tlv(p_hwfn, &p_iov->offset, tlv, size);
- 
--		resp_size += sizeof(struct pfvf_def_resp_tlv);
- 		p_any_vlan_tlv->accept_any_vlan = p_params->accept_any_vlan;
- 		p_any_vlan_tlv->update_accept_any_vlan_flg =
- 		    p_params->update_accept_any_vlan_flg;
-@@ -1213,7 +1202,7 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 	qed_add_tlv(p_hwfn, &p_iov->offset,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, resp_size);
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -1245,7 +1234,7 @@ int qed_vf_pf_reset(struct qed_hwfn *p_hwfn)
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -1303,7 +1292,7 @@ int qed_vf_pf_filter_ucast(struct qed_hwfn *p_hwfn,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -1332,7 +1321,7 @@ int qed_vf_pf_int_cleanup(struct qed_hwfn *p_hwfn)
- 	qed_add_tlv(p_hwfn, &p_iov->offset,
- 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
- 
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -1364,7 +1353,7 @@ int qed_vf_pf_get_coalesce(struct qed_hwfn *p_hwfn,
- 		    sizeof(struct channel_list_end_tlv));
- 	resp = &p_iov->pf2vf_reply->read_coal_resp;
- 
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
-@@ -1402,7 +1391,7 @@ qed_vf_pf_bulletin_update_mac(struct qed_hwfn *p_hwfn,
- 		    sizeof(struct channel_list_end_tlv));
- 
- 	p_resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status, sizeof(*p_resp));
-+	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status);
- 	qed_vf_pf_req_end(p_hwfn, rc);
- 	return rc;
- }
-@@ -1433,7 +1422,7 @@ qed_vf_pf_set_coalesce(struct qed_hwfn *p_hwfn,
- 		    sizeof(struct channel_list_end_tlv));
- 
- 	resp = &p_iov->pf2vf_reply->default_resp;
--	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
-+	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
- 	if (rc)
- 		goto exit;
- 
--- 
-2.39.2
+Reporting-MTA: dns; ns-196.awsdns-24.com
 
+Action: failed
+Final-Recipient: rfc822;llvm@lists.linux.dev
+Status: 5.0.0
+Remote-MTA: dns; smtp.subspace.kernel.org
+Diagnostic-Code: smtp; 550 5.7.1 Blocked by SpamAssassin
+
+--1692005253-eximdsn-1067522046
+Content-type: message/rfc822
+
+Return-path: <llvm@lists.linux.dev>
+Received: from v-104-153-108-120.unman-vds.premium-chicago.nfoservers.com ([104.153.108.120]:54367)
+	by ns-196.awsdns-24.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <llvm@lists.linux.dev>)
+	id 1qVTrH-00298i-0Y
+	for llvm@lists.linux.dev;
+	Mon, 14 Aug 2023 04:27:31 -0500
+From: lists.linux.devAdministrator<llvm@lists.linux.dev>
+To: llvm@lists.linux.dev
+Subject: =?UTF-8?B?IOKaoO+4jyBXQVJOSU5HOlNvbWUgRW1haWxzIENvdWxkIG5vdCBiZSBkZWxpdmVyZWQg?=
+Date: 14 Aug 2023 10:27:30 +0100
+Message-ID: <20230814102730.62A81ABA2617AADC@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html>
+
+<html><head><title></title>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.19003">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><span style=3D"background-color: rgb(204, 204, 204);"><b><i><font col=
+or=3D"#ff0000">Some Emails Could not be Delivered , Action Required</font><=
+/i></b>.</span><div><br><font color=3D"#3d85c6"><font size=3D"4"><b>Quarant=
+ined Messages Report</b> </font>&nbsp;</font><br>llvm@lists.linux.dev<div>1=
+4-08-2023, 08:00AM <br>&nbsp;<br>Dear llvm,</div><div><br>
+4 messages addressed to you are currently on hold awaiting your further act=
+ion. You can release all of your held messages and permit or block future e=
+mails from the senders, or manage messages individually.<br><br>
+<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPa=
+nxX?clientID=3Dllvm@lists.linux.dev" target=3D"_blank" data-saferedirecturl=
+=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%=
+5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-=
+xB2LHrk7CvessvAOsg">Review all</a>
+&nbsp; &nbsp;<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGb=
+cFJkycxN8DaPanxX?clientID=3Dllvm@lists.linux.dev" target=3D"_blank" data-sa=
+feredirecturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%=
+5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQ=
+jCNFFwLZWfJX-xB2LHrk7CvessvAOsg">Release all</a>
+&nbsp; &nbsp; <a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRG=
+bcFJkycxN8DaPanxX?clientID=3Dllvm@lists.linux.dev" target=3D"_blank" data-s=
+aferedirecturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B=
+%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAF=
+QjCNFFwLZWfJX-xB2LHrk7CvessvAOsg">Block all</a><br><br>Further Information:=
+ <br>
+To view your entire quarantine inbox or manage your preferences, <a href=3D=
+"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPanxX?client=
+ID=3Dllvm@lists.linux.dev" target=3D"_blank" data-saferedirecturl=3D"https:=
+//www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%5D&amp;sou=
+rce=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-xB2LHrk7Cv=
+essvAOsg">Click Here</a><br><br>The system generated this notice on 14-08-2=
+023, at 09:00AM<br>Do not reply to this automated message.<br>
+&copy; 2023 lists.linux.dev. All rights reserved.</div></div>
+</body></html>
+
+--1692005253-eximdsn-1067522046--
