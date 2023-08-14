@@ -1,120 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD179947E;
-	Mon, 14 Aug 2023 12:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692016604; x=1723552604;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=SyRFhQC+24S8k/Ak+6StdZwEVT9QHeM2dar2nszIHJQ=;
-  b=JAyddmAVasnmb5ICXTaufFt9auPGWW18KsYmwmg+mncii/qfqaP4VqGG
-   frIfJH7o+VUc1E4Id4KBgJjtQU10XhNr2gLmJG3FV5HNbosz+TrcyV3FE
-   pLYFeA4uxWB2HRWtKpMx3uznh9ul5WqrJRWHdRzah3ATIdrMMjJDdUJFV
-   D3LI8xj4G5UddFSf+c84bWYoS7KN4jR1U+WpswbFKmh8g0Yf/wIJUSBef
-   PI//s59Xggy5HQeQaMDLbdVIxpOI76OIpAhgWh4ZjCxwDACb4Bc8pqqVW
-   DsXvXhu8+4pRhW7DX9PBc+lS/BqWBZAe4oIucxW4yx/IaJ8sci0wRzuzO
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="374796908"
-X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
-   d="scan'208";a="374796908"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 05:36:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="857071366"
-X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
-   d="scan'208";a="857071366"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 14 Aug 2023 05:36:20 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qVWnz-00008z-12;
-	Mon, 14 Aug 2023 12:36:19 +0000
-Date: Mon, 14 Aug 2023 20:35:47 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 4/5] memfd: replace ratcheting feature from
- vm.memfd_noexec with hierarchy
-Message-ID: <202308142051.QSBkwvO9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BB5BE68
+	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 14:09:37 +0000 (UTC)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37EBlj6E029566;
+	Mon, 14 Aug 2023 14:09:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eRtRcSeLyPTUnI5TkxluVlX8y1YmXchwUnzvT+HnUh4=;
+ b=K0akEjTTyi4xti+J8sqst6laRm0+MNRLo7vFD4BgBd7srYQUngWFa5iOPzUQNs7xf5ji
+ qADzTy3xLqPFMHTeCSpCJv971Sn6bZ7X9s3pnHxdIpihcYPp45I6sOOnQ3gtiOS0ovo2
+ PQoQJrDnVIZCxbkph26ggxReESvNZWxP8LLl4MxGnhWg9AUbp438wUqcu2Wb8jH7eudl
+ ptrdJ3SMhu7s97u3ssUq+RwE1VSZEqzJYepdUrhyawa+3hjH0tNcrRmxX2Q1fEbY70aV
+ YPrP5r11fdtpiDaoXtTy/Aa8j58bV5f2xU/WIcsLNrxuKl3oT8F25N1IYgFsAYnrlSMi 1w== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3se3tym02r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Aug 2023 14:09:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37EE92ol001402
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Aug 2023 14:09:02 GMT
+Received: from [10.48.240.144] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 14 Aug
+ 2023 07:09:01 -0700
+Message-ID: <6529ca77-6ce4-d930-38a4-5ee2f9671bdd@quicinc.com>
+Date: Mon, 14 Aug 2023 07:09:00 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] wireless: ath: remove unused-but-set parameter
+Content-Language: en-US
+To: Arnd Bergmann <arnd@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+        Jiri Slaby
+	<jirislaby@kernel.org>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        "Luis
+ Chamberlain" <mcgrof@kernel.org>,
+        =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rg?=
+ =?UTF-8?Q?ensen?= <toke@toke.dk>
+CC: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Aloka Dixit <quic_alokad@quicinc.com>,
+        Wen Gong <quic_wgong@quicinc.com>,
+        "Ramya Gnanasekar" <quic_rgnanase@quicinc.com>,
+        Karthik M
+	<quic_karm@quicinc.com>,
+        Aditya Kumar Singh <quic_adisi@quicinc.com>,
+        Muna
+ Sinada <quic_msinada@quicinc.com>,
+        Johannes Berg <johannes.berg@intel.com>, <ath12k@lists.infradead.org>,
+        <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+References: <20230814073255.1065242-1-arnd@kernel.org>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20230814073255.1065242-1-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: uLjaxiIgc9QlrycbadpGy8PPMY6alyV3
+X-Proofpoint-ORIG-GUID: uLjaxiIgc9QlrycbadpGy8PPMY6alyV3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-14_10,2023-08-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=820 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ adultscore=0 spamscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308140130
 
-In-Reply-To: <20230814-memfd-vm-noexec-uapi-fixes-v2-4-7ff9e3e10ba6@cyphar.com>
-References: <20230814-memfd-vm-noexec-uapi-fixes-v2-4-7ff9e3e10ba6@cyphar.com>
-TO: Aleksa Sarai <cyphar@cyphar.com>
-TO: Andrew Morton <akpm@linux-foundation.org>
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Shuah Khan <skhan@linuxfoundation.org>
-TO: Jeff Xu <jeffxu@google.com>
-TO: Kees Cook <keescook@chromium.org>
-TO: Daniel Verkamp <dverkamp@chromium.org>
-CC: Christian Brauner <brauner@kernel.org>
-CC: Dominique Martinet <asmadeus@codewreck.org>
-CC: stable@vger.kernel.org
-CC: linux-api@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: linux-kselftest@vger.kernel.org
-CC: Aleksa Sarai <cyphar@cyphar.com>
+On 8/14/2023 12:32 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This has never been used since the driver was merged, but it now causes
+> a W=1 warning in recent clang versions
+> 
+> drivers/net/wireless/ath/ath9k/main.c:1566:21: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
+> drivers/net/wireless/ath/ath9k/htc_drv_main.c:1258:25: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
+> drivers/net/wireless/ath/ath5k/mac80211-ops.c:367:62: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
+> 
+> Remove the bit manipulation on the otherwise unused parameter.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Hi Aleksa,
+I'm wondering if the ath12k change should be separated into its own 
+patch because 1) it is the most current driver with a dedicated list, 
+and 2) it actually doesn't generate a warning because changed_flags is 
+used, just not in a meaningful way. But I'll let Kalle make the call on 
+that when he returns from holiday.
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 
-[auto build test ERROR on 3ff995246e801ea4de0a30860a1d8da4aeb538e7]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Sarai/selftests-memfd-error-out-test-process-when-child-test-fails/20230814-164743
-base:   3ff995246e801ea4de0a30860a1d8da4aeb538e7
-patch link:    https://lore.kernel.org/r/20230814-memfd-vm-noexec-uapi-fixes-v2-4-7ff9e3e10ba6%40cyphar.com
-patch subject: [PATCH v2 4/5] memfd: replace ratcheting feature from vm.memfd_noexec with hierarchy
-config: riscv-randconfig-r026-20230814 (https://download.01.org/0day-ci/archive/20230814/202308142051.QSBkwvO9-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230814/202308142051.QSBkwvO9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308142051.QSBkwvO9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: vmlinux.a(init/main.o):(function __traceiter_initcall_start: .text+0x5e): relocation R_RISCV_HI20 out of range: 528079 is not in [-524288, 524287]; references __tracepoint_initcall_start
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function init_completion: .text+0x4b6): relocation R_RISCV_HI20 out of range: 526635 is not in [-524288, 524287]; references kthreadd_done
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function init_completion: .text+0x4be): relocation R_RISCV_HI20 out of range: 527221 is not in [-524288, 524287]; references .L.str.33
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function init_completion: .text+0x4c6): relocation R_RISCV_HI20 out of range: 528336 is not in [-524288, 524287]; references init_completion.__key
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0x57e): relocation R_RISCV_HI20 out of range: 527221 is not in [-524288, 524287]; references .L.str.67
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function __traceiter_initcall_finish: .text+0xae): relocation R_RISCV_HI20 out of range: 528079 is not in [-524288, 524287]; references __tracepoint_initcall_finish
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function trace_event_raw_event_initcall_level: .text+0x156): relocation R_RISCV_HI20 out of range: 527221 is not in [-524288, 524287]; references .L.str.17
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function perf_trace_initcall_level: .text+0x1d2): relocation R_RISCV_HI20 out of range: 527221 is not in [-524288, 524287]; references .L.str.17
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
