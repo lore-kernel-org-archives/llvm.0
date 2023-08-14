@@ -1,35 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF115846D
-	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 23:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04BE6C433C8;
-	Mon, 14 Aug 2023 23:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692054011;
-	bh=EGJa219ihsXwvLRWPwGjLPQ3UTuDHjV8KLOtyo3Xz5M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=pyhcsuGhgXNLbgCZ/if9Xu8DF/2u9Ax1DOX6dC4ngl9hHTcVkYVhQf3tOAe0OjwVm
-	 PpklY7mWveA1pALcUTFYqOm9z6mKj/PazrqpffyWSJY8AxnhkdBdrdqa4ZbwDxDAry
-	 ya8myKXKh0pGTK5B5xwK/MAK/LasV/V1OJdH0ipv3+VNos/vD0C3gxcI7H5TQR8CvZ
-	 rR1+fwslOxyyp29K35WAU41hWP57hJBc4b0fy78cwIr4dnBFcDABQCZ4qvSx+QSRNs
-	 lJbGEcI3M8WB29JPfGg4Eb2CO5vlmfcZoMRJBXXzcySJzCTkhnOXMwAvnEGXlLDhga
-	 w1DyPKBO92mPQ==
-Date: Mon, 14 Aug 2023 18:00:08 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-pci@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] PCI: iproc: fix -Wvoid-pointer-to-enum-cast warning
-Message-ID: <20230814230008.GA196797@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D9AA925;
+	Mon, 14 Aug 2023 23:20:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692055241; x=1723591241;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6R3IlU4037oAS239BEeiCZLjKRvvjdnnateL0pbLzho=;
+  b=grFmhi084z4HQC3SapjcFNrpAbj1XVtH4JS4pxzRf9fiyTHj5S31/bQh
+   lknpXKcy77mtHjHkZS4T+AJnWg+OCza77PC+v7qDIxXAbNDjXMcYq3St7
+   AXsQVj5RtYEgb+QuId1IhtF0ze+0iysocP192p0kKJ+2ytIEzI+ZCfsVZ
+   kVp4CFOV4894UGSm+nysjN98jyv4lJRfl47ZqEgDcRAWfVN1IIpurMp0w
+   yIRtelKEURfZB43GF7wYXstzkeAVJ6PrfHy466nE07GjrmWb8ULfe8fI0
+   Ssz5prABl/Rvfkkfkld2mcDrHxM72Br9i50x8bQqifrn9d/mV+5sSmmOg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="436051468"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="436051468"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 16:20:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="823641357"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="823641357"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Aug 2023 16:20:38 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qVgrV-0000Ut-04;
+	Mon, 14 Aug 2023 23:20:37 +0000
+Date: Tue, 15 Aug 2023 07:20:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tony Lindgren <tony@atomide.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-omap@vger.kernel.org, Dhruva Gole <d-gole@ti.com>
+Subject: [tmlind-omap:omap-for-v6.6/ti-sysc 3/5]
+ drivers/bus/ti-sysc.c:3107:19: warning: cast to smaller integer type 'enum
+ sysc_soc' from 'const void *'
+Message-ID: <202308150723.ziuGCdM3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,60 +47,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230814-void-drivers-pci-controller-pcie-iproc-platform-v1-1-81a121607851@google.com>
 
-On Mon, Aug 14, 2023 at 10:29:22PM +0000, Justin Stitt wrote:
-> When building with clang 18 I see the following warning:
-> |       drivers/pci/controller/pcie-iproc-platform.c:55:15: warning: cast to smaller
-> |                integer type 'enum iproc_pcie_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> |          55 |         pcie->type = (enum iproc_pcie_type) of_device_get_match_data(dev);
-> 
-> This is due to the fact that `of_device_get_match_data` returns a void*
-> while `enum iproc_pcie_type` has the size of an int. This leads to
-> truncation and possible data loss.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1910
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Note: There is likely no data loss occurring here since `enum
-> iproc_pcie_type` has only a few fields enumerated from 0. Definitely not
-> enough to cause data loss from pointer-width to int-width.
-> ---
->  drivers/pci/controller/pcie-iproc-platform.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-iproc-platform.c b/drivers/pci/controller/pcie-iproc-platform.c
-> index acdc583d2980..83cbc95f4384 100644
-> --- a/drivers/pci/controller/pcie-iproc-platform.c
-> +++ b/drivers/pci/controller/pcie-iproc-platform.c
-> @@ -52,7 +52,7 @@ static int iproc_pltfm_pcie_probe(struct platform_device *pdev)
->  	pcie = pci_host_bridge_priv(bridge);
->  
->  	pcie->dev = dev;
-> -	pcie->type = (enum iproc_pcie_type) of_device_get_match_data(dev);
-> +	pcie->type = (uintptr_t) of_device_get_match_data(dev);
+Hi Tony,
 
-This seems a little ugly on both ends: we have to cast the enum to
-(int *) in the of_device_id table:
+First bad commit (maybe != root cause):
 
-  static const struct of_device_id iproc_pcie_of_match_table[] = {
-    {
-      .compatible = "brcm,iproc-pcie",
-      .data = (int *)IPROC_PCIE_PAXB,
-    },
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git omap-for-v6.6/ti-sysc
+head:   40a4f49cd32dbc641c706215c1fa6c5bd051428c
+commit: 063dc0622705623b3a70739b9f33d5ea019882e6 [3/5] bus: ti-sysc: Build driver for TI K3 SoCs
+config: arm64-randconfig-r006-20230815 (https://download.01.org/0day-ci/archive/20230815/202308150723.ziuGCdM3-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230815/202308150723.ziuGCdM3-lkp@intel.com/reproduce)
 
-and then we have to cast it back to the the enum type here, and we
-can't even use the actual enum type:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308150723.ziuGCdM3-lkp@intel.com/
 
-  pcie->type = (uintptr_t) of_device_get_match_data(dev);
+All warnings (new ones prefixed by >>):
 
-I think this would be nicer if we made a struct iproc_pcie_of_data
-along the lines of ks_pcie_of_data and put the enum values in
-instances of that struct.
+>> drivers/bus/ti-sysc.c:3107:19: warning: cast to smaller integer type 'enum sysc_soc' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+    3107 |                 sysc_soc->soc = (enum sysc_soc)match->data;
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-It's definitely a little more code and space, but it might also help
-us get rid of some of the "switch (pcie->type)" stuff scattered around
-this driver.
 
-Bjorn
+vim +3107 drivers/bus/ti-sysc.c
+
+feaa8baee82aba Tony Lindgren     2020-02-24  3073  
+feaa8baee82aba Tony Lindgren     2020-02-24  3074  /*
+9d881361206ebc Tony Lindgren     2021-09-21  3075   * One time init to detect the booted SoC, disable unavailable features
+9d881361206ebc Tony Lindgren     2021-09-21  3076   * and initialize list for optional cpu_pm notifier.
+9d881361206ebc Tony Lindgren     2021-09-21  3077   *
+feaa8baee82aba Tony Lindgren     2020-02-24  3078   * Note that we initialize static data shared across all ti-sysc instances
+feaa8baee82aba Tony Lindgren     2020-02-24  3079   * so ddata is only used for SoC type. This can be called from module_init
+feaa8baee82aba Tony Lindgren     2020-02-24  3080   * once we no longer need to rely on platform data.
+feaa8baee82aba Tony Lindgren     2020-02-24  3081   */
+9d881361206ebc Tony Lindgren     2021-09-21  3082  static int sysc_init_static_data(struct sysc *ddata)
+feaa8baee82aba Tony Lindgren     2020-02-24  3083  {
+feaa8baee82aba Tony Lindgren     2020-02-24  3084  	const struct soc_device_attribute *match;
+feaa8baee82aba Tony Lindgren     2020-02-24  3085  	struct ti_sysc_platform_data *pdata;
+feaa8baee82aba Tony Lindgren     2020-02-24  3086  	unsigned long features = 0;
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3087  	struct device_node *np;
+feaa8baee82aba Tony Lindgren     2020-02-24  3088  
+feaa8baee82aba Tony Lindgren     2020-02-24  3089  	if (sysc_soc)
+feaa8baee82aba Tony Lindgren     2020-02-24  3090  		return 0;
+feaa8baee82aba Tony Lindgren     2020-02-24  3091  
+feaa8baee82aba Tony Lindgren     2020-02-24  3092  	sysc_soc = kzalloc(sizeof(*sysc_soc), GFP_KERNEL);
+feaa8baee82aba Tony Lindgren     2020-02-24  3093  	if (!sysc_soc)
+feaa8baee82aba Tony Lindgren     2020-02-24  3094  		return -ENOMEM;
+feaa8baee82aba Tony Lindgren     2020-02-24  3095  
+feaa8baee82aba Tony Lindgren     2020-02-24  3096  	mutex_init(&sysc_soc->list_lock);
+feaa8baee82aba Tony Lindgren     2020-02-24  3097  	INIT_LIST_HEAD(&sysc_soc->disabled_modules);
+9d881361206ebc Tony Lindgren     2021-09-21  3098  	INIT_LIST_HEAD(&sysc_soc->restored_modules);
+feaa8baee82aba Tony Lindgren     2020-02-24  3099  	sysc_soc->general_purpose = true;
+feaa8baee82aba Tony Lindgren     2020-02-24  3100  
+feaa8baee82aba Tony Lindgren     2020-02-24  3101  	pdata = dev_get_platdata(ddata->dev);
+feaa8baee82aba Tony Lindgren     2020-02-24  3102  	if (pdata && pdata->soc_type_gp)
+feaa8baee82aba Tony Lindgren     2020-02-24  3103  		sysc_soc->general_purpose = pdata->soc_type_gp();
+feaa8baee82aba Tony Lindgren     2020-02-24  3104  
+feaa8baee82aba Tony Lindgren     2020-02-24  3105  	match = soc_device_match(sysc_soc_match);
+feaa8baee82aba Tony Lindgren     2020-02-24  3106  	if (match && match->data)
+e1e1e9bb9d943e Tony Lindgren     2023-08-04 @3107  		sysc_soc->soc = (enum sysc_soc)match->data;
+feaa8baee82aba Tony Lindgren     2020-02-24  3108  
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3109  	/*
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3110  	 * Check and warn about possible old incomplete dtb. We now want to see
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3111  	 * simple-pm-bus instead of simple-bus in the dtb for genpd using SoCs.
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3112  	 */
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3113  	switch (sysc_soc->soc) {
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3114  	case SOC_AM3:
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3115  	case SOC_AM4:
+4adcf4c28f6dc1 Tony Lindgren     2021-03-12  3116  	case SOC_4430 ... SOC_4470:
+4adcf4c28f6dc1 Tony Lindgren     2021-03-12  3117  	case SOC_5430:
+4adcf4c28f6dc1 Tony Lindgren     2021-03-12  3118  	case SOC_DRA7:
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3119  		np = of_find_node_by_path("/ocp");
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3120  		WARN_ONCE(np && of_device_is_compatible(np, "simple-bus"),
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3121  			  "ti-sysc: Incomplete old dtb, please update\n");
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3122  		break;
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3123  	default:
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3124  		break;
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3125  	}
+5f7259a578e9c6 Tony Lindgren     2021-03-08  3126  
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3127  	/* Ignore devices that are not available on HS and EMU SoCs */
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3128  	if (!sysc_soc->general_purpose) {
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3129  		switch (sysc_soc->soc) {
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3130  		case SOC_3430 ... SOC_3630:
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3131  			sysc_add_disabled(0x48304000);	/* timer12 */
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3132  			break;
+a6d90e9f22328f Kevin Hilman      2021-07-20  3133  		case SOC_AM3:
+a6d90e9f22328f Kevin Hilman      2021-07-20  3134  			sysc_add_disabled(0x48310000);  /* rng */
+e879f855e590b4 Nathan Chancellor 2021-08-15  3135  			break;
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3136  		default:
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3137  			break;
+52fbb5aabb5cf6 Yang Li           2021-02-02  3138  		}
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3139  	}
+4bba9bf08ff41d Tony Lindgren     2020-05-07  3140  
+feaa8baee82aba Tony Lindgren     2020-02-24  3141  	match = soc_device_match(sysc_soc_feat_match);
+feaa8baee82aba Tony Lindgren     2020-02-24  3142  	if (!match)
+feaa8baee82aba Tony Lindgren     2020-02-24  3143  		return 0;
+feaa8baee82aba Tony Lindgren     2020-02-24  3144  
+feaa8baee82aba Tony Lindgren     2020-02-24  3145  	if (match->data)
+feaa8baee82aba Tony Lindgren     2020-02-24  3146  		features = (unsigned long)match->data;
+feaa8baee82aba Tony Lindgren     2020-02-24  3147  
+feaa8baee82aba Tony Lindgren     2020-02-24  3148  	/*
+feaa8baee82aba Tony Lindgren     2020-02-24  3149  	 * Add disabled devices to the list based on the module base.
+feaa8baee82aba Tony Lindgren     2020-02-24  3150  	 * Note that this must be done before we attempt to access the
+feaa8baee82aba Tony Lindgren     2020-02-24  3151  	 * device and have module revision checks working.
+feaa8baee82aba Tony Lindgren     2020-02-24  3152  	 */
+feaa8baee82aba Tony Lindgren     2020-02-24  3153  	if (features & DIS_ISP)
+feaa8baee82aba Tony Lindgren     2020-02-24  3154  		sysc_add_disabled(0x480bd400);
+feaa8baee82aba Tony Lindgren     2020-02-24  3155  	if (features & DIS_IVA)
+feaa8baee82aba Tony Lindgren     2020-02-24  3156  		sysc_add_disabled(0x5d000000);
+feaa8baee82aba Tony Lindgren     2020-02-24  3157  	if (features & DIS_SGX)
+feaa8baee82aba Tony Lindgren     2020-02-24  3158  		sysc_add_disabled(0x50000000);
+feaa8baee82aba Tony Lindgren     2020-02-24  3159  
+feaa8baee82aba Tony Lindgren     2020-02-24  3160  	return 0;
+feaa8baee82aba Tony Lindgren     2020-02-24  3161  }
+feaa8baee82aba Tony Lindgren     2020-02-24  3162  
+
+:::::: The code at line 3107 was first introduced by commit
+:::::: e1e1e9bb9d943ec690670a609a5f660ca10eaf85 bus: ti-sysc: Fix build warning for 64-bit build
+
+:::::: TO: Tony Lindgren <tony@atomide.com>
+:::::: CC: Tony Lindgren <tony@atomide.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
