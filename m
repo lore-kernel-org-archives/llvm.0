@@ -1,105 +1,346 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BB5BE68
-	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 14:09:37 +0000 (UTC)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37EBlj6E029566;
-	Mon, 14 Aug 2023 14:09:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=eRtRcSeLyPTUnI5TkxluVlX8y1YmXchwUnzvT+HnUh4=;
- b=K0akEjTTyi4xti+J8sqst6laRm0+MNRLo7vFD4BgBd7srYQUngWFa5iOPzUQNs7xf5ji
- qADzTy3xLqPFMHTeCSpCJv971Sn6bZ7X9s3pnHxdIpihcYPp45I6sOOnQ3gtiOS0ovo2
- PQoQJrDnVIZCxbkph26ggxReESvNZWxP8LLl4MxGnhWg9AUbp438wUqcu2Wb8jH7eudl
- ptrdJ3SMhu7s97u3ssUq+RwE1VSZEqzJYepdUrhyawa+3hjH0tNcrRmxX2Q1fEbY70aV
- YPrP5r11fdtpiDaoXtTy/Aa8j58bV5f2xU/WIcsLNrxuKl3oT8F25N1IYgFsAYnrlSMi 1w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3se3tym02r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Aug 2023 14:09:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37EE92ol001402
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Aug 2023 14:09:02 GMT
-Received: from [10.48.240.144] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 14 Aug
- 2023 07:09:01 -0700
-Message-ID: <6529ca77-6ce4-d930-38a4-5ee2f9671bdd@quicinc.com>
-Date: Mon, 14 Aug 2023 07:09:00 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F8AC14B;
+	Mon, 14 Aug 2023 14:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692023474; x=1723559474;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3hGNuogA1q0MzSOkzYz6r0rTwhhUJjNFQD60UGjNo4s=;
+  b=Oy2EwzzizPswUa+41s1/XaQVYnb50kyhH77q0mcpgVtjiDoyOJwI6pkW
+   a2LkU32BArEhm5xUgBn2YUts6mApQPrltav7v7nMCwax9kBFdrVksdjeA
+   tSHU61egL2HmpLApTNL9H+NBmkylJxkTFfNbKcRbqZbqoL2NEN8lIjHKB
+   HmNuD66xROe7DMeu6yIEVjmPoUNqyGU/dxsIyodc4jQbrMLviEBR5pIWi
+   UqTCsi+7NfhPiYxxiOt26QqvAexuE/0aTbrIFbAkYfg/ysffqL7ZvF2q3
+   OFm5GAEmBfIAISI+I+ExWmhYHmLCAkBfhQdbhK/HwE1UkpMF7Av6v2urC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="372044231"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="372044231"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 07:31:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="727025397"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="727025397"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 14 Aug 2023 07:31:11 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qVYb8-0000C3-1R;
+	Mon, 14 Aug 2023 14:31:10 +0000
+Date: Mon, 14 Aug 2023 22:30:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric DeVolder <eric.devolder@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Sourabh Jain <sourabhjain@linux.ibm.com>
+Subject: [akpm-mm:mm-nonmm-unstable 63/70] kernel/crash_core.c:318:40:
+ warning: declaration of 'struct crash_mem' will not be visible outside of
+ this function
+Message-ID: <202308142200.xficd195-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] wireless: ath: remove unused-but-set parameter
-Content-Language: en-US
-To: Arnd Bergmann <arnd@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-        Jiri Slaby
-	<jirislaby@kernel.org>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        "Luis
- Chamberlain" <mcgrof@kernel.org>,
-        =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rg?=
- =?UTF-8?Q?ensen?= <toke@toke.dk>
-CC: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Aloka Dixit <quic_alokad@quicinc.com>,
-        Wen Gong <quic_wgong@quicinc.com>,
-        "Ramya Gnanasekar" <quic_rgnanase@quicinc.com>,
-        Karthik M
-	<quic_karm@quicinc.com>,
-        Aditya Kumar Singh <quic_adisi@quicinc.com>,
-        Muna
- Sinada <quic_msinada@quicinc.com>,
-        Johannes Berg <johannes.berg@intel.com>, <ath12k@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-References: <20230814073255.1065242-1-arnd@kernel.org>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20230814073255.1065242-1-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uLjaxiIgc9QlrycbadpGy8PPMY6alyV3
-X-Proofpoint-ORIG-GUID: uLjaxiIgc9QlrycbadpGy8PPMY6alyV3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-14_10,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=820 mlxscore=0
- lowpriorityscore=0 impostorscore=0 suspectscore=0 phishscore=0
- adultscore=0 spamscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308140130
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 8/14/2023 12:32 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This has never been used since the driver was merged, but it now causes
-> a W=1 warning in recent clang versions
-> 
-> drivers/net/wireless/ath/ath9k/main.c:1566:21: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
-> drivers/net/wireless/ath/ath9k/htc_drv_main.c:1258:25: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
-> drivers/net/wireless/ath/ath5k/mac80211-ops.c:367:62: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
-> 
-> Remove the bit manipulation on the otherwise unused parameter.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+head:   a9c5ffc5c68640a5ade3d65a43954a0971d8cfd2
+commit: 3afa7700e148b3ce7af3656a8fe46c0f3625e7ea [63/70] crash: move a few code bits to setup support of crash hotplug
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230814/202308142200.xficd195-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230814/202308142200.xficd195-lkp@intel.com/reproduce)
 
-I'm wondering if the ath12k change should be separated into its own 
-patch because 1) it is the most current driver with a dedicated list, 
-and 2) it actually doesn't generate a warning because changed_flags is 
-used, just not in a meaningful way. But I'll let Kalle make the call on 
-that when he returns from holiday.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308142200.xficd195-lkp@intel.com/
 
-Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/crash_core.c:13:
+   In file included from include/linux/kexec.h:19:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/crash_core.c:13:
+   In file included from include/linux/kexec.h:19:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/crash_core.c:13:
+   In file included from include/linux/kexec.h:19:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> kernel/crash_core.c:318:40: warning: declaration of 'struct crash_mem' will not be visible outside of this function [-Wvisibility]
+     318 | int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+         |                                        ^
+   kernel/crash_core.c:331:16: error: incomplete definition of type 'struct crash_mem'
+     331 |         nr_phdr += mem->nr_ranges;
+         |                    ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+     318 | int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+         |                                        ^
+   kernel/crash_core.c:343:25: error: use of undeclared identifier 'ELF_CORE_HEADER_ALIGN'
+     343 |         elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
+         |                                ^
+   kernel/crash_core.c:343:25: error: use of undeclared identifier 'ELF_CORE_HEADER_ALIGN'
+   kernel/crash_core.c:393:21: error: incomplete definition of type 'struct crash_mem'
+     393 |         for (i = 0; i < mem->nr_ranges; i++) {
+         |                         ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+     318 | int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+         |                                        ^
+   kernel/crash_core.c:394:15: error: incomplete definition of type 'struct crash_mem'
+     394 |                 mstart = mem->ranges[i].start;
+         |                          ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+     318 | int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+         |                                        ^
+   kernel/crash_core.c:395:13: error: incomplete definition of type 'struct crash_mem'
+     395 |                 mend = mem->ranges[i].end;
+         |                        ~~~^
+   kernel/crash_core.c:318:40: note: forward declaration of 'struct crash_mem'
+     318 | int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+         |                                        ^
+>> kernel/crash_core.c:318:5: warning: no previous prototype for function 'crash_prepare_elf64_headers' [-Wmissing-prototypes]
+     318 | int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+         |     ^
+   kernel/crash_core.c:318:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     318 | int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+         | ^
+         | static 
+   kernel/crash_core.c:417:36: warning: declaration of 'struct crash_mem' will not be visible outside of this function [-Wvisibility]
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:424:21: error: incomplete definition of type 'struct crash_mem'
+     424 |         for (i = 0; i < mem->nr_ranges; i++) {
+         |                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:425:14: error: incomplete definition of type 'struct crash_mem'
+     425 |                 start = mem->ranges[i].start;
+         |                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:426:12: error: incomplete definition of type 'struct crash_mem'
+     426 |                 end = mem->ranges[i].end;
+         |                       ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:441:7: error: incomplete definition of type 'struct crash_mem'
+     441 |                         mem->ranges[i].start = 0;
+         |                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:442:7: error: incomplete definition of type 'struct crash_mem'
+     442 |                         mem->ranges[i].end = 0;
+         |                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:443:15: error: incomplete definition of type 'struct crash_mem'
+     443 |                         if (i < mem->nr_ranges - 1) {
+         |                                 ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:445:24: error: incomplete definition of type 'struct crash_mem'
+     445 |                                 for (j = i; j < mem->nr_ranges - 1; j++) {
+         |                                                 ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:446:9: error: incomplete definition of type 'struct crash_mem'
+     446 |                                         mem->ranges[j].start =
+         |                                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:447:10: error: incomplete definition of type 'struct crash_mem'
+     447 |                                                 mem->ranges[j+1].start;
+         |                                                 ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:448:9: error: incomplete definition of type 'struct crash_mem'
+     448 |                                         mem->ranges[j].end =
+         |                                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:449:11: error: incomplete definition of type 'struct crash_mem'
+     449 |                                                         mem->ranges[j+1].end;
+         |                                                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:458:8: error: incomplete definition of type 'struct crash_mem'
+     458 |                                 mem->nr_ranges--;
+         |                                 ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   kernel/crash_core.c:461:7: error: incomplete definition of type 'struct crash_mem'
+     461 |                         mem->nr_ranges--;
+         |                         ~~~^
+   kernel/crash_core.c:417:36: note: forward declaration of 'struct crash_mem'
+     417 | int crash_exclude_mem_range(struct crash_mem *mem,
+         |                                    ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   15 warnings and 20 errors generated.
 
 
+vim +318 kernel/crash_core.c
+
+   317	
+ > 318	int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+   319				  void **addr, unsigned long *sz)
+   320	{
+   321		Elf64_Ehdr *ehdr;
+   322		Elf64_Phdr *phdr;
+   323		unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
+   324		unsigned char *buf;
+   325		unsigned int cpu, i;
+   326		unsigned long long notes_addr;
+   327		unsigned long mstart, mend;
+   328	
+   329		/* extra phdr for vmcoreinfo ELF note */
+   330		nr_phdr = nr_cpus + 1;
+   331		nr_phdr += mem->nr_ranges;
+   332	
+   333		/*
+   334		 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
+   335		 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
+   336		 * I think this is required by tools like gdb. So same physical
+   337		 * memory will be mapped in two ELF headers. One will contain kernel
+   338		 * text virtual addresses and other will have __va(physical) addresses.
+   339		 */
+   340	
+   341		nr_phdr++;
+   342		elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
+   343		elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
+   344	
+   345		buf = vzalloc(elf_sz);
+   346		if (!buf)
+   347			return -ENOMEM;
+   348	
+   349		ehdr = (Elf64_Ehdr *)buf;
+   350		phdr = (Elf64_Phdr *)(ehdr + 1);
+   351		memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
+   352		ehdr->e_ident[EI_CLASS] = ELFCLASS64;
+   353		ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
+   354		ehdr->e_ident[EI_VERSION] = EV_CURRENT;
+   355		ehdr->e_ident[EI_OSABI] = ELF_OSABI;
+   356		memset(ehdr->e_ident + EI_PAD, 0, EI_NIDENT - EI_PAD);
+   357		ehdr->e_type = ET_CORE;
+   358		ehdr->e_machine = ELF_ARCH;
+   359		ehdr->e_version = EV_CURRENT;
+   360		ehdr->e_phoff = sizeof(Elf64_Ehdr);
+   361		ehdr->e_ehsize = sizeof(Elf64_Ehdr);
+   362		ehdr->e_phentsize = sizeof(Elf64_Phdr);
+   363	
+   364		/* Prepare one phdr of type PT_NOTE for each present CPU */
+   365		for_each_present_cpu(cpu) {
+   366			phdr->p_type = PT_NOTE;
+   367			notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
+   368			phdr->p_offset = phdr->p_paddr = notes_addr;
+   369			phdr->p_filesz = phdr->p_memsz = sizeof(note_buf_t);
+   370			(ehdr->e_phnum)++;
+   371			phdr++;
+   372		}
+   373	
+   374		/* Prepare one PT_NOTE header for vmcoreinfo */
+   375		phdr->p_type = PT_NOTE;
+   376		phdr->p_offset = phdr->p_paddr = paddr_vmcoreinfo_note();
+   377		phdr->p_filesz = phdr->p_memsz = VMCOREINFO_NOTE_SIZE;
+   378		(ehdr->e_phnum)++;
+   379		phdr++;
+   380	
+   381		/* Prepare PT_LOAD type program header for kernel text region */
+   382		if (need_kernel_map) {
+   383			phdr->p_type = PT_LOAD;
+   384			phdr->p_flags = PF_R|PF_W|PF_X;
+   385			phdr->p_vaddr = (unsigned long) _text;
+   386			phdr->p_filesz = phdr->p_memsz = _end - _text;
+   387			phdr->p_offset = phdr->p_paddr = __pa_symbol(_text);
+   388			ehdr->e_phnum++;
+   389			phdr++;
+   390		}
+   391	
+   392		/* Go through all the ranges in mem->ranges[] and prepare phdr */
+   393		for (i = 0; i < mem->nr_ranges; i++) {
+   394			mstart = mem->ranges[i].start;
+   395			mend = mem->ranges[i].end;
+   396	
+   397			phdr->p_type = PT_LOAD;
+   398			phdr->p_flags = PF_R|PF_W|PF_X;
+   399			phdr->p_offset  = mstart;
+   400	
+   401			phdr->p_paddr = mstart;
+   402			phdr->p_vaddr = (unsigned long) __va(mstart);
+   403			phdr->p_filesz = phdr->p_memsz = mend - mstart + 1;
+   404			phdr->p_align = 0;
+   405			ehdr->e_phnum++;
+   406			pr_debug("Crash PT_LOAD ELF header. phdr=%p vaddr=0x%llx, paddr=0x%llx, sz=0x%llx e_phnum=%d p_offset=0x%llx\n",
+   407				phdr, phdr->p_vaddr, phdr->p_paddr, phdr->p_filesz,
+   408				ehdr->e_phnum, phdr->p_offset);
+   409			phdr++;
+   410		}
+   411	
+   412		*addr = buf;
+   413		*sz = elf_sz;
+   414		return 0;
+   415	}
+   416	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
