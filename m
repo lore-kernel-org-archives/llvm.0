@@ -1,103 +1,123 @@
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95169C2D4
-	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 15:35:15 +0000 (UTC)
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4474c7fce20so1727036137.3
-        for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 08:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692027314; x=1692632114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dwZynochhhORLpCB6DjxeAh/RlJ/3P4bMuPp8yyJkYU=;
-        b=s3U1x+uHEnmCITDqc5tFkzyv81a4pTKNhmXBWqyyQCBwJ9lDyueXPs+QJvFwfQrFv1
-         94mhMEJao3y8DJwc5oT8+dt+Wr5UYBw8TJO4d2VdkCf0E89LWqvbledG56xkQRlB+lJv
-         HuJ9jTT72Kq/5bgapQkAxcYjD8j6PlyUeVgX8I7P87QjXz0oQox69zOZ9u7aPBTSXRgD
-         QFb8wVl+85tBx+gVSaWaHvoU+8kaW9jaFBmNV8FlNahqC7H5yxnqxDIvvUeHXpJXa503
-         C0FHZxfT/PQTJT7IQ7K01NejMXA2qQ8a+AK3N2+qI1t9D+ODBO6qm+92WTFZ7JLaRuoq
-         LyXg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CA1C2D4
+	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 15:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1692027505;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ftfZzPPxMX01Gby0U/PiwMfwiI0XDF12P1Ajb3ohqCY=;
+	b=WSYD0135S4hEGEtfMJ62DYaa8tDKiPT23kAdz1jIttYWO4fyXApHTS+U+h90dJVjOPa6HB
+	Rb48294r1OXACu6jHnQcO0m8b4U7LjR4XDuyip/ZV1qI5ymMTzALI6LI8bC2rnB/lTt5Tb
+	FvsLX7Edxk1637kAMh7Aiw6OJEgRE2w=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-KRCSW2jMOl-IjH7Xo9Ubqw-1; Mon, 14 Aug 2023 11:38:24 -0400
+X-MC-Unique: KRCSW2jMOl-IjH7Xo9Ubqw-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-645778904dfso8256116d6.1
+        for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 08:38:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692027314; x=1692632114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dwZynochhhORLpCB6DjxeAh/RlJ/3P4bMuPp8yyJkYU=;
-        b=ghfIqTFF/o2N9EORnaCT0bO4bOK7eH9HdUEdR8lCzT/y2D2mS7NM46i/9zbFh23lyr
-         OImMx5iP/LCyUsjETonkYmjS2B9FWCE2ON9DKviQk1ElL4cIzKr5k8c+yOcF+yVCFHvA
-         1PMjZJAOBcReZi3e+tJFfAbMPdCNMqeVwPwEM+LtmS9xgwn+1vmx+2rJR9r1l6ZGYLn9
-         nNmgO5q0LSmiCgGZGMPMzZMYR42NxmRIoj52RdTed5XJn3iX+AYwtRLEox02Jxw+Ej8I
-         D5gdPA+KWKpe5SQIpqVfhktOMYu3aueckBZzdiQ2BljswsoYRboKiDghBaCqhuZc9yIQ
-         Gj1g==
-X-Gm-Message-State: AOJu0YzPSuUc7gzH1/1B/WgttHEFVxZioiBnkdfFu9Li7Gs0CM66+/NF
-	CdBd8pj08Ii3wpTlE9DVFG6Zh2K4KwCyPRdZhUsnPQ==
-X-Google-Smtp-Source: AGHT+IEc/ansqEvhUK8upK41DzZmZXeg9i65FyaNq/0zMjuxetY5EwlfjUBrV9vueWGSzkKHu9AeI3Av2jUqmfgPyhA=
-X-Received: by 2002:a67:ee07:0:b0:445:91b:385d with SMTP id
- f7-20020a67ee07000000b00445091b385dmr9781787vsp.12.1692027314070; Mon, 14 Aug
- 2023 08:35:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692027504; x=1692632304;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ftfZzPPxMX01Gby0U/PiwMfwiI0XDF12P1Ajb3ohqCY=;
+        b=M5fGVM4Rqp/p40kH+YmsfcpDjrqqlw47KxoENWmEjs1w2wYNCH67ejnMBR3CXcT+V8
+         m/nNnn+jFWuRzqQF+Zm1rQsb0uFUVqLkFW4PTH6vH9uxVFNoFSPEqtSGmOPIBh6OHnJl
+         pAT0o+Nq0ePqxWJJWL29MHa1ZvQ+EfymESeyBqwCQiiT6NrTrgzZF7D9mljbdmGn1Mt9
+         dC7o8R3aKKvteBbnshbN1tBmShv34nGftBVuQFhlin8uIF8WA+dxizrvVCmP/BklwxSS
+         tjxpN5aOryhDmQjNCJeYZ+XmaUvXWl9yWyJGfaIsauj3vlLUimIQvWwvKDlGGdwq/bnh
+         +nCg==
+X-Gm-Message-State: AOJu0YzlcXUdhrerfoIoDSHp9rW3yxcA7MxS1MMKZ8N3uVw9D5UtmRQc
+	FB7tLd1NQOUjyvkt2QaxWY4lYiPu9n8nqU4JLxx82j9sPLwVtTlsWGTesqaLjAM9DcJ+c9yVNu3
+	7+wfJrqiivHQo5Q==
+X-Received: by 2002:ad4:5f0f:0:b0:625:aa48:e50f with SMTP id fo15-20020ad45f0f000000b00625aa48e50fmr13929597qvb.6.1692027503760;
+        Mon, 14 Aug 2023 08:38:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFACOs0OhCKoORZlOJko4R2FENW1W6OqTr5H/q9L0Y8dHpVVK+fY2mYrwhhPkkNvUWN04cF0w==
+X-Received: by 2002:ad4:5f0f:0:b0:625:aa48:e50f with SMTP id fo15-20020ad45f0f000000b00625aa48e50fmr13929579qvb.6.1692027503460;
+        Mon, 14 Aug 2023 08:38:23 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id pc5-20020a05620a840500b00767fbfea21dsm3098480qkn.69.2023.08.14.08.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 08:38:22 -0700 (PDT)
+Date: Mon, 14 Aug 2023 11:38:18 -0400
+From: Peter Xu <peterx@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Huang, Ying" <ying.huang@intel.com>
+Subject: Re: Cannot find symbol for section 69: .text.arch_max_swapfile_size.
+Message-ID: <ZNpKaiweCbf9i5QS@x1n>
+References: <202308120906.Efohswpa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230811233556.97161-8-samitolvanen@google.com>
- <202308122238.XLMMmeL0-lkp@intel.com> <CAJF2gTQmezqnJo68CuV8e+=RwCAioKbk0UqTS_fq5--HjUTLDw@mail.gmail.com>
-In-Reply-To: <CAJF2gTQmezqnJo68CuV8e+=RwCAioKbk0UqTS_fq5--HjUTLDw@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 14 Aug 2023 08:34:37 -0700
-Message-ID: <CABCJKueRPOEiRdGoT5A+c3s7zbH3YqvFUcQowwXMUT4CmFyBEw@mail.gmail.com>
-Subject: Re: [PATCH 1/5] riscv: VMAP_STACK overflow detection thread-safe
-To: Guo Ren <guoren@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev, 
-	Deepak Gupta <debug@rivosinc.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Fangrui Song <maskray@google.com>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Jisheng Zhang <jszhang@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <202308120906.Efohswpa-lkp@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Sat, Aug 12, 2023 at 6:25=E2=80=AFPM Guo Ren <guoren@kernel.org> wrote:
->
-> On Sat, Aug 12, 2023 at 10:36=E2=80=AFPM kernel test robot <lkp@intel.com=
-> wrote:
-> >
-> > Hi Sami,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on 52a93d39b17dc7eb98b6aa3edb93943248e03b2f]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Sami-Tolvanen/ri=
-scv-VMAP_STACK-overflow-detection-thread-safe/20230812-073751
-> > base:   52a93d39b17dc7eb98b6aa3edb93943248e03b2f
-> > patch link:    https://lore.kernel.org/r/20230811233556.97161-8-samitol=
-vanen%40google.com
-> > patch subject: [PATCH 1/5] riscv: VMAP_STACK overflow detection thread-=
-safe
-> > config: riscv-randconfig-r042-20230812 (https://download.01.org/0day-ci=
-/archive/20230812/202308122238.XLMMmeL0-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.gi=
-t 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce: (https://download.01.org/0day-ci/archive/20230812/2023081222=
-38.XLMMmeL0-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202308122238.XLMMmeL0-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> ld.lld: error: undefined symbol: __per_cpu_offset
-> >    >>> referenced by arch/riscv/kernel/entry.o:(handle_kernel_stack_ove=
-rflow) in archive vmlinux.a
-> !CONFIG_SMP missed
+On Sat, Aug 12, 2023 at 09:11:33AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   190bf7b14b0cf3df19c059061be032bd8994a597
+> commit: be45a4902c7caa717fee6b2f671e59b396ed395c mm/swap: cache maximum swapfile size when init swap
+> date:   11 months ago
+> config: mips-randconfig-r014-20230811 (https://download.01.org/0day-ci/archive/20230812/202308120906.Efohswpa-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230812/202308120906.Efohswpa-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308120906.Efohswpa-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> Cannot find symbol for section 69: .text.arch_max_swapfile_size.
+>    mm/swapfile.o: failed
 
-Indeed. I'll fix this in v2.
+Hmm.. I don't really know what's the issue here, neither can I reproduce
+this locally - the cross build seems to all work with the reproducer and I
+can see mm/swapfile.o correctly generated.
 
-Sami
+$ wget https://download.01.org/0day-ci/archive/20230812/202308120906.Efohswpa-lkp@intel.com/config
+$ mv config .config
+$ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ./make.cross W=1 O=build_dir ARCH=mips olddefconfig
+[...]
+$ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ./make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+[...]
+FIT description: Linux 6.5.0-rc4-00492-gad3232df3e41
+Created:         Mon Aug 14 11:35:57 2023
+ Image 0 (kernel)
+  Description:  Linux 6.5.0-rc4-00492-gad3232df3e41
+  Created:      Mon Aug 14 11:35:57 2023
+  Type:         Kernel Image
+  Compression:  gzip compressed
+  Data Size:    1767982 Bytes = 1726.54 KiB = 1.69 MiB
+  Architecture: MIPS
+  OS:           Linux
+  Load Address: 0x80100000
+  Entry Point:  0x8043e5f0
+  Hash algo:    sha1
+  Hash value:   750e28c2fdd0d73eec9b0d8dbf5655579cb1364c
+ Default Configuration: 'conf-default'
+ Configuration 0 (conf-default)
+  Description:  Generic Linux kernel
+  Kernel:       kernel
+$ file build_dir/mm/swapfile.o 
+build_dir/mm/swapfile.o: ELF 32-bit MSB relocatable, MIPS, MIPS32 version 1 (SYSV), not stripped
+
+Please let me now if anyone knows what I'm missing.
+
+-- 
+Peter Xu
+
