@@ -1,43 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FDCC2FC;
-	Mon, 14 Aug 2023 18:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692037181; x=1723573181;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=raoZRhOJv6xLl2PEtlp0MPEmTsfUo1HT8Kzl8xpLc5U=;
-  b=MWngNUU+S+RYUoOjqQy4yU1NJc2ZDg6ZlMr44qiWbojTIEOA9ALQhF5r
-   ZM1UOFYsa98RsowAtm2rNRhREMPPcnZ2uj7eAq0YTTzWOY413dTlfmVh+
-   +PGFNH2v26usBfSTgTQe0yJPQ+y/Wi3YklrDQmWvKtwR5MRldcIB27wOm
-   vtxOu4sKNaE/gm99fnrqEsYHrKNt/QL0qaga30duq/I/K+MCFfA+m7E11
-   12hUKQHEjv+ekV0wxFAWJs3bE6uJA0Jr91lebnrIcnpuDz4l0Ap8j3x1D
-   kMcGdKLpY2igDnQE+QduZy15GkIBsJdUP5sDV5PspdaWnqw9Ax4c+DSnN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="352434169"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="352434169"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 11:19:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="736609670"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="736609670"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Aug 2023 11:19:39 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qVcAE-0000LH-0z;
-	Mon, 14 Aug 2023 18:19:38 +0000
-Date: Tue, 15 Aug 2023 02:19:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-nvme:tls.v13 17/19] drivers/nvme/target/configfs.c:1881:19:
- error: call to undeclared function 'key_lookup'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202308150232.X4uOBipx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FC1C13D
+	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 18:33:33 +0000 (UTC)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-26b56cc7896so625652a91.3
+        for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 11:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1692038013; x=1692642813;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J8iwZg12OLuhKmVur/3KwHW/8LJxcNDVt1vwEiERMGA=;
+        b=bFFqbLkEpK7yIJMGtIvYU+M+BhgGIQ6EuxXiqxJXKdluI9eyiHNw6zWy58WyqWDYS7
+         PNX3Ltz3Hv8rQyoWH1aYcEUjZVJSC6leddeGvziv/G5VPUH+Q4f8oQtHPAa1tXzbHyMw
+         xaoKqVMs9yciwG/L14RqjSGjc5vmWl1o/+J2w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692038013; x=1692642813;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J8iwZg12OLuhKmVur/3KwHW/8LJxcNDVt1vwEiERMGA=;
+        b=MvGIsds+Cqi6waFAbaAY/7CY9q9Blvcq2aRr7G0isFCuSIDSnmKTf/GijaH4tF6kIb
+         2h8P61nk3mg+HnMFUtYgmhGffPhBwhnYKGYn6KTxN5HaUzl+fcYv1xI6ZkrEF9cyAoue
+         K9QNC/3tJfkQzHS/It3KmgKkL2BcZWfC3FHmjBQJct7RCvDTRFr5/awPjUtaV0o8O3zN
+         7EElQ/Hnb4CjwxVq8Y9N2p6rSzwSRczzZCf4bbQGhlh4FeKyFeemCIN6tj92WTbzSI/1
+         kr4uncZxKWmFcmUqQbPS1I/PBq2rcJnKNVO678buD65HLxPSgLcAzNbmoguClH1durZA
+         9OIw==
+X-Gm-Message-State: AOJu0YwuHypXU0W9iwsMZKbUKhGqwI32sf6+sdxnbQ/7uMpIfNHMYQNn
+	14HsD/W8VisJkxpgiJALjcg77A==
+X-Google-Smtp-Source: AGHT+IEklZccVL6cUi3mOUlAJqnCYsINOyo2Bwkp+4IkA+X5znYYwIyoEN7NI88uHvmjTxQq2W/Tqg==
+X-Received: by 2002:a17:90a:cb06:b0:26b:2538:d717 with SMTP id z6-20020a17090acb0600b0026b2538d717mr6989311pjt.25.1692038012892;
+        Mon, 14 Aug 2023 11:33:32 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090aca8d00b00262eccfa29fsm10161456pjt.33.2023.08.14.11.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 11:33:32 -0700 (PDT)
+Date: Mon, 14 Aug 2023 11:33:31 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Fangrui Song <maskray@google.com>, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] riscv: SCS support
+Message-ID: <202308141131.6B90A4205@keescook>
+References: <20230811233556.97161-7-samitolvanen@google.com>
+ <20230814175928.GA1028706@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,105 +57,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230814175928.GA1028706@dev-arch.thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/nvme.git tls.v13
-head:   ce525e34ae9d3f5ed12f23caea57c0aa2e8359ee
-commit: 742a9e6a640d76c3d7cbb647d0da0887857e7d32 [17/19] nvmet-tcp: enable TLS handshake upcall
-config: arm-randconfig-r033-20230814 (https://download.01.org/0day-ci/archive/20230815/202308150232.X4uOBipx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230815/202308150232.X4uOBipx-lkp@intel.com/reproduce)
+On Mon, Aug 14, 2023 at 10:59:28AM -0700, Nathan Chancellor wrote:
+> Hi Sami,
+> 
+> On Fri, Aug 11, 2023 at 11:35:57PM +0000, Sami Tolvanen wrote:
+> > Hi folks,
+> > 
+> > This series adds Shadow Call Stack (SCS) support for RISC-V. SCS
+> > uses compiler instrumentation to store return addresses in a
+> > separate shadow stack to protect them against accidental or
+> > malicious overwrites. More information about SCS can be found
+> > here:
+> > 
+> >   https://clang.llvm.org/docs/ShadowCallStack.html
+> > 
+> > Patch 1 is from Deepak, and it simplifies VMAP_STACK overflow
+> > handling by adding support for accessing per-CPU variables
+> > directly in assembly. The patch is included in this series to
+> > make IRQ stack switching cleaner with SCS, and I've simply
+> > rebased it. Patch 2 uses this functionality to clean up the stack
+> > switching by moving duplicate code into a single function. On
+> > RISC-V, the compiler uses the gp register for storing the current
+> > shadow call stack pointer, which is incompatible with global
+> > pointer relaxation. Patch 3 moves global pointer loading into a
+> > macro that can be easily disabled with SCS. Patch 4 implements
+> > SCS register loading and switching, and allows the feature to be
+> > enabled, and patch 5 adds separate per-CPU IRQ shadow call stacks
+> > when CONFIG_IRQ_STACKS is enabled.
+> > 
+> > Note that this series requires Clang 17. Earlier Clang versions
+> > support SCS on RISC-V, but use the x18 register instead of gp,
+> > which isn't ideal. gcc has SCS support for arm64, but I'm not
+> > aware of plans to support RISC-V. Once the Zicfiss extension is
+> > ratified, it's probably preferable to use hardware-backed shadow
+> > stacks instead of SCS on hardware that supports the extension,
+> > and we may want to consider implementing CONFIG_DYNAMIC_SCS to
+> > patch between the implementation at runtime (similarly to the
+> > arm64 implementation, which switches to SCS when hardware PAC
+> > support isn't available).
+> 
+> I took this series for a spin on top of 6.5-rc6 with both LLVM 18 (built
+> within the past couple of days) and LLVM 17.0.0-rc2 but it seems that
+> the CFI_BACKWARDS LKDTM test does not pass with
+> CONFIG_SHADOW_CALL_STACK=y.
+> 
+>   [   73.324652] lkdtm: Performing direct entry CFI_BACKWARD
+>   [   73.324900] lkdtm: Attempting unchecked stack return address redirection ...
+>   [   73.325178] lkdtm: Eek: return address mismatch! 0000000000000002 != ffffffff80614982
+>   [   73.325478] lkdtm: FAIL: stack return address manipulation failed!
+> 
+> Does the test need to be adjusted or is there some other issue?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308150232.X4uOBipx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/nvme/target/configfs.c:1881:19: error: call to undeclared function 'key_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1881 |                 port->keyring = key_lookup(nvme_keyring_id());
-         |                                 ^
->> drivers/nvme/target/configfs.c:1881:17: error: incompatible integer to pointer conversion assigning to 'struct key *' from 'int' [-Wint-conversion]
-    1881 |                 port->keyring = key_lookup(nvme_keyring_id());
-         |                               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +/key_lookup +1881 drivers/nvme/target/configfs.c
-
-  1858	
-  1859	static struct config_group *nvmet_ports_make(struct config_group *group,
-  1860			const char *name)
-  1861	{
-  1862		struct nvmet_port *port;
-  1863		u16 portid;
-  1864		u32 i;
-  1865	
-  1866		if (kstrtou16(name, 0, &portid))
-  1867			return ERR_PTR(-EINVAL);
-  1868	
-  1869		port = kzalloc(sizeof(*port), GFP_KERNEL);
-  1870		if (!port)
-  1871			return ERR_PTR(-ENOMEM);
-  1872	
-  1873		port->ana_state = kcalloc(NVMET_MAX_ANAGRPS + 1,
-  1874				sizeof(*port->ana_state), GFP_KERNEL);
-  1875		if (!port->ana_state) {
-  1876			kfree(port);
-  1877			return ERR_PTR(-ENOMEM);
-  1878		}
-  1879	
-  1880		if (nvme_keyring_id()) {
-> 1881			port->keyring = key_lookup(nvme_keyring_id());
-  1882			if (IS_ERR(port->keyring)) {
-  1883				pr_warn("NVMe keyring not available, disabling TLS\n");
-  1884				port->keyring = NULL;
-  1885			}
-  1886		}
-  1887	
-  1888		for (i = 1; i <= NVMET_MAX_ANAGRPS; i++) {
-  1889			if (i == NVMET_DEFAULT_ANA_GRPID)
-  1890				port->ana_state[1] = NVME_ANA_OPTIMIZED;
-  1891			else
-  1892				port->ana_state[i] = NVME_ANA_INACCESSIBLE;
-  1893		}
-  1894	
-  1895		list_add(&port->global_entry, &nvmet_ports_list);
-  1896	
-  1897		INIT_LIST_HEAD(&port->entry);
-  1898		INIT_LIST_HEAD(&port->subsystems);
-  1899		INIT_LIST_HEAD(&port->referrals);
-  1900		port->inline_data_size = -1;	/* < 0 == let the transport choose */
-  1901	
-  1902		port->disc_addr.portid = cpu_to_le16(portid);
-  1903		port->disc_addr.adrfam = NVMF_ADDR_FAMILY_MAX;
-  1904		port->disc_addr.treq = NVMF_TREQ_DISABLE_SQFLOW;
-  1905		config_group_init_type_name(&port->group, name, &nvmet_port_type);
-  1906	
-  1907		config_group_init_type_name(&port->subsys_group,
-  1908				"subsystems", &nvmet_port_subsys_type);
-  1909		configfs_add_default_group(&port->subsys_group, &port->group);
-  1910	
-  1911		config_group_init_type_name(&port->referrals_group,
-  1912				"referrals", &nvmet_referrals_type);
-  1913		configfs_add_default_group(&port->referrals_group, &port->group);
-  1914	
-  1915		config_group_init_type_name(&port->ana_groups_group,
-  1916				"ana_groups", &nvmet_ana_groups_type);
-  1917		configfs_add_default_group(&port->ana_groups_group, &port->group);
-  1918	
-  1919		port->ana_default_group.port = port;
-  1920		port->ana_default_group.grpid = NVMET_DEFAULT_ANA_GRPID;
-  1921		config_group_init_type_name(&port->ana_default_group.group,
-  1922				__stringify(NVMET_DEFAULT_ANA_GRPID),
-  1923				&nvmet_ana_group_type);
-  1924		configfs_add_default_group(&port->ana_default_group.group,
-  1925				&port->ana_groups_group);
-  1926	
-  1927		return &port->group;
-  1928	}
-  1929	
+Does it pass without the series? I tried to write it to be
+arch-agnostic, but I never tested it on RISC-V. It's very possible that
+test needs adjusting for the architecture. Besides the label horrors,
+the use of __builtin_frame_address may not work there either...
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
