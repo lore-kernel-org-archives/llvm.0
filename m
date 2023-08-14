@@ -1,44 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D9AA925;
-	Mon, 14 Aug 2023 23:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692055241; x=1723591241;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6R3IlU4037oAS239BEeiCZLjKRvvjdnnateL0pbLzho=;
-  b=grFmhi084z4HQC3SapjcFNrpAbj1XVtH4JS4pxzRf9fiyTHj5S31/bQh
-   lknpXKcy77mtHjHkZS4T+AJnWg+OCza77PC+v7qDIxXAbNDjXMcYq3St7
-   AXsQVj5RtYEgb+QuId1IhtF0ze+0iysocP192p0kKJ+2ytIEzI+ZCfsVZ
-   kVp4CFOV4894UGSm+nysjN98jyv4lJRfl47ZqEgDcRAWfVN1IIpurMp0w
-   yIRtelKEURfZB43GF7wYXstzkeAVJ6PrfHy466nE07GjrmWb8ULfe8fI0
-   Ssz5prABl/Rvfkkfkld2mcDrHxM72Br9i50x8bQqifrn9d/mV+5sSmmOg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="436051468"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="436051468"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 16:20:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="823641357"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="823641357"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Aug 2023 16:20:38 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qVgrV-0000Ut-04;
-	Mon, 14 Aug 2023 23:20:37 +0000
-Date: Tue, 15 Aug 2023 07:20:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tony Lindgren <tony@atomide.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-omap@vger.kernel.org, Dhruva Gole <d-gole@ti.com>
-Subject: [tmlind-omap:omap-for-v6.6/ti-sysc 3/5]
- drivers/bus/ti-sysc.c:3107:19: warning: cast to smaller integer type 'enum
- sysc_soc' from 'const void *'
-Message-ID: <202308150723.ziuGCdM3-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28729A925
+	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 23:21:44 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1bdb801c667so29152245ad.1
+        for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 16:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1692055304; x=1692660104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zDgteNssk7bldWg1S9G58zrFCCsMMUu+wXIpurB+HOk=;
+        b=f0Ak5IcltrDFdkQCDY8pIN2Q+ApDStplykSnlDyPTlJ5hOzrqc9PWJCJjuzY2a8RJ+
+         g8xVrAL3nMB+kfcdXe60p9qKEe3GlaSBVzwWcARsfm76j54TnQAq99JEPb1dmu6zAVNx
+         W/EJPZgrIcJBBWdgJxFVqDLwjpYw5EdzIukns=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692055304; x=1692660104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zDgteNssk7bldWg1S9G58zrFCCsMMUu+wXIpurB+HOk=;
+        b=dM7UoIa4un8ir/6ei1CTJD9pYKX3OE4jg8e2a13sw+ZtPP8shkZLKKOrtytPsbdeV8
+         pryHvQGIEnOLZGeAiqdkV0+yJl9N13oSG0PRTmZIrwnXywgJqt2j6wvv2KKiR+veXO6h
+         95gp7wlcbSEGhF6pki6eSqAKU0gelSrKGtUNOFUe/pIn4h8VmWjEsDK2rRJqEMy1cD0b
+         ODhhuPjCvSYHjqXd1YVac6tTziDBrXiR15Dg5JuMniJ3pXHtD9ZxSZCgrJyb3pD7huE8
+         JbIC1k6N5/wOtpbewNc46qXqlGvdN7seBY5MmhXWEBB/HLvKbW7EPfjGlIWEKyo5QlCa
+         W4Xg==
+X-Gm-Message-State: AOJu0YymrpruNSCWGtj/qG0A/T+B7pqFxj6ZYuRll6p0SQu0v2M40NDn
+	+qFjFZB5+aZeT69pkIVNT5BiOg==
+X-Google-Smtp-Source: AGHT+IHSGL8C59m4WskNFhunf6W+tABRL2W8v1BYu6fmf1+j7vX3+mrOp1twYX7SxuE7dHDeO2B60Q==
+X-Received: by 2002:a17:902:e802:b0:1bc:422a:b9fd with SMTP id u2-20020a170902e80200b001bc422ab9fdmr13245083plg.13.1692055304507;
+        Mon, 14 Aug 2023 16:21:44 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id c13-20020a170902d48d00b001bdcd4b1616sm5310621plg.260.2023.08.14.16.21.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 16:21:43 -0700 (PDT)
+Date: Mon, 14 Aug 2023 16:21:43 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Marco Elver <elver@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	llvm@lists.linux.dev, Dmitry Vyukov <dvyukov@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] compiler_types: Introduce the Clang
+ __preserve_most function attribute
+Message-ID: <202308141620.E16B93279@keescook>
+References: <20230811151847.1594958-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,130 +72,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230811151847.1594958-1-elver@google.com>
 
-Hi Tony,
+On Fri, Aug 11, 2023 at 05:18:38PM +0200, Marco Elver wrote:
+> [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
+> convention of a function. The preserve_most calling convention attempts
+> to make the code in the caller as unintrusive as possible. This
+> convention behaves identically to the C calling convention on how
+> arguments and return values are passed, but it uses a different set of
+> caller/callee-saved registers. This alleviates the burden of saving and
+> recovering a large register set before and after the call in the caller.
+> If the arguments are passed in callee-saved registers, then they will be
+> preserved by the callee across the call. This doesn't apply for values
+> returned in callee-saved registers.
+> 
+>  * On X86-64 the callee preserves all general purpose registers, except
+>    for R11. R11 can be used as a scratch register. Floating-point
+>    registers (XMMs/YMMs) are not preserved and need to be saved by the
+>    caller.
+> 
+>  * On AArch64 the callee preserve all general purpose registers, except
+>    x0-X8 and X16-X18."
+> 
+> [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
+> 
+> Introduce the attribute to compiler_types.h as __preserve_most.
+> 
+> Use of this attribute results in better code generation for calls to
+> very rarely called functions, such as error-reporting functions, or
+> rarely executed slow paths.
+> 
+> Beware that the attribute conflicts with instrumentation calls inserted
+> on function entry which do not use __preserve_most themselves. Notably,
+> function tracing which assumes the normal C calling convention for the
+> given architecture.  Where the attribute is supported, __preserve_most
+> will imply notrace. It is recommended to restrict use of the attribute
+> to functions that should or already disable tracing.
+> 
+> Note: The additional preprocessor check against architecture should not
+> be necessary if __has_attribute() only returns true where supported;
+> also see https://github.com/ClangBuiltLinux/linux/issues/1908. But until
+> __has_attribute() does the right thing, we also guard by known-supported
+> architectures to avoid build warnings on other architectures.
+> 
+> The attribute may be supported by a future GCC version (see
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110899).
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-First bad commit (maybe != root cause):
+Should this go via -mm, the hardening tree, or something else? I'm happy
+to carry it if no one else wants it?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git omap-for-v6.6/ti-sysc
-head:   40a4f49cd32dbc641c706215c1fa6c5bd051428c
-commit: 063dc0622705623b3a70739b9f33d5ea019882e6 [3/5] bus: ti-sysc: Build driver for TI K3 SoCs
-config: arm64-randconfig-r006-20230815 (https://download.01.org/0day-ci/archive/20230815/202308150723.ziuGCdM3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230815/202308150723.ziuGCdM3-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308150723.ziuGCdM3-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/bus/ti-sysc.c:3107:19: warning: cast to smaller integer type 'enum sysc_soc' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-    3107 |                 sysc_soc->soc = (enum sysc_soc)match->data;
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +3107 drivers/bus/ti-sysc.c
-
-feaa8baee82aba Tony Lindgren     2020-02-24  3073  
-feaa8baee82aba Tony Lindgren     2020-02-24  3074  /*
-9d881361206ebc Tony Lindgren     2021-09-21  3075   * One time init to detect the booted SoC, disable unavailable features
-9d881361206ebc Tony Lindgren     2021-09-21  3076   * and initialize list for optional cpu_pm notifier.
-9d881361206ebc Tony Lindgren     2021-09-21  3077   *
-feaa8baee82aba Tony Lindgren     2020-02-24  3078   * Note that we initialize static data shared across all ti-sysc instances
-feaa8baee82aba Tony Lindgren     2020-02-24  3079   * so ddata is only used for SoC type. This can be called from module_init
-feaa8baee82aba Tony Lindgren     2020-02-24  3080   * once we no longer need to rely on platform data.
-feaa8baee82aba Tony Lindgren     2020-02-24  3081   */
-9d881361206ebc Tony Lindgren     2021-09-21  3082  static int sysc_init_static_data(struct sysc *ddata)
-feaa8baee82aba Tony Lindgren     2020-02-24  3083  {
-feaa8baee82aba Tony Lindgren     2020-02-24  3084  	const struct soc_device_attribute *match;
-feaa8baee82aba Tony Lindgren     2020-02-24  3085  	struct ti_sysc_platform_data *pdata;
-feaa8baee82aba Tony Lindgren     2020-02-24  3086  	unsigned long features = 0;
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3087  	struct device_node *np;
-feaa8baee82aba Tony Lindgren     2020-02-24  3088  
-feaa8baee82aba Tony Lindgren     2020-02-24  3089  	if (sysc_soc)
-feaa8baee82aba Tony Lindgren     2020-02-24  3090  		return 0;
-feaa8baee82aba Tony Lindgren     2020-02-24  3091  
-feaa8baee82aba Tony Lindgren     2020-02-24  3092  	sysc_soc = kzalloc(sizeof(*sysc_soc), GFP_KERNEL);
-feaa8baee82aba Tony Lindgren     2020-02-24  3093  	if (!sysc_soc)
-feaa8baee82aba Tony Lindgren     2020-02-24  3094  		return -ENOMEM;
-feaa8baee82aba Tony Lindgren     2020-02-24  3095  
-feaa8baee82aba Tony Lindgren     2020-02-24  3096  	mutex_init(&sysc_soc->list_lock);
-feaa8baee82aba Tony Lindgren     2020-02-24  3097  	INIT_LIST_HEAD(&sysc_soc->disabled_modules);
-9d881361206ebc Tony Lindgren     2021-09-21  3098  	INIT_LIST_HEAD(&sysc_soc->restored_modules);
-feaa8baee82aba Tony Lindgren     2020-02-24  3099  	sysc_soc->general_purpose = true;
-feaa8baee82aba Tony Lindgren     2020-02-24  3100  
-feaa8baee82aba Tony Lindgren     2020-02-24  3101  	pdata = dev_get_platdata(ddata->dev);
-feaa8baee82aba Tony Lindgren     2020-02-24  3102  	if (pdata && pdata->soc_type_gp)
-feaa8baee82aba Tony Lindgren     2020-02-24  3103  		sysc_soc->general_purpose = pdata->soc_type_gp();
-feaa8baee82aba Tony Lindgren     2020-02-24  3104  
-feaa8baee82aba Tony Lindgren     2020-02-24  3105  	match = soc_device_match(sysc_soc_match);
-feaa8baee82aba Tony Lindgren     2020-02-24  3106  	if (match && match->data)
-e1e1e9bb9d943e Tony Lindgren     2023-08-04 @3107  		sysc_soc->soc = (enum sysc_soc)match->data;
-feaa8baee82aba Tony Lindgren     2020-02-24  3108  
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3109  	/*
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3110  	 * Check and warn about possible old incomplete dtb. We now want to see
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3111  	 * simple-pm-bus instead of simple-bus in the dtb for genpd using SoCs.
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3112  	 */
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3113  	switch (sysc_soc->soc) {
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3114  	case SOC_AM3:
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3115  	case SOC_AM4:
-4adcf4c28f6dc1 Tony Lindgren     2021-03-12  3116  	case SOC_4430 ... SOC_4470:
-4adcf4c28f6dc1 Tony Lindgren     2021-03-12  3117  	case SOC_5430:
-4adcf4c28f6dc1 Tony Lindgren     2021-03-12  3118  	case SOC_DRA7:
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3119  		np = of_find_node_by_path("/ocp");
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3120  		WARN_ONCE(np && of_device_is_compatible(np, "simple-bus"),
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3121  			  "ti-sysc: Incomplete old dtb, please update\n");
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3122  		break;
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3123  	default:
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3124  		break;
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3125  	}
-5f7259a578e9c6 Tony Lindgren     2021-03-08  3126  
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3127  	/* Ignore devices that are not available on HS and EMU SoCs */
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3128  	if (!sysc_soc->general_purpose) {
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3129  		switch (sysc_soc->soc) {
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3130  		case SOC_3430 ... SOC_3630:
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3131  			sysc_add_disabled(0x48304000);	/* timer12 */
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3132  			break;
-a6d90e9f22328f Kevin Hilman      2021-07-20  3133  		case SOC_AM3:
-a6d90e9f22328f Kevin Hilman      2021-07-20  3134  			sysc_add_disabled(0x48310000);  /* rng */
-e879f855e590b4 Nathan Chancellor 2021-08-15  3135  			break;
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3136  		default:
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3137  			break;
-52fbb5aabb5cf6 Yang Li           2021-02-02  3138  		}
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3139  	}
-4bba9bf08ff41d Tony Lindgren     2020-05-07  3140  
-feaa8baee82aba Tony Lindgren     2020-02-24  3141  	match = soc_device_match(sysc_soc_feat_match);
-feaa8baee82aba Tony Lindgren     2020-02-24  3142  	if (!match)
-feaa8baee82aba Tony Lindgren     2020-02-24  3143  		return 0;
-feaa8baee82aba Tony Lindgren     2020-02-24  3144  
-feaa8baee82aba Tony Lindgren     2020-02-24  3145  	if (match->data)
-feaa8baee82aba Tony Lindgren     2020-02-24  3146  		features = (unsigned long)match->data;
-feaa8baee82aba Tony Lindgren     2020-02-24  3147  
-feaa8baee82aba Tony Lindgren     2020-02-24  3148  	/*
-feaa8baee82aba Tony Lindgren     2020-02-24  3149  	 * Add disabled devices to the list based on the module base.
-feaa8baee82aba Tony Lindgren     2020-02-24  3150  	 * Note that this must be done before we attempt to access the
-feaa8baee82aba Tony Lindgren     2020-02-24  3151  	 * device and have module revision checks working.
-feaa8baee82aba Tony Lindgren     2020-02-24  3152  	 */
-feaa8baee82aba Tony Lindgren     2020-02-24  3153  	if (features & DIS_ISP)
-feaa8baee82aba Tony Lindgren     2020-02-24  3154  		sysc_add_disabled(0x480bd400);
-feaa8baee82aba Tony Lindgren     2020-02-24  3155  	if (features & DIS_IVA)
-feaa8baee82aba Tony Lindgren     2020-02-24  3156  		sysc_add_disabled(0x5d000000);
-feaa8baee82aba Tony Lindgren     2020-02-24  3157  	if (features & DIS_SGX)
-feaa8baee82aba Tony Lindgren     2020-02-24  3158  		sysc_add_disabled(0x50000000);
-feaa8baee82aba Tony Lindgren     2020-02-24  3159  
-feaa8baee82aba Tony Lindgren     2020-02-24  3160  	return 0;
-feaa8baee82aba Tony Lindgren     2020-02-24  3161  }
-feaa8baee82aba Tony Lindgren     2020-02-24  3162  
-
-:::::: The code at line 3107 was first introduced by commit
-:::::: e1e1e9bb9d943ec690670a609a5f660ca10eaf85 bus: ti-sysc: Fix build warning for 64-bit build
-
-:::::: TO: Tony Lindgren <tony@atomide.com>
-:::::: CC: Tony Lindgren <tony@atomide.com>
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
