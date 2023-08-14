@@ -1,119 +1,292 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7321842
-	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 07:40:28 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 8CB125C0125;
-	Mon, 14 Aug 2023 03:40:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 14 Aug 2023 03:40:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1691998827; x=1692085227; bh=zhIr+YFny3Ax+nBYjcGNtxMTlKdI2p4qsam
-	OFHm/fmU=; b=lQyzt8ZLnsC5Y4UD4rcO9dWLQemDrz7il2Mxuh11MQmaHw+tEBa
-	WZDt4/Dez0EgliHQKAHWxE4olKashOAKJ6eUkT6FdeyTLJECyYPyhtI7i4Gqe5nF
-	hXE6HrnSoZ6cNhxVj0CHKKmbmxhXFP2ByD0RE+1S1kRlkWJJZqH9l30gc508ss8m
-	Fg1u3TpiwcMJJTDRRJr0uQBmB0QKwNWirPjXPTrv+Z3XSDNBykO6ibnWw6zyMfz4
-	7h0n5DQtmxjoUKRmRBuZcbHmWJz/yrIUe0B38slYIg2GDnRq3r3t1G+84c91JRXI
-	1sLrN+lAiojvZUzO0Ry+J6LnON2gDb4OI4g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1691998827; x=1692085227; bh=zhIr+YFny3Ax+nBYjcGNtxMTlKdI2p4qsam
-	OFHm/fmU=; b=ocFr0qDmiS9E5/sOvsP5cpWIFi/jWAZeosdutO/nXN7USaZsaWk
-	y58ZvbAPa3S7o+UGyrYhowIRb1sAuz/9U+GsjxUJQAyE/XayHiVEvwJwgnVvEmQe
-	k4FTPfXsOXc+nz+Xe2sNy0jtI2dz40sA7SfVHT84lGO/8bNHR9L4vZ/9gyp21Xsp
-	2ZKzxntQsMuRqJ1s6VUUbASKVBdXE42/CG5RiftQajbPvvPg5q5ofhTYxqlTmL/s
-	WTIoamvXGGQwqbbhr6ON10dpRo291lnWNwmp8/tZ5NaKykQGuzYb+KZlwNxg3uOA
-	929mGr7RtvjAA9TdObEckQhGXE38FFv5J9w==
-X-ME-Sender: <xms:a9rZZJxVYOZsaqZENcyzopD3CtKe5tFkIQUZg3rPO6d2SA7gluVCeg>
-    <xme:a9rZZJS3tB-x7dcIKYmjO4rPBmWW5L3Ywr495ocjCW0xbx-Wy2KzdFX7nHBuTyuD1
-    jsnc75lyCZWQgQrbGE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddtfedguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepfffhvdejieelteeljeekgeegieevheelueehieehkeehgeekhfdtleek
-    teevtefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:a9rZZDV6sWgYeiJIG9l0H429IJUdAOX6rpdnSlDQnxUlYBUaqOP3jg>
-    <xmx:a9rZZLgSHOuGLrTQOY2l4NjhImeSCbZbevftVnV5RGOhsPFjsxBNDg>
-    <xmx:a9rZZLAMqWGDYsiYycxVcCVfogs40BAJLvSqK8N1YcTw9K_df-yVRw>
-    <xmx:a9rZZLzDpj7cOzLpPrQRj3-TU_ZNHS5nYbeyG41sbHaf5PlCLw4-tg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E93C5B60089; Mon, 14 Aug 2023 03:40:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66321842;
+	Mon, 14 Aug 2023 07:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0E5C433C8;
+	Mon, 14 Aug 2023 07:45:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691999120;
+	bh=UKxzW+x4Bhe85PmCQpAj1NUbjaWZu2yOxA+zzBepsrE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=U+fU3YxMeUFcSIo7V3KmCJ2QTEc3AnZCdoNWjSghgVde7qgMy8l/dQzOTbk/ntBDP
+	 3KTqYUep+CFqdzcV07x8MUYit4roChSFCHX6BgrPdiuEkcuCgyDRI/27/95in9IG/R
+	 et6Rjp00/KXHufGqRtds2Abh1OPpVrCzcc+ivyhDtw1hSt/Ww/WaR1GZ6iy6zTrcw1
+	 EWrFsr1nRABg/B8Gk0YSJwHYN4pDoWwovImdPgnVoY/8yFg7hB0zLZ8azajnGM2qp7
+	 AByvzbPvevMO2D6vwg8gPSO0W8bbHCxQ9Xra2yTG02aGO2B0ve32Ry+tWrtqqIPcjn
+	 cfHJ2sd0PE8qw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Ariel Elior <aelior@marvell.com>,
+	Manish Chopra <manishc@marvell.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Yuval Mintz <Yuval.Mintz@qlogic.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] qed: remove unused 'resp_size' calculation
+Date: Mon, 14 Aug 2023 09:45:03 +0200
+Message-Id: <20230814074512.1067715-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <075ff937-645e-41fe-87cd-0fa878dd6408@app.fastmail.com>
-In-Reply-To: <7aa516e1.1dfc.189f22149f6.Coremail.xingtong_wu@163.com>
-References: <20230811130948.2211800-1-arnd@kernel.org>
- <97764bad-7091-e9ed-6f49-d31861fc622f@linux.intel.com>
- <ef7d94a4-9f65-47fb-906a-4fed4480d020@app.fastmail.com>
- <69fbdb7bb4d048bc9c5eb756bbf87f56@siemens.com>
- <7aa516e1.1dfc.189f22149f6.Coremail.xingtong_wu@163.com>
-Date: Mon, 14 Aug 2023 09:40:04 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "xingtong.wu" <xingtong_wu@163.com>
-Cc: "xingtong.wu" <xingtong.wu@siemens.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "Arnd Bergmann" <arnd@kernel.org>, "Hans de Goede" <hdegoede@redhat.com>,
- "Mark Gross" <markgross@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Lee Jones" <lee@kernel.org>, platform-driver-x86@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- gerd.haeussler.ext@siemens.com, tobias.schaffner@siemens.com
-Subject: Re: FW: [PATCH] platform/x86/siemens: simatic-ipc: fix nonsensical condition
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 14, 2023, at 05:40, xingtong.wu wrote:
->>From: Arnd Bergmann <arnd@arndb.de>=20
->
->>Sent: Friday, August 11, 2023 11:02 PM
->>
->>Ok, I see. I missed those as there is hasn't been a new linux-next in =
-a few days.
->>
->>I suppose this one is also fixed then?
->>
->>WARNING: unmet direct dependencies detected for P2SB
->>  Depends on [n]: PCI [=3Dn] && X86 [=3Dy]
->>  Selected by [m]:
->>  - SIEMENS_SIMATIC_IPC_WDT [=3Dm] && WATCHDOG [=3Dy] && SIEMENS_SIMAT=
-IC_IPC [=3Dy]
->>drivers/platform/x86/p2sb.c:68:9: error: call to undeclared function '=
-pci_scan_single_device'; ISO C99 and later do not support implicit funct=
-ion declarations [-Wimplicit-function-declaration]
->
-> I=E2=80=99m pretty sure your .config file is error to compile the kern=
-el,
-> you must have changed the .config file manually, and there will be no
-> possibility that option SIEMENS_SIMATIC_IPC is [y] while PCI is [n].
-> reason:
-> https://elixir.bootlin.com/linux/v6.5-rc6/source/drivers/platform/x86/=
-Kconfig#L1079
->
-> if the PCI option is [n], the "p2sb.c" should never compile pass.
->
-> I suggest you make menuconfig to build kernel and check your .config
-> carefully.
+From: Arnd Bergmann <arnd@arndb.de>
 
-It was broken in linux-next by commit b72da71ce24b0 ("platform/x86:
-simatic-ipc: drop PCI runtime depends and header"), I sent a fix now.
+Newer versions of clang warn about this variable being assigned but
+never used:
 
-    Arnd
+drivers/net/ethernet/qlogic/qed/qed_vf.c:63:67: error: parameter 'resp_size' set but not used [-Werror,-Wunused-but-set-parameter]
+
+There is no indication in the git history on how this was ever
+meant to be used, so just remove the entire calculation and argument
+passing for it to avoid the warning.
+
+Fixes: 1408cc1fa48c5 ("qed: Introduce VFs")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/ethernet/qlogic/qed/qed_vf.c | 45 +++++++++---------------
+ 1 file changed, 17 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.c b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+index 7b0e390c0b07d..0e265ed1f501c 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_vf.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+@@ -60,7 +60,7 @@ static void qed_vf_pf_req_end(struct qed_hwfn *p_hwfn, int req_status)
+ #define QED_VF_CHANNEL_MSLEEP_ITERATIONS	10
+ #define QED_VF_CHANNEL_MSLEEP_DELAY		25
+ 
+-static int qed_send_msg2pf(struct qed_hwfn *p_hwfn, u8 *done, u32 resp_size)
++static int qed_send_msg2pf(struct qed_hwfn *p_hwfn, u8 *done)
+ {
+ 	union vfpf_tlvs *p_req = p_hwfn->vf_iov_info->vf2pf_request;
+ 	struct ustorm_trigger_vf_zone trigger;
+@@ -72,9 +72,6 @@ static int qed_send_msg2pf(struct qed_hwfn *p_hwfn, u8 *done, u32 resp_size)
+ 	/* output tlvs list */
+ 	qed_dp_tlv_list(p_hwfn, p_req);
+ 
+-	/* need to add the END TLV to the message size */
+-	resp_size += sizeof(struct channel_list_end_tlv);
+-
+ 	/* Send TLVs over HW channel */
+ 	memset(&trigger, 0, sizeof(struct ustorm_trigger_vf_zone));
+ 	trigger.vf_pf_msg_valid = 1;
+@@ -172,7 +169,7 @@ static int _qed_vf_pf_release(struct qed_hwfn *p_hwfn, bool b_final)
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 
+ 	if (!rc && resp->hdr.status != PFVF_STATUS_SUCCESS)
+ 		rc = -EAGAIN;
+@@ -301,7 +298,7 @@ static int qed_vf_pf_acquire(struct qed_hwfn *p_hwfn)
+ 		memset(p_iov->pf2vf_reply, 0, sizeof(union pfvf_tlvs));
+ 
+ 		/* send acquire request */
+-		rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++		rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 
+ 		/* Re-try acquire in case of vf-pf hw channel timeout */
+ 		if (retry_cnt && rc == -EBUSY) {
+@@ -705,7 +702,7 @@ int qed_vf_pf_tunnel_param_update(struct qed_hwfn *p_hwfn,
+ 		    sizeof(struct channel_list_end_tlv));
+ 
+ 	p_resp = &p_iov->pf2vf_reply->tunn_param_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status, sizeof(*p_resp));
++	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status);
+ 
+ 	if (rc)
+ 		goto exit;
+@@ -772,7 +769,7 @@ qed_vf_pf_rxq_start(struct qed_hwfn *p_hwfn,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->queue_start;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -822,7 +819,7 @@ int qed_vf_pf_rxq_stop(struct qed_hwfn *p_hwfn,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -867,7 +864,7 @@ qed_vf_pf_txq_start(struct qed_hwfn *p_hwfn,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->queue_start;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -918,7 +915,7 @@ int qed_vf_pf_txq_stop(struct qed_hwfn *p_hwfn, struct qed_queue_cid *p_cid)
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -968,7 +965,7 @@ int qed_vf_pf_vport_start(struct qed_hwfn *p_hwfn,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -997,7 +994,7 @@ int qed_vf_pf_vport_stop(struct qed_hwfn *p_hwfn)
+ 	qed_add_tlv(p_hwfn, &p_iov->offset,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -1075,12 +1072,10 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 	struct vfpf_vport_update_tlv *req;
+ 	struct pfvf_def_resp_tlv *resp;
+ 	u8 update_rx, update_tx;
+-	u32 resp_size = 0;
+ 	u16 size, tlv;
+ 	int rc;
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	resp_size = sizeof(*resp);
+ 
+ 	update_rx = p_params->update_vport_active_rx_flg;
+ 	update_tx = p_params->update_vport_active_tx_flg;
+@@ -1096,7 +1091,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 		p_act_tlv = qed_add_tlv(p_hwfn, &p_iov->offset,
+ 					CHANNEL_TLV_VPORT_UPDATE_ACTIVATE,
+ 					size);
+-		resp_size += sizeof(struct pfvf_def_resp_tlv);
+ 
+ 		if (update_rx) {
+ 			p_act_tlv->update_rx = update_rx;
+@@ -1116,7 +1110,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 		tlv = CHANNEL_TLV_VPORT_UPDATE_TX_SWITCH;
+ 		p_tx_switch_tlv = qed_add_tlv(p_hwfn, &p_iov->offset,
+ 					      tlv, size);
+-		resp_size += sizeof(struct pfvf_def_resp_tlv);
+ 
+ 		p_tx_switch_tlv->tx_switching = p_params->tx_switching_flg;
+ 	}
+@@ -1127,7 +1120,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 		size = sizeof(struct vfpf_vport_update_mcast_bin_tlv);
+ 		p_mcast_tlv = qed_add_tlv(p_hwfn, &p_iov->offset,
+ 					  CHANNEL_TLV_VPORT_UPDATE_MCAST, size);
+-		resp_size += sizeof(struct pfvf_def_resp_tlv);
+ 
+ 		memcpy(p_mcast_tlv->bins, p_params->bins,
+ 		       sizeof(u32) * ETH_MULTICAST_MAC_BINS_IN_REGS);
+@@ -1142,7 +1134,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 		tlv = CHANNEL_TLV_VPORT_UPDATE_ACCEPT_PARAM;
+ 		size = sizeof(struct vfpf_vport_update_accept_param_tlv);
+ 		p_accept_tlv = qed_add_tlv(p_hwfn, &p_iov->offset, tlv, size);
+-		resp_size += sizeof(struct pfvf_def_resp_tlv);
+ 
+ 		if (update_rx) {
+ 			p_accept_tlv->update_rx_mode = update_rx;
+@@ -1166,7 +1157,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 		p_rss_tlv = qed_add_tlv(p_hwfn,
+ 					&p_iov->offset,
+ 					CHANNEL_TLV_VPORT_UPDATE_RSS, size);
+-		resp_size += sizeof(struct pfvf_def_resp_tlv);
+ 
+ 		if (rss_params->update_rss_config)
+ 			p_rss_tlv->update_rss_flags |=
+@@ -1203,7 +1193,6 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 		tlv = CHANNEL_TLV_VPORT_UPDATE_ACCEPT_ANY_VLAN;
+ 		p_any_vlan_tlv = qed_add_tlv(p_hwfn, &p_iov->offset, tlv, size);
+ 
+-		resp_size += sizeof(struct pfvf_def_resp_tlv);
+ 		p_any_vlan_tlv->accept_any_vlan = p_params->accept_any_vlan;
+ 		p_any_vlan_tlv->update_accept_any_vlan_flg =
+ 		    p_params->update_accept_any_vlan_flg;
+@@ -1213,7 +1202,7 @@ int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
+ 	qed_add_tlv(p_hwfn, &p_iov->offset,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, resp_size);
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -1245,7 +1234,7 @@ int qed_vf_pf_reset(struct qed_hwfn *p_hwfn)
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -1303,7 +1292,7 @@ int qed_vf_pf_filter_ucast(struct qed_hwfn *p_hwfn,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -1332,7 +1321,7 @@ int qed_vf_pf_int_cleanup(struct qed_hwfn *p_hwfn)
+ 	qed_add_tlv(p_hwfn, &p_iov->offset,
+ 		    CHANNEL_TLV_LIST_END, sizeof(struct channel_list_end_tlv));
+ 
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -1364,7 +1353,7 @@ int qed_vf_pf_get_coalesce(struct qed_hwfn *p_hwfn,
+ 		    sizeof(struct channel_list_end_tlv));
+ 	resp = &p_iov->pf2vf_reply->read_coal_resp;
+ 
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+@@ -1402,7 +1391,7 @@ qed_vf_pf_bulletin_update_mac(struct qed_hwfn *p_hwfn,
+ 		    sizeof(struct channel_list_end_tlv));
+ 
+ 	p_resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status, sizeof(*p_resp));
++	rc = qed_send_msg2pf(p_hwfn, &p_resp->hdr.status);
+ 	qed_vf_pf_req_end(p_hwfn, rc);
+ 	return rc;
+ }
+@@ -1433,7 +1422,7 @@ qed_vf_pf_set_coalesce(struct qed_hwfn *p_hwfn,
+ 		    sizeof(struct channel_list_end_tlv));
+ 
+ 	resp = &p_iov->pf2vf_reply->default_resp;
+-	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status, sizeof(*resp));
++	rc = qed_send_msg2pf(p_hwfn, &resp->hdr.status);
+ 	if (rc)
+ 		goto exit;
+ 
+-- 
+2.39.2
+
