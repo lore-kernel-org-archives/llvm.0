@@ -1,109 +1,103 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741E0DDB7
-	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 22:02:14 +0000 (UTC)
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6459a873237so13729156d6.0
-        for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 15:02:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49BE8100AA
+	for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 22:11:33 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d6411f96b35so3759448276.1
+        for <llvm@lists.linux.dev>; Mon, 14 Aug 2023 15:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692050533; x=1692655333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4mwYC5y1w73XOQ+JQk9ab6pGT6BUQ0RtEcIvzv4bMiU=;
-        b=dQh/oXzkAnSIrtDNcO6e5Rb9npBij+9Md2DDJpcMtgE5V8lMFH5fyRAzbjpcFej7ny
-         cX6f8nkjPkuSyNj5VM+zEv3PTAUz1cC+taVXXaoZ0oS3wMR3Veesfh8jNGbx3l8U9MGF
-         Dpxwc9pmNuy4v4KqYuUXV75tqbymxCExp0+zuG8YJ4erqXWQmWTUdjNvCCZkyDP0NgeY
-         X0u4oa0AIVXaRRaVlJZWADjWzeknVdpAHD6sTaG8BzJoBAIcFze2JrJgFesxQULRYkzI
-         smkBvJOcq9uvREbJklJeMrJQ8VEQ0TnnG2TwXZFtC2AKVNL27f2ThO/PQeAHZ9Xl9H5/
-         zDag==
+        d=google.com; s=20221208; t=1692051092; x=1692655892;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CMcdRD24atYHQ4ASbvndMrLmRw1xxWMNBnFpR/mRjlk=;
+        b=HuqgTRKoklAsdTv01+eJc2nEa8jvomwmVl1Dw8TZU5BWfw9XWQSaI6zrx1ldt1uleL
+         DL1DM5ofxEVUFClCMFYhN4S7AHSKFQyDS5c89+UQACDbUfjhjebi8MKjMZT/dqSqLrmp
+         r+tKKjojKe4LehRwglg/xrVMe1SR2w04+QM+UkJUsjmylvSbAfmKBsa6F429r2Ot7Cwt
+         jjnJPYNk622Xm9zldrGQOd+OHgXNb946EGkZGni8hc4bmcS2ID/VhtdHCosV6NzhmTUp
+         83BonW5fwbtL/KkXUrdhF1kOC3rHrU7Nz7fBesTse77Zvxiq6DOQ0zH2lolhnz1vNo2Y
+         wonQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692050533; x=1692655333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4mwYC5y1w73XOQ+JQk9ab6pGT6BUQ0RtEcIvzv4bMiU=;
-        b=AQa1dfzMbbxhzglHpHyPzZUKbDykDOi76wLGiOKJb0/Ko11VoztmlPt4E8pAqqUufb
-         j9Ss58WQ6QWezb3wHtc/WKVy+EeNLOKgM7XYV/oPWDZn5jH7lapNzmOYldPLDPbJLGiK
-         b3HSn+b22cBra+IBNhZyEPNE+oCL0IOwYQowCHUn9Tw0NsFisCRedEZ3eafZfftwuekP
-         urOd2OXfoWYG1r0MlSlMHxXoDgL2LpmlYwIa+pH5rlg39pTe3ds8mXDMYIHDxwSnXMp/
-         y6cXY5gfFY4tqxs2f8X9q/3D+ozCw1lBFpqivEDJJIemKBmN16h972XySEWACLU48aZk
-         jBiA==
-X-Gm-Message-State: AOJu0YwQkKMj9ryHhdpWtYiEF2DW9wYWM2ZoDSRIWHrY8DWBwvCRuVfv
-	fP2hP4DTQwrYl5AJnrEIZH8W7+3HjrjjdQ3JLWWbvQ==
-X-Google-Smtp-Source: AGHT+IH6wivOZHs37QX+AYcNTOVvJhfdvZs2Fe6L0Y0X/5iqhnofg4KtZ94BhgTJQ2RzI2U8jlPbdkhVTSh/ljoySZ4=
-X-Received: by 2002:a0c:f444:0:b0:647:27ee:4853 with SMTP id
- h4-20020a0cf444000000b0064727ee4853mr2741059qvm.5.1692050533527; Mon, 14 Aug
- 2023 15:02:13 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692051092; x=1692655892;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CMcdRD24atYHQ4ASbvndMrLmRw1xxWMNBnFpR/mRjlk=;
+        b=bZ82exqylC8vNJmwhZfuSPnsvFh9pN5IBmC7VtStKd3RL0Ie6O8STlzJIag+FhNR6/
+         2DPDYOYG0pqYaMLxAIzy7RfMr9vNbqD2GJq77ha1m/QJr6EZvlVD+y4C2cwJel12VnzS
+         A7JJsV4ioPL0/4wKAOr5Er5XY3q7QBhJTG8XCHi7faSVnpO0y2ENLVRKEclWtM0l2LWe
+         ewybEuByUoiMrbspYfhZrUxd6zmZd39WVRDzzBBfLOW1ogzKA/sdpVNzJnrPbq90mXae
+         Plpgf/2j2u0SDliscvrmQdAcF0bmyJhrn73Zzv86wkwcFsamInI5vwM69GIIceet482l
+         2Zaw==
+X-Gm-Message-State: AOJu0YzmAjpdTfCpSe/eMhxvSjzEYIPBZItstWnNRIH3ESeRzC39NccT
+	Kn3/5byZGIrI73bZzbtH/TdV4hy0oAIXii/osg==
+X-Google-Smtp-Source: AGHT+IFge6sMjlzuWc91VOTqFOPoOtO9DhwycrLl6JYCuJSnpwiiizAteB6AGo2bWHyHSzmtkYNWoxff+qRYMspZeA==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a25:b190:0:b0:d4d:564d:8fbf with SMTP
+ id h16-20020a25b190000000b00d4d564d8fbfmr146274ybj.13.1692051092011; Mon, 14
+ Aug 2023 15:11:32 -0700 (PDT)
+Date: Mon, 14 Aug 2023 22:11:28 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230810104749.164827-1-krzysztof.kozlowski@linaro.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 14 Aug 2023 15:02:02 -0700
-Message-ID: <CAKwvOdm5kiTho-b1yagjjCGX5-=HGKutGZR3NkDeYh5RRBHJ_A@mail.gmail.com>
-Subject: Re: [PATCH 1/4] ASoC: aw88261: Fix unitialized ret of aw88261_reg_update()
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org, 
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	llvm@lists.linux.dev, Andi Shyti <andi.shyti@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAI+m2mQC/x3NwQqDMAyA4VeRnBdoq6LbqwwPXZq5wNaOBIoiv
+ vvKjt/l/w8wVmGDW3eAchWTkhv8pQN6xbwySmqG4ELvZj9gLZIwqVRWQyuEypktGuqnPOTNaLs RXmc/uhjGyRNBa32Vn7L9P/flPH/3xh9OdwAAAA==
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692051090; l=1743;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=wIdErpsOv+ezc2N3195w2EaGkvC3nzErvAaVNhdk/Rs=; b=QvPWejA1W6dyxCS1W8dn15uDJwEG3gwju4x31ItwOpaH9xtSR+GXhgUPir79VMcQJMlD7Z+Vy
+ yJZvZwaPECSBBH9pvOyco404PO0xKNU2LexES3A6CKLz0bnRKG54Hp1
+X-Mailer: b4 0.12.3
+Message-ID: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
+Subject: [PATCH] soc: renesas: rmobile-sysc: fix -Wvoid-pointer-to-enum-cast warning
+From: Justin Stitt <justinstitt@google.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, Aug 10, 2023 at 3:47=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> There is a branch in if() clause where aw88261_reg_update() could return
-> uninitialized value.  Pounted out by W=3D1 clang build:
->
->   sound/soc/codecs/aw88261.c:651:7: error: variable 'ret' is used uniniti=
-alized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->                 if (aw_dev->prof_cur !=3D aw_dev->prof_index) {
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   sound/soc/codecs/aw88261.c:660:9: note: uninitialized use occurs here
->         return ret;
->                ^~~
->   sound/soc/codecs/aw88261.c:651:3: note: remove the 'if' if its conditio=
-n is always true
->                 if (aw_dev->prof_cur !=3D aw_dev->prof_index) {
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+When building with clang 18 I see the following warning:
+|      drivers/soc/renesas/rmobile-sysc.c:193:22: warning: cast to smaller integer
+|               type 'enum pd_types' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+|        193 |                 add_special_pd(np, (enum pd_types)id->data);
 
-Thanks for the patch!
-I see this addressed already in -next:
-https://lore.kernel.org/all/20230808125703.1611325-1-arnd@kernel.org/
+This is due to the fact that `id->data` is a void* and `enum pd_types`
+has the size of an integer. This cast from pointer-width to int-width
+causes truncation and possible data loss. Instead, cast to `uintptr_t`
+which has the same width as void*.
 
+Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Note: It should be noted that there is likely no data loss occurring in
+this case since the enum only has a few fields. The narrowing cast from
+pointer to int will not lose any data.
+---
+ drivers/soc/renesas/rmobile-sysc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  sound/soc/codecs/aw88261.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/sound/soc/codecs/aw88261.c b/sound/soc/codecs/aw88261.c
-> index 82923b454dd4..fddba2f2de41 100644
-> --- a/sound/soc/codecs/aw88261.c
-> +++ b/sound/soc/codecs/aw88261.c
-> @@ -636,7 +636,7 @@ static int aw88261_dev_stop(struct aw_device *aw_dev)
->  static int aw88261_reg_update(struct aw88261 *aw88261, bool force)
->  {
->         struct aw_device *aw_dev =3D aw88261->aw_pa;
-> -       int ret;
-> +       int ret =3D 0;
->
->         if (force) {
->                 ret =3D regmap_write(aw_dev->regmap,
-> --
-> 2.34.1
->
+diff --git a/drivers/soc/renesas/rmobile-sysc.c b/drivers/soc/renesas/rmobile-sysc.c
+index 912daadaa10d..0b77f37787d5 100644
+--- a/drivers/soc/renesas/rmobile-sysc.c
++++ b/drivers/soc/renesas/rmobile-sysc.c
+@@ -190,7 +190,7 @@ static void __init get_special_pds(void)
+ 
+ 	/* PM domains containing other special devices */
+ 	for_each_matching_node_and_match(np, special_ids, &id)
+-		add_special_pd(np, (enum pd_types)id->data);
++		add_special_pd(np, (uintptr_t)id->data);
+ }
+ 
+ static void __init put_special_pds(void)
 
+---
+base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
+change-id: 20230814-void-drivers-soc-renesas-rmobile-sysc-98150a2571cc
 
---=20
-Thanks,
-~Nick Desaulniers
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
