@@ -1,137 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6536F134AD
-	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 15:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1692113476;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=kfI+luU6AWmFTwvFpwUVre98jSLW/3cZi/beg0VfzP8=;
-	b=e4DXeUJWsG44RFCBIccKXl5EJgJ+aLX9bVgOmjvs9uqFBUvIyS/M7E3AVxLxQfHXD91nVT
-	RwYAuh/56jMFn91ZUg1Xxzd8Re0GE4DLq7fdp7UXfJQh6LgBp88ALhF2w+6kUYImoAF0Do
-	nTAX5XrQyeyyUfQ18LzjK5MJnvhYuPQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-414-otFaPPlPO_i0hL73xgiAZA-1; Tue, 15 Aug 2023 11:31:14 -0400
-X-MC-Unique: otFaPPlPO_i0hL73xgiAZA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 36E2780556B
-	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 15:31:14 +0000 (UTC)
-Received: from [172.64.9.53] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1F9462166B2D;
-	Tue, 15 Aug 2023 15:31:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 16 of 267): Test report for master
- (6.5.0-rc6, mainline.kernel.org-clang, 91aa6c41)
-Date: Tue, 15 Aug 2023 15:31:14 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162D011CB7;
+	Tue, 15 Aug 2023 15:48:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692114520; x=1723650520;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sMqwy9G/HltimeX87tKOTEF4evIeRyeOvFxxudBhWG4=;
+  b=he8qZmmCqlo+NhkBhy+7c94nsTELAli6C58aaiYiHLMPxrXZ5DXB02sL
+   eS+t0x+o9do9VAXWQaL8LZb8c48xgNkMEuzBDPwOvTTgFXZsQKItWSYaC
+   ajK7VJhjlWnRX8GB/EBAucCkvL2Rc0NJsGZRGis0MK7mR1EzWP2Gw2Cjg
+   J3hGCmBA79NrVXkJ6vghShGwTwaRfo/7Us2OvExUi/19hjiIvUzAzdkIf
+   YIDG/5urrsiL4zYEXJ8mZPfmqI6+hW//dlON2BH9cwt5B2yHFDTYkGNHy
+   3ExvOiwHSTRqdruu27saAwc61CZ80jy6ey/r4jhmfv+GqNWxoXdNmuN2q
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="351898534"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="351898534"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 08:48:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="727408114"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="727408114"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Aug 2023 08:48:35 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qVwHX-00013b-1q;
+	Tue, 15 Aug 2023 15:48:32 +0000
+Date: Tue, 15 Aug 2023 23:48:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jinjiang Tu <tujinjiang@huawei.com>, linux-mm@kvack.org,
+	akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+	sunnanyong@huawei.com, liushixin2@huawei.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	tujinjiang@huawei.com
+Subject: Re: [PATCH 2/6] mm/page_owner: show modules allocating pages when
+ oom occurred
+Message-ID: <202308152353.TqoJfjIk-lkp@intel.com>
+References: <20230815125251.2865852-3-tujinjiang@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <34770.123081511311400914@us-mta-414.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230815125251.2865852-3-tujinjiang@huawei.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Jinjiang,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on mcgrof/modules-next linus/master v6.5-rc6 next-20230815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'for_linus' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/mst/vhost
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjiang-Tu/mm-page_owner-support-identifying-pages-allocated-by-modules/20230815-195940
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230815125251.2865852-3-tujinjiang%40huawei.com
+patch subject: [PATCH 2/6] mm/page_owner: show modules allocating pages when oom occurred
+config: x86_64-randconfig-x073-20230815 (https://download.01.org/0day-ci/archive/20230815/202308152353.TqoJfjIk-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230815/202308152353.TqoJfjIk-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/100030
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308152353.TqoJfjIk-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:558 =
-apply_returns+0x1bf/0x210
-            URL: https://lore.kernel.org/all/Ys58BxHxoDZ7rfpr@xsang-OptiPle=
-x-9020/
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+All warnings (new ones prefixed by >>):
+
+>> kernel/module/page_owner.c:34:6: warning: no previous prototype for function 'po_register_oom_notifier' [-Wmissing-prototypes]
+   void po_register_oom_notifier(void)
+        ^
+   kernel/module/page_owner.c:34:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void po_register_oom_notifier(void)
+   ^
+   static 
+   1 warning generated.
 
 
+vim +/po_register_oom_notifier +34 kernel/module/page_owner.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    33	
+  > 34	void po_register_oom_notifier(void)
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
