@@ -1,116 +1,202 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052F715AD7
-	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 21:58:36 +0000 (UTC)
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6887c3aac15so109189b3a.2
-        for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 14:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692136716; x=1692741516;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7Z8K31bkMTbdIni3NCgyAAMv9oewxKBq0qkaddr2kYE=;
-        b=P5OEd4Nl1vFHMOZX0kiCCsg+ALdbM3Jq7SfXh8p09T5kt+BwT3N3A+WU/8d7eCFd2O
-         LhOZTvl4ubIun+RbYT+844ggRTfu97S+QvSvLYZmQxkd8QzSViGI+4eiZUxpV4gS+ntY
-         ZYn+0xq6abTK4+oIdkRuBdtGRoW6CGc4TDtu0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692136716; x=1692741516;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7Z8K31bkMTbdIni3NCgyAAMv9oewxKBq0qkaddr2kYE=;
-        b=NQPnoaxWbcVUd67XQXCDkvWTE7g8pvaEXrD5RmD0r2D6ng8exW42qmKBYK0WrYbRyB
-         FTVzsBY5O8ALs64via5vAhRNM5GLfdP/CZ/By64Uqwlsfw0XBWNtBGFx1iXW6FebKHeE
-         2Qq/L9yDk6UgkWElMedV1BtG7Lqds1VayXz/ldX8eeCUk8DK42AMUnK0ysS7TNh3jlih
-         xXcwvgN12z60RPKgrCTC/bYQa4/YWRvvFDpGQy4B30E40SRZtkB2TD6gK/jGXe/vC94r
-         cnI1KhM/BX7eNF3RTw1q98DoCm++7omqpzZ68GV5OIrMw9lQqih5+Z1WnuTnzJ8T4nPu
-         IOaw==
-X-Gm-Message-State: AOJu0YymBpbL01tyQ+/ci0JbTdo909W6CeLMZFz0uY/OwVsNIN2bhyCj
-	Ckj0rcU32KoUnxHL7NOFruhB4w==
-X-Google-Smtp-Source: AGHT+IGIGJcDqcADsYQ9H0lWCBGqrfD4exL5cuoWWqNOlf/hsRbDS674HVOPC9PdGLNB8RfKgc3Qug==
-X-Received: by 2002:a05:6a20:938b:b0:141:69d:8041 with SMTP id x11-20020a056a20938b00b00141069d8041mr158650pzh.48.1692136716284;
-        Tue, 15 Aug 2023 14:58:36 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z17-20020a637e11000000b0056129129ef8sm10583401pgc.18.2023.08.15.14.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 14:58:35 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Alexander Potapenko <glider@google.com>,
-	kasan-dev@googlegroups.com,
-	linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] compiler_types: Introduce the Clang __preserve_most function attribute
-Date: Tue, 15 Aug 2023 14:58:29 -0700
-Message-Id: <169213670578.656151.9756083800563304743.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230811151847.1594958-1-elver@google.com>
-References: <20230811151847.1594958-1-elver@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93EF515AD7;
+	Tue, 15 Aug 2023 22:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692137896; x=1723673896;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N4vmi4W6zM1L9JVjv0dWGbmzpnKS4ljIAM+MtTFnAX0=;
+  b=SpgbZSfHaecEZy7O/rrvqLGNCACKcItxwO81Ro5XG9OuoTj7l4TxtHX0
+   deyQy7icT5slUU54XVMPB9WJpEQywLI8LVTXlqSUJwR0sbYyj37ZJGqQZ
+   ND0JU2GiwvgoN+lZeiLXHzlSxFr1ahEJbDrD+xCHJKFydaz13AfqRKVVt
+   nfGVXif7A4R/sCoZhSDoC6Mw54MCl6DC6y1mE4eFbJFJGdNTLt8JnM8jA
+   sFrHZVlYULfuIzOotITqwRzIfxCjTNMLIRmUkyAcUu1wbtCX1ssO0P33m
+   ch+yN/N40wP3NLAcjFTCXCHNNHmyzQ+Sp2jpC4pWLyzUXNJtd8ajQuJCd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="438735293"
+X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
+   d="scan'208";a="438735293"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 15:18:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="857584201"
+X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
+   d="scan'208";a="857584201"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Aug 2023 15:18:14 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qW2Mf-0001GR-2X;
+	Tue, 15 Aug 2023 22:18:13 +0000
+Date: Wed, 16 Aug 2023 06:17:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davejiang:cxl-ide 18/24] drivers/pci/ide.c:303:2: warning:
+ unannotated fall-through between switch labels
+Message-ID: <202308160658.8ZwFBENH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 11 Aug 2023 17:18:38 +0200, Marco Elver wrote:
-> [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
-> convention of a function. The preserve_most calling convention attempts
-> to make the code in the caller as unintrusive as possible. This
-> convention behaves identically to the C calling convention on how
-> arguments and return values are passed, but it uses a different set of
-> caller/callee-saved registers. This alleviates the burden of saving and
-> recovering a large register set before and after the call in the caller.
-> If the arguments are passed in callee-saved registers, then they will be
-> preserved by the callee across the call. This doesn't apply for values
-> returned in callee-saved registers.
-> 
-> [...]
+tree:   https://github.com/davejiang/linux.git cxl-ide
+head:   a43b30b80446a307847711c68ed284729a3e4cdb
+commit: 9ed7e5038134210887003c32f743b6e66186186f [18/24] pci: ide: Add IDE operations for endpoint device
+config: s390-randconfig-r015-20230816 (https://download.01.org/0day-ci/archive/20230816/202308160658.8ZwFBENH-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230816/202308160658.8ZwFBENH-lkp@intel.com/reproduce)
 
-Applied to for-next/hardening, thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308160658.8ZwFBENH-lkp@intel.com/
 
-[1/4] compiler_types: Introduce the Clang __preserve_most function attribute
-      https://git.kernel.org/kees/c/7a0fd5e16785
-[2/4] list_debug: Introduce inline wrappers for debug checks
-      https://git.kernel.org/kees/c/b16c42c8fde8
-[3/4] list: Introduce CONFIG_LIST_HARDENED
-      https://git.kernel.org/kees/c/aebc7b0d8d91
-[4/4] hardening: Move BUG_ON_DATA_CORRUPTION to hardening options
-      https://git.kernel.org/kees/c/aa9f10d57056
+All warnings (new ones prefixed by >>):
 
-Take care,
+   In file included from drivers/pci/ide.c:4:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/pci/ide.c:4:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/pci/ide.c:4:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/pci/ide.c:303:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     303 |         default:        /* Do nothing, RP should be already set */
+         |         ^
+   drivers/pci/ide.c:303:2: note: insert 'break;' to avoid fall-through
+     303 |         default:        /* Do nothing, RP should be already set */
+         |         ^
+         |         break; 
+   13 warnings generated.
+
+
+vim +303 drivers/pci/ide.c
+
+   256	
+   257	void pci_ide_init(struct pci_dev *pdev)
+   258	{
+   259		int link_num = 0, select_num = 0, pos;
+   260		u32 cap;
+   261		int rc;
+   262	
+   263		if (!pci_is_pcie(pdev))
+   264			return;
+   265	
+   266		pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_IDE);
+   267		if (!pos)
+   268			return;
+   269	
+   270		pci_read_config_dword(pdev, pos + PCI_IDE_CAP, &cap);
+   271		if (!(cap & (PCI_IDE_CAP_LNK | PCI_IDE_CAP_SEL)))
+   272			return;
+   273	
+   274		if (cap & PCI_IDE_CAP_LNK)
+   275			link_num = 1 + FIELD_GET(PCI_IDE_CAP_LNK_NUM, cap);
+   276	
+   277		if (cap & PCI_IDE_CAP_SEL)
+   278			select_num = 1 + FIELD_GET(PCI_IDE_CAP_SEL_NUM, cap);
+   279	
+   280		pdev->ide_support = true;
+   281		pdev->ide.link_num = link_num;
+   282		pdev->ide.select_num = select_num;
+   283		pdev->ide.stream_min = 0;
+   284		pdev->ide.stream_max = link_num + select_num;
+   285		ida_init(&pdev->ide.stream_pos_ids);
+   286		ida_init(&pdev->ide.stream_ids);
+   287	
+   288		/* No CMA established, just exit */
+   289		if (!test_bit(PCI_CMA_AUTHENTICATED, &pdev->priv_flags))
+   290			return;
+   291	
+   292	
+   293		switch (pci_pcie_type(pdev)) {
+   294		case PCI_EXP_TYPE_DOWNSTREAM:
+   295			pdev->ide.ops = &pcie_dsp_ide_ops;
+   296			break;
+   297		case PCI_EXP_TYPE_UPSTREAM:
+   298			pdev->ide.ops = &pcie_usp_ide_ops;
+   299			break;
+   300		case PCI_EXP_TYPE_ENDPOINT:
+   301		case PCI_EXP_TYPE_RC_END:
+   302			pdev->ide.ops = &pcie_ep_ide_ops;
+ > 303		default:	/* Do nothing, RP should be already set */
+   304			break;
+   305		}
+   306	
+   307		if (is_pci_endpoint(pdev)) {
+   308			struct pci_dev *rp = pcie_find_root_port(pdev);
+   309	
+   310			rc = pcie_ide_stream_create(rp, pdev, pdev,
+   311						    PCI_IDE_STREAM_TYPE_SELECTIVE);
+   312			if (rc) {
+   313				dev_dbg(&pdev->dev,
+   314					"Failed to establish IDE stream.\n");
+   315				return;
+   316			}
+   317		}
+   318	}
+   319	
 
 -- 
-Kees Cook
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
