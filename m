@@ -1,37 +1,59 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC7817ACA
-	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 20:42:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=KNXPvYcZb7t5cm0QAdkUsloaAM5T4oHA+oToVO1OQQM=; b=beY9uSXeRpnVTnYCsL6X+sk2Ek
-	DZDib77o+BAJyCGsCND7saxzTldBTUdEiU/SgQ6nevWgBsV/b3Jf7tjniPlOc9KmbiCjYTMMepviR
-	bC9w6DXdb34+m00CYFpJ97xEh8vTs9me2ZOPKqkf8j+3kaByYO58/WUmkKTnwP640NEg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1qW0rD-004CEM-V0; Tue, 15 Aug 2023 22:41:39 +0200
-Date: Tue, 15 Aug 2023 22:41:39 +0200
-From: Andrew Lunn <andrew@lunn.ch>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C6117ACA
+	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 20:46:37 +0000 (UTC)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1c4cf775a14so2185691fac.3
+        for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 13:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692132397; x=1692737197;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VaIHc+gFTv/gCTaNkA6eGeAJslVqFsij3m6nG8kuwbQ=;
+        b=BtUF+COVfEoHH4ObDCfa8UZniGPU0b3si4iqFKuVip+tVxTiT7c+k5vhwcSpRM2qVv
+         e/fD581IC9g0wfwo7Hw5lmY9O4uTBEkiAXviNuLyaSWP5oMvm9n/ElQ5/k4q5tSZdrd6
+         7XNtl36ytsmoedPMWeDPK32he8IXGNeGXKFeOb65ptuniXMm47nJpqSw4VA50AWZWdAE
+         5aril4u1K7Q9Q/ncBbuGZPlqTrWIquwBOSFmQeEOOo5izk57QXjpXTQmxlZe/jM/xiwF
+         fTkZvfsL9QsDm332StnxKO7pAA98yeWeiXNRzNI/CrCeR1otZ50L+HSj/zwCVNmoohZI
+         +Nyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692132397; x=1692737197;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VaIHc+gFTv/gCTaNkA6eGeAJslVqFsij3m6nG8kuwbQ=;
+        b=dxLi4/XtzsnOMLVoHRNdXXPprbSfkt2VxYMiqfkuTp2JOHzAEPI055rdtbsEY7kjz3
+         yr42VYJW/jNJLEdZhmvN+JOsEliFxOYUn8uOIdISKzHbiZV/BwkAIXtuKZwzRd2BXjQr
+         +EsjhUIMU1IkslyDFyIJnzglaGosfvQFGe2hjMekGK59yXflPQZL2+w/6SMdZUbFpiWo
+         KvJM6RFdr0aoI8dton521XCMLXmYR3kWG/8wtlzc9ZuKjrr6iUrJAqvRf6sXz0B3l6Ei
+         MOs1FEly7S9E7p+HI1G/aaeOxeNPnGXbEoTG2QPRvV3wgCBMiAlyToYjQhpOCdSW6Ppa
+         g3AA==
+X-Gm-Message-State: AOJu0YzN3fRil7uH38yryhmBprGeGr1zQJqXaWSB7LxxuNshEAXSnWMm
+	PUcF3BsVkNBeVT41dSEqhQ==
+X-Google-Smtp-Source: AGHT+IGIcu+xaJ09yTpMfBilaQOCvslUE7RUnQyVistmiDU9ejNDPAdGiWvFAJ3utTuKFPtcgU7wpw==
+X-Received: by 2002:a05:6870:601b:b0:1c3:c43d:838 with SMTP id t27-20020a056870601b00b001c3c43d0838mr15178841oaa.39.1692132396755;
+        Tue, 15 Aug 2023 13:46:36 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id ef38-20020a0568701aa600b001c4b8a9ef88sm4779365oab.24.2023.08.15.13.46.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 13:46:35 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:77ae:9090:5436:3099])
+	by serve.minyard.net (Postfix) with ESMTPSA id 91B5C1800E8;
+	Tue, 15 Aug 2023 20:46:34 +0000 (UTC)
+Date: Tue, 15 Aug 2023 15:46:33 -0500
+From: Corey Minyard <minyard@acm.org>
 To: Justin Stitt <justinstitt@google.com>
-Cc: Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Keyur Chudgar <keyur@os.amperecomputing.com>,
-	Quan Nguyen <quan@os.amperecomputing.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+Cc: Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] net: mdio: fix -Wvoid-pointer-to-enum-cast warning
-Message-ID: <cf3a36ea-d8d2-4560-9032-04ecc2ad7495@lunn.ch>
-References: <20230815-void-drivers-net-mdio-mdio-xgene-v1-1-5304342e0659@google.com>
+	Tom Rix <trix@redhat.com>, openipmi-developer@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ipmi_si: fix -Wvoid-pointer-to-enum-cast warning
+Message-ID: <ZNvkKReuMsDCktsH@mail.minyard.net>
+Reply-To: minyard@acm.org
+References: <20230809-cbl-1902-v1-1-92def12d1dea@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,22 +62,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230815-void-drivers-net-mdio-mdio-xgene-v1-1-5304342e0659@google.com>
+In-Reply-To: <20230809-cbl-1902-v1-1-92def12d1dea@google.com>
 
-On Tue, Aug 15, 2023 at 08:35:59PM +0000, Justin Stitt wrote:
-> When building with clang 18 I see the following warning:
-> |       drivers/net/mdio/mdio-xgene.c:338:13: warning: cast to smaller integer
-> |               type 'enum xgene_mdio_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> |         338 |                 mdio_id = (enum xgene_mdio_id)of_id->data;
+On Wed, Aug 09, 2023 at 09:05:17PM +0000, Justin Stitt wrote:
+> With W=1 we see the following warning:
 > 
-> This is due to the fact that `of_id->data` is a void* while `enum
-> xgene_mdio_id` has the size of an int. This leads to truncation and
-> possible data loss.
+> |  drivers/char/ipmi/ipmi_si_platform.c:272:15: error: \
+> |       cast to smaller integer type 'enum si_type' from \
+> |       'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+> |    272 |         io.si_type      = (enum si_type) match->data;
+> |        |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ok, this is included in my tree.  Thanks.
+
+-corey
+
 > 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1910
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> This is due to the fact that the `si_type` enum members are int-width
+> and a cast from pointer-width down to int will cause truncation and
+> possible data loss. Although in this case `si_type` has only a few
+> enumerated fields and thus there is likely no data loss occurring.
+> Nonetheless, this patch is necessary to the goal of promoting this
+> warning out of W=1.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1902
+> Link: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
 > Signed-off-by: Justin Stitt <justinstitt@google.com>
-
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+> ---
+> Note:
+> Arnd had mentioned that there perhaps may be some semantic differences
+> between GCC and Clang regarding this warning or family of warnings. For
+> now, this patch (and others following) will yield less noisy W=1 builds
+> and hopefully materialize into this warning getting promoted out of W=1
+> to an always-on warning.
+> ---
+>  drivers/char/ipmi/ipmi_si_platform.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_si_platform.c b/drivers/char/ipmi/ipmi_si_platform.c
+> index 505cc978c97a..0d509d683c0f 100644
+> --- a/drivers/char/ipmi/ipmi_si_platform.c
+> +++ b/drivers/char/ipmi/ipmi_si_platform.c
+> @@ -269,7 +269,7 @@ static int of_ipmi_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	memset(&io, 0, sizeof(io));
+> -	io.si_type	= (enum si_type) match->data;
+> +	io.si_type	= (unsigned long) match->data;
+>  	io.addr_source	= SI_DEVICETREE;
+>  	io.irq_setup	= ipmi_std_irq_setup;
+>  
+> 
+> ---
+> base-commit: c1a515d3c0270628df8ae5f5118ba859b85464a2
+> change-id: 20230809-cbl-1902-7532a747b731
+> 
+> Best regards,
+> --
+> Justin Stitt <justinstitt@google.com>
+> 
