@@ -1,90 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F094312B98;
-	Tue, 15 Aug 2023 16:00:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692115251; x=1723651251;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s1vDqhBD78d5dFi8FLwZ+C7F8GGkuDRSb/H+ET+fVig=;
-  b=PP4Sh3Z4GpIIu4SoKFEsn5lbVlCFM5O6t3+KHAei9BUFmsZZZ51rRRyf
-   HyGJ/25nqZBGQONSw9iRd9YzC7Xbz6Q8arGhZ/E6LWUdF5Slpkou25l2N
-   PXSy/yyft5iEkcCJikgM2uwvEF1FNWh6RXTaYbWTQmw31QZ5So3kcv/XY
-   j6pccURvpc3Aj7YVYuIZkKfVUzMHG4mIYCwFnyVskkPJMb3VQQwxZ4qFr
-   AlF/DgDVZWAZPOK1eF7QADLGalljJqsX4KFsO5qKuIKXa0okJY8j0KN5f
-   VfP4a0YzwO1+zrBLeRz82qdxcrkJoc2/XdeCRNERmTO/Fl41SLFmaJY57
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="376043589"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="376043589"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 09:00:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="1064511283"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="1064511283"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Aug 2023 09:00:47 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qVwSh-00014X-0w;
-	Tue, 15 Aug 2023 16:00:17 +0000
-Date: Tue, 15 Aug 2023 23:58:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Ober <dober6023@gmail.com>, linux-hwmon@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-	dober@lenovo.com, mpearson@lenovo.com,
-	David Ober <dober6023@gmail.com>
-Subject: Re: [PATCH] hwmon: add in watchdog for nct6686
-Message-ID: <202308152354.OmOTyX2r-lkp@intel.com>
-References: <20230815115515.286142-1-dober6023@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B549814A81;
+	Tue, 15 Aug 2023 16:18:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45CFAC433CA;
+	Tue, 15 Aug 2023 16:18:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692116310;
+	bh=Fzs40tiStK6EkB/YuFNO47++s2pzGPjPobOJCKqNu8c=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=m6yXaSAwx8X+r9uIAcVeX5zrd0VAUGDC+FSDKjY57xEz4o7w6VZxoqPpXrwP5GzkY
+	 11KtwWsJFbX2wEHCng3rI/4RiDngUv+kHRaIat8tkqE1R+P7xJ8PkSs/pRFQP2PRpT
+	 jbsWXAdmcb/HHGk8efWVlRkOqS9MBs7VOPo6f/MFH8Ugubvg2ciTCQvkMCjq84oOoD
+	 ZoTjvVhLTzqP91Q67jijBow7hGlnmADOt1xY/GrleGc8pYlGGuJSFsU9UAzA02uskG
+	 1jSqBkxZwkWo/RImvjoBlA4/+NqqBXJP6/i+ZAFX58iqK+LXVyaEpHu/rMJhGPUlfh
+	 BlZX7cliEcWtg==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4ff882397ecso1025288e87.3;
+        Tue, 15 Aug 2023 09:18:30 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyDtMfA6Aq1FPPD1xDKhNRR7M2b0Cj+tNYdCIExw/dd40l20QTo
+	h+lBBEMpegWZ0kCQcHtv65WV10qLTOAkFcz8M7U=
+X-Google-Smtp-Source: AGHT+IGSKxTJ19mqFeIIAz2Lk4itGkDuL8iY/S0R3KrwN8mSoHZ/GfI5rqOeRSLn2I6I+A/Oy27EIKyPND4S5+ihiKA=
+X-Received: by 2002:a05:6512:3985:b0:4fb:740a:81ae with SMTP id
+ j5-20020a056512398500b004fb740a81aemr10981306lfu.16.1692116308327; Tue, 15
+ Aug 2023 09:18:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230815115515.286142-1-dober6023@gmail.com>
+References: <202308150547.m54XHV12-lkp@intel.com> <ZNql2TqaVFnMKlzJ@shell.armlinux.org.uk>
+ <7dfa4337-fc2f-4a02-a12e-f94feca7362b@app.fastmail.com> <CAMj1kXE_Rehybm_ANRYcDqPT8q7SPJ_Yxw9HLNNg9SsmTk17zA@mail.gmail.com>
+ <ZNs/1GB10P1zq5bU@shell.armlinux.org.uk>
+In-Reply-To: <ZNs/1GB10P1zq5bU@shell.armlinux.org.uk>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 15 Aug 2023 18:18:16 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXG8Qb4vdbWiT3MOQziSbRRW-YMfotG9w1XMMTYFVQXC4w@mail.gmail.com>
+Message-ID: <CAMj1kXG8Qb4vdbWiT3MOQziSbRRW-YMfotG9w1XMMTYFVQXC4w@mail.gmail.com>
+Subject: Re: [arm:for-next 4/4] arch/arm/vfp/vfpmodule.c:324:13: error: static
+ declaration of 'VFP_bounce' follows non-static declaration
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi David,
+On Tue, 15 Aug 2023 at 11:05, Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Tue, Aug 15, 2023 at 10:39:31AM +0200, Ard Biesheuvel wrote:
+> > On Tue, 15 Aug 2023 at 00:16, Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Tue, Aug 15, 2023, at 00:08, Russell King (Oracle) wrote:
+> > > > On Tue, Aug 15, 2023 at 05:06:03AM +0800, kernel test robot wrote:
+> > > >>    1 error generated.
+> > > >
+> > > > I'm guessing this is a conflict between Arnd's patch
+> > > >
+> > > > ae1f8d793a19 ("ARM: 9304/1: add prototype for function called only from asm")
+> > > >
+> > > > merged in v6.5-rc1 and Ard's patch, and that part of Arnd's patch
+> > > > needs to be reverted since VFP_bounce is now static. Agreed?
+> > >
+> > > Yes, with Ard's change, the prototype I added is neither required nor correct.
+> > >
+> > > My series contained another patch that added a prototype for
+> > > vfp_entry(), and this is also obsoleted by Ard's series, but you
+> > > did not merge it anyway, so it's all good on that one.
+> > >
+> >
+> > When you sent out that series, I mentioned the conflict with
+> > vfp_entry() [13/16], but I failed to spot that the same series had
+> > another patch that added the VFP_bounce() declaration, which is the
+> > one that is now conflicting.
+> >
+> > So we just need a patch that drops the VFP_bounce() declaration,
+> > right? Should I send that out and drop it into the patch system?
+>
+> http://git.armlinux.org.uk/cgit/linux-arm.git/commit/?h=for-next&id=a6f307c20d649e5f1da280bee7ed160de74de2ff
+>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.5-rc6 next-20230815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Ober/hwmon-add-in-watchdog-for-nct6686/20230815-195946
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230815115515.286142-1-dober6023%40gmail.com
-patch subject: [PATCH] hwmon: add in watchdog for nct6686
-config: x86_64-randconfig-r006-20230815 (https://download.01.org/0day-ci/archive/20230815/202308152354.OmOTyX2r-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230815/202308152354.OmOTyX2r-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308152354.OmOTyX2r-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: watchdog_init_timeout
-   >>> referenced by nct6683.c:1514 (drivers/hwmon/nct6683.c:1514)
-   >>>               drivers/hwmon/nct6683.o:(nct6683_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: devm_watchdog_register_device
-   >>> referenced by nct6683.c:1524 (drivers/hwmon/nct6683.c:1524)
-   >>>               drivers/hwmon/nct6683.o:(nct6683_probe) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+OK thanks for taking care of that.
