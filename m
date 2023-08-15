@@ -1,131 +1,96 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A6413AFD
-	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 18:22:38 +0000 (UTC)
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3fe4cdb72b9so51842775e9.0
-        for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 11:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692123756; x=1692728556;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRFUf4dNqMSfHq2+lBU85kOOjIYPLnDmd2dSara3YQ0=;
-        b=B5+dfis4GodiyMswujpdft5yTaiXEq+hCwoLLuJZRiCvztSGpvOULmk8iJEZg0adZH
-         BY8An2LpsxdQEREmqow3gZhdUpFsyxA5U4miqfRxIUa2E7orC7Q7Ko0rzGuYQoBGy3qE
-         uJuL2aJukQjiTszT6TACOaiShD5ikUEvhecLDrbpWvp0vfZwKh8yvRzW81AuKihenO+k
-         gAvQFt9BBsbYBPBrxoO18Y0Bx8A9NLjX4Dppy7CnQFNiNPm0XWjqjxeGhTirjoSgNZrN
-         VA5L9DiSGMhLlpHCXIi62EV9vWnA4wHPi/7SHM9HSJEE9w35I7MEUBr2S7/c/OBIEDC9
-         TeBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692123756; x=1692728556;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rRFUf4dNqMSfHq2+lBU85kOOjIYPLnDmd2dSara3YQ0=;
-        b=Mf406eLfojKKv3/B1fp7qLcvXmBiuOL6a1YeaCGkH9J3pgZXkSFUk2qoOU52wrXyk4
-         A4tl01EtL7KwAPE1GWbsQVs/+mkQpOuvAZZnTKViojVU1ohiOEtb4w/u47zqu6MKI0at
-         r+OeTeqj+TGcyO9R/0nEUzjJre5O8OtZ5ex67CPf2qaAJ68RHA9CJph+Y8sPX30NSHeP
-         DyEWnqThXGyVVIbHlBXbsnWQs4FCs/r6GE7t5I2Kun/NkJuz0AsAlwYCgGNFUzgQbH5q
-         Tie5J3ARUbPtACCJ+cixO/BG0qprJicG1UOx4AxmCobzaZ6RxNU2o6LJsm2ORZBXCKdX
-         FxUQ==
-X-Gm-Message-State: AOJu0YyHPpuF6KO/HsXFzNm2/VlDeI22Yyk4DfVOjDKFQDFQtY9UQGoB
-	HZypZp/Ux0dh3CvyrX9yW4OnPUKT/6qPuWcAkiaaLw==
-X-Google-Smtp-Source: AGHT+IGIPWace5mdmcxiYsdjUOHTOAtdVTz9UvfQVQP31URfweI7ITp2r94AA2XEk86pkT7L3VWHyy8DVHcpStWzCas=
-X-Received: by 2002:a7b:cd99:0:b0:3fe:14af:ea21 with SMTP id
- y25-20020a7bcd99000000b003fe14afea21mr10108651wmj.21.1692123756120; Tue, 15
- Aug 2023 11:22:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3FE156F7;
+	Tue, 15 Aug 2023 19:07:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F710C433C7;
+	Tue, 15 Aug 2023 19:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692126427;
+	bh=MJRTsKjJrCqgZBHh3ucJktBplP659QkvtPqpYoiAoQY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=e5wIKX0EVRDwQ8ztXhcobA5K0H7FetEp9rCkWJCAkGOuVzNaswxxaDMkJDz/5BLUY
+	 p3U2fSmikJ/+yYR6zf1Q6hSqg9Na159AiTm9D8+F4NfGfrNd/fjsWuAfUamHcAgdtD
+	 040pJTC/tEnDHObPF0x37dC+WZgYZmbgstlFKPwIN/q7/aHumtMsf+/j8tSZ85dkCS
+	 +NDmXcKdcGPYoy51TznvaaItdBvpwDhBP8NWjDoRDZCugP3GKy1OUGc8dU4bGVv0DP
+	 gaI5fSECd5w3krOG+Uy6QDTpYLf8MbfR8f5RuopIr4q7asAcbHuBxAoViW2z1WJryr
+	 seDIlPdcvkBmg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 15 Aug 2023 12:06:50 -0700
+Subject: [PATCH] watchdog: xilinx_wwdt: Use div_u64() in
+ xilinx_wwdt_start()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230811151847.1594958-1-elver@google.com> <202308141620.E16B93279@keescook>
-In-Reply-To: <202308141620.E16B93279@keescook>
-From: Marco Elver <elver@google.com>
-Date: Tue, 15 Aug 2023 20:21:59 +0200
-Message-ID: <CANpmjNNDcVK9gmnBfxbthD3KEzsdc=PJb97AXcPEaweLNM5mPw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] compiler_types: Introduce the Clang
- __preserve_most function attribute
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	llvm@lists.linux.dev, Dmitry Vyukov <dvyukov@google.com>, 
-	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230815-watchdog-xilinx-div_u64-v1-1-20b0b5a65c2e@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMnM22QC/x3MywqAIBBA0V+JWTdglr1+JSJCpxoIC+0hRP+et
+ DyLex/w5Jg8tMkDji72vNmILE1AL6OdCdlEgxQyF3Wm8B4PvZhtxsAr24CGr+EsC6yVlpUulSi
+ aHGK9O5o4/Oeuf98PnGt1FGkAAAA=
+To: srinivas.neeli@amd.com, wim@linux-watchdog.org
+Cc: shubhrajyoti.datta@amd.com, michal.simek@amd.com, linux@roeck-us.net, 
+ ndesaulniers@google.com, trix@redhat.com, linux-watchdog@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, patches@lists.linux.dev, 
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1840; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=MJRTsKjJrCqgZBHh3ucJktBplP659QkvtPqpYoiAoQY=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCm3z9za46s+3+aG7cQa/fs105dt+eAvter+059nAv7Xp
+ og5zpNt7ShlYRDjYJAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQAT2bmUkaHTbNGCHMVL139w
+ r5namNxs7dgxv8peou6PmCW32LuiSy0M/+uEYhQn/lDSj7JOLxBh8zn4u3xJ2Y5qx4bjS/lvGTh
+ PZQQA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, 15 Aug 2023 at 01:21, Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Aug 11, 2023 at 05:18:38PM +0200, Marco Elver wrote:
-> > [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
-> > convention of a function. The preserve_most calling convention attempts
-> > to make the code in the caller as unintrusive as possible. This
-> > convention behaves identically to the C calling convention on how
-> > arguments and return values are passed, but it uses a different set of
-> > caller/callee-saved registers. This alleviates the burden of saving and
-> > recovering a large register set before and after the call in the caller.
-> > If the arguments are passed in callee-saved registers, then they will be
-> > preserved by the callee across the call. This doesn't apply for values
-> > returned in callee-saved registers.
-> >
-> >  * On X86-64 the callee preserves all general purpose registers, except
-> >    for R11. R11 can be used as a scratch register. Floating-point
-> >    registers (XMMs/YMMs) are not preserved and need to be saved by the
-> >    caller.
-> >
-> >  * On AArch64 the callee preserve all general purpose registers, except
-> >    x0-X8 and X16-X18."
-> >
-> > [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
-> >
-> > Introduce the attribute to compiler_types.h as __preserve_most.
-> >
-> > Use of this attribute results in better code generation for calls to
-> > very rarely called functions, such as error-reporting functions, or
-> > rarely executed slow paths.
-> >
-> > Beware that the attribute conflicts with instrumentation calls inserted
-> > on function entry which do not use __preserve_most themselves. Notably,
-> > function tracing which assumes the normal C calling convention for the
-> > given architecture.  Where the attribute is supported, __preserve_most
-> > will imply notrace. It is recommended to restrict use of the attribute
-> > to functions that should or already disable tracing.
-> >
-> > Note: The additional preprocessor check against architecture should not
-> > be necessary if __has_attribute() only returns true where supported;
-> > also see https://github.com/ClangBuiltLinux/linux/issues/1908. But until
-> > __has_attribute() does the right thing, we also guard by known-supported
-> > architectures to avoid build warnings on other architectures.
-> >
-> > The attribute may be supported by a future GCC version (see
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110899).
-> >
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Acked-by: Mark Rutland <mark.rutland@arm.com>
->
-> Should this go via -mm, the hardening tree, or something else? I'm happy
-> to carry it if no one else wants it?
+After commit f1a43aadb5a6 ("watchdog: Enable COMPILE_TEST for more
+drivers"), it is possible to enable this driver on 32-bit architectures.
+When building for those architectures with clang, there is an error due
+to a 64-bit division in xilinx_wwdt_start():
 
-v3 of this series is already in mm-unstable, and has had some -next
-exposure (which was helpful in uncovering some additional issues).
-Therefore, I think it's appropriate that it continues in mm and Andrew
-picks up the latest v4 here.
+  ERROR: modpost: "__aeabi_uldivmod" [drivers/watchdog/xilinx_wwdt.ko] undefined!
 
-Your official Ack would nevertheless be much appreciated!
+Use div_u64() to fix this, which takes a 64-bit dividend and 32-bit
+divisor. GCC likely avoids the same error due to optimizations it
+employs to transform division by a constant into other equivalent
+operations, which may be different than what is implemented in clang.
 
-Thanks,
--- Marco
+Link: https://github.com/ClangBuiltLinux/linux/issues/1915
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/watchdog/xilinx_wwdt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/xilinx_wwdt.c b/drivers/watchdog/xilinx_wwdt.c
+index 1d998db41533..d271e2e8d6e2 100644
+--- a/drivers/watchdog/xilinx_wwdt.c
++++ b/drivers/watchdog/xilinx_wwdt.c
+@@ -9,6 +9,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/ioport.h>
++#include <linux/math64.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+@@ -71,7 +72,7 @@ static int xilinx_wwdt_start(struct watchdog_device *wdd)
+ 
+ 	/* Calculate timeout count */
+ 	time_out = xdev->freq * wdd->timeout;
+-	closed_timeout = (time_out * xdev->close_percent) / 100;
++	closed_timeout = div_u64(time_out * xdev->close_percent, 100);
+ 	open_timeout = time_out - closed_timeout;
+ 	wdd->min_hw_heartbeat_ms = xdev->close_percent * 10 * wdd->timeout;
+ 
+
+---
+base-commit: 8a504bd61ec7b3ddd72680e15775f2c7c0f9e894
+change-id: 20230815-watchdog-xilinx-div_u64-85c27c650493
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
