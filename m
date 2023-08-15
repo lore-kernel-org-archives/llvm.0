@@ -1,101 +1,105 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-ot1-f73.google.com (mail-ot1-f73.google.com [209.85.210.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D84717ACA
-	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 20:50:15 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d6b7eb39ef0so2471945276.3
-        for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 13:50:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D321017FEA
+	for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 20:58:49 +0000 (UTC)
+Received: by mail-ot1-f73.google.com with SMTP id 46e09a7af769-6bc807e99adso5580785a34.2
+        for <llvm@lists.linux.dev>; Tue, 15 Aug 2023 13:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692132614; x=1692737414;
+        d=google.com; s=20221208; t=1692133129; x=1692737929;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ci189aHPBFBjtm/RN/hzTJMe0+KKoH+4CClRyv2s6dg=;
-        b=SAeIcykjeO3O4waBr9JKtx/sxluuhH/9cEcIo8KaE0eyK1VF08SzRAJKh6p+FmA1JM
-         69OTv8TvYkczMG0mhmrq9GTsueFg0IlEsypYeECDD2vH2l6576G5pEuCEzFlDoCMLvWT
-         fn362CQrZE/tm0v5rMp0CN01qzTPzCv6QJCv7l/IHGeLYxWRcXVES5g5p9/31INLZcoa
-         Rvnz18b/2PQNIiKNRAYs2uT62njO7WMkocibzanwhe1+v4vEpbghNK/2MHile54eDFs5
-         uM8NETVzrBbLkfr44/H893S5AScQPRBPXeWc34kmCmUx4lVV+Kfwz5e0JGWHAb4m+tw5
-         X+tw==
+        bh=i43ino8+cQV5fs59YFTMpgpy3gd6Kvhnph8ypvpU1+E=;
+        b=OaxNZF0XeYWAxRvthJD35Tl9i7hNdMx3tQUmVK3WMKxUOPWVZGqtu8tPhOn+L5tulx
+         xuSR6QwuQzjucbrKrku+UFgwmRL4KepxrquekQ9XHqbI9qnEr9712T3kQUag/EbT7vDe
+         QKpZGn2ap+1vWwydxynUDL3mkCGS6wDvdjEhMHvAqZp847wBPjwKQhp5cZRrFsUmyZ83
+         L36Dlb6XMxbhYXcEZ0hmMRqvzFFXIdZieTZG9HOC7jXZerkC72IDSE9I8tFL7ile8CsV
+         wep05GdDlBWhqmhhg387YEwJgwmZDYQO97zOyx/XphXe/2FcRkPN8ScnustwRB+2yLyC
+         6q+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692132614; x=1692737414;
+        d=1e100.net; s=20221208; t=1692133129; x=1692737929;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ci189aHPBFBjtm/RN/hzTJMe0+KKoH+4CClRyv2s6dg=;
-        b=IkQ3w2U9xoUK0+LIEqCVAr8Uz8Vna1vw311w9Hg39DZP1urt55gPXVb9d1KmL9T6L1
-         UC7Hqk38DuTrPAhSYS0K+y2SGMhlz49ep8JTRUFWmigKy7Q7ltwKQUH9jhq0Ec30TxKJ
-         70OpHtOxZgdL2YV1kw78j3FpFxFOZts8oDZ4vjUpsgaDCC+q5ixkDxws9HLKLe2YCVqp
-         Jwo9B1LJCW6cYSkBXQQ3Oj41Hga2JgU6jAomruKdICjisXc/cjhTkBRAtMHD02OHWbzX
-         O3C46gTE67zedzsnVn7zwunaCku0duEMH0InBgoYgMTJLmjpDFAQd1CWraIF9BLUjllw
-         CLsA==
-X-Gm-Message-State: AOJu0YzegH64rVjX86wqPzyhDmcQEOm5Tbn5t//dlsPi09OWC4CkQJJB
-	rtOYdjFDvWgEMIXXCXf9Xizsic9WpuGff6auzQ==
-X-Google-Smtp-Source: AGHT+IE0S8U2GnJZpujIzqMD7YILSF8i9bPnwtVZEQv8bw7cAjHxPN+IBbiHTBhY+Q8tDhl8X7qu4g/1kHaZi/Xotw==
+        bh=i43ino8+cQV5fs59YFTMpgpy3gd6Kvhnph8ypvpU1+E=;
+        b=fgbmSN8+etegXh6KXi8onPc2+u05l/K4NNXstsOqDnFNDfS+J7UUXG4+uc+BN82XLV
+         gyBxhMAL+QrJP0XeSvPvpvggOj6Hou040b7u72GcceVZzHTEGXqSHgJjft8PzEeANzJ2
+         MkvGuOfhwsgKmC65ca8V/syBmf9uI73T9TEgOjnskuiIMS8BHJE2esZvo8HmDhdltT8i
+         Ykb3vsDwvG+jb4M6DjZEhsLR6gBe5r+mQ1zmkxQ5iLgWGVRxYjciDlIBD4eSS0YE6i2c
+         c4e1IQTmdpAVVW9H201aa2YnOuxuMzlGEqqQzhf7ByWUIsssqRF98h8/Ri1rn0+Ytytj
+         L3cw==
+X-Gm-Message-State: AOJu0Yz7AvEXJJOweW7Va4WjOG0zxTONWYNfO5IyVaFw1K43l2JUmNxk
+	cqjOaiz1Za+65f0XiA3trWlBrKG/sLtNwpHP9w==
+X-Google-Smtp-Source: AGHT+IG6T8KFew1s+X5WQiOn2+4/yct62q/iaRBeV0Fq3wY/nCalyvWlspLQ1IMg2y/MrcyQDbBVxlt0Frv3SCy3aw==
 X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a25:3482:0:b0:d51:577e:425d with SMTP
- id b124-20020a253482000000b00d51577e425dmr172964yba.12.1692132614147; Tue, 15
- Aug 2023 13:50:14 -0700 (PDT)
-Date: Tue, 15 Aug 2023 20:50:13 +0000
+ (user=justinstitt job=sendgmr) by 2002:a05:6870:8c34:b0:1bb:6791:cc68 with
+ SMTP id ec52-20020a0568708c3400b001bb6791cc68mr216505oab.3.1692133128823;
+ Tue, 15 Aug 2023 13:58:48 -0700 (PDT)
+Date: Tue, 15 Aug 2023 20:58:47 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAATl22QC/x2NwQqDMBBEf0X23IXEaBV/pfRgm1H3EmUjQRD/v
- WthDvMOb+akDBVkGqqTFEWyrMnAPyr6LmOawRKNqXZ1cL1vuawSOaoUaOaEnbEv0LsksRxmhO7 TPNs++HFyZEObYpLjf/J6X9cPHh5EAXQAAAA=
+X-B4-Tracking: v=1; b=H4sIAAfn22QC/x3NTQoCMQxA4asMWRtoOz8UryIitUk1CzOSDlUY5
+ u4Wl9/mvR0qm3CF87CDcZMqq3b40wD5mfTBKNQNwYXRRT9jW4WQTBpbxddGqEkJLX2wlcW7m5a MSx7nWKYw3WOCXnobF/n+L5frcfwAXHqUeXUAAAA=
 X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692132613; l=1704;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692133128; l=1875;
  i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=koKe9TiNY9BHLtNN6bXZhZ0oxr/kaYIOgBRphxRQ9R4=; b=4zK7hYBEqziHv0W5/Pz/2k3HinI9eYV7eo3A7IjcFaIx8ueNhiyyhTdLIyTZ827+goMPHHYVm
- LXiqIzRSRwND2YO1dk2khOrUhZ9LI5EX+oXcD11QKowi4+yD62y5ymC
+ bh=y2JbzG62AXClW5TbICNapFpMx9TWmAr5KjVSEN24CHY=; b=ph2dAzVEzI/Hp2y1+thActuqF4avgbTqiwLRd0iD0lkfUbCpSWXtXOTntsjxLLcfcDGOL6GDD
+ Zd6jcbvOxHWDmRwh4JoND6QutLqs/72t+7bRVE1J9SSS0NDidFEsL/U
 X-Mailer: b4 0.12.3
-Message-ID: <20230815-void-drivers-net-ethernet-ni-nixge-v1-1-f096a6e43038@google.com>
-Subject: [PATCH] net: nixge: fix -Wvoid-pointer-to-enum-cast warning
+Message-ID: <20230815-void-drivers-mtd-nand-raw-vf610_nfc-v1-1-7cc65314c56c@google.com>
+Subject: [PATCH] mtd: rawnand: fix -Wvoid-pointer-to-enum-cast warning
 From: Justin Stitt <justinstitt@google.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Justin Stitt <justinstitt@google.com>
+To: Stefan Agner <stefan@agner.ch>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="utf-8"
 
 When building with clang 18 I see the following warning:
-|       drivers/net/ethernet/ni/nixge.c:1273:12: warning: cast to smaller integer
-|               type 'enum nixge_version' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-|        1273 |         version = (enum nixge_version)of_id->data;
+|       drivers/mtd/nand/raw/vf610_nfc.c:853:17: warning: cast to smaller integer
+|               type 'enum vf610_nfc_variant' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+|         853 |         nfc->variant = (enum vf610_nfc_variant)of_id->data;
 
-This is due to the fact that `of_id->data` is a void* while `enum nixge_version`
-has the size of an int. This leads to truncation and possible data loss.
+This is due to the fact that `of_id->data` is a void* while `enum
+vf610_nfc_variant` has the size of an int. This leads to truncation and
+possible data loss.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1910
 Reported-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
-Note: There is likely no data loss occurring here since `enum nixge_version`
-has only a few fields which aren't nearly large enough to cause data
-loss. However, this patch still works towards the goal of enabling this
-warning for more builds by reducing noise.
+Note: There is likely no data loss actually occurring here due to the
+fact that `enum vf610_nfc_variant` only has a few fields which are not
+nearly large enough to cause data loss. This patch helps towards the
+goal of eventually enabling this warning.
+
+Also, should we use `unsigned long` here instead of `uintptr_t`? I've
+seen maintainers request both and I'm flipping a coin here.
 ---
- drivers/net/ethernet/ni/nixge.c | 2 +-
+ drivers/mtd/nand/raw/vf610_nfc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
-index 0fd156286d4d..105977804e6a 100644
---- a/drivers/net/ethernet/ni/nixge.c
-+++ b/drivers/net/ethernet/ni/nixge.c
-@@ -1270,7 +1270,7 @@ static int nixge_of_get_resources(struct platform_device *pdev)
- 	if (!of_id)
- 		return -ENODEV;
+diff --git a/drivers/mtd/nand/raw/vf610_nfc.c b/drivers/mtd/nand/raw/vf610_nfc.c
+index 86522048e271..11d996dc655d 100644
+--- a/drivers/mtd/nand/raw/vf610_nfc.c
++++ b/drivers/mtd/nand/raw/vf610_nfc.c
+@@ -850,7 +850,7 @@ static int vf610_nfc_probe(struct platform_device *pdev)
+ 		goto err_disable_clk;
+ 	}
  
--	version = (enum nixge_version)of_id->data;
-+	version = (uintptr_t)of_id->data;
- 	if (version <= NIXGE_V2)
- 		priv->dma_regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	else
+-	nfc->variant = (enum vf610_nfc_variant)of_id->data;
++	nfc->variant = (uintptr_t)of_id->data;
+ 
+ 	for_each_available_child_of_node(nfc->dev->of_node, child) {
+ 		if (of_device_is_compatible(child, "fsl,vf610-nfc-nandcs")) {
 
 ---
 base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
-change-id: 20230815-void-drivers-net-ethernet-ni-nixge-37b465831af0
+change-id: 20230815-void-drivers-mtd-nand-raw-vf610_nfc-6c358f424b8a
 
 Best regards,
 --
