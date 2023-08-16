@@ -1,117 +1,155 @@
-Received: from chg.server2.ideacentral.com (unknown [108.163.232.234])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625CA5CBC
-	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 11:04:08 +0000 (UTC)
-Received: from mailnull by ns-196.awsdns-24.com with local (Exim 4.96)
-	id 1qWEJr-00EAQG-1d
-	for llvm@lists.linux.dev;
-	Wed, 16 Aug 2023 06:04:07 -0500
-X-Failed-Recipients: llvm@lists.linux.dev
-Auto-Submitted: auto-replied
-From: Mail Delivery System <Mailer-Daemon@ns-196.awsdns-24.com>
-To: llvm@lists.linux.dev
-References: <20230816120404.72EB41734ED057E8@lists.linux.dev>
-Content-Type: multipart/report; report-type=delivery-status; boundary=1692183847-eximdsn-1675117402
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C6C1078E;
+	Wed, 16 Aug 2023 13:11:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C04BC433C9;
+	Wed, 16 Aug 2023 13:11:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692191475;
+	bh=zWuvXK7QMRZXyxcMioldJT+UNyw10JlwQNc8/I5Yezk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GTWI0SxKGp1wEgqfo7YBE5wtsKMlhEew8Ab06byaIFdkUrz50ik8wuvOe4ce2cHvg
+	 jwfFc0nHs36ks6Kv+rPzQ5qXPcm2pqp0WIUjd2yVM0PvfsaMnx+yjoHQNfLw9g5+Or
+	 xwLPPV+4eTmXDPIy9UWP3x/Px/GmK3VxuG9concy7gKpLchjOE85KsrrrbNj3TrbTZ
+	 74Alulf+4B6X7JC2m1k6nWK+Ae7nFFPADkX2Sak6GQ46OBd7NqADHdZzUjSnrpD/If
+	 Gqn5UL12zGEvZ3cz+19OWWnuSHYpTZmHVJ/6+itKxvJSkj/tBhv3SoroJ9StX5jJuN
+	 u0sluyTu4ywbQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id BA6CF404DF; Wed, 16 Aug 2023 10:11:11 -0300 (-03)
+Date: Wed, 16 Aug 2023 10:11:11 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Fangrui Song <maskray@google.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Andi Kleen <ak@linux.intel.com>, Leo Yan <leo.yan@linaro.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Carsten Haitzler <carsten.haitzler@arm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	James Clark <james.clark@arm.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>,
+	Rob Herring <robh@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	linux-perf-users <linux-perf-users@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev,
+	Wang Nan <wangnan0@huawei.com>,
+	Wang ShaoBo <bobo.shaobowang@huawei.com>,
+	YueHaibing <yuehaibing@huawei.com>, He Kuang <hekuang@huawei.com>,
+	Brendan Gregg <brendan.d.gregg@gmail.com>
+Subject: Re: [PATCH v1 2/4] perf trace: Migrate BPF augmentation to use a
+ skeleton
+Message-ID: <ZNzK70eH3ISoL8r0@kernel.org>
+References: <20230810184853.2860737-1-irogers@google.com>
+ <20230810184853.2860737-3-irogers@google.com>
+ <ZNuK1TFwdjyezV3I@kernel.org>
+ <CAP-5=fURf+vv3TA4cRx1MiV3DDp=3wo0g5dBYH43DKtPhNZQsQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Mail delivery failed: returning message to sender
-Message-Id: <E1qWEJr-00EAQG-1d@ns-196.awsdns-24.com>
-Date: Wed, 16 Aug 2023 06:04:07 -0500
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - ns-196.awsdns-24.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - 
-X-Get-Message-Sender-Via: ns-196.awsdns-24.com: sender_ident via received_protocol == local: mailnull/primary_hostname/system user
-X-Authenticated-Sender: ns-196.awsdns-24.com: mailnull
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fURf+vv3TA4cRx1MiV3DDp=3wo0g5dBYH43DKtPhNZQsQ@mail.gmail.com>
+X-Url: http://acmel.wordpress.com
 
---1692183847-eximdsn-1675117402
-Content-type: text/plain; charset=us-ascii
+Em Tue, Aug 15, 2023 at 07:34:08AM -0700, Ian Rogers escreveu:
+> On Tue, Aug 15, 2023, 7:25 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> >                 bpf_object__for_each_program(prog, trace.skel->obj) {
+> >                         if (prog != trace.skel->progs.sys_enter && prog !=
+> > trace.skel->progs.sys_exit)
+> >                                 bpf_program__set_autoattach(prog,
+> > /*autoattach=*/false);
+> >                 }
+> >
+> > So that we don't have to add new lines disabling attachment when adding
+> > support for other pointer receiving syscalls.
+ 
+> Makes sense. Thanks,
 
-This message was created automatically by mail delivery software.
+Just taking notes about things to work on top of what is in
+tmp.perf-tools-next, that will move to perf-tools-next soon:
 
-A message that you sent could not be delivered to one or more of its
-recipients. This is a permanent error. The following address(es) failed:
+We need to make these libbpf error messages appear only in verbose mode,
+and probably have a hint about unprivileged BPF, a quick attempt failed
+after several attempts at getting privileges :-\
 
-  llvm@lists.linux.dev
-    host smtp.subspace.kernel.org [44.238.234.78]
-    SMTP error from remote mail server after end of data:
-    550 5.7.1 Blocked by SpamAssassin
+Probably attaching to tracepoints is off limits to !root even with
+/proc/sys/kernel/unprivileged_bpf_disabled set to zero.
 
---1692183847-eximdsn-1675117402
-Content-type: message/delivery-status
+[acme@quaco perf-tools-next]$ perf trace ls
+libbpf: Failed to bump RLIMIT_MEMLOCK (err = -1), you might need to do it explicitly!
+libbpf: Error in bpf_object__probe_loading():Operation not permitted(1). Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.
+libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -1
+Error:	No permissions to read /sys/kernel/tracing//events/raw_syscalls/sys_(enter|exit)
+Hint:	Try 'sudo mount -o remount,mode=755 /sys/kernel/tracing/'
 
-Reporting-MTA: dns; ns-196.awsdns-24.com
+[acme@quaco perf-tools-next]$
 
-Action: failed
-Final-Recipient: rfc822;llvm@lists.linux.dev
-Status: 5.0.0
-Remote-MTA: dns; smtp.subspace.kernel.org
-Diagnostic-Code: smtp; 550 5.7.1 Blocked by SpamAssassin
+[acme@quaco perf-tools-next]$ perf trace -e open* sleep 1
+libbpf: Failed to bump RLIMIT_MEMLOCK (err = -1), you might need to do it explicitly!
+libbpf: Error in bpf_object__probe_loading():Operation not permitted(1). Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.
+libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -1
+Error:	No permissions to read /sys/kernel/tracing//events/raw_syscalls/sys_(enter|exit)
+Hint:	Try 'sudo mount -o remount,mode=755 /sys/kernel/tracing/'
 
---1692183847-eximdsn-1675117402
-Content-type: message/rfc822
+[acme@quaco perf-tools-next]$ sudo mount -o remount,mode=755 /sys/kernel/tracing/
+[sudo] password for acme:
+[acme@quaco perf-tools-next]$ perf trace -e open* sleep 1
+libbpf: Failed to bump RLIMIT_MEMLOCK (err = -1), you might need to do it explicitly!
+libbpf: Error in bpf_object__probe_loading():Operation not permitted(1). Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.
+libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -1
+Error:	No permissions to read /sys/kernel/tracing//events/raw_syscalls/sys_(enter|exit)
+Hint:	Try 'sudo mount -o remount,mode=755 /sys/kernel/tracing/'
 
-Return-path: <llvm@lists.linux.dev>
-Received: from v-104-153-108-120.unman-vds.premium-chicago.nfoservers.com ([104.153.108.120]:53307)
-	by ns-196.awsdns-24.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <llvm@lists.linux.dev>)
-	id 1qWEJp-00E9eP-08
-	for llvm@lists.linux.dev;
-	Wed, 16 Aug 2023 06:04:05 -0500
-From: lists.linux.devAdministrator<llvm@lists.linux.dev>
-To: llvm@lists.linux.dev
-Subject: =?UTF-8?B?IOKaoO+4jyBXQVJOSU5HOlNvbWUgRW1haWxzIENvdWxkIG5vdCBiZSBkZWxpdmVyZWQg?=
-Date: 16 Aug 2023 12:04:04 +0100
-Message-ID: <20230816120404.72EB41734ED057E8@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/html
-Content-Transfer-Encoding: quoted-printable
+[acme@quaco perf-tools-next]$ sudo mount -o remount,mode=755 /sys/kernel/debug
+[acme@quaco perf-tools-next]$ perf trace -e open* sleep 1
+libbpf: Failed to bump RLIMIT_MEMLOCK (err = -1), you might need to do it explicitly!
+libbpf: Error in bpf_object__probe_loading():Operation not permitted(1). Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.
+libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -1
+Error:	No permissions to read /sys/kernel/tracing//events/raw_syscalls/sys_(enter|exit)
+Hint:	Try 'sudo mount -o remount,mode=755 /sys/kernel/tracing/'
 
-<!DOCTYPE html>
+[acme@quaco perf-tools-next]$ sudo sh -c "echo 0 > /proc/sys/kernel/unprivileged_bpf_disabled"
+[acme@quaco perf-tools-next]$ perf trace -e open* sleep 1
+libbpf: prog 'syscall_unaugmented': BPF program load failed: Operation not permitted
+libbpf: prog 'syscall_unaugmented': failed to load: -1
+libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -1
+Error:	No permissions to read /sys/kernel/tracing//events/raw_syscalls/sys_(enter|exit)
+Hint:	Try 'sudo mount -o remount,mode=755 /sys/kernel/tracing/'
 
-<html><head><title></title>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.19003">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body><span style=3D"background-color: rgb(204, 204, 204);"><b><i><font col=
-or=3D"#ff0000">Some Emails Could not be Delivered , Action Required</font><=
-/i></b>.</span><div><br><font color=3D"#3d85c6"><font size=3D"4"><b>Quarant=
-ined Messages Report</b> </font>&nbsp;</font><br>llvm@lists.linux.dev<div>1=
-6-08-2023, 08:00AM <br>&nbsp;<br>Dear llvm,</div><div><br>
-4 messages addressed to you are currently on hold awaiting your further act=
-ion. You can release all of your held messages and permit or block future e=
-mails from the senders, or manage messages individually.<br><br>
-<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPa=
-nxX?clientID=3Dllvm@lists.linux.dev" target=3D"_blank" data-saferedirecturl=
-=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%=
-5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-=
-xB2LHrk7CvessvAOsg">Review all</a>
-&nbsp; &nbsp;<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGb=
-cFJkycxN8DaPanxX?clientID=3Dllvm@lists.linux.dev" target=3D"_blank" data-sa=
-feredirecturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%=
-5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQ=
-jCNFFwLZWfJX-xB2LHrk7CvessvAOsg">Release all</a>
-&nbsp; &nbsp; <a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRG=
-bcFJkycxN8DaPanxX?clientID=3Dllvm@lists.linux.dev" target=3D"_blank" data-s=
-aferedirecturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B=
-%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAF=
-QjCNFFwLZWfJX-xB2LHrk7CvessvAOsg">Block all</a><br><br>Further Information:=
- <br>
-To view your entire quarantine inbox or manage your preferences, <a href=3D=
-"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPanxX?client=
-ID=3Dllvm@lists.linux.dev" target=3D"_blank" data-saferedirecturl=3D"https:=
-//www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%5D&amp;sou=
-rce=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-xB2LHrk7Cv=
-essvAOsg">Click Here</a><br><br>The system generated this notice on 16-08-2=
-023, at 09:00AM<br>Do not reply to this automated message.<br>
-&copy; 2023 lists.linux.dev. All rights reserved.</div></div>
-</body></html>
+[acme@quaco perf-tools-next]$ cat /proc/sys/kernel/unprivileged_bpf_disabled
+0
+[acme@quaco perf-tools-next]$
+[acme@quaco perf-tools-next]$
+[acme@quaco perf-tools-next]$ cat /proc/sys/kernel/perf_event_paranoid
+2
+[acme@quaco perf-tools-next]$ sudo sh -c "echo -1 > /proc/sys/kernel/perf_event_paranoid"
+[acme@quaco perf-tools-next]$ perf trace -e open* sleep 1
+libbpf: prog 'syscall_unaugmented': BPF program load failed: Operation not permitted
+libbpf: prog 'syscall_unaugmented': failed to load: -1
+libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -1
+Error:	No permissions to read /sys/kernel/tracing//events/raw_syscalls/sys_(enter|exit)
+Hint:	Try 'sudo mount -o remount,mode=755 /sys/kernel/tracing/'
 
---1692183847-eximdsn-1675117402--
+[acme@quaco perf-tools-next]$
+
