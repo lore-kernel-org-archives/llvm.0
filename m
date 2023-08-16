@@ -1,45 +1,33 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1655DC8E2;
-	Wed, 16 Aug 2023 08:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692173741; x=1723709741;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fq3/yQ5GNTXk3fanQ4Pz/Ds7yeWCzYn66mWCbkmhU8E=;
-  b=KnHNU90wKYqnknyUW+5mnNaQfy0NT8FaIO90X60l4AAFLAgBl/6Gqudh
-   /65d8E3+Ev5cegWy/kTpfJCPL98LIraq0gKcJWdIIWMwhpq8qfbpqwGrp
-   +VILP0f3H09kEJLR/dIHi5BKd/oqwr7qjnslMmSII215G048VptiyL19C
-   usfcpPjT8uWm51ECPzqc3CXNS3E7uE0AW6ddd2eqs+AbPQyvNlWGLC8yA
-   t2AX+Zhb1wIkMpTgms5+Hwci2H3BdCSFjFgUkDAP89F2qMm4PK9WVkxmm
-   MuWo4XVeRNfQt6PGWSB000GDFqhOlW5apXxr2fsL+zp8gI9VC9S3+w0zv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="369946580"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="369946580"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 01:15:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="799487684"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="799487684"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2023 01:15:38 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWBgX-00007v-0W;
-	Wed, 16 Aug 2023 08:15:27 +0000
-Date: Wed, 16 Aug 2023 16:13:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prasad Pandit <ppandit@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-crypto@vger.kernel.org, P J P <pjp@fedoraproject.org>
-Subject: Re: [PATCH] crypto: use SRCARCH to source arch Kconfigs
-Message-ID: <202308161608.VTW4Ttjd-lkp@intel.com>
-References: <20230816063107.11215-1-ppandit@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3648B443D;
+	Wed, 16 Aug 2023 08:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721E8C433CA;
+	Wed, 16 Aug 2023 08:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692174425;
+	bh=/NwmrTbylnu4L2dUN7IAYjB8B65NFoALZ+lzOZthkSY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tyTC1D3lQqUOQZ4XiWP7Iu8HKl3vz95meL5fMuPHOTSoNY/YPfNDIeMGy31vEaqel
+	 4KEdtD3lMCYhAanBb1VVr1qQQiMDFFyCAOVLBZ5/nITRCBoTqGTcagWWm8Y0xamzGT
+	 aUhS65LUy1G2ipnvqukPMv3KAK0G8kxOsgSzsKBRE5Q8fUEKbTbZCvnn+yIq9bQFm9
+	 jfWV1dB/6A3PVUxYSrhuBNH+En9YR79z/t/JDqdPCUnWSeO1XtvuSDTXv0GcjNGrsZ
+	 PYR/uZEf+Z+D4AriwPoaa2v/TTcnOEXJUP8kt+XJDa/DqMH7dQIakPSbkwHbbQ3G/r
+	 D/70SEbglZxlw==
+Date: Wed, 16 Aug 2023 10:27:01 +0200
+From: Simon Horman <horms@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] net: nixge: fix -Wvoid-pointer-to-enum-cast warning
+Message-ID: <ZNyIVQABsgj96DiK@vergenet.net>
+References: <20230815-void-drivers-net-ethernet-ni-nixge-v1-1-f096a6e43038@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,61 +36,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230816063107.11215-1-ppandit@redhat.com>
+In-Reply-To: <20230815-void-drivers-net-ethernet-ni-nixge-v1-1-f096a6e43038@google.com>
 
-Hi Prasad,
+On Tue, Aug 15, 2023 at 08:50:13PM +0000, Justin Stitt wrote:
+> When building with clang 18 I see the following warning:
+> |       drivers/net/ethernet/ni/nixge.c:1273:12: warning: cast to smaller integer
+> |               type 'enum nixge_version' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> |        1273 |         version = (enum nixge_version)of_id->data;
+> 
+> This is due to the fact that `of_id->data` is a void* while `enum nixge_version`
+> has the size of an int. This leads to truncation and possible data loss.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Note: There is likely no data loss occurring here since `enum nixge_version`
+> has only a few fields which aren't nearly large enough to cause data
+> loss. However, this patch still works towards the goal of enabling this
+> warning for more builds by reducing noise.
 
-kernel test robot noticed the following build errors:
+This information might be better placed in the patch description,
+above the scissors (---) and tags ("Link:", ...)
 
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master linus/master v6.5-rc6 next-20230815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+And, although I did make an error in this area myself as recently as
+yesterday, this patch should probably be tagged as being for net-next.
+It's probably not necessary to repost for this.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prasad-Pandit/crypto-use-SRCARCH-to-source-arch-Kconfigs/20230816-143209
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20230816063107.11215-1-ppandit%40redhat.com
-patch subject: [PATCH] crypto: use SRCARCH to source arch Kconfigs
-config: hexagon-randconfig-r011-20230816 (attached as .config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230816/202308161608.VTW4Ttjd-lkp@intel.com/reproduce)
+	Subject: [PATCH net-next] ...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308161608.VTW4Ttjd-lkp@intel.com/
+The above notwithstanding,
 
-All errors (new ones prefixed by >>):
-
->> crypto/Kconfig:1424: can't open file "arch/hexagon/crypto/Kconfig"
-   make[3]: *** [scripts/kconfig/Makefile:77: oldconfig] Error 1 shuffle=3400782416
-   make[2]: *** [Makefile:693: oldconfig] Error 2 shuffle=3400782416
-   make[1]: *** [Makefile:234: __sub-make] Error 2 shuffle=3400782416
-   make[1]: Target 'oldconfig' not remade because of errors.
-   make: *** [Makefile:234: __sub-make] Error 2 shuffle=3400782416
-   make: Target 'oldconfig' not remade because of errors.
---
->> crypto/Kconfig:1424: can't open file "arch/hexagon/crypto/Kconfig"
-   make[3]: *** [scripts/kconfig/Makefile:77: olddefconfig] Error 1 shuffle=3400782416
-   make[2]: *** [Makefile:693: olddefconfig] Error 2 shuffle=3400782416
-   make[1]: *** [Makefile:234: __sub-make] Error 2 shuffle=3400782416
-   make[1]: Target 'olddefconfig' not remade because of errors.
-   make: *** [Makefile:234: __sub-make] Error 2 shuffle=3400782416
-   make: Target 'olddefconfig' not remade because of errors.
-
-
-vim +1424 crypto/Kconfig
-
-  1419	
-  1420	config CRYPTO_HASH_INFO
-  1421		bool
-  1422	
-  1423	if !KMSAN # avoid false positives from assembly
-> 1424	source "arch/$(SRCARCH)/crypto/Kconfig"
-  1425	endif
-  1426	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Simon Horman <horms@kernel.org>
+Tested-by: Simon Horman <horms@kernel.org> # build-tested
