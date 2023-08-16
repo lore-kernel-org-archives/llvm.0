@@ -1,105 +1,109 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37C0168B9
-	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 18:26:51 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-58caf216c55so2727287b3.0
-        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 11:26:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DB914A80
+	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 19:37:54 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-589c772be14so3949407b3.0
+        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 12:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692210410; x=1692815210;
+        d=google.com; s=20221208; t=1692214673; x=1692819473;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=S6as3BxJpUCbqcYsYLfwqrd6wpI3WguOJqonU+8LSLc=;
-        b=z0c2F/G/8ZqCH25VdVy3+VNDQI8CZeomkJY3XdzlkKQh/JwPUa5Z1o9g74b4z1pxiH
-         wRYVTVuqobGllrdShttdO/QSk1CkCvnHciCc+U6yeBKeMn+G8bMhR+kKrlyHuLI78mgH
-         /xhC9LfsawjIy7OW5AbgBlur6CBQyM9oq+7T98ppgngF3OFCO5C4JO0Ati2/MimQ3z9U
-         GEv8Fn8BOAvyhA3xgcd9vgY4844c7XHjvtPwYSJ8J0FHRfSxmOZ7IyzbNBghkWgIAK5u
-         svFaihEPiZ2b4puUHNUBBfwTU3sl64Ck6rlz10eKKLgLmoxIB/j85T+jNUpMtdvqTLcr
-         FPWA==
+        bh=/+LjxTcw3v2yMw5zpUVuw9q5BXCTvUMFQpgpNYN1QVg=;
+        b=1RfasmD5jzy0I/e7fuP4O4msfCkc4u2H08gbfAC3qAftXA19agDf4QuMpKi7mcsQzz
+         7A8usSg1wizAqPFu8bw91CUEJoYIW+aa8Lu60tYXwAZJtdJgOG1t6jZi2d1CyZ+AQVsR
+         6NlE51G1wSnE5Iqd82c4OXO+WwZIq5rVrGSkuPo/VweY6XLbkWi83BrvP8FwYcQATKAY
+         F2LrJax10hZWS/YPww0yQbFbomashQmlx003/LCfvl6BAx9+AusKYSN6U8+vJfOc8LSn
+         iePayOwC+1s+oBAVaKDuJTf/W950iu8gnYBZO4q6zUhfgEBxA5uxr97nKKzbmRm2NXK8
+         34QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692210410; x=1692815210;
+        d=1e100.net; s=20221208; t=1692214673; x=1692819473;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=S6as3BxJpUCbqcYsYLfwqrd6wpI3WguOJqonU+8LSLc=;
-        b=QovL6K9yNpLNRv4m3jA66oziucS4fESlWTb1+xs+1IQH3ImgYtQKhRpnWO3SicPPb5
-         UQONIzkTdN2RvVnB3u09SW7GzODEvOKRTbznMVty+SiLH9M7iHfJnoSdeC9PkqC0Q+d1
-         F7XuwFeNuognRbrr19pnnMce21/obmSsuSMrfz3FKTcfSYOfcakH7WX+7tCuwlqIGPY7
-         K53DGAnkQxIjRJEWa9cCjEfSYPfWn3YehQp/OBMRFEjhenXl9AxRyCkZRJt3izss6tTi
-         UNY+vZUf/qD40SEaqu4Oq/fYRGi1OJup+3S61CGW/S26I1DkG5dLk59vcF5VVH11YTdi
-         HKBg==
-X-Gm-Message-State: AOJu0YztB/eLwli3nf2Xxqh/u4RfIvZOOLPWa7aXfyKwpITq4LHQ1hqA
-	/QN7yaeBQe4mS0GR7AfGDervw9ZGMEBP3hP7xA==
-X-Google-Smtp-Source: AGHT+IGHa/5g87NdPEOq2wAtPaDB0w/dWc4EOap0B976E0FRPaTqbUwY726ZhRQ4H+6EEHfTB93fXA2tnit2luAlDA==
+        bh=/+LjxTcw3v2yMw5zpUVuw9q5BXCTvUMFQpgpNYN1QVg=;
+        b=VCK3RvLoCfMcfIwtSmFbmKbxYjjri1iebpi4jwWsbrLGwDbKMZPXRSFc3GQ6Z88zFY
+         AsWeuYIyrw0/sJAHNzFLaN7ihewBdyiNuJ5+YNZ8AL5pW7YVIYveffv5rVjd3QWmkM79
+         TBsAJqPxlGDkCD4ITL13hqpSYlzvK+qzWu1HrczpEgIGDORx4FrEA8kZCVXkHsOJrCaP
+         ipk8ZyKZcblUUBXFhlPijX/azrxb2ptMDwJpQTWnexXZQL6Fu6WmLhQg8/fVuUzYyZrK
+         GYkTy2zQ5CHgaXmTY4Snofb171Rbh4qI+3ENl067UTRjDgF3QNzQkNPJ3P+twINzhCwK
+         bOgg==
+X-Gm-Message-State: AOJu0YwPrWGEvVhgpOA7WznEDEgOR8IXrWwdIlxTLnTt7h07QF/xFE0Y
+	nPPZRNBu/VORE4+wo0agqoeue10GQwu3fkTrPw==
+X-Google-Smtp-Source: AGHT+IFSPI1nblCHVMtOyfqUjsfaIPN4xVKpcpnHV1rjUFdjIsIGvbSQUjHcmsRPBah8JEyGwYVPR1Ff456AHTz/bg==
 X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a81:4316:0:b0:58c:e8da:4d1a with SMTP
- id q22-20020a814316000000b0058ce8da4d1amr8918ywa.2.1692210410645; Wed, 16 Aug
- 2023 11:26:50 -0700 (PDT)
-Date: Wed, 16 Aug 2023 18:26:44 +0000
+ (user=justinstitt job=sendgmr) by 2002:a81:b623:0:b0:589:a3d6:2e02 with SMTP
+ id u35-20020a81b623000000b00589a3d62e02mr11481ywh.3.1692214673138; Wed, 16
+ Aug 2023 12:37:53 -0700 (PDT)
+Date: Wed, 16 Aug 2023 19:37:52 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAOMU3WQC/5WNSw6DMAwFr4K8riuSlo+64h4Vi5Q4YAkIilFUh
- Lh7Azfo7s0s3uwgFJgEXtkOgSIL+zmBvmXQDWbuCdkmBp3rR16rAqNnizZwpCA4rRYnswguwyZ
- p4GnNyiOh1lXuqHLWqRLS2xLI8fcqvdvEA8vqw3aFozrt/42oUOHHlK6rS1vQk5re+36ke+cna I/j+AGL1kKx3wAAAA==
+X-B4-Tracking: v=1; b=H4sIAI8l3WQC/y2NQQqAIBAAvxJ7bkGNsvpKdBDdaiEsVpAg+nsSX
+ QbmMnNDImFKMFY3CGVOfMQiuq7Aby6uhByKg1GmUb3uMB8cMAhnkoQ7hR+nd0PbXmiVMt531pl BQ4mcQgtf32Can+cF6SNRInAAAAA=
 X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692210409; l=1749;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692214672; l=1884;
  i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=8lAIhnmpRVK+py4l8xzNXorgfe03DykVYWVS/7qh4fw=; b=ktG2rQbNbxM+rTl/KVl5MI/PcP0u3a40de2Mqg6Bm+oJeBznguW1yO4lm/q5TFtmA7hRZT6nf
- DixvkgTw1w3BeuZDW/cwGzcjia8AwOtJnFMUleRe1Ten7DKqdvdMwwp
+ bh=DImqGSc3DxMYYtM+y3nWIyr7RKQ7ZF8igdoNKRIjvLQ=; b=oZtCzrNRhX+BmRVUVvDSMSHtFevQke6DkQXuUAFvKDDJ1JsC/SVF5cWpFkKp1YFqFV2ZBkibS
+ Xr8bPbEJ4bVDVADcU3GcnzqSWeXBFKsF6nxpOmdDkzqD7eO6tjNDrAm
 X-Mailer: b4 0.12.3
-Message-ID: <20230816-void-drivers-mtd-maps-physmap-versatile-v2-1-433a25272bfa@google.com>
-Subject: [PATCH v2] mtd: maps: fix -Wvoid-pointer-to-enum-cast warning
+Message-ID: <20230816-void-drivers-leds-leds-pca955x-v1-1-2967e4c1bdcc@google.com>
+Subject: [PATCH] leds: pca955x: fix -Wvoid-pointer-to-enum-cast warning
 From: Justin Stitt <justinstitt@google.com>
-To: Linus Walleij <linus.walleij@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Nathan Chancellor <nathan@kernel.org>, 
+To: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
+Cc: linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="utf-8"
 
 When building with clang 18 I see the following warning:
-|       drivers/mtd/maps/physmap-versatile.c:209:25: warning: cast to smaller
-|               integer type 'enum versatile_flashprot' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-|         209 |                 versatile_flashprot = (enum versatile_flashprot)devid->data;
+|      drivers/leds/leds-pca955x.c:487:15: warning: cast to smaller integer
+|      type 'enum pca955x_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+|        487 |                 chip_type = (enum pca955x_type)md;
 
-This is due to the fact that `devid->data` is a void* while `enum versatile_flashprot`
-has the size of an int.
+This is due to the fact that `md` is a void* while `enum pca995x_type` has the
+size of an int.
 
-Cast `devid->data` to a uintptr_t to silence the above warning for clang
-builds using W=1.
+Add uintptr_t cast to silence clang warning while also keeping enum cast
+for readability and consistency with other `chip_type` assignment just a
+few lines below:
+|	chip_type = (enum pca955x_type)id->driver_data;
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1910
 Reported-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
-Changes in v2:
-- Use more accurate commit message (thanks Krzysztof)
-- Link to v1: https://lore.kernel.org/r/20230815-void-drivers-mtd-maps-physmap-versatile-v1-1-ba6fc86d5e4e@google.com
+
+
+leds: pca955x: fix -Wvoid-pointer-to-enum-cast warning
 ---
- drivers/mtd/maps/physmap-versatile.c | 2 +-
+Note: I've opted to keep the initial `enum pca955x_type` cast and just
+place the uintptr_t cast first to silence the warning. It seemed weird
+to me to see the same variable being assigned to two different casted
+values within just a few lines.
+---
+ drivers/leds/leds-pca955x.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/maps/physmap-versatile.c b/drivers/mtd/maps/physmap-versatile.c
-index a1b8b7b25f88..d65cf8833771 100644
---- a/drivers/mtd/maps/physmap-versatile.c
-+++ b/drivers/mtd/maps/physmap-versatile.c
-@@ -206,7 +206,7 @@ int of_flash_probe_versatile(struct platform_device *pdev,
- 		if (!sysnp)
- 			return -ENODEV;
+diff --git a/drivers/leds/leds-pca955x.c b/drivers/leds/leds-pca955x.c
+index b10e1ef38db0..1d7fa0cd97bf 100644
+--- a/drivers/leds/leds-pca955x.c
++++ b/drivers/leds/leds-pca955x.c
+@@ -484,7 +484,7 @@ static int pca955x_probe(struct i2c_client *client)
+ 	const void *md = device_get_match_data(&client->dev);
  
--		versatile_flashprot = (enum versatile_flashprot)devid->data;
-+		versatile_flashprot = (uintptr_t)devid->data;
- 		rmap = syscon_node_to_regmap(sysnp);
- 		of_node_put(sysnp);
- 		if (IS_ERR(rmap))
+ 	if (md) {
+-		chip_type = (enum pca955x_type)md;
++		chip_type = (enum pca955x_type)(uintptr_t)md;
+ 	} else {
+ 		const struct i2c_device_id *id = i2c_match_id(pca955x_id,
+ 							      client);
 
 ---
 base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
-change-id: 20230815-void-drivers-mtd-maps-physmap-versatile-2270fe7fdf16
+change-id: 20230816-void-drivers-leds-leds-pca955x-7002cc67a291
 
 Best regards,
 --
