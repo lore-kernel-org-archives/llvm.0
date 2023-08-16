@@ -1,75 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D3BD2F1;
-	Wed, 16 Aug 2023 22:38:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692225522; x=1723761522;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CO5A5P2eUHmFyMZg3w6+rv/UdmA5bIeUSUXOuHm8Rgg=;
-  b=NihBFsz/zX606crMOKQlA1GXVLm+Dg62VE8trlg5TgWzdv5XKsKaVXFb
-   wZHnCXAU5Abzf9UdQ93CyTAxDskacwQstjvpxn6OUZH4143IjiOqrbCOE
-   bO/UtpjPVBMB7nJsJ/PoH5b5i6uuXXA9fKsChuQAenH6YOg/K1EcSjqG3
-   ankDdWUZJla248vRX4vXd1OMupbP+rV9SQaQ5oMVdSvsZ9o7CWZEry9Jf
-   80xiSSZ2+2LHcOUpBh3xzilYKdApuW5H8eEqwAQXhOP86b0qoNFhD/j0n
-   BjlABbyc35bE0KXZUebNGt9PXgrQBkDTF9uDpSnKgyn/b/0vVt48onYCQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="352973421"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="352973421"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 15:38:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="763795088"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="763795088"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 Aug 2023 15:38:40 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWP9t-0000ct-20;
-	Wed, 16 Aug 2023 22:38:35 +0000
-Date: Thu, 17 Aug 2023 06:38:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tianyu Lan <tiala@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Kelley <mikelley@microsoft.com>
-Subject: [lantianyu:test 14/21] ld.lld: error: undefined symbol:
- isolation_type_en_snp
-Message-ID: <202308170646.cOnDa07c-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EAED2F1
+	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 22:41:23 +0000 (UTC)
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-4898a4466b6so675265e0c.3
+        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 15:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692225682; x=1692830482;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mmIqxa6frC+gPR1n1W6gSgs3JOKzmDAS0GTXjwaiYmA=;
+        b=5Bs6sM4GRaoJLPQgY5xE+w4MsxnsgboK1Dh+YN60e0m/ucJzK4S8elgXG7atMdSjzx
+         oOezkrK7ViKu51PnZH/Z3xLWwNhNcx1e5EDYw6y14A5B29UuZzphtgdpHJMYA53uFNWJ
+         wwm/zz7P4OGidZfvmJ85fTEkb7klogJgqe0Sw85jgcD6/MxmUeY93gD2VDN2QtKEZzNQ
+         53CvG28kl5EOZ6s7R/Sn/nIaFP1fuAY/dVuNby+9CaOyrXWT1XU8oVaaINkYd6XQLmZz
+         FYC7dqMkHjzlfE3lmH/wJMGzPYM9HmKMjrlHWR096C+v32UrwmMH7+lVcGCCC3/9QwJt
+         /6hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692225682; x=1692830482;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mmIqxa6frC+gPR1n1W6gSgs3JOKzmDAS0GTXjwaiYmA=;
+        b=Tl2M5MAUIDPFV1nRqhIXXEVumcjVLkmdNT+iZpwfe2xjJLptJk80r73qURGdMegAdp
+         bwjYOu8WtfB3jf2H76xxUOQRIspT4HNn8SnARwWc072Fbu3WBqorwxnAQU3O+37vHne+
+         wcQgXgIJW7YXBcgbX4SdIzNsq3mFqTX0I+zkOcYQScZ/YTetBwUMPYlZ3UPlZcJQjwd8
+         xL0y/2JayReMdOFGSMelrKXaZMFGG2Cu8T0g/GJJ8hYiPwUdIp1JR8qe/gMesiZ9pXSy
+         YUeDoN8QnXISD+geMhp7in+mP5RnNzQ229QwlW+XtqBIksGIBuXKFmdpQuCDERFUqJuN
+         r6WQ==
+X-Gm-Message-State: AOJu0YzLvziJ9GXByYLTLzEDoGniWuNln+rX06Zlk1Bn51BpqyFuq7tZ
+	G5XJuMvyEasIYY2+OyuaEpuqgsBZxMgAI25Y9irVtg==
+X-Google-Smtp-Source: AGHT+IG1+IPfo+RX82+EOF4EsXRn+LG2oKvxL3tLdVcgq7pTP/+tdR7tm3COfErbYJ2EsxeSvKy8qQ9gkLN6OhX6Xoo=
+X-Received: by 2002:a1f:c189:0:b0:48a:68d0:28fc with SMTP id
+ r131-20020a1fc189000000b0048a68d028fcmr3232564vkf.4.1692225682132; Wed, 16
+ Aug 2023 15:41:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230816-mips-vdso-cond-export-__vdso_gettimeofday-v1-1-fe725254c782@kernel.org>
+In-Reply-To: <20230816-mips-vdso-cond-export-__vdso_gettimeofday-v1-1-fe725254c782@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 16 Aug 2023 15:41:11 -0700
+Message-ID: <CAKwvOdmq2Yvf3g83xQdV9_X2NEHVNORb7xBMn2ivZ0jriBPv6w@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: VDSO: Conditionally export __vdso_gettimeofday()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: tsbogend@alpha.franken.de, linux-mips@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/lantianyu/linux test
-head:   f5c4c5f104612a69401a5343609c6f939716896a
-commit: 7a649840782fb85d5d719118dd4b404d535345e3 [14/21] x86/hyperv: Add sev-snp enlightened guest static key
-config: x86_64-randconfig-x013-20230817 (https://download.01.org/0day-ci/archive/20230817/202308170646.cOnDa07c-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170646.cOnDa07c-lkp@intel.com/reproduce)
+On Wed, Aug 16, 2023 at 2:59=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> ld.lld 16.0.0 and newer defaults to '--no-undefined-version', which
+> causes the following error when CONFIG_MIPS_CLOCK_VSYSCALL is not set:
+>
+>   ld.lld: error: version script assignment of 'LINUX_2.6' to symbol '__vd=
+so_gettimeofday' failed: symbol not defined
+>
+> Only export __vdso_gettimeofday() when it will be present in the final
+> object file, which clears up the error.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202308170532.zxFFv25c-lkp@i=
+ntel.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308170646.cOnDa07c-lkp@intel.com/
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All errors (new ones prefixed by >>):
+> ---
+>  arch/mips/vdso/vdso.lds.S | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
+> index d90b65724d78..836465e3bcb8 100644
+> --- a/arch/mips/vdso/vdso.lds.S
+> +++ b/arch/mips/vdso/vdso.lds.S
+> @@ -94,7 +94,9 @@ VERSION
+>  #ifndef CONFIG_MIPS_DISABLE_VDSO
+>         global:
+>                 __vdso_clock_gettime;
+> +#ifdef CONFIG_MIPS_CLOCK_VSYSCALL
+>                 __vdso_gettimeofday;
+> +#endif
+>                 __vdso_clock_getres;
+>  #if _MIPS_SIM !=3D _MIPS_SIM_ABI64
+>                 __vdso_clock_gettime64;
+>
+> ---
+> base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
+> change-id: 20230816-mips-vdso-cond-export-__vdso_gettimeofday-30ab92c716d=
+4
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+>
 
->> ld.lld: error: undefined symbol: isolation_type_en_snp
-   >>> referenced by instrumented.h:68 (include/linux/instrumented.h:68)
-   >>>               vmlinux.o:(ms_hyperv_init_platform)
-   >>> referenced by instrumented.h:68 (include/linux/instrumented.h:68)
-   >>>               vmlinux.o:(ms_hyperv_init_platform)
-   >>> referenced by atomic.h:23 (arch/x86/include/asm/atomic.h:23)
-   >>>               vmlinux.o:(ms_hyperv_init_platform)
-   >>> referenced 13 more times
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
