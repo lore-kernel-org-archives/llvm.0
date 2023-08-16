@@ -1,62 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAD03D60;
-	Wed, 16 Aug 2023 22:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60DCEC433C8;
-	Wed, 16 Aug 2023 22:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692223318;
-	bh=UUEYl5HxoSScFuWiDblQhxwz1ZMb/pQYtbWQP+cA2eg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mzhhZBrdLkDYrFA8xJ72K20M7OC88H5TSa9hS2L0i5T6JJ0YIpbHlA0McRhYXzWn2
-	 8bDPQskKDcGnOwlpmAPrwmug7W2uRytVo3pM9VxGHL0LDzbfsfPI4iJxBSxnccOSh3
-	 CX1ZVXE6QR5x7LuNCfsd4fG54FtffTe/gNTqoY36ZRmc1uf5ROun6UvI15n+Te0TDC
-	 PJdqX1NfQRO9ZkoJR69B+GLh+KdUQnBfnpNCYxevZvO9yZ67HFBtj6C+qdhqGtPet3
-	 TTCG+Q24+sK5cUxckv0TMYlbGgWiMPoMx9gfKGH/mcNDVHi91n+jyLfAu/xvvK4wn9
-	 06+DaUJ0Ikw4Q==
-Date: Wed, 16 Aug 2023 15:01:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Keguang Zhang <keguang.zhang@gmail.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: ld.lld: error: version script assignment of 'LINUX_2.6' to
- symbol '__vdso_gettimeofday' failed: symbol not defined
-Message-ID: <20230816220156.GA1408221@dev-arch.thelio-3990X>
-References: <202308170532.zxFFv25c-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0191AA95
+	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 22:05:02 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1bbb3195013so22965ad.1
+        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 15:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692223502; x=1692828302;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bBPTE28cAPKLWrgM2uUfeQITqXrIuPWTV58S91B8OJI=;
+        b=vcF4yOPHfczBQYINY7p/sgfRsPapUuPOGiBbhWqQBEvOuthgZKjD4Qrc9YF8UQB7/q
+         drD+D9rbfpd+7gugaFmaX0+38sAdlW7k8huZB13sEHUiXw/KBOboAOYQdaHK2kBRwebH
+         kLAnbDdo5d5KTt2j/oPwMvE7ifJC209z/eNf7O6naxG1wOmO1rbPTIyCgQMWZVeMRRDD
+         Sl6PXrPh5fGRikUQNbIRUvZfuxumaQcXPmBj40bKRPYqPKa+lUI5zwNAmgRP2P8z9OnT
+         rdbZiKNvsVPkZq2IsNwU+RlLfDEZB37ClSv35srOVxcJ1u65ObX7u95ewKJJDVxnFvkZ
+         UkOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692223502; x=1692828302;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bBPTE28cAPKLWrgM2uUfeQITqXrIuPWTV58S91B8OJI=;
+        b=XN0CgKR1vSeFo4RbA6JV/RL3dRGdtI/6WCD95bpN6v266iEqhRdEBoc6GfoRCEB740
+         qu+l76dDoVjyrQw+bYr7ainEGAFHgB4r8QK77o5o58wmkSubzNZU9lOr49FNcy7qVdb1
+         nmi01D5rl0Fzyr96UmP+jnvslWfIN0FM7VT6HZ0jMNHEV/InuWTBRwhA9UYmuK60nlnr
+         8j6rYHyQecsU6InKXOGtcC7ePLhd31gAYqjKYqxXTRLmR2zpGgnM5/FQFFfakDhILDU/
+         5wpiZGhJG7TC6Jnywdwk/7mj1SAe5s6xNdcXcpjDEqjaBNfF3OaC81+7/t2n6p6XGNpF
+         Us2A==
+X-Gm-Message-State: AOJu0Yx35Hv+z9TGP91T+Gfn/3sXgJ8ytY9RcHI3/xQN53otjX+vfwvo
+	og1ntOGmAsUBa4Kx0J3ROZ0Hmg==
+X-Google-Smtp-Source: AGHT+IEuOUCO/H139rrEjwSPDvyEtzzmsDP4BDaEKor0UvpvxGlepYgrvvJV8S5/Zv9LowbS4wuvqg==
+X-Received: by 2002:a17:902:d2c4:b0:1b8:698e:ac2f with SMTP id n4-20020a170902d2c400b001b8698eac2fmr44043plc.21.1692223501659;
+        Wed, 16 Aug 2023 15:05:01 -0700 (PDT)
+Received: from google.com ([2620:15c:2d3:205:abd7:243d:5e17:457d])
+        by smtp.gmail.com with ESMTPSA id iw12-20020a170903044c00b001b9d7c8f44dsm13592911plb.182.2023.08.16.15.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 15:05:01 -0700 (PDT)
+Date: Wed, 16 Aug 2023 15:04:57 -0700
+From: Fangrui Song <maskray@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	akpm@linux-foundation.org, conor@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] lib/Kconfig.debug: Restrict DEBUG_INFO_SPLIT for RISC-V
+Message-ID: <20230816220457.kqzlbiibeomvki4y@google.com>
+References: <20230816-riscv-debug_info_split-v1-1-d1019d6ccc11@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <202308170532.zxFFv25c-lkp@intel.com>
+In-Reply-To: <20230816-riscv-debug_info_split-v1-1-d1019d6ccc11@kernel.org>
 
-On Thu, Aug 17, 2023 at 05:15:55AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
-> commit: e738521a11f13e40af89f66527e59306c4169782 clocksource/drivers/loongson1: Move PWM timer to clocksource framework
-> date:   8 weeks ago
-> config: mips-randconfig-r012-20230817 (https://download.01.org/0day-ci/archive/20230817/202308170532.zxFFv25c-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170532.zxFFv25c-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308170532.zxFFv25c-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: version script assignment of 'LINUX_2.6' to symbol '__vdso_gettimeofday' failed: symbol not defined
+On 2023-08-16, Nathan Chancellor wrote:
+>When building for ARCH=riscv using LLVM < 14, there is an error with
+>CONFIG_DEBUG_INFO_SPLIT=y:
+>
+>  error: A dwo section may not contain relocations
+>
+>This was worked around in LLVM 15 by disallowing '-gsplit-dwarf' with
+>'-mrelax' (the default), so CONFIG_DEBUG_INFO_SPLIT is not selectable
+>with newer versions of LLVM:
+>
+>  $ clang --target=riscv64-linux-gnu -gsplit-dwarf -c -o /dev/null -x c /dev/null
+>  clang: error: -gsplit-dwarf is unsupported with RISC-V linker relaxation (-mrelax)
+>
+>GCC silently had a similar issue that was resolved with GCC 12.x.
+>Restrict CONFIG_DEBUG_INFO_SPLIT for RISC-V when using LLVM or GCC <
+>12.x to avoid these known issues.
+>
+>Link: https://github.com/ClangBuiltLinux/linux/issues/1914
+>Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99090
+>Reported-by: kernel test robot <lkp@intel.com>
+>Closes: https://lore.kernel.org/all/202308090204.9yZffBWo-lkp@intel.com/
+>Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>---
+>Since this only impacts RISC-V, it seems reasonable that this would go
+>in via their tree but I have added Andrew in case he wants to take it.
+>---
+> lib/Kconfig.debug | 5 +++++
+> 1 file changed, 5 insertions(+)
+>
+>diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>index d6798513a8c2..bd51274f4771 100644
+>--- a/lib/Kconfig.debug
+>+++ b/lib/Kconfig.debug
+>@@ -355,6 +355,11 @@ endchoice # "Compressed Debug information"
+> config DEBUG_INFO_SPLIT
+> 	bool "Produce split debuginfo in .dwo files"
+> 	depends on $(cc-option,-gsplit-dwarf)
+>+	# RISC-V linker relaxation + -gsplit-dwarf has issues with LLVM and GCC
+>+	# prior to 12.x:
+>+	# https://github.com/llvm/llvm-project/issues/56642
+>+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99090
+>+	depends on !RISCV || GCC_VERSION >= 120000
+> 	help
+> 	  Generate debug info into separate .dwo files. This significantly
+> 	  reduces the build directory size for builds with DEBUG_INFO,
+>
+>---
+>base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
+>change-id: 20230816-riscv-debug_info_split-0713571a1ac2
+>
+>Best regards,
+>-- 
+>Nathan Chancellor <nathan@kernel.org>
+>
 
-I fail to see why the robot landed on this change as the cause of this
-error but regardless, I have sent a patch to clear it up:
+LGTM as the author of the Clang mitigation
+(https://github.com/llvm/llvm-project/issues/56642) and several recent
+LLVM assembler side linker relaxation improvement (I continue updating
+https://maskray.me/blog/2021-03-14-the-dark-side-of-riscv-linker-relaxation
+about the complication of linker relaxation).
 
-https://lore.kernel.org/20230816-mips-vdso-cond-export-__vdso_gettimeofday-v1-1-fe725254c782@kernel.org/
-
-Cheers,
-Nathan
+Reviewed-by: Fangrui Song <maskray@google.com>
