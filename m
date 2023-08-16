@@ -1,102 +1,111 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6063317737
-	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 19:55:32 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-589f986ab8aso4043107b3.1
-        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 12:55:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F3215AE5
+	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 20:05:38 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d6b66b41232so3441516276.0
+        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 13:05:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692215731; x=1692820531;
+        d=google.com; s=20221208; t=1692216337; x=1692821137;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=N67WiS7/3sb8Cj5N6RzDQuOPr7zI0dDToiYbr0rmgmw=;
-        b=qqAMPQ5GdxbgdBzVIb7T7A7AxjWjb8DZommfyeV76VQL2kkVv7tkNkJUQ06TRq8XnT
-         waLMQoVGcBnknva0JTqjv8UZ6Q+wYnClzOw4zyn+P5Ngf3Q6q6Cwk2hfakEIaqveWx8P
-         jZ/xK08v011Lo51sEevdEdRGkUqTHL/QXB1gJnUCRoKect4TDA2Sc283QbDuly1TgYla
-         7GtIvdLrfvitpRwndHWgT14eFK2AP78lTlIxPi7aMm16JurApTs+jnKNpgETgQfCyxeY
-         dql2gk9AN8kJCTSa0Tf0acm/kTGEVr94Od1hnkrMQeCIIDi2UMgZnvcJa9mI5IEpOKer
-         nAmQ==
+        bh=q1zJRByobygJmxlGcPsiWYXWmw/Kpo9bqoSIzYxrAMA=;
+        b=MvPkkBqm010VBxFPljzdSSPqlYrL8FgyrZXAzR4r/xUWdpnYPgVERfx8PD+azrvKMl
+         Js7XhKSo8fj8XcptTE0E8pWWmyKo3pBi3WP/7Uel1U9kKiaIcdi8S5tVhOEWG5VcaN6A
+         h11A4j0lWRy59IKfGN17uP3iQTnUOXWOYRdyeyH5MBshW43kG8mNr5nffVj8jAma8FSZ
+         n/7yyNPZwsq2rmZ8lbIvE6JOXSsoOco0qR0T3OEm1L9JedF3oEp8/QAAYaBsJ18RjXI7
+         xFpgDy00CW7OfeR1XAbQ+MbVeAcZOSjbrFKteZn6bpY6/ZZvAB1Fq4eVytP78qiojp/Z
+         slJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692215731; x=1692820531;
+        d=1e100.net; s=20221208; t=1692216337; x=1692821137;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=N67WiS7/3sb8Cj5N6RzDQuOPr7zI0dDToiYbr0rmgmw=;
-        b=G2mYQzmu/l0lVdLs6DQ8CyYk7mf6amzKYTFmKEqOQ9A1P58sbYJE4oxm8d1YjWjjH1
-         1UE4YZGVOZWXp+OfHolUd5hXszZ8eNqGzGsjDzVYrjchRuWacYUIImiSEeYEgcVgrtnh
-         PE2hDSLUctwoaKRd0MZSNDI48CtQELdEnaOzKh67PkcTJuPNVj54jn5Vw9MyfAaIYcpi
-         E/mHjo7nbd5G9fSU4bqwCSE5Jt2cxiYvHD+I4JtokzF11ufCAyrGviySHp7R3GJZj3k5
-         LfQXuVFMnJSZyzNHWpV7AQPJqffN1NqfCFbpVqP2aBDyCSAtCBETUMtl14vBjdroCUYV
-         aQQA==
-X-Gm-Message-State: AOJu0YweiRYM/AUDFuHCoX/VlhlxjWFvRK6+lTsXE0ZLWDS8buM/CSRz
-	umHLYdR22xo2Ou0bFI/WBK7bJOIKK2vVH8Lg0g==
-X-Google-Smtp-Source: AGHT+IH1FY4dJduz6fzigREg8tgE5e/JoOxQTJRQ+4NUOdZQ3sjCJGTYtxjEsAd879DrJol6J6MNGzXEiww4uT8XAA==
+        bh=q1zJRByobygJmxlGcPsiWYXWmw/Kpo9bqoSIzYxrAMA=;
+        b=Dz0DDV1Xrz87pYaWuiWpRsYydhMMlhPliANpKkHvoFuO7OAwVISAtL0JEA3ZKLwTTC
+         ozAJ9fFVkyLqj6GgKJHTStq4NO1DTiaesmKvnqIxFT7NarBXAKjHOw6OSKixaAIdI5dc
+         Oj7WF/GCvk2hOC9GkqDAP3/5Rngnh1rjF+QM/iODsYrw8tSglKj6TN3bDS/v3RAcz/G+
+         k51NpB1WO/TXhg4USkeLzmvG4vmhvBO/cRkoBvmjupJXghyNpFf1rLUI57rXDovBF3qJ
+         s1DLehiFRfYZBFzh+D12EXM9nv/DrpL4TabnDwTMwxl0QTwdAykovOxDO+UExVt+PhH/
+         pE3g==
+X-Gm-Message-State: AOJu0YwL4qJ9sa+8JjFG5LQ+HMazPRv5qvfJKzJvzrorBYjOR9f0aSZh
+	ARan8tdhGtMtHxOjDpWDgnuIsu0zmqTNS4Awow==
+X-Google-Smtp-Source: AGHT+IFNaJOEypbhXqhScLpEC21mUN+AtwIEQNf0srEs8ajqHsvV56K3cjHMN0wUd+cCbRBCQpzv2iN90laIwSR5Jw==
 X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a81:ac16:0:b0:586:e91a:46c2 with SMTP
- id k22-20020a81ac16000000b00586e91a46c2mr10910ywh.4.1692215731117; Wed, 16
- Aug 2023 12:55:31 -0700 (PDT)
-Date: Wed, 16 Aug 2023 19:55:29 +0000
+ (user=justinstitt job=sendgmr) by 2002:a05:6902:1828:b0:d47:4b58:a19e with
+ SMTP id cf40-20020a056902182800b00d474b58a19emr41135ybb.11.1692216337708;
+ Wed, 16 Aug 2023 13:05:37 -0700 (PDT)
+Date: Wed, 16 Aug 2023 20:05:37 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIALAp3WQC/x2NywqEMAwAf0Vy3kBbwcf+yrKHYqLmYC2pFkX8d
- 4u3mcvMBYlVOMG3ukA5S5I1FLGfCobZh4lRqDg442rT2QbzKoSkklkTTnEvvOAm4UTl6CMretP Vzg7U99RC6UTlUY738fvf9wNunyWqcwAAAA==
+X-B4-Tracking: v=1; b=H4sIABAs3WQC/yWNUQqDMBBEryL73YWslrb2KkVKTDZ2wWrY2CCId
+ 29sf4Z5PJjZILEKJ7hXGyhnSTJPBehUgXvZaWAUXxhqUzfmRhfMs3j0Kpk14RA/pb8xjkT0z+c h7CIj47npybQu2Kv1UAajcpD1d/bo9v0LTho/FHwAAAA=
 X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692215730; l=1587;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692216336; l=2252;
  i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=1YZyFhkuynphmxg7TZPqc+HCfPgAHdsuqMCKaSpuV/U=; b=bBQyQBouy2hNFI2Y+MZ5b8WiXWffYYC1ZHRHShS4JwLZXQ5M+xDLuy36HSKM9qv3Feh2sFmcI
- EcULJCqRSxRDiOcyGlXjVSpYurYZS4f1tLMAnsNdkAn4PX9rVhH0Fj0
+ bh=Tnc4+dz64T+fPs7aJDSgBftKnogFsH+GQZIzMyR+1bk=; b=LmuyjatrHL0EddGvQOBipnyOHLraxks6AybfPQDU72+ioz+pYbqw78aaPi1gn/pyT0iIiNkrp
+ 6c9T6yj2kV8D6dO05mfCKTBd9A8PmgzKtR6YY3xoWYuebZApiZ+d0gS
 X-Mailer: b4 0.12.3
-Message-ID: <20230816-void-drivers-gpu-drm-tiny-repaper-v1-1-9d8d10f0d52f@google.com>
-Subject: [PATCH] drm/repaper: fix -Wvoid-pointer-to-enum-cast warning
+Message-ID: <20230816-void-drivers-gpu-drm-pl111-pl111_versatile-v1-1-92125dd9e6d4@google.com>
+Subject: [PATCH] drm: pl111: fix clang -Wvoid-pointer-to-enum-cast warning
 From: Justin Stitt <justinstitt@google.com>
-To: "=?utf-8?q?Noralf_Tr=C3=B8nnes?=" <noralf@tronnes.org>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+To: Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
 Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-When building with clang 18 I see the following warning:
-|       drivers/gpu/drm/tiny/repaper.c:952:11: warning: cast to smaller integer
-|       type 'enum repaper_model' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-|         952 |                 model = (enum repaper_model)match;
-|
+When building with clang 18 I see the following warnings:
+|1.     drivers/gpu/drm/pl111/pl111_versatile.c:487:24: warning: cast to smaller
+|       integer type 'enum versatile_clcd' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+|         487 |         versatile_clcd_type = (enum versatile_clcd)clcd_id->data;
+-
+|2.     drivers/gpu/drm/pl111/pl111_versatile.c:507:26: warning: cast to smaller
+|       integer type 'enum versatile_clcd' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+|         507 |                         versatile_clcd_type = (enum versatile_clcd)clcd_id->data;
 
-This is due to the fact that `match` is a void* while `enum repaper_model`
+This is due to the fact that `clcd_id->data` is a void* while `enum versatile_clcd`
 has the size of an int.
 
-Add uintptr_t cast to silence clang warning while also keeping enum cast
-for readability and consistency with other `model` assignment just a
-few lines below:
-|       model = (enum repaper_model)spi_id->driver_data;
+Cast `clcd_id->data` to a uintptr_t to silence the above warning for
+clang builds using W=1
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1910
 Reported-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
- drivers/gpu/drm/tiny/repaper.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/pl111/pl111_versatile.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/tiny/repaper.c b/drivers/gpu/drm/tiny/repaper.c
-index c2677d081a7b..165f2099e7d8 100644
---- a/drivers/gpu/drm/tiny/repaper.c
-+++ b/drivers/gpu/drm/tiny/repaper.c
-@@ -949,7 +949,7 @@ static int repaper_probe(struct spi_device *spi)
+diff --git a/drivers/gpu/drm/pl111/pl111_versatile.c b/drivers/gpu/drm/pl111/pl111_versatile.c
+index 00c3ebd32359..d6fd9e51377e 100644
+--- a/drivers/gpu/drm/pl111/pl111_versatile.c
++++ b/drivers/gpu/drm/pl111/pl111_versatile.c
+@@ -484,7 +484,7 @@ int pl111_versatile_init(struct device *dev, struct pl111_drm_dev_private *priv)
+ 		return 0;
+ 	}
  
- 	match = device_get_match_data(dev);
- 	if (match) {
--		model = (enum repaper_model)match;
-+		model = (enum repaper_model)(uintptr_t)match;
- 	} else {
- 		spi_id = spi_get_device_id(spi);
- 		model = (enum repaper_model)spi_id->driver_data;
+-	versatile_clcd_type = (enum versatile_clcd)clcd_id->data;
++	versatile_clcd_type = (enum versatile_clcd)(uintptr_t)clcd_id->data;
+ 
+ 	/* Versatile Express special handling */
+ 	if (versatile_clcd_type == VEXPRESS_CLCD_V2M) {
+@@ -504,7 +504,7 @@ int pl111_versatile_init(struct device *dev, struct pl111_drm_dev_private *priv)
+ 		np = of_find_matching_node_and_match(NULL, impd1_clcd_of_match,
+ 						     &clcd_id);
+ 		if (np)
+-			versatile_clcd_type = (enum versatile_clcd)clcd_id->data;
++			versatile_clcd_type = (enum versatile_clcd)(uintptr_t)clcd_id->data;
+ 	}
+ 
+ 	map = syscon_node_to_regmap(np);
 
 ---
 base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
-change-id: 20230816-void-drivers-gpu-drm-tiny-repaper-a08321cd99d7
+change-id: 20230816-void-drivers-gpu-drm-pl111-pl111_versatile-43b109cfa7ad
 
 Best regards,
 --
