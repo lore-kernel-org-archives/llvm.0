@@ -1,147 +1,75 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3CFD2F1
-	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 22:35:18 +0000 (UTC)
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-78f1210e27fso2018234241.1
-        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 15:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692225317; x=1692830117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7SX8jlMVqMi1+mLRoYyUfc72SUd+crYgBsYv56+9V6E=;
-        b=EfLFo/b41aCL09FPShvIG4tmRfEM0AwoIXv4zJi49BVDrF9iPI0A8tbq7wR4GQ0e9p
-         oivgK7oz9AKcXdl2AHm4mwT2RWJEekqG5ehDH0h1D2QkJmPpDLbEgyyHCyZLK1PmVn3e
-         zovIeprLeYevzeyj5NnQkJKitard3wRxq1Pejhayb3ju9rtFqyqs28IVC0TJIMjgED+n
-         5seVZQzsp70BDVbVQDuVR9Va4sPDH8z1COdrb2bVRzEbIxHnHvfdk724UhKH9YayP2np
-         +JMvf40D3KN/T+WBRDVcd3vov+V6HWZTYVP8sbiRt4HJWrQb8+IndhjuTc1UXuyD23Tz
-         PTxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692225317; x=1692830117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7SX8jlMVqMi1+mLRoYyUfc72SUd+crYgBsYv56+9V6E=;
-        b=cWQVjTpNR1ThrXyG41WXXEMjKlzqQe+iZSEJ2wbvYtFyAVhS1CHcd0Ej+bli4XZSNQ
-         /shptdbOFFXVCVhKwZngI3ADDeLmutOojJZSinaW1RSN97jY7sS8W2FyoHp0zArYDnwT
-         wNMy9rF1DlwyAHtNJWqa0pMqMnPDVcXmwqEQOrkrPui9w4EWotR3why/C0GtrUKSYE0T
-         iEXkVv9Tu8VOMTpq2Ynss1Hg4tswBEI9n5uh+pA3t3XKIu9OanDd4LgZpsq6tMVl0PF3
-         Bixvq9NMSlSEnU45WOrS/Uii6npRtXAlmrcJR8ur+1dWSoTZDs/doRN1WLzB1g4nu09x
-         Q67A==
-X-Gm-Message-State: AOJu0YwDKvtOWDPbXRkTMC8+gkPjtCkPSvIMXTaLH1NEp57a94LZ22e2
-	5VkZQ0iOWvDf8avXsaIk66ROUHGgxEUJTKnyuxz6mw==
-X-Google-Smtp-Source: AGHT+IGxyLfu+paRIoexaD6++oCBn/XHtUBIo0chldIV2SAMVOqAwfY5RYFRwl6Gb08X8o6pYt8fWuN4GCV6exZuHyU=
-X-Received: by 2002:a67:f299:0:b0:446:a2f8:9fe4 with SMTP id
- m25-20020a67f299000000b00446a2f89fe4mr2962206vsk.16.1692225317332; Wed, 16
- Aug 2023 15:35:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D3BD2F1;
+	Wed, 16 Aug 2023 22:38:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692225522; x=1723761522;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CO5A5P2eUHmFyMZg3w6+rv/UdmA5bIeUSUXOuHm8Rgg=;
+  b=NihBFsz/zX606crMOKQlA1GXVLm+Dg62VE8trlg5TgWzdv5XKsKaVXFb
+   wZHnCXAU5Abzf9UdQ93CyTAxDskacwQstjvpxn6OUZH4143IjiOqrbCOE
+   bO/UtpjPVBMB7nJsJ/PoH5b5i6uuXXA9fKsChuQAenH6YOg/K1EcSjqG3
+   ankDdWUZJla248vRX4vXd1OMupbP+rV9SQaQ5oMVdSvsZ9o7CWZEry9Jf
+   80xiSSZ2+2LHcOUpBh3xzilYKdApuW5H8eEqwAQXhOP86b0qoNFhD/j0n
+   BjlABbyc35bE0KXZUebNGt9PXgrQBkDTF9uDpSnKgyn/b/0vVt48onYCQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="352973421"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="352973421"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 15:38:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="763795088"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="763795088"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 16 Aug 2023 15:38:40 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWP9t-0000ct-20;
+	Wed, 16 Aug 2023 22:38:35 +0000
+Date: Thu, 17 Aug 2023 06:38:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tianyu Lan <tiala@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Michael Kelley <mikelley@microsoft.com>
+Subject: [lantianyu:test 14/21] ld.lld: error: undefined symbol:
+ isolation_type_en_snp
+Message-ID: <202308170646.cOnDa07c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230816-riscv-debug_info_split-v1-1-d1019d6ccc11@kernel.org> <20230816220457.kqzlbiibeomvki4y@google.com>
-In-Reply-To: <20230816220457.kqzlbiibeomvki4y@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 16 Aug 2023 15:35:06 -0700
-Message-ID: <CAKwvOdnRb1OmLWNWnj5f-r-rqL0=OsBXJV9d7OU3bjXtOLLtiA@mail.gmail.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: Restrict DEBUG_INFO_SPLIT for RISC-V
-To: Fangrui Song <maskray@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, akpm@linux-foundation.org, conor@kernel.org, 
-	trix@redhat.com, linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Aug 16, 2023 at 3:05=E2=80=AFPM Fangrui Song <maskray@google.com> w=
-rote:
->
-> On 2023-08-16, Nathan Chancellor wrote:
-> >When building for ARCH=3Driscv using LLVM < 14, there is an error with
-> >CONFIG_DEBUG_INFO_SPLIT=3Dy:
-> >
-> >  error: A dwo section may not contain relocations
-> >
-> >This was worked around in LLVM 15 by disallowing '-gsplit-dwarf' with
-> >'-mrelax' (the default), so CONFIG_DEBUG_INFO_SPLIT is not selectable
-> >with newer versions of LLVM:
-> >
-> >  $ clang --target=3Driscv64-linux-gnu -gsplit-dwarf -c -o /dev/null -x =
-c /dev/null
-> >  clang: error: -gsplit-dwarf is unsupported with RISC-V linker relaxati=
-on (-mrelax)
-> >
-> >GCC silently had a similar issue that was resolved with GCC 12.x.
-> >Restrict CONFIG_DEBUG_INFO_SPLIT for RISC-V when using LLVM or GCC <
-> >12.x to avoid these known issues.
-> >
-> >Link: https://github.com/ClangBuiltLinux/linux/issues/1914
-> >Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D99090
-> >Reported-by: kernel test robot <lkp@intel.com>
-> >Closes: https://lore.kernel.org/all/202308090204.9yZffBWo-lkp@intel.com/
-> >Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >---
-> >Since this only impacts RISC-V, it seems reasonable that this would go
-> >in via their tree but I have added Andrew in case he wants to take it.
-> >---
-> > lib/Kconfig.debug | 5 +++++
-> > 1 file changed, 5 insertions(+)
-> >
-> >diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> >index d6798513a8c2..bd51274f4771 100644
-> >--- a/lib/Kconfig.debug
-> >+++ b/lib/Kconfig.debug
-> >@@ -355,6 +355,11 @@ endchoice # "Compressed Debug information"
-> > config DEBUG_INFO_SPLIT
-> >       bool "Produce split debuginfo in .dwo files"
-> >       depends on $(cc-option,-gsplit-dwarf)
-> >+      # RISC-V linker relaxation + -gsplit-dwarf has issues with LLVM a=
-nd GCC
-> >+      # prior to 12.x:
-> >+      # https://github.com/llvm/llvm-project/issues/56642
-> >+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D99090
-> >+      depends on !RISCV || GCC_VERSION >=3D 120000
+tree:   https://github.com/lantianyu/linux test
+head:   f5c4c5f104612a69401a5343609c6f939716896a
+commit: 7a649840782fb85d5d719118dd4b404d535345e3 [14/21] x86/hyperv: Add sev-snp enlightened guest static key
+config: x86_64-randconfig-x013-20230817 (https://download.01.org/0day-ci/archive/20230817/202308170646.cOnDa07c-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170646.cOnDa07c-lkp@intel.com/reproduce)
 
-Thanks for the patch. I was initially surprised to see no explicit
-check for LLVM version.  Rereading the commit description a few times,
-I think it makes sense, but I'm guessing we may need to rework this
-condition again should we eventually get split debug info working for
-riscv for llvm.  I am looking to enable split debug info for kernels
-for Android's next release.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308170646.cOnDa07c-lkp@intel.com/
 
-Fangrui, any thoughts on feasibility for `-mrelax` and `-gsplit-dwarf`
-composability for llvm?
+All errors (new ones prefixed by >>):
 
-Link: https://github.com/llvm/llvm-project/issues/56642
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>> ld.lld: error: undefined symbol: isolation_type_en_snp
+   >>> referenced by instrumented.h:68 (include/linux/instrumented.h:68)
+   >>>               vmlinux.o:(ms_hyperv_init_platform)
+   >>> referenced by instrumented.h:68 (include/linux/instrumented.h:68)
+   >>>               vmlinux.o:(ms_hyperv_init_platform)
+   >>> referenced by atomic.h:23 (arch/x86/include/asm/atomic.h:23)
+   >>>               vmlinux.o:(ms_hyperv_init_platform)
+   >>> referenced 13 more times
 
-> >       help
-> >         Generate debug info into separate .dwo files. This significantl=
-y
-> >         reduces the build directory size for builds with DEBUG_INFO,
-> >
-> >---
-> >base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
-> >change-id: 20230816-riscv-debug_info_split-0713571a1ac2
-> >
-> >Best regards,
-> >--
-> >Nathan Chancellor <nathan@kernel.org>
-> >
->
-> LGTM as the author of the Clang mitigation
-> (https://github.com/llvm/llvm-project/issues/56642) and several recent
-> LLVM assembler side linker relaxation improvement (I continue updating
-> https://maskray.me/blog/2021-03-14-the-dark-side-of-riscv-linker-relaxati=
-on
-> about the complication of linker relaxation).
->
-> Reviewed-by: Fangrui Song <maskray@google.com>
-
-
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
