@@ -1,101 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6EF10949;
-	Wed, 16 Aug 2023 17:36:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C38C433CA;
-	Wed, 16 Aug 2023 17:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692207375;
-	bh=m679p/qT6+EyvubNhxEO5K2mUWdE4N+P6efMLjeRxGw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=HfNrC/VNXLU2zN7yz9ioqbbYI6MatQwhSss0CKArWGV0bLb53MhC2Kn+h63zcgnnQ
-	 OaZ/LCaai2p+1nZtfOuojFokIT6y8ofycIxMPhbzOl8sm8tV/996S8V/UexSqerVZY
-	 RGTXxgMANVI8jjVn0Ijlyp6FyHQ/8LzT9BBhiNvfc6byvFwkqVEBwV0Z6rwr5JMc7N
-	 nqR4vYi4RIePFPxkmOjmK2e/LOvNyhKLhIfC3pKTNV7hvnKT5mxotP2LY7LAEVZT1m
-	 si9DTo4nMo8DNkn3gv+8SBh2IFyyd72Z1c8ujqmVMVVIoBXgz79/oKZF7vDb75ciKF
-	 xhOCoVH+zNJfA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 16 Aug 2023 10:35:43 -0700
-Subject: [PATCH] lib/Kconfig.debug: Restrict DEBUG_INFO_SPLIT for RISC-V
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38C5168B9;
+	Wed, 16 Aug 2023 18:09:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692209387; x=1723745387;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QQh55dXAQhnU798Gceylkp53FVOkeS6Ogu7sr0aNLTA=;
+  b=nOn93FV3AOtcnZ/0CP25deOpAKKMVPGQyT+P7MAzqDSMtdjiuwFLU7eM
+   sGYrJDBNiVpeaHoFBoF9L3sxlhegOjjG7ZhD628r4gKMqwYW0pWCBr27a
+   97HzzTk2YS5QAUlJ5z+hGWCje4F4ihjzIU7QCuPa/iQJ9NiFPohvzFWKk
+   Mr3Szp4smgIoPytya70a0aMS3DsWwc3td2WyK+PaRW5b92qnOEfoteIX1
+   6h1ckLI66BJuQWwU2SOa1TOA47eaoc/I/Zoq4QUxdImjuXWC7t7OV8YHi
+   NqLjoCfsPJGyHXwse28jSJlUQPb8Z4BysSGIZyLZTmCfEYy73TUirWBcw
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="352190489"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="352190489"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 11:09:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="1064939782"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="1064939782"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2023 11:09:45 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWKxk-0000UH-2r;
+	Wed, 16 Aug 2023 18:09:44 +0000
+Date: Thu, 17 Aug 2023 02:09:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:bits/220-tso 3/4]
+ arch/arm64/kernel/cpufeature_impdef.c:11:6: warning: no previous prototype
+ for function 'has_tso_fixed'
+Message-ID: <202308170117.vXBT0Pwa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230816-riscv-debug_info_split-v1-1-d1019d6ccc11@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAO4I3WQC/x3MSwqAMAwA0atI1haaih+8ikipNWpAqjQqgnh3i
- 8u3mHlAKDIJtNkDkS4W3kIC5hn4xYWZFI/JYLQpdIOViiz+UiMN52w5TJuVfeVD6RqLskaHzht
- I8R5p4vsfd/37fgujfGNoAAAA
-To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
- akpm@linux-foundation.org
-Cc: conor@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2086; i=nathan@kernel.org;
- h=from:subject:message-id; bh=m679p/qT6+EyvubNhxEO5K2mUWdE4N+P6efMLjeRxGw=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCl3OfkExD9F7fHcujvxoHro5+nPGv/lFzIzHs08Et660
- qvfptW3o5SFQYyDQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzkDR/DH472fWeuhOS5cjye
- aX1hB2fRRe31btynWoT6ZoXvc+1t4GP4Z6P2VmhKnsbGngTdXzUGjAphT66kWt9Ma/Sefn3X04d
- XmAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When building for ARCH=riscv using LLVM < 14, there is an error with
-CONFIG_DEBUG_INFO_SPLIT=y:
+tree:   https://github.com/AsahiLinux/linux bits/220-tso
+head:   6a8bd3529f0e9a26ebabd614ab6582cda3337142
+commit: 2a13d04cf14b7cb9432177840c840fb42fb411a6 [3/4] arm64: Implement PR_{GET,SET}_MEM_MODEL for always-TSO CPUs
+config: arm64-randconfig-r011-20230816 (https://download.01.org/0day-ci/archive/20230817/202308170117.vXBT0Pwa-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170117.vXBT0Pwa-lkp@intel.com/reproduce)
 
-  error: A dwo section may not contain relocations
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308170117.vXBT0Pwa-lkp@intel.com/
 
-This was worked around in LLVM 15 by disallowing '-gsplit-dwarf' with
-'-mrelax' (the default), so CONFIG_DEBUG_INFO_SPLIT is not selectable
-with newer versions of LLVM:
+All warnings (new ones prefixed by >>):
 
-  $ clang --target=riscv64-linux-gnu -gsplit-dwarf -c -o /dev/null -x c /dev/null
-  clang: error: -gsplit-dwarf is unsupported with RISC-V linker relaxation (-mrelax)
+>> arch/arm64/kernel/cpufeature_impdef.c:11:6: warning: no previous prototype for function 'has_tso_fixed' [-Wmissing-prototypes]
+      11 | bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
+         |      ^
+   arch/arm64/kernel/cpufeature_impdef.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      11 | bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
+         | ^
+         | static 
+>> arch/arm64/kernel/cpufeature_impdef.c:36:13: warning: no previous prototype for function 'init_cpu_hwcaps_indirect_list_impdef' [-Wmissing-prototypes]
+      36 | void __init init_cpu_hwcaps_indirect_list_impdef(void)
+         |             ^
+   arch/arm64/kernel/cpufeature_impdef.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      36 | void __init init_cpu_hwcaps_indirect_list_impdef(void)
+         | ^
+         | static 
+   2 warnings generated.
+--
+>> arch/arm64/kernel/cpufeature.c:959:1: warning: no previous prototype for function 'init_cpu_hwcaps_indirect_list_from_array' [-Wmissing-prototypes]
+     959 | init_cpu_hwcaps_indirect_list_from_array(const struct arm64_cpu_capabilities *caps)
+         | ^
+   arch/arm64/kernel/cpufeature.c:958:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     958 | void __init
+         | ^
+         | static 
+>> arch/arm64/kernel/cpufeature.c:1428:1: warning: no previous prototype for function 'feature_matches' [-Wmissing-prototypes]
+    1428 | feature_matches(u64 reg, const struct arm64_cpu_capabilities *entry)
+         | ^
+   arch/arm64/kernel/cpufeature.c:1427:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1427 | bool
+         | ^
+         | static 
+   2 warnings generated.
+--
+>> arch/arm64/kernel/process.c:544:5: warning: no previous prototype for function 'arch_prctl_mem_model_get' [-Wmissing-prototypes]
+     544 | int arch_prctl_mem_model_get(struct task_struct *t)
+         |     ^
+   arch/arm64/kernel/process.c:544:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     544 | int arch_prctl_mem_model_get(struct task_struct *t)
+         | ^
+         | static 
+>> arch/arm64/kernel/process.c:549:5: warning: no previous prototype for function 'arch_prctl_mem_model_set' [-Wmissing-prototypes]
+     549 | int arch_prctl_mem_model_set(struct task_struct *t, unsigned long val)
+         |     ^
+   arch/arm64/kernel/process.c:549:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     549 | int arch_prctl_mem_model_set(struct task_struct *t, unsigned long val)
+         | ^
+         | static 
+   2 warnings generated.
 
-GCC silently had a similar issue that was resolved with GCC 12.x.
-Restrict CONFIG_DEBUG_INFO_SPLIT for RISC-V when using LLVM or GCC <
-12.x to avoid these known issues.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1914
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99090
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/all/202308090204.9yZffBWo-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Since this only impacts RISC-V, it seems reasonable that this would go
-in via their tree but I have added Andrew in case he wants to take it.
----
- lib/Kconfig.debug | 5 +++++
- 1 file changed, 5 insertions(+)
+vim +/has_tso_fixed +11 arch/arm64/kernel/cpufeature_impdef.c
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d6798513a8c2..bd51274f4771 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -355,6 +355,11 @@ endchoice # "Compressed Debug information"
- config DEBUG_INFO_SPLIT
- 	bool "Produce split debuginfo in .dwo files"
- 	depends on $(cc-option,-gsplit-dwarf)
-+	# RISC-V linker relaxation + -gsplit-dwarf has issues with LLVM and GCC
-+	# prior to 12.x:
-+	# https://github.com/llvm/llvm-project/issues/56642
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99090
-+	depends on !RISCV || GCC_VERSION >= 120000
- 	help
- 	  Generate debug info into separate .dwo files. This significantly
- 	  reduces the build directory size for builds with DEBUG_INFO,
+    10	
+  > 11	bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
+    12	{
+    13		/* List of CPUs that always use the TSO memory model */
+    14		static const struct midr_range fixed_tso_list[] = {
+    15			MIDR_ALL_VERSIONS(MIDR_NVIDIA_DENVER),
+    16			MIDR_ALL_VERSIONS(MIDR_NVIDIA_CARMEL),
+    17			MIDR_ALL_VERSIONS(MIDR_FUJITSU_A64FX),
+    18			{ /* sentinel */ }
+    19		};
+    20	
+    21		return is_midr_in_range_list(read_cpuid_id(), fixed_tso_list);
+    22	}
+    23	
+    24	static const struct arm64_cpu_capabilities arm64_impdef_features[] = {
+    25	#ifdef CONFIG_ARM64_MEMORY_MODEL_CONTROL
+    26		{
+    27			.desc = "TSO memory model (Fixed)",
+    28			.capability = ARM64_HAS_TSO_FIXED,
+    29			.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+    30			.matches = has_tso_fixed,
+    31		},
+    32	#endif
+    33		{},
+    34	};
+    35	
+  > 36	void __init init_cpu_hwcaps_indirect_list_impdef(void)
 
----
-base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
-change-id: 20230816-riscv-debug_info_split-0713571a1ac2
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
