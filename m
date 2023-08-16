@@ -1,38 +1,44 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC070101DA;
-	Wed, 16 Aug 2023 15:07:30 +0000 (UTC)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id ED5F5218FC;
-	Wed, 16 Aug 2023 15:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1692198105; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cwYr/ImenycskpSCIbuvxpPgA8pKU0LOXJlUOQJJlZc=;
-	b=BAoXAjr4dRq9QYTkYjPQ3T3bey6O/p4hgNk6aSHnyCuZaN4++Hsb7G0+qFVygkvUE+zIgP
-	8Jp8g2/w4YONjyYfeGas0oTPBrHD0zfP5ikMwGNG1bj0klYLJFD+nsNenQGwWzIEHUz/Lk
-	ZSg1XKUJBkBw+gkrUhoXnUw4tSibH14=
-Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id 3CD052C146;
-	Wed, 16 Aug 2023 15:01:45 +0000 (UTC)
-Date: Wed, 16 Aug 2023 17:01:43 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: rostedt@goodmis.org, senozhatsky@chromium.org,
-	andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] lib: test_scanf: Add explicit type cast to result
- initialization in test_number_prefix()
-Message-ID: <ZNzk1yIvCy7EF_EF@alley>
-References: <20230807-test_scanf-wconstant-conversion-v2-1-839ca39083e1@kernel.org>
- <ZNysmicYHHQ3f1Ck@alley>
- <20230816140112.GA2109327@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99B310957;
+	Wed, 16 Aug 2023 15:12:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692198724; x=1723734724;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p+r7n8YCIiGsobeKQXD1BlmAUYuDkI9/aXWSyVZ4wjI=;
+  b=b0vKxIdLk2CtNPgfSaqCGo7nytTrC9QrktL7klej0HkSSquTQQu6V6bL
+   574hgJFAT6IbGQwmv2yeYu3z2m45Gk3tBFQ+L+9b+NH5QxXgOe5hgE+y/
+   Xn4c8KKnFvfRj+DK5d9xIMh7mWXFODHctbY8c7s8Zaa1mpr9u2b5pf8dW
+   U+cn9H+cjbQd+hhbjT4JLpe9TDmqiS44mxHVpqHKi6MiCHfsyd6PF8z4r
+   WWvb44DKu9GUY+Pw3BPE0OgMUnxcV+FOpIsJ3jLXPFdq/0tASKzv51Oys
+   eA38Nl/fEoiB4GIZ/nwHWCUoLH3hcXtv8yWoOJGoszV/dhNG1ym3mMjiO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="438908853"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="438908853"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 08:12:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="711141407"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="711141407"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 Aug 2023 08:12:03 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWIBm-0000OT-0r;
+	Wed, 16 Aug 2023 15:12:02 +0000
+Date: Wed, 16 Aug 2023 23:11:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Julian Anastasov <ja@ssi.bg>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC net-next 11/14] ipvs: no_cport and dropentry counters
+ can be per-net
+Message-ID: <202308162222.Kp161L5h-lkp@intel.com>
+References: <20230815173031.168344-12-ja@ssi.bg>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,67 +47,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230816140112.GA2109327@dev-arch.thelio-3990X>
+In-Reply-To: <20230815173031.168344-12-ja@ssi.bg>
 
-On Wed 2023-08-16 07:01:12, Nathan Chancellor wrote:
-> Hi Petr,
-> 
-> On Wed, Aug 16, 2023 at 01:01:46PM +0200, Petr Mladek wrote:
-> > On Mon 2023-08-07 08:36:28, Nathan Chancellor wrote:
-> > > A recent change in clang allows it to consider more expressions as
-> > > compile time constants, which causes it to point out an implicit
-> > > conversion in the scanf tests:
-> > > 
-> > >   lib/test_scanf.c:661:2: warning: implicit conversion from 'int' to 'unsigned char' changes value from -168 to 88 [-Wconstant-conversion]
-> > >     661 |         test_number_prefix(unsigned char,       "0xA7", "%2hhx%hhx", 0, 0xa7, 2, check_uchar);
-> > >         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   lib/test_scanf.c:609:29: note: expanded from macro 'test_number_prefix'
-> > >     609 |         T result[2] = {~expect[0], ~expect[1]};                                 \
-> > >         |                       ~            ^~~~~~~~~~
-> > >   1 warning generated.
-> > > 
-> > > The result of the bitwise negation is the type of the operand after
-> > > going through the integer promotion rules, so this truncation is
-> > > expected but harmless, as the initial values in the result array get
-> > > overwritten by _test() anyways. Add an explicit cast to the expected
-> > > type in test_number_prefix() to silence the warning. There is no
-> > > functional change, as all the tests still pass with GCC 13.1.0 and clang
-> > > 18.0.0.
-> > > 
-> > > Cc: stable@vger.kernel.org
-> > > Closes: https://github.com/ClangBuiltLinux/linux/issues/1899
-> > 
-> > "Closes:" is not a valid tag. It was proposed and rejected in the end.
-> > I replaced it with "Link:" as suggested by ./scripts/checkpatch.pl/
-> 
-> I don't really care about "Closes:" vs. "Link:", either is fine with me,
-> but checkpatch.pl did not warn me about it and I still see commit
-> 44c31888098a ("checkpatch: allow Closes tags with links") in mainline
-> and -next that explicitly allows this (and even requires Closes: instead
-> of Link: when following Reported-by:).
+Hi Julian,
 
-Good to know. It is possible that I mixed this with another tag.
-I recall that people wanted to add some new tags recently and
-Linus was strongly against it. Unfortunately, I can't find
-the discussion now.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-It seems that the Closes: tag is acceptable. But Linus is still
-going to "put my foot down" when it gets misused, see
-https://lore.kernel.org/linux-doc/CAHk-=wh0v1EeDV3v8TzK81nDC40=XuTdY2MCr0xy3m3FiBV3+Q@mail.gmail.com/
+[auto build test ERROR on net-next/main]
 
-I called the checkpatch.pl from printk/linux.git in a branch based on 6.4.
-It did not have the commit 44c31888098a ("checkpatch: allow Closes
-tags with links").
+url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Anastasov/rculist_bl-add-hlist_bl_for_each_entry_continue_rcu/20230816-100047
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230815173031.168344-12-ja%40ssi.bg
+patch subject: [PATCH RFC net-next 11/14] ipvs: no_cport and dropentry counters can be per-net
+config: arm-randconfig-r035-20230816 (https://download.01.org/0day-ci/archive/20230816/202308162222.Kp161L5h-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230816/202308162222.Kp161L5h-lkp@intel.com/reproduce)
 
-If you do not mind, I'll keep the "Link:" tag to avoid rebase in
-the for-6.6 branch in printk/linug.git.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308162222.Kp161L5h-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/netfilter/ipvs/ip_vs_conn.c:1599:14: error: no member named 'dropentry_counters' in 'struct netns_ipvs'
+           if (--ipvs->dropentry_counters[i] > 0)
+                 ~~~~  ^
+   net/netfilter/ipvs/ip_vs_conn.c:1603:8: error: no member named 'dropentry_counters' in 'struct netns_ipvs'
+           ipvs->dropentry_counters[i] = i + 1;
+           ~~~~  ^
+   2 errors generated.
 
 
-> > The patch has been pushed into printk/linux.git, branch for-6.6.
-> 
-> Thanks a lot for the review and acceptance!
+vim +1599 net/netfilter/ipvs/ip_vs_conn.c
 
-You are welcome.
+  1574	
+  1575	
+  1576	/* Randomly drop connection entries before running out of memory
+  1577	 * Can be used for DATA and CTL conns. For TPL conns there are exceptions:
+  1578	 * - traffic for services in OPS mode increases ct->in_pkts, so it is supported
+  1579	 * - traffic for services not in OPS mode does not increase ct->in_pkts in
+  1580	 * all cases, so it is not supported
+  1581	 */
+  1582	static inline int todrop_entry(struct ip_vs_conn *cp)
+  1583	{
+  1584		struct netns_ipvs *ipvs = cp->ipvs;
+  1585		int i;
+  1586	
+  1587		/* if the conn entry hasn't lasted for 60 seconds, don't drop it.
+  1588		   This will leave enough time for normal connection to get
+  1589		   through. */
+  1590		if (time_before(cp->timeout + jiffies, cp->timer.expires + 60*HZ))
+  1591			return 0;
+  1592	
+  1593		/* Drop only conns with number of incoming packets in [1..8] range */
+  1594		i = atomic_read(&cp->in_pkts);
+  1595		if (i > 8 || i < 1)
+  1596			return 0;
+  1597	
+  1598		i--;
+> 1599		if (--ipvs->dropentry_counters[i] > 0)
+  1600			return 0;
+  1601	
+  1602		/* Prefer to drop conns with less number of incoming packets */
+  1603		ipvs->dropentry_counters[i] = i + 1;
+  1604		return 1;
+  1605	}
+  1606	
 
-Best Regards,
-Petr
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
