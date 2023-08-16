@@ -1,95 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13345A31;
-	Wed, 16 Aug 2023 04:53:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692161631; x=1723697631;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0fck4FpTAXmmjMfqECWo2DNzL/CycdLv2yke48G2VIY=;
-  b=XQ4p3WL28IWyth7Erl5LCNQ05oRjMGP4Mkll19qMLznsIjjeJs5FRH9K
-   0EyMGKxL6wyw/7CYeR5KWktcl7rlMkPOYmqdthGp1IwCdDeC+Ozc2Tfy7
-   VOK1JqS584734Hxhtu2A2p+OOatyLrdBDwk7wYujkWa2BwWbxBY2VhqgZ
-   8A3QT33fYczIEyKLFwews9Ao4Mq69DHWsdoVeueFkpIrPfLGCw+gahwcR
-   nxRnyaqjYUA0xeIHtzHn/Vw8XY0yNa73YY0cphatdNhejfiff4x0YRcQq
-   daO3CDMKh6omy3TX5DIGYaG3zjDY2rEhWBNOr6oe3oHXp8Htn1l/I8+Jf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="372438742"
-X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
-   d="scan'208";a="372438742"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 21:53:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="857676205"
-X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
-   d="scan'208";a="857676205"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Aug 2023 21:53:49 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qW8XU-0001WB-1C;
-	Wed, 16 Aug 2023 04:53:48 +0000
-Date: Wed, 16 Aug 2023 12:53:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/hyperv_no_range_flush 15/15]
- include/linux/kvm_host.h:1483:19: error: redefinition of
- 'kvm_arch_flush_remote_tlbs'
-Message-ID: <202308161241.Mi3s7LqF-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B83717C4
+	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 05:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1692162616;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hFuF5NK6LnH63xNXVH3MAkLra9j+8nOqCilO3CnswQ4=;
+	b=bnMU80Hl31BkbcHsdLEuw+5iZtXlZ+U3mTgvvxT0MiQPI+7WNmuuLZNDLqei2SQZiW9Fyi
+	JDS+YXnx61bugcDuOOtkepeP9GH4mbcPiRQXKYsLboTXw0qHlBc56ys/vAX+GNtqDPWC2G
+	o9ds8VwmGfeiQQG/U5gPweMbJYCrjb4=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-28-1-FKR7fIPeqUB7X-VsWG7w-1; Wed, 16 Aug 2023 01:10:15 -0400
+X-MC-Unique: 1-FKR7fIPeqUB7X-VsWG7w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C46511C05ED1
+	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 05:10:14 +0000 (UTC)
+Received: from [172.64.0.120] (unknown [10.30.33.131])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AC17740D283A;
+	Wed, 16 Aug 2023 05:10:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 19 of 267): Test report for master
+ (6.5.0-rc6, mainline.kernel.org-clang, d4f8e13b)
+Date: Wed, 16 Aug 2023 05:10:14 -0000
+To: yizhan@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <07577.123081601101500185@us-mta-28.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/sean-jc/linux x86/hyperv_no_range_flush
-head:   f9d65d9f4720ff9339b177fcc9af5a5d9bd43551
-commit: f9d65d9f4720ff9339b177fcc9af5a5d9bd43551 [15/15] KVM: x86/mmu: Declare flush_remote_tlbs{_range}() hooks iff HYPERV!=n
-config: i386-randconfig-i011-20230816 (https://download.01.org/0day-ci/archive/20230816/202308161241.Mi3s7LqF-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230816/202308161241.Mi3s7LqF-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308161241.Mi3s7LqF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/events/intel/core.c:17:
->> include/linux/kvm_host.h:1483:19: error: redefinition of 'kvm_arch_flush_remote_tlbs'
-   static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
-                     ^
-   arch/x86/include/asm/kvm_host.h:1801:19: note: previous definition is here
-   static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
-                     ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/kvm_arch_flush_remote_tlbs +1483 include/linux/kvm_host.h
+Kernel information:
+    Commit message: Merge tag 'regulator-fix-v6.5-rc6' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/broonie/regulator
 
-d89f5eff70a312 Jan Kiszka             2010-11-09  1481  
-51787fd509e7a7 David Matlack          2023-08-11  1482  #ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
-51787fd509e7a7 David Matlack          2023-08-11 @1483  static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
-b08660e59dbdb6 Tianyu Lan             2018-07-19  1484  {
-b08660e59dbdb6 Tianyu Lan             2018-07-19  1485  	return -ENOTSUPP;
-b08660e59dbdb6 Tianyu Lan             2018-07-19  1486  }
-ccf9fdedfffe97 Raghavendra Rao Ananta 2023-08-11  1487  #else
-ccf9fdedfffe97 Raghavendra Rao Ananta 2023-08-11  1488  int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
-b08660e59dbdb6 Tianyu Lan             2018-07-19  1489  #endif
-b08660e59dbdb6 Tianyu Lan             2018-07-19  1490  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/100182
 
-:::::: The code at line 1483 was first introduced by commit
-:::::: 51787fd509e7a7cee6f0336c173ed757225dcd9f KVM: Rename kvm_arch_flush_remote_tlb() to kvm_arch_flush_remote_tlbs()
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9166108
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/002
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/016
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/017
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/030
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9166109
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
 
-:::::: TO: David Matlack <dmatlack@google.com>
-:::::: CC: Sean Christopherson <seanjc@google.com>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
+        Issue: WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:558 =
+apply_returns+0x1bf/0x210
+            URL: https://lore.kernel.org/all/Ys58BxHxoDZ7rfpr@xsang-OptiPle=
+x-9020/
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage - blktests - nvme-tcp: hit test timeout
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
