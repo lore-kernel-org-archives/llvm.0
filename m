@@ -1,160 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC281773C;
-	Wed, 16 Aug 2023 19:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692214972; x=1723750972;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5z4P4U9+rxDnalp8TmUP8a/3YytDJ6FRRl+IufBJ8sw=;
-  b=f71Mn36HlUqXlgQE1kBNt6J9sdpi7SsTXrJVJ4Xx+4dwXBCd9zkBxK3a
-   mFfbEUWLnc/ZunA21+HfQXwrYWz6Kd3FVFvJu8samXnKYo12MBIYg0umz
-   jxhhmvc3OUwYYuWJJG4T6FqTEEvHtsa74FOjk7ogWkvqLVUtjKM5rxTKr
-   klcQ5jP266cjhyCsT03r9gzuZcLS8A7TLEM1h6Jichaj1sD3ip4BsPQmM
-   yo9wlSzaoHQuazU8rM0d5BE7aF6an4NVYe/wBSdz6wdQB3k6Q7HnzgXF5
-   8jSS5AXhFYSVKZkJ7+eVMud4Nq/6S6RS62HtLiqQQy/+7rPC8V9255fdG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="370092743"
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="370092743"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 12:42:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="857937448"
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="857937448"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2023 12:42:50 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWMPp-0000Vv-2H;
-	Wed, 16 Aug 2023 19:42:49 +0000
-Date: Thu, 17 Aug 2023 03:42:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tianyu Lan <tiala@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [lantianyu:test 18/21] arch/x86/include/asm/mshyperv.h:62:6: error:
- call to undeclared function 'hv_isolation_type_en_snp'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202308170331.IdBMI6ij-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D97917737
+	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 19:48:28 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d7231c761b6so712343276.1
+        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 12:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692215307; x=1692820107;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nkZLboM2Wm9YlU5YcPRNRdsA86AbIHK8rlKPDBuPrH8=;
+        b=w1omL2BiOFpkdL5jDclMmBY0GNnDbrWPT4wTL4N2sQpREeclV+NMYHxIdUx9hQ5/X1
+         1ceBSumpLZfuuKV31ysa+PqpHBwXG3XdIvLMIOPkMfMCmzt+6STuu9nqzp5vPlc3ROyo
+         EwN+SX9nLIhz0we10ylC835cua9hzNyD3wFz35mWISCc755akVT34hz/6ISQX7cymKKQ
+         jI+x8IEWL/Tk7pmKBhpVskeeHsg3mt1jzfDz+PyOzmBI6Ksc/CMDJeFHj6MQwwgauTa/
+         De/iHDXsuuCoTWEfuqekPQ+aFMTaQFBOBvxacVvea5KIVpTOuyanIORyYaVbcuFbCSQK
+         /sCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692215307; x=1692820107;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nkZLboM2Wm9YlU5YcPRNRdsA86AbIHK8rlKPDBuPrH8=;
+        b=DlhaqZdRWuWRQ/OTcwabFo6jrwHfW4C4rLW09imKu2fWrDHC+yaOylDZ9cweREqZ/l
+         ON8SOloNwWKURI/McxDdrYaBmnliMnI7D6BEohRfbXsykXK+3IZyaOFPl8DKRQCHFq7S
+         HKwJrv69GNZuuChQHhNJG+ro1Jd6ouVUUmr84h6IxqLGlV6LAs3s8q+eUzvChYsVZqY8
+         efSk3fl0bP/ldcF1ogz1/yHMOEZjnA1se9XXWt8EHZ1Z0KbWCiwwModOB6xIqNpQAstz
+         XmvlceXO00YajY7gAfCDveWOOd5fXz9q53LSS60+ycd0cmToQaJfgmrWMe4ghF8MvWRY
+         XS3w==
+X-Gm-Message-State: AOJu0YxjKBR8uZagFV5tkKwFDGffYcyMCIXX22mH+NgvHHf8TBgalYmv
+	pDQB/pp/btVGIfiNTWuNaWKXBa4OtwxoaMS0VA==
+X-Google-Smtp-Source: AGHT+IHjp9P72ZGwmOWlkS671Xd985XpiPnEOZX2GKLyktLXegMqDh3mye2IrJSib9umXBMNuOxs5qxEBzWx72SCXg==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6902:1828:b0:d47:4b58:a19e with
+ SMTP id cf40-20020a056902182800b00d474b58a19emr40504ybb.11.1692215307122;
+ Wed, 16 Aug 2023 12:48:27 -0700 (PDT)
+Date: Wed, 16 Aug 2023 19:48:23 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAAYo3WQC/yWNQQqEMAwAvyI5G6jtrqhfEQ+1TddcVBIsgvh3i
+ 3ubucxcoCRMCkN1gVBm5W0t0tQVhMWvP0KOxcEa60zXtJg3jhiFM4ki24DzoUp/3E+P3qf+k77 B9WSgVHahxOd7GKf7fgCAzDQXcQAAAA==
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692215306; l=1676;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=hkaFiiA7JBYWa2I9LQiYCZ5i8gpVCmv0FGtI2UsqcAI=; b=C+oj7SwQG5q6DxF4FuXnKHonwIbMc/hMkdyBDnSA5r93/ldMj84vq4vMPjfD+yqNQdN46FsVt
+ DYX535Hg3IwCqUUFd4fVOYEFuw7cTbl8W+Vcw+jn7/fL+2Ugzue4gxH
+X-Mailer: b4 0.12.3
+Message-ID: <20230816-void-drivers-i2c-busses-i2c-pxa-v1-1-931634b931ec@google.com>
+Subject: [PATCH] i2c: pxa: fix clang -Wvoid-pointer-to-enum-cast warning
+From: Justin Stitt <justinstitt@google.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-tree:   https://github.com/lantianyu/linux test
-head:   f5c4c5f104612a69401a5343609c6f939716896a
-commit: 21ff4de070a797f04aafc8cf608d3b4dbc67aa81 [18/21] x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp enlightened guest
-config: x86_64-buildonly-randconfig-r001-20230817 (https://download.01.org/0day-ci/archive/20230817/202308170331.IdBMI6ij-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170331.IdBMI6ij-lkp@intel.com/reproduce)
+When building with clang 18 I see the following warning:
+|       drivers/i2c/busses/i2c-pxa.c:1267:15: warning: cast to smaller integer
+|       type 'enum pxa_i2c_types' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+|        1267 |         *i2c_types = (enum pxa_i2c_types)(of_id->data);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308170331.IdBMI6ij-lkp@intel.com/
+This is due to the fact that `of_id->data` is a void* while `enum pxa_i2c_types`
+has the size of an int.
 
-All errors (new ones prefixed by >>):
+Cast `of_id->data` to a uintptr_t to silence the above warning for clang
+builds using W=1
 
-   In file included from drivers/hv/channel_mgmt.c:23:
->> arch/x86/include/asm/mshyperv.h:62:6: error: call to undeclared function 'hv_isolation_type_en_snp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (hv_isolation_type_en_snp()) {
-               ^
-   arch/x86/include/asm/mshyperv.h:114:6: error: call to undeclared function 'hv_isolation_type_en_snp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (hv_isolation_type_en_snp()) {
-               ^
-   arch/x86/include/asm/mshyperv.h:165:6: error: call to undeclared function 'hv_isolation_type_en_snp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (hv_isolation_type_en_snp()) {
-               ^
->> arch/x86/include/asm/mshyperv.h:265:13: error: conflicting types for 'hv_isolation_type_en_snp'
-   extern bool hv_isolation_type_en_snp(void);
-               ^
-   arch/x86/include/asm/mshyperv.h:62:6: note: previous implicit declaration is here
-           if (hv_isolation_type_en_snp()) {
-               ^
-   4 errors generated.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Note: I think something like this may be more readable:
+| 	*i2c_types = (enum pxa_i2c_types)(uintptr_t)of_id->data;
+
+Thoughts on this approach against the one present in this patch?
+---
+ drivers/i2c/busses/i2c-pxa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
+index 937f7eebe906..20d1132d3d69 100644
+--- a/drivers/i2c/busses/i2c-pxa.c
++++ b/drivers/i2c/busses/i2c-pxa.c
+@@ -1264,7 +1264,7 @@ static int i2c_pxa_probe_dt(struct platform_device *pdev, struct pxa_i2c *i2c,
+ 	i2c->use_pio = of_property_read_bool(np, "mrvl,i2c-polling");
+ 	i2c->fast_mode = of_property_read_bool(np, "mrvl,i2c-fast-mode");
+ 
+-	*i2c_types = (enum pxa_i2c_types)(of_id->data);
++	*i2c_types = (uintptr_t)of_id->data;
+ 
+ 	return 0;
+ }
+
+---
+base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
+change-id: 20230816-void-drivers-i2c-busses-i2c-pxa-aaf94f5c39e0
+
+Best regards,
 --
-   In file included from drivers/hv/vmbus_drv.c:40:
->> arch/x86/include/asm/mshyperv.h:62:6: error: call to undeclared function 'hv_isolation_type_en_snp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (hv_isolation_type_en_snp()) {
-               ^
-   arch/x86/include/asm/mshyperv.h:114:6: error: call to undeclared function 'hv_isolation_type_en_snp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (hv_isolation_type_en_snp()) {
-               ^
-   arch/x86/include/asm/mshyperv.h:165:6: error: call to undeclared function 'hv_isolation_type_en_snp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (hv_isolation_type_en_snp()) {
-               ^
->> arch/x86/include/asm/mshyperv.h:265:13: error: conflicting types for 'hv_isolation_type_en_snp'
-   extern bool hv_isolation_type_en_snp(void);
-               ^
-   arch/x86/include/asm/mshyperv.h:62:6: note: previous implicit declaration is here
-           if (hv_isolation_type_en_snp()) {
-               ^
-   drivers/hv/vmbus_drv.c:1910:42: warning: shift count >= width of type [-Wshift-count-overflow]
-           dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
-                                                   ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 4 errors generated.
+Justin Stitt <justinstitt@google.com>
 
-
-vim +/hv_isolation_type_en_snp +62 arch/x86/include/asm/mshyperv.h
-
-    54	
-    55	static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
-    56	{
-    57		u64 input_address = input ? virt_to_phys(input) : 0;
-    58		u64 output_address = output ? virt_to_phys(output) : 0;
-    59		u64 hv_status;
-    60	
-    61	#ifdef CONFIG_X86_64
-  > 62		if (hv_isolation_type_en_snp()) {
-    63			__asm__ __volatile__("mov %4, %%r8\n"
-    64					     "vmmcall"
-    65					     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-    66					       "+c" (control), "+d" (input_address)
-    67					     :  "r" (output_address)
-    68					     : "cc", "memory", "r8", "r9", "r10", "r11");
-    69		} else {
-    70			if (!hv_hypercall_pg)
-    71				return U64_MAX;
-    72	
-    73			__asm__ __volatile__("mov %4, %%r8\n"
-    74					     CALL_NOSPEC
-    75					     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-    76					       "+c" (control), "+d" (input_address)
-    77					     :  "r" (output_address),
-    78						THUNK_TARGET(hv_hypercall_pg)
-    79					     : "cc", "memory", "r8", "r9", "r10", "r11");
-    80		}
-    81	#else
-    82		u32 input_address_hi = upper_32_bits(input_address);
-    83		u32 input_address_lo = lower_32_bits(input_address);
-    84		u32 output_address_hi = upper_32_bits(output_address);
-    85		u32 output_address_lo = lower_32_bits(output_address);
-    86	
-    87		if (!hv_hypercall_pg)
-    88			return U64_MAX;
-    89	
-    90		__asm__ __volatile__(CALL_NOSPEC
-    91				     : "=A" (hv_status),
-    92				       "+c" (input_address_lo), ASM_CALL_CONSTRAINT
-    93				     : "A" (control),
-    94				       "b" (input_address_hi),
-    95				       "D"(output_address_hi), "S"(output_address_lo),
-    96				       THUNK_TARGET(hv_hypercall_pg)
-    97				     : "cc", "memory");
-    98	#endif /* !x86_64 */
-    99		return hv_status;
-   100	}
-   101	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
