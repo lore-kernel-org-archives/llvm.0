@@ -1,115 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406C5DDBD;
-	Wed, 16 Aug 2023 09:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD70DF71;
+	Wed, 16 Aug 2023 09:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692178988; x=1723714988;
+  t=1692179418; x=1723715418;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=eCPEuZdSeEMjfWw8Q9Yz6ZCubhJo1INruSKhvZMrgqA=;
-  b=Vy1QTQsQQqYCK+5QezGMYNTqPX16nemfopK7L6GPNjqzw/q5Tkwwvgfx
-   zZrQaM8lYZJr2jY4bMeKIqbpvWBATxfsUmvZotmW6ssxEg3Vlyag+id3x
-   7guRO6NjqbRq3uzpeT4kdfxiMx+JyQRjBpsv5ckJ99YP/Uj04Q1s60RRZ
-   oFj1iNnH6sS81YxK69rnXtC/fyP14Ak1GVk8xOI4D55IAQJtoYzq1asxx
-   xQWGOTcwTLdlT5L2nP+8Gc22IrwPDOSIL/vwCihtANFCP171V7DhTSn8A
-   N84+vKiSxChrQJE4eFGJ9cg1wmDGZUSt3jiVKkQL3ZZ1wF6tNoP69O5C9
+   mime-version:in-reply-to;
+  bh=oWi75NojLSLKlx4YxL2ARuRq66wAnt6OUzej2OG3Tqo=;
+  b=kZWX+R1ta+j0jpZqsRuDMeEdVpEFIpe1H1uTEaqgstRb4etFKycL+8ek
+   0vVHEch3MeIBsBTwBYuuSEHPgfdbVgByGXoUL9Hd08ccZChWxz+rjOb2k
+   0YxSiSz5f1UAncrJ2zk72wgwGzTIFCtuWQGZdI0Upqk3GTCIx92uIg9wR
+   YF8NViLedRX1PuuOTvfBF5UhPoDgIZIC401qEWOMEGyXQktBrKeIKZyVQ
+   1rywkXAMu2uqGdQaEk+lEId4zGBFXHZ6gr88RapCX8MHOKMw08IlQ2+cc
+   OmJOIK35XJURf8P+BGo/AnJJVlq8jYhwb7i9i8SmXL/K6LrMGd8v1V/DI
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="376216907"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="458842071"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="376216907"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 02:43:07 -0700
+   d="scan'208";a="458842071"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 02:50:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="711056786"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="769128511"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="711056786"
+   d="scan'208";a="769128511"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Aug 2023 02:43:06 -0700
+  by orsmga001.jf.intel.com with ESMTP; 16 Aug 2023 02:50:15 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWD2V-0000Bn-24;
-	Wed, 16 Aug 2023 09:42:39 +0000
-Date: Wed, 16 Aug 2023 17:38:37 +0800
+	id 1qWDAD-0000Cf-0G;
+	Wed, 16 Aug 2023 09:50:07 +0000
+Date: Wed, 16 Aug 2023 17:49:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] media: mediatek: vcodec: Consider vdecsys presence in
- reg range check
-Message-ID: <202308161708.NEoSnIHR-lkp@intel.com>
-References: <20230725204043.569799-1-nfraprado@collabora.com>
+To: Johannes Berg <johannes@sipsolutions.net>,
+	linux-wireless@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Aloka Dixit <quic_alokad@quicinc.com>,
+	Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [PATCH v2] wifi: mac80211: fix puncturing bitmap handling in CSA
+Message-ID: <202308161727.hK0qYLAL-lkp@intel.com>
+References: <20230816101108.9a2a011e3670.I062e026efafb59b026ab72fc7f7fce54f43dd29b@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230725204043.569799-1-nfraprado@collabora.com>
+In-Reply-To: <20230816101108.9a2a011e3670.I062e026efafb59b026ab72fc7f7fce54f43dd29b@changeid>
 
-Hi Nícolas,
+Hi Johannes,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on v6.5-rc6]
-[also build test ERROR on linus/master]
-[cannot apply to media-tree/master next-20230816]
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.5-rc6 next-20230816]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/N-colas-F-R-A-Prado/media-mediatek-vcodec-Consider-vdecsys-presence-in-reg-range-check/20230816-145454
-base:   v6.5-rc6
-patch link:    https://lore.kernel.org/r/20230725204043.569799-1-nfraprado%40collabora.com
-patch subject: [PATCH] media: mediatek: vcodec: Consider vdecsys presence in reg range check
-config: arm64-randconfig-r014-20230816 (https://download.01.org/0day-ci/archive/20230816/202308161708.NEoSnIHR-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/wifi-mac80211-fix-puncturing-bitmap-handling-in-CSA/20230816-161302
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20230816101108.9a2a011e3670.I062e026efafb59b026ab72fc7f7fce54f43dd29b%40changeid
+patch subject: [PATCH v2] wifi: mac80211: fix puncturing bitmap handling in CSA
+config: riscv-randconfig-r012-20230816 (https://download.01.org/0day-ci/archive/20230816/202308161727.hK0qYLAL-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230816/202308161708.NEoSnIHR-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230816/202308161727.hK0qYLAL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308161708.NEoSnIHR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308161727.hK0qYLAL-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c:90:8: error: use of undeclared identifier 'has_vdecsys_reg'
-      90 |             (!has_vdecsys_reg && reg_num > NUM_MAX_VDEC_REG_BASE - 1)) {
-         |               ^
-   1 error generated.
+>> net/mac80211/cfg.c:3680:6: error: use of undeclared identifier 'link_data'
+    3680 |         if (link_data->conf->eht_puncturing != link_data->conf->csa_punct_bitmap) {
+         |             ^
+   net/mac80211/cfg.c:3680:41: error: use of undeclared identifier 'link_data'
+    3680 |         if (link_data->conf->eht_puncturing != link_data->conf->csa_punct_bitmap) {
+         |                                                ^
+   net/mac80211/cfg.c:3681:3: error: use of undeclared identifier 'link_data'
+    3681 |                 link_data->conf->eht_puncturing =
+         |                 ^
+   net/mac80211/cfg.c:3682:6: error: use of undeclared identifier 'link_data'
+    3682 |                                         link_data->conf->csa_punct_bitmap;
+         |                                         ^
+   4 errors generated.
 
 
-vim +/has_vdecsys_reg +90 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+vim +/link_data +3680 net/mac80211/cfg.c
 
-    80	
-    81	static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
-    82	{
-    83		struct platform_device *pdev = dev->plat_dev;
-    84		int reg_num, i;
-    85	
-    86		/* Sizeof(u32) * 4 bytes for each register base. */
-    87		reg_num = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
-    88							  sizeof(u32) * 4);
-    89		if (reg_num <= 0 || reg_num > NUM_MAX_VDEC_REG_BASE ||
-  > 90		    (!has_vdecsys_reg && reg_num > NUM_MAX_VDEC_REG_BASE - 1)) {
-    91			dev_err(&pdev->dev, "Invalid register property size: %d\n", reg_num);
-    92			return -EINVAL;
-    93		}
-    94	
-    95		for (i = 0; i < reg_num; i++) {
-    96			dev->reg_base[i] = devm_platform_ioremap_resource(pdev, i);
-    97			if (IS_ERR(dev->reg_base[i]))
-    98				return PTR_ERR(dev->reg_base[i]);
-    99	
-   100			mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
-   101		}
-   102	
-   103		return 0;
-   104	}
-   105	
+  3640	
+  3641	static int __ieee80211_csa_finalize(struct ieee80211_sub_if_data *sdata)
+  3642	{
+  3643		struct ieee80211_local *local = sdata->local;
+  3644		u64 changed = 0;
+  3645		int err;
+  3646	
+  3647		sdata_assert_lock(sdata);
+  3648		lockdep_assert_held(&local->mtx);
+  3649		lockdep_assert_held(&local->chanctx_mtx);
+  3650	
+  3651		/*
+  3652		 * using reservation isn't immediate as it may be deferred until later
+  3653		 * with multi-vif. once reservation is complete it will re-schedule the
+  3654		 * work with no reserved_chanctx so verify chandef to check if it
+  3655		 * completed successfully
+  3656		 */
+  3657	
+  3658		if (sdata->deflink.reserved_chanctx) {
+  3659			/*
+  3660			 * with multi-vif csa driver may call ieee80211_csa_finish()
+  3661			 * many times while waiting for other interfaces to use their
+  3662			 * reservations
+  3663			 */
+  3664			if (sdata->deflink.reserved_ready)
+  3665				return 0;
+  3666	
+  3667			return ieee80211_link_use_reserved_context(&sdata->deflink);
+  3668		}
+  3669	
+  3670		if (!cfg80211_chandef_identical(&sdata->vif.bss_conf.chandef,
+  3671						&sdata->deflink.csa_chandef))
+  3672			return -EINVAL;
+  3673	
+  3674		sdata->vif.bss_conf.csa_active = false;
+  3675	
+  3676		err = ieee80211_set_after_csa_beacon(sdata, &changed);
+  3677		if (err)
+  3678			return err;
+  3679	
+> 3680		if (link_data->conf->eht_puncturing != link_data->conf->csa_punct_bitmap) {
+  3681			link_data->conf->eht_puncturing =
+  3682						link_data->conf->csa_punct_bitmap;
+  3683			changed |= BSS_CHANGED_EHT_PUNCTURING;
+  3684		}
+  3685	
+  3686		ieee80211_link_info_change_notify(sdata, &sdata->deflink, changed);
+  3687	
+  3688		if (sdata->deflink.csa_block_tx) {
+  3689			ieee80211_wake_vif_queues(local, sdata,
+  3690						  IEEE80211_QUEUE_STOP_REASON_CSA);
+  3691			sdata->deflink.csa_block_tx = false;
+  3692		}
+  3693	
+  3694		err = drv_post_channel_switch(sdata);
+  3695		if (err)
+  3696			return err;
+  3697	
+  3698		cfg80211_ch_switch_notify(sdata->dev, &sdata->deflink.csa_chandef, 0,
+  3699					  sdata->vif.bss_conf.eht_puncturing);
+  3700	
+  3701		return 0;
+  3702	}
+  3703	
 
 -- 
 0-DAY CI Kernel Test Service
