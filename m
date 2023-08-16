@@ -1,170 +1,70 @@
-Received: from mail-pf1-f206.google.com (mail-pf1-f206.google.com [209.85.210.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F42B125A3
-	for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 22:48:49 +0000 (UTC)
-Received: by mail-pf1-f206.google.com with SMTP id d2e1a72fcca58-6887c5d5b35so2048183b3a.0
-        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 15:48:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692226129; x=1692830929;
-        h=content-transfer-encoding:to:from:subject:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GzwLqv7bpZfAyR4e420CE/PzPemUg67hgqEHw1UBtUk=;
-        b=e4M7bs5G8ImL3vzcIEmOgwVv3DYoSSKah8MzPVFw6wBF2BRIHBgy3T243l5ch9SJ9d
-         deNGxxn7nox0DJu7URcuNiYims8PQpwPqxz3+tj5sQTDPnwuMYSLWqsFXCx07qiKX/p4
-         chk1AwRxmlHsju3wp+qFHI2N85B1G62hzH00rMI+yy9EUfEyyWnjH4Up1Jn6/ti3yTn+
-         wj+qRqdOmDhwNRdw/T4zXhYPAv13YqiUpBM9X+/cXrYuDVGbFyHqST7/F6ESAtiX8zpH
-         9CNMY0Ve4kAlaWvXxSey5kEsHrpYVlH1usbTZDa/eNDvKdB4Kw4NmM4O4FU823CzaZzH
-         H+qg==
-X-Gm-Message-State: AOJu0YwhxWfrj7ku6vB9cE60xs2UOjek7OzmwrnTBMooZpKkNJb8g6eJ
-	84LXJy6fSrqU1A4K01TklYL5FZAJVoUIRMe5NuGn9tMgqqVE
-X-Google-Smtp-Source: AGHT+IEM5vv31TNAebpUiR/YN2gpOjhloP5qqKkJbGjKKOYYmnqiKn2w2j/7j/lEokgs3OVKVRbD1UgxlbwBBBXGl87AP/PWAadM
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE732F23;
+	Thu, 17 Aug 2023 00:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692230437; x=1723766437;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=/CmL5Dn3yIoMVpVpPjRt3MbixJUqhMvLOAgKHx1krjE=;
+  b=PvnbbRo+DssEUKWj0zGvkefnT6r9j9H4znUGqP6NfnutflVvGbpia8ix
+   aItN+HOcEc2rUWJoFM8aZthVbsvj14GUFaTdoRyWjfhM7qlI0u9qzHbF6
+   GSkeO9aFIyONC1M3I84Z55PZydCFQjGbtNTeAH3NvayEvQLEK+CdakuzD
+   9jsg8Y8T/t0ACAoUqMbaRdvZPdBkYhlpI4+Yl331nLb1F3u065uLX/Imo
+   0rX7MASnYjaQl85vk0XnJKlyR/qQCjndhI/4i0joP2ei425poNshN81kN
+   uV51vRoCFyC6r3NLr3fkduXiNvsJfUxdg+mVbVTl16xUNz89Bi50RzsQD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="371570041"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="371570041"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 17:00:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848679212"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="848679212"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Aug 2023 17:00:35 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWQRG-0000f7-10;
+	Thu, 17 Aug 2023 00:00:34 +0000
+Date: Thu, 17 Aug 2023 07:59:51 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: net/netfilter/ipvs/ip_vs.o: warning: objtool: .init.text: unexpected
+ end of section
+Message-ID: <202308170728.054gl33Z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6a00:1a16:b0:668:7143:50ea with SMTP id
- g22-20020a056a001a1600b00668714350eamr1450790pfv.4.1692226129430; Wed, 16 Aug
- 2023 15:48:49 -0700 (PDT)
-Date: Wed, 16 Aug 2023 15:48:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000530e0d060312199e@google.com>
-Subject: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic forced
- after error (3)
-From: syzbot <syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com>
-To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+CC: linux-kernel@vger.kernel.org
+TO: Kees Cook <keescook@chromium.org>
 
-syzbot found the following issue on:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
+commit: 55c84a5cf2c72a821719823ef2ebef01b119025b fortify: strcat: Move definition to use fortified strlcat()
+date:   3 months ago
+config: x86_64-randconfig-r025-20230816 (https://download.01.org/0day-ci/archive/20230817/202308170728.054gl33Z-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170728.054gl33Z-lkp@intel.com/reproduce)
 
-HEAD commit:    ae545c3283dc Merge tag 'gpio-fixes-for-v6.5-rc6' of git://.=
-.
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D13e5d553a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3D171b698bc2e613c=
-f
-dashboard link: https://syzkaller.appspot.com/bug?extid=3D27eece6916b914a49=
-ce7
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debia=
-n) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D13433207a8000=
-0
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D109cd837a80000
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308170728.054gl33Z-lkp@intel.com/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3b9bad020898/disk-=
-ae545c32.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4073566d0a4b/vmlinux-=
-ae545c32.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b163e2a2c47c/bzI=
-mage-ae545c32.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/004395fabe81=
-/mount_0.gz
+All warnings (new ones prefixed by >>):
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
+>> net/netfilter/ipvs/ip_vs.o: warning: objtool: .init.text: unexpected end of section
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12890d53a800=
-00
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D11890d53a800=
-00
-console output: https://syzkaller.appspot.com/x/log.txt?x=3D16890d53a80000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit=
-:
-Reported-by: syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 512
-ext2: Unknown parameter '=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD'
-EXT4-fs (loop0): feature flags set on rev 0 fs, running e2fsck is recommend=
-ed
-EXT4-fs (loop0): warning: checktime reached, running e2fsck is recommended
-EXT4-fs warning (device loop0): ext4_update_dynamic_rev:1084: updating to r=
-ev 1 because of new feature flag, running e2fsck is recommended
-EXT4-fs error (device loop0): ext4_validate_block_bitmap:430: comm syz-exec=
-utor211: bg 0: block 46: invalid block bitmap
-Kernel panic - not syncing: EXT4-fs (device loop0): panic forced after erro=
-r
-CPU: 1 PID: 5061 Comm: syz-executor211 Not tainted 6.5.0-rc5-syzkaller-0035=
-3-gae545c3283dc #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Goo=
-gle 07/26/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- panic+0x30f/0x770 kernel/panic.c:340
- ext4_handle_error+0x84e/0x8b0 fs/ext4/super.c:685
- __ext4_error+0x277/0x3b0 fs/ext4/super.c:776
- ext4_validate_block_bitmap+0xdf5/0x1200 fs/ext4/balloc.c:429
- ext4_read_block_bitmap+0x40/0x80 fs/ext4/balloc.c:595
- ext4_mb_clear_bb fs/ext4/mballoc.c:6503 [inline]
- ext4_free_blocks+0xfd3/0x2e20 fs/ext4/mballoc.c:6748
- ext4_remove_blocks fs/ext4/extents.c:2545 [inline]
- ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
- ext4_ext_remove_space+0x216e/0x4d90 fs/ext4/extents.c:2958
- ext4_ext_truncate+0x164/0x1f0 fs/ext4/extents.c:4408
- ext4_truncate+0xa0a/0x1150 fs/ext4/inode.c:4127
- ext4_process_orphan+0x1aa/0x2d0 fs/ext4/orphan.c:339
- ext4_orphan_cleanup+0xb71/0x1400 fs/ext4/orphan.c:474
- __ext4_fill_super fs/ext4/super.c:5577 [inline]
- ext4_fill_super+0x63ef/0x6ce0 fs/ext4/super.c:5696
- get_tree_bdev+0x468/0x6c0 fs/super.c:1318
- vfs_get_tree+0x8c/0x270 fs/super.c:1519
- do_new_mount+0x28f/0xae0 fs/namespace.c:3335
- do_mount fs/namespace.c:3675 [inline]
- __do_sys_mount fs/namespace.c:3884 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3861
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f86c9eb1a99
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 17 00 00 90 48 89 f8 48 89 f7 =
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff f=
-f 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc2eecbce8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f86c9eb1a99
-RDX: 00000000200001c0 RSI: 00000000200006c0 RDI: 0000000020000640
-RBP: 000000000000ec37 R08: 0000000000000000 R09: 00005555562044c0
-R10: 000000003f000000 R11: 0000000000000246 R12: 00007ffc2eecbd10
-R13: 00007ffc2eecbcfc R14: 431bde82d7b634db R15: 00007f86c9efa03b
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisectio=
-n
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
