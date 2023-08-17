@@ -1,127 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E084510974;
-	Thu, 17 Aug 2023 09:13:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692263609; x=1723799609;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4z/FYGQdd8TUJLtwj7tIzG3gTwFirQUpcAAlf+5kjMw=;
-  b=YYJsXtapJ6UXMGRf/p6jszIV6TN2B3HQ/Pw+7yvBD6RHgpV6yfzmmAjk
-   UoqsqjClGSfv0nZLlLWbnwB9rJWnPVqoLkl++dWhtrbvtpm3Al+8N5CO4
-   L/8uQuz8LTUdOyfxxUA+DdZtRb309JVPJSQvpu09fVvsaqD/qcybaff/z
-   mvOFa81G4vPz4hbdCZaFAoshgisDJ+4YdSbrZfpSQVGlDWsrencskvqKq
-   Xg+j73s6xwVOmzYdDMvptC/+sJ+xr+sTrJhXCYw15J9Rk8a4jGlivcJLs
-   yB4G7j+mdLhejylkcsDMXMypfYTwqDqVCKkOuLbO9ULD1XkShhwfftpdK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="370225029"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="370225029"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 02:13:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="737630385"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="737630385"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Aug 2023 02:13:22 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWZ4D-0000zb-2N;
-	Thu, 17 Aug 2023 09:13:21 +0000
-Date: Thu, 17 Aug 2023 17:12:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gabriel Krisman Bertazi <krisman@suse.de>, viro@zeniv.linux.org.uk,
-	brauner@kernel.org, tytso@mit.edu, ebiggers@kernel.org,
-	jaegeuk@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Gabriel Krisman Bertazi <krisman@suse.de>
-Subject: Re: [PATCH v5 04/10] fs: Expose name under lookup to d_revalidate
- hooks
-Message-ID: <202308171740.0u9DuWtr-lkp@intel.com>
-References: <20230812004146.30980-5-krisman@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6C810942
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 10:03:31 +0000 (UTC)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-48b829cbf8dso367849e0c.1
+        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 03:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692266610; x=1692871410;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t7L7oor9hguIJsZ7+KIFg8XeyxoxXJrD2hQ498S73ew=;
+        b=vvo1oFDdZVLJAK601uPA0V/ZZtKkHmNyd3aL5YDqjJT+d2or3PHF9bN0c/9qdUB9Hs
+         +xudL0/J09I/kida9xeOwalJnKJkNHubq6i0KGVv9lhnliio34la2nMnCiox3e6yL7gm
+         9og/kZAwqhixfYyyKEGbRKttVzw8hjGmhYjnBJGS5sDxk8T/nmAz0mymk1Bi/RlGxA5k
+         koCghU1xWXRCg8Bt8Q/GHSe6Iwc+yYiPc2HFzRW6IX2uVkTjn+9k+c10hDnzPFwJi2HQ
+         4kNXaGRDS5p2Xw5M5bc33kKr7s7FWjpym6eZJUAWOp0kPl/JuYJ/ChS8B2KXxLnW1c04
+         chRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692266610; x=1692871410;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t7L7oor9hguIJsZ7+KIFg8XeyxoxXJrD2hQ498S73ew=;
+        b=Q0VqFB+Jzequ5z+O3jEexVp0NY6Y5BO8RtIDRvA6IyGVkLboZe+XfI2IZFA5olcjIX
+         CljmGTU/OEaRg+aqVVDmgfhgJd6MjkJzj8NWDhff1Ne8/KybiE5z5GVebS1C9z2d5ayK
+         mSJt0VkIEUGgMLUs6m9WRjG4Baxjs2Rdk5aVVxwoMVqu7RjgxVr2iIl4LVAf+SdEaofP
+         rghpt+ZwhtxKhg6/G5EsuLSNa5GNtKfHd1W0YpR9lo5PsqL3SM25/J7FCMrylItT8UGs
+         zWdP+/o1uGpqmsCGaKf5eQclc8jQp0Z2i+8OFaXIOwFiUJlL7rhkoObYp1vee++tAyXq
+         JwkA==
+X-Gm-Message-State: AOJu0YzlZkTPUaHUW5Jix52Ler7nKskVvVbfFe3AfPCYhE3MEpFFasqg
+	YkWv7PETQpN9F8MTu4sInTfr5avOWmtxAEPuDil6z+8W8lnZ4YpCP+g=
+X-Google-Smtp-Source: AGHT+IEtSFu+V1HQS5CtIwMAfU0t+xp9kwVpngqBujbOD7GxgE8fH/zRCeMsU/kV9nlZ3xlX6otyeGckyUcjfPom9LE=
+X-Received: by 2002:a1f:41c3:0:b0:489:aaa4:ca26 with SMTP id
+ o186-20020a1f41c3000000b00489aaa4ca26mr4754235vka.13.1692266609977; Thu, 17
+ Aug 2023 03:03:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230812004146.30980-5-krisman@suse.de>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 17 Aug 2023 15:33:18 +0530
+Message-ID: <CA+G9fYvVZmOJvf=+JM8LRGxV6ynCPuPreipCP3+fmti=M+dxwA@mail.gmail.com>
+Subject: selftests: arm64: hwcap.c:51:15: error: instruction requires: crc
+To: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org
+Cc: Kristina Martsenko <kristina.martsenko@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Anders Roxell <anders.roxell@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Gabriel,
+While building selftests arm64 following warnings / errors noticed on the
+Linux next-20230817 tag ( from next-20230815 )
 
-kernel test robot noticed the following build warnings:
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on linus/master]
-[cannot apply to tyhicks-ecryptfs/next ericvh-v9fs/for-next viro-vfs/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Build errors:
+------------
+selftests/arm64/abi/hwcap
+hwcap.c:51:15: error: instruction requires: crc
+   51 |         asm volatile("crc32w w0, w0, w1");
+      |                      ^
+<inline asm>:1:2: note: instantiated into assembly here
+    1 |         crc32w w0, w0, w1
+      |         ^
+1 error generated.
+make[5]: *** [../../lib.mk:181: selftests/arm64/abi/hwcap] Error 1
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gabriel-Krisman-Bertazi/fs-Expose-helper-to-check-if-a-directory-needs-casefolding/20230812-084506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230812004146.30980-5-krisman%40suse.de
-patch subject: [PATCH v5 04/10] fs: Expose name under lookup to d_revalidate hooks
-config: x86_64-randconfig-x012-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171740.0u9DuWtr-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171740.0u9DuWtr-lkp@intel.com/reproduce)
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2U69ue7AaypfY7eRU4UUygecrDx/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308171740.0u9DuWtr-lkp@intel.com/
+Steps to reproduce:
+tuxmake --runtime podman --target-arch arm64 --toolchain clang-17
+--kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2U69ue7AaypfY7eRU4UUygecrDx/config
+LLVM=1 LLVM_IAS=1 dtbs dtbs-legacy headers kernel kselftest modules
 
-All warnings (new ones prefixed by >>):
-
->> fs/ecryptfs/dentry.c:33: warning: Function parameter or member 'name' not described in 'ecryptfs_d_revalidate'
-
-
-vim +33 fs/ecryptfs/dentry.c
-
-237fead619984c Michael Halcrow         2006-10-04  17  
-237fead619984c Michael Halcrow         2006-10-04  18  /**
-237fead619984c Michael Halcrow         2006-10-04  19   * ecryptfs_d_revalidate - revalidate an ecryptfs dentry
-237fead619984c Michael Halcrow         2006-10-04  20   * @dentry: The ecryptfs dentry
-0b728e1911cbe6 Al Viro                 2012-06-10  21   * @flags: lookup flags
-237fead619984c Michael Halcrow         2006-10-04  22   *
-237fead619984c Michael Halcrow         2006-10-04  23   * Called when the VFS needs to revalidate a dentry. This
-237fead619984c Michael Halcrow         2006-10-04  24   * is called whenever a name lookup finds a dentry in the
-237fead619984c Michael Halcrow         2006-10-04  25   * dcache. Most filesystems leave this as NULL, because all their
-237fead619984c Michael Halcrow         2006-10-04  26   * dentries in the dcache are valid.
-237fead619984c Michael Halcrow         2006-10-04  27   *
-237fead619984c Michael Halcrow         2006-10-04  28   * Returns 1 if valid, 0 otherwise.
-237fead619984c Michael Halcrow         2006-10-04  29   *
-237fead619984c Michael Halcrow         2006-10-04  30   */
-0838ae103beaf6 Gabriel Krisman Bertazi 2023-08-11  31  static int ecryptfs_d_revalidate(struct dentry *dentry,
-0838ae103beaf6 Gabriel Krisman Bertazi 2023-08-11  32  				 const struct qstr *name, unsigned int flags)
-237fead619984c Michael Halcrow         2006-10-04 @33  {
-2edbfbf1c1ab0a Al Viro                 2013-09-15  34  	struct dentry *lower_dentry = ecryptfs_dentry_to_lower(dentry);
-5556e7e6d30e8e Tyler Hicks             2015-08-05  35  	int rc = 1;
-237fead619984c Michael Halcrow         2006-10-04  36  
-0b728e1911cbe6 Al Viro                 2012-06-10  37  	if (flags & LOOKUP_RCU)
-34286d6662308d Nicholas Piggin         2011-01-07  38  		return -ECHILD;
-34286d6662308d Nicholas Piggin         2011-01-07  39  
-5556e7e6d30e8e Tyler Hicks             2015-08-05  40  	if (lower_dentry->d_flags & DCACHE_OP_REVALIDATE)
-0838ae103beaf6 Gabriel Krisman Bertazi 2023-08-11  41  		rc = lower_dentry->d_op->d_revalidate(lower_dentry, name, flags);
-5556e7e6d30e8e Tyler Hicks             2015-08-05  42  
-2b0143b5c986be David Howells           2015-03-17  43  	if (d_really_is_positive(dentry)) {
-5556e7e6d30e8e Tyler Hicks             2015-08-05  44  		struct inode *inode = d_inode(dentry);
-ae56fb16337c88 Michael Halcrow         2006-11-16  45  
-5556e7e6d30e8e Tyler Hicks             2015-08-05  46  		fsstack_copy_attr_all(inode, ecryptfs_inode_to_lower(inode));
-5556e7e6d30e8e Tyler Hicks             2015-08-05  47  		if (!inode->i_nlink)
-5556e7e6d30e8e Tyler Hicks             2015-08-05  48  			return 0;
-ae56fb16337c88 Michael Halcrow         2006-11-16  49  	}
-237fead619984c Michael Halcrow         2006-10-04  50  	return rc;
-237fead619984c Michael Halcrow         2006-10-04  51  }
-237fead619984c Michael Halcrow         2006-10-04  52  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Linaro LKFT
+https://lkft.linaro.org
