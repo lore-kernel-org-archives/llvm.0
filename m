@@ -1,44 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DE2D52B;
-	Thu, 17 Aug 2023 07:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66778CA58;
+	Thu, 17 Aug 2023 07:54:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692258883; x=1723794883;
+  t=1692258882; x=1723794882;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Sf3RK2lXleJ+hE+XnvcPAKYqYXhQamKKSIsj03WyQng=;
-  b=nqkwGsJquLojGuuUasQ5UoPIMSyRzVmGrTWtd17AyuFhbESQPYZI8SWp
-   UzUSqQuBQ8xns0NTP/TXA1jOBclSvTiPD5IxTuiri+pxxp5R7LcL47iEO
-   brDWxyTzf2pgp8kHolRaq6bOmQ3euQo/rjY/m7HicAD60/uP7jcOIJkEC
-   laGKPE9QPb3E0+LpuCzSZCJiUQ8Ak5If3npPIV/9XqBHbz51F2T5fkNbE
-   BfiwIqpxX486mF97gDZ5Pk5+QU4QKHfAGCR7kWOq/q2qUgWrZWjddBhs5
-   mBV063YPm0+eKw2YwPjAPmFP3LFNI8AGz8YGdTUgIzHBgHoOMssd+q/uw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="353058264"
+  bh=JjqfJzbjuYdRYPECagrfG7wvT+iC8uA0V847U6jle+w=;
+  b=YwoTdHTjwDTZjt5ntl8v3mA2rOqbgft5PvfANdllL/lfQKMMOGatIvFt
+   kud75XUBJQeco0SUDtFjGQEZNIvI0FWxFFMLnNh8lTJ0XawpfaDGqTyOI
+   XC7LCwaQBen7qjd0P5ocIyMM0mU6ambjpvSxjO4TDxhBu5sQyPcoide+K
+   0v/G8mvTgg+kKcrOeBzWHyAuGL7KmsepIk4SuUnCwaUc0RU7Y06EwiMJ2
+   tXs+Kq0ofIvxLvSyS2MTUNq5wxp9u2U/M8bEEOiZdTL5nXhm5BEBzgqnj
+   8efQM9ECzRN3gESPJEz4VSeTjho5370Y0DW4lM6dTzcDHiojPKDb8zskb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="357707712"
 X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="353058264"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 00:54:42 -0700
+   d="scan'208";a="357707712"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 00:54:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848796704"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="711435491"
 X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="848796704"
+   d="scan'208";a="711435491"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Aug 2023 00:54:39 -0700
+  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2023 00:54:39 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWXq3-0000vF-0Q;
+	id 1qWXq3-0000v7-08;
 	Thu, 17 Aug 2023 07:54:39 +0000
-Date: Thu, 17 Aug 2023 15:54:34 +0800
+Date: Thu, 17 Aug 2023 15:54:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Petlozu Pravareshwar <petlozup@nvidia.com>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
-	Stefan Kristiansson <stefank@nvidia.com>
-Subject: drivers/soc/tegra/pmc.c:467: warning: Function parameter or member
- 'syscore' not described in 'tegra_pmc'
-Message-ID: <202308171504.PtwuzSji-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Wolfram Sang <wsa-dev@sang-engineering.com>
+Subject: drivers/i2c/busses/i2c-cadence.c:218: warning: Function parameter or
+ member 'rinfo' not described in 'cdns_i2c'
+Message-ID: <202308171510.bKHBcZQW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,116 +50,87 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
-commit: 1ddb8f6d44ff482c9953a06f800453bc372cfead soc/tegra: pmc: Fix dual edge triggered wakes
-date:   9 months ago
-config: arm-randconfig-r015-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171504.PtwuzSji-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171504.PtwuzSji-lkp@intel.com/reproduce)
+commit: 58b924241d0a23eee8e86dd9e6f5dacd01c82e62 i2c: cadence: Add standard bus recovery support
+date:   11 months ago
+config: riscv-randconfig-r002-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171510.bKHBcZQW-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171510.bKHBcZQW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308171504.PtwuzSji-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308171510.bKHBcZQW-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/soc/tegra/pmc.c:467: warning: Function parameter or member 'syscore' not described in 'tegra_pmc'
+>> drivers/i2c/busses/i2c-cadence.c:218: warning: Function parameter or member 'rinfo' not described in 'cdns_i2c'
 
 
-vim +467 drivers/soc/tegra/pmc.c
+vim +218 drivers/i2c/busses/i2c-cadence.c
 
-5f84bb1a4099e2 Sandipan Patra       2018-10-24  383  
-7232398abc6a71 Thierry Reding       2014-07-11  384  /**
-7232398abc6a71 Thierry Reding       2014-07-11  385   * struct tegra_pmc - NVIDIA Tegra PMC
-35b67291b4a85d Jon Hunter           2015-12-04  386   * @dev: pointer to PMC device structure
-7232398abc6a71 Thierry Reding       2014-07-11  387   * @base: pointer to I/O remapped register region
-bbe5af60041cae Thierry Reding       2019-01-25  388   * @wake: pointer to I/O remapped region for WAKE registers
-bbe5af60041cae Thierry Reding       2019-01-25  389   * @aotag: pointer to I/O remapped region for AOTAG registers
-bbe5af60041cae Thierry Reding       2019-01-25  390   * @scratch: pointer to I/O remapped region for scratch registers
-7232398abc6a71 Thierry Reding       2014-07-11  391   * @clk: pointer to pclk clock
-35b67291b4a85d Jon Hunter           2015-12-04  392   * @soc: pointer to SoC data structure
-e247deae1a5508 Mikko Perttunen      2019-01-25  393   * @tz_only: flag specifying if the PMC can only be accessed via TrustZone
-3195ac6d9cbeef Jon Hunter           2015-12-04  394   * @debugfs: pointer to debugfs entry
-7232398abc6a71 Thierry Reding       2014-07-11  395   * @rate: currently configured rate of pclk
-7232398abc6a71 Thierry Reding       2014-07-11  396   * @suspend_mode: lowest suspend mode available
-7232398abc6a71 Thierry Reding       2014-07-11  397   * @cpu_good_time: CPU power good time (in microseconds)
-7232398abc6a71 Thierry Reding       2014-07-11  398   * @cpu_off_time: CPU power off time (in microsecends)
-7232398abc6a71 Thierry Reding       2014-07-11  399   * @core_osc_time: core power good OSC time (in microseconds)
-7232398abc6a71 Thierry Reding       2014-07-11  400   * @core_pmu_time: core power good PMU time (in microseconds)
-7232398abc6a71 Thierry Reding       2014-07-11  401   * @core_off_time: core power off time (in microseconds)
-7232398abc6a71 Thierry Reding       2014-07-11  402   * @corereq_high: core power request is active-high
-7232398abc6a71 Thierry Reding       2014-07-11  403   * @sysclkreq_high: system clock request is active-high
-7232398abc6a71 Thierry Reding       2014-07-11  404   * @combined_req: combined power request for CPU & core
-7232398abc6a71 Thierry Reding       2014-07-11  405   * @cpu_pwr_good_en: CPU power good signal is enabled
-7232398abc6a71 Thierry Reding       2014-07-11  406   * @lp0_vec_phys: physical base address of the LP0 warm boot code
-7232398abc6a71 Thierry Reding       2014-07-11  407   * @lp0_vec_size: size of the LP0 warm boot code
-a38045121bf421 Jon Hunter           2016-03-30  408   * @powergates_available: Bitmap of available power gates
-7232398abc6a71 Thierry Reding       2014-07-11  409   * @powergates_lock: mutex for power gate register access
-bbe5af60041cae Thierry Reding       2019-01-25  410   * @pctl_dev: pin controller exposed by the PMC
-bbe5af60041cae Thierry Reding       2019-01-25  411   * @domain: IRQ domain provided by the PMC
-bbe5af60041cae Thierry Reding       2019-01-25  412   * @irq: chip implementation for the IRQ domain
-e57a243f5d896f Dmitry Osipenko      2019-09-26  413   * @clk_nb: pclk clock changes handler
-d3a20dcbca4880 Thierry Reding       2022-05-06  414   * @core_domain_state_synced: flag marking the core domain's state as synced
-d3a20dcbca4880 Thierry Reding       2022-05-06  415   * @core_domain_registered: flag marking the core domain as registered
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  416   * @wake_type_level_map: Bitmap indicating level type for non-dual edge wakes
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  417   * @wake_type_dual_edge_map: Bitmap indicating if a wake is dual-edge or not
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  418   * @wake_sw_status_map: Bitmap to hold raw status of wakes without mask
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  419   * @wake_cntrl_level_map: Bitmap to hold wake levels to be programmed in
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  420   *     cntrl register associated with each wake during system suspend.
-7232398abc6a71 Thierry Reding       2014-07-11  421   */
-7232398abc6a71 Thierry Reding       2014-07-11  422  struct tegra_pmc {
-3568df3d31d62b Mikko Perttunen      2015-01-06  423  	struct device *dev;
-7232398abc6a71 Thierry Reding       2014-07-11  424  	void __iomem *base;
-c641ec6eab8587 Thierry Reding       2017-08-30  425  	void __iomem *wake;
-c641ec6eab8587 Thierry Reding       2017-08-30  426  	void __iomem *aotag;
-5be2255676bf2b Thierry Reding       2017-08-30  427  	void __iomem *scratch;
-7232398abc6a71 Thierry Reding       2014-07-11  428  	struct clk *clk;
-3195ac6d9cbeef Jon Hunter           2015-12-04  429  	struct dentry *debugfs;
-7232398abc6a71 Thierry Reding       2014-07-11  430  
-7232398abc6a71 Thierry Reding       2014-07-11  431  	const struct tegra_pmc_soc *soc;
-e247deae1a5508 Mikko Perttunen      2019-01-25  432  	bool tz_only;
-7232398abc6a71 Thierry Reding       2014-07-11  433  
-7232398abc6a71 Thierry Reding       2014-07-11  434  	unsigned long rate;
-7232398abc6a71 Thierry Reding       2014-07-11  435  
-7232398abc6a71 Thierry Reding       2014-07-11  436  	enum tegra_suspend_mode suspend_mode;
-7232398abc6a71 Thierry Reding       2014-07-11  437  	u32 cpu_good_time;
-7232398abc6a71 Thierry Reding       2014-07-11  438  	u32 cpu_off_time;
-7232398abc6a71 Thierry Reding       2014-07-11  439  	u32 core_osc_time;
-7232398abc6a71 Thierry Reding       2014-07-11  440  	u32 core_pmu_time;
-7232398abc6a71 Thierry Reding       2014-07-11  441  	u32 core_off_time;
-7232398abc6a71 Thierry Reding       2014-07-11  442  	bool corereq_high;
-7232398abc6a71 Thierry Reding       2014-07-11  443  	bool sysclkreq_high;
-7232398abc6a71 Thierry Reding       2014-07-11  444  	bool combined_req;
-7232398abc6a71 Thierry Reding       2014-07-11  445  	bool cpu_pwr_good_en;
-7232398abc6a71 Thierry Reding       2014-07-11  446  	u32 lp0_vec_phys;
-7232398abc6a71 Thierry Reding       2014-07-11  447  	u32 lp0_vec_size;
-a38045121bf421 Jon Hunter           2016-03-30  448  	DECLARE_BITMAP(powergates_available, TEGRA_POWERGATE_MAX);
-7232398abc6a71 Thierry Reding       2014-07-11  449  
-7232398abc6a71 Thierry Reding       2014-07-11  450  	struct mutex powergates_lock;
-4a37f11c8f57ff Aapo Vienamo         2018-08-10  451  
-4a37f11c8f57ff Aapo Vienamo         2018-08-10  452  	struct pinctrl_dev *pctl_dev;
-19906e6b166721 Thierry Reding       2018-09-17  453  
-19906e6b166721 Thierry Reding       2018-09-17  454  	struct irq_domain *domain;
-19906e6b166721 Thierry Reding       2018-09-17  455  	struct irq_chip irq;
-e57a243f5d896f Dmitry Osipenko      2019-09-26  456  
-e57a243f5d896f Dmitry Osipenko      2019-09-26  457  	struct notifier_block clk_nb;
-41bafa698ddd07 Dmitry Osipenko      2021-06-01  458  
-41bafa698ddd07 Dmitry Osipenko      2021-06-01  459  	bool core_domain_state_synced;
-41bafa698ddd07 Dmitry Osipenko      2021-06-01  460  	bool core_domain_registered;
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  461  
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  462  	unsigned long *wake_type_level_map;
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  463  	unsigned long *wake_type_dual_edge_map;
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  464  	unsigned long *wake_sw_status_map;
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  465  	unsigned long *wake_cntrl_level_map;
-1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  466  	struct syscore_ops syscore;
-7232398abc6a71 Thierry Reding       2014-07-11 @467  };
-7232398abc6a71 Thierry Reding       2014-07-11  468  
+1a351b10b9671f Radu Pirea           2020-01-06  163  
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  164  /**
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  165   * struct cdns_i2c - I2C device private data structure
+30e31a1fbc1fc0 Shubhrajyoti Datta   2016-03-07  166   *
+30e31a1fbc1fc0 Shubhrajyoti Datta   2016-03-07  167   * @dev:		Pointer to device structure
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  168   * @membase:		Base address of the I2C device
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  169   * @adap:		I2C adapter instance
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  170   * @p_msg:		Message pointer
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  171   * @err_status:		Error status in Interrupt Status Register
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  172   * @xfer_done:		Transfer complete status
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  173   * @p_send_buf:		Pointer to transmit buffer
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  174   * @p_recv_buf:		Pointer to receive buffer
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  175   * @send_count:		Number of bytes still expected to send
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  176   * @recv_count:		Number of bytes still expected to receive
+9fae82e1acda8d Harini Katakam       2014-12-12  177   * @curr_recv_count:	Number of bytes to be received in current transfer
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  178   * @irq:		IRQ number
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  179   * @input_clk:		Input clock to I2C controller
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  180   * @i2c_clk:		Maximum I2C clock speed
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  181   * @bus_hold_flag:	Flag used in repeated start for clearing HOLD bit
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  182   * @clk:		Pointer to struct clk
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  183   * @clk_rate_change_nb:	Notifier block for clock rate changes
+63cab195bf4986 Anurag Kumar Vulisha 2015-07-10  184   * @quirks:		flag for broken hold bit usage in r1p10
+8b51a8e64443b9 Shubhrajyoti Datta   2021-07-13  185   * @ctrl_reg:		Cached value of the control register.
+1a351b10b9671f Radu Pirea           2020-01-06  186   * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
+1a351b10b9671f Radu Pirea           2020-01-06  187   * @slave:		Registered slave instance.
+1a351b10b9671f Radu Pirea           2020-01-06  188   * @dev_mode:		I2C operating role(master/slave).
+1a351b10b9671f Radu Pirea           2020-01-06  189   * @slave_state:	I2C Slave state(idle/read/write).
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  190   */
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  191  struct cdns_i2c {
+7fa32329ca0314 Shubhrajyoti Datta   2015-11-24  192  	struct device		*dev;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  193  	void __iomem *membase;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  194  	struct i2c_adapter adap;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  195  	struct i2c_msg *p_msg;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  196  	int err_status;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  197  	struct completion xfer_done;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  198  	unsigned char *p_send_buf;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  199  	unsigned char *p_recv_buf;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  200  	unsigned int send_count;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  201  	unsigned int recv_count;
+9fae82e1acda8d Harini Katakam       2014-12-12  202  	unsigned int curr_recv_count;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  203  	int irq;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  204  	unsigned long input_clk;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  205  	unsigned int i2c_clk;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  206  	unsigned int bus_hold_flag;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  207  	struct clk *clk;
+df8eb5691c48d3 Soren Brinkmann      2014-04-04  208  	struct notifier_block clk_rate_change_nb;
+63cab195bf4986 Anurag Kumar Vulisha 2015-07-10  209  	u32 quirks;
+8b51a8e64443b9 Shubhrajyoti Datta   2021-07-13  210  	u32 ctrl_reg;
+58b924241d0a23 Shubhrajyoti Datta   2022-07-28  211  	struct i2c_bus_recovery_info rinfo;
+1a351b10b9671f Radu Pirea           2020-01-06  212  #if IS_ENABLED(CONFIG_I2C_SLAVE)
+1a351b10b9671f Radu Pirea           2020-01-06  213  	u16 ctrl_reg_diva_divb;
+1a351b10b9671f Radu Pirea           2020-01-06  214  	struct i2c_client *slave;
+1a351b10b9671f Radu Pirea           2020-01-06  215  	enum cdns_i2c_mode dev_mode;
+1a351b10b9671f Radu Pirea           2020-01-06  216  	enum cdns_i2c_slave_state slave_state;
+1a351b10b9671f Radu Pirea           2020-01-06  217  #endif
+63cab195bf4986 Anurag Kumar Vulisha 2015-07-10 @218  };
+63cab195bf4986 Anurag Kumar Vulisha 2015-07-10  219  
 
-:::::: The code at line 467 was first introduced by commit
-:::::: 7232398abc6a7186e315425638c367d50c674718 ARM: tegra: Convert PMC to a driver
+:::::: The code at line 218 was first introduced by commit
+:::::: 63cab195bf498676619951e81ad5791e9d47c420 i2c: removed work arounds in i2c driver for Zynq Ultrascale+ MPSoC
 
-:::::: TO: Thierry Reding <treding@nvidia.com>
-:::::: CC: Thierry Reding <treding@nvidia.com>
+:::::: TO: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+:::::: CC: Wolfram Sang <wsa@the-dreams.de>
 
 -- 
 0-DAY CI Kernel Test Service
