@@ -1,62 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC0517FF3;
-	Thu, 17 Aug 2023 19:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4070C433C7;
-	Thu, 17 Aug 2023 19:52:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692301956;
-	bh=SPiXooE6PXcXmqC5tjCHuM013avVZj6UwiflyY70E2M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H6ncAT98j4Enq0lr0b+waHy+Zt96gKu0n6FcdoztdS3GhaVY9F2Zis2GR1qVY88+W
-	 69Slu03qP0ZNXNm2+CHjxfB0a5dPCDYaTXf3RUIoATZ8y5LP+5KN83Z2lLaLA6UWkx
-	 Q1jGnlK/nXEe0khoXFjwu9l3/8toEqpT+4T+7SS7K9bXorKT7Ec40BUiB26G5PJA3x
-	 sxpMTE4a4715SEEwPXhzUIooHn6NZL89D9NB1JrByM+WrhJSF9XkUH+phYvq1xDGZX
-	 j+9+QnFSWFkos1KuzTNR4iAtU8LNK7VIAMU4yjtEI2I61gq3Mt+g9zJ1WFWvJC0ZmX
-	 AqCAya57wexjA==
-Date: Thu, 17 Aug 2023 20:52:31 +0100
-From: Lee Jones <lee@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Artur Weber <aweber.kernel@gmail.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>
-Subject: Re: [linux-next:master 4727/8441]
- drivers/video/backlight/lp855x_bl.c:252:7: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <20230817195231.GL986605@google.com>
-References: <202308091728.NEJhgUPP-lkp@intel.com>
- <20230817170602.GJ986605@google.com>
- <20230817170845.GA3299567@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB0517FF3
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 20:06:06 +0000 (UTC)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1bcad794ad4so1600905ad.3
+        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 13:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1692302766; x=1692907566;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZbsxO4EunJBczn5K/qVWQc9X0kVNu3YHxV88CwvQfAo=;
+        b=bb7QBUe3bTaz2B2jMyMl56SJDnlsnftgVjMEogpwFzd7cb/Ocv2M7yWlKTUK//A+XT
+         sl3doHdTYBEIeGe8ER5o9AjcQaLtk/dkoP5fZXCQZB6w9bmo9UXfASSzdguyOiCal+Ja
+         +uGlklc5Pobah5m6SxwT6rNxF4+m41uvS0oFk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692302766; x=1692907566;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZbsxO4EunJBczn5K/qVWQc9X0kVNu3YHxV88CwvQfAo=;
+        b=lhOvuGmv8y5LkHdH8MmKEeTihQnfCNGAULDJFQBUD86cZPHQ6tJ0qNP85Yzy3hYGQc
+         1EfA++k/tFKAg2WvGY72yqg1Q5t7bZjMVCVtRwSFN3gncQ7/IO6lftGNKtMhSTivXIWR
+         F8T1KTOxxJkRNKYrT0871m0R9ZC+0l5hPDafBWrf5HVIrvh0wtYzjxGYpS3rZtacgmTH
+         BS55JfdppVTSe7S3Wnl3Zqz81e6wNSLtFDEvIt52XFV4othzji5NY9rJKffNLCtPush6
+         9guw3gr+c/JRAYLOSyCzSavWd3CdsgzLrrIXZKrMzY91rl9EyHiQY7nuPbrHlKof7rS9
+         nMCg==
+X-Gm-Message-State: AOJu0YwsO6z6BqSKupMSTZwJF9tQ32SatSWuX0YZjGiyxJZASZBFVzUB
+	bCerNAIaEoD/FPeflU0VDMPKCA==
+X-Google-Smtp-Source: AGHT+IFvOpj41A5JYl6PjF6P3Rg1fHwaar9j0sl1Dy+YcFnDkvyGkeNGyVRne93EWm8OkeJhGUQqUQ==
+X-Received: by 2002:a17:903:2287:b0:1bc:18e5:2c82 with SMTP id b7-20020a170903228700b001bc18e52c82mr535587plh.36.1692302766095;
+        Thu, 17 Aug 2023 13:06:06 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id jb11-20020a170903258b00b001b6a27dff99sm154872plb.159.2023.08.17.13.06.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 13:06:05 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] Compiler Attributes: counted_by: Adjust name and identifier expansion
+Date: Thu, 17 Aug 2023 13:06:03 -0700
+Message-Id: <20230817200558.never.077-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2201; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=yMkCTHZHP/BRFycnWTEzZlu5l2QK06etjGosbVrVIT4=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3n2r1CgP3Mc6pKxyHkZYiaBqAOVNY4uUihf1S
+ xpexulDGQCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN59qwAKCRCJcvTf3G3A
+ Juk5D/0fRxpeHUoylQN5bw44Q4bDNoPclBzKqlpYMfYTeS/vBf3t02TO2Oh4sBmPxyMa/pdcRMD
+ n6Z4w4GOgxAitAfrDNMuqyFEyvp4insRTwwoTKl1kNhaYJu22bIw0CWngvRv4upSqODjUrB+ale
+ 7oSuCuUohlqq62sibdTRlYqhtpYymI7/hEx4W/hrGg5Xr+i9DCeK0o+Wn48uzyrYuWRJ2cZIb5o
+ lFR7wItH03McdWGnQq6cowK0bX3UJTnH9BQ+WeoKeJNGq489fi/IaZtAaDiLR2dIkr9TP+B93El
+ bi+vAqYsZXxpmmYd6rUqiLAordhRuaL70ZH7gNN1BxQ3GFQdAiR2VEffxF1RA3vucM1LgQVY91P
+ YCyAKovCM02kXBx9l1KQxzL6hyrhTgXHbQ+GehYjTMnDzcL7KKoSPaphXnczGgPet+FZ0Zt87uq
+ DJbJ3RmRxIVA0GG4G0Ll24+wpbJhMYVRYIJIiB1KgQy5zhshHOJOtlmG0GuzimTTnxUAibE6uF/
+ tlMOVVHDy66Z1Ag3mB8UwMFf7Y3qhJUtpHDPQhhZuKXvXwZviXFJ/q+VsavNT7xl6BqXwu9a4X7
+ fqyZPju0U/35nmQBgq9imr7gRVDLLenkPpbmprm8iPz0ZrQ1u9PXcaRpiLrS9C6m54f3RiFG2vp
+ 77E2RG1 raQeW3CQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230817170845.GA3299567@dev-arch.thelio-3990X>
 
-On Thu, 17 Aug 2023, Nathan Chancellor wrote:
+GCC and Clang's current RFCs name this attribute "counted_by", and have
+moved away from using a string for the member name. Update the kernel's
+macros to match. Additionally provide a UAPI no-op macro for UAPI structs
+that will gain annotations.
 
-> On Thu, Aug 17, 2023 at 06:06:02PM +0100, Lee Jones wrote:
-> > Arthur,
-> > 
-> > Please submit a follow-up patch or I'll have to revert it.
-> 
-> The follow up fix was sent a couple hours after this report:
-> 
-> https://lore.kernel.org/20230809114216.4078-1-aweber.kernel@gmail.com/
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: dd06e72e68bc ("Compiler Attributes: Add __counted_by macro")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/compiler_attributes.h | 26 +++++++++++++-------------
+ include/uapi/linux/stddef.h         |  4 ++++
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
-Super, thanks.
-
-I had a simple grep for a follow-up, but must have missed it.  I'll
-probably get up to it (working reverse chronologically) tomorrow some
-time.
-
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index 00efa35c350f..74716a407aac 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -94,6 +94,19 @@
+ # define __copy(symbol)
+ #endif
+ 
++/*
++ * Optional: only supported since gcc >= 14
++ * Optional: only supported since clang >= 17
++ *
++ *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
++ * clang: https://reviews.llvm.org/D148381
++ */
++#if __has_attribute(__counted_by__)
++# define __counted_by(member)		__attribute__((__counted_by__(member)))
++#else
++# define __counted_by(member)
++#endif
++
+ /*
+  * Optional: not supported by gcc
+  * Optional: only supported since clang >= 14.0
+@@ -129,19 +142,6 @@
+ # define __designated_init
+ #endif
+ 
+-/*
+- * Optional: only supported since gcc >= 14
+- * Optional: only supported since clang >= 17
+- *
+- *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+- * clang: https://reviews.llvm.org/D148381
+- */
+-#if __has_attribute(__element_count__)
+-# define __counted_by(member)		__attribute__((__element_count__(#member)))
+-#else
+-# define __counted_by(member)
+-#endif
+-
+ /*
+  * Optional: only supported since clang >= 14.0
+  *
+diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
+index 7837ba4fe728..7c3fc3980881 100644
+--- a/include/uapi/linux/stddef.h
++++ b/include/uapi/linux/stddef.h
+@@ -45,3 +45,7 @@
+ 		TYPE NAME[]; \
+ 	}
+ #endif
++
++#ifndef __counted_by
++#define __counted_by(m)
++#endif
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
