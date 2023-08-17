@@ -1,170 +1,290 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E910154B6;
-	Thu, 17 Aug 2023 15:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692286702; x=1723822702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Acxcms3HSz7m9rd5CZpi++iniuYxfwBpedurivGX2As=;
-  b=GHGeeG2b7kKsBSLOfBhXe0/vWmu+Tdc7wvNymTFoYARIjO7fAmhwSEeL
-   C1qgq0qtZQhQRC2vU1WKlKQ8qx5BL0mZ43ljPK7MMWuxkyFyEOopIk+1Y
-   WbG4fQXfH/fhRu/H5I5IW88iwaAoJ2YqpoTVEYQKKkvRU1i1+tkBt7/A2
-   VXoptvfSF8cCin/iJr55/xpNcGMHsDmaoMMw3I8UQZArAnuJPkN5qNXgr
-   XMQi7K43yKAkZW+9It7kNd28OqYDrm3ynBoX0OYI9zitTtwdPk/6/LEXO
-   03CBKu/MiLm4JURWXrcdJkhkzTaiZpSMja5h1O5ZSHEy+SCPVWReGolOy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="459204647"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="459204647"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 08:36:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="764139338"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="764139338"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2023 08:36:22 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWf2r-0001HR-2r;
-	Thu, 17 Aug 2023 15:36:21 +0000
-Date: Thu, 17 Aug 2023 23:35:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>
-Subject: [linux-next:master 8648/10848] ERROR: modpost: "bdev_mark_dead"
- [drivers/s390/block/dasd_mod.ko] undefined!
-Message-ID: <202308172348.1BthulLk-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54DC14274
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 15:44:16 +0000 (UTC)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-40c72caec5cso370591cf.0
+        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 08:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692287055; x=1692891855;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fnSBHKbg+bFVx1C0vxWi4Wu1D2ldOSatGLLDKItke1w=;
+        b=c7Z6abzKUvTJaXkCERiNZUJHCRJSh0d1wHhlZF/Opu4YZURFRABagzmKECUatXBZ6o
+         thYmaG2kTsK7lGrLiMMVbi85zfs0PeGZmLbHDwvsa0SdYXVKfWlMtVNN5f7Keov/BjIi
+         AvSjLslyIWz4M5itjWif3CVi/hxrbkKOdeM74wBmGxTSI3I0U232Kcs5c34QHMIP2KVe
+         U0saaVVeBjudwo5Sb5xStqalNamWAeErf14CwpLX5WLCjh9OSrFPiYjAhxcOFbXNqWUD
+         O0SnSM/tKGERsC1MbHI3pZ4IBD2ZLxHSua8NgIzyymyX2sO73Jg0RdOlxizG5uLrMhjr
+         Imow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692287055; x=1692891855;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fnSBHKbg+bFVx1C0vxWi4Wu1D2ldOSatGLLDKItke1w=;
+        b=lkgkgpXoYar71V1zTg1x3AleaX76Hgm26zFRngtAX05mMK6k3sWL+LSkMQJiDEf0zm
+         NArh2PC0vKmocPORn5ybuAepN8RfmnPdXdndAqZpGHK+pYKPBqjhB9LpvSKjwVjyjuUe
+         nnAW/CzK7Apz/MpVBWYZdovjeKoWbIS0p3kb2FvhMzwbMCJIaCBfP790I7cEExnjpme8
+         xHq+Qw+Mtg2DCWeHxSbi1W9UlPNNeJOiNMHcENr99j02FM+8CDRYuuJfvP5RW8XakKdC
+         3FaYgQ5fPr62JiEfmQa8PM8mdKFTdHcYvAkeHEzeWbgpSX/4osn5p1bHYtwGufLjT3x5
+         BKCQ==
+X-Gm-Message-State: AOJu0Ywv6zalMNtOvy5JAAQbhX6fAAJOibVShH03IO377WYmiF5kCJiT
+	FczgWIE30Dlym0Y5om9pQUraSTL40YIU83AlBwWoRQ==
+X-Google-Smtp-Source: AGHT+IEr19MMeyMiAlfVJCDFx4zGb7T76ZmH0bEemxbxQAs2OUxW/Psp4bMXtQt2Nx84ICTNeqTZvnA9G9ZFNmvc5gM=
+X-Received: by 2002:a05:622a:180a:b0:404:8218:83da with SMTP id
+ t10-20020a05622a180a00b00404821883damr217250qtc.1.1692287055249; Thu, 17 Aug
+ 2023 08:44:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <ZN4+s2Wl+zYmXTDj@kernel.org>
+In-Reply-To: <ZN4+s2Wl+zYmXTDj@kernel.org>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 17 Aug 2023 08:44:03 -0700
+Message-ID: <CAP-5=fUX78z+i5sKcZVAV1prWhA0wzNSK2zkzg70ERaLVDLFAQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] perf trace: Use the augmented_raw_syscall BPF skel
+ only for tracing syscalls
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Andi Kleen <ak@linux.intel.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Anshuman Khandual <anshuman.khandual@arm.com>, 
+	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, bpf@vger.kernel.org, 
+	Brendan Gregg <brendan.d.gregg@gmail.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Fangrui Song <maskray@google.com>, He Kuang <hekuang@huawei.com>, 
+	Ingo Molnar <mingo@redhat.com>, James Clark <james.clark@arm.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Kan Liang <kan.liang@linux.intel.com>, Leo Yan <leo.yan@linaro.org>, llvm@lists.linux.dev, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Nathan Chancellor <nathan@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Rob Herring <robh@kernel.org>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Tom Rix <trix@redhat.com>, Wang Nan <wangnan0@huawei.com>, 
+	Wang ShaoBo <bobo.shaobowang@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Yonghong Song <yhs@fb.com>, YueHaibing <yuehaibing@huawei.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   47762f08697484cf0c2f2904b8c52375ed26c8cb
-commit: 381f678306ceef1cefb39fb22f88e3b977b81403 [8648/10848] block: consolidate __invalidate_device and fsync_bdev
-config: s390-randconfig-r006-20230817 (https://download.01.org/0day-ci/archive/20230817/202308172348.1BthulLk-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308172348.1BthulLk-lkp@intel.com/reproduce)
+On Thu, Aug 17, 2023 at 8:37=E2=80=AFAM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> It is possible to use 'perf trace' with tracepoints and in that case we
+> can't initialize/use the augmented_raw_syscalls BPF skel.
+>
+> For instance, this usecase:
+>
+>   # perf trace -e sched:*exec --max-events=3D5
+>          ? (         ): NetworkManager/1183  ... [continued]: poll())    =
+                                         =3D 1
+>      0.043 ( 0.007 ms): NetworkManager/1183 epoll_wait(epfd: 17<anon_inod=
+e:[eventpoll]>, events: 0x55555f90e920, maxevents: 6) =3D 0
+>      0.060 ( 0.007 ms): NetworkManager/1183 write(fd: 3<anon_inode:[event=
+fd]>, buf: 0x7ffc5a27cd30, count: 8)     =3D 8
+>      0.073 ( 0.005 ms): NetworkManager/1183 epoll_wait(epfd: 24<anon_inod=
+e:[eventpoll]>, events: 0x7ffc5a27cd20, maxevents: 2) =3D 1
+>      0.082 ( 0.010 ms): NetworkManager/1183 recvmmsg(fd: 26<socket:[30298=
+]>, mmsg: 0x7ffc5a27caa0, vlen: 8)       =3D 1
+>   #
+>
+> Where we want to trace just some sched tracepoints ending in 'exec' ends
+> up tracing all syscalls.
+>
+> Fix it by checking existing trace->trace_syscalls boolean to see if we
+> need the augmenter.
+>
+> A followup patch will move those sections of code used only with the
+> augmenter to separate functions, to get it cleaner and remove the goto,
+> done just for reviewing purposes.
+>
+> With this patch in place the previous behaviour is restored: no syscalls
+> when we have other events and no syscall names:
+>
+>   [root@quaco ~]# perf probe do_filp_open "filename=3Dpathname->name:stri=
+ng"
+>   Added new event:
+>     probe:do_filp_open   (on do_filp_open with filename=3Dpathname->name:=
+string)
+>
+>   You can now use it in all perf tools, such as:
+>
+>           perf record -e probe:do_filp_open -aR sleep 1
+>
+>   [root@quaco ~]# perf trace --max-events=3D10 -e probe:do_filp_open slee=
+p 1
+>      0.000 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/etc/ld.so.cache")
+>      0.056 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/lib64/libc.so.6")
+>      0.481 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/lib/locale/locale-archive")
+>      0.501 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/share/locale/locale.alias")
+>      0.572 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/lib/locale/en_US.UTF-8/LC_IDENTIFICATION")
+>      0.581 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/lib/locale/en_US.utf8/LC_IDENTIFICATION")
+>      0.616 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/lib64/gconv/gconv-modules.cache")
+>      0.656 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/lib/locale/en_US.UTF-8/LC_MEASUREMENT")
+>      0.664 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/lib/locale/en_US.utf8/LC_MEASUREMENT")
+>      0.696 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filen=
+ame: "/usr/lib/locale/en_US.UTF-8/LC_TELEPHONE")
+>   [root@quaco ~]#
+>
+> As well as mixing syscalls with tracepoints, getting the syscall
+> tracepoints used augmented using the BPF skel:
+>
+>   [root@quaco ~]# perf trace --max-events=3D10 -e open*,probe:do_filp_ope=
+n sleep 1
+>      0.000 (         ): sleep/455124 openat(dfd: CWD, filename: "/etc/ld.=
+so.cache", flags: RDONLY|CLOEXEC) ...
+>      0.005 (         ): sleep/455124 probe:do_filp_open(__probe_ip: -1186=
+560412, filename: "/etc/ld.so.cache")
+>      0.000 ( 0.011 ms): sleep/455124  ... [continued]: openat())         =
+                                  =3D 3
+>      0.031 (         ): sleep/455124 openat(dfd: CWD, filename: "/lib64/l=
+ibc.so.6", flags: RDONLY|CLOEXEC) ...
+>      0.033 (         ): sleep/455124 probe:do_filp_open(__probe_ip: -1186=
+560412, filename: "/lib64/libc.so.6")
+>      0.031 ( 0.006 ms): sleep/455124  ... [continued]: openat())         =
+                                  =3D 3
+>      0.258 (         ): sleep/455124 openat(dfd: CWD, filename: "/usr/lib=
+/locale/locale-archive", flags: RDONLY|CLOEXEC) ...
+>      0.261 (         ): sleep/455124 probe:do_filp_open(__probe_ip: -1186=
+560412, filename: "/usr/lib/locale/locale-archive")
+>      0.258 ( 0.006 ms): sleep/455124  ... [continued]: openat())         =
+                                  =3D -1 ENOENT (No such file or directory)
+>      0.272 (         ): sleep/455124 openat(dfd: CWD, filename: "/usr/sha=
+re/locale/locale.alias", flags: RDONLY|CLOEXEC) ...
+>      0.273  (        ): sleep/455124 probe:do_filp_open(__probe_ip: -1186=
+560412, filename: "/usr/share/locale/locale.alias")
+>
+> A final note: the probe:do_filp_open uses a kprobe (probably optimized
+> as its in the start of a function) that uses the kprobe_tracer mechanism
+> in the kernel to collect the pathname->name string and stash it into the
+> tracepoint created by 'perf probe' for that:
+>
+>   [root@quaco ~]# cat /sys/kernel/debug/tracing/kprobe_events
+>   p:probe/do_filp_open _text+4621920 filename=3D+0(+0(%si)):string
+>   [root@quaco ~]#
+>
+> While the syscalls:sys_enter_openat tracepoint gets its string from a
+> BPF program attached to raw_syscalls:sys_enter that tail calls into
+> another BPF program that knows the types for the openat syscall args and
+> thus can bpf_probe_read it right after the normal
+> sys_enter/sys_enter_openat tracepoint payload that comes prefixed with
+> whatever perf_event_open asked for (CPU, timestamp, etc):
+>
+>   [root@quaco ~]# bpftool prog | grep -E "sys_enter |sys_enter_opena" -A3
+>   3176: tracepoint  name sys_enter  tag 0bc3fc9d11754ba1  gpl
+>         loaded_at 2023-08-17T12:32:20-0300  uid 0
+>         xlated 272B  jited 257B  memlock 4096B  map_ids 2462,2466,2463
+>         btf_id 2976
+>   --
+>   3180: tracepoint  name sys_enter_opena  tag 19dd077f00ec2f58  gpl
+>           loaded_at 2023-08-17T12:32:20-0300  uid 0
+>           xlated 328B  jited 206B  memlock 4096B  map_ids 2466,2465
+>           btf_id 2976
+>   [root@quaco ~]#
+>
+> Fixes: 42963c8bedeb864b ("perf trace: Migrate BPF augmentation to use a s=
+keleton")
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+> Cc: bpf@vger.kernel.org
+> Cc: Brendan Gregg <brendan.d.gregg@gmail.com>
+> Cc: Carsten Haitzler <carsten.haitzler@arm.com>
+> Cc: Eduard Zingerman <eddyz87@gmail.com>
+> Cc: Fangrui Song <maskray@google.com>
+> Cc: He Kuang <hekuang@huawei.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: James Clark <james.clark@arm.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Kan Liang <kan.liang@linux.intel.com>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: llvm@lists.linux.dev
+> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ravi Bangoria <ravi.bangoria@amd.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Wang Nan <wangnan0@huawei.com>
+> Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
+> Cc: Yang Jihong <yangjihong1@huawei.com>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: YueHaibing <yuehaibing@huawei.com>
+> Link: https://lore.kernel.org/lkml/
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308172348.1BthulLk-lkp@intel.com/
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Thanks,
+Ian
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-jpgdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-mm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-mm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-apmixedsys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-topckgen.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-peri_ao.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-infra_ao.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-mfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-ipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-mdp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-mfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-mm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-msdc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-scp_adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-apmixedsys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-apu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-cam.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/suniv-f1c100s-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun20i-d1-r-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun50i-a64-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun50i-a100-r-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun50i-h6-r-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun4i-a10-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-a33-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-a83t-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/imx/soc-imx8m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/mediatek/mtk-cmdq-helper.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/amlogic/meson-clk-measure.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/qcom/spm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/st-rng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ppdev.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/loop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/pcf50633-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/core/cxl_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_mem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_port.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/host/nvme-fabrics.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/host/nvme-fc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet-fc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-fcloop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/common/nvme-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-omap2-mcspi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/line-display.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/phy/phy-am335x-control.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/phy/phy-am335x.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/storage/uas.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/ezusb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_tcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/matrix-keymap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ccgx-ucsi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-pxa.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-qup.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/samsung/exynos4-is/exynos-fimc-lite.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/samsung/exynos4-is/exynos4-is-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/ti/vpe/ti-vpdma.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/tmio_mmc_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/renesas_sdhi_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_simple.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_emmc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/blink/leds-bcm63138.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/flash/leds-rt4505.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/coreboot_table.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/memconsole.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/memconsole-coreboot.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mailbox/mtk-cmdq-mailbox.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/fsl_imx8_ddr_perf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/arm_cspmu_module.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/counter/ftm-quaddec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/libnvdimm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/drivers/snd-pcmtest.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/cio/vfio_ccw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/block/dasd_fba_mod.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/char/fs3270.o
->> ERROR: modpost: "bdev_mark_dead" [drivers/s390/block/dasd_mod.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  tools/perf/builtin-trace.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index 0ebfa95895e0bf4d..3964cf44cdbcb3e8 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -3895,7 +3895,7 @@ static int trace__run(struct trace *trace, int argc=
+, const char **argv)
+>         if (err < 0)
+>                 goto out_error_open;
+>  #ifdef HAVE_BPF_SKEL
+> -       {
+> +       if (trace->syscalls.events.bpf_output) {
+>                 struct perf_cpu cpu;
+>
+>                 /*
+> @@ -3916,7 +3916,7 @@ static int trace__run(struct trace *trace, int argc=
+, const char **argv)
+>                 goto out_error_mem;
+>
+>  #ifdef HAVE_BPF_SKEL
+> -       if (trace->skel->progs.sys_enter)
+> +       if (trace->skel && trace->skel->progs.sys_enter)
+>                 trace__init_syscalls_bpf_prog_array_maps(trace);
+>  #endif
+>
+> @@ -4850,6 +4850,9 @@ int cmd_trace(int argc, const char **argv)
+>         }
+>
+>  #ifdef HAVE_BPF_SKEL
+> +       if (!trace.trace_syscalls)
+> +               goto skip_augmentation;
+> +
+>         trace.skel =3D augmented_raw_syscalls_bpf__open();
+>         if (!trace.skel) {
+>                 pr_debug("Failed to open augmented syscalls BPF skeleton"=
+);
+> @@ -4884,6 +4887,7 @@ int cmd_trace(int argc, const char **argv)
+>         }
+>         trace.syscalls.events.bpf_output =3D evlist__last(trace.evlist);
+>         assert(!strcmp(evsel__name(trace.syscalls.events.bpf_output), "__=
+augmented_syscalls__"));
+> +skip_augmentation:
+>  #endif
+>         err =3D -1;
+>
+> --
+> 2.41.0
+>
