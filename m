@@ -1,120 +1,126 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08B21BEE4
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:15:38 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-268299d5d9fso179804a91.1
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 14:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692306938; x=1692911738;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L1xDe42Zb4O1g25la6ZbpuaxP3YQAxL+qM/43yhn7u4=;
-        b=aAnD+yQ6IXIXvqgfxPjHa3eQuh0LMSjOgvcikD2gU4WhmPjmZ5UKGdPLx9zVjdMWq/
-         htAwgtscCm+le+2XgzbGGyAu0u0v25DSSdxStSrMki6Vmy7v4V9iAZSwWRcg46VgRUC6
-         GBsKGsdXMR9I4jsHBGhPuW1cOm7H1PO49iZ0w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692306938; x=1692911738;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L1xDe42Zb4O1g25la6ZbpuaxP3YQAxL+qM/43yhn7u4=;
-        b=MMpFa/LAgjxz7fD9SNKMYfab8k5gMW7HPhmCXVha9qViLB4+H1bcD/QOW/xXyezwG4
-         doCuZvQTc8LgTX9+FxRH0lgyTa0Ihl153F63gVUzDu5qU64NdmbTib+UmuSvAAtABNFo
-         +6+M+RVT4hjEgVrKBI36fJfaQu0sr3YcAeNJMytYaLEKfCjVPzJ8thyxMgIHoS7WQx2d
-         1vNS9dI+EGOHBYOq0zlZDIkOQWOhBy3KIYbIogKepgh9SESc+xXMcMoIhpwDEgb0K7nC
-         YQTXFSlwznYy9GCgd79U3WdVasVyTS2bwZTLwFAp9R7YupXNP8wNQOy9DDDRQj2qMbX8
-         KGVw==
-X-Gm-Message-State: AOJu0YyBV5mipkStPpi9CFQqIRjCy73QiGzq8ZtotS/wyAB+j7238iIy
-	/TmbpHr7ELMZqZDD2cX/Je/pcw==
-X-Google-Smtp-Source: AGHT+IFi8O0i9RK0CHXGKeQfJM6qFoojgbvsRcV1oh+MbrP9SdGULKDsRCDtwXu5ebU7gX5iSPej4A==
-X-Received: by 2002:a17:902:aa4a:b0:1b9:ea60:cd91 with SMTP id c10-20020a170902aa4a00b001b9ea60cd91mr614626plr.7.1692306938249;
-        Thu, 17 Aug 2023 14:15:38 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i4-20020a170902eb4400b001b531e8a000sm212760pli.157.2023.08.17.14.15.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 14:15:35 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: Kees Cook <keescook@chromium.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH 6/7] wifi: cfg80211: Annotate struct cfg80211_scan_request with __counted_by
-Date: Thu, 17 Aug 2023 14:15:28 -0700
-Message-Id: <20230817211531.4193219-6-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230817211114.never.208-kees@kernel.org>
-References: <20230817211114.never.208-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7A51643A
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:17:07 +0000 (UTC)
+Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
+	by cmsmtp with ESMTP
+	id WgHtqYOFUWU1cWkMdqMOz5; Thu, 17 Aug 2023 21:17:07 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id WkMcqRKag9DJVWkMcqI8jq; Thu, 17 Aug 2023 21:17:06 +0000
+X-Authority-Analysis: v=2.4 cv=UaxC9YeN c=1 sm=1 tr=0 ts=64de8e52
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=edGIuiaXAAAA:8 a=xVhDTqbCAAAA:8 a=K6HrmWtEAAAA:8 a=hBqU3vQJAAAA:8
+ a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=4kyDAASA-Eebq_PzFVE6:22 a=GrmWmAYt4dzCMttCBZOh:22 a=yV38gEssg_2GhkhKF82i:22
+ a=WLjMIN4s_96MqnBbPenP:22 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=XPrmBnGis32Q4Plsd5hHko1y81xn30PHQUauq/WHvYE=; b=j1YUKDz7wraUXWHGPd7VTuEae/
+	Byk8pUT8yXEhDXuwemji864YtuYgeSgS1NcZzfKN4eMUZpiDU83w/kzCUY6sz20kx2UXpnj6WGE8B
+	HMue5dVwt6HvqXAAwVHOWEAfiLzGLaE/G5rNbcgYlx603vNA4JDTDKXPzer3vx96Qns869F2nunBU
+	52XoOlRv8x92H4zTANHgQtrni72bme3zfbjLfpnA9cxVMlzTsUxmqIRd9bkX62lKRnpe6SGyFnN18
+	ye41BDVA7BnW/DmfGzyx2XuAVURRveQoMk3BWLhGK8n9sQZCfCMgZ46IkWWoGkNfNHEEhuYjyTYam
+	G2XvhWBw==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:56616 helo=[192.168.15.8])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qWkMa-001gal-1N;
+	Thu, 17 Aug 2023 16:17:04 -0500
+Message-ID: <713066f1-1c03-94c4-c9d6-7b145a9ac00b@embeddedor.com>
+Date: Thu, 17 Aug 2023 15:18:06 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1547; i=keescook@chromium.org;
- h=from:subject; bh=B1om6kzjnM+KYttPuLCv8qgp2sSo5I5ukw0vuIq7IR4=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3o3x6e3yCDOyg/CnRvaTxYnwKpLSGmq9jMXbu
- Lj6hWgVrwmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6N8QAKCRCJcvTf3G3A
- JuPqEACvZBjYWwE9vVsmWQaH0PScoxmrFrBmcCJVAXE9aU4a7P770PtzaGYD5I4idLwYuQstxsu
- hyy8i9VRnSI4ZhovMyvONu4Oa5vSGx30KKqu+EgYLel4gougy5ljNd62Ma1JJQwq/tl3Ib5VvtG
- b4/+4/CP1NIhwdhZGpdOCu9K6sbcBy/VllCKVkuohkOsR/LZWmQbOxapbM5l99ZKMlMtRi5Y4J6
- ZyNkLPFv5UCoX0UNCoOwjIf8TX7Re1URAq6OK74mYIj2KLLBcQQb6WtzVhqlhEy69NV6s9mG4zw
- aN7Um7gzgf/969aG7t0K+Bg7sMaFVyl4Q5j2/ibGo3dLnxRjo8NcXeI7nFByEoZzCr0D1pLlnvE
- WyiFXEPJpE888qd74gajJKkFm/VVR8Aa+rcay3qko/HJACbC7MlDGKVmfbYWDentPVIeYfLpBAK
- 0zKQV4vVA+8Ni+4/N/CcXyEOVIoIEXU9gl3aOVSKME20mJd2/uEV+jkDQvzz3l2O3q3vg0iebeW
- oMZpUFHphqMXnfO+ecIAtyviIuuQ90a8AIu5ZFBzcnRmj44QZlSnICV33GdmCz1azq7xOUMe2Lg
- Nbedjr4+NY+tfEx20wxse70y+NoN5qmNSjxe027lWYKy1MuBHxZMamCWXthTi8bDNtm15bGhHWG GVGAyzyr9T5ndYg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] landlock: Annotate struct landlock_rule with __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?=
+ <mic@digikod.net>
+Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, linux-security-module@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20230817210257.never.920-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230817210257.never.920-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.21.192
+X-Source-L: No
+X-Exim-ID: 1qWkMa-001gal-1N
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:56616
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 23
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfIwkdkJMnLshyqe9goeaOTpTYWZB0m/5mStFfXq4yP3E+X8k+gFHB4hjLHrkJ6ZRDRbQhQjyGLaLtlEEsMBePhMMx+fxIQfwpY5jXYqqlwimGokkJR4g
+ BPysV9K5d+ery12tEAuSNdwFH0JPjrErp8IW680ZrnQAeHh6rJInOVmPzX6/now4l2lBxeIh8oKgnBY2/qNXbCBbViUhZtG8B/I=
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
 
-As found with Coccinelle[1], add __counted_by for struct cfg80211_scan_request.
-Additionally, since the element count member must be set before accessing
-the annotated flexible array member, move its initialization earlier.
 
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+On 8/17/23 15:03, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct landlock_rule.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: "Mickaël Salaün" <mic@digikod.net>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/net/cfg80211.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
-index 6efe216c01d2..a2afc94a5408 100644
---- a/include/net/cfg80211.h
-+++ b/include/net/cfg80211.h
-@@ -2544,7 +2544,7 @@ struct cfg80211_scan_request {
- 	struct cfg80211_scan_6ghz_params *scan_6ghz_params;
- 
- 	/* keep last */
--	struct ieee80211_channel *channels[];
-+	struct ieee80211_channel *channels[] __counted_by(n_channels);
- };
- 
- static inline void get_random_mask_addr(u8 *buf, const u8 *addr, const u8 *mask)
--- 
-2.34.1
+Thanks
+--
+Gustavo
 
+> ---
+>   security/landlock/ruleset.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+> index d43231b783e4..55b1df8f66a8 100644
+> --- a/security/landlock/ruleset.h
+> +++ b/security/landlock/ruleset.h
+> @@ -67,7 +67,7 @@ struct landlock_rule {
+>   	 * @layers: Stack of layers, from the latest to the newest, implemented
+>   	 * as a flexible array member (FAM).
+>   	 */
+> -	struct landlock_layer layers[];
+> +	struct landlock_layer layers[] __counted_by(num_layers);
+>   };
+>   
+>   /**
