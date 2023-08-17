@@ -1,20 +1,20 @@
 Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEE31427B
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:22:39 +0000 (UTC)
-Received: from eig-obgw-5008a.ext.cloudfilter.net ([10.0.29.246])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6801643A
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:22:54 +0000 (UTC)
+Received: from eig-obgw-5002a.ext.cloudfilter.net ([10.0.29.215])
 	by cmsmtp with ESMTP
-	id We1vqgRWUyYOwWkRyqtqyw; Thu, 17 Aug 2023 21:22:38 +0000
+	id WhIjqhYlByYOwWkSEqtrQG; Thu, 17 Aug 2023 21:22:54 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id WkRyqY5FQDHerWkRyqlFgm; Thu, 17 Aug 2023 21:22:38 +0000
-X-Authority-Analysis: v=2.4 cv=MN5zJeVl c=1 sm=1 tr=0 ts=64de8f9e
+	id WkSDq0MGSqpuuWkSEqpC8I; Thu, 17 Aug 2023 21:22:54 +0000
+X-Authority-Analysis: v=2.4 cv=XOgj9CtE c=1 sm=1 tr=0 ts=64de8fae
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
  a=stkexhm8AAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
- a=20KFwNOVAAAA:8 a=cm27Pg_UAAAA:8 a=6UV5UrL1aO4bJEFlmkAA:9 a=QEXdDO2ut3YA:10
+ a=20KFwNOVAAAA:8 a=cm27Pg_UAAAA:8 a=YSKGN3ub9cUXa_79IdMA:9 a=QEXdDO2ut3YA:10
  a=pIW3pCRaVxJDc-hWtpF8:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=AjGcO6oz07-iQ99wixmX:22
  a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,20 +23,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=wgoIFsvs5xLnCx7q6HCwBasYA5R0F0VgetzOCKQWKAY=; b=BCBP7qvIvC+L9+9rKPpZHnkX1m
-	kBrpap7OckaNKzcVzUpWFO6dYAzPm14FR7eIT3p+/zfPXevDya4tOq2i39znbhx2jhhk+fkAjG04z
-	XO0uZv+AaeI5bT6FaID6EGiBOf3EYLrham7Dp1V+f/VdZgSa1g0kRk2A9Tu2Bg09xaZEF29wWvJT2
-	8a8B5JO5cQ4Cz29jH/aPA6xuuJtjF7RIkKQL+KSS7Jxb5o8s5DSj9HBFvYTno887Se4vUmxBmx3fF
-	Jvs7S8Hxdi8v8R9xMKxU/ZgmTOuyHMG1Qng54rRQHM2j16/ZqM5nkOWqdMjBtrnBqpfRYFXRf09fF
-	RIUs0Nrg==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:55954 helo=[192.168.15.8])
+	bh=WMTEtoZYgunGGNiDKyCUfv/YwFOmWcnbP9DZsuaFRbU=; b=eJpXyuRPPP1dJu6Z/jtCpkeXCX
+	38KqT2/3wwGNmhNCF7muzcl8j5ehDY40SlFAWIjAwTxDeuki/uqa71bppUI+XHPKGaiqWfYlW9ufY
+	5uDANIJeGRR2/s7iiUE/xKddAaloO/+u2ovEcr8d2u/ZDgb4wHIvs60G0+PwIlX32VsF2yiixmo0H
+	hEUq7L083A64B6dS8z9/yBhkUMU3FLLakPfYMcW28ChoZQV9HffLUOcUUj6ALBGeaGg5FtWkiYXPZ
+	sIn8gMc3Yc8YjauM2wtw+HFYSJyS3ShkfsoRQgdJqm8KIEwHujLSni/vMRlJksoAyzSNBAXMQcJN1
+	sDpu/Apw==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:42350 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWkRv-001kOC-3D;
-	Thu, 17 Aug 2023 16:22:36 -0500
-Message-ID: <d720192a-6381-3122-4e7f-bcabaae8cd4b@embeddedor.com>
-Date: Thu, 17 Aug 2023 15:23:37 -0600
+	id 1qWkSB-001kdk-30;
+	Thu, 17 Aug 2023 16:22:51 -0500
+Message-ID: <bc0cb25d-fab4-e9d7-5917-34a36a68468f@embeddedor.com>
+Date: Thu, 17 Aug 2023 15:23:53 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 1/7] wifi: cfg80211: Annotate struct cfg80211_acl_data
+Subject: Re: [PATCH 2/7] wifi: cfg80211: Annotate struct cfg80211_cqm_config
  with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>,
@@ -58,9 +58,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
 References: <20230817211114.never.208-kees@kernel.org>
- <20230817211531.4193219-1-keescook@chromium.org>
+ <20230817211531.4193219-2-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817211531.4193219-1-keescook@chromium.org>
+In-Reply-To: <20230817211531.4193219-2-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -71,18 +71,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qWkRv-001kOC-3D
+X-Exim-ID: 1qWkSB-001kdk-30
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:55954
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:42350
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 49
+X-Email-Count: 63
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfBgtQSwawnfn0Nd/LdXhh/QK5/s2bAxKYY7LO6qU40zexHDoWHweVj4fS+iQX9pkRNK7lsNqoR2am0i6SajagUPzVx1PFncPh2P3UZ2b/fi/drpI7wyC
- ZuQyDj/FfACxdEp1QQzf17TGp221a/MqMSxcW0m0wf2d5JWnlcIoWsX1e1d1Bouh2wXHtqC5tYpKbIMuchDFMe/G8gvMasVNi00=
+X-CMAE-Envelope: MS4xfNr4QCNslIs8fQgsmvlVRWR+xVBlv7UCRF8zfdo8QmvgKMA6F3pb/BWJXziH+PBEFASK/Hbqbmsn5ykFcuVY5HOx92TH0Be5OOgjw2L9aPjjgGpBfgPZ
+ AaJNcuUNDRUzNSgVFXZqIRWtnNsmDOzRBD5AEhjAh4f5R8SOz3cjHebbX4P9SNrKj+O2rVPfjPrd48zLqy6vVR18v5JdRm0Oo0c=
 
 
 
@@ -93,9 +93,7 @@ On 8/17/23 15:15, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct cfg80211_acl_data.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
+> As found with Coccinelle[1], add __counted_by for struct cfg80211_cqm_config.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
@@ -115,39 +113,19 @@ Thanks
 Gustavo
 
 > ---
->   include/net/cfg80211.h | 2 +-
->   net/wireless/nl80211.c | 3 +--
->   2 files changed, 2 insertions(+), 3 deletions(-)
+>   net/wireless/core.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
-> index d6fa7c8767ad..eb73b5af5d04 100644
-> --- a/include/net/cfg80211.h
-> +++ b/include/net/cfg80211.h
-> @@ -1282,7 +1282,7 @@ struct cfg80211_acl_data {
->   	int n_acl_entries;
->   
->   	/* Keep it last */
-> -	struct mac_address mac_addrs[];
-> +	struct mac_address mac_addrs[] __counted_by(n_acl_entries);
+> diff --git a/net/wireless/core.h b/net/wireless/core.h
+> index 8a807b609ef7..507d184b8b40 100644
+> --- a/net/wireless/core.h
+> +++ b/net/wireless/core.h
+> @@ -298,7 +298,7 @@ struct cfg80211_cqm_config {
+>   	u32 rssi_hyst;
+>   	s32 last_rssi_event_value;
+>   	int n_rssi_thresholds;
+> -	s32 rssi_thresholds[];
+> +	s32 rssi_thresholds[] __counted_by(n_rssi_thresholds);
 >   };
 >   
->   /**
-> diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-> index 8bcf8e293308..80633e815311 100644
-> --- a/net/wireless/nl80211.c
-> +++ b/net/wireless/nl80211.c
-> @@ -4889,13 +4889,12 @@ static struct cfg80211_acl_data *parse_acl_data(struct wiphy *wiphy,
->   	acl = kzalloc(struct_size(acl, mac_addrs, n_entries), GFP_KERNEL);
->   	if (!acl)
->   		return ERR_PTR(-ENOMEM);
-> +	acl->n_acl_entries = n_entries;
->   
->   	nla_for_each_nested(attr, info->attrs[NL80211_ATTR_MAC_ADDRS], tmp) {
->   		memcpy(acl->mac_addrs[i].addr, nla_data(attr), ETH_ALEN);
->   		i++;
->   	}
-> -
-> -	acl->n_acl_entries = n_entries;
->   	acl->acl_policy = acl_policy;
->   
->   	return acl;
+>   void cfg80211_destroy_ifaces(struct cfg80211_registered_device *rdev);
