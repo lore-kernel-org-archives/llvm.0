@@ -1,51 +1,57 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E97CA20
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 06:09:03 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-26b139f4e42so3765881a91.1
-        for <llvm@lists.linux.dev>; Wed, 16 Aug 2023 23:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692252542; x=1692857342;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dMupaGt3lT1C6kccf/TFi4L2Zf/EmehC3TxUCzjtixY=;
-        b=FFPr75vKB+KpdBAwp2C3sgFtlfEVnChZG2+NKIhPJx2xbiWQe0rm+3eqQSt1ZYcesi
-         YDMGMDtYR0328TGSOOy9F6RBFp4sQTgKJ0o+zGtaB+LO1awcFO7S/v/xpuKr4YSTwbz4
-         VmOhac0ElSZ3hkkkPRHVATGDKuXniBOBMc39U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692252542; x=1692857342;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dMupaGt3lT1C6kccf/TFi4L2Zf/EmehC3TxUCzjtixY=;
-        b=d2bj564AmWm2mHSr2o+P/L1606TSgS/XmraaKZg1zfLYNk0Xx1UIjHb8+gBW9C8Yxi
-         hkijaWwbbeXbHhDnH4vGpK6NeNh82xcuPyd8+i+iW5WQIBZaLPI0POQEXqsWY4CK3mR4
-         CNdZpUUY/GP13lMhIJyDv+rhXgs9Bnq4/GH420mfL0aBSKO0CwFdasY7GBUrdhxnHPLo
-         RWE5+GZif+nqD/p7FyhyNiiaolRgZi+k3J+3WLDYNgh1Gl3FGCvt13D28hm1UGjzqHVG
-         /VnHIXvoJHcQxTPRGSoibU/1qLUPec25uYgh/jK6aFhnenZqVBELJMHbrNZ33jC25iLG
-         SOeQ==
-X-Gm-Message-State: AOJu0YyPw9bt6dQTtiY+DM1Nt6qYkeQ7O2ZRfwU7r3yWw9bjYtD0WSVs
-	66TQ9q+gi1MYv1d6M7BzhBpFRQ==
-X-Google-Smtp-Source: AGHT+IG3QbcrpDrZ9Ru2n1cwj5LDSCPZgsOvfI1WKSbQd51Qm63XNFI7JaPbVv68FFkX9s/qIOWYLA==
-X-Received: by 2002:a17:90a:990e:b0:268:6670:46df with SMTP id b14-20020a17090a990e00b00268667046dfmr2987411pjp.27.1692252542365;
-        Wed, 16 Aug 2023 23:09:02 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 27-20020a17090a031b00b0026d034f6badsm815035pje.38.2023.08.16.23.09.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 23:09:01 -0700 (PDT)
-Date: Wed, 16 Aug 2023 23:09:00 -0700
-From: Kees Cook <keescook@chromium.org>
-To: "GONG, Ruiqi" <gongruiqi1@huawei.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Florian Westphal <fw@strlen.de>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [netfilter-nf-next:testing 2/9]
- ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field
- 'target' with variable sized type 'struct ebt_entry_target' not at the end
- of a struct or class is a GNU extension
-Message-ID: <202308162257.F7876776C9@keescook>
-References: <202308171249.g1ywxhII-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0DA80C;
+	Thu, 17 Aug 2023 06:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692254357; x=1723790357;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rFRRVEEucSSTXNeQi/3oBg68H2cCmE1GCVvNVuJOHew=;
+  b=aYDD5Ig9ScCFI5N3jpYRj7GBvttckgJ4rcBC5parqI8yZZVkhGbO6kNB
+   L8z2TWYB23/pI2dtCQWl0ifKwuRqoD7JKvjuBeaVUh3JzxI7D12/t+NGb
+   URMIAjjZswjHt2S3Tz7DfnW1eYkx3Qvjg5Z4S0N9KjH1q0Xgc36ZoHnsC
+   4AjSt5lM5zY2cBRpoRgnxGosKYilvvc+ws5NRDdnY9vdEu0a6xzofXL4J
+   zfkC3kDbW45jXe1Oc6FVe5podI1BVMMhJ+INbds4fI6Td5uKbGD2hRrnY
+   +T8cld3ApB0npD78HcLg2H5kJ9b1tGR1zLrVTxiVv4YiOGKgAMMSNmizE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="372727112"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="372727112"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 23:39:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="1065135113"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="1065135113"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2023 23:39:10 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWWez-0000rX-0i;
+	Thu, 17 Aug 2023 06:39:09 +0000
+Date: Thu, 17 Aug 2023 14:38:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raghavendra Rao Ananta <rananta@google.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Shaoqin Huang <shahuang@redhat.com>,
+	Jing Zhang <jingzhangos@google.com>,
+	Reiji Watanabe <reijiw@google.com>,
+	Colton Lewis <coltonlewis@google.com>,
+	Raghavendra Rao Anata <rananta@google.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v5 05/12] KVM: arm64: PMU: Simplify extracting PMCR_EL0.N
+Message-ID: <202308171444.Q5rfJubF-lkp@intel.com>
+References: <20230817003029.3073210-6-rananta@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,109 +60,179 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202308171249.g1ywxhII-lkp@intel.com>
+In-Reply-To: <20230817003029.3073210-6-rananta@google.com>
 
-On Thu, Aug 17, 2023 at 01:03:20PM +0800, kernel test robot wrote:
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
-> head:   015e2d9101d3713c7bee16dccad171df04a3bbd5
-> commit: 61b9e6bd48a6317c0a44ee4f3fecdec9de5baa9e [2/9] netfilter: ebtables: replace zero-length array members
-> config: i386-buildonly-randconfig-r004-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308171249.g1ywxhII-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from <built-in>:1:
-> >> ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
->            struct ebt_entry_target target;
->                                    ^
->    1 warning generated.
+Hi Raghavendra,
 
-Eww, it looks like "struct ebt_entry_target" is used _within_ another
-struct:
+kernel test robot noticed the following build errors:
 
-struct ebt_standard_target {
-        struct ebt_entry_target target;
-        int verdict;
-};
+[auto build test ERROR on 2ccdd1b13c591d306f0401d98dedc4bdcd02b421]
 
-So "verdict" overlaps with the "data" FAM:
+url:    https://github.com/intel-lab-lkp/linux/commits/Raghavendra-Rao-Ananta/KVM-arm64-PMU-Introduce-a-helper-to-set-the-guest-s-PMU/20230817-083353
+base:   2ccdd1b13c591d306f0401d98dedc4bdcd02b421
+patch link:    https://lore.kernel.org/r/20230817003029.3073210-6-rananta%40google.com
+patch subject: [PATCH v5 05/12] KVM: arm64: PMU: Simplify extracting PMCR_EL0.N
+config: arm-randconfig-r046-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171444.Q5rfJubF-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171444.Q5rfJubF-lkp@intel.com/reproduce)
 
-struct ebt_entry_target {
-        union { 
-                struct {
-                        char name[EBT_EXTENSION_MAXNAMELEN];
-                        __u8 revision;
-                };
-                struct xt_target *target;
-        } u;
-        /* size of data */
-        unsigned int target_size;
-        unsigned char data[0] __attribute__ ((aligned (__alignof__(struct ebt_replace))));
-};  
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308171444.Q5rfJubF-lkp@intel.com/
 
-These have been fixed in the past in a variety of ways -- it all depends
-on how userspace is using them. In looking at Debian Code Search:
-https://codesearch.debian.net/search?q=struct+ebt_standard_target&literal=1
+All errors (new ones prefixed by >>):
 
-It is exclusively doing casts and looking at the "verdict" member. So
-the easiest conversion might be this:
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+     141 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:148:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     148 |         [C(DTLB)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:133:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD'
+     133 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD                         0x004E
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+     141 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:149:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     149 |         [C(DTLB)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR,
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:134:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR'
+     134 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR                         0x004F
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+     141 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:150:42: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     150 |         [C(DTLB)][C(OP_READ)][C(RESULT_MISS)]   = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:131:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD'
+     131 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD                  0x004C
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+     141 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:151:43: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     151 |         [C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]  = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:132:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR'
+     132 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR                  0x004D
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+     141 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:153:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     153 |         [C(NODE)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:148:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD'
+     148 | #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD                      0x0060
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+     141 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:154:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     154 |         [C(NODE)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR,
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:149:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR'
+     149 | #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR                      0x0061
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+     141 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+>> drivers/perf/arm_pmuv3.c:1131:24: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1131 |         cpu_pmu->num_events = FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read());
+         |                               ^
+   55 warnings and 1 error generated.
 
- struct ebt_standard_target {
--       struct ebt_entry_target target;
-+       unsigned char hdr[sizeof(struct ebt_entry_target)];
-        int verdict;
- };
 
-Or this might work (not tested):
+vim +/FIELD_GET +1131 drivers/perf/arm_pmuv3.c
 
-diff --git a/include/uapi/linux/netfilter_bridge/ebtables.h b/include/uapi/linux/netfilter_bridge/ebtables.h
-index a494cf43a755..d6f10163b14a 100644
---- a/include/uapi/linux/netfilter_bridge/ebtables.h
-+++ b/include/uapi/linux/netfilter_bridge/ebtables.h
-@@ -146,23 +146,25 @@ struct ebt_entry_watcher {
- };
- 
- struct ebt_entry_target {
--	union {
--		struct {
--			char name[EBT_EXTENSION_MAXNAMELEN];
--			__u8 revision;
--		};
--		struct xt_target *target;
--	} u;
--	/* size of data */
--	unsigned int target_size;
--	unsigned char data[0] __attribute__ ((aligned (__alignof__(struct ebt_replace))));
-+	struct ebt_entry_target_hdr {
-+		union {
-+			struct {
-+				char name[EBT_EXTENSION_MAXNAMELEN];
-+				__u8 revision;
-+			};
-+			struct xt_target *target;
-+		} u;
-+		/* size of data */
-+		unsigned int target_size;
-+	};
-+	unsigned char data[] __attribute__ ((aligned (__alignof__(struct ebt_replace))));
- };
- 
- #define EBT_STANDARD_TARGET "standard"
- struct ebt_standard_target {
--	struct ebt_entry_target target;
--	int verdict;
-+	struct ebt_entry_target_hdr target;
-+	int verdict __attribute__ ((aligned (__alignof__(struct ebt_replace))));
- };
- 
- /* one entry */
-
+  1114	
+  1115	static void __armv8pmu_probe_pmu(void *info)
+  1116	{
+  1117		struct armv8pmu_probe_info *probe = info;
+  1118		struct arm_pmu *cpu_pmu = probe->pmu;
+  1119		u64 pmceid_raw[2];
+  1120		u32 pmceid[2];
+  1121		int pmuver;
+  1122	
+  1123		pmuver = read_pmuver();
+  1124		if (!pmuv3_implemented(pmuver))
+  1125			return;
+  1126	
+  1127		cpu_pmu->pmuver = pmuver;
+  1128		probe->present = true;
+  1129	
+  1130		/* Read the nb of CNTx counters supported from PMNC */
+> 1131		cpu_pmu->num_events = FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read());
+  1132	
+  1133		/* Add the CPU cycles counter */
+  1134		cpu_pmu->num_events += 1;
+  1135	
+  1136		pmceid[0] = pmceid_raw[0] = read_pmceid0();
+  1137		pmceid[1] = pmceid_raw[1] = read_pmceid1();
+  1138	
+  1139		bitmap_from_arr32(cpu_pmu->pmceid_bitmap,
+  1140				     pmceid, ARMV8_PMUV3_MAX_COMMON_EVENTS);
+  1141	
+  1142		pmceid[0] = pmceid_raw[0] >> 32;
+  1143		pmceid[1] = pmceid_raw[1] >> 32;
+  1144	
+  1145		bitmap_from_arr32(cpu_pmu->pmceid_ext_bitmap,
+  1146				     pmceid, ARMV8_PMUV3_MAX_COMMON_EVENTS);
+  1147	
+  1148		/* store PMMIR register for sysfs */
+  1149		if (is_pmuv3p4(pmuver) && (pmceid_raw[1] & BIT(31)))
+  1150			cpu_pmu->reg_pmmir = read_pmmir();
+  1151		else
+  1152			cpu_pmu->reg_pmmir = 0;
+  1153	}
+  1154	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
