@@ -1,54 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CE11549E;
-	Thu, 17 Aug 2023 15:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8759AC433C9;
-	Thu, 17 Aug 2023 15:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692286646;
-	bh=FsTOQy1J00h09RqORDICXkOwRWchRTxx4z6I0fSFUFo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=uE51BkgLq5R2nrgeqCvtJgTcvmmzvUBASge7HSt89nmd8mvPSRvSNydYnNd0wU6N8
-	 j0eJZWNEuNC3BkoAxS0Ev0GulJxwdnD0xdzh4vhnFdLo/W1r6cCM9v16BuBPJlNqF9
-	 LShOhR9Fxrec+DNc+0vJvpC58c4JTFXZAtbORgnO1EZepqyufpdZPlRsq1maBGZgtn
-	 VeIuI6q8wxWHW0D0kDqcLBdcPlUwiaCYgGyQtzLwHUV0blwsZdT1Lc1WFc1VW/iU0z
-	 B+eQOjQBleKRevzOWOmTfvscWIskHar38lVn0vBHH7n/1srto/MImsyR1KdjmKYnyD
-	 f7UmniOxDsKig==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 986DD404DF; Thu, 17 Aug 2023 12:37:23 -0300 (-03)
-Date: Thu, 17 Aug 2023 12:37:23 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, bpf@vger.kernel.org,
-	Brendan Gregg <brendan.d.gregg@gmail.com>,
-	Carsten Haitzler <carsten.haitzler@arm.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Fangrui Song <maskray@google.com>, He Kuang <hekuang@huawei.com>,
-	Ingo Molnar <mingo@redhat.com>, James Clark <james.clark@arm.com>,
-	Jiri Olsa <jolsa@kernel.org>, Kan Liang <kan.liang@linux.intel.com>,
-	Leo Yan <leo.yan@linaro.org>, llvm@lists.linux.dev,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Rob Herring <robh@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Tom Rix <trix@redhat.com>, Wang Nan <wangnan0@huawei.com>,
-	Wang ShaoBo <bobo.shaobowang@huawei.com>,
-	Yang Jihong <yangjihong1@huawei.com>, Yonghong Song <yhs@fb.com>,
-	YueHaibing <yuehaibing@huawei.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] perf trace: Use the augmented_raw_syscall BPF skel only
- for tracing syscalls
-Message-ID: <ZN4+s2Wl+zYmXTDj@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7614914AA8;
+	Thu, 17 Aug 2023 15:38:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692286701; x=1723822701;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AF6Jp9zpxQK52mVav7l7mei07u6LPV0nf5nfuhvoi3E=;
+  b=O3lXDw/aV4QaSpyg7fau7XjWOBUeHZllHnSU+I2Z2ImTa3Kah+m8iDSB
+   gsQ1PgnxeNOxRyM/i5YLCvXO9juuiSl9bvEL/T9FoJAUsUdggXzg9xXOM
+   gnVYutsiShkDwS0K7zaC4R84SKqUaJSQVky3Vw67xF0BR4ECFkJDNBn4i
+   UNZ4WrgsTv5wO8SmNBh4cOmNTh0ciym/Xxp/asCL2MvdPdRfA4yVNcCO2
+   VD2SfzEN0DSoEetB9bQbQCcnmmLIFzTTKjvCnKG4BX5Pagon8Is/hspfY
+   w5XQMFDGEUJHZpNKtCbgDK9mfMqHTnC2RAlRnwP3khrF7ijskbNv6liw9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="459204644"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="459204644"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 08:36:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="764139341"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="764139341"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2023 08:36:23 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWf2r-0001HW-33;
+	Thu, 17 Aug 2023 15:36:21 +0000
+Date: Thu, 17 Aug 2023 23:35:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Quinn Tran <qutran@marvell.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Himanshu Madhani <himanshu.madhani@oracle.com>,
+	Nilesh Javali <njavali@marvell.com>
+Subject: drivers/scsi/qla2xxx/qla_isr.c:3724: warning: Function parameter or
+ member 'rsp_q_in' not described in 'qla_chk_cont_iocb_avail'
+Message-ID: <202308172330.ram2SwC7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,179 +50,74 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-It is possible to use 'perf trace' with tracepoints and in that case we
-can't initialize/use the augmented_raw_syscalls BPF skel.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
+commit: c019cd656e717349ff22d0c41d6fbfc773f48c52 scsi: qla2xxx: edif: Fix dropped IKE message
+date:   1 year, 1 month ago
+config: i386-randconfig-i002-20230817 (https://download.01.org/0day-ci/archive/20230817/202308172330.ram2SwC7-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308172330.ram2SwC7-lkp@intel.com/reproduce)
 
-For instance, this usecase:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308172330.ram2SwC7-lkp@intel.com/
 
-  # perf trace -e sched:*exec --max-events=5
-         ? (         ): NetworkManager/1183  ... [continued]: poll())                                             = 1
-     0.043 ( 0.007 ms): NetworkManager/1183 epoll_wait(epfd: 17<anon_inode:[eventpoll]>, events: 0x55555f90e920, maxevents: 6) = 0
-     0.060 ( 0.007 ms): NetworkManager/1183 write(fd: 3<anon_inode:[eventfd]>, buf: 0x7ffc5a27cd30, count: 8)     = 8
-     0.073 ( 0.005 ms): NetworkManager/1183 epoll_wait(epfd: 24<anon_inode:[eventpoll]>, events: 0x7ffc5a27cd20, maxevents: 2) = 1
-     0.082 ( 0.010 ms): NetworkManager/1183 recvmmsg(fd: 26<socket:[30298]>, mmsg: 0x7ffc5a27caa0, vlen: 8)       = 1
-  #
+All warnings (new ones prefixed by >>):
 
-Where we want to trace just some sched tracepoints ending in 'exec' ends
-up tracing all syscalls.
+>> drivers/scsi/qla2xxx/qla_isr.c:3724: warning: Function parameter or member 'rsp_q_in' not described in 'qla_chk_cont_iocb_avail'
 
-Fix it by checking existing trace->trace_syscalls boolean to see if we
-need the augmenter.
 
-A followup patch will move those sections of code used only with the
-augmenter to separate functions, to get it cleaner and remove the goto,
-done just for reviewing purposes.
+vim +3724 drivers/scsi/qla2xxx/qla_isr.c
 
-With this patch in place the previous behaviour is restored: no syscalls
-when we have other events and no syscall names:
+e84067d7430107 Duane Grigsby 2017-06-21  3713  
+fac2807946c10b Quinn Tran    2021-06-23  3714  /**
+fac2807946c10b Quinn Tran    2021-06-23  3715   * qla_chk_cont_iocb_avail - check for all continuation iocbs are available
+fac2807946c10b Quinn Tran    2021-06-23  3716   *   before iocb processing can start.
+fac2807946c10b Quinn Tran    2021-06-23  3717   * @vha: host adapter pointer
+fac2807946c10b Quinn Tran    2021-06-23  3718   * @rsp: respond queue
+fac2807946c10b Quinn Tran    2021-06-23  3719   * @pkt: head iocb describing how many continuation iocb
+fac2807946c10b Quinn Tran    2021-06-23  3720   * Return: 0 all iocbs has arrived, xx- all iocbs have not arrived.
+fac2807946c10b Quinn Tran    2021-06-23  3721   */
+fac2807946c10b Quinn Tran    2021-06-23  3722  static int qla_chk_cont_iocb_avail(struct scsi_qla_host *vha,
+c019cd656e7173 Quinn Tran    2022-07-12  3723  	struct rsp_que *rsp, response_t *pkt, u32 rsp_q_in)
+fac2807946c10b Quinn Tran    2021-06-23 @3724  {
+c019cd656e7173 Quinn Tran    2022-07-12  3725  	int start_pkt_ring_index;
+c019cd656e7173 Quinn Tran    2022-07-12  3726  	u32 iocb_cnt = 0;
+fac2807946c10b Quinn Tran    2021-06-23  3727  	int rc = 0;
+fac2807946c10b Quinn Tran    2021-06-23  3728  
+fac2807946c10b Quinn Tran    2021-06-23  3729  	if (pkt->entry_count == 1)
+fac2807946c10b Quinn Tran    2021-06-23  3730  		return rc;
+fac2807946c10b Quinn Tran    2021-06-23  3731  
+fac2807946c10b Quinn Tran    2021-06-23  3732  	/* ring_index was pre-increment. set it back to current pkt */
+fac2807946c10b Quinn Tran    2021-06-23  3733  	if (rsp->ring_index == 0)
+fac2807946c10b Quinn Tran    2021-06-23  3734  		start_pkt_ring_index = rsp->length - 1;
+fac2807946c10b Quinn Tran    2021-06-23  3735  	else
+fac2807946c10b Quinn Tran    2021-06-23  3736  		start_pkt_ring_index = rsp->ring_index - 1;
+fac2807946c10b Quinn Tran    2021-06-23  3737  
+c019cd656e7173 Quinn Tran    2022-07-12  3738  	if (rsp_q_in < start_pkt_ring_index)
+c019cd656e7173 Quinn Tran    2022-07-12  3739  		/* q in ptr is wrapped */
+c019cd656e7173 Quinn Tran    2022-07-12  3740  		iocb_cnt = rsp->length - start_pkt_ring_index + rsp_q_in;
+fac2807946c10b Quinn Tran    2021-06-23  3741  	else
+c019cd656e7173 Quinn Tran    2022-07-12  3742  		iocb_cnt = rsp_q_in - start_pkt_ring_index;
+fac2807946c10b Quinn Tran    2021-06-23  3743  
+c019cd656e7173 Quinn Tran    2022-07-12  3744  	if (iocb_cnt < pkt->entry_count)
+fac2807946c10b Quinn Tran    2021-06-23  3745  		rc = -EIO;
+fac2807946c10b Quinn Tran    2021-06-23  3746  
+c019cd656e7173 Quinn Tran    2022-07-12  3747  	ql_dbg(ql_dbg_init, vha, 0x5091,
+c019cd656e7173 Quinn Tran    2022-07-12  3748  	       "%s - ring %p pkt %p entry count %d iocb_cnt %d rsp_q_in %d rc %d\n",
+c019cd656e7173 Quinn Tran    2022-07-12  3749  	       __func__, rsp->ring, pkt, pkt->entry_count, iocb_cnt, rsp_q_in, rc);
+fac2807946c10b Quinn Tran    2021-06-23  3750  
+fac2807946c10b Quinn Tran    2021-06-23  3751  	return rc;
+fac2807946c10b Quinn Tran    2021-06-23  3752  }
+fac2807946c10b Quinn Tran    2021-06-23  3753  
 
-  [root@quaco ~]# perf probe do_filp_open "filename=pathname->name:string"
-  Added new event:
-    probe:do_filp_open   (on do_filp_open with filename=pathname->name:string)
+:::::: The code at line 3724 was first introduced by commit
+:::::: fac2807946c10b9a509b9c348afd442fa823c5f7 scsi: qla2xxx: edif: Add extraction of auth_els from the wire
 
-  You can now use it in all perf tools, such as:
+:::::: TO: Quinn Tran <qutran@marvell.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
-	  perf record -e probe:do_filp_open -aR sleep 1
-
-  [root@quaco ~]# perf trace --max-events=10 -e probe:do_filp_open sleep 1
-     0.000 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/etc/ld.so.cache")
-     0.056 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/lib64/libc.so.6")
-     0.481 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib/locale/locale-archive")
-     0.501 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/share/locale/locale.alias")
-     0.572 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib/locale/en_US.UTF-8/LC_IDENTIFICATION")
-     0.581 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib/locale/en_US.utf8/LC_IDENTIFICATION")
-     0.616 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib64/gconv/gconv-modules.cache")
-     0.656 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib/locale/en_US.UTF-8/LC_MEASUREMENT")
-     0.664 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib/locale/en_US.utf8/LC_MEASUREMENT")
-     0.696 sleep/455122 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib/locale/en_US.UTF-8/LC_TELEPHONE")
-  [root@quaco ~]#
-
-As well as mixing syscalls with tracepoints, getting the syscall
-tracepoints used augmented using the BPF skel:
-
-  [root@quaco ~]# perf trace --max-events=10 -e open*,probe:do_filp_open sleep 1
-     0.000 (         ): sleep/455124 openat(dfd: CWD, filename: "/etc/ld.so.cache", flags: RDONLY|CLOEXEC) ...
-     0.005 (         ): sleep/455124 probe:do_filp_open(__probe_ip: -1186560412, filename: "/etc/ld.so.cache")
-     0.000 ( 0.011 ms): sleep/455124  ... [continued]: openat())                                           = 3
-     0.031 (         ): sleep/455124 openat(dfd: CWD, filename: "/lib64/libc.so.6", flags: RDONLY|CLOEXEC) ...
-     0.033 (         ): sleep/455124 probe:do_filp_open(__probe_ip: -1186560412, filename: "/lib64/libc.so.6")
-     0.031 ( 0.006 ms): sleep/455124  ... [continued]: openat())                                           = 3
-     0.258 (         ): sleep/455124 openat(dfd: CWD, filename: "/usr/lib/locale/locale-archive", flags: RDONLY|CLOEXEC) ...
-     0.261 (         ): sleep/455124 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/lib/locale/locale-archive")
-     0.258 ( 0.006 ms): sleep/455124  ... [continued]: openat())                                           = -1 ENOENT (No such file or directory)
-     0.272 (         ): sleep/455124 openat(dfd: CWD, filename: "/usr/share/locale/locale.alias", flags: RDONLY|CLOEXEC) ...
-     0.273  (        ): sleep/455124 probe:do_filp_open(__probe_ip: -1186560412, filename: "/usr/share/locale/locale.alias")
-
-A final note: the probe:do_filp_open uses a kprobe (probably optimized
-as its in the start of a function) that uses the kprobe_tracer mechanism
-in the kernel to collect the pathname->name string and stash it into the
-tracepoint created by 'perf probe' for that:
-
-  [root@quaco ~]# cat /sys/kernel/debug/tracing/kprobe_events
-  p:probe/do_filp_open _text+4621920 filename=+0(+0(%si)):string
-  [root@quaco ~]#
-
-While the syscalls:sys_enter_openat tracepoint gets its string from a
-BPF program attached to raw_syscalls:sys_enter that tail calls into
-another BPF program that knows the types for the openat syscall args and
-thus can bpf_probe_read it right after the normal
-sys_enter/sys_enter_openat tracepoint payload that comes prefixed with
-whatever perf_event_open asked for (CPU, timestamp, etc):
-
-  [root@quaco ~]# bpftool prog | grep -E "sys_enter |sys_enter_opena" -A3
-  3176: tracepoint  name sys_enter  tag 0bc3fc9d11754ba1  gpl
-	loaded_at 2023-08-17T12:32:20-0300  uid 0
-	xlated 272B  jited 257B  memlock 4096B  map_ids 2462,2466,2463
-	btf_id 2976
-  --
-  3180: tracepoint  name sys_enter_opena  tag 19dd077f00ec2f58  gpl
-	  loaded_at 2023-08-17T12:32:20-0300  uid 0
-	  xlated 328B  jited 206B  memlock 4096B  map_ids 2466,2465
-	  btf_id 2976
-  [root@quaco ~]#
-
-Fixes: 42963c8bedeb864b ("perf trace: Migrate BPF augmentation to use a skeleton")
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Cc: bpf@vger.kernel.org
-Cc: Brendan Gregg <brendan.d.gregg@gmail.com>
-Cc: Carsten Haitzler <carsten.haitzler@arm.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Fangrui Song <maskray@google.com>
-Cc: He Kuang <hekuang@huawei.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Clark <james.clark@arm.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: llvm@lists.linux.dev
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ravi Bangoria <ravi.bangoria@amd.com>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Wang Nan <wangnan0@huawei.com>
-Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
-Cc: Yang Jihong <yangjihong1@huawei.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: YueHaibing <yuehaibing@huawei.com>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/builtin-trace.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index 0ebfa95895e0bf4d..3964cf44cdbcb3e8 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -3895,7 +3895,7 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
- 	if (err < 0)
- 		goto out_error_open;
- #ifdef HAVE_BPF_SKEL
--	{
-+	if (trace->syscalls.events.bpf_output) {
- 		struct perf_cpu cpu;
- 
- 		/*
-@@ -3916,7 +3916,7 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
- 		goto out_error_mem;
- 
- #ifdef HAVE_BPF_SKEL
--	if (trace->skel->progs.sys_enter)
-+	if (trace->skel && trace->skel->progs.sys_enter)
- 		trace__init_syscalls_bpf_prog_array_maps(trace);
- #endif
- 
-@@ -4850,6 +4850,9 @@ int cmd_trace(int argc, const char **argv)
- 	}
- 
- #ifdef HAVE_BPF_SKEL
-+	if (!trace.trace_syscalls)
-+		goto skip_augmentation;
-+
- 	trace.skel = augmented_raw_syscalls_bpf__open();
- 	if (!trace.skel) {
- 		pr_debug("Failed to open augmented syscalls BPF skeleton");
-@@ -4884,6 +4887,7 @@ int cmd_trace(int argc, const char **argv)
- 	}
- 	trace.syscalls.events.bpf_output = evlist__last(trace.evlist);
- 	assert(!strcmp(evsel__name(trace.syscalls.events.bpf_output), "__augmented_syscalls__"));
-+skip_augmentation:
- #endif
- 	err = -1;
- 
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
