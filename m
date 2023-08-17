@@ -1,52 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF81914AA6;
-	Thu, 17 Aug 2023 18:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD71E20F8;
+	Thu, 17 Aug 2023 19:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692298682; x=1723834682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7yo3tNXh31iOl1DRSqLjn8gRj2unBq2YatRzwFJUzDI=;
-  b=UAdcOeR7wxX3kuko9KmQOLUTNxavPGflmbrrXKDT/xAfereJa1Vtuv4S
-   tcvLQ0YSO0mFbqdAksTjwXKdBggDppayRdNYNrzK7nGLzC1Y94PefclQU
-   K6aRqUoEirnR1DJLhKDuVcOP4pzfkdSi14pf0v5fTXzh4eHose445opOA
-   3DRwibtdMcRl7yji1+BAqW17djQXo2ji21EbfqNxG84XOh5qC1x5D+E7X
-   idM8JMTvCL3w9d5wucb++qYhker/IDJIpffFKoZhvaSs0xDCUukP/SUFR
-   2S5sbhjI66Ec23jq2M3syAxB/WWjvSFkzLlP5y+CRQgt0esJiplBsOKGy
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="371805542"
+  t=1692301854; x=1723837854;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Lb1p0ROhtllE/Ow4Y+z97jdGKJvSbfo6OaPMGL3OFss=;
+  b=GGOeD304okDjEb7yoOY7XeRWjipeRChx0NlM82KzzcfqfxuOImICPCGo
+   f+QvnZ8xLUndeobIIUrV1rTespQySs+3Yjomze/5ff1CtCZNwJYDOOFGK
+   VQ/e3S6JY4qRw6eSMz/moNStPtJEy+bXuY7hetnYkzEWJVUyGJd1kt90G
+   1HXQjbuLtgpa83uBR9izpY4U3GlROARV6cgeRyzzWcj/M9wmORq/V2pH6
+   IBhUGt57Z2vUJ8xTszHTnMbuj4trdgjlJXqmOqu3mhg4uJi3T7mwxZGd4
+   VoXR7rLPl7FdXn3fCqVCNYcuEJftiE9JdwqXAhnMzAQ/TUhyRLQInlHOk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="363073009"
 X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="371805542"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 11:58:01 -0700
+   d="scan'208";a="363073009"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 12:50:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="734766972"
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="711661135"
 X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="734766972"
+   d="scan'208";a="711661135"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 17 Aug 2023 11:57:51 -0700
+  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2023 12:50:53 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWiBp-0001Ox-34;
-	Thu, 17 Aug 2023 18:57:49 +0000
-Date: Fri, 18 Aug 2023 02:57:08 +0800
+	id 1qWj1A-0001Qp-1u;
+	Thu, 17 Aug 2023 19:50:52 +0000
+Date: Fri, 18 Aug 2023 03:49:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-	linux@roeck-us.net, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-	corbet@lwn.net, thierry.reding@gmail.com,
-	u.kleine-koenig@pengutronix.de, p.zabel@pengutronix.de,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-pwm@vger.kernel.org, BMC-SW@aspeedtech.com, patrick@stwcx.xyz
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v7 2/2] hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED
- g6 PWM/Fan tach
-Message-ID: <202308180218.lgWU1tp1-lkp@intel.com>
-References: <20230817120029.221484-3-billy_tsai@aspeedtech.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [linusw-gpio:b4/descriptors-asoc-rt 4/20] ld.lld: error:
+ vmlinux.a(init/main.o):(function trace_raw_output_initcall_level:
+ .text+0x3be): relocation R_RISCV_HI20 out of range: 529271 is not in
+ [-524288, 524287]; references .L.str.31
+Message-ID: <202308180313.sET8aigh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,62 +46,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230817120029.221484-3-billy_tsai@aspeedtech.com>
 
-Hi Billy,
+CC: linux-gpio@vger.kernel.org
+TO: Linus Walleij <linus.walleij@linaro.org>
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.5-rc6 next-20230817]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Billy-Tsai/dt-bindings-hwmon-Support-Aspeed-g6-PWM-TACH-Control/20230817-200427
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230817120029.221484-3-billy_tsai%40aspeedtech.com
-patch subject: [PATCH v7 2/2] hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach
-config: powerpc-randconfig-r011-20230818 (https://download.01.org/0day-ci/archive/20230818/202308180218.lgWU1tp1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230818/202308180218.lgWU1tp1-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git b4/descriptors-asoc-rt
+head:   9f4ec4cfd0f1cdd6df96c2cc8922ab0919a0a9ca
+commit: 3379efc68bf203967daacbbdecc8a5fb6921b478 [4/20] ASoC: rt1016: Drop GPIO include
+config: riscv-randconfig-r042-20230818 (https://download.01.org/0day-ci/archive/20230818/202308180313.sET8aigh-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230818/202308180313.sET8aigh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308180218.lgWU1tp1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308180313.sET8aigh-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hwmon/aspeed-g6-pwm-tach.c:431:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     431 |         int ret, count;
-         |             ^
-   1 warning generated.
-
-
-vim +/ret +431 drivers/hwmon/aspeed-g6-pwm-tach.c
-
-   426	
-   427	static int aspeed_tach_create_fan(struct device *dev,
-   428					  struct aspeed_pwm_tach_data *priv)
-   429	{
-   430		u8 *tach_ch;
- > 431		int ret, count;
-   432	
-   433		count = of_property_count_u8_elems(dev->of_node, "aspeed,fan-tach-ch");
-   434		if (count < 1)
-   435			return -EINVAL;
-   436		tach_ch = devm_kcalloc(dev, count, sizeof(*tach_ch), GFP_KERNEL);
-   437		if (!tach_ch)
-   438			return -ENOMEM;
-   439		ret = of_property_read_u8_array(dev->of_node, "aspeed,fan-tach-ch",
-   440						tach_ch, count);
-   441	
-   442		aspeed_present_fan_tach(priv, tach_ch, count);
-   443	
-   444		return 0;
-   445	}
-   446	
+>> ld.lld: error: vmlinux.a(init/main.o):(function trace_raw_output_initcall_level: .text+0x3be): relocation R_RISCV_HI20 out of range: 529271 is not in [-524288, 524287]; references .L.str.31
+   >>> referenced by main.c:1424 (init/main.c:1424)
+   >>> defined in vmlinux.a(init/main.o)
 
 -- 
 0-DAY CI Kernel Test Service
