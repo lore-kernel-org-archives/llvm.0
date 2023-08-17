@@ -1,41 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE732F23;
-	Thu, 17 Aug 2023 00:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A10379;
+	Thu, 17 Aug 2023 01:55:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692230437; x=1723766437;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=/CmL5Dn3yIoMVpVpPjRt3MbixJUqhMvLOAgKHx1krjE=;
-  b=PvnbbRo+DssEUKWj0zGvkefnT6r9j9H4znUGqP6NfnutflVvGbpia8ix
-   aItN+HOcEc2rUWJoFM8aZthVbsvj14GUFaTdoRyWjfhM7qlI0u9qzHbF6
-   GSkeO9aFIyONC1M3I84Z55PZydCFQjGbtNTeAH3NvayEvQLEK+CdakuzD
-   9jsg8Y8T/t0ACAoUqMbaRdvZPdBkYhlpI4+Yl331nLb1F3u065uLX/Imo
-   0rX7MASnYjaQl85vk0XnJKlyR/qQCjndhI/4i0joP2ei425poNshN81kN
-   uV51vRoCFyC6r3NLr3fkduXiNvsJfUxdg+mVbVTl16xUNz89Bi50RzsQD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="371570041"
+  t=1692237356; x=1723773356;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=an4OihAbsi8ksvlnSt9o6Jgc9iKxzwGw/cFTct/opko=;
+  b=g25BgoknmQK1Zz8Kg6HW3Oju1naaX2JExJX2qeiCu7q0Zz/H40eTvRvi
+   4nO4nXEMfc3ALXVHA9MYhmLhiUKjnhJhUJMxOzttlgNSI9lbIQg6Iumg0
+   qQPn8v9m0VmC0u4BGUVaKyFLOndu5lUG5unXsDGBbGwVF+HEFtAmg8vKf
+   66kohfXoJ1IinFMGfPoP2cxp+erMqTWRpfq7L0VEgI3dmATIiuvHqReI7
+   6uQd9kSoWtrxi7ZQwTsSBDGT4bAFfFG4iN72PYrW9qrp9fQhd6NTR5pQy
+   gs2vLZO0jnH2SSWXUl63bbbXtggP3QyMztHQ1+S2BN/qryGp9JuqWysla
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="376426061"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="371570041"
+   d="scan'208";a="376426061"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 17:00:36 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 18:55:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848679212"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848710883"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="848679212"
+   d="scan'208";a="848710883"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Aug 2023 17:00:35 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 16 Aug 2023 18:55:52 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWQRG-0000f7-10;
-	Thu, 17 Aug 2023 00:00:34 +0000
-Date: Thu, 17 Aug 2023 07:59:51 +0800
+	id 1qWSEq-0000i1-05;
+	Thu, 17 Aug 2023 01:55:52 +0000
+Date: Thu, 17 Aug 2023 09:55:09 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: net/netfilter/ipvs/ip_vs.o: warning: objtool: .init.text: unexpected
- end of section
-Message-ID: <202308170728.054gl33Z-lkp@intel.com>
+To: Asmaa Mnebhi <asmaa@nvidia.com>, andy.shevchenko@gmail.com,
+	linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+	bgolaszewski@baylibre.com, brgl@bgdev.pl,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: Re: [PATCH v2 2/2] gpio: mlxbf3: Support add_pin_ranges()
+Message-ID: <202308170926.sCNjFYJH-lkp@intel.com>
+References: <20230816154442.8417-3-asmaa@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,26 +50,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230816154442.8417-3-asmaa@nvidia.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Kees Cook <keescook@chromium.org>
+Hi Asmaa,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
-commit: 55c84a5cf2c72a821719823ef2ebef01b119025b fortify: strcat: Move definition to use fortified strlcat()
-date:   3 months ago
-config: x86_64-randconfig-r025-20230816 (https://download.01.org/0day-ci/archive/20230817/202308170728.054gl33Z-lkp@intel.com/config)
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next brgl/gpio/for-next linus/master v6.5-rc6 next-20230816]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Asmaa-Mnebhi/pinctrl-mlxbf3-Remove-gpio_disable_free/20230816-234711
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20230816154442.8417-3-asmaa%40nvidia.com
+patch subject: [PATCH v2 2/2] gpio: mlxbf3: Support add_pin_ranges()
+config: i386-buildonly-randconfig-r005-20230817 (https://download.01.org/0day-ci/archive/20230817/202308170926.sCNjFYJH-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170728.054gl33Z-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170926.sCNjFYJH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308170728.054gl33Z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308170926.sCNjFYJH-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> net/netfilter/ipvs/ip_vs.o: warning: objtool: .init.text: unexpected end of section
+>> drivers/gpio/gpio-mlxbf3.c:164:6: warning: unused variable 'ret' [-Wunused-variable]
+           int ret;
+               ^
+   1 warning generated.
+
+
+vim +/ret +164 drivers/gpio/gpio-mlxbf3.c
+
+   160	
+   161	static int mlxbf3_gpio_add_pin_ranges(struct gpio_chip *chip)
+   162	{
+   163		unsigned int id = 0;
+ > 164		int ret;
+   165	
+   166		if (chip->ngpio % MLXBF3_GPIO_MAX_PINS_PER_BLOCK)
+   167			id = 1;
+   168	
+   169		return gpiochip_add_pin_range(chip, "MLNXBF34:00",
+   170				chip->base, id * MLXBF3_GPIO_MAX_PINS_PER_BLOCK,
+   171				chip->ngpio);
+   172	}
+   173	
 
 -- 
 0-DAY CI Kernel Test Service
