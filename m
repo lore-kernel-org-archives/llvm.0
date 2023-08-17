@@ -1,68 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C14915486
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 15:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E8BDBC43395;
-	Thu, 17 Aug 2023 15:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692285625;
-	bh=qR6kigngMHcRwuRvA7J2U593va9JFSML77bkafy5IPQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=jt0wKcZDmE5NOyOJT0HC5QwXnRO0aqMe3XhQMCQivbQgcWq/a6TnuQxhPUG2V3y6y
-	 QUo9JC9e8TYNLH2KxgAns8ojt3vdIufLXNoepPipIq8tZ5roJbQe1QxfkJg+QPUjXy
-	 hAOOgK5QuQ0Dhy1hFUMk+dBflRBK4g6BhZmebBtoWkPqQO/qY/T39b7Y1E8/LKxvFR
-	 aieKn/nNBaiwFIFgbrjEOi9iA8VFWA+pLJLiQsZBxmCUYA9l0sR/385r5z3GF3msiM
-	 tzCN/TuI8z/d6FqLYeQRftBm8iiJCOSBjfoTsU6iZblqCyrp7Otp3IKi2Qwc3GYCdE
-	 fRnK71TCk9wsQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D06B7E26D3B;
-	Thu, 17 Aug 2023 15:20:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E844814A84;
+	Thu, 17 Aug 2023 15:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692285943; x=1723821943;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bWfsPyFfKqEssNtf28fn3Z9KsAMTbdk29rYzhPaSm2A=;
+  b=X9K73uU90GBUQujYoDcrLZazdEewu6AEn/VOcAVebpHUcr2Ak3u4nenS
+   ydReOpXJJs9rcXfCcbPqHcl4C06eIK0QaKUHuLJmLnvJjDaT5kywTxgEx
+   cbt41jFHecMkCBZtbd1OI+5NuYqPICIjFLuQQR9YbRS5lC7a1TlAA1isw
+   ACkSiGUBQs/HpSF5GK+JCTd5N7pTnccz0LjuqWbv0inOvRntHBN5zYaTk
+   +nXljnKLlhADjeDcbfBw3wpgTlnsMmp2QK71g4RJu3xdfiAljBAYxmG/P
+   EjnIFyrZ69RdqDA/P10VrQwKqI4m5wLekO7ML+Yz1Cb5qqFUTi10uQkxl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="372832643"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="372832643"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 08:25:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="728175534"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="728175534"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 17 Aug 2023 08:25:21 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWesD-0001Gn-0m;
+	Thu, 17 Aug 2023 15:25:21 +0000
+Date: Thu, 17 Aug 2023 23:24:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mitul Golani <mitulkumar.ajitkumar.golani@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jyri.sarha@linux.intel.com
+Subject: Re: [Intel-gfx] [PATCH 3/3] drm/i915/display: Add wrapper to Compute
+ SAD
+Message-ID: <202308172319.rTgU3hnc-lkp@intel.com>
+References: <20230817125007.2681331-4-mitulkumar.ajitkumar.golani@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5] riscv: Handle zicsr/zifencei issue between gcc and
- binutils
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <169228562484.20811.14246462375671910714.git-patchwork-notify@kernel.org>
-Date: Thu, 17 Aug 2023 15:20:24 +0000
-References: <20230809165648.21071-1-xingmingzheng@iscas.ac.cn>
-In-Reply-To: <20230809165648.21071-1-xingmingzheng@iscas.ac.cn>
-To: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-Cc: linux-riscv@lists.infradead.org, conor@kernel.org,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- bmeng@tinylab.org, guoren@kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, stable@vger.kernel.org, conor.dooley@microchip.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817125007.2681331-4-mitulkumar.ajitkumar.golani@intel.com>
 
-Hello:
+Hi Mitul,
 
-This patch was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+kernel test robot noticed the following build warnings:
 
-On Thu, 10 Aug 2023 00:56:48 +0800 you wrote:
-> Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to the newer
-> 20191213 version which moves some instructions from the I extension to the
-> Zicsr and Zifencei extensions. So if one of the binutils and GCC exceeds
-> that version, we should explicitly specifying Zicsr and Zifencei via -march
-> to cope with the new changes. but this only occurs when binutils >= 2.36
-> and GCC >= 11.1.0. It's a different story when binutils < 2.36.
-> 
-> [...]
+[auto build test WARNING on drm-tip/drm-tip]
 
-Here is the summary with links:
-  - [v5] riscv: Handle zicsr/zifencei issue between gcc and binutils
-    https://git.kernel.org/riscv/c/ca09f772ccca
+url:    https://github.com/intel-lab-lkp/linux/commits/Mitul-Golani/drm-i915-Add-has_audio-to-separate-audio-parameter-in-crtc_state/20230817-205556
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230817125007.2681331-4-mitulkumar.ajitkumar.golani%40intel.com
+patch subject: [Intel-gfx] [PATCH 3/3] drm/i915/display: Add wrapper to Compute SAD
+config: x86_64-buildonly-randconfig-r001-20230817 (https://download.01.org/0day-ci/archive/20230817/202308172319.rTgU3hnc-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308172319.rTgU3hnc-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308172319.rTgU3hnc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_audio.c:822:39: warning: variable 'channel_count' is uninitialized when used here [-Wuninitialized]
+                   audio_req_bandwidth = calc_audio_bw(channel_count,
+                                                       ^~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_audio.c:812:19: note: initialize the variable 'channel_count' to silence this warning
+           int channel_count;
+                            ^
+                             = 0
+   1 warning generated.
+
+
+vim +/channel_count +822 drivers/gpu/drm/i915/display/intel_audio.c
+
+   808	
+   809	static void calibrate_audio_config_params(struct intel_crtc_state *pipe_config, int channel)
+   810	{
+   811		struct drm_display_mode *adjusted_mode = &pipe_config->hw.adjusted_mode;
+   812		int channel_count;
+   813		int index, rate[] = { 192000, 176000, 96000, 88000, 48000, 44100, 32000 };
+   814		int audio_req_bandwidth, available_blank_bandwidth, vblank, hblank;
+   815	
+   816		hblank = adjusted_mode->htotal - adjusted_mode->hdisplay;
+   817		vblank = adjusted_mode->vtotal - adjusted_mode->vdisplay;
+   818		available_blank_bandwidth = hblank * vblank *
+   819					    drm_mode_vrefresh(adjusted_mode) * pipe_config->pipe_bpp;
+   820	
+   821		for (index = 0; index < ARRAY_SIZE(rate); index++) {
+ > 822			audio_req_bandwidth = calc_audio_bw(channel_count,
+   823							    rate[index]);
+   824			if (audio_req_bandwidth < available_blank_bandwidth) {
+   825				pipe_config->audio.max_rate = rate[index];
+   826				pipe_config->audio.max_channel_count = channel_count;
+   827				return;
+   828			}
+   829		}
+   830	
+   831		pipe_config->audio.max_rate = 0;
+   832		pipe_config->audio.max_channel_count = 0;
+   833	}
+   834	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
