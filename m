@@ -1,42 +1,46 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7751E2918
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 20:41:51 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1bf11b1c7d0so7961325ad.0
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 13:41:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E582918
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 20:42:18 +0000 (UTC)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1bc6535027aso1872405ad.2
+        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 13:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692304911; x=1692909711;
+        d=chromium.org; s=google; t=1692304938; x=1692909738;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ON/HA/SiAC88+rr3DCSUlZBZfTPO/sj9aPfYnbMZ8/I=;
-        b=ifRrRqspqYAUIBinX8EYU5JbgtyYEe0y4++wffwIl3rt37oHl/+RgqXM9breR7rX+q
-         krMpd1nlz1emlA9qgmA5K/AbEGtrPLxs8quv32j0w09bYPp83eCyD3jEacb9OQlUOGqw
-         75KFySlFi9RG5JrdT+xGx+imQzbkm09/bZsSY=
+        bh=GJmAzvapOutvPkrb5k8FqNTcJnY32flwAQr4+re3BlM=;
+        b=VzXNH3dV5IOgCFbXRiThrdo6uGwH5Ty9rguuRzFYLtZjhPNnNpR3XoUo71zdBOWeio
+         /fnXP3FvC7UVlPnoH6DjAhZRoNkE70NTxuzp/DEfQhI5KYUMdoQXPmrFhcPPfg+KZ1x8
+         jES41E3dA2rbmNcV/BlKUfrJDiD79PJRbZWio=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692304911; x=1692909711;
+        d=1e100.net; s=20221208; t=1692304938; x=1692909738;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ON/HA/SiAC88+rr3DCSUlZBZfTPO/sj9aPfYnbMZ8/I=;
-        b=YAiD77MRm05uSldgd2kzMzV5M9IzOTEpeQQ7OBUQWqrtDj/HVC8jppQpCrM8Y/1U6+
-         JHqZVk3T0waB4h1LOH37FiuqNUAEc6l+ejl4Q2qFPe+q0kvdKK6egQJTsglcjC7rcf7d
-         veiDZWyvqxe9MHG2nt2CNkkT1ItYRi6zLILghQfsVxm99QxM0OSXTz9MnJGE8tlCKuih
-         aszbpBcAaoqWzcBs/3KqLRitebptsF6SSukVxBXqN1gyUqpBQi7u/subd7xpkpfRri5b
-         i61yUqVZcaVZiIhYcdF9AktsmO1e5fXzSNmiEVUjJOqOKbaOimfdO2QBQXoInNUNzO2s
-         7BXA==
-X-Gm-Message-State: AOJu0YzKL9teBeXGOVKe7PS1Nu+dvoazBNiOZ2QMVKlYkCmC1A3mrtkV
-	nUmezMMfemzJRSxzSchQJ/hBqw==
-X-Google-Smtp-Source: AGHT+IEixP8k42UxWzyK3z3mcCEOHUwHxuIqvnvfev8H2rv7kJis4nPd/Y0Gk5spob+OtZeOX4JsEg==
-X-Received: by 2002:a17:903:234f:b0:1b8:a936:1915 with SMTP id c15-20020a170903234f00b001b8a9361915mr489582plh.22.1692304910696;
-        Thu, 17 Aug 2023 13:41:50 -0700 (PDT)
+        bh=GJmAzvapOutvPkrb5k8FqNTcJnY32flwAQr4+re3BlM=;
+        b=PO6sHytCtLnmixp2ZARye7KiG9RQep9Bhu1DtI28/Y4M+oZZ67qvbNYnC0renZOSyP
+         Q0p6DJUtQHxx6ADCCwbval+gOjhD3L/23H3oDGHx5OplbpZEEFKxZjFsQocBE49Ajly/
+         ppoByXDfaqgD1OUfxdmZ+HwuRe74dZN9U3zpolHsXu3CpMernlVshfd81+V2EoHh8h0F
+         0epBscnY1NEv3IFnczoZ5mj/u1HCUBXwE0at+Wou3u1OavW4xIvabmI+Le2gBTtgqfu2
+         VICs6+YlCkJZ/X6P0gW0CWmTU3WhSq4bPIWq/33rSmHwJjaaKBkdS8useWWVfigFOGs2
+         EosA==
+X-Gm-Message-State: AOJu0YyomPsbNpwuQaKs03HLMpXKOOfCqZ1baJ2vcj/sYywDJIYz5v0q
+	HEoIts9VhHsnipLlqxNt5aJsow==
+X-Google-Smtp-Source: AGHT+IHrogL0Xdsxq0CyyNb4Qufw7ZNxe4F/xPT8gesfxkYm5vRUzu7UKbzv9OQeL/RnSUHmy4YKLw==
+X-Received: by 2002:a17:902:e546:b0:1bb:a522:909a with SMTP id n6-20020a170902e54600b001bba522909amr594193plf.37.1692304937693;
+        Thu, 17 Aug 2023 13:42:17 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id iw20-20020a170903045400b001bbb25dd3a7sm183467plb.187.2023.08.17.13.41.49
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902bd4b00b001bdcc3a09c3sm177279plx.256.2023.08.17.13.42.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 13:41:49 -0700 (PDT)
+        Thu, 17 Aug 2023 13:42:17 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Georgi Djakov <djakov@kernel.org>
+To: Andy Gross <agross@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Georgi Djakov <djakov@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
@@ -44,9 +48,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] interconnect: Annotate struct icc_path with __counted_by
-Date: Thu, 17 Aug 2023 13:41:47 -0700
-Message-Id: <20230817204144.never.605-kees@kernel.org>
+Subject: [PATCH] interconnect: qcom: Annotate struct icc_onecell_data with __counted_by
+Date: Thu, 17 Aug 2023 13:42:15 -0700
+Message-Id: <20230817204215.never.916-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -54,20 +58,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1093; i=keescook@chromium.org;
- h=from:subject:message-id; bh=GhnqOj5xKp4EZEn1rfER9M+dGNFJZhUCFss3oBsydI0=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3oYLDqFtQnXUx50zr9QOolW/NLep8d1dsSx0k
- Wckz4fh3piJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6GCwAKCRCJcvTf3G3A
- JoJaD/sFm5t8BZrqSQzCw5/FVGoKyBL5QTsGTijXgA925uS5duD0gXBXcCcTT8aywtqgVBs/ZbZ
- skPWWlbIIWzalIc6snsWyyPwn5ho6fdWArF0Vm66IPXsbaF6UmfLITZm0EqXiMooiq1IxYjYjqA
- ZiF9FqpoHIlMW6fP1miZC3BAHFl6TVquIwXgiOitQn9BUXZEWLg8HfyYWTEn24ieXuQ6SYtaPkQ
- dg2aVGlI8TtexNZ0ELkV5QJymzFRC4MJgq4Z1EHBH/o1B35jE1SikZ5oKgNRCRG5T0lmMOP+UFV
- NI51WZiah10mT0iudsdM5YVGFF57Tddu2kpYvFYt5Oe9k01jzm6xm2yRxDPBK0bT/Hlwyu9ZMfk
- K1JLd3hZZ7cjG5tP2lrtsEd3Rg2Ne/dKeVt0DuA2rC7+NePaMwpD6k3knc4Xx2osA6q2LvzUHx3
- 1ma9IcXCzMiW0OUo06nSBHrCBwjZ4c153OaMMQXt58WyyLDM9tIwBcCLAzW5iycKhwHc+BUF3VC
- Xwzts8qtX8jGPnnSctUC+pQ4mX8F9WV29UQQiQxq+FfY5QJXAOtFcGQS6F4zlcqipwCo6huO7ps
- 6NKvF40Rvz2A4IOUKKQNDpG6Wd/LqM3gQkZDd7J7JsBpL1/EAKGv6OfI/BTKQGi4lLxIOm6wFf1
- iKBkAU0 rxCThuhQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3789; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=AYpdhVDwJu2OwMLTaV1ZMwBOcGX4aSqyJvLvspWtvFw=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3oYnMGx9/0oGfe2HMN10NNHiagAkOhbRsVfwM
+ Ys/iO2HGTyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6GJwAKCRCJcvTf3G3A
+ JuXoD/9ny0KtsXPv8eBrgFAzN2E9KziVmPDkfCMLhIKMVm9FuRbWrR3oO7uqOH33zE4R+E8DxWI
+ vzT6ZAjJdKarN8uMYb5eHUUsbuUD/7+XrJoKqCQMGxWBd+AEpClnwhmpeNJc8ZzHEtLHPzfi5WJ
+ iUvHSYP2eIiXrT1oXnGj4H1l1B35C+xFvAxgcRODvhlMJpHgzfREgVmAHBJdTrBJMZeA1LMnOkq
+ ml0Bp69oEDEjFw+CymU/YELRg/Xkjprjw5z5T3GP/wgEHSmLHDMx2YIYzcBRrJtbvxlHyfylA0k
+ ReHqltdFdWPI1MVxFUdj4THgbr9Y9AR6dLlV/55InecBVu8gdFxrIJAoJ5R9OsRWXsMHpueOgi0
+ HMmTvGCiaKOwt5pzw6emTq14UVPraxEW8Xz0q9WHanedlDMUxyS0qg8RdJvVqdTEXyEen3AUXlN
+ th13YeLFTH4K3jOyofErng0WWDPN096G/ae0fF2ck0hLypgE6zdkSEbAsKJKJMDpzgiYyyUClEm
+ gl0WSUFJukJYk+VL2MmtEwwc5hu6TizQW72YO6gptGmTbEpCb38JW2/PPHysfh3QhOfm3S74pyG
+ GafjfHCQgLQVnr8kocXTYYj+hhi9jLQ3VVgDRnhEqFXdHnygFu/pILCmvUSvu6Fe97NDDTvoH4v
+ fd65EX+ oPRAlh9g==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -77,30 +81,100 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct icc_path.
+As found with Coccinelle[1], add __counted_by for struct icc_onecell_data.
+Additionally, since the element count member must be set before accessing
+the annotated flexible array member, move its initialization earlier.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc: Georgi Djakov <djakov@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org
 Cc: linux-pm@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/interconnect/internal.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/interconnect/qcom/icc-rpmh.c  | 3 +--
+ drivers/interconnect/qcom/msm8974.c   | 2 +-
+ drivers/interconnect/qcom/osm-l3.c    | 2 +-
+ include/linux/interconnect-provider.h | 2 +-
+ 4 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/interconnect/internal.h b/drivers/interconnect/internal.h
-index f5f82a5c939e..b30856db523d 100644
---- a/drivers/interconnect/internal.h
-+++ b/drivers/interconnect/internal.h
-@@ -38,7 +38,7 @@ struct icc_req {
- struct icc_path {
- 	const char *name;
- 	size_t num_nodes;
--	struct icc_req reqs[];
-+	struct icc_req reqs[] __counted_by(num_nodes);
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index 8053ec8ab01b..b9f27ce3b607 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -185,6 +185,7 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 	data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
++	data->num_nodes = num_nodes;
+ 
+ 	provider = &qp->provider;
+ 	provider->dev = dev;
+@@ -228,8 +229,6 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 		data->nodes[i] = node;
+ 	}
+ 
+-	data->num_nodes = num_nodes;
+-
+ 	ret = icc_provider_register(provider);
+ 	if (ret)
+ 		goto err_remove_nodes;
+diff --git a/drivers/interconnect/qcom/msm8974.c b/drivers/interconnect/qcom/msm8974.c
+index b85cab2f208f..885ca9d6d4ed 100644
+--- a/drivers/interconnect/qcom/msm8974.c
++++ b/drivers/interconnect/qcom/msm8974.c
+@@ -675,6 +675,7 @@ static int msm8974_icc_probe(struct platform_device *pdev)
+ 			    GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
++	data->num_nodes = num_nodes;
+ 
+ 	qp->bus_clks = devm_kmemdup(dev, msm8974_icc_bus_clocks,
+ 				    sizeof(msm8974_icc_bus_clocks), GFP_KERNEL);
+@@ -721,7 +722,6 @@ static int msm8974_icc_probe(struct platform_device *pdev)
+ 
+ 		data->nodes[i] = node;
+ 	}
+-	data->num_nodes = num_nodes;
+ 
+ 	ret = icc_provider_register(provider);
+ 	if (ret)
+diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+index 056ac91225c4..dc321bb86d0b 100644
+--- a/drivers/interconnect/qcom/osm-l3.c
++++ b/drivers/interconnect/qcom/osm-l3.c
+@@ -232,6 +232,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+ 	data = devm_kzalloc(&pdev->dev, struct_size(data, nodes, num_nodes), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
++	data->num_nodes = num_nodes;
+ 
+ 	provider = &qp->provider;
+ 	provider->dev = &pdev->dev;
+@@ -261,7 +262,6 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+ 
+ 		data->nodes[i] = node;
+ 	}
+-	data->num_nodes = num_nodes;
+ 
+ 	ret = icc_provider_register(provider);
+ 	if (ret)
+diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+index e6d8aca6886d..7ba183f221f1 100644
+--- a/include/linux/interconnect-provider.h
++++ b/include/linux/interconnect-provider.h
+@@ -33,7 +33,7 @@ struct icc_node_data {
+  */
+ struct icc_onecell_data {
+ 	unsigned int num_nodes;
+-	struct icc_node *nodes[];
++	struct icc_node *nodes[] __counted_by(num_nodes);
  };
  
- #endif
+ struct icc_node *of_icc_xlate_onecell(struct of_phandle_args *spec,
 -- 
 2.34.1
 
