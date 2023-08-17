@@ -1,50 +1,48 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54D21C287
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 23:59:02 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2680a031283so276653a91.3
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 16:59:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0572F1C28D
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 23:59:03 +0000 (UTC)
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-26b2beae166so277741a91.0
+        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 16:59:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692316742; x=1692921542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9IIJznhYZqet29caE60ZbA2pqDUDYoC2Ni193sUkBvY=;
-        b=lfMuDWZkxFbnsbKKPqOUzD1QUbR6DkcVXQOk5J3buEXsWhNksf1iNd/44SHWaESHDl
-         j+hryvuSMYcAsCnshdpn8g7l690Dju9CViGdao/7iFYQDsHrXDRk3T+86i+QcOSUH9RM
-         5AHRTVcWEztYIcVzyPlCMdNzqMi555hFHkeoE=
+        d=chromium.org; s=google; t=1692316743; x=1692921543;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gLiCnBbyPzaic/GZ7z4G3P0cbvM2XGBwdo50oYhUApk=;
+        b=P5Pp0wwT5nzP3n43DVWzU0GTRLBYDoDSQDfCmbHmbAyHke8vM3wJwLlQCndFTYZ7KE
+         ZVi1VZoSjZdpJ+Cv7UQqBsqf+jX/87/JGb0fruxGutn29PXRZMDB9jPSZIrj3VxbaicZ
+         bNJeGzg/zR8SLlYCw17rI+RJwBXQBpyTYDPlo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692316742; x=1692921542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9IIJznhYZqet29caE60ZbA2pqDUDYoC2Ni193sUkBvY=;
-        b=ED7+eGmUIHPDGi0TKhAR4rbg1IV1eswSY2AADlpZeQwn9guNUp7qKkYwnSG8iVAjbH
-         jyI/FENfn/dzz4w5duaaN5G8KtmYNjTfHrSJ+3VO9bnjltYDWKlsciEodZ7MgmXQc3Mk
-         udmu2mN7YG//uese6FU0aBWBk8d356BedCpx2EgWJmbg1E9AiE8umUrmCsHaMovlAY/Q
-         3eKBNHQrwPcxFJjNNXY/D9HuGIm8NQka/CfJKhp9Z0OdoC1xuXfheLtRz+KwVCN9dHZu
-         Obsf40C94DK7CKKSsXafJZg/H1wq58w4vAFZU0sQJirQUgrTcd1muWAISiot+Q7Tb1v9
-         2mzg==
-X-Gm-Message-State: AOJu0Yy8hu0SCv0D/Oyx03JHhw+WF3STW5/JFyhIM9E75AniaFQS5jbA
-	W1MEzEZd078au1zQDPeV8uy3Dg==
-X-Google-Smtp-Source: AGHT+IE65dJQjfZK41wRT3vTQIMQrQ1msHGo0xfJJM2cHVIfGc5VRcslgbukfOm/ii0qD36iiH5rJg==
-X-Received: by 2002:a17:90a:ff05:b0:26d:ae3:f6a7 with SMTP id ce5-20020a17090aff0500b0026d0ae3f6a7mr935986pjb.21.1692316742244;
-        Thu, 17 Aug 2023 16:59:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692316743; x=1692921543;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gLiCnBbyPzaic/GZ7z4G3P0cbvM2XGBwdo50oYhUApk=;
+        b=MYfjlA305UQcm9U2rfPhDjt3vMQqiCYCvFmKdEjQtK2GWRotjTJIThSjkSdoO92UMq
+         oYaUU8cbtizXwh/4NbGuBJ/KD1KEcIBLuXAj42w7/9bnCBfjxmM7QqtkfqwMVOehi6vU
+         ljGy0WM5Ne6hVyB1YCJUlg9FGkyylnDcQ1liLeVp6UqPljWtYZPd60MoEZFMI273PbP2
+         EOOLL4roRmMZU1y96lecTEMbHQggXo6x6NKbf6euffDvORQp0I4jjdWuLq4KPdUA8zSR
+         9109XwEYgDENrIImyCDefoxickX39pjtmbDuCJZD/6xutz1w5prcNgk0gcbCbfWrX52Z
+         GAdA==
+X-Gm-Message-State: AOJu0YyrnWvJFgqA6argADaImtgjZpmCdOn0yvBvJlpwz3nCj0JDLTLX
+	ktMc2ZCk7tmK15w+zKVwE5LdgQ==
+X-Google-Smtp-Source: AGHT+IG7Ur7jvG1Cor78dTTxi94xoQ0HyBPagkNa35jw/ciTiPyRGRuVsIer724v3p+TKZGgt/zcZQ==
+X-Received: by 2002:a17:90a:7564:b0:262:d7db:2520 with SMTP id q91-20020a17090a756400b00262d7db2520mr994346pjk.26.1692316743403;
+        Thu, 17 Aug 2023 16:59:03 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id bt11-20020a17090af00b00b002680ef05c40sm334830pjb.55.2023.08.17.16.58.59
+        by smtp.gmail.com with ESMTPSA id s10-20020a17090a948a00b00263cca08d95sm2101254pjo.55.2023.08.17.16.58.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 16:58:59 -0700 (PDT)
+        Thu, 17 Aug 2023 16:59:00 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Vinod Koul <vkoul@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	dmaengine@vger.kernel.org,
 	Hector Martin <marcan@marcan.st>,
 	Sven Peter <sven@svenpeter.dev>,
 	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
 	Ludovic Desroches <ludovic.desroches@microchip.com>,
 	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
 	Zhou Wang <wangzhou1@hisilicon.com>,
 	Jie Hai <haijie1@huawei.com>,
 	Andy Gross <agross@kernel.org>,
@@ -73,86 +71,98 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	asahi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
+	dmaengine@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-tegra@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 03/21] dmaengine: axi-dmac: Annotate struct axi_dmac_desc with __counted_by
-Date: Thu, 17 Aug 2023 16:58:40 -0700
-Message-Id: <20230817235859.49846-3-keescook@chromium.org>
+Subject: [PATCH 00/21] dmaengine: Annotate with __counted_by
+Date: Thu, 17 Aug 2023 16:58:37 -0700
+Message-Id: <20230817235428.never.111-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230817235428.never.111-kees@kernel.org>
-References: <20230817235428.never.111-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1664; i=keescook@chromium.org;
- h=from:subject; bh=5nTriTvU6hERX/iI4Nl8dL1Ec/4B+oHOGqi2OU9g6Qg=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3rQ/kvuY7+Gn5tKJWg/r4cXZIgImGLVHbUCZB
- DFLPZ2NhGWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN60PwAKCRCJcvTf3G3A
- JhvpD/wNYxu2CIOowdUv5/Gwd94bn/HKEspBIm29MnOZtnaUtavl0IWVwMhW1P/8HQl9woaPfLG
- 6Aq1zIhFa0dMdc/NApNTy4232MZ5m0W2yU1vsE4DoahHlSo99Wb5IXEpmYQoW3Ogcru8iTI6RWE
- X+O5eTwn/TrdoEplK1g6rsrSovVWaEWuKQPOdUcN0zVf0YFUcRqB5ErOnPXhT+eeEQosMKckapy
- xAlbAopfCGNa55AO8pK6DeF9558RwA8t+1v8gtPAtBrx0xl98gWhKtK4YNcorE0C/IQnmvzBmtM
- E5wFOLjYn9E36ScSEdLRXdOLC0TOh1hT2mgx4IlClvnnj6ejHDSwQKih3mT+CnD0ir9WDUWyX9C
- bGjxWt4DBLFpP42ZKN1lFVD3p1UsDwQf1sVM/JJZZWUREKtwdy/Jm8jzHw9j/hLep56o7cJQuzK
- COT8j10NMt/uMFOu3Th8H23KqtaUnz7XDdZv2DXz4gkrLBWqttX9OJsyxN0brY84f6Lmu+2P50E
- la+wH9n2H1f6jFY8wmjqrrLqTCvhPaXHM7/yl9TlA3zM2OgrLbARzLsJcM3sEBnJTMszTBziErj
- Bn7kZG3N8z1rIg4yzutknyAVMFixUdrTgZ968m671TSetEtKj/KknSzomKzfesrG9oL7QZZRtXi zZtgQ/94fa+v75Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2707; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=X+13aptrkzlZofkuldd+d07374jzvU5KMGSMFeBiQiA=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3rQ/Y/4ffzo1IbZvWMUH7ld52PtnkCTORxyHK
+ CIS35jFSfGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN60PwAKCRCJcvTf3G3A
+ Jmk6D/91xaM88OIg15Z+90cr21kEhBomkBw2kzWyeOFGSeWZfWBT9v5HW3rrVN64Q7kDB9XAJal
+ nI4M0KHJ8cUO6Y8Oww5+x4tmVhFS+/yiSYyxDNbGtiEP8zwAJazWBFG/VAIXoqJgr65f9N5MrMB
+ tpMNT5QDBa+NOdvwfEWIqptgdiUfftpp3/JCQpoUJZ4170WFUNdylNkOKOPlZWzpB/Z7GOnXskj
+ Y1F1IK0F8spqaHu/QGQTnrZa1o6gGjKYuxFrbZ4zlMZRP6cXwRZ0m6mDTeTaaItw3X13J97fgUo
+ +KCUF1tsNSs50HZwRVPdXjSJj7iidcnHdBsGgUJixBqnHI+eUuwI/fXIEDWrZi5f6nl8i+4okPg
+ VnbPoCI4gD1g9nfDtXklxQcCpgY6Jz519HM0b2UWNjQi8Nwc4DAovAEsCwLNvgdZtD+p832lPfn
+ YSpjXkaDWrfN2tgUC/YmPkkuGyybh/vqVuNhp78qD1aXxmydmnU5+5WL2AyRzmP6Y/xlHa5wO4g
+ b/PSScMBx7nKATYBufXnhc8uQfrucLW4+GkmubGiNp03RUxPh5cKo2hoJtIZWTZCsuMKQhS8gdD
+ YLlNjS9qafx1FicrUpVmxB5pFplJDCN/02onKYItefjjDduHSTMCC4tIJ//0yRQN+DfP5lzceR4
+ h6gsvBD jioTUffw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+Hi,
 
-As found with Coccinelle[1], add __counted_by for struct axi_dmac_desc.
-Additionally, since the element count member must be set before accessing
-the annotated flexible array member, move its initialization earlier.
+This annotates several structures with the coming __counted_by attribute
+for bounds checking of flexible arrays at run-time. For more details, see
+commit dd06e72e68bc ("Compiler Attributes: Add __counted_by macro").
 
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+Thanks!
 
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Lars-Peter Clausen <lars@metafoo.de>
-Cc: dmaengine@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/dma/dma-axi-dmac.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+-Kees
 
-diff --git a/drivers/dma/dma-axi-dmac.c b/drivers/dma/dma-axi-dmac.c
-index fc7cdad37161..b9f85cb20d3e 100644
---- a/drivers/dma/dma-axi-dmac.c
-+++ b/drivers/dma/dma-axi-dmac.c
-@@ -117,7 +117,7 @@ struct axi_dmac_desc {
- 	unsigned int num_submitted;
- 	unsigned int num_completed;
- 	unsigned int num_sgs;
--	struct axi_dmac_sg sg[];
-+	struct axi_dmac_sg sg[] __counted_by(num_sgs);
- };
- 
- struct axi_dmac_chan {
-@@ -484,12 +484,11 @@ static struct axi_dmac_desc *axi_dmac_alloc_desc(unsigned int num_sgs)
- 	desc = kzalloc(struct_size(desc, sg, num_sgs), GFP_NOWAIT);
- 	if (!desc)
- 		return NULL;
-+	desc->num_sgs = num_sgs;
- 
- 	for (i = 0; i < num_sgs; i++)
- 		desc->sg[i].id = AXI_DMAC_SG_UNUSED;
- 
--	desc->num_sgs = num_sgs;
--
- 	return desc;
- }
- 
+Kees Cook (21):
+  dmaengine: apple-admac: Annotate struct admac_data with __counted_by
+  dmaengine: at_hdmac: Annotate struct at_desc with __counted_by
+  dmaengine: axi-dmac: Annotate struct axi_dmac_desc with __counted_by
+  dmaengine: fsl-edma: Annotate struct fsl_edma_desc with __counted_by
+  dmaengine: hisilicon: Annotate struct hisi_dma_dev with __counted_by
+  dmaengine: moxart-dma: Annotate struct moxart_desc with __counted_by
+  dmaengine: qcom: bam_dma: Annotate struct bam_async_desc with
+    __counted_by
+  dmaengine: sa11x0: Annotate struct sa11x0_dma_desc with __counted_by
+  dmaengine: sf-pdma: Annotate struct sf_pdma with __counted_by
+  dmaengine: sprd: Annotate struct sprd_dma_dev with __counted_by
+  dmaengine: st_fdma: Annotate struct st_fdma_desc with __counted_by
+  dmaengine: stm32-dma: Annotate struct stm32_dma_desc with __counted_by
+  dmaengine: stm32-mdma: Annotate struct stm32_mdma_desc with
+    __counted_by
+  dmaengine: stm32-mdma: Annotate struct stm32_mdma_device with
+    __counted_by
+  dmaengine: tegra: Annotate struct tegra_dma_desc with __counted_by
+  dmaengine: tegra210-adma: Annotate struct tegra_adma with __counted_by
+  dmaengine: ti: edma: Annotate struct edma_desc with __counted_by
+  dmaengine: ti: omap-dma: Annotate struct omap_desc with __counted_by
+  dmaengine: uniphier-xdmac: Annotate struct uniphier_xdmac_desc with
+    __counted_by
+  dmaengine: uniphier-xdmac: Annotate struct uniphier_xdmac_device with
+    __counted_by
+  dmaengine: usb-dmac: Annotate struct usb_dmac_desc with __counted_by
+
+ drivers/dma/apple-admac.c      |  2 +-
+ drivers/dma/at_hdmac.c         |  2 +-
+ drivers/dma/dma-axi-dmac.c     |  5 ++---
+ drivers/dma/fsl-edma-common.h  |  2 +-
+ drivers/dma/hisi_dma.c         |  2 +-
+ drivers/dma/moxart-dma.c       |  5 ++---
+ drivers/dma/qcom/bam_dma.c     |  2 +-
+ drivers/dma/sa11x0-dma.c       |  6 +++---
+ drivers/dma/sf-pdma/sf-pdma.h  |  2 +-
+ drivers/dma/sh/usb-dmac.c      |  2 +-
+ drivers/dma/sprd-dma.c         |  2 +-
+ drivers/dma/st_fdma.h          |  2 +-
+ drivers/dma/stm32-dma.c        | 11 ++++-------
+ drivers/dma/stm32-mdma.c       |  9 ++++-----
+ drivers/dma/tegra186-gpc-dma.c |  2 +-
+ drivers/dma/tegra210-adma.c    |  2 +-
+ drivers/dma/ti/edma.c          |  2 +-
+ drivers/dma/ti/omap-dma.c      |  5 ++---
+ drivers/dma/uniphier-xdmac.c   |  8 ++++----
+ 19 files changed, 33 insertions(+), 40 deletions(-)
+
 -- 
 2.34.1
 
