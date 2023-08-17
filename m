@@ -1,100 +1,166 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3CC3C3A
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 07:29:37 +0000 (UTC)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-977e0fbd742so954528966b.2
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 00:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692257375; x=1692862175;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nOJ+d25pMjeuQsrRl8LvKNCwqzu1i3KiQKGQ/abbmGA=;
-        b=KHj9kJxlgGzVh8YlTYqULol7noxuqcEEcRtHkRtx+Fez3IN4tdPcTOd4uAwoWcjOm2
-         wx/gb0HmirUR7xQNg1BoAMGzptwS9RajJE2aqt2m7Mv4ohDtzoDkiMCGUKgTqsfCmYcd
-         o6r6E8hwTlTxafe/gRnUINHfMP4io0J1QaN1hPz5zWA49LF9zF1eOO85ey37B7cgU1v0
-         XJfrhnbCUJjsDsxJz+OqA0PPEkyoUw44iHpq5mqZrp1NzvpKxd7/eRrBIm+O5EAaGtA2
-         9PK/iqhhd2pjMfZUJxeeEVwCtLM99SANz5kb9wUoq74jkPPJjtTuNpPGI7yZcKFZhd7v
-         BfIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692257375; x=1692862175;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nOJ+d25pMjeuQsrRl8LvKNCwqzu1i3KiQKGQ/abbmGA=;
-        b=fpb0TgZTxYlA19Xyt0QOR7hAWcj0+NIyG2YkEY6leI/2eY2IKfcEBbbjx2Ltg8vyE9
-         KZqoJ3BcKcPZzzTSDzy0c3+k4msZQRdPbsz5XKOxNVKsKYNUaWVqAg8FrCejYfvxDSFo
-         WtRKjTB6JQISLKXE8RbEsr8Y/U1/yZDi9Gbn5uC1+qfmB509zoLgm8/Kedc+5p/p5xX+
-         avuIi8xi2CHh8WB99aFGb/abID+Dqip+03295MNCjDZ2HHDaXN5iUydjsAvgxgLyi6Vb
-         oassC8V08Ox9BBiswVxU4qrF86XKHm6gkV8oDwGhlNtYyILP9Qinw87PXMeKkUrEC/6x
-         lJ2Q==
-X-Gm-Message-State: AOJu0YwyVh8c+6BFdf8O+olAmElsSeV1mrAvQ0f8HPeAaBBJIsv+uDSN
-	ZEycRsLNwHMjwh+Pf6fXFm/3kw==
-X-Google-Smtp-Source: AGHT+IHoUseg7XR3xqv75cPWee71BqJRxVL4itNOrzkR/G51AqPMAF8h4xpYk+qJQcN4YtUyDsqbng==
-X-Received: by 2002:a17:906:3110:b0:99c:55c0:acfd with SMTP id 16-20020a170906311000b0099c55c0acfdmr3022293ejx.62.1692257375687;
-        Thu, 17 Aug 2023 00:29:35 -0700 (PDT)
-Received: from [192.168.69.115] (mek33-h02-176-184-23-56.dsl.sta.abo.bbox.fr. [176.184.23.56])
-        by smtp.gmail.com with ESMTPSA id jw13-20020a17090776ad00b0099275c59bc9sm9724407ejc.33.2023.08.17.00.29.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Aug 2023 00:29:35 -0700 (PDT)
-Message-ID: <405d395f-b817-f31b-041f-823d6167e2c2@linaro.org>
-Date: Thu, 17 Aug 2023 09:29:32 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DE2D52B;
+	Thu, 17 Aug 2023 07:54:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692258883; x=1723794883;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Sf3RK2lXleJ+hE+XnvcPAKYqYXhQamKKSIsj03WyQng=;
+  b=nqkwGsJquLojGuuUasQ5UoPIMSyRzVmGrTWtd17AyuFhbESQPYZI8SWp
+   UzUSqQuBQ8xns0NTP/TXA1jOBclSvTiPD5IxTuiri+pxxp5R7LcL47iEO
+   brDWxyTzf2pgp8kHolRaq6bOmQ3euQo/rjY/m7HicAD60/uP7jcOIJkEC
+   laGKPE9QPb3E0+LpuCzSZCJiUQ8Ak5If3npPIV/9XqBHbz51F2T5fkNbE
+   BfiwIqpxX486mF97gDZ5Pk5+QU4QKHfAGCR7kWOq/q2qUgWrZWjddBhs5
+   mBV063YPm0+eKw2YwPjAPmFP3LFNI8AGz8YGdTUgIzHBgHoOMssd+q/uw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="353058264"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="353058264"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 00:54:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848796704"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="848796704"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Aug 2023 00:54:39 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWXq3-0000vF-0Q;
+	Thu, 17 Aug 2023 07:54:39 +0000
+Date: Thu, 17 Aug 2023 15:54:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Petlozu Pravareshwar <petlozup@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+	Stefan Kristiansson <stefank@nvidia.com>
+Subject: drivers/soc/tegra/pmc.c:467: warning: Function parameter or member
+ 'syscore' not described in 'tegra_pmc'
+Message-ID: <202308171504.PtwuzSji-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.14.0
-Subject: Re: [PATCH] MIPS: VDSO: Conditionally export __vdso_gettimeofday()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, tsbogend@alpha.franken.de
-Cc: linux-mips@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-References: <20230816-mips-vdso-cond-export-__vdso_gettimeofday-v1-1-fe725254c782@kernel.org>
-From: =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230816-mips-vdso-cond-export-__vdso_gettimeofday-v1-1-fe725254c782@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nathan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
+commit: 1ddb8f6d44ff482c9953a06f800453bc372cfead soc/tegra: pmc: Fix dual edge triggered wakes
+date:   9 months ago
+config: arm-randconfig-r015-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171504.PtwuzSji-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171504.PtwuzSji-lkp@intel.com/reproduce)
 
-On 16/8/23 23:59, Nathan Chancellor wrote:
-> ld.lld 16.0.0 and newer defaults to '--no-undefined-version', which
-> causes the following error when CONFIG_MIPS_CLOCK_VSYSCALL is not set:
-> 
->    ld.lld: error: version script assignment of 'LINUX_2.6' to symbol '__vdso_gettimeofday' failed: symbol not defined
-> 
-> Only export __vdso_gettimeofday() when it will be present in the final
-> object file, which clears up the error.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202308170532.zxFFv25c-lkp@intel.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   arch/mips/vdso/vdso.lds.S | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-> index d90b65724d78..836465e3bcb8 100644
-> --- a/arch/mips/vdso/vdso.lds.S
-> +++ b/arch/mips/vdso/vdso.lds.S
-> @@ -94,7 +94,9 @@ VERSION
->   #ifndef CONFIG_MIPS_DISABLE_VDSO
->   	global:
->   		__vdso_clock_gettime;
-> +#ifdef CONFIG_MIPS_CLOCK_VSYSCALL
->   		__vdso_gettimeofday;
-> +#endif
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308171504.PtwuzSji-lkp@intel.com/
 
-Possibly:
-Fixes: 7d2aa4bb90f5 ("mips: Fix gettimeofday() in the vdso library")
+All warnings (new ones prefixed by >>):
 
-Otherwise,
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+>> drivers/soc/tegra/pmc.c:467: warning: Function parameter or member 'syscore' not described in 'tegra_pmc'
 
-Thanks,
 
-Phil.
+vim +467 drivers/soc/tegra/pmc.c
+
+5f84bb1a4099e2 Sandipan Patra       2018-10-24  383  
+7232398abc6a71 Thierry Reding       2014-07-11  384  /**
+7232398abc6a71 Thierry Reding       2014-07-11  385   * struct tegra_pmc - NVIDIA Tegra PMC
+35b67291b4a85d Jon Hunter           2015-12-04  386   * @dev: pointer to PMC device structure
+7232398abc6a71 Thierry Reding       2014-07-11  387   * @base: pointer to I/O remapped register region
+bbe5af60041cae Thierry Reding       2019-01-25  388   * @wake: pointer to I/O remapped region for WAKE registers
+bbe5af60041cae Thierry Reding       2019-01-25  389   * @aotag: pointer to I/O remapped region for AOTAG registers
+bbe5af60041cae Thierry Reding       2019-01-25  390   * @scratch: pointer to I/O remapped region for scratch registers
+7232398abc6a71 Thierry Reding       2014-07-11  391   * @clk: pointer to pclk clock
+35b67291b4a85d Jon Hunter           2015-12-04  392   * @soc: pointer to SoC data structure
+e247deae1a5508 Mikko Perttunen      2019-01-25  393   * @tz_only: flag specifying if the PMC can only be accessed via TrustZone
+3195ac6d9cbeef Jon Hunter           2015-12-04  394   * @debugfs: pointer to debugfs entry
+7232398abc6a71 Thierry Reding       2014-07-11  395   * @rate: currently configured rate of pclk
+7232398abc6a71 Thierry Reding       2014-07-11  396   * @suspend_mode: lowest suspend mode available
+7232398abc6a71 Thierry Reding       2014-07-11  397   * @cpu_good_time: CPU power good time (in microseconds)
+7232398abc6a71 Thierry Reding       2014-07-11  398   * @cpu_off_time: CPU power off time (in microsecends)
+7232398abc6a71 Thierry Reding       2014-07-11  399   * @core_osc_time: core power good OSC time (in microseconds)
+7232398abc6a71 Thierry Reding       2014-07-11  400   * @core_pmu_time: core power good PMU time (in microseconds)
+7232398abc6a71 Thierry Reding       2014-07-11  401   * @core_off_time: core power off time (in microseconds)
+7232398abc6a71 Thierry Reding       2014-07-11  402   * @corereq_high: core power request is active-high
+7232398abc6a71 Thierry Reding       2014-07-11  403   * @sysclkreq_high: system clock request is active-high
+7232398abc6a71 Thierry Reding       2014-07-11  404   * @combined_req: combined power request for CPU & core
+7232398abc6a71 Thierry Reding       2014-07-11  405   * @cpu_pwr_good_en: CPU power good signal is enabled
+7232398abc6a71 Thierry Reding       2014-07-11  406   * @lp0_vec_phys: physical base address of the LP0 warm boot code
+7232398abc6a71 Thierry Reding       2014-07-11  407   * @lp0_vec_size: size of the LP0 warm boot code
+a38045121bf421 Jon Hunter           2016-03-30  408   * @powergates_available: Bitmap of available power gates
+7232398abc6a71 Thierry Reding       2014-07-11  409   * @powergates_lock: mutex for power gate register access
+bbe5af60041cae Thierry Reding       2019-01-25  410   * @pctl_dev: pin controller exposed by the PMC
+bbe5af60041cae Thierry Reding       2019-01-25  411   * @domain: IRQ domain provided by the PMC
+bbe5af60041cae Thierry Reding       2019-01-25  412   * @irq: chip implementation for the IRQ domain
+e57a243f5d896f Dmitry Osipenko      2019-09-26  413   * @clk_nb: pclk clock changes handler
+d3a20dcbca4880 Thierry Reding       2022-05-06  414   * @core_domain_state_synced: flag marking the core domain's state as synced
+d3a20dcbca4880 Thierry Reding       2022-05-06  415   * @core_domain_registered: flag marking the core domain as registered
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  416   * @wake_type_level_map: Bitmap indicating level type for non-dual edge wakes
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  417   * @wake_type_dual_edge_map: Bitmap indicating if a wake is dual-edge or not
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  418   * @wake_sw_status_map: Bitmap to hold raw status of wakes without mask
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  419   * @wake_cntrl_level_map: Bitmap to hold wake levels to be programmed in
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  420   *     cntrl register associated with each wake during system suspend.
+7232398abc6a71 Thierry Reding       2014-07-11  421   */
+7232398abc6a71 Thierry Reding       2014-07-11  422  struct tegra_pmc {
+3568df3d31d62b Mikko Perttunen      2015-01-06  423  	struct device *dev;
+7232398abc6a71 Thierry Reding       2014-07-11  424  	void __iomem *base;
+c641ec6eab8587 Thierry Reding       2017-08-30  425  	void __iomem *wake;
+c641ec6eab8587 Thierry Reding       2017-08-30  426  	void __iomem *aotag;
+5be2255676bf2b Thierry Reding       2017-08-30  427  	void __iomem *scratch;
+7232398abc6a71 Thierry Reding       2014-07-11  428  	struct clk *clk;
+3195ac6d9cbeef Jon Hunter           2015-12-04  429  	struct dentry *debugfs;
+7232398abc6a71 Thierry Reding       2014-07-11  430  
+7232398abc6a71 Thierry Reding       2014-07-11  431  	const struct tegra_pmc_soc *soc;
+e247deae1a5508 Mikko Perttunen      2019-01-25  432  	bool tz_only;
+7232398abc6a71 Thierry Reding       2014-07-11  433  
+7232398abc6a71 Thierry Reding       2014-07-11  434  	unsigned long rate;
+7232398abc6a71 Thierry Reding       2014-07-11  435  
+7232398abc6a71 Thierry Reding       2014-07-11  436  	enum tegra_suspend_mode suspend_mode;
+7232398abc6a71 Thierry Reding       2014-07-11  437  	u32 cpu_good_time;
+7232398abc6a71 Thierry Reding       2014-07-11  438  	u32 cpu_off_time;
+7232398abc6a71 Thierry Reding       2014-07-11  439  	u32 core_osc_time;
+7232398abc6a71 Thierry Reding       2014-07-11  440  	u32 core_pmu_time;
+7232398abc6a71 Thierry Reding       2014-07-11  441  	u32 core_off_time;
+7232398abc6a71 Thierry Reding       2014-07-11  442  	bool corereq_high;
+7232398abc6a71 Thierry Reding       2014-07-11  443  	bool sysclkreq_high;
+7232398abc6a71 Thierry Reding       2014-07-11  444  	bool combined_req;
+7232398abc6a71 Thierry Reding       2014-07-11  445  	bool cpu_pwr_good_en;
+7232398abc6a71 Thierry Reding       2014-07-11  446  	u32 lp0_vec_phys;
+7232398abc6a71 Thierry Reding       2014-07-11  447  	u32 lp0_vec_size;
+a38045121bf421 Jon Hunter           2016-03-30  448  	DECLARE_BITMAP(powergates_available, TEGRA_POWERGATE_MAX);
+7232398abc6a71 Thierry Reding       2014-07-11  449  
+7232398abc6a71 Thierry Reding       2014-07-11  450  	struct mutex powergates_lock;
+4a37f11c8f57ff Aapo Vienamo         2018-08-10  451  
+4a37f11c8f57ff Aapo Vienamo         2018-08-10  452  	struct pinctrl_dev *pctl_dev;
+19906e6b166721 Thierry Reding       2018-09-17  453  
+19906e6b166721 Thierry Reding       2018-09-17  454  	struct irq_domain *domain;
+19906e6b166721 Thierry Reding       2018-09-17  455  	struct irq_chip irq;
+e57a243f5d896f Dmitry Osipenko      2019-09-26  456  
+e57a243f5d896f Dmitry Osipenko      2019-09-26  457  	struct notifier_block clk_nb;
+41bafa698ddd07 Dmitry Osipenko      2021-06-01  458  
+41bafa698ddd07 Dmitry Osipenko      2021-06-01  459  	bool core_domain_state_synced;
+41bafa698ddd07 Dmitry Osipenko      2021-06-01  460  	bool core_domain_registered;
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  461  
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  462  	unsigned long *wake_type_level_map;
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  463  	unsigned long *wake_type_dual_edge_map;
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  464  	unsigned long *wake_sw_status_map;
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  465  	unsigned long *wake_cntrl_level_map;
+1ddb8f6d44ff48 Petlozu Pravareshwar 2022-09-30  466  	struct syscore_ops syscore;
+7232398abc6a71 Thierry Reding       2014-07-11 @467  };
+7232398abc6a71 Thierry Reding       2014-07-11  468  
+
+:::::: The code at line 467 was first introduced by commit
+:::::: 7232398abc6a7186e315425638c367d50c674718 ARM: tegra: Convert PMC to a driver
+
+:::::: TO: Thierry Reding <treding@nvidia.com>
+:::::: CC: Thierry Reding <treding@nvidia.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
