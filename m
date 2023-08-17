@@ -1,108 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E2C12B62;
-	Thu, 17 Aug 2023 11:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692270049; x=1723806049;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8YLd6v+XCjtNvZ9V//6v/gUDJj7FKxTnr8OvhgVBG6E=;
-  b=DIhF8zpMZ5OJ04lui1PVOIqH07oRTfmQ7Dfj3LtRyBtEnN/J+NqEQHdu
-   JD6CLhikcjuWd6bgB+UQ2InE0aiL+6Fzx8odFI0hLDoU2EX8tvA2XmXyI
-   A5FggAmyjoEr616u8UzA3ep847Qp53qCuZdrRIUAFwJ5UsEx9PCsUza3j
-   iZc3RaDIyreA13miARX07lqftpdvjHsqO1X77fXelBnfKyEHeS04WAm/G
-   wvpPikul8OzKH4pZEOFwzQHsBGkzHsI3A2FN4zOEn7M1PEXm1c0/hQ/E9
-   wa6Ddk/uZMLIaLuJky0dsMh+F7AkusderrEbCxsUc+LJImUP7okd4/Hhi
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="370247813"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="370247813"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 04:00:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="764031285"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="764031285"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2023 04:00:45 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWak8-000141-1P;
-	Thu, 17 Aug 2023 11:00:44 +0000
-Date: Thu, 17 Aug 2023 19:00:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tony Lindgren <tony@atomide.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: drivers/clocksource/timer-ti-dm.c:82: warning: Function parameter or
- member 'val' not described in 'dmtimer_write'
-Message-ID: <202308171822.ZcUAzWPw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600B6134A4
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 11:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9794EC433C8;
+	Thu, 17 Aug 2023 11:28:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692271706;
+	bh=QizM/IZpfLB5gNw8uILxz1bnW3evYEoQkYuca1IFqRg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OzpKUutHKba8ti7KWcq4IRNp9NGE4BkW2di4vdwKz1cPKO8O1qsvYuSIHBmW1wxYK
+	 sb0PaaKdbMVYe8TJJ90r0myvrEjIlIa7kOTZGEyoEfoT11y6ubtyrcphl/14OnCKqr
+	 a5hF2O/Xxl9sghpr5dCAelyU1KlgNW1WvyBxyk7n6CYKUSOwxEfp/6hp6upZZt/8RT
+	 Z+2AOpCx3qc2wwQS7Q7M7My/emxmDgrvvbHG6QC+epF9ZKo0Oq9JLsefTogBPnm97I
+	 3bN4qnjJdKUZk59BwjXLsPgBRBf6EI/U0pU7ls4YH5mERZb1JKoomv9h87OVPHS3RQ
+	 IgatkkD3ALkNg==
+Date: Thu, 17 Aug 2023 12:28:18 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+	open list <linux-kernel@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	Kristina Martsenko <kristina.martsenko@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: selftests: arm64: hwcap.c:51:15: error: instruction requires: crc
+Message-ID: <a7b678d9-d6ba-4cf1-a6b3-89098cc90f6e@sirena.org.uk>
+References: <CA+G9fYvVZmOJvf=+JM8LRGxV6ynCPuPreipCP3+fmti=M+dxwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+S02MxnRuwcq6WP5"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvVZmOJvf=+JM8LRGxV6ynCPuPreipCP3+fmti=M+dxwA@mail.gmail.com>
+X-Cookie: Walk softly and carry a BFG-9000.
+
+
+--+S02MxnRuwcq6WP5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
-commit: 49cd16bb573e43dc2ee64d734b9b545475dbb35f clocksource/drivers/timer-ti-dm: Simplify register writes with dmtimer_write()
-date:   11 months ago
-config: riscv-randconfig-r002-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171822.ZcUAzWPw-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171822.ZcUAzWPw-lkp@intel.com/reproduce)
+On Thu, Aug 17, 2023 at 03:33:18PM +0530, Naresh Kamboju wrote:
+> While building selftests arm64 following warnings / errors noticed on the
+> Linux next-20230817 tag ( from next-20230815 )
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308171822.ZcUAzWPw-lkp@intel.com/
+Fix already sent.
 
-All warnings (new ones prefixed by >>):
+--+S02MxnRuwcq6WP5
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> drivers/clocksource/timer-ti-dm.c:82: warning: Function parameter or member 'val' not described in 'dmtimer_write'
->> drivers/clocksource/timer-ti-dm.c:82: warning: Excess function parameter 'value' description in 'dmtimer_write'
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTeBFEACgkQJNaLcl1U
+h9Cgrgf/Wenr4NZxC38M3/DbG/CskZ16LCseE4pV7yjyBMeEtE/oUrSZ2CEncxvr
+2XFFcdmCptO6ndzRpfqZWtz+x5IOhq29QbBcHgNQQwSaUaFuDAOcZIcuEBZnK7dT
+6k1cnXwDNBxFxrZR371CdZKb6csnBGbgTL/AWSvxwXUx/ho8O1iz1ouaXKmZS9Pc
+t6xenkAHV14HFX3eg0RvleE5549UcQrX67Tt5nSblpISxSu6e0sSPNi4PfwRGijr
+qltuZNiKI7ESyv9oEv5AcVjJsga+LraklRUdsXyhYt2FJ6Q61gjkXWzXOgCHrLu3
+8iVuXhnI7k8B6QESUjEZlgD9bB8PqA==
+=M49M
+-----END PGP SIGNATURE-----
 
-vim +82 drivers/clocksource/timer-ti-dm.c
-
-41e79b1d458477 Tony Lindgren 2022-04-08  70  
-49cd16bb573e43 Tony Lindgren 2022-08-15  71  /**
-49cd16bb573e43 Tony Lindgren 2022-08-15  72   * dmtimer_write - write timer registers in posted and non-posted mode
-49cd16bb573e43 Tony Lindgren 2022-08-15  73   * @timer:      timer pointer over which write operation is to perform
-49cd16bb573e43 Tony Lindgren 2022-08-15  74   * @reg:        lowest byte holds the register offset
-49cd16bb573e43 Tony Lindgren 2022-08-15  75   * @value:      data to write into the register
-49cd16bb573e43 Tony Lindgren 2022-08-15  76   *
-49cd16bb573e43 Tony Lindgren 2022-08-15  77   * The posted mode bit is encoded in reg. Note that in posted mode, the write
-49cd16bb573e43 Tony Lindgren 2022-08-15  78   * pending bit must be checked. Otherwise a write on a register which has a
-49cd16bb573e43 Tony Lindgren 2022-08-15  79   * pending write will be lost.
-49cd16bb573e43 Tony Lindgren 2022-08-15  80   */
-49cd16bb573e43 Tony Lindgren 2022-08-15  81  static inline void dmtimer_write(struct omap_dm_timer *timer, u32 reg, u32 val)
-41e79b1d458477 Tony Lindgren 2022-04-08 @82  {
-49cd16bb573e43 Tony Lindgren 2022-08-15  83  	u16 wp, offset;
-49cd16bb573e43 Tony Lindgren 2022-08-15  84  
-49cd16bb573e43 Tony Lindgren 2022-08-15  85  	wp = reg >> WPSHIFT;
-49cd16bb573e43 Tony Lindgren 2022-08-15  86  	offset = reg & 0xff;
-49cd16bb573e43 Tony Lindgren 2022-08-15  87  
-49cd16bb573e43 Tony Lindgren 2022-08-15  88  	/* Wait for a possible write pending bit in posted mode */
-49cd16bb573e43 Tony Lindgren 2022-08-15  89  	if (wp && timer->posted)
-49cd16bb573e43 Tony Lindgren 2022-08-15  90  		while (readl_relaxed(timer->pend) & wp)
-41e79b1d458477 Tony Lindgren 2022-04-08  91  			cpu_relax();
-41e79b1d458477 Tony Lindgren 2022-04-08  92  
-49cd16bb573e43 Tony Lindgren 2022-08-15  93  	writel_relaxed(val, timer->func_base + offset);
-41e79b1d458477 Tony Lindgren 2022-04-08  94  }
-41e79b1d458477 Tony Lindgren 2022-04-08  95  
-
-:::::: The code at line 82 was first introduced by commit
-:::::: 41e79b1d458477212d0a880c87622bcaa69ab3ea clocksource/drivers/timer-ti-dm: Move inline functions to driver for am6
-
-:::::: TO: Tony Lindgren <tony@atomide.com>
-:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--+S02MxnRuwcq6WP5--
