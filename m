@@ -1,110 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0F819898
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:48:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB7B3C433C8;
-	Thu, 17 Aug 2023 21:48:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692308909;
-	bh=bexJ/xREDVWvZmu+lu8XL2wVApfsd/lRowROzQZizoc=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=DEBtayWkbf820tXs6npe3l1kydGysurs82ZhdJ046kH4/0n2Tga8dbgPpaWymLVVm
-	 wbAh3DD/ZYklGV8PE9XptJijDDarWoCERbZglkf6nHXnzdPvmOTi3dDia1ZIqE1+1b
-	 MHLA0S/dBZrzYmfEWqdLvRdZZpVxBKiDa/WqpZbVOtDXdFIctcoUUL6pHv8Xyizee8
-	 4FgALKGCCGjpWKoBuOt8/yQUsLkcvL+g+IBo4Sz3ri7uWbsdAhgcEEirVzPGhV0tJ0
-	 ddajm0l3zYAFXl2O4WCaJyftSIN9aFdV5pFLwBRaS13Yc9phxiI4wvVUdMZXKKGf4B
-	 uCZl4IeEREStw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D651ADC8
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 22:03:42 +0000 (UTC)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37HM0GHG008965;
+	Thu, 17 Aug 2023 22:03:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dDbHUAQVLstzKjTzLnR27yiz9xz7bG0tn4s8Wa8jZC4=;
+ b=DoFD6ZygVE9A0oxF942Dz+tsdprZ1UGwyIeJrUvRxkj5HSWNCUk2PYEaDl3iasMMgybW
+ gPFbr8R8wF0Zk2FAZ5Ysq+bVAk0PVfOBZDWAaCWIWnE3PXA6FgKmN2jQ8/P2b3fNX1yU
+ FvSwJDAVrphxhdPQlFFTnSTv15mQ3MiKUQRzaEQ2+sCJ1/61efgLRcYijUQRdy7mhvKd
+ 44WYyhGVK/UkuY39Q3HUwY21KrmVBqRJJhUQTEcmGbDsWNp6vhh5KY793JOaqnJeVX6w
+ A1cjvsJBVC35MGykHzm3NtAuM6cmc7P1KBD3Ty9Nfjxe0qvtQpVxk0phYYZ1MBTiRdV1 bg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sh2a3kf0f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 17 Aug 2023 22:03:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37HM3Ube015648
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 17 Aug 2023 22:03:30 GMT
+Received: from [10.48.241.213] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 17 Aug
+ 2023 15:03:30 -0700
+Message-ID: <c07d1893-5994-4a1d-b9a2-9f71c2598d98@quicinc.com>
+Date: Thu, 17 Aug 2023 15:03:29 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 18 Aug 2023 00:48:24 +0300
-Message-Id: <CUV5FU612TVH.3U5BOWZR013CD@suppilovahvero>
-Cc: "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, <linux-integrity@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nick Desaulniers" <ndesaulniers@google.com>, "Tom
- Rix" <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
- <llvm@lists.linux.dev>, <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] integrity: Annotate struct ima_rule_opt_list with
- __counted_by
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Kees Cook" <keescook@chromium.org>, "Mimi Zohar" <zohar@linux.ibm.com>
-X-Mailer: aerc 0.14.0
-References: <20230817210327.never.598-kees@kernel.org>
-In-Reply-To: <20230817210327.never.598-kees@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/7] wifi: cfg80211: Annotate struct cfg80211_acl_data
+ with __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>,
+        Johannes Berg
+	<johannes@sipsolutions.net>
+CC: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+	<pabeni@redhat.com>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+        <linux-hardening@vger.kernel.org>
+References: <20230817211114.never.208-kees@kernel.org>
+ <20230817211531.4193219-1-keescook@chromium.org>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20230817211531.4193219-1-keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fEVuMk04dtqHU5g-ubaMjlLfFGSGndlx
+X-Proofpoint-ORIG-GUID: fEVuMk04dtqHU5g-ubaMjlLfFGSGndlx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-17_18,2023-08-17_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ bulkscore=0 clxscore=1011 impostorscore=0 phishscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=825
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308170196
 
-On Fri Aug 18, 2023 at 12:03 AM EEST, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_b=
-y
+On 8/17/2023 2:15 PM, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUND=
-S
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
->
-> As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_lis=
-t.
+> 
+> As found with Coccinelle[1], add __counted_by for struct cfg80211_acl_data.
 > Additionally, since the element count member must be set before accessing
 > the annotated flexible array member, move its initialization earlier.
->
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/c=
-ounted_by.cocci
->
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  security/integrity/ima/ima_policy.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima=
-/ima_policy.c
-> index 69452b79686b..f69062617754 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -68,7 +68,7 @@ enum policy_rule_list { IMA_DEFAULT_POLICY =3D 1, IMA_C=
-USTOM_POLICY };
-> =20
->  struct ima_rule_opt_list {
->  	size_t count;
-> -	char *items[];
-> +	char *items[] __counted_by(count);
->  };
-> =20
->  /*
-> @@ -342,6 +342,7 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_l=
-ist(const substring_t *src)
->  		kfree(src_copy);
->  		return ERR_PTR(-ENOMEM);
->  	}
-> +	opt_list->count =3D count;
-> =20
->  	/*
->  	 * strsep() has already replaced all instances of '|' with '\0',
-> @@ -357,7 +358,6 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_l=
-ist(const substring_t *src)
->  		opt_list->items[i] =3D cur;
->  		cur =3D strchr(cur, '\0') + 1;
->  	}
-> -	opt_list->count =3D count;
-> =20
->  	return opt_list;
->  }
-> --=20
-> 2.34.1
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 
-BR, Jarkko
+
