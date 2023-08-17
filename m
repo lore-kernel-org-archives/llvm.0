@@ -1,47 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A10379;
-	Thu, 17 Aug 2023 01:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E9836A;
+	Thu, 17 Aug 2023 02:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692237356; x=1723773356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=an4OihAbsi8ksvlnSt9o6Jgc9iKxzwGw/cFTct/opko=;
-  b=g25BgoknmQK1Zz8Kg6HW3Oju1naaX2JExJX2qeiCu7q0Zz/H40eTvRvi
-   4nO4nXEMfc3ALXVHA9MYhmLhiUKjnhJhUJMxOzttlgNSI9lbIQg6Iumg0
-   qQPn8v9m0VmC0u4BGUVaKyFLOndu5lUG5unXsDGBbGwVF+HEFtAmg8vKf
-   66kohfXoJ1IinFMGfPoP2cxp+erMqTWRpfq7L0VEgI3dmATIiuvHqReI7
-   6uQd9kSoWtrxi7ZQwTsSBDGT4bAFfFG4iN72PYrW9qrp9fQhd6NTR5pQy
-   gs2vLZO0jnH2SSWXUl63bbbXtggP3QyMztHQ1+S2BN/qryGp9JuqWysla
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="376426061"
+  t=1692239892; x=1723775892;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hE+H3wI3CvbxDR/L3xbOorBY+7gADHSnAXr980hWcpo=;
+  b=G75mZ9gqPwwpbLzIeY50guW9NfAmA4dQg07jagBKo2HMS1xBFmOANqfT
+   NRmzc7pHmVrpEUrd3YfhFgEImadpXYr2J+FWgG1244SYS/3IFUz23xu1g
+   T+zpxc53+MkEv4JODdFbR74ssHBtRYaeFPf0dauoqKYUsoztZmxC0zdKQ
+   ogi+7Mz5Xj5iJCyY8/zqBc8z1+eNogeSGfPSptP51XLNEqTjv4nKIR5qa
+   ZxjX6LS/hi9gKKonRLFW4XRZGyqmX7qswAgFKPuSsQGWOERJ9ij3OyEp/
+   TlOcLiMFqovsH3O7LmRBjVC3rjySPfWOrNSjhiR9Xsz1zUCoofBMJhc4K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="439048189"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="376426061"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 18:55:55 -0700
+   d="scan'208";a="439048189"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 19:38:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848710883"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="799852828"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="848710883"
+   d="scan'208";a="799852828"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Aug 2023 18:55:52 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2023 19:38:10 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWSEq-0000i1-05;
-	Thu, 17 Aug 2023 01:55:52 +0000
-Date: Thu, 17 Aug 2023 09:55:09 +0800
+	id 1qWStl-0000kB-37;
+	Thu, 17 Aug 2023 02:38:09 +0000
+Date: Thu, 17 Aug 2023 10:38:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Asmaa Mnebhi <asmaa@nvidia.com>, andy.shevchenko@gmail.com,
-	linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
-	bgolaszewski@baylibre.com, brgl@bgdev.pl,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: Re: [PATCH v2 2/2] gpio: mlxbf3: Support add_pin_ranges()
-Message-ID: <202308170926.sCNjFYJH-lkp@intel.com>
-References: <20230816154442.8417-3-asmaa@nvidia.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot/v6.5-rc1 147/148]
+ arch/x86/include/asm/resctrl.h:149:9: error: incompatible pointer to integer
+ conversion returning 'unsigned long long (void)' from a function with result
+ type 'u64' (aka 'unsigned long long')
+Message-ID: <202308171014.V9egIIfl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,55 +47,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230816154442.8417-3-asmaa@nvidia.com>
 
-Hi Asmaa,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linusw-pinctrl/for-next brgl/gpio/for-next linus/master v6.5-rc6 next-20230816]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Asmaa-Mnebhi/pinctrl-mlxbf3-Remove-gpio_disable_free/20230816-234711
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20230816154442.8417-3-asmaa%40nvidia.com
-patch subject: [PATCH v2 2/2] gpio: mlxbf3: Support add_pin_ranges()
-config: i386-buildonly-randconfig-r005-20230817 (https://download.01.org/0day-ci/archive/20230817/202308170926.sCNjFYJH-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.5-rc1
+head:   3feae02a8f8cf9aca5d7d1915ea1e026c9d3d8ec
+commit: d2210e80c29bdd622cb88af630aa4de57a01181c [147/148] fs/resctrl: Add cranky debug for reading CPU msr values
+config: x86_64-randconfig-x072-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171014.V9egIIfl-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308170926.sCNjFYJH-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171014.V9egIIfl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308170926.sCNjFYJH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308171014.V9egIIfl-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpio/gpio-mlxbf3.c:164:6: warning: unused variable 'ret' [-Wunused-variable]
-           int ret;
-               ^
-   1 warning generated.
+   In file included from fs/proc/base.c:97:
+   In file included from include/linux/resctrl.h:12:
+   arch/x86/include/asm/resctrl.h:149:33: error: too few arguments provided to function-like macro invocation
+           return rdmsr(MSR_IA32_PQR_ASSOC);
+                                          ^
+   arch/x86/include/asm/paravirt.h:210:9: note: macro 'rdmsr' defined here
+   #define rdmsr(msr, val1, val2)                  \
+           ^
+   In file included from fs/proc/base.c:97:
+   In file included from include/linux/resctrl.h:12:
+   arch/x86/include/asm/resctrl.h:149:9: error: use of undeclared identifier 'rdmsr'; did you mean 'rdtsc'?
+           return rdmsr(MSR_IA32_PQR_ASSOC);
+                  ^~~~~
+                  rdtsc
+   arch/x86/include/asm/msr.h:180:43: note: 'rdtsc' declared here
+   static __always_inline unsigned long long rdtsc(void)
+                                             ^
+   In file included from fs/proc/base.c:97:
+   In file included from include/linux/resctrl.h:12:
+>> arch/x86/include/asm/resctrl.h:149:9: error: incompatible pointer to integer conversion returning 'unsigned long long (void)' from a function with result type 'u64' (aka 'unsigned long long') [-Wint-conversion]
+           return rdmsr(MSR_IA32_PQR_ASSOC);
+                  ^~~~~
+   3 errors generated.
+--
+   In file included from fs/resctrl/monitor.c:22:
+   In file included from fs/resctrl/internal.h:5:
+   In file included from include/linux/resctrl.h:12:
+   arch/x86/include/asm/resctrl.h:149:33: error: too few arguments provided to function-like macro invocation
+           return rdmsr(MSR_IA32_PQR_ASSOC);
+                                          ^
+   arch/x86/include/asm/paravirt.h:210:9: note: macro 'rdmsr' defined here
+   #define rdmsr(msr, val1, val2)                  \
+           ^
+   In file included from fs/resctrl/monitor.c:22:
+   In file included from fs/resctrl/internal.h:5:
+   In file included from include/linux/resctrl.h:12:
+   arch/x86/include/asm/resctrl.h:149:9: error: use of undeclared identifier 'rdmsr'; did you mean 'rdtsc'?
+           return rdmsr(MSR_IA32_PQR_ASSOC);
+                  ^~~~~
+                  rdtsc
+   arch/x86/include/asm/msr.h:180:43: note: 'rdtsc' declared here
+   static __always_inline unsigned long long rdtsc(void)
+                                             ^
+   In file included from fs/resctrl/monitor.c:22:
+   In file included from fs/resctrl/internal.h:5:
+   In file included from include/linux/resctrl.h:12:
+>> arch/x86/include/asm/resctrl.h:149:9: error: incompatible pointer to integer conversion returning 'unsigned long long (void)' from a function with result type 'u64' (aka 'unsigned long long') [-Wint-conversion]
+           return rdmsr(MSR_IA32_PQR_ASSOC);
+                  ^~~~~
+   fs/resctrl/monitor.c:590:23: warning: variable 'r' set but not used [-Wunused-but-set-variable]
+           struct rdt_resource *r;
+                                ^
+   1 warning and 3 errors generated.
 
 
-vim +/ret +164 drivers/gpio/gpio-mlxbf3.c
+vim +149 arch/x86/include/asm/resctrl.h
 
-   160	
-   161	static int mlxbf3_gpio_add_pin_ranges(struct gpio_chip *chip)
-   162	{
-   163		unsigned int id = 0;
- > 164		int ret;
-   165	
-   166		if (chip->ngpio % MLXBF3_GPIO_MAX_PINS_PER_BLOCK)
-   167			id = 1;
-   168	
-   169		return gpiochip_add_pin_range(chip, "MLNXBF34:00",
-   170				chip->base, id * MLXBF3_GPIO_MAX_PINS_PER_BLOCK,
-   171				chip->ngpio);
-   172	}
-   173	
+   146	
+   147	static inline u64 resctrl_arch_get_cpu_msr(void)
+   148	{
+ > 149		return rdmsr(MSR_IA32_PQR_ASSOC);
+   150	}
+   151	
 
 -- 
 0-DAY CI Kernel Test Service
