@@ -1,117 +1,122 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3703B168C1
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 17:02:36 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1bddac1b7bfso414585ad.0
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 10:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692291756; x=1692896556;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Of6VU25h9o3MQFapeYfF0CWZ6iyOJM3AV0c4Y0pZ9cU=;
-        b=SFYhf7Oz8UygdI5YwpKRoNs+ZXAjO5sfO6ikcV/OhTNMscCt40x0lD0mjI1W9025YN
-         A0bkeVTf0o5KpnbkeZDJOHyk2POgEKEmARdNxasavIOmfnfOz0TyzBm9fo1VCD3JwPiB
-         OS3XEwNdNlmJBQ+pjG1wh8ag9tz/SIwbh4GBo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692291756; x=1692896556;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Of6VU25h9o3MQFapeYfF0CWZ6iyOJM3AV0c4Y0pZ9cU=;
-        b=cy4B5AtTFwYPQiyIrG4/n+wa7AEIT2+WxzhuEwyD51pSnqXd3NVoSPRVED4OqHDeB9
-         /efcwD3Sn1S/mnAaScMI7s7LZSgDyKy7uL/yvFyIUTEl2XoaF6VsPl8KLoByhBsDXQMh
-         1hh4e3ZmAMIeoJm+pX585e/u9YHG4oEiqiV8jvkYjtfxXIfxz9UQOONCaDSXCRmchXpX
-         pbLoQwITgurWb9vQWAnaHnzqFPg0J4yx3HEkEpngLxVfDAFV4EpjpnjnueS6VCsGIn5X
-         73zH0nP+fIL1AsmX4JvfjlR6ad8UaRZrevWy29IqY5BLqml8+k/AFdyKDkkCER66FtGK
-         ppXQ==
-X-Gm-Message-State: AOJu0YwT6YxiK+7RVLAObdzCLIoaFqRaKulprt0Q6hK7oZ0QjQlTuj2I
-	cxGUfAenImE7t0gB2tej346epg==
-X-Google-Smtp-Source: AGHT+IGI+a/TGyaY9qq/8RhsQ7+ZyIRNHF9G7HFpGWCoFP17tKGyxWmLNtgQ1mqMX5B+KZCAWgxUvA==
-X-Received: by 2002:a17:902:dace:b0:1bc:4b77:c74 with SMTP id q14-20020a170902dace00b001bc4b770c74mr4865416plx.0.1692291756228;
-        Thu, 17 Aug 2023 10:02:36 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ju17-20020a170903429100b001bdb0483e65sm13952918plb.265.2023.08.17.10.02.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 10:02:35 -0700 (PDT)
-Date: Thu, 17 Aug 2023 10:02:35 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Florian Westphal <fw@strlen.de>
-Cc: "GONG, Ruiqi" <gongruiqi1@huawei.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [netfilter-nf-next:testing 2/9]
- ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field
- 'target' with variable sized type 'struct ebt_entry_target' not at the end
- of a struct or class is a GNU extension
-Message-ID: <202308171000.C97EEC7@keescook>
-References: <202308171249.g1ywxhII-lkp@intel.com>
- <202308162257.F7876776C9@keescook>
- <20230817082618.GE4312@breakpoint.cc>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFEA014F65;
+	Thu, 17 Aug 2023 17:06:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6040DC433C8;
+	Thu, 17 Aug 2023 17:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692291968;
+	bh=sen9TQXr/zKZqojODsbJSwqZD2qAsaFDcJAkfDcxUFY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=coIcBhTXB6fCF/db+6zSqXqQ5KtIv+w4xBb8LlQozLmN1p48zaz+RgUf1Lpw/mTEV
+	 JuRaHCKOCpd3juvxvi6hA73rd6+5ZHeL+z/ksusZhcNWu4u3WEw1VK48/XsN9fDDTF
+	 lDdUWpScIi1IXyt6dDHmCmGxdRz303r/UAXM+3Y212v1mAip0pd4sI9KK2ggEliBsh
+	 PE5EKt2uXZu7Ji54RN965mF6m3iX8i1tq+LHBRPVjtR7c9pqQFO+a/hSCYDUt8pJcH
+	 TGhQEZAF9H8YtX/FW3wabvPvSxHsByWtmh+0NCiKmuGDPJ75QLEMMygHjgL8yW0HCY
+	 k7DMmCLIbdXuw==
+Date: Thu, 17 Aug 2023 18:06:02 +0100
+From: Lee Jones <lee@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Artur Weber <aweber.kernel@gmail.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>
+Subject: Re: [linux-next:master 4727/8441]
+ drivers/video/backlight/lp855x_bl.c:252:7: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <20230817170602.GJ986605@google.com>
+References: <202308091728.NEJhgUPP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230817082618.GE4312@breakpoint.cc>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202308091728.NEJhgUPP-lkp@intel.com>
 
-On Thu, Aug 17, 2023 at 10:26:18AM +0200, Florian Westphal wrote:
-> Kees Cook <keescook@chromium.org> wrote:
-> > On Thu, Aug 17, 2023 at 01:03:20PM +0800, kernel test robot wrote:
-> > > tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
-> > > head:   015e2d9101d3713c7bee16dccad171df04a3bbd5
-> > > commit: 61b9e6bd48a6317c0a44ee4f3fecdec9de5baa9e [2/9] netfilter: ebtables: replace zero-length array members
-> > > config: i386-buildonly-randconfig-r004-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/config)
-> > > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> > > reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202308171249.g1ywxhII-lkp@intel.com/
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > >    In file included from <built-in>:1:
-> > > >> ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-> > >            struct ebt_entry_target target;
-> > >                                    ^
-> > >    1 warning generated.
-> > 
-> > Eww, it looks like "struct ebt_entry_target" is used _within_ another
-> > struct:
-> > 
-> > struct ebt_standard_target {
-> >         struct ebt_entry_target target;
-> >         int verdict;
-> > };
-> 
-> Yes, same as xt_standard_target.
-> 
-> > These have been fixed in the past in a variety of ways -- it all depends
-> > on how userspace is using them. In looking at Debian Code Search:
-> > https://codesearch.debian.net/search?q=struct+ebt_standard_target&literal=1
-> > 
-> > It is exclusively doing casts and looking at the "verdict" member. So
-> > the easiest conversion might be this:
-> > 
-> >  struct ebt_standard_target {
-> > -       struct ebt_entry_target target;
-> > +       unsigned char hdr[sizeof(struct ebt_entry_target)];
-> >         int verdict;
-> 
-> I don't think its worth doing all of this.
-> 
-> Can't we just keep it as-is and drop the relevant hunk from the patch?
+Arthur,
 
-For now, yeah. But we'll need to find a solution as flex-array
-structures overlapping variables is considered deprecated (it can lead
-to ambiguous sizing results). But as long as the kernel itself doesn't
-use struct ebt_standard_target, we can kick the can down the road a bit
-more. :)
+Please submit a follow-up patch or I'll have to revert it.
+
+Thanks.
+
+On Wed, 09 Aug 2023, kernel test robot wrote:
+
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   21ef7b1e17d039053edaeaf41142423810572741
+> commit: 5145531be5fbad0e914d1dc1cbd392d7b756abaa [4727/8441] backlight: lp855x: Catch errors when changing brightness
+> config: x86_64-buildonly-randconfig-r002-20230808 (https://download.01.org/0day-ci/archive/20230809/202308091728.NEJhgUPP-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce: (https://download.01.org/0day-ci/archive/20230809/202308091728.NEJhgUPP-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308091728.NEJhgUPP-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/video/backlight/lp855x_bl.c:252:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>            else if (lp->mode == REGISTER_BASED)
+>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/compiler.h:55:28: note: expanded from macro 'if'
+>    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+>    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+>                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/video/backlight/lp855x_bl.c:256:9: note: uninitialized use occurs here
+>            return ret;
+>                   ^~~
+>    drivers/video/backlight/lp855x_bl.c:252:7: note: remove the 'if' if its condition is always true
+>            else if (lp->mode == REGISTER_BASED)
+>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/compiler.h:55:23: note: expanded from macro 'if'
+>    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>                          ^
+>    drivers/video/backlight/lp855x_bl.c:244:9: note: initialize the variable 'ret' to silence this warning
+>            int ret;
+>                   ^
+>                    = 0
+>    1 warning generated.
+> 
+> 
+> vim +252 drivers/video/backlight/lp855x_bl.c
+> 
+> 8cc9764c9c7d01 Kim, Milo    2012-12-17  239  
+> 7be865ab8634d4 Kim, Milo    2012-03-23  240  static int lp855x_bl_update_status(struct backlight_device *bl)
+> 7be865ab8634d4 Kim, Milo    2012-03-23  241  {
+> 7be865ab8634d4 Kim, Milo    2012-03-23  242  	struct lp855x *lp = bl_get_data(bl);
+> 61c1c6147f69d8 Sean Paul    2015-05-11  243  	int brightness = bl->props.brightness;
+> 5145531be5fbad Artur Weber  2023-07-14  244  	int ret;
+> 7be865ab8634d4 Kim, Milo    2012-03-23  245  
+> 9f0a511f4a227c Shingo Nakao 2013-07-02  246  	if (bl->props.state & (BL_CORE_SUSPENDED | BL_CORE_FBBLANK))
+> 61c1c6147f69d8 Sean Paul    2015-05-11  247  		brightness = 0;
+> 7be865ab8634d4 Kim, Milo    2012-03-23  248  
+> 61c1c6147f69d8 Sean Paul    2015-05-11  249  	if (lp->mode == PWM_BASED)
+> 5145531be5fbad Artur Weber  2023-07-14  250  		ret = lp855x_pwm_ctrl(lp, brightness,
+> 5145531be5fbad Artur Weber  2023-07-14  251  				      bl->props.max_brightness);
+> 61c1c6147f69d8 Sean Paul    2015-05-11 @252  	else if (lp->mode == REGISTER_BASED)
+> 5145531be5fbad Artur Weber  2023-07-14  253  		ret = lp855x_write_byte(lp, lp->cfg->reg_brightness,
+> 5145531be5fbad Artur Weber  2023-07-14  254  					(u8)brightness);
+> 7be865ab8634d4 Kim, Milo    2012-03-23  255  
+> 5145531be5fbad Artur Weber  2023-07-14  256  	return ret;
+> 7be865ab8634d4 Kim, Milo    2012-03-23  257  }
+> 7be865ab8634d4 Kim, Milo    2012-03-23  258  
+> 
+> :::::: The code at line 252 was first introduced by commit
+> :::::: 61c1c6147f69d8dea31fd133d2ec0b1594c9a3eb backlight: lp855x: Don't clear level on suspend/blank
+> 
+> :::::: TO: Sean Paul <seanpaul@chromium.org>
+> :::::: CC: Lee Jones <lee.jones@linaro.org>
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
 -- 
-Kees Cook
+Lee Jones [李琼斯]
