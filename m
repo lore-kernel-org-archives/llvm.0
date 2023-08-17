@@ -1,159 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C068C8F73;
-	Thu, 17 Aug 2023 08:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692261669; x=1723797669;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LZfkMZVbekI1ttvSBvdXxPUIZDU8FC3RkUWcDtMQHWw=;
-  b=NwQsYC8K5z0zy/nIfvsVZNucNBCWvGfTrtF8/X/tXXJhNdOIoW9PKgZ/
-   fgwbPVCKnh4EdTnF1X5C/TWjIj9wXPrqa6EO0IoE3MkfGSM6cinMmu6SR
-   PX5JrN7ACXcDo8gqBnywfkEY9cjGWgEb3SX2USf5C7HRdAtEr89ZPxiWJ
-   LcBnez9/htBU9la+NMg31V/rt03AkUR0Ywl1DlATf0aJ5V7+2eIS929la
-   E2CxkUeQizexTO8onS04yXYEdbI/f4VsirnIx/iSSKvEFb/qFL3gf7blP
-   sr7UirNH/99ZPpBGuX3qBw17auG47jEAK1jXNYS3s3CL4x/BGHIwaaNaI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="352341268"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="352341268"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 01:41:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="824546426"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="824546426"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Aug 2023 01:41:02 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWYYv-0000xd-36;
-	Thu, 17 Aug 2023 08:41:01 +0000
-Date: Thu, 17 Aug 2023 16:40:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/at_hdmac.c:240: warning: Function parameter or member
- 'sglen' not described in 'at_desc'
-Message-ID: <202308171622.bAzP2Yv3-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11EC8F73
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 08:43:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 74A5A1BF20D;
+	Thu, 17 Aug 2023 08:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1692261798;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UZTPzGWR823YG5jFJrtbSl0SkHcpjEiMeVAQSp30Zyg=;
+	b=AXCaItneDiKmQZVzmSpvvVUGf/dhoyBk23IuegiE10XZWy/0yMUgAyYaoC7FPkhcDpLQv5
+	KPgswpVotS+ApFCCfTjOz1oKns26teIl1mvr/mvXRlVbm2UXc96N7FIhh/3HKVkeT8b9Ai
+	mjQ45ai64+wazBScB76VV5fmQacVd9MXJM2jFHyzhWNHNcgkZfPhDy6beiwYw75yRb4V9X
+	gENUL2m3FBeh+k7506ftz7X/52ysnNTgrF6t+VbruaaVszkz5L/ao83cBdNCKW96K5GoPq
+	aIlueyUYxwkChF4XXUc8g5a79Ay90iySe6Bgg3mNICpvSFXYqxq7TSxFoOvWig==
+Date: Thu, 17 Aug 2023 10:43:16 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Stefan Agner <stefan@agner.ch>, Richard Weinberger <richard@nod.at>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>, linux-mtd@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] mtd: rawnand: fix -Wvoid-pointer-to-enum-cast warning
+Message-ID: <20230817104316.0ac684d0@xps-13>
+In-Reply-To: <20230815-void-drivers-mtd-nand-raw-vf610_nfc-v1-1-7cc65314c56c@google.com>
+References: <20230815-void-drivers-mtd-nand-raw-vf610_nfc-v1-1-7cc65314c56c@google.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
-commit: ac803b56860f6506c55a3c9330007837e3f4edda dmaengine: at_hdmac: Convert driver to use virt-dma
-date:   9 months ago
-config: arm-randconfig-r046-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171622.bAzP2Yv3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171622.bAzP2Yv3-lkp@intel.com/reproduce)
+Hi Justin,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308171622.bAzP2Yv3-lkp@intel.com/
+justinstitt@google.com wrote on Tue, 15 Aug 2023 20:58:47 +0000:
 
-All warnings (new ones prefixed by >>):
+> When building with clang 18 I see the following warning:
+> |       drivers/mtd/nand/raw/vf610_nfc.c:853:17: warning: cast to smaller=
+ integer
+> |               type 'enum vf610_nfc_variant' from 'const void *' [-Wvoid=
+-pointer-to-enum-cast]
+> |         853 |         nfc->variant =3D (enum vf610_nfc_variant)of_id->d=
+ata;
+>=20
+> This is due to the fact that `of_id->data` is a void* while `enum
+> vf610_nfc_variant` has the size of an int. This leads to truncation and
+> possible data loss.
 
->> drivers/dma/at_hdmac.c:240: warning: Function parameter or member 'sglen' not described in 'at_desc'
-   drivers/dma/at_hdmac.c:240: warning: Function parameter or member 'boundary' not described in 'at_desc'
-   drivers/dma/at_hdmac.c:240: warning: Function parameter or member 'dst_hole' not described in 'at_desc'
-   drivers/dma/at_hdmac.c:240: warning: Function parameter or member 'src_hole' not described in 'at_desc'
-   drivers/dma/at_hdmac.c:240: warning: Function parameter or member 'memset_buffer' not described in 'at_desc'
-   drivers/dma/at_hdmac.c:240: warning: Function parameter or member 'memset_paddr' not described in 'at_desc'
-   drivers/dma/at_hdmac.c:240: warning: Function parameter or member 'memset_vaddr' not described in 'at_desc'
-   drivers/dma/at_hdmac.c:249: warning: cannot understand function prototype: 'enum atc_status '
->> drivers/dma/at_hdmac.c:284: warning: Function parameter or member 'cyclic' not described in 'at_dma_chan'
-   drivers/dma/at_hdmac.c:348: warning: Function parameter or member 'regs' not described in 'at_dma'
-   drivers/dma/at_hdmac.c:348: warning: Function parameter or member 'memset_pool' not described in 'at_dma'
+Can you please update this commit log to what Krzysztof suggested in
+the "mtd: maps: fix -W<foo> warning" thread?
 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Note: There is likely no data loss actually occurring here due to the
+> fact that `enum vf610_nfc_variant` only has a few fields which are not
+> nearly large enough to cause data loss. This patch helps towards the
+> goal of eventually enabling this warning.
+>=20
+> Also, should we use `unsigned long` here instead of `uintptr_t`? I've
+> seen maintainers request both and I'm flipping a coin here.
 
-vim +240 drivers/dma/at_hdmac.c
+I'm fine with uintptr_t.
 
-ac803b56860f65 Tudor Ambarus 2022-10-25  216  
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  217  /**
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  218   * struct at_desc - software descriptor
-ac803b56860f65 Tudor Ambarus 2022-10-25  219   * @vd: pointer to the virtual dma descriptor.
-ac803b56860f65 Tudor Ambarus 2022-10-25  220   * @atchan: pointer to the atmel dma channel.
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  221   * @total_len: total transaction byte count
-ac803b56860f65 Tudor Ambarus 2022-10-25  222   * @sg_len: number of sg entries.
-ac803b56860f65 Tudor Ambarus 2022-10-25  223   * @sg: array of sgs.
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  224   */
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  225  struct at_desc {
-ac803b56860f65 Tudor Ambarus 2022-10-25  226  	struct				virt_dma_desc vd;
-ac803b56860f65 Tudor Ambarus 2022-10-25  227  	struct				at_dma_chan *atchan;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  228  	size_t				total_len;
-ac803b56860f65 Tudor Ambarus 2022-10-25  229  	unsigned int			sglen;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  230  	/* Interleaved data */
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  231  	size_t				boundary;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  232  	size_t				dst_hole;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  233  	size_t				src_hole;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  234  
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  235  	/* Memset temporary buffer */
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  236  	bool				memset_buffer;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  237  	dma_addr_t			memset_paddr;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  238  	int				*memset_vaddr;
-ac803b56860f65 Tudor Ambarus 2022-10-25  239  	struct atdma_sg			sg[];
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25 @240  };
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  241  
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  242  /*--  Channels  --------------------------------------------------------*/
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  243  
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  244  /**
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  245   * atc_status - information bits stored in channel status flag
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  246   *
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  247   * Manipulated with atomic operations.
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  248   */
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  249  enum atc_status {
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  250  	ATC_IS_PAUSED = 1,
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  251  	ATC_IS_CYCLIC = 24,
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  252  };
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  253  
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  254  /**
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  255   * struct at_dma_chan - internal representation of an Atmel HDMAC channel
-ac803b56860f65 Tudor Ambarus 2022-10-25  256   * @vc: virtual dma channel entry.
-ac803b56860f65 Tudor Ambarus 2022-10-25  257   * @atdma: pointer to the driver data.
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  258   * @ch_regs: memory mapped register base
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  259   * @mask: channel index in a mask
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  260   * @per_if: peripheral interface
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  261   * @mem_if: memory interface
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  262   * @status: transmit status information from irq/prep* functions
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  263   *                to tasklet (use atomic operations)
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  264   * @save_cfg: configuration register that is saved on suspend/resume cycle
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  265   * @save_dscr: for cyclic operations, preserve next descriptor address in
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  266   *             the cyclic list on suspend/resume cycle
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  267   * @dma_sconfig: configuration for slave transfers, passed via
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  268   * .device_config
-ac803b56860f65 Tudor Ambarus 2022-10-25  269   * @desc: pointer to the atmel dma descriptor.
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  270   */
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  271  struct at_dma_chan {
-ac803b56860f65 Tudor Ambarus 2022-10-25  272  	struct virt_dma_chan	vc;
-ac803b56860f65 Tudor Ambarus 2022-10-25  273  	struct at_dma		*atdma;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  274  	void __iomem		*ch_regs;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  275  	u8			mask;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  276  	u8			per_if;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  277  	u8			mem_if;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  278  	unsigned long		status;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  279  	u32			save_cfg;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  280  	u32			save_dscr;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  281  	struct dma_slave_config	dma_sconfig;
-ac803b56860f65 Tudor Ambarus 2022-10-25  282  	bool			cyclic;
-ac803b56860f65 Tudor Ambarus 2022-10-25  283  	struct at_desc		*desc;
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25 @284  };
-5cecadc3e2a4fb Tudor Ambarus 2022-10-25  285  
-
-:::::: The code at line 240 was first introduced by commit
-:::::: 5cecadc3e2a4fb72ab37d9420df0a9e1179b8a3e dmaengine: at_hdmac: Keep register definitions and structures private to at_hdmac.c
-
-:::::: TO: Tudor Ambarus <tudor.ambarus@microchip.com>
-:::::: CC: Vinod Koul <vkoul@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Miqu=C3=A8l
