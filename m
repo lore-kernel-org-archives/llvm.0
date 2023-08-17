@@ -1,44 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66778CA58;
-	Thu, 17 Aug 2023 07:54:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C622DDDD;
+	Thu, 17 Aug 2023 08:07:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692258882; x=1723794882;
+  t=1692259668; x=1723795668;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JjqfJzbjuYdRYPECagrfG7wvT+iC8uA0V847U6jle+w=;
-  b=YwoTdHTjwDTZjt5ntl8v3mA2rOqbgft5PvfANdllL/lfQKMMOGatIvFt
-   kud75XUBJQeco0SUDtFjGQEZNIvI0FWxFFMLnNh8lTJ0XawpfaDGqTyOI
-   XC7LCwaQBen7qjd0P5ocIyMM0mU6ambjpvSxjO4TDxhBu5sQyPcoide+K
-   0v/G8mvTgg+kKcrOeBzWHyAuGL7KmsepIk4SuUnCwaUc0RU7Y06EwiMJ2
-   tXs+Kq0ofIvxLvSyS2MTUNq5wxp9u2U/M8bEEOiZdTL5nXhm5BEBzgqnj
-   8efQM9ECzRN3gESPJEz4VSeTjho5370Y0DW4lM6dTzcDHiojPKDb8zskb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="357707712"
+  bh=8KoWn4BGp7AzKYi1rx1zgLWjbrlHcyfkYk/K8VIcOus=;
+  b=KrIv1PWq4ZOziDCC7smAlxC7tUQEGTSWkwop4U1RZn0CD4TnADmJgxUj
+   Yu7/2biziQb7kWgQJ74GP6GiyexYYYqJYxz7264EgpRasIZnGbdRr/RJp
+   YGYTJ5ZHpU9BravbPhJK6WY44h/SzC6TiT/bUAvkYOQ9VlhPIBgpooOhx
+   lgtTEgJkgmuJ2lYyMJfSMzjE+7JE4bhjksxGtldQM6yTk4BxYDj5VU2bI
+   W27YJ5YVMa5D8b8xykpyG53WNc6WWpqCn4V5PfTz5un9tzY7Ye3ZbWDmn
+   hsnOKSGlI5c0Mz30Ikd+BXi+dgz4GlOsiTspUjAkPU12QuHqfoD2TGRza
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="459101099"
 X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="357707712"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 00:54:41 -0700
+   d="scan'208";a="459101099"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 01:07:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="711435491"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="799935018"
 X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="711435491"
+   d="scan'208";a="799935018"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2023 00:54:39 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 17 Aug 2023 01:07:44 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWXq3-0000v7-08;
-	Thu, 17 Aug 2023 07:54:39 +0000
-Date: Thu, 17 Aug 2023 15:54:37 +0800
+	id 1qWY2f-0000vv-2Z;
+	Thu, 17 Aug 2023 08:07:42 +0000
+Date: Thu, 17 Aug 2023 16:06:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To: Shashank Sharma <shashank.sharma@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Subject: drivers/i2c/busses/i2c-cadence.c:218: warning: Function parameter or
- member 'rinfo' not described in 'cdns_i2c'
-Message-ID: <202308171510.bKHBcZQW-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: [linux-next:master 6742/10848]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c:123: warning: Function
+ parameter or member 'doorbell_index' not described in
+ 'amdgpu_doorbell_index_on_bar'
+Message-ID: <202308171521.DFEZZNuE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,89 +50,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
-commit: 58b924241d0a23eee8e86dd9e6f5dacd01c82e62 i2c: cadence: Add standard bus recovery support
-date:   11 months ago
-config: riscv-randconfig-r002-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171510.bKHBcZQW-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171510.bKHBcZQW-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   47762f08697484cf0c2f2904b8c52375ed26c8cb
+commit: d124aa0ac96358042ba34df091a3bfa6e77fcf6f [6742/10848] drm/amdgpu: get absolute offset from doorbell index
+config: riscv-randconfig-r036-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171521.DFEZZNuE-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171521.DFEZZNuE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308171510.bKHBcZQW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308171521.DFEZZNuE-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-cadence.c:218: warning: Function parameter or member 'rinfo' not described in 'cdns_i2c'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c:123: warning: Function parameter or member 'doorbell_index' not described in 'amdgpu_doorbell_index_on_bar'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c:123: warning: Excess function parameter 'db_index' description in 'amdgpu_doorbell_index_on_bar'
 
 
-vim +218 drivers/i2c/busses/i2c-cadence.c
+vim +123 drivers/gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c
 
-1a351b10b9671f Radu Pirea           2020-01-06  163  
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  164  /**
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  165   * struct cdns_i2c - I2C device private data structure
-30e31a1fbc1fc0 Shubhrajyoti Datta   2016-03-07  166   *
-30e31a1fbc1fc0 Shubhrajyoti Datta   2016-03-07  167   * @dev:		Pointer to device structure
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  168   * @membase:		Base address of the I2C device
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  169   * @adap:		I2C adapter instance
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  170   * @p_msg:		Message pointer
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  171   * @err_status:		Error status in Interrupt Status Register
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  172   * @xfer_done:		Transfer complete status
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  173   * @p_send_buf:		Pointer to transmit buffer
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  174   * @p_recv_buf:		Pointer to receive buffer
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  175   * @send_count:		Number of bytes still expected to send
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  176   * @recv_count:		Number of bytes still expected to receive
-9fae82e1acda8d Harini Katakam       2014-12-12  177   * @curr_recv_count:	Number of bytes to be received in current transfer
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  178   * @irq:		IRQ number
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  179   * @input_clk:		Input clock to I2C controller
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  180   * @i2c_clk:		Maximum I2C clock speed
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  181   * @bus_hold_flag:	Flag used in repeated start for clearing HOLD bit
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  182   * @clk:		Pointer to struct clk
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  183   * @clk_rate_change_nb:	Notifier block for clock rate changes
-63cab195bf4986 Anurag Kumar Vulisha 2015-07-10  184   * @quirks:		flag for broken hold bit usage in r1p10
-8b51a8e64443b9 Shubhrajyoti Datta   2021-07-13  185   * @ctrl_reg:		Cached value of the control register.
-1a351b10b9671f Radu Pirea           2020-01-06  186   * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
-1a351b10b9671f Radu Pirea           2020-01-06  187   * @slave:		Registered slave instance.
-1a351b10b9671f Radu Pirea           2020-01-06  188   * @dev_mode:		I2C operating role(master/slave).
-1a351b10b9671f Radu Pirea           2020-01-06  189   * @slave_state:	I2C Slave state(idle/read/write).
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  190   */
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  191  struct cdns_i2c {
-7fa32329ca0314 Shubhrajyoti Datta   2015-11-24  192  	struct device		*dev;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  193  	void __iomem *membase;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  194  	struct i2c_adapter adap;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  195  	struct i2c_msg *p_msg;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  196  	int err_status;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  197  	struct completion xfer_done;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  198  	unsigned char *p_send_buf;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  199  	unsigned char *p_recv_buf;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  200  	unsigned int send_count;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  201  	unsigned int recv_count;
-9fae82e1acda8d Harini Katakam       2014-12-12  202  	unsigned int curr_recv_count;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  203  	int irq;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  204  	unsigned long input_clk;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  205  	unsigned int i2c_clk;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  206  	unsigned int bus_hold_flag;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  207  	struct clk *clk;
-df8eb5691c48d3 Soren Brinkmann      2014-04-04  208  	struct notifier_block clk_rate_change_nb;
-63cab195bf4986 Anurag Kumar Vulisha 2015-07-10  209  	u32 quirks;
-8b51a8e64443b9 Shubhrajyoti Datta   2021-07-13  210  	u32 ctrl_reg;
-58b924241d0a23 Shubhrajyoti Datta   2022-07-28  211  	struct i2c_bus_recovery_info rinfo;
-1a351b10b9671f Radu Pirea           2020-01-06  212  #if IS_ENABLED(CONFIG_I2C_SLAVE)
-1a351b10b9671f Radu Pirea           2020-01-06  213  	u16 ctrl_reg_diva_divb;
-1a351b10b9671f Radu Pirea           2020-01-06  214  	struct i2c_client *slave;
-1a351b10b9671f Radu Pirea           2020-01-06  215  	enum cdns_i2c_mode dev_mode;
-1a351b10b9671f Radu Pirea           2020-01-06  216  	enum cdns_i2c_slave_state slave_state;
-1a351b10b9671f Radu Pirea           2020-01-06  217  #endif
-63cab195bf4986 Anurag Kumar Vulisha 2015-07-10 @218  };
-63cab195bf4986 Anurag Kumar Vulisha 2015-07-10  219  
-
-:::::: The code at line 218 was first introduced by commit
-:::::: 63cab195bf498676619951e81ad5791e9d47c420 i2c: removed work arounds in i2c driver for Zynq Ultrascale+ MPSoC
-
-:::::: TO: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-:::::: CC: Wolfram Sang <wsa@the-dreams.de>
+   110	
+   111	/**
+   112	 * amdgpu_doorbell_index_on_bar - Find doorbell's absolute offset in BAR
+   113	 *
+   114	 * @adev: amdgpu_device pointer
+   115	 * @db_bo: doorbell object's bo
+   116	 * @db_index: doorbell relative index in this doorbell object
+   117	 *
+   118	 * returns doorbell's absolute index in BAR
+   119	 */
+   120	uint32_t amdgpu_doorbell_index_on_bar(struct amdgpu_device *adev,
+   121					       struct amdgpu_bo *db_bo,
+   122					       uint32_t doorbell_index)
+ > 123	{
+   124		int db_bo_offset;
+   125	
+   126		db_bo_offset = amdgpu_bo_gpu_offset_no_check(db_bo);
+   127	
+   128		/* doorbell index is 32 bit but doorbell's size is 64-bit, so *2 */
+   129		return db_bo_offset / sizeof(u32) + doorbell_index * 2;
+   130	}
+   131	
 
 -- 
 0-DAY CI Kernel Test Service
