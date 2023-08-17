@@ -1,44 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E9836A;
-	Thu, 17 Aug 2023 02:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7478E638;
+	Thu, 17 Aug 2023 03:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692239892; x=1723775892;
+  t=1692244274; x=1723780274;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hE+H3wI3CvbxDR/L3xbOorBY+7gADHSnAXr980hWcpo=;
-  b=G75mZ9gqPwwpbLzIeY50guW9NfAmA4dQg07jagBKo2HMS1xBFmOANqfT
-   NRmzc7pHmVrpEUrd3YfhFgEImadpXYr2J+FWgG1244SYS/3IFUz23xu1g
-   T+zpxc53+MkEv4JODdFbR74ssHBtRYaeFPf0dauoqKYUsoztZmxC0zdKQ
-   ogi+7Mz5Xj5iJCyY8/zqBc8z1+eNogeSGfPSptP51XLNEqTjv4nKIR5qa
-   ZxjX6LS/hi9gKKonRLFW4XRZGyqmX7qswAgFKPuSsQGWOERJ9ij3OyEp/
-   TlOcLiMFqovsH3O7LmRBjVC3rjySPfWOrNSjhiR9Xsz1zUCoofBMJhc4K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="439048189"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="439048189"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 19:38:11 -0700
+  bh=yZfgjuR8TyRHxDKxLFVns2Sc+NHfA9nImCmP5vX4I30=;
+  b=ShBmuuj/k/8L8xXJDdaNhY+fqmmKuh5u3kgJMNgkSZLgB1ivcY4HElMF
+   N+kBli1ihozkzYfwe31pJBGkN7mTx3OMp97xs08tGRfidrUaDmzBaB0j3
+   MOIckPm1H9krJc37y8zCDqMtep6JXLWuEF9OluW/J3UdVXyMo6jo/Pi9X
+   rQ75XaRlDRuMsLRudHf5gShGWTGqaX/KshPrwvlwy1ivv2gUfJXi0ajVM
+   LJL3Kp/I8hXCz4jsnqAw9hqmGV6T+/mih0zAZcHQ1xGAEa2p6otypKDS4
+   wVdQ8GYaReLecYsoUoZHe9ptbQLLF6RITYZyYnZQj7d8F+Vxr/RH3bjs4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="353020848"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="353020848"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 20:51:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="799852828"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="799852828"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="763875569"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="763875569"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2023 19:38:10 -0700
+  by orsmga008.jf.intel.com with ESMTP; 16 Aug 2023 20:51:11 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWStl-0000kB-37;
-	Thu, 17 Aug 2023 02:38:09 +0000
-Date: Thu, 17 Aug 2023 10:38:09 +0800
+	id 1qWU2R-0000lz-0t;
+	Thu, 17 Aug 2023 03:51:11 +0000
+Date: Thu, 17 Aug 2023 11:50:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
+To: Jiri Pirko <jiri@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:mpam/snapshot/v6.5-rc1 147/148]
- arch/x86/include/asm/resctrl.h:149:9: error: incompatible pointer to integer
- conversion returning 'unsigned long long (void)' from a function with result
- type 'u64' (aka 'unsigned long long')
-Message-ID: <202308171014.V9egIIfl-lkp@intel.com>
+Subject: [jpirko-mlxsw:wip_dl_files 14/19] ld.lld: error: duplicate symbol:
+ __tracepoint_devlink_hwmsg
+Message-ID: <202308171135.7MOBGv6h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,83 +46,86 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.5-rc1
-head:   3feae02a8f8cf9aca5d7d1915ea1e026c9d3d8ec
-commit: d2210e80c29bdd622cb88af630aa4de57a01181c [147/148] fs/resctrl: Add cranky debug for reading CPU msr values
-config: x86_64-randconfig-x072-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171014.V9egIIfl-lkp@intel.com/config)
+tree:   https://github.com/jpirko/linux_mlxsw wip_dl_files
+head:   00a5b9621f0bc27e4f004dc027f187a5ef824a53
+commit: 0ff7fc74219efe0060acfa60c1e2d9029b8efbd9 [14/19] devlink: push trap related code into separate file
+config: i386-buildonly-randconfig-r006-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171135.7MOBGv6h-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171014.V9egIIfl-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171135.7MOBGv6h-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308171014.V9egIIfl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308171135.7MOBGv6h-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/proc/base.c:97:
-   In file included from include/linux/resctrl.h:12:
-   arch/x86/include/asm/resctrl.h:149:33: error: too few arguments provided to function-like macro invocation
-           return rdmsr(MSR_IA32_PQR_ASSOC);
-                                          ^
-   arch/x86/include/asm/paravirt.h:210:9: note: macro 'rdmsr' defined here
-   #define rdmsr(msr, val1, val2)                  \
-           ^
-   In file included from fs/proc/base.c:97:
-   In file included from include/linux/resctrl.h:12:
-   arch/x86/include/asm/resctrl.h:149:9: error: use of undeclared identifier 'rdmsr'; did you mean 'rdtsc'?
-           return rdmsr(MSR_IA32_PQR_ASSOC);
-                  ^~~~~
-                  rdtsc
-   arch/x86/include/asm/msr.h:180:43: note: 'rdtsc' declared here
-   static __always_inline unsigned long long rdtsc(void)
-                                             ^
-   In file included from fs/proc/base.c:97:
-   In file included from include/linux/resctrl.h:12:
->> arch/x86/include/asm/resctrl.h:149:9: error: incompatible pointer to integer conversion returning 'unsigned long long (void)' from a function with result type 'u64' (aka 'unsigned long long') [-Wint-conversion]
-           return rdmsr(MSR_IA32_PQR_ASSOC);
-                  ^~~~~
-   3 errors generated.
+>> ld.lld: error: duplicate symbol: __tracepoint_devlink_hwmsg
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__tracepoint_devlink_hwmsg) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(__tracepoints+0x0) in archive vmlinux.a
 --
-   In file included from fs/resctrl/monitor.c:22:
-   In file included from fs/resctrl/internal.h:5:
-   In file included from include/linux/resctrl.h:12:
-   arch/x86/include/asm/resctrl.h:149:33: error: too few arguments provided to function-like macro invocation
-           return rdmsr(MSR_IA32_PQR_ASSOC);
-                                          ^
-   arch/x86/include/asm/paravirt.h:210:9: note: macro 'rdmsr' defined here
-   #define rdmsr(msr, val1, val2)                  \
-           ^
-   In file included from fs/resctrl/monitor.c:22:
-   In file included from fs/resctrl/internal.h:5:
-   In file included from include/linux/resctrl.h:12:
-   arch/x86/include/asm/resctrl.h:149:9: error: use of undeclared identifier 'rdmsr'; did you mean 'rdtsc'?
-           return rdmsr(MSR_IA32_PQR_ASSOC);
-                  ^~~~~
-                  rdtsc
-   arch/x86/include/asm/msr.h:180:43: note: 'rdtsc' declared here
-   static __always_inline unsigned long long rdtsc(void)
-                                             ^
-   In file included from fs/resctrl/monitor.c:22:
-   In file included from fs/resctrl/internal.h:5:
-   In file included from include/linux/resctrl.h:12:
->> arch/x86/include/asm/resctrl.h:149:9: error: incompatible pointer to integer conversion returning 'unsigned long long (void)' from a function with result type 'u64' (aka 'unsigned long long') [-Wint-conversion]
-           return rdmsr(MSR_IA32_PQR_ASSOC);
-                  ^~~~~
-   fs/resctrl/monitor.c:590:23: warning: variable 'r' set but not used [-Wunused-but-set-variable]
-           struct rdt_resource *r;
-                                ^
-   1 warning and 3 errors generated.
-
-
-vim +149 arch/x86/include/asm/resctrl.h
-
-   146	
-   147	static inline u64 resctrl_arch_get_cpu_msr(void)
-   148	{
- > 149		return rdmsr(MSR_IA32_PQR_ASSOC);
-   150	}
-   151	
+>> ld.lld: error: duplicate symbol: __SCT__tp_func_devlink_hwmsg
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__SCT__tp_func_devlink_hwmsg) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(.static_call.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCT__tp_func_devlink_health_recover_aborted
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__SCT__tp_func_devlink_health_recover_aborted) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(.static_call.text+0x18) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __traceiter_devlink_health_recover_aborted
+   >>> defined at devlink.h:112 (include/trace/events/devlink.h:112)
+   >>>            net/devlink/leftover.o:(__traceiter_devlink_health_recover_aborted) in archive vmlinux.a
+   >>> defined at devlink.h:112 (include/trace/events/devlink.h:112)
+   >>>            net/devlink/trap.o:(.text+0x100) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __tracepoint_devlink_health_reporter_state_update
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__tracepoint_devlink_health_reporter_state_update) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(__tracepoints+0xA0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCT__tp_func_devlink_health_reporter_state_update
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__SCT__tp_func_devlink_health_reporter_state_update) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(.static_call.text+0x20) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __traceiter_devlink_health_reporter_state_update
+   >>> defined at devlink.h:146 (include/trace/events/devlink.h:146)
+   >>>            net/devlink/leftover.o:(__traceiter_devlink_health_reporter_state_update) in archive vmlinux.a
+   >>> defined at devlink.h:146 (include/trace/events/devlink.h:146)
+   >>>            net/devlink/trap.o:(.text+0x160) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __tracepoint_devlink_trap_report
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__tracepoint_devlink_trap_report) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(__tracepoints+0xC8) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCT__tp_func_devlink_trap_report
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__SCT__tp_func_devlink_trap_report) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(.static_call.text+0x28) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __traceiter_devlink_trap_report
+   >>> defined at devlink.h:177 (include/trace/events/devlink.h:177)
+   >>>            net/devlink/leftover.o:(__traceiter_devlink_trap_report) in archive vmlinux.a
+   >>> defined at devlink.h:177 (include/trace/events/devlink.h:177)
+   >>>            net/devlink/trap.o:(.text+0x1C0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCK__tp_func_devlink_trap_report
+   >>> defined at leftover.c
+   >>>            net/devlink/leftover.o:(__SCK__tp_func_devlink_trap_report) in archive vmlinux.a
+   >>> defined at trap.c
+   >>>            net/devlink/trap.o:(.data+0x14) in archive vmlinux.a
+..
 
 -- 
 0-DAY CI Kernel Test Service
