@@ -1,106 +1,102 @@
-Received: from mail-ot1-f73.google.com (mail-ot1-f73.google.com [209.85.210.73])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE08A14AA6
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 17:52:23 +0000 (UTC)
-Received: by mail-ot1-f73.google.com with SMTP id 46e09a7af769-6bd372edd1cso162849a34.3
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 10:52:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52F9171BB
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 18:12:00 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d6412374defso181891276.0
+        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 11:12:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692294743; x=1692899543;
+        d=google.com; s=20221208; t=1692295919; x=1692900719;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=n2UG2OG5KrxWJ0s3qtnx/i+Fr3CRP1zZ4JSm6GFIF8c=;
-        b=camaHaV/Gbd+c1ik48sZSGrt5XHK8lSjJ9F8mxQ8gLFTx8n435uppOnVSxPbS/8nUS
-         4uVnoANdukrwQN7xcDWOUWsUPjc725/cuRivpAvQBhIgg6CzB/aSMHIlyh0G0EgNj1Qp
-         xlseRYQh4Fym8TvlpTtsxzYaJutZpSvYLdRVHFCnjq0P7HspwTp8XdfkwSXhM0QaFv5j
-         84snFfINaQiAptUy7r4lVlsr3D2JGzcYWqpD9iw+iBq5pTW5Ju/bRMC6yDqTTcvUscc7
-         Q2SGV9kcFEyWXJmEeBKXjHlCwSjI4T58yrXhGZS5J05eSAXz4ogD5Au17r54xzjfHatF
-         BXMg==
+        bh=WDpEeeNNR0Nw6EuE4P52nYwvS2tr5AEnMgO9JS9l+5M=;
+        b=TaGbMUFBJl9KSgciaIgpVCisyqbCRpB7YYBG8v79mOmaHpt1tQW4gawLupbCsjGmej
+         z0M22Qkxwd6H5Xf9tezwcGzF2BEM0GiWrlMbrqI6y1DxAhLEHpA4LEFNbzzvaS5/USQK
+         lnCy83pmJ5KTWktENc5P093oPYM0W7geImacqNCB5v+MvPhMCV3KLqFUNdtuwxAttkjP
+         dtl8Pb8QNhuqq+jGhdU0UI1QD77M36OE/e70pTSQuPwf6Xf8AlWO0BYWDs6MfgyskmLc
+         s0mENOVB8d4jdzMDABjzbc2Nrq6t54AzWyred9TY2rPT9nehfBlceHHhguFaNgrKcA0v
+         avfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692294743; x=1692899543;
+        d=1e100.net; s=20221208; t=1692295919; x=1692900719;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=n2UG2OG5KrxWJ0s3qtnx/i+Fr3CRP1zZ4JSm6GFIF8c=;
-        b=CuXA479l1MPZ/xrKtb7OZ5oFGK7bts1E2lZ343QbRVj+55sYVMGylN6xsHjxdP0M1T
-         nQYkgNMvUwfNFE/k0CoXciIgw0ClaDwx3MedcKEbJ97fxPVZ7s+kEZJ2f+6zV3RClYqz
-         aj0lfz+QT9DU1K9vZMF4+VLJwSRMKCKW1YGFUgQK3wY78mt4jFAxHZqz8n16EVAQixGx
-         7oZlOQiw+8sI1vRKJ4DgWqxr/ZC4aDHpSToZ0AgxMKE5QGJ7Jh8118e2F0VxuE0t2pJV
-         drBFgf5BUVtZalmOdY2dcUG3FuoRz8fseAttWr6CL+F8IH+vwJmD0MWdsXgaLuTg7YPw
-         2+4A==
-X-Gm-Message-State: AOJu0Yy7XWMt5ZPcYjwMQdXTqA/hwoNMDJ0z83Spab8gfdGtCwY/gd/C
-	9323450O5phmAkJnWGvzOdUDZ0mMqPGrIfP3ww==
-X-Google-Smtp-Source: AGHT+IH06wac0SBG25lJJhXNOWcsSI2IvrGrskfXKVnJv8hj8F+qNwDIvYHlFs8yFjiUbo4MsE/swog16j/Elyccow==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:6870:a8a5:b0:1bf:d3b8:5cae with
- SMTP id eb37-20020a056870a8a500b001bfd3b85caemr2392oab.10.1692294742832; Thu,
- 17 Aug 2023 10:52:22 -0700 (PDT)
-Date: Thu, 17 Aug 2023 17:52:21 +0000
+        bh=WDpEeeNNR0Nw6EuE4P52nYwvS2tr5AEnMgO9JS9l+5M=;
+        b=Ar7IWiMvJVF9A6qi8BXxECjdAZYKeRzu1B7rT13sv+JL5UFXxbBVW2uhDEsUX8hDH/
+         HE0VaD5ffZEWUW+ye5uEHuzaBsSi9ESA7b4pwEcKQkEJJ7cB6EvXi6cvIUjKTg/cU7KK
+         4TefHudlHdmj2t+sYHpQjEaTDqJ4mt/VrNWynvB9rpd6O6YSIeagNsgkde5ReZ1PM3Gy
+         FVktT67yoCTPlNqZ5AZLlK02O+Bq7sh1gNCNkEKi3+RDlJO5btS4bKnitNyJkSUHqfHW
+         TVEoMfOQof4O0v3ERdW29zn0D/MzO3HWYO4CYKA3XQNNNcowVcjy3y7V2s9Ujk33bsSy
+         Pu8g==
+X-Gm-Message-State: AOJu0Yz0KdctSgwlOqOTmIoH30MNLuYvzApuBGQcuFewb86YuosQ0SS0
+	BSw4+eNmlv8fzZzfyat2+5++MgvQD5r/NuxS+tM=
+X-Google-Smtp-Source: AGHT+IHGCNqBSivcUqwjOFgkuqC7Ixw26kQNxulLbkpUGpA9QPWtOwJPpJ84qHhcCJciZbWLNwY8Ah3LFW97G3/jWMA=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:ede8:d843:1818:cd60])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:e7ca:0:b0:d74:347:1e3 with SMTP
+ id e193-20020a25e7ca000000b00d74034701e3mr4153ybh.9.1692295919476; Thu, 17
+ Aug 2023 11:11:59 -0700 (PDT)
+Date: Thu, 17 Aug 2023 11:11:56 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAFRe3mQC/5WNQQ7CIBAAv9Jwdk2hBRtP/sM0BhdoN7FgoEFNw
- 9/F/sDjzGFmY8lGsomdm41FmylR8BXEoWE4az9ZIFOZiVZ07cAl5EAGTKRsY4JlNeC1NxD1C7J
- TvL15h6Cwk4PrRX8fNKulZ7SO3vvlOlaeKa0hfvZp5j/7Xz9z4HBCVLLjPUqFlymE6WGPGBY2l lK+MSeyT9cAAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692294742; l=1720;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=MouGUYg3kqvRKE/s9FPfueuRCAtPM0lCpE5G1aOdCPA=; b=0qynUlCcs0UVl9/8Ugxh9CjQAoBaOahFyRH41Qo/Dkbl4zK00nH7C2j1ViGwNZ0iDLJGBWUBo
- sgWqOz6c9VeCZ3x2xIFjaBqNJmlKt5jXgy0SlqoZ0OqWSxdtsgE9+uq
+X-B4-Tracking: v=1; b=H4sIAOti3mQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDC0Nz3YKC5PiK3Pw83RQjC4sUCwNjM0ODVCWg8oKi1LTMCrBR0bG1tQA SG74bWgAAAA==
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692295917; l=1306;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=KvMdBaUrJ04OP30COeFfEE9LlNaItBIz7QURy18B4Q4=; b=0evZ866zmAcV3WRRll2szvRKmqpke+TXcD3BeqNZENNAC0GzwFFUTYVL/l+EVlX7ETBXDWTYb
+ 1ikpSuCMENIDTDAuHTqXGGIONyo6p216JYBb88Z9dqYHLzGgZbHiDDV
 X-Mailer: b4 0.12.3
-Message-ID: <20230817-void-drivers-mtd-nand-raw-vf610_nfc-v2-1-870a7c948c44@google.com>
-Subject: [PATCH v2] mtd: rawnand: fix -Wvoid-pointer-to-enum-cast warning
-From: Justin Stitt <justinstitt@google.com>
-To: Stefan Agner <stefan@agner.ch>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Message-ID: <20230817-ppc_xmon-v1-1-8cc2d51b9995@google.com>
+Subject: [PATCH] Revert "powerpc/xmon: Relax frame size for clang"
+From: ndesaulniers@google.com
+To: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>
+Cc: Joel Stanley <joel@jms.id.au>, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-When building with clang 18 I see the following warning:
-|       drivers/mtd/nand/raw/vf610_nfc.c:853:17: warning: cast to smaller integer
-|               type 'enum vf610_nfc_variant' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-|         853 |         nfc->variant = (enum vf610_nfc_variant)of_id->data;
+This reverts commit 9c87156cce5a63735d1218f0096a65c50a7a32aa.
 
-This is due to the fact that `of_id->data` is a void* while `enum vf610_nfc_variant`
-has the size of an int.
+I have not been able to reproduce the reported -Wframe-larger-than=
+warning (or disassembly) with clang-11 or clang-18.
 
-Cast `of_id->data` to a uintptr_t to silence the above warning for clang
-builds using W=1.
+I don't know precisely when this was fixed in llvm, but it may be time
+to revert this.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1910
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Justin Stitt <justinstitt@google.com>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/252
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-Changes in v2:
-- use better commit message (thanks Krzysztof and Miquel)
-- Link to v1: https://lore.kernel.org/r/20230815-void-drivers-mtd-nand-raw-vf610_nfc-v1-1-7cc65314c56c@google.com
----
- drivers/mtd/nand/raw/vf610_nfc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/xmon/Makefile | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/vf610_nfc.c b/drivers/mtd/nand/raw/vf610_nfc.c
-index 86522048e271..11d996dc655d 100644
---- a/drivers/mtd/nand/raw/vf610_nfc.c
-+++ b/drivers/mtd/nand/raw/vf610_nfc.c
-@@ -850,7 +850,7 @@ static int vf610_nfc_probe(struct platform_device *pdev)
- 		goto err_disable_clk;
- 	}
+diff --git a/arch/powerpc/xmon/Makefile b/arch/powerpc/xmon/Makefile
+index d334de392e6c..7705aa74a24d 100644
+--- a/arch/powerpc/xmon/Makefile
++++ b/arch/powerpc/xmon/Makefile
+@@ -10,12 +10,6 @@ KCSAN_SANITIZE := n
+ # Disable ftrace for the entire directory
+ ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
  
--	nfc->variant = (enum vf610_nfc_variant)of_id->data;
-+	nfc->variant = (uintptr_t)of_id->data;
+-ifdef CONFIG_CC_IS_CLANG
+-# clang stores addresses on the stack causing the frame size to blow
+-# out. See https://github.com/ClangBuiltLinux/linux/issues/252
+-KBUILD_CFLAGS += -Wframe-larger-than=4096
+-endif
+-
+ ccflags-$(CONFIG_PPC64) := $(NO_MINIMAL_TOC)
  
- 	for_each_available_child_of_node(nfc->dev->of_node, child) {
- 		if (of_device_is_compatible(child, "fsl,vf610-nfc-nandcs")) {
+ obj-y			+= xmon.o nonstdio.o spr_access.o xmon_bpts.o
 
 ---
-base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
-change-id: 20230815-void-drivers-mtd-nand-raw-vf610_nfc-6c358f424b8a
+base-commit: 16931859a6500d360b90aeacab3b505a3560a3ed
+change-id: 20230817-ppc_xmon-d288d803610e
 
 Best regards,
---
-Justin Stitt <justinstitt@google.com>
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
 
