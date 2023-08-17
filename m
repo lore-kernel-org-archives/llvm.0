@@ -1,134 +1,124 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA6619890
-	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:03:30 +0000 (UTC)
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-68872cadc7cso220502b3a.1
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 14:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692306210; x=1692911010;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NfS80rdvjC+m6qhv52KISAltR5va/tDpeHzyoanDsI0=;
-        b=FJas0+eST4okoJWSS6RCysgzg0fj3Loq6oDvOWc5CflQR7vp4NV1eLXMiDj/Cowb/H
-         HS7iDE50P0Yde3sKbLCCdVvBXyRFl3mkJvtxNUZDyu80DyJ9KSfxeaOxEA5qxjX7Cx62
-         xpgQqZ7G+G2Fa9JikL2tz/BxgZiYAI1k+2plE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692306210; x=1692911010;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NfS80rdvjC+m6qhv52KISAltR5va/tDpeHzyoanDsI0=;
-        b=JVm62sf7kYmDIY1iY/kL9EBZ+cBVQLxYCUTnF3IaZ2aTfNSSvhxEfu8PEZl7GwyoTx
-         2swz1p8w9afLU0dSwORZ95s8y8C1vi1ov9xZjJuToJfQAiS7CURB6L1H9DINJVAnJldz
-         S+di7x7nHMUKSXiXV8xiUqJ38OSvd98m0qKZdPICtO6GzhQK+HPsVUF9f8Ypcp/PCOnh
-         kCuUoDzr9O3LWx52bLkawNTeoWxMcYOeCbDlZNhBbMbdbz67QkEqCEENXMOurMPEcMoc
-         NiqgfJAFRRUhivtRqyAZuASRaIf9SGlFdE6C8BrK/V0c6/14lM9Pk/dFiUdq0pp/yF9Y
-         lKgQ==
-X-Gm-Message-State: AOJu0YxqeRla/vcshP4xBeBYASPIx6DppHG3oB3rdV827GxCm3oa5lK0
-	KRWD8M8sPrd+dLQ44sPx0VR3ew==
-X-Google-Smtp-Source: AGHT+IEO4gNnhl2ooknWaiN5W0VRAo8Ktjbq9t5NGymGilNuMderwFfgK5JuIgY4Q1yxZVS57mollw==
-X-Received: by 2002:a05:6a00:198a:b0:668:753a:b150 with SMTP id d10-20020a056a00198a00b00668753ab150mr731267pfl.21.1692306210065;
-        Thu, 17 Aug 2023 14:03:30 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q13-20020a62e10d000000b00686236718d8sm197124pfh.41.2023.08.17.14.03.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 14:03:29 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] integrity: Annotate struct ima_rule_opt_list with __counted_by
-Date: Thu, 17 Aug 2023 14:03:28 -0700
-Message-Id: <20230817210327.never.598-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92B419890
+	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:03:48 +0000 (UTC)
+Received: from eig-obgw-6005a.ext.cloudfilter.net ([10.0.30.201])
+	by cmsmtp with ESMTP
+	id WiMFqFc00DKaKWk8BqC5S0; Thu, 17 Aug 2023 21:02:11 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id Wk8Aqu8InZeaBWk8BqTAza; Thu, 17 Aug 2023 21:02:11 +0000
+X-Authority-Analysis: v=2.4 cv=APmGYa2N c=1 sm=1 tr=0 ts=64de8ad3
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=ag1SF4gXAAAA:8 a=pGLkceISAAAA:8 a=cm27Pg_UAAAA:8 a=VwQbUJbxAAAA:8
+ a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10 a=Yupwre4RP9_Eg_Bd0iYG:22
+ a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=tARRQMv9SG0j8Ou7zFS+GX9Wit7Gyy3VndsgD0vYGeY=; b=jE9eQFREWs8M7/YqBeDH8qcAtC
+	onRCpjN6/tuW6IjRfIYHir8zSTHUg8O8EDjl6fvXknSp5DM2orhwhP9Q81BrGqeHNHsIg950eCESS
+	LZrk9pRe2fB6lrsN/f3553OTZ5/dqfu9tphZ7HI9jXAWQg9c4+Wok2JUi7bzNe9gCnOiZIs1SZlSx
+	t+ZbXD37VZuzCEmMFtlVpcWYp4M2k4OTqfLvtzuDF/eQ1yY7XIv97wpMWztmZH+K3MlcO8sgrdlQW
+	gDF+OT+EeymqW8Rzj3dcxEs2wuznkLsM3Dj1jnBJqKnDpMGpm6SigZotqxMI3JxfY2eazcOjt9uKX
+	2XQrE/hg==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:47346 helo=[192.168.15.8])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qWk89-001SRk-0L;
+	Thu, 17 Aug 2023 16:02:09 -0500
+Message-ID: <35dcbb0a-4dd6-39bf-3948-a069484b622c@embeddedor.com>
+Date: Thu, 17 Aug 2023 15:03:11 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1990; i=keescook@chromium.org;
- h=from:subject:message-id; bh=GpbrBY44rmYcaNwTehqSCUt4o0snmReubO2vlJQen7s=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3osgscS9wZD5eGd/OmyOJlzZSsaXAhrsROadk
- 3Ql7xKO5s6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6LIAAKCRCJcvTf3G3A
- JpgXD/0YjyTzVbKewZU7aUBPJkZCjNbwow0h2y1LaMuBfC4U+6szREmOA8cyvDv65uQQGBEuNZg
- 39HLyihd+pROrxzk5nZvlfVzu2fisWM/0SOlp/UlrCrPju0kRP2Q5/6g/IIB0/Af/ynX1HRWjW3
- PMp5u87eXsm6WN+ed5WeBqSc+Se32bYnpLE3hTLg1FbF5w4ip3qtDajbk6103cj1zzXonqirm9q
- AISgJudGXdHY6neUxv6/Gy0jeZH+GAS2NAiVC/Apzatl8TODu+5yRqNw/quhgzpqbGTrMsM5Edj
- cOmpOfWhB0Ana1I7Y/qL8QTPGrgR8RfwNuAhmOOd8aaFbpIQXLG+7xjU/X0GzlYeNFQC4fhPacn
- JW1wKnsdnTwXMgO/zXhfxdKaSeg1LdSsv9fjSUNzB9M/ScnmGDGL4FsrWYYf2fbweYp7kdM0f9X
- MCM7GC4ZtaVCnrGlxdJoHd6956En5iNueehXXEG5mayXb9OuUix5Gh1xgfX4MGkEey6QgoBv9ya
- H/tb0H71pVjduXVpYBenKcNKcNLe5ZpZMpYgAlHkpty0M0Grwr/bhpmKyHJlpT6Q2WzU4/ugO0H
- 35VRbVde28PKyei2xTKmi4emyW5KuKfAPnLTLqyLHgOEohM/Us0BBRlaRZSLYVE7bHxHjngVVqi
- /6GP72M 9bKidutQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] staging: rtl8192e: Annotate struct rtllib_txb with
+ __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+ linux-staging@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Yogesh Hegde <yogi.kernel@gmail.com>, Sumitra Sharma
+ <sumitraartsy@gmail.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230817204523.never.034-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230817204523.never.034-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.21.192
+X-Source-L: No
+X-Exim-ID: 1qWk89-001SRk-0L
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:47346
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 11
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfDbqvxW1xDgHdRIMNqE54rlvXp2Cen2NQSZ0EwQfUxUJsSX2qOqdHXPP+SljbQPMzkmBQFmq4+TbpiyAsK0PxZUmWL6FZiHdq+gGrx9q68EGWalny37J
+ r6q0UOumOhDM/WF907JjBOK77DIAqNivkkt2mx1XgPwEMSZ9os/tuApCKNY90wCAAvEzLiLxAA3Uf53s0Nic1IjP6N2nlwxJKQY=
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
 
-As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_list.
-Additionally, since the element count member must be set before accessing
-the annotated flexible array member, move its initialization earlier.
 
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+On 8/17/23 14:45, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct rtllib_txb.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> Cc: linux-staging@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- security/integrity/ima/ima_policy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 69452b79686b..f69062617754 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -68,7 +68,7 @@ enum policy_rule_list { IMA_DEFAULT_POLICY = 1, IMA_CUSTOM_POLICY };
- 
- struct ima_rule_opt_list {
- 	size_t count;
--	char *items[];
-+	char *items[] __counted_by(count);
- };
- 
- /*
-@@ -342,6 +342,7 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
- 		kfree(src_copy);
- 		return ERR_PTR(-ENOMEM);
- 	}
-+	opt_list->count = count;
- 
- 	/*
- 	 * strsep() has already replaced all instances of '|' with '\0',
-@@ -357,7 +358,6 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
- 		opt_list->items[i] = cur;
- 		cur = strchr(cur, '\0') + 1;
- 	}
--	opt_list->count = count;
- 
- 	return opt_list;
- }
--- 
-2.34.1
+Thanks
+--
+Gustavo
 
+> ---
+>   drivers/staging/rtl8192e/rtllib.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+> index c5a692dfcd17..543d8671281d 100644
+> --- a/drivers/staging/rtl8192e/rtllib.h
+> +++ b/drivers/staging/rtl8192e/rtllib.h
+> @@ -818,7 +818,7 @@ struct rtllib_txb {
+>   	u16 reserved;
+>   	__le16 frag_size;
+>   	__le16 payload_size;
+> -	struct sk_buff *fragments[];
+> +	struct sk_buff *fragments[] __counted_by(nr_frags);
+>   };
+>   
+>   #define MAX_SUBFRAME_COUNT		  64
