@@ -1,38 +1,38 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE071ADD9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BD01ADD5
 	for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 21:15:34 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1bdb801c667so2210595ad.1
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1bdbbede5d4so2109995ad.2
         for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 14:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google; t=1692306934; x=1692911734;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A6pRzVAL1HfaFk+MrN35IOTXl1yUajrA5beAIZxFLLg=;
-        b=MyltMusNWYrHHduM59ZY3KVk2F109y3Pp1ImvclhC5uVVFlNLd85wpLi5oUy/yS5VG
-         ZFFcJApAMPM4nChjoYVKU7Y6Oh7sZaTnMWVh6YYIKI0/wWuJfWBrRxdnsHBmTTqccdY7
-         /Ns8/4aEaQBWWwnFK+vLM7Ur9D5iHCixdohfk=
+        bh=84126Krvj5It4jg9Q1uPzC9d5K5UntVoSjqBC8dGf2s=;
+        b=BHz4qEOXdw40B8x8sOfWFvsckDK4ZpX1DduLsCtYUeDJHrXqjzAF9zFyUz0yA9PTh2
+         eC/nGE41cN98MhDYLXv7g4Hg0mURamg+YmSIGtq1u4M3cEsm6Mlpm/buNulzWU+ZJe/K
+         QrlwgfN8fE+5xgreRerXYyu0HuOHuVQC19cQI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1692306934; x=1692911734;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A6pRzVAL1HfaFk+MrN35IOTXl1yUajrA5beAIZxFLLg=;
-        b=JZ4WIHIe8dUNCxY2mtFQyVo85H/z+hx8j8tUgGh8aTJ+jEyPGYMTpWsow4q13+Oknj
-         4anCOmEOqbxe+owRKek1CBnPfdVyjkR4LAXkEcORjDI+Nom7EQCfNzbuLAAISXcduHra
-         akCII1oEyC0apePIN1YC0nGqr5lY2eNuyFrQ63y40ssm0arH5BiHK00JYupgnx2WUeec
-         /ton4R94+FO+slsEvDtvBNZlgoU382IALw12A2JYEi3nPJ/YivcsRErsXK9JqYMMBVsR
-         n4tDCaTJMIfhXdcHSUZ99YyUXwPg+OaDoFLhY/g4YKZLc61fFY2fY5KDnOcZlh4emTRA
-         UJnw==
-X-Gm-Message-State: AOJu0YwyI3XM6rEx1apgTz4QSOmStFZbqrCDEAab+SIz1Beq/20P/UjH
-	V5iVL/sC/Zkf0XnJ37hVKT+1eQ==
-X-Google-Smtp-Source: AGHT+IHVjuRk1web/N5CIE6G3DSroLocgLnvFFM3Lfkq6agT4XiyPHhqIHZks3sie+eRrw9Rg6gakw==
-X-Received: by 2002:a17:902:be03:b0:1bd:e85f:700e with SMTP id r3-20020a170902be0300b001bde85f700emr590833pls.69.1692306934435;
+        bh=84126Krvj5It4jg9Q1uPzC9d5K5UntVoSjqBC8dGf2s=;
+        b=BMX6YijBgC2Ndtp1bPY1J5Ka+P2WqmMjSsF9PvLzEi8YJUchaPkqj82N9VeO38anbK
+         jGLjQVRTeS/HizK4WKV/1TOYT6FfXhnsnf+YublpGSvRNeBrlS6lDlQ8nVBxNV808eZO
+         +/Bk9rlPuQ2QHPrdJlvdYVD2lrjMQLhJGOAWnxFTvAfuOf1BOJxOKA690BP71GBrFaMO
+         woeGtTSIRy/+LwzZeHb0uEtuMhp/OL14LTBOFcFCV5+0n+SQmMzlr5ZacIuybARJLAXo
+         rJQoN1wN4EyC75sipOgG+UFby57rTVsxnG1My7ZIEnYy+zsaYRHshjwSPO+LXt4yo3s3
+         AmdA==
+X-Gm-Message-State: AOJu0Yxc2cnchRO5ocRmu/vCl/xGbYlFqA5OnHYlUxEDU1gpNFtBjXmi
+	NDu6YWBvWlrDhWPSzF+mB6OGew==
+X-Google-Smtp-Source: AGHT+IGejMpNDu5iUt5y4pkNg7hjNXDzs6GU7LUwzlDmA1AYeMtiV3uVhEVENEVbaoaSlRg1FcsTxA==
+X-Received: by 2002:a17:902:f54f:b0:1b8:6987:de84 with SMTP id h15-20020a170902f54f00b001b86987de84mr625512plf.48.1692306934091;
         Thu, 17 Aug 2023 14:15:34 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id jj20-20020a170903049400b001b9f7bc3e77sm208556plb.189.2023.08.17.14.15.31
+        by smtp.gmail.com with ESMTPSA id u12-20020a17090282cc00b001b8943b37a5sm223595plz.24.2023.08.17.14.15.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 17 Aug 2023 14:15:32 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
@@ -50,9 +50,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 4/7] wifi: cfg80211: Annotate struct cfg80211_pmsr_request with __counted_by
-Date: Thu, 17 Aug 2023 14:15:26 -0700
-Message-Id: <20230817211531.4193219-4-keescook@chromium.org>
+Subject: [PATCH 3/7] wifi: cfg80211: Annotate struct cfg80211_mbssid_elems with __counted_by
+Date: Thu, 17 Aug 2023 14:15:25 -0700
+Message-Id: <20230817211531.4193219-3-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230817211114.never.208-kees@kernel.org>
 References: <20230817211114.never.208-kees@kernel.org>
@@ -62,19 +62,19 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2180; i=keescook@chromium.org;
- h=from:subject; bh=ytZuVuu89ZLCBsGHGYeK5Mrw8+wpGzwhqHz7UbWnFA8=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3o3x/0j3Sg2xlp/sAxt3CMimE1sDR90HXUPBB
- lc5GQBuZSuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6N8QAKCRCJcvTf3G3A
- JnDCEACQDuHi5umP6pnbV1/6oqKWEuBYmNo/ZvDgqxNNQUELDL5Ta/5wtzf7XiiCeoll8eOLUCi
- P7ReHnkR5v3TpE40/l08pqvVD0Uhy7syN+4izs7Z/I2Tj6P9F7QPf1eIz9o+DGg+BoXpIz7+anZ
- deuiv+CQBw/qR3n+4ZutHmcdrJ6VXv7JPMxjVlKnPlKZ14LELqAVNYpqRb7GVT9mtCWYSUCzI/o
- q7pc8sXhIiGvqbhGEH1DHBwUsDaCJFyZU0deQ/4Wr6PjJmzm6VwT1/tCLXsJSOc/Bm0dZnJ50tF
- CrXF9Lu0muoI54sFAZ2aObdmUdx9cRs7vLwLMPMpORFSToSzsYuxcmfoe139MigExg96t0sqMjr
- 15BXehaTyC/b1xov42tJ+E86o2aphkoRQy/CJfb+41Ab6Kxd881kUk5U5AQDaEzwFxO70DgRF9i
- AIBAQRxAKLNJiH/KfcqZ+dBL3eZFLiSraO9F/WymXLqEq+VLYAFI0NzWsbLSyYAxYakd3yyqocD
- rama7ffqboYN4fv1HznzYuerAjJ40SUp7OYKWNCrjOenDPT+r7wkghCV4iXQMjc7EOpL3oHq35H
- Lwq8T6EDWTvsH0OISgIGkXmXOFRctDiRJ1qka4z9zeAyOBEMvT3kscRRH+5HmFH3PAQoLms2mF6 tAQgs/hfx8leeZg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2022; i=keescook@chromium.org;
+ h=from:subject; bh=vaWHXmxPO1ptoIqyZPI0oaQtbTFkYHcNqPSrVLO+Cyo=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3o3x9Q72AWeO3iT9FoMZtrv2vw6MyWouRB7nh
+ h1x+UnGyeSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6N8QAKCRCJcvTf3G3A
+ JrUyEACKeu7bZ+6W17+6Csyy59kutbcaGWnWoZqfeNWCSYd8tAVhCczdJLuz9/B0R2QrXSpwu5n
+ zpIIYGWYvFW7QaNN3Ygc4s35ySoSg3owW7TtTyaCr7IXyJoJ1XjqboBhARy1m1Xf2omjbw68BMf
+ 7E2D+pVCSVklqLPDnXGQGvI+wuRpG+nlQMh+MkQ7gbU4cE+qrDf2VGKADgzzqFCCtNjsOsm02ho
+ R3Fh6czL/VlwYTGdoI/cmyNjZVZkxHLTxOQvl+18zGC/2AbLsX7QRbFN0Qt5ky6gUa0PTo2fW3e
+ Z2tQLZDcpZhxgLxNp9sF9eKAfzzQoT5V5oxZ4oXka86BlvZR6b+OgYyFq75wNqabtdhPK02OTmY
+ trw7lr+vgki7yU+3+OErnwg0WAMENH7zVcC4WcnpIxwTxaVBM4oFEhytGPLPfNGyfXfUPT5JRen
+ ygp8TcPbp1bgT6ITfxI+mP3vMVDrZy0w+385fFnq9xUyJYou6HIOzlr3PXaP0Ya82tLq4T4cKoF
+ xOsW6OcFPLf2zsF2H/IvlbgWExJEV3XI0eIz7UXg1axO1xs3z76pyLB1ZwRuOxepVQ9hP2jHT69
+ 3ihSRWYcbD7XS8UeaSsUR6HfR1YBJrG6hgR0zJDcMztj7DCNSiWrE2eolF9mGGG381h9598oL6j wLHKdDJFXPjvMAQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -84,7 +84,7 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct cfg80211_pmsr_request.
+As found with Coccinelle[1], add __counted_by for struct cfg80211_mbssid_elems.
 Additionally, since the element count member must be set before accessing
 the annotated flexible array member, move its initialization earlier.
 
@@ -100,42 +100,40 @@ Cc: netdev@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
  include/net/cfg80211.h | 2 +-
- net/wireless/pmsr.c    | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ net/wireless/nl80211.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
-index 5c7d091b3925..e9ca4726a732 100644
+index eb73b5af5d04..5c7d091b3925 100644
 --- a/include/net/cfg80211.h
 +++ b/include/net/cfg80211.h
-@@ -3948,7 +3948,7 @@ struct cfg80211_pmsr_request {
- 
- 	struct list_head list;
- 
--	struct cfg80211_pmsr_request_peer peers[];
-+	struct cfg80211_pmsr_request_peer peers[] __counted_by(n_peers);
+@@ -1187,7 +1187,7 @@ struct cfg80211_mbssid_elems {
+ 	struct {
+ 		const u8 *data;
+ 		size_t len;
+-	} elem[];
++	} elem[] __counted_by(cnt);
  };
  
  /**
-diff --git a/net/wireless/pmsr.c b/net/wireless/pmsr.c
-index 77000a264855..9611aa0bd051 100644
---- a/net/wireless/pmsr.c
-+++ b/net/wireless/pmsr.c
-@@ -291,6 +291,7 @@ int nl80211_pmsr_start(struct sk_buff *skb, struct genl_info *info)
- 	req = kzalloc(struct_size(req, peers, count), GFP_KERNEL);
- 	if (!req)
- 		return -ENOMEM;
-+	req->n_peers = count;
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 80633e815311..9ba4266368db 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -5438,13 +5438,13 @@ nl80211_parse_mbssid_elems(struct wiphy *wiphy, struct nlattr *attrs)
+ 	elems = kzalloc(struct_size(elems, elem, num_elems), GFP_KERNEL);
+ 	if (!elems)
+ 		return ERR_PTR(-ENOMEM);
++	elems->cnt = num_elems;
  
- 	if (info->attrs[NL80211_ATTR_TIMEOUT])
- 		req->timeout = nla_get_u32(info->attrs[NL80211_ATTR_TIMEOUT]);
-@@ -321,8 +322,6 @@ int nl80211_pmsr_start(struct sk_buff *skb, struct genl_info *info)
- 			goto out_err;
- 		idx++;
+ 	nla_for_each_nested(nl_elems, attrs, rem_elems) {
+ 		elems->elem[i].data = nla_data(nl_elems);
+ 		elems->elem[i].len = nla_len(nl_elems);
+ 		i++;
  	}
--
--	req->n_peers = count;
- 	req->cookie = cfg80211_assign_cookie(rdev);
- 	req->nl_portid = info->snd_portid;
+-	elems->cnt = num_elems;
+ 	return elems;
+ }
  
 -- 
 2.34.1
