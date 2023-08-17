@@ -1,43 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84C9154B3;
-	Thu, 17 Aug 2023 18:47:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF81914AA6;
+	Thu, 17 Aug 2023 18:58:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692298059; x=1723834059;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O0gnxjopY6iwpnarsS5okryFAdhWEJyN24allt66AsI=;
-  b=QQYJFHu7+lUJRvqUfI/gb268BFtoS+mIB8IZAeqD069TlB3yQbJukus4
-   bKtaUvUe+uglWUe3f+v7PCUSECnvHxJn8u9VOKupX0SxKS21ZXSyQAFLQ
-   O8Wm8+Rq3zFtBwlZTa4Kpq0Kp0TxezxQExhcRm2iIWpp4qL6jPuKZqXzL
-   pyaPliQXiPiI+8hdoQGDJEY+wxtWuL8HcTz0vjvmZu8ROq0yfhu0URuTh
-   IazNQw1jn8D18Pt2X3M/auNPQtqVS/U5sg8j6FDlorwVClXtK5yJFpi3T
-   BOuYLGNbAtrjKM+igBj4HoPPhyjnRz6dYYj5S9x8N/QHayfQ8qT5uGeq1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="352487484"
+  t=1692298682; x=1723834682;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7yo3tNXh31iOl1DRSqLjn8gRj2unBq2YatRzwFJUzDI=;
+  b=UAdcOeR7wxX3kuko9KmQOLUTNxavPGflmbrrXKDT/xAfereJa1Vtuv4S
+   tcvLQ0YSO0mFbqdAksTjwXKdBggDppayRdNYNrzK7nGLzC1Y94PefclQU
+   K6aRqUoEirnR1DJLhKDuVcOP4pzfkdSi14pf0v5fTXzh4eHose445opOA
+   3DRwibtdMcRl7yji1+BAqW17djQXo2ji21EbfqNxG84XOh5qC1x5D+E7X
+   idM8JMTvCL3w9d5wucb++qYhker/IDJIpffFKoZhvaSs0xDCUukP/SUFR
+   2S5sbhjI66Ec23jq2M3syAxB/WWjvSFkzLlP5y+CRQgt0esJiplBsOKGy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="371805542"
 X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="352487484"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 11:47:38 -0700
+   d="scan'208";a="371805542"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 11:58:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="908523367"
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="734766972"
 X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="908523367"
+   d="scan'208";a="734766972"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 17 Aug 2023 11:47:37 -0700
+  by orsmga002.jf.intel.com with ESMTP; 17 Aug 2023 11:57:51 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWi1w-0001OR-1Q;
-	Thu, 17 Aug 2023 18:47:36 +0000
-Date: Fri, 18 Aug 2023 02:46:50 +0800
+	id 1qWiBp-0001Ox-34;
+	Thu, 17 Aug 2023 18:57:49 +0000
+Date: Fri, 18 Aug 2023 02:57:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/thermal/max77620_thermal.c:48: warning: Function parameter
- or member 'tz' not described in 'max77620_thermal_read_temp'
-Message-ID: <202308180208.Gd4T0y3o-lkp@intel.com>
+To: Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
+	linux@roeck-us.net, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+	corbet@lwn.net, thierry.reding@gmail.com,
+	u.kleine-koenig@pengutronix.de, p.zabel@pengutronix.de,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-pwm@vger.kernel.org, BMC-SW@aspeedtech.com, patrick@stwcx.xyz
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v7 2/2] hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED
+ g6 PWM/Fan tach
+Message-ID: <202308180218.lgWU1tp1-lkp@intel.com>
+References: <20230817120029.221484-3-billy_tsai@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,71 +55,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230817120029.221484-3-billy_tsai@aspeedtech.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   16931859a6500d360b90aeacab3b505a3560a3ed
-commit: f59ac19b7f44cab23df84810e2da5f57bdd3a7e7 thermal/of: Remove old OF code
-date:   1 year ago
-config: i386-buildonly-randconfig-r006-20230817 (https://download.01.org/0day-ci/archive/20230818/202308180208.Gd4T0y3o-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230818/202308180208.Gd4T0y3o-lkp@intel.com/reproduce)
+Hi Billy,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.5-rc6 next-20230817]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Billy-Tsai/dt-bindings-hwmon-Support-Aspeed-g6-PWM-TACH-Control/20230817-200427
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230817120029.221484-3-billy_tsai%40aspeedtech.com
+patch subject: [PATCH v7 2/2] hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach
+config: powerpc-randconfig-r011-20230818 (https://download.01.org/0day-ci/archive/20230818/202308180218.lgWU1tp1-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230818/202308180218.lgWU1tp1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308180208.Gd4T0y3o-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308180218.lgWU1tp1-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/thermal/max77620_thermal.c:48: warning: Function parameter or member 'tz' not described in 'max77620_thermal_read_temp'
->> drivers/thermal/max77620_thermal.c:48: warning: Excess function parameter 'data' description in 'max77620_thermal_read_temp'
+>> drivers/hwmon/aspeed-g6-pwm-tach.c:431:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     431 |         int ret, count;
+         |             ^
+   1 warning generated.
 
 
-vim +48 drivers/thermal/max77620_thermal.c
+vim +/ret +431 drivers/hwmon/aspeed-g6-pwm-tach.c
 
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  32  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  33  /**
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  34   * max77620_thermal_read_temp: Read PMIC die temperatue.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  35   * @data:	Device specific data.
-0f43e646dddd60 Amit Kucheria   2019-11-20  36   * @temp:	Temperature in millidegrees Celsius
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  37   *
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  38   * The actual temperature of PMIC die is not available from PMIC.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  39   * PMIC only tells the status if it has crossed or not the threshold level
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  40   * of 120degC or 140degC.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  41   * If threshold has not been crossed then assume die temperature as 100degC
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  42   * else 120degC or 140deG based on the PMIC die temp threshold status.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  43   *
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  44   * Return 0 on success otherwise error number to show reason of failure.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  45   */
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  46  
-ae11d6a87c3e74 Daniel Lezcano  2022-08-05  47  static int max77620_thermal_read_temp(struct thermal_zone_device *tz, int *temp)
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23 @48  {
-ae11d6a87c3e74 Daniel Lezcano  2022-08-05  49  	struct max77620_therm_info *mtherm = tz->devdata;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  50  	unsigned int val;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  51  	int ret;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  52  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  53  	ret = regmap_read(mtherm->rmap, MAX77620_REG_STATLBT, &val);
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  54  	if (ret < 0) {
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  55  		dev_err(mtherm->dev, "Failed to read STATLBT: %d\n", ret);
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  56  		return ret;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  57  	}
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  58  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  59  	if (val & MAX77620_IRQ_TJALRM2_MASK)
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  60  		*temp = MAX77620_TJALARM2_TEMP;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  61  	else if (val & MAX77620_IRQ_TJALRM1_MASK)
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  62  		*temp = MAX77620_TJALARM1_TEMP;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  63  	else
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  64  		*temp = MAX77620_NORMAL_OPERATING_TEMP;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  65  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  66  	return 0;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  67  }
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  68  
-
-:::::: The code at line 48 was first introduced by commit
-:::::: ec4664b3fd6d565a79eb562e4339528f74eb1cca thermal: max77620: Add thermal driver for reporting junction temp
-
-:::::: TO: Laxman Dewangan <ldewangan@nvidia.com>
-:::::: CC: Zhang Rui <rui.zhang@intel.com>
+   426	
+   427	static int aspeed_tach_create_fan(struct device *dev,
+   428					  struct aspeed_pwm_tach_data *priv)
+   429	{
+   430		u8 *tach_ch;
+ > 431		int ret, count;
+   432	
+   433		count = of_property_count_u8_elems(dev->of_node, "aspeed,fan-tach-ch");
+   434		if (count < 1)
+   435			return -EINVAL;
+   436		tach_ch = devm_kcalloc(dev, count, sizeof(*tach_ch), GFP_KERNEL);
+   437		if (!tach_ch)
+   438			return -ENOMEM;
+   439		ret = of_property_read_u8_array(dev->of_node, "aspeed,fan-tach-ch",
+   440						tach_ch, count);
+   441	
+   442		aspeed_present_fan_tach(priv, tach_ch, count);
+   443	
+   444		return 0;
+   445	}
+   446	
 
 -- 
 0-DAY CI Kernel Test Service
