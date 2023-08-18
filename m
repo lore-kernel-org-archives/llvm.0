@@ -1,98 +1,125 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2371F1426B
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 05:18:53 +0000 (UTC)
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4881eab4de2so158630e0c.0
-        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 22:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692335933; x=1692940733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+kpLB9nUoya1zg6wDKkXayE7Tz/XHKIUeAAVe5xKhK0=;
-        b=KaJjLiyhBSvhpgsm8YiFaBS8xI7UGZoG5drkaowj2GP6x3bnrlC3xOI9td0TTSOaAe
-         U8CIrSHQWflISPqATW2Jo4GQiAlJPU0m/8d2f85PGndrz8aD8hfh2jAjRsTiH+CTkLXa
-         m7Jyn6jzSFdoWq8Cj3ukeolSvabGfHWqd3VkCvjM329jQTuiE3+JNp4UdwbXKk2U9XJN
-         +sVLZ11JcehL6jteXQVA0W10g46ms6XNkh0ocrcENaiTzXDHMmhQV2Yk2ioO5jxIIELt
-         b9a3SmTagu6fnJsvmeaZRCTHEiUrhVsd+wOWsCbL+Vw6pMR3+OvW+biIoAtgD8wdZeIS
-         w68g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692335933; x=1692940733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+kpLB9nUoya1zg6wDKkXayE7Tz/XHKIUeAAVe5xKhK0=;
-        b=HyMnryeJCkpArpiYZ7j40oE5VEFsQGLnNcVZNZnOeCBhaipViKxP30kjg0/gbPFs9o
-         YzN6zRd5R0ViTN+owfFW67ZjnxDOfm9bx7aTuSQmDdFNg3QfuPhO8DjXL6hC8ZI0jUPY
-         ntWeVrNeUYJqgTa0bgK+V8PIPx1Dv52u4NZSj6heqjoRsYh7ubUyqLBl0n/060SytFbc
-         FVw5A3Y0yTtDsduXJ2wfBq2porpE/ioRwE2FFBgffgPIa/gTB9bo84Xn6bUIgYpmDnIz
-         YQZakky/pEi39/xjrlMAcA5KhCp57seomxHm5ur90CAhH/ZCLSa7+XEM8FlBbd1TGU0Q
-         tTFw==
-X-Gm-Message-State: AOJu0YyO+DaAsfQXi1WwLamnjekg1PbiKM+CE8Gmh2WEJHWy9ScrMgbs
-	0Tccdy10LUurAEKZeVYJzs1ex0hb1f20OMYSDrg4sg==
-X-Google-Smtp-Source: AGHT+IEf2oEZW2NUvuhCzB/XQOkZOamd12TFRt7JdNd8j2TpdIAQwd5X10QtMAXKbXbUwLs+I54R8FqOfRXoI/bJsKM=
-X-Received: by 2002:a67:b648:0:b0:44a:c20a:ebb1 with SMTP id
- e8-20020a67b648000000b0044ac20aebb1mr1545884vsm.13.1692335932647; Thu, 17 Aug
- 2023 22:18:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B169311CA7;
+	Fri, 18 Aug 2023 05:23:43 +0000 (UTC)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RRqzC3zyrz4f3mVX;
+	Fri, 18 Aug 2023 13:23:35 +0800 (CST)
+Received: from [10.67.110.48] (unknown [10.67.110.48])
+	by APP3 (Coremail) with SMTP id _Ch0CgBXe8NSAN9kaCyzAw--.3431S2;
+	Fri, 18 Aug 2023 13:23:32 +0800 (CST)
+Message-ID: <d3af78d4-9b15-347e-f3e8-5ce83f44faf6@huaweicloud.com>
+Date: Fri, 18 Aug 2023 13:23:30 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYvFD-kE0+EGWkwcnR1DXRxh7p7OwQThJ6KWxYWVROJ4+A@mail.gmail.com>
- <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com>
-In-Reply-To: <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 18 Aug 2023 10:48:41 +0530
-Message-ID: <CA+G9fYtRMde7Ksswa8pY8sFgnWVN-snRHfz4YRM04HSQ4LFBZQ@mail.gmail.com>
-Subject: Re: landlock: fs_test: fs_test.c:4524:9: error: initializer element
- is not a compile-time constant
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>, 
-	Anders Roxell <anders.roxell@linaro.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Richard Weinberger <richard@nod.at>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [netfilter-nf-next:testing 2/9]
+ ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field
+ 'target' with variable sized type 'struct ebt_entry_target' not at the end of
+ a struct or class is a GNU extension
+Content-Language: en-US
+From: "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+To: Kees Cook <keescook@chromium.org>, Florian Westphal <fw@strlen.de>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <202308171249.g1ywxhII-lkp@intel.com>
+ <202308162257.F7876776C9@keescook> <20230817082618.GE4312@breakpoint.cc>
+ <202308171000.C97EEC7@keescook>
+ <247c158b-f1d3-1bba-b2fa-1d741a566837@huaweicloud.com>
+In-Reply-To: <247c158b-f1d3-1bba-b2fa-1d741a566837@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_Ch0CgBXe8NSAN9kaCyzAw--.3431S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw47GFWDKw1fKr1xKrWUXFb_yoW5Zw17pF
+	y8Aa1jkr48JrZ7Gw4IqF47uF1Yvw47Jry3ur13G348Z3Z0vry2kF4Ikr4a9F90yrsrGr1a
+	yF4jqrWxZrsFqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
 
-On Thu, 17 Aug 2023 at 21:24, Nick Desaulniers <ndesaulniers@google.com> wr=
-ote:
->
-> On Thu, Aug 17, 2023 at 3:51=E2=80=AFAM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > While building selftests landlock following warnings / errors noticed o=
-n the
-> > Linux next with clang-17.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Build errors:
-> > ------------
-> > landlock/fs_test
-> > fs_test.c:4524:9: error: initializer element is not a compile-time cons=
-tant
->
-> Hi Naresh,
-> Can you tell me more about your specific version of clang-17?
 
-    compiler:
-        name: clang,
-        version: 17.0.0,
-        version_full: Debian clang version 17.0.0
-(++20230725053429+d0b54bb50e51-1~exp1~20230725173444.1)
 
->
-> I believe a fix of mine to clang should address this. It landed in
-> clang-18, and was backported to clang-17 recently.
-> https://github.com/llvm/llvm-project-release-prs/commit/0b2d5b967d9837579=
-3897295d651f58f6fbd3034
->
-> I suspect your clang-17 might need a rebuild.  Thanks for the report.
+On 2023/08/18 11:24, GONG, Ruiqi wrote:
+> 
+> 
+> On 2023/08/18 1:02, Kees Cook wrote:
+>> On Thu, Aug 17, 2023 at 10:26:18AM +0200, Florian Westphal wrote:
+>>> Kees Cook <keescook@chromium.org> wrote:
+>>>> On Thu, Aug 17, 2023 at 01:03:20PM +0800, kernel test robot wrote:
+>>>>> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
+>>>>> head:   015e2d9101d3713c7bee16dccad171df04a3bbd5
+>>>>> commit: 61b9e6bd48a6317c0a44ee4f3fecdec9de5baa9e [2/9] netfilter: ebtables: replace zero-length array members
+>>>>> config: i386-buildonly-randconfig-r004-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/config)
+>>>>> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+>>>>> reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/reproduce)
+>>>>>
+>>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>>>> the same patch/commit), kindly add following tags
+>>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202308171249.g1ywxhII-lkp@intel.com/
+>>>>>
+>>>>> All warnings (new ones prefixed by >>):
+>>>>>
+>>>>>    In file included from <built-in>:1:
+>>>>>>> ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+>>>>>            struct ebt_entry_target target;
+>>>>>                                    ^
+>>>>>    1 warning generated.
+>>>>
+>>>> Eww, it looks like "struct ebt_entry_target" is used _within_ another
+>>>> struct:
+>>>>
+>>>> struct ebt_standard_target {
+>>>>         struct ebt_entry_target target;
+>>>>         int verdict;
+>>>> };
+>>>
+>>> Yes, same as xt_standard_target.
+>>>
+>>>> These have been fixed in the past in a variety of ways -- it all depends
+>>>> on how userspace is using them. In looking at Debian Code Search:
+>>>> https://codesearch.debian.net/search?q=struct+ebt_standard_target&literal=1
+>>>>
+>>>> It is exclusively doing casts and looking at the "verdict" member. So
+>>>> the easiest conversion might be this:
+>>>>
+>>>>  struct ebt_standard_target {
+>>>> -       struct ebt_entry_target target;
+>>>> +       unsigned char hdr[sizeof(struct ebt_entry_target)];
+>>>>         int verdict;
+>>>
+>>> I don't think its worth doing all of this.
+>>>
+>>> Can't we just keep it as-is and drop the relevant hunk from the patch?
+>>
+>> For now, yeah. But we'll need to find a solution as flex-array
+>> structures overlapping variables is considered deprecated (it can lead
+>> to ambiguous sizing results). But as long as the kernel itself doesn't
+>> use struct ebt_standard_target, we can kick the can down the road a bit
+>> more. :)
+>>
+> 
+> I agree that we can complete the whole transformation step-by-step. I
+> will make another patch without the problematic replacement.
 
-I will rebuild / re-test and confirm soon.
+I didn't notice that the patch had been modified and merged into
+nf-next's testing branch. Let's use that and I won't send another one.
+Thanks Florian! XD
 
-- Naresh
