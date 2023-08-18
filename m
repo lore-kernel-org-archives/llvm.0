@@ -1,79 +1,67 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599F17ED
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 14:26:09 +0000 (UTC)
-Received: from cwcc.thunk.org (pool-173-48-121-162.bstnma.fios.verizon.net [173.48.121.162])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 37IEPi9R008983
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Aug 2023 10:25:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1692368747; bh=mr78n3qsUgsgPJgzwDA3ALe/I5P61WM2l6xoqGgEaxk=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=ifckXAgyqVrtSRdqKrD9L/Sz32XDzO9iBLPsAWc3woHvB45OxXeNyyurXmSdK/1Ou
-	 5KrKw2StHw3SqGZ9hQfuuurrTylF99RTMEjbg1BoPT0Wgv2fQdlcpQwJPLQHAARscK
-	 dpbRs8QuHAdrRIDP/w0gqOHY3q7kB4cfmLxmNrjWviMT3OOkR24h+TOwGfPw/URuEJ
-	 Hf4euGVDyeGXRWC1h/VHzvTy5ZgsYKrGn4Te+QHg/AKHU7FRBCvFvRFra0eHXBYB8t
-	 C0Uz4b6+d0cbMlUOfF8/Bwj06gL80gl/kq1u4vuQdEQuoezh5ZBjhLWmnS2Y/9s/cE
-	 AcNNVB0ajSlFw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id A684315C0501; Fri, 18 Aug 2023 10:25:44 -0400 (EDT)
-Date: Fri, 18 Aug 2023 10:25:44 -0400
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: sandeen@redhat.com,
-        syzbot <syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
- forced after error (3)
-Message-ID: <20230818142544.GA3513305@mit.edu>
-References: <000000000000530e0d060312199e@google.com>
- <20230817142103.GA2247938@mit.edu>
- <81f96763-51fe-8ea1-bf81-cd67deed9087@redhat.com>
- <20230817161118.GC2247938@mit.edu>
- <20230817164739.GC1483@sol.localdomain>
- <20230818021038.GC3464136@mit.edu>
- <20230818025255.GA2175@sol.localdomain>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AC9374
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 14:41:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 74709C0006;
+	Fri, 18 Aug 2023 14:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1692369666;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GnWLZlTRklyIq0gsggN9dgk+3faULATNeMM2pNJ88wI=;
+	b=X53g3EnPtfUJXK6TOLZketkkLshIxL6N+tjsmJPq7tuxg4aq40EyHPmoP5BVJMmV3nZxMa
+	+0TN8cLFzCK/JmR7Nj2KlZhFCsGak9ezL9t0u7OgpCfulQtxidzB5k8lUVpJ7+Awkt7mWz
+	t1qWKh0hJ69tJSd649DBuMeou8/YS27juKbC5K+v0Ua4cFIfVVQY6hKarWeP76cMX13bWO
+	ySeSpa2B0L4haMysf/MZaU4j7q1AA/wTmtuQ7Eg0NUHTKzfehWd35H/X11ya3frSwpTXNX
+	dKu2WOkyYGqClCORWDI3L80pQ/52YsY5X6kNUE4KwfBb6CuXiOiocZjJ8j5Z3w==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Justin Stitt <justinstitt@google.com>,
+	Stefan Agner <stefan@agner.ch>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] mtd: rawnand: fix -Wvoid-pointer-to-enum-cast warning
+Date: Fri, 18 Aug 2023 16:41:04 +0200
+Message-Id: <20230818144104.145820-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To:  <20230817-void-drivers-mtd-nand-raw-vf610_nfc-v2-1-870a7c948c44@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230818025255.GA2175@sol.localdomain>
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'b9e002a34420e5ba25d4283be870c48e0c9e005f'
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Thu, Aug 17, 2023 at 07:52:55PM -0700, Eric Biggers wrote:
-> Obviously it's up to the system administrator; that should have been clear since
-> I suggested a sysctl.  Sorry if I wasn't clear.  The point is that there are
-> certain conventions for what is allowed to break the safety guarantees that the
-> kernel provides to userspace, which includes causing a kernel panic.  Panics on
-> various problems are configured by /proc/sys/kernel/panic_*.  So having to
-> opt-in to panic-on-error, or at least being able to opt-out, by setting a sysctl
-> seems natural.  Whereas having mount() being able to automatically panic the
-> kernel with no way to opt-out seems like a violation of broader kernel
-> conventions, even if it happens to be "working as intended" in the ext4 context.
+On Thu, 2023-08-17 at 17:52:21 UTC, Justin Stitt wrote:
+> When building with clang 18 I see the following warning:
+> |       drivers/mtd/nand/raw/vf610_nfc.c:853:17: warning: cast to smaller integer
+> |               type 'enum vf610_nfc_variant' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> |         853 |         nfc->variant = (enum vf610_nfc_variant)of_id->data;
+> 
+> This is due to the fact that `of_id->data` is a void* while `enum vf610_nfc_variant`
+> has the size of an int.
+> 
+> Cast `of_id->data` to a uintptr_t to silence the above warning for clang
+> builds using W=1.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-The reason why a sysctl isn't really great is because the system
-administrator might want to configure the behavior on a per-file
-system basis.  And you *can* configure it as a mount option, via
-"mount -o errors=continue" or "mount -o "errors=panic".  The
-superblock setting is just the default if something isn't explicitly
-specified as a mount option (either on the command line or in
-/etc/fstab).
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
-So mount does not "automatically" panic the kernel, and there are
-*plenty* of ways to opt-out.  You can use the mount option; you can
-run "tune2fs -e continue"; you can just !@#!?! run fsck.ext4 before
-mounting the file system.  There are all ways of "opting out."  Some
-of them, such as the last, is even considered best practice --- just
-as picking up a USB stick, or worse, a firewire drive, in a parking
-lot, and *not* plugging it into your laptop is considered best practice.
-
-	     	  	    	      	       - Ted
+Miquel
