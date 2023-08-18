@@ -1,17 +1,44 @@
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 60C7B18B11
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 13:52:43 +0000 (UTC)
-Received: (qmail 30393 invoked by uid 1000); 18 Aug 2023 09:52:35 -0400
-Date: Fri, 18 Aug 2023 09:52:35 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: kernel test robot <lkp@intel.com>
-Cc: Badhri Jagan Sridharan <badhri@google.com>, llvm@lists.linux.dev,
-  oe-kbuild-all@lists.linux.dev,
-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [stable:linux-6.1.y 6854/8698] drivers/usb/gadget/udc/core.c:56:
- warning: Function parameter or member 'vbus_work' not described in 'usb_udc'
-Message-ID: <bbd143c9-afc9-4231-b4fc-e095d9b15bd2@rowland.harvard.edu>
-References: <202308181228.oUyNPyxW-lkp@intel.com>
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599F17ED
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 14:26:09 +0000 (UTC)
+Received: from cwcc.thunk.org (pool-173-48-121-162.bstnma.fios.verizon.net [173.48.121.162])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 37IEPi9R008983
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Aug 2023 10:25:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1692368747; bh=mr78n3qsUgsgPJgzwDA3ALe/I5P61WM2l6xoqGgEaxk=;
+	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
+	b=ifckXAgyqVrtSRdqKrD9L/Sz32XDzO9iBLPsAWc3woHvB45OxXeNyyurXmSdK/1Ou
+	 5KrKw2StHw3SqGZ9hQfuuurrTylF99RTMEjbg1BoPT0Wgv2fQdlcpQwJPLQHAARscK
+	 dpbRs8QuHAdrRIDP/w0gqOHY3q7kB4cfmLxmNrjWviMT3OOkR24h+TOwGfPw/URuEJ
+	 Hf4euGVDyeGXRWC1h/VHzvTy5ZgsYKrGn4Te+QHg/AKHU7FRBCvFvRFra0eHXBYB8t
+	 C0Uz4b6+d0cbMlUOfF8/Bwj06gL80gl/kq1u4vuQdEQuoezh5ZBjhLWmnS2Y/9s/cE
+	 AcNNVB0ajSlFw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id A684315C0501; Fri, 18 Aug 2023 10:25:44 -0400 (EDT)
+Date: Fri, 18 Aug 2023 10:25:44 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: sandeen@redhat.com,
+        syzbot <syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
+ forced after error (3)
+Message-ID: <20230818142544.GA3513305@mit.edu>
+References: <000000000000530e0d060312199e@google.com>
+ <20230817142103.GA2247938@mit.edu>
+ <81f96763-51fe-8ea1-bf81-cd67deed9087@redhat.com>
+ <20230817161118.GC2247938@mit.edu>
+ <20230817164739.GC1483@sol.localdomain>
+ <20230818021038.GC3464136@mit.edu>
+ <20230818025255.GA2175@sol.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -20,27 +47,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202308181228.oUyNPyxW-lkp@intel.com>
+In-Reply-To: <20230818025255.GA2175@sol.localdomain>
 
-On Fri, Aug 18, 2023 at 12:41:40PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
-> head:   6c44e13dc284f7f4db17706ca48fd016d6b3d49a
-> commit: 3c048d42c305cba61c2040702778023a7b973b22 [6854/8698] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
-> config: i386-randconfig-i001-20230817 (https://download.01.org/0day-ci/archive/20230818/202308181228.oUyNPyxW-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181228.oUyNPyxW-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308181228.oUyNPyxW-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/usb/gadget/udc/core.c:56: warning: Function parameter or member 'vbus_work' not described in 'usb_udc'
+On Thu, Aug 17, 2023 at 07:52:55PM -0700, Eric Biggers wrote:
+> Obviously it's up to the system administrator; that should have been clear since
+> I suggested a sysctl.  Sorry if I wasn't clear.  The point is that there are
+> certain conventions for what is allowed to break the safety guarantees that the
+> kernel provides to userspace, which includes causing a kernel panic.  Panics on
+> various problems are configured by /proc/sys/kernel/panic_*.  So having to
+> opt-in to panic-on-error, or at least being able to opt-out, by setting a sysctl
+> seems natural.  Whereas having mount() being able to automatically panic the
+> kernel with no way to opt-out seems like a violation of broader kernel
+> conventions, even if it happens to be "working as intended" in the ext4 context.
 
-This has already been fixed by commit 159a98afc88e ("USB: gadget: core: 
-Add missing kerneldoc for vbus_work") in linux-next.
+The reason why a sysctl isn't really great is because the system
+administrator might want to configure the behavior on a per-file
+system basis.  And you *can* configure it as a mount option, via
+"mount -o errors=continue" or "mount -o "errors=panic".  The
+superblock setting is just the default if something isn't explicitly
+specified as a mount option (either on the command line or in
+/etc/fstab).
 
-Alan Stern
+So mount does not "automatically" panic the kernel, and there are
+*plenty* of ways to opt-out.  You can use the mount option; you can
+run "tune2fs -e continue"; you can just !@#!?! run fsck.ext4 before
+mounting the file system.  There are all ways of "opting out."  Some
+of them, such as the last, is even considered best practice --- just
+as picking up a USB stick, or worse, a firewire drive, in a parking
+lot, and *not* plugging it into your laptop is considered best practice.
 
+	     	  	    	      	       - Ted
