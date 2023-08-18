@@ -1,163 +1,107 @@
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44DB28478;
-	Fri, 18 Aug 2023 03:55:40 +0000 (UTC)
-Received: from eig-obgw-6003a.ext.cloudfilter.net ([10.0.30.151])
-	by cmsmtp with ESMTP
-	id WmuKq3TyeQFHRWqaKqwQXR; Fri, 18 Aug 2023 03:55:40 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id WqaKqAKE2oeMqWqaKqvgGT; Fri, 18 Aug 2023 03:55:40 +0000
-X-Authority-Analysis: v=2.4 cv=F9xEy4tN c=1 sm=1 tr=0 ts=64deebbc
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9
- a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=/CaltAbw9kXoOTkGA4OE5zZGNtQe7YqeZHvxU27zSHI=; b=VFqmbvP9jPcq9FBHlW1rFOuXzs
-	4RdFRuq2koYRsFuYDT1gW+hRskGxauToUbJXGS7bg6l1gqxSnac7swgcT2LY1YO88rrKxDk9SrHtK
-	YJmfIrT0+m9POf2vT+fntaW8A3jvgxmiAykLEc/XWdXWptNurdcYARUYDdj6kNhZWE4hTBEXGw7A8
-	GcJ8yfJTqrVqDr8mQv7ZnZSXEKAHcR2RkXjhqZDp1huw1Ab9cKICWRU4YLFBJmJA/BG2Yvmix4cWZ
-	hl7RpAwdNwdXoxnTGnxvW+0O4orZrO7i0zKMuBTpnz5ubwDz4XlWL4uxKZKQbax9TcRP3Wnu/NEaI
-	KzssiFFQ==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:51454 helo=[192.168.15.8])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWp0a-001CPk-2l;
-	Thu, 17 Aug 2023 21:14:40 -0500
-Message-ID: <a21ec18e-21be-2715-f125-a7ec67c2cb02@embeddedor.com>
-Date: Thu, 17 Aug 2023 20:15:39 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543E8613E;
+	Fri, 18 Aug 2023 04:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692333724; x=1723869724;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G36Qd9hgbHcwJG9GZKW0oip/LIbLVmolK1qUKZmVkQw=;
+  b=hqb5puhuxPDI8SIz0rX4vFjSpgvNutXhBysIqqZpZlJBi3AC6nKgNsqO
+   7Knedv5oM418sMtJ5oYQVqDOjMD88/neshvrHz8SsOVnqxtUcyHOr9tXj
+   YLc4jmyi0niNtQ4N0/fMq1MFNcXxlW83o61qtDEaTXBW3GTHvULHj2mDJ
+   l0A2352eEskiLbbNADDHnK992hnwrzb34X3VKNmwVeKBWNgQynCVPOdtD
+   4USc9/VbRRaBiFI5iycNNabkl+r80PTcM0aaRcq/QGoocrcqKtfVo0Dyz
+   PbBRbJgR8Usowf48Kkolb+2uFJGwxp/VI+0L+8kBo8fB/u/GBEJs846K3
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="363171556"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="363171556"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 21:42:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="800324893"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="800324893"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Aug 2023 21:42:00 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWrJ9-00026c-2M;
+	Fri, 18 Aug 2023 04:41:59 +0000
+Date: Fri, 18 Aug 2023 12:41:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: [stable:linux-6.1.y 6854/8698] drivers/usb/gadget/udc/core.c:56:
+ warning: Function parameter or member 'vbus_work' not described in 'usb_udc'
+Message-ID: <202308181228.oUyNPyxW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 18/21] dmaengine: ti: omap-dma: Annotate struct omap_desc
- with __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
-Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>, dmaengine@vger.kernel.org,
- Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Zhou Wang <wangzhou1@hisilicon.com>,
- Jie Hai <haijie1@huawei.com>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Green Wan <green.wan@sifive.com>,
- Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- Patrice Chotard <patrice.chotard@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Laxman Dewangan <ldewangan@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Yu Kuai <yukuai3@huawei.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jordy Zomer <jordy@pwning.systems>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230817235428.never.111-kees@kernel.org>
- <20230817235859.49846-18-keescook@chromium.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817235859.49846-18-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qWp0a-001CPk-2l
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:51454
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 9
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDr1vlC3VZXGiaI+em1TpUlxGjg5JIKtQM95TQfX6Ha834LEYhx6n/hUyjTW6X6HniasPf72qOj9rTEcQaBSDXgqxAs+V5lPJu24TPqQasJoFKVGhhu0
- r4Q1tSk5eR/ULG29K5N4FQGjeqvatecGhmWzmxiq0GcEbqrRohXL9TmzcQ5ERl8hEPyH1Tg4vFdR376PmmxSvzjM84dS4Q5fkuROs8rHVgQLTb6608/w4MDC
- JSbt9P/iJlDSPOYFUfwTZw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
+head:   6c44e13dc284f7f4db17706ca48fd016d6b3d49a
+commit: 3c048d42c305cba61c2040702778023a7b973b22 [6854/8698] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+config: i386-randconfig-i001-20230817 (https://download.01.org/0day-ci/archive/20230818/202308181228.oUyNPyxW-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181228.oUyNPyxW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308181228.oUyNPyxW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/gadget/udc/core.c:56: warning: Function parameter or member 'vbus_work' not described in 'usb_udc'
 
 
+vim +56 drivers/usb/gadget/udc/core.c
 
-On 8/17/23 17:58, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct omap_desc.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-> Cc: dmaengine@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+fc274c1e997314 drivers/usb/gadget/udc/core.c     Alan Stern             2022-04-23  30  
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  31  /**
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  32   * struct usb_udc - describes one usb device controller
+e21cd08f965766 drivers/usb/gadget/udc/core.c     Lee Jones              2020-07-03  33   * @driver: the gadget driver pointer. For use by the class code
+e21cd08f965766 drivers/usb/gadget/udc/core.c     Lee Jones              2020-07-03  34   * @dev: the child device to the actual controller
+e21cd08f965766 drivers/usb/gadget/udc/core.c     Lee Jones              2020-07-03  35   * @gadget: the gadget. For use by the class code
+e21cd08f965766 drivers/usb/gadget/udc/core.c     Lee Jones              2020-07-03  36   * @list: for use by the udc class driver
+e21cd08f965766 drivers/usb/gadget/udc/core.c     Lee Jones              2020-07-03  37   * @vbus: for udcs who care about vbus status, this value is real vbus status;
+628ef0d273a69d drivers/usb/gadget/udc/udc-core.c Peter Chen             2015-03-06  38   * for udcs who do not care about vbus status, this value is always true
+49d08cfc783044 drivers/usb/gadget/udc/core.c     Thinh Nguyen           2021-01-11  39   * @started: the UDC's started state. True if the UDC had started.
+3c048d42c305cb drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-09  40   * @allow_connect: Indicates whether UDC is allowed to be pulled up.
+3c048d42c305cb drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-09  41   * Set/cleared by gadget_(un)bind_driver() after gadget driver is bound or
+3c048d42c305cb drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-09  42   * unbound.
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  43   *
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  44   * This represents the internal data structure which is used by the UDC-class
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  45   * to hold information about udc driver and gadget together.
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  46   */
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  47  struct usb_udc {
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  48  	struct usb_gadget_driver	*driver;
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  49  	struct usb_gadget		*gadget;
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  50  	struct device			dev;
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  51  	struct list_head		list;
+628ef0d273a69d drivers/usb/gadget/udc/udc-core.c Peter Chen             2015-03-06  52  	bool				vbus;
+49d08cfc783044 drivers/usb/gadget/udc/core.c     Thinh Nguyen           2021-01-11  53  	bool				started;
+3c048d42c305cb drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-09  54  	bool				allow_connect;
+3c048d42c305cb drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-09  55  	struct work_struct		vbus_work;
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28 @56  };
+2ccea03a8f7ec9 drivers/usb/gadget/udc-core.c     Felipe Balbi           2011-06-28  57  
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+:::::: The code at line 56 was first introduced by commit
+:::::: 2ccea03a8f7ec93641791f2760d7cdc6cab6205f usb: gadget: introduce UDC Class
 
-Thanks
---
-Gustavo
+:::::: TO: Felipe Balbi <balbi@ti.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
 
-> ---
->   drivers/dma/ti/omap-dma.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/dma/ti/omap-dma.c b/drivers/dma/ti/omap-dma.c
-> index cf96cf915c0c..11ac3fc0a52a 100644
-> --- a/drivers/dma/ti/omap-dma.c
-> +++ b/drivers/dma/ti/omap-dma.c
-> @@ -124,7 +124,7 @@ struct omap_desc {
->   	uint32_t csdp;		/* CSDP value */
->   
->   	unsigned sglen;
-> -	struct omap_sg sg[];
-> +	struct omap_sg sg[] __counted_by(sglen);
->   };
->   
->   enum {
-> @@ -1005,6 +1005,7 @@ static struct dma_async_tx_descriptor *omap_dma_prep_slave_sg(
->   	d = kzalloc(struct_size(d, sg, sglen), GFP_ATOMIC);
->   	if (!d)
->   		return NULL;
-> +	d->sglen = sglen;
->   
->   	d->dir = dir;
->   	d->dev_addr = dev_addr;
-> @@ -1120,8 +1121,6 @@ static struct dma_async_tx_descriptor *omap_dma_prep_slave_sg(
->   		}
->   	}
->   
-> -	d->sglen = sglen;
-> -
->   	/* Release the dma_pool entries if one allocation failed */
->   	if (ll_failed) {
->   		for (i = 0; i < d->sglen; i++) {
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
