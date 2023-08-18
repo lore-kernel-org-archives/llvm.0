@@ -1,41 +1,40 @@
-Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17CFE375
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 01:21:58 +0000 (UTC)
-Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81119375
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 01:22:23 +0000 (UTC)
+Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
 	by cmsmtp with ESMTP
-	id WmuKqHTlDDKaKWoBaqIX8K; Fri, 18 Aug 2023 01:21:58 +0000
+	id We1ZqkuC6ez0CWoBjqAqP5; Fri, 18 Aug 2023 01:22:07 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id WoBZqhyNKD5qiWoBZqcy0a; Fri, 18 Aug 2023 01:21:57 +0000
-X-Authority-Analysis: v=2.4 cv=dMe1JcVb c=1 sm=1 tr=0 ts=64dec7b5
+	id WoBwqZBrm234eWoBwqLdWL; Fri, 18 Aug 2023 01:22:20 +0000
+X-Authority-Analysis: v=2.4 cv=cPzzD3SN c=1 sm=1 tr=0 ts=64dec7cc
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9
- a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=1CNFftbPRP8L7MoqJWF3:22
- a=xmb-EsYY8bH0VWELuYED:22
+ a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4qj0EaSxUo2+DCTF/hymWHxE6YXJwkpWmEuGBo/Dmbc=; b=n+XJDOIpS3chhDQvGjusg83aqL
-	kotuJV5YiiK7mhcxygIaK8gdEM36MVhuQumYgfktIfM4pIfdSPHgO69oI+LdslniQgvuflhAVhsvz
-	xTXwA4g2mz7+3cP/vlCYfRUJRbeRp/lvUHGyz7Xt/PLQ1/Me2V1ZLKkEyJTiBRdSjL1a8IYIXz+bn
-	4hVFZYiEiosfCDz5DC5dGVY/bVDGQd9vKe5ii60dGxZswHz+UohqjZc4Yxvo3LTSAGMDiEQGGLi+3
-	CD935yKR04s/TRMESuoUI6TgTU7RYtcs6eqnbgLFnUOZzubddNm6hANkkI26WoiVkc9I+mm5N0gEu
-	JaN4KC1Q==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:40700 helo=[192.168.15.8])
+	bh=st6W8wFthlxJj8Xs/X7DzBxbKeU4f01Jzh9fAohMtXU=; b=q6EPELf/a4P/OkIeCuCS/FiRLK
+	h9oy+zc6j6J+7Wp6BbI34AGk5+w9rnoMSa0yKSdTo/JWgfylVuHdc9XqGWtaqgSt0DA3mlH2ziDhk
+	aW9G1BHFQwkS9tKZy8y7yQeaPRJz2YPDP82Lq3Y0Xwtx6jycUWq4bK7l+DXnR2VUqRDWQkGASGwX6
+	xknAtnuD28ltggoiT5PQ9t7c+H/jFRmLqfpYaVylJPyF7fOsQFM3rzOxinCQ3ttTiCSrsECGV6wLz
+	5KgJID+UkO4y1lFbf0FKUfcNPTje3+mJsbVjkSU7Ike67X7DR3WEsvDrmVNN0kgjHqQO2UjRtQ8Tm
+	yQ0IxiTA==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:54890 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWoBR-000THf-37;
-	Thu, 17 Aug 2023 20:21:50 -0500
-Message-ID: <1e22a311-0cb4-f31c-4439-65421147a50e@embeddedor.com>
-Date: Thu, 17 Aug 2023 19:22:33 -0600
+	id 1qWoBq-000TtY-0M;
+	Thu, 17 Aug 2023 20:22:14 -0500
+Message-ID: <ceacfabe-f611-f1d2-2dd3-5fc9155ece83@embeddedor.com>
+Date: Thu, 17 Aug 2023 19:23:09 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,13 +43,12 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 01/21] dmaengine: apple-admac: Annotate struct admac_data
+Subject: Re: [PATCH 04/21] dmaengine: fsl-edma: Annotate struct fsl_edma_desc
  with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
-Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+Cc: dmaengine@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+ Sven Peter <sven@svenpeter.dev>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
  Ludovic Desroches <ludovic.desroches@microchip.com>,
  Tudor Ambarus <tudor.ambarus@linaro.org>,
  Lars-Peter Clausen <lars@metafoo.de>, Zhou Wang <wangzhou1@hisilicon.com>,
@@ -71,13 +69,14 @@ Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
  Jordy Zomer <jordy@pwning.systems>, Jernej Skrabec
  <jernej.skrabec@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org,
  llvm@lists.linux.dev, linux-hardening@vger.kernel.org
 References: <20230817235428.never.111-kees@kernel.org>
- <20230817235859.49846-1-keescook@chromium.org>
+ <20230817235859.49846-4-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817235859.49846-1-keescook@chromium.org>
+In-Reply-To: <20230817235859.49846-4-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -88,18 +87,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qWoBR-000THf-37
+X-Exim-ID: 1qWoBq-000TtY-0M
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:40700
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:54890
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
+X-Email-Count: 44
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFZgoprPhfOTvNnRfCl7gFI5+VvU1SK50T8OzEBSWUX0g9IFbINRS56DpjxV2ouJIL/0cXnpXb9gG6r78VAj3z+SD+MtVFIymJdKNJPHncB9wyuWK7hU
- 3N2Bg59UUJWeQC/CDDTdDOF+opgt2LPv0iRFGxSuAZowBM0CRMDt3agcTD1ywaWEuTVv5GSZ6WU5V3H68lne0wd0eNNtVHp6Eio=
+X-CMAE-Envelope: MS4xfENkIScpSjXlwWRjeBczlGZ8LdW3EYR8EFAQyXtBBzXvYXfNapq+Ivzf/75LyxBOMuiGLyEVNce3YDQQ01kQNvV1nrTayCaaCs5WyjfP4Hq6lCuIZ7Iu
+ hh5Tndb0EdRRUhORGaN0cgKDrX+HeriJQ5gfkFoGlI3P+Bat0H6FiiO/+Z2uL93dPxa3mJuIc4DAHlhNCCEcKW12dx8IsrbBSq4=
 
 
 
@@ -110,16 +109,11 @@ On 8/17/23 17:58, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct admac_data.
+> As found with Coccinelle[1], add __counted_by for struct fsl_edma_desc.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
 > Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Hector Martin <marcan@marcan.st>
-> Cc: Sven Peter <sven@svenpeter.dev>
-> Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-> Cc: asahi@lists.linux.dev
-> Cc: linux-arm-kernel@lists.infradead.org
 > Cc: dmaengine@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
@@ -130,19 +124,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/dma/apple-admac.c | 2 +-
+>   drivers/dma/fsl-edma-common.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/dma/apple-admac.c b/drivers/dma/apple-admac.c
-> index 3af795635c5c..ff46260b6ebc 100644
-> --- a/drivers/dma/apple-admac.c
-> +++ b/drivers/dma/apple-admac.c
-> @@ -128,7 +128,7 @@ struct admac_data {
->   	int irq;
->   	int irq_index;
->   	int nchannels;
-> -	struct admac_chan channels[];
-> +	struct admac_chan channels[] __counted_by(nchannels);
+> diff --git a/drivers/dma/fsl-edma-common.h b/drivers/dma/fsl-edma-common.h
+> index 004ec4a6bc86..fdbc79787643 100644
+> --- a/drivers/dma/fsl-edma-common.h
+> +++ b/drivers/dma/fsl-edma-common.h
+> @@ -135,7 +135,7 @@ struct fsl_edma_desc {
+>   	bool				iscyclic;
+>   	enum dma_transfer_direction	dirn;
+>   	unsigned int			n_tcds;
+> -	struct fsl_edma_sw_tcd		tcd[];
+> +	struct fsl_edma_sw_tcd		tcd[] __counted_by(n_tcds);
 >   };
 >   
->   struct admac_tx {
+>   enum edma_version {
