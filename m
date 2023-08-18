@@ -1,146 +1,88 @@
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575DF62C
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 01:25:41 +0000 (UTC)
-Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
-	by cmsmtp with ESMTP
-	id WncWq47KrbK1VWoDdqk2LN; Fri, 18 Aug 2023 01:24:05 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id WoDdqi1uZD5qiWoDdqd1UX; Fri, 18 Aug 2023 01:24:05 +0000
-X-Authority-Analysis: v=2.4 cv=dMe1JcVb c=1 sm=1 tr=0 ts=64dec835
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=8b9GpE9nAAAA:8 a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8
- a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=T3LWEMljR5ZiDmsYVIUa:22 a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=wt9JyjAgPAPGR6Wixh0L2cZNzUJH2xdSJeUmcul+zXU=; b=fOt1P9YrKkwR7S6EO+WBSFOTvo
-	4BviY69h6yC/WlD7H9hQzJ9N0IquEbi+J0eRxmndLOilfz/K6d92Cxs7Llm4lbqeV80IqSDtZTPIw
-	izYPYBAO55EZGBG4RXMEBjFqeaorvfSsOAZJob3wfV984/s18gTYitS/y7RPoWTDbCT78+i9cJeQF
-	liYgvw85iZvbqloKqq/PROxSSVuBREBVw9ipEhEk4YEvcaVUt6efEQFdEc2YgxEymkgvmSgr6C64k
-	xbR2pDkNybfy25EtsK2HaPvYON9YEMjX9JnkeDcM5lUrpscXW0dpu3ZD1mhCrxPWsVFBuHTLViH4e
-	kgBXFNkA==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:46760 helo=[192.168.15.8])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWoDW-000WfM-1p;
-	Thu, 17 Aug 2023 20:23:58 -0500
-Message-ID: <996abdd6-dd83-b4b3-e347-2889e9d2e7ef@embeddedor.com>
-Date: Thu, 17 Aug 2023 19:24:57 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA766398
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 02:10:50 +0000 (UTC)
+Received: from cwcc.thunk.org (pool-173-48-102-95.bstnma.fios.verizon.net [173.48.102.95])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 37I2Acvu020102
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 17 Aug 2023 22:10:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1692324641; bh=LpT20QH/hu7wFLRE2zsy7cC3Q44uuq8Hmr2dybBwTxk=;
+	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
+	b=DnGHoNCnT4NHxG4T1TjOqGIhDKNqnSMGhGJB64sBbM6STLDyxzBwu0KeBQePPR++3
+	 6ivYBU3VTxxDXWxki5wv2CL2y16WO0j7ftOxm8my/XU33gv1RkbS5WDARdYdgsoUZD
+	 BvybOX0CjFbBT+GXa+YxNfruzgvt6ETcg9WeJVRLbgJK7kDnt799aMkBhcQjqZg1ld
+	 RhYCuF5eFFXxx5xqn2oczbZrF22SJ56S7Thr+pbs7AIpBrOVbZL1KVMeNxrsp54jWV
+	 G10ZJyWkJx1H7Oz6/ghBTd0f9l2vK2thwN6M5kR7+1k5c4HkN7rE2WF9mvksEyBABa
+	 lyAb8w56jLa9g==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 10C8615C0501; Thu, 17 Aug 2023 22:10:38 -0400 (EDT)
+Date: Thu, 17 Aug 2023 22:10:38 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: sandeen@redhat.com,
+        syzbot <syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
+ forced after error (3)
+Message-ID: <20230818021038.GC3464136@mit.edu>
+References: <000000000000530e0d060312199e@google.com>
+ <20230817142103.GA2247938@mit.edu>
+ <81f96763-51fe-8ea1-bf81-cd67deed9087@redhat.com>
+ <20230817161118.GC2247938@mit.edu>
+ <20230817164739.GC1483@sol.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 11/21] dmaengine: st_fdma: Annotate struct st_fdma_desc
- with __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>,
- linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
- Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Zhou Wang <wangzhou1@hisilicon.com>,
- Jie Hai <haijie1@huawei.com>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Green Wan <green.wan@sifive.com>,
- Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Laxman Dewangan <ldewangan@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Peter Ujfalusi <peter.ujfalusi@gmail.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Yu Kuai <yukuai3@huawei.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jordy Zomer <jordy@pwning.systems>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
- linux-arm-msm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-tegra@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20230817235428.never.111-kees@kernel.org>
- <20230817235859.49846-11-keescook@chromium.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817235859.49846-11-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qWoDW-000WfM-1p
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:46760
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 338
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFNn/nYkNWCu465x55Rpji6BrcDzSlEk3XM/ityrmJF+fJouSvhRhKGR7YR/g1szFAqVQpnqpgTs1H0aneIcfV3WZ4plgYQB7CdXvHxRddgBxAGbfDxr
- hIHPhE+i+MDT43jHDP8ab08mMhpaGddlexQDBW3zYR0Zortpr3Zicb/SrmgzMWoS4sJNn8kRW4pr9HdBU/N+IVvGLXKOWqKQ6SM=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817164739.GC1483@sol.localdomain>
 
-
-
-On 8/17/23 17:58, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On Thu, Aug 17, 2023 at 09:47:39AM -0700, Eric Biggers wrote:
 > 
-> As found with Coccinelle[1], add __counted_by for struct st_fdma_desc.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: dmaengine@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Eric S. is correct that for a filesystem image to enable panic on error, support
+> for panic on error should have to be properly consented to by the kernel
+> configuration, for example through an fs.allow_panic_on_error sysctl.
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+I disagree.  It's up to the system administrator, not the kernel ---
+and the system adminsitrator is perfectly free to run e2fsck on a
+random file system, or to use tune2fs to adjust the panic on error
+setting on the file system, befure using their root powers to mount
+the file system.
 
-Thanks
---
-Gustavo
+Root can do many things that cause the system to reboot.  For example,
+the system adminsirtator could run /sbin/reboot.  Should the kernel
+"consent" by setting fs.allow_reboot_system_call_to_work before the
+root user can run the /sbin/reboot binary?  Hopefully it's obvious why
+this makes absolutely no sense.
 
-> ---
->   drivers/dma/st_fdma.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/st_fdma.h b/drivers/dma/st_fdma.h
-> index fa15b97a3bab..f296412e96b6 100644
-> --- a/drivers/dma/st_fdma.h
-> +++ b/drivers/dma/st_fdma.h
-> @@ -97,7 +97,7 @@ struct st_fdma_desc {
->   	struct st_fdma_chan *fchan;
->   	bool iscyclic;
->   	unsigned int n_nodes;
-> -	struct st_fdma_sw_node node[];
-> +	struct st_fdma_sw_node node[] __counted_by(n_nodes);
->   };
->   
->   enum st_fdma_type {
+> It can be argued that this not important, or not worth implementing when the
+> default will need to remain 1 for backwards compatibility.  Or even that
+> syzkaller should work around it in the mean time.  But it is incorrect to write
+> "This is fundamentally a syzbot bug."
+
+Well, the current behaviour is Working as Intended.  And if syzbot is
+going about whining about things that are Working as Intended, it's
+not fit for the upostream developers' purpose.
+
+As another example, root can set a real-time priority of a process to
+be at a level where it will prempt all other processes, including
+kernel threads.  Do enough of these, and you *will* lock up the
+kernel.  Again, should there be a sysctl that allows real-time
+priorities to work?  Or do we teach syzbot that doing things that are
+documented to cause the kernel to lock up are not something that's
+worthy of a report.  In the past, syzbot issued a *huge* amount of
+noise caused by precisely to this.  Upstream developers complained
+that it was a false positive, and syzbot was adjusted to Stop Doing
+That.
+
+						- Ted
