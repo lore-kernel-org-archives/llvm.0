@@ -1,103 +1,181 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF95A52
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 11:44:00 +0000 (UTC)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fe2a116565so58695e9.1
-        for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 04:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692359039; x=1692963839;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DIXjbiz6TK1LqDn6EHee8zioCV1ywwUJqzx0qrSWlC4=;
-        b=iAgEvAVFBHQmlvfmKejtJd+tUsRv5Q9HsK1z1MMUT8NTKv+Xizhh2LRqQKLgcS6CvP
-         q9n4l3qH+G3TBjQOyWSlbL2WqhenVfqETZVvzYzlL13E4O6ell/BiLzm3EOI8GxeO9st
-         GIcpSvzBKsbnIVQytGOawEW0dmtHcqFqSuaNsa0HMVnp0lDpXkrUy+NVZlSnQ5UR4JrH
-         j3CxKUeH/3ofKgSNls3PkLkvz7tSMFSVhQaXONFdEcLtycUAlp2uVlZMaTDbOE4vd3GZ
-         ZQVGT81i1x4w/vaLKZ00Lyj94a8s1zJN2Kr4zA10d1iLrZNWKpj0mqpTJL1+Bzn9A7qJ
-         /p8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692359039; x=1692963839;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DIXjbiz6TK1LqDn6EHee8zioCV1ywwUJqzx0qrSWlC4=;
-        b=R7k+ba7MJrW4rqB/VvJJj3YOmjHVS5sz7FgIDTmpo5+hkaGwT2L0oRQ/WyTOg3Aop5
-         zaVvV6ok05QXgtIFncrxF1oNcRf8+1RWbraDUhu3trL6SabwjQ3eDh2nKlOp+oE79FoZ
-         vfVMVaKH3CpVRqVbZIGoxzpG3QfWpRCmC49csWtjCU5mwRzB6s7XycYkJgpzvSkT2jrt
-         C+0ydos5t7ZSVOw//OX2KYbZ4DGyItpUrqwMBiEvrBTc/BzGYDGgp5QLicbws7GTcIoT
-         mqJcERggwpwisPLoA91DlWWeI59GXSU/nOwsIdPhgWZEAq1vd6r20TF9bzQIFZSdJtoz
-         bOXA==
-X-Gm-Message-State: AOJu0Yy74Kda0SeBb2Z3mZitadqn6nZxfmic6aRidw6bDW7X9c7W5t4L
-	3fGOOOf64DrqtA15Uj0ElxGo7d/MY0pIsNgBRpfjbQ==
-X-Google-Smtp-Source: AGHT+IGvpCUj333BWxhvbZecJ7Q1XwDtFX6G7nOkCGTQf/F8EMz3zoGP8dovzTUAoHcPtkSAUWXb/iozmJw80waQMYM=
-X-Received: by 2002:a05:600c:3b0c:b0:3fd:e47:39c7 with SMTP id
- m12-20020a05600c3b0c00b003fd0e4739c7mr89946wms.4.1692359038988; Fri, 18 Aug
- 2023 04:43:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD40B17FE9;
+	Fri, 18 Aug 2023 12:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692360499; x=1723896499;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=z3yev7QeNzfKGTN+peWa+yf32WONzEhWgq/tgKqLkXM=;
+  b=WPsOaFFpWQIg26l2S+yFhpWX3GRLdXg1kvPIUEf0Cyl5WQI69YtkYRdU
+   dPA/jkAcIUi5gQFoRsuaarVORyEhQKjxVg/oUpOljrXtXwIMKWeiKsIPh
+   7WwSJaFFC8BdxqO5T4FKSzIEqJv7ktylzBTh7Zrnz8dd2GsjKRilZox5V
+   Gkae86aD3RAJMFLBMp4+DRqLi/rWwzJKs2UeEfgft6plIHrW8Ys8hGgWN
+   V7lbwvIVwN+BLE/4BikytzJbjLlW4ZeLdEpuCEMAcFOelCk6hguipbnPb
+   TJv7i15nCF/5VRIWb0iPov5UY+OpZ8EVaaTMAPh8aFMG9rbHtFuQ12viG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="373066797"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="373066797"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 05:08:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="764545249"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="764545249"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga008.jf.intel.com with ESMTP; 18 Aug 2023 05:08:15 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 18 Aug 2023 05:08:15 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 18 Aug 2023 05:08:14 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Fri, 18 Aug 2023 05:08:14 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Fri, 18 Aug 2023 05:08:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XQ0wietqb7qEEGSLfkcQOn6sSAo1wIPzVweJxJL6VqHvSU+ds5Ms2Koidf1Tw22onwglpZdx7gr5nz75CspVSAqcB6wEQibhuRlaGy3i/cCz858IwAcyPcrqFt+iK33ej8jkXH660pg5y0AOl8VEZKUJ1aRBZK33DwL2pmeDWrShPnxjDFeXxImnQQU3GJr2e0O1NDH+a98vuEkZYh6wvRVtNMH5I2LXM3pyeI0qUWCxJkQRJDduQe9DoDOk3ryX208ueYfIXEvmUMbM/n8ZPzUnVBNJjHxsUH3Qto8jB/E14F/AN62DNvWCjFgItX0IbUE//Q4+Nn7jy/73sWp0+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HP4TlWA7+ZOb2BkE44DRSNThJ3eSovnPvg5EtaFi+vc=;
+ b=BpBru7LGGGSo6gld5zUuLZKczRZ25nZe1qPzPi/0yQSXXUMCYG6ViFewHYmiC7HwrFhcBpXLINBou8kRNvuDiLmwygKhES3AxvXu0RZUW3WDY6Ie7y1/OXuLAkpocX48njpdJ7mxuUogNtRIJF8XFb7xJUzUZi3tBKw0ZHK4e5pLCTcTi9MxXpboutHiJ232G+kFocFd5PmPjHCW5o4gtXhQZB6R9TmAyufCTQeej4V1PyQYQbk7JD4VdosnG68FAdCHIIjngca3B9qDYK8D11wcif5WAIH+ozu0A8VB6nyE3CfVgdSGSnd5obKisCJFMKmrwnGLflif0xrmldwDyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
+ by PH0PR11MB7660.namprd11.prod.outlook.com (2603:10b6:510:26f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Fri, 18 Aug
+ 2023 12:08:07 +0000
+Received: from BL0PR11MB2995.namprd11.prod.outlook.com
+ ([fe80::589b:22b8:e509:c001]) by BL0PR11MB2995.namprd11.prod.outlook.com
+ ([fe80::589b:22b8:e509:c001%4]) with mapi id 15.20.6678.022; Fri, 18 Aug 2023
+ 12:08:07 +0000
+Date: Fri, 18 Aug 2023 20:07:55 +0800
+From: Philip Li <philip.li@intel.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+CC: Przemek Kitszel <przemyslaw.kitszel@intel.com>, kernel test robot
+	<lkp@intel.com>, Yujie Liu <yujie.liu@intel.com>, Greg KH
+	<gregkh@linuxfoundation.org>, <rust-for-linux@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Jacob Keller
+	<jacob.e.keller@intel.com>, <intel-wired-lan@lists.osuosl.org>, "Alexander
+ Lobakin" <aleksander.lobakin@intel.com>, <linux-hardening@vger.kernel.org>,
+	Kees Cook <keescook@chromium.org>, <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 1/7] overflow: add DEFINE_FLEX() for on-stack
+ allocs
+Message-ID: <ZN9fG8rPmdFO0kLK@rli9-mobl>
+References: <20230816140623.452869-2-przemyslaw.kitszel@intel.com>
+ <202308170000.YqabIR9D-lkp@intel.com>
+ <cfc29063-9e20-5101-d70b-62b5423d2d10@intel.com>
+ <CANiq72m9ZEVkP76FMFOnPYkA8ih4Mq72HtW9AbrJ-JPy9ku3jw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72m9ZEVkP76FMFOnPYkA8ih4Mq72HtW9AbrJ-JPy9ku3jw@mail.gmail.com>
+X-ClientProxiedBy: SG2PR04CA0154.apcprd04.prod.outlook.com (2603:1096:4::16)
+ To BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000530e0d060312199e@google.com> <20230817142103.GA2247938@mit.edu>
- <CANp29Y7jbcOw_rS5vbfWNo7Y+ySYhYS-AWC356QN=JRVOm9B8w@mail.gmail.com> <20230817144505.GB2247938@mit.edu>
-In-Reply-To: <20230817144505.GB2247938@mit.edu>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Fri, 18 Aug 2023 13:43:45 +0200
-Message-ID: <CANp29Y4HGnp6LJ7jw2hrXNFd7S4+MKfjdpjOGZALUuGK1L3wPA@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
- forced after error (3)
-To: "Theodore Ts'o" <tytso@mit.edu>
-Cc: syzbot <syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com>, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR11MB2995:EE_|PH0PR11MB7660:EE_
+X-MS-Office365-Filtering-Correlation-Id: f106fe94-b6ec-4fbb-6c79-08db9fe3c850
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BuuLKPfbge5MixQ3rrFItk37sSuw/t4R/x4Zr/V+nylY+Hx60ftQ5XCwc9JOeyk5J+QcNXoDMaLbLANs/cazBADWUlezMgENFBLvp16OAZVsVH/pl0oBLsWjqONmhZ6DK2bqtg291BZyZ7bdSi+JxTkB3h8cqkj+iPapGgSWoR4THC3LAA21S8YdW4oI4Os9jXGOt8RxLpARDzIZbGdITTTCP50JVbJvHh78WdwwlxN6fS7l+qKlobRqFXXyUMnCpsfAWCS1vqUwUhbCk6JENHZpfclq5z3rGCM6C7EbUiG8oAS08MASbtRKOHxkNpGhULf0F+uyFmCDlxqo0ayh5GDV3L1eN695IKDAk4MVKUj5I0XtsPHIsISqss+n5d3bCacATpfGC8pXZjq/K/60B4IAftKAyMz0zV18LMtDijl2/RVxwVPp5VhT6sSIKArKJcXqi+G3My+mXnDq7qQh8n2a69+TZlEX8Iv24v1yWCy1uOvFNLKEtm70VeTTdbVCxQcTSMR51WKPQ2bGBUxalFMo6R24P1CLrcLz+w3VymJvtwrJkJ7QM6ChyIkU9OvS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB2995.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(346002)(136003)(39860400002)(366004)(376002)(396003)(186009)(1800799009)(451199024)(6666004)(6486002)(6506007)(38100700002)(9686003)(6512007)(53546011)(82960400001)(86362001)(26005)(83380400001)(33716001)(2906002)(54906003)(66946007)(66476007)(66556008)(316002)(6916009)(41300700001)(44832011)(5660300002)(8676002)(4326008)(8936002)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUNqQTgwcHgzcmIyaDAvMFk1Z3JKR1VWeWZrR3ZEbm5abXd3MzZvR0ZBNUw0?=
+ =?utf-8?B?QkJUVHVlZlJESnBHNTdFR1RpeGcwQjY0blFBOTVNbDJ2SlhvNlRTMWlYRUV2?=
+ =?utf-8?B?WHdlTDEzaHZOOVkwd0VibURzSlYzRDA2YVZVSDBSVXR2cDd3ejZMYmQ5T1Vr?=
+ =?utf-8?B?U013NlJhZ0lRb3VzbXoxWjJMUW5FTnVhZnA1UUZQOUxXVGZ4ajhSd2ZpUStl?=
+ =?utf-8?B?Qit5RFdiOUNBbkpDTTMxamdVZDRiV1FmNFBLZWcrNGYzdzRtNnE2SUdkdksr?=
+ =?utf-8?B?UzlydngvekVTTGF6VWxhVy96TGZ1aTkzMEZiMnZnSzM4MXZqWmRDS1c3Z1Bk?=
+ =?utf-8?B?UjRMZDd1NWdWRzNOdCtyM3hXUUhDc2s4eG0xU1lyY3JDMStmSEx5YmFvNGtP?=
+ =?utf-8?B?Tys5dEduUlFJTEtvc3E3MlpHNWtTRlJWNGNrQkZEcGMxeUh0M2FFa1BIalk0?=
+ =?utf-8?B?a29ZakJ6WXFlQkdoWXVDUE01Qlg5ZXRtWm9oSFhydFN5cVlYNHdsUUhxRThL?=
+ =?utf-8?B?b00zd0c0b2xFTk5tMElRcGdacTVhZC8yNm5XdloyNzNvY2lZTmFmZm83Mzk2?=
+ =?utf-8?B?dkF5aDhqbzg0dHRRN2ZCem5JeU9ycUpmMUVyYmpkRTM3d3ZEQmgxTFRLQWNV?=
+ =?utf-8?B?WnMwZkxucXY3L0M2QjhnSUFWaThVOStKaG9WSFpDd29CU1NkQ05Xb0pMd3Ur?=
+ =?utf-8?B?SERrbEpqL01nWXY0TVVhNmYwY04rQkJYV0M0eTRXMjVJWTlQMG5sd3phTGZ1?=
+ =?utf-8?B?T1pLb0JyTDg2V3Z2Z0ZuU2tpWk9mV2Y5MFB2QkJlZzNlVlVTV0VIQk1XQklY?=
+ =?utf-8?B?bFZhZ3JqWmNFSWZlankyUmZRbzJ0LzZRQzhWSEZ4UmIvZHIzRFJqSTZOWE1Y?=
+ =?utf-8?B?dWZzSTJxa1JNSVVLMCt6K2RsenE3eVQzd00zTmFsQ1MwaDl0SXZvNS8wN3hB?=
+ =?utf-8?B?bXZmMEtZWCt4VGhIemtROEJCTUQxTkJQN2xVNTExc3oyN09qZW9rWUNaSXBj?=
+ =?utf-8?B?anJ5ZDNMOHdGcGxROWkwb3B4bzJGSTVOdEg1dk1zYkpKTjRLSnI5NUEwMkRD?=
+ =?utf-8?B?alhSa3pCeU5YSjdjSi90OWd1SGVWOU5tNUc1T2dmbFlLNGxJT2tnUzhWQWRp?=
+ =?utf-8?B?SnpaN2JlYTlUc3lQSFNTWE9uWHNteFVWK2NWeVNUdXMzbnVtK1lWcnN0SGly?=
+ =?utf-8?B?TjM0NzRmeE43VlF5T24xVlVlR0Y1VzNyQmtNNVFtSzM5V3lwTTc3OVo4cFF5?=
+ =?utf-8?B?VTZwcmlaM1Z0NFNTS0JuLzRIZklEaFNXdWFJd3NsazNMbUg2UVl3L0lUeEcz?=
+ =?utf-8?B?OE53TkN6NlcrMUtsWFBlb2RaZEFKcGJNMXFHU0x2TjRCQmFVVFk4M1c2NEJv?=
+ =?utf-8?B?R1k5UVo4Sy9sdVpLMmtldHY1SFk3akZtSU9EYmV1R3J2cjhRVTc4U2ZkZG1n?=
+ =?utf-8?B?Q1J6ZXFseVF6QzgrZlczVUdieEVrZmhDaXZWM2NFMGpjY2tiV2pITUFObHRP?=
+ =?utf-8?B?QUIyMDZFVGJmZEYrMzFmQVhFbHpZUWgzN0ZWZ3Zmc0M3dGVza0FCNUpOcUYv?=
+ =?utf-8?B?QmpwaUZsWklLRHAzMkhJbVJnQTVpS25icTNwYzFjcDZKb2dwMnpNMmR5dzU5?=
+ =?utf-8?B?aTk4UzVsZTU5TXQzTDl2VjJHVW5zZkFwL1BSVSs4aU02eWpmaHJwS0ZBY1VU?=
+ =?utf-8?B?d0FCWmlBM0JxK1Y4VWMzQk9STjB0Mk1vYUZNaXp3MGo3Z1k3WHJnc3ljbk9w?=
+ =?utf-8?B?NnMwdnNtczlxbmdJSDJGWW03ajJEWGxvRmJnajMrYWVydHJKeURoNHErV2s4?=
+ =?utf-8?B?RUxSUThmUnRWYkNyNFpDUkg5Y2E5RnB2Sm1weWlZQ3luay9DQU02ZkdnYzFt?=
+ =?utf-8?B?M21Ld05rNlpJc2xQUWtoMjJlcDd5YkVVdWwvTE9jdGxZV3hla3M0bThZUEdL?=
+ =?utf-8?B?cE9FWmo5UU9xeHg5Slk4WWdwNUtscElqNXdYVVZrOTk1dk9yVjZGelczQUd5?=
+ =?utf-8?B?bzlmSlNUL0tQQk5zQ2l4NGw2NExKTFliNGV0Skl3N0dIYmFzY2Y0U0labVVN?=
+ =?utf-8?B?UzVyeHJvRUp2OFRBSmp2MG9WdCtIejBDMHNtYXdhZUJJcStSQURORS9JYkg5?=
+ =?utf-8?Q?q5DHiDiTQcezFSr0ge1Oiesyv?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f106fe94-b6ec-4fbb-6c79-08db9fe3c850
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB2995.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2023 12:08:07.3694
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PzCO+RxzdWs+LVnSfaDx/Id8J4CqTj+O5/VpBNgNe6RARzrR+mC7+sefnqxaDjRO3biu/TyEUuxyqq1cZLPoYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7660
+X-OriginatorOrg: intel.com
 
-I've taken a closer look at the issue.
-
-Documentation/filesystems/ext4.txt says that the "errors=3D" mount
-parameter "override the errors behavior specified in the superblock".
-So syzbot can prevent it by passing "errors=3Dcontinue" as a mount
-argument and there's no need to filter out such reports.
-
-Syzkaller actually already does that in the C reproducer. It just
-seems that this time the tool has mutated the mount options so much
-that the simple patching no longer worked (most likely because of \0
-characters in between). I'll update the syz_mount_image() code.
-
-
-On Thu, Aug 17, 2023 at 4:45=E2=80=AFPM Theodore Ts'o <tytso@mit.edu> wrote=
-:
->
-> On Thu, Aug 17, 2023 at 04:28:33PM +0200, Aleksandr Nogikh wrote:
-> > The console log has the following line:
+On Fri, Aug 18, 2023 at 01:10:07PM +0200, Miguel Ojeda wrote:
+> On Fri, Aug 18, 2023 at 12:38 PM Przemek Kitszel
+> <przemyslaw.kitszel@intel.com> wrote:
 > >
-> > [   60.708717][ T5061] Kernel panic - not syncing: EXT4-fs (device
-> > loop0): panic forced after error
+> > Rust folks, could you please tell me if this is something I should fix,
+> > or I just uncovered some existing bug in "unstable" thing?
 > >
-> > Can we consider a "panic forced after error" line to be a reliable
-> > indicator that syzbot must ignore the report?
->
-> Yes.  And the file system image that generated this bug should be
-> discarded, because otherwise successive mutations will generate a
-> large number of crashes that syzbot will then need to ignore, thus
-> consuming syzbot resources.
->
-> Alternatively, you can do the moral equivalent of "tune2fs -e continue
-> foo.img" on any mutated file system seed, which will clear the "panic
-> on error".
->
-> (The other alternative is "tune2fs -e remount-ro", but given syzbot's
-> desire to find kernel crashes, "tune2fs -e continue" is more likely
-> find ways in which the kernel will find itself into trouble.  Some
-> sysadmins will want to chose "remount-ro", however, since that is more
-> likely to limit file system damage once the file system is discovered
-> to be corrupted.)
->
->                                         - Ted
->
+> > Perhaps it is worth to mention, diff of v3 vs v2 is:
+> > move dummy implementation of __has_builtin() macro to the top of
+> > compiler_types.h, just before `#ifndef ASSEMBLY`
+> 
+> Nothing you need to worry about, it is an issue with old `bindgen` and
+> LLVM >= 16, fixed in commit 08ab786556ff ("rust: bindgen: upgrade to
+> 0.65.1") which is in `rust-next` at the moment. Sorry about that, and
+> thanks for pinging us!
+> 
+> LKP / Yujie / Philip: since we got a few reports on this, would it be
+> possible to avoid LLVM >= 16 for Rust-enabled builds for any branch
+> that does not include the new `bindgen` or at least 08ab786556ff? Or,
+
+Got it, we will update the bot to handle this to avoid further false
+positive.
+
+> if Greg is OK with that, I guess we could also backport the upgrade,
+> but perhaps it is a bit too much for stable?
+> 
+> Cheers,
+> Miguel
