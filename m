@@ -1,56 +1,32 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9C8613A
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 17:33:58 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-688779ffcfdso1007202b3a.1
-        for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 10:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692380038; x=1692984838;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=z8VxOYqY0vk5zLSdtNkelkzBoODifEK09GEUE59Uh/E=;
-        b=kMub35CoX+FGqGlEXa/v7SPizCC+sQH0jMFem1D1JeANqS37tH6/y0XZCXnC/aH+U5
-         kJBVdMWwYkMTpF1pLdKjiX4dO1zZg9PmnllgKhcQ8/j6A+6lsAOGm7snFIH2dL+oBYJF
-         zdkydtJWoioVltE5GW9w6lD0ChboN8PRmcDbA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692380038; x=1692984838;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z8VxOYqY0vk5zLSdtNkelkzBoODifEK09GEUE59Uh/E=;
-        b=MWGJvpw+XiVg2nLyMeejJ/4hkMgM3VDuSvbEZjmOW0hPZGBWDEYX2EQEUKYbi6Eu1M
-         CW1ysDSNqtXkEP+VIyM8x2BWXOQzklDMEtUsywWvocCuZ4p/3XdevZZIwIrBefDiT/Nu
-         lLKHqHy6fcPLj2a181igEzK6KLs2IjjDnRSBzbjJfq0zSc6PLeKV8i7FVolX1IBAVAH+
-         HqowJIfFbuVEWLei11dW1Q0yzBPDFR2gdDRyo1XGkWL7Xm9xVyuoMnI3lfGZ+77Phkow
-         /IYlPxc1RAAusOtDroxYOLiwvau+ZRd/mLFTC9Iswz1IHHL8JWPBasVeTVOomzQje+8o
-         6yNQ==
-X-Gm-Message-State: AOJu0YwJ691pXjY5u8d3G/XVtrDcY/hfwc2dHz0gtPwy7gkGhtylHBWA
-	Lzcridm7DRZWjttMfpA5q8zLxw==
-X-Google-Smtp-Source: AGHT+IEIW5Yl9r6Sj3v9imMpgLBJxv4XcEqIkrMkv167YzQxcg7Et1cOrpJxjwCXnMm+AR6HQRKkrA==
-X-Received: by 2002:a05:6a00:1249:b0:689:f693:917f with SMTP id u9-20020a056a00124900b00689f693917fmr3136404pfi.28.1692380037809;
-        Fri, 18 Aug 2023 10:33:57 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ff18-20020a056a002f5200b0068703879d3esm1794159pfb.113.2023.08.18.10.33.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 10:33:57 -0700 (PDT)
-Date: Fri, 18 Aug 2023 10:33:56 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Ondrej Mosnacek <omosnace@redhat.com>, selinux@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F7D525F
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 17:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A31C433C8;
+	Fri, 18 Aug 2023 17:39:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692380347;
+	bh=4mrMBMQCt3eC/q7RwFbH0gGMN9gDD6qugmRXW2bkuOo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZKinp7UZ9KJ92P7fJU5Nymt/UY1x44pWnjgR4gMHJyYeuAmHxTTjQecajXghL8VlT
+	 gOPO62VL3dKQ/R1xYz11JiFmiQCssmFvFeHkJQDVJM7/SzOB0PgZJ11IYDkCR6FZzC
+	 jMuCVz/TJhG19D2EfmO8OnIrQAxyPt3E8b/eu28hwkeLz4wgy57aBV9YH1nMLpkhUa
+	 HNYv+u3OtDBCXECVLEWFMwk8VXFk2RMELRVHmrR6nwTBuBu+H8hf+8TPqCF+hIhdLB
+	 ZdP5FbgJeFeXYqldPjVmakqp1DN4b8LRcbwN1p/28cMn6Z4ORmHe0D20LzvieocvRc
+	 /OJ3YN60PrHDw==
+Date: Fri, 18 Aug 2023 18:39:02 +0100
+From: Lee Jones <lee@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Justin Stitt <justinstitt@google.com>, Pavel Machek <pavel@ucw.cz>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, "GONG, Ruiqi" <gongruiqi1@huawei.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] selinux: Annotate struct sidtab_str_cache with
- __counted_by
-Message-ID: <202308181033.03592D6E2D@keescook>
-References: <20230817202210.never.014-kees@kernel.org>
- <CAHC9VhR-vxsaR7deTQ+zzVP9W2uSupz4ucf8p+tt0e730qbZ1g@mail.gmail.com>
+	Tom Rix <trix@redhat.com>, linux-leds@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] leds: pca955x: fix -Wvoid-pointer-to-enum-cast warning
+Message-ID: <20230818173902.GE986605@google.com>
+References: <20230816-void-drivers-leds-leds-pca955x-v1-1-2967e4c1bdcc@google.com>
+ <20230818160154.GZ986605@google.com>
+ <20230818160648.GA939927@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,36 +36,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhR-vxsaR7deTQ+zzVP9W2uSupz4ucf8p+tt0e730qbZ1g@mail.gmail.com>
+In-Reply-To: <20230818160648.GA939927@dev-arch.thelio-3990X>
 
-On Fri, Aug 18, 2023 at 12:25:12PM -0400, Paul Moore wrote:
-> On Thu, Aug 17, 2023 at 4:22 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Prepare for the coming implementation by GCC and Clang of the __counted_by
-> > attribute. Flexible array members annotated with __counted_by can have
-> > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> > functions).
-> >
-> > As found with Coccinelle[1], add __counted_by for struct sidtab_str_cache.
-> >
-> > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> >
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
-> > Cc: Eric Paris <eparis@parisplace.org>
-> > Cc: Ondrej Mosnacek <omosnace@redhat.com>
-> > Cc: selinux@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  security/selinux/ss/sidtab.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 18 Aug 2023, Nathan Chancellor wrote:
+
+> On Fri, Aug 18, 2023 at 05:01:54PM +0100, Lee Jones wrote:
+> > On Wed, 16 Aug 2023, Justin Stitt wrote:
+> > 
+> > > When building with clang 18 I see the following warning:
+> > > |      drivers/leds/leds-pca955x.c:487:15: warning: cast to smaller integer
+> > > |      type 'enum pca955x_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> > > |        487 |                 chip_type = (enum pca955x_type)md;
+> > > 
+> > > This is due to the fact that `md` is a void* while `enum pca995x_type` has the
+> > > size of an int.
+> > > 
+> > > Add uintptr_t cast to silence clang warning while also keeping enum cast
+> > > for readability and consistency with other `chip_type` assignment just a
+> > > few lines below:
+> > > |	chip_type = (enum pca955x_type)id->driver_data;
+> > > 
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> > > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > 
+> > A review from Nathan would be good here.
 > 
-> This also looks good to me, but similarly to the audit patch, since we
-> are at -rc6 I'm going to wait to merge this until after the merge
-> window.  I'll send a follow up email once it's merged.
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Thanks! Yeah, there's no rush. :)
+Thank you.
 
 -- 
-Kees Cook
+Lee Jones [李琼斯]
