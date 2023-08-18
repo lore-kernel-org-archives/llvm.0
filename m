@@ -1,255 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7592380A;
-	Fri, 18 Aug 2023 05:18:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692335894; x=1723871894;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IOT2930eA2wfbSFNQcDVrByiI/LfRNDHmlBhO4kydMI=;
-  b=iItcGpU9RYR8ycqb2le22zveSbgno7i1NE3772KzRRhYK2oNjUf+ETaQ
-   pl23oVgYQfGfU750KDTJJBoF/84R2TzWVGQsBN5P/35UsYfQx7gdpmVBE
-   fCJM55p8s0/tIFgZyarIjO+UkPFf0Nqx7XmY3MxlixHkRTD34Ytd9Kq1a
-   TPTVVzuMNPSiMDJ66K5eI9W+buvy8VM6cBGjHqExVUollOR9Sn5TDQBhX
-   1If8nR2aKDScq9kKvMdvHCgVBSHIdw+78bPPdrMb1qpvPgVpfo2UNFGrb
-   0ba2g+FR5/ffh+SquBb0m+ZtjaMkQtyFEnA7YUGQevsYvI6Z/TetHFnLP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="375793784"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="375793784"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 22:18:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="805012377"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="805012377"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Aug 2023 22:18:11 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWrqT-000284-2d;
-	Fri, 18 Aug 2023 05:16:36 +0000
-Date: Fri, 18 Aug 2023 13:15:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alsa-devel@alsa-project.org
-Subject: [tiwai-sound:topic/dev-split-kref 3/11]
- sound/aoa/soundbus/i2sbus/pcm.c:975:47: error: member reference type 'struct
- snd_pcm_str' is not a pointer; did you mean to use '.'?
-Message-ID: <202308181347.q3XPr3Lm-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2371F1426B
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 05:18:53 +0000 (UTC)
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4881eab4de2so158630e0c.0
+        for <llvm@lists.linux.dev>; Thu, 17 Aug 2023 22:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692335933; x=1692940733;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+kpLB9nUoya1zg6wDKkXayE7Tz/XHKIUeAAVe5xKhK0=;
+        b=KaJjLiyhBSvhpgsm8YiFaBS8xI7UGZoG5drkaowj2GP6x3bnrlC3xOI9td0TTSOaAe
+         U8CIrSHQWflISPqATW2Jo4GQiAlJPU0m/8d2f85PGndrz8aD8hfh2jAjRsTiH+CTkLXa
+         m7Jyn6jzSFdoWq8Cj3ukeolSvabGfHWqd3VkCvjM329jQTuiE3+JNp4UdwbXKk2U9XJN
+         +sVLZ11JcehL6jteXQVA0W10g46ms6XNkh0ocrcENaiTzXDHMmhQV2Yk2ioO5jxIIELt
+         b9a3SmTagu6fnJsvmeaZRCTHEiUrhVsd+wOWsCbL+Vw6pMR3+OvW+biIoAtgD8wdZeIS
+         w68g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692335933; x=1692940733;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+kpLB9nUoya1zg6wDKkXayE7Tz/XHKIUeAAVe5xKhK0=;
+        b=HyMnryeJCkpArpiYZ7j40oE5VEFsQGLnNcVZNZnOeCBhaipViKxP30kjg0/gbPFs9o
+         YzN6zRd5R0ViTN+owfFW67ZjnxDOfm9bx7aTuSQmDdFNg3QfuPhO8DjXL6hC8ZI0jUPY
+         ntWeVrNeUYJqgTa0bgK+V8PIPx1Dv52u4NZSj6heqjoRsYh7ubUyqLBl0n/060SytFbc
+         FVw5A3Y0yTtDsduXJ2wfBq2porpE/ioRwE2FFBgffgPIa/gTB9bo84Xn6bUIgYpmDnIz
+         YQZakky/pEi39/xjrlMAcA5KhCp57seomxHm5ur90CAhH/ZCLSa7+XEM8FlBbd1TGU0Q
+         tTFw==
+X-Gm-Message-State: AOJu0YyO+DaAsfQXi1WwLamnjekg1PbiKM+CE8Gmh2WEJHWy9ScrMgbs
+	0Tccdy10LUurAEKZeVYJzs1ex0hb1f20OMYSDrg4sg==
+X-Google-Smtp-Source: AGHT+IEf2oEZW2NUvuhCzB/XQOkZOamd12TFRt7JdNd8j2TpdIAQwd5X10QtMAXKbXbUwLs+I54R8FqOfRXoI/bJsKM=
+X-Received: by 2002:a67:b648:0:b0:44a:c20a:ebb1 with SMTP id
+ e8-20020a67b648000000b0044ac20aebb1mr1545884vsm.13.1692335932647; Thu, 17 Aug
+ 2023 22:18:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CA+G9fYvFD-kE0+EGWkwcnR1DXRxh7p7OwQThJ6KWxYWVROJ4+A@mail.gmail.com>
+ <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com>
+In-Reply-To: <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Fri, 18 Aug 2023 10:48:41 +0530
+Message-ID: <CA+G9fYtRMde7Ksswa8pY8sFgnWVN-snRHfz4YRM04HSQ4LFBZQ@mail.gmail.com>
+Subject: Re: landlock: fs_test: fs_test.c:4524:9: error: initializer element
+ is not a compile-time constant
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
+	lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Richard Weinberger <richard@nod.at>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git topic/dev-split-kref
-head:   6e1b44385310dd465cae48213eae65d0b8095d13
-commit: 7a3dce3fb37c25de3f3c347f4e69ba358cb81a3d [3/11] ALSA: pcm: Don't embed device
-config: powerpc-g5_defconfig (https://download.01.org/0day-ci/archive/20230818/202308181347.q3XPr3Lm-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181347.q3XPr3Lm-lkp@intel.com/reproduce)
+On Thu, 17 Aug 2023 at 21:24, Nick Desaulniers <ndesaulniers@google.com> wr=
+ote:
+>
+> On Thu, Aug 17, 2023 at 3:51=E2=80=AFAM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > While building selftests landlock following warnings / errors noticed o=
+n the
+> > Linux next with clang-17.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Build errors:
+> > ------------
+> > landlock/fs_test
+> > fs_test.c:4524:9: error: initializer element is not a compile-time cons=
+tant
+>
+> Hi Naresh,
+> Can you tell me more about your specific version of clang-17?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308181347.q3XPr3Lm-lkp@intel.com/
+    compiler:
+        name: clang,
+        version: 17.0.0,
+        version_full: Debian clang version 17.0.0
+(++20230725053429+d0b54bb50e51-1~exp1~20230725173444.1)
 
-All errors (new ones prefixed by >>):
+>
+> I believe a fix of mine to clang should address this. It landed in
+> clang-18, and was backported to clang-17 recently.
+> https://github.com/llvm/llvm-project-release-prs/commit/0b2d5b967d9837579=
+3897295d651f58f6fbd3034
+>
+> I suspect your clang-17 might need a rebuild.  Thanks for the report.
 
->> sound/aoa/soundbus/i2sbus/pcm.c:975:47: error: member reference type 'struct snd_pcm_str' is not a pointer; did you mean to use '.'?
-                   dev->pcm->streams[SNDRV_PCM_STREAM_PLAYBACK]->dev.parent =
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-                                                               .
->> sound/aoa/soundbus/i2sbus/pcm.c:975:52: error: member reference type 'struct device *' is a pointer; did you mean to use '->'?
-                   dev->pcm->streams[SNDRV_PCM_STREAM_PLAYBACK]->dev.parent =
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-                                                                    ->
-   sound/aoa/soundbus/i2sbus/pcm.c:992:46: error: member reference type 'struct snd_pcm_str' is not a pointer; did you mean to use '.'?
-                   dev->pcm->streams[SNDRV_PCM_STREAM_CAPTURE]->dev.parent =
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-                                                              .
-   sound/aoa/soundbus/i2sbus/pcm.c:992:51: error: member reference type 'struct device *' is a pointer; did you mean to use '->'?
-                   dev->pcm->streams[SNDRV_PCM_STREAM_CAPTURE]->dev.parent =
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-                                                                   ->
-   4 errors generated.
+I will rebuild / re-test and confirm soon.
 
-
-vim +975 sound/aoa/soundbus/i2sbus/pcm.c
-
-   866	
-   867	int
-   868	i2sbus_attach_codec(struct soundbus_dev *dev, struct snd_card *card,
-   869			    struct codec_info *ci, void *data)
-   870	{
-   871		int err, in = 0, out = 0;
-   872		struct transfer_info *tmp;
-   873		struct i2sbus_dev *i2sdev = soundbus_dev_to_i2sbus_dev(dev);
-   874		struct codec_info_item *cii;
-   875	
-   876		if (!dev->pcmname || dev->pcmid == -1) {
-   877			printk(KERN_ERR "i2sbus: pcm name and id must be set!\n");
-   878			return -EINVAL;
-   879		}
-   880	
-   881		list_for_each_entry(cii, &dev->codec_list, list) {
-   882			if (cii->codec_data == data)
-   883				return -EALREADY;
-   884		}
-   885	
-   886		if (!ci->transfers || !ci->transfers->formats
-   887		    || !ci->transfers->rates || !ci->usable)
-   888			return -EINVAL;
-   889	
-   890		/* we currently code the i2s transfer on the clock, and support only
-   891		 * 32 and 64 */
-   892		if (ci->bus_factor != 32 && ci->bus_factor != 64)
-   893			return -EINVAL;
-   894	
-   895		/* If you want to fix this, you need to keep track of what transport infos
-   896		 * are to be used, which codecs they belong to, and then fix all the
-   897		 * sysclock/busclock stuff above to depend on which is usable */
-   898		list_for_each_entry(cii, &dev->codec_list, list) {
-   899			if (cii->codec->sysclock_factor != ci->sysclock_factor) {
-   900				printk(KERN_DEBUG
-   901				       "cannot yet handle multiple different sysclocks!\n");
-   902				return -EINVAL;
-   903			}
-   904			if (cii->codec->bus_factor != ci->bus_factor) {
-   905				printk(KERN_DEBUG
-   906				       "cannot yet handle multiple different bus clocks!\n");
-   907				return -EINVAL;
-   908			}
-   909		}
-   910	
-   911		tmp = ci->transfers;
-   912		while (tmp->formats && tmp->rates) {
-   913			if (tmp->transfer_in)
-   914				in = 1;
-   915			else
-   916				out = 1;
-   917			tmp++;
-   918		}
-   919	
-   920		cii = kzalloc(sizeof(struct codec_info_item), GFP_KERNEL);
-   921		if (!cii)
-   922			return -ENOMEM;
-   923	
-   924		/* use the private data to point to the codec info */
-   925		cii->sdev = soundbus_dev_get(dev);
-   926		cii->codec = ci;
-   927		cii->codec_data = data;
-   928	
-   929		if (!cii->sdev) {
-   930			printk(KERN_DEBUG
-   931			       "i2sbus: failed to get soundbus dev reference\n");
-   932			err = -ENODEV;
-   933			goto out_free_cii;
-   934		}
-   935	
-   936		if (!try_module_get(THIS_MODULE)) {
-   937			printk(KERN_DEBUG "i2sbus: failed to get module reference!\n");
-   938			err = -EBUSY;
-   939			goto out_put_sdev;
-   940		}
-   941	
-   942		if (!try_module_get(ci->owner)) {
-   943			printk(KERN_DEBUG
-   944			       "i2sbus: failed to get module reference to codec owner!\n");
-   945			err = -EBUSY;
-   946			goto out_put_this_module;
-   947		}
-   948	
-   949		if (!dev->pcm) {
-   950			err = snd_pcm_new(card, dev->pcmname, dev->pcmid, 0, 0,
-   951					  &dev->pcm);
-   952			if (err) {
-   953				printk(KERN_DEBUG "i2sbus: failed to create pcm\n");
-   954				goto out_put_ci_module;
-   955			}
-   956		}
-   957	
-   958		/* ALSA yet again sucks.
-   959		 * If it is ever fixed, remove this line. See below. */
-   960		out = in = 1;
-   961	
-   962		if (!i2sdev->out.created && out) {
-   963			if (dev->pcm->card != card) {
-   964				/* eh? */
-   965				printk(KERN_ERR
-   966				       "Can't attach same bus to different cards!\n");
-   967				err = -EINVAL;
-   968				goto out_put_ci_module;
-   969			}
-   970			err = snd_pcm_new_stream(dev->pcm, SNDRV_PCM_STREAM_PLAYBACK, 1);
-   971			if (err)
-   972				goto out_put_ci_module;
-   973			snd_pcm_set_ops(dev->pcm, SNDRV_PCM_STREAM_PLAYBACK,
-   974					&i2sbus_playback_ops);
- > 975			dev->pcm->streams[SNDRV_PCM_STREAM_PLAYBACK]->dev.parent =
-   976				&dev->ofdev.dev;
-   977			i2sdev->out.created = 1;
-   978		}
-   979	
-   980		if (!i2sdev->in.created && in) {
-   981			if (dev->pcm->card != card) {
-   982				printk(KERN_ERR
-   983				       "Can't attach same bus to different cards!\n");
-   984				err = -EINVAL;
-   985				goto out_put_ci_module;
-   986			}
-   987			err = snd_pcm_new_stream(dev->pcm, SNDRV_PCM_STREAM_CAPTURE, 1);
-   988			if (err)
-   989				goto out_put_ci_module;
-   990			snd_pcm_set_ops(dev->pcm, SNDRV_PCM_STREAM_CAPTURE,
-   991					&i2sbus_record_ops);
-   992			dev->pcm->streams[SNDRV_PCM_STREAM_CAPTURE]->dev.parent =
-   993				&dev->ofdev.dev;
-   994			i2sdev->in.created = 1;
-   995		}
-   996	
-   997		/* so we have to register the pcm after adding any substream
-   998		 * to it because alsa doesn't create the devices for the
-   999		 * substreams when we add them later.
-  1000		 * Therefore, force in and out on both busses (above) and
-  1001		 * register the pcm now instead of just after creating it.
-  1002		 */
-  1003		err = snd_device_register(card, dev->pcm);
-  1004		if (err) {
-  1005			printk(KERN_ERR "i2sbus: error registering new pcm\n");
-  1006			goto out_put_ci_module;
-  1007		}
-  1008		/* no errors any more, so let's add this to our list */
-  1009		list_add(&cii->list, &dev->codec_list);
-  1010	
-  1011		dev->pcm->private_data = i2sdev;
-  1012		dev->pcm->private_free = i2sbus_private_free;
-  1013	
-  1014		/* well, we really should support scatter/gather DMA */
-  1015		snd_pcm_set_managed_buffer_all(
-  1016			dev->pcm, SNDRV_DMA_TYPE_DEV,
-  1017			&macio_get_pci_dev(i2sdev->macio)->dev,
-  1018			64 * 1024, 64 * 1024);
-  1019	
-  1020		return 0;
-  1021	 out_put_ci_module:
-  1022		module_put(ci->owner);
-  1023	 out_put_this_module:
-  1024		module_put(THIS_MODULE);
-  1025	 out_put_sdev:
-  1026		soundbus_dev_put(dev);
-  1027	 out_free_cii:
-  1028		kfree(cii);
-  1029		return err;
-  1030	}
-  1031	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Naresh
