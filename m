@@ -1,160 +1,117 @@
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512108478
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 03:41:18 +0000 (UTC)
-Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
-	by cmsmtp with ESMTP
-	id WmuKq3TzoQFHRWqMPqwEMK; Fri, 18 Aug 2023 03:41:17 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id WqMOqcExz234eWqMPqOcls; Fri, 18 Aug 2023 03:41:17 +0000
-X-Authority-Analysis: v=2.4 cv=cPzzD3SN c=1 sm=1 tr=0 ts=64dee85d
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
- a=1XWaLZrsAAAA:8 a=cm27Pg_UAAAA:8 a=mDV3o1hIAAAA:8 a=Twlkf-z8AAAA:8
- a=hEGvEmT7ark0PdWysM4A:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=xmb-EsYY8bH0VWELuYED:22 a=_FVE-zBwftR9WsbkzFJk:22 a=-74SuR6ZdpOK_LpdRCUo:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=XS6ddzMrecuPuYAqVJpaZu6ilnoyG2mS0jCrgvsgBTQ=; b=SrRkOhaP3QKiVP6PPRxlkhwJsc
-	cZTdPs+iOlfJ9w8SKFgQ7nl5pPbKFCAVgNMj0bvhrVFtrgbcA+mhjkRZ6VsFs4Ifh/PS++eMgVkY1
-	70Ci9WmNxrMRFgcecjYFQNRapbVf34l3Qr6uJucThJY4do+LdjxdcPB16dXUXfOsI12jGqT09wRqi
-	4vMMkZ8MtBkM4GWS5j9/8dhgLcIXoLKt+aBEha+MkL7w+tkxPRg2whqC5STS9gCw1ZefbVXbbCmaN
-	Iuy9VjIQTedCmcJ5dKWCVb+oFxsf1Ua1k2ei7wCZFHuqwLmEsxJ6SNQNZWz0wfwj1p3aWk3mhyZ5z
-	Wa7hSFTA==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:56796 helo=[192.168.15.8])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWqMN-002Jn6-1p;
-	Thu, 17 Aug 2023 22:41:16 -0500
-Message-ID: <338a56b6-1e07-4089-d762-25440c0f9d81@embeddedor.com>
-Date: Thu, 17 Aug 2023 21:42:05 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6915B8478;
+	Fri, 18 Aug 2023 03:44:01 +0000 (UTC)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RRnLM6Cwvz4f3lVj;
+	Fri, 18 Aug 2023 11:24:59 +0800 (CST)
+Received: from [10.67.110.48] (unknown [10.67.110.48])
+	by APP4 (Coremail) with SMTP id gCh0CgCHZKeH5N5kGNnnAw--.49051S2;
+	Fri, 18 Aug 2023 11:24:57 +0800 (CST)
+Message-ID: <247c158b-f1d3-1bba-b2fa-1d741a566837@huaweicloud.com>
+Date: Fri, 18 Aug 2023 11:24:55 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] Compiler Attributes: counted_by: Adjust name and
- identifier expansion
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [netfilter-nf-next:testing 2/9]
+ ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field
+ 'target' with variable sized type 'struct ebt_entry_target' not at the end of
+ a struct or class is a GNU extension
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230817200558.never.077-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817200558.never.077-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Kees Cook <keescook@chromium.org>, Florian Westphal <fw@strlen.de>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <202308171249.g1ywxhII-lkp@intel.com>
+ <202308162257.F7876776C9@keescook> <20230817082618.GE4312@breakpoint.cc>
+ <202308171000.C97EEC7@keescook>
+From: "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+In-Reply-To: <202308171000.C97EEC7@keescook>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qWqMN-002Jn6-1p
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:56796
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfEb/TSu/95UKW3vE+rID2dgksCV41BHw7yTOBv8ENdGi+279jUpmb+Fbc4BkSUgP6OwDA1E8jrnPeVVxShJC5fH/Lrrut6Ujrp2sDGwZz2IVvGGjdJU4
- lfa3jEkOEJwHukuH90wpK8Uhid9LLxWUEtgH4e8E0sWa8/D/sQUjJYqnSCiLPqF7xVIee2BJfTyxxLjFLX19CO7wp+JdiqoTFDA=
+X-CM-TRANSID:gCh0CgCHZKeH5N5kGNnnAw--.49051S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw4rWr1kGFWrtw1kAFW5Jrb_yoW5AFy8pF
+	yUAayjkr48JrZ7Gw4IqF47uF4Yvw43Gry3ur13G34rZ3Z0vry7Ka1Ikr42kasIyr4DCr1a
+	yF4qqrW8ZrsFqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
 
 
 
-On 8/17/23 14:06, Kees Cook wrote:
-> GCC and Clang's current RFCs name this attribute "counted_by", and have
-> moved away from using a string for the member name. Update the kernel's
-> macros to match. Additionally provide a UAPI no-op macro for UAPI structs
-> that will gain annotations.
+On 2023/08/18 1:02, Kees Cook wrote:
+> On Thu, Aug 17, 2023 at 10:26:18AM +0200, Florian Westphal wrote:
+>> Kees Cook <keescook@chromium.org> wrote:
+>>> On Thu, Aug 17, 2023 at 01:03:20PM +0800, kernel test robot wrote:
+>>>> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
+>>>> head:   015e2d9101d3713c7bee16dccad171df04a3bbd5
+>>>> commit: 61b9e6bd48a6317c0a44ee4f3fecdec9de5baa9e [2/9] netfilter: ebtables: replace zero-length array members
+>>>> config: i386-buildonly-randconfig-r004-20230817 (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/config)
+>>>> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+>>>> reproduce: (https://download.01.org/0day-ci/archive/20230817/202308171249.g1ywxhII-lkp@intel.com/reproduce)
+>>>>
+>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>>> the same patch/commit), kindly add following tags
+>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202308171249.g1ywxhII-lkp@intel.com/
+>>>>
+>>>> All warnings (new ones prefixed by >>):
+>>>>
+>>>>    In file included from <built-in>:1:
+>>>>>> ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+>>>>            struct ebt_entry_target target;
+>>>>                                    ^
+>>>>    1 warning generated.
+>>>
+>>> Eww, it looks like "struct ebt_entry_target" is used _within_ another
+>>> struct:
+>>>
+>>> struct ebt_standard_target {
+>>>         struct ebt_entry_target target;
+>>>         int verdict;
+>>> };
+>>
+>> Yes, same as xt_standard_target.
+>>
+>>> These have been fixed in the past in a variety of ways -- it all depends
+>>> on how userspace is using them. In looking at Debian Code Search:
+>>> https://codesearch.debian.net/search?q=struct+ebt_standard_target&literal=1
+>>>
+>>> It is exclusively doing casts and looking at the "verdict" member. So
+>>> the easiest conversion might be this:
+>>>
+>>>  struct ebt_standard_target {
+>>> -       struct ebt_entry_target target;
+>>> +       unsigned char hdr[sizeof(struct ebt_entry_target)];
+>>>         int verdict;
+>>
+>> I don't think its worth doing all of this.
+>>
+>> Can't we just keep it as-is and drop the relevant hunk from the patch?
 > 
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Fixes: dd06e72e68bc ("Compiler Attributes: Add __counted_by macro")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks
--- 
-Gustavo
-
-> ---
->   include/linux/compiler_attributes.h | 26 +++++++++++++-------------
->   include/uapi/linux/stddef.h         |  4 ++++
->   2 files changed, 17 insertions(+), 13 deletions(-)
+> For now, yeah. But we'll need to find a solution as flex-array
+> structures overlapping variables is considered deprecated (it can lead
+> to ambiguous sizing results). But as long as the kernel itself doesn't
+> use struct ebt_standard_target, we can kick the can down the road a bit
+> more. :)
 > 
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 00efa35c350f..74716a407aac 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -94,6 +94,19 @@
->   # define __copy(symbol)
->   #endif
->   
-> +/*
-> + * Optional: only supported since gcc >= 14
-> + * Optional: only supported since clang >= 17
-> + *
-> + *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
-> + * clang: https://reviews.llvm.org/D148381
-> + */
-> +#if __has_attribute(__counted_by__)
-> +# define __counted_by(member)		__attribute__((__counted_by__(member)))
-> +#else
-> +# define __counted_by(member)
-> +#endif
-> +
->   /*
->    * Optional: not supported by gcc
->    * Optional: only supported since clang >= 14.0
-> @@ -129,19 +142,6 @@
->   # define __designated_init
->   #endif
->   
-> -/*
-> - * Optional: only supported since gcc >= 14
-> - * Optional: only supported since clang >= 17
-> - *
-> - *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
-> - * clang: https://reviews.llvm.org/D148381
-> - */
-> -#if __has_attribute(__element_count__)
-> -# define __counted_by(member)		__attribute__((__element_count__(#member)))
-> -#else
-> -# define __counted_by(member)
-> -#endif
-> -
->   /*
->    * Optional: only supported since clang >= 14.0
->    *
-> diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
-> index 7837ba4fe728..7c3fc3980881 100644
-> --- a/include/uapi/linux/stddef.h
-> +++ b/include/uapi/linux/stddef.h
-> @@ -45,3 +45,7 @@
->   		TYPE NAME[]; \
->   	}
->   #endif
-> +
-> +#ifndef __counted_by
-> +#define __counted_by(m)
-> +#endif
+
+I agree that we can complete the whole transformation step-by-step. I
+will make another patch without the problematic replacement.
+
