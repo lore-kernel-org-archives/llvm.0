@@ -1,45 +1,45 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADBDE56C;
-	Fri, 18 Aug 2023 07:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E040414AA7;
+	Fri, 18 Aug 2023 08:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692344980; x=1723880980;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dtZ7PkQSm/suc9nyv1QVhlNVz4vpaXbAM4VQiGLCyjA=;
-  b=JJS0OvkOgItAwpyDHuJhmiGUZI1j9fANNZ5wIgF+AujbXngGxrc7mUUg
-   qRrfpMlTnmAbu5MEWMmEnXaQitCdnrj3layzYh5gAT0jcuYpd677BHn/I
-   k7ocnJQimsB39+Hug5ixWqrV8x7GI6DgLkZU4PPfJvmF2Sq3UL0PQmT9l
-   mtl+JNzJfePKtIC2S7GHurGCxR9HzHpBbjtijlVNfuWtqUmd3BejwV9PZ
-   +mW3Vi3qPQcaVdVLAZcgkQbv/+1oy0QQGewZhbQVp7XtVqsox5TN5GAYn
-   uSLsu6zqbzhIsgAawzJFPHwLQHaJTa26EAxk7rJabToUEa98d33B6K3dR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="376798571"
+  t=1692345636; x=1723881636;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UrMwbZh7etk/SoX6ujozcIHwKlca0dDPqmB5AACzLVw=;
+  b=N2DJKvdroLn7TJNiHCZGwhgaEnjvf/tP+gJj7l0SZ6NmscQNgg1M6XF2
+   YOKL6DNWaz6fZtyxEfIEW+72apwJu9biTeVoX5KDDdN8Y1725ABjAub47
+   ZRE+eKhVM8/ad9sPKY8/1xMRtTTkqZ3W1XvFYTgQxm2VXJzEO9hEHMmx1
+   dw7k/sPGUvQhSlBCrOn9SfOp0vmW4RKQN2SHZc/M6cbgcs72cfwB1uzQr
+   4ecuCSH3fAJWvQR3Ygfv/FXVulNKXfZBKgKvM1cBbJ7fK7sOXahtx2I3o
+   LctTksyif2wGgvJovkJjLXJr781Ee9uYc6dAjWlAPOgnqtZAlaHvJlpOX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="376801919"
 X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="376798571"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 00:49:08 -0700
+   d="scan'208";a="376801919"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 01:00:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="684788912"
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="849189503"
 X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="684788912"
+   d="scan'208";a="849189503"
 Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 18 Aug 2023 00:49:05 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 18 Aug 2023 01:00:32 -0700
 Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qWuEC-0002Ei-2I;
-	Fri, 18 Aug 2023 07:49:04 +0000
-Date: Fri, 18 Aug 2023 15:48:48 +0800
+	id 1qWuPE-0002FW-2d;
+	Fri, 18 Aug 2023 08:00:29 +0000
+Date: Fri, 18 Aug 2023 15:59:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	netfilter-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH nf] netfilter: nf_tables: GC transaction race with abort
- path
-Message-ID: <202308181545.lZbeE7Lm-lkp@intel.com>
-References: <20230817231352.8412-1-pablo@netfilter.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org,
+	Michael Ellerman <mpe@ellerman.id.au>
+Subject: [powerpc:next-test 21/79]
+ arch/powerpc/platforms/powermac/feature.c:137:19: error: unused function
+ 'simple_feature_tweak'
+Message-ID: <202308181501.AR5HMDWC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,56 +48,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230817231352.8412-1-pablo@netfilter.org>
 
-Hi Pablo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on nf/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/netfilter-nf_tables-GC-transaction-race-with-abort-path/20230818-071545
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf.git master
-patch link:    https://lore.kernel.org/r/20230817231352.8412-1-pablo%40netfilter.org
-patch subject: [PATCH nf] netfilter: nf_tables: GC transaction race with abort path
-config: hexagon-randconfig-r045-20230818 (https://download.01.org/0day-ci/archive/20230818/202308181545.lZbeE7Lm-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181545.lZbeE7Lm-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next-test
+head:   c56963d48343b50998bacc6df949217c950163e3
+commit: 54f30b83fe627453082f15d83d7820b28b2d24bb [21/79] powerpc: address missing-prototypes warnings
+config: powerpc-g5_defconfig (https://download.01.org/0day-ci/archive/20230818/202308181501.AR5HMDWC-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181501.AR5HMDWC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308181545.lZbeE7Lm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308181501.AR5HMDWC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/netfilter/nf_tables_api.c:9132:11: error: call to undeclared function 'nft_gc_seq_begin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    9132 |         gc_seq = nft_gc_seq_begin(nft_net);
-         |                  ^
->> net/netfilter/nf_tables_api.c:9134:2: error: call to undeclared function 'nft_gc_seq_end'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    9134 |         nft_gc_seq_end(nft_net, gc_seq);
-         |         ^
-   2 errors generated.
+>> arch/powerpc/platforms/powermac/feature.c:137:19: error: unused function 'simple_feature_tweak' [-Werror,-Wunused-function]
+   static inline int simple_feature_tweak(struct device_node *node, int type,
+                     ^
+   1 error generated.
 
 
-vim +/nft_gc_seq_begin +9132 net/netfilter/nf_tables_api.c
+vim +/simple_feature_tweak +137 arch/powerpc/platforms/powermac/feature.c
 
-  9124	
-  9125	static int nf_tables_abort(struct net *net, struct sk_buff *skb,
-  9126				   enum nfnl_abort_action action)
-  9127	{
-  9128		struct nftables_pernet *nft_net = nft_pernet(net);
-  9129		unsigned int gc_seq;
-  9130		int ret;
-  9131	
-> 9132		gc_seq = nft_gc_seq_begin(nft_net);
-  9133		ret = __nf_tables_abort(net, action);
-> 9134		nft_gc_seq_end(nft_net, gc_seq);
-  9135		mutex_unlock(&nft_net->commit_mutex);
-  9136	
-  9137		return ret;
-  9138	}
-  9139	
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  132  
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  133  /*
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  134   * Here are the chip specific feature functions
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  135   */
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  136  
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26 @137  static inline int simple_feature_tweak(struct device_node *node, int type,
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  138  				       int reg, u32 mask, int value)
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  139  {
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  140  	struct macio_chip*	macio;
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  141  	unsigned long		flags;
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  142  
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  143  	macio = macio_find(node, type);
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  144  	if (!macio)
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  145  		return -ENODEV;
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  146  	LOCK(flags);
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  147  	if (value)
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  148  		MACIO_BIS(reg, mask);
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  149  	else
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  150  		MACIO_BIC(reg, mask);
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  151  	(void)MACIO_IN32(reg);
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  152  	UNLOCK(flags);
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  153  
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  154  	return 0;
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  155  }
+14cf11af6cf608 arch/powerpc/platforms/powermac/pmac_feature.c Paul Mackerras 2005-09-26  156  
+
+:::::: The code at line 137 was first introduced by commit
+:::::: 14cf11af6cf608eb8c23e989ddb17a715ddce109 powerpc: Merge enough to start building in arch/powerpc.
+
+:::::: TO: Paul Mackerras <paulus@samba.org>
+:::::: CC: Paul Mackerras <paulus@samba.org>
 
 -- 
 0-DAY CI Kernel Test Service
