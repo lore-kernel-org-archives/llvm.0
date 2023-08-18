@@ -1,44 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EDF17AC1;
-	Fri, 18 Aug 2023 13:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D9EC433C7;
-	Fri, 18 Aug 2023 13:14:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692364458;
-	bh=kGhAkAiiAfeWyJ3QgeiaV3PO4o2y8rRpbHm210LQQvk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jVtLZ7HwikGqHIaZCQxQ63Gr10NMs1q2SgHgMfX/TC30K46rbXb5XRD3Wfmmzjn6A
-	 Z0UIibLI7qGkRK0l6FzI1ZUKCHh2EQIE3gw1WKXOvoTmAuQ48plidVYOtctDwfbKp3
-	 MjIhiQmL9Rxu4gORhuURBZs4fNCKic8OZwOaj4Md93t8iKu/dtNXX2klD7trV3L+2Y
-	 LtVVoFSQC8AbszvfsO2ePGv+Zk8LDRx5TYYa8P1e+6yfj+VhkTcZQxkY/vRUfCOgGw
-	 +JS3n4FcYgXTo8gjD5/4MQmcc2QXV4B106FC6WkrgH16PQHG0zKkWW8NVXoYyv0c0W
-	 TT9u6Obk9Uc/w==
-Date: Fri, 18 Aug 2023 15:14:14 +0200
-From: Christian Brauner <brauner@kernel.org>
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 60C7B18B11
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 13:52:43 +0000 (UTC)
+Received: (qmail 30393 invoked by uid 1000); 18 Aug 2023 09:52:35 -0400
+Date: Fri, 18 Aug 2023 09:52:35 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
 To: kernel test robot <lkp@intel.com>
-Cc: Christoph Hellwig <hch@lst.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Josef Bacik <josef@toxicpanda.com>
-Subject: Re: [linux-next:master 8648/10848] ERROR: modpost: "bdev_mark_dead"
- [drivers/s390/block/dasd_mod.ko] undefined!
-Message-ID: <20230818-abhob-gecko-420d48fbc031@brauner>
-References: <202308172348.1BthulLk-lkp@intel.com>
+Cc: Badhri Jagan Sridharan <badhri@google.com>, llvm@lists.linux.dev,
+  oe-kbuild-all@lists.linux.dev,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [stable:linux-6.1.y 6854/8698] drivers/usb/gadget/udc/core.c:56:
+ warning: Function parameter or member 'vbus_work' not described in 'usb_udc'
+Message-ID: <bbd143c9-afc9-4231-b4fc-e095d9b15bd2@rowland.harvard.edu>
+References: <202308181228.oUyNPyxW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202308172348.1BthulLk-lkp@intel.com>
+In-Reply-To: <202308181228.oUyNPyxW-lkp@intel.com>
 
-On Thu, Aug 17, 2023 at 11:35:54PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   47762f08697484cf0c2f2904b8c52375ed26c8cb
-> commit: 381f678306ceef1cefb39fb22f88e3b977b81403 [8648/10848] block: consolidate __invalidate_device and fsync_bdev
+On Fri, Aug 18, 2023 at 12:41:40PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
+> head:   6c44e13dc284f7f4db17706ca48fd016d6b3d49a
+> commit: 3c048d42c305cba61c2040702778023a7b973b22 [6854/8698] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+> config: i386-randconfig-i001-20230817 (https://download.01.org/0day-ci/archive/20230818/202308181228.oUyNPyxW-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181228.oUyNPyxW-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308181228.oUyNPyxW-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/usb/gadget/udc/core.c:56: warning: Function parameter or member 'vbus_work' not described in 'usb_udc'
 
-Outdated commit hash and should already be fixed in-tree.
+This has already been fixed by commit 159a98afc88e ("USB: gadget: core: 
+Add missing kerneldoc for vbus_work") in linux-next.
+
+Alan Stern
+
