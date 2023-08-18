@@ -1,92 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF32F812;
-	Fri, 18 Aug 2023 06:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692341742; x=1723877742;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mHNsFXuEtXzAhgoCApLvFOIEZkFl/CS5g6nQfFPQhMU=;
-  b=mWln8Xgq+j47hfXBcR/Q/uzWDudd4ipci88K8Vhz+nFYzI8o/NHRDyM3
-   O1GnYMj7s9Dty3XMvYdOTpwvF9VZKYBkw999zCxvGYYjOEafJd/fGWayy
-   ydcklVJzditqwFLd+4TpDlOVTq9T8wuZu6aUlZxRfL+dJxhwxdLQK3xvd
-   0uiQNL0Kt/2rYjZWfWnOMmbfPmiEDDlsg6jHCiJOh3WEuAGWbLFcC5k9P
-   r0uEu9tcEADfClP/h5ZJd6ETRm+KgDlAV4a3hVTYrh+w8z5uMtRHbpG5H
-   Nsq0Q+OQE1WLBxjIid2hgsR1LjxtfLZu8cihA7i12LrCjvMdcyvk44wdg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="436943522"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="436943522"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 23:55:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="858563690"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="858563690"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 17 Aug 2023 23:55:38 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qWtNU-0002Be-2R;
-	Fri, 18 Aug 2023 06:54:42 +0000
-Date: Fri, 18 Aug 2023 14:54:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	dri-devel@lists.freedesktop.org, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, Gerd Hoffmann <kraxel@redhat.com>,
-	Dongwon Kim <dongwon.kim@intel.com>,
-	Junxiao Chang <junxiao.chang@intel.com>
-Subject: Re: [PATCH v3 1/2] udmabuf: Use vmf_insert_pfn and VM_PFNMAP for
- handling mmap
-Message-ID: <202308181405.UwIsWuMi-lkp@intel.com>
-References: <20230817064623.3424348-2-vivek.kasireddy@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2DE14F70;
+	Fri, 18 Aug 2023 07:19:36 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4fe3b86cec1so821680e87.2;
+        Fri, 18 Aug 2023 00:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692343174; x=1692947974;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3WLOotOOz6Whg1Mj8YD4tZ6eErSJfZzqhK5ewDoU7mk=;
+        b=IajLjVccbpcsXfF6OU5/ko/nIqNPbKcFd6e2aT5W9pBlW3XQUm0m8EFelVlZe6qRYL
+         hWfKGC6zkHirHD0Vk6UA4I7/2OUev/lpIE9w4wAGxOAcRDp9fy8tvwY3PaRb713hq5Gl
+         Ys5PXLIU5EDvX9oI3MBIkzEaQc7cILrdOSuLwl1tEdn8tlxG3g2fibsJ/q6uhZAu2ku7
+         aE18AjUnFuVL9CSUtFtOHehtPsngPwBUaJYyEiaOqsSEZyqN18nC2K89Z4vNHRSAU4rp
+         RAR3IFqyKlGJRvP7D4qX+wkF2V7I7PY6OmNwO+F3SO9HC6Tuim6u5wHSzb3xNeRTA52I
+         RWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692343174; x=1692947974;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3WLOotOOz6Whg1Mj8YD4tZ6eErSJfZzqhK5ewDoU7mk=;
+        b=kjDT68ADJldH/HJC8nfM9k4xjJX7BG3/g7rKoOG1PP5HJ7k0mmiKCh3uvnCffkciWv
+         prY2dZKvLVTCtpYYiHyrTcxUwkwKFTR9TNMnHzxUkGhrxFxfJBCWwqmphFMgUUZdlXeQ
+         TsYXl+i9RZZF7Et1ovHZlgSgx0wk+MPVuR7i+abZyelt7cu3MfNuIVbvhmmjYa2kJMHU
+         5bUZcE9LOo9SECeNhKqxQdr59+20CXzPsnJmOYz/kbROvSkkyZ3MYARoXnMQhuQn3QU4
+         f9/KGqQQdFOPMjHLW+PrbMAo+BiS+eQ4ABkYLpF0IGaN3sHoPFNeAUA6GSXDWyMqyOCp
+         8Kug==
+X-Gm-Message-State: AOJu0YzpaxrbLjnxd+YYJwxGTuvCFmyg9LmsEA/aqEbz768za3pnBFzx
+	KgjLY+4jumPUWzv2hvehqWO8w5R4cdze8J+XN+0=
+X-Google-Smtp-Source: AGHT+IEH6Jq48dkRZ4ezmCDNiEhdIsVUoXZNVTgzFF8vUlSHsXfot+cfT4CogWsvKA/tHn7Z/98bxJ7Qo34oYIi4M4s=
+X-Received: by 2002:a05:6512:2202:b0:4fe:ef9:c8d0 with SMTP id
+ h2-20020a056512220200b004fe0ef9c8d0mr1268562lfu.35.1692343174179; Fri, 18 Aug
+ 2023 00:19:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230817064623.3424348-2-vivek.kasireddy@intel.com>
+References: <20230817235428.never.111-kees@kernel.org> <20230817235859.49846-10-keescook@chromium.org>
+In-Reply-To: <20230817235859.49846-10-keescook@chromium.org>
+From: Chunyan Zhang <zhang.lyra@gmail.com>
+Date: Fri, 18 Aug 2023 15:18:57 +0800
+Message-ID: <CAAfSe-s_XMzqMLsGpvZoeDBm8+ugJwTYoCDC7g0Yx4dJgsJ6wA@mail.gmail.com>
+Subject: Re: [PATCH 10/21] dmaengine: sprd: Annotate struct sprd_dma_dev with __counted_by
+To: Kees Cook <keescook@chromium.org>
+Cc: Vinod Koul <vkoul@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, dmaengine@vger.kernel.org, 
+	Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Ludovic Desroches <ludovic.desroches@microchip.com>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Lars-Peter Clausen <lars@metafoo.de>, 
+	Zhou Wang <wangzhou1@hisilicon.com>, Jie Hai <haijie1@huawei.com>, 
+	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Green Wan <green.wan@sifive.com>, 
+	Patrice Chotard <patrice.chotard@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Laxman Dewangan <ldewangan@nvidia.com>, 
+	Jon Hunter <jonathanh@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Peter Ujfalusi <peter.ujfalusi@gmail.com>, 
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Yu Kuai <yukuai3@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jordy Zomer <jordy@pwning.systems>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Vivek,
+On Fri, 18 Aug 2023 at 07:59, Kees Cook <keescook@chromium.org> wrote:
+>
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>
+> As found with Coccinelle[1], add __counted_by for struct sprd_dma_dev.
+>
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Orson Zhai <orsonzhai@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> Cc: dmaengine@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-kernel test robot noticed the following build errors:
+Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip linus/master v6.5-rc6 next-20230817]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Chunyan
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vivek-Kasireddy/udmabuf-Use-vmf_insert_pfn-and-VM_PFNMAP-for-handling-mmap/20230817-150922
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230817064623.3424348-2-vivek.kasireddy%40intel.com
-patch subject: [PATCH v3 1/2] udmabuf: Use vmf_insert_pfn and VM_PFNMAP for handling mmap
-config: arm-randconfig-r035-20230818 (https://download.01.org/0day-ci/archive/20230818/202308181405.UwIsWuMi-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181405.UwIsWuMi-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308181405.UwIsWuMi-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: vmf_insert_pfn
-   >>> referenced by udmabuf.c:44 (drivers/dma-buf/udmabuf.c:44)
-   >>>               drivers/dma-buf/udmabuf.o:(udmabuf_vm_fault) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  drivers/dma/sprd-dma.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
+> index 168aa0bd73a0..07871dcc4593 100644
+> --- a/drivers/dma/sprd-dma.c
+> +++ b/drivers/dma/sprd-dma.c
+> @@ -212,7 +212,7 @@ struct sprd_dma_dev {
+>         struct clk              *ashb_clk;
+>         int                     irq;
+>         u32                     total_chns;
+> -       struct sprd_dma_chn     channels[];
+> +       struct sprd_dma_chn     channels[] __counted_by(total_chns);
+>  };
+>
+>  static void sprd_dma_free_desc(struct virt_dma_desc *vd);
+> --
+> 2.34.1
+>
