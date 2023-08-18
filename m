@@ -1,101 +1,119 @@
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BE87ED;
-	Fri, 18 Aug 2023 12:37:02 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.west.internal (Postfix) with ESMTP id 5BAC22B00191;
-	Fri, 18 Aug 2023 08:37:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 18 Aug 2023 08:37:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1692362220; x=1692369420; bh=SQ
-	lAgMLU3HRev+9d1VH4auJeedGv3m900FTY4V8KdiA=; b=C5e9rXhJtnNi2TCu7l
-	8CCMb2Ohju/uda/ovu0B779p56tmqTdZJwmdZSRTzSlLiAluVrCX00jjepJOWOtq
-	nc6Nfrz5GAEuqfx2nHVe1+1LxMQ8Ff9bPSH4coUTygXiy/GEpljsZOSJieZDBX2H
-	MR/5CwY5tst2SGTcCOGgtsscMCUB7fJGWfuFdoRmtaZ8hwUrrBjw+hBq4OXgc3JJ
-	t63hN93j/ZO9GzWTLnuFjL6wp1kevlnmtjV4RoNULTL1ktJxhRyVrIHYspZ+KC7d
-	CndBxbjKo2B/y8JKAf7JNOoyhlSmcgWZ8GE0f4CJIsxD0Vw1NRUuN0I+CFYN8HdL
-	BSNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1692362220; x=1692369420; bh=SQlAgMLU3HRev
-	+9d1VH4auJeedGv3m900FTY4V8KdiA=; b=WvErnSocl35e2ZAgGXaYZxdlUOhel
-	didA48DngANn67Y80fNR7gIHLTM/hmDRikHFS+SOLFVhEz7QbJgutwEx0nOwYyAB
-	IBqYC8+zsl6vSaPyJ2nq8UfzfiGZnQ+Chzzp4LT/V6Yg3ld6uFuYKum6rIVv3LwT
-	3reQ09/6CEgIbLcKfVl15G6tUEc9tXbWAutJgRk59IuVv0HR0bHZ/41wbaur1qKx
-	4MwLYzh6wGMOOV1/l5Qe51l31aqU4p8QztXQ+8KAXWrhcXRljDr/QQ2wM+fSbk63
-	6sxQcDDX6I01WGw26r/+va5RIc1pj31c3jGNeSNeXJe0wNYoONNZcVRlg==
-X-ME-Sender: <xms:62XfZLuNPPlnBU9-wMKjSVV05BSyeD7j_oTBNp2vVWlUSgz6Wvp62w>
-    <xme:62XfZMd2eKCF3oI9OC-fobB6jU1XP1_Tuop21eLFFatnrXP7euNsvxRSlBWtlkHo_
-    ak4NY8gC6O5Dc_wMCo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddufedgheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
-    dtredtreertdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnuges
-    rghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeevhfffledtgeehfeffhfdtgedvhe
-    ejtdfgkeeuvefgudffteettdekkeeufeehudenucffohhmrghinhepkhgvrhhnvghlrdho
-    rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:7GXfZOy01ZaCBBVLKc-kqw_muk8j3uSg3CC_cWJEkOKv3FtHC2N26g>
-    <xmx:7GXfZKN8_e_dRw3GisVLk0WnUjC1IsJMxUQso0UcslY7FxvFRp9V5Q>
-    <xmx:7GXfZL9HcGmJR3P0-FEwiuR0boDwGPjvqjwKOAW5VbM1LP6Awmq8DA>
-    <xmx:7GXfZNLtbhDzc6MLwtZgmu-NXVNH9ymB5SqsVBjkbgMnkEl1d1S6Rcxnlto>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id D8428B6008F; Fri, 18 Aug 2023 08:36:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C8463B4
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 12:46:35 +0000 (UTC)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37ICdLxv013227;
+	Fri, 18 Aug 2023 12:46:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=XRwtB3eOF7H/ZVixiy/pWVAo66LCiR44s1VydLXQPvc=;
+ b=UZVodGMJ2yXs9eRpXjvbXDtTlPYAWWCh/1yf8wgTwyzAfZV+xjiNv2kCvI5BskSXi9nS
+ QhpB02JlpU86i4eLWC9GaHPNlrfUMDR1YYoVU7Vp+BrmUeigq9gRJOV5OkHGhOwW5FHa
+ mya1LNP89eWDl2c2eioA3AVKq7o2YiscqfryTTAYuPNpv/WzFLWO/b0qVNz85mWEKjku
+ Ads4iUtTovIZ61qUu3Em1JD/x0Hs0X5HMpHp121zIcf3xMeW0pPhOWocF39ablEoub2p
+ t2QRDkhtXAs99GdKcMPxeNPnorfpJ+dOj0zNYGY8MMIYGt6bGS398ZcjM4ud4MzujIcH Wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sj8m4ra7k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Aug 2023 12:46:14 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37ICdRMC014130;
+	Fri, 18 Aug 2023 12:46:14 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sj8m4ra79-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Aug 2023 12:46:13 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37ICFxOO013413;
+	Fri, 18 Aug 2023 12:46:12 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sepmkej57-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Aug 2023 12:46:12 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37ICkBf528902136
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 18 Aug 2023 12:46:12 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CB2A45805A;
+	Fri, 18 Aug 2023 12:46:11 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1A63D5805E;
+	Fri, 18 Aug 2023 12:46:11 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.81.121])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 18 Aug 2023 12:46:10 +0000 (GMT)
+Message-ID: <56197f75291ae44fabd1a692f01f09863fbff7e3.camel@linux.ibm.com>
+Subject: Re: [PATCH] integrity: Annotate struct ima_rule_opt_list with
+ __counted_by
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn"
+ <serge@hallyn.com>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Nathan Chancellor
+ <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Date: Fri, 18 Aug 2023 08:46:10 -0400
+In-Reply-To: <20230817210327.never.598-kees@kernel.org>
+References: <20230817210327.never.598-kees@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NAmYlWVzRQ0YohiSinTeU8-Dr5Z-mXL6
+X-Proofpoint-GUID: Hc3SwzQ8TQeVTaLkoy2HdKp6dCaMk4S4
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <6173828b-183c-490d-abca-bdc72221bafc@app.fastmail.com>
-In-Reply-To: <202308181501.AR5HMDWC-lkp@intel.com>
-References: <202308181501.AR5HMDWC-lkp@intel.com>
-Date: Fri, 18 Aug 2023 14:36:37 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "kernel test robot" <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linuxppc-dev@lists.ozlabs.org, "Michael Ellerman" <mpe@ellerman.id.au>
-Subject: Re: [powerpc:next-test 21/79]
- arch/powerpc/platforms/powermac/feature.c:137:19: error: unused function
- 'simple_feature_tweak'
-Content-Type: text/plain
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-18_15,2023-08-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ spamscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 priorityscore=1501 mlxscore=0 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308180115
 
-On Fri, Aug 18, 2023, at 09:59, kernel test robot wrote:
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git 
-> next-test
-> head:   c56963d48343b50998bacc6df949217c950163e3
-> commit: 54f30b83fe627453082f15d83d7820b28b2d24bb [21/79] powerpc: 
-> address missing-prototypes warnings
+On Thu, 2023-08-17 at 14:03 -0700, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_list.
+> Additionally, since the element count member must be set before accessing
+> the annotated flexible array member, move its initialization earlier.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new 
-> version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: 
-> https://lore.kernel.org/oe-kbuild-all/202308181501.AR5HMDWC-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->>> arch/powerpc/platforms/powermac/feature.c:137:19: error: unused function 'simple_feature_tweak' [-Werror,-Wunused-function]
->    static inline int simple_feature_tweak(struct device_node *node, int type,
->                      ^
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
 
-This looks unrelated to my patch, but is easily addressed by marking
-the function __maybe_unused. The warning is triggered by clang specific
-behavior that treats inline functions in .c files differently, see
-6863f5643dd7 ("kbuild: allow Clang to find unused static inline functions
-for W=1 build")
+-- 
+thanks,
 
-     Arnd
+Mimi
+
