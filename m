@@ -1,42 +1,41 @@
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62D839A
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 01:25:10 +0000 (UTC)
-Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575DF62C
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 01:25:41 +0000 (UTC)
+Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
 	by cmsmtp with ESMTP
-	id Wh24qYetRWU1cWoEgqSTsE; Fri, 18 Aug 2023 01:25:10 +0000
+	id WncWq47KrbK1VWoDdqk2LN; Fri, 18 Aug 2023 01:24:05 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id WoEfqWT4QZReaWoEfqIPEX; Fri, 18 Aug 2023 01:25:09 +0000
-X-Authority-Analysis: v=2.4 cv=WtA4jPTv c=1 sm=1 tr=0 ts=64dec875
+	id WoDdqi1uZD5qiWoDdqd1UX; Fri, 18 Aug 2023 01:24:05 +0000
+X-Authority-Analysis: v=2.4 cv=dMe1JcVb c=1 sm=1 tr=0 ts=64dec835
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=8b9GpE9nAAAA:8 a=phlkwaE_AAAA:8
- a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8 a=-bvcuBnrpKmIfEhu9ToA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=T3LWEMljR5ZiDmsYVIUa:22 a=uKTQOUHymn4LaG7oTSIC:22
- a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=VwQbUJbxAAAA:8 a=8b9GpE9nAAAA:8 a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8
+ a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+ a=T3LWEMljR5ZiDmsYVIUa:22 a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=f7nwE/qFZmVusLxJv+zoA/66vZW2NKiHaJWx4yhC0cI=; b=r/Wwa+KHDaHY8bcPNx4aFUQCFt
-	RYaJEsoP3Pmk9Eb9/3iwlUGKrZ5FKHCX9QX11bl8DgIpseEh4WH6xGh4GW3UfezUe/v8VgjKGCz8e
-	k06oSbj1xGoOgACMCmLcyLJHM+8AXI/z6otTqA661jPfjCiinzi4mFUgvLBzUxscCFS80GSgmEIW1
-	hmRCIMgr24h+WOJnLwPOG5feE4dHRc0pxMHTWUSBbDmkdFgTrpjYd9YD753SxvOALk8P8h2hIgtMt
-	G4OrHF8nLaEx5rU54CFQdgcHXAjgkmQau/rjBjgv93vQF1RAUk0GaGgXQJ1C7Sm4FKVu0o5N28xh7
-	GaCSs5vw==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:52924 helo=[192.168.15.8])
+	bh=wt9JyjAgPAPGR6Wixh0L2cZNzUJH2xdSJeUmcul+zXU=; b=fOt1P9YrKkwR7S6EO+WBSFOTvo
+	4BviY69h6yC/WlD7H9hQzJ9N0IquEbi+J0eRxmndLOilfz/K6d92Cxs7Llm4lbqeV80IqSDtZTPIw
+	izYPYBAO55EZGBG4RXMEBjFqeaorvfSsOAZJob3wfV984/s18gTYitS/y7RPoWTDbCT78+i9cJeQF
+	liYgvw85iZvbqloKqq/PROxSSVuBREBVw9ipEhEk4YEvcaVUt6efEQFdEc2YgxEymkgvmSgr6C64k
+	xbR2pDkNybfy25EtsK2HaPvYON9YEMjX9JnkeDcM5lUrpscXW0dpu3ZD1mhCrxPWsVFBuHTLViH4e
+	kgBXFNkA==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:46760 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWoEa-000Y5s-00;
-	Thu, 17 Aug 2023 20:25:04 -0500
-Message-ID: <1f6873bb-e6d3-fdff-5e20-72332469def2@embeddedor.com>
-Date: Thu, 17 Aug 2023 19:26:02 -0600
+	id 1qWoDW-000WfM-1p;
+	Thu, 17 Aug 2023 20:23:58 -0500
+Message-ID: <996abdd6-dd83-b4b3-e347-2889e9d2e7ef@embeddedor.com>
+Date: Thu, 17 Aug 2023 19:24:57 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,15 +44,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 14/21] dmaengine: stm32-mdma: Annotate struct
- stm32_mdma_device with __counted_by
+Subject: Re: [PATCH 11/21] dmaengine: st_fdma: Annotate struct st_fdma_desc
+ with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, dmaengine@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, Hector Martin <marcan@marcan.st>,
- Sven Peter <sven@svenpeter.dev>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>,
+ linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+ Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>,
  Ludovic Desroches <ludovic.desroches@microchip.com>,
  Tudor Ambarus <tudor.ambarus@linaro.org>,
  Lars-Peter Clausen <lars@metafoo.de>, Zhou Wang <wangzhou1@hisilicon.com>,
@@ -62,7 +60,8 @@ Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
  Konrad Dybcio <konrad.dybcio@linaro.org>, Green Wan <green.wan@sifive.com>,
  Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
  <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- Patrice Chotard <patrice.chotard@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
  Laxman Dewangan <ldewangan@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
  Thierry Reding <thierry.reding@gmail.com>,
  Peter Ujfalusi <peter.ujfalusi@gmail.com>,
@@ -73,12 +72,13 @@ Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
  <jernej.skrabec@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
- linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+ linux-arm-msm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-tegra@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
 References: <20230817235428.never.111-kees@kernel.org>
- <20230817235859.49846-14-keescook@chromium.org>
+ <20230817235859.49846-11-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817235859.49846-14-keescook@chromium.org>
+In-Reply-To: <20230817235859.49846-11-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -89,18 +89,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qWoEa-000Y5s-00
+X-Exim-ID: 1qWoDW-000WfM-1p
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:52924
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:46760
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 464
+X-Email-Count: 338
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfO1l8Hpg5B4fSe3q3iLGdUyfObGa6Qdm2PWBcUK6q0UUA4LlYjsP2GyaVUiB1IgtoKbJSUeErfKaS1i3+/02o/CwoCW28vITQHCb5hIqfbhHpCdRU4wK
- aEKVIsRTaXqGvDqF+6z17rUfm+WT/TxqI57OztpykrRK1pWJbNPh8JGWibZPPVZo6QbBAUaVT5Ong8cu79acckPsogoHcGJDze0=
+X-CMAE-Envelope: MS4xfFNn/nYkNWCu465x55Rpji6BrcDzSlEk3XM/ityrmJF+fJouSvhRhKGR7YR/g1szFAqVQpnqpgTs1H0aneIcfV3WZ4plgYQB7CdXvHxRddgBxAGbfDxr
+ hIHPhE+i+MDT43jHDP8ab08mMhpaGddlexQDBW3zYR0Zortpr3Zicb/SrmgzMWoS4sJNn8kRW4pr9HdBU/N+IVvGLXKOWqKQ6SM=
 
 
 
@@ -111,18 +111,14 @@ On 8/17/23 17:58, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct stm32_mdma_device.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
+> As found with Coccinelle[1], add __counted_by for struct st_fdma_desc.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
 > Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
 > Cc: linux-arm-kernel@lists.infradead.org
+> Cc: dmaengine@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -132,34 +128,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/dma/stm32-mdma.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/dma/st_fdma.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-> index 926d6ecf1274..0c7d2295856e 100644
-> --- a/drivers/dma/stm32-mdma.c
-> +++ b/drivers/dma/stm32-mdma.c
-> @@ -256,7 +256,7 @@ struct stm32_mdma_device {
->   	u32 nr_ahb_addr_masks;
->   	u32 chan_reserved;
->   	struct stm32_mdma_chan chan[STM32_MDMA_MAX_CHANNELS];
-> -	u32 ahb_addr_masks[];
-> +	u32 ahb_addr_masks[] __counted_by(nr_ahb_addr_masks);
+> diff --git a/drivers/dma/st_fdma.h b/drivers/dma/st_fdma.h
+> index fa15b97a3bab..f296412e96b6 100644
+> --- a/drivers/dma/st_fdma.h
+> +++ b/drivers/dma/st_fdma.h
+> @@ -97,7 +97,7 @@ struct st_fdma_desc {
+>   	struct st_fdma_chan *fchan;
+>   	bool iscyclic;
+>   	unsigned int n_nodes;
+> -	struct st_fdma_sw_node node[];
+> +	struct st_fdma_sw_node node[] __counted_by(n_nodes);
 >   };
 >   
->   static struct stm32_mdma_device *stm32_mdma_get_dev(
-> @@ -1611,13 +1611,13 @@ static int stm32_mdma_probe(struct platform_device *pdev)
->   			      GFP_KERNEL);
->   	if (!dmadev)
->   		return -ENOMEM;
-> +	dmadev->nr_ahb_addr_masks = count;
->   
->   	dmadev->nr_channels = nr_channels;
->   	dmadev->nr_requests = nr_requests;
->   	device_property_read_u32_array(&pdev->dev, "st,ahb-addr-masks",
->   				       dmadev->ahb_addr_masks,
->   				       count);
-> -	dmadev->nr_ahb_addr_masks = count;
->   
->   	dmadev->base = devm_platform_ioremap_resource(pdev, 0);
->   	if (IS_ERR(dmadev->base))
+>   enum st_fdma_type {
