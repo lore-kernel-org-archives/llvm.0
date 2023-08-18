@@ -1,99 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1661D398
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 02:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6C5C433C7;
-	Fri, 18 Aug 2023 02:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA16647;
+	Fri, 18 Aug 2023 03:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33D18C433C7;
+	Fri, 18 Aug 2023 03:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692327177;
-	bh=oKWvl5cR+aN7W6Ji9c7Edvn9oPXPfUDSKX2O+ONXOxs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CQFHjEJKGV9Tqr52SOusQnN7Yl56ANN1btFHVmJ29VdDF7Jt+W3fouYvza9+lB1TB
-	 YuIfYN2v1y3NrQzAYsBQv5YCW5hiP0VLibIt/EHCm54jKOS8WAJ/8DOhcpcaRG9xPQ
-	 t4WGve5L4FRAaul9rMadQrwLTTKyADodVV1MlIsnqztyVFyds43yEMrbTXqDLWpEJ0
-	 pz6Qu0/PiAVtEhwuUIKgjw3vQ24809RvxWeO9gfp1Fy1LQxsAM9GNII6raJ5FLy0Im
-	 JPGfkhaZcNdEzZhM2kwjH+yIU0RyERYj4/+gt+0qWBdT6JrIN68XyDuI/DD83JiqYv
-	 ZDvHCVRXNgoeg==
-Date: Thu, 17 Aug 2023 19:52:55 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Theodore Ts'o <tytso@mit.edu>
-Cc: sandeen@redhat.com,
-	syzbot <syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com>,
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
- forced after error (3)
-Message-ID: <20230818025255.GA2175@sol.localdomain>
-References: <000000000000530e0d060312199e@google.com>
- <20230817142103.GA2247938@mit.edu>
- <81f96763-51fe-8ea1-bf81-cd67deed9087@redhat.com>
- <20230817161118.GC2247938@mit.edu>
- <20230817164739.GC1483@sol.localdomain>
- <20230818021038.GC3464136@mit.edu>
+	s=k20201202; t=1692328222;
+	bh=y9P/3/WGyEw+CQqUCiUgiFpqMBL0DcUQoe8g58/Afs8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TdlFlxaGNnjEfkiv09QR0t1UyigA/lOjQGICLQESx/jXozINFKPufb3Y+LE+CL0WQ
+	 ihdW7FWGXOoWwrYDhwz7SrTRXhcIB3N5DexWMqvqeVfMo91H3dw/vk7frXk6HqIYVS
+	 fsnxFTitJmXR/UwmsAR5IsyIW/HWvNN9oRfaMCkIyRfgqnSkY3Q85JT0s/s649Vejf
+	 rgoYNt7Rs2A3fqilQyEW7WCUnPMtqm+CPzFJ6uZIpTV2fNpj/d2GpeybVXr1T6f72y
+	 SOa1utSyGSIWviOUrYLv2C7ugLiHp7AUQjCOCk/fDFcI1YtfRu0EpCAP40+BA+cDEE
+	 KoEeKnQc86DVg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1616BC395C5;
+	Fri, 18 Aug 2023 03:10:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230818021038.GC3464136@mit.edu>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: mdio: fix -Wvoid-pointer-to-enum-cast warning
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169232822208.13423.9185597276539868139.git-patchwork-notify@kernel.org>
+Date: Fri, 18 Aug 2023 03:10:22 +0000
+References: <20230815-void-drivers-net-mdio-mdio-xgene-v1-1-5304342e0659@google.com>
+In-Reply-To: <20230815-void-drivers-net-mdio-mdio-xgene-v1-1-5304342e0659@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
+ quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
+ linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-On Thu, Aug 17, 2023 at 10:10:38PM -0400, Theodore Ts'o wrote:
-> On Thu, Aug 17, 2023 at 09:47:39AM -0700, Eric Biggers wrote:
-> > 
-> > Eric S. is correct that for a filesystem image to enable panic on error, support
-> > for panic on error should have to be properly consented to by the kernel
-> > configuration, for example through an fs.allow_panic_on_error sysctl.
-> 
-> I disagree.  It's up to the system administrator, not the kernel ---
-> and the system adminsitrator is perfectly free to run e2fsck on a
-> random file system, or to use tune2fs to adjust the panic on error
-> setting on the file system, befure using their root powers to mount
-> the file system.
-> 
-> Root can do many things that cause the system to reboot.  For example,
-> the system adminsirtator could run /sbin/reboot.  Should the kernel
-> "consent" by setting fs.allow_reboot_system_call_to_work before the
-> root user can run the /sbin/reboot binary?  Hopefully it's obvious why
-> this makes absolutely no sense.
-> 
-> > It can be argued that this not important, or not worth implementing when the
-> > default will need to remain 1 for backwards compatibility.  Or even that
-> > syzkaller should work around it in the mean time.  But it is incorrect to write
-> > "This is fundamentally a syzbot bug."
-> 
-> Well, the current behaviour is Working as Intended.  And if syzbot is
-> going about whining about things that are Working as Intended, it's
-> not fit for the upostream developers' purpose.
-> 
-> As another example, root can set a real-time priority of a process to
-> be at a level where it will prempt all other processes, including
-> kernel threads.  Do enough of these, and you *will* lock up the
-> kernel.  Again, should there be a sysctl that allows real-time
-> priorities to work?  Or do we teach syzbot that doing things that are
-> documented to cause the kernel to lock up are not something that's
-> worthy of a report.  In the past, syzbot issued a *huge* amount of
-> noise caused by precisely to this.  Upstream developers complained
-> that it was a false positive, and syzbot was adjusted to Stop Doing
-> That.
+Hello:
 
-Obviously it's up to the system administrator; that should have been clear since
-I suggested a sysctl.  Sorry if I wasn't clear.  The point is that there are
-certain conventions for what is allowed to break the safety guarantees that the
-kernel provides to userspace, which includes causing a kernel panic.  Panics on
-various problems are configured by /proc/sys/kernel/panic_*.  So having to
-opt-in to panic-on-error, or at least being able to opt-out, by setting a sysctl
-seems natural.  Whereas having mount() being able to automatically panic the
-kernel with no way to opt-out seems like a violation of broader kernel
-conventions, even if it happens to be "working as intended" in the ext4 context.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Anyway, I'm not actually saying this issue is important.  I just get frustrated
-by the total denial that it could even possibly be considered something that
-could be improved in the kernel...
+On Tue, 15 Aug 2023 20:35:59 +0000 you wrote:
+> When building with clang 18 I see the following warning:
+> |       drivers/net/mdio/mdio-xgene.c:338:13: warning: cast to smaller integer
+> |               type 'enum xgene_mdio_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> |         338 |                 mdio_id = (enum xgene_mdio_id)of_id->data;
+> 
+> This is due to the fact that `of_id->data` is a void* while `enum
+> xgene_mdio_id` has the size of an int. This leads to truncation and
+> possible data loss.
+> 
+> [...]
 
-- Eric
+Here is the summary with links:
+  - net: mdio: fix -Wvoid-pointer-to-enum-cast warning
+    https://git.kernel.org/netdev/net-next/c/f3add6dec36d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
