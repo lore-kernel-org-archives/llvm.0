@@ -1,20 +1,20 @@
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780E5398
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 01:24:33 +0000 (UTC)
-Received: from eig-obgw-6010a.ext.cloudfilter.net ([10.0.30.248])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081A762F
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 01:24:46 +0000 (UTC)
+Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
 	by cmsmtp with ESMTP
-	id Wm24qfHQ3EoVsWoE5qGRek; Fri, 18 Aug 2023 01:24:33 +0000
+	id WkxXqGdW2DKaKWoEIqIbHd; Fri, 18 Aug 2023 01:24:46 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id WoE4qsLbFJJfoWoE4qeNss; Fri, 18 Aug 2023 01:24:32 +0000
-X-Authority-Analysis: v=2.4 cv=V4lubMri c=1 sm=1 tr=0 ts=64dec850
+	id WoEHq1hZK1rJFWoEHqG3um; Fri, 18 Aug 2023 01:24:45 +0000
+X-Authority-Analysis: v=2.4 cv=PYPsOwtd c=1 sm=1 tr=0 ts=64dec85e
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
  a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=8b9GpE9nAAAA:8 a=phlkwaE_AAAA:8
- a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8 a=PQxDlO0rh1wi_DnxKH8A:9 a=QEXdDO2ut3YA:10
+ a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8 a=qjWHau5h7Oqj65Zv8QkA:9 a=QEXdDO2ut3YA:10
  a=AjGcO6oz07-iQ99wixmX:22 a=T3LWEMljR5ZiDmsYVIUa:22 a=uKTQOUHymn4LaG7oTSIC:22
  a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,20 +23,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=EwBdW62PPBMZVf78eVBfrCIfGvyXuF9Ofx4kjw6wwVU=; b=PINaxgXl8Chxqc5houvaG4bVzG
-	KziTmKnq9L+37ydcZjmi5Az2P4nZyitbdg9RGfEoK8IwCtRVXPIqgL7AuCMPnevwzdnfu8rfp0Kjx
-	UFOllsZDWvTfaa8AlsylGuKEdMMpFOJ5/01nXxZWTTr7hYqIM+Dz5jgGrkuCfmgEn9Kafr1xkwe8K
-	F9v2e4iKqRl1v0Z5AhLucqAev4X7YlwK+ju2EhtgfZdyMFg73VaOGEwKn3vslu+/gZws2AOEuMZCH
-	hpgY+ywIBBXq4XGyRIzjT+7NHCZWaeGKBZRFCt8THw/ZoOXDtOK2rGheOvfKhW5jLWroXKWhTjhHC
-	oCAH982w==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:55258 helo=[192.168.15.8])
+	bh=AqieMOIgktxvBo8GBaNhs4Rq0vAOt4KL0VhES5aYsCM=; b=K1zZu/5hYlyfu/445Kt5jUu61c
+	2n+YMmumLFyMUGsx2R6zrgIH90c8OeFQfPPlCtYkmPuD1kdYaBKL8AmSbbC09aYuoDUYX5KgBVpBw
+	+Glqy434Dp3KX8eJNc5xhy3rUq9P+pGo+dtQ1PRDMLKOW5lPPspAbrRi2aN4IiVUT3eMSP1Wjuuze
+	P5ZlknrUfMB3D6galG8FjDa4fAexxvT2FN79vkZ0D+fTibDzuBC51y2QI09OIXWjA7gx18kDhaNpe
+	DYn5z5vK/oRMOg57ZbqEe+xkZLEj17g+AoboD7/OxSDK9wWHgIR2GeFohwSsaXkUYOxXCu+xfp4xC
+	njZ1SmWw==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:42946 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWoDy-000XHo-0J;
-	Thu, 17 Aug 2023 20:24:26 -0500
-Message-ID: <be53a6d3-9cac-0bc2-c659-68bea6034073@embeddedor.com>
-Date: Thu, 17 Aug 2023 19:25:24 -0600
+	id 1qWoEB-000XeZ-0x;
+	Thu, 17 Aug 2023 20:24:39 -0500
+Message-ID: <37a8baae-02da-9a1a-2a02-d63f9e212aa1@embeddedor.com>
+Date: Thu, 17 Aug 2023 19:25:38 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,8 +45,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 12/21] dmaengine: stm32-dma: Annotate struct
- stm32_dma_desc with __counted_by
+Subject: Re: [PATCH 13/21] dmaengine: stm32-mdma: Annotate struct
+ stm32_mdma_desc with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
@@ -76,9 +76,9 @@ Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
  linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
  llvm@lists.linux.dev, linux-hardening@vger.kernel.org
 References: <20230817235428.never.111-kees@kernel.org>
- <20230817235859.49846-12-keescook@chromium.org>
+ <20230817235859.49846-13-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817235859.49846-12-keescook@chromium.org>
+In-Reply-To: <20230817235859.49846-13-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -89,18 +89,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qWoDy-000XHo-0J
+X-Exim-ID: 1qWoEB-000XeZ-0x
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:55258
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:42946
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 380
+X-Email-Count: 422
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfK2e+j9UJFnGrdCR2mu9hAsiJY3Awijz2veLgcWSG/6tvo7KKQfZtzwuJWGZZPKjEV0ryQVj5HFYqIJP1ua+SmnapBBdTITMeo2HZQynGYp6w9zBJKtL
- i+wYDj2taAB5kUFnD13O9xyAyoC/LGTJDNklU6vSB9S+pnk3fWsLC1nnfUtYAbG1CDcOnTL/IuGr1fBTVMqefLf4M6E71xqRC5g=
+X-CMAE-Envelope: MS4xfCZNLC+ze81VEYwpvm7xUzIb/4jfqAz47c9J7rr2LAKknrO/h564Ap0EyQrvbe1Da0F9gEpL2ynuJy35DUTTYtHbGHiu70H5pA55sElW9EUIJkvPJEr+
+ nYFF71qhC9Ran7WMAPyJOncqM7t5XETiXpRUYA42ERiKNKcV/8dgCpDpbhO9S9DLLPkB6ryXAfFLnWBEzyKysGkHnA9cAcVGnFY=
 
 
 
@@ -111,7 +111,7 @@ On 8/17/23 17:58, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct stm32_dma_desc.
+> As found with Coccinelle[1], add __counted_by for struct stm32_mdma_desc.
 > Additionally, since the element count member must be set before accessing
 > the annotated flexible array member, move its initialization earlier.
 > 
@@ -132,70 +132,36 @@ Thanks
 Gustavo
 
 > ---
->   drivers/dma/stm32-dma.c | 11 ++++-------
->   1 file changed, 4 insertions(+), 7 deletions(-)
+>   drivers/dma/stm32-mdma.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
-> index 5c36811aa134..a732b3807b11 100644
-> --- a/drivers/dma/stm32-dma.c
-> +++ b/drivers/dma/stm32-dma.c
-> @@ -191,7 +191,7 @@ struct stm32_dma_desc {
->   	struct virt_dma_desc vdesc;
+> diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+> index 0de234022c6d..926d6ecf1274 100644
+> --- a/drivers/dma/stm32-mdma.c
+> +++ b/drivers/dma/stm32-mdma.c
+> @@ -224,7 +224,7 @@ struct stm32_mdma_desc {
+>   	u32 ccr;
 >   	bool cyclic;
->   	u32 num_sgs;
-> -	struct stm32_dma_sg_req sg_req[];
-> +	struct stm32_dma_sg_req sg_req[] __counted_by(num_sgs);
+>   	u32 count;
+> -	struct stm32_mdma_desc_node node[];
+> +	struct stm32_mdma_desc_node node[] __counted_by(count);
 >   };
 >   
->   /**
-> @@ -1105,6 +1105,7 @@ static struct dma_async_tx_descriptor *stm32_dma_prep_slave_sg(
->   	desc = kzalloc(struct_size(desc, sg_req, sg_len), GFP_NOWAIT);
+>   struct stm32_mdma_dma_config {
+> @@ -321,6 +321,7 @@ static struct stm32_mdma_desc *stm32_mdma_alloc_desc(
+>   	desc = kzalloc(struct_size(desc, node, count), GFP_NOWAIT);
 >   	if (!desc)
 >   		return NULL;
-> +	desc->num_sgs = sg_len;
+> +	desc->count = count;
 >   
->   	/* Set peripheral flow controller */
->   	if (chan->dma_sconfig.device_fc)
-> @@ -1141,8 +1142,6 @@ static struct dma_async_tx_descriptor *stm32_dma_prep_slave_sg(
->   			desc->sg_req[i].chan_reg.dma_sm1ar += sg_dma_len(sg);
->   		desc->sg_req[i].chan_reg.dma_sndtr = nb_data_items;
+>   	for (i = 0; i < count; i++) {
+>   		desc->node[i].hwdesc =
+> @@ -330,8 +331,6 @@ static struct stm32_mdma_desc *stm32_mdma_alloc_desc(
+>   			goto err;
 >   	}
+>   
+> -	desc->count = count;
 > -
-> -	desc->num_sgs = sg_len;
->   	desc->cyclic = false;
+>   	return desc;
 >   
->   	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
-> @@ -1216,6 +1215,7 @@ static struct dma_async_tx_descriptor *stm32_dma_prep_dma_cyclic(
->   	desc = kzalloc(struct_size(desc, sg_req, num_periods), GFP_NOWAIT);
->   	if (!desc)
->   		return NULL;
-> +	desc->num_sgs = num_periods;
->   
->   	for (i = 0; i < num_periods; i++) {
->   		desc->sg_req[i].len = period_len;
-> @@ -1232,8 +1232,6 @@ static struct dma_async_tx_descriptor *stm32_dma_prep_dma_cyclic(
->   		if (!chan->trig_mdma)
->   			buf_addr += period_len;
->   	}
-> -
-> -	desc->num_sgs = num_periods;
->   	desc->cyclic = true;
->   
->   	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
-> @@ -1254,6 +1252,7 @@ static struct dma_async_tx_descriptor *stm32_dma_prep_dma_memcpy(
->   	desc = kzalloc(struct_size(desc, sg_req, num_sgs), GFP_NOWAIT);
->   	if (!desc)
->   		return NULL;
-> +	desc->num_sgs = num_sgs;
->   
->   	threshold = chan->threshold;
->   
-> @@ -1283,8 +1282,6 @@ static struct dma_async_tx_descriptor *stm32_dma_prep_dma_memcpy(
->   		desc->sg_req[i].chan_reg.dma_sndtr = xfer_count;
->   		desc->sg_req[i].len = xfer_count;
->   	}
-> -
-> -	desc->num_sgs = num_sgs;
->   	desc->cyclic = false;
->   
->   	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
+>   err:
