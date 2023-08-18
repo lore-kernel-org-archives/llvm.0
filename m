@@ -1,42 +1,41 @@
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEC28BE2;
-	Fri, 18 Aug 2023 03:31:00 +0000 (UTC)
-Received: from eig-obgw-6003a.ext.cloudfilter.net ([10.0.30.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A5B8478;
+	Fri, 18 Aug 2023 03:38:01 +0000 (UTC)
+Received: from eig-obgw-5003a.ext.cloudfilter.net ([10.0.29.159])
 	by cmsmtp with ESMTP
-	id WcM7qWzDTWU1cWqCRqUsF1; Fri, 18 Aug 2023 03:30:59 +0000
+	id WmuKqjqx0yYOwWqJEq2IlA; Fri, 18 Aug 2023 03:38:00 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id WqCQq9ohjoeMqWqCQqvBUV; Fri, 18 Aug 2023 03:30:59 +0000
-X-Authority-Analysis: v=2.4 cv=F9xEy4tN c=1 sm=1 tr=0 ts=64dee5f3
+	id WqJEqe1VKr28JWqJEq2UXK; Fri, 18 Aug 2023 03:38:00 +0000
+X-Authority-Analysis: v=2.4 cv=PIQcRNmC c=1 sm=1 tr=0 ts=64dee798
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=XYAwZIGsAAAA:8 a=KKAkSRfTAAAA:8 a=JfrnYn6hAAAA:8
- a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=E8ToXWR_bxluHZ7gmE-Z:22 a=cvBusfyB2V15izCimMoJ:22
- a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=VwQbUJbxAAAA:8 a=Ikd4Dj_1AAAA:8 a=pGLkceISAAAA:8 a=cm27Pg_UAAAA:8
+ a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+ a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4JVL3LP3PLZ/upNqPHsF4xqDCij7GthtAZ+WHDAAltY=; b=sPr4kpZEP5HHCUdB+VqF0+61G0
-	8ED4pa/Ev/dmoTBuqhl1nOI8A5uHwzHEkPajZgkKC9Y2SRcdz8ABm6ugVbWLYXajC+PkCLbTksosT
-	ymbLZv0/C9RzL1Th1L3ZeW2I14PWFnyQzQAdtJto/vE803C6btuRXIHL8sf+j5RehbiVlv+odZS9G
-	4z/iR2Zui6dYEsIIdPK3G4I5FfXy8O+0GFTgk9XI9GaDQinBRFmhig7VVxBwvV7u6ehW3Tg5laM7k
-	UNdtqU4ax7/OTzhEMbdVlT3Ac6h4GggAR9yEGZ3QrfM2hvFIUjavDc+EUKUtsmgrDq9RLp9uttxDA
-	/j/d1pQA==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:47366 helo=[192.168.15.8])
+	bh=L0n5YvsnOREjDavEqwIfonPDHlgYaxvqnu5lUobWG1I=; b=tHeYKVrHUJemYIG8wkzYXKKQeK
+	LZOQuy5Q2Aff6Q0LjCX7wAbdA0NELdQ2ug9kERJ3nmfLByHcAGYZ0H2urNlpeuYcVRKN+RibDxB2L
+	CpKt9CwfXsU4hSApJ1dxGON3kuCzv/Atk0Kzu6WTS8nb66oEO/YJNsWoLseZQHoWFdNAyKGwgfyuc
+	6HQ4lOh4wHIem2qOg1qaLoRzhbAhQ1ywyJoYdBBe/2ATUMXpz+FHrqdhMffnxRMcUiagT7FChjDLc
+	m6ZcIUlk06BerGP4CPuLEn6BP5kURY0Ljf11xvLMVXxkmGzXUKGVvXBY20R60Fjw/SwRsoM3MQayW
+	2ug8swMA==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:48526 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWozG-001AGP-1n;
-	Thu, 17 Aug 2023 21:13:18 -0500
-Message-ID: <0cac6115-6026-463d-7254-c69151fa1af6@embeddedor.com>
-Date: Thu, 17 Aug 2023 20:14:17 -0600
+	id 1qWp00-001BF6-0L;
+	Thu, 17 Aug 2023 21:14:04 -0500
+Message-ID: <681fd5fa-3a0d-676b-44b0-0aab66f21dd7@embeddedor.com>
+Date: Thu, 17 Aug 2023 20:15:02 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,15 +44,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 02/21] dmaengine: at_hdmac: Annotate struct at_desc with
- __counted_by
+Subject: Re: [PATCH 15/21] dmaengine: tegra: Annotate struct tegra_dma_desc
+ with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+Cc: Laxman Dewangan <ldewangan@nvidia.com>, Jon Hunter
+ <jonathanh@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>,
+ dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
  Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
  Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
  Lars-Peter Clausen <lars@metafoo.de>, Zhou Wang <wangzhou1@hisilicon.com>,
  Jie Hai <haijie1@huawei.com>, Andy Gross <agross@kernel.org>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -63,8 +64,6 @@ Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
  Patrice Chotard <patrice.chotard@foss.st.com>,
  Maxime Coquelin <mcoquelin.stm32@gmail.com>,
  Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Laxman Dewangan <ldewangan@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
- Thierry Reding <thierry.reding@gmail.com>,
  Peter Ujfalusi <peter.ujfalusi@gmail.com>,
  Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
  Masami Hiramatsu <mhiramat@kernel.org>, Yu Kuai <yukuai3@huawei.com>,
@@ -73,13 +72,13 @@ Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
  <jernej.skrabec@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
- linux-arm-msm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-tegra@vger.kernel.org, llvm@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
 References: <20230817235428.never.111-kees@kernel.org>
- <20230817235859.49846-2-keescook@chromium.org>
+ <20230817235859.49846-15-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817235859.49846-2-keescook@chromium.org>
+In-Reply-To: <20230817235859.49846-15-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -90,19 +89,19 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qWozG-001AGP-1n
+X-Exim-ID: 1qWp00-001BF6-0L
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:47366
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:48526
 X-Source-Auth: gustavo@embeddedor.com
 X-Email-Count: 0
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAUX18Z7xlrIjhzHAvuLOCUcL7PM2S8SO7d9aIKkm1zkAAZhSrz6UIPgs8DbwS/kJZ5XZVoZxAkoqlyDhF8GJssdIih5fVxLZwkcekk05BO1DuWT4tKb
- mvnez5SZbKzwdS59VumU6soh4GLS0K+nVavKt2ftyIUcDSmRVLtUcS+k2SMvi6jUw/69ri+/Kvqbdc5FJo62NQb01Skmat4mjSPz2KyM5hpIwQQDHPgXuY4B
- Ch/QsWhHK3GqAbXGTJoJtA==
+X-CMAE-Envelope: MS4xfEMHJCERCahrinjuEr6PqW0ej788etKvyjO3/WdGrkjxK6igCT7WeI15c7446JOkbGSId8iKJm3iTrASzF05JTgokcSK02hoV9tL53wcagjGz9n2+Jr4
+ vNhxSzc/gqPyOLGg/0Bpn+00D+265LaTTi4ikP4xyTT/8s/tLz9GcqE5XJgo3MLZCYzHRV+e9bjexsMgb8g57GmfuHlBgiwrcrF/qJf3ZOmsJknE0nzgH6uW
+ 9XfZokj7MvP+y9Lx/FJulQ==
 
 
 
@@ -113,15 +112,16 @@ On 8/17/23 17:58, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct at_desc.
+> As found with Coccinelle[1], add __counted_by for struct tegra_dma_desc.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
 > Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-> Cc: Tudor Ambarus <tudor.ambarus@linaro.org>
-> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: Laxman Dewangan <ldewangan@nvidia.com>
+> Cc: Jon Hunter <jonathanh@nvidia.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
 > Cc: dmaengine@vger.kernel.org
+> Cc: linux-tegra@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -131,19 +131,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/dma/at_hdmac.c | 2 +-
+>   drivers/dma/tegra186-gpc-dma.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
-> index b2876f67471f..b66c7f416881 100644
-> --- a/drivers/dma/at_hdmac.c
-> +++ b/drivers/dma/at_hdmac.c
-> @@ -239,7 +239,7 @@ struct at_desc {
->   	bool				memset_buffer;
->   	dma_addr_t			memset_paddr;
->   	int				*memset_vaddr;
-> -	struct atdma_sg			sg[];
-> +	struct atdma_sg			sg[] __counted_by(sglen);
+> diff --git a/drivers/dma/tegra186-gpc-dma.c b/drivers/dma/tegra186-gpc-dma.c
+> index 33b101001100..5e3d5f5d1e20 100644
+> --- a/drivers/dma/tegra186-gpc-dma.c
+> +++ b/drivers/dma/tegra186-gpc-dma.c
+> @@ -221,7 +221,7 @@ struct tegra_dma_desc {
+>   	unsigned int sg_count;
+>   	struct virt_dma_desc vd;
+>   	struct tegra_dma_channel *tdc;
+> -	struct tegra_dma_sg_req sg_req[];
+> +	struct tegra_dma_sg_req sg_req[] __counted_by(sg_count);
 >   };
 >   
->   /*--  Channels  --------------------------------------------------------*/
+>   /*
