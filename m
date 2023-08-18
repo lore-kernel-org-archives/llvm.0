@@ -1,71 +1,104 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C2CE56C;
-	Fri, 18 Aug 2023 07:42:25 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-d71f1bc5735so652137276.1;
-        Fri, 18 Aug 2023 00:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692344544; x=1692949344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=umfRL0MpWoTpYd4eriIsZ7c3FD2yks3ZslXFGgBsLn4=;
-        b=XdgKOepCjrtZhzCYElxYbGmZkvnFAhOOVKJ7XajE1CqtbKlSyuYPfD9wnkHFWKsAZK
-         /qgFHNi/Am3zXi0FIRM7RO8HKvsPjEtzoOhggLD9sdFtcl8gPuiVqCzou5qGOJ2iTm+r
-         0cmuqhf0FNw6HG0FmGOLJ/1nSAwqSoVRkBgqVoc6oTAgSw6Cr0h3wI3thw8TIHd70mng
-         k4NwDQb8/8zYd4EBRD5qvJ8nuN09j65EkLhxX8+5Ggo0Ae7gjMMaCniSMBzM/F4hR1uQ
-         1M0a8beVX4f3vYIxZ/jhOS5pCna6zWoLkNUmpMS7H2vRB93RZC7hzHSH9Hqe/ozOMEEW
-         ZZBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692344544; x=1692949344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=umfRL0MpWoTpYd4eriIsZ7c3FD2yks3ZslXFGgBsLn4=;
-        b=ccHzndqn7xAF3RPaEZgHG+PHOud8hoiQV0cYRfWKQ3Gl42ah923c/cB2E1WCcTMHPK
-         TwohRkGbC8del4MgHayksGDAkgtT51fB7l0q6TXlUb8dTdLvemS2OE09In6692gYEdEp
-         cldGnBwyrN2s+JeIhsAQCIAr6ZFG62bYrG9aJx8olagDQetfWTjCeVhV6lWnmHVCXTsd
-         5CrNf7aarScGnxXYrq8k/jYZBVmPN5aBVhh1lU/htEfsiHMSpmhvnAm1RGrnjHpDFpnB
-         g1tiDZbZI6BTtB2Xg9REcoy1vE1igr5wjkvtH5/Bz+Wua0d1t7WGd/fUVRVt+wMYYLkb
-         opgg==
-X-Gm-Message-State: AOJu0YyZfWSoHCSVgrLcHupoC2RXwpzVmncmKIDMWnuItYYQJrqHkocZ
-	3/MetZGuNonns+UuW9XRpwltM/piEYXPHxEcE6k=
-X-Google-Smtp-Source: AGHT+IGIawVbtin0TkRKDL3gBQm9Sj3hVasR4SGaVCXvIfZaCQ+HJ7dbDEcvhTnWuR57N7WHEpL46n7V55UiG4915Ao=
-X-Received: by 2002:a05:6902:1890:b0:d4b:6a0:fe2b with SMTP id
- cj16-20020a056902189000b00d4b06a0fe2bmr2607567ybb.36.1692344544234; Fri, 18
- Aug 2023 00:42:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADBDE56C;
+	Fri, 18 Aug 2023 07:49:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692344980; x=1723880980;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dtZ7PkQSm/suc9nyv1QVhlNVz4vpaXbAM4VQiGLCyjA=;
+  b=JJS0OvkOgItAwpyDHuJhmiGUZI1j9fANNZ5wIgF+AujbXngGxrc7mUUg
+   qRrfpMlTnmAbu5MEWMmEnXaQitCdnrj3layzYh5gAT0jcuYpd677BHn/I
+   k7ocnJQimsB39+Hug5ixWqrV8x7GI6DgLkZU4PPfJvmF2Sq3UL0PQmT9l
+   mtl+JNzJfePKtIC2S7GHurGCxR9HzHpBbjtijlVNfuWtqUmd3BejwV9PZ
+   +mW3Vi3qPQcaVdVLAZcgkQbv/+1oy0QQGewZhbQVp7XtVqsox5TN5GAYn
+   uSLsu6zqbzhIsgAawzJFPHwLQHaJTa26EAxk7rJabToUEa98d33B6K3dR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="376798571"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="376798571"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 00:49:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="684788912"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="684788912"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 18 Aug 2023 00:49:05 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qWuEC-0002Ei-2I;
+	Fri, 18 Aug 2023 07:49:04 +0000
+Date: Fri, 18 Aug 2023 15:48:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH nf] netfilter: nf_tables: GC transaction race with abort
+ path
+Message-ID: <202308181545.lZbeE7Lm-lkp@intel.com>
+References: <20230817231352.8412-1-pablo@netfilter.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202308171545.aknH9sjQ-lkp@intel.com> <CANpmjNMFjm0QZqaTwAKdQrBi7qnLv2wAPOXz7frYch-9dUkArA@mail.gmail.com>
-In-Reply-To: <CANpmjNMFjm0QZqaTwAKdQrBi7qnLv2wAPOXz7frYch-9dUkArA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 18 Aug 2023 09:42:13 +0200
-Message-ID: <CANiq72=-VSH6HF47GdmF7+12+vdb2Lw1_b-_jPA6gQ2QTmQdjw@mail.gmail.com>
-Subject: Re: [linux-next:master 9940/10848] thread 'main' panicked at
- '"ftrace_branch_data_union_(anonymous_at_include/linux/compiler_types_h_174_2)"
- is not a valid Ident', /opt/cross/rustc-1.68.2-bindgen-0.56.0/cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.24/src/fallback.rs:693:9
-To: Marco Elver <elver@google.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Kees Cook <keescook@chromium.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817231352.8412-1-pablo@netfilter.org>
 
-On Fri, Aug 18, 2023 at 12:21=E2=80=AFAM Marco Elver <elver@google.com> wro=
-te:
->
-> Looks like the commit added some lines before this union, and so the
-> line numbers have changed. AFAIK this is not a new issue:
-> https://github.com/Rust-for-Linux/linux/issues/1013
+Hi Pablo,
 
-Indeed, this was fixed by the upgrade to a newer bindgen in
-`rust-next`, see commit 08ab786556ff ("rust: bindgen: upgrade to
-0.65.1").
+kernel test robot noticed the following build errors:
 
-Cheers,
-Miguel
+[auto build test ERROR on nf/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/netfilter-nf_tables-GC-transaction-race-with-abort-path/20230818-071545
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf.git master
+patch link:    https://lore.kernel.org/r/20230817231352.8412-1-pablo%40netfilter.org
+patch subject: [PATCH nf] netfilter: nf_tables: GC transaction race with abort path
+config: hexagon-randconfig-r045-20230818 (https://download.01.org/0day-ci/archive/20230818/202308181545.lZbeE7Lm-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181545.lZbeE7Lm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308181545.lZbeE7Lm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/netfilter/nf_tables_api.c:9132:11: error: call to undeclared function 'nft_gc_seq_begin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    9132 |         gc_seq = nft_gc_seq_begin(nft_net);
+         |                  ^
+>> net/netfilter/nf_tables_api.c:9134:2: error: call to undeclared function 'nft_gc_seq_end'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    9134 |         nft_gc_seq_end(nft_net, gc_seq);
+         |         ^
+   2 errors generated.
+
+
+vim +/nft_gc_seq_begin +9132 net/netfilter/nf_tables_api.c
+
+  9124	
+  9125	static int nf_tables_abort(struct net *net, struct sk_buff *skb,
+  9126				   enum nfnl_abort_action action)
+  9127	{
+  9128		struct nftables_pernet *nft_net = nft_pernet(net);
+  9129		unsigned int gc_seq;
+  9130		int ret;
+  9131	
+> 9132		gc_seq = nft_gc_seq_begin(nft_net);
+  9133		ret = __nf_tables_abort(net, action);
+> 9134		nft_gc_seq_end(nft_net, gc_seq);
+  9135		mutex_unlock(&nft_net->commit_mutex);
+  9136	
+  9137		return ret;
+  9138	}
+  9139	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
