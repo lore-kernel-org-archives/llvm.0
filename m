@@ -1,118 +1,95 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA58612D
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 16:47:11 +0000 (UTC)
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3fe2d620d17so1335e9.0
-        for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 09:47:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9C8613A
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 17:33:58 +0000 (UTC)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-688779ffcfdso1007202b3a.1
+        for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 10:33:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692377230; x=1692982030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcYBK4IDMWdZXBUH9qUpJWq6mMj5wrlrL6q6rkCUyi0=;
-        b=DZchxW7NW3WIGfXMnGboGBURwzn7WFGdeJG+sgmIXEimzDVc8m75Y/skORcrUBqh43
-         xFsQQf5kHDGo2tSO8fvROhiiNwe3/aGiD4kAb0eOXgzVLpbplYd2Ph33tJzQBNrI6YaH
-         BeOf1H6b5FTqKuZrVwD7lBj60By+89vFgf4hUL96Lsic+URcqAXpkfHHvZG5HG7+nM72
-         skJJRmCrsNeyZccYYVrqYg5XIhswhK+MDK0C24bdsjB2D0fzGSafmLO8kdwDGMTXCraR
-         HlptcFEE5XjwTmPRnA2+FWhioo/IKtiFifqVDmAKubMyGxg9a2lNcc7r9nrB5/1qS1BM
-         oydg==
+        d=chromium.org; s=google; t=1692380038; x=1692984838;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=z8VxOYqY0vk5zLSdtNkelkzBoODifEK09GEUE59Uh/E=;
+        b=kMub35CoX+FGqGlEXa/v7SPizCC+sQH0jMFem1D1JeANqS37tH6/y0XZCXnC/aH+U5
+         kJBVdMWwYkMTpF1pLdKjiX4dO1zZg9PmnllgKhcQ8/j6A+6lsAOGm7snFIH2dL+oBYJF
+         zdkydtJWoioVltE5GW9w6lD0ChboN8PRmcDbA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692377230; x=1692982030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vcYBK4IDMWdZXBUH9qUpJWq6mMj5wrlrL6q6rkCUyi0=;
-        b=hywk6Dg8+PUlpHVyx7upAg7+ZqRpUwB1ScRznmKQbY0GWDnQibQtwVtAeZC73PW4EL
-         cD03NNZnYfjdwNhXSfgzVAy2AfU2td5FlJThWmdi272ZrzyaQBsfBN6C9wKuHfWWL5Cd
-         S4nb3MBDgbpeYJshtY9GSK/hDmAu/+ubtClWPf1aUah4M3/eKS4O6Rnw8G69YZMacjDf
-         sZOLUaLawgVgIJy/5LVYw89lbmF6FeNTZBzGKA0UjkgRTEALw+qGU9itLx0yJIyb+x1f
-         S2zIVGbVeZwKLRqEGBIjEUid+bkOMmfy61NSOBio/LL9Dk8xcu1PFPql3z9S42r/X4Q3
-         hFBg==
-X-Gm-Message-State: AOJu0Yy41A5CeMNwX6qyHbUA15ZPYfjomFN4YEQcQTBFIBNlw8Fx5YZI
-	9NFE8ObuSktAwnnhmpfb3qF1zugnvs05nEJTwOrQLg==
-X-Google-Smtp-Source: AGHT+IHONJU+ctmsr9aVMkdjHd8jipE/NT/Q0+Z+iy7ah9jBa7kpTKIKB44dhx/A+QLF7kEmMzhGxMlCIOAlBtWCi/w=
-X-Received: by 2002:a05:600c:3b0c:b0:3fd:e47:39c7 with SMTP id
- m12-20020a05600c3b0c00b003fd0e4739c7mr119961wms.4.1692377229649; Fri, 18 Aug
- 2023 09:47:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692380038; x=1692984838;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z8VxOYqY0vk5zLSdtNkelkzBoODifEK09GEUE59Uh/E=;
+        b=MWGJvpw+XiVg2nLyMeejJ/4hkMgM3VDuSvbEZjmOW0hPZGBWDEYX2EQEUKYbi6Eu1M
+         CW1ysDSNqtXkEP+VIyM8x2BWXOQzklDMEtUsywWvocCuZ4p/3XdevZZIwIrBefDiT/Nu
+         lLKHqHy6fcPLj2a181igEzK6KLs2IjjDnRSBzbjJfq0zSc6PLeKV8i7FVolX1IBAVAH+
+         HqowJIfFbuVEWLei11dW1Q0yzBPDFR2gdDRyo1XGkWL7Xm9xVyuoMnI3lfGZ+77Phkow
+         /IYlPxc1RAAusOtDroxYOLiwvau+ZRd/mLFTC9Iswz1IHHL8JWPBasVeTVOomzQje+8o
+         6yNQ==
+X-Gm-Message-State: AOJu0YwJ691pXjY5u8d3G/XVtrDcY/hfwc2dHz0gtPwy7gkGhtylHBWA
+	Lzcridm7DRZWjttMfpA5q8zLxw==
+X-Google-Smtp-Source: AGHT+IEIW5Yl9r6Sj3v9imMpgLBJxv4XcEqIkrMkv167YzQxcg7Et1cOrpJxjwCXnMm+AR6HQRKkrA==
+X-Received: by 2002:a05:6a00:1249:b0:689:f693:917f with SMTP id u9-20020a056a00124900b00689f693917fmr3136404pfi.28.1692380037809;
+        Fri, 18 Aug 2023 10:33:57 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id ff18-20020a056a002f5200b0068703879d3esm1794159pfb.113.2023.08.18.10.33.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Aug 2023 10:33:57 -0700 (PDT)
+Date: Fri, 18 Aug 2023 10:33:56 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Ondrej Mosnacek <omosnace@redhat.com>, selinux@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, "GONG, Ruiqi" <gongruiqi1@huawei.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] selinux: Annotate struct sidtab_str_cache with
+ __counted_by
+Message-ID: <202308181033.03592D6E2D@keescook>
+References: <20230817202210.never.014-kees@kernel.org>
+ <CAHC9VhR-vxsaR7deTQ+zzVP9W2uSupz4ucf8p+tt0e730qbZ1g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000530e0d060312199e@google.com> <20230817142103.GA2247938@mit.edu>
- <CANp29Y7jbcOw_rS5vbfWNo7Y+ySYhYS-AWC356QN=JRVOm9B8w@mail.gmail.com>
- <20230817144505.GB2247938@mit.edu> <CANp29Y4HGnp6LJ7jw2hrXNFd7S4+MKfjdpjOGZALUuGK1L3wPA@mail.gmail.com>
-In-Reply-To: <CANp29Y4HGnp6LJ7jw2hrXNFd7S4+MKfjdpjOGZALUuGK1L3wPA@mail.gmail.com>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Fri, 18 Aug 2023 18:46:57 +0200
-Message-ID: <CANp29Y6JE-HyYL6XZfBy8QvE2CwLHw-HdtVsYxAGMhfy9qT=RQ@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
- forced after error (3)
-To: "Theodore Ts'o" <tytso@mit.edu>
-Cc: syzbot <syzbot+27eece6916b914a49ce7@syzkaller.appspotmail.com>, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhR-vxsaR7deTQ+zzVP9W2uSupz4ucf8p+tt0e730qbZ1g@mail.gmail.com>
 
-On Fri, Aug 18, 2023 at 1:43=E2=80=AFPM Aleksandr Nogikh <nogikh@google.com=
-> wrote:
->
-> I've taken a closer look at the issue.
->
-> Documentation/filesystems/ext4.txt says that the "errors=3D" mount
-> parameter "override the errors behavior specified in the superblock".
-> So syzbot can prevent it by passing "errors=3Dcontinue" as a mount
-> argument and there's no need to filter out such reports.
->
-> Syzkaller actually already does that in the C reproducer. It just
-> seems that this time the tool has mutated the mount options so much
-> that the simple patching no longer worked (most likely because of \0
-> characters in between). I'll update the syz_mount_image() code.
+On Fri, Aug 18, 2023 at 12:25:12PM -0400, Paul Moore wrote:
+> On Thu, Aug 17, 2023 at 4:22 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Prepare for the coming implementation by GCC and Clang of the __counted_by
+> > attribute. Flexible array members annotated with __counted_by can have
+> > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> > functions).
+> >
+> > As found with Coccinelle[1], add __counted_by for struct sidtab_str_cache.
+> >
+> > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> >
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+> > Cc: Eric Paris <eparis@parisplace.org>
+> > Cc: Ondrej Mosnacek <omosnace@redhat.com>
+> > Cc: selinux@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  security/selinux/ss/sidtab.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> This also looks good to me, but similarly to the audit patch, since we
+> are at -rc6 I'm going to wait to merge this until after the merge
+> window.  I'll send a follow up email once it's merged.
 
-Ah, it's a bit trickier -- the syz_mount_image() code is fine. The
-reproducer first mounts an ext4 image via syz_mount_image(), which
-appends "errors=3Dcontinue" to the options and it doesn't lead to the
-panic. But then the reproducer does a direct mount() call for the loop
-device previously created in syz_mount_image(), this time _without_
-mount options.
+Thanks! Yeah, there's no rush. :)
 
-I've sent https://github.com/google/syzkaller/pull/4143 to sanitize
-plain mount() calls.
-
->
->
-> On Thu, Aug 17, 2023 at 4:45=E2=80=AFPM Theodore Ts'o <tytso@mit.edu> wro=
-te:
-> >
-> > On Thu, Aug 17, 2023 at 04:28:33PM +0200, Aleksandr Nogikh wrote:
-> > > The console log has the following line:
-> > >
-> > > [   60.708717][ T5061] Kernel panic - not syncing: EXT4-fs (device
-> > > loop0): panic forced after error
-> > >
-> > > Can we consider a "panic forced after error" line to be a reliable
-> > > indicator that syzbot must ignore the report?
-> >
-> > Yes.  And the file system image that generated this bug should be
-> > discarded, because otherwise successive mutations will generate a
-> > large number of crashes that syzbot will then need to ignore, thus
-> > consuming syzbot resources.
-> >
-> > Alternatively, you can do the moral equivalent of "tune2fs -e continue
-> > foo.img" on any mutated file system seed, which will clear the "panic
-> > on error".
-> >
-> > (The other alternative is "tune2fs -e remount-ro", but given syzbot's
-> > desire to find kernel crashes, "tune2fs -e continue" is more likely
-> > find ways in which the kernel will find itself into trouble.  Some
-> > sysadmins will want to chose "remount-ro", however, since that is more
-> > likely to limit file system damage once the file system is discovered
-> > to be corrupted.)
-> >
-> >                                         - Ted
-> >
+-- 
+Kees Cook
