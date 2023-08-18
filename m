@@ -1,119 +1,44 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C8463B4
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 12:46:35 +0000 (UTC)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37ICdLxv013227;
-	Fri, 18 Aug 2023 12:46:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=XRwtB3eOF7H/ZVixiy/pWVAo66LCiR44s1VydLXQPvc=;
- b=UZVodGMJ2yXs9eRpXjvbXDtTlPYAWWCh/1yf8wgTwyzAfZV+xjiNv2kCvI5BskSXi9nS
- QhpB02JlpU86i4eLWC9GaHPNlrfUMDR1YYoVU7Vp+BrmUeigq9gRJOV5OkHGhOwW5FHa
- mya1LNP89eWDl2c2eioA3AVKq7o2YiscqfryTTAYuPNpv/WzFLWO/b0qVNz85mWEKjku
- Ads4iUtTovIZ61qUu3Em1JD/x0Hs0X5HMpHp121zIcf3xMeW0pPhOWocF39ablEoub2p
- t2QRDkhtXAs99GdKcMPxeNPnorfpJ+dOj0zNYGY8MMIYGt6bGS398ZcjM4ud4MzujIcH Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sj8m4ra7k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Aug 2023 12:46:14 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37ICdRMC014130;
-	Fri, 18 Aug 2023 12:46:14 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sj8m4ra79-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Aug 2023 12:46:13 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37ICFxOO013413;
-	Fri, 18 Aug 2023 12:46:12 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sepmkej57-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Aug 2023 12:46:12 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37ICkBf528902136
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 18 Aug 2023 12:46:12 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CB2A45805A;
-	Fri, 18 Aug 2023 12:46:11 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1A63D5805E;
-	Fri, 18 Aug 2023 12:46:11 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.81.121])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 18 Aug 2023 12:46:10 +0000 (GMT)
-Message-ID: <56197f75291ae44fabd1a692f01f09863fbff7e3.camel@linux.ibm.com>
-Subject: Re: [PATCH] integrity: Annotate struct ima_rule_opt_list with
- __counted_by
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore
- <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn"
- <serge@hallyn.com>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Nathan Chancellor
- <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
- <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Date: Fri, 18 Aug 2023 08:46:10 -0400
-In-Reply-To: <20230817210327.never.598-kees@kernel.org>
-References: <20230817210327.never.598-kees@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NAmYlWVzRQ0YohiSinTeU8-Dr5Z-mXL6
-X-Proofpoint-GUID: Hc3SwzQ8TQeVTaLkoy2HdKp6dCaMk4S4
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EDF17AC1;
+	Fri, 18 Aug 2023 13:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D9EC433C7;
+	Fri, 18 Aug 2023 13:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692364458;
+	bh=kGhAkAiiAfeWyJ3QgeiaV3PO4o2y8rRpbHm210LQQvk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jVtLZ7HwikGqHIaZCQxQ63Gr10NMs1q2SgHgMfX/TC30K46rbXb5XRD3Wfmmzjn6A
+	 Z0UIibLI7qGkRK0l6FzI1ZUKCHh2EQIE3gw1WKXOvoTmAuQ48plidVYOtctDwfbKp3
+	 MjIhiQmL9Rxu4gORhuURBZs4fNCKic8OZwOaj4Md93t8iKu/dtNXX2klD7trV3L+2Y
+	 LtVVoFSQC8AbszvfsO2ePGv+Zk8LDRx5TYYa8P1e+6yfj+VhkTcZQxkY/vRUfCOgGw
+	 +JS3n4FcYgXTo8gjD5/4MQmcc2QXV4B106FC6WkrgH16PQHG0zKkWW8NVXoYyv0c0W
+	 TT9u6Obk9Uc/w==
+Date: Fri, 18 Aug 2023 15:14:14 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Christoph Hellwig <hch@lst.de>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Josef Bacik <josef@toxicpanda.com>
+Subject: Re: [linux-next:master 8648/10848] ERROR: modpost: "bdev_mark_dead"
+ [drivers/s390/block/dasd_mod.ko] undefined!
+Message-ID: <20230818-abhob-gecko-420d48fbc031@brauner>
+References: <202308172348.1BthulLk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-18_15,2023-08-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- spamscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 mlxscore=0 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308180115
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202308172348.1BthulLk-lkp@intel.com>
 
-On Thu, 2023-08-17 at 14:03 -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_list.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Thu, Aug 17, 2023 at 11:35:54PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   47762f08697484cf0c2f2904b8c52375ed26c8cb
+> commit: 381f678306ceef1cefb39fb22f88e3b977b81403 [8648/10848] block: consolidate __invalidate_device and fsync_bdev
 
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-
--- 
-thanks,
-
-Mimi
-
+Outdated commit hash and should already be fixed in-tree.
