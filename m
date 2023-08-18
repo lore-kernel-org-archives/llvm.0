@@ -1,41 +1,41 @@
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A5B8478;
-	Fri, 18 Aug 2023 03:38:01 +0000 (UTC)
-Received: from eig-obgw-5003a.ext.cloudfilter.net ([10.0.29.159])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512108478
+	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 03:41:18 +0000 (UTC)
+Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
 	by cmsmtp with ESMTP
-	id WmuKqjqx0yYOwWqJEq2IlA; Fri, 18 Aug 2023 03:38:00 +0000
+	id WmuKq3TzoQFHRWqMPqwEMK; Fri, 18 Aug 2023 03:41:17 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id WqJEqe1VKr28JWqJEq2UXK; Fri, 18 Aug 2023 03:38:00 +0000
-X-Authority-Analysis: v=2.4 cv=PIQcRNmC c=1 sm=1 tr=0 ts=64dee798
+	id WqMOqcExz234eWqMPqOcls; Fri, 18 Aug 2023 03:41:17 +0000
+X-Authority-Analysis: v=2.4 cv=cPzzD3SN c=1 sm=1 tr=0 ts=64dee85d
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=Ikd4Dj_1AAAA:8 a=pGLkceISAAAA:8 a=cm27Pg_UAAAA:8
- a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=xmb-EsYY8bH0VWELuYED:22
+ a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
+ a=1XWaLZrsAAAA:8 a=cm27Pg_UAAAA:8 a=mDV3o1hIAAAA:8 a=Twlkf-z8AAAA:8
+ a=hEGvEmT7ark0PdWysM4A:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+ a=xmb-EsYY8bH0VWELuYED:22 a=_FVE-zBwftR9WsbkzFJk:22 a=-74SuR6ZdpOK_LpdRCUo:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=L0n5YvsnOREjDavEqwIfonPDHlgYaxvqnu5lUobWG1I=; b=tHeYKVrHUJemYIG8wkzYXKKQeK
-	LZOQuy5Q2Aff6Q0LjCX7wAbdA0NELdQ2ug9kERJ3nmfLByHcAGYZ0H2urNlpeuYcVRKN+RibDxB2L
-	CpKt9CwfXsU4hSApJ1dxGON3kuCzv/Atk0Kzu6WTS8nb66oEO/YJNsWoLseZQHoWFdNAyKGwgfyuc
-	6HQ4lOh4wHIem2qOg1qaLoRzhbAhQ1ywyJoYdBBe/2ATUMXpz+FHrqdhMffnxRMcUiagT7FChjDLc
-	m6ZcIUlk06BerGP4CPuLEn6BP5kURY0Ljf11xvLMVXxkmGzXUKGVvXBY20R60Fjw/SwRsoM3MQayW
-	2ug8swMA==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:48526 helo=[192.168.15.8])
+	bh=XS6ddzMrecuPuYAqVJpaZu6ilnoyG2mS0jCrgvsgBTQ=; b=SrRkOhaP3QKiVP6PPRxlkhwJsc
+	cZTdPs+iOlfJ9w8SKFgQ7nl5pPbKFCAVgNMj0bvhrVFtrgbcA+mhjkRZ6VsFs4Ifh/PS++eMgVkY1
+	70Ci9WmNxrMRFgcecjYFQNRapbVf34l3Qr6uJucThJY4do+LdjxdcPB16dXUXfOsI12jGqT09wRqi
+	4vMMkZ8MtBkM4GWS5j9/8dhgLcIXoLKt+aBEha+MkL7w+tkxPRg2whqC5STS9gCw1ZefbVXbbCmaN
+	Iuy9VjIQTedCmcJ5dKWCVb+oFxsf1Ua1k2ei7wCZFHuqwLmEsxJ6SNQNZWz0wfwj1p3aWk3mhyZ5z
+	Wa7hSFTA==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:56796 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qWp00-001BF6-0L;
-	Thu, 17 Aug 2023 21:14:04 -0500
-Message-ID: <681fd5fa-3a0d-676b-44b0-0aab66f21dd7@embeddedor.com>
-Date: Thu, 17 Aug 2023 20:15:02 -0600
+	id 1qWqMN-002Jn6-1p;
+	Thu, 17 Aug 2023 22:41:16 -0500
+Message-ID: <338a56b6-1e07-4089-d762-25440c0f9d81@embeddedor.com>
+Date: Thu, 17 Aug 2023 21:42:05 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,41 +44,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 15/21] dmaengine: tegra: Annotate struct tegra_dma_desc
- with __counted_by
+Subject: Re: [PATCH] Compiler Attributes: counted_by: Adjust name and
+ identifier expansion
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
-Cc: Laxman Dewangan <ldewangan@nvidia.com>, Jon Hunter
- <jonathanh@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>,
- dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
- Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Zhou Wang <wangzhou1@hisilicon.com>,
- Jie Hai <haijie1@huawei.com>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Green Wan <green.wan@sifive.com>,
- Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- Patrice Chotard <patrice.chotard@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Peter Ujfalusi <peter.ujfalusi@gmail.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Yu Kuai <yukuai3@huawei.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jordy Zomer <jordy@pwning.systems>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20230817235428.never.111-kees@kernel.org>
- <20230817235859.49846-15-keescook@chromium.org>
+To: Kees Cook <keescook@chromium.org>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230817200558.never.077-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817235859.49846-15-keescook@chromium.org>
+In-Reply-To: <20230817200558.never.077-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -89,61 +65,96 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qWp00-001BF6-0L
+X-Exim-ID: 1qWqMN-002Jn6-1p
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:48526
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:56796
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
+X-Email-Count: 2
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfEMHJCERCahrinjuEr6PqW0ej788etKvyjO3/WdGrkjxK6igCT7WeI15c7446JOkbGSId8iKJm3iTrASzF05JTgokcSK02hoV9tL53wcagjGz9n2+Jr4
- vNhxSzc/gqPyOLGg/0Bpn+00D+265LaTTi4ikP4xyTT/8s/tLz9GcqE5XJgo3MLZCYzHRV+e9bjexsMgb8g57GmfuHlBgiwrcrF/qJf3ZOmsJknE0nzgH6uW
- 9XfZokj7MvP+y9Lx/FJulQ==
+X-CMAE-Envelope: MS4xfEb/TSu/95UKW3vE+rID2dgksCV41BHw7yTOBv8ENdGi+279jUpmb+Fbc4BkSUgP6OwDA1E8jrnPeVVxShJC5fH/Lrrut6Ujrp2sDGwZz2IVvGGjdJU4
+ lfa3jEkOEJwHukuH90wpK8Uhid9LLxWUEtgH4e8E0sWa8/D/sQUjJYqnSCiLPqF7xVIee2BJfTyxxLjFLX19CO7wp+JdiqoTFDA=
 
 
 
-On 8/17/23 17:58, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On 8/17/23 14:06, Kees Cook wrote:
+> GCC and Clang's current RFCs name this attribute "counted_by", and have
+> moved away from using a string for the member name. Update the kernel's
+> macros to match. Additionally provide a UAPI no-op macro for UAPI structs
+> that will gain annotations.
 > 
-> As found with Coccinelle[1], add __counted_by for struct tegra_dma_desc.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Laxman Dewangan <ldewangan@nvidia.com>
-> Cc: Jon Hunter <jonathanh@nvidia.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-tegra@vger.kernel.org
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Fixes: dd06e72e68bc ("Compiler Attributes: Add __counted_by macro")
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
 Thanks
---
+-- 
 Gustavo
 
 > ---
->   drivers/dma/tegra186-gpc-dma.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   include/linux/compiler_attributes.h | 26 +++++++++++++-------------
+>   include/uapi/linux/stddef.h         |  4 ++++
+>   2 files changed, 17 insertions(+), 13 deletions(-)
 > 
-> diff --git a/drivers/dma/tegra186-gpc-dma.c b/drivers/dma/tegra186-gpc-dma.c
-> index 33b101001100..5e3d5f5d1e20 100644
-> --- a/drivers/dma/tegra186-gpc-dma.c
-> +++ b/drivers/dma/tegra186-gpc-dma.c
-> @@ -221,7 +221,7 @@ struct tegra_dma_desc {
->   	unsigned int sg_count;
->   	struct virt_dma_desc vd;
->   	struct tegra_dma_channel *tdc;
-> -	struct tegra_dma_sg_req sg_req[];
-> +	struct tegra_dma_sg_req sg_req[] __counted_by(sg_count);
->   };
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 00efa35c350f..74716a407aac 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -94,6 +94,19 @@
+>   # define __copy(symbol)
+>   #endif
 >   
+> +/*
+> + * Optional: only supported since gcc >= 14
+> + * Optional: only supported since clang >= 17
+> + *
+> + *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> + * clang: https://reviews.llvm.org/D148381
+> + */
+> +#if __has_attribute(__counted_by__)
+> +# define __counted_by(member)		__attribute__((__counted_by__(member)))
+> +#else
+> +# define __counted_by(member)
+> +#endif
+> +
 >   /*
+>    * Optional: not supported by gcc
+>    * Optional: only supported since clang >= 14.0
+> @@ -129,19 +142,6 @@
+>   # define __designated_init
+>   #endif
+>   
+> -/*
+> - * Optional: only supported since gcc >= 14
+> - * Optional: only supported since clang >= 17
+> - *
+> - *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> - * clang: https://reviews.llvm.org/D148381
+> - */
+> -#if __has_attribute(__element_count__)
+> -# define __counted_by(member)		__attribute__((__element_count__(#member)))
+> -#else
+> -# define __counted_by(member)
+> -#endif
+> -
+>   /*
+>    * Optional: only supported since clang >= 14.0
+>    *
+> diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
+> index 7837ba4fe728..7c3fc3980881 100644
+> --- a/include/uapi/linux/stddef.h
+> +++ b/include/uapi/linux/stddef.h
+> @@ -45,3 +45,7 @@
+>   		TYPE NAME[]; \
+>   	}
+>   #endif
+> +
+> +#ifndef __counted_by
+> +#define __counted_by(m)
+> +#endif
