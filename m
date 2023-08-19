@@ -1,90 +1,100 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3473E1AA8F
-	for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 18:01:30 +0000 (UTC)
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-564b326185bso879307a12.2
-        for <llvm@lists.linux.dev>; Fri, 18 Aug 2023 11:01:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE714A54;
+	Sat, 19 Aug 2023 05:49:22 +0000 (UTC)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3159b524c56so372130f8f.1;
+        Fri, 18 Aug 2023 22:49:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692381690; x=1692986490;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qYBhb547ncMi3wuUeN47Qu32Xgp7Mgncg35363KdjMY=;
-        b=e8Q1lB1q/5WpShrGBZOlVAiH4jHMVpOUuaOqIgAkBvaujIY8uzpya5ESLBaG3ix8nb
-         FHUNTjwbqpghd11R4Q+G2sU0BtL4HRvOe1svnqwdTQzKOSgMk3Jyhq+iNgCDAYct9ETm
-         lToX6VZMeh+e1RqjKH4Tk4VV24davAJq54e9U=
+        d=gmail.com; s=20221208; t=1692424161; x=1693028961;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GDooX7y6opYRgfOUyrqtxnmqnDr/SH0R0pIwWzOytOo=;
+        b=ROXIAov9Bl/vtXJf0tkYoIqoEQuFrdU8qlt6c9PFS4LxO8R1E5oWqoeTyhisCbdzg9
+         np6YTzFcXIQex4Ijwg42qrFLzvxQO1FVbL0JETCv1G0/CpTkn+IrO8bsaUIQkYlu/0q8
+         7A8tpQ8kupjdea2oVtAmS73qctEEJ8lHpNXcaMNgGx1T3iX1uMUPBA9QEprCHuGdOiTc
+         mbuHZdDF/vXSRsW/JlTHhKMIiiOu6mF4ObcB0hTjQK6CyI6nJaWM17y56WDHLxCVULvP
+         ZJSeU5bY1RMX/yT82GO2S8kqMit36OMaS0bG3bOZd0MQ8h/kHzb4fgv+eC0ds3BXDRc6
+         2aIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692381690; x=1692986490;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qYBhb547ncMi3wuUeN47Qu32Xgp7Mgncg35363KdjMY=;
-        b=TC5Hiho5gfSNCZoVKvNUt/4YKT/VB0qnx2s6Y7hG8dKqvDmUvYA9HeoAEkDsL4nyQI
-         rHvwC/VeaSphvKamQt3rKSBmfSRUdbVjFkN6LsmcSTYD1lON3wfUjqhuEPzwLOMNoFUz
-         YmovNnlgyIPPGE5CcbxqFH1fCACtf1ImDxWRK1oQ0FP6UcIpJw0fB6y0ZN5I2dL2/bfd
-         sR4HYLOTJPeq9u7/8etOGIZ3bEjg3A/09VTn1quG8cd7ve7cElqo82Tm0VZ+vf5xClCw
-         GPCA6tRIYleQzSBBcTSvbrEdJZ1q3tsYFlddl91VQwLD+GqxUmB2cXvzppCBZJvJ9TXw
-         m6qg==
-X-Gm-Message-State: AOJu0YwsSSmUDFkoZnfl8WG9tRckrra0UGVT0WPMeAzlhK+DiXMbiRIa
-	sb1bFzfCdZbziNO+o8H8T/vadA==
-X-Google-Smtp-Source: AGHT+IHK7p11ROoF/GBRTRYvtIRFeZ79ofBB2FpFJ+GKVFcVF+S6Zy6V00Y0yvuoDiCNKNnDjwtw1A==
-X-Received: by 2002:a05:6a21:3984:b0:135:10fd:31b0 with SMTP id ad4-20020a056a21398400b0013510fd31b0mr3565014pzc.15.1692381690480;
-        Fri, 18 Aug 2023 11:01:30 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id v21-20020aa78095000000b00687087d8bc3sm1883813pff.141.2023.08.18.11.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 11:01:29 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Mimi Zohar <zohar@linux.ibm.com>,
-	Kees Cook <keescook@chromium.org>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] integrity: Annotate struct ima_rule_opt_list with __counted_by
-Date: Fri, 18 Aug 2023 11:01:15 -0700
-Message-Id: <169238167326.1457886.12849640803727382145.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230817210327.never.598-kees@kernel.org>
-References: <20230817210327.never.598-kees@kernel.org>
+        d=1e100.net; s=20221208; t=1692424161; x=1693028961;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GDooX7y6opYRgfOUyrqtxnmqnDr/SH0R0pIwWzOytOo=;
+        b=WGUWOubMwOPFrYE+L8rv1P/HUUTniV6vREz/LqHXfp4ocvAdoWCAtmkzAppL26nra0
+         eBOPsDk3jGP85VUjvPa7+DXKgQZlSEg9PnXWkAnUn77KV/o0KN5IdXYTvgeczbvqRpnL
+         poK+NNtti2DseIhQ7bZFdwVpYZzgrRGAs9xvTgyOGGbDQZGjEdXAlecnv16Op3Q11SCs
+         4BNHtjNwCoSPnBHXFGVw2OMKuDbLpiFsK2MW0mSfxFOahdfljQH1hYbN+tAYMSY62mtc
+         xtYM+T/oMtuImpwVmtUr5+T1A7ClPWCYR8Yhr3moFVK0c0pv1mzZgzhDktRiCai/636h
+         2UQA==
+X-Gm-Message-State: AOJu0YygtwbgrvoVxNRRS24e4hxoXFbgec0NiUdyzXu8cPTiZ0eQkO0U
+	PJ5VuOfn0TLoPWEMuo/qlaQ=
+X-Google-Smtp-Source: AGHT+IHmuj65VHkTwaHKhiexS5RVDQnXf6GhithcHiUsDTuTB7U+bi7kvEsm+aEY53Yu2BT+UHYeRQ==
+X-Received: by 2002:adf:fc42:0:b0:31a:e29f:5eab with SMTP id e2-20020adffc42000000b0031ae29f5eabmr646983wrs.7.1692424160702;
+        Fri, 18 Aug 2023 22:49:20 -0700 (PDT)
+Received: from [192.168.0.100] (p579356c7.dip0.t-ipconnect.de. [87.147.86.199])
+        by smtp.gmail.com with ESMTPSA id p11-20020adfe60b000000b003176c6e87b1sm5079305wrm.81.2023.08.18.22.49.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Aug 2023 22:49:20 -0700 (PDT)
+Message-ID: <86235749-8629-230b-74f6-2b2a29af19f9@gmail.com>
+Date: Sat, 19 Aug 2023 07:49:18 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] staging: rtl8192e: Annotate struct rtllib_txb with
+ __counted_by
+To: Kees Cook <keescook@chromium.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-staging@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Yogesh Hegde <yogi.kernel@gmail.com>, Sumitra Sharma
+ <sumitraartsy@gmail.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230817204523.never.034-kees@kernel.org>
+Content-Language: en-US
+From: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20230817204523.never.034-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 17 Aug 2023 14:03:28 -0700, Kees Cook wrote:
+On 8/17/23 22:45, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_list.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
+> As found with Coccinelle[1], add __counted_by for struct rtllib_txb.
 > 
-> [...]
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> Cc: linux-staging@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   drivers/staging/rtl8192e/rtllib.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+> index c5a692dfcd17..543d8671281d 100644
+> --- a/drivers/staging/rtl8192e/rtllib.h
+> +++ b/drivers/staging/rtl8192e/rtllib.h
+> @@ -818,7 +818,7 @@ struct rtllib_txb {
+>   	u16 reserved;
+>   	__le16 frag_size;
+>   	__le16 payload_size;
+> -	struct sk_buff *fragments[];
+> +	struct sk_buff *fragments[] __counted_by(nr_frags);
+>   };
+>   
+>   #define MAX_SUBFRAME_COUNT		  64
 
-Applied to for-next/hardening, thanks!
-
-[1/1] integrity: Annotate struct ima_rule_opt_list with __counted_by
-      https://git.kernel.org/kees/c/a4b35d4d05b9
-
-Take care,
-
--- 
-Kees Cook
-
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
