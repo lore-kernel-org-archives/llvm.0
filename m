@@ -1,217 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119957493;
-	Mon, 21 Aug 2023 14:18:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692627531; x=1724163531;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DcPW1SNfyQwZtUyE3xJVKI0a6fgEAr7OmdT6jvOGal0=;
-  b=S72v7PhwtzsH0K486VlIrxTiDXkKnufXpdcTf4HqbXhM15i1PF+RQHU4
-   h0Vwc5XQIgi+Pg51yLh0ttkjwa2/oQh4ytFPbfuUyMfagUVsIl5Lwn8QF
-   T6i5CPWkBetiGOce4so8DFLeYPNDVXOxNPmZTbb6AhLQo2RmvBIqEQcey
-   VX+LMy//lKyJvt8wg1EUaw+w0fqA0AoQ3SXXSl1KzirqrfVXi17dNeRTI
-   WMWsA6wpBtQ1LgjW4fkCu0g5BYYGARi3Dt7a33If7POeEWehQdnpIQuui
-   H23rBUfwbD0n/gxy1QrSfk7YTS7sQTsgmoj8SdoxXTrD9YbDLTwjs29V0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="459969614"
-X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
-   d="scan'208";a="459969614"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 07:18:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="735847107"
-X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
-   d="scan'208";a="735847107"
-Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Aug 2023 07:18:41 -0700
-Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qY5in-0000Yd-2B;
-	Mon, 21 Aug 2023 14:17:56 +0000
-Date: Mon, 21 Aug 2023 22:14:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: arch/arm/common/locomo.c:368: warning: Function parameter or member
- 'me' not described in '__locomo_probe'
-Message-ID: <202308212211.KSITn7l9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1706747C
+	for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 14:20:33 +0000 (UTC)
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-48d0edd8a81so380183e0c.0
+        for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 07:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692627632; x=1693232432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CWG07LdVGn7VFP43KyVmejqn3QURW+mK8BYkazDvZEc=;
+        b=NQo539YRUXe+f0Pd/a7rVllCjpqGN9LkjDJz8JkJsEv15dNe/OY4F74VMfOkCGHe/j
+         9jexdGNy+28fkyz31IT36rJVp0nzsR4FGtFRHga+UMAAbrAZDAloZ1L9hxMRYD7O2eh0
+         PWBIV89WIBMocZxvaMmEI1jQbtq4vSWgmvgToC+/bLLKrGQAQXamTLM4Bl9gtIERAPE0
+         YSDlv09x8A5BZ7n2iKYIRzRLLvpqBpGy+9a9nn1ORSsSd7ClWecCtfSpdMLF9Fa6n5MS
+         haLytHXvTYgR0wrbxwLcgTHJRO3TcfIbn8wS24suVM7tmR5r/0EgW1G1ATo/CSt6eiX9
+         h6RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692627632; x=1693232432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CWG07LdVGn7VFP43KyVmejqn3QURW+mK8BYkazDvZEc=;
+        b=eaUuk1/gIRIYOuV7ZuK06e9u5/z/LyZ/HmU2yXlPjCuUNqLMMn787jzFonUxzU2j75
+         bSUEsqTiRmVCN5oqp8uOQmceu3IzErinRvCFA/tti8BcoQfax/P/+7Nn58RFtfSqEwkD
+         MoIkznC5jJhiEQCDsj+J7v30RcQj+MrQKZtxrNH+IKA0CKhBalnKhy04k+aqdhYY9qv+
+         HmZXjh6cODZYRBHweCOVAF8PkD9Q4ZtDgEs2ZE3FxVX71lOF1Y7Nlo+ptChYOsRWF0Gb
+         bY0FaB2PB3pzwoj9dH9hTaFUD+J3Aej3K68SGPYo4JjdO1v703FgDSCeR1GBmT5EQ2XK
+         2ghA==
+X-Gm-Message-State: AOJu0YyKZZJb0GUpFn/3HdSp4Rje7nNgd8isrByoln5y5nwHn0mOwh0Q
+	wTuaJeCWyq/XyNbz4HHm5NroZ+lrH5PyHEEHXBBZ1g==
+X-Google-Smtp-Source: AGHT+IEL7/lIT2DoE0nDuddm6ZZs7RBtHuj4HDAswtvPoZsdO4X81ZEyQeyt9+TjVQDnz2iWfFMWLqleLeNK9ffgCso=
+X-Received: by 2002:a67:f310:0:b0:447:4316:415a with SMTP id
+ p16-20020a67f310000000b004474316415amr5762575vsf.31.1692627632355; Mon, 21
+ Aug 2023 07:20:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CA+G9fYvFD-kE0+EGWkwcnR1DXRxh7p7OwQThJ6KWxYWVROJ4+A@mail.gmail.com>
+ <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com> <CA+G9fYtRMde7Ksswa8pY8sFgnWVN-snRHfz4YRM04HSQ4LFBZQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYtRMde7Ksswa8pY8sFgnWVN-snRHfz4YRM04HSQ4LFBZQ@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 21 Aug 2023 19:50:21 +0530
+Message-ID: <CA+G9fYuRy_yJ0Fa1hxt4iPZvgw+qvdvXmqWtFV-rDME+pCdXiA@mail.gmail.com>
+Subject: Re: landlock: fs_test: fs_test.c:4524:9: error: initializer element
+ is not a compile-time constant
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
+	lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Richard Weinberger <richard@nod.at>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nathan,
+On Fri, 18 Aug 2023 at 10:48, Naresh Kamboju <naresh.kamboju@linaro.org> wr=
+ote:
+>
+> On Thu, 17 Aug 2023 at 21:24, Nick Desaulniers <ndesaulniers@google.com> =
+wrote:
+> >
+> > On Thu, Aug 17, 2023 at 3:51=E2=80=AFAM Naresh Kamboju
+> > <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > While building selftests landlock following warnings / errors noticed=
+ on the
+> > > Linux next with clang-17.
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > Build errors:
+> > > ------------
+> > > landlock/fs_test
+> > > fs_test.c:4524:9: error: initializer element is not a compile-time co=
+nstant
+> >
+> > Hi Naresh,
+> > Can you tell me more about your specific version of clang-17?
+>
+>     compiler:
+>         name: clang,
+>         version: 17.0.0,
+>         version_full: Debian clang version 17.0.0
+> (++20230725053429+d0b54bb50e51-1~exp1~20230725173444.1)
+>
+> >
+> > I believe a fix of mine to clang should address this. It landed in
+> > clang-18, and was backported to clang-17 recently.
+> > https://github.com/llvm/llvm-project-release-prs/commit/0b2d5b967d98375=
+793897295d651f58f6fbd3034
+> >
+> > I suspect your clang-17 might need a rebuild.  Thanks for the report.
+>
+> I will rebuild / re-test and confirm soon.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+LKFT team re-built containers and I have re-tested the builds
+and reported build issues has been fixed.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f7757129e3dea336c407551c98f50057c22bb266
-commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-date:   7 months ago
-config: arm-collie_defconfig (https://download.01.org/0day-ci/archive/20230821/202308212211.KSITn7l9-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230821/202308212211.KSITn7l9-lkp@intel.com/reproduce)
+Thank you !
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308212211.KSITn7l9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/common/locomo.c:368: warning: Function parameter or member 'me' not described in '__locomo_probe'
->> arch/arm/common/locomo.c:368: warning: Function parameter or member 'mem' not described in '__locomo_probe'
->> arch/arm/common/locomo.c:368: warning: Function parameter or member 'irq' not described in '__locomo_probe'
->> arch/arm/common/locomo.c:368: warning: expecting prototype for locomo_probe(). Prototype was for __locomo_probe() instead
---
->> drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype for function 'pcmcia_collie_init' [-Wmissing-prototypes]
-     206 | int pcmcia_collie_init(struct device *dev)
-         |     ^
-   drivers/pcmcia/pxa2xx_sharpsl.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     206 | int pcmcia_collie_init(struct device *dev)
-         | ^
-         | static 
-   1 warning generated.
---
->> drivers/video/fbdev/sa1100fb.c:1219:12: warning: no previous prototype for function 'sa1100fb_init' [-Wmissing-prototypes]
-    1219 | int __init sa1100fb_init(void)
-         |            ^
-   drivers/video/fbdev/sa1100fb.c:1219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1219 | int __init sa1100fb_init(void)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +368 arch/arm/common/locomo.c
-
-b38d950d3aedf9 John Lenz         2005-09-08  352  
-4ebf2d00260bac Pavel Machek      2006-03-15  353  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  354  /**
-^1da177e4c3f41 Linus Torvalds    2005-04-16  355   *	locomo_probe - probe for a single LoCoMo chip.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  356   *	@phys_addr: physical address of device.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  357   *
-^1da177e4c3f41 Linus Torvalds    2005-04-16  358   *	Probe for a LoCoMo chip.  This must be called
-^1da177e4c3f41 Linus Torvalds    2005-04-16  359   *	before any other locomo-specific code.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  360   *
-^1da177e4c3f41 Linus Torvalds    2005-04-16  361   *	Returns:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  362   *	%-ENODEV	device not found.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  363   *	%-EBUSY		physical address already marked in-use.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  364   *	%0		successful.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  365   */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  366  static int
-^1da177e4c3f41 Linus Torvalds    2005-04-16  367  __locomo_probe(struct device *me, struct resource *mem, int irq)
-^1da177e4c3f41 Linus Torvalds    2005-04-16 @368  {
-ac609d266e4af4 Eric Miao         2010-02-04  369  	struct locomo_platform_data *pdata = me->platform_data;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  370  	struct locomo *lchip;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  371  	unsigned long r;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  372  	int i, ret = -ENODEV;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  373  
-d2a02b93cf7820 Russell King      2006-03-20  374  	lchip = kzalloc(sizeof(struct locomo), GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  375  	if (!lchip)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  376  		return -ENOMEM;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  377  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  378  	spin_lock_init(&lchip->lock);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  379  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  380  	lchip->dev = me;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  381  	dev_set_drvdata(lchip->dev, lchip);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  382  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  383  	lchip->phys = mem->start;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  384  	lchip->irq = irq;
-ac609d266e4af4 Eric Miao         2010-02-04  385  	lchip->irq_base = (pdata) ? pdata->irq_base : NO_IRQ;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  386  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  387  	/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  388  	 * Map the whole region.  This also maps the
-^1da177e4c3f41 Linus Torvalds    2005-04-16  389  	 * registers for our children.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  390  	 */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  391  	lchip->base = ioremap(mem->start, PAGE_SIZE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  392  	if (!lchip->base) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  393  		ret = -ENOMEM;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  394  		goto out;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  395  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  396  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  397  	/* locomo initialize */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  398  	locomo_writel(0, lchip->base + LOCOMO_ICR);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  399  	/* KEYBOARD */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  400  	locomo_writel(0, lchip->base + LOCOMO_KEYBOARD + LOCOMO_KIC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  401  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  402  	/* GPIO */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  403  	locomo_writel(0, lchip->base + LOCOMO_GPO);
-2a52efb2cecf78 Thomas Kunze      2008-04-29  404  	locomo_writel((LOCOMO_GPIO(1) | LOCOMO_GPIO(2) | LOCOMO_GPIO(13) | LOCOMO_GPIO(14))
-^1da177e4c3f41 Linus Torvalds    2005-04-16  405  			, lchip->base + LOCOMO_GPE);
-2a52efb2cecf78 Thomas Kunze      2008-04-29  406  	locomo_writel((LOCOMO_GPIO(1) | LOCOMO_GPIO(2) | LOCOMO_GPIO(13) | LOCOMO_GPIO(14))
-^1da177e4c3f41 Linus Torvalds    2005-04-16  407  			, lchip->base + LOCOMO_GPD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  408  	locomo_writel(0, lchip->base + LOCOMO_GIE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  409  
-e4423781850025 Richard Purdie    2006-06-26  410  	/* Frontlight */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  411  	locomo_writel(0, lchip->base + LOCOMO_FRONTLIGHT + LOCOMO_ALS);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  412  	locomo_writel(0, lchip->base + LOCOMO_FRONTLIGHT + LOCOMO_ALD);
-4ebf2d00260bac Pavel Machek      2006-03-15  413  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  414  	/* Longtime timer */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  415  	locomo_writel(0, lchip->base + LOCOMO_LTINT);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  416  	/* SPI */
-1b0d76cb9d5a65 H Hartley Sweeten 2010-03-22  417  	locomo_writel(0, lchip->base + LOCOMO_SPI + LOCOMO_SPIIE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  418  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  419  	locomo_writel(6 + 8 + 320 + 30 - 10, lchip->base + LOCOMO_ASD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  420  	r = locomo_readl(lchip->base + LOCOMO_ASD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  421  	r |= 0x8000;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  422  	locomo_writel(r, lchip->base + LOCOMO_ASD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  423  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  424  	locomo_writel(6 + 8 + 320 + 30 - 10 - 128 + 4, lchip->base + LOCOMO_HSD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  425  	r = locomo_readl(lchip->base + LOCOMO_HSD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  426  	r |= 0x8000;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  427  	locomo_writel(r, lchip->base + LOCOMO_HSD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  428  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  429  	locomo_writel(128 / 8, lchip->base + LOCOMO_HSC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  430  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  431  	/* XON */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  432  	locomo_writel(0x80, lchip->base + LOCOMO_TADC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  433  	udelay(1000);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  434  	/* CLK9MEN */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  435  	r = locomo_readl(lchip->base + LOCOMO_TADC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  436  	r |= 0x10;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  437  	locomo_writel(r, lchip->base + LOCOMO_TADC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  438  	udelay(100);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  439  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  440  	/* init DAC */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  441  	r = locomo_readl(lchip->base + LOCOMO_DAC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  442  	r |= LOCOMO_DAC_SCLOEB | LOCOMO_DAC_SDAOEB;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  443  	locomo_writel(r, lchip->base + LOCOMO_DAC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  444  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  445  	r = locomo_readl(lchip->base + LOCOMO_VER);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  446  	printk(KERN_INFO "LoCoMo Chip: %lu%lu\n", (r >> 8), (r & 0xff));
-^1da177e4c3f41 Linus Torvalds    2005-04-16  447  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  448  	/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  449  	 * The interrupt controller must be initialised before any
-^1da177e4c3f41 Linus Torvalds    2005-04-16  450  	 * other device to ensure that the interrupts are available.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  451  	 */
-ac609d266e4af4 Eric Miao         2010-02-04  452  	if (lchip->irq != NO_IRQ && lchip->irq_base != NO_IRQ)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  453  		locomo_setup_irq(lchip);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  454  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  455  	for (i = 0; i < ARRAY_SIZE(locomo_devices); i++)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  456  		locomo_init_one_child(lchip, &locomo_devices[i]);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  457  	return 0;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  458  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  459   out:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  460  	kfree(lchip);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  461  	return ret;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  462  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  463  
-
-:::::: The code at line 368 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards
+Naresh Kamboju
