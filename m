@@ -1,41 +1,47 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091D55684;
-	Mon, 21 Aug 2023 19:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF7A11703;
+	Mon, 21 Aug 2023 19:54:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692646377; x=1724182377;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=CpvRz3SzXSIgMhGcQOUercgCb1iE61BLWlRVUnD+XcA=;
-  b=hk+BLGfs+4xdl6GCxTgfapF/tuKouEI+2r9SZwvm+TL7Kc+Q5aXf8AHW
-   Trjx5rc40K4VZBdLCjEE7IudT8L9bm03NfNVw6y/Pgav7ehdXKuv4MTr0
-   8izH3cZKWmS1ncKI6lcbofG99O4Qaiw6HhOByn7PJL3NZ/40RgdPw70Bs
-   n28G6+JzGAXLEoNUDExd0eSGMuJlrq3dwxxoFik1wqbQughGUZUlN2Nfg
-   EcIaRrRi9gThI8a9cfp653tULfi6Z7vpVKttp3yE45ijczqfd1/7d9aH3
-   8x9jCTavRsyCNfZckod/HPKPaA3a9hng6Z9/kCdpp1Q8CjuIftZH6EmSj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="460048044"
+  t=1692647683; x=1724183683;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uojYPtSeSRn90ap/xQEo2sFrpcBYeD2eHRgnIC5QHXw=;
+  b=l+kSaqNp9X4uEyig7i2n+fOtUjTKAJPBVMayMtYEMO2+Q5sYOX+Wr8Wh
+   zOJ5287XM53nnuNgVV2OeTsyTQrnakU3kG9D4Ck3ku2LwfoOudW5Q+r71
+   YXC2UUsP288oaIXBLZGqbui/JICgJRRZciHzpisGEG7w86Yr64USPKiZe
+   vF5Ra8c1sAX4r080H6sQorD0D+ZhuOUeGJrmV0ISXT5KsCT2FAmsvMbNb
+   yNFgxoaVPCMq0NRDaK6jCqI+QI94g5erScNdPKwbePrMb0AT0LU4IVnDb
+   245hF//TcgR3SErac2XH4Ri0qg/+1Xy2i25X0YvvqG+bVWvny9A/T4i6y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="460054999"
 X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="460048044"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 12:32:36 -0700
+   d="scan'208";a="460054999"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 12:54:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="771074038"
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="859606457"
 X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="771074038"
+   d="scan'208";a="859606457"
 Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 21 Aug 2023 12:32:35 -0700
+  by orsmga004.jf.intel.com with ESMTP; 21 Aug 2023 12:54:39 -0700
 Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYAde-0000qU-11;
-	Mon, 21 Aug 2023 19:32:34 +0000
-Date: Tue, 22 Aug 2023 03:32:18 +0800
+	id 1qYAz0-0000rU-12;
+	Mon, 21 Aug 2023 19:54:38 +0000
+Date: Tue, 22 Aug 2023 03:54:19 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [stable:linux-5.10.y 2874/9999] drivers/hwmon/pmbus/adm1275.o:
- warning: objtool: adm1275_probe()+0x744: unreachable instruction
-Message-ID: <202308220333.6Kt4bdn3-lkp@intel.com>
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>, gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com, stern@rowland.harvard.edu,
+	yangyingliang@huawei.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
+Subject: Re: [PATCH] usb: hcd: xhci: Add set command timer delay API
+Message-ID: <202308220340.2SPzc4kd-lkp@intel.com>
+References: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,35 +50,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
 
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Borislav Petkov <bp@suse.de>
-CC: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-CC: Ben Hutchings <bwh@kernel.org>
+Hi Hardik,
 
-Hi Peter,
+kernel test robot noticed the following build warnings:
 
-FYI, the error/warning still remains.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.5-rc7 next-20230821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   da742ebfa00c3add4a358dd79ec92161c07e1435
-commit: b24fdd0f1c3328cf8ee0c518b93a7187f8cee097 [2874/9999] x86/retbleed: Add fine grained Kconfig knobs
-config: x86_64-buildonly-randconfig-004-20230821 (https://download.01.org/0day-ci/archive/20230822/202308220333.6Kt4bdn3-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Hardik-Gajjar/usb-hcd-xhci-Add-set-command-timer-delay-API/20230821-094400
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230818092353.124658-1-hgajjar%40de.adit-jv.com
+patch subject: [PATCH] usb: hcd: xhci: Add set command timer delay API
+config: x86_64-randconfig-013-20230821 (https://download.01.org/0day-ci/archive/20230822/202308220340.2SPzc4kd-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230822/202308220333.6Kt4bdn3-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308220340.2SPzc4kd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308220333.6Kt4bdn3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308220340.2SPzc4kd-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hwmon/pmbus/adm1275.o: warning: objtool: adm1275_probe()+0x744: unreachable instruction
+>> drivers/usb/core/hcd.c:3133: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
 
 
-objdump-func vmlinux.o adm1275_probe:
+vim +3133 drivers/usb/core/hcd.c
+
+  3131	
+  3132	/**
+> 3133	 * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
+  3134	 * @hcd - pointer to the HCD representing the controller
+  3135	 * @delay - Delay value to be used in command timer.
+  3136	 *
+  3137	 * wrapper function to call the set_cmd_timer_delay API of the host
+  3138	 * diver.
+  3139	 *
+  3140	 * return 0 on success; otherwise -ENODEV means the feature not
+  3141	 * supported by host driver.
+  3142	 */
+  3143	
 
 -- 
 0-DAY CI Kernel Test Service
