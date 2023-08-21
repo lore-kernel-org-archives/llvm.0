@@ -1,125 +1,126 @@
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6118C17
-	for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 18:10:28 +0000 (UTC)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1c4dd644cf8so2414133fac.0
-        for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 11:10:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903EEF9C1
+	for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 18:15:40 +0000 (UTC)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-64c5f5d6f04so16982956d6.3
+        for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 11:15:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692641427; x=1693246227;
+        d=google.com; s=20221208; t=1692641739; x=1693246539;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dF6rxD+ZkHyNq/ltHpWvUanV1plOfqlbq7nLdiifj/c=;
-        b=UsZjS99KVCX6avIBGy32ovoxhZYlwbMG6sxkQdHFe5+1fGSl0JDE8OHZwLKzH2Aa+z
-         /kvZrnHUH76NceJsqbQmIpVRr3srALaBS9Eq5iAfAVV+6ZH9YQh75qYv26lK1du8dxbs
-         uwSJNn6HftiHIDfv/m/PBVZm+d7Y/RPhxN+JMkJvyhEZKryFT5YjOJLFAaThMgi7nZJb
-         /EbBBENjwJ+xg5dLS28lVmTlDHSgLcrnn66PqQ+y3Z0XcmXB7kTOvdq4GP8kHoVL0Xa9
-         AC87EMaUilGmyDKUJ1r7MZBdrYd3PlUDh+GMpTGgiPsjgY4ReWqfZIhtXA3acBGhIwf3
-         PITQ==
+        bh=f16g3dlm3PDplDbtrkl45zO6RDrmmDTeYGTidmrzBQ0=;
+        b=JnVy9ycYPdyi6i70GY4h9cgWRRBCu1PFK2qdsvIOwnkOIqL6yV5yPaOgBlAFcZgsey
+         wZq9BTY/2y0Mz054D2FiExeHpfNiaEJ1R6zu5FTGyKyHENgKEgwx+kN1ZUz0dV9GxPXy
+         3RxdPczZtF+QNsR9zcapLA0COJ45oZOuD6G9rj+ladY41B6l3BfO4mLlMfOxYqO5w77R
+         UxR/BSUpUdlMXS+9nHAbqqr2a7ef5Im0Gm35CJu9RVgAMaCCGOnHXk7/6wG3QGy5Mbem
+         9+WWe4CdeIBov7vOa1XGLHoUDjsD+k7T9mkB0DZUYkpcMLvnjksUjXMPhWxTYYPsdUQe
+         T6dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692641427; x=1693246227;
+        d=1e100.net; s=20221208; t=1692641739; x=1693246539;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dF6rxD+ZkHyNq/ltHpWvUanV1plOfqlbq7nLdiifj/c=;
-        b=bcnKR8QnxY3ObPL+cHmST3pi/7lNLTkqwMZ9MrYLPUwimvsd9/M1S7Id83wC0n9AY6
-         LlwtYh/u3RLT87/PG4mULwp+Gqkfd1awT6m8+eaKI2CZhFYJvFmS/bdPJtu4Uk0QvDBK
-         tKScfhbZQVarOFS9IRVRKvVGagT189LebXXgHWWRytGGe2xshrIbY65TT45y5SJmGb5u
-         Ra3xO28ygKQMj05lCAy+ltrSh1p03jXb4bAPXyrUd503Ln9sKR5y7Sv4h78rLOSCCBc5
-         Dut8QGrsuxWHShlLiRaKY0jBrAhD+hM73Xx2TnEVOWkF1W8TVUdskZkfw9TDQghDtxOA
-         1epw==
-X-Gm-Message-State: AOJu0Yxe/xG3t3R0EXKuw7fs13JL7IXySJXcdcOhsJ7xvot/MmXn3Fo4
-	HfuLGSbst1+MxzdyqTmhU5xUt4pi22LZp5b9tS420A==
-X-Google-Smtp-Source: AGHT+IEkF8SKAy0eWsCodQOtnaef5xNdxImXVaiIDx8VyX01r+4IxF35/Fqn16U/grcbCUgCEWldlnHFINGB53bX7M0=
-X-Received: by 2002:a05:6870:b30a:b0:1b0:653a:af92 with SMTP id
- a10-20020a056870b30a00b001b0653aaf92mr10954978oao.8.1692641427159; Mon, 21
- Aug 2023 11:10:27 -0700 (PDT)
+        bh=f16g3dlm3PDplDbtrkl45zO6RDrmmDTeYGTidmrzBQ0=;
+        b=bEGQ+ntmXdC7h3rV6bFp3EeRhno7PyJ0dDOmlD4eX3KDPKvCZ43nSglevQKEXPdMAi
+         IF4055okzVBd1evMb4wmMPYzT9+as/4NOulvlk9IBzHw2HNqma+gykHekKoorNwcAbGq
+         vhPKm5Kkz/LPkSnHnbHvgW/4HVIJD4SgokS+EHaEPlk0L4cgUS163QjiWfu2b6e9i3AU
+         OqWWtsBVoP3n1E8NqGTayirVU42AFm3eT8TQnMDv5e+04p1UCD1FXmSZb5/P6iZhWwtR
+         WgYDE4LfHGlIQURMsoWpRvdz8rYofKWOwNheYQxVFqgpscnbj6tGd1Itr8ICmQLVCIqj
+         oKrg==
+X-Gm-Message-State: AOJu0YxIvjIZgtT7P5PIQDqfoEnmIBso5dPk2FXmReeikarVveXOeWYG
+	ln66Mi717hMp3Ew42DUc4rSH5ZGI15Pz780GpMvBxQ==
+X-Google-Smtp-Source: AGHT+IHZJDN20DzukhtxuIQhSEd9Yr13VQln9/JtmGVrNYcDpo6lHrVJl3E0IepjoM+TAKRmiv7avS5d3deTVxlN9ak=
+X-Received: by 2002:a0c:f483:0:b0:64f:4be7:b6c7 with SMTP id
+ i3-20020a0cf483000000b0064f4be7b6c7mr655466qvm.4.1692641738964; Mon, 21 Aug
+ 2023 11:15:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYvFD-kE0+EGWkwcnR1DXRxh7p7OwQThJ6KWxYWVROJ4+A@mail.gmail.com>
- <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com>
- <CA+G9fYtRMde7Ksswa8pY8sFgnWVN-snRHfz4YRM04HSQ4LFBZQ@mail.gmail.com> <CA+G9fYuRy_yJ0Fa1hxt4iPZvgw+qvdvXmqWtFV-rDME+pCdXiA@mail.gmail.com>
-In-Reply-To: <CA+G9fYuRy_yJ0Fa1hxt4iPZvgw+qvdvXmqWtFV-rDME+pCdXiA@mail.gmail.com>
+References: <CA+G9fYtdRe5x=mS4Xonb+ZZsArO2o7vuNL+qJsv5DkNvcirQbA@mail.gmail.com>
+In-Reply-To: <CA+G9fYtdRe5x=mS4Xonb+ZZsArO2o7vuNL+qJsv5DkNvcirQbA@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 21 Aug 2023 11:10:16 -0700
-Message-ID: <CAKwvOd=B3na1Dsg7ATqRa7rwD030SVd6tR6G555Y6Q7t-8yLaw@mail.gmail.com>
-Subject: Re: landlock: fs_test: fs_test.c:4524:9: error: initializer element
- is not a compile-time constant
+Date: Mon, 21 Aug 2023 11:15:28 -0700
+Message-ID: <CAKwvOdmMYzDNK0+un0xossc4f7-A3=EZo11VnVx5Bf0THWhhpw@mail.gmail.com>
+Subject: Re: clang-17: selftests: sgx: clang: error: -z noexecstack: 'linker'
+ input unused [-Werror,-Wunused-command-line-argument]
 To: Naresh Kamboju <naresh.kamboju@linaro.org>
 Cc: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>, 
-	Anders Roxell <anders.roxell@linaro.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Richard Weinberger <richard@nod.at>
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Nathan Chancellor <nathan@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 21, 2023 at 7:20=E2=80=AFAM Naresh Kamboju
+On Mon, Aug 21, 2023 at 6:52=E2=80=AFAM Naresh Kamboju
 <naresh.kamboju@linaro.org> wrote:
 >
-> On Fri, 18 Aug 2023 at 10:48, Naresh Kamboju <naresh.kamboju@linaro.org> =
-wrote:
-> >
-> > On Thu, 17 Aug 2023 at 21:24, Nick Desaulniers <ndesaulniers@google.com=
-> wrote:
-> > >
-> > > On Thu, Aug 17, 2023 at 3:51=E2=80=AFAM Naresh Kamboju
-> > > <naresh.kamboju@linaro.org> wrote:
-> > > >
-> > > > While building selftests landlock following warnings / errors notic=
-ed on the
-> > > > Linux next with clang-17.
-> > > >
-> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > >
-> > > > Build errors:
-> > > > ------------
-> > > > landlock/fs_test
-> > > > fs_test.c:4524:9: error: initializer element is not a compile-time =
-constant
-> > >
-> > > Hi Naresh,
-> > > Can you tell me more about your specific version of clang-17?
-> >
-> >     compiler:
-> >         name: clang,
-> >         version: 17.0.0,
-> >         version_full: Debian clang version 17.0.0
-> > (++20230725053429+d0b54bb50e51-1~exp1~20230725173444.1)
-
-Ok, decoding that we have 2023-07-25...
-
-> >
-> > >
-> > > I believe a fix of mine to clang should address this. It landed in
-> > > clang-18, and was backported to clang-17 recently.
-> > > https://github.com/llvm/llvm-project-release-prs/commit/0b2d5b967d983=
-75793897295d651f58f6fbd3034
-
-And the backport (that sha above) landed 2023-08-03 so that checks
-out.  So yes, the initial report was missing the fix that landed more
-recently.
-
-> > >
-> > > I suspect your clang-17 might need a rebuild.  Thanks for the report.
-> >
-> > I will rebuild / re-test and confirm soon.
+> Recently we have updated the toolchain clang-17 version.
 >
-> LKFT team re-built containers and I have re-tested the builds
-> and reported build issues has been fixed.
+> While building selftests sgx following warnings / errors noticed on the
+> Linux next with clang-17.
 >
-> Thank you !
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> sgx/main.o
+> clang: error: -z noexecstack: 'linker' input unused
+> [-Werror,-Wunused-command-line-argument]
 
-Awesome, thanks for the report and retesting to confirm.
+Hi Naresh,
+Thanks for the report.
+
+I think in general for the kselftests, these aren't really
+regressions; we've simply not spent the time to sit down and get them
+all building.
+
+That said, we should.
+
+Since this isn't a recent regression, would you mind instead of
+emailing the list instead file an individual issue at our issue
+tracker per diagnostic identified?
+
+https://github.com/ClangBuiltLinux/linux/issues
+
+We are very active in tracking the progress on issues there. I would
+love for you and the LKFT team to participate with us there.
+
+https://github.com/ClangBuiltLinux/linux/issues/1698 is the meta issue
+tracking the kselftest targets.
+
+When we have a target building that regresses, then we should notify
+the list, but until then I think it may be less noisy to get issues on
+file.
 
 >
-> Best regards
-> Naresh Kamboju
+> Links:
+>  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9U=
+q9EFceoQd0VL/
+>
+> Steps to reproduce:
+>  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9U=
+q9EFceoQd0VL/tuxmake_reproducer.sh
+>
+> tuxmake --runtime podman --target-arch x86_64 --toolchain clang-17
+> --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0T=
+PLhjp9Uq9EFceoQd0VL/config
+> LLVM=3D1 LLVM_IAS=3D1 debugkernel cpupower headers kernel kselftest
+> modules
+
+Any chance you can extract the invocation of `make` from the above for
+the bug reports?  I'm guessing
+
+`make LLVM=3D1 debugkernel cpupower headers kernel kselftest`?
+(LLVM_IAS=3D1 should be obsolete on mainline)
+
+>
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
 
 
