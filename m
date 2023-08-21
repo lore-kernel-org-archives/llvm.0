@@ -1,44 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B7611737;
-	Mon, 21 Aug 2023 20:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57AA11173A;
+	Mon, 21 Aug 2023 21:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692651401; x=1724187401;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G6XopZWwfsNkH1VsGSyaQrxnSYYAB5c5w4FFiAi1pP4=;
-  b=CVHjt+XBk32xCKC3dRl8nwAc5qkKPJPY8Jt5M7YZ4dbYPO7++2tJQvXH
-   qk032a7Xnoe8+8Mes4/k2t6HKkxHTk4ck4MM+TVYFq9YlDhJiOdil3icC
-   I496WdW0Qjmcgyx3aBQ47oHinRR4umq10XkPXgMsNFuS16N5YJSYEi2gX
-   P4TgS60iwaxuPv4twKvNQNLhyE1DNF2hHSLwip9RSuKLvyYWj+Qi1JfLp
-   J/UFNsZcBsNHyAuxraGy/OIp75t7XYCna101aCNHUW3kEGR9bxh6LYapu
-   ULXsTFwC1oXaDWEQx836tewDrHVhcysijus34AWgPej5GP93//DgdOjqq
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="377451484"
+  t=1692652053; x=1724188053;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bo8/PTq7MCFs00Px7x5WhlSNz/3L4ShOzWCE2VgyrC8=;
+  b=bHqKDv/wV0YbCqOrGEkIxT/KosSDDZZMuCN5ie4w7p2ccKMaxTbdMCgi
+   ViuOSc77N0JQhpOiBeWo3HdPcMjhchSpRkEbt7szClb3nFzbUt01gKvm0
+   vD8DEkACWDgNaHenE9LOfMZiON3rSrCRghDu6/P409sbFkPyZmSmx3mPO
+   xrtwPpXBGG5m7N6p+WKkt03qM6JOq4UUsUAArjf5VbhWu8lzZEqbaauAZ
+   /abTdfkb5Eq/lVka/NVMfw9n08POOCTdhIF+BKnh72gMq5iS4DAt1hPWx
+   oXFwaaNWEPxM5nWQ4IJzJJcaIWED2CU94sZ3SCNkEpb+wa1JqCxpN0NZG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="371131876"
 X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="377451484"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 13:56:41 -0700
+   d="scan'208";a="371131876"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 14:07:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="739058777"
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="729561218"
 X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="739058777"
+   d="scan'208";a="729561218"
 Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Aug 2023 13:56:40 -0700
+  by orsmga007.jf.intel.com with ESMTP; 21 Aug 2023 14:07:27 -0700
 Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYBwq-0000v6-0J;
-	Mon, 21 Aug 2023 20:56:31 +0000
-Date: Tue, 22 Aug 2023 04:54:47 +0800
+	id 1qYC7S-0000va-2S;
+	Mon, 21 Aug 2023 21:07:26 +0000
+Date: Tue, 22 Aug 2023 05:07:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Elena Reshetova <elena.reshetova@intel.com>
+To: Alistair Francis <alistair23@gmail.com>, bhelgaas@google.com,
+	linux-pci@vger.kernel.org, Jonathan.Cameron@huawei.com,
+	lukas@wunner.de
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest-filter 30/34] drivers/acpi/osl.c:410: warning:
- cannot understand function prototype: 'void *__ref
- acpi_os_map_memory_opregion(acpi_physical_address phys, acpi_size size) '
-Message-ID: <202308220403.Cnc4i2d5-lkp@intel.com>
+	alex.williamson@redhat.com, christian.koenig@amd.com,
+	kch@nvidia.com, gregkh@linuxfoundation.org, logang@deltatee.com,
+	linux-kernel@vger.kernel.org, alistair23@gmail.com,
+	chaitanyak@nvidia.com, rdunlap@infradead.org,
+	Alistair Francis <alistair.francis@wdc.com>
+Subject: Re: [PATCH v6 1/3] PCI/DOE: Expose the DOE features via sysfs
+Message-ID: <202308220442.udC7U63t-lkp@intel.com>
+References: <20230817235810.596458-1-alistair.francis@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,53 +53,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230817235810.596458-1-alistair.francis@wdc.com>
 
-tree:   https://github.com/intel/tdx.git guest-filter
-head:   f84bcdf50d1bb34ff2715bb067074582b407f3d9
-commit: 7be70dd0f99a936b19893afa9b0719009181bd34 [30/34] acpica: add acpi_os_map_memory_opregion
-config: i386-randconfig-001-20230821 (https://download.01.org/0day-ci/archive/20230822/202308220403.Cnc4i2d5-lkp@intel.com/config)
+Hi Alistair,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.5-rc7 next-20230821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Francis/sysfs-Add-a-attr_is_visible-function-to-attribute_group/20230818-080110
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20230817235810.596458-1-alistair.francis%40wdc.com
+patch subject: [PATCH v6 1/3] PCI/DOE: Expose the DOE features via sysfs
+config: i386-randconfig-006-20230821 (https://download.01.org/0day-ci/archive/20230822/202308220442.udC7U63t-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230822/202308220403.Cnc4i2d5-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308220442.udC7U63t-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308220403.Cnc4i2d5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308220442.udC7U63t-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/acpi/osl.c:410: warning: cannot understand function prototype: 'void *__ref acpi_os_map_memory_opregion(acpi_physical_address phys, acpi_size size) '
+>> drivers/pci/doe.c:61: warning: Function parameter or member 'sysfs_attrs' not described in 'pci_doe_mb'
 
 
-vim +410 drivers/acpi/osl.c
+vim +61 drivers/pci/doe.c
 
-   391	
-   392	/**
-   393	 * acpi_os_map_memory_opregion - Get a virtual address for a given physical
-   394	 * address range. This function is intended to be used only for AML operation
-   395	 * regions. In a confidential computing guest such regions needs to be explicitly
-   396	 * shared with the host to avoid breaking the communication. 
-   397	 *
-   398	 * @phys: Start of the physical address range to map.
-   399	 * @size: Size of the physical address range to map.
-   400	 *
-   401	 * Look up the given physical address range in the list of existing ACPI memory
-   402	 * mappings.  If found, get a reference to it and return a pointer to it (its
-   403	 * virtual address).  If not found, map it, add it to that list and return a
-   404	 * pointer to it.
-   405	 *
-   406	 * During early init (when acpi_permanent_mmap has not been set yet) this
-   407	 * routine simply calls __acpi_map_table() to get the job done.
-   408	 */
-   409	void *__ref acpi_os_map_memory_opregion(acpi_physical_address phys, acpi_size size)
- > 410	{
-   411		if (!cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
-   412			return (void *)__acpi_os_map_iomem(phys, size, false);
-   413		else
-   414			return (void *)__acpi_os_map_iomem(phys, size, true);
-   415	}
-   416	EXPORT_SYMBOL_GPL(acpi_os_map_memory_opregion);
-   417	
+a4ff8e7a716013 Li Ming          2022-11-16  36  
+9d24322e887b6a Jonathan Cameron 2022-07-19  37  /**
+9d24322e887b6a Jonathan Cameron 2022-07-19  38   * struct pci_doe_mb - State for a single DOE mailbox
+9d24322e887b6a Jonathan Cameron 2022-07-19  39   *
+9d24322e887b6a Jonathan Cameron 2022-07-19  40   * This state is used to manage a single DOE mailbox capability.  All fields
+9d24322e887b6a Jonathan Cameron 2022-07-19  41   * should be considered opaque to the consumers and the structure passed into
+022b66f38195f6 Lukas Wunner     2023-03-11  42   * the helpers below after being created by pci_doe_create_mb().
+9d24322e887b6a Jonathan Cameron 2022-07-19  43   *
+9d24322e887b6a Jonathan Cameron 2022-07-19  44   * @pdev: PCI device this mailbox belongs to
+9d24322e887b6a Jonathan Cameron 2022-07-19  45   * @cap_offset: Capability offset
+9d24322e887b6a Jonathan Cameron 2022-07-19  46   * @prots: Array of protocols supported (encoded as long values)
+9d24322e887b6a Jonathan Cameron 2022-07-19  47   * @wq: Wait queue for work item
+9d24322e887b6a Jonathan Cameron 2022-07-19  48   * @work_queue: Queue of pci_doe_work items
+9d24322e887b6a Jonathan Cameron 2022-07-19  49   * @flags: Bit array of PCI_DOE_FLAG_* flags
+9d24322e887b6a Jonathan Cameron 2022-07-19  50   */
+9d24322e887b6a Jonathan Cameron 2022-07-19  51  struct pci_doe_mb {
+9d24322e887b6a Jonathan Cameron 2022-07-19  52  	struct pci_dev *pdev;
+9d24322e887b6a Jonathan Cameron 2022-07-19  53  	u16 cap_offset;
+9d24322e887b6a Jonathan Cameron 2022-07-19  54  	struct xarray prots;
+9d24322e887b6a Jonathan Cameron 2022-07-19  55  
+9d24322e887b6a Jonathan Cameron 2022-07-19  56  	wait_queue_head_t wq;
+9d24322e887b6a Jonathan Cameron 2022-07-19  57  	struct workqueue_struct *work_queue;
+9d24322e887b6a Jonathan Cameron 2022-07-19  58  	unsigned long flags;
+2a8556606e90c6 Alistair Francis 2023-08-17  59  
+2a8556606e90c6 Alistair Francis 2023-08-17  60  	struct device_attribute *sysfs_attrs;
+9d24322e887b6a Jonathan Cameron 2022-07-19 @61  };
+9d24322e887b6a Jonathan Cameron 2022-07-19  62  
 
 -- 
 0-DAY CI Kernel Test Service
