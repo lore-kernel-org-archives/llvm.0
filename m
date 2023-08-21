@@ -1,104 +1,64 @@
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7256FBE
-	for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 13:48:06 +0000 (UTC)
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-79aeb0a4665so943599241.1
-        for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 06:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692625684; x=1693230484;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jLB+9REAygYY0DOuwfBq/jxAg+N5aJcW36e9CeI5Mwo=;
-        b=x/n3TBl+cj7w/o3N8b3V2L6LF5VESVaz1Xd7sOEF3etaG0J5JiDWG9qHfQX+0EsDGY
-         gYn1VMPMXIpZnlRlhBVpR0O7QM+p+zEyMvRmSKyXfj8/Gr9wt54zuwipPo9yDYW/c4Hp
-         eEz2AyojrFI7xuATX8bTAD/AZIRnlLaOD0L86CMWmFV5jD3EtQHF16sPLFzQX83KWAad
-         t17/FJwFzTdykbYjwEFSa6UcEKzjm7GWfNFjpFJZJK7Du0g1W/3bGkeq5Aq9f/C7usTR
-         9UtQAnW0+ZqgHbzNTbiHT4gJBAFHg307w3007gSDcF0BHfLuIdI8gcsPBSBGT/XF1omw
-         cB7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692625684; x=1693230484;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jLB+9REAygYY0DOuwfBq/jxAg+N5aJcW36e9CeI5Mwo=;
-        b=S6LbDOjQ0ewz9dwtYM4I6Vt1oDBWp1q2J1TpLtm/Wlt6rnzpAmqhDUVeTnCM5sdWRR
-         g1HDkSH98ke/6G2B2G2AnTlFzhi+8WI4ZEis3PGS7LejuaJYD2rUxrTWvEcu1zXXbFlX
-         AbmtpUycigPxPA1GgV+kxqbDLOWpfvOTWgumkIJDaxPgwJ9f0RP7gUYra3l0PxJovk5+
-         sYU+dtcPmH6wJxSgPDQdq4q36fulvS/pDl+fzr9Z2FnKkNodpmhPU5TDbIQ0pZo00dlQ
-         AOOFt3HenbHw3SOkE2apWbRUK4KmUsm5yD+ODC4zrwVCEWUpv8KRcm65qjPyrPrZhzaG
-         Rg4g==
-X-Gm-Message-State: AOJu0YxVCX1nLvzyXbdL8HomnyRUvd3iZwBn25tGYo4c4wTkb5poQ120
-	a464mS+jM5Uu50TYq4R5MrUOOY0wgKVimDCOLE8UWCjfwt/pNiIJjgg=
-X-Google-Smtp-Source: AGHT+IF9fvjUB+rS/XJKPseqYgUHXMa08uiTMMNhG1uODld2kPDyU4fq0bYuoaefzZZ92fcnfawvUwbvDXJB3QYeYHY=
-X-Received: by 2002:a67:f1ce:0:b0:44d:50f8:f with SMTP id v14-20020a67f1ce000000b0044d50f8000fmr1793441vsm.17.1692625684430;
- Mon, 21 Aug 2023 06:48:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FDA6FBE
+	for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 13:51:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE4DC433C9;
+	Mon, 21 Aug 2023 13:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692625914;
+	bh=Ij1Fky1SzjNGU19dxA9VEMP/m+IgopJUmHpYOQtDxZk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=NYdogs3jbqTRkOYTYeZW38QExUCqBvCA+ZyJaiEMrZb5K31onx0mb1UBwO5k5IVwP
+	 IT6qGW3XAth0Kw2j7EAxjLdnDge2Fi1kZysQJsY6uOEhaat8e89GmMAkYqEyAoVFIQ
+	 sB9BXEKd1hsXJHJGI733yUgpFnL76W7eeSVXnaXZOIJRG4n2Pi1NZIGCN75+l7tFwi
+	 YHmZ3+u05XVjzC3VgkXFZ5XuyOYaSviUHhfGYk+MtIak1VHu2GfHwzwVTTiKSHTD27
+	 hfC4QD6EEEdsz8KWx10/OH+hsePhIQrUJz0rhht3NcG+XiT/agnD2DSL/wFbAdDnAP
+	 fsq3YFYa4VdUA==
+From: Vinod Koul <vkoul@kernel.org>
+To: =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+ Justin Stitt <justinstitt@google.com>
+Cc: dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev
+In-Reply-To: <20230816-void-drivers-dma-owl-dma-v1-1-a0a5e085e937@google.com>
+References: <20230816-void-drivers-dma-owl-dma-v1-1-a0a5e085e937@google.com>
+Subject: Re: [PATCH] dmaengine: owl-dma: fix clang
+ -Wvoid-pointer-to-enum-cast warning
+Message-Id: <169262591106.224153.11282362277012403845.b4-ty@kernel.org>
+Date: Mon, 21 Aug 2023 19:21:51 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 21 Aug 2023 19:17:53 +0530
-Message-ID: <CA+G9fYt2PZd7Zj5ndPL+LBstGvoVwyCLpFucOY-7UNajvAqRLQ@mail.gmail.com>
-Subject: clang: error: cannot specify -o when generating multiple output files
-To: clang-built-linux <llvm@lists.linux.dev>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	lkft-triage@lists.linaro.org
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-
-Recently we have updated the toolchain clang-17 version.
-
-While building selftests filesystems/binderfs, openat2, resctrl and x86
-following warnings / errors noticed on the Linux next with clang-17.
-But pass with gcc-13.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build logs:
-========
-binderfs_test
-clang: error: cannot specify -o when generating multiple output files
-...
-openat2/openat2_test
-clang: error: cannot specify -o when generating multiple output files
-...
-resctrl/resctrl_tests
-clang: error: cannot specify -o when generating multiple output files
-...
-make[4]: Entering directory 'tools/testing/selftests/x86'
-clang --target=x86_64-linux-gnu -fintegrated-as
--Werror=unknown-warning-option -Werror=ignored-optimization-argument
--Werror=option-ignored -Werror=unused-command-line-argument
---target=x86_64-linux-gnu -fintegrated-as -m64 -o
-/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/x86/single_step_syscall_64
--O2 -g -std=gnu99 -pthread -Wall -isystem
-/home/tuxbuild/.cache/tuxmake/builds/1/build/usr/include -no-pie
--DCAN_BUILD_64 single_step_syscall.c helpers.h -lrt -ldl
-clang: error: cannot specify -o when generating multiple output files
-make[4]: *** [Makefile:78:
-/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/x86/single_step_syscall_64]
-Error 1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
 
 
-Links:
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9Uq9EFceoQd0VL/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230821/testrun/19213760/suite/kselftest-x86/test/shardfile-x86/details/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230821/testrun/19213728/suite/kselftest-openat2/test/shardfile-openat2/details/
- -
+On Wed, 16 Aug 2023 20:12:50 +0000, Justin Stitt wrote:
+> When building with clang 18 I see the following warning:
+> |       drivers/dma/owl-dma.c:1119:14: warning: cast to smaller integer type
+> |       'enum owl_dma_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> |        1119 | od->devid = (enum owl_dma_id)of_device_get_match_data(&pdev->dev);
+> 
+> This is due to the fact that `of_device_get_match_data()` returns a
+> void* while `enum owl_dma_id` has the size of an int.
+> 
+> [...]
 
-Steps to reproduce:
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9Uq9EFceoQd0VL/tuxmake_reproducer.sh
+Applied, thanks!
 
-tuxmake --runtime podman --target-arch x86_64 --toolchain clang-17
---kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9Uq9EFceoQd0VL/config
-LLVM=1 LLVM_IAS=1 debugkernel cpupower headers kernel kselftest
-modules
+[1/1] dmaengine: owl-dma: fix clang -Wvoid-pointer-to-enum-cast warning
+      commit: 1fbda5f4c7c1c8bd51cd3bc3d2ff19176c696b74
+
+Best regards,
+-- 
+~Vinod
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
