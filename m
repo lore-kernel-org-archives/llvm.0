@@ -1,47 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF7A11703;
-	Mon, 21 Aug 2023 19:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D111171A;
+	Mon, 21 Aug 2023 20:07:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692647683; x=1724183683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uojYPtSeSRn90ap/xQEo2sFrpcBYeD2eHRgnIC5QHXw=;
-  b=l+kSaqNp9X4uEyig7i2n+fOtUjTKAJPBVMayMtYEMO2+Q5sYOX+Wr8Wh
-   zOJ5287XM53nnuNgVV2OeTsyTQrnakU3kG9D4Ck3ku2LwfoOudW5Q+r71
-   YXC2UUsP288oaIXBLZGqbui/JICgJRRZciHzpisGEG7w86Yr64USPKiZe
-   vF5Ra8c1sAX4r080H6sQorD0D+ZhuOUeGJrmV0ISXT5KsCT2FAmsvMbNb
-   yNFgxoaVPCMq0NRDaK6jCqI+QI94g5erScNdPKwbePrMb0AT0LU4IVnDb
-   245hF//TcgR3SErac2XH4Ri0qg/+1Xy2i25X0YvvqG+bVWvny9A/T4i6y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="460054999"
+  t=1692648471; x=1724184471;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cfeNTR28TFv7XNm5wRNHtTOjkdfI98GGGw816HRnS2o=;
+  b=G9OMP9WIv6YuTSIckBGxeLt7cB2tYGVvvq57zZkcxU7DlCcrMsSIdwPk
+   YRkJVYIVSCIlqamLjBn996gVzJV49bWy5e3sKUqoo4aHSQZSsql+Igyue
+   i0TsIsfOTEKbmZDh20/mjVI924jauTZYye9a7MBucq5KKajbPM3P3Cxh6
+   pPX4HsWmya6DNNnFXplSjrbKl+4JdvKcajLsQ1Nwjd4G+1MafnbIMKqFp
+   1u90b6P7Gi9QMxt22g0yfQg9OtDag5crwVM/BlncmbiVwCSFjRUsFxUNP
+   5QvN4s7oGRGHvxwVOhf4SKZVMIInaG27UcyBwZ2x2P5Es8JWvj2ssVKUS
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="440063771"
 X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="460054999"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 12:54:42 -0700
+   d="scan'208";a="440063771"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 13:07:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="859606457"
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="909827533"
 X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="859606457"
+   d="scan'208";a="909827533"
 Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Aug 2023 12:54:39 -0700
+  by orsmga005.jf.intel.com with ESMTP; 21 Aug 2023 13:07:49 -0700
 Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYAz0-0000rU-12;
-	Mon, 21 Aug 2023 19:54:38 +0000
-Date: Tue, 22 Aug 2023 03:54:19 +0800
+	id 1qYBBk-0000sK-16;
+	Mon, 21 Aug 2023 20:07:48 +0000
+Date: Tue, 22 Aug 2023 04:06:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>, gregkh@linuxfoundation.org,
-	mathias.nyman@intel.com, stern@rowland.harvard.edu,
-	yangyingliang@huawei.com
+To: Jakob Hauser <jahau@rocketmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
-Subject: Re: [PATCH] usb: hcd: xhci: Add set command timer delay API
-Message-ID: <202308220340.2SPzc4kd-lkp@intel.com>
-References: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Lee Jones <lee@kernel.org>
+Subject: [linux-next:master 10698/11453] ld.lld: error: undefined symbol:
+ extcon_find_edev_by_node
+Message-ID: <202308220324.LsI8q3ML-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,52 +47,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
 
-Hi Hardik,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.5-rc7 next-20230821]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hardik-Gajjar/usb-hcd-xhci-Add-set-command-timer-delay-API/20230821-094400
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230818092353.124658-1-hgajjar%40de.adit-jv.com
-patch subject: [PATCH] usb: hcd: xhci: Add set command timer delay API
-config: x86_64-randconfig-013-20230821 (https://download.01.org/0day-ci/archive/20230822/202308220340.2SPzc4kd-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   47d9bb711707d15b19fad18c8e2b4b027a264a3a
+commit: 12cc585f36b8dffa68b809c2d23a9bd73ee6ffd2 [10698/11453] power: supply: rt5033_charger: Add cable detection and USB OTG supply
+config: x86_64-randconfig-076-20230821 (https://download.01.org/0day-ci/archive/20230822/202308220324.LsI8q3ML-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230822/202308220340.2SPzc4kd-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308220324.LsI8q3ML-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308220340.2SPzc4kd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308220324.LsI8q3ML-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/usb/core/hcd.c:3133: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
-
-
-vim +3133 drivers/usb/core/hcd.c
-
-  3131	
-  3132	/**
-> 3133	 * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
-  3134	 * @hcd - pointer to the HCD representing the controller
-  3135	 * @delay - Delay value to be used in command timer.
-  3136	 *
-  3137	 * wrapper function to call the set_cmd_timer_delay API of the host
-  3138	 * diver.
-  3139	 *
-  3140	 * return 0 on success; otherwise -ENODEV means the feature not
-  3141	 * supported by host driver.
-  3142	 */
-  3143	
+>> ld.lld: error: undefined symbol: extcon_find_edev_by_node
+   >>> referenced by rt5033_charger.c:696 (drivers/power/supply/rt5033_charger.c:696)
+   >>>               vmlinux.o:(rt5033_charger_probe)
+--
+>> ld.lld: error: undefined symbol: devm_extcon_register_notifier_all
+   >>> referenced by rt5033_charger.c:710 (drivers/power/supply/rt5033_charger.c:710)
+   >>>               vmlinux.o:(rt5033_charger_probe)
+--
+>> ld.lld: error: undefined symbol: extcon_get_state
+   >>> referenced by rt5033_charger.c:578 (drivers/power/supply/rt5033_charger.c:578)
+   >>>               vmlinux.o:(rt5033_charger_extcon_work)
+   >>> referenced by rt5033_charger.c:578 (drivers/power/supply/rt5033_charger.c:578)
+   >>>               vmlinux.o:(rt5033_charger_extcon_work)
+   >>> referenced by rt5033_charger.c:578 (drivers/power/supply/rt5033_charger.c:578)
+   >>>               vmlinux.o:(rt5033_charger_extcon_work)
+   >>> referenced 8 more times
 
 -- 
 0-DAY CI Kernel Test Service
