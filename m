@@ -1,107 +1,117 @@
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1706747C
-	for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 14:20:33 +0000 (UTC)
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-48d0edd8a81so380183e0c.0
-        for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 07:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692627632; x=1693232432;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CWG07LdVGn7VFP43KyVmejqn3QURW+mK8BYkazDvZEc=;
-        b=NQo539YRUXe+f0Pd/a7rVllCjpqGN9LkjDJz8JkJsEv15dNe/OY4F74VMfOkCGHe/j
-         9jexdGNy+28fkyz31IT36rJVp0nzsR4FGtFRHga+UMAAbrAZDAloZ1L9hxMRYD7O2eh0
-         PWBIV89WIBMocZxvaMmEI1jQbtq4vSWgmvgToC+/bLLKrGQAQXamTLM4Bl9gtIERAPE0
-         YSDlv09x8A5BZ7n2iKYIRzRLLvpqBpGy+9a9nn1ORSsSd7ClWecCtfSpdMLF9Fa6n5MS
-         haLytHXvTYgR0wrbxwLcgTHJRO3TcfIbn8wS24suVM7tmR5r/0EgW1G1ATo/CSt6eiX9
-         h6RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692627632; x=1693232432;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CWG07LdVGn7VFP43KyVmejqn3QURW+mK8BYkazDvZEc=;
-        b=eaUuk1/gIRIYOuV7ZuK06e9u5/z/LyZ/HmU2yXlPjCuUNqLMMn787jzFonUxzU2j75
-         bSUEsqTiRmVCN5oqp8uOQmceu3IzErinRvCFA/tti8BcoQfax/P/+7Nn58RFtfSqEwkD
-         MoIkznC5jJhiEQCDsj+J7v30RcQj+MrQKZtxrNH+IKA0CKhBalnKhy04k+aqdhYY9qv+
-         HmZXjh6cODZYRBHweCOVAF8PkD9Q4ZtDgEs2ZE3FxVX71lOF1Y7Nlo+ptChYOsRWF0Gb
-         bY0FaB2PB3pzwoj9dH9hTaFUD+J3Aej3K68SGPYo4JjdO1v703FgDSCeR1GBmT5EQ2XK
-         2ghA==
-X-Gm-Message-State: AOJu0YyKZZJb0GUpFn/3HdSp4Rje7nNgd8isrByoln5y5nwHn0mOwh0Q
-	wTuaJeCWyq/XyNbz4HHm5NroZ+lrH5PyHEEHXBBZ1g==
-X-Google-Smtp-Source: AGHT+IEL7/lIT2DoE0nDuddm6ZZs7RBtHuj4HDAswtvPoZsdO4X81ZEyQeyt9+TjVQDnz2iWfFMWLqleLeNK9ffgCso=
-X-Received: by 2002:a67:f310:0:b0:447:4316:415a with SMTP id
- p16-20020a67f310000000b004474316415amr5762575vsf.31.1692627632355; Mon, 21
- Aug 2023 07:20:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63EFF79F1;
+	Mon, 21 Aug 2023 15:36:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692632180; x=1724168180;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=LLr7f1tqvsHf4GXpWB+4g385BtuMw5ip75u7KeEtKbk=;
+  b=jyWP7XG+AULU6eKq/a6vIVfZZZFHO4NKbNOLg1M1ZicR2TqQi1mRZruF
+   ZPJDtHbwBjH8CgqJslKRwPO7cJcFUIyAeejVKxtN/canww9bGYgUlDYFh
+   hVTPG4niB5ZvMoZ7HdukaMDzGOipM0Wl7mfxMXkxJ9Wf+ppb8m9TaOXJ+
+   DnaUzdEPXWuZGQahPahVglMDl/irpPBH6I54PJ6FvZ/vgDzhi74F60WjK
+   0qsQJ0+Nrze6efwhm/DDSWYLCt5es5/ABuuWlHtrOqjlM4c4nX0ECBrqT
+   RwUCMcp78/uhjHJmQ7q/HxtjJCFLi2tCCEFNKyH3uQFwMZpMB2QUln9sV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="459987571"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="459987571"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 08:36:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="735859923"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="735859923"
+Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 Aug 2023 08:36:18 -0700
+Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qY6wv-0000e7-0M;
+	Mon, 21 Aug 2023 15:36:13 +0000
+Date: Mon, 21 Aug 2023 23:35:55 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: handle_bug+0x8: call to
+ kmsan_unpoison_entry_regs() leaves .noinstr.text section
+Message-ID: <202308212328.jPUdPhgk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYvFD-kE0+EGWkwcnR1DXRxh7p7OwQThJ6KWxYWVROJ4+A@mail.gmail.com>
- <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com> <CA+G9fYtRMde7Ksswa8pY8sFgnWVN-snRHfz4YRM04HSQ4LFBZQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYtRMde7Ksswa8pY8sFgnWVN-snRHfz4YRM04HSQ4LFBZQ@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 21 Aug 2023 19:50:21 +0530
-Message-ID: <CA+G9fYuRy_yJ0Fa1hxt4iPZvgw+qvdvXmqWtFV-rDME+pCdXiA@mail.gmail.com>
-Subject: Re: landlock: fs_test: fs_test.c:4524:9: error: initializer element
- is not a compile-time constant
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>, 
-	Anders Roxell <anders.roxell@linaro.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Richard Weinberger <richard@nod.at>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 18 Aug 2023 at 10:48, Naresh Kamboju <naresh.kamboju@linaro.org> wr=
-ote:
->
-> On Thu, 17 Aug 2023 at 21:24, Nick Desaulniers <ndesaulniers@google.com> =
-wrote:
-> >
-> > On Thu, Aug 17, 2023 at 3:51=E2=80=AFAM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > While building selftests landlock following warnings / errors noticed=
- on the
-> > > Linux next with clang-17.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Build errors:
-> > > ------------
-> > > landlock/fs_test
-> > > fs_test.c:4524:9: error: initializer element is not a compile-time co=
-nstant
-> >
-> > Hi Naresh,
-> > Can you tell me more about your specific version of clang-17?
->
->     compiler:
->         name: clang,
->         version: 17.0.0,
->         version_full: Debian clang version 17.0.0
-> (++20230725053429+d0b54bb50e51-1~exp1~20230725173444.1)
->
-> >
-> > I believe a fix of mine to clang should address this. It landed in
-> > clang-18, and was backported to clang-17 recently.
-> > https://github.com/llvm/llvm-project-release-prs/commit/0b2d5b967d98375=
-793897295d651f58f6fbd3034
-> >
-> > I suspect your clang-17 might need a rebuild.  Thanks for the report.
->
-> I will rebuild / re-test and confirm soon.
+CC: linux-kernel@vger.kernel.org
+TO: Alexander Potapenko <glider@google.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
 
-LKFT team re-built containers and I have re-tested the builds
-and reported build issues has been fixed.
+Hi Alexander,
 
-Thank you !
+FYI, the error/warning still remains.
 
-Best regards
-Naresh Kamboju
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f7757129e3dea336c407551c98f50057c22bb266
+commit: ba54d194f8daad8943802d6dfe06e205f882c391 x86/traps: avoid KMSAN bugs originating from handle_bug()
+date:   10 months ago
+config: x86_64-buildonly-randconfig-001-20230821 (https://download.01.org/0day-ci/archive/20230821/202308212328.jPUdPhgk-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230821/202308212328.jPUdPhgk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308212328.jPUdPhgk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: handle_bug+0x8: call to kmsan_unpoison_entry_regs() leaves .noinstr.text section
+
+
+objdump-func vmlinux.o handle_bug:
+0000 0000000000001640 <handle_bug>:
+0000     1640:	55                   	push   %rbp
+0001     1641:	48 89 e5             	mov    %rsp,%rbp
+0004     1644:	53                   	push   %rbx
+0005     1645:	48 89 fb             	mov    %rdi,%rbx
+0008     1648:	e8 00 00 00 00       	call   164d <handle_bug+0xd>	1649: R_X86_64_PLT32	kmsan_unpoison_entry_regs-0x4
+000d     164d:	48 8b 83 80 00 00 00 	mov    0x80(%rbx),%rax
+0014     1654:	48 b9 00 f0 ff ff ff 7f 00 00 	movabs $0x7ffffffff000,%rcx
+001e     165e:	48 39 c8             	cmp    %rcx,%rax
+0021     1661:	72 41                	jb     16a4 <handle_bug+0x64>
+0023     1663:	0f b7 00             	movzwl (%rax),%eax
+0026     1666:	3d 0f 0b 00 00       	cmp    $0xb0f,%eax
+002b     166b:	75 37                	jne    16a4 <handle_bug+0x64>
+002d     166d:	90                   	nop
+002e     166e:	f6 83 91 00 00 00 02 	testb  $0x2,0x91(%rbx)
+0035     1675:	74 01                	je     1678 <handle_bug+0x38>
+0037     1677:	fb                   	sti
+0038     1678:	48 8b bb 80 00 00 00 	mov    0x80(%rbx),%rdi
+003f     167f:	48 89 de             	mov    %rbx,%rsi
+0042     1682:	e8 00 00 00 00       	call   1687 <handle_bug+0x47>	1683: R_X86_64_PLT32	report_bug-0x4
+0047     1687:	83 f8 01             	cmp    $0x1,%eax
+004a     168a:	0f 94 c0             	sete   %al
+004d     168d:	75 08                	jne    1697 <handle_bug+0x57>
+004f     168f:	48 83 83 80 00 00 00 02 	addq   $0x2,0x80(%rbx)
+0057     1697:	f6 83 91 00 00 00 02 	testb  $0x2,0x91(%rbx)
+005e     169e:	74 01                	je     16a1 <handle_bug+0x61>
+0060     16a0:	fa                   	cli
+0061     16a1:	90                   	nop
+0062     16a2:	eb 02                	jmp    16a6 <handle_bug+0x66>
+0064     16a4:	31 c0                	xor    %eax,%eax
+0066     16a6:	5b                   	pop    %rbx
+0067     16a7:	5d                   	pop    %rbp
+0068     16a8:	31 c9                	xor    %ecx,%ecx
+006a     16aa:	31 ff                	xor    %edi,%edi
+006c     16ac:	31 f6                	xor    %esi,%esi
+006e     16ae:	c3                   	ret
+006f     16af:	66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+007e     16be:	66 90                	xchg   %ax,%ax
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
