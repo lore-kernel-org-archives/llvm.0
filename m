@@ -1,181 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AC3441D;
-	Mon, 21 Aug 2023 13:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692623061; x=1724159061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cI93qn5e3LNC5GFx2NC4TLSJmFd5o4x4tWtl4ZL61E4=;
-  b=M52FoWLui6udvoH5caVim1UyYz1nnttRAtKzgCD4n9pQzmMETInbreX4
-   BX2fyZLJqfC2rBMBoWMEddKLLL22aUyFkNqMzshcUnzSuS6wAXJU2l52z
-   q4ljwFJi6/8/Kh9SwK0HeG/+iRpt/dzc54NE6SdnpEVyhKkqB3T+gpljp
-   hBoEDNe6jZZ1BraUvDy6pzUyK7nBop5lco7y0PqBFtEgIS6rRm5aXl93g
-   5e6KWj8EcQmqr3d6sPChsvk1CIaBaG4VFLXYzZzo3ch+PE6Md44FqvYkR
-   /cu7wBXcAa1m2aETnS+VBP1T3l9GNQVoalhMzuwr/m0jz4ogDhL8bvCcg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="353898830"
-X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
-   d="scan'208";a="353898830"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 06:04:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="765361592"
-X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
-   d="scan'208";a="765361592"
-Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 21 Aug 2023 06:04:18 -0700
-Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qY4Zt-0000VA-2e;
-	Mon, 21 Aug 2023 13:04:17 +0000
-Date: Mon, 21 Aug 2023 21:03:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	linux-bluetooth@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] Bluetooth: hci_core: Fix missing instances using
- HCI_MAX_AD_LENGTH
-Message-ID: <202308212004.EXsdDWkd-lkp@intel.com>
-References: <20230818212211.3207580-1-luiz.dentz@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD625392
+	for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 13:33:16 +0000 (UTC)
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-79af014b555so1054339241.1
+        for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 06:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692624794; x=1693229594;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=khLlIHW+Jm6+gOuRPwp6mA1hqc/ytZ1HIVMa6QE2/hc=;
+        b=MXqe80sAtCGV+ehrYswoWLd5KZQCoK6YAWu+x7WyF7bblYFwKE8dxoIJCEKNNOqOlJ
+         Mt2GOg1xTnUJEsJddpIoaHb68m741jH19GWHZ6/N5iu8aVIXEPbzrOxypYsdTRQNWW1R
+         2f1YQZqbibNrPXuxOVZ2kLXGOk83zrkxtXB4EqyU6vm8XW08d195A1t+1nAO/dNyv3Or
+         9oQ0M0exaWivUrnn4YHQuODXM5FUQbQHDOGBQmkug+deAvhzv0UYalzocevQ7dbZza1v
+         aolc7gU+vocnsbh37DmZ5rKUoH9pH4RGDRsOEdRaHJbWbdz5V+D0j76QZZ4CNQFLGb5w
+         5dRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692624794; x=1693229594;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=khLlIHW+Jm6+gOuRPwp6mA1hqc/ytZ1HIVMa6QE2/hc=;
+        b=Prl5lnkTnmNQb3EEulattPUV24lSu/e3LkvKzlAs/7FjdvdvLE6hvAxudrCpYTsAdF
+         ZeIWH1YkrutHZ7lUeo1b8SuAqFUsB3JpLQJWxYbN502Jd0amFc/YnWK8vofa5/ZCfi1N
+         0zyf/HpjsleUacUEZYGSDLJWLjO+1gFABsNk/ZqwSkJSlYOK/r3ndksfRDVMAu1ktiTR
+         p9NqfMCsW2LWo1LctQFAEjR6JlWVi545SsvwRXZVuQKf2BQPbN5jomQWsA/+K9wswTDx
+         515pnG0GATcFWbjgauEwlZio1xrxezT66iylwcOQ3oni5Py+umy7rEEc9q9gwZ755KQE
+         r73Q==
+X-Gm-Message-State: AOJu0Yyi+vZtSYSyKwoq/vmAFhES8rxYs4NA59b9UCnaTRMBLT+3zD/I
+	dK8BC+Sbvr4Vo9PshAsKzeOFcRxY8yGGDFPe95USHDP1o5zu2lJWGHw=
+X-Google-Smtp-Source: AGHT+IGdiroFpyHjOCjxX3nFiWrenguPGn6R1CMfgDrH4PeozwIcKL/83yaISys0pAnDYUzENf41pAhVnMM9BFjR72s=
+X-Received: by 2002:a67:cd99:0:b0:430:e0:ac2e with SMTP id r25-20020a67cd99000000b0043000e0ac2emr6220213vsl.15.1692624794563;
+ Mon, 21 Aug 2023 06:33:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230818212211.3207580-1-luiz.dentz@gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 21 Aug 2023 19:03:03 +0530
+Message-ID: <CA+G9fYsQBg2SwfAyzyJmkz2kOQa7Ef+NZVnpEwqc4y911DBzVw@mail.gmail.com>
+Subject: clang-17: selftests: vdso_standalone_test_x86.c:(.text+0x1e6):
+ undefined reference to `memcpy'
+To: clang-built-linux <llvm@lists.linux.dev>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Luiz,
+Recently we have updated toolchain clang-17 version.
 
-kernel test robot noticed the following build errors:
+While building selftests vdso following warnings / errors noticed on the
+Linux next with clang-17. but pass with gcc-13.
 
-[auto build test ERROR on linux-next/master]
-[also build test ERROR on linus/master v6.5-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-hci_core-Fix-missing-instances-using-HCI_MAX_AD_LENGTH/20230821-102220
-base:   linux-next/master
-patch link:    https://lore.kernel.org/r/20230818212211.3207580-1-luiz.dentz%40gmail.com
-patch subject: [PATCH] Bluetooth: hci_core: Fix missing instances using HCI_MAX_AD_LENGTH
-config: i386-buildonly-randconfig-002-20230821 (https://download.01.org/0day-ci/archive/20230821/202308212004.EXsdDWkd-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230821/202308212004.EXsdDWkd-lkp@intel.com/reproduce)
+make[4]: Entering directory 'tools/testing/selftests/vDSO'
+clang --target=x86_64-linux-gnu -fintegrated-as
+-Werror=unknown-warning-option -Werror=ignored-optimization-argument
+-Werror=option-ignored -Werror=unused-command-line-argument
+--target=x86_64-linux-gnu -fintegrated-as -std=gnu99 -nostdlib
+-fno-asynchronous-unwind-tables -fno-stack-protector \
+vdso_standalone_test_x86.c parse_vdso.c \
+-o /vDSO/vdso_standalone_test_x86
+vdso_standalone_test_x86.c:73:16: warning: unknown attribute
+'externally_visible' ignored [-Wunknown-attributes]
+   73 | __attribute__((externally_visible)) void c_main(void **stack)
+      |                ^~~~~~~~~~~~~~~~~~
+1 warning generated.
+parse_vdso.c:65:9: warning: using the result of an assignment as a
+condition without parentheses [-Wparentheses]
+   65 |                 if (g = h & 0xf0000000)
+      |                     ~~^~~~~~~~~~~~~~~~
+parse_vdso.c:65:9: note: place parentheses around the assignment to
+silence this warning
+   65 |                 if (g = h & 0xf0000000)
+      |                       ^
+      |                     (                 )
+parse_vdso.c:65:9: note: use '==' to turn this assignment into an
+equality comparison
+   65 |                 if (g = h & 0xf0000000)
+      |                       ^
+      |                       ==
+parse_vdso.c:206:22: warning: passing 'const char *' to parameter of
+type 'const unsigned char *' converts between pointers to integer
+types where one is of the unique plain 'char' type and the other is
+not [-Wpointer-sign]
+  206 |         ver_hash = elf_hash(version);
+      |                             ^~~~~~~
+parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+   59 | static unsigned long elf_hash(const unsigned char *name)
+      |                                                    ^
+parse_vdso.c:207:46: warning: passing 'const char *' to parameter of
+type 'const unsigned char *' converts between pointers to integer
+types where one is of the unique plain 'char' type and the other is
+not [-Wpointer-sign]
+  207 |         ELF(Word) chain = vdso_info.bucket[elf_hash(name) %
+vdso_info.nbucket];
+      |                                                     ^~~~
+parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+   59 | static unsigned long elf_hash(const unsigned char *name)
+      |                                                    ^
+3 warnings generated.
+/usr/bin/x86_64-linux-gnu-ld: /tmp/vdso_standalone_test_x86-31b09f.o:
+in function `c_main':
+vdso_standalone_test_x86.c:(.text+0x1e6): undefined reference to `memcpy'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[4]: Leaving directory 'tools/testing/selftests/vDSO'
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308212004.EXsdDWkd-lkp@intel.com/
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9Uq9EFceoQd0VL/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230821/testrun/19213783/suite/kselftest-vDSO/test/shardfile-vDSO/details/
 
-All errors (new ones prefixed by >>):
+Steps to reproduce:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9Uq9EFceoQd0VL/tuxmake_reproducer.sh
 
->> net/bluetooth/eir.c:36:19: error: use of undeclared identifier 'dev'; did you mean 'hdev'?
-           if ((max_adv_len(dev) - ad_len) < HCI_MAX_SHORT_NAME_LENGTH + 3)
-                            ^~~
-                            hdev
-   include/net/bluetooth/hci_core.h:1854:19: note: expanded from macro 'max_adv_len'
-           (ext_adv_capable(dev) ? HCI_MAX_EXT_AD_LENGTH : HCI_MAX_AD_LENGTH)
-                            ^
-   include/net/bluetooth/hci_core.h:1850:33: note: expanded from macro 'ext_adv_capable'
-   #define ext_adv_capable(dev) (((dev)->le_features[1] & HCI_LE_EXT_ADV))
-                                   ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^
-   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^
-   net/bluetooth/eir.c:30:42: note: 'hdev' declared here
-   u8 eir_append_local_name(struct hci_dev *hdev, u8 *ptr, u8 ad_len)
-                                            ^
->> net/bluetooth/eir.c:36:19: error: use of undeclared identifier 'dev'; did you mean 'hdev'?
-           if ((max_adv_len(dev) - ad_len) < HCI_MAX_SHORT_NAME_LENGTH + 3)
-                            ^~~
-                            hdev
-   include/net/bluetooth/hci_core.h:1854:19: note: expanded from macro 'max_adv_len'
-           (ext_adv_capable(dev) ? HCI_MAX_EXT_AD_LENGTH : HCI_MAX_AD_LENGTH)
-                            ^
-   include/net/bluetooth/hci_core.h:1850:33: note: expanded from macro 'ext_adv_capable'
-   #define ext_adv_capable(dev) (((dev)->le_features[1] & HCI_LE_EXT_ADV))
-                                   ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^
-   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^
-   net/bluetooth/eir.c:30:42: note: 'hdev' declared here
-   u8 eir_append_local_name(struct hci_dev *hdev, u8 *ptr, u8 ad_len)
-                                            ^
->> net/bluetooth/eir.c:36:19: error: use of undeclared identifier 'dev'; did you mean 'hdev'?
-           if ((max_adv_len(dev) - ad_len) < HCI_MAX_SHORT_NAME_LENGTH + 3)
-                            ^~~
-                            hdev
-   include/net/bluetooth/hci_core.h:1854:19: note: expanded from macro 'max_adv_len'
-           (ext_adv_capable(dev) ? HCI_MAX_EXT_AD_LENGTH : HCI_MAX_AD_LENGTH)
-                            ^
-   include/net/bluetooth/hci_core.h:1850:33: note: expanded from macro 'ext_adv_capable'
-   #define ext_adv_capable(dev) (((dev)->le_features[1] & HCI_LE_EXT_ADV))
-                                   ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^
-   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^
-   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^
-   net/bluetooth/eir.c:30:42: note: 'hdev' declared here
-   u8 eir_append_local_name(struct hci_dev *hdev, u8 *ptr, u8 ad_len)
-                                            ^
-   3 errors generated.
+tuxmake --runtime podman --target-arch x86_64 --toolchain clang-17
+--kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2UHhSg0TPLhjp9Uq9EFceoQd0VL/config
+LLVM=1 LLVM_IAS=1 debugkernel cpupower headers kernel kselftest
+modules
 
 
-vim +36 net/bluetooth/eir.c
-
-    29	
-    30	u8 eir_append_local_name(struct hci_dev *hdev, u8 *ptr, u8 ad_len)
-    31	{
-    32		size_t short_len;
-    33		size_t complete_len;
-    34	
-    35		/* no space left for name (+ NULL + type + len) */
-  > 36		if ((max_adv_len(dev) - ad_len) < HCI_MAX_SHORT_NAME_LENGTH + 3)
-    37			return ad_len;
-    38	
-    39		/* use complete name if present and fits */
-    40		complete_len = strnlen(hdev->dev_name, sizeof(hdev->dev_name));
-    41		if (complete_len && complete_len <= HCI_MAX_SHORT_NAME_LENGTH)
-    42			return eir_append_name(ptr, ad_len, EIR_NAME_COMPLETE,
-    43					       hdev->dev_name, complete_len + 1);
-    44	
-    45		/* use short name if present */
-    46		short_len = strnlen(hdev->short_name, sizeof(hdev->short_name));
-    47		if (short_len)
-    48			return eir_append_name(ptr, ad_len, EIR_NAME_SHORT,
-    49					       hdev->short_name,
-    50					       short_len == HCI_MAX_SHORT_NAME_LENGTH ?
-    51					       short_len : short_len + 1);
-    52	
-    53		/* use shortened full name if present, we already know that name
-    54		 * is longer then HCI_MAX_SHORT_NAME_LENGTH
-    55		 */
-    56		if (complete_len)
-    57			return eir_append_name(ptr, ad_len, EIR_NAME_SHORT,
-    58					       hdev->dev_name,
-    59					       HCI_MAX_SHORT_NAME_LENGTH);
-    60	
-    61		return ad_len;
-    62	}
-    63	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Linaro LKFT
+https://lkft.linaro.org
