@@ -1,45 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D991C1360;
-	Tue, 22 Aug 2023 04:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7655F1FA1;
+	Tue, 22 Aug 2023 05:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692679441; x=1724215441;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DsLjVDruSkUMF7E16G+RW+410ikjkOJm6yxPIBWVkpw=;
-  b=UUQByHwtbSmdZX8enaS/YEoead4l8ojfumq+rbvRSRKeHJzJE9szXuDF
-   DhU0wzCgkCl+rDUd0AS2FIyM3qzKgGDNvncErP6dM0DcFcfNWah0Dd8uz
-   0Dy8VbiScVgb1fiY8NLlmXLHzU3dEPHG9xarHOBC7J0bVj1fz4Y45JFlC
-   Vm5Y8ScRJ63b/FhbzeZFeps8IRFW3NMmyAJKcTHXP3U6yQ4ZDXRTVwm3E
-   7nhXkPhMp4XaBg4fW8V+/6DvHlBvnYSBJ+S737JG+EonmnBfiq1RbD8uU
-   wKSVhNv0EKvPuk8saWezqfjGcOCHP13MT/kVJqcdovdFXJMmKYLrazGd2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="358768753"
+  t=1692681122; x=1724217122;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aXAGANQWUdOju3qwQ0k64Gy9Mkc9JcoibWROSruwz9Q=;
+  b=QuAZXRtxisiDdqE+ViYOhmyyPwrqEDw0/M9daG1VjZpBQRQGM8Sfch17
+   w8xcfdjpLqaIoGSfbEpO89YY440MSOZypU4wJ18Bd57SYSjwhzAhXsER9
+   xyVvSfRkXiKi58An8xR/yjmsN3eu9jB0py3JO5s6OqLoX6wX/9pKL5NCE
+   ohR/dWN/gwGwoPcFjYK1oa9iMlILLaqwcuEvQ4annH+tdIhmy1AM4IC6c
+   cHSQjiVQYx7ZIGAfnoCeOgBPPOBYoafIe9tzEMXmnymEQeELlJeje3xAe
+   15mnHxBRlWckSXh8yuUeJO9PaWMDD2p2gQakJZOIeUanUj6l/OgIfPc0G
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="460147100"
 X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
-   d="scan'208";a="358768753"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 21:44:00 -0700
+   d="scan'208";a="460147100"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 22:12:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="1066888922"
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="685912356"
 X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
-   d="scan'208";a="1066888922"
+   d="scan'208";a="685912356"
 Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Aug 2023 21:43:54 -0700
+  by orsmga003.jf.intel.com with ESMTP; 21 Aug 2023 22:11:57 -0700
 Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYJCZ-0001Mw-0u;
-	Tue, 22 Aug 2023 04:42:21 +0000
-Date: Tue, 22 Aug 2023 12:37:27 +0800
+	id 1qYJgK-0001OM-1s;
+	Tue, 22 Aug 2023 05:11:56 +0000
+Date: Tue, 22 Aug 2023 13:11:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mao Wenan <maowenan@huawei.com>
+To: Helge Deller <deller@gmx.de>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Andrei Vagin <avagin@openvz.org>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	"Sasha Levin (Microsoft)" <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-4.14.y 10564/26782]
- drivers/tty/serial/sc16is7xx.c:1503:1: warning: unused label 'err_i2c'
-Message-ID: <202308221219.c7BXhDCc-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-parisc@vger.kernel.org
+Subject: Re: [PATCH] procfs: Fix /proc/self/maps output for 32-bit kernel and
+ compat tasks
+Message-ID: <202308221231.B7yBmSQV-lkp@intel.com>
+References: <ZOCJltW/eufPUc+T@p100>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,62 +51,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZOCJltW/eufPUc+T@p100>
 
-Hi Mao,
+Hi Helge,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-head:   d4d51e77b58d0c75103d4df5558535d0059ef324
-commit: 707615f47db3e240158abe732ef4f99e01c2a91f [10564/26782] sc16is7xx: missing unregister/delete driver on error in sc16is7xx_init()
-config: x86_64-randconfig-004-20230822 (https://download.01.org/0day-ci/archive/20230822/202308221219.c7BXhDCc-lkp@intel.com/config)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.5-rc7 next-20230821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Helge-Deller/procfs-Fix-proc-self-maps-output-for-32-bit-kernel-and-compat-tasks/20230821-100823
+base:   linus/master
+patch link:    https://lore.kernel.org/r/ZOCJltW%2FeufPUc%2BT%40p100
+patch subject: [PATCH] procfs: Fix /proc/self/maps output for 32-bit kernel and compat tasks
+config: x86_64-randconfig-013-20230821 (https://download.01.org/0day-ci/archive/20230822/202308221231.B7yBmSQV-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230822/202308221219.c7BXhDCc-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308221231.B7yBmSQV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308221219.c7BXhDCc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308221231.B7yBmSQV-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/tty/serial/sc16is7xx.c:1503:1: warning: unused label 'err_i2c' [-Wunused-label]
-   err_i2c:
-   ^~~~~~~~
-   1 warning generated.
-   /tmp/sc16is7xx-ac5cc8.s: Assembler messages:
-   /tmp/sc16is7xx-ac5cc8.s:3123: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
-   /tmp/sc16is7xx-ac5cc8.s:3155: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
-   /tmp/sc16is7xx-ac5cc8.s:3187: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
-   /tmp/sc16is7xx-ac5cc8.s:3219: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
-   /tmp/sc16is7xx-ac5cc8.s:3251: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
-   /tmp/sc16is7xx-ac5cc8.s:3283: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
-   /tmp/sc16is7xx-ac5cc8.s:3315: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
-   /tmp/sc16is7xx-ac5cc8.s:3350: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
+>> fs/seq_file.c:765:16: error: call to undeclared function 'is_compat_task'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (v == 0 || is_compat_task())
+                         ^
+   1 error generated.
 
 
-vim +/err_i2c +1503 drivers/tty/serial/sc16is7xx.c
+vim +/is_compat_task +765 fs/seq_file.c
 
-  1489	
-  1490	#ifdef CONFIG_SERIAL_SC16IS7XX_SPI
-  1491		ret = spi_register_driver(&sc16is7xx_spi_uart_driver);
-  1492		if (ret < 0) {
-  1493			pr_err("failed to init sc16is7xx spi --> %d\n", ret);
-  1494			goto err_spi;
-  1495		}
-  1496	#endif
-  1497		return ret;
-  1498	
-  1499	err_spi:
-  1500	#ifdef CONFIG_SERIAL_SC16IS7XX_I2C
-  1501		i2c_del_driver(&sc16is7xx_i2c_uart_driver);
-  1502	#endif
-> 1503	err_i2c:
-  1504		uart_unregister_driver(&sc16is7xx_uart);
-  1505		return ret;
-  1506	}
-  1507	module_init(sc16is7xx_init);
-  1508	
+   737	
+   738	/**
+   739	 * seq_put_hex_ll - put a number in hexadecimal notation
+   740	 * @m: seq_file identifying the buffer to which data should be written
+   741	 * @delimiter: a string which is printed before the number
+   742	 * @v: the number
+   743	 * @width: a minimum field width
+   744	 *
+   745	 * seq_put_hex_ll(m, "", v, 8) is equal to seq_printf(m, "%08llx", v)
+   746	 *
+   747	 * This routine is very quick when you show lots of numbers.
+   748	 * In usual cases, it will be better to use seq_printf(). It's easier to read.
+   749	 */
+   750	void seq_put_hex_ll(struct seq_file *m, const char *delimiter,
+   751					unsigned long long v, unsigned int width)
+   752	{
+   753		unsigned int len;
+   754		int i;
+   755	
+   756		if (delimiter && delimiter[0]) {
+   757			if (delimiter[1] == 0)
+   758				seq_putc(m, delimiter[0]);
+   759			else
+   760				seq_puts(m, delimiter);
+   761		}
+   762	
+   763	#ifdef CONFIG_64BIT
+   764		/* If x is 0, the result of __builtin_clzll is undefined */
+ > 765		if (v == 0 || is_compat_task())
+   766			len = 1;
+   767		else
+   768			len = (sizeof(v) * 8 - __builtin_clzll(v) + 3) / 4;
+   769	#else
+   770		/* On 32-bit kernel always use provided width */
+   771		len = 1;
+   772	#endif
+   773	
+   774		if (len < width)
+   775			len = width;
+   776	
+   777		if (m->count + len > m->size) {
+   778			seq_set_overflow(m);
+   779			return;
+   780		}
+   781	
+   782		for (i = len - 1; i >= 0; i--) {
+   783			m->buf[m->count + i] = hex_asc[0xf & v];
+   784			v = v >> 4;
+   785		}
+   786		m->count += len;
+   787	}
+   788	
 
 -- 
 0-DAY CI Kernel Test Service
