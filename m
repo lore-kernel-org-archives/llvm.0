@@ -1,87 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D83B2018C;
-	Tue, 22 Aug 2023 21:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF9C1C433C8;
-	Tue, 22 Aug 2023 21:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692738036;
-	bh=Bfl9Q+5PUYbGX93gC/p5dsy9+HHVDK69a8BX8HMEtCU=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=GZpOGvaIQjPh2lkGmj4jrgl7PGiUtpu6L07cneYELTEjIgB8Hz1gzNwk2c9ObPAmq
-	 viXdFFEbVNOD43Gz6sCjHQZxQg2e7OAsXHdD+UyK/NKk2j7zavpWtjgyY3YFxBAuUD
-	 C5fTdTtWEBm/Czz5ibqpn8wVDDdGM4w+3QQD9eLk02gSAZZ/ZASO+1gq+pRPVfL/g6
-	 0CJ6lGLxQyjRE+GQwlQ81qbXHjZLqOlRNZzGVBv0zyniq/nrtBm6+rbslW53DAMctp
-	 K1pnfey+QNClhJ3zugG68htX/BGAUZW0g8Wva8QEjsr86rP7rP3X/BOzWOYRu6JmnN
-	 IIym9YlDIldXQ==
-Message-ID: <cb4f740cd5bcb6c9b19ce970d8573388.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3DEB2018C;
+	Tue, 22 Aug 2023 21:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692738729; x=1724274729;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h47jyvY9KIJODj8/IDB8R3btLRf5d4FwKHGpYaDEhg0=;
+  b=OA8Pjy2UgLvKQwB2KrOP7MVl4kA3d8Po0VsyaIRh11YPtb14omVV+AzT
+   seR+r2vIPPOL2ysYgv+KA/McdNEebmdzwcETdSI95gKqIGhexqDJX0rEt
+   bNf+5BnjFElZqwAXApyOsIz7EpUZUVGVgrDyUpalW96Ew9wyJZcj3H1Ve
+   8MkzZMytsGwOd9lRrlOqNNNZtFCZ41xukHMm5IU4WqqjQ8mlL1a1CEECP
+   NemzmO3WUBkKPCF5AbzZ0jbsy/bh2CxZXzWOZARV4prZ4NdmMVlVThBee
+   c8Iy/I5Dv1wc85ZadCesjLpKPr2bHVZAGFgYGDwxdpt1zIYP+O5dGJOLC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="404996607"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="404996607"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 14:12:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="736380540"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="736380540"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 22 Aug 2023 14:12:06 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qYYfP-0000Wu-36;
+	Tue, 22 Aug 2023 21:12:02 +0000
+Date: Wed, 23 Aug 2023 05:11:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Berg <johannes.berg@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>
+Subject: /usr/bin/ld: init/main.o: warning: relocation in read-only section
+ `.init.text'
+Message-ID: <202308230538.sIoFzSnM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230817203019.never.795-kees@kernel.org>
-References: <20230817203019.never.795-kees@kernel.org>
-Subject: Re: [PATCH] clk: Annotate struct clk_hw_onecell_data with __counted_by
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>, Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, Qin Jian <qinjian@cqplus1.com>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Sergio Paracuellos <sergio.paracuellos@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Samuel Holland <samuel@sholland.org>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-aspe
- ed@lists.ozlabs.org, linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org, linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-To: Kees Cook <keescook@chromium.org>, Michael Turquette <mturquette@baylibre.com>
-Date: Tue, 22 Aug 2023 14:00:34 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Quoting Kees Cook (2023-08-17 13:30:22)
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
->=20
-> As found with Coccinelle[1], add __counted_by for struct clk_hw_onecell_d=
-ata.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
->=20
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/c=
-ounted_by.cocci
->=20
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Taichi Sugaya <sugaya.taichi@socionext.com>
-> Cc: Takao Orito <orito.takao@socionext.com>
-> Cc: Qin Jian <qinjian@cqplus1.com>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Gregory Clement <gregory.clement@bootlin.com>
-> Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-aspeed@lists.ozlabs.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-mediatek@lists.infradead.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-sunxi@lists.linux.dev
-> Cc: linux-phy@lists.infradead.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f7757129e3dea336c407551c98f50057c22bb266
+commit: 8c6174503c7b7134c22072b45f92724c8a959f06 um: hostfs: define our own API boundary
+date:   4 months ago
+config: um-randconfig-r036-20230822 (https://download.01.org/0day-ci/archive/20230823/202308230538.sIoFzSnM-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230538.sIoFzSnM-lkp@intel.com/reproduce)
 
-Applied to clk-next
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308230538.sIoFzSnM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> /usr/bin/ld: init/main.o: warning: relocation in read-only section `.init.text'
+   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+>> /usr/bin/ld: init/main.o: warning: relocation in read-only section `.init.text'
+   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with RWX permissions
+   /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+>> /usr/bin/ld: init/main.o: warning: relocation in read-only section `.init.text'
+   /usr/bin/ld: warning: vmlinux has a LOAD segment with RWX permissions
+   /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
