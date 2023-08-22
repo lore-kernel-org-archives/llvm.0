@@ -1,43 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3DEB2018C;
-	Tue, 22 Aug 2023 21:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A29920183;
+	Tue, 22 Aug 2023 22:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692738729; x=1724274729;
+  t=1692743195; x=1724279195;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h47jyvY9KIJODj8/IDB8R3btLRf5d4FwKHGpYaDEhg0=;
-  b=OA8Pjy2UgLvKQwB2KrOP7MVl4kA3d8Po0VsyaIRh11YPtb14omVV+AzT
-   seR+r2vIPPOL2ysYgv+KA/McdNEebmdzwcETdSI95gKqIGhexqDJX0rEt
-   bNf+5BnjFElZqwAXApyOsIz7EpUZUVGVgrDyUpalW96Ew9wyJZcj3H1Ve
-   8MkzZMytsGwOd9lRrlOqNNNZtFCZ41xukHMm5IU4WqqjQ8mlL1a1CEECP
-   NemzmO3WUBkKPCF5AbzZ0jbsy/bh2CxZXzWOZARV4prZ4NdmMVlVThBee
-   c8Iy/I5Dv1wc85ZadCesjLpKPr2bHVZAGFgYGDwxdpt1zIYP+O5dGJOLC
+  bh=/nUhKEi/fBYzKkURoZWSb/wFRFPAD0iy0hEcZ6Slxew=;
+  b=nwjeN/guWgNUyzKdfUZpoP8V+DhzdnDjWyaF8taCKjcgJr25X5Rtp/hH
+   5rbZ6Vkmy1S/vNiXEtSIPhTVHXQ1JnXDPY189suBztfLrRIxMtT/pX0iC
+   17GALsZrb0mANGjnmGFo4r68aIvkaTuSSfvzw0ebJx3eDgqZPZwud17D2
+   +G4KR9El+PvM+dGYVSe1S251pJBqHaczFBs13W4SeyuM052P8CZxobT2E
+   lcstJJ/ufXlRniihrTDjTMAqCpQCX03oDh+XQb+ejcGoTfN8y+poEdWiQ
+   i+HPhTkTpm2Vv48FxP6ayx6P0UPGFvkpiTbsmNe+Xc1irlgTwf5qM4j6s
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="404996607"
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="364192810"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="404996607"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 14:12:08 -0700
+   d="scan'208";a="364192810"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 15:26:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="736380540"
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="983047595"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="736380540"
+   d="scan'208";a="983047595"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 22 Aug 2023 14:12:06 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 22 Aug 2023 15:26:31 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYYfP-0000Wu-36;
-	Tue, 22 Aug 2023 21:12:02 +0000
-Date: Wed, 23 Aug 2023 05:11:13 +0800
+	id 1qYZpX-0000a1-0X;
+	Tue, 22 Aug 2023 22:26:31 +0000
+Date: Wed, 23 Aug 2023 06:25:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes.berg@intel.com>
+To: Rohan McLure <rmclure@linux.ibm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>
-Subject: /usr/bin/ld: init/main.o: warning: relocation in read-only section
- `.init.text'
-Message-ID: <202308230538.sIoFzSnM-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
+Subject: drivers/media/dvb-frontends/dib0090.c:2542:12: warning: stack frame
+ size (2080) exceeds limit (2048) in 'dib0090_set_params'
+Message-ID: <202308230658.YWtkC9Oz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,30 +47,168 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Hi Rohan,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f7757129e3dea336c407551c98f50057c22bb266
-commit: 8c6174503c7b7134c22072b45f92724c8a959f06 um: hostfs: define our own API boundary
-date:   4 months ago
-config: um-randconfig-r036-20230822 (https://download.01.org/0day-ci/archive/20230823/202308230538.sIoFzSnM-lkp@intel.com/config)
+head:   89bf6209cad66214d3774dac86b6bbf2aec6a30d
+commit: 6f0926c00565a91f3bd7ca1aa05db307daed5e0f powerpc/kcsan: Add KCSAN Support
+date:   6 months ago
+config: powerpc64-randconfig-r032-20230823 (https://download.01.org/0day-ci/archive/20230823/202308230658.YWtkC9Oz-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230538.sIoFzSnM-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230658.YWtkC9Oz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308230538.sIoFzSnM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308230658.YWtkC9Oz-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> /usr/bin/ld: init/main.o: warning: relocation in read-only section `.init.text'
-   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
->> /usr/bin/ld: init/main.o: warning: relocation in read-only section `.init.text'
-   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with RWX permissions
-   /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
->> /usr/bin/ld: init/main.o: warning: relocation in read-only section `.init.text'
-   /usr/bin/ld: warning: vmlinux has a LOAD segment with RWX permissions
-   /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:207:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/media/dvb-frontends/dib0090.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:211:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/media/dvb-frontends/dib0090.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:215:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/media/dvb-frontends/dib0090.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:219:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> drivers/media/dvb-frontends/dib0090.c:2542:12: warning: stack frame size (2080) exceeds limit (2048) in 'dib0090_set_params' [-Wframe-larger-than]
+   static int dib0090_set_params(struct dvb_frontend *fe)
+              ^
+   1997/2080 (96.01%) spills, 83/2080 (3.99%) variables
+   13 warnings generated.
+
+
+vim +/dib0090_set_params +2542 drivers/media/dvb-frontends/dib0090.c
+
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2541  
+14d24d148c7521 drivers/media/dvb/frontends/dib0090.c Mauro Carvalho Chehab 2011-12-24 @2542  static int dib0090_set_params(struct dvb_frontend *fe)
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2543  {
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2544  	struct dib0090_state *state = fe->tuner_priv;
+28fafca78797be drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2011-01-04  2545  	u32 ret;
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2546  
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2547  	state->tune_state = CT_TUNER_START;
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2548  
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2549  	do {
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2550  		ret = dib0090_tune(fe);
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2551  		if (ret == FE_CALLBACK_TIME_NEVER)
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2552  			break;
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2553  
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2554  		/*
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2555  		 * Despite dib0090_tune returns time at a 0.1 ms range,
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2556  		 * the actual sleep time depends on CONFIG_HZ. The worse case
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2557  		 * is when CONFIG_HZ=100. In such case, the minimum granularity
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2558  		 * is 10ms. On some real field tests, the tuner sometimes don't
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2559  		 * lock when this timer is lower than 10ms. So, enforce a 10ms
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2560  		 * granularity and use usleep_range() instead of msleep().
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2561  		 */
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2562  		ret = 10 * (ret + 99)/100;
+0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2563  		usleep_range(ret * 1000, (ret + 1) * 1000);
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2564  	} while (state->tune_state != CT_TUNER_STOP);
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2565  
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2566  	return 0;
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2567  }
+03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2568  
+
+:::::: The code at line 2542 was first introduced by commit
+:::::: 14d24d148c7521b2b88b396652e36f55d061e195 [media] tuners: remove dvb_frontend_parameters from set_params()
+
+:::::: TO: Mauro Carvalho Chehab <mchehab@redhat.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
