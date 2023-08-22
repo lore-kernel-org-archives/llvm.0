@@ -1,87 +1,220 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9343EEA8
-	for <llvm@lists.linux.dev>; Tue, 22 Aug 2023 06:54:10 +0000 (UTC)
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1c06f6f98c0so12872605ad.3
-        for <llvm@lists.linux.dev>; Mon, 21 Aug 2023 23:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692687250; x=1693292050;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ve676d4JygpyiEcrPI+SQ2vixWRAfUQkdAIluX+ykhQ=;
-        b=ebGYjVszLeF1umCyRN8bue0FD0Em8Za2f27t/3K0loeow5Jr/tJ/vfHVqXCOxPas/i
-         zK0DIDUsshJfYNZKsHiE6XhuT2GvkXFW01Ah4Jgkh5gxu9taufca8BsoEnZSxNwRjMPo
-         DKDA98HbHpWgAYP2Heckvb4ngKpcFbgYrr+FA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692687250; x=1693292050;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ve676d4JygpyiEcrPI+SQ2vixWRAfUQkdAIluX+ykhQ=;
-        b=RMGVdkrProVMQu68wf41b3gxme2SGIAdpudnRXDnAAd9NG1ZsWHOQnoh6CRXigbMXc
-         cKehZOXOr9WXjEf2OILjbZs8nV37Q/rZrE8wMzcX9qUkWULaImlxetpTMKqLRi1o5cNM
-         u43OpduPyI9deHpt8MaG+hdjU20l7HH4XNicKaaNQFCy6vaLtyw9fysajpNYSmYGAVpD
-         LRlfgIL5++PZ4WVZoz8LvtcP1DfnrZYiJItmYRavha/EuOZjNu+F2fC7ka5uADojtjFf
-         m8XI7b9VRaTynyFmHBVpdFCz8u95vRqkeCuHENnWXHoPp/QPuT0I0VTQGLPaVO6/IXSO
-         8jDA==
-X-Gm-Message-State: AOJu0YxvAnERmf+82PhogNY9CPZLeOPWA/OSsf8MhfUs3xr7NM2HHIvR
-	0dLF1hNGX0f07PV9UIIahndtFw==
-X-Google-Smtp-Source: AGHT+IHyoDY2eU7axzNzBSKrXJY9J7Jjb+Z+v7SE8quHZ+O9dYs3Fz6aKcjheAS9j0V1v5qFdeJknQ==
-X-Received: by 2002:a17:903:44c:b0:1b9:e81f:fb08 with SMTP id iw12-20020a170903044c00b001b9e81ffb08mr8315927plb.55.1692687249792;
-        Mon, 21 Aug 2023 23:54:09 -0700 (PDT)
-Received: from localhost ([2620:15c:2d3:205:c79b:9f4c:f1d8:4659])
-        by smtp.gmail.com with UTF8SMTPSA id u7-20020a170902e80700b001bdd512df9csm8219663plg.74.2023.08.21.23.54.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Aug 2023 23:54:09 -0700 (PDT)
-From: Denis Nikitin <denik@chromium.org>
-To: linux-kbuild@vger.kernel.org
-Cc: denik@chromium.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] modpost: Skip .llvm.call-graph-profile section check
-Date: Mon, 21 Aug 2023 23:52:55 -0700
-Message-ID: <20230822065256.163660-1-denik@chromium.org>
-X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C0CEA8;
+	Tue, 22 Aug 2023 06:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692687436; x=1724223436;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MMCNSzNyKaRl/6IgFJ7/jUyJusR7tBmhQi9GlVoyxA0=;
+  b=j+KOknEDNhX8t/qzn0PWMNfQpeNap7HUNY46/fbL2WEdDHONTLlQNq8m
+   VtgueM/mBbui7FVnItEkmu+90KFeSigpO9UNWPriomX/qhuBbI6JOHCLX
+   QEeW9iHlnv0SjVFak4z4izP8S4Gc/scE6kqgJIuyj18rHud8gpsw/mODl
+   H/frPcd+HX9VDaY0NsL/VBlCahXaOo5DRSCsGXIbbNhhl7mf2ccwXWrel
+   JLdhcqQUYvYwX0L5J5ahu/1qOqO0VDAyY+SafEDCIJullXJyav9ihtErF
+   1T4HOFlJMkfmSIFyOsPn3DJ75FQ0uOiYzi3owdJMxqgE4bd9SGrFITJC9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="437713060"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="437713060"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 23:57:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="713045190"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="713045190"
+Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 21 Aug 2023 23:57:10 -0700
+Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qYLJy-0001Tw-1l;
+	Tue, 22 Aug 2023 06:57:05 +0000
+Date: Tue, 22 Aug 2023 14:56:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] tracing: Fix to avoid wakeup loop in splice read of
+ per-cpu buffer
+Message-ID: <202308221429.cY9ifC65-lkp@intel.com>
+References: <169262755804.106231.8245792908363050528.stgit@devnote2>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <169262755804.106231.8245792908363050528.stgit@devnote2>
 
-.llvm.call-graph-profile section is added when the kernel is built with
-profiles (e.g. -fprofile-sample-use=<llvm.profile>). The section holds
-metadata for symbols beloning to other sections and hence doesn't need
-modpost checks.
+Hi Masami,
 
-This change fixes the kernel build with sample profiles which fails
-with:
-"FATAL: modpost: Please add code to calculate addend for this architecture"
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Denis Nikitin <denik@chromium.org>
----
- scripts/mod/modpost.c | 1 +
- 1 file changed, 1 insertion(+)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.5-rc7 next-20230821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index b29b29707f10..64bd13f7199c 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -761,6 +761,7 @@ static const char *const section_white_list[] =
- 	".fmt_slot*",			/* EZchip */
- 	".gnu.lto*",
- 	".discard.*",
-+	".llvm.call-graph-profile",	/* call graph */
- 	NULL
- };
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/tracing-Fix-to-avoid-wakeup-loop-in-splice-read-of-per-cpu-buffer/20230821-222307
+base:   linus/master
+patch link:    https://lore.kernel.org/r/169262755804.106231.8245792908363050528.stgit%40devnote2
+patch subject: [PATCH] tracing: Fix to avoid wakeup loop in splice read of per-cpu buffer
+config: arm-randconfig-r004-20230822 (https://download.01.org/0day-ci/archive/20230822/202308221429.cY9ifC65-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308221429.cY9ifC65-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308221429.cY9ifC65-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> kernel/trace/trace.c:8481:4: warning: comparison of distinct pointer types ('typeof ((full)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+    8481 |                         do_div(full, nr_pages);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> kernel/trace/trace.c:8481:4: error: incompatible pointer types passing 'size_t *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+    8481 |                         do_div(full, nr_pages);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+     238 |                 __rem = __div64_32(&(n), __base);       \
+         |                                    ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+      24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+         |                                             ^
+>> kernel/trace/trace.c:8481:4: warning: shift count >= width of type [-Wshift-count-overflow]
+    8481 |                         do_div(full, nr_pages);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+     234 |         } else if (likely(((n) >> 32) == 0)) {          \
+         |                                ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+      76 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   2 warnings and 1 error generated.
+
+
+vim +8481 kernel/trace/trace.c
+
+  8400	
+  8401		if (*ppos & (PAGE_SIZE - 1))
+  8402			return -EINVAL;
+  8403	
+  8404		if (len & (PAGE_SIZE - 1)) {
+  8405			if (len < PAGE_SIZE)
+  8406				return -EINVAL;
+  8407			len &= PAGE_MASK;
+  8408		}
+  8409	
+  8410		if (splice_grow_spd(pipe, &spd))
+  8411			return -ENOMEM;
+  8412	
+  8413	 again:
+  8414		trace_access_lock(iter->cpu_file);
+  8415		entries = ring_buffer_entries_cpu(iter->array_buffer->buffer, iter->cpu_file);
+  8416	
+  8417		for (i = 0; i < spd.nr_pages_max && len && entries; i++, len -= PAGE_SIZE) {
+  8418			struct page *page;
+  8419			int r;
+  8420	
+  8421			ref = kzalloc(sizeof(*ref), GFP_KERNEL);
+  8422			if (!ref) {
+  8423				ret = -ENOMEM;
+  8424				break;
+  8425			}
+  8426	
+  8427			refcount_set(&ref->refcount, 1);
+  8428			ref->buffer = iter->array_buffer->buffer;
+  8429			ref->page = ring_buffer_alloc_read_page(ref->buffer, iter->cpu_file);
+  8430			if (IS_ERR(ref->page)) {
+  8431				ret = PTR_ERR(ref->page);
+  8432				ref->page = NULL;
+  8433				kfree(ref);
+  8434				break;
+  8435			}
+  8436			ref->cpu = iter->cpu_file;
+  8437	
+  8438			r = ring_buffer_read_page(ref->buffer, &ref->page,
+  8439						  len, iter->cpu_file, 1);
+  8440			if (r < 0) {
+  8441				ring_buffer_free_read_page(ref->buffer, ref->cpu,
+  8442							   ref->page);
+  8443				kfree(ref);
+  8444				break;
+  8445			}
+  8446	
+  8447			page = virt_to_page(ref->page);
+  8448	
+  8449			spd.pages[i] = page;
+  8450			spd.partial[i].len = PAGE_SIZE;
+  8451			spd.partial[i].offset = 0;
+  8452			spd.partial[i].private = (unsigned long)ref;
+  8453			spd.nr_pages++;
+  8454			*ppos += PAGE_SIZE;
+  8455	
+  8456			entries = ring_buffer_entries_cpu(iter->array_buffer->buffer, iter->cpu_file);
+  8457		}
+  8458	
+  8459		trace_access_unlock(iter->cpu_file);
+  8460		spd.nr_pages = i;
+  8461	
+  8462		/* did we read anything? */
+  8463		if (!spd.nr_pages) {
+  8464			long wait_index;
+  8465			size_t nr_pages;
+  8466			size_t full;
+  8467	
+  8468			if (ret)
+  8469				goto out;
+  8470	
+  8471			ret = -EAGAIN;
+  8472			if ((file->f_flags & O_NONBLOCK) || (flags & SPLICE_F_NONBLOCK))
+  8473				goto out;
+  8474	
+  8475			wait_index = READ_ONCE(iter->wait_index);
+  8476	
+  8477			/* For splice, we have to ensure at least 1 page is filled */
+  8478			nr_pages = ring_buffer_nr_pages(iter->array_buffer->buffer, iter->cpu_file);
+  8479			if (nr_pages * iter->tr->buffer_percent < 100) {
+  8480				full = nr_pages + 99;
+> 8481				do_div(full, nr_pages);
+  8482			} else
+  8483				full = iter->tr->buffer_percent;
+  8484	
+  8485			ret = wait_on_pipe(iter, full);
+  8486			if (ret)
+  8487				goto out;
+  8488	
+  8489			/* No need to wait after waking up when tracing is off */
+  8490			if (!tracer_tracing_is_on(iter->tr))
+  8491				goto out;
+  8492	
+  8493			/* Make sure we see the new wait_index */
+  8494			smp_rmb();
+  8495			if (wait_index != iter->wait_index)
+  8496				goto out;
+  8497	
+  8498			goto again;
+  8499		}
+  8500	
+  8501		ret = splice_to_pipe(pipe, &spd);
+  8502	out:
+  8503		splice_shrink_spd(&spd);
+  8504	
+  8505		return ret;
+  8506	}
+  8507	
+
 -- 
-2.42.0.rc1.204.g551eb34607-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
