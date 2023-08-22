@@ -1,172 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089AB7F
-	for <llvm@lists.linux.dev>; Tue, 22 Aug 2023 03:11:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1692673876;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rxfat+Q5h74XaIbfZlecFTKA0wqa/Oc/nQ8VpMF0MMY=;
-	b=HWDPkEV8JHBfLCudY9dLk92kLB6bOhAVhFXOzYULzJewrWMuC0RKxX2Oo6KfMEhN+o57z/
-	P9jIRZ1WJ61FG6xKRvhgScIzVh4xTSfcWEzj8U3LtWh3URhuWuIHDhiUEGrIV3Jpgue8o1
-	QPXBr2WDGgdbaHKJzPSrGfPv8UPOwIk=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-633-GCtfVLt1OLGGYzv1qFRKig-1; Mon, 21 Aug 2023 23:11:13 -0400
-X-MC-Unique: GCtfVLt1OLGGYzv1qFRKig-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9CDF3C108C1
-	for <llvm@lists.linux.dev>; Tue, 22 Aug 2023 03:11:12 +0000 (UTC)
-Received: from [172.64.4.37] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A5226492C13;
-	Tue, 22 Aug 2023 03:11:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 12 of 267): Test report for master
- (6.5.0-rc7, mainline.kernel.org-clang, f7757129)
-Date: Tue, 22 Aug 2023 03:11:12 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52AF7F;
+	Tue, 22 Aug 2023 03:13:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692674017; x=1724210017;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gMhOPpln6PZIB0MFQoFjB/JJWAZsbI5O+vFGGPRmOJo=;
+  b=X7ezVimv67n4AUXjJf0G/48UeO/nUtpSsXZa9s/Q3gEwop7FxpcanK37
+   86GMzKXgN1rqLWR2POFgx+r1jWv24TEFZNs6NOryUpsN50cvjFXb7jrcg
+   pX9JloB1t3QS58pGBaah7bVb0MDy/ws+ec46P9GGjpJRbLI3zAE2KcukB
+   YEPAajBm1aAn7XlYCOIlqj5a218URWRe31viZrMshkytuzjK2wR4tmn0w
+   +0+ZVrTo2QQMMxZCCnsf0dcKNVxDKOLwwHL+LPYpxWWOgswSlgV2arQLr
+   RcAcAcNGN2ekJC/4CLj/yuhfJQHwMGdgSMKZklKcYJJLgD6TCuKs6xxZY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="363932362"
+X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
+   d="scan'208";a="363932362"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 20:13:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="806129175"
+X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
+   d="scan'208";a="806129175"
+Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Aug 2023 20:13:33 -0700
+Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qYHpk-0001Hc-1B;
+	Tue, 22 Aug 2023 03:13:32 +0000
+Date: Tue, 22 Aug 2023 11:12:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Michael S . Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org,
+	eric.dumazet@gmail.com, Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next 3/3] net: l2tp_eth: use generic dev->stats fields
+Message-ID: <202308221125.rGMwm9uv-lkp@intel.com>
+References: <20230819044059.833749-4-edumazet@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <48579.123082123111300151@us-mta-633.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230819044059.833749-4-edumazet@google.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Eric,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on net-next/main]
 
-Kernel information:
-    Commit message: Merge tag 'v6.5-p3' of git://git.kernel.org/pub/scm/lin=
-ux/kernel/git/herbert/crypto-2.6
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-add-DEV_STATS_READ-helper/20230821-110051
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230819044059.833749-4-edumazet%40google.com
+patch subject: [PATCH net-next 3/3] net: l2tp_eth: use generic dev->stats fields
+config: i386-randconfig-015-20230822 (https://download.01.org/0day-ci/archive/20230822/202308221125.rGMwm9uv-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308221125.rGMwm9uv-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/100787
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308221125.rGMwm9uv-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9210478
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/002
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/016
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/017
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/030
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9210479
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9210765
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/002
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/016
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/017
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/030
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9210766
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-          x86_64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9210660
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/002
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/016
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/017
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/030
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9210661
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
+>> net/l2tp/l2tp_eth.c:121:19: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
+           struct l2tp_eth *priv;
+                            ^
+   1 warning generated.
 
 
+vim +/priv +121 net/l2tp/l2tp_eth.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+d9e31d17ceba5f James Chapman    2010-04-02  116  
+d9e31d17ceba5f James Chapman    2010-04-02  117  static void l2tp_eth_dev_recv(struct l2tp_session *session, struct sk_buff *skb, int data_len)
+d9e31d17ceba5f James Chapman    2010-04-02  118  {
+d9e31d17ceba5f James Chapman    2010-04-02  119  	struct l2tp_eth_sess *spriv = l2tp_session_priv(session);
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  120  	struct net_device *dev;
+ee28de6bbd78c2 Guillaume Nault  2017-10-27 @121  	struct l2tp_eth *priv;
+d9e31d17ceba5f James Chapman    2010-04-02  122  
+c0cc88a7627c33 Eric Dumazet     2012-09-04  123  	if (!pskb_may_pull(skb, ETH_HLEN))
+d9e31d17ceba5f James Chapman    2010-04-02  124  		goto error;
+d9e31d17ceba5f James Chapman    2010-04-02  125  
+d9e31d17ceba5f James Chapman    2010-04-02  126  	secpath_reset(skb);
+d9e31d17ceba5f James Chapman    2010-04-02  127  
+d9e31d17ceba5f James Chapman    2010-04-02  128  	/* checksums verified by L2TP */
+d9e31d17ceba5f James Chapman    2010-04-02  129  	skb->ip_summed = CHECKSUM_NONE;
+d9e31d17ceba5f James Chapman    2010-04-02  130  
+d9e31d17ceba5f James Chapman    2010-04-02  131  	skb_dst_drop(skb);
+895b5c9f206eb7 Florian Westphal 2019-09-29  132  	nf_reset_ct(skb);
+d9e31d17ceba5f James Chapman    2010-04-02  133  
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  134  	rcu_read_lock();
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  135  	dev = rcu_dereference(spriv->dev);
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  136  	if (!dev)
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  137  		goto error_rcu;
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  138  
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  139  	priv = netdev_priv(dev);
+d9e31d17ceba5f James Chapman    2010-04-02  140  	if (dev_forward_skb(dev, skb) == NET_RX_SUCCESS) {
+b9494cd37a920d Eric Dumazet     2023-08-19  141  		DEV_STATS_INC(dev, rx_packets);
+b9494cd37a920d Eric Dumazet     2023-08-19  142  		DEV_STATS_ADD(dev, rx_bytes, data_len);
+a2842a1e663297 Eric Dumazet     2012-06-25  143  	} else {
+b9494cd37a920d Eric Dumazet     2023-08-19  144  		DEV_STATS_INC(dev, rx_errors);
+a2842a1e663297 Eric Dumazet     2012-06-25  145  	}
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  146  	rcu_read_unlock();
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  147  
+d9e31d17ceba5f James Chapman    2010-04-02  148  	return;
+d9e31d17ceba5f James Chapman    2010-04-02  149  
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  150  error_rcu:
+ee28de6bbd78c2 Guillaume Nault  2017-10-27  151  	rcu_read_unlock();
+d9e31d17ceba5f James Chapman    2010-04-02  152  error:
+d9e31d17ceba5f James Chapman    2010-04-02  153  	kfree_skb(skb);
+d9e31d17ceba5f James Chapman    2010-04-02  154  }
+d9e31d17ceba5f James Chapman    2010-04-02  155  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
