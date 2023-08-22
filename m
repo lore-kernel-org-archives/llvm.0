@@ -1,185 +1,151 @@
-Received: from mail-pg1-f205.google.com (mail-pg1-f205.google.com [209.85.215.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD7F8F59
-	for <llvm@lists.linux.dev>; Tue, 22 Aug 2023 09:39:57 +0000 (UTC)
-Received: by mail-pg1-f205.google.com with SMTP id 41be03b00d2f7-564fa3b49e1so4592304a12.0
-        for <llvm@lists.linux.dev>; Tue, 22 Aug 2023 02:39:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692697196; x=1693301996;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UICpq6r5xOWf0+sNmvDtxNk8IwDDZXnsUDmAR56LhQs=;
-        b=LDTMFSfrb1Fvu4VT3a7uFnAXZoo7sMrvTcXE2ftdNQKxN5aoxwk7qTD2z2mQtDGGjF
-         5ZT8DNiSWuzWbmexIqLw/QpSdGyTORC6+zv4k5YyV/T0UPM4v4Sifmmeer/dx9AVHmuV
-         FAfz0CoVuWvWzyaZyQZiISKPRVPcx0GUzTBPZPU6oNa5yeBG7cNZZKZYNe9XLZZHkeDm
-         JPGZLnBu5u8F/i04G5UdyUaKlI49gecsvK36O0Cs8/Zhmyz+58vyyKmEa7ky4EE04ldc
-         xA8byX2XnLl8Gcb/hkLMQnH+g0iAZcLj+aE4lBlgqEWI1EQ/kmdkoSRuxTNyOJUVk81O
-         oq+A==
-X-Gm-Message-State: AOJu0YxQQHMHbqqJXGq6tL3tgO8+SRiAmfLi97Nwwlk+mceGEB8Nj+hm
-	4/teVw+cUYuz0wHxdvnBS72Iewvom3Jp3zBzNuLjztj0E4jT
-X-Google-Smtp-Source: AGHT+IGfYLilLfst0g4d42LBpBLoGkF/gZvEyIAIEFbaFQGmxf2atEBqZH8ClJV/Fw81XB4/PplqK760mwcYgvYym19rKUmKfl68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056E79472;
+	Tue, 22 Aug 2023 11:15:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692702906; x=1724238906;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i75HhlflSSi41MyaHt4baASVCVCa+LKBNgLm73EWvHk=;
+  b=IR02bbVCYxLfO2Vf9OWVbifW6g1qbYrbVGnjcRsLnmqWQZx9W9Bhkt0f
+   0qTTXCGlL+5o1/xUDnGbAXSKofZBSxi6sJskPduV3vovSYHFn4/ZaDm48
+   59E7ijAMOHxTxvD1+zsUgM69trtSTDHUHq3sBsKyaGhhPnM8iRh2LIk0t
+   4hQBV3aBq5bOkJBP9Q/jv8WrYp1fFu3Gh4HdQsOwrWgzqEg2l9w7j4pdf
+   NyW2vRuTwaCOYIJF96ZqGGbLqSOjxSKRSIyDqgUd8xG+4/G8xo7GCzGvW
+   9KRriYxb6tsY+cc3sAh7YC+rauzwLlEamX1EdQZ2V1G/ydNO7n49FXy3Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="377608496"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="377608496"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 04:15:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="765708401"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="765708401"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 22 Aug 2023 04:15:02 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qYPLg-00008y-2n;
+	Tue, 22 Aug 2023 11:15:01 +0000
+Date: Tue, 22 Aug 2023 19:14:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:file0yZ50U 278/279]
+ sound/soc/intel/common/soc-acpi-intel-rpl-match.c:369:41: error:
+ redefinition of 'rpl_nau8318_amp'
+Message-ID: <202308221955.FkglAuTF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a63:754f:0:b0:564:6e43:a00d with SMTP id
- f15-20020a63754f000000b005646e43a00dmr1185691pgn.3.1692697196708; Tue, 22 Aug
- 2023 02:39:56 -0700 (PDT)
-Date: Tue, 22 Aug 2023 02:39:56 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001f4d4806037fc7b8@google.com>
-Subject: [syzbot] [mm?] kernel BUG in free_unref_page_prepare
-From: syzbot <syzbot+7423f066b632d9ff23d5@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git file0yZ50U
+head:   1465811cf7b52be6e4468f9acd678a0b05e2bd4a
+commit: 6b8b6892e43419f5339c47d307b1baac0eea036d [278/279] ASoC: Intel: Add rpl_nau8318_8825 driver
+config: i386-randconfig-r022-20230822 (https://download.01.org/0day-ci/archive/20230822/202308221955.FkglAuTF-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308221955.FkglAuTF-lkp@intel.com/reproduce)
 
-syzbot found the following issue on:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308221955.FkglAuTF-lkp@intel.com/
 
-HEAD commit:    7271b2a53042 Add linux-next specific files for 20230818
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=119dbe4ba80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1936af09cdef7dd6
-dashboard link: https://syzkaller.appspot.com/bug?extid=7423f066b632d9ff23d5
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112386f3a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15044717a80000
+All errors (new ones prefixed by >>):
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d81109bc02c1/disk-7271b2a5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4b3bf8e2a4f7/vmlinux-7271b2a5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6404cd473c1e/bzImage-7271b2a5.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7423f066b632d9ff23d5@syzkaller.appspotmail.com
-
- __do_sys_mmap arch/x86/kernel/sys_x86_64.c:93 [inline]
- __se_sys_mmap arch/x86/kernel/sys_x86_64.c:86 [inline]
- __x64_sys_mmap+0x125/0x190 arch/x86/kernel/sys_x86_64.c:86
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1136 [inline]
- free_unref_page_prepare+0x476/0xa40 mm/page_alloc.c:2348
- free_unref_page+0x33/0x3b0 mm/page_alloc.c:2441
- free_contig_range+0xb6/0x190 mm/page_alloc.c:6391
- destroy_args+0x768/0x990 mm/debug_vm_pgtable.c:1028
- debug_vm_pgtable+0x1d7e/0x3e00 mm/debug_vm_pgtable.c:1408
- do_one_initcall+0x117/0x630 init/main.c:1232
- do_initcall_level init/main.c:1294 [inline]
- do_initcalls init/main.c:1310 [inline]
- do_basic_setup init/main.c:1329 [inline]
- kernel_init_freeable+0x5c2/0x900 init/main.c:1547
- kernel_init+0x1c/0x2a0 init/main.c:1437
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
-------------[ cut here ]------------
-kernel BUG at mm/page_alloc.c:1107!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5045 Comm: syz-executor350 Not tainted 6.5.0-rc6-next-20230818-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-RIP: 0010:free_pages_prepare mm/page_alloc.c:1107 [inline]
-RIP: 0010:free_unref_page_prepare+0x885/0xa40 mm/page_alloc.c:2348
-Code: 48 89 d7 e8 5d 2e f4 ff 0f 0b c7 44 24 08 00 00 00 00 4d 8d 77 40 e9 79 fd ff ff 48 c7 c6 80 b9 99 8a 4c 89 ff e8 3b 2e f4 ff <0f> 0b 48 89 ef e8 81 db 0b 00 e9 aa f7 ff ff 4c 89 f7 e8 74 db 0b
-RSP: 0018:ffffc9000397f6c0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000009 RCX: 0000000000000000
-RDX: ffff88807af30000 RSI: ffffffff81d178f5 RDI: 0000000000000000
-RBP: ffffea0001b10008 R08: 0000000000000000 R09: fffffbfff1d9bbf2
-R10: ffffffff8ecddf97 R11: 1ffffffff1976ca9 R12: 000000000006c400
-R13: 0000000000000009 R14: ffffea0001b10040 R15: ffffea0001b10000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f154f89164c CR3: 0000000029448000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- free_unref_page+0x33/0x3b0 mm/page_alloc.c:2441
- __update_and_free_hugetlb_folio+0x3c1/0x4a0 mm/hugetlb.c:1765
- update_and_free_hugetlb_folio+0x82/0x120 mm/hugetlb.c:1821
- free_huge_folio+0x6e0/0xbb0 mm/hugetlb.c:1917
- release_pages+0x51b/0x14e0 mm/swap.c:1008
- __folio_batch_release+0x77/0xe0 mm/swap.c:1062
- folio_batch_release include/linux/pagevec.h:83 [inline]
- remove_inode_hugepages+0xb7b/0xe20 fs/hugetlbfs/inode.c:691
- hugetlbfs_evict_inode+0x22/0x70 fs/hugetlbfs/inode.c:703
- evict+0x2ed/0x6b0 fs/inode.c:664
- iput_final fs/inode.c:1775 [inline]
- iput.part.0+0x55e/0x7a0 fs/inode.c:1801
- iput+0x5c/0x80 fs/inode.c:1791
- dentry_unlink_inode+0x292/0x430 fs/dcache.c:401
- __dentry_kill+0x3b8/0x640 fs/dcache.c:607
- dentry_kill fs/dcache.c:733 [inline]
- dput+0x8dd/0xfd0 fs/dcache.c:913
- __fput+0x536/0xa70 fs/file_table.c:392
- task_work_run+0x14d/0x240 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xa99/0x2a20 kernel/exit.c:874
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- __do_sys_exit_group kernel/exit.c:1035 [inline]
- __se_sys_exit_group kernel/exit.c:1033 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f154f8c0b09
-Code: Unable to access opcode bytes at 0x7f154f8c0adf.
-RSP: 002b:00007fffeb55e118 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f154f8c0b09
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 00007f154f93b290 R08: ffffffffffffffb8 R09: 0000000000000000
-R10: 0000000000048031 R11: 0000000000000246 R12: 00007f154f93b290
-R13: 0000000000000000 R14: 00007f154f93bce0 R15: 00007f154f891d60
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:free_pages_prepare mm/page_alloc.c:1107 [inline]
-RIP: 0010:free_unref_page_prepare+0x885/0xa40 mm/page_alloc.c:2348
-Code: 48 89 d7 e8 5d 2e f4 ff 0f 0b c7 44 24 08 00 00 00 00 4d 8d 77 40 e9 79 fd ff ff 48 c7 c6 80 b9 99 8a 4c 89 ff e8 3b 2e f4 ff <0f> 0b 48 89 ef e8 81 db 0b 00 e9 aa f7 ff ff 4c 89 f7 e8 74 db 0b
-RSP: 0018:ffffc9000397f6c0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000009 RCX: 0000000000000000
-RDX: ffff88807af30000 RSI: ffffffff81d178f5 RDI: 0000000000000000
-RBP: ffffea0001b10008 R08: 0000000000000000 R09: fffffbfff1d9bbf2
-R10: ffffffff8ecddf97 R11: 1ffffffff1976ca9 R12: 000000000006c400
-R13: 0000000000000009 R14: ffffea0001b10040 R15: ffffea0001b10000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d22c54e0b8 CR3: 0000000029448000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> sound/soc/intel/common/soc-acpi-intel-rpl-match.c:369:41: error: redefinition of 'rpl_nau8318_amp'
+   static const struct snd_soc_acpi_codecs rpl_nau8318_amp = {
+                                           ^
+   sound/soc/intel/common/soc-acpi-intel-rpl-match.c:359:41: note: previous definition is here
+   static const struct snd_soc_acpi_codecs rpl_nau8318_amp = {
+                                           ^
+>> sound/soc/intel/common/soc-acpi-intel-rpl-match.c:432:19: error: redeclaration of 'snd_soc_acpi_intel_rpl_machines' with a different type: 'typeof (snd_soc_acpi_intel_rpl_machines)' vs 'struct snd_soc_acpi_mach[]'
+   EXPORT_SYMBOL_GPL(snd_soc_acpi_intel_rpl_machines);
+                     ^
+   sound/soc/intel/common/soc-acpi-intel-rpl-match.c:374:26: note: previous definition is here
+   struct snd_soc_acpi_mach snd_soc_acpi_intel_rpl_machines[] = {
+                            ^
+   2 errors generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +/rpl_nau8318_amp +369 sound/soc/intel/common/soc-acpi-intel-rpl-match.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+   368	
+ > 369	static const struct snd_soc_acpi_codecs rpl_nau8318_amp = {
+   370		.num_codecs = 1,
+   371		.codecs = {"NVTN2012"}
+   372	};
+   373	
+   374	struct snd_soc_acpi_mach snd_soc_acpi_intel_rpl_machines[] = {
+   375		{
+   376			.comp_ids = &rpl_rt5682_hp,
+   377			.drv_name = "rpl_mx98357_rt5682",
+   378			.machine_quirk = snd_soc_acpi_codec_list,
+   379			.quirk_data = &rpl_max98357a_amp,
+   380			.sof_tplg_filename = "sof-rpl-max98357a-rt5682.tplg",
+   381		},
+   382		{
+   383			.comp_ids = &rpl_rt5682_hp,
+   384			.drv_name = "rpl_mx98360_rt5682",
+   385			.machine_quirk = snd_soc_acpi_codec_list,
+   386			.quirk_data = &rpl_max98360a_amp,
+   387			.sof_tplg_filename = "sof-rpl-max98360a-rt5682.tplg",
+   388		},
+   389		{
+   390			.id = "10508825",
+   391			.drv_name = "rpl_max98373_8825",
+   392			.machine_quirk = snd_soc_acpi_codec_list,
+   393			.quirk_data = &rpl_max98373_amp,
+   394			.sof_tplg_filename = "sof-rpl-max98373-nau8825.tplg",
+   395		},
+   396		{
+   397			.id = "10508825",
+   398			.drv_name = "rpl_nau8318_8825",
+   399			.machine_quirk = snd_soc_acpi_codec_list,
+   400			.quirk_data = &rpl_nau8318_amp,
+   401			.sof_tplg_filename = "sof-rpl-nau8318-nau8825.tplg",
+   402		},
+   403		{
+   404			.comp_ids = &rpl_rt5682_hp,
+   405			.drv_name = "rpl_rt1019_rt5682",
+   406			.machine_quirk = snd_soc_acpi_codec_list,
+   407			.quirk_data = &rpl_rt1019p_amp,
+   408			.sof_tplg_filename = "sof-rpl-rt1019-rt5682.tplg",
+   409		},
+   410		{
+   411			.comp_ids = &rpl_essx_83x6,
+   412			.drv_name = "rpl_es83x6_c1_h02",
+   413			.machine_quirk = snd_soc_acpi_codec_list,
+   414			.quirk_data = &rpl_lt6911_hdmi,
+   415			.sof_tplg_filename = "sof-rpl-es83x6-ssp1-hdmi-ssp02.tplg",
+   416		},
+   417		{
+   418			.comp_ids = &rpl_essx_83x6,
+   419			.drv_name = "sof-essx8336",
+   420			.sof_tplg_filename = "sof-rpl-es83x6", /* the tplg suffix is added at run time */
+   421			.tplg_quirk_mask = SND_SOC_ACPI_TPLG_INTEL_SSP_NUMBER |
+   422						SND_SOC_ACPI_TPLG_INTEL_SSP_MSB |
+   423						SND_SOC_ACPI_TPLG_INTEL_DMIC_NUMBER,
+   424		},
+   425		{
+   426			.id = "INTC10B0",
+   427			.drv_name = "rpl_lt6911_hdmi_ssp",
+   428			.sof_tplg_filename = "sof-rpl-nocodec-hdmi-ssp02.tplg"
+   429		},
+   430		{},
+   431	};
+ > 432	EXPORT_SYMBOL_GPL(snd_soc_acpi_intel_rpl_machines);
+   433	
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
