@@ -1,43 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A29920183;
-	Tue, 22 Aug 2023 22:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7637020EE0;
+	Tue, 22 Aug 2023 23:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692743195; x=1724279195;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/nUhKEi/fBYzKkURoZWSb/wFRFPAD0iy0hEcZ6Slxew=;
-  b=nwjeN/guWgNUyzKdfUZpoP8V+DhzdnDjWyaF8taCKjcgJr25X5Rtp/hH
-   5rbZ6Vkmy1S/vNiXEtSIPhTVHXQ1JnXDPY189suBztfLrRIxMtT/pX0iC
-   17GALsZrb0mANGjnmGFo4r68aIvkaTuSSfvzw0ebJx3eDgqZPZwud17D2
-   +G4KR9El+PvM+dGYVSe1S251pJBqHaczFBs13W4SeyuM052P8CZxobT2E
-   lcstJJ/ufXlRniihrTDjTMAqCpQCX03oDh+XQb+ejcGoTfN8y+poEdWiQ
-   i+HPhTkTpm2Vv48FxP6ayx6P0UPGFvkpiTbsmNe+Xc1irlgTwf5qM4j6s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="364192810"
+  t=1692745849; x=1724281849;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3c2oE48QdtSIDfdgYyeQETAU7cBTOr2uHvBC3KHuxjw=;
+  b=Oy3H4frHtzWN7hGSdfTaOCk64jYAVPsP0yDveqNjcYvWkIN3gdZv/GoY
+   MkMG5Vm6o0aspxFLArbPLPgH/99M+8w5TNyJdfT012m27D0HdjHz/e8p1
+   G/WtEX1NYrvzyW3hxLAKDwbJHy24H0ESmJOx1VMCOA6gRDG3pU/WiZQpO
+   tEdy/3FffOBhxTBKrbmpmOm5tMep4QC3zrP6giynRnP2PoK4Ir+bPbH1P
+   Kl6ZPIXDYxwzF5FPGjruKYFqp8nTm4KTvZO46ZdY+W7b4OOAiryCx6vo1
+   VkARoINlR3zUP92YA8dUPZCZGL86+VfbCDKj8j3yAV3bxgno0WlR46Yb0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="405015238"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="364192810"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 15:26:34 -0700
+   d="scan'208";a="405015238"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 16:10:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="983047595"
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="736414493"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="983047595"
+   d="scan'208";a="736414493"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Aug 2023 15:26:31 -0700
+  by orsmga002.jf.intel.com with ESMTP; 22 Aug 2023 16:10:43 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYZpX-0000a1-0X;
-	Tue, 22 Aug 2023 22:26:31 +0000
-Date: Wed, 23 Aug 2023 06:25:40 +0800
+	id 1qYaWI-0000bs-1u;
+	Tue, 22 Aug 2023 23:10:42 +0000
+Date: Wed, 23 Aug 2023 07:10:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rohan McLure <rmclure@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Subject: drivers/media/dvb-frontends/dib0090.c:2542:12: warning: stack frame
- size (2080) exceeds limit (2048) in 'dib0090_set_params'
-Message-ID: <202308230658.YWtkC9Oz-lkp@intel.com>
+To: Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	manivannan.sadhasivam@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, helgaas@kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
+	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+	quic_ramkri@quicinc.com, quic_parass@quicinc.com,
+	krzysztof.kozlowski@linaro.org,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	"(open list:OPERATING PERFORMANCE POINTS (OPP))" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 3/4] OPP: Add api to retrieve opps which is at most
+ the provided level
+Message-ID: <202308230637.gz3wmjrT-lkp@intel.com>
+References: <1692717141-32743-4-git-send-email-quic_krichai@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,169 +57,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1692717141-32743-4-git-send-email-quic_krichai@quicinc.com>
 
-Hi Rohan,
+Hi Krishna,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   89bf6209cad66214d3774dac86b6bbf2aec6a30d
-commit: 6f0926c00565a91f3bd7ca1aa05db307daed5e0f powerpc/kcsan: Add KCSAN Support
-date:   6 months ago
-config: powerpc64-randconfig-r032-20230823 (https://download.01.org/0day-ci/archive/20230823/202308230658.YWtkC9Oz-lkp@intel.com/config)
+[auto build test WARNING on pci/for-linus]
+[also build test WARNING on robh/for-next rafael-pm/linux-next linus/master v6.5-rc7 next-20230822]
+[cannot apply to pci/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-chaitanya-chundru/dt-bindings-pci-qcom-Add-opp-table/20230822-232104
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
+patch link:    https://lore.kernel.org/r/1692717141-32743-4-git-send-email-quic_krichai%40quicinc.com
+patch subject: [PATCH v4 3/4] OPP: Add api to retrieve opps which is at most the provided level
+config: x86_64-randconfig-073-20230823 (https://download.01.org/0day-ci/archive/20230823/202308230637.gz3wmjrT-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230658.YWtkC9Oz-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230637.gz3wmjrT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308230658.YWtkC9Oz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308230637.gz3wmjrT-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:207:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/media/dvb-frontends/dib0090.c:15:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:211:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/media/dvb-frontends/dib0090.c:15:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/media/dvb-frontends/dib0090.c:15:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:219:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/media/dvb-frontends/dib0090.c:2542:12: warning: stack frame size (2080) exceeds limit (2048) in 'dib0090_set_params' [-Wframe-larger-than]
-   static int dib0090_set_params(struct dvb_frontend *fe)
-              ^
-   1997/2080 (96.01%) spills, 83/2080 (3.99%) variables
-   13 warnings generated.
+>> drivers/opp/core.c:756: warning: Function parameter or member 'level' not described in 'dev_pm_opp_find_level_floor'
+>> drivers/opp/core.c:756: warning: Excess function parameter 'freq' description in 'dev_pm_opp_find_level_floor'
+   drivers/opp/core.c:2025: warning: Function parameter or member 'opp_table' not described in '_opp_set_supported_hw'
+   drivers/opp/core.c:2025: warning: Excess function parameter 'dev' description in '_opp_set_supported_hw'
+   drivers/opp/core.c:2068: warning: Function parameter or member 'opp_table' not described in '_opp_set_prop_name'
+   drivers/opp/core.c:2068: warning: Excess function parameter 'dev' description in '_opp_set_prop_name'
+   drivers/opp/core.c:2109: warning: Function parameter or member 'opp_table' not described in '_opp_set_regulators'
+   drivers/opp/core.c:2109: warning: Excess function parameter 'count' description in '_opp_set_regulators'
+   drivers/opp/core.c:2213: warning: Function parameter or member 'opp_table' not described in '_opp_set_clknames'
+   drivers/opp/core.c:2213: warning: Function parameter or member 'config_clks' not described in '_opp_set_clknames'
+   drivers/opp/core.c:2311: warning: Function parameter or member 'opp_table' not described in '_opp_set_config_regulators_helper'
+   drivers/opp/core.c:2375: warning: Function parameter or member 'opp_table' not described in '_opp_attach_genpd'
+   drivers/opp/core.c:2602: warning: Function parameter or member 'token' not described in 'dev_pm_opp_clear_config'
+   drivers/opp/core.c:2602: warning: Excess function parameter 'opp_table' description in 'dev_pm_opp_clear_config'
 
 
-vim +/dib0090_set_params +2542 drivers/media/dvb-frontends/dib0090.c
+vim +756 drivers/opp/core.c
 
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2541  
-14d24d148c7521 drivers/media/dvb/frontends/dib0090.c Mauro Carvalho Chehab 2011-12-24 @2542  static int dib0090_set_params(struct dvb_frontend *fe)
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2543  {
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2544  	struct dib0090_state *state = fe->tuner_priv;
-28fafca78797be drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2011-01-04  2545  	u32 ret;
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2546  
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2547  	state->tune_state = CT_TUNER_START;
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2548  
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2549  	do {
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2550  		ret = dib0090_tune(fe);
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2551  		if (ret == FE_CALLBACK_TIME_NEVER)
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2552  			break;
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2553  
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2554  		/*
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2555  		 * Despite dib0090_tune returns time at a 0.1 ms range,
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2556  		 * the actual sleep time depends on CONFIG_HZ. The worse case
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2557  		 * is when CONFIG_HZ=100. In such case, the minimum granularity
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2558  		 * is 10ms. On some real field tests, the tuner sometimes don't
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2559  		 * lock when this timer is lower than 10ms. So, enforce a 10ms
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2560  		 * granularity and use usleep_range() instead of msleep().
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2561  		 */
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2562  		ret = 10 * (ret + 99)/100;
-0de04ca1dc0bd3 drivers/media/dvb-frontends/dib0090.c Mauro Carvalho Chehab 2014-07-04  2563  		usleep_range(ret * 1000, (ret + 1) * 1000);
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2564  	} while (state->tune_state != CT_TUNER_STOP);
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2565  
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2566  	return 0;
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2567  }
-03245a5ee69a5f drivers/media/dvb/frontends/dib0090.c Olivier Grenie        2009-12-04  2568  
-
-:::::: The code at line 2542 was first introduced by commit
-:::::: 14d24d148c7521b2b88b396652e36f55d061e195 [media] tuners: remove dvb_frontend_parameters from set_params()
-
-:::::: TO: Mauro Carvalho Chehab <mchehab@redhat.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@redhat.com>
+   734	
+   735	
+   736	/**
+   737	 * dev_pm_opp_find_level_floor() - Search for a rounded floor freq
+   738	 * @dev:	device for which we do this operation
+   739	 * @freq:	Start level
+   740	 *
+   741	 * Search for the matching floor *available* OPP from a starting level
+   742	 * for a device.
+   743	 *
+   744	 * Return: matching *opp and refreshes *level accordingly, else returns
+   745	 * ERR_PTR in case of error and should be handled using IS_ERR. Error return
+   746	 * values can be:
+   747	 * EINVAL:	for bad pointer
+   748	 * ERANGE:	no match found for search
+   749	 * ENODEV:	if device not found in list of registered devices
+   750	 *
+   751	 * The callers are required to call dev_pm_opp_put() for the returned OPP after
+   752	 * use.
+   753	 */
+   754	struct dev_pm_opp *dev_pm_opp_find_level_floor(struct device *dev,
+   755						      unsigned long *level)
+ > 756	{
+   757		return _find_key_floor(dev, level, 0, true, _read_level, NULL);
+   758	}
+   759	EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_floor);
+   760	
 
 -- 
 0-DAY CI Kernel Test Service
