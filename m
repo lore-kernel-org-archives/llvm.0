@@ -1,109 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49860BE4D
-	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 13:32:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5126C433C7;
-	Wed, 23 Aug 2023 13:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA23DBE7C
+	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 14:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC8EC433C8;
+	Wed, 23 Aug 2023 14:12:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692797522;
-	bh=wTn3isAqqk+t81XyNdYbxia/Ad1Si3J428HEivbrf2I=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=IR6qlqzQg6igQ/9syCO/6OvdectOVNbsoNpiIiR/cEMXUlhS69uiwCYR3aXvyK/qn
-	 pr9r7l7d0Hidy1PcOjwUqgOwpLdISqwCYDLhfQEfY1AIMn5i9CtqwX+1/PJyvs4YBg
-	 21dZXBv4IokYl0gQYiHsCgxM9/DactqacHmjnLcIyBPMkiDpcMEy26uTlJVyc5cmNO
-	 hAGdvPR7qPXr88aRuaNVHZHVhgh1S2hHMZBU/fWcg34gy0um1j4APcDgVTC73mI4XA
-	 p/bO4oCwS8Rljjr0cmC68xe7S3kNsYigL4RthcphADyP+qI0D8D0cRpCsJf/93WgcW
-	 kh4jV74KUmkow==
-Date: Wed, 23 Aug 2023 14:31:57 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Conor Dooley <conor.dooley@microchip.com>
-List-Id: <linux-riscv.lore.kernel.org>
-Cc: patchwork-bot+linux-riscv@kernel.org,
-	Mingzheng Xing <xingmingzheng@iscas.ac.cn>,
-	linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com, bmeng@tinylab.org,
-	guoren@kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v5] riscv: Handle zicsr/zifencei issue between gcc and
- binutils
-Message-ID: <20230823-facelift-ovary-41f2eb4d9eac@spud>
-References: <20230809165648.21071-1-xingmingzheng@iscas.ac.cn>
- <169228562484.20811.14246462375671910714.git-patchwork-notify@kernel.org>
- <20230823-captive-abdomen-befd942a4a73@wendy>
+	s=k20201202; t=1692799949;
+	bh=aK8sjaMMZCwX9NyCciICkzG/hN1SXAT3vqzO/pjFLfU=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=Wy3UBr+NXNWEJ0EK7Z7zSFIDDpS79KrygtZ/M2QrDWykNrZLB+nC9TuIzBKj4M8zd
+	 5F65MB/Z0zUhZ9oKfA9Q3KY4flQE9A8KrD9MkMU33jMOwLkYcv5kNiYlCDZbUbv4Kb
+	 2ZbBV9iSvOMAmq6xk52O2Y/0R5luCW1sTkzQ/k0ouQ5P9weP9OODRuMCcEHcEgZDay
+	 OIK7YO++zXlzbsGUZRnglE8CIUGRkmGqCl1i5wGwnqnsYCcV2fLI46KNlS1m9LrfJj
+	 JFH45QVbUGqx6BPARaJw7K3a43L1itv8zwQ+6XAHsnH4Bp/KTX0n18o4zlkiQndEe8
+	 vTbCdSNWmP59g==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="t4zP4cEKxycq2r5X"
-Content-Disposition: inline
-In-Reply-To: <20230823-captive-abdomen-befd942a4a73@wendy>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] wireless: ath: remove unused-but-set parameter
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230814073255.1065242-1-arnd@kernel.org>
+References: <20230814073255.1065242-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Jeff Johnson <quic_jjohnson@quicinc.com>,
+ Jiri Slaby <jirislaby@kernel.org>, Nick Kossifidis <mickflemm@gmail.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rg?=
+	=?utf-8?q?ensen?= <toke@toke.dk>, Arnd Bergmann <arnd@arndb.de>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Aloka Dixit <quic_alokad@quicinc.com>, Wen Gong <quic_wgong@quicinc.com>,
+ Ramya Gnanasekar <quic_rgnanase@quicinc.com>,
+ Karthik M <quic_karm@quicinc.com>,
+ Aditya Kumar Singh <quic_adisi@quicinc.com>,
+ Muna Sinada <quic_msinada@quicinc.com>,
+ Johannes Berg <johannes.berg@intel.com>, ath12k@lists.infradead.org,
+ linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
+Message-ID: <169279994309.1241462.4902060190559349249.kvalo@kernel.org>
+Date: Wed, 23 Aug 2023 14:12:24 +0000 (UTC)
 
+Arnd Bergmann <arnd@kernel.org> wrote:
 
---t4zP4cEKxycq2r5X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> This has never been used since the driver was merged, but it now causes
+> a W=1 warning in recent clang versions
+> 
+> drivers/net/wireless/ath/ath9k/main.c:1566:21: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
+> drivers/net/wireless/ath/ath9k/htc_drv_main.c:1258:25: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
+> drivers/net/wireless/ath/ath5k/mac80211-ops.c:367:62: error: parameter 'changed_flags' set but not used [-Werror,-Wunused-but-set-parameter]
+> 
+> Remove the bit manipulation on the otherwise unused parameter.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-On Wed, Aug 23, 2023 at 12:51:13PM +0100, Conor Dooley wrote:
-> On Thu, Aug 17, 2023 at 03:20:24PM +0000, patchwork-bot+linux-riscv@kerne=
-l.org wrote:
-> > Hello:
-> >=20
-> > This patch was applied to riscv/linux.git (fixes)
-> > by Palmer Dabbelt <palmer@rivosinc.com>:
-> >=20
-> > On Thu, 10 Aug 2023 00:56:48 +0800 you wrote:
-> > > Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to the=
- newer
-> > > 20191213 version which moves some instructions from the I extension t=
-o the
-> > > Zicsr and Zifencei extensions. So if one of the binutils and GCC exce=
-eds
-> > > that version, we should explicitly specifying Zicsr and Zifencei via =
--march
-> > > to cope with the new changes. but this only occurs when binutils >=3D=
- 2.36
-> > > and GCC >=3D 11.1.0. It's a different story when binutils < 2.36.
-> > >=20
-> > > [...]
-> >=20
-> > Here is the summary with links:
-> >   - [v5] riscv: Handle zicsr/zifencei issue between gcc and binutils
-> >     https://git.kernel.org/riscv/c/ca09f772ccca
->=20
-> *sigh* so this breaks the build for gcc-11 & binutils 2.37 w/
-> 	Assembler messages:
-> 	Error: cannot find default versions of the ISA extension `zicsr'
-> 	Error: cannot find default versions of the ISA extension `zifencei'
->=20
-> I'll have a poke later.
+Patch applied to ath-next branch of ath.git, thanks.
 
-So uh, are we sure that this should not be:
--       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC &&=
- GCC_VERSION < 110100)
-+       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC &&=
- GCC_VERSION <=3D 110100)
+3b86f86d0f16 wifi: ath: remove unused-but-set parameter
 
-My gcc-11.1 + binutils 2.37 toolchain built from riscv-gnu-toolchain
-doesn't have the default versions & the above diff fixes the build.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230814073255.1065242-1-arnd@kernel.org/
 
-Thanks,
-Conor.
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
---t4zP4cEKxycq2r5X
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZOYKTQAKCRB4tDGHoIJi
-0j0mAQC/dAakOtKVIdAXlSLgJ4/8vCec4WO3cCO3pmTQ3qMdrAD7BY2ORdI1A3Sm
-bhyeikCboYot3QNuYvvFBtqt30XnCQg=
-=Ia53
------END PGP SIGNATURE-----
-
---t4zP4cEKxycq2r5X--
