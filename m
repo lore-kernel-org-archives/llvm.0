@@ -1,138 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEF7CA40;
-	Wed, 23 Aug 2023 16:26:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692808014; x=1724344014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p+QCSo7Rvow0+W1Uj7taMmY+Cl5pg16z6fZ0NSSfq38=;
-  b=euDGMQBogxZacReenZslcFXxEaTXzhiCXfxuEml2f2jdDStUsW3r2H+F
-   gLBFdAuWfCFpkbQ5BKCDKYzsBDWQH81arSCaE8p4cGyFKdHyHxkixj8JT
-   ZZhoqVbLG/O9tnyKS+hTVaBbB8iJ8OQ+rQJ9uGib+iNvBO+YbyFDSxonS
-   i71lsxss4GHijOGBWz7j/oNf6Uy0lxzmKU/3OKAOcr5AU4/I85mzPG+XF
-   d2eBCuRZBxoP93AiOQ6bmKl/lVjXDrposQP69nqlWxzCkQfX0b22w9JgS
-   sLhVaG/UkhKWjTg01GKJroYaTOuR1U381jNyUrFiwT9ZkmGJn2T/JEDng
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="460573150"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="460573150"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 09:26:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="766203103"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="766203103"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 23 Aug 2023 09:26:50 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qYqgz-0001Lb-2A;
-	Wed, 23 Aug 2023 16:26:49 +0000
-Date: Thu, 24 Aug 2023 00:26:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 1/2] drm/display/dp: Default 8 bpc support when DSC is
- supported
-Message-ID: <202308240007.1edS9XsL-lkp@intel.com>
-References: <20230823115425.715644-2-ankit.k.nautiyal@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852569445;
+	Wed, 23 Aug 2023 16:33:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A79BC433C7;
+	Wed, 23 Aug 2023 16:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692808381;
+	bh=oAGOZ+ekiLiOmp7hE1/xSBjmF1EMKp3By99T76ldHzg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=KfEEuG4PAxY+ze4/trTba3y0v4nzMF2BU5VQfCVQnFpu9pRUZ7Ux3SN75/QrFpzAo
+	 MFD6Brikt3mf0knjuDtlvfKsjFOVpLszis5h6+dIcBXSXmxFkhf6OeJnMpl0Suhjbp
+	 fXMKS6ja78Kxrp4Ky6hzacwWbjwDctt+8eeWfPbk2uF2qFYibsYCNurqPBr7aWUjNV
+	 jRmSmMi4luN/Q48pxbKV6KufC86IzQPlrKe22/CJA+t0YWHOSRlxtfRx0xHg1DfGBz
+	 h1hmiNhG66WLAZDwpR9GqTB+sD3W1pNbvMMab3higzVyUnatOzoyR4HOscDsYI+kCD
+	 Y02cA9VNqcG8g==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 23 Aug 2023 09:32:50 -0700
+Subject: [PATCH] ASoC: cs42l43: Initialize ret in default case in
+ cs42l43_pll_ev()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230823115425.715644-2-ankit.k.nautiyal@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230823-cs42l43_pll_ev-init-ret-v1-1-5836f1ad5dad@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALE05mQC/x3MQQqDMBBG4avIrB2ISVqlVxGRaH/bgZBKEkQI3
+ t3Q5bd4r1BCFCR6NYUiDknyCxVd29D6deEDlnc1aaWNGrThNVntrZl372ccLEEyR2Telg62h1N
+ P9aBa7xGbnP/zOF3XDdE0twtpAAAA
+To: james.schulman@cirrus.com, david.rhodes@cirrus.com, 
+ rf@opensource.cirrus.com, ckeepax@opensource.cirrus.com, broonie@kernel.org
+Cc: lgirdwood@gmail.com, ndesaulniers@google.com, trix@redhat.com, 
+ alsa-devel@alsa-project.org, patches@opensource.cirrus.com, 
+ patches@lists.linux.dev, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1488; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=oAGOZ+ekiLiOmp7hE1/xSBjmF1EMKp3By99T76ldHzg=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCnPTPYo171w2Pom4577NeuFIve5ctWWe6hPO5ci+n2Sl
+ vCFvXyKHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiJqWMDL8NDPbONpAy98zu
+ 0lzgG++Uff/7vt1ZdyL9ti07WRGWrM7I8Ej8WpfCI3N3u5163u4vuTd9f/s1nd1pt3cij9BRtfe
+ buQA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Ankit,
+clang warns (or errors with CONFIG_WERROR=y):
 
-kernel test robot noticed the following build warnings:
+  sound/soc/codecs/cs42l43.c:1371:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+   1371 |         default:
+        |         ^~~~~~~
+  sound/soc/codecs/cs42l43.c:1377:9: note: uninitialized use occurs here
+   1377 |         return ret;
+        |                ^~~
+  sound/soc/codecs/cs42l43.c:1349:9: note: initialize the variable 'ret' to silence this warning
+   1349 |         int ret;
+        |                ^
+        |                 = 0
+  1 error generated.
 
-[auto build test WARNING on drm-tip/drm-tip]
-[also build test WARNING on linus/master v6.5-rc7 next-20230823]
-[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Initialize ret to 0 in the default case, as there was nothing to do for
+other event types.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ankit-Nautiyal/drm-display-dp-Default-8-bpc-support-when-DSC-is-supported/20230823-195946
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230823115425.715644-2-ankit.k.nautiyal%40intel.com
-patch subject: [PATCH 1/2] drm/display/dp: Default 8 bpc support when DSC is supported
-config: i386-randconfig-r036-20230823 (https://download.01.org/0day-ci/archive/20230824/202308240007.1edS9XsL-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240007.1edS9XsL-lkp@intel.com/reproduce)
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1922
+Fixes: fc918cbe874e ("ASoC: cs42l43: Add support for the cs42l43")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ sound/soc/codecs/cs42l43.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308240007.1edS9XsL-lkp@intel.com/
+diff --git a/sound/soc/codecs/cs42l43.c b/sound/soc/codecs/cs42l43.c
+index 55a79219af35..18178ffa82f2 100644
+--- a/sound/soc/codecs/cs42l43.c
++++ b/sound/soc/codecs/cs42l43.c
+@@ -1369,6 +1369,7 @@ static int cs42l43_pll_ev(struct snd_soc_dapm_widget *w,
+ 			clk_disable_unprepare(priv->mclk);
+ 		break;
+ 	default:
++		ret = 0;
+ 		break;
+ 	}
+ 
 
-All warnings (new ones prefixed by >>):
+---
+base-commit: 014ee0692f29da8b08fed5da0fa14e04698a50f7
+change-id: 20230823-cs42l43_pll_ev-init-ret-fb1e47ea0605
 
->> drivers/gpu/drm/display/drm_dp_helper.c:2451:6: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
-           if (!dsc_dpcd[DP_DSC_SUPPORT] & DP_DSC_DECOMPRESSION_IS_SUPPORTED)
-               ^                         ~
-   drivers/gpu/drm/display/drm_dp_helper.c:2451:6: note: add parentheses after the '!' to evaluate the bitwise operator first
-           if (!dsc_dpcd[DP_DSC_SUPPORT] & DP_DSC_DECOMPRESSION_IS_SUPPORTED)
-               ^
-                (                                                           )
-   drivers/gpu/drm/display/drm_dp_helper.c:2451:6: note: add parentheses around left hand side expression to silence this warning
-           if (!dsc_dpcd[DP_DSC_SUPPORT] & DP_DSC_DECOMPRESSION_IS_SUPPORTED)
-               ^
-               (                        )
-   1 warning generated.
-
-
-vim +2451 drivers/gpu/drm/display/drm_dp_helper.c
-
-  2428	
-  2429	/**
-  2430	 * drm_dp_dsc_sink_supported_input_bpcs() - Get all the input bits per component
-  2431	 * values supported by the DSC sink.
-  2432	 * @dsc_dpcd: DSC capabilities from DPCD
-  2433	 * @dsc_bpc: An array to be filled by this helper with supported
-  2434	 *           input bpcs.
-  2435	 *
-  2436	 * Read the DSC DPCD from the sink device to parse the supported bits per
-  2437	 * component values. This is used to populate the DSC parameters
-  2438	 * in the &struct drm_dsc_config by the driver.
-  2439	 * Driver creates an infoframe using these parameters to populate
-  2440	 * &struct drm_dsc_pps_infoframe. These are sent to the sink using DSC
-  2441	 * infoframe using the helper function drm_dsc_pps_infoframe_pack()
-  2442	 *
-  2443	 * Returns:
-  2444	 * Number of input BPC values parsed from the DPCD
-  2445	 */
-  2446	int drm_dp_dsc_sink_supported_input_bpcs(const u8 dsc_dpcd[DP_DSC_RECEIVER_CAP_SIZE],
-  2447						 u8 dsc_bpc[3])
-  2448	{
-  2449		int num_bpc = 0;
-  2450	
-> 2451		if (!dsc_dpcd[DP_DSC_SUPPORT] & DP_DSC_DECOMPRESSION_IS_SUPPORTED)
-  2452			return 0;
-  2453	
-  2454		u8 color_depth = dsc_dpcd[DP_DSC_DEC_COLOR_DEPTH_CAP - DP_DSC_SUPPORT];
-  2455	
-  2456		if (color_depth & DP_DSC_12_BPC)
-  2457			dsc_bpc[num_bpc++] = 12;
-  2458		if (color_depth & DP_DSC_10_BPC)
-  2459			dsc_bpc[num_bpc++] = 10;
-  2460	
-  2461		/* A DP DSC Sink devices shall support 8 bpc. */
-  2462		dsc_bpc[num_bpc++] = 8;
-  2463	
-  2464		return num_bpc;
-  2465	}
-  2466	EXPORT_SYMBOL(drm_dp_dsc_sink_supported_input_bpcs);
-  2467	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
