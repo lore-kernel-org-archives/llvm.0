@@ -1,43 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFF01F173;
-	Wed, 23 Aug 2023 17:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9185C139;
+	Wed, 23 Aug 2023 17:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692811336; x=1724347336;
+  t=1692811338; x=1724347338;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TRSVJG/W0Bk671i1ql5KQDA57pfaIv3KhrYANEx351w=;
-  b=OgPYNXmFnylkGhwOjx8D0pg7/wOkzPfvahYXIGVQJilUUYaW17JywyDA
-   U6IRYmTOoX7zt5dGve+XgkTn5vjphqF3nYrgqcKMLSq4xHjZneV/wAaRo
-   RFyyXnNdDnbCSdjxJESN+QwYerVbZmoXciisb/QYOHvBezQ3KDD850E3c
-   AqhFJBEiVdAtOn/ZrVH+bHVj+xxscSN4FMNz9FWHtrgYHf5oFcTk7toF8
-   19sH9/ZOOtKiYkwkA4C9yWGIPF+SOsOEKQHXLIwYmeXo53CN9DDXO42yO
-   U3TdYTQJckKCV668iuPL17BughY5ZOAv+tD+g0qBHx6/tg9i6OyX0bu9d
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="377976893"
+  bh=UZbRmCx3FnjE1IPnG2qMSW8wsV/xlzM6uLH/OIlfDpQ=;
+  b=Mkg25v3Anf/w/+uu18vtsJh+IPf9lF+nyZ4XqEEC3QoXxv19R8Z8okOe
+   y5ZF3Wa0HaQUew7j9QtDE1Vl9B6EucgVQLAZ/jMsN0KJ5u9kYl780z6lh
+   +4gYbK//cxcOf3AhSpMpgZELcgmIBOkbnLiEvqgbCv3bqyPDHfs1R6ovZ
+   K/tThmdEUDqtkBGE1ZSOm9eMH+qONghJLHVW8G1jks07r62LZoPdE2xIs
+   Pcb5AbsrEuyExcYGb/SeN/3N8WZQLknTtk0aij31tnC+H0Dt18A1QDXVP
+   12U4CAs33AsuIb2AzvG/a9nQGrrCtUZETnoDcwwC9xxAUc5x+jy7In/Ku
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="377976898"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="377976893"
+   d="scan'208";a="377976898"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 10:22:13 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 10:22:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="730284638"
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="730284644"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="730284638"
+   d="scan'208";a="730284644"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
   by orsmga007.jf.intel.com with ESMTP; 23 Aug 2023 10:22:11 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYrYZ-0001NE-04;
-	Wed, 23 Aug 2023 17:22:11 +0000
-Date: Thu, 24 Aug 2023 01:21:59 +0800
+	id 1qYrYY-0001N1-2D;
+	Wed, 23 Aug 2023 17:22:10 +0000
+Date: Thu, 24 Aug 2023 01:21:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Geliang Tang <geliang.tang@suse.com>
+To: Khadija Kamran <kamrankhadijadj@gmail.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	ztarkhani@microsoft.com, alison.schofield@intel.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC mptcp-next v2 2/2] mptcp: add bpf_burst set/get params
-Message-ID: <202308240117.eY4mqax7-lkp@intel.com>
-References: <486891cb494ba4e9eeb02b6e220ca670dbc80866.1692788531.git.geliang.tang@suse.com>
+Subject: Re: [PATCH] lsm: constify 'mnt_opts' parameter in
+ security_free_mnt_opts()
+Message-ID: <202308240128.Gsn0b0Fv-lkp@intel.com>
+References: <ZOXG/VVC1XRc7TtI@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,283 +54,169 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <486891cb494ba4e9eeb02b6e220ca670dbc80866.1692788531.git.geliang.tang@suse.com>
+In-Reply-To: <ZOXG/VVC1XRc7TtI@gmail.com>
 
-Hi Geliang,
+Hi Khadija,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on mptcp/export]
-[cannot apply to mptcp/export-net linus/master v6.5-rc7 next-20230823]
+[auto build test ERROR on pcmoore-selinux/next]
+[also build test ERROR on pcmoore-audit/next linus/master v6.5-rc7 next-20230823]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Geliang-Tang/mptcp-add-set-get-params-wrappers/20230823-190626
-base:   https://github.com/multipath-tcp/mptcp_net-next.git export
-patch link:    https://lore.kernel.org/r/486891cb494ba4e9eeb02b6e220ca670dbc80866.1692788531.git.geliang.tang%40suse.com
-patch subject: [RFC mptcp-next v2 2/2] mptcp: add bpf_burst set/get params
-config: um-randconfig-r014-20230823 (https://download.01.org/0day-ci/archive/20230824/202308240117.eY4mqax7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240117.eY4mqax7-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Khadija-Kamran/lsm-constify-mnt_opts-parameter-in-security_free_mnt_opts/20230823-170310
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+patch link:    https://lore.kernel.org/r/ZOXG%2FVVC1XRc7TtI%40gmail.com
+patch subject: [PATCH] lsm: constify 'mnt_opts' parameter in security_free_mnt_opts()
+config: riscv-randconfig-001-20230823 (https://download.01.org/0day-ci/archive/20230824/202308240128.Gsn0b0Fv-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240128.Gsn0b0Fv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308240117.eY4mqax7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308240128.Gsn0b0Fv-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/mptcp/sched.c:14:
-   In file included from include/net/bpf_sk_storage.h:11:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/mptcp/sched.c:14:
-   In file included from include/net/bpf_sk_storage.h:11:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/mptcp/sched.c:14:
-   In file included from include/net/bpf_sk_storage.h:11:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from net/mptcp/sched.c:14:
->> include/net/bpf_sk_storage.h:64:1: warning: no previous prototype for function 'bpf_sk_storage_lookup' [-Wmissing-prototypes]
-      64 | bpf_sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit)
-         | ^
-   include/net/bpf_sk_storage.h:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      63 | struct bpf_local_storage_data *
-         | ^
-         | static 
-   net/mptcp/sched.c:211:10: error: no member named 'sk_bpf_storage' in 'struct sock'
-     211 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
-         |             ~~  ^
-   net/mptcp/sched.c:211:32: error: no member named 'sk_bpf_storage' in 'struct sock'
-     211 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
-         |                                   ~~  ^
-   net/mptcp/sched.c:212:18: error: no member named 'sk_bpf_storage' in 'struct sock'
-     212 |             !strcmp(sk->sk_bpf_storage->smap->map.name, "mptcp_burst_map")) {
-         |                     ~~  ^
-   net/mptcp/sched.c:215:42: error: no member named 'sk_bpf_storage' in 'struct sock'
-     215 |                 sdata = bpf_sk_storage_lookup(sk, &sk->sk_bpf_storage->smap->map, true);
-         |                                                    ~~  ^
-   net/mptcp/sched.c:239:10: error: no member named 'sk_bpf_storage' in 'struct sock'
-     239 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
-         |             ~~  ^
-   net/mptcp/sched.c:239:32: error: no member named 'sk_bpf_storage' in 'struct sock'
-     239 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
-         |                                   ~~  ^
-   net/mptcp/sched.c:240:18: error: no member named 'sk_bpf_storage' in 'struct sock'
-     240 |             !strcmp(sk->sk_bpf_storage->smap->map.name, "mptcp_burst_map")) {
-         |                     ~~  ^
-   net/mptcp/sched.c:243:42: error: no member named 'sk_bpf_storage' in 'struct sock'
-     243 |                 sdata = bpf_sk_storage_lookup(sk, &sk->sk_bpf_storage->smap->map, true);
-         |                                                    ~~  ^
-   13 warnings and 8 errors generated.
---
-   In file included from net/core/sock.c:91:
-   In file included from include/linux/errqueue.h:6:
-   In file included from include/net/ip.h:22:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/core/sock.c:91:
-   In file included from include/linux/errqueue.h:6:
-   In file included from include/net/ip.h:22:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/core/sock.c:91:
-   In file included from include/linux/errqueue.h:6:
-   In file included from include/net/ip.h:22:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from net/core/sock.c:138:
->> include/net/bpf_sk_storage.h:64:1: warning: no previous prototype for function 'bpf_sk_storage_lookup' [-Wmissing-prototypes]
-      64 | bpf_sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit)
-         | ^
-   include/net/bpf_sk_storage.h:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      63 | struct bpf_local_storage_data *
-         | ^
-         | static 
-   13 warnings generated.
+>> fs/btrfs/super.c:1523:25: error: passing 'void **' to parameter of type 'const void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           security_free_mnt_opts(&new_sec_opts);
+                                  ^~~~~~~~~~~~~
+   include/linux/security.h:301:42: note: passing argument to parameter 'mnt_opts' here
+   void security_free_mnt_opts(const void **mnt_opts);
+                                            ^
+   fs/btrfs/super.c:1536:25: error: passing 'void **' to parameter of type 'const void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           security_free_mnt_opts(&new_sec_opts);
+                                  ^~~~~~~~~~~~~
+   include/linux/security.h:301:42: note: passing argument to parameter 'mnt_opts' here
+   void security_free_mnt_opts(const void **mnt_opts);
+                                            ^
+   fs/btrfs/super.c:1699:26: error: passing 'void **' to parameter of type 'const void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   security_free_mnt_opts(&new_sec_opts);
+                                          ^~~~~~~~~~~~~
+   include/linux/security.h:301:42: note: passing argument to parameter 'mnt_opts' here
+   void security_free_mnt_opts(const void **mnt_opts);
+                                            ^
+   3 errors generated.
 
 
-vim +/bpf_sk_storage_lookup +64 include/net/bpf_sk_storage.h
+vim +1523 fs/btrfs/super.c
 
-    30	
-    31	#ifdef CONFIG_BPF_SYSCALL
-    32	int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk);
-    33	struct bpf_sk_storage_diag *
-    34	bpf_sk_storage_diag_alloc(const struct nlattr *nla_stgs);
-    35	void bpf_sk_storage_diag_free(struct bpf_sk_storage_diag *diag);
-    36	int bpf_sk_storage_diag_put(struct bpf_sk_storage_diag *diag,
-    37				    struct sock *sk, struct sk_buff *skb,
-    38				    int stg_array_type,
-    39				    unsigned int *res_diag_size);
-    40	struct bpf_local_storage_data *
-    41	bpf_sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit);
-    42	#else
-    43	static inline int bpf_sk_storage_clone(const struct sock *sk,
-    44					       struct sock *newsk)
-    45	{
-    46		return 0;
-    47	}
-    48	static inline struct bpf_sk_storage_diag *
-    49	bpf_sk_storage_diag_alloc(const struct nlattr *nla)
-    50	{
-    51		return NULL;
-    52	}
-    53	static inline void bpf_sk_storage_diag_free(struct bpf_sk_storage_diag *diag)
-    54	{
-    55	}
-    56	static inline int bpf_sk_storage_diag_put(struct bpf_sk_storage_diag *diag,
-    57						  struct sock *sk, struct sk_buff *skb,
-    58						  int stg_array_type,
-    59						  unsigned int *res_diag_size)
-    60	{
-    61		return 0;
-    62	}
-    63	struct bpf_local_storage_data *
-  > 64	bpf_sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit)
-    65	{
-    66		return NULL;
-    67	}
-    68	#endif
-    69	
+450ba0ea06b6ed Josef Bacik       2010-11-19  1427  
+312c89fbca0689 Misono, Tomohiro  2017-12-14  1428  /*
+312c89fbca0689 Misono, Tomohiro  2017-12-14  1429   * Find a superblock for the given device / mount point.
+312c89fbca0689 Misono, Tomohiro  2017-12-14  1430   *
+312c89fbca0689 Misono, Tomohiro  2017-12-14  1431   * Note: This is based on mount_bdev from fs/super.c with a few additions
+312c89fbca0689 Misono, Tomohiro  2017-12-14  1432   *       for multiple device setup.  Make sure to keep it in sync.
+312c89fbca0689 Misono, Tomohiro  2017-12-14  1433   */
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1434  static struct dentry *btrfs_mount_root(struct file_system_type *fs_type,
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1435  		int flags, const char *device_name, void *data)
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1436  {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1437  	struct block_device *bdev = NULL;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1438  	struct super_block *s;
+36350e95a2b1fe Gu Jinxiang       2018-07-12  1439  	struct btrfs_device *device = NULL;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1440  	struct btrfs_fs_devices *fs_devices = NULL;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1441  	struct btrfs_fs_info *fs_info = NULL;
+204cc0ccf1d49c Al Viro           2018-12-13  1442  	void *new_sec_opts = NULL;
+05bdb9965305bb Christoph Hellwig 2023-06-08  1443  	blk_mode_t mode = sb_open_mode(flags);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1444  	int error = 0;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1445  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1446  	if (data) {
+a65001e8a4d465 Al Viro           2018-12-10  1447  		error = security_sb_eat_lsm_opts(data, &new_sec_opts);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1448  		if (error)
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1449  			return ERR_PTR(error);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1450  	}
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1451  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1452  	/*
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1453  	 * Setup a dummy root and fs_info for test/set super.  This is because
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1454  	 * we don't actually fill this stuff out until open_ctree, but we need
+8260edba67a2e6 Josef Bacik       2020-01-24  1455  	 * then open_ctree will properly initialize the file system specific
+8260edba67a2e6 Josef Bacik       2020-01-24  1456  	 * settings later.  btrfs_init_fs_info initializes the static elements
+8260edba67a2e6 Josef Bacik       2020-01-24  1457  	 * of the fs_info (locks and such) to make cleanup easier if we find a
+8260edba67a2e6 Josef Bacik       2020-01-24  1458  	 * superblock with our given fs_devices later on at sget() time.
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1459  	 */
+a8fd1f71749387 Jeff Mahoney      2018-02-15  1460  	fs_info = kvzalloc(sizeof(struct btrfs_fs_info), GFP_KERNEL);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1461  	if (!fs_info) {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1462  		error = -ENOMEM;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1463  		goto error_sec_opts;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1464  	}
+8260edba67a2e6 Josef Bacik       2020-01-24  1465  	btrfs_init_fs_info(fs_info);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1466  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1467  	fs_info->super_copy = kzalloc(BTRFS_SUPER_INFO_SIZE, GFP_KERNEL);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1468  	fs_info->super_for_commit = kzalloc(BTRFS_SUPER_INFO_SIZE, GFP_KERNEL);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1469  	if (!fs_info->super_copy || !fs_info->super_for_commit) {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1470  		error = -ENOMEM;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1471  		goto error_fs_info;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1472  	}
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1473  
+399f7f4c42e8a5 David Sterba      2018-06-19  1474  	mutex_lock(&uuid_mutex);
+2ef789288afd36 Christoph Hellwig 2023-06-08  1475  	error = btrfs_parse_device_options(data, mode);
+81ffd56b574535 David Sterba      2018-06-19  1476  	if (error) {
+399f7f4c42e8a5 David Sterba      2018-06-19  1477  		mutex_unlock(&uuid_mutex);
+399f7f4c42e8a5 David Sterba      2018-06-19  1478  		goto error_fs_info;
+81ffd56b574535 David Sterba      2018-06-19  1479  	}
+399f7f4c42e8a5 David Sterba      2018-06-19  1480  
+2ef789288afd36 Christoph Hellwig 2023-06-08  1481  	device = btrfs_scan_one_device(device_name, mode);
+36350e95a2b1fe Gu Jinxiang       2018-07-12  1482  	if (IS_ERR(device)) {
+399f7f4c42e8a5 David Sterba      2018-06-19  1483  		mutex_unlock(&uuid_mutex);
+36350e95a2b1fe Gu Jinxiang       2018-07-12  1484  		error = PTR_ERR(device);
+399f7f4c42e8a5 David Sterba      2018-06-19  1485  		goto error_fs_info;
+81ffd56b574535 David Sterba      2018-06-19  1486  	}
+399f7f4c42e8a5 David Sterba      2018-06-19  1487  
+36350e95a2b1fe Gu Jinxiang       2018-07-12  1488  	fs_devices = device->fs_devices;
+399f7f4c42e8a5 David Sterba      2018-06-19  1489  	fs_info->fs_devices = fs_devices;
+399f7f4c42e8a5 David Sterba      2018-06-19  1490  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1491  	error = btrfs_open_devices(fs_devices, mode, fs_type);
+f5194e34cabadd David Sterba      2018-06-19  1492  	mutex_unlock(&uuid_mutex);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1493  	if (error)
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1494  		goto error_fs_info;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1495  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1496  	if (!(flags & SB_RDONLY) && fs_devices->rw_devices == 0) {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1497  		error = -EACCES;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1498  		goto error_close_devices;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1499  	}
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1500  
+d24fa5c1da0802 Anand Jain        2021-08-24  1501  	bdev = fs_devices->latest_dev->bdev;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1502  	s = sget(fs_type, btrfs_test_super, btrfs_set_super, flags | SB_NOSEC,
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1503  		 fs_info);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1504  	if (IS_ERR(s)) {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1505  		error = PTR_ERR(s);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1506  		goto error_close_devices;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1507  	}
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1508  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1509  	if (s->s_root) {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1510  		btrfs_close_devices(fs_devices);
+0d4b0463011de0 Josef Bacik       2020-01-24  1511  		btrfs_free_fs_info(fs_info);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1512  		if ((flags ^ s->s_flags) & SB_RDONLY)
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1513  			error = -EBUSY;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1514  	} else {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1515  		snprintf(s->s_id, sizeof(s->s_id), "%pg", bdev);
+e33c267ab70de4 Roman Gushchin    2022-05-31  1516  		shrinker_debugfs_rename(&s->s_shrink, "sb-%s:%s", fs_type->name,
+e33c267ab70de4 Roman Gushchin    2022-05-31  1517  					s->s_id);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1518  		btrfs_sb(s)->bdev_holder = fs_type;
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1519  		error = btrfs_fill_super(s, fs_devices, data);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1520  	}
+a65001e8a4d465 Al Viro           2018-12-10  1521  	if (!error)
+204cc0ccf1d49c Al Viro           2018-12-13  1522  		error = security_sb_set_mnt_opts(s, new_sec_opts, 0, NULL);
+a65001e8a4d465 Al Viro           2018-12-10 @1523  	security_free_mnt_opts(&new_sec_opts);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1524  	if (error) {
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1525  		deactivate_locked_super(s);
+a65001e8a4d465 Al Viro           2018-12-10  1526  		return ERR_PTR(error);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1527  	}
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1528  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1529  	return dget(s->s_root);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1530  
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1531  error_close_devices:
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1532  	btrfs_close_devices(fs_devices);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1533  error_fs_info:
+0d4b0463011de0 Josef Bacik       2020-01-24  1534  	btrfs_free_fs_info(fs_info);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1535  error_sec_opts:
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1536  	security_free_mnt_opts(&new_sec_opts);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1537  	return ERR_PTR(error);
+72fa39f5c7a1c9 Misono, Tomohiro  2017-12-14  1538  }
+312c89fbca0689 Misono, Tomohiro  2017-12-14  1539  
 
 -- 
 0-DAY CI Kernel Test Service
