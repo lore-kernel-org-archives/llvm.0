@@ -1,85 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EEB1C3F;
-	Wed, 23 Aug 2023 21:09:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B352C433C7;
-	Wed, 23 Aug 2023 21:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692824944;
-	bh=OF5HJLG5FzsNNhmPY/VyYpOOUEVm3L9+q1JsGFn1ulc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=OlF1Si3rIqIafTdto8/wWcEkfcJW3vMy6f1dXKj8rC8vDSkwCRZARXc8pFOpHcGAX
-	 J5EUQvKgGyA2fRcpDucTMc4/V3k604hVLHApj3UeaI/eGyIU00RlhyaJBSz6TT4MLt
-	 EvY2XwnGU/GoLcbz5Iy/VrJPyWH17b2TZGWyV1FMaKg8SywCUy2HlB2oIt0t5QcEnb
-	 txsYqO9AJad/5by7hrKs0sFTxNqg5giCqJK1hUx5mrpzBoCKpwsXCyCDCvIhPlLp78
-	 Wovg8OZsbvZ1lR8Fy8fopf8zMJtuQtgIHgybFhnGJHyUpE8zmWX3oZ+89/D38Kj8wW
-	 ylsxKr7FnWYVQ==
-From: Mark Brown <broonie@kernel.org>
-To: james.schulman@cirrus.com, david.rhodes@cirrus.com, 
- rf@opensource.cirrus.com, ckeepax@opensource.cirrus.com, 
- Nathan Chancellor <nathan@kernel.org>
-Cc: lgirdwood@gmail.com, ndesaulniers@google.com, trix@redhat.com, 
- alsa-devel@alsa-project.org, patches@opensource.cirrus.com, 
- patches@lists.linux.dev, llvm@lists.linux.dev
-In-Reply-To: <20230823-cs42l43_pll_ev-init-ret-v1-1-5836f1ad5dad@kernel.org>
-References: <20230823-cs42l43_pll_ev-init-ret-v1-1-5836f1ad5dad@kernel.org>
-Subject: Re: [PATCH] ASoC: cs42l43: Initialize ret in default case in
- cs42l43_pll_ev()
-Message-Id: <169282494202.183189.5510150432042109830.b4-ty@kernel.org>
-Date: Wed, 23 Aug 2023 22:09:02 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F771FB3E;
+	Wed, 23 Aug 2023 22:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692830522; x=1724366522;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7GsoHVjGAnzr0npIMBdQcCZqngf3794Y9d9PFhE5SKM=;
+  b=hJ8K8TbOnpDaXM1UDsJsBxkmlz3YTF/xW2fDnYIMWTzxHKjzY/n0Rc6n
+   gwOEc1tjAEQRRqUqgoRA7c1yiq8XJrFCfzSpUH7z92VIMvsgcNpM8XSPx
+   r+58UqA2v94abokJxTHVR1ADLsbQEOyVs+ePoC9YbIzoFGXCQP9712oqL
+   EqGR/zO0ZjoUnoFyfKFftdfLqMi1BpPExxU5IJY717Vu0nFpDslZqyuuI
+   +lbkbw8FrS+VwajevCGioiTw4YHFrnzzInZtlgMPHC35Sp2R0KZ3WeNqS
+   N1l1O0toLBQn5fck6W1ue/QNNdeR+4rpyLnuuhlfGJxU0jv7Dd23d6vst
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="371700011"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="371700011"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 15:42:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="910688312"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="910688312"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 23 Aug 2023 15:41:58 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qYwY1-0001Ye-27;
+	Wed, 23 Aug 2023 22:41:57 +0000
+Date: Thu, 24 Aug 2023 06:40:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Weiner <hannes@cmpxchg.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Mel Gorman <mgorman@suse.de>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/8] mm: page_alloc: consolidate free page accounting
+Message-ID: <202308240628.YoW5rQTu-lkp@intel.com>
+References: <20230821183733.106619-9-hannes@cmpxchg.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-034f2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230821183733.106619-9-hannes@cmpxchg.org>
 
-On Wed, 23 Aug 2023 09:32:50 -0700, Nathan Chancellor wrote:
-> clang warns (or errors with CONFIG_WERROR=y):
-> 
->   sound/soc/codecs/cs42l43.c:1371:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->    1371 |         default:
->         |         ^~~~~~~
->   sound/soc/codecs/cs42l43.c:1377:9: note: uninitialized use occurs here
->    1377 |         return ret;
->         |                ^~~
->   sound/soc/codecs/cs42l43.c:1349:9: note: initialize the variable 'ret' to silence this warning
->    1349 |         int ret;
->         |                ^
->         |                 = 0
->   1 error generated.
-> 
-> [...]
+Hi Johannes,
 
-Applied to
+kernel test robot noticed the following build errors:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.5-rc7]
+[cannot apply to akpm-mm/mm-everything next-20230823]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Weiner/mm-page_alloc-use-get_pfnblock_migratetype-where-pfn-available/20230822-024104
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230821183733.106619-9-hannes%40cmpxchg.org
+patch subject: [PATCH 8/8] mm: page_alloc: consolidate free page accounting
+config: x86_64-randconfig-075-20230823 (https://download.01.org/0day-ci/archive/20230824/202308240628.YoW5rQTu-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240628.YoW5rQTu-lkp@intel.com/reproduce)
 
-[1/1] ASoC: cs42l43: Initialize ret in default case in cs42l43_pll_ev()
-      commit: a74048432fbb30e7a574747f6e1f47aef17010b0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308240628.YoW5rQTu-lkp@intel.com/
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+All errors (new ones prefixed by >>):
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+>> mm/page_alloc.c:6702:2: error: call to undeclared function '__mod_zone_freepage_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           __mod_zone_freepage_state(zone, -MAX_ORDER_NR_PAGES, MIGRATE_MOVABLE);
+           ^
+   mm/page_alloc.c:6702:2: note: did you mean '__mod_zone_page_state'?
+   include/linux/vmstat.h:319:20: note: '__mod_zone_page_state' declared here
+   static inline void __mod_zone_page_state(struct zone *zone,
+                      ^
+   mm/page_alloc.c:6754:2: error: call to undeclared function '__mod_zone_freepage_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           __mod_zone_freepage_state(zone, MAX_ORDER_NR_PAGES, MIGRATE_MOVABLE);
+           ^
+   2 errors generated.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+vim +/__mod_zone_freepage_state +6702 mm/page_alloc.c
 
-Thanks,
-Mark
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6681  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6682  static bool try_to_accept_memory_one(struct zone *zone)
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6683  {
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6684  	unsigned long flags;
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6685  	struct page *page;
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6686  	bool last;
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6687  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6688  	if (list_empty(&zone->unaccepted_pages))
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6689  		return false;
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6690  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6691  	spin_lock_irqsave(&zone->lock, flags);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6692  	page = list_first_entry_or_null(&zone->unaccepted_pages,
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6693  					struct page, lru);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6694  	if (!page) {
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6695  		spin_unlock_irqrestore(&zone->lock, flags);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6696  		return false;
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6697  	}
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6698  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6699  	list_del(&page->lru);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6700  	last = list_empty(&zone->unaccepted_pages);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6701  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06 @6702  	__mod_zone_freepage_state(zone, -MAX_ORDER_NR_PAGES, MIGRATE_MOVABLE);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6703  	__mod_zone_page_state(zone, NR_UNACCEPTED, -MAX_ORDER_NR_PAGES);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6704  	spin_unlock_irqrestore(&zone->lock, flags);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6705  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6706  	accept_page(page, MAX_ORDER);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6707  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6708  	__free_pages_ok(page, MAX_ORDER, FPI_TO_TAIL);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6709  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6710  	if (last)
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6711  		static_branch_dec(&zones_with_unaccepted_pages);
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6712  
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6713  	return true;
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6714  }
+dcdfdd40fa82b6 Kirill A. Shutemov 2023-06-06  6715  
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
