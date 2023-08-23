@@ -1,136 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9151710E9;
-	Wed, 23 Aug 2023 01:36:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692754582; x=1724290582;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3VidKf/oV/xeJfywrfMmJnZGabtP4bZ552VU4txec74=;
-  b=QpkFfBwyrkDVTZCROyl5xpQwULZW3yZ9+yDD6FUGu1CGxli+mgpYBomU
-   H1umy4ZGFdiUJzF91tir5l2BuSTf5EIjhqAXsHZFbbdLP5GazdWabuQpJ
-   Z5asIb3s/Om8ezJUBTzFIMcXOYLh4jXeeRUM145GDDHuR0JPAtIZp/nzA
-   oWwScKBJ/qd68ZLfHcclRjMUN/pHMHwx9UcZhiiZPnBkhl/SGkdyyHvNq
-   6Gv25P256RdDOAOBeLpL1k9BOnEeziT5Bvhp9W5JFAxjfs+EkSyA5chNh
-   0SLs9OnXzVldj6kOUIM02BUIOomlPYCBJgdch98fdv8iKPnwq4iB/ypJL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="364218624"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="364218624"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 18:36:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="806496697"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="806496697"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Aug 2023 18:36:16 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qYcn9-0000iP-1O;
-	Wed, 23 Aug 2023 01:36:15 +0000
-Date: Wed, 23 Aug 2023 09:35:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tao Zhang <quic_taozha@quicinc.com>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Konrad Dybcio <konradybcio@gmail.com>,
-	Mike Leach <mike.leach@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Tao Zhang <quic_taozha@quicinc.com>,
-	Jinlong Mao <quic_jinlmao@quicinc.com>,
-	Leo Yan <leo.yan@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Tingwei Zhang <quic_tingweiz@quicinc.com>,
-	Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Hao Zhang <quic_hazha@quicinc.com>, linux-arm-msm@vger.kernel.org,
-	andersson@kernel.org
-Subject: Re: [PATCH v8 04/13] coresight-tpda: Add DSB dataset support
-Message-ID: <202308230927.JBX1uKOE-lkp@intel.com>
-References: <1692681973-20764-5-git-send-email-quic_taozha@quicinc.com>
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3580010E9;
+	Wed, 23 Aug 2023 01:48:13 +0000 (UTC)
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 37N1hwlmF032733, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 37N1hwlmF032733
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 23 Aug 2023 09:43:58 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 23 Aug 2023 09:44:20 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 23 Aug 2023 09:44:19 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Wed, 23 Aug 2023 09:44:19 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+        "kvalo@kernel.org"
+	<kvalo@kernel.org>
+CC: "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "trix@redhat.com"
+	<trix@redhat.com>,
+        Damon Chen <damon.chen@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>
+Subject: RE: [PATCH] wifi: rtw89: Fix clang -Wimplicit-fallthrough in rtw89_query_sar()
+Thread-Topic: [PATCH] wifi: rtw89: Fix clang -Wimplicit-fallthrough in
+ rtw89_query_sar()
+Thread-Index: AQHZ1Q0rICwq3rdb4kKeSJtfSCPujK/3HGqw
+Date: Wed, 23 Aug 2023 01:44:19 +0000
+Message-ID: <c1feebe0159348d2a0e50f58f0e278e6@realtek.com>
+References: <20230822-rtw89-tas-clang-implicit-fallthrough-v1-1-5cb73f0fa976@kernel.org>
+In-Reply-To: <20230822-rtw89-tas-clang-implicit-fallthrough-v1-1-5cb73f0fa976@kernel.org>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1692681973-20764-5-git-send-email-quic_taozha@quicinc.com>
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-Hi Tao,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.5-rc7 next-20230822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tao-Zhang/coresight-tpdm-Remove-the-unnecessary-lock/20230822-132946
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/1692681973-20764-5-git-send-email-quic_taozha%40quicinc.com
-patch subject: [PATCH v8 04/13] coresight-tpda: Add DSB dataset support
-config: arm64-randconfig-r031-20230823 (https://download.01.org/0day-ci/archive/20230823/202308230927.JBX1uKOE-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230927.JBX1uKOE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308230927.JBX1uKOE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwtracing/coresight/coresight-tpda.c:168:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (atomic_read(&in->dest_refcnt) == 0) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwtracing/coresight/coresight-tpda.c:177:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/hwtracing/coresight/coresight-tpda.c:168:2: note: remove the 'if' if its condition is always true
-           if (atomic_read(&in->dest_refcnt) == 0) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwtracing/coresight/coresight-tpda.c:165:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +168 drivers/hwtracing/coresight/coresight-tpda.c
-
-   159	
-   160	static int tpda_enable(struct coresight_device *csdev,
-   161			       struct coresight_connection *in,
-   162			       struct coresight_connection *out)
-   163	{
-   164		struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-   165		int ret;
-   166	
-   167		spin_lock(&drvdata->spinlock);
- > 168		if (atomic_read(&in->dest_refcnt) == 0) {
-   169			ret = __tpda_enable(drvdata, in->dest_port);
-   170			if (!ret) {
-   171				atomic_inc(&in->dest_refcnt);
-   172				dev_dbg(drvdata->dev, "TPDA inport %d enabled.\n", in->dest_port);
-   173			}
-   174		}
-   175	
-   176		spin_unlock(&drvdata->spinlock);
-   177		return ret;
-   178	}
-   179	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTmF0aGFuIENoYW5jZWxs
+b3IgPG5hdGhhbkBrZXJuZWwub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBBdWd1c3QgMjIsIDIwMjMg
+MTE6MjcgUE0NCj4gVG86IFBpbmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPjsga3ZhbG9A
+a2VybmVsLm9yZw0KPiBDYzogbmRlc2F1bG5pZXJzQGdvb2dsZS5jb207IHRyaXhAcmVkaGF0LmNv
+bTsgRGFtb24gQ2hlbiA8ZGFtb24uY2hlbkByZWFsdGVrLmNvbT47DQo+IGxpbnV4LXdpcmVsZXNz
+QHZnZXIua2VybmVsLm9yZzsgcGF0Y2hlc0BsaXN0cy5saW51eC5kZXY7IGxsdm1AbGlzdHMubGlu
+dXguZGV2OyBOYXRoYW4gQ2hhbmNlbGxvcg0KPiA8bmF0aGFuQGtlcm5lbC5vcmc+DQo+IFN1Ympl
+Y3Q6IFtQQVRDSF0gd2lmaTogcnR3ODk6IEZpeCBjbGFuZyAtV2ltcGxpY2l0LWZhbGx0aHJvdWdo
+IGluIHJ0dzg5X3F1ZXJ5X3NhcigpDQo+IA0KPiBjbGFuZyB3YXJucyAob3IgZXJyb3JzIHdpdGgg
+Q09ORklHX1dFUlJPUj15KToNCj4gDQo+ICAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9y
+dHc4OS9zYXIuYzoyMTY6MzogZXJyb3I6IHVuYW5ub3RhdGVkIGZhbGwtdGhyb3VnaCBiZXR3ZWVu
+IHN3aXRjaCBsYWJlbHMNCj4gWy1XZXJyb3IsLVdpbXBsaWNpdC1mYWxsdGhyb3VnaF0NCj4gICAg
+IDIxNiB8ICAgICAgICAgICAgICAgICBjYXNlIFJUVzg5X1RBU19TVEFURV9EUFJfRk9SQklEOg0K
+PiAgICAgICAgIHwgICAgICAgICAgICAgICAgIF4NCj4gICBkcml2ZXJzL25ldC93aXJlbGVzcy9y
+ZWFsdGVrL3J0dzg5L3Nhci5jOjIxNjozOiBub3RlOiBpbnNlcnQgJ2JyZWFrOycgdG8gYXZvaWQg
+ZmFsbC10aHJvdWdoDQo+ICAgICAyMTYgfCAgICAgICAgICAgICAgICAgY2FzZSBSVFc4OV9UQVNf
+U1RBVEVfRFBSX0ZPUkJJRDoNCj4gICAgICAgICB8ICAgICAgICAgICAgICAgICBeDQo+ICAgICAg
+ICAgfCAgICAgICAgICAgICAgICAgYnJlYWs7DQo+ICAgMSBlcnJvciBnZW5lcmF0ZWQuDQo+IA0K
+PiBDbGFuZyBpcyBhIGxpdHRsZSBtb3JlIHBlZGFudGljIHRoYW4gR0NDLCB3aGljaCBkb2VzIG5v
+dCB3YXJuIHdoZW4NCj4gZmFsbGluZyB0aHJvdWdoIHRvIGEgY2FzZSB0aGF0IGlzIGp1c3QgYnJl
+YWsgb3IgcmV0dXJuLiBDbGFuZydzIHZlcnNpb24NCj4gaXMgbW9yZSBpbiBsaW5lIHdpdGggdGhl
+IGtlcm5lbCdzIG93biBzdGFuY2UgaW4gZGVwcmVjYXRlZC5yc3QsIHdoaWNoDQo+IHN0YXRlcyB0
+aGF0IGFsbCBzd2l0Y2gvY2FzZSBibG9ja3MgbXVzdCBlbmQgaW4gZWl0aGVyIGJyZWFrLA0KPiBm
+YWxsdGhyb3VnaCwgY29udGludWUsIGdvdG8sIG9yIHJldHVybi4gQWRkIHRoZSBtaXNzaW5nIGJy
+ZWFrIHRvIHNpbGVuY2UNCj4gdGhlIHdhcm5pbmcuDQo+IA0KPiBDbG9zZXM6IGh0dHBzOi8vZ2l0
+aHViLmNvbS9DbGFuZ0J1aWx0TGludXgvbGludXgvaXNzdWVzLzE5MjENCj4gRml4ZXM6IGViMjYy
+NGY1NWFkMSAoIndpZmk6IHJ0dzg5OiBJbnRyb2R1Y2UgVGltZSBBdmVyYWdlZCBTQVIgKFRBUykg
+ZmVhdHVyZSIpDQo+IFNpZ25lZC1vZmYtYnk6IE5hdGhhbiBDaGFuY2VsbG9yIDxuYXRoYW5Aa2Vy
+bmVsLm9yZz4NCg0KQWNrZWQtYnk6IFBpbmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0K
+DQoNCg==
