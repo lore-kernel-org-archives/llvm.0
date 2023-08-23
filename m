@@ -1,122 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB3BA92F;
-	Wed, 23 Aug 2023 10:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BDCBA48
+	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 11:52:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692786003; x=1724322003;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1692791578; x=1724327578;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=J/smH+od+JQo9e6T8OxoQJwtGe7Bs2VOOafthAAhtBs=;
-  b=ly7RPjJa9pPchWinWLJkwPPoX7NDIBTz6HcdkrMX2qVMrPb1LwTJYhlM
-   FkY5E07VyHjkSJ5OjDGguhmJDucfU0DDvaMnKc7iDeX+dG5ecNGetTtJx
-   yH1AGal06klx+X8nx5LQqi8KTC3opBLoW/ItZ5NEL0gIOBXv3YP40rJuy
-   +YseZMuZQRwybtVwnEJs3wH64hJX6CsfnARGk17RJUATJd5GcViVwTQgV
-   I+XZ+RJSmx3QWopPnYVaEYwDMbDSef8ehKVTKauNj3XY54z+v/8cettp6
-   FDXJUkhZLZcyZ/zO8L2N2n2l3mANqlEZtvb5p1KniHiBcdr/oB+cq93M7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="377884497"
+  bh=P+msHyqhyTgIowePgGmJTm4oqKwwJ9h/OkrOjGnPZWA=;
+  b=tlSEI8L9nZ/wextej2IThSyBR97Z8yqm4jZBjt8PvhUAJ2u+8als9xyZ
+   ozoB0NgUCbyyv3BUFLB75KIkzzB6tm89BuN1TbHJ4Nj/gmbppRz4ukHr1
+   AQQsIMQr3IzqYiZyNuC26Bl2ZVtvvVBpZmL0B4Mpjqt9Vr6B/67qKfxOK
+   zqifNQpaXI+DRjq0vaGDU0NwSK4iuVTQA6tVU8AiAMQexNe4cVA3KOGOq
+   Im4NtHh1GkBIx4nPSavIKZhy8QWJtq6+fCUQ6V2dUTFG+a422DyaqSPed
+   kI1ZxM57aFWnNfWE9OipQhKdgJED+ddN/2zjkyiyLwEXutkgfQGfhHW2k
+   A==;
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="377884497"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 03:20:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="730169336"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="730169336"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 23 Aug 2023 03:19:57 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qYkxw-00016C-0r;
-	Wed, 23 Aug 2023 10:19:56 +0000
-Date: Wed, 23 Aug 2023 18:19:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Huang Jiaqing <jiaqing.huang@intel.com>, kvm@vger.kernel.org,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, joro@8bytes.org,
-	will@kernel.org, robin.murphy@arm.com, kevin.tian@intel.com,
-	baolu.lu@linux.intel.com, jacob.jun.pan@linux.intel.com,
-	yi.l.liu@intel.com, yi.y.sun@intel.com, jiaqing.huang@intel.com
-Subject: Re: [PATCH] iommu/vt-d: Introduce a rb_tree for looking up device
-Message-ID: <202308231801.6MtvqTmB-lkp@intel.com>
-References: <20230821071659.123981-1-jiaqing.huang@intel.com>
+   d="asc'?scan'208";a="231293047"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Aug 2023 04:52:56 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 23 Aug 2023 04:51:57 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 23 Aug 2023 04:51:54 -0700
+Date: Wed, 23 Aug 2023 12:51:13 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: <patchwork-bot+linux-riscv@kernel.org>
+CC: Mingzheng Xing <xingmingzheng@iscas.ac.cn>,
+	<linux-riscv@lists.infradead.org>, <conor@kernel.org>,
+	<paul.walmsley@sifive.com>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+	<nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>,
+	<bmeng@tinylab.org>, <guoren@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v5] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+Message-ID: <20230823-captive-abdomen-befd942a4a73@wendy>
+References: <20230809165648.21071-1-xingmingzheng@iscas.ac.cn>
+ <169228562484.20811.14246462375671910714.git-patchwork-notify@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="W7NS5WMbXWdulCbP"
+Content-Disposition: inline
+In-Reply-To: <169228562484.20811.14246462375671910714.git-patchwork-notify@kernel.org>
+
+--W7NS5WMbXWdulCbP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230821071659.123981-1-jiaqing.huang@intel.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Huang,
+On Thu, Aug 17, 2023 at 03:20:24PM +0000, patchwork-bot+linux-riscv@kernel.=
+org wrote:
+> Hello:
+>=20
+> This patch was applied to riscv/linux.git (fixes)
+> by Palmer Dabbelt <palmer@rivosinc.com>:
+>=20
+> On Thu, 10 Aug 2023 00:56:48 +0800 you wrote:
+> > Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to the n=
+ewer
+> > 20191213 version which moves some instructions from the I extension to =
+the
+> > Zicsr and Zifencei extensions. So if one of the binutils and GCC exceeds
+> > that version, we should explicitly specifying Zicsr and Zifencei via -m=
+arch
+> > to cope with the new changes. but this only occurs when binutils >=3D 2=
+=2E36
+> > and GCC >=3D 11.1.0. It's a different story when binutils < 2.36.
+> >=20
+> > [...]
+>=20
+> Here is the summary with links:
+>   - [v5] riscv: Handle zicsr/zifencei issue between gcc and binutils
+>     https://git.kernel.org/riscv/c/ca09f772ccca
 
-kernel test robot noticed the following build warnings:
+*sigh* so this breaks the build for gcc-11 & binutils 2.37 w/
+	Assembler messages:
+	Error: cannot find default versions of the ISA extension `zicsr'
+	Error: cannot find default versions of the ISA extension `zifencei'
 
-[auto build test WARNING on v6.5-rc7]
-[also build test WARNING on linus/master]
-[cannot apply to joro-iommu/next next-20230823]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'll have a poke later.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Huang-Jiaqing/iommu-vt-d-Introduce-a-rb_tree-for-looking-up-device/20230821-151945
-base:   v6.5-rc7
-patch link:    https://lore.kernel.org/r/20230821071659.123981-1-jiaqing.huang%40intel.com
-patch subject: [PATCH] iommu/vt-d: Introduce a rb_tree for looking up device
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230823/202308231801.6MtvqTmB-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230823/202308231801.6MtvqTmB-lkp@intel.com/reproduce)
+--W7NS5WMbXWdulCbP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308231801.6MtvqTmB-lkp@intel.com/
+-----BEGIN PGP SIGNATURE-----
 
-All warnings (new ones prefixed by >>):
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZOXysQAKCRB4tDGHoIJi
+0umKAPsHfU8Vxgef4+lOhFoGQMmuEDZ660fUifAWXoqFaCjwlQD/dLrrEsJhYReV
+cosGU4uWW2+SuNH9+QHMozew2ttVyAk=
+=9H5F
+-----END PGP SIGNATURE-----
 
->> drivers/iommu/intel/iommu.c:239:28: warning: no previous prototype for function 'device_rbtree_find' [-Wmissing-prototypes]
-   struct device_domain_info *device_rbtree_find(struct intel_iommu *iommu, u8 bus, u8 devfn)
-                              ^
-   drivers/iommu/intel/iommu.c:239:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct device_domain_info *device_rbtree_find(struct intel_iommu *iommu, u8 bus, u8 devfn)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/device_rbtree_find +239 drivers/iommu/intel/iommu.c
-
-   237	
-   238	
- > 239	struct device_domain_info *device_rbtree_find(struct intel_iommu *iommu, u8 bus, u8 devfn)
-   240	{
-   241		struct device_domain_info *data = NULL;
-   242		struct rb_node *node;
-   243	
-   244		down_read(&iommu->iopf_device_sem);
-   245	
-   246		node = iommu->iopf_device_rbtree.rb_node;
-   247		while (node) {
-   248			data = container_of(node, struct device_domain_info, node);
-   249			s16 result = RB_NODE_CMP(bus, devfn, data->bus, data->devfn);
-   250	
-   251			if (result < 0)
-   252				node = node->rb_left;
-   253			else if (result > 0)
-   254				node = node->rb_right;
-   255			else
-   256				break;
-   257		}
-   258		up_read(&iommu->iopf_device_sem);
-   259	
-   260		return node ? data : NULL;
-   261	}
-   262	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--W7NS5WMbXWdulCbP--
