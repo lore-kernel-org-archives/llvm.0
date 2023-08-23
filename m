@@ -1,145 +1,128 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0773A17C6
-	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 04:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1692766273;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VH1M2QS4xMJ/pvwtQvY0anQlbNxuoAa0XzyoQH8C28s=;
-	b=ec1ENw81TLfK9e1WEzJWfxEkwbgX0Dy4pKYGp2KQ+OvGuZJLrxyrhfqQ5Vv99JscZsjGzG
-	fMaIsVRvtkDJCnHMgSv2pIHfTZO4VO3Z67q4pOBk2k3e1yihP4EJtjfYjyLIslL8Q0P9ru
-	meZQp87U057n4W14OmfkGe5gY0MW2OU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-615-WvEFVuq_M12g_7vQzRtmbw-1; Wed, 23 Aug 2023 00:51:12 -0400
-X-MC-Unique: WvEFVuq_M12g_7vQzRtmbw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A65D185A78F
-	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 04:51:12 +0000 (UTC)
-Received: from [172.64.4.37] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 04EAC492C13;
-	Wed, 23 Aug 2023 04:51:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 11 of 267): Test report for master
- (6.5.0-rc7, mainline.kernel.org-clang, 53663f41)
-Date: Wed, 23 Aug 2023 04:51:11 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92824846D;
+	Wed, 23 Aug 2023 07:35:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692776101; x=1724312101;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+WoV4tVJSCaUjsWyOMHHl7owKPLxv8Zvbh4nBhVd9LM=;
+  b=SI2j6nZ4LaqLJ8a2WO3F2L/26BZtorLiWyIvlQntflipeDH2G3+55sjT
+   uFS7XNzQQU9iV6E1jmEgBby7rNSxtyqIe6NABZT0qgBOUDEENML1I/GBp
+   xESdB22qksW7Ra+fbR+FPVnrJy89wQq8aHFiaCXR2XkpxmQbQ5dbQImaU
+   YmnR6J1C3KTO/Fk/NeJcDDIB/OM9tmvRz+5MXBys/2E1003Kk7o6l7PRK
+   90+jW6I8iv6+2yylSb6k5evP6c1hYGMRbgetXCgcGiiHsu2bRt29bb79G
+   X+4GtCaKOCOriTc+kh1fQEj+h/PViijJis7j0aApxs7Fcbwo2dQfCajv/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="460459184"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="460459184"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 00:34:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="713476425"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="713476425"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 23 Aug 2023 00:34:56 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qYiOF-0000y4-2F;
+	Wed, 23 Aug 2023 07:34:55 +0000
+Date: Wed, 23 Aug 2023 15:34:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Antipov <dmantipov@yandex.ru>,
+	Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kalle Valo <kvalo@kernel.org>, ath10k@lists.infradead.org,
+	linux-wireless@vger.kernel.org, lvc-project@linuxtesting.org,
+	Dmitry Antipov <dmantipov@yandex.ru>
+Subject: Re: [PATCH 1/3] wifi: ath10k: cleanup CE initialization
+Message-ID: <202308231552.qVY1nOZs-lkp@intel.com>
+References: <20230822155532.95983-1-dmantipov@yandex.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <30003.123082300511200381@us-mta-615.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230822155532.95983-1-dmantipov@yandex.ru>
 
-Hi, we tested your kernel and here are the results:
+Hi Dmitry,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on kvalo-ath/ath-next]
+[also build test WARNING on wireless-next/main wireless/main linus/master v6.5-rc7 next-20230822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.5-2' of git://git.linux-nfs.org/pr=
-ojects/trondmy/linux-nfs
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Antipov/wifi-ath10k-simplify-ath10k_peer_assoc_h_vht/20230822-235854
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git ath-next
+patch link:    https://lore.kernel.org/r/20230822155532.95983-1-dmantipov%40yandex.ru
+patch subject: [PATCH 1/3] wifi: ath10k: cleanup CE initialization
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230823/202308231552.qVY1nOZs-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230823/202308231552.qVY1nOZs-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101050
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308231552.qVY1nOZs-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9231698
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/net/wireless/ath/ath10k/snoc.c:1083:1: warning: unused label 'err_free_rri' [-Wunused-label]
+   err_free_rri:
+   ^~~~~~~~~~~~~
+   1 warning generated.
 
 
+vim +/err_free_rri +1083 drivers/net/wireless/ath/ath10k/snoc.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1056  
+3c545a25939c27 Rakesh Pillai  2019-02-08  1057  static int ath10k_snoc_hif_power_up(struct ath10k *ar,
+3c545a25939c27 Rakesh Pillai  2019-02-08  1058  				    enum ath10k_firmware_mode fw_mode)
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1059  {
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1060  	int ret;
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1061  
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1062  	ath10k_dbg(ar, ATH10K_DBG_SNOC, "%s:WCN3990 driver state = %d\n",
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1063  		   __func__, ar->state);
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1064  
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1065  	ret = ath10k_hw_power_on(ar);
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1066  	if (ret) {
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1067  		ath10k_err(ar, "failed to power on device: %d\n", ret);
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1068  		return ret;
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1069  	}
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1070  
+3c545a25939c27 Rakesh Pillai  2019-02-08  1071  	ret = ath10k_snoc_wlan_enable(ar, fw_mode);
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1072  	if (ret) {
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1073  		ath10k_err(ar, "failed to enable wcn3990: %d\n", ret);
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1074  		goto err_hw_power_off;
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1075  	}
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1076  
+4945af5b264fbd Govind Singh   2018-04-17  1077  	ath10k_ce_alloc_rri(ar);
+4945af5b264fbd Govind Singh   2018-04-17  1078  
+7279d6262224cd Dmitry Antipov 2023-08-22  1079  	ath10k_snoc_init_pipes(ar);
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1080  
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1081  	return 0;
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1082  
+31561e8557cd1e Rakesh Pillai  2020-12-12 @1083  err_free_rri:
+31561e8557cd1e Rakesh Pillai  2020-12-12  1084  	ath10k_ce_free_rri(ar);
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1085  	ath10k_snoc_wlan_disable(ar);
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1086  
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1087  err_hw_power_off:
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1088  	ath10k_hw_power_off(ar);
+5f1aa93ffa1f36 Rakesh Pillai  2020-12-12  1089  
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1090  	return ret;
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1091  }
+0fa4fbe9b8cf76 Govind Singh   2018-04-10  1092  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
