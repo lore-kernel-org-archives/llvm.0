@@ -1,110 +1,109 @@
-Received: from mail-pj1-f79.google.com (mail-pj1-f79.google.com [209.85.216.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14987BE73
-	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 13:14:40 +0000 (UTC)
-Received: by mail-pj1-f79.google.com with SMTP id 98e67ed59e1d1-26d50941f68so6487333a91.1
-        for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 06:14:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692796480; x=1693401280;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RFApB1Y2v2rveRjo6nnTdcFEwXfzQreGSzlC+r9Qk20=;
-        b=bj1WMylnQeh2r+/tT1nF9EoCkZEah25uEY/NQyHCbwvjKvnJbVuaQA1rfLOmN2hehw
-         hq8iP1YIfuwvt5D4Gj7yUNI5uEwrUACLHduKl0m2gc/Z00R2ZCJdW3ymyhl9k95pmFtN
-         IQkSpElpHm+zMoDiUFGYaQprSfsN+Djop2DGxjmGx1stMT9drFKxz2TMzmzLTyZoBhrU
-         sISxG6Q3i1Nv6pjMsxRBeTSR6GmcWLBpyqVwhF2IsSgjZQnWtgjIVnicLUKTTg8c9JB9
-         gxxcMsIsIqaEMEQ2oiMTjFRw11EWSFg2kWafTjYUQfAlnaP3MBzt8IpIRqIkY5zYivig
-         sI6Q==
-X-Gm-Message-State: AOJu0YxeH9K07/PbIWvHmk0bwgx7nfB34AeMviK9bG7sZgFbSrRpJ/6Q
-	O6Huz1Okctel5Buhx0hVH0n7C/ssgMOkUFrNtF55RT6yzZa3
-X-Google-Smtp-Source: AGHT+IEX1yqAYhiEN1pueWO1LpFxWdmeDTE28VzHBsnz4BeGwdO3pqmg1pnm5QXJ79UtLgqPj9IJbjT/KmqHF23jlB6WpQP7/VJR
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49860BE4D
+	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 13:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5126C433C7;
+	Wed, 23 Aug 2023 13:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692797522;
+	bh=wTn3isAqqk+t81XyNdYbxia/Ad1Si3J428HEivbrf2I=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=IR6qlqzQg6igQ/9syCO/6OvdectOVNbsoNpiIiR/cEMXUlhS69uiwCYR3aXvyK/qn
+	 pr9r7l7d0Hidy1PcOjwUqgOwpLdISqwCYDLhfQEfY1AIMn5i9CtqwX+1/PJyvs4YBg
+	 21dZXBv4IokYl0gQYiHsCgxM9/DactqacHmjnLcIyBPMkiDpcMEy26uTlJVyc5cmNO
+	 hAGdvPR7qPXr88aRuaNVHZHVhgh1S2hHMZBU/fWcg34gy0um1j4APcDgVTC73mI4XA
+	 p/bO4oCwS8Rljjr0cmC68xe7S3kNsYigL4RthcphADyP+qI0D8D0cRpCsJf/93WgcW
+	 kh4jV74KUmkow==
+Date: Wed, 23 Aug 2023 14:31:57 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Conor Dooley <conor.dooley@microchip.com>
+List-Id: <linux-riscv.lore.kernel.org>
+Cc: patchwork-bot+linux-riscv@kernel.org,
+	Mingzheng Xing <xingmingzheng@iscas.ac.cn>,
+	linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com, bmeng@tinylab.org,
+	guoren@kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v5] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+Message-ID: <20230823-facelift-ovary-41f2eb4d9eac@spud>
+References: <20230809165648.21071-1-xingmingzheng@iscas.ac.cn>
+ <169228562484.20811.14246462375671910714.git-patchwork-notify@kernel.org>
+ <20230823-captive-abdomen-befd942a4a73@wendy>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a17:90a:ea07:b0:26d:43f3:eef1 with SMTP id
- w7-20020a17090aea0700b0026d43f3eef1mr3215711pjy.7.1692796480428; Wed, 23 Aug
- 2023 06:14:40 -0700 (PDT)
-Date: Wed, 23 Aug 2023 06:14:40 -0700
-In-Reply-To: <0000000000006f098a06000d10a5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e4a538060396e4e9@google.com>
-Subject: Re: [syzbot] [ntfs3?] UBSAN: array-index-out-of-bounds in truncate_inode_pages_final
-From: syzbot <syzbot+e295147e14b474e4ad70@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-
-syzbot has found a reproducer for the following issue on:
-
-HEAD commit:    35e2132122ba Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16924717a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4f6a8d3c0bd07f11
-dashboard link: https://syzkaller.appspot.com/bug?extid=e295147e14b474e4ad70
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a2eeb0680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12224553a80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6808a9c4c8df/disk-35e21321.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/85a6cfc7b474/vmlinux-35e21321.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a3958fe16b1c/Image-35e21321.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/b81535b17c61/mount_1.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e295147e14b474e4ad70@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: array-index-out-of-bounds in ./include/linux/pagevec.h:74:2
-index 255 is out of range for type 'struct folio *[15]'
-CPU: 1 PID: 12841 Comm: syz-executor402 Not tainted 6.5.0-rc7-syzkaller-g35e2132122ba #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0xfc/0x148 lib/ubsan.c:348
- folio_batch_add include/linux/pagevec.h:74 [inline]
- find_lock_entries+0x8fc/0xd84 mm/filemap.c:2089
- truncate_inode_pages_range+0x1b0/0xf74 mm/truncate.c:364
- truncate_inode_pages mm/truncate.c:449 [inline]
- truncate_inode_pages_final+0x90/0xc0 mm/truncate.c:484
- ntfs_evict_inode+0x20/0x48 fs/ntfs3/inode.c:1790
- evict+0x260/0x68c fs/inode.c:664
- iput_final fs/inode.c:1788 [inline]
- iput+0x734/0x818 fs/inode.c:1814
- ntfs_fill_super+0x3648/0x3f90 fs/ntfs3/super.c:1420
- get_tree_bdev+0x378/0x570 fs/super.c:1318
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1647
- vfs_get_tree+0x90/0x274 fs/super.c:1519
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3335
- path_mount+0x590/0xe04 fs/namespace.c:3662
- do_mount fs/namespace.c:3675 [inline]
- __do_sys_mount fs/namespace.c:3884 [inline]
- __se_sys_mount fs/namespace.c:3861 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3861
- __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
- invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
- el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
- do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
- el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="t4zP4cEKxycq2r5X"
+Content-Disposition: inline
+In-Reply-To: <20230823-captive-abdomen-befd942a4a73@wendy>
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+--t4zP4cEKxycq2r5X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Aug 23, 2023 at 12:51:13PM +0100, Conor Dooley wrote:
+> On Thu, Aug 17, 2023 at 03:20:24PM +0000, patchwork-bot+linux-riscv@kerne=
+l.org wrote:
+> > Hello:
+> >=20
+> > This patch was applied to riscv/linux.git (fixes)
+> > by Palmer Dabbelt <palmer@rivosinc.com>:
+> >=20
+> > On Thu, 10 Aug 2023 00:56:48 +0800 you wrote:
+> > > Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to the=
+ newer
+> > > 20191213 version which moves some instructions from the I extension t=
+o the
+> > > Zicsr and Zifencei extensions. So if one of the binutils and GCC exce=
+eds
+> > > that version, we should explicitly specifying Zicsr and Zifencei via =
+-march
+> > > to cope with the new changes. but this only occurs when binutils >=3D=
+ 2.36
+> > > and GCC >=3D 11.1.0. It's a different story when binutils < 2.36.
+> > >=20
+> > > [...]
+> >=20
+> > Here is the summary with links:
+> >   - [v5] riscv: Handle zicsr/zifencei issue between gcc and binutils
+> >     https://git.kernel.org/riscv/c/ca09f772ccca
+>=20
+> *sigh* so this breaks the build for gcc-11 & binutils 2.37 w/
+> 	Assembler messages:
+> 	Error: cannot find default versions of the ISA extension `zicsr'
+> 	Error: cannot find default versions of the ISA extension `zifencei'
+>=20
+> I'll have a poke later.
+
+So uh, are we sure that this should not be:
+-       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC &&=
+ GCC_VERSION < 110100)
++       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC &&=
+ GCC_VERSION <=3D 110100)
+
+My gcc-11.1 + binutils 2.37 toolchain built from riscv-gnu-toolchain
+doesn't have the default versions & the above diff fixes the build.
+
+Thanks,
+Conor.
+
+--t4zP4cEKxycq2r5X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZOYKTQAKCRB4tDGHoIJi
+0j0mAQC/dAakOtKVIdAXlSLgJ4/8vCec4WO3cCO3pmTQ3qMdrAD7BY2ORdI1A3Sm
+bhyeikCboYot3QNuYvvFBtqt30XnCQg=
+=Ia53
+-----END PGP SIGNATURE-----
+
+--t4zP4cEKxycq2r5X--
