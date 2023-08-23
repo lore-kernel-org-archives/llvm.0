@@ -1,126 +1,225 @@
-Received: from mail-pg1-f206.google.com (mail-pg1-f206.google.com [209.85.215.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CED1F199
-	for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 18:08:45 +0000 (UTC)
-Received: by mail-pg1-f206.google.com with SMTP id 41be03b00d2f7-53ff4f39c0fso6586709a12.0
-        for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 11:08:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692814125; x=1693418925;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6TFYzbe+aItdEHV02B+YSmc25pOCMrU53WsD56T7Io=;
-        b=hmRGzc8qBYktj0uib64z6uZdHpl3uJtIKeiEY3kl8qOSzei/6xRzW5EywpSxfVJWd5
-         giTeu3EVwcLBzc5DdVS1v4vYQ8ZQhAwoLeWX0ytbt4UTeBPUK1vZ587uPWy2RIaERGkz
-         gwo6DT1uvvc8FwV3sLYYm/oC4hTRcihE7uffH1XCc9K1tdISa5wlM7UdTdgq1bsTqTGM
-         wmROqIDt6IpKP4EtcdgTRGs9UykXMxYVbTXJCKH1UdS81+O2fJ6n30wCxWMjapeTCyfR
-         wwPPZD36ICTSmQF/xO52vMA1enicPewdvg/iUKiZWcdAOvXCpaeDa1ydUnNgpDBhG4VT
-         JJlQ==
-X-Gm-Message-State: AOJu0Yz66tkl9tuspj5+F2+rB/++dS83ycuNR9uKfkg5+J1R4dZznKvk
-	nilFtsJH66sbwDqv1cqjz4cKzL5Qz321c5NXOeGX94ys/fp9
-X-Google-Smtp-Source: AGHT+IEJhI9fec1i4ZYACCZLBzgyCh11MSzkTLvunUv2a7UbGaZvosC7SAqCCqtfBkWsLXl3UjWdGM86TC62dfv9r88Bwgkx4qwv
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2331C2E6;
+	Wed, 23 Aug 2023 20:09:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692821385; x=1724357385;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AvUeRca67cv5xiR1xSt7IP4lbB1HUdJhCrmEBsWjAtM=;
+  b=jSN8OG1cjnF3yHk5zlfrIqVWO5mErIR/LsVPmxXY9abWHNZmfXRD8GTt
+   amwG2vPX3UzmNU9tCsTrh2b1wAwo4lFQlkmjZH9KnY70PXinMh5VVVPVz
+   gw4T6d1na6fmOwn6Uda5cNrRQFuw4j4s4z2MvsXufFbxsiXyZPxuTFgkf
+   rpQcKXRxfeHRbRNe1+wVYC9hXDnufd7wfSfcg7AIHK6GLQTN6E8BK+mwf
+   ySq9PLmwrjXpj65nRQIc1MxnCCQ3XUFNnqkE8qZawwLMu2hP66znByPoA
+   qvtPTQ0mMPyVyjUOEkOPVsnY/7VIuOES8dTDaQsowMWwcCRy9IYC3+Gge
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="460621930"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="460621930"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 13:09:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="826851453"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="826851453"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Aug 2023 13:09:43 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qYuAg-0001TG-2P;
+	Wed, 23 Aug 2023 20:09:42 +0000
+Date: Thu, 24 Aug 2023 04:09:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geliang Tang <geliang.tang@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC mptcp-next v2 2/2] mptcp: add bpf_burst set/get params
+Message-ID: <202308240315.MEo2AODX-lkp@intel.com>
+References: <486891cb494ba4e9eeb02b6e220ca670dbc80866.1692788531.git.geliang.tang@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a63:778a:0:b0:56a:164b:c6ec with SMTP id
- s132-20020a63778a000000b0056a164bc6ecmr1985913pgc.7.1692814125013; Wed, 23
- Aug 2023 11:08:45 -0700 (PDT)
-Date: Wed, 23 Aug 2023 11:08:44 -0700
-In-Reply-To: <0000000000000126ec05ffd5a528@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000097a8e606039b001f@google.com>
-Subject: Re: [syzbot] [ext4?] kernel BUG in ext4_enable_quotas
-From: syzbot <syzbot+693985588d7a5e439483@syzkaller.appspotmail.com>
-To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <486891cb494ba4e9eeb02b6e220ca670dbc80866.1692788531.git.geliang.tang@suse.com>
 
-syzbot has found a reproducer for the following issue on:
+Hi Geliang,
 
-HEAD commit:    89bf6209cad6 Merge tag 'devicetree-fixes-for-6.5-2' of git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=120c47f7a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1b32f62c755c3a9c
-dashboard link: https://syzkaller.appspot.com/bug?extid=693985588d7a5e439483
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ba1fefa80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1636640fa80000
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/57b9a06bad82/disk-89bf6209.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a5bb3483e19d/vmlinux-89bf6209.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/905ebaa6ecf8/bzImage-89bf6209.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/20b0f7175bae/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/eda4e74724f3/mount_1.gz
+[auto build test ERROR on mptcp/export]
+[cannot apply to mptcp/export-net linus/master v6.5-rc7 next-20230823]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+693985588d7a5e439483@syzkaller.appspotmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Geliang-Tang/mptcp-add-set-get-params-wrappers/20230823-190626
+base:   https://github.com/multipath-tcp/mptcp_net-next.git export
+patch link:    https://lore.kernel.org/r/486891cb494ba4e9eeb02b6e220ca670dbc80866.1692788531.git.geliang.tang%40suse.com
+patch subject: [RFC mptcp-next v2 2/2] mptcp: add bpf_burst set/get params
+config: um-randconfig-r014-20230823 (https://download.01.org/0day-ci/archive/20230824/202308240315.MEo2AODX-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240315.MEo2AODX-lkp@intel.com/reproduce)
 
-kernel BUG at fs/ext4/super.c:7010!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5086 Comm: syz-executor143 Not tainted 6.5.0-rc7-syzkaller-00018-g89bf6209cad6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-RIP: 0010:ext4_quota_enable fs/ext4/super.c:7010 [inline]
-RIP: 0010:ext4_enable_quotas+0xb7a/0xb90 fs/ext4/super.c:7057
-Code: ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 3a f7 ff ff 49 89 d6 48 89 df e8 13 07 99 ff 4c 89 f2 e9 27 f7 ff ff e8 36 35 40 ff <0f> 0b e8 2f 35 40 ff 0f 0b e8 e8 4d 71 08 0f 1f 84 00 00 00 00 00
-RSP: 0018:ffffc90003d7f880 EFLAGS: 00010293
-RAX: ffffffff824b82fa RBX: 0000000000000000 RCX: ffff88802cd08000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003d7fa50 R08: ffffffff824b7bf4 R09: 1ffff1100eadb457
-R10: dffffc0000000000 R11: ffffed100eadb458 R12: 0000000000000001
-R13: 0000000000000001 R14: ffff88801675d464 R15: dffffc0000000000
-FS:  00007fc13f7ec6c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc13f8b86c0 CR3: 000000001635a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __ext4_fill_super fs/ext4/super.c:5562 [inline]
- ext4_fill_super+0x6157/0x6ce0 fs/ext4/super.c:5696
- get_tree_bdev+0x468/0x6c0 fs/super.c:1318
- vfs_get_tree+0x8c/0x270 fs/super.c:1519
- do_new_mount+0x28f/0xae0 fs/namespace.c:3335
- do_mount fs/namespace.c:3675 [inline]
- __do_sys_mount fs/namespace.c:3884 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3861
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc13f83111a
-Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb a6 e8 5e 04 00 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc13f7ec088 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fc13f83111a
-RDX: 00000000200005c0 RSI: 0000000020000000 RDI: 00007fc13f7ec0a0
-RBP: 00007fc13f7ec0a0 R08: 00007fc13f7ec0e0 R09: 00000000000004d4
-R10: 0000000000200810 R11: 0000000000000206 R12: 00007fc13f7ec0e0
-R13: 0000000000200810 R14: 0000000000000003 R15: 0000000000040000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_quota_enable fs/ext4/super.c:7010 [inline]
-RIP: 0010:ext4_enable_quotas+0xb7a/0xb90 fs/ext4/super.c:7057
-Code: ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 3a f7 ff ff 49 89 d6 48 89 df e8 13 07 99 ff 4c 89 f2 e9 27 f7 ff ff e8 36 35 40 ff <0f> 0b e8 2f 35 40 ff 0f 0b e8 e8 4d 71 08 0f 1f 84 00 00 00 00 00
-RSP: 0018:ffffc90003d7f880 EFLAGS: 00010293
-RAX: ffffffff824b82fa RBX: 0000000000000000 RCX: ffff88802cd08000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003d7fa50 R08: ffffffff824b7bf4 R09: 1ffff1100eadb457
-R10: dffffc0000000000 R11: ffffed100eadb458 R12: 0000000000000001
-R13: 0000000000000001 R14: ffff88801675d464 R15: dffffc0000000000
-FS:  00007fc13f7ec6c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555556776778 CR3: 000000001635a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308240315.MEo2AODX-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from net/mptcp/sched.c:14:
+   In file included from include/net/bpf_sk_storage.h:11:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/mptcp/sched.c:14:
+   In file included from include/net/bpf_sk_storage.h:11:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/mptcp/sched.c:14:
+   In file included from include/net/bpf_sk_storage.h:11:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from net/mptcp/sched.c:14:
+   include/net/bpf_sk_storage.h:64:1: warning: no previous prototype for function 'bpf_sk_storage_lookup' [-Wmissing-prototypes]
+      64 | bpf_sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit)
+         | ^
+   include/net/bpf_sk_storage.h:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      63 | struct bpf_local_storage_data *
+         | ^
+         | static 
+>> net/mptcp/sched.c:211:10: error: no member named 'sk_bpf_storage' in 'struct sock'
+     211 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
+         |             ~~  ^
+   net/mptcp/sched.c:211:32: error: no member named 'sk_bpf_storage' in 'struct sock'
+     211 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
+         |                                   ~~  ^
+   net/mptcp/sched.c:212:18: error: no member named 'sk_bpf_storage' in 'struct sock'
+     212 |             !strcmp(sk->sk_bpf_storage->smap->map.name, "mptcp_burst_map")) {
+         |                     ~~  ^
+   net/mptcp/sched.c:215:42: error: no member named 'sk_bpf_storage' in 'struct sock'
+     215 |                 sdata = bpf_sk_storage_lookup(sk, &sk->sk_bpf_storage->smap->map, true);
+         |                                                    ~~  ^
+   net/mptcp/sched.c:239:10: error: no member named 'sk_bpf_storage' in 'struct sock'
+     239 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
+         |             ~~  ^
+   net/mptcp/sched.c:239:32: error: no member named 'sk_bpf_storage' in 'struct sock'
+     239 |         if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
+         |                                   ~~  ^
+   net/mptcp/sched.c:240:18: error: no member named 'sk_bpf_storage' in 'struct sock'
+     240 |             !strcmp(sk->sk_bpf_storage->smap->map.name, "mptcp_burst_map")) {
+         |                     ~~  ^
+   net/mptcp/sched.c:243:42: error: no member named 'sk_bpf_storage' in 'struct sock'
+     243 |                 sdata = bpf_sk_storage_lookup(sk, &sk->sk_bpf_storage->smap->map, true);
+         |                                                    ~~  ^
+   13 warnings and 8 errors generated.
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+vim +211 net/mptcp/sched.c
+
+   203	
+   204	int mptcp_sched_get_params(struct mptcp_sock *msk)
+   205	{
+   206		struct sock *sk = (struct sock *)msk;
+   207	
+   208		if (msk->sched == &mptcp_sched_default)
+   209			return msk->snd_burst;
+   210	
+ > 211		if (sk->sk_bpf_storage && sk->sk_bpf_storage->smap &&
+   212		    !strcmp(sk->sk_bpf_storage->smap->map.name, "mptcp_burst_map")) {
+   213			struct bpf_local_storage_data *sdata;
+   214	
+   215			sdata = bpf_sk_storage_lookup(sk, &sk->sk_bpf_storage->smap->map, true);
+   216			if (sdata) {
+   217				struct mptcp_burst_storage {
+   218					int snd_burst;
+   219				} *ptr;
+   220	
+   221				ptr = (struct mptcp_burst_storage *)sdata->data;
+   222				if (ptr)
+   223					return ptr->snd_burst;
+   224			}
+   225		}
+   226	
+   227		return 0;
+   228	}
+   229	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
