@@ -1,268 +1,75 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901B728917
-	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 18:03:22 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d7496b913e7so120161276.3
-        for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 11:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692900201; x=1693505001;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jylpqBSq6UZhDtJHaP/6cFTqfJ1I/2o5dmapcGZqzGk=;
-        b=E1FcvBcvo1zP1Vdi0KwRwEi4XcKZj2/NFp52Hpeo3fA/EOMBpFgAU04ap1h+EiJzIO
-         YDmoI/iJcKnWCiURI93udUFg04oDjRjV5TKetnMYZdncataXHWrDUThf7ZAt2yXv8435
-         4CcW4YJtDEUZA9j1Hdr0uSenajyWJGANqc+05EPJvPSZfkErZBkh/k70pWmVQqIR0vxt
-         rFhDm9Dyn4at7lRQuYDAqBkhx97LspiHznYimCqZymj1I+8jKeeX6wG9HRReRgx6cUdc
-         HB8gMTQfZ6COrsPz29W6oUdbcMzaS4iy53e13a4aEo/Mosl1DYV2b30RgXbFSPe7p5x4
-         bFRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692900201; x=1693505001;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jylpqBSq6UZhDtJHaP/6cFTqfJ1I/2o5dmapcGZqzGk=;
-        b=e6sK3F26l51BYsPDhm4mChsYXA/MJniLY+zPNhx4bu712C7w851JHFCEls5Ak5jd8Y
-         15gl3jQhf696WHQG2eWAPUaVzRSe1wAYjZw43uiePOYBrA7oZPDeGzOy8mZqU1PSBL5w
-         lWJWUBmcX5pTFD3UBYgnLehQOd9TllyQUVyIOxgl6lbtbME+COepbv9jsLs/2uEra0w1
-         jDKlsAmLTExi5ieIWaFYdniW2+vVJVk4yi4g8NckA+fHT65iSeQJgKp9fLbybD1Tsatv
-         41AvdoHsGS++7w013og5gB8evTMRoHIH0/8EloCFvM48Ea0HqjD8rzmQE+vrQ0jvFRie
-         L7Tg==
-X-Gm-Message-State: AOJu0Yx8GgWZuYoprmtVFdlUZYV5sP+aO9Uo5aIBln2n4YGbopYPL3QR
-	Ihh0GB+66UjXk4x0hYF4RSSyRuvWEO8e5C0zbWA=
-X-Google-Smtp-Source: AGHT+IGDTvjBhTEjTSJ+jxTsdrlcA5pLuf1/WRjn/S7zeKMOvitmcknjEYYJppddGEudEVAhJ3cf8i90mlLIl7TEptE=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:63f7:38ec:c0bd:8830])
- (user=ndesaulniers job=sendgmr) by 2002:a25:c752:0:b0:d6b:1a89:6673 with SMTP
- id w79-20020a25c752000000b00d6b1a896673mr217374ybe.5.1692900201401; Thu, 24
- Aug 2023 11:03:21 -0700 (PDT)
-Date: Thu, 24 Aug 2023 11:03:17 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C3A28917
+	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 18:05:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94152C433C8;
+	Thu, 24 Aug 2023 18:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692900318;
+	bh=b9Y4MPFolNjzn4rKwTbXRHQYatnX1u3FmDMhr2r9dz8=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=DfHVNSb5f04gpIp928ey9FDQppV9g16cxcCFbnmXLlzczV5Fr+m7iOZdD7NqfcnRr
+	 jssafJzN3XCx7hMfYdBJ940V0KyasdFVTPIuylav+O153GUVHKylaA/Ja7l1Au6R4A
+	 oIp2gev0SB+akKLnOOE8eDC7UEucEfPR6DlyDghDEV0+tTE2pHpq8/zxObGFf808Tw
+	 wnL2MX0pTMGpsWPdDXEhLkLOfRYba7863JBLMANK8nqAthlHrmT9jF86A8jAZs40LX
+	 GhY1yeWL4KALL9EuVn4TGJMkY8tSHhc72uHitMzFoLJatnVQJVCoy2f114QDwmew1Q
+	 1AvL7+ZCgoXeQ==
+Date: Thu, 24 Aug 2023 19:05:13 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+List-Id: <linux-riscv.lore.kernel.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	patchwork-bot+linux-riscv@kernel.org,
+	linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com, bmeng@tinylab.org,
+	guoren@kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v5] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+Message-ID: <20230824-cortex-mobilize-8b94e059e130@spud>
+References: <20230809165648.21071-1-xingmingzheng@iscas.ac.cn>
+ <169228562484.20811.14246462375671910714.git-patchwork-notify@kernel.org>
+ <20230823-captive-abdomen-befd942a4a73@wendy>
+ <20230823-facelift-ovary-41f2eb4d9eac@spud>
+ <4677fc33-6e76-21e6-2a7f-f12670bc1ce2@iscas.ac.cn>
+ <4177c0c5-4d36-75e1-84e2-c6ac82b74e50@iscas.ac.cn>
+ <20230824-stick-neutron-839dfdfa0538@spud>
+ <3ba51c81-7eca-b1b5-c89d-47b292b65641@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAGSb52QC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2MDCyMT3ZT85GLdZEPzRNOUVPM0QwNjJaDSgqLUtMwKsDHRsbW1AIR2Jcx WAAAA
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692900199; l=7833;
- i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
- bh=yaDjW5hOI5gJGOMZ1DsDzpbL5Z3k3IDsA7FrJwcxAdM=; b=6OoJ7R8CkuDjqnXjQysK58Kb5Piqi7H/nHRIVfhdlo6v+c7ImybKTufIPhYohUbYmUpG/dahd
- 9/vUqbUHgtjD7Ucxf0/2rRwHPB8uTmjizRlYvGdyr2Yrr+yquGSVi89
-X-Mailer: b4 0.12.3
-Message-ID: <20230824-docs-v1-1-67e061278b8f@google.com>
-Subject: [PATCH] Documentation/llvm: refresh docs
-From: ndesaulniers@google.com
-To: Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
-
-Recent fixes for an embargoed hardware security vulnerability failed to
-link with ld.lld (LLVM's linker).  [0]  To be fair, our documentation
-mentions ``CC=clang`` foremost with ``LLVM=1`` being buried "below the
-fold."
-
-We want to encourage the use of ``LLVM=1`` rather than just
-``CC=clang``. Make that sugguestion "above the fold" and "front and
-center" in our docs.
-
-While here, the following additional changes were made:
-- remove the bit about CROSS_COMPILE setting --target=, that's no longer
-  true.
-- Add ARCH=loongarch to the list of maintained targets (though we're
-  still working on getting defconfig building cleanly at the moment;
-  we're pretty close).
-- Promote ARCH=riscv from being Maintained to being Supported. Android
-  is working towards supporting RISC-V, and we have excellent support
-  from multiple companies in this regard.
-- Note that the toolchain distribution on kernel.org has been built with
-  profile data from kernel builds.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1907 [0]
----
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="U02fYEvSEIMc9kCR"
+Content-Disposition: inline
+In-Reply-To: <3ba51c81-7eca-b1b5-c89d-47b292b65641@iscas.ac.cn>
 
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- Documentation/kbuild/llvm.rst | 102 +++++++++++++++++++++++-------------------
- 1 file changed, 55 insertions(+), 47 deletions(-)
+--U02fYEvSEIMc9kCR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-index c3851fe1900d..00b26a0a6bf1 100644
---- a/Documentation/kbuild/llvm.rst
-+++ b/Documentation/kbuild/llvm.rst
-@@ -25,50 +25,38 @@ objects <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM
- that supports C and the GNU C extensions required by the kernel, and is
- pronounced "klang," not "see-lang."
- 
--Clang
-------
--
--The compiler used can be swapped out via ``CC=`` command line argument to ``make``.
--``CC=`` should be set when selecting a config and during a build. ::
--
--	make CC=clang defconfig
-+Building with LLVM
-+------------------
- 
--	make CC=clang
--
--Cross Compiling
-----------------
-+Invoke ``make`` via::
- 
--A single Clang compiler binary will typically contain all supported backends,
--which can help simplify cross compiling. ::
--
--	make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
-+	make LLVM=1
- 
--``CROSS_COMPILE`` is not used to prefix the Clang compiler binary, instead
--``CROSS_COMPILE`` is used to set a command line flag: ``--target=<triple>``. For
--example: ::
-+to compile for the host target. For cross compiling::
- 
--	clang --target=aarch64-linux-gnu foo.c
-+	make LLVM=1 ARCH=arm64
- 
--LLVM Utilities
-+The LLVM= argument
- --------------
- 
--LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
--The full list of supported make variables::
-+LLVM has substitutes for GNU binutils utilities. They can be enabled
-+individually. The full list of supported make variables::
- 
- 	make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
- 	  OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
- 	  HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
- 
--To simplify the above command, Kbuild supports the ``LLVM`` variable::
--
--	make LLVM=1
-+``LLVM=1`` expands to the above.
- 
- If your LLVM tools are not available in your PATH, you can supply their
- location using the LLVM variable with a trailing slash::
- 
- 	make LLVM=/path/to/llvm/
- 
--which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-+which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc. The
-+following may also be used::
-+
-+	PATH=/path/to/llvm:$PATH make LLVM=1
- 
- If your LLVM tools have a version suffix and you want to test with that
- explicit version rather than the unsuffixed executables like ``LLVM=1``, you
-@@ -78,31 +66,46 @@ can pass the suffix using the ``LLVM`` variable::
- 
- which will use ``clang-14``, ``ld.lld-14``, etc.
- 
--``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
--``LLVM=1``. If you only wish to use certain LLVM utilities, use their respective
--make variables.
-+To support combinations of out of tree paths with version suffixes, we
-+recommend::
-+
-+	PATH=/path/to/llvm/:$PATH make LLVM=-14
- 
--The integrated assembler is enabled by default. You can pass ``LLVM_IAS=0`` to
--disable it.
-+``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-+``LLVM=1``. If you only wish to use certain LLVM utilities, use their
-+respective make variables.
- 
--Omitting CROSS_COMPILE
------------------------
-+The same value used for ``LLVM=`` should be set for each invocation of ``make``
-+if configuring and building via distinct commands. ``LLVM=`` should also be set
-+as an environment variable when running scripts that will eventually run
-+``make``.
- 
--As explained above, ``CROSS_COMPILE`` is used to set ``--target=<triple>``.
-+Cross Compiling
-+---------------
- 
--If ``CROSS_COMPILE`` is not specified, the ``--target=<triple>`` is inferred
--from ``ARCH``.
-+A single Clang compiler binary (and corresponding LLVM utilities) will
-+typically contain all supported backends, which can help simplify cross
-+compiling especially when ``LLVM=1`` is used. If you use only LLVM tools,
-+``CROSS_COMPILE`` becomes unnecessary.
- 
--That means if you use only LLVM tools, ``CROSS_COMPILE`` becomes unnecessary.
-+As an example, for a target like ``ARCH=s390`` which does not yet have
-+``ld.lld`` support, you could invoke ``make`` via::
- 
--For example, to cross-compile the arm64 kernel::
-+	make LLVM=1 LD=ld.bfd CROSS_COMPILE=s390x-linux-gnu-
- 
--	make ARCH=arm64 LLVM=1
-+``CROSS_COMPILE`` is not used to prefix the Clang compiler binary (or
-+corresponding LLVM utilities), but it will be for any GNU toolchain utilities.
-+This example will invoke ``s390x-linux-gnu-ld.bfd`` as the linker, so ensure
-+that is reachable in your ``$PATH``.
- 
--If ``LLVM_IAS=0`` is specified, ``CROSS_COMPILE`` is also used to derive
--``--prefix=<path>`` to search for the GNU assembler and linker. ::
-+The LLVM_IAS= argument
-+-----------------
- 
--	make ARCH=arm64 LLVM=1 LLVM_IAS=0 CROSS_COMPILE=aarch64-linux-gnu-
-+Clang can assemble assembler code. You can pass ``LLVM_IAS=0`` to disable this
-+behavior and have Clang invoke the system assembler instead (or the assembler
-+based on ``CROSS_COMPILE``). ``CROSS_COMPILE`` is necessary when ``LLVM_IAS=0``
-+is set when cross compiling in order to set ``--prefix=`` for the compiler to
-+find the corresponding non-integrated assembler.
- 
- Supported Architectures
- -----------------------
-@@ -135,14 +138,17 @@ yet. Bug reports are always welcome at the issue tracker below!
-    * - hexagon
-      - Maintained
-      - ``LLVM=1``
-+   * - loongarch
-+     - Maintained
-+     - ``LLVM=1``
-    * - mips
-      - Maintained
-      - ``LLVM=1``
-    * - powerpc
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1``
-    * - riscv
--     - Maintained
-+     - Supported
-      - ``LLVM=1``
-    * - s390
-      - Maintained
-@@ -171,9 +177,11 @@ Getting Help
- Getting LLVM
- -------------
- 
--We provide prebuilt stable versions of LLVM on `kernel.org <https://kernel.org/pub/tools/llvm/>`_.
--Below are links that may be useful for building LLVM from source or procuring
--it through a distribution's package manager.
-+We provide prebuilt stable versions of LLVM on `kernel.org
-+<https://kernel.org/pub/tools/llvm/>`_. These have been optimized with profile
-+data for building Linux kernels. Below are links that may be useful for
-+building LLVM from source or procuring it through a distribution's package
-+manager.
- 
- - https://releases.llvm.org/download.html
- - https://github.com/llvm/llvm-project
+On Fri, Aug 25, 2023 at 01:46:59AM +0800, Mingzheng Xing wrote:
 
----
-base-commit: 93f5de5f648d2b1ce3540a4ac71756d4a852dc23
-change-id: 20230824-docs-c17a5de7f103
+> Just a question, I see that the previous patch has been merged
+> into 6.5-rc7, and now a new fix patch should be sent out based
+> on that, right?
 
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
+yes
 
+--U02fYEvSEIMc9kCR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZOeb2QAKCRB4tDGHoIJi
+0vDMAQCzGNlPBZZkzPnogVAMPBEN/UWcLLDix5fK5GC8O/NBdgD9Eq02Jx3LLTHQ
+NQ7boHcY0bsiLyHDYsoS6SSG921AbgI=
+=nZ9V
+-----END PGP SIGNATURE-----
+
+--U02fYEvSEIMc9kCR--
