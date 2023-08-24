@@ -1,67 +1,211 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAA117FF0
-	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 20:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 48A83C433C7;
-	Thu, 24 Aug 2023 20:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692907822;
-	bh=qT/JbWrkOTT0b8z8DYIP7cA63D810/8ETsf+/hqaq8U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=NHcNTdq+6kQqgQNG4+6nbr5bvmyMDnA7WSPRQvFgkRvocYz/gItS5JW6OZKmNXu3K
-	 Mf+kB+Do3xeLqoTGrxmBj1dcsh5mflX/rDOt0z/HH5zAHy0VTM0h6VU7+kDcldEKVN
-	 +bN0jqnxouPsKqLPFZHzV/ZX5UhCE95HgCk9ONTJTNPd0Q2uWZjJSPj931jozNTNi1
-	 JOCWZXZm/2Rl7Q9C66GAVAsr4ouKDuWhjyZnRhM/aPDcSYJEEE6oftOw6r72exSKan
-	 QhcnOr8yAmKs7qmf3/TjTVSZpX2jXWHj17TreeGyeQvpmEeFEuu5VLhFdaKtXFt/D6
-	 X/u2erUCkzHdw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 29A74E33093;
-	Thu, 24 Aug 2023 20:10:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3079C1803F
+	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 20:32:54 +0000 (UTC)
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-79a10807b4fso91374241.2
+        for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 13:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692909174; x=1693513974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tHgc3WP+Nh6Vx2D3nfsqbnX7Tv1DqoV0JUg0NhhaZj0=;
+        b=yUSsrWXewLlVITH1WXfUdKTdRJucx44NluTkLK1hKUN7MOAOoeNAxg0GbiBkppLBqw
+         2SSw7fRty8PZ4jahXDUgvCq6mHGME3/pusrnlWgJBQyOLKpyGrwtNZ76eo8bzd4gEbps
+         yRsgzQ8KQjJ/SYrfq4tsGNfmnB+XT/f61OeeP2a91WwQmxDzHRf5reDG0dTf5yreKwOP
+         YkPC563nZqNgtMUZ6rDBIU3zgrCfc4DRcSVZJC+mjhLctJcnN6fh+yCgPrn8OqJW//CO
+         J1fTP929LHNCV/PLeEV0dYOaVChPytLLrG7ZW53zcO8+NggVhA0Ci2pCr05ZYWWLt7Gj
+         Y3pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692909174; x=1693513974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tHgc3WP+Nh6Vx2D3nfsqbnX7Tv1DqoV0JUg0NhhaZj0=;
+        b=ZsHWN1maN2RRoN843ytFXUor5whNjFuxXDuZZfxDQH/7cJQvKqRecJXUr40W/2ZfXm
+         ZNt0tGdBdb5PEE4lvuUtskE5AmAni0nY2icgnoTOFSae+iaEmsvFR76oIQs2ofxR37gB
+         VH3MTbxsd9c/oqPkU8g9fdKSCYDxGUqthU+c1RovM54ZVosEZVOEGzVu8Kj6qapJEpi/
+         M113J9yNzm8ONVrKUWW+PXntKtpK3wUCzpZ1CPHqOJ5WihG2KbSQM6V05DYtPXzu9XDd
+         Bfe5LD3njie7sGxmMGHaVWAwj+yXqe46UOkXoDMnXEaBl4ocLPk0wTZSbZanBAln5Oyo
+         VtGw==
+X-Gm-Message-State: AOJu0YzpNusEOWNNgBbJKEEO3nBFQv3mf+jfQYB7j8BlQOuav4ItEgcF
+	X64UiViibChOF/EAcpvZh1/xGXSnbZ1vaSSBwJPqIQ==
+X-Google-Smtp-Source: AGHT+IHx+HdR8IQ8OXZN+MAUVyWyXJ/kKMpdKNVgDgofuFkKOBodmgQtn3uFU6QlecscjQN2j2BzMPtDM26C8djqy14=
+X-Received: by 2002:a05:6102:2d3:b0:44d:3f58:c42f with SMTP id
+ h19-20020a05610202d300b0044d3f58c42fmr13443054vsh.11.1692909173739; Thu, 24
+ Aug 2023 13:32:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] riscv: Fix build errors using binutils2.37 toolchains
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <169290782216.11381.9335896608253523695.git-patchwork-notify@kernel.org>
-Date: Thu, 24 Aug 2023 20:10:22 +0000
-References: <20230824190852.45470-1-xingmingzheng@iscas.ac.cn>
-In-Reply-To: <20230824190852.45470-1-xingmingzheng@iscas.ac.cn>
-To: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-Cc: linux-riscv@lists.infradead.org, conor@kernel.org,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- bmeng@tinylab.org, guoren@kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, stable@vger.kernel.org, conor.dooley@microchip.com
+References: <20230824-docs-v1-1-67e061278b8f@google.com> <20230824184910.GA2015748@dev-arch.thelio-3990X>
+In-Reply-To: <20230824184910.GA2015748@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 24 Aug 2023 13:32:42 -0700
+Message-ID: <CAKwvOdkdb=dDggNNPHb08AiZNp5V-H9utgm0H+2hJmZJdO-biA@mail.gmail.com>
+Subject: Re: [PATCH] Documentation/llvm: refresh docs
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Thu, Aug 24, 2023 at 11:49=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
+>
+> On Thu, Aug 24, 2023 at 11:03:17AM -0700, ndesaulniers@google.com wrote:
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1907 [0]
+> > ---
+> >
+> >
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Nit: Your signed-off-by ended up below the fold, was it in your cover
+> letter commit rather than your actual commit?
 
-This patch was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+Heh, no. I'm restoring a machine after suffering drive corruption last
+week. I just got patatt and friends re-set up, but I forgot to `git
+commit --amend -s` for this patch once everything was working again.
+Thanks for catching this!
 
-On Fri, 25 Aug 2023 03:08:52 +0800 you wrote:
-> When building the kernel with binutils 2.37 and GCC-11.1.0/GCC-11.2.0,
-> the following error occurs:
-> 
->   Assembler messages:
->   Error: cannot find default versions of the ISA extension `zicsr'
->   Error: cannot find default versions of the ISA extension `zifencei'
-> 
-> [...]
+>
+> Aside from the relatively minor comments below, this looks like a really
+> good improvement to the documentation to me. It feels like it is more
+> targeting users or non-kbuild folks now, which I think is great.
+>
+> I trust you to address my comments as you see fit, so please carry
+> forward:
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Here is the summary with links:
-  - riscv: Fix build errors using binutils2.37 toolchains
-    https://git.kernel.org/riscv/c/ef21fa7c198e
+Thanks for the review!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> I see a few new kernel-doc warnings from not adjusting the underlines to
+> match the new length of the title:
+>
+>   Documentation/kbuild/llvm.rst:40: WARNING: Title underline too short.
+>
+>   The LLVM=3D argument
+>   --------------
+>   Documentation/kbuild/llvm.rst:40: WARNING: Title underline too short.
+>
+>   The LLVM=3D argument
+>   --------------
+>   Documentation/kbuild/llvm.rst:102: WARNING: Title underline too short.
+>
+>   The LLVM_IAS=3D argument
+>   -----------------
+>   Documentation/kbuild/llvm.rst:102: WARNING: Title underline too short.
+>
+>   The LLVM_IAS=3D argument
+>   -----------------
 
+oops! remind me of the make target to observe these?
 
+> > -For example, to cross-compile the arm64 kernel::
+> > +     make LLVM=3D1 LD=3Dld.bfd CROSS_COMPILE=3Ds390x-linux-gnu-
+>
+> This should probably have ARCH=3Ds390?
+
+Oops! Good catch!
+
+>
+> > -     make ARCH=3Darm64 LLVM=3D1
+> > +``CROSS_COMPILE`` is not used to prefix the Clang compiler binary (or
+> > +corresponding LLVM utilities), but it will be for any GNU toolchain ut=
+ilities.
+> > +This example will invoke ``s390x-linux-gnu-ld.bfd`` as the linker, so =
+ensure
+> > +that is reachable in your ``$PATH``.
+>
+> I like the example as I feel like it addresses some of the fear I have ha=
+d
+> around recommending LLVM=3D1 as the initial build suggestion but 'LLVM=3D=
+1
+> LD=3Dld.bfd CROSS_COMPILE=3Ds390x-linux-gnu-' does not compose as you des=
+cribe here
+> because $(LD) is not prefixed with $(CROSS_COMPILE) anywhere in Makefile.=
+ The
+> non-$(LLVM) default assignment of $(LD) is '$(CROSS_COMPILE)ld' and that =
+is
+> overridden by 'LD=3Dld.bfd' on the command line.
+>
+> In other words, this should be
+>
+>   make ARCH=3Ds390 LLVM=3D1 LD=3Ds390x-linux-gnu-ld.bfd
+>
+> and have the note about CROSS_COMPILE prefixing any GNU toolchain utiliti=
+es
+> removed. It should problably have OBJCOPY and OBJDUMP too, as those are
+> required due to https://github.com/ClangBuiltLinux/linux/issues/859 and
+> https://github.com/ClangBuiltLinux/linux/issues/1530.
+
+Ah right; I'm no longer able to repro the build failure with OBJDUMP,
+though I still see warnings.
+
+I kind of feel like we should bring back CROSS_COMPILE in some form;
+having to respecify the triple is still sub-optimal.
+
+i.e. today:
+$ make LLVM=3D1 ARCH=3Ds390 LD=3Ds390x-linux-gnu-ld.bfd
+OBJCOPY=3Ds390x-linux-gnu-objcopy OBJDUMP=3Ds390x-linux-gnu-objdump
+
+vs
+
+$ make LLVM=3D1 ARCH=3Ds390 CROSS_COMPILE=3Ds390x-linux-gnu- LD=3Dld.bfd
+OBJCOPY=3Dobjcopy OBJDUMP=3Dobjdump
+
+but perhaps that's a change for another day.
+
+>
+> > -If ``LLVM_IAS=3D0`` is specified, ``CROSS_COMPILE`` is also used to de=
+rive
+> > -``--prefix=3D<path>`` to search for the GNU assembler and linker. ::
+> > +The LLVM_IAS=3D argument
+> > +-----------------
+> >
+> > -     make ARCH=3Darm64 LLVM=3D1 LLVM_IAS=3D0 CROSS_COMPILE=3Daarch64-l=
+inux-gnu-
+> > +Clang can assemble assembler code. You can pass ``LLVM_IAS=3D0`` to di=
+sable this
+> > +behavior and have Clang invoke the system assembler instead (or the as=
+sembler
+> > +based on ``CROSS_COMPILE``). ``CROSS_COMPILE`` is necessary when ``LLV=
+M_IAS=3D0``
+> > +is set when cross compiling in order to set ``--prefix=3D`` for the co=
+mpiler to
+> > +find the corresponding non-integrated assembler.
+>
+> Thanks a lot for documenting this behavior, it is one of the most common
+> issues I run into myself (adding LLVM_IAS=3D0 without CROSS_COMPILE) and
+> maybe this note will be what I need in order to remember :)
+
+Ah right, I'll make that clearer.
+
+> >
+> > -We provide prebuilt stable versions of LLVM on `kernel.org <https://ke=
+rnel.org/pub/tools/llvm/>`_.
+> > -Below are links that may be useful for building LLVM from source or pr=
+ocuring
+> > -it through a distribution's package manager.
+> > +We provide prebuilt stable versions of LLVM on `kernel.org
+> > +<https://kernel.org/pub/tools/llvm/>`_. These have been optimized with=
+ profile
+> > +data for building Linux kernels. Below are links that may be useful fo=
+r
+>
+> Maybe make a note of why this matters? ", which should lower kernel
+> build times compared to non-optimized LLVM toolchains."?
+
+Ack
+
+--=20
+Thanks,
+~Nick Desaulniers
