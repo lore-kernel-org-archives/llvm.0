@@ -1,88 +1,146 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0633A134A1
-	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 19:03:38 +0000 (UTC)
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3a7d7de894bso132570b6e.3
-        for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 12:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692903818; x=1693508618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OIOxOAbASEK1ExaxZknXwWWIX7BvuBO6qbXSqSkkplM=;
-        b=in7SDO1nCpMs1pW6kZW2GONP33S6cr0Tzr+D5zoGf9HonygP8+Ho7kWZjEoOKA6s4g
-         d45VlJ3vVhh4ACl/LqFkXaO6QnczQHQEIYYLcD8RA32+ejXBnWfwneKIsA51JyVJQXSx
-         E13fyTljsypiqKlxyoOqjClb4wwL/+i2nmGAsnEFF51vn2E1vWxKyb8skn90GlH869CV
-         zcxOC0fDSVNKJlZcGfzEkSIPtie6yKijQyiP9J6zUeRMAOhxKYaa6NaN36Ow6+1w8FAH
-         oTemG/zutFjoDyqFV7AZLpo6aCZpB5ZtrdBkImv4isq7MqSEQZZriBzlnXmpSqan0vMF
-         7zFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692903818; x=1693508618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OIOxOAbASEK1ExaxZknXwWWIX7BvuBO6qbXSqSkkplM=;
-        b=hq8/nny/vSfwTT0cFN3MWQtfRpb65zJbqStW7dE68Eotn169AWjI9+2QAf7QpGYCqO
-         UCYdAPF+cgtXDBBITjRJ/r2KT1bS47EmgK21ERJ6qKW1JfphAlUbfhuyg+xLP/mbbbvB
-         txdvklIg2RMSUif1no/KIJ8SAQmr7tFKT+RXZusvtLGLeneZz8ukun8NxhCUB5EcqxmD
-         7No8v8O2B7UQ3fq0BAUdMrXHeFOPDPYCQWkt8HgEC3h4djx4tZgxyP268fewhK2yH2rQ
-         ceYcPEGwbbVskh0/2+QyGkFp5uDqPDP236CASvQ/n5Ss6Emx8LTW/J/nlpeqe2Mm+gjH
-         d/dg==
-X-Gm-Message-State: AOJu0YzMVQmlq9yQ5865lg7+YDVqqG/jNFkRqi/FmwSDYScvqAppMSMX
-	BmKhoJkgt/xDPly1uunUubGqcy2MAKCcJYD4UYtpbg==
-X-Google-Smtp-Source: AGHT+IEXfuxs+RNxF7LKh6GmsWDesiSbOR2nqSO8VUt1beRy2Mdk4QadJhGLc+bzDHcxONvRodJuItf2jppA6SS8Bts=
-X-Received: by 2002:a05:6808:10cd:b0:3a7:458e:3df4 with SMTP id
- s13-20020a05680810cd00b003a7458e3df4mr600019ois.56.1692903817600; Thu, 24 Aug
- 2023 12:03:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CF414F8B
+	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 19:16:15 +0000 (UTC)
+Received: from xmz-huawei.. (unknown [111.197.209.91])
+	by APP-03 (Coremail) with SMTP id rQCowAAXHmbGqudkwlMABQ--.63174S2;
+	Fri, 25 Aug 2023 03:08:55 +0800 (CST)
+From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+To: Conor Dooley <conor@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: Bin Meng <bmeng@tinylab.org>,
+	Guo Ren <guoren@kernel.org>,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	stable@vger.kernel.org,
+	Mingzheng Xing <xingmingzheng@iscas.ac.cn>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH] riscv: Fix build errors using binutils2.37 toolchains
+Date: Fri, 25 Aug 2023 03:08:52 +0800
+Message-Id: <20230824190852.45470-1-xingmingzheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230815203442.1608773-8-samitolvanen@google.com>
- <20230815203442.1608773-10-samitolvanen@google.com> <d3696b2a-3d21-4ab6-8cef-20b8ee21742f@rivosinc.com>
-In-Reply-To: <d3696b2a-3d21-4ab6-8cef-20b8ee21742f@rivosinc.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 24 Aug 2023 12:03:00 -0700
-Message-ID: <CABCJKud+24TGRX7b8Tb83HdWApC83adY=o2JpejRTHA4nkfpMg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] riscv: Deduplicate IRQ stack switching
-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>, 
-	Guo Ren <guoren@kernel.org>, Deepak Gupta <debug@rivosinc.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Fangrui Song <maskray@google.com>, linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowAAXHmbGqudkwlMABQ--.63174S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw15uF48Cw4ftFy5ZF1rXrb_yoW5Cw4fp3
+	4fCFn8Kr1rWF1xJr10yr18W3WYgrZ5J39Igr4kXr4Uuws5ZrZrJ34vkr129rsFvrs7trZ5
+	Zr4F9a1rWF1DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+	DUUUUU=
+X-Originating-IP: [111.197.209.91]
+X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiCgUNCmTnYiSHfgAAs0
 
-Hi Cl=C3=A9ment,
+When building the kernel with binutils 2.37 and GCC-11.1.0/GCC-11.2.0,
+the following error occurs:
 
-On Thu, Aug 24, 2023 at 1:12=E2=80=AFAM Cl=C3=A9ment L=C3=A9ger <cleger@riv=
-osinc.com> wrote:
->
-> Some defines for stack frame offsets could be added in asm-offsets for
-> the offsets:
->
->         DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe),
-> STACK_ALIGN));
->         OFFSET(STACKFRAME_FP, stackframe, fp);
->         OFFSET(STACKFRAME_RA, stackframe, ra);
->
-> And you can probably increment the stack at once (saving two addi in
-> prologue/epilogue) for both RA and FP and reuse the asm-offsets defines:
->
->         addi    sp, sp, -STACKFRAME_SIZE_ON_STACK
->         REG_S   ra, STACKFRAME_RA(sp)
->         REG_S   s0, STACKFRAME_FP(sp)
->         addi    s0, sp, STACKFRAME_SIZE_ON_STACK
+  Assembler messages:
+  Error: cannot find default versions of the ISA extension `zicsr'
+  Error: cannot find default versions of the ISA extension `zifencei'
 
-Thanks for taking a look!
+The above error originated from this commit of binutils[0], which has been
+resolved and backported by GCC-12.1.0[1] and GCC-11.3.0[2].
 
-I just copied the existing inline assembly here, but I do agree that
-defining stack frame offsets and avoiding the extra addis is a cleaner
-approach. I'll change this in v3.
+So fix this by change the GCC version in
+CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC to GCC-11.3.0.
 
-Sami
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=f0bae2552db1dd4f1995608fbf6648fcee4e9e0c [0]
+Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca2bbb88f999f4d3cc40e89bc1aba712505dd598 [1]
+Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d29f5d6ab513c52fd872f532c492e35ae9fd6671 [2]
+Fixes: ca09f772ccca ("riscv: Handle zicsr/zifencei issue between gcc and binutils")
+Reported-by: Conor Dooley <conor.dooley@microchip.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+---
+
+Then below are my test results after this fix:
+
+gcc        binutils
+
+10.5.0     2.35            ok
+10.5.0     2.36            ok
+10.5.0     2.37            ok
+10.5.0     2.38            ok
+
+11.1.0     2.35            ok
+11.1.0     2.36            ok
+11.1.0     2.37            ok
+11.1.0     2.38            ok
+
+11.2.0     2.35            ok
+11.2.0     2.36            ok
+11.2.0     2.37            ok
+11.2.0     2.38            ok
+
+11.3.0     2.35            ok
+11.3.0     2.36            ok
+11.3.0     2.37            ok
+11.3.0     2.38            ok
+
+11.4.0     2.35            ok
+11.4.0     2.36            ok
+11.4.0     2.37            ok
+11.4.0     2.38            ok
+
+12.1.0     2.35            ok
+12.1.0     2.36            ok
+12.1.0     2.37            ok
+12.1.0     2.38            ok
+
+12.2.0     2.35            ok
+12.2.0     2.36            ok
+12.2.0     2.37            ok
+12.2.0     2.38            ok 
+
+ arch/riscv/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 10e7a7ad175a..bea7b73e895d 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -580,15 +580,15 @@ config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+ 	  and Zifencei are supported in binutils from version 2.36 onwards.
+ 	  To make life easier, and avoid forcing toolchains that default to a
+ 	  newer ISA spec to version 2.2, relax the check to binutils >= 2.36.
+-	  For clang < 17 or GCC < 11.1.0, for which this is not possible, this is
+-	  dealt with in CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
++	  For clang < 17 or GCC < 11.3.0, for which this is not possible or need
++	  special treatment, this is dealt with in TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
+ 
+ config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+ 	def_bool y
+ 	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+ 	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
+-	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b03be74bad08c382da47e048007a78fa3fb4ef49
+-	depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC && GCC_VERSION < 110100)
++	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d29f5d6ab513c52fd872f532c492e35ae9fd6671
++	depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC && GCC_VERSION < 110300)
+ 	help
+ 	  Certain versions of clang and GCC do not support zicsr and zifencei via
+ 	  -march. This option causes an older ISA spec compatible with these older
+-- 
+2.34.1
+
