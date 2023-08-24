@@ -1,60 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B46179;
-	Thu, 24 Aug 2023 00:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DF319C;
+	Thu, 24 Aug 2023 00:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692835287; x=1724371287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nhyqneDoLJjZ/M+Loz6bMRFomtPYuD47bFXLTP1ffc0=;
-  b=E/YX4xSUg06XE2IEQimS9HU0fBIRdB/mDTusyD3dPTgQgVyZtbUk9BC9
-   FsarpfIanJUTTFtSjwI2wROkktKvwtWf3SU6ps/GDxFcZ+B6iGZ5EOvHW
-   3Bd4FYHtjAK48kxX5GmiZPZ9X/WcT6QkjOrjjrdiTnZ+ND6AceeR6hex+
-   amWYAj5MFyoMz9cvRH4CQ6ImhHPw0Ui3VSC/GGrcBYjYam8xT/VHxXOAx
-   kpaMUT1i5XvsXw51k+QE2UKTPqkfY8vQCzm33zsZYW6XDoxwXoEPSv8C6
-   J8LHpiIVnc+Bgw/z81fV7gqnBIjSM5koLCeH24Ty4UDbjFOxTU99CIv44
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="364477168"
+  t=1692835954; x=1724371954;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tnNXdyCfD1BeAl2AiS4i0w2NnYqR9jbiNNErytlQfW4=;
+  b=NjuJRtXcWUOhrYVbmz9jREcqlTCAMhgKXg8bHS0j7biRmXnShjsD515u
+   L3ABC1vL8Ioognlrym/LFg+iwZEvWNFPgZjNumnoyd6LoTYsjXVYPNtcO
+   htmbAOM/ogfx5aU/VjF/F+5tUX+urx9WOTeFGqz5dThqp4SYp1drRHZMO
+   1w6aI35coPTTAnBnE7JOWREOQU9oRbIUbxWfzRQS34fj5pP5uULM2rrtj
+   zG0GFAmNJdXa1Rftdq3rVr9miFIlDvvbTWWUJGyXAZC3vj7L2CtoFeK6g
+   h1wWbgyjmj+edgqOb940iU9o6X6PvHPJd0tfKKRo83jO4X+XL30kyGYV1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="378058713"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="364477168"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 17:01:22 -0700
+   d="scan'208";a="378058713"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 17:12:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="771905331"
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="713770846"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="771905331"
+   d="scan'208";a="713770846"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 23 Aug 2023 17:01:16 -0700
+  by orsmga006.jf.intel.com with ESMTP; 23 Aug 2023 17:12:31 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qYxmm-0001bA-16;
-	Thu, 24 Aug 2023 00:01:16 +0000
-Date: Thu, 24 Aug 2023 08:00:56 +0800
+	id 1qYxxe-0001bu-0q;
+	Thu, 24 Aug 2023 00:12:30 +0000
+Date: Thu, 24 Aug 2023 08:11:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Stultz <jstultz@google.com>, LKML <linux-kernel@vger.kernel.org>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	John Stultz <jstultz@google.com>,
-	Joel Fernandes <joelaf@google.com>,
-	Qais Yousef <qyousef@google.com>, Ingo Molnar <mingo@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Zimuzo Ezeozue <zezeozue@google.com>,
-	Youssef Esmat <youssefesmat@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com
-Subject: Re: [PATCH v5 13/19] sched: Split out __sched() deactivate task
- logic into a helper
-Message-ID: <202308240712.RzqTiO81-lkp@intel.com>
-References: <20230819060915.3001568-14-jstultz@google.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 11462/12208] mm/internal.h:709:3: error: call to
+ undeclared function 'release_fault_lock'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202308240853.4ARCefs9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,36 +48,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230819060915.3001568-14-jstultz@google.com>
 
-Hi John,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/locking/core]
-[also build test WARNING on linus/master tip/auto-latest v6.5-rc7]
-[cannot apply to tip/sched/core tip/master next-20230823]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/sched-Unify-runtime-accounting-across-classes/20230821-121604
-base:   tip/locking/core
-patch link:    https://lore.kernel.org/r/20230819060915.3001568-14-jstultz%40google.com
-patch subject: [PATCH v5 13/19] sched: Split out __sched() deactivate task logic into a helper
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230824/202308240712.RzqTiO81-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e3f80d3eae76c3557b3c9b5938ad01c0e6cf25ec
+commit: 0790e1e2b1b71ba357e89e779451efe79dff28e6 [11462/12208] mm: allow fault_dirty_shared_page() to be called under the VMA lock
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230824/202308240853.4ARCefs9-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240712.RzqTiO81-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240853.4ARCefs9-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308240712.RzqTiO81-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308240853.4ARCefs9-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the linux-next/master HEAD e3f80d3eae76c3557b3c9b5938ad01c0e6cf25ec builds fine.
+      It may have been fixed somewhere.
 
-   In file included from kernel/sched/core.c:9:
-   In file included from include/linux/highmem.h:12:
+All errors (new ones prefixed by >>):
+
+   In file included from mm/filemap.c:20:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -108,8 +84,9 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
          |                                                   ^
-   In file included from kernel/sched/core.c:9:
-   In file included from include/linux/highmem.h:12:
+   In file included from mm/filemap.c:20:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -122,8 +99,9 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
          |                                                   ^
-   In file included from kernel/sched/core.c:9:
-   In file included from include/linux/highmem.h:12:
+   In file included from mm/filemap.c:20:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -157,72 +135,209 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      735 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
->> kernel/sched/core.c:6565:6: warning: no previous prototype for function 'try_to_deactivate_task' [-Wmissing-prototypes]
-    6565 | bool try_to_deactivate_task(struct rq *rq, struct task_struct *p, unsigned long state)
-         |      ^
-   kernel/sched/core.c:6565:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    6565 | bool try_to_deactivate_task(struct rq *rq, struct task_struct *p, unsigned long state)
-         | ^
-         | static 
-   kernel/sched/core.c:3697:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-    3697 | static inline bool rq_has_pinned_tasks(struct rq *rq)
-         |                    ^
-   kernel/sched/core.c:5834:20: warning: unused function 'sched_tick_start' [-Wunused-function]
-    5834 | static inline void sched_tick_start(int cpu) { }
-         |                    ^
-   kernel/sched/core.c:5835:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-    5835 | static inline void sched_tick_stop(int cpu) { }
-         |                    ^
-   kernel/sched/core.c:6535:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
-    6535 | static inline void sched_core_cpu_starting(unsigned int cpu) {}
-         |                    ^
-   kernel/sched/core.c:6536:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-    6536 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-         |                    ^
-   kernel/sched/core.c:6537:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-    6537 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
-         |                    ^
-   19 warnings generated.
+   In file included from mm/filemap.c:50:
+>> mm/internal.h:709:3: error: call to undeclared function 'release_fault_lock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     709 |                 release_fault_lock(vmf);
+         |                 ^
+   12 warnings and 1 error generated.
+--
+   In file included from mm/slub.c:14:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/slub.c:14:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/slub.c:14:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from mm/slub.c:48:
+>> mm/internal.h:709:3: error: call to undeclared function 'release_fault_lock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     709 |                 release_fault_lock(vmf);
+         |                 ^
+   mm/slub.c:2270:15: warning: variable 'partial_slabs' set but not used [-Wunused-but-set-variable]
+    2270 |         unsigned int partial_slabs = 0;
+         |                      ^
+   13 warnings and 1 error generated.
+--
+   In file included from lib/vsprintf.c:36:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from lib/vsprintf.c:36:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from lib/vsprintf.c:36:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from lib/vsprintf.c:49:
+>> lib/../mm/internal.h:709:3: error: call to undeclared function 'release_fault_lock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     709 |                 release_fault_lock(vmf);
+         |                 ^
+   12 warnings and 1 error generated.
 
 
-vim +/try_to_deactivate_task +6565 kernel/sched/core.c
+vim +/release_fault_lock +709 mm/internal.h
 
-  6564	
-> 6565	bool try_to_deactivate_task(struct rq *rq, struct task_struct *p, unsigned long state)
-  6566	{
-  6567		if (signal_pending_state(state, p)) {
-  6568			WRITE_ONCE(p->__state, TASK_RUNNING);
-  6569		} else {
-  6570			p->sched_contributes_to_load =
-  6571				(state & TASK_UNINTERRUPTIBLE) &&
-  6572				!(state & TASK_NOLOAD) &&
-  6573				!(state & TASK_FROZEN);
-  6574	
-  6575			if (p->sched_contributes_to_load)
-  6576				rq->nr_uninterruptible++;
-  6577	
-  6578			/*
-  6579			 * __schedule()			ttwu()
-  6580			 *   prev_state = prev->state;    if (p->on_rq && ...)
-  6581			 *   if (prev_state)		    goto out;
-  6582			 *     p->on_rq = 0;		  smp_acquire__after_ctrl_dep();
-  6583			 *				  p->state = TASK_WAKING
-  6584			 *
-  6585			 * Where __schedule() and ttwu() have matching control dependencies.
-  6586			 *
-  6587			 * After this, schedule() must not care about p->state any more.
-  6588			 */
-  6589			deactivate_task(rq, p, DEQUEUE_SLEEP | DEQUEUE_NOCLOCK);
-  6590	
-  6591			if (p->in_iowait) {
-  6592				atomic_inc(&rq->nr_iowait);
-  6593				delayacct_blkio_start();
-  6594			}
-  6595			return true;
-  6596		}
-  6597		return false;
-  6598	}
-  6599	
+   692	
+   693	static inline struct file *maybe_unlock_mmap_for_io(struct vm_fault *vmf,
+   694							    struct file *fpin)
+   695	{
+   696		int flags = vmf->flags;
+   697	
+   698		if (fpin)
+   699			return fpin;
+   700	
+   701		/*
+   702		 * FAULT_FLAG_RETRY_NOWAIT means we don't want to wait on page locks or
+   703		 * anything, so we only pin the file and drop the mmap_lock if only
+   704		 * FAULT_FLAG_ALLOW_RETRY is set, while this is the first attempt.
+   705		 */
+   706		if (fault_flag_allow_retry_first(flags) &&
+   707		    !(flags & FAULT_FLAG_RETRY_NOWAIT)) {
+   708			fpin = get_file(vmf->vma->vm_file);
+ > 709			release_fault_lock(vmf);
+   710		}
+   711		return fpin;
+   712	}
+   713	#else /* !CONFIG_MMU */
+   714	static inline void unmap_mapping_folio(struct folio *folio) { }
+   715	static inline void mlock_new_folio(struct folio *folio) { }
+   716	static inline bool need_mlock_drain(int cpu) { return false; }
+   717	static inline void mlock_drain_local(void) { }
+   718	static inline void mlock_drain_remote(int cpu) { }
+   719	static inline void vunmap_range_noflush(unsigned long start, unsigned long end)
+   720	{
+   721	}
+   722	#endif /* !CONFIG_MMU */
+   723	
 
 -- 
 0-DAY CI Kernel Test Service
