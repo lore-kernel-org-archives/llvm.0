@@ -1,47 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B44DF62;
-	Thu, 24 Aug 2023 14:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E518710979;
+	Thu, 24 Aug 2023 15:15:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692885607; x=1724421607;
+  t=1692890106; x=1724426106;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=GBSyGk8xGxYynVKmO5H//T8q5CbtNF6TMMZQKQdxkDY=;
-  b=f1mAmXSfHRmiw/IdXSzLn8ccr2Muwx03OmanRgUqPmYIRYFIbE6XkEVf
-   rIAnc4s+VVl0FNYiHCxf6AUFOSmPNqSwRqhtAMYsrdWrM2IqrXSErGduE
-   dJ62c+FR7J8hBw/FiX64uwBNBKKMxbMcPS4MovfUpdi3w7tzbhjqT8EmB
-   fAiOcqlG8FmbswG9VuruagO0AVhBEDNPBi1sKptJFaZ6MS2Wga1HHiby8
-   JJcQdIwow+D4FUEEUIEsTWF2o7PuuTCZoEbrWH8ZP/y0vzUQ/pahzALSS
-   z+ul/y0QO8AbB24g2DqVDv0cAKJY68kpqMXafavw7O6FrDYneUWiezxYj
+  bh=j3s15fzbY21jU7a4dXxI63BSMfPORjJ31zoaNT3reHQ=;
+  b=Tjx+XEjFviEOmMmC6tsAis9YN6dsHAWlUVvcjIPNG5BRATWY+mbWOL7W
+   Oezh6jAuAiN+ILEgW5S8eBjKzO5Gb5Zh0zKN4rjlvRqSMmA/TFa923BZa
+   q5afT+yAQlXjcM0Y0EAdXGcEf02d87uwxICjH0+TScXMYx1Q93rZz0yqa
+   MlbANkKbUShwsIY+5WFwYXo4GihmNcV+53FfLhZwU2Og3/1Md/H33taEk
+   +dfNPb20P+uWZf5vZY/5i1IN9a/Tbevl3KMIf5Sa+22KiqbhOm8emri2q
+   8aNGpHJkElKzmvRyjZWGXY1MYaSr4yngR2OLwo1oqGVa1NQasnviC0Hdo
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="373323950"
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="374433213"
 X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="373323950"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 07:00:05 -0700
+   d="scan'208";a="374433213"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 08:07:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="860709978"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="860709978"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="880838364"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 24 Aug 2023 07:00:03 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 24 Aug 2023 08:06:58 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZAsU-0002k8-0c;
-	Thu, 24 Aug 2023 14:00:02 +0000
-Date: Thu, 24 Aug 2023 21:59:31 +0800
+	id 1qZBv5-0002me-0p;
+	Thu, 24 Aug 2023 15:06:49 +0000
+Date: Thu, 24 Aug 2023 23:06:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Mike Kravetz <mike.kravetz@oracle.com>
+To: Jisheng Zhang <jszhang@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>, linux-mm@kvack.org,
-	Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: Re: [PATCH 2/3] hugetlb: Remove a few calls to page_folio()
-Message-ID: <202308242115.E2LcVeIB-lkp@intel.com>
-References: <20230822162808.4131399-2-willy@infradead.org>
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH net-next 3/3] net: stmmac: add glue layer for T-HEAD
+ TH1520 SoC
+Message-ID: <202308242250.G39QxvdR-lkp@intel.com>
+References: <20230820120213.2054-4-jszhang@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,150 +60,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230822162808.4131399-2-willy@infradead.org>
+In-Reply-To: <20230820120213.2054-4-jszhang@kernel.org>
 
-Hi Matthew,
+Hi Jisheng,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.5-rc7 next-20230824]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/hugetlb-Remove-a-few-calls-to-page_folio/20230823-002932
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230822162808.4131399-2-willy%40infradead.org
-patch subject: [PATCH 2/3] hugetlb: Remove a few calls to page_folio()
-config: s390-randconfig-001-20230824 (https://download.01.org/0day-ci/archive/20230824/202308242115.E2LcVeIB-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/dt-bindings-net-snps-dwmac-allow-dwmac-3-70a-to-set-pbl-properties/20230821-114902
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230820120213.2054-4-jszhang%40kernel.org
+patch subject: [PATCH net-next 3/3] net: stmmac: add glue layer for T-HEAD TH1520 SoC
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230824/202308242250.G39QxvdR-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230824/202308242115.E2LcVeIB-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230824/202308242250.G39QxvdR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308242115.E2LcVeIB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308242250.G39QxvdR-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from mm/hugetlb.c:19:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from mm/hugetlb.c:19:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from mm/hugetlb.c:19:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> mm/hugetlb.c:2232:32: warning: variable 'folio' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-    2232 |         for_each_node_mask_to_free(h, nr_nodes, node, nodes_allowed) {
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/hugetlb.c:1469:3: note: expanded from macro 'for_each_node_mask_to_free'
-    1469 |                 nr_nodes > 0 &&                                         \
-         |                 ^~~~~~~~~~~~
-   mm/hugetlb.c:2246:10: note: uninitialized use occurs here
-    2246 |         return &folio->page;
-         |                 ^~~~~
-   mm/hugetlb.c:2232:32: note: remove the '&&' if its condition is always true
-    2232 |         for_each_node_mask_to_free(h, nr_nodes, node, nodes_allowed) {
-         |                                       ^
-   mm/hugetlb.c:2229:21: note: initialize the variable 'folio' to silence this warning
-    2229 |         struct folio *folio;
-         |                            ^
-         |                             = NULL
-   13 warnings generated.
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:151:3: warning: variable 'div' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+     151 |                 default:
+         |                 ^~~~~~~
+   drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:156:50: note: uninitialized use occurs here
+     156 |                                    GMAC_PLLCLK_DIV_MASK, GMAC_PLLCLK_DIV_NUM(div));
+         |                                                                              ^~~
+   drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:40:68: note: expanded from macro 'GMAC_PLLCLK_DIV_NUM'
+      40 | #define  GMAC_PLLCLK_DIV_NUM(x)         FIELD_PREP(GMAC_PLLCLK_DIV_MASK, (x))
+         |                                                                           ^
+   include/linux/bitfield.h:114:33: note: expanded from macro 'FIELD_PREP'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                                               ^~~~
+   include/linux/bitfield.h:68:41: note: expanded from macro '__BF_FIELD_CHECK'
+      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+         |                                                       ^~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:121:9: note: initialize the variable 'div' to silence this warning
+     121 |         u32 div;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +2232 mm/hugetlb.c
+vim +/div +151 drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c
 
-b2261026825ed3 Joonsoo Kim             2013-09-11  2216  
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2217  /*
-10c6ec49802b17 Mike Kravetz            2021-05-04  2218   * Remove huge page from pool from next node to free.  Attempt to keep
-10c6ec49802b17 Mike Kravetz            2021-05-04  2219   * persistent huge pages more or less balanced over allowed nodes.
-10c6ec49802b17 Mike Kravetz            2021-05-04  2220   * This routine only 'removes' the hugetlb page.  The caller must make
-10c6ec49802b17 Mike Kravetz            2021-05-04  2221   * an additional call to free the page to low level allocators.
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2222   * Called with hugetlb_lock locked.
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2223   */
-10c6ec49802b17 Mike Kravetz            2021-05-04  2224  static struct page *remove_pool_huge_page(struct hstate *h,
-10c6ec49802b17 Mike Kravetz            2021-05-04  2225  						nodemask_t *nodes_allowed,
-6ae11b278bca1c Lee Schermerhorn        2009-12-14  2226  						 bool acct_surplus)
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2227  {
-b2261026825ed3 Joonsoo Kim             2013-09-11  2228  	int nr_nodes, node;
-cfd5082b514765 Sidhartha Kumar         2022-11-29  2229  	struct folio *folio;
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2230  
-9487ca60fd7fa2 Mike Kravetz            2021-05-04  2231  	lockdep_assert_held(&hugetlb_lock);
-b2261026825ed3 Joonsoo Kim             2013-09-11 @2232  	for_each_node_mask_to_free(h, nr_nodes, node, nodes_allowed) {
-685f345708096e Lee Schermerhorn        2009-09-21  2233  		/*
-685f345708096e Lee Schermerhorn        2009-09-21  2234  		 * If we're returning unused surplus pages, only examine
-685f345708096e Lee Schermerhorn        2009-09-21  2235  		 * nodes with surplus pages.
-685f345708096e Lee Schermerhorn        2009-09-21  2236  		 */
-b2261026825ed3 Joonsoo Kim             2013-09-11  2237  		if ((!acct_surplus || h->surplus_huge_pages_node[node]) &&
-b2261026825ed3 Joonsoo Kim             2013-09-11  2238  		    !list_empty(&h->hugepage_freelists[node])) {
-e601ce76a2aabd Matthew Wilcox (Oracle  2023-08-22  2239) 			folio = list_entry(h->hugepage_freelists[node].next,
-e601ce76a2aabd Matthew Wilcox (Oracle  2023-08-22  2240) 					  struct folio, lru);
-cfd5082b514765 Sidhartha Kumar         2022-11-29  2241  			remove_hugetlb_folio(h, folio, acct_surplus);
-9a76db09970938 Lee Schermerhorn        2009-12-14  2242  			break;
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2243  		}
-b2261026825ed3 Joonsoo Kim             2013-09-11  2244  	}
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2245  
-e601ce76a2aabd Matthew Wilcox (Oracle  2023-08-22  2246) 	return &folio->page;
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2247  }
-e8c5c8249878fb Lee Schermerhorn        2009-09-21  2248  
+   115	
+   116	static void thead_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mode)
+   117	{
+   118		struct thead_dwmac *dwmac = priv;
+   119		struct plat_stmmacenet_data *plat = dwmac->plat;
+   120		unsigned long rate;
+   121		u32 div;
+   122	
+   123		switch (plat->interface) {
+   124		/* For MII, rxc/txc is provided by phy */
+   125		case PHY_INTERFACE_MODE_MII:
+   126			return;
+   127	
+   128		case PHY_INTERFACE_MODE_RGMII:
+   129		case PHY_INTERFACE_MODE_RGMII_ID:
+   130		case PHY_INTERFACE_MODE_RGMII_RXID:
+   131		case PHY_INTERFACE_MODE_RGMII_TXID:
+   132			rate = clk_get_rate(plat->stmmac_clk);
+   133			if (!rate || rate % GMAC_GMII_RGMII_RATE != 0 ||
+   134			    rate % GMAC_MII_RATE != 0) {
+   135				dev_err(dwmac->dev, "invalid gmac rate %ld\n", rate);
+   136				return;
+   137			}
+   138	
+   139			regmap_update_bits(dwmac->apb_regmap, GMAC_PLLCLK_DIV, GMAC_PLLCLK_DIV_EN, 0);
+   140	
+   141			switch (speed) {
+   142			case SPEED_1000:
+   143				div = rate / GMAC_GMII_RGMII_RATE;
+   144				break;
+   145			case SPEED_100:
+   146				div = rate / GMAC_MII_RATE;
+   147				break;
+   148			case SPEED_10:
+   149				div = rate * 10 / GMAC_MII_RATE;
+   150				break;
+ > 151			default:
+   152				dev_err(dwmac->dev, "invalid speed %u\n", speed);
+   153				break;
+   154			}
+   155			regmap_update_bits(dwmac->apb_regmap, GMAC_PLLCLK_DIV,
+   156					   GMAC_PLLCLK_DIV_MASK, GMAC_PLLCLK_DIV_NUM(div));
+   157	
+   158			regmap_update_bits(dwmac->apb_regmap, GMAC_PLLCLK_DIV,
+   159					   GMAC_PLLCLK_DIV_EN, GMAC_PLLCLK_DIV_EN);
+   160			break;
+   161		default:
+   162			dev_err(dwmac->dev, "unsupported phy interface %d\n",
+   163				plat->interface);
+   164			return;
+   165		}
+   166	}
+   167	
 
 -- 
 0-DAY CI Kernel Test Service
