@@ -1,87 +1,83 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9E4156FB
-	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 19:36:15 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1bdb7b0c8afso2213895ad.3
-        for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 12:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1692905775; x=1693510575;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4wIorNWdyOim0Yl5+/O6guxDVdvD8pw8pKxbm7dcdPQ=;
-        b=vkfnSDccPDleQWhZypW1vaQBlDMLohs76rDCLW1jIn9gS1PE25ocbxD3nx4CGayjiy
-         xRFJ2Wtcx7SZUPtvClu/a/1a2m+o2CfJNuKyJQXM3crXLK4eHGIODYS7KAazwqXYoADm
-         vVdYud4oxdyMI8mSMAp7B1I1GJu2PzM6oITVBUfY1B6S5XYuExLSIIQg3Ij8Renq/rxy
-         tyzv7kiTH7j8otIZFX1IfaEeclwB1E/mJ0dpBzywnAkEO+UzIk5QbDHKFPIL3HFmtZdB
-         lbKaYFUyCghRLvjEAcQgQ7EpVqFKVfX1lCfLlv9ACXCpgOpVeWL9c4NSkhAz1emRcE8z
-         1gng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692905775; x=1693510575;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4wIorNWdyOim0Yl5+/O6guxDVdvD8pw8pKxbm7dcdPQ=;
-        b=L+5kuS4o9J6wcpB3D4+GWmCPuRycpHmmFqByX4BZIgS1Zb63Md8c2jZHaXHviA80LU
-         FjBf2mAnVqKCkajsPQxnDxNCZs+Ek+iB4DwCzqxxNbfyniEOZIy22RlSYbyum5/u9cc8
-         8aHz2/SGUeDGiDN3uJ2PUgdq2MlR5fCVQWPTeYgu84Q9df99i0TM2XEvIRN2Rjfctixg
-         moZ9T9iog4tgCi70TNwS9aYI3gRABGR0cPq5kWWVlcPP+LH6NbpwwW81WEcc+FYSl326
-         mG2ZHMdFnP7IDTem6Q0gFMzIA0uiAK/iH8Zwkyxoec1GtX5zdhzuVQ2Zx48txaJ62S/i
-         nk/g==
-X-Gm-Message-State: AOJu0Yzw0ZsnZfMCAWdHrFeMybeIisUUNMtuYIrx/0pAqfaHllQ4ZYpr
-	a4MzCBF1BM5Ce6GYy3hua/InAg==
-X-Google-Smtp-Source: AGHT+IFVrj1OzIkyNOoOCKQZ7jaR0afgTplscsaJzR2zemPpPXyzwEEXtz71kxOpimuVRf4ZW2UdOA==
-X-Received: by 2002:a17:902:f80d:b0:1c0:c1ed:70c9 with SMTP id ix13-20020a170902f80d00b001c0c1ed70c9mr3100816plb.12.1692905774791;
-        Thu, 24 Aug 2023 12:36:14 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id v4-20020a170902b7c400b001b8a3dd5a4asm24040plz.283.2023.08.24.12.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 12:36:13 -0700 (PDT)
-Date: Thu, 24 Aug 2023 12:36:13 -0700 (PDT)
-X-Google-Original-Date: Thu, 24 Aug 2023 12:36:08 PDT (-0700)
-Subject:     Re: [PATCH] riscv: Fix build errors using binutils2.37 toolchains
-In-Reply-To: <20230824-wimp-unvocal-c27df1798ae8@spud>
-CC: xingmingzheng@iscas.ac.cn, Paul Walmsley <paul.walmsley@sifive.com>,
-  aou@eecs.berkeley.edu, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, bmeng@tinylab.org,
-  guoren@kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-  llvm@lists.linux.dev, stable@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-72b1a20e-8bab-42f2-9a30-40f86038bba5@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C24156FB;
+	Thu, 24 Aug 2023 19:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692906920; x=1724442920;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=E5taHdwxDBb/dTIclA08znj7ku26RhKjtUKW852n4Vw=;
+  b=X1bL55++7o2tGWThj6o7eQllDo+fwYmefk7Cs2cTPXTQOo+Yl6Vu1zQu
+   6eruJDchUfmD0gTJgT4fsVdJjLHOyMvlEM1KssU41CpKJWj5CiXKWKXRR
+   qNk5ig5i5tJNaYAC8vnduci9uYggtDjvBWfyKAVEPpTxBAb3+H9bUYXL7
+   5NXWzWFY90L+n8at0qHjLiB+IF9+OX8tzi1OXlAL/hfM9YIV9fOumFo2D
+   pxjbQQVdMMtpOly4iCJXR0CrTmlL/8aOWdZonQxfpJf4dwzdu7JrsPfGM
+   dBuGCyEgh/EFH3lGAttg1brrW0jPlGXyME4V0aFbC1kfQTSjBCqPag0Cu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="359543607"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="359543607"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 12:55:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="740339869"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="740339869"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Aug 2023 12:55:18 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qZGQH-0002w8-1L;
+	Thu, 24 Aug 2023 19:55:17 +0000
+Date: Fri, 25 Aug 2023 03:54:45 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [stable:linux-5.10.y 68/9999] test_set_error_stamp: rm
+ /kbuild/obj/consumer/arm-spear3xx_defconfig/.reduce_errors/error:unknown-target-CPU-armv5te
+Message-ID: <202308250318.vDtbk2TY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 24 Aug 2023 12:25:36 PDT (-0700), Conor Dooley wrote:
-> On Fri, Aug 25, 2023 at 03:08:52AM +0800, Mingzheng Xing wrote:
->> When building the kernel with binutils 2.37 and GCC-11.1.0/GCC-11.2.0,
->> the following error occurs:
->> 
->>   Assembler messages:
->>   Error: cannot find default versions of the ISA extension `zicsr'
->>   Error: cannot find default versions of the ISA extension `zifencei'
->> 
->> The above error originated from this commit of binutils[0], which has been
->> resolved and backported by GCC-12.1.0[1] and GCC-11.3.0[2].
->> 
->> So fix this by change the GCC version in
->> CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC to GCC-11.3.0.
->> 
->> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=f0bae2552db1dd4f1995608fbf6648fcee4e9e0c [0]
->> Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca2bbb88f999f4d3cc40e89bc1aba712505dd598 [1]
->> Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d29f5d6ab513c52fd872f532c492e35ae9fd6671 [2]
->> Fixes: ca09f772ccca ("riscv: Handle zicsr/zifencei issue between gcc and binutils")
->> Reported-by: Conor Dooley <conor.dooley@microchip.com>
->
-> Closes: https://lore.kernel.org/all/20230823-captive-abdomen-befd942a4a73@wendy/
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Tested-by: Conor Dooley <conor.dooley@microchip.com>
+TO: Arnd Bergmann <arnd@arndb.de>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-Thanks.  I queued this up into staging, it's building -- so is Linus' 
-master, so it might take a bit to get through everything.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+head:   da742ebfa00c3add4a358dd79ec92161c07e1435
+commit: 241c74cc655540fd34df083832e40fb6050d70b5 [68/9999] ARM: 9156/1: drop cc-option fallbacks for architecture selection
+config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20230825/202308250318.vDtbk2TY-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230825/202308250318.vDtbk2TY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308250318.vDtbk2TY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> error: unknown target CPU 'armv5te'
+   note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, sierraforest, grandridge, graniterapids, emeraldrapids, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+   make[2]: *** [scripts/Makefile.build:280: scripts/mod/empty.o] Error 1
+>> error: unknown target CPU 'armv5te'
+   note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, sierraforest, grandridge, graniterapids, emeraldrapids, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+   make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1214: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:185: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
