@@ -1,176 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E518710979;
-	Thu, 24 Aug 2023 15:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692890106; x=1724426106;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j3s15fzbY21jU7a4dXxI63BSMfPORjJ31zoaNT3reHQ=;
-  b=Tjx+XEjFviEOmMmC6tsAis9YN6dsHAWlUVvcjIPNG5BRATWY+mbWOL7W
-   Oezh6jAuAiN+ILEgW5S8eBjKzO5Gb5Zh0zKN4rjlvRqSMmA/TFa923BZa
-   q5afT+yAQlXjcM0Y0EAdXGcEf02d87uwxICjH0+TScXMYx1Q93rZz0yqa
-   MlbANkKbUShwsIY+5WFwYXo4GihmNcV+53FfLhZwU2Og3/1Md/H33taEk
-   +dfNPb20P+uWZf5vZY/5i1IN9a/Tbevl3KMIf5Sa+22KiqbhOm8emri2q
-   8aNGpHJkElKzmvRyjZWGXY1MYaSr4yngR2OLwo1oqGVa1NQasnviC0Hdo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="374433213"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="374433213"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 08:07:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="880838364"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Aug 2023 08:06:58 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qZBv5-0002me-0p;
-	Thu, 24 Aug 2023 15:06:49 +0000
-Date: Thu, 24 Aug 2023 23:06:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jisheng Zhang <jszhang@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH net-next 3/3] net: stmmac: add glue layer for T-HEAD
- TH1520 SoC
-Message-ID: <202308242250.G39QxvdR-lkp@intel.com>
-References: <20230820120213.2054-4-jszhang@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C78134CC
+	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 17:30:57 +0000 (UTC)
+Received: from [192.168.0.107] (unknown [111.197.209.91])
+	by APP-05 (Coremail) with SMTP id zQCowACXnGC8k+dkhsHRBA--.2541S2;
+	Fri, 25 Aug 2023 01:30:36 +0800 (CST)
+Message-ID: <4177c0c5-4d36-75e1-84e2-c6ac82b74e50@iscas.ac.cn>
+Date: Fri, 25 Aug 2023 01:30:36 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230820120213.2054-4-jszhang@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v5] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+Content-Language: en-US
+From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+To: Conor Dooley <conor@kernel.org>, Conor Dooley <conor.dooley@microchip.com>
+Cc: patchwork-bot+linux-riscv@kernel.org, linux-riscv@lists.infradead.org,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ bmeng@tinylab.org, guoren@kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, stable@vger.kernel.org
+References: <20230809165648.21071-1-xingmingzheng@iscas.ac.cn>
+ <169228562484.20811.14246462375671910714.git-patchwork-notify@kernel.org>
+ <20230823-captive-abdomen-befd942a4a73@wendy>
+ <20230823-facelift-ovary-41f2eb4d9eac@spud>
+ <4677fc33-6e76-21e6-2a7f-f12670bc1ce2@iscas.ac.cn>
+Organization: ISCAS
+In-Reply-To: <4677fc33-6e76-21e6-2a7f-f12670bc1ce2@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowACXnGC8k+dkhsHRBA--.2541S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFWrWF4xWryktFWxKFWxZwb_yoWrKF4kp3
+	4rGF17GrWUJr18Jwn7tr1jqryjyrWUJ34UXrn8JF1UJryDWr1jqF1xXryY9r1DtF4rGr18
+	Ar1UGF1xZr1DJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+	c7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+	W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+	1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07beAp5UUUUU=
+X-Originating-IP: [111.197.209.91]
+X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiAxMNCmTnYidivAAAsP
 
-Hi Jisheng,
+On 8/24/23 19:32, Mingzheng Xing wrote:
+> On 8/23/23 21:31, Conor Dooley wrote:
+>> On Wed, Aug 23, 2023 at 12:51:13PM +0100, Conor Dooley wrote:
+>>> On Thu, Aug 17, 2023 at 03:20:24PM +0000, 
+>>> patchwork-bot+linux-riscv@kernel.org wrote:
+>>>> Hello:
+>>>>
+>>>> This patch was applied to riscv/linux.git (fixes)
+>>>> by Palmer Dabbelt <palmer@rivosinc.com>:
+>>>>
+>>>> On Thu, 10 Aug 2023 00:56:48 +0800 you wrote:
+>>>>> Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to 
+>>>>> the newer
+>>>>> 20191213 version which moves some instructions from the I 
+>>>>> extension to the
+>>>>> Zicsr and Zifencei extensions. So if one of the binutils and GCC 
+>>>>> exceeds
+>>>>> that version, we should explicitly specifying Zicsr and Zifencei 
+>>>>> via -march
+>>>>> to cope with the new changes. but this only occurs when binutils 
+>>>>> >= 2.36
+>>>>> and GCC >= 11.1.0. It's a different story when binutils < 2.36.
+>>>>>
+>>>>> [...]
+>>>> Here is the summary with links:
+>>>>    - [v5] riscv: Handle zicsr/zifencei issue between gcc and binutils
+>>>>      https://git.kernel.org/riscv/c/ca09f772ccca
+>>> *sigh* so this breaks the build for gcc-11 & binutils 2.37 w/
+>>>     Assembler messages:
+>>>     Error: cannot find default versions of the ISA extension `zicsr'
+>>>     Error: cannot find default versions of the ISA extension `zifencei'
+>>>
+>>> I'll have a poke later.
+>> So uh, are we sure that this should not be:
+>> -       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || 
+>> (CC_IS_GCC && GCC_VERSION < 110100)
+>> +       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || 
+>> (CC_IS_GCC && GCC_VERSION <= 110100)
+>>
+>> My gcc-11.1 + binutils 2.37 toolchain built from riscv-gnu-toolchain
+>> doesn't have the default versions & the above diff fixes the build.
+>
+> I reproduced the error, the combination of gcc-11.1 and
+> binutils 2.37 does cause errors. What a surprise, since binutils
+> 2.36 and 2.38 are fine.
+>
+> I used git bisect to locate this commit[1] for binutils.
+> I'll test this diff in more detail later. Thanks!
+>
+> [1] 
+> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=f0bae2552db1dd4f1995608fbf6648fcee4e9e0c
+>
 
-kernel test robot noticed the following build warnings:
+Hi, Conor.
+The above error does originate from link[1] mentioned above, which was
+resolved in gcc-12.1.0[2], and gcc-11.3.0 made the backport[3].
+So gcc-11.2.0 combined with binutils 2.37 produces the same error.
+I think we should do the following diff to fix it:
+-       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC 
+&& GCC_VERSION < 110100)
++       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC 
+&& GCC_VERSION < 110300)
 
-[auto build test WARNING on net-next/main]
+Then below are my test results after the fix:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/dt-bindings-net-snps-dwmac-allow-dwmac-3-70a-to-set-pbl-properties/20230821-114902
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230820120213.2054-4-jszhang%40kernel.org
-patch subject: [PATCH net-next 3/3] net: stmmac: add glue layer for T-HEAD TH1520 SoC
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230824/202308242250.G39QxvdR-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230824/202308242250.G39QxvdR-lkp@intel.com/reproduce)
+gcc        binutils
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308242250.G39QxvdR-lkp@intel.com/
+10.5.0     2.35            ok
+10.5.0     2.36            ok
+10.5.0     2.37            ok
+10.5.0     2.38            ok
 
-All warnings (new ones prefixed by >>):
+11.1.0     2.35            ok
+11.1.0     2.36            ok
+11.1.0     2.37            ok
+11.1.0     2.38            ok
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:151:3: warning: variable 'div' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-     151 |                 default:
-         |                 ^~~~~~~
-   drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:156:50: note: uninitialized use occurs here
-     156 |                                    GMAC_PLLCLK_DIV_MASK, GMAC_PLLCLK_DIV_NUM(div));
-         |                                                                              ^~~
-   drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:40:68: note: expanded from macro 'GMAC_PLLCLK_DIV_NUM'
-      40 | #define  GMAC_PLLCLK_DIV_NUM(x)         FIELD_PREP(GMAC_PLLCLK_DIV_MASK, (x))
-         |                                                                           ^
-   include/linux/bitfield.h:114:33: note: expanded from macro 'FIELD_PREP'
-     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                                               ^~~~
-   include/linux/bitfield.h:68:41: note: expanded from macro '__BF_FIELD_CHECK'
-      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-         |                                                       ^~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-     385 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c:121:9: note: initialize the variable 'div' to silence this warning
-     121 |         u32 div;
-         |                ^
-         |                 = 0
-   1 warning generated.
+11.2.0     2.35            ok
+11.2.0     2.36            ok
+11.2.0     2.37            ok
+11.2.0     2.38            ok
 
+11.3.0     2.35            ok
+11.3.0     2.36            ok
+11.3.0     2.37            ok
+11.3.0     2.38            ok
 
-vim +/div +151 drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c
+11.4.0     2.35            ok
+11.4.0     2.36            ok
+11.4.0     2.37            ok
+11.4.0     2.38            ok
 
-   115	
-   116	static void thead_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mode)
-   117	{
-   118		struct thead_dwmac *dwmac = priv;
-   119		struct plat_stmmacenet_data *plat = dwmac->plat;
-   120		unsigned long rate;
-   121		u32 div;
-   122	
-   123		switch (plat->interface) {
-   124		/* For MII, rxc/txc is provided by phy */
-   125		case PHY_INTERFACE_MODE_MII:
-   126			return;
-   127	
-   128		case PHY_INTERFACE_MODE_RGMII:
-   129		case PHY_INTERFACE_MODE_RGMII_ID:
-   130		case PHY_INTERFACE_MODE_RGMII_RXID:
-   131		case PHY_INTERFACE_MODE_RGMII_TXID:
-   132			rate = clk_get_rate(plat->stmmac_clk);
-   133			if (!rate || rate % GMAC_GMII_RGMII_RATE != 0 ||
-   134			    rate % GMAC_MII_RATE != 0) {
-   135				dev_err(dwmac->dev, "invalid gmac rate %ld\n", rate);
-   136				return;
-   137			}
-   138	
-   139			regmap_update_bits(dwmac->apb_regmap, GMAC_PLLCLK_DIV, GMAC_PLLCLK_DIV_EN, 0);
-   140	
-   141			switch (speed) {
-   142			case SPEED_1000:
-   143				div = rate / GMAC_GMII_RGMII_RATE;
-   144				break;
-   145			case SPEED_100:
-   146				div = rate / GMAC_MII_RATE;
-   147				break;
-   148			case SPEED_10:
-   149				div = rate * 10 / GMAC_MII_RATE;
-   150				break;
- > 151			default:
-   152				dev_err(dwmac->dev, "invalid speed %u\n", speed);
-   153				break;
-   154			}
-   155			regmap_update_bits(dwmac->apb_regmap, GMAC_PLLCLK_DIV,
-   156					   GMAC_PLLCLK_DIV_MASK, GMAC_PLLCLK_DIV_NUM(div));
-   157	
-   158			regmap_update_bits(dwmac->apb_regmap, GMAC_PLLCLK_DIV,
-   159					   GMAC_PLLCLK_DIV_EN, GMAC_PLLCLK_DIV_EN);
-   160			break;
-   161		default:
-   162			dev_err(dwmac->dev, "unsupported phy interface %d\n",
-   163				plat->interface);
-   164			return;
-   165		}
-   166	}
-   167	
+12.1.0     2.35            ok
+12.1.0     2.36            ok
+12.1.0     2.37            ok
+12.1.0     2.38            ok
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+12.2.0     2.35            ok
+12.2.0     2.36            ok
+12.2.0     2.37            ok
+12.2.0     2.38            ok
+
+[1] 
+https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=f0bae2552db1dd4f1995608fbf6648fcee4e9e0c
+[2] 
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca2bbb88f999f4d3cc40e89bc1aba712505dd598
+[3] 
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d29f5d6ab513c52fd872f532c492e35ae9fd6671
+
+Thanks,
+Mingzheng.
+
+>>
+>> Thanks,
+>> Conor.
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
