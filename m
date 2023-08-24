@@ -1,121 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC3C24521;
-	Thu, 24 Aug 2023 03:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692847643; x=1724383643;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A3iZPqngUyTbrB3YhDz9wWKRazwFt+VVj9sYzPiGUAs=;
-  b=DTwul3Zdm0WEE3A8Sqxtiy/1KFGqNObrP7C9RDeVOsA+5hoaXOWy7CdH
-   JiTgfd17+hoDc9Y+Y/sp3qzzVIrHWTdHRMRy8bS7sCAGaOl8JXWihDY2O
-   QKOHrQmUCvOgXOfhRWLNdBk7fThdiJ6ZyA49l7VUsjzG6Ic0IQaPa0Fis
-   vDjrohAR8CYn+NqkFkhNlrPu7Y8fD89ltBFOAhFg+lbGjBQw3F5OlMtzM
-   3TktALSZYnHRNfmaE6/KNX+UYtiUStquzMrLjqvGlmaYwMuTTgvMGat6j
-   dnC7hJHUjzBL5kxz684hqNYegI/EECbE7qolvB2CE5RIfJ6G4MIIoJsBt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="364504220"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="364504220"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 20:27:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="766379501"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="766379501"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 23 Aug 2023 20:27:16 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qZ108-0001j2-0Z;
-	Thu, 24 Aug 2023 03:27:16 +0000
-Date: Thu, 24 Aug 2023 11:26:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 4/4] perf: Use folios for the aux ringbuffer &
- pagefault path
-Message-ID: <202308241126.5y4WcO3T-lkp@intel.com>
-References: <20230821202016.2910321-5-willy@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4860617F2
+	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 06:13:32 +0000 (UTC)
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-40a47e8e38dso146341cf.1
+        for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 23:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692857612; x=1693462412;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iFZbALfD5j8bkOsPp24wLCSxuLIXKQlbu5x+aUv5CFk=;
+        b=eVA/2gc1TLCiER+jX93Iv4jVefRl0whhczr1Li9l99jTiofSagEOfDWAowHCiZ2jK/
+         g/i9Htozhn3owsRd4swHz6ZAuYPIEjw99Lj7vtas4fVVMHnjrn/n9cgx3WpvebEwxMBg
+         wklumIqevwYMwJfPebQXD5x1e3I/OgMpSMnrilJPsDjf5CBU4GJj+oRhmzTXJr4APF+4
+         eZ1CtywEdht3aXULDvqDnS7WvSVLObLM3HRxE/f8Se0JiK50kXSXusKZYnFIOzmaeTUA
+         wNT304PjS5CUF6rWdmM1NxCm6B5nMU4mF5caJkc5TWoDxzLEQwBgAPhnjt+zk7SLw5aX
+         05Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692857612; x=1693462412;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iFZbALfD5j8bkOsPp24wLCSxuLIXKQlbu5x+aUv5CFk=;
+        b=kkQfiyVqvnD2HbZ0U4le/QkA0MernPodjNc47trAmQ1lTGzBApooNQo6ae8iq05DQZ
+         m5tVF+JyGdzEXEsT5jf/uE01RyP21Gbn5HRDUbapT7XcyFrsnCgU2KCnfqKL1WQYZPLy
+         HXzCD9az7/yOM5V6pnVCoOSZEEkGngDK9PV1zXl/0oppSswFIHA5LaRH0PbWLOv4qBps
+         rz6XTUaH8Kl2L7AmD1XPg2+HvjmuIOhBMwLhTSAmo1YA39r3z2YWWW0KFgECyMYIPLSx
+         hVio1b0fQetTvZrG2gsaGfL8Hz9BobBsLOiWgc37dgqSlpVvfyB1WdXC7bU/2qJl1AHI
+         jHgA==
+X-Gm-Message-State: AOJu0Yxs9OyOP46x6Mh9KUmgGfFwCTHcZaSmlFX/sIdeRelAHE6mT4xJ
+	OujzCN8ZFXeTowbcV46TciQ+ZnJnXtwlemSwcvpMWA==
+X-Google-Smtp-Source: AGHT+IGR3X8UN3n/H5GJpozFOeFboKSmh+s5sqpVSHkY11BSfDY+oPUJESYIqqjCXkSDgIatozWe4VCYRRZsPiOK4YE=
+X-Received: by 2002:a05:622a:1888:b0:403:b6ff:c0b with SMTP id
+ v8-20020a05622a188800b00403b6ff0c0bmr771555qtc.6.1692857611746; Wed, 23 Aug
+ 2023 23:13:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230821202016.2910321-5-willy@infradead.org>
+References: <20230822065256.163660-1-denik@chromium.org> <20230822174835.253469-1-denik@chromium.org>
+ <CAFP8O3KunP9CzT_U2cj1_oysojTxCNJRWX_kvvu_wOx4tbYHug@mail.gmail.com>
+ <CAK7LNASstNj2HEfJHcRzqt7hay65T-yEgzaAuXbEQPuCS+yC6w@mail.gmail.com>
+ <CADDJ8CWdm+cWt4UBTae0sCQ8ZDWhbMuozqqq59R+EtvMHere0g@mail.gmail.com> <CAK7LNARVi1sfBjv5a5OoQWPEeM-6bFuwPJE+i32NC=wdum-AKw@mail.gmail.com>
+In-Reply-To: <CAK7LNARVi1sfBjv5a5OoQWPEeM-6bFuwPJE+i32NC=wdum-AKw@mail.gmail.com>
+From: Fangrui Song <maskray@google.com>
+Date: Wed, 23 Aug 2023 23:13:18 -0700
+Message-ID: <CAFP8O3Lm_nDTPcvLyA-kkwnuiTNnv+s3hEf3dneUU3s0Th_-hA@mail.gmail.com>
+Subject: Re: [PATCH v2] modpost: Skip .llvm.call-graph-profile section check
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Denis Nikitin <denik@chromium.org>, linux-kbuild@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Douglas Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matthew,
+On Wed, Aug 23, 2023 at 6:34=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Thu, Aug 24, 2023 at 8:30=E2=80=AFAM Denis Nikitin <denik@chromium.org=
+> wrote:
+> >
+> > On Wed, Aug 23, 2023 at 4:02=E2=80=AFPM Masahiro Yamada <masahiroy@kern=
+el.org> wrote:
+> > >
+> > > On Wed, Aug 23, 2023 at 3:00=E2=80=AFAM Fangrui Song <maskray@google.=
+com> wrote:
+> > > >
+> > > > On Tue, Aug 22, 2023 at 10:49=E2=80=AFAM Denis Nikitin <denik@chrom=
+ium.org> wrote:
+> > > > >
+> > > > > .llvm.call-graph-profile section is added by clang when the kerne=
+l is
+> > > > > built with profiles (e.g. -fprofile-sample-use=3D or -fprofile-us=
+e=3D).
+> > > > >
+> > > > > The section contains edge information derived from text sections,
+> > > > > so .llvm.call-graph-profile itself doesn't need more analysis as
+> > > > > the text sections have been analyzed.
+> > > > >
+> > > > > This change fixes the kernel build with clang and a sample profil=
+e
+> > > > > which currently fails with:
+> > > > >
+> > > > > "FATAL: modpost: Please add code to calculate addend for this arc=
+hitecture"
+> > >
+> > >
+> > > Curious.
+> > >
+> > > This message is only displayed for REL.
+> > >
+> > > (Please not it is located in section_rel() function)
+> > >
+> > >
+> > > I think modern architectures use RELA instead of REL.
+> > > Which architecture are we talking about?
+> >
+> > Aarch64. There was also a report on x86-64 but the error message could =
+be
+> > different there.
+> >
+> > >
+> > >
+> > > What does the output of this command look like?
+> > >
+> > > $ llvm-readelf -S vmlinux.o | grep  .llvm.call-graph-profile
+> > >
+> > >
+> > > Is it REL?
+> > >
+> >
+> >   [119] .llvm.call-graph-profile LLVM_CALL_GRAPH_PROFILE 00000000000000=
+00
+> > 1c74a458 0104c8 08   E  0   0  1
+> >   [120] .rel.llvm.call-graph-profile REL 0000000000000000 1c75a920 0413=
+20 10
+> > I 26090 119  8
+>
+>
+> Fangrui,
+>
+> Aarch64 uses RELA for other sections, but REL for this one.
+>
+> I'd like to confirm if this is an expectation, not a toolchain bug.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Hi Masahiro,
 
-[auto build test WARNING on acme/perf/core]
-[also build test WARNING on tip/perf/core akpm-mm/mm-everything linus/master v6.5-rc7 next-20230823]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yes, using REL is intentional. It makes the relocations of
+.llvm.call-graph-profile smaller.
+The format encodes the (from,to,count) information with
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/perf-Convert-perf_mmap_-alloc-free-_page-to-folios/20230822-042131
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
-patch link:    https://lore.kernel.org/r/20230821202016.2910321-5-willy%40infradead.org
-patch subject: [RFC PATCH 4/4] perf: Use folios for the aux ringbuffer & pagefault path
-config: mips-randconfig-r003-20230824 (https://download.01.org/0day-ci/archive/20230824/202308241126.5y4WcO3T-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230824/202308241126.5y4WcO3T-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308241126.5y4WcO3T-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/events/ring_buffer.c:11:
-   In file included from include/linux/perf_event.h:18:
-   In file included from include/uapi/linux/bpf_perf_event.h:11:
-   In file included from ./arch/mips/include/generated/uapi/asm/bpf_perf_event.h:1:
-   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
-   In file included from include/linux/ptrace.h:6:
-   In file included from include/linux/sched.h:12:
-   In file included from ./arch/mips/include/generated/asm/current.h:1:
-   In file included from include/asm-generic/current.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
->> arch/mips/include/asm/atomic.h:155:1: warning: used $at (currently $1) without ".set noat" [-Winline-asm]
-     155 | ATOMIC_OPS(atomic, add, int, +=, addu, ll, sc)
-         | ^
-   arch/mips/include/asm/atomic.h:151:2: note: expanded from macro 'ATOMIC_OPS'
-     151 |         ATOMIC_OP(pfx, op, type, c_op, asm_op, ll, sc)                  \
-         |         ^
-   arch/mips/include/asm/atomic.h:74:3: note: expanded from macro 'ATOMIC_OP'
-      74 |         "       " #asm_op " %0, %2                              \n"     \
-         |          ^
-   <inline asm>:5:11: note: instantiated into assembly here
-       5 |         addu $3, $1                             
-         |                  ^
-   1 warning generated.
+* the section content holds 'count'
+* two R_*_NONE relocations hold 'from' and 'to'. The addend field is
+unused, therefore REL is better.
 
 
-vim +155 arch/mips/include/asm/atomic.h
-
-4edac529eb629c arch/mips/include/asm/atomic.h Peter Zijlstra 2016-04-18  148  
-1da7bce8591d58 arch/mips/include/asm/atomic.h Paul Burton    2019-10-01  149  #undef ATOMIC_OPS
-a38ee6bb14a41b arch/mips/include/asm/atomic.h Paul Burton    2019-10-01  150  #define ATOMIC_OPS(pfx, op, type, c_op, asm_op, ll, sc)			\
-a38ee6bb14a41b arch/mips/include/asm/atomic.h Paul Burton    2019-10-01  151  	ATOMIC_OP(pfx, op, type, c_op, asm_op, ll, sc)			\
-a38ee6bb14a41b arch/mips/include/asm/atomic.h Paul Burton    2019-10-01  152  	ATOMIC_OP_RETURN(pfx, op, type, c_op, asm_op, ll, sc)		\
-a38ee6bb14a41b arch/mips/include/asm/atomic.h Paul Burton    2019-10-01  153  	ATOMIC_FETCH_OP(pfx, op, type, c_op, asm_op, ll, sc)
-^1da177e4c3f41 include/asm-mips/atomic.h      Linus Torvalds 2005-04-16  154  
-a38ee6bb14a41b arch/mips/include/asm/atomic.h Paul Burton    2019-10-01 @155  ATOMIC_OPS(atomic, add, int, +=, addu, ll, sc)
-a38ee6bb14a41b arch/mips/include/asm/atomic.h Paul Burton    2019-10-01  156  ATOMIC_OPS(atomic, sub, int, -=, subu, ll, sc)
-0004a9dfeaa709 include/asm-mips/atomic.h      Ralf Baechle   2006-10-31  157  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
