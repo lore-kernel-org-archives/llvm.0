@@ -1,137 +1,75 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0F07F
-	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 01:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1692840072;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=igGYw2l8R4cMOicAHWogTF8/nIzRHDRcg7+rsbSTmm8=;
-	b=ZtSSL0Sf0Kva+md+br6iARICmJTX7N0xdlq23roAXEUOs+1P5CG+SnL4BzyhxdLtYKlaHy
-	ScdyiEvD4PITAQ0eopHbZwtR6cYmupStR7YVluuJl4js08HrJzEJ3wzLcvrRNZHe+/OQPs
-	/vPHrLstRyqPY2oNZx0sp7J8kxdABTQ=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-355-vO85JmKXMN-kWEgexxw2EA-1; Wed, 23 Aug 2023 21:21:10 -0400
-X-MC-Unique: vO85JmKXMN-kWEgexxw2EA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 111BD29AB435
-	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 01:21:10 +0000 (UTC)
-Received: from [172.64.4.37] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id EEFC940C2073;
-	Thu, 24 Aug 2023 01:21:09 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 34 of 267): Test report for master
- (6.5.0-rc7, mainline.kernel.org-clang, a5e505a9)
-Date: Thu, 24 Aug 2023 01:21:09 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76F37F
+	for <llvm@lists.linux.dev>; Thu, 24 Aug 2023 01:34:28 +0000 (UTC)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4107e6fb0e8so38347511cf.3
+        for <llvm@lists.linux.dev>; Wed, 23 Aug 2023 18:34:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1692840867; x=1693445667;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Om/ivCHVAhRwD7zWkX5toeItMM4JgUzapHEvOHWSE4=;
+        b=axbfktD0hGOymILWFI4Lf5iVAv6oZ8SrmQ3iwjqyffzqVF0npiTUuOmgzua4uZmpyt
+         vtiHxCI/wtBbo45e87rU8FmjhIR9NsF2DaZQTooFef4RMI/hMlmTVlWoyQmDhiUJPqjn
+         P2fkxWLzds28tR5jAccvGCwRbs9EU6ySu49kyvD3/8mvcu7Zq9o20+VhAoolVj9faLLX
+         AF9I0d7l05RD2jKaF+zMT2UIabtultw1EUhWLZB3CwxttQHmW8Lihn40N/AJh/D+1UaB
+         p84wV1vA0QojsBdQPfyXTS0KiKSDjd9KaUhaY2fxVlbDivRtZQTlBaFxFiWZpZMnC6xT
+         PouQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692840867; x=1693445667;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Om/ivCHVAhRwD7zWkX5toeItMM4JgUzapHEvOHWSE4=;
+        b=LkxVBnCRBTCGhxEWEXDYyfVyT6bdW4a2OlfLx+fynEb7iKLfpZ1SsJn3C+Z1ldvcrs
+         H38EQEzmQkzdKHjkD86U+y4VsD847t8XTD+3ENKFNa8ktqd8ZjLJDUZ8gDSD5gIJ2knA
+         TbQaEnnULszQtBQKmtAO5dWrvj1oBYP2TJpX9VmtCIqj1yoGCEuxI4LUDRHeaYY06wcs
+         46VEya5e4fH9AtiaNrjkw42F9Zuh6TdFBiYl8RNuXO/Jd489tkhyqofI98Em7+pYW3bj
+         u3Uknj1Ul9zLfzmGVwjyHINQZwxg331KeP5uNwVk9uYtAWpQVGQkX2V4VihlCWjHzO5w
+         SxnA==
+X-Gm-Message-State: AOJu0YzTYMoIz9nSkQpHWb7Zy/jLhVfuqFxGC/pSOnVfGMFZYo5kaobl
+	RT1KSp6mnsm5UW30O9NpGulLLQ==
+X-Google-Smtp-Source: AGHT+IFvgoSrMDdsAH3npNUBskPs/Btd4QwdQ3ZKKw/QPTg1kM+PzOBEwjb/X+iASBAYYeJcebp8Lg==
+X-Received: by 2002:a05:622a:138c:b0:411:fc77:5863 with SMTP id o12-20020a05622a138c00b00411fc775863mr2226710qtk.34.1692840867176;
+        Wed, 23 Aug 2023 18:34:27 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-7ffd-0cf9-a739-5564.res6.spectrum.com. [2603:7000:c01:2716:7ffd:cf9:a739:5564])
+        by smtp.gmail.com with ESMTPSA id z8-20020ac87108000000b0040331a24f16sm4064786qto.3.2023.08.23.18.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Aug 2023 18:34:26 -0700 (PDT)
+Date: Wed, 23 Aug 2023 21:34:25 -0400
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Mel Gorman <mgorman@suse.de>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/8] mm: page_alloc: consolidate free page accounting
+Message-ID: <20230824013425.GA52469@cmpxchg.org>
+References: <20230821183733.106619-9-hannes@cmpxchg.org>
+ <202308240628.YoW5rQTu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <42517.123082321211000187@us-mta-355.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202308240628.YoW5rQTu-lkp@intel.com>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Aug 24, 2023 at 06:40:58AM +0800, kernel test robot wrote:
+> >> mm/page_alloc.c:6702:2: error: call to undeclared function '__mod_zone_freepage_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            __mod_zone_freepage_state(zone, -MAX_ORDER_NR_PAGES, MIGRATE_MOVABLE);
+>            ^
+>    mm/page_alloc.c:6702:2: note: did you mean '__mod_zone_page_state'?
+>    include/linux/vmstat.h:319:20: note: '__mod_zone_page_state' declared here
+>    static inline void __mod_zone_page_state(struct zone *zone,
+>                       ^
+>    mm/page_alloc.c:6754:2: error: call to undeclared function '__mod_zone_freepage_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            __mod_zone_freepage_state(zone, MAX_ORDER_NR_PAGES, MIGRATE_MOVABLE);
+>            ^
+>    2 errors generated.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'platform-drivers-x86-v6.5-5' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101240
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9246435
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9246296
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
-3': Input/output error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1436
-            Affected tests:
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Ah, that's in the new unaccepted memory bits. I'll fix those up in v2.
