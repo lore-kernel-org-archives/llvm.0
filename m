@@ -1,128 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31600642;
-	Fri, 25 Aug 2023 01:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692928118; x=1724464118;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eh5YqIQK65gZuUtvygXGY1OIBSrgJDWKSVzm0lov+Wc=;
-  b=kMWPBH8QJyZj7cGf9dz/4vNYhe20BtMwh/aR0/Kos03IX562yk4tzwuX
-   P/aP+5QsZdcRmq9KHUTxw01kVA1gYuXnVLuw8BKnG+s4sRJNcZr7fwMnq
-   w3ekO8VfAA0tXhgJIIYQ8Y2Pp29SXIG8uD/XmRode3cp8zBXxfyTrQ3UQ
-   d/JtpvfLH7Qz49gMuwIVMk5UAjurYnCE2RsA7NlBB1mzCyZp20X0Gg7Q5
-   NZ6+IF/QR1tv6F/8WLv5BYFlYa4O09kIPcFtFWbUWb/nRhmZP7iRX83MY
-   oAl59lcYQRZTXPrY6LomD0HdYRDNg160XUMBroti6VTfHP3zZmnb69MVq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="372004725"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="372004725"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 18:48:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="911119748"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="911119748"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Aug 2023 18:48:35 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qZLwA-00037O-1H;
-	Fri, 25 Aug 2023 01:48:34 +0000
-Date: Fri, 25 Aug 2023 09:48:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.08.22a 61/69]
- kernel/locking/qspinlock.c:709:102: warning: format specifies type 'unsigned
- long' but the argument has type 'unsigned int'
-Message-ID: <202308250917.NOqF6Mad-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8DC7E0
+	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 02:51:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1692931873;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uQB+13I3Nc4wWYXqqHAPzt73YpJuqmfC2I6gXjUc17w=;
+	b=jJKnD9sciFCV0bLVjp01nvlm6JR0Tkks5eEfjXeXnG589EQQURHbfNgvxToruykx4SuGPY
+	YWnrBU4kjavleAXNga+/z1/SbGfs5U0wlNXe6n16ry6rijxpDenepSFLXV9U/6JRRMobgi
+	8EJyFxrFuhu2i02wSqHVHFHZ7N7ZBaw=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-424-Y-nQ_0qJPxaVkZ6AJsu0Yw-1; Thu, 24 Aug 2023 22:51:11 -0400
+X-MC-Unique: Y-nQ_0qJPxaVkZ6AJsu0Yw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50E58299E75E
+	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 02:51:11 +0000 (UTC)
+Received: from [172.64.4.37] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 26E13492C14;
+	Fri, 25 Aug 2023 02:51:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 11 of 267): Test report for master
+ (6.5.0-rc7, mainline.kernel.org-clang, b5cc3833)
+Date: Fri, 25 Aug 2023 02:51:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <02636.123082422511100227@us-mta-424.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.08.22a
-head:   354957ec11dc80eac68c4b1e10c237d69adc1833
-commit: bdd8d60bd4047aa4a7dc207789dc4ad0dfd5f07e [61/69] EXP qspinlock: Dump lock state, add call from locktorture
-config: mips-randconfig-r023-20230825 (https://download.01.org/0day-ci/archive/20230825/202308250917.NOqF6Mad-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230825/202308250917.NOqF6Mad-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308250917.NOqF6Mad-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> kernel/locking/qspinlock.c:709:102: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     709 |         pr_alert("%s: _Q_TAIL_CPU_OFFSET=%d _Q_TAIL_IDX_MASK=%d _Q_TAIL_IDX_OFFSET=%d _Q_LOCKED_VAL=%d _Q_TAIL_OFFSET=%d sizeof(->tail)=%lu\n",
-         |                                                                                                                                         ~~~
-         |                                                                                                                                         %u
-     710 |                 __func__, _Q_TAIL_CPU_OFFSET, _Q_TAIL_IDX_MASK, _Q_TAIL_IDX_OFFSET, _Q_LOCKED_VAL, _Q_TAIL_OFFSET, sizeof(qval.tail));
-         |                                                                                                                    ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:478:35: note: expanded from macro 'pr_alert'
-     478 |         printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
-         |                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
->> kernel/locking/qspinlock.c:691:6: warning: no previous prototype for function 'spinlock_dump' [-Wmissing-prototypes]
-     691 | void spinlock_dump(spinlock_t *sp, bool full)
-         |      ^
-   kernel/locking/qspinlock.c:691:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     691 | void spinlock_dump(spinlock_t *sp, bool full)
-         | ^
-         | static 
-   2 warnings generated.
+Kernel information:
+    Commit message: Merge tag 'net-6.5-rc8' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/101388
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
+3': Input/output error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1436
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage - blktests - nvme-tcp: hit test timeout
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
 
 
-vim +709 kernel/locking/qspinlock.c
 
-   690	
- > 691	void spinlock_dump(spinlock_t *sp, bool full)
-   692	{
-   693		int cpu;
-   694		int i = 0;
-   695		int idx;
-   696		struct mcs_spinlock *msp;
-   697		struct qspinlock qval = sp->rlock.raw_lock;
-   698	
-   699		cpu = tail_to_cpu(qval.tail);
-   700		idx = tail_to_idx(qval.tail);
-   701		pr_alert("%s: %ps %#x (%c%c%c%c %#x: %d[%d]\n",
-   702			 __func__, sp, (unsigned int)atomic_read(&qval.val),
-   703			 ".L"[!!qval.locked],
-   704			 ".P"[!!qval.pending],
-   705			 ".Q"[cpu >= 0 && idx >= 0],
-   706			 ".F"[!!full],
-   707			 (unsigned int)qval.tail, cpu, idx);
-   708		pr_alert("%s: _Q_TAIL_CPU_OFFSET=%d _Q_TAIL_IDX_MASK=%d _Q_TAIL_IDX_OFFSET=%d _Q_LOCKED_VAL=%d _Q_TAIL_OFFSET=%d sizeof(->tail)=%lu\n",
- > 709			__func__, _Q_TAIL_CPU_OFFSET, _Q_TAIL_IDX_MASK, _Q_TAIL_IDX_OFFSET, _Q_LOCKED_VAL, _Q_TAIL_OFFSET, sizeof(qval.tail));
-   710		if (!full)
-   711			return;
-   712		while (i++ < nr_cpu_ids && (msp = next_to_prev(msp, &cpu, &idx))) {
-   713			pr_alert("%s: Q%d CPU %d[%d] %c%d\n", __func__, i, cpu, idx,
-   714				 ".L"[!!msp->locked], msp->count);
-   715		}
-   716		if (i >= nr_cpu_ids && cpu >= 0 && idx >= 0)
-   717			pr_alert("%s: Queue output truncated.\n", __func__);
-   718		else
-   719			pr_alert("%s: End of queue.\n", __func__);
-   720	}
-   721	EXPORT_SYMBOL(spinlock_dump);
-   722	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
