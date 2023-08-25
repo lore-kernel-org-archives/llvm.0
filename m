@@ -1,43 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980671FC9;
-	Fri, 25 Aug 2023 08:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6666AC8D1;
+	Fri, 25 Aug 2023 09:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692953792; x=1724489792;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JCH43ctKr+8nrbOK2BXGW5bYASdd1r/s0AzuHw4giac=;
-  b=akuKNB4Kts+ESeCD1VycEGCQeVp/LhiPrhXOydh+hGnMkVgLxyNbcEsw
-   4RKzrbjVbbARAs5OtqZqC0g94XaHM8lqb87NPsdPFE3nFzBvwo7/k3C1s
-   pO75pbNRCgCtPSdqyJY5p71gLDi8RqRoqeZTT+J0Mnc8sZPmnZEJXuv3N
-   wUy677vJzykIDWz5QfKCQxU3rPDtX0oPaWRAY/XraPM7lfV8fozejM2Y1
-   oExWszHeIexmOcU0TIj/GZyR1zSs5EqHRppWdhFLgF8gljDf7fdFQxpRg
-   PTzwo8pZDe2ES+d6td5cLb2SGdC+xcaFRo/eNaSjSxtpVlUAN/NDpy1pE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="405669224"
+  t=1692956340; x=1724492340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3RThncrfyLkM0f4g6LZtlksefEUauAjBRluEVJ6Ay+s=;
+  b=J6G8PM3nxDYc7mO1weAO43UG67kPtrt2oMokRU278tDsRS9+hqv3sM3g
+   Evk2dOWaNi4n6N1WxtPQs3VHzLs+3PGHYb/dHCfY2DmxQ6aPQpFjRVwSP
+   v8gJyv0iP+TZ3+QIzgPTNE4AbaVG8M6WtniWajE37zR098LR6R+en6+tW
+   Wt3q77i58zQOp5wZQOffAEIJgh2qXPFkL9iEZW5Ks5J1/X/LZHw94K6X9
+   QLnVKlzlW1KcO06Ddrll4gSuBOyuRs1vELsOYCQkFT4hEkK7tO9Ij7o8n
+   9cJEfK+tH03U5aHVrXqN9CbakKaUumNmFo95VRnoeMPMmkL9LzdFvGubp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="364871748"
 X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="405669224"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 01:56:31 -0700
+   d="scan'208";a="364871748"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 02:38:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="737408490"
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="714292976"
 X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="737408490"
+   d="scan'208";a="714292976"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 25 Aug 2023 01:56:29 -0700
+  by orsmga006.jf.intel.com with ESMTP; 25 Aug 2023 02:38:53 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZScG-0003Mu-24;
-	Fri, 25 Aug 2023 08:56:28 +0000
-Date: Fri, 25 Aug 2023 16:55:39 +0800
+	id 1qZTHI-0003Pi-1O;
+	Fri, 25 Aug 2023 09:38:52 +0000
+Date: Fri, 25 Aug 2023 17:38:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.08.22a 67/69]
- kernel/locking/qspinlock.c:691:29: error: redefinition of 'next_to_cpu_idx'
-Message-ID: <202308251616.7HOmYRfg-lkp@intel.com>
+To: Zi Yan <zi.yan@sent.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] mm: use nth_page() for all memmap (struct page)
+ position operations.
+Message-ID: <202308251717.4u77tZsA-lkp@intel.com>
+References: <20230823030622.96112-1-zi.yan@sent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,122 +47,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230823030622.96112-1-zi.yan@sent.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.08.22a
-head:   354957ec11dc80eac68c4b1e10c237d69adc1833
-commit: 62532cfc5f2be5376f0eac431783c226c35e104f [67/69] EXP qspinlock: Dump full qnode structure
-config: i386-buildonly-randconfig-001-20230825 (https://download.01.org/0day-ci/archive/20230825/202308251616.7HOmYRfg-lkp@intel.com/config)
+Hi Zi,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-use-nth_page-for-all-memmap-struct-page-position-operations/20230823-110839
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230823030622.96112-1-zi.yan%40sent.com
+patch subject: [RFC PATCH] mm: use nth_page() for all memmap (struct page) position operations.
+config: i386-randconfig-004-20230825 (https://download.01.org/0day-ci/archive/20230825/202308251717.4u77tZsA-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230825/202308251616.7HOmYRfg-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230825/202308251717.4u77tZsA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308251616.7HOmYRfg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308251717.4u77tZsA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   kernel/locking/qspinlock.c:730:102: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-                   __func__, _Q_TAIL_CPU_OFFSET, _Q_TAIL_IDX_MASK, _Q_TAIL_IDX_OFFSET, _Q_LOCKED_VAL, _Q_TAIL_OFFSET, sizeof(qval.tail));
-                                                                                                                      ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:478:35: note: expanded from macro 'pr_alert'
-           printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
-                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   In file included from kernel/locking/qspinlock.c:779:
-   kernel/locking/qspinlock_paravirt.h:298:7: warning: variable 'wait_early' set but not used [-Wunused-but-set-variable]
-           bool wait_early;
-                ^
-   kernel/locking/qspinlock_paravirt.h:407:6: warning: variable 'waitcnt' set but not used [-Wunused-but-set-variable]
-           int waitcnt = 0;
-               ^
-   kernel/locking/qspinlock_paravirt.h:493:1: warning: no previous prototype for function '__pv_queued_spin_unlock_slowpath' [-Wmissing-prototypes]
-   __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
-   ^
-   kernel/locking/qspinlock_paravirt.h:492:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   __visible __lockfunc void
-                        ^
-                        static 
-   In file included from kernel/locking/qspinlock.c:780:
-   kernel/locking/qspinlock.c:660:19: error: redefinition of 'tail_to_cpu'
-   static __pure int tail_to_cpu(u32 tail)
-                     ^
-   kernel/locking/qspinlock.c:660:19: note: previous definition is here
-   static __pure int tail_to_cpu(u32 tail)
-                     ^
-   In file included from kernel/locking/qspinlock.c:780:
-   kernel/locking/qspinlock.c:665:19: error: redefinition of 'tail_to_idx'
-   static __pure int tail_to_idx(u32 tail)
-                     ^
-   kernel/locking/qspinlock.c:665:19: note: previous definition is here
-   static __pure int tail_to_idx(u32 tail)
-                     ^
-   In file included from kernel/locking/qspinlock.c:780:
-   kernel/locking/qspinlock.c:670:29: error: redefinition of 'next_to_prev'
-   static struct mcs_spinlock *next_to_prev(struct mcs_spinlock *msp, int *cpup, int *idxp)
-                               ^
-   kernel/locking/qspinlock.c:670:29: note: previous definition is here
-   static struct mcs_spinlock *next_to_prev(struct mcs_spinlock *msp, int *cpup, int *idxp)
-                               ^
-   In file included from kernel/locking/qspinlock.c:780:
->> kernel/locking/qspinlock.c:691:29: error: redefinition of 'next_to_cpu_idx'
-   static struct mcs_spinlock *next_to_cpu_idx(struct mcs_spinlock *msp, int *cpup, int *idxp)
-                               ^
-   kernel/locking/qspinlock.c:691:29: note: previous definition is here
-   static struct mcs_spinlock *next_to_cpu_idx(struct mcs_spinlock *msp, int *cpup, int *idxp)
-                               ^
-   In file included from kernel/locking/qspinlock.c:780:
-   kernel/locking/qspinlock.c:712:6: error: redefinition of 'spinlock_dump'
-   void spinlock_dump(spinlock_t *sp, bool full)
-        ^
-   kernel/locking/qspinlock.c:712:6: note: previous definition is here
-   void spinlock_dump(spinlock_t *sp, bool full)
-        ^
-   In file included from kernel/locking/qspinlock.c:780:
-   kernel/locking/qspinlock.c:730:102: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-                   __func__, _Q_TAIL_CPU_OFFSET, _Q_TAIL_IDX_MASK, _Q_TAIL_IDX_OFFSET, _Q_LOCKED_VAL, _Q_TAIL_OFFSET, sizeof(qval.tail));
-                                                                                                                      ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:478:35: note: expanded from macro 'pr_alert'
-           printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
-                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   5 warnings and 5 errors generated.
+>> fs/hfs/btree.c:273:10: error: incompatible pointer types initializing 'const struct page *' with an expression of type 'struct page *[]' [-Werror,-Wincompatible-pointer-types]
+           pagep = nth_page(node->page, (off >> PAGE_SHIFT));
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:213:38: note: expanded from macro 'nth_page'
+   #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+                            ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
+   #define page_to_pfn __page_to_pfn
+                       ^
+   include/asm-generic/memory_model.h:46:23: note: expanded from macro '__page_to_pfn'
+   ({      const struct page *__pg = (pg);                         \
+                              ^
+   include/asm-generic/memory_model.h:52:27: note: expanded from macro '__pfn_to_page'
+   ({      unsigned long __pfn = (pfn);                    \
+                                  ^~~
+>> fs/hfs/btree.c:273:8: error: incompatible pointer types assigning to 'struct page **' from 'struct page *' [-Werror,-Wincompatible-pointer-types]
+           pagep = nth_page(node->page, (off >> PAGE_SHIFT));
+                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/hfs/btree.c:319:11: error: incompatible pointer types initializing 'const struct page *' with an expression of type 'struct page *[]' [-Werror,-Wincompatible-pointer-types]
+                   pagep = nth_page(node->page, (off >> PAGE_SHIFT));
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:213:38: note: expanded from macro 'nth_page'
+   #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+                            ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
+   #define page_to_pfn __page_to_pfn
+                       ^
+   include/asm-generic/memory_model.h:46:23: note: expanded from macro '__page_to_pfn'
+   ({      const struct page *__pg = (pg);                         \
+                              ^
+   include/asm-generic/memory_model.h:52:27: note: expanded from macro '__pfn_to_page'
+   ({      unsigned long __pfn = (pfn);                    \
+                                  ^~~
+   fs/hfs/btree.c:319:9: error: incompatible pointer types assigning to 'struct page **' from 'struct page *' [-Werror,-Wincompatible-pointer-types]
+                   pagep = nth_page(node->page, (off >> PAGE_SHIFT));
+                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
 
 
-vim +/next_to_cpu_idx +691 kernel/locking/qspinlock.c
+vim +273 fs/hfs/btree.c
 
-   690	
- > 691	static struct mcs_spinlock *next_to_cpu_idx(struct mcs_spinlock *msp, int *cpup, int *idxp)
-   692	{
-   693		int cpu;
-   694		int idx;
-   695	
-   696		for_each_possible_cpu(cpu) {
-   697			struct qnode *qnp = per_cpu_ptr(&qnodes[0], cpu);
-   698	
-   699			for (idx = 0; idx < MAX_NODES; idx++) {
-   700				if (&qnp[idx].mcs == msp) {
-   701					*cpup = cpu;
-   702					*idxp = idx;
-   703					return &qnp[idx].mcs;
-   704				}
-   705			}
-   706		}
-   707		*cpup = -1;
-   708		*idxp = -1;
-   709		return NULL;
-   710	}
-   711	
+   249	
+   250	struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree *tree)
+   251	{
+   252		struct hfs_bnode *node, *next_node;
+   253		struct page **pagep;
+   254		u32 nidx, idx;
+   255		unsigned off;
+   256		u16 off16;
+   257		u16 len;
+   258		u8 *data, byte, m;
+   259		int i, res;
+   260	
+   261		res = hfs_bmap_reserve(tree, 1);
+   262		if (res)
+   263			return ERR_PTR(res);
+   264	
+   265		nidx = 0;
+   266		node = hfs_bnode_find(tree, nidx);
+   267		if (IS_ERR(node))
+   268			return node;
+   269		len = hfs_brec_lenoff(node, 2, &off16);
+   270		off = off16;
+   271	
+   272		off += node->page_offset;
+ > 273		pagep = nth_page(node->page, (off >> PAGE_SHIFT));
+   274		data = kmap_local_page(*pagep);
+   275		off &= ~PAGE_MASK;
+   276		idx = 0;
+   277	
+   278		for (;;) {
+   279			while (len) {
+   280				byte = data[off];
+   281				if (byte != 0xff) {
+   282					for (m = 0x80, i = 0; i < 8; m >>= 1, i++) {
+   283						if (!(byte & m)) {
+   284							idx += i;
+   285							data[off] |= m;
+   286							set_page_dirty(*pagep);
+   287							kunmap_local(data);
+   288							tree->free_nodes--;
+   289							mark_inode_dirty(tree->inode);
+   290							hfs_bnode_put(node);
+   291							return hfs_bnode_create(tree, idx);
+   292						}
+   293					}
+   294				}
+   295				if (++off >= PAGE_SIZE) {
+   296					kunmap_local(data);
+   297					data = kmap_local_page(nth_page(*pagep, 1));
+   298					*pagep = nth_page(*pagep, 1);
+   299					off = 0;
+   300				}
+   301				idx += 8;
+   302				len--;
+   303			}
+   304			kunmap_local(data);
+   305			nidx = node->next;
+   306			if (!nidx) {
+   307				printk(KERN_DEBUG "create new bmap node...\n");
+   308				next_node = hfs_bmap_new_bmap(node, idx);
+   309			} else
+   310				next_node = hfs_bnode_find(tree, nidx);
+   311			hfs_bnode_put(node);
+   312			if (IS_ERR(next_node))
+   313				return next_node;
+   314			node = next_node;
+   315	
+   316			len = hfs_brec_lenoff(node, 0, &off16);
+   317			off = off16;
+   318			off += node->page_offset;
+   319			pagep = nth_page(node->page, (off >> PAGE_SHIFT));
+   320			data = kmap_local_page(*pagep);
+   321			off &= ~PAGE_MASK;
+   322		}
+   323	}
+   324	
 
 -- 
 0-DAY CI Kernel Test Service
