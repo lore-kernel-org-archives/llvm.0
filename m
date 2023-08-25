@@ -1,95 +1,191 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0771377;
-	Fri, 25 Aug 2023 07:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692947399; x=1724483399;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HxtjP/eWI5irDDcXkwHLdeRMWrol5auXuwj5c4Fn374=;
-  b=kPtD/8BvPDypZS0oUszr/OBr7sIKlm0XCsXKt2WX3nfT/JCv1uUfbo1w
-   3g4NmB8Gp/0alcZCTlM2CA10OawLYZHZWMTJiMvBxUgtzlcjGIK+JulCJ
-   Jk/4Xdsy7Bx4IiY/5yFLj+LvKc9GxB3o1oV/zJfdsAqAJmMpvh2YfCuoU
-   CoRpRxw91DqucqyNn2B85sQyGafc7gsJrlFHXGKCtwVa0Nvo7iS3E5LNW
-   MuuNWAtBEURl0NKRV5uxdSqUXkgcEkqfChXys9VlKGzEZdSow3qQarpxS
-   K6EEygYM1h2SyHSvoVZO6QDe1xG1OVtc1D6ePKK8PUBzf0E0aa5XeVuRU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="354179024"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="354179024"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 00:09:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="687203794"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="687203794"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 25 Aug 2023 00:09:56 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qZQx9-0003IK-1m;
-	Fri, 25 Aug 2023 07:09:55 +0000
-Date: Fri, 25 Aug 2023 15:09:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Reza Arbab <arbab@linux.ibm.com>
-Subject: [powerpc:next 84/128] arch/powerpc/mm/init_64.c:477:38: error: use
- of undeclared identifier 'SECTION_SIZE_BITS'
-Message-ID: <202308251532.k9PpWEAD-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CE117FC
+	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 07:19:26 +0000 (UTC)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RXBCR2Xzjz4f3lVt
+	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 15:19:15 +0800 (CST)
+Received: from [10.174.178.55] (unknown [10.174.178.55])
+	by APP4 (Coremail) with SMTP id gCh0CgBH16nuVehkUYQkBg--.15410S3;
+	Fri, 25 Aug 2023 15:19:14 +0800 (CST)
+Subject: Re: [PATCH] kallsyms: Fix kallsyms_selftest failure
+To: Yonghong Song <yonghong.song@linux.dev>, Kees Cook
+ <keescook@chromium.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>
+Cc: Fangrui Song <maskray@google.com>, kernel-team@fb.com,
+ Leizhen <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel test robot <oliver.sang@intel.com>
+References: <20230825034659.1037627-1-yonghong.song@linux.dev>
+From: "Leizhen (ThunderTown)" <thunder.leizhen@huaweicloud.com>
+Message-ID: <95a7d98c-b227-7929-b833-f6adc3b7e3ca@huaweicloud.com>
+Date: Fri, 25 Aug 2023 15:19:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-head:   b9bbbf4979073d5536b7650decd37fcb901e6556
-commit: 4d15721177d539d743fcf31d7bb376fb3b81aeb6 [84/128] powerpc/mm: Cleanup memory block size probing
-config: powerpc64-randconfig-r005-20230825 (https://download.01.org/0day-ci/archive/20230825/202308251532.k9PpWEAD-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230825/202308251532.k9PpWEAD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308251532.k9PpWEAD-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/mm/init_64.c:477:38: error: use of undeclared identifier 'SECTION_SIZE_BITS'
-     477 |         unsigned long section_size = 1UL << SECTION_SIZE_BITS;
-         |                                             ^
-   arch/powerpc/mm/init_64.c:510:18: error: use of undeclared identifier 'SECTION_SIZE_BITS'
-     510 |                         *block_size = MIN_MEMORY_BLOCK_SIZE;
-         |                                       ^
-   include/linux/memory.h:23:43: note: expanded from macro 'MIN_MEMORY_BLOCK_SIZE'
-      23 | #define MIN_MEMORY_BLOCK_SIZE     (1UL << SECTION_SIZE_BITS)
-         |                                           ^
-   2 errors generated.
+In-Reply-To: <20230825034659.1037627-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgBH16nuVehkUYQkBg--.15410S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxuFyxCw1xAF1rZFyrtFW7CFg_yoW7Xw47pr
+	WSyFsrGF48Ar1Fka4UJay8WryxCws5Xw1UGayqkFykCFn5ury0qwn7Kw4fu3s8ZrZ8uFWr
+	XanYvFyxtF10yFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+	e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+	14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+	9x07UWE__UUUUU=
+X-CM-SenderInfo: hwkx0vthuozvpl2kv046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
 
 
-vim +/SECTION_SIZE_BITS +477 arch/powerpc/mm/init_64.c
 
-   474	
-   475	static void update_memory_block_size(unsigned long *block_size, unsigned long mem_size)
-   476	{
- > 477		unsigned long section_size = 1UL << SECTION_SIZE_BITS;
-   478	
-   479		for (; *block_size > section_size; *block_size >>= 2) {
-   480	
-   481			if ((mem_size & *block_size) == 0)
-   482				break;
-   483		}
-   484	}
-   485	
+On 2023/8/25 11:46, Yonghong Song wrote:
+> Kernel test robot reported a kallsyms_test failure when clang lto is
+> enabled (thin or full) and CONFIG_KALLSYMS_SELFTEST is also enabled.
+> I can reproduce in my local environment with the following error message
+> with thin lto:
+>   [    1.877897] kallsyms_selftest: Test for 1750th symbol failed: (tsc_cs_mark_unstable) addr=ffffffff81038090
+>   [    1.877901] kallsyms_selftest: abort
+> 
+> It appears that commit 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes
+> from promoted global functions") caused the failure. Commit 8cc32a9bbf29
+> changed cleanup_symbol_name() based on ".llvm." instead of '.' where
+> ".llvm." is appended to a before-lto-optimization local symbol name.
+> We need to propagate such knowledge in kallsyms_selftest.c as well.
+> 
+> Further more, compare_symbol_name() in kallsyms.c needs change as well.
+> In scripts/kallsyms.c, kallsyms_names and kallsyms_seqs_of_names are used
+> to record symbol names themselves and index to symbol names respectively.
+> For example:
+>   kallsyms_names:
+>     ...
+>     __amd_smn_rw._entry       <== seq 1000
+>     __amd_smn_rw._entry.5     <== seq 1001
+>     __amd_smn_rw.llvm.<hash>  <== seq 1002
+>     ...
+> 
+> kallsyms_seqs_of_names are sorted based on cleanup_symbol_name() through, so
+> the order in kallsyms_seqs_of_names actually has
+> 
+>   index 1000:   seq 1002   <== __amd_smn_rw.llvm.<hash> (actual symbol comparison using '__amd_smn_rw')
+>   index 1001:   seq 1000   <== __amd_smn_rw._entry
+>   index 1002:   seq 1001   <== __amd_smn_rw._entry.5
+> 
+> Let us say at a particular point, at index 1000, symbol '__amd_smn_rw.llvm.<hash>'
+> is comparing to '__amd_smn_rw._entry' where '__amd_smn_rw._entry' is the one to
+> search e.g., with function kallsyms_on_each_match_symbol(). The current implementation
+> will find out '__amd_smn_rw._entry' is less than '__amd_smn_rw.llvm.<hash>' and
+> then continue to search e.g., index 999 and never found a match although the actual
+> index 1001 is a match.
+> 
+> To fix this issue, let us do cleanup_symbol_name() first and then do comparison.
+> In the above case, comparing '__amd_smn_rw' vs '__amd_smn_rw._entry' and
+> '__amd_smn_rw._entry' being greater than '__amd_smn_rw', the next comparison will
+> be > index 1000 and eventually index 1001 will be hit an a match is found.
+> 
+> For any symbols not having '.llvm.' substr, there is no functionality change
+> for compare_symbol_name().
+
+Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+
+> 
+> Fixes: 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes from promoted global functions")
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202308232200.1c932a90-oliver.sang@intel.com
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>  kernel/kallsyms.c          | 17 +++++++----------
+>  kernel/kallsyms_selftest.c | 23 +----------------------
+>  2 files changed, 8 insertions(+), 32 deletions(-)
+> 
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 016d997131d4..e12d26c10dba 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -188,16 +188,13 @@ static bool cleanup_symbol_name(char *s)
+>  
+>  static int compare_symbol_name(const char *name, char *namebuf)
+>  {
+> -	int ret;
+> -
+> -	ret = strcmp(name, namebuf);
+> -	if (!ret)
+> -		return ret;
+> -
+> -	if (cleanup_symbol_name(namebuf) && !strcmp(name, namebuf))
+> -		return 0;
+> -
+> -	return ret;
+> +	/* The kallsyms_seqs_of_names is sorted based on names after
+> +	 * cleanup_symbol_name() (see scripts/kallsyms.c) if clang lto is enabled.
+> +	 * To ensure correct bisection in kallsyms_lookup_names(), do
+> +	 * cleanup_symbol_name(namebuf) before comparing name and namebuf.
+> +	 */
+> +	cleanup_symbol_name(namebuf);
+> +	return strcmp(name, namebuf);
+>  }
+>  
+>  static unsigned int get_symbol_seq(int index)
+> diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+> index a2e3745d15c4..e05ddc33a752 100644
+> --- a/kernel/kallsyms_selftest.c
+> +++ b/kernel/kallsyms_selftest.c
+> @@ -196,7 +196,7 @@ static bool match_cleanup_name(const char *s, const char *name)
+>  	if (!IS_ENABLED(CONFIG_LTO_CLANG))
+>  		return false;
+>  
+> -	p = strchr(s, '.');
+> +	p = strstr(s, ".llvm.");
+>  	if (!p)
+>  		return false;
+>  
+> @@ -344,27 +344,6 @@ static int test_kallsyms_basic_function(void)
+>  			goto failed;
+>  		}
+>  
+> -		/*
+> -		 * The first '.' may be the initial letter, in which case the
+> -		 * entire symbol name will be truncated to an empty string in
+> -		 * cleanup_symbol_name(). Do not test these symbols.
+> -		 *
+> -		 * For example:
+> -		 * cat /proc/kallsyms | awk '{print $3}' | grep -E "^\." | head
+> -		 * .E_read_words
+> -		 * .E_leading_bytes
+> -		 * .E_trailing_bytes
+> -		 * .E_write_words
+> -		 * .E_copy
+> -		 * .str.292.llvm.12122243386960820698
+> -		 * .str.24.llvm.12122243386960820698
+> -		 * .str.29.llvm.12122243386960820698
+> -		 * .str.75.llvm.12122243386960820698
+> -		 * .str.99.llvm.12122243386960820698
+> -		 */
+> -		if (IS_ENABLED(CONFIG_LTO_CLANG) && !namebuf[0])
+> -			continue;
+> -
+>  		lookup_addr = kallsyms_lookup_name(namebuf);
+>  
+>  		memset(stat, 0, sizeof(*stat));
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+  Zhen Lei
+
