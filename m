@@ -1,199 +1,141 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0EDD2FD
-	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 12:22:48 +0000 (UTC)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RXJty6GNmzVkMk;
-	Fri, 25 Aug 2023 20:20:26 +0800 (CST)
-Received: from [10.174.176.34] (10.174.176.34) by
- canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Fri, 25 Aug 2023 20:22:45 +0800
-Subject: Re: [syzbot] [ext4?] BUG: unable to handle kernel paging request in
- ext4_calculate_overhead
-To: syzbot <syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com>,
-	<adilger.kernel@dilger.ca>, <jack@suse.cz>, <linux-ext4@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-	<syzkaller-bugs@googlegroups.com>, <trix@redhat.com>, <tytso@mit.edu>
-References: <000000000000b1426e0603bc40b6@google.com>
-From: Zhang Yi <yi.zhang@huawei.com>
-Message-ID: <a220f4f7-e8b4-d8f8-0840-522ca123d21a@huawei.com>
-Date: Fri, 25 Aug 2023 20:22:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD76D302;
+	Fri, 25 Aug 2023 12:26:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692966415; x=1724502415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=psOCa7KDDmybtBbFrOreIdagf4PFHIM8yxTia2JKqqs=;
+  b=Q55W5bcnJHqxYk1xRGo7ChZn6/kIzlfzw+1CdbopTHi+rCzL1QaimSsp
+   jJCy/5kpzh0H0mOufM18NOi9qFRfjPnzh/K6jKSMuH5yYa6UGO4SwoMQY
+   JWm+DCsyDZOjjLiQ4PKjDfiLIK2rC6ZP3cGrPo3+b9pYehDDDQBrcm/Fj
+   2p7EZzc9uH7PBP4jTg2y+ui1vjUrlO9c8cO9K4Wy3wD1iMWsj7Xq2rZRe
+   i88ZD6B0Obw9/4r3W35xggciwBLj50k1h0b3aviRvT8RFZcftmtecUvPf
+   eL7RrsvBbZwb0BrdExWjuf+3XXYfiyJK7m3YFOLcH20LlA4i+Hk+pm0ha
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="355030434"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="355030434"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 05:26:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="1068223843"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="1068223843"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Aug 2023 05:26:47 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qZVtn-0003Z4-0l;
+	Fri, 25 Aug 2023 12:26:47 +0000
+Date: Fri, 25 Aug 2023 20:26:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
+	tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
+	ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+	gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
+	nicolas.dufresne@collabora.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+	kernel@collabora.com,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH v5 10/10] media: v4l2: Add mem2mem helpers for
+ DELETE_BUFS ioctl
+Message-ID: <202308252057.jcyaKKOJ-lkp@intel.com>
+References: <20230824092133.39510-11-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <000000000000b1426e0603bc40b6@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.34]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230824092133.39510-11-benjamin.gaignard@collabora.com>
 
-On 2023/8/25 17:48, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    47d9bb711707 Add linux-next specific files for 20230821
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=124d6a4ba80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=20999f779fa96017
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b3123e6d9842e526de39
-> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110f9c0fa80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b8867fa80000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/ffbe03c733b7/disk-47d9bb71.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/a61a31d6caf9/vmlinux-47d9bb71.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/37e6f882b2d9/bzImage-47d9bb71.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/bf27f1330349/mount_0.gz
-> 
-> The issue was bisected to:
-> 
-> commit 99d6c5d892bfff3be40f83ec34d91d562125afd4
-> Author: Zhang Yi <yi.zhang@huawei.com>
-> Date:   Fri Aug 11 06:36:10 2023 +0000
-> 
->     ext4: ext4_get_{dev}_journal return proper error value
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13a381cfa80000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=106381cfa80000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17a381cfa80000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com
-> Fixes: 99d6c5d892bf ("ext4: ext4_get_{dev}_journal return proper error value")
-> 
-> EXT4-fs (loop0): ext4_check_descriptors: Checksum for group 0 failed (394!=20869)
-> EXT4-fs error (device loop0): ext4_get_journal_inode:5719: comm syz-executor999: inode #33: comm syz-executor999: iget: illegal inode #
-> EXT4-fs (loop0): no journal found
-> BUG: unable to handle page fault for address: ffffffffffffffdb
+Hi Benjamin,
 
-Thanks for the report, It's a real issue and I'm sorry to introduce
-it due to my carelessness on commit '99d6c5d892bf ("ext4:
-ext4_get_{dev}_journal return proper error value")'. The problem is
-that I forgot to modify ext4_calculate_overhead() together to handle
-the error return value from ext4_get_journal_inode() properly. I will
-fix it soon.
+kernel test robot noticed the following build errors:
 
-Thanks,
-Yi.
+[auto build test ERROR on next-20230824]
+[also build test ERROR on v6.5-rc7]
+[cannot apply to linus/master v6.5-rc7 v6.5-rc6 v6.5-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD c979067 P4D c979067 PUD c97b067 PMD 0 
-> Oops: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 5041 Comm: syz-executor999 Not tainted 6.5.0-rc7-next-20230821-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-> RIP: 0010:ext4_calculate_overhead+0xfd2/0x1380 fs/ext4/super.c:4182
-> Code: 7b 50 48 89 fa 48 c1 ea 03 44 0f b6 60 14 48 b8 00 00 00 00 00 fc ff df 80 3c 02 00 0f 85 72 03 00 00 44 89 e6 bf 3f 00 00 00 <48> 8b 6b 50 e8 95 20 43 ff 41 80 fc 3f 0f 87 cb 20 ef 07 e8 56 25
-> RSP: 0018:ffffc9000399fa00 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffffffffffffff8b RCX: 0000000000000000
-> RDX: 1ffffffffffffffb RSI: 000000000000000a RDI: 000000000000003f
-> RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000080000000 R11: 0000000000000001 R12: 000000000000000a
-> R13: ffff888020936000 R14: dffffc0000000000 R15: ffff8880242a4000
-> FS:  0000555555f06380(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffdb CR3: 0000000074f9b000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __ext4_fill_super fs/ext4/super.c:5391 [inline]
->  ext4_fill_super+0x85e3/0xade0 fs/ext4/super.c:5643
->  get_tree_bdev+0x390/0x630 fs/super.c:1351
->  vfs_get_tree+0x88/0x350 fs/super.c:1524
->  do_new_mount fs/namespace.c:3335 [inline]
->  path_mount+0x1492/0x1ed0 fs/namespace.c:3662
->  do_mount fs/namespace.c:3675 [inline]
->  __do_sys_mount fs/namespace.c:3884 [inline]
->  __se_sys_mount fs/namespace.c:3861 [inline]
->  __x64_sys_mount+0x293/0x310 fs/namespace.c:3861
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f73494babba
-> Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb a6 e8 5e 04 00 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fffae0148e8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-> RAX: ffffffffffffffda RBX: 00007fffae0148f0 RCX: 00007f73494babba
-> RDX: 00000000200000c0 RSI: 0000000020000040 RDI: 00007fffae0148f0
-> RBP: 0000000000000004 R08: 00007fffae014930 R09: 00007fffae014930
-> R10: 0000000001000403 R11: 0000000000000202 R12: 00007fffae014930
-> R13: 0000000000000003 R14: 0000000000080000 R15: 0000000000000001
->  </TASK>
-> Modules linked in:
-> CR2: ffffffffffffffdb
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:ext4_calculate_overhead+0xfd2/0x1380 fs/ext4/super.c:4182
-> Code: 7b 50 48 89 fa 48 c1 ea 03 44 0f b6 60 14 48 b8 00 00 00 00 00 fc ff df 80 3c 02 00 0f 85 72 03 00 00 44 89 e6 bf 3f 00 00 00 <48> 8b 6b 50 e8 95 20 43 ff 41 80 fc 3f 0f 87 cb 20 ef 07 e8 56 25
-> RSP: 0018:ffffc9000399fa00 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffffffffffffff8b RCX: 0000000000000000
-> RDX: 1ffffffffffffffb RSI: 000000000000000a RDI: 000000000000003f
-> RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000080000000 R11: 0000000000000001 R12: 000000000000000a
-> R13: ffff888020936000 R14: dffffc0000000000 R15: ffff8880242a4000
-> FS:  0000555555f06380(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffdb CR3: 0000000074f9b000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:	7b 50                	jnp    0x52
->    2:	48 89 fa             	mov    %rdi,%rdx
->    5:	48 c1 ea 03          	shr    $0x3,%rdx
->    9:	44 0f b6 60 14       	movzbl 0x14(%rax),%r12d
->    e:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
->   15:	fc ff df
->   18:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
->   1c:	0f 85 72 03 00 00    	jne    0x394
->   22:	44 89 e6             	mov    %r12d,%esi
->   25:	bf 3f 00 00 00       	mov    $0x3f,%edi
-> * 2a:	48 8b 6b 50          	mov    0x50(%rbx),%rbp <-- trapping instruction
->   2e:	e8 95 20 43 ff       	call   0xff4320c8
->   33:	41 80 fc 3f          	cmp    $0x3f,%r12b
->   37:	0f 87 cb 20 ef 07    	ja     0x7ef2108
->   3d:	e8                   	.byte 0xe8
->   3e:	56                   	push   %rsi
->   3f:	25                   	.byte 0x25
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
-> 
-> If you want to overwrite bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
-> 
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
-> 
-> If you want to undo deduplication, reply with:
-> #syz undup
-> 
-> .
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Rework-offset-cookie-encoding-pattern/20230824-172416
+base:   next-20230824
+patch link:    https://lore.kernel.org/r/20230824092133.39510-11-benjamin.gaignard%40collabora.com
+patch subject: [PATCH v5 10/10] media: v4l2: Add mem2mem helpers for DELETE_BUFS ioctl
+config: i386-randconfig-r033-20230825 (https://download.01.org/0day-ci/archive/20230825/202308252057.jcyaKKOJ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230825/202308252057.jcyaKKOJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308252057.jcyaKKOJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/test-drivers/vim2m.c:963:23: error: use of undeclared identifier 'v4l2_m2m_ioctl_delete_buf'; did you mean 'v4l2_m2m_ioctl_delete_bufs'?
+           .vidioc_delete_buf      = v4l2_m2m_ioctl_delete_buf,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~
+                                     v4l2_m2m_ioctl_delete_bufs
+   include/media/v4l2-mem2mem.h:873:5: note: 'v4l2_m2m_ioctl_delete_bufs' declared here
+   int v4l2_m2m_ioctl_delete_bufs(struct file *file, void *priv,
+       ^
+>> drivers/media/test-drivers/vim2m.c:963:3: error: field designator 'vidioc_delete_buf' does not refer to any field in type 'const struct v4l2_ioctl_ops'; did you mean 'vidioc_delete_bufs'?
+           .vidioc_delete_buf      = v4l2_m2m_ioctl_delete_buf,
+            ^~~~~~~~~~~~~~~~~
+            vidioc_delete_bufs
+   include/media/v4l2-ioctl.h:427:8: note: 'vidioc_delete_bufs' declared here
+           int (*vidioc_delete_bufs)(struct file *file, void *fh,
+                 ^
+   2 errors generated.
+
+
+vim +963 drivers/media/test-drivers/vim2m.c
+
+   942	
+   943	static const struct v4l2_ioctl_ops vim2m_ioctl_ops = {
+   944		.vidioc_querycap	= vidioc_querycap,
+   945	
+   946		.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt_vid_cap,
+   947		.vidioc_enum_framesizes = vidioc_enum_framesizes,
+   948		.vidioc_g_fmt_vid_cap	= vidioc_g_fmt_vid_cap,
+   949		.vidioc_try_fmt_vid_cap	= vidioc_try_fmt_vid_cap,
+   950		.vidioc_s_fmt_vid_cap	= vidioc_s_fmt_vid_cap,
+   951	
+   952		.vidioc_enum_fmt_vid_out = vidioc_enum_fmt_vid_out,
+   953		.vidioc_g_fmt_vid_out	= vidioc_g_fmt_vid_out,
+   954		.vidioc_try_fmt_vid_out	= vidioc_try_fmt_vid_out,
+   955		.vidioc_s_fmt_vid_out	= vidioc_s_fmt_vid_out,
+   956	
+   957		.vidioc_reqbufs		= v4l2_m2m_ioctl_reqbufs,
+   958		.vidioc_querybuf	= v4l2_m2m_ioctl_querybuf,
+   959		.vidioc_qbuf		= v4l2_m2m_ioctl_qbuf,
+   960		.vidioc_dqbuf		= v4l2_m2m_ioctl_dqbuf,
+   961		.vidioc_prepare_buf	= v4l2_m2m_ioctl_prepare_buf,
+   962		.vidioc_create_bufs	= v4l2_m2m_ioctl_create_bufs,
+ > 963		.vidioc_delete_buf	= v4l2_m2m_ioctl_delete_buf,
+   964		.vidioc_expbuf		= v4l2_m2m_ioctl_expbuf,
+   965	
+   966		.vidioc_streamon	= v4l2_m2m_ioctl_streamon,
+   967		.vidioc_streamoff	= v4l2_m2m_ioctl_streamoff,
+   968	
+   969		.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
+   970		.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
+   971	};
+   972	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
