@@ -1,100 +1,139 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5761840
-	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 07:27:53 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1bf3a2f4528so5760035ad.2
-        for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 00:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692948473; x=1693553273;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MlXlLHBoW4dTZ8FthLBS8Kn5SzBMbKV4fH/qmyBs2dA=;
-        b=GuK8FTdQFStQBrc/+UrZlObuHDLb/Z8HolfK7+I4/Rz8Cj9OtCekENJ7pG3OpGAlIb
-         IRPgrHuLapXBWD0Rems1twDE6slppU1VDXMdMgWBeASnEeZXpzW1NrCUckmmp2WNmos9
-         JaJRtKhaR554bCf3Cpx+Jfml+7fx91n2y3TAo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692948473; x=1693553273;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MlXlLHBoW4dTZ8FthLBS8Kn5SzBMbKV4fH/qmyBs2dA=;
-        b=FWIcaSwQxlpbnBdTGM+tUQhYvj5IMowD5SAxgWLefuQdzxOBrsW3kI2QztnVl8Gpsv
-         fiLgQdALQPO4PlPUHkHe9Fl7hF/Lp5pRCZuVbACb8r5Fo+KKxUS6EqzYtccL3p6OLuPQ
-         0szFn42cIBbwGxHb/Pbe7advL1JhLuKhDk6c3r6w+BIWCbenn3Jbd1eLCDLqF9wlmTGc
-         eg+N4Scq0m2AmXoFooJlm63SwDQonP5Y7zfLnAUlhrtB58MZ14cUsFjMhmHR7e0OqDRq
-         1b7+gPt67X+s0keJjO/ENsFtOO806ySuh5Mjrp4++tc1rSnHn0N6updGuW34vnX2tZOS
-         RK5Q==
-X-Gm-Message-State: AOJu0YzbY+ReJgygSFe0So6SaKLmJVY0fuOCIDCrZB6ykPCMGnWjQRMm
-	Heyy39SQdQnAxX/V+Mf7qPb07A==
-X-Google-Smtp-Source: AGHT+IHDwVITh4CP16FgpTedCa7AJLG3VbgEE5V/d8qOuRFFHo7iLtE66cCg3HNHXSdYwFnDkZi6VQ==
-X-Received: by 2002:a17:902:a587:b0:1c0:9abb:4873 with SMTP id az7-20020a170902a58700b001c09abb4873mr7736874plb.64.1692948472928;
-        Fri, 25 Aug 2023 00:27:52 -0700 (PDT)
-Received: from localhost ([2620:15c:2d3:205:b8fe:79ca:c6d4:645f])
-        by smtp.gmail.com with UTF8SMTPSA id t8-20020a1709027fc800b001bdcafcf8d3sm948242plb.69.2023.08.25.00.27.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Aug 2023 00:27:52 -0700 (PDT)
-From: Denis Nikitin <denik@chromium.org>
-To: linux-kbuild@vger.kernel.org
-Cc: denik@chromium.org,
-	Fangrui Song <maskray@google.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3] modpost: Skip .llvm.call-graph-profile section check
-Date: Fri, 25 Aug 2023 00:27:43 -0700
-Message-ID: <20230825072744.1322656-1-denik@chromium.org>
-X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
-In-Reply-To: <20230822065256.163660-1-denik@chromium.org>
-References: <20230822065256.163660-1-denik@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8541840;
+	Fri, 25 Aug 2023 07:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692948673; x=1724484673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eeH2sPNSiqdy3jxJvKVu7yF5DPRFOdMNgYX5QPiMDxc=;
+  b=WbrpfNPnjNu60i61q1wxVjKa3dn8O/36qZbePtb7GyBdHWW+bZXRwJc8
+   0ZLpxWI5v6mswoka+DJtdC/UJm1bqxNzZA+unPheRi5pjNHTLBSGLakxi
+   o8piDGZUbpyuzqxCu1RLHf8pqB0s63URlUqnMyoSnifbI9tq1tW8laBCX
+   1HUN5gT0SBy8J2zwvWij6zDR21Uh8NgJ4C8UWo8zqZ9D0Whdh8Sz5uskH
+   jBuDsq8NNdfqf1RdQwK1qdqw84TBeuDN4UVXWz9VMFQpxTQCV+JUQfyKb
+   cfasSYYVBSx54tJUzcGK9Y8lF81T7W7i/iGnV/khvq3lrgxNvwkSkddGv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="374630800"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="374630800"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 00:31:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="860992646"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="860992646"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 25 Aug 2023 00:31:09 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qZRHh-0003JM-09;
+	Fri, 25 Aug 2023 07:31:09 +0000
+Date: Fri, 25 Aug 2023 15:30:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Fitzgerald <rf@opensource.cirrus.com>,
+	brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+	Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: Re: [PATCH v5 09/10] kunit: Use string_stream for test log
+Message-ID: <202308251509.VjWK804c-lkp@intel.com>
+References: <20230824143129.1957914-10-rf@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230824143129.1957914-10-rf@opensource.cirrus.com>
 
-.llvm.call-graph-profile section is added by clang when the kernel is
-built with profiles (e.g. -fprofile-sample-use= or -fprofile-use=).
-Note that .llvm.call-graph-profile intentionally uses REL relocations
-to decrease the object size, for more details see
-https://reviews.llvm.org/D104080.
+Hi Richard,
 
-The section contains edge information derived from text sections,
-so .llvm.call-graph-profile itself doesn't need more analysis as
-the text sections have been analyzed.
+kernel test robot noticed the following build warnings:
 
-This change fixes the kernel build with clang and a sample profile
-which currently fails with:
+[auto build test WARNING on shuah-kselftest/kunit]
+[also build test WARNING on next-20230824]
+[cannot apply to shuah-kselftest/kunit-fixes linus/master v6.5-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-"FATAL: modpost: Please add code to calculate addend for this architecture"
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald/kunit-string-stream-Don-t-create-a-fragment-for-empty-strings/20230824-223722
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
+patch link:    https://lore.kernel.org/r/20230824143129.1957914-10-rf%40opensource.cirrus.com
+patch subject: [PATCH v5 09/10] kunit: Use string_stream for test log
+config: hexagon-randconfig-001-20230825 (https://download.01.org/0day-ci/archive/20230825/202308251509.VjWK804c-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230825/202308251509.VjWK804c-lkp@intel.com/reproduce)
 
-Signed-off-by: Denis Nikitin <denik@chromium.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Fangrui Song <maskray@google.com>
----
- scripts/mod/modpost.c | 1 +
- 1 file changed, 1 insertion(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308251509.VjWK804c-lkp@intel.com/
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index b29b29707f10..64bd13f7199c 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -761,6 +761,7 @@ static const char *const section_white_list[] =
- 	".fmt_slot*",			/* EZchip */
- 	".gnu.lto*",
- 	".discard.*",
-+	".llvm.call-graph-profile",	/* call graph */
- 	NULL
- };
- 
+All warnings (new ones prefixed by >>):
+
+>> lib/kunit/kunit-test.c:557:25: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     557 |         kunit_add_action(test, (kunit_action_t *)kfree, full_log);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~
+   lib/kunit/kunit-test.c:564:25: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     564 |         kunit_add_action(test, (kunit_action_t *)kfree, full_log);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~
+   lib/kunit/kunit-test.c:581:26: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     581 |                 kunit_add_action(test, (kunit_action_t *)kfree, full_log);
+         |                                        ^~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +557 lib/kunit/kunit-test.c
+
+   533	
+   534	/*
+   535	 * Log tests call string_stream functions, which aren't exported. So only
+   536	 * build this code if this test is built-in.
+   537	 */
+   538	#if IS_BUILTIN(CONFIG_KUNIT_TEST)
+   539	static void kunit_log_test(struct kunit *test)
+   540	{
+   541		struct kunit_suite suite;
+   542		char *full_log;
+   543	
+   544		suite.log = kunit_alloc_string_stream(test, GFP_KERNEL);
+   545		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+   546		string_stream_set_append_newlines(suite.log, true);
+   547	
+   548		kunit_log(KERN_INFO, test, "put this in log.");
+   549		kunit_log(KERN_INFO, test, "this too.");
+   550		kunit_log(KERN_INFO, &suite, "add to suite log.");
+   551		kunit_log(KERN_INFO, &suite, "along with this.");
+   552	
+   553	#ifdef CONFIG_KUNIT_DEBUGFS
+   554		KUNIT_EXPECT_TRUE(test, test->log->append_newlines);
+   555	
+   556		full_log = string_stream_get_string(test->log);
+ > 557		kunit_add_action(test, (kunit_action_t *)kfree, full_log);
+   558		KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+   559					     strstr(full_log, "put this in log."));
+   560		KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+   561					     strstr(full_log, "this too."));
+   562	
+   563		full_log = string_stream_get_string(suite.log);
+   564		kunit_add_action(test, (kunit_action_t *)kfree, full_log);
+   565		KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+   566					     strstr(full_log, "add to suite log."));
+   567		KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+   568					     strstr(full_log, "along with this."));
+   569	#else
+   570		KUNIT_EXPECT_NULL(test, test->log);
+   571	#endif
+   572	}
+   573	
+
 -- 
-2.42.0.rc1.204.g551eb34607-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
