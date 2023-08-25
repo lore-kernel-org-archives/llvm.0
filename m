@@ -1,114 +1,232 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0D5125D2;
-	Fri, 25 Aug 2023 19:17:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692991023; x=1724527023;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NwNOp5ObJawmkCtx0reRMWPpn4TZiTct6jKZA2CxKQ0=;
-  b=KQOpxKqMuTcMRbMQ3VJoQOkR8cFhKTmw9w5QI+YwhYjMuhA+mll0V0eU
-   LKvdV+meyOdURurWQIdUqMR0V3gUqyonIzWQNpjCRxb6ZH1wrvblau0CK
-   inuMZ8pKYWa1Vm159Y0tSFWSgXj63Opi/KJxORCljz0+wtCtDbaAr424j
-   l+vFStYoITUf81YxUM/JwYkkFcoAXYhOqtYOwjGn1zGC2TQwm91S9Vdfx
-   NneEf2thAs3lT8tnaSjbvvc4DBqJZMcC6lI7vI2e/nq9jjwt+51LA0O3L
-   C1aPEgxPee31okjJ8LeC36DBuDsawkwvGBohVWX4M+pndowmD0H+mewcA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="438724669"
-X-IronPort-AV: E=Sophos;i="6.02,201,1688454000"; 
-   d="scan'208";a="438724669"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 12:17:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="740715774"
-X-IronPort-AV: E=Sophos;i="6.02,201,1688454000"; 
-   d="scan'208";a="740715774"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Aug 2023 12:16:59 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qZcIl-0003vr-0a;
-	Fri, 25 Aug 2023 19:16:59 +0000
-Date: Sat, 26 Aug 2023 03:16:00 +0800
-From: kernel test robot <lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CCD322B;
+	Fri, 25 Aug 2023 19:40:49 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QzcojxGttXI3WpMwmd1D2FY3xHcD+0eD/ex21C45cZM1zqM5ynh/1OXw4rA1B3Xt+xd4zKHlMw4L4RezZCwGj7injrMVjIfl97cBOZvhjHkI292uvKjrUHI4Kxlja97Hrl08ZDY+P86Z/7LXVL7cIJiAL3qdUGuiGiT24bSXh+bBnYdmiGqeTB8Bk+MXB+QZza3yqAvboeuNZkOmxdOEYUXzUSa5s2yUoVKPrMEzr4PYm68f2hIPTs1FzVGRxCBqRK5/m6ij35VaaxxgxADg5WzLgJhQD/akNQQuMDoTeZ8RNuaL3bFCTAZMgm1Q3WgdtlxAIvuQM7b5s7xlX+674w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iRk7cmQuFYvAtqbrwgnGrdRMyiyYzpcibbvfr54ezn0=;
+ b=Y4m4Ce7kakyG5nA2XYIUD60FYW0QRRl6lPUPiqWTAkcZR6AY2cIH8uPYKD/L+kjgw9WkuA33ClC/Rmfs9xHfBTIP5G0GyMOjI5zA0WCLNbmQcGG7aijFF/c6fQGTpYM4877y0TMkqI9mesnGlA8JCw7Ns7ps6X4mTD+RwPK+fxhT6U+I3XqmoauVDpo9gwYCIHU/JMMQlwyjiCB73gKGsnG+xJoBpInstKs/2nxuYp2KrME/L4p/6ZY1OEoQVwOoYB4zNSWKKyiAjhKeYe0Se0IhYn0i83I7BgXzCNyuYgIIX51Ape4wX8pFuHkKKIXUsXVCTN8qEFdzKIrim1XZDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iRk7cmQuFYvAtqbrwgnGrdRMyiyYzpcibbvfr54ezn0=;
+ b=Hl3iHrnGst1z5SGp65Ow4qF+mZam9EXyI9idh3JDr2SP+o87mYyP2/+/o+5paJUNrgilA9fzQH6CohGQ0J7ZafA6LVScFeaER1rBNVBHRcWnQ6EWggWbk0pscTU37RF8R2UBq3UNmcHGw/PP1usqT/3p68bLuLgWPmyrLvPYLoPFHR0413C6DxGB5v5oFG5SERQP9Qq5qNmg/fgcxw2pUOKqspdH9EM6FhTFxhRMgaOn8UpseK+LhtVPMOgAV/d+lS20VUyvFxyEh3nLrEcn4sPbKA++NaHp0vbu+tnm6llLMDCNl1CmPy6uW/B/EtyKL69Xm7S27UDq5GAPvp1jvg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SA0PR12MB4381.namprd12.prod.outlook.com (2603:10b6:806:70::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.27; Fri, 25 Aug
+ 2023 19:40:47 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::5111:16e8:5afe:1da1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::5111:16e8:5afe:1da1%6]) with mapi id 15.20.6699.032; Fri, 25 Aug 2023
+ 19:40:47 +0000
+Date: Fri, 25 Aug 2023 16:40:44 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
 To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Ellerman <mpe@ellerman.id.au>,
+Cc: Yi Liu <yi.l.liu@intel.com>, kernel test robot <lkp@intel.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+	Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>
-Subject: [linuxppc:next-test 85/129] arch/powerpc/xmon/xmon.c:489:12: error:
- stack frame size (2160) exceeds limit (2048) in 'xmon_core'
-Message-ID: <202308260344.Vc4Giuk7-lkp@intel.com>
+Subject: Re: [linux-next:master 3581/12910]
+ arch/powerpc/kvm/../../../virt/kvm/vfio.c:89:7: error: attribute declaration
+ must precede definition
+Message-ID: <ZOkDvPOt/UMprbU4@nvidia.com>
+References: <202308251949.5IiaV0sz-lkp@intel.com>
+ <ZOiapxgvLqM1w+DU@nvidia.com>
+ <CAKwvOdmoewb30p1yazbkPAEDPhrSN2csngohDiC2fOJ=3Mufng@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdmoewb30p1yazbkPAEDPhrSN2csngohDiC2fOJ=3Mufng@mail.gmail.com>
+X-ClientProxiedBy: SJ0PR03CA0271.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::6) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA0PR12MB4381:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05e66b51-9964-4112-4f36-08dba5a32db1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Pnhq49fGBR2LhIRXJCL4zfSSbHv90uQwzbIcVbPOCMfixxwowvj0Rte9L6w45nYnUriG+AfEqXM+r2Ah/R4kVWFW/VQmyDYP9SkG3VqqkOie/8XPwJHqkYHdo64whYLFbfNWmP9lPWU1rRzo5okYElf3+1IL4cKdnafiQ7FZ4cvUvwEzRruqGDOUt9IFenbFpg0NI3Rb/asz9aw4Q7/oU2Sbm/T3YCYaBWcLoZ0be7zS5hnOgcYwqMOC/92oQUjToV05Ax2l8cUw+FDPB1QI+5XpD0CipNRtcDkO1M3qwmXaf7M/ZlobRl5Iyh/tc3he9qegf7aVAhzTNjzzxrg/x1yvh4kXMcJc3415eSFfQb4eJOerM4beVPu53whiHLcIHZ3+G7u1rnP/8OhPt3UMCf1UQbdpzwGvtQWPovPkYN4InfbSC84lBLdZlFH12FkQOb5zBjuR7NggQ0/3lfhgCqbu2E8qRXAi+ma+wh0Gtt7c4YjYvKQ1V314dZdbbpjY9+Pqd0emDzQo+WYQ2pU+JI4MKG5kkCXvsBL2+IOs7ZCu6VdlKSuu0xhL75zvx48pBaeViGoYB+W39gLklPPMVph60wjKXhEiq3qaEuumdNM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(366004)(39860400002)(396003)(346002)(1800799009)(451199024)(186009)(6506007)(26005)(6512007)(83380400001)(41300700001)(66556008)(2616005)(7416002)(66476007)(6916009)(316002)(2906002)(5660300002)(8676002)(478600001)(8936002)(66946007)(4326008)(6486002)(6666004)(966005)(54906003)(86362001)(38100700002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?9tYw1gd/15YNhd1tAfbFR8Lv2+OLkp9rlGCyT+qcnwhq+IP5vyv/wWRZXQbz?=
+ =?us-ascii?Q?6Xu8z4ev4U2NLeJec89LlL5/ZMzSarv1zXlNmloku75IBFJy0hRRt+Cpacfe?=
+ =?us-ascii?Q?0ET0Q+iyESLPqCBb/X1XSInXQfh/nrcB2h+0H76s9T1x/Yh9S+2jOUSKOqyV?=
+ =?us-ascii?Q?T0xpkUbyb4IpXVT777FybJNXm007oSNYVZPEosba6Ol11NmACCehGqxNvN1x?=
+ =?us-ascii?Q?vRZGVAetclsRUem1xfQM0qtkSWNajIE9i02XHw5S0ohFyadKS7xRMNM8YaPB?=
+ =?us-ascii?Q?9Yaa/ij2YajenslWv8Ir1NIdTr4KCZpFZl8Fj8PUGr8MfbUZFKyqQgV2o0rF?=
+ =?us-ascii?Q?0/KQzrfixCKTjJnKJalrAAaEjt4eeHd2Kespz8dL9R2EW/8k+efzGuy29bRr?=
+ =?us-ascii?Q?Gx/bSx8AkGKh9KAnLi0wxi3aM+xaBay0tOhnO4toD0lgqzRUTUQSrLLNCJRl?=
+ =?us-ascii?Q?PAwrzujnzst7aqV1FUCGfRHjwZ6LqqkOiehn3JK5rnacTvNi/xFy+TUeaN7k?=
+ =?us-ascii?Q?0bwlhub4cNc1OW+t9OwzXHUlVXrLovBlZHXRQrhyvQp43KsII5+ygg+eBAwn?=
+ =?us-ascii?Q?aJiOPnFah7a5dy/xBxP/jSgh9Hf/Nc2+JbOnP3Obb7u3ExdXXgwIS+U7NuHE?=
+ =?us-ascii?Q?HuyF9gqYFWZzoGuMnk0rYO8FzlKNjuxdIZOmfg64SrGkx17k4/ChfyNGsjP2?=
+ =?us-ascii?Q?+BE4rfOQaPv16KMDFWpAbrAnTul/L+HHTZmTWHWPt2T+r5W/R78revjN8iZC?=
+ =?us-ascii?Q?NBcEMQDzC744FLyLHVFAo7BrtbYlWrdAmdOK6pPbGoZp2K8Bx7/V0KY+voL6?=
+ =?us-ascii?Q?7f7wiHPykLOKQ+cNGWho0+ijMtqP7F9DxEEnaQmn/3xj17MipBIH0vK0Ie8F?=
+ =?us-ascii?Q?PGtd7GBNp52tCfodasMJh12LgCPBNXjteHyCT8HG0OhYvhdXM00fHGskugKC?=
+ =?us-ascii?Q?NAgqgdI05lzvfSQULXHiCtWXQI5KMe51Y/p52YfBj+JADGTsY5L/0+dL5GeQ?=
+ =?us-ascii?Q?sYXvFiCjxwzR9QJhX5ZIiBwrcuINNQU/UDyIsFGhkrmKl6df03OtqzBONwca?=
+ =?us-ascii?Q?/4F/6uwC+Eghv5B2LLIcjiJkQpsWvCyGmNz+OL80NLO+xdDECC47A9OZUEe0?=
+ =?us-ascii?Q?Cmk0V95/uyef9pXOBf29yTBt5cFIl8DVZPsYLSYQqv9pxTGeoqJlhbguSIGB?=
+ =?us-ascii?Q?j4AIlGO6FQ1/iQy7zTDNiinmtLSrDbNy0EPx6jx5Rulv3EoPwKyTf6dEZEub?=
+ =?us-ascii?Q?eH1UxNq1TOL7dGCtIPJ4NHR+JR/43tBtCzgXYGGImz23dZ2WRLkvCSTP/T4g?=
+ =?us-ascii?Q?Y5SzFQjtVWSJCFSzzNF3xaxeWlzShL6breF4D6PCxOItkKzkVYbb4V0vBwY8?=
+ =?us-ascii?Q?ye6GEzEfBfZ4axFRMaqmj0UdAFvXuNyhQVWD6sfGp8b51dUy0lcACKTqc9CF?=
+ =?us-ascii?Q?HQ8WgFcNkVPmb6uavY/MqF2EjIinuZ9wesI5W7OVnvJdZ/JNuXUKzuRih1QM?=
+ =?us-ascii?Q?2LTs3Kjg6/SiTnHw8244ZhIa5/pE5LMXZTEENVO/uChN4rztjAG3ZbGdy6v9?=
+ =?us-ascii?Q?u61rkHMRt6EtqYmjHfbTV0e+jxfBy8ff7u01+ZKm?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05e66b51-9964-4112-4f36-08dba5a32db1
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2023 19:40:46.9892
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 43TJ6WWnUqCLYExgaDPOjL5ghmbFqrH5LLd2kSo4ftwoCSfCOPx0ApBen5iaE50e
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4381
 
-tree:   https://github.com/linuxppc/linux next-test
-head:   c37b6908f7b2bd24dcaaf14a180e28c9132b9c58
-commit: 7f3c5d099b6f8452dc4dcfe4179ea48e6a13d0eb [85/129] Revert "powerpc/xmon: Relax frame size for clang"
-config: powerpc64-randconfig-r006-20230825 (https://download.01.org/0day-ci/archive/20230826/202308260344.Vc4Giuk7-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308260344.Vc4Giuk7-lkp@intel.com/reproduce)
+On Fri, Aug 25, 2023 at 11:49:53AM -0700, Nick Desaulniers wrote:
+> I think this example demonstrates a little clearer what's going on:
+> https://godbolt.org/z/9d6scv1hE
+> 
+> So based on the warning, it seems like symbol_get() can only be used
+> before the parameter it's passed is defined, otherwise the "weak" and
+> "visibility(hidden)" attributes are ignored.  These attributes are
+> merge-able upon redeclaration up until the first definition.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308260344.Vc4Giuk7-lkp@intel.com/
+No, that doesn't make sense. The macro does:
 
-All errors (new ones prefixed by >>):
+#define symbol_get(x) ({ extern typeof(x) x __attribute__((weak,visibility("hidden"))); &(x); })
 
->> arch/powerpc/xmon/xmon.c:489:12: error: stack frame size (2160) exceeds limit (2048) in 'xmon_core' [-Werror,-Wframe-larger-than]
-   static int xmon_core(struct pt_regs *regs, volatile int fromipi)
-              ^
-   1 error generated.
+x must be defined for typeof(x) to work.
 
+The commit I referenced explains what this is trying to do, it is
+deliberately trying to change the attributes of an already forward
+declared function.
 
-vim +/xmon_core +489 arch/powerpc/xmon/xmon.c
+It seems to me from your godbolt output that the compiler is refusing
+to allow this if the function already has a body. In this case because
+it is a static inline. Due to a nonsensical CONFIG combination.
 
-5c699396f5f6cf arch/powerpc/xmon/xmon.c Anton Blanchard      2020-06-30  488  
-a2305e3de81939 arch/powerpc/xmon/xmon.c Arnd Bergmann        2021-04-29 @489  static int xmon_core(struct pt_regs *regs, volatile int fromipi)
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  490  {
-a2305e3de81939 arch/powerpc/xmon/xmon.c Arnd Bergmann        2021-04-29  491  	volatile int cmd = 0;
-a2305e3de81939 arch/powerpc/xmon/xmon.c Arnd Bergmann        2021-04-29  492  	struct bpt *volatile bp;
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  493  	long recurse_jmp[JMP_BUF_LEN];
-69393cb03ccdf2 arch/powerpc/xmon/xmon.c Christopher M. Riedl 2019-09-07  494  	bool locked_down;
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  495  	unsigned long offset;
-f13659e0b39075 arch/powerpc/xmon/xmon.c Anton Blanchard      2007-03-21  496  	unsigned long flags;
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  497  #ifdef CONFIG_SMP
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  498  	int cpu;
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  499  	int secondary;
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  500  #endif
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  501  
-f13659e0b39075 arch/powerpc/xmon/xmon.c Anton Blanchard      2007-03-21  502  	local_irq_save(flags);
-a71d64b4dc4067 arch/powerpc/xmon/xmon.c Anton Blanchard      2014-08-05  503  	hard_irq_disable();
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  504  
-69393cb03ccdf2 arch/powerpc/xmon/xmon.c Christopher M. Riedl 2019-09-07  505  	locked_down = xmon_is_locked_down();
-69393cb03ccdf2 arch/powerpc/xmon/xmon.c Christopher M. Riedl 2019-09-07  506  
-aaf06665f7ea3e arch/powerpc/xmon/xmon.c Naveen N. Rao        2019-06-27  507  	if (!fromipi) {
-ed49f7fd6438dc arch/powerpc/xmon/xmon.c Breno Leitao         2017-08-02  508  		tracing_enabled = tracing_is_on();
-ed49f7fd6438dc arch/powerpc/xmon/xmon.c Breno Leitao         2017-08-02  509  		tracing_off();
-aaf06665f7ea3e arch/powerpc/xmon/xmon.c Naveen N. Rao        2019-06-27  510  	}
-ed49f7fd6438dc arch/powerpc/xmon/xmon.c Breno Leitao         2017-08-02  511  
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  512  	bp = in_breakpoint_table(regs->nip, &offset);
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  513  	if (bp != NULL) {
-59dc5bfca0cb6a arch/powerpc/xmon/xmon.c Nicholas Piggin      2021-06-18  514  		regs_set_return_ip(regs, bp->address + offset);
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  515  		atomic_dec(&bp->ref_count);
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  516  	}
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  517  
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  518  	remove_cpu_bpts();
-^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  519  
+Making a static inline a hidden weak references seems kind of crazy in
+the first place. It looks like the hidden was added to make up for
+strange things weak does, but I have no idea why weak would be needed
+here. It predates the git history.
 
-:::::: The code at line 489 was first introduced by commit
-:::::: a2305e3de819394a7adf68078964a92d06f9db33 powerpc: mark local variables around longjmp as volatile
+> If the definition of vfio_file_iommu_group() is visible to
+> virt/kvm/vfio.c, do we even need this weak+hidden redeclaration?
+> ```
+> diff --git a/virt/kvm/vfio.c b/virt/kvm/vfio.c
+> index ca24ce120906..b497b762ddba 100644
+> --- a/virt/kvm/vfio.c
+> +++ b/virt/kvm/vfio.c
+> @@ -86,7 +86,7 @@ static struct iommu_group
+> *kvm_vfio_file_iommu_group(struct file *file)
+>         struct iommu_group *(*fn)(struct file *file);
+>         struct iommu_group *ret;
+> 
+> -       fn = symbol_get(vfio_file_iommu_group);
+> +       fn = vfio_file_iommu_group;
 
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+Yes, the prototype already exists in all cases. The point is that
+vfio_file_iommu_group is usually not an inline.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> But I'll admit I don't fully understand the implications of that
+> change.  
+
+Well, it doesn't work for what it is supposed to do at all :)
+
+> Thought that then makes me think that perhaps even better would be
+> some sort of Kconfig dependency expressed between
+> CONFIG_SPAPR_TCE_IOMMU and CONFIG_VFIO_GROUP.
+
+Yeah, there are different layers. An iommu driver should not depend on
+a VFIO symbol..
+
+> Though I do see:
+> drivers/vfio/Kconfig
+> 7:      select VFIO_GROUP if SPAPR_TCE_IOMMU || IOMMUFD=n
+
+> Perhaps something is wrong with that, and randconfig is able to tickle
+> IOMMUFD=n and still set VFIO_GROUP without SPAPR_TCE_IOMMU.
+
+That should be fine..
+
+> $ grep -rn -e CONFIG_VFIO_GROUP -e CONFIG_SPAPR_TCE_IOMMU -e
+> CONFIG_VFIO_GROUP .config
+> 4678:CONFIG_SPAPR_TCE_IOMMU=y
+
+I think the issue is that:
+
+# CONFIG_VFIO is not set
+CONFIG_KVM_VFIO=y
+
+And
+
+kvm-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
+
+Which is a combination that doesn't make any sense.
+
+Looks like CONFIG_KVM_VFIO should probably be called CONFIG_KVM_ARCH_VFIO
+
+And then
+
+config KVM_VFIO
+     bool
+     depends on KVM_ARCH_VFIO
+     depends on VFIO
+
+(or similar)
+
+So we don't even attempt to compile kvm/vfio.c if we don't have VFIO
+support turned on.
+
+> > (BTW does clang actually work on power, I tried it a bit ago and it
+> > didn't get very far)
+> 
+> So it looks like in CI we build+boot test the following configs:
+> https://github.com/ClangBuiltLinux/continuous-integration2/blob/32a9db9c4a4b4950407dfceb4bd4c36bf7a6ac4e/generator.yml#L2686
+> - ppc44x_defconfig
+> - ppc64_guest_defconfig
+> - allmodconfig
+> - fedora's ppc config
+> - suse's ppc config
+> 
+> I just tried simply defconfig and ran into some hermiticity issues
+> with the kbuild rules for their vdso:
+> https://github.com/ClangBuiltLinux/linux/issues/1601
+
+That looks familiar..
+
+I just tried again and it seems to have built with a warning:
+
+ld.lld-15: warning: address (0xc000000000000100) of section .text is not a multiple of alignment (4096)
+
+So that's nice!
+
+Thanks,
+Jason
