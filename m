@@ -1,194 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f78.google.com (mail-ot1-f78.google.com [209.85.210.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6666AC8D1;
-	Fri, 25 Aug 2023 09:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692956340; x=1724492340;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3RThncrfyLkM0f4g6LZtlksefEUauAjBRluEVJ6Ay+s=;
-  b=J6G8PM3nxDYc7mO1weAO43UG67kPtrt2oMokRU278tDsRS9+hqv3sM3g
-   Evk2dOWaNi4n6N1WxtPQs3VHzLs+3PGHYb/dHCfY2DmxQ6aPQpFjRVwSP
-   v8gJyv0iP+TZ3+QIzgPTNE4AbaVG8M6WtniWajE37zR098LR6R+en6+tW
-   Wt3q77i58zQOp5wZQOffAEIJgh2qXPFkL9iEZW5Ks5J1/X/LZHw94K6X9
-   QLnVKlzlW1KcO06Ddrll4gSuBOyuRs1vELsOYCQkFT4hEkK7tO9Ij7o8n
-   9cJEfK+tH03U5aHVrXqN9CbakKaUumNmFo95VRnoeMPMmkL9LzdFvGubp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="364871748"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="364871748"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 02:38:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="714292976"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="714292976"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 25 Aug 2023 02:38:53 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qZTHI-0003Pi-1O;
-	Fri, 25 Aug 2023 09:38:52 +0000
-Date: Fri, 25 Aug 2023 17:38:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zi Yan <zi.yan@sent.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] mm: use nth_page() for all memmap (struct page)
- position operations.
-Message-ID: <202308251717.4u77tZsA-lkp@intel.com>
-References: <20230823030622.96112-1-zi.yan@sent.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8018EC8C4
+	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 09:48:55 +0000 (UTC)
+Received: by mail-ot1-f78.google.com with SMTP id 46e09a7af769-6bb31eaf566so825881a34.1
+        for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 02:48:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692956934; x=1693561734;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BFJif4QDdWSfgk5/2e0e9FOP2xlthhr5LjObem+qeTA=;
+        b=fGXr+t5xBjgLhlJvrAtbWu3fqu90YhrKtSgFw2/ZsAQwoWgL7zNPwjCrd3G0NKNYJI
+         HlohpHRHlfpAuETd0GC+F6lEF80uFiPn4Y7SYw8i/K3bVIBKu2nlQRbVzgNEVsZheDoG
+         6abClf48T56U/rngrCiZ/x0ljlsbRjrtBNdTUty5fIu2OFHJ2MvlCzWoiTrNpfuPKwlb
+         IaMv1LkB5HtKrKgqTqDz2JqpmXs/QSF+cY+aViVLdM8iUtSQ7zxxN2mTqCU2dUJA/1cR
+         QoiKrHMrrogbkmTbyNqaY+FpSWIHl7cbbLVR01CWmv7zGA2IxU/+FpBQTVlaf4FlOajg
+         DgpA==
+X-Gm-Message-State: AOJu0YxbmK0eb1RJGCGTq/FV8JFcmL6yM441sHpUtKWTV7Mrvnbt16dW
+	Rc4S8Bq+WSZ/zm0Ux0BNZY5jZ/qwIzuusXv9iMUfxGCPgm0E
+X-Google-Smtp-Source: AGHT+IFffqOpQlow6RHRZJVP8RmFpLckBBaH8EwZWfUG5r88xpDg+lmaZp8PdpaoHGWBHpe9q8AsSDwWrStLeH6BNuvgAWGmisCR
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230823030622.96112-1-zi.yan@sent.com>
+X-Received: by 2002:a9d:628a:0:b0:6bc:ac3d:2b77 with SMTP id
+ x10-20020a9d628a000000b006bcac3d2b77mr356281otk.2.1692956934355; Fri, 25 Aug
+ 2023 02:48:54 -0700 (PDT)
+Date: Fri, 25 Aug 2023 02:48:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b1426e0603bc40b6@google.com>
+Subject: [syzbot] [ext4?] BUG: unable to handle kernel paging request in ext4_calculate_overhead
+From: syzbot <syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, jack@suse.cz, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu, 
+	yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Zi,
+Hello,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+syzbot found the following issue on:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+HEAD commit:    47d9bb711707 Add linux-next specific files for 20230821
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=124d6a4ba80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20999f779fa96017
+dashboard link: https://syzkaller.appspot.com/bug?extid=b3123e6d9842e526de39
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110f9c0fa80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b8867fa80000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-use-nth_page-for-all-memmap-struct-page-position-operations/20230823-110839
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230823030622.96112-1-zi.yan%40sent.com
-patch subject: [RFC PATCH] mm: use nth_page() for all memmap (struct page) position operations.
-config: i386-randconfig-004-20230825 (https://download.01.org/0day-ci/archive/20230825/202308251717.4u77tZsA-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230825/202308251717.4u77tZsA-lkp@intel.com/reproduce)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ffbe03c733b7/disk-47d9bb71.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a61a31d6caf9/vmlinux-47d9bb71.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/37e6f882b2d9/bzImage-47d9bb71.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/bf27f1330349/mount_0.gz
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308251717.4u77tZsA-lkp@intel.com/
+The issue was bisected to:
 
-All errors (new ones prefixed by >>):
+commit 99d6c5d892bfff3be40f83ec34d91d562125afd4
+Author: Zhang Yi <yi.zhang@huawei.com>
+Date:   Fri Aug 11 06:36:10 2023 +0000
 
->> fs/hfs/btree.c:273:10: error: incompatible pointer types initializing 'const struct page *' with an expression of type 'struct page *[]' [-Werror,-Wincompatible-pointer-types]
-           pagep = nth_page(node->page, (off >> PAGE_SHIFT));
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm.h:213:38: note: expanded from macro 'nth_page'
-   #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
-                            ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
-   #define page_to_pfn __page_to_pfn
-                       ^
-   include/asm-generic/memory_model.h:46:23: note: expanded from macro '__page_to_pfn'
-   ({      const struct page *__pg = (pg);                         \
-                              ^
-   include/asm-generic/memory_model.h:52:27: note: expanded from macro '__pfn_to_page'
-   ({      unsigned long __pfn = (pfn);                    \
-                                  ^~~
->> fs/hfs/btree.c:273:8: error: incompatible pointer types assigning to 'struct page **' from 'struct page *' [-Werror,-Wincompatible-pointer-types]
-           pagep = nth_page(node->page, (off >> PAGE_SHIFT));
-                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/hfs/btree.c:319:11: error: incompatible pointer types initializing 'const struct page *' with an expression of type 'struct page *[]' [-Werror,-Wincompatible-pointer-types]
-                   pagep = nth_page(node->page, (off >> PAGE_SHIFT));
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm.h:213:38: note: expanded from macro 'nth_page'
-   #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
-                            ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
-   #define page_to_pfn __page_to_pfn
-                       ^
-   include/asm-generic/memory_model.h:46:23: note: expanded from macro '__page_to_pfn'
-   ({      const struct page *__pg = (pg);                         \
-                              ^
-   include/asm-generic/memory_model.h:52:27: note: expanded from macro '__pfn_to_page'
-   ({      unsigned long __pfn = (pfn);                    \
-                                  ^~~
-   fs/hfs/btree.c:319:9: error: incompatible pointer types assigning to 'struct page **' from 'struct page *' [-Werror,-Wincompatible-pointer-types]
-                   pagep = nth_page(node->page, (off >> PAGE_SHIFT));
-                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+    ext4: ext4_get_{dev}_journal return proper error value
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13a381cfa80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=106381cfa80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a381cfa80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com
+Fixes: 99d6c5d892bf ("ext4: ext4_get_{dev}_journal return proper error value")
+
+EXT4-fs (loop0): ext4_check_descriptors: Checksum for group 0 failed (394!=20869)
+EXT4-fs error (device loop0): ext4_get_journal_inode:5719: comm syz-executor999: inode #33: comm syz-executor999: iget: illegal inode #
+EXT4-fs (loop0): no journal found
+BUG: unable to handle page fault for address: ffffffffffffffdb
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD c979067 P4D c979067 PUD c97b067 PMD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 5041 Comm: syz-executor999 Not tainted 6.5.0-rc7-next-20230821-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
+RIP: 0010:ext4_calculate_overhead+0xfd2/0x1380 fs/ext4/super.c:4182
+Code: 7b 50 48 89 fa 48 c1 ea 03 44 0f b6 60 14 48 b8 00 00 00 00 00 fc ff df 80 3c 02 00 0f 85 72 03 00 00 44 89 e6 bf 3f 00 00 00 <48> 8b 6b 50 e8 95 20 43 ff 41 80 fc 3f 0f 87 cb 20 ef 07 e8 56 25
+RSP: 0018:ffffc9000399fa00 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffffffffffff8b RCX: 0000000000000000
+RDX: 1ffffffffffffffb RSI: 000000000000000a RDI: 000000000000003f
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000001 R12: 000000000000000a
+R13: ffff888020936000 R14: dffffc0000000000 R15: ffff8880242a4000
+FS:  0000555555f06380(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffdb CR3: 0000000074f9b000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __ext4_fill_super fs/ext4/super.c:5391 [inline]
+ ext4_fill_super+0x85e3/0xade0 fs/ext4/super.c:5643
+ get_tree_bdev+0x390/0x630 fs/super.c:1351
+ vfs_get_tree+0x88/0x350 fs/super.c:1524
+ do_new_mount fs/namespace.c:3335 [inline]
+ path_mount+0x1492/0x1ed0 fs/namespace.c:3662
+ do_mount fs/namespace.c:3675 [inline]
+ __do_sys_mount fs/namespace.c:3884 [inline]
+ __se_sys_mount fs/namespace.c:3861 [inline]
+ __x64_sys_mount+0x293/0x310 fs/namespace.c:3861
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f73494babba
+Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb a6 e8 5e 04 00 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffae0148e8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007fffae0148f0 RCX: 00007f73494babba
+RDX: 00000000200000c0 RSI: 0000000020000040 RDI: 00007fffae0148f0
+RBP: 0000000000000004 R08: 00007fffae014930 R09: 00007fffae014930
+R10: 0000000001000403 R11: 0000000000000202 R12: 00007fffae014930
+R13: 0000000000000003 R14: 0000000000080000 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+CR2: ffffffffffffffdb
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ext4_calculate_overhead+0xfd2/0x1380 fs/ext4/super.c:4182
+Code: 7b 50 48 89 fa 48 c1 ea 03 44 0f b6 60 14 48 b8 00 00 00 00 00 fc ff df 80 3c 02 00 0f 85 72 03 00 00 44 89 e6 bf 3f 00 00 00 <48> 8b 6b 50 e8 95 20 43 ff 41 80 fc 3f 0f 87 cb 20 ef 07 e8 56 25
+RSP: 0018:ffffc9000399fa00 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffffffffffff8b RCX: 0000000000000000
+RDX: 1ffffffffffffffb RSI: 000000000000000a RDI: 000000000000003f
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000001 R12: 000000000000000a
+R13: ffff888020936000 R14: dffffc0000000000 R15: ffff8880242a4000
+FS:  0000555555f06380(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffdb CR3: 0000000074f9b000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	7b 50                	jnp    0x52
+   2:	48 89 fa             	mov    %rdi,%rdx
+   5:	48 c1 ea 03          	shr    $0x3,%rdx
+   9:	44 0f b6 60 14       	movzbl 0x14(%rax),%r12d
+   e:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  15:	fc ff df
+  18:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+  1c:	0f 85 72 03 00 00    	jne    0x394
+  22:	44 89 e6             	mov    %r12d,%esi
+  25:	bf 3f 00 00 00       	mov    $0x3f,%edi
+* 2a:	48 8b 6b 50          	mov    0x50(%rbx),%rbp <-- trapping instruction
+  2e:	e8 95 20 43 ff       	call   0xff4320c8
+  33:	41 80 fc 3f          	cmp    $0x3f,%r12b
+  37:	0f 87 cb 20 ef 07    	ja     0x7ef2108
+  3d:	e8                   	.byte 0xe8
+  3e:	56                   	push   %rsi
+  3f:	25                   	.byte 0x25
 
 
-vim +273 fs/hfs/btree.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   249	
-   250	struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree *tree)
-   251	{
-   252		struct hfs_bnode *node, *next_node;
-   253		struct page **pagep;
-   254		u32 nidx, idx;
-   255		unsigned off;
-   256		u16 off16;
-   257		u16 len;
-   258		u8 *data, byte, m;
-   259		int i, res;
-   260	
-   261		res = hfs_bmap_reserve(tree, 1);
-   262		if (res)
-   263			return ERR_PTR(res);
-   264	
-   265		nidx = 0;
-   266		node = hfs_bnode_find(tree, nidx);
-   267		if (IS_ERR(node))
-   268			return node;
-   269		len = hfs_brec_lenoff(node, 2, &off16);
-   270		off = off16;
-   271	
-   272		off += node->page_offset;
- > 273		pagep = nth_page(node->page, (off >> PAGE_SHIFT));
-   274		data = kmap_local_page(*pagep);
-   275		off &= ~PAGE_MASK;
-   276		idx = 0;
-   277	
-   278		for (;;) {
-   279			while (len) {
-   280				byte = data[off];
-   281				if (byte != 0xff) {
-   282					for (m = 0x80, i = 0; i < 8; m >>= 1, i++) {
-   283						if (!(byte & m)) {
-   284							idx += i;
-   285							data[off] |= m;
-   286							set_page_dirty(*pagep);
-   287							kunmap_local(data);
-   288							tree->free_nodes--;
-   289							mark_inode_dirty(tree->inode);
-   290							hfs_bnode_put(node);
-   291							return hfs_bnode_create(tree, idx);
-   292						}
-   293					}
-   294				}
-   295				if (++off >= PAGE_SIZE) {
-   296					kunmap_local(data);
-   297					data = kmap_local_page(nth_page(*pagep, 1));
-   298					*pagep = nth_page(*pagep, 1);
-   299					off = 0;
-   300				}
-   301				idx += 8;
-   302				len--;
-   303			}
-   304			kunmap_local(data);
-   305			nidx = node->next;
-   306			if (!nidx) {
-   307				printk(KERN_DEBUG "create new bmap node...\n");
-   308				next_node = hfs_bmap_new_bmap(node, idx);
-   309			} else
-   310				next_node = hfs_bnode_find(tree, nidx);
-   311			hfs_bnode_put(node);
-   312			if (IS_ERR(next_node))
-   313				return next_node;
-   314			node = next_node;
-   315	
-   316			len = hfs_brec_lenoff(node, 0, &off16);
-   317			off = off16;
-   318			off += node->page_offset;
-   319			pagep = nth_page(node->page, (off >> PAGE_SHIFT));
-   320			data = kmap_local_page(*pagep);
-   321			off &= ~PAGE_MASK;
-   322		}
-   323	}
-   324	
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
