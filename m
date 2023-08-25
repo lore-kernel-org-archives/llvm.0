@@ -1,104 +1,85 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843831C02
-	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 22:52:52 +0000 (UTC)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-58fc4eaa04fso17102887b3.0
-        for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 15:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693003971; x=1693608771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8xMtqDbKxEwCzgnyNbVs2sMz5QqO99bNAeKAJBAO7ac=;
-        b=owun0nYHfvLTp02HwjgYJCJKKexvJCKZ8eEpK/3Pa51NHe3qKpAz3uJHyuIsFuWBSL
-         s8prQQagkZbq4lBh+Vb/qil5pGBOTceukyQpNn+SD480sQl3YIzE7pWG+7PyQFayvM+q
-         8WhSikpJegzXr+eu+3QY4wqY5bofpo+TgaSgHtXLMN9rXyi934cymNwNw9mcN4psAFWD
-         e6f6ePwPhTMBdPi1PLhDF1EKPIiLG7c4lp2fpy4/uNrHVrx6SEkFbm3ooIXfahBbkNiy
-         QMesI7AF4+yAjxNNYdcaaCLhrNDpo9mP6TPiCb9GW8Si7JtKP8EohgzrmuPP0u2RCpPh
-         cQww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693003971; x=1693608771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8xMtqDbKxEwCzgnyNbVs2sMz5QqO99bNAeKAJBAO7ac=;
-        b=iOQq7JPWmcWvqnY+bmsvHj6WbeiygowwVEts1DbgmAT/oBl/waWBH2/pYqvGOLzAO8
-         bD0babKj5wOEmgyYEBGo8er5SZEnh3qpdPpwY1/BrNCVJuScjZrFZHJB7cdvZkCAxDYe
-         Kl8GKWbpa0VvqyU0iuG5JUL9Jl7BC7d4OdTMdi2+br5WtPqvtJDvEhxebJeOOoNgYydq
-         GwQ9brepygcVkLutWAR8jgPrHVfC6I8Y5iM86Kt9QL4E9TTtm2N5JKjtU3lhcZgPIBh0
-         CrKbwXWyKb4xD6HPjxKY8OwXdUoOvg70Mda/EP2XHX9wNCH7Sv10+m0vsAwB3xUijZjx
-         ZFjA==
-X-Gm-Message-State: AOJu0Yyqmky9XeQI0h6Yf0Q4JRXMkyBGFJs3ME8zoItxjYRZrUwTowxh
-	o4XGLBv6nXzq6N3ANUpsBNx0197/LTwA89RfVGK62w==
-X-Google-Smtp-Source: AGHT+IHXxCQJZoZx8m6MeDZFbASI/p7xgZwgm0CtAj9gMwK5eTjmcUc8UZWXJ+fjed0ebk0B7L3wKLDrCavAO/UrWKw=
-X-Received: by 2002:a0d:d4d5:0:b0:579:ec06:eb3d with SMTP id
- w204-20020a0dd4d5000000b00579ec06eb3dmr22215439ywd.21.1693003971054; Fri, 25
- Aug 2023 15:52:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C0F18B0E
+	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 22:59:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA231C43395;
+	Fri, 25 Aug 2023 22:59:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1693004362;
+	bh=7cns6S8+ADgngXm0a3i8nrTUZjXYM/26rR0aGDZTI4I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F/BvoR86Sura+HK4lwwY7s2fyOAVDO/s8yExViZbsl9LXfvCVsc0KWXE40nUa+lDd
+	 Xgmm/CEruefdvVT3wP/dikRMMohBp065gJIraKAduxaIto3kVP9hqBQCT2UI5EquqX
+	 QBIILvID+FEFcSl/bmSHLWXNEc72qjo8R9TUOGfv3B43uPH9bB9Z/GJmfSSqFpKTCZ
+	 08tbdCZ9TS8M4MtYJ0VO4KT0I8PA8m0lJv8Wp1VoxYZw3z0QK1Ss3KUKWSIJ2BCElm
+	 U5xZvlqZlmsbLlGldCcfcj6uwa/JnCU3ffxhjV3YQWZmqMdYKdXIymF9qgxYPMuBRr
+	 uyAu3pMttl0lQ==
+Date: Sat, 26 Aug 2023 00:59:18 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: pxa: fix clang -Wvoid-pointer-to-enum-cast warning
+Message-ID: <ZOkyRoKmRTMHLm7b@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230816-void-drivers-i2c-busses-i2c-pxa-v1-1-931634b931ec@google.com>
+ <ZOkofUzv6t9lXyN+@shikoro>
+ <CAFhGd8qg5aeo34irrOQR7td1rjBVF2q4mDFV=Kbt=EmMUiTB_A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230816-void-drivers-i2c-busses-i2c-pxa-v1-1-931634b931ec@google.com>
- <ZOkofUzv6t9lXyN+@shikoro> <CAFhGd8qg5aeo34irrOQR7td1rjBVF2q4mDFV=Kbt=EmMUiTB_A@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Lct9vfZQb4MUpnCc"
+Content-Disposition: inline
 In-Reply-To: <CAFhGd8qg5aeo34irrOQR7td1rjBVF2q4mDFV=Kbt=EmMUiTB_A@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 25 Aug 2023 15:52:39 -0700
-Message-ID: <CAKwvOd=1otHgNkJf7wBajDrGmRNQduvR5ie_XgJMPPWT6+n_mQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: pxa: fix clang -Wvoid-pointer-to-enum-cast warning
-To: Justin Stitt <justinstitt@google.com>
-Cc: Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 25, 2023 at 3:49=E2=80=AFPM Justin Stitt <justinstitt@google.co=
-m> wrote:
->
-> On Fri, Aug 25, 2023 at 3:17=E2=80=AFPM Wolfram Sang <wsa@kernel.org> wro=
-te:
-> >
-> >
-> > > Note: I think something like this may be more readable:
-> > > |     *i2c_types =3D (enum pxa_i2c_types)(uintptr_t)of_id->data;
-> > >
-> > > Thoughts on this approach against the one present in this patch?
-> >
-> > On the one hand, I think this is more explicit and, thus, more readable=
-.
-> > On the other hand, we still have the loss of precision, between the
-> > first and the second cast. Which gives it a bit of a "let's hide it
-> > somewhat so the compiler will be happy" feeling?
-> >
+
+--Lct9vfZQb4MUpnCc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
 > There was some discussion [1] wherein it was ultimately decided that
 > this warning should probably be turned off (contrary to what the title
 > of the GitHub issue says).
->
-> The state of these patches [2] is in some sort of limbo until I get a
-> patch in to disable the warning from W=3D1 (keep in mind GCC doesn't
-> even support this specific warning). I want to make the patch but am
-> seeking some guidance about what exactly is to be done -- I feel a
-> simply _demotion_ from W=3D1 to W=3D2 would suffice as CI robots aren't
-> testing w/ that AFAIK.
->
-> Nick, do you have anything to add here as we had previously discussed
-> this off-list/IRL.
 
-Mostly that we should make -fsanitize=3Denum not totally suck (i.e.
-actually do anything for C code, then check for bad conversions from
-values that aren't valid enumeration values including truncations),
-then disable this warning in favor of folks testing with that
-sanitizer enabled.
+I totally agree with your last comment in [1]. So, I also vote for
+disabling the warning. Thus, I will reject these patches, but still
+thank you for looking into such issues and trying to solve them!
 
->
 > [1]: https://github.com/ClangBuiltLinux/linux/issues/1910
-> [2]: https://lore.kernel.org/all/?q=3Db%3Apointer-to-enum-cast
 
+--Lct9vfZQb4MUpnCc
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
---=20
-Thanks,
-~Nick Desaulniers
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTpMkIACgkQFA3kzBSg
+Kba9gg/9GrJitxIM9E2rp5zbcPYpBOq2zX6PL5iO5PdIYoO3j9goeVD0n0hnWv9B
+CR/dDuAAkaBahCoewCuKdwbZQhoYS3WOZVrCCuXHT5CPmg23ujoOb3F2ANGHhsVd
+MvxaM6Eti6DOr1mRlqfaprpkNcPO0P0iDRSE2c0o0zi9L2VxrKamxTxRMyxMOF+H
+8KrHsetOQl4uwdCUGaQ07YKbxWp6qte2SH3/Y6FhwFpdTuSKhyco4ve/V2FdtUVL
+d3rPU/5V63xgILcniopUf9c4eFkGxptZ7jYhbqM/6QNXkf0fi3eh5Xd0kz3q2tv7
+7/YMRWvE7gIEwKO8UYzZtpsHcmLTDjHHcNpoqHVjYC7w/ZFkxkXANaleReeqkC15
+9Gsokez9QOWVwb1YjoeakNEDpvmiceYP1KM6yd+0mTyrGMDNBJLjxd2YD/PZtYgw
+k7ymNz2J0VXAXFTYA1PzQPG8RAjBeYC8HHiPtsTFX+7/DGviY1qPyRbLozYlilNE
+cyB98JpW0Sh82kBdbaK6yycWuU28xPHljRizFePv0tTtUKrK55Jeu0feIbwUVq1I
+ykcBs958tLnlX2vjqLGwLK35lUNJsbWTI6PgCrQ7bSo0KLm7N0q1JZTcsLbGc5Hx
+KDbAODfaypBHdyy/lS5TtsspmMVzqymlGuynUevwyZ1756S1ovI=
+=rq/A
+-----END PGP SIGNATURE-----
+
+--Lct9vfZQb4MUpnCc--
