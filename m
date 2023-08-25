@@ -1,47 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA4017E9;
-	Fri, 25 Aug 2023 06:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6662617EA;
+	Fri, 25 Aug 2023 06:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692944395; x=1724480395;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bmfd8qRTID5gBvloZQsb4+G4sktL/Sul01ezj7s1kaE=;
-  b=SVWljTGKzyrerkSMq3sHbyciEzGWSyFTxwy3HAv1Su36s/YG6B6PWyEt
-   n344IQyBh9uTDzaqE+XldJExT7CkfY8WKtWoyalln1WeV5t8CEdr7cIQD
-   Y7msh3hQoecMIDeCbM0vBC5GOLR0y6Wyt0py2/3+X4PrIag5OUcLRMe4B
-   O0UwbUbWmCORSCm+lKrcvQ/rrfJ4f8i/z/GFQ3OIxGbOtn64okIGeQXop
-   IbXB++rP10YeRbv4EbwSa9U4yTYX0+lG8jxK6onqtQYLV+/W3HbxLurfs
-   lmG+tEcJViKghWjIG9qaNO1FuoUpSaj1ilDb2Dx2AbxwvEpeMKKwMLRFa
+  t=1692945478; x=1724481478;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pV8ekNNMAxTA4+vHF2loLxjGa17Kbulq6RW+d0X+oMo=;
+  b=oI/mVB4Q7BZPuSTYnWKdt7lkr/MIMUMNSIsE9eryyP4kD4dCrqSmGEp7
+   xHKtj642FqcoLzT2Wb4Wx92sahsU6YEqwxQmYc4GW0Zw7W2d4D7t55h89
+   btTSDtuvjNSO6TfSmS9GSfD5NRu84tvB6nlsUSOBIGY3YD/IBV5s9figI
+   LFWk0Lz1M0ahIg4/vp27B45hwCy4/6OI/VAN3zsrjSWOEDaNG7Z16gQC7
+   an7SAXYCPvKxF2SNOHWF4fOo68fzgPK52t3h6fF0GjuJz7Vh3N3+PHgy3
+   Yc9Id4bbFU3eBTPC9XujLwLsYYE6x44fMb0RyePhuXRb8vAc6mWwfA/oe
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="372038767"
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="364841521"
 X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="372038767"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 23:17:47 -0700
+   d="scan'208";a="364841521"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 23:37:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="730923769"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="730923769"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="881071899"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 24 Aug 2023 23:17:44 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 24 Aug 2023 23:38:00 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZQ8d-0003Gm-1E;
-	Fri, 25 Aug 2023 06:17:43 +0000
-Date: Fri, 25 Aug 2023 14:17:22 +0800
+	id 1qZQSA-0003Hg-2x;
+	Fri, 25 Aug 2023 06:37:54 +0000
+Date: Fri, 25 Aug 2023 14:37:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Richard Fitzgerald <rf@opensource.cirrus.com>,
-	brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
+To: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-	Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: Re: [PATCH v5 09/10] kunit: Use string_stream for test log
-Message-ID: <202308251443.dMAw1CW3-lkp@intel.com>
-References: <20230824143129.1957914-10-rf@opensource.cirrus.com>
+	linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.08.22a 61/69]
+ kernel/locking/qspinlock.c:660:19: error: redefinition of 'tail_to_cpu'
+Message-ID: <202308251435.gwLevKf4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,65 +45,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230824143129.1957914-10-rf@opensource.cirrus.com>
 
-Hi Richard,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on shuah-kselftest/kunit]
-[also build test WARNING on next-20230824]
-[cannot apply to shuah-kselftest/kunit-fixes linus/master v6.5-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald/kunit-string-stream-Don-t-create-a-fragment-for-empty-strings/20230824-223722
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20230824143129.1957914-10-rf%40opensource.cirrus.com
-patch subject: [PATCH v5 09/10] kunit: Use string_stream for test log
-config: hexagon-randconfig-002-20230825 (https://download.01.org/0day-ci/archive/20230825/202308251443.dMAw1CW3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230825/202308251443.dMAw1CW3-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.08.22a
+head:   354957ec11dc80eac68c4b1e10c237d69adc1833
+commit: bdd8d60bd4047aa4a7dc207789dc4ad0dfd5f07e [61/69] EXP qspinlock: Dump lock state, add call from locktorture
+config: i386-buildonly-randconfig-001-20230825 (https://download.01.org/0day-ci/archive/20230825/202308251435.gwLevKf4-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230825/202308251435.gwLevKf4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308251443.dMAw1CW3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308251435.gwLevKf4-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> lib/kunit/kunit-test.c:542:8: warning: unused variable 'full_log' [-Wunused-variable]
-     542 |         char *full_log;
-         |               ^
-   lib/kunit/kunit-test.c:581:26: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     581 |                 kunit_add_action(test, (kunit_action_t *)kfree, full_log);
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+   kernel/locking/qspinlock.c:709:102: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+                   __func__, _Q_TAIL_CPU_OFFSET, _Q_TAIL_IDX_MASK, _Q_TAIL_IDX_OFFSET, _Q_LOCKED_VAL, _Q_TAIL_OFFSET, sizeof(qval.tail));
+                                                                                                                      ^~~~~~~~~~~~~~~~~
+   include/linux/printk.h:478:35: note: expanded from macro 'pr_alert'
+           printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
+                                    ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   In file included from kernel/locking/qspinlock.c:741:
+   kernel/locking/qspinlock_paravirt.h:298:7: warning: variable 'wait_early' set but not used [-Wunused-but-set-variable]
+           bool wait_early;
+                ^
+   kernel/locking/qspinlock_paravirt.h:407:6: warning: variable 'waitcnt' set but not used [-Wunused-but-set-variable]
+           int waitcnt = 0;
+               ^
+   kernel/locking/qspinlock_paravirt.h:493:1: warning: no previous prototype for function '__pv_queued_spin_unlock_slowpath' [-Wmissing-prototypes]
+   __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+   ^
+   kernel/locking/qspinlock_paravirt.h:492:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible __lockfunc void
+                        ^
+                        static 
+   In file included from kernel/locking/qspinlock.c:742:
+>> kernel/locking/qspinlock.c:660:19: error: redefinition of 'tail_to_cpu'
+   static __pure int tail_to_cpu(u32 tail)
+                     ^
+   kernel/locking/qspinlock.c:660:19: note: previous definition is here
+   static __pure int tail_to_cpu(u32 tail)
+                     ^
+   In file included from kernel/locking/qspinlock.c:742:
+>> kernel/locking/qspinlock.c:665:19: error: redefinition of 'tail_to_idx'
+   static __pure int tail_to_idx(u32 tail)
+                     ^
+   kernel/locking/qspinlock.c:665:19: note: previous definition is here
+   static __pure int tail_to_idx(u32 tail)
+                     ^
+   In file included from kernel/locking/qspinlock.c:742:
+>> kernel/locking/qspinlock.c:670:29: error: redefinition of 'next_to_prev'
+   static struct mcs_spinlock *next_to_prev(struct mcs_spinlock *msp, int *cpup, int *idxp)
+                               ^
+   kernel/locking/qspinlock.c:670:29: note: previous definition is here
+   static struct mcs_spinlock *next_to_prev(struct mcs_spinlock *msp, int *cpup, int *idxp)
+                               ^
+   In file included from kernel/locking/qspinlock.c:742:
+>> kernel/locking/qspinlock.c:691:6: error: redefinition of 'spinlock_dump'
+   void spinlock_dump(spinlock_t *sp, bool full)
+        ^
+   kernel/locking/qspinlock.c:691:6: note: previous definition is here
+   void spinlock_dump(spinlock_t *sp, bool full)
+        ^
+   In file included from kernel/locking/qspinlock.c:742:
+   kernel/locking/qspinlock.c:709:102: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+                   __func__, _Q_TAIL_CPU_OFFSET, _Q_TAIL_IDX_MASK, _Q_TAIL_IDX_OFFSET, _Q_LOCKED_VAL, _Q_TAIL_OFFSET, sizeof(qval.tail));
+                                                                                                                      ^~~~~~~~~~~~~~~~~
+   include/linux/printk.h:478:35: note: expanded from macro 'pr_alert'
+           printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
+                                    ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   5 warnings and 4 errors generated.
 
 
-vim +/full_log +542 lib/kunit/kunit-test.c
+vim +/tail_to_cpu +660 kernel/locking/qspinlock.c
 
-   533	
-   534	/*
-   535	 * Log tests call string_stream functions, which aren't exported. So only
-   536	 * build this code if this test is built-in.
-   537	 */
-   538	#if IS_BUILTIN(CONFIG_KUNIT_TEST)
-   539	static void kunit_log_test(struct kunit *test)
-   540	{
-   541		struct kunit_suite suite;
- > 542		char *full_log;
-   543	
-   544		suite.log = kunit_alloc_string_stream(test, GFP_KERNEL);
-   545		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-   546		string_stream_set_append_newlines(suite.log, true);
-   547	
-   548		kunit_log(KERN_INFO, test, "put this in log.");
-   549		kunit_log(KERN_INFO, test, "this too.");
-   550		kunit_log(KERN_INFO, &suite, "add to suite log.");
-   551		kunit_log(KERN_INFO, &suite, "along with this.");
-   552	
+   658	
+   659	/* Dump out queued spinlock state. */
+ > 660	static __pure int tail_to_cpu(u32 tail)
+   661	{
+   662		return (tail >> (_Q_TAIL_CPU_OFFSET - _Q_TAIL_OFFSET)) - 1;
+   663	}
+   664	
+ > 665	static __pure int tail_to_idx(u32 tail)
+   666	{
+   667		return (tail & _Q_TAIL_IDX_MASK) >> (_Q_TAIL_IDX_OFFSET - _Q_TAIL_OFFSET);
+   668	}
+   669	
+ > 670	static struct mcs_spinlock *next_to_prev(struct mcs_spinlock *msp, int *cpup, int *idxp)
+   671	{
+   672		int cpu;
+   673		int idx;
+   674	
+   675		for_each_possible_cpu(cpu) {
+   676			struct qnode *qnp = per_cpu_ptr(&qnodes[0], cpu);
+   677	
+   678			for (idx = 0; idx < MAX_NODES; idx++) {
+   679				if (qnp[idx].mcs.next == msp) {
+   680					*cpup = cpu;
+   681					*idxp = idx;
+   682					return &qnp[idx].mcs;
+   683				}
+   684			}
+   685		}
+   686		*cpup = -1;
+   687		*idxp = -1;
+   688		return NULL;
+   689	}
+   690	
+ > 691	void spinlock_dump(spinlock_t *sp, bool full)
+   692	{
+   693		int cpu;
+   694		int i = 0;
+   695		int idx;
+   696		struct mcs_spinlock *msp;
+   697		struct qspinlock qval = sp->rlock.raw_lock;
+   698	
+   699		cpu = tail_to_cpu(qval.tail);
+   700		idx = tail_to_idx(qval.tail);
+   701		pr_alert("%s: %ps %#x (%c%c%c%c %#x: %d[%d]\n",
+   702			 __func__, sp, (unsigned int)atomic_read(&qval.val),
+   703			 ".L"[!!qval.locked],
+   704			 ".P"[!!qval.pending],
+   705			 ".Q"[cpu >= 0 && idx >= 0],
+   706			 ".F"[!!full],
+   707			 (unsigned int)qval.tail, cpu, idx);
+   708		pr_alert("%s: _Q_TAIL_CPU_OFFSET=%d _Q_TAIL_IDX_MASK=%d _Q_TAIL_IDX_OFFSET=%d _Q_LOCKED_VAL=%d _Q_TAIL_OFFSET=%d sizeof(->tail)=%lu\n",
+   709			__func__, _Q_TAIL_CPU_OFFSET, _Q_TAIL_IDX_MASK, _Q_TAIL_IDX_OFFSET, _Q_LOCKED_VAL, _Q_TAIL_OFFSET, sizeof(qval.tail));
+   710		if (!full)
+   711			return;
+   712		while (i++ < nr_cpu_ids && (msp = next_to_prev(msp, &cpu, &idx))) {
+   713			pr_alert("%s: Q%d CPU %d[%d] %c%d\n", __func__, i, cpu, idx,
+   714				 ".L"[!!msp->locked], msp->count);
+   715		}
+   716		if (i >= nr_cpu_ids && cpu >= 0 && idx >= 0)
+   717			pr_alert("%s: Queue output truncated.\n", __func__);
+   718		else
+   719			pr_alert("%s: End of queue.\n", __func__);
+   720	}
+   721	EXPORT_SYMBOL(spinlock_dump);
+   722	
 
 -- 
 0-DAY CI Kernel Test Service
