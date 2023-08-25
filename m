@@ -1,163 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8DC7E0
-	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 02:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1692931873;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uQB+13I3Nc4wWYXqqHAPzt73YpJuqmfC2I6gXjUc17w=;
-	b=jJKnD9sciFCV0bLVjp01nvlm6JR0Tkks5eEfjXeXnG589EQQURHbfNgvxToruykx4SuGPY
-	YWnrBU4kjavleAXNga+/z1/SbGfs5U0wlNXe6n16ry6rijxpDenepSFLXV9U/6JRRMobgi
-	8EJyFxrFuhu2i02wSqHVHFHZ7N7ZBaw=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-424-Y-nQ_0qJPxaVkZ6AJsu0Yw-1; Thu, 24 Aug 2023 22:51:11 -0400
-X-MC-Unique: Y-nQ_0qJPxaVkZ6AJsu0Yw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50E58299E75E
-	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 02:51:11 +0000 (UTC)
-Received: from [172.64.4.37] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 26E13492C14;
-	Fri, 25 Aug 2023 02:51:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 11 of 267): Test report for master
- (6.5.0-rc7, mainline.kernel.org-clang, b5cc3833)
-Date: Fri, 25 Aug 2023 02:51:11 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE9D7E0
+	for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 03:49:20 +0000 (UTC)
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 8190E255BDB3C; Thu, 24 Aug 2023 20:46:59 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Kees Cook <keescook@chromium.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Cc: Fangrui Song <maskray@google.com>,
+	kernel-team@fb.com,
+	Leizhen <thunder.leizhen@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel test robot <oliver.sang@intel.com>
+Subject: [PATCH] kallsyms: Fix kallsyms_selftest failure
+Date: Thu, 24 Aug 2023 20:46:59 -0700
+Message-Id: <20230825034659.1037627-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <02636.123082422511100227@us-mta-424.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Kernel test robot reported a kallsyms_test failure when clang lto is
+enabled (thin or full) and CONFIG_KALLSYMS_SELFTEST is also enabled.
+I can reproduce in my local environment with the following error message
+with thin lto:
+  [    1.877897] kallsyms_selftest: Test for 1750th symbol failed: (tsc_c=
+s_mark_unstable) addr=3Dffffffff81038090
+  [    1.877901] kallsyms_selftest: abort
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+It appears that commit 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes
+from promoted global functions") caused the failure. Commit 8cc32a9bbf29
+changed cleanup_symbol_name() based on ".llvm." instead of '.' where
+".llvm." is appended to a before-lto-optimization local symbol name.
+We need to propagate such knowledge in kallsyms_selftest.c as well.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Further more, compare_symbol_name() in kallsyms.c needs change as well.
+In scripts/kallsyms.c, kallsyms_names and kallsyms_seqs_of_names are used
+to record symbol names themselves and index to symbol names respectively.
+For example:
+  kallsyms_names:
+    ...
+    __amd_smn_rw._entry       <=3D=3D seq 1000
+    __amd_smn_rw._entry.5     <=3D=3D seq 1001
+    __amd_smn_rw.llvm.<hash>  <=3D=3D seq 1002
+    ...
 
-Kernel information:
-    Commit message: Merge tag 'net-6.5-rc8' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
+kallsyms_seqs_of_names are sorted based on cleanup_symbol_name() through,=
+ so
+the order in kallsyms_seqs_of_names actually has
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101388
+  index 1000:   seq 1002   <=3D=3D __amd_smn_rw.llvm.<hash> (actual symbo=
+l comparison using '__amd_smn_rw')
+  index 1001:   seq 1000   <=3D=3D __amd_smn_rw._entry
+  index 1002:   seq 1001   <=3D=3D __amd_smn_rw._entry.5
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
-amdgpu]
-            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
-33a3db@linux.intel.com/
-            Affected tests:
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
-3': Input/output error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1436
-            Affected tests:
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Storage - blktests - nvme-tcp: hit test timeout
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
+Let us say at a particular point, at index 1000, symbol '__amd_smn_rw.llv=
+m.<hash>'
+is comparing to '__amd_smn_rw._entry' where '__amd_smn_rw._entry' is the =
+one to
+search e.g., with function kallsyms_on_each_match_symbol(). The current i=
+mplementation
+will find out '__amd_smn_rw._entry' is less than '__amd_smn_rw.llvm.<hash=
+>' and
+then continue to search e.g., index 999 and never found a match although =
+the actual
+index 1001 is a match.
 
+To fix this issue, let us do cleanup_symbol_name() first and then do comp=
+arison.
+In the above case, comparing '__amd_smn_rw' vs '__amd_smn_rw._entry' and
+'__amd_smn_rw._entry' being greater than '__amd_smn_rw', the next compari=
+son will
+be > index 1000 and eventually index 1001 will be hit an a match is found=
+.
 
+For any symbols not having '.llvm.' substr, there is no functionality cha=
+nge
+for compare_symbol_name().
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Fixes: 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes from promoted glo=
+bal functions")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202308232200.1c932a90-oliver.sang@=
+intel.com
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/kallsyms.c          | 17 +++++++----------
+ kernel/kallsyms_selftest.c | 23 +----------------------
+ 2 files changed, 8 insertions(+), 32 deletions(-)
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 016d997131d4..e12d26c10dba 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -188,16 +188,13 @@ static bool cleanup_symbol_name(char *s)
+=20
+ static int compare_symbol_name(const char *name, char *namebuf)
+ {
+-	int ret;
+-
+-	ret =3D strcmp(name, namebuf);
+-	if (!ret)
+-		return ret;
+-
+-	if (cleanup_symbol_name(namebuf) && !strcmp(name, namebuf))
+-		return 0;
+-
+-	return ret;
++	/* The kallsyms_seqs_of_names is sorted based on names after
++	 * cleanup_symbol_name() (see scripts/kallsyms.c) if clang lto is enabl=
+ed.
++	 * To ensure correct bisection in kallsyms_lookup_names(), do
++	 * cleanup_symbol_name(namebuf) before comparing name and namebuf.
++	 */
++	cleanup_symbol_name(namebuf);
++	return strcmp(name, namebuf);
+ }
+=20
+ static unsigned int get_symbol_seq(int index)
+diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+index a2e3745d15c4..e05ddc33a752 100644
+--- a/kernel/kallsyms_selftest.c
++++ b/kernel/kallsyms_selftest.c
+@@ -196,7 +196,7 @@ static bool match_cleanup_name(const char *s, const c=
+har *name)
+ 	if (!IS_ENABLED(CONFIG_LTO_CLANG))
+ 		return false;
+=20
+-	p =3D strchr(s, '.');
++	p =3D strstr(s, ".llvm.");
+ 	if (!p)
+ 		return false;
+=20
+@@ -344,27 +344,6 @@ static int test_kallsyms_basic_function(void)
+ 			goto failed;
+ 		}
+=20
+-		/*
+-		 * The first '.' may be the initial letter, in which case the
+-		 * entire symbol name will be truncated to an empty string in
+-		 * cleanup_symbol_name(). Do not test these symbols.
+-		 *
+-		 * For example:
+-		 * cat /proc/kallsyms | awk '{print $3}' | grep -E "^\." | head
+-		 * .E_read_words
+-		 * .E_leading_bytes
+-		 * .E_trailing_bytes
+-		 * .E_write_words
+-		 * .E_copy
+-		 * .str.292.llvm.12122243386960820698
+-		 * .str.24.llvm.12122243386960820698
+-		 * .str.29.llvm.12122243386960820698
+-		 * .str.75.llvm.12122243386960820698
+-		 * .str.99.llvm.12122243386960820698
+-		 */
+-		if (IS_ENABLED(CONFIG_LTO_CLANG) && !namebuf[0])
+-			continue;
+-
+ 		lookup_addr =3D kallsyms_lookup_name(namebuf);
+=20
+ 		memset(stat, 0, sizeof(*stat));
+--=20
+2.34.1
 
