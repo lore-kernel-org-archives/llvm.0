@@ -1,43 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7491F2915;
-	Fri, 25 Aug 2023 19:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0D5125D2;
+	Fri, 25 Aug 2023 19:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692990366; x=1724526366;
+  t=1692991023; x=1724527023;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YJJi/wemdxksBbsikAZ6LBPaPSymRL1BwFr09SiXHcY=;
-  b=S5Ekdet51TVqJHMKQCwMnvoFmwLkVXvG9ucVNT5rMUZTUfH3Bb23oeFr
-   jnLkl81sgCJKUMcz/OAo9Bc4zptqmEKmy1Ji9tL1s2PYnTDQPc+r8Fr05
-   QRNa6g3599fFfWz4TLrppYJRT+uzO+PdSwJIQ2xhKX/81WdjOVh4UZ8q2
-   SKf23Iw3dHeiTLIZAAVYVwIh6oXr278GanEoT53ZbY2woO5msJZ8udhP8
-   DVMnsZGOZhfyoF2YUECyYCxhDbOf0Dwrw+mcBts21gs6cO6LzF4Ov05AR
-   ZDleyHVX8I4aBjvejtzIX3f+jmclYu1loLmXxsf5PElpDuLMO+N5CFG3m
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="461145628"
+  bh=NwNOp5ObJawmkCtx0reRMWPpn4TZiTct6jKZA2CxKQ0=;
+  b=KQOpxKqMuTcMRbMQ3VJoQOkR8cFhKTmw9w5QI+YwhYjMuhA+mll0V0eU
+   LKvdV+meyOdURurWQIdUqMR0V3gUqyonIzWQNpjCRxb6ZH1wrvblau0CK
+   inuMZ8pKYWa1Vm159Y0tSFWSgXj63Opi/KJxORCljz0+wtCtDbaAr424j
+   l+vFStYoITUf81YxUM/JwYkkFcoAXYhOqtYOwjGn1zGC2TQwm91S9Vdfx
+   NneEf2thAs3lT8tnaSjbvvc4DBqJZMcC6lI7vI2e/nq9jjwt+51LA0O3L
+   C1aPEgxPee31okjJ8LeC36DBuDsawkwvGBohVWX4M+pndowmD0H+mewcA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="438724669"
 X-IronPort-AV: E=Sophos;i="6.02,201,1688454000"; 
-   d="scan'208";a="461145628"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 12:06:01 -0700
+   d="scan'208";a="438724669"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 12:17:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="772584200"
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="740715774"
 X-IronPort-AV: E=Sophos;i="6.02,201,1688454000"; 
-   d="scan'208";a="772584200"
+   d="scan'208";a="740715774"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Aug 2023 12:05:59 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 25 Aug 2023 12:16:59 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZc86-0003vF-29;
-	Fri, 25 Aug 2023 19:05:58 +0000
-Date: Sat, 26 Aug 2023 03:05:49 +0800
+	id 1qZcIl-0003vr-0a;
+	Fri, 25 Aug 2023 19:16:59 +0000
+Date: Sat, 26 Aug 2023 03:16:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steve French <stfrench@microsoft.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: fs/smb/client/sess.c:160:5: warning: stack frame size (1152) exceeds
- limit (1024) in 'cifs_try_adding_channels'
-Message-ID: <202308260234.njSK5nHi-lkp@intel.com>
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [linuxppc:next-test 85/129] arch/powerpc/xmon/xmon.c:489:12: error:
+ stack frame size (2160) exceeds limit (2048) in 'xmon_core'
+Message-ID: <202308260344.Vc4Giuk7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,139 +48,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Steve,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4942fed84b98cfb71d3cdff1a3df0072a57bbdfa
-commit: 38c8a9a52082579090e34c033d439ed2cd1a462d smb: move client and server files to common directory fs/smb
-date:   3 months ago
-config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20230826/202308260234.njSK5nHi-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308260234.njSK5nHi-lkp@intel.com/reproduce)
+tree:   https://github.com/linuxppc/linux next-test
+head:   c37b6908f7b2bd24dcaaf14a180e28c9132b9c58
+commit: 7f3c5d099b6f8452dc4dcfe4179ea48e6a13d0eb [85/129] Revert "powerpc/xmon: Relax frame size for clang"
+config: powerpc64-randconfig-r006-20230825 (https://download.01.org/0day-ci/archive/20230826/202308260344.Vc4Giuk7-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230826/202308260344.Vc4Giuk7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308260234.njSK5nHi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308260344.Vc4Giuk7-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/smb/client/sess.c:160:5: warning: stack frame size (1152) exceeds limit (1024) in 'cifs_try_adding_channels' [-Wframe-larger-than]
-     160 | int cifs_try_adding_channels(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses)
-         |     ^
-   1 warning generated.
+>> arch/powerpc/xmon/xmon.c:489:12: error: stack frame size (2160) exceeds limit (2048) in 'xmon_core' [-Werror,-Wframe-larger-than]
+   static int xmon_core(struct pt_regs *regs, volatile int fromipi)
+              ^
+   1 error generated.
 
 
-vim +/cifs_try_adding_channels +160 fs/smb/client/sess.c
+vim +/xmon_core +489 arch/powerpc/xmon/xmon.c
 
-b54034a73baf9f fs/cifs/sess.c Shyam Prasad N  2022-01-03  158  
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  159  /* returns number of channels added */
-387ec58f339b0c fs/cifs/sess.c Ronnie Sahlberg 2020-12-14 @160  int cifs_try_adding_channels(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses)
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  161  {
-90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  162  	struct TCP_Server_Info *server = ses->server;
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  163  	int old_chan_count, new_chan_count;
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  164  	int left;
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  165  	int rc = 0;
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  166  	int tries = 0;
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  167  	struct cifs_server_iface *iface = NULL, *niface = NULL;
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  168  
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  169  	spin_lock(&ses->chan_lock);
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  170  
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  171  	new_chan_count = old_chan_count = ses->chan_count;
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  172  	left = ses->chan_max - ses->chan_count;
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  173  
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  174  	if (left <= 0) {
-88b024f556fcd5 fs/cifs/sess.c Shyam Prasad N  2021-11-19  175  		spin_unlock(&ses->chan_lock);
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  176  		cifs_dbg(FYI,
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  177  			 "ses already at max_channels (%zu), nothing to open\n",
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  178  			 ses->chan_max);
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  179  		return 0;
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  180  	}
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  181  
-90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  182  	if (server->dialect < SMB30_PROT_ID) {
-53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  183  		spin_unlock(&ses->chan_lock);
-53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  184  		cifs_dbg(VFS, "multichannel is not supported on this protocol version, use 3.0 or above\n");
-53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  185  		return 0;
-53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  186  	}
-53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  187  
-90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  188  	if (!(server->capabilities & SMB2_GLOBAL_CAP_MULTI_CHANNEL)) {
-9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  189  		ses->chan_max = 1;
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  190  		spin_unlock(&ses->chan_lock);
-90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  191  		cifs_server_dbg(VFS, "no multichannel support\n");
-9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  192  		return 0;
-9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  193  	}
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  194  	spin_unlock(&ses->chan_lock);
-9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  195  
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  196  	/*
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  197  	 * Keep connecting to same, fastest, iface for all channels as
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  198  	 * long as its RSS. Try next fastest one if not RSS or channel
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  199  	 * creation fails.
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  200  	 */
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  201  	spin_lock(&ses->iface_lock);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  202  	iface = list_first_entry(&ses->iface_list, struct cifs_server_iface,
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  203  				 iface_head);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  204  	spin_unlock(&ses->iface_lock);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  205  
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  206  	while (left > 0) {
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  207  
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  208  		tries++;
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  209  		if (tries > 3*ses->chan_max) {
-bbbf9eafbfdaa2 fs/cifs/sess.c Steve French    2020-05-30  210  			cifs_dbg(FYI, "too many channel open attempts (%d channels left to open)\n",
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  211  				 left);
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  212  			break;
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  213  		}
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  214  
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  215  		spin_lock(&ses->iface_lock);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  216  		if (!ses->iface_count) {
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  217  			spin_unlock(&ses->iface_lock);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  218  			break;
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  219  		}
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  220  
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  221  		list_for_each_entry_safe_from(iface, niface, &ses->iface_list,
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  222  				    iface_head) {
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  223  			/* skip ifaces that are unusable */
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  224  			if (!iface->is_active ||
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  225  			    (is_ses_using_iface(ses, iface) &&
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  226  			     !iface->rss_capable)) {
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  227  				continue;
-65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  228  			}
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  229  
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  230  			/* take ref before unlock */
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  231  			kref_get(&iface->refcount);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  232  
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  233  			spin_unlock(&ses->iface_lock);
-387ec58f339b0c fs/cifs/sess.c Ronnie Sahlberg 2020-12-14  234  			rc = cifs_ses_add_channel(cifs_sb, ses, iface);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  235  			spin_lock(&ses->iface_lock);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  236  
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  237  			if (rc) {
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  238  				cifs_dbg(VFS, "failed to open extra channel on iface:%pIS rc=%d\n",
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  239  					 &iface->sockaddr,
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  240  					 rc);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  241  				kref_put(&iface->refcount, release_iface);
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  242  				continue;
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  243  			}
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  244  
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  245  			cifs_dbg(FYI, "successfully opened new channel on iface:%pIS\n",
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  246  				 &iface->sockaddr);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  247  			break;
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  248  		}
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  249  		spin_unlock(&ses->iface_lock);
-aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  250  
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  251  		left--;
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  252  		new_chan_count++;
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  253  	}
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  254  
-724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  255  	return new_chan_count - old_chan_count;
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  256  }
-d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  257  
+5c699396f5f6cf arch/powerpc/xmon/xmon.c Anton Blanchard      2020-06-30  488  
+a2305e3de81939 arch/powerpc/xmon/xmon.c Arnd Bergmann        2021-04-29 @489  static int xmon_core(struct pt_regs *regs, volatile int fromipi)
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  490  {
+a2305e3de81939 arch/powerpc/xmon/xmon.c Arnd Bergmann        2021-04-29  491  	volatile int cmd = 0;
+a2305e3de81939 arch/powerpc/xmon/xmon.c Arnd Bergmann        2021-04-29  492  	struct bpt *volatile bp;
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  493  	long recurse_jmp[JMP_BUF_LEN];
+69393cb03ccdf2 arch/powerpc/xmon/xmon.c Christopher M. Riedl 2019-09-07  494  	bool locked_down;
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  495  	unsigned long offset;
+f13659e0b39075 arch/powerpc/xmon/xmon.c Anton Blanchard      2007-03-21  496  	unsigned long flags;
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  497  #ifdef CONFIG_SMP
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  498  	int cpu;
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  499  	int secondary;
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  500  #endif
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  501  
+f13659e0b39075 arch/powerpc/xmon/xmon.c Anton Blanchard      2007-03-21  502  	local_irq_save(flags);
+a71d64b4dc4067 arch/powerpc/xmon/xmon.c Anton Blanchard      2014-08-05  503  	hard_irq_disable();
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  504  
+69393cb03ccdf2 arch/powerpc/xmon/xmon.c Christopher M. Riedl 2019-09-07  505  	locked_down = xmon_is_locked_down();
+69393cb03ccdf2 arch/powerpc/xmon/xmon.c Christopher M. Riedl 2019-09-07  506  
+aaf06665f7ea3e arch/powerpc/xmon/xmon.c Naveen N. Rao        2019-06-27  507  	if (!fromipi) {
+ed49f7fd6438dc arch/powerpc/xmon/xmon.c Breno Leitao         2017-08-02  508  		tracing_enabled = tracing_is_on();
+ed49f7fd6438dc arch/powerpc/xmon/xmon.c Breno Leitao         2017-08-02  509  		tracing_off();
+aaf06665f7ea3e arch/powerpc/xmon/xmon.c Naveen N. Rao        2019-06-27  510  	}
+ed49f7fd6438dc arch/powerpc/xmon/xmon.c Breno Leitao         2017-08-02  511  
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  512  	bp = in_breakpoint_table(regs->nip, &offset);
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  513  	if (bp != NULL) {
+59dc5bfca0cb6a arch/powerpc/xmon/xmon.c Nicholas Piggin      2021-06-18  514  		regs_set_return_ip(regs, bp->address + offset);
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  515  		atomic_dec(&bp->ref_count);
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  516  	}
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  517  
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  518  	remove_cpu_bpts();
+^1da177e4c3f41 arch/ppc64/xmon/xmon.c   Linus Torvalds       2005-04-16  519  
 
-:::::: The code at line 160 was first introduced by commit
-:::::: 387ec58f339b0c45e3767395f11fa8dd3772131e cifs: simplify handling of cifs_sb/ctx->local_nls
+:::::: The code at line 489 was first introduced by commit
+:::::: a2305e3de819394a7adf68078964a92d06f9db33 powerpc: mark local variables around longjmp as volatile
 
-:::::: TO: Ronnie Sahlberg <lsahlber@redhat.com>
-:::::: CC: Steve French <stfrench@microsoft.com>
+:::::: TO: Arnd Bergmann <arnd@arndb.de>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
 -- 
 0-DAY CI Kernel Test Service
