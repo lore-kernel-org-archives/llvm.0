@@ -1,43 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FDE1C29;
-	Sat, 26 Aug 2023 08:54:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FB51C29;
+	Sat, 26 Aug 2023 09:26:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693040068; x=1724576068;
+  t=1693041988; x=1724577988;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mxcVWrZwz/T6FGJmsCXt++J16Sl9ErWreUXWWde7/4A=;
-  b=IL2cle1ke78BMmKBaUascc8eOd6oDl0UX4nkmVTEllJJhOx56ynkDkhn
-   lTMGYJgM/FaVw7XZ9oLDoJ/2kTftN2MFy7OJT6B/yB7Jbd5+K9SJxHyxP
-   qSut8hv2aFxotoNO4ICXsox6De1HlDtH0VkX+22f2VsXk+CRigFfvmWt0
-   ov3qaF6Z62uUyjD7ZpSFbluCCUHaQjjcT1ii0APZll0Us8zlQmwL2SVYN
-   bqSBcgwZ3Sf2DceaatSsXJ0Lj4K8p2hRxZuR/d6fgmVkPiJX/oPnkGiVm
-   3TdEBzfiJysbZQ+03PwPkgKVm4A3vu+Q2RxT7MdkBp3fgZiM7ux4t29BJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="405854704"
+  bh=QoRqAXyypzIZtNDTfW6EgjkVaOCSwTVW/Bwef7Q8bVc=;
+  b=MP+LSkD+4eVZloWUKbl4GM4zJRKDM+FkY30XCMttJ4ushcbhDhPua8rJ
+   gFluUojZbNDNyMUF2lDx/bRXcqYNNeSNopipmMTJ9RXxWMNhVBuztbbQ6
+   kIpUEkvAztwmo9vldQcfV2GG4GzfB38TtEvqJ1fgm1CMQSFR/TVLaauE3
+   mWlQ9Y8AK4hPMIZhyaRRI+kOab98ZYxjvvnm69suVPtX6VJqhRMHpRZdf
+   hd38cp11YdvOSVAZZkjYZro+iAMSq9EyEn6ktFYRrdbSp1SpOLiMvDxk9
+   E+gpCw39B2q1i+g9nsoJ9MPFqfbrO2pFcpI6z+RVUYtCwGxemDg4gRf/X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="372264866"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="405854704"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 01:54:27 -0700
+   d="scan'208";a="372264866"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 02:26:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="714589271"
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="1068490919"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="714589271"
+   d="scan'208";a="1068490919"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 26 Aug 2023 01:54:25 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2023 02:26:26 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZp3o-0004Wl-2d;
-	Sat, 26 Aug 2023 08:54:24 +0000
-Date: Sat, 26 Aug 2023 16:54:00 +0800
+	id 1qZpYn-0004YN-20;
+	Sat, 26 Aug 2023 09:26:25 +0000
+Date: Sat, 26 Aug 2023 17:25:29 +0800
 From: kernel test robot <lkp@intel.com>
 To: Qais Yousef <qais.yousef@arm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [qais-yousef:sched-setscheduler-hide 8/9]
- kernel/rcu/rcutorture.c:2409:3: error: implicit declaration of function
- 'sched_setscheduler_nocheck' is invalid in C99
-Message-ID: <202308261649.tz4C0gBb-lkp@intel.com>
+ kernel/rcu/rcutorture.c:2409:3: error: call to undeclared function
+ 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202308261704.SSuhTI8n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,102 +51,21 @@ Content-Disposition: inline
 tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
 head:   e586c67baa1c537a793f135e324cc56df2b6585b
 commit: 66cbe87c50b34ba823e5542a7c699fcbe8663d5d [8/9] sched: Make sched_set{scheduler, attr}() static
-config: um-randconfig-r002-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261649.tz4C0gBb-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261649.tz4C0gBb-lkp@intel.com/reproduce)
+config: i386-randconfig-r022-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261704.SSuhTI8n-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261704.SSuhTI8n-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308261649.tz4C0gBb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308261704.SSuhTI8n-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/rcu/rcutorture.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/rcu/rcutorture.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/rcu/rcutorture.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   kernel/rcu/rcutorture.c:412:16: warning: variable 'started' set but not used [-Wunused-but-set-variable]
-           unsigned long started;
-                         ^
-   kernel/rcu/rcutorture.c:416:21: warning: variable 'ts' set but not used [-Wunused-but-set-variable]
-           unsigned long long ts;
-                              ^
-   kernel/rcu/rcutorture.c:413:16: warning: variable 'completed' set but not used [-Wunused-but-set-variable]
-           unsigned long completed;
-                         ^
-   kernel/rcu/rcutorture.c:1967:21: warning: variable 'ts' set but not used [-Wunused-but-set-variable]
-           unsigned long long ts;
-                              ^
->> kernel/rcu/rcutorture.c:2409:3: error: implicit declaration of function 'sched_setscheduler_nocheck' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+>> kernel/rcu/rcutorture.c:2409:3: error: call to undeclared function 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                    sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
                    ^
-   kernel/rcu/rcutorture.c:3174:9: error: implicit declaration of function 'rcu_get_gp_kthreads_prio' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           prio = rcu_get_gp_kthreads_prio();
-                  ^
-   16 warnings and 2 errors generated.
+   1 error generated.
 
 
 vim +/sched_setscheduler_nocheck +2409 kernel/rcu/rcutorture.c
