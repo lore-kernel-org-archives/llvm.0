@@ -1,43 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB34BA34;
-	Sat, 26 Aug 2023 20:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B73A107B6;
+	Sat, 26 Aug 2023 21:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693083227; x=1724619227;
+  t=1693085899; x=1724621899;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u8v4e3xzweK3QD9FHJAbcqx6mAxB8dUf3nH7Y9DYd6U=;
-  b=l6uQs92EvNvmSB1VQXyJJPQMquJIYujzTDJg/sBm6qOBqNu+Ze+En6Qh
-   F6ifo+DK6mRwE+CEDz9SrQbMCiXL53onXx+xbPhFv0g9YBBrFZQzIpMdz
-   Ig4IB99+2dEJhOmIxkSLNQXXQ2Rgv4uQrbx2kbMICCR5s6XDzNqe9EoiX
-   1sx3XHYlTR58deunMyTdaVmW7qMHOMNWm1KjCAgSqQTvdX1m9t/himkEw
-   aKHApU/VcD/BfrlnXfWpF4QGJstFDC4NqFgHaM3vQ+4qnDH9WB8G3bVYs
-   7w1x5davJHRjlNXx47KwiKAebfk9eOpqDemWN7Iv5L+LG1b4fBXi74G0o
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="354422916"
+  bh=6YfwtJnMYiDpOsuCosAbWSEaeo4PxA5FMRqrslczDRk=;
+  b=C4yLfGG7p+doHUsBulkh75+BEkEfMJSmUn7/eCBu04ttYh6LH9is9/DD
+   ydDxuofhsHvIQAZ4B7V60eTNGiJPbOmEjQ1W4grn1j+GzGvof0jEsn/C2
+   nUYkPy79vpAUDrM4hJos4Yb8s31rbYNelKV9KgLHwXM/zwV80+YNevX0e
+   DCmniquvQuiieCEnFzuCDFK6ML7WyG2rpg8W2zKSz+3xPjh8Cpp8VsIIl
+   F8X2fDDcj2yxg82UUaVGcZf5kDIkhGWY9dKTkdmE+3s7qxI0iMRoRLQfm
+   Ae5LdPLk5Ir6orfTI0pP+t2rDZGdTQ24BMyo4hrqKKwb+luj+SWtMTF3t
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="377635115"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="354422916"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 13:53:46 -0700
+   d="scan'208";a="377635115"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 14:38:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="737828653"
+X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="1068606152"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="737828653"
+   d="scan'208";a="1068606152"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 26 Aug 2023 13:53:45 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2023 14:38:17 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qa0HB-00054J-0A;
-	Sat, 26 Aug 2023 20:53:03 +0000
-Date: Sun, 27 Aug 2023 04:52:03 +0800
+	id 1qa0yE-00056f-1K;
+	Sat, 26 Aug 2023 21:37:36 +0000
+Date: Sun, 27 Aug 2023 05:33:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qyousef@layalina.io>
+To: Qais Yousef <qais.yousef@arm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:sched-setscheduler-hide 11/11]
- kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of
- declaration
-Message-ID: <202308270422.p5AK6N1L-lkp@intel.com>
+Subject: [qais-yousef:sched-setscheduler-hide 2/11]
+ kernel/rcu/tree_plugin.h:1192:21: warning: unused variable 'sp'
+Message-ID: <202308270544.JPqA8NOZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,70 +48,64 @@ Content-Disposition: inline
 
 tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
 head:   ee8dbca703c8d81200c2be455c377bab893206c4
-commit: ee8dbca703c8d81200c2be455c377bab893206c4 [11/11] kthread: Provide a mechanism to control kthread sched_attr
-config: arm-randconfig-001-20230827 (https://download.01.org/0day-ci/archive/20230827/202308270422.p5AK6N1L-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230827/202308270422.p5AK6N1L-lkp@intel.com/reproduce)
+commit: 029b407f286d7bc9a7ace79c65483efa8ead8671 [2/11] rcu: Use a new sched_set_rcu_fifo() to set gp kthread prio
+config: i386-buildonly-randconfig-003-20230827 (https://download.01.org/0day-ci/archive/20230827/202308270544.JPqA8NOZ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230827/202308270544.JPqA8NOZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308270422.p5AK6N1L-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308270544.JPqA8NOZ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
-     155 |         task =  kthread_run(preemptirq_delay_run, NULL, task_name);
-         |                                                         ^
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
-   8 errors generated.
---
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
-    1359 |         cd->qthread = kthread_run(qthread_fn, cd, dev_name(dev));
-         |                                                   ^
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
->> drivers/staging/fieldbus/anybuss/host.c:1359:44: error: expected ';' at end of declaration
-   8 errors generated.
+   In file included from kernel/rcu/tree.c:5017:
+>> kernel/rcu/tree_plugin.h:1192:21: warning: unused variable 'sp' [-Wunused-variable]
+           struct sched_param sp;
+                              ^
+   1 warning generated.
 
 
-vim +155 kernel/trace/preemptirq_delay_test.c
+vim +/sp +1192 kernel/rcu/tree_plugin.h
 
-f96e8577da1026 Joel Fernandes (Google  2018-07-12  146) 
-d16a8c31077e75 Steven Rostedt (VMware  2020-05-06  147) static int preemptirq_run_test(void)
-f96e8577da1026 Joel Fernandes (Google  2018-07-12  148) {
-d16a8c31077e75 Steven Rostedt (VMware  2020-05-06  149) 	struct task_struct *task;
-f96e8577da1026 Joel Fernandes (Google  2018-07-12  150) 	char task_name[50];
-f96e8577da1026 Joel Fernandes (Google  2018-07-12  151) 
-8b1fac2e73e84e Steven Rostedt (VMware  2020-05-10  152) 	init_completion(&done);
-8b1fac2e73e84e Steven Rostedt (VMware  2020-05-10  153) 
-f96e8577da1026 Joel Fernandes (Google  2018-07-12  154) 	snprintf(task_name, sizeof(task_name), "%s_test", test_mode);
-d16a8c31077e75 Steven Rostedt (VMware  2020-05-06 @155) 	task =  kthread_run(preemptirq_delay_run, NULL, task_name);
-d16a8c31077e75 Steven Rostedt (VMware  2020-05-06  156) 	if (IS_ERR(task))
-d16a8c31077e75 Steven Rostedt (VMware  2020-05-06  157) 		return PTR_ERR(task);
-8b1fac2e73e84e Steven Rostedt (VMware  2020-05-10  158) 	if (task) {
-8b1fac2e73e84e Steven Rostedt (VMware  2020-05-10  159) 		wait_for_completion(&done);
-d16a8c31077e75 Steven Rostedt (VMware  2020-05-06  160) 		kthread_stop(task);
-8b1fac2e73e84e Steven Rostedt (VMware  2020-05-10  161) 	}
-d16a8c31077e75 Steven Rostedt (VMware  2020-05-06  162) 	return 0;
-793937236d1ee0 Viktor Rosendahl (BMW   2019-10-09  163) }
-793937236d1ee0 Viktor Rosendahl (BMW   2019-10-09  164) 
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1183  
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1184  /*
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1185   * Create an RCU-boost kthread for the specified node if one does not
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1186   * already exist.  We only create this kthread for preemptible RCU.
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1187   */
+3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1188  static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1189  {
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1190  	unsigned long flags;
+3ef5a1c3821ab6 kernel/rcu/tree_plugin.h Paul E. McKenney 2021-04-05  1191  	int rnp_index = rnp - rcu_get_root();
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07 @1192  	struct sched_param sp;
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1193  	struct task_struct *t;
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1194  
+218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1195  	mutex_lock(&rnp->boost_kthread_mutex);
+3ef5a1c3821ab6 kernel/rcu/tree_plugin.h Paul E. McKenney 2021-04-05  1196  	if (rnp->boost_kthread_task || !rcu_scheduler_fully_active)
+218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1197  		goto out;
+3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1198  
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1199  	t = kthread_create(rcu_boost_kthread, (void *)rnp,
+5b61b0baa9e802 kernel/rcutree_plugin.h  Mike Galbraith   2011-08-19  1200  			   "rcub/%d", rnp_index);
+3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1201  	if (WARN_ON_ONCE(IS_ERR(t)))
+218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1202  		goto out;
+3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1203  
+2a67e741bbbc02 kernel/rcu/tree_plugin.h Peter Zijlstra   2015-10-08  1204  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1205  	rnp->boost_kthread_task = t;
+67c583a7de3433 kernel/rcu/tree_plugin.h Boqun Feng       2015-12-29  1206  	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+029b407f286d7b kernel/rcu/tree_plugin.h Qais Yousef      2020-07-23  1207  	rcu_set_gp_prio(t);
+9a432736904d38 kernel/rcutree_plugin.h  Paul E. McKenney 2011-05-30  1208  	wake_up_process(t); /* get to TASK_INTERRUPTIBLE quickly. */
+218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1209  
+218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1210   out:
+218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1211  	mutex_unlock(&rnp->boost_kthread_mutex);
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1212  }
+27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1213  
 
-:::::: The code at line 155 was first introduced by commit
-:::::: d16a8c31077e75ecb9427fbfea59b74eed00f698 tracing: Wait for preempt irq delay thread to finish
+:::::: The code at line 1192 was first introduced by commit
+:::::: 27f4d28057adf98750cf863c40baefb12f5b6d21 rcu: priority boosting for TREE_PREEMPT_RCU
 
-:::::: TO: Steven Rostedt (VMware) <rostedt@goodmis.org>
-:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
+:::::: TO: Paul E. McKenney <paul.mckenney@linaro.org>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 
 -- 
 0-DAY CI Kernel Test Service
