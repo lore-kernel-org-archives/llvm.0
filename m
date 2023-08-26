@@ -1,150 +1,141 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F597E
-	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 03:17:58 +0000 (UTC)
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1b52875b8d9so83075ad.0
-        for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 20:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693019878; x=1693624678; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NTpWWoAzCcGiRnwVxW+wyPGfNXm/UmsRStzWL2401ms=;
-        b=C1qXi5R9cHfHtuRwGLEdGwD2n+fJHV8CRjbZzTvZVn13EhS410/4/wGyluYDqwUpyt
-         BT/vg/xrqYhStWJAk8XaiyH8QMXks3LTJpm6RWbRsWQF58UbEDGEK+1fIdcfbvSYnZV8
-         yED3L7oIjBoXnaHSmPMh9I6AyGFnDFlHcMEY1EoBVBUPu5x6yuJ1sHuhUvMWcVVdPdrs
-         LVL+miWMjmJHMK15RvKgwzbGPgPYvXLCBdiOiZ+rnD5AUepUScLXjQGnThTZnTlT5MGT
-         U2CZz1vYrrrgYBlip/XgCb5Bhh8WJOAUvcGlcYyuSSurao2ZPvKAI/mK4oyOopZV6w/h
-         nm9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693019878; x=1693624678;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NTpWWoAzCcGiRnwVxW+wyPGfNXm/UmsRStzWL2401ms=;
-        b=YONbnS6AlKta199NN8jPm0eDdkmNG7wpLXtYIiI5dh+JGF7yg+hv6zN3zoStqjdwfW
-         qAuz8D3PbsUXUecuMO6g/O44aTawCgQNRJR+CrGUjveV0O0Nv5kXFhDVfVoBS6zTNkCo
-         BvbUuqVa/qq6IiB+sMaAGcCNgBB7xXS9C0mx/cu2M7jUh6i3iQZIp2KBlByJp93kVHKg
-         PxYPhVXNBfXmi/bDmfMJ+orXM/35GhME0CNGTsZW7TT/5Moo6j4tigbVV+MOFVjxYoid
-         B0V2PonbbKBLH750UKfNw8j0MPhiIJkImLwSn4q5iFiPWg1rxev1KPqYwHLMk7MilEvj
-         j/Rg==
-X-Gm-Message-State: AOJu0YyQBHwF6xjzEvvHzaUSZ2QcgBq14roAthUkrKh3KONUiGyHyREM
-	NWFeuKE8OBnq1xHf3Mo7ejkF+A==
-X-Google-Smtp-Source: AGHT+IFgTjL85NMW7QVTfT1LIEunufc8m3DLUqvJfm8kEADFDEa+5LGQPIut13OdOpGUuedULTjPsw==
-X-Received: by 2002:a17:902:c703:b0:1bd:b75a:e95f with SMTP id p3-20020a170902c70300b001bdb75ae95fmr128179plp.0.1693019877605;
-        Fri, 25 Aug 2023 20:17:57 -0700 (PDT)
-Received: from google.com ([2620:15c:2d3:205:6671:452e:1913:d899])
-        by smtp.gmail.com with ESMTPSA id a14-20020a62bd0e000000b006870ff20254sm2251739pff.125.2023.08.25.20.17.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 20:17:57 -0700 (PDT)
-Date: Fri, 25 Aug 2023 20:17:52 -0700
-From: Fangrui Song <maskray@google.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Helge Deller <deller@gmx.de>,
-	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Chanho Min <chanho.min@lge.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <keescook@chromium.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [PATCH] lib/clz_ctz.c: Fix __clzdi2() and __ctzdi2() for 32-bit
- kernels
-Message-ID: <20230826031752.gongmxkr56zyycol@google.com>
-References: <ZOkGCSNr0VN2VIJJ@p100>
- <CAHk-=wjZwSymfuGvf7TX3UQLU1OMN1FZMnEA-Hja0ruqyhMK4A@mail.gmail.com>
- <CAHk-=whVvD05T0yD5DQj803uETLD6qDq-Vx-SiLPcrL=eO77LQ@mail.gmail.com>
- <CAKwvOdnYauyrzz7-ceH-MP_KZ5ED8oYxjRx_Xei68=tUOSeKyA@mail.gmail.com>
- <CAGG=3QWcZPYqHMcjwuYDz1+OQhzS40hmhdOvSBZBQOkhs8YAQQ@mail.gmail.com>
- <CAGG=3QX8AaTedPy-joWm6yp+TFHBVXm59OcvxkdLGsSuDjem5g@mail.gmail.com>
- <CAHk-=wjQpXpnGAwvv-oBi+cQ0g+D9rTK5STkXSSV4a90FPR+EQ@mail.gmail.com>
- <CAKwvOdm_y6UOnxFrAiDxou2jc8CRUvyhfH9kAdc3PG0=bEvduw@mail.gmail.com>
- <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E0B7E
+	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 03:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693021285;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bCMDPqkdNDRKDQKN8OiGB7bHZ8y/+Qyewi485qBZcdc=;
+	b=UwCuct+tVQSAIDp3OS3cU6HlACGC7VWdWw1uMrnR1Aw1C4jXMUvjMTdbjCvaCndFDGqqx1
+	ISxqpWV765MPq0Vm+rksEZbc1XpxRo4c9LWddPWhZXAs2KM2ACoORcENOSimpTmnm16b9S
+	LH6lErsNR1Bmdj3kXzrfD0lkTLlIpnA=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461-1MkgEW2ZNbaPDH6VvxiQ8A-1; Fri, 25 Aug 2023 23:41:24 -0400
+X-MC-Unique: 1MkgEW2ZNbaPDH6VvxiQ8A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA03829AA2D6
+	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 03:41:23 +0000 (UTC)
+Received: from [172.64.4.37] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8EB2B2166B26;
+	Sat, 26 Aug 2023 03:41:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 12 of 267): Test report for master
+ (6.5.0-rc7, mainline.kernel.org-clang, 4942fed8)
+Date: Sat, 26 Aug 2023 03:41:23 -0000
+To: yizhan@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <21628.123082523412400195@us-mta-461.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2023-08-25, Linus Torvalds wrote:
->On Fri, 25 Aug 2023 at 17:52, Nick Desaulniers <ndesaulniers@google.com> wrote:
->>
->> So 2 concerns where "I'll do it in inline asm" can pessimize codegen:
->> 1. You alluded to this, but what happens when one of these functions
->> is called with a constant?
->
->This is why our headers have a lot of __builtin_constant_p()'s in them..
->
->In this particular case, see the x86 asm/bitops.h code:
->
->    #define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) :
->variable_ffs(x))
+Hi, we tested your kernel and here are the results:
 
-For the curious (like me),
-
-__builtin_ffs
-https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fffs says
-
-     Returns the number of leading 0-bits in x, starting at the most significant bit position. If x is 0, the result is undefined.
-
-The hangling of 0 seems the cause that __builtin_ffs codegen is not as
-well as inline asm.  Clang implemented the builtin in 2008 and took the
-same constraint (penalty).
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+Kernel information:
+    Commit message: Merge tag 'riscv-for-linus-6.5-rc8' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/riscv/linux
 
-GCC compiles __builtin_ctzl(x) to xorl    %eax, %eax; tzcntq  %rdi, %rax
-on most Intel processors (AMD -march= values are unaffected). The extra
-xor is due to a false dependency issue
-https://gcc.gnu.org/git/?p=gcc.git&a=commit;h=73543b2286027da1de561902440b53f775a03a86
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/101543
 
-Inline asm wins here as well since we know the argument 0 is undefined.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9275770
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/block/024
 
-In May 2023, https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=cc6eb8b51f9568ae0caf46b80e2a0aff050030ce
-"Disable avoid_false_dep_for_bmi for atom and icelake(and later) core processors."
-removed the extra xor for icelake (and later) core processors.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
 
->but this is actually quite a common pattern, and it's often not about
->something like __builtin_ffs() at all.
->
->See all the other __builtin_constant_p()'s that we have in that same
->file because we basically just use different code sequences for
->constants.
->
->And that file isn't even unusual. We use it quite a lot when we care
->about code generation for some particular case.
->
->> 2. by providing the definition of a symbol typically provided by libc
->> (and then not building with -ffreestanding) pessimizes libcall
->> optimization.
->
->.. and this is partly why we often avoid libgcc things, and do certain
->things by hand.
->
->The classic rule is "Don't do 64-bit divisions using the C '/' operator".
->
->So in the kernel you have to use do_div() and friends, because the
->library versions are often disgusting and might not know that 64/32 is
->much much cheaper and is what you want.
->
->And quite often we simply use other names - but then we also do *not*
->build with -freestanding, because -freestanding has at least
->traditionally meant that the compiler won't optimize the simple and
->obvious cases (typically things like "memcpy with a constant size").
->
->So we mix and match and pick the best option.
->
->The kernel really doesn't care about architecture portability, because
->honestly, something like "ffs()" is entirely *trivial* to get right,
->compared to the real differences between architectures (eg VM and IO
->differences etc).
->
->             Linus
->
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
