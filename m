@@ -1,267 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4F2C151;
-	Sat, 26 Aug 2023 10:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693045783; x=1724581783;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aFLWRld2y45GLEwEXqQhbgkN3oUo1/+HiHcD/SZ6tlc=;
-  b=Q9ud4vlrNFeve7rR01IM5/7ao7aHrdKtPemggldH7bxnJPxIT2cjDfVD
-   5qLfCXPDWFu9vRnpNG98Z0gXwoQnKxUBR+AbCNLMP1YGNwPg8v09YdXP2
-   OHv2sUJrInaHGZTyIfXYd1Gzzfh4AUnvqOV6CFjX3MHC1llwDgwNNv6wG
-   yP9GHIXBVx1KO3c9pm0fSw0ZeQ6Y5c29aeuGOQzyJ+55+emxZ1u4palIt
-   /gGQdeL44ZR1zRPhUwsWV90SbAjEu1zW2rGsdmJyTTSZc17FzM9dj+PMO
-   CmbLheLx/Zg5H9zbOtpQ5OYkNdT3kUwM0rEpiKMQ1NZl/6axoDFqFX3mB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="359857845"
-X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="359857845"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 03:29:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="861320498"
-X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="861320498"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 26 Aug 2023 03:29:39 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qZqXy-0004bz-39;
-	Sat, 26 Aug 2023 10:29:38 +0000
-Date: Sat, 26 Aug 2023 18:29:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:sched-setscheduler-hide 9/9]
- include/linux/kthread.h:28:65: warning: declaration of 'struct kernel_param'
- will not be visible outside of this function
-Message-ID: <202308261806.y6VTMxtP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596D5186E
+	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 11:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693050675;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cGsmmcBNgZDVwOj90Fe60rq4nIXxubVLjgACL9Btbdk=;
+	b=ShLcRMdqIf6rUvHjIUAf+++aMO7SEVdp3JOG2cYFds1/LdH3LjT7WeBh2F3mBPFhX6kxaz
+	qiOoXly2vHBzHARvuc3DuI+tzr6S9SfTMLtGV5Zz5qFatwBOKIA+WcZAMxBabnbk7rYEWA
+	TReiPxAzo+mNRrfAZqtAay3L6IZt/0s=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-LvPd8lfDO4a36a_5npE-kQ-1; Sat, 26 Aug 2023 07:51:12 -0400
+X-MC-Unique: LvPd8lfDO4a36a_5npE-kQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 54FA1381AE40
+	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 11:51:12 +0000 (UTC)
+Received: from [172.64.4.37] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 42E0B40C2070;
+	Sat, 26 Aug 2023 11:51:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 11 of 267): Test report for master
+ (6.5.0-rc7, mainline.kernel.org-clang, 7d2f353b)
+Date: Sat, 26 Aug 2023 11:51:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <37633.123082607511200331@us-mta-59.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
-head:   e586c67baa1c537a793f135e324cc56df2b6585b
-commit: e586c67baa1c537a793f135e324cc56df2b6585b [9/9] kthread: Provide a mechanism to control kthread sched_attr
-config: i386-randconfig-r022-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261806.y6VTMxtP-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261806.y6VTMxtP-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308261806.y6VTMxtP-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All error/warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-   In file included from kernel/trace/preemptirq_delay_test.c:14:
->> include/linux/kthread.h:28:65: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_policy(const char *val, const struct kernel_param *kp);
-                                                                   ^
-   include/linux/kthread.h:29:62: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_policy(char *buffer, const struct kernel_param *kp);
-                                                                ^
-   include/linux/kthread.h:32:63: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_nice(const char *val, const struct kernel_param *kp);
-                                                                 ^
-   include/linux/kthread.h:33:60: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_nice(char *buffer, const struct kernel_param *kp);
-                                                              ^
-   include/linux/kthread.h:36:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_priority(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:37:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_priority(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:40:66: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_runtime(const char *val, const struct kernel_param *kp);
-                                                                    ^
-   include/linux/kthread.h:41:63: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_runtime(char *buffer, const struct kernel_param *kp);
-                                                                 ^
-   include/linux/kthread.h:44:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_deadline(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:45:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_deadline(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:48:65: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_period(const char *val, const struct kernel_param *kp);
-                                                                   ^
-   include/linux/kthread.h:49:62: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_period(char *buffer, const struct kernel_param *kp);
-                                                                ^
-   include/linux/kthread.h:52:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_util_min(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:53:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_util_min(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:56:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_util_max(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:57:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_util_max(char *buffer, const struct kernel_param *kp);
-                                                                  ^
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
-           task =  kthread_run(preemptirq_delay_run, NULL, task_name);
-                                                           ^
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
->> kernel/trace/preemptirq_delay_test.c:155:50: error: expected ';' at end of declaration
-   16 warnings and 8 errors generated.
---
-   In file included from kernel/trace/trace_events.c:17:
->> include/linux/kthread.h:28:65: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_policy(const char *val, const struct kernel_param *kp);
-                                                                   ^
-   include/linux/kthread.h:29:62: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_policy(char *buffer, const struct kernel_param *kp);
-                                                                ^
-   include/linux/kthread.h:32:63: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_nice(const char *val, const struct kernel_param *kp);
-                                                                 ^
-   include/linux/kthread.h:33:60: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_nice(char *buffer, const struct kernel_param *kp);
-                                                              ^
-   include/linux/kthread.h:36:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_priority(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:37:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_priority(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:40:66: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_runtime(const char *val, const struct kernel_param *kp);
-                                                                    ^
-   include/linux/kthread.h:41:63: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_runtime(char *buffer, const struct kernel_param *kp);
-                                                                 ^
-   include/linux/kthread.h:44:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_deadline(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:45:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_deadline(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:48:65: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_period(const char *val, const struct kernel_param *kp);
-                                                                   ^
-   include/linux/kthread.h:49:62: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_period(char *buffer, const struct kernel_param *kp);
-                                                                ^
-   include/linux/kthread.h:52:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_util_min(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:53:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_util_min(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:56:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_util_max(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:57:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_util_max(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   16 warnings generated.
---
-   In file included from drivers/gpu/drm/scheduler/sched_main.c:51:
->> include/linux/kthread.h:28:65: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_policy(const char *val, const struct kernel_param *kp);
-                                                                   ^
-   include/linux/kthread.h:29:62: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_policy(char *buffer, const struct kernel_param *kp);
-                                                                ^
-   include/linux/kthread.h:32:63: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_nice(const char *val, const struct kernel_param *kp);
-                                                                 ^
-   include/linux/kthread.h:33:60: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_nice(char *buffer, const struct kernel_param *kp);
-                                                              ^
-   include/linux/kthread.h:36:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_priority(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:37:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_priority(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:40:66: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_runtime(const char *val, const struct kernel_param *kp);
-                                                                    ^
-   include/linux/kthread.h:41:63: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_runtime(char *buffer, const struct kernel_param *kp);
-                                                                 ^
-   include/linux/kthread.h:44:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_deadline(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:45:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_deadline(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:48:65: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_period(const char *val, const struct kernel_param *kp);
-                                                                   ^
-   include/linux/kthread.h:49:62: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_period(char *buffer, const struct kernel_param *kp);
-                                                                ^
-   include/linux/kthread.h:52:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_util_min(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:53:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_util_min(char *buffer, const struct kernel_param *kp);
-                                                                  ^
-   include/linux/kthread.h:56:67: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_set_sched_util_max(const char *val, const struct kernel_param *kp);
-                                                                     ^
-   include/linux/kthread.h:57:64: warning: declaration of 'struct kernel_param' will not be visible outside of this function [-Wvisibility]
-   extern int param_get_sched_util_max(char *buffer, const struct kernel_param *kp);
-                                                                  ^
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
-           sched->thread = kthread_run(drm_sched_main, sched, sched->name);
-                                                              ^
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
->> drivers/gpu/drm/scheduler/sched_main.c:1113:53: error: expected ';' at end of declaration
-   16 warnings and 8 errors generated.
+Kernel information:
+    Commit message: Merge tag 'clk-fixes-for-linus' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/clk/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/101613
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
-vim +28 include/linux/kthread.h
 
-     7	
-     8	#define ___kthread_param(name, type, attr, perm) do {	\
-     9		static type attr;				\
-    10		__module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
-    11		} while(0)
-    12	
-    13	#define __kthread_param(name, type, attr)		\
-    14		___kthread_param(name, type, attr, 0644)	\
-    15	
-    16	#define kthread_param(name) do {					\
-    17		__kthread_param(name, unsigned long, sched_policy);		\
-    18		__kthread_param(name, long, sched_nice);			\
-    19		__kthread_param(name, unsigned long, sched_priority);		\
-    20		__kthread_param(name, unsigned long long, sched_runtime);	\
-    21		__kthread_param(name, unsigned long long, sched_deadline);	\
-    22		__kthread_param(name, unsigned long long, sched_period);	\
-    23		__kthread_param(name, unsigned long, sched_util_min);		\
-    24		__kthread_param(name, unsigned long, sched_util_max);		\
-    25		} while (0)
-    26	
-    27	extern const struct kernel_param_ops param_ops_sched_policy;
-  > 28	extern int param_set_sched_policy(const char *val, const struct kernel_param *kp);
-    29	extern int param_get_sched_policy(char *buffer, const struct kernel_param *kp);
-    30	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
