@@ -1,42 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3907DEC1;
-	Sat, 26 Aug 2023 07:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278CF137D;
+	Sat, 26 Aug 2023 08:02:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693033765; x=1724569765;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=7ocVKg3ovYjpFQLrmrjk6At6S+FKTYJXY+m8lCkLpus=;
-  b=ECPnXl1yu/Tgi02CPOJPQ5AGjLN1kxGjFmT4fKN4V0FmiWWZ5+pEip62
-   GEBqF2s0fJVSkhjTpu8JHiOG6LqjwWGw1yMnJqk+pl2qW/UK3vah2i7QE
-   UOMo0Th3MirKOhZSCfoVLLS/l9KP4PMDt16Kgwo4dQ/ztEhrcfYsCQKBs
-   X17AO5qvBWnz7okc6eMl2lp9EmJxoy8L090sopJl+D5Eh+RB4/WTg0CEG
-   htBbAKTTrMmonEB7bEy3NS9Syn7rj1mIYuUGSWpV97QRl9OkXemh4Lwo1
-   FPhj+/T+1Vit5IBI6wbNoPnrRYj20EzlNb5grTVx5/6vROiiz7WwxcohY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="354381233"
+  t=1693036924; x=1724572924;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bVpGnSBGvSJPKPCdKmhHM2u3QgUVXmp2aXiWFiOxQUA=;
+  b=fQZTAN5fexHHx53mx3xcAUQ+urwC7Zkl3e1vhK7zTpEcbanUoErfF9lD
+   rTCMgxHq+oo1HoYe11yqIC4eeMzMy/XAYr4fMgq8QdnqUBN/sjiSYutZ5
+   oaoUH070a8UOvBdBmtaFFqyuvl+6bgDChNGjg8n77zw5Nr3fVHW9kCLwJ
+   ViOE6lmDu17HbEyTPPgQPeUUmnsMCUCiJncdP86eQSrydcSmkKt3kRq/7
+   hOwdCPPVrbXqZ4hUZQxYAHloYZvjvcOTBALicy8zEwKBQ9qKxck8Y8yC2
+   rKyWtu2HckGB3DN7Nn6mlN9IH/Nq1gvP6TdPQ38WnJzQvD3VMC6wBzqlv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="372260804"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="354381233"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 00:09:24 -0700
+   d="scan'208";a="372260804"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 01:02:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="1068466270"
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="827815883"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="1068466270"
+   d="scan'208";a="827815883"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2023 00:09:23 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Aug 2023 01:01:58 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZnQA-0004Rq-20;
-	Sat, 26 Aug 2023 07:09:22 +0000
-Date: Sat, 26 Aug 2023 15:09:05 +0800
+	id 1qZoF4-0004U3-0E;
+	Sat, 26 Aug 2023 08:01:58 +0000
+Date: Sat, 26 Aug 2023 16:01:45 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: drivers/iio/imu/bmi160/bmi160_core.o: warning: objtool:
- bmi160_setup_irq() falls through to next function
- bmi160_data_rdy_trigger_set_state()
-Message-ID: <202308261506.l4R1lVt5-lkp@intel.com>
+To: Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Muchun Song <songmuchun@bytedance.com>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	David Hildenbrand <david@redhat.com>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	David Rientjes <rientjes@google.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+	Barry Song <song.bao.hua@hisilicon.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Xiongchun Duan <duanxiongchun@bytedance.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH 12/12] hugetlb: batch TLB flushes when restoring vmemmap
+Message-ID: <202308261516.F6FBNktd-lkp@intel.com>
+References: <20230825190436.55045-13-mike.kravetz@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,27 +62,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230825190436.55045-13-mike.kravetz@oracle.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Hi Mike,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7d2f353b2682dcfe5f9bc71e5b61d5b61770d98e
-commit: 5f474919fad82cd5761d2842c261d736941035fe iio: imu: bmi160: Make use of device properties
-date:   1 year, 4 months ago
-config: x86_64-randconfig-012-20230823 (https://download.01.org/0day-ci/archive/20230826/202308261506.l4R1lVt5-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261506.l4R1lVt5-lkp@intel.com/reproduce)
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20230825]
+[cannot apply to akpm-mm/mm-everything v6.5-rc7 v6.5-rc6 v6.5-rc5 linus/master v6.5-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Kravetz/hugetlb-clear-flags-in-tail-pages-that-will-be-freed-individually/20230826-030805
+base:   next-20230825
+patch link:    https://lore.kernel.org/r/20230825190436.55045-13-mike.kravetz%40oracle.com
+patch subject: [PATCH 12/12] hugetlb: batch TLB flushes when restoring vmemmap
+config: s390-randconfig-001-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261516.F6FBNktd-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261516.F6FBNktd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308261506.l4R1lVt5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308261516.F6FBNktd-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iio/imu/bmi160/bmi160_core.o: warning: objtool: bmi160_setup_irq() falls through to next function bmi160_data_rdy_trigger_set_state()
+>> mm/hugetlb_vmemmap.c:516:5: warning: no previous prototype for function '__hugetlb_vmemmap_restore' [-Wmissing-prototypes]
+     516 | int __hugetlb_vmemmap_restore(const struct hstate *h, struct page *head, bool bulk)
+         |     ^
+   mm/hugetlb_vmemmap.c:516:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     516 | int __hugetlb_vmemmap_restore(const struct hstate *h, struct page *head, bool bulk)
+         | ^
+         | static 
+   mm/hugetlb_vmemmap.c:567:28: error: use of undeclared identifier 'TLB_FLUSH_ALL'
+     567 |         flush_tlb_kernel_range(0, TLB_FLUSH_ALL);
+         |                                   ^
+   mm/hugetlb_vmemmap.c:673:6: warning: no previous prototype for function 'hugetlb_vmemmap_optimize_bulk' [-Wmissing-prototypes]
+     673 | void hugetlb_vmemmap_optimize_bulk(const struct hstate *h, struct page *head,
+         |      ^
+   mm/hugetlb_vmemmap.c:673:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     673 | void hugetlb_vmemmap_optimize_bulk(const struct hstate *h, struct page *head,
+         | ^
+         | static 
+   mm/hugetlb_vmemmap.c:679:6: warning: no previous prototype for function 'hugetlb_vmemmap_split' [-Wmissing-prototypes]
+     679 | void hugetlb_vmemmap_split(const struct hstate *h, struct page *head)
+         |      ^
+   mm/hugetlb_vmemmap.c:679:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     679 | void hugetlb_vmemmap_split(const struct hstate *h, struct page *head)
+         | ^
+         | static 
+   mm/hugetlb_vmemmap.c:710:28: error: use of undeclared identifier 'TLB_FLUSH_ALL'
+     710 |         flush_tlb_kernel_range(0, TLB_FLUSH_ALL);
+         |                                   ^
+   mm/hugetlb_vmemmap.c:715:28: error: use of undeclared identifier 'TLB_FLUSH_ALL'
+     715 |         flush_tlb_kernel_range(0, TLB_FLUSH_ALL);
+         |                                   ^
+   3 warnings and 3 errors generated.
+
+
+vim +/__hugetlb_vmemmap_restore +516 mm/hugetlb_vmemmap.c
+
+   515	
+ > 516	int __hugetlb_vmemmap_restore(const struct hstate *h, struct page *head, bool bulk)
+   517	{
+   518		int ret;
+   519		unsigned long vmemmap_start = (unsigned long)head, vmemmap_end;
+   520		unsigned long vmemmap_reuse;
+   521	
+   522		if (!HPageVmemmapOptimized(head))
+   523			return 0;
+   524	
+   525		vmemmap_end	= vmemmap_start + hugetlb_vmemmap_size(h);
+   526		vmemmap_reuse	= vmemmap_start;
+   527		vmemmap_start	+= HUGETLB_VMEMMAP_RESERVE_SIZE;
+   528	
+   529		/*
+   530		 * The pages which the vmemmap virtual address range [@vmemmap_start,
+   531		 * @vmemmap_end) are mapped to are freed to the buddy allocator, and
+   532		 * the range is mapped to the page which @vmemmap_reuse is mapped to.
+   533		 * When a HugeTLB page is freed to the buddy allocator, previously
+   534		 * discarded vmemmap pages must be allocated and remapping.
+   535		 */
+   536		ret = vmemmap_remap_alloc(vmemmap_start, vmemmap_end, vmemmap_reuse, bulk);
+   537		if (!ret) {
+   538			ClearHPageVmemmapOptimized(head);
+   539			static_branch_dec(&hugetlb_optimize_vmemmap_key);
+   540		}
+   541	
+   542		return ret;
+   543	}
+   544	
 
 -- 
 0-DAY CI Kernel Test Service
