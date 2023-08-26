@@ -1,119 +1,114 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACACB37F
-	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 01:08:13 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-52a1ce52ef4so1965506a12.2
-        for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 18:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1693012091; x=1693616891;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V940I5eBi0Ftd+/pXbQQIlfDUIAcd0CLy5fb6CBFMNA=;
-        b=I0DqPuAzgbvUQNAQTNOqi344H51xBwjJIMFJ8zDFdl9Rw15fK6MY4morHz6I0GRTh6
-         Nu0WWuxkneTUdamEFhpSYSkd8cNQPzT+VCVHESGnLHJmt0MtCe5Hh+c2ECSp7rqv4yvj
-         7mP0Ty9G0Zm3AfJUx5g6X9GNsxOXzMb3TW8Lw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693012091; x=1693616891;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V940I5eBi0Ftd+/pXbQQIlfDUIAcd0CLy5fb6CBFMNA=;
-        b=KMUFhNWQnCLVmzMLWO6mylVmf8C7Ax5tOby9lm6GC3xpN76zgdB1VHTP/8lukJSVfU
-         jsG5v2ZiB+/gbKz/UotIJioT3APQtmp35sOIKWRyRhiMeAvBJbqUs//YLaPgVG0busyL
-         k/lK/bmMgYQ0IXhUTxE3GsQmxmjrEM71I4YT1ksWhxc+mrcgT5kmhtoN0y/L1K7Ip6qH
-         BBeDfifHhAN2tcCJRuas6asF8pqGD0eV5F5fdkcKJhYocd/0upilc8xUYNMPvb/kIPRm
-         PAdAhRcpCDAPK1+4svuGr+dATZuWIrLo1OLugzq/Do8HC6Hs56uZq14L/m+0nw3mFzSP
-         Z9yA==
-X-Gm-Message-State: AOJu0Yz2oVNFoNnUFcNkaMmi1Vzd3+3938Q+iUdCHU/+u/0rbZnYpaWH
-	Jt2eQNp9QRq66wdhC5QK52VBEonimNP+REzqgOJs3wVN
-X-Google-Smtp-Source: AGHT+IEamVCuUQTYlTFKYVcgeZjFkezaWoilF3UBAqS0IblS7+VxdtjmvZBPUCwGik/XRc92vJDWjQ==
-X-Received: by 2002:a17:906:310d:b0:992:1233:9c45 with SMTP id 13-20020a170906310d00b0099212339c45mr13951944ejx.69.1693012091474;
-        Fri, 25 Aug 2023 18:08:11 -0700 (PDT)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id d14-20020a17090648ce00b0099cb349d570sm1492240ejt.185.2023.08.25.18.08.09
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Aug 2023 18:08:10 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9a19bf6ab66so186169366b.3
-        for <llvm@lists.linux.dev>; Fri, 25 Aug 2023 18:08:09 -0700 (PDT)
-X-Received: by 2002:a17:906:9be8:b0:99d:6ca6:7a8c with SMTP id
- de40-20020a1709069be800b0099d6ca67a8cmr15893578ejc.63.1693012089691; Fri, 25
- Aug 2023 18:08:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6450D387;
+	Sat, 26 Aug 2023 01:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693013585; x=1724549585;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0xfi99d+MSBvaAIRFTxrUPN86pncS8duO07e0eIUNu4=;
+  b=RMmnUKlnruv2jxIdk59OyT5NNDUyR+xRjR2wzul1MF3JStR1Mdbu1JUV
+   UQGO7dhGpjzzMq7TSMBIBliNvIz7uYDUVLncgKev4shGK3FF9Bi2pyabF
+   3n9cPkPucyKygiCvU+FvFSD0xucRkpcgv4+D2YvkOrsFxP8lSqSPV5dzE
+   QZgkQqsaRO6T1viO2QE/vF3yUsOEs0XAnSxhmeWxuFIA+YJtEqlbDiVVn
+   jfgmjFuEsJJRCh/rOPSqkgCcemRPNuj2ZkYyFx0eHyUk3MJmJypl02pat
+   XIVxWtqrB/Btb0rXMPaceGukimXGe8w+TW9OH7e1Bfrx5vVK90oOeVQ1N
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="405831043"
+X-IronPort-AV: E=Sophos;i="6.02,202,1688454000"; 
+   d="scan'208";a="405831043"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 18:33:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="767095322"
+X-IronPort-AV: E=Sophos;i="6.02,202,1688454000"; 
+   d="scan'208";a="767095322"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2023 18:33:00 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qZiAd-0004Dp-17;
+	Sat, 26 Aug 2023 01:32:59 +0000
+Date: Sat, 26 Aug 2023 09:32:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Ogness <john.ogness@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-6.5.y-rt-rebase 49/87]
+ kernel/printk/printk.c:3361:6: warning: no previous prototype for function
+ 'console_bkl_kthread_create'
+Message-ID: <202308260912.i1Fadnhp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <ZOkGCSNr0VN2VIJJ@p100> <CAHk-=wjZwSymfuGvf7TX3UQLU1OMN1FZMnEA-Hja0ruqyhMK4A@mail.gmail.com>
- <CAHk-=whVvD05T0yD5DQj803uETLD6qDq-Vx-SiLPcrL=eO77LQ@mail.gmail.com>
- <CAKwvOdnYauyrzz7-ceH-MP_KZ5ED8oYxjRx_Xei68=tUOSeKyA@mail.gmail.com>
- <CAGG=3QWcZPYqHMcjwuYDz1+OQhzS40hmhdOvSBZBQOkhs8YAQQ@mail.gmail.com>
- <CAGG=3QX8AaTedPy-joWm6yp+TFHBVXm59OcvxkdLGsSuDjem5g@mail.gmail.com>
- <CAHk-=wjQpXpnGAwvv-oBi+cQ0g+D9rTK5STkXSSV4a90FPR+EQ@mail.gmail.com> <CAKwvOdm_y6UOnxFrAiDxou2jc8CRUvyhfH9kAdc3PG0=bEvduw@mail.gmail.com>
-In-Reply-To: <CAKwvOdm_y6UOnxFrAiDxou2jc8CRUvyhfH9kAdc3PG0=bEvduw@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 25 Aug 2023 18:07:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
-Message-ID: <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
-Subject: Re: [PATCH] lib/clz_ctz.c: Fix __clzdi2() and __ctzdi2() for 32-bit kernels
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>, Helge Deller <deller@gmx.de>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Chanho Min <chanho.min@lge.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <keescook@chromium.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 25 Aug 2023 at 17:52, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> So 2 concerns where "I'll do it in inline asm" can pessimize codegen:
-> 1. You alluded to this, but what happens when one of these functions
-> is called with a constant?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.5.y-rt-rebase
+head:   c328ba8602906864849212de9927db3542a6d9f1
+commit: ebf7d7c2929535b0203001866e5d1f816bc46c6f [49/87] printk: Add threaded printing support for BKL consoles.
+config: powerpc64-randconfig-r022-20230826 (https://download.01.org/0day-ci/archive/20230826/202308260912.i1Fadnhp-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230826/202308260912.i1Fadnhp-lkp@intel.com/reproduce)
 
-This is why our headers have a lot of __builtin_constant_p()'s in them..
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308260912.i1Fadnhp-lkp@intel.com/
 
-In this particular case, see the x86 asm/bitops.h code:
+All warnings (new ones prefixed by >>):
 
-    #define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) :
-variable_ffs(x))
+>> kernel/printk/printk.c:3361:6: warning: no previous prototype for function 'console_bkl_kthread_create' [-Wmissing-prototypes]
+    3361 | void console_bkl_kthread_create(void)
+         |      ^
+   kernel/printk/printk.c:3361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    3361 | void console_bkl_kthread_create(void)
+         | ^
+         | static 
+   1 warning generated.
 
-but this is actually quite a common pattern, and it's often not about
-something like __builtin_ffs() at all.
 
-See all the other __builtin_constant_p()'s that we have in that same
-file because we basically just use different code sequences for
-constants.
+vim +/console_bkl_kthread_create +3361 kernel/printk/printk.c
 
-And that file isn't even unusual. We use it quite a lot when we care
-about code generation for some particular case.
+  3360	
+> 3361	void console_bkl_kthread_create(void)
+  3362	{
+  3363		struct task_struct *kt;
+  3364		struct console *c;
+  3365	
+  3366		lockdep_assert_held(&console_mutex);
+  3367	
+  3368		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+  3369			return;
+  3370	
+  3371		if (!printk_threads_enabled || console_bkl_kthread)
+  3372			return;
+  3373	
+  3374		for_each_console(c) {
+  3375			if (c->flags & CON_BOOT)
+  3376				return;
+  3377		}
+  3378	
+  3379		kt = kthread_run(console_bkl_kthread_func, NULL, "pr/bkl");
+  3380		if (IS_ERR(kt)) {
+  3381			pr_err("unable to start BKL printing thread\n");
+  3382			return;
+  3383		}
+  3384	
+  3385		console_bkl_kthread = kt;
+  3386	
+  3387		/*
+  3388		 * It is important that console printing threads are scheduled
+  3389		 * shortly after a printk call and with generous runtime budgets.
+  3390		 */
+  3391		sched_set_normal(console_bkl_kthread, -20);
+  3392	}
+  3393	
 
-> 2. by providing the definition of a symbol typically provided by libc
-> (and then not building with -ffreestanding) pessimizes libcall
-> optimization.
-
-.. and this is partly why we often avoid libgcc things, and do certain
-things by hand.
-
-The classic rule is "Don't do 64-bit divisions using the C '/' operator".
-
-So in the kernel you have to use do_div() and friends, because the
-library versions are often disgusting and might not know that 64/32 is
-much much cheaper and is what you want.
-
-And quite often we simply use other names - but then we also do *not*
-build with -freestanding, because -freestanding has at least
-traditionally meant that the compiler won't optimize the simple and
-obvious cases (typically things like "memcpy with a constant size").
-
-So we mix and match and pick the best option.
-
-The kernel really doesn't care about architecture portability, because
-honestly, something like "ffs()" is entirely *trivial* to get right,
-compared to the real differences between architectures (eg VM and IO
-differences etc).
-
-             Linus
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
