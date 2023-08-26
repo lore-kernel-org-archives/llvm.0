@@ -1,44 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FB51C29;
-	Sat, 26 Aug 2023 09:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA0AC8C7;
+	Sat, 26 Aug 2023 10:08:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693041988; x=1724577988;
+  t=1693044486; x=1724580486;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QoRqAXyypzIZtNDTfW6EgjkVaOCSwTVW/Bwef7Q8bVc=;
-  b=MP+LSkD+4eVZloWUKbl4GM4zJRKDM+FkY30XCMttJ4ushcbhDhPua8rJ
-   gFluUojZbNDNyMUF2lDx/bRXcqYNNeSNopipmMTJ9RXxWMNhVBuztbbQ6
-   kIpUEkvAztwmo9vldQcfV2GG4GzfB38TtEvqJ1fgm1CMQSFR/TVLaauE3
-   mWlQ9Y8AK4hPMIZhyaRRI+kOab98ZYxjvvnm69suVPtX6VJqhRMHpRZdf
-   hd38cp11YdvOSVAZZkjYZro+iAMSq9EyEn6ktFYRrdbSp1SpOLiMvDxk9
-   E+gpCw39B2q1i+g9nsoJ9MPFqfbrO2pFcpI6z+RVUYtCwGxemDg4gRf/X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="372264866"
+  bh=nEcMl3UmVyaVeKG8oDzYBK25gQcEQgG9pMV2FQ7RBRA=;
+  b=YdNFjGtUFBYIRK5Ua8fQmsh04NPp2vrHz+FxzjI01UwgtACHAIckSIMJ
+   M8h4gGTgH/bXBfhC2mgylcZ5xISibAbi3+OosI6esq3pIqpM0FfZ8A1FS
+   aL21IQxajssc34X3NLsCKpeU6x4eJkeRZtG/r0qkpOdbjzwKd8jnKtToH
+   a7+Ai22qSrRSw4aWuC084Z4uRUvae7op+dc1t2EX+biCs57ItgbrXgHDm
+   k9ZeDYfMoj9Oa/2bJbpYykeld/82/wcznLbPS+IOFDjadjp+jafSFCb2H
+   3JdBHKcJaeFLW0uE6GMj9iln3FJNlNhnleN9HE+HaPEmSDRqFxVSapUIu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="441210627"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="372264866"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 02:26:27 -0700
+   d="scan'208";a="441210627"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 03:08:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="1068490919"
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="861317492"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="1068490919"
+   d="scan'208";a="861317492"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2023 02:26:26 -0700
+  by orsmga004.jf.intel.com with ESMTP; 26 Aug 2023 03:08:02 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZpYn-0004YN-20;
-	Sat, 26 Aug 2023 09:26:25 +0000
-Date: Sat, 26 Aug 2023 17:25:29 +0800
+	id 1qZqD4-0004ab-0O;
+	Sat, 26 Aug 2023 10:08:02 +0000
+Date: Sat, 26 Aug 2023 18:07:29 +0800
 From: kernel test robot <lkp@intel.com>
 To: Qais Yousef <qais.yousef@arm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:sched-setscheduler-hide 8/9]
- kernel/rcu/rcutorture.c:2409:3: error: call to undeclared function
- 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit
+Subject: [qais-yousef:sched-setscheduler-hide 2/9]
+ kernel/rcu/rcutorture.c:3174:9: error: call to undeclared function
+ 'rcu_get_gp_kthreads_prio'; ISO C99 and later do not support implicit
  function declarations
-Message-ID: <202308261704.SSuhTI8n-lkp@intel.com>
+Message-ID: <202308261851.tRxdvzGA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,71 +50,119 @@ Content-Disposition: inline
 
 tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
 head:   e586c67baa1c537a793f135e324cc56df2b6585b
-commit: 66cbe87c50b34ba823e5542a7c699fcbe8663d5d [8/9] sched: Make sched_set{scheduler, attr}() static
-config: i386-randconfig-r022-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261704.SSuhTI8n-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261704.SSuhTI8n-lkp@intel.com/reproduce)
+commit: 029b407f286d7bc9a7ace79c65483efa8ead8671 [2/9] rcu: Use a new sched_set_rcu_fifo() to set gp kthread prio
+config: hexagon-randconfig-r025-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261851.tRxdvzGA-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261851.tRxdvzGA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308261704.SSuhTI8n-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308261851.tRxdvzGA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/rcu/rcutorture.c:2409:3: error: call to undeclared function 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-                   ^
-   1 error generated.
+   In file included from kernel/rcu/rcutorture.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/rcu/rcutorture.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/rcu/rcutorture.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   kernel/rcu/rcutorture.c:412:16: warning: variable 'started' set but not used [-Wunused-but-set-variable]
+     412 |         unsigned long started;
+         |                       ^
+   kernel/rcu/rcutorture.c:413:16: warning: variable 'completed' set but not used [-Wunused-but-set-variable]
+     413 |         unsigned long completed;
+         |                       ^
+   kernel/rcu/rcutorture.c:416:21: warning: variable 'ts' set but not used [-Wunused-but-set-variable]
+     416 |         unsigned long long ts;
+         |                            ^
+   kernel/rcu/rcutorture.c:1967:21: warning: variable 'ts' set but not used [-Wunused-but-set-variable]
+    1967 |         unsigned long long ts;
+         |                            ^
+>> kernel/rcu/rcutorture.c:3174:9: error: call to undeclared function 'rcu_get_gp_kthreads_prio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3174 |         prio = rcu_get_gp_kthreads_prio();
+         |                ^
+   10 warnings and 1 error generated.
 
 
-vim +/sched_setscheduler_nocheck +2409 kernel/rcu/rcutorture.c
+vim +/rcu_get_gp_kthreads_prio +3174 kernel/rcu/rcutorture.c
 
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2391  
-0ffd374b2207a1 kernel/rcu/rcutorture.c Sebastian Andrzej Siewior 2016-08-18  2392  static int rcutorture_booster_init(unsigned int cpu)
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2393  {
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2394  	int retval;
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2395  
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2396  	if (boost_tasks[cpu] != NULL)
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2397  		return 0;  /* Already created, nothing more to do. */
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2398  
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2399  	// Testing RCU priority boosting requires rcutorture do
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2400  	// some serious abuse.  Counter this by running ksoftirqd
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2401  	// at higher priority.
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2402  	if (IS_BUILTIN(CONFIG_RCU_TORTURE_TEST)) {
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2403  		struct sched_param sp;
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2404  		struct task_struct *t;
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2405  
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2406  		t = per_cpu(ksoftirqd, cpu);
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2407  		WARN_ON_ONCE(!t);
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2408  		sp.sched_priority = 2;
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10 @2409  		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2410  	}
-3002153a91a973 kernel/rcu/rcutorture.c Frederic Weisbecker       2022-06-10  2411  
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2412  	/* Don't allow time recalculation while creating a new task. */
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2413  	mutex_lock(&boost_mutex);
-450efca7182a51 kernel/rcu/rcutorture.c Joel Fernandes (Google    2018-06-10  2414) 	rcu_torture_disable_rt_throttle();
-5ccf60f23d33af kernel/rcu/rcutorture.c Paul E. McKenney          2014-01-29  2415  	VERBOSE_TOROUT_STRING("Creating rcu_torture_boost task");
-3b9cb4ba4b54ec kernel/rcu/rcutorture.c Cai Huoqing               2022-01-14  2416  	boost_tasks[cpu] = kthread_run_on_cpu(rcu_torture_boost, NULL,
-3b9cb4ba4b54ec kernel/rcu/rcutorture.c Cai Huoqing               2022-01-14  2417  					      cpu, "rcu_torture_boost_%u");
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2418  	if (IS_ERR(boost_tasks[cpu])) {
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2419  		retval = PTR_ERR(boost_tasks[cpu]);
-5ccf60f23d33af kernel/rcu/rcutorture.c Paul E. McKenney          2014-01-29  2420  		VERBOSE_TOROUT_STRING("rcu_torture_boost task create failed");
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2421  		n_rcu_torture_boost_ktrerror++;
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2422  		boost_tasks[cpu] = NULL;
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2423  		mutex_unlock(&boost_mutex);
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2424  		return retval;
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2425  	}
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2426  	mutex_unlock(&boost_mutex);
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2427  	return 0;
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2428  }
-8e8be45e8e55da kernel/rcutorture.c     Paul E. McKenney          2010-09-02  2429  
+fae4b54f28f034 kernel/rcutorture.c     Paul E. McKenney        2012-02-20  3163  
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3164) static bool rcu_torture_can_boost(void)
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3165) {
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3166) 	static int boost_warn_once;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3167) 	int prio;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3168) 
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3169) 	if (!(test_boost == 1 && cur_ops->can_boost) && test_boost != 2)
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3170) 		return false;
+ea6d962e80b619 kernel/rcu/rcutorture.c Paul E. McKenney        2021-03-30  3171  	if (!cur_ops->start_gp_poll || !cur_ops->poll_gp_state)
+5e59fba573e64c kernel/rcu/rcutorture.c Paul E. McKenney        2021-01-15  3172  		return false;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3173) 
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19 @3174) 	prio = rcu_get_gp_kthreads_prio();
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3175) 	if (!prio)
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3176) 		return false;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3177) 
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3178) 	if (prio < 2) {
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3179) 		if (boost_warn_once == 1)
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3180) 			return false;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3181) 
+bf5b64355a3ce4 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3182) 		pr_alert("%s: WARN: RCU kthread priority too low to test boosting.  Skipping RCU boost test. Try passing rcutree.kthread_prio > 1 on the kernel command line.\n", KBUILD_MODNAME);
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3183) 		boost_warn_once = 1;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3184) 		return false;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3185) 	}
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3186) 
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3187) 	return true;
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3188) }
+4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3189) 
 
-:::::: The code at line 2409 was first introduced by commit
-:::::: 3002153a91a9732a6d1d0bb95138593c7da15743 rcutorture: Fix ksoftirqd boosting timing and iteration
+:::::: The code at line 3174 was first introduced by commit
+:::::: 4babd855fd6137f9792117eb73b096c221a49d3c rcutorture: Add support to detect if boost kthread prio is too low
 
-:::::: TO: Frederic Weisbecker <frederic@kernel.org>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
+:::::: TO: Joel Fernandes (Google) <joel@joelfernandes.org>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 
 -- 
 0-DAY CI Kernel Test Service
