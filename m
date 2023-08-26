@@ -1,44 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6450D387;
-	Sat, 26 Aug 2023 01:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CB1394;
+	Sat, 26 Aug 2023 02:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693013585; x=1724549585;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0xfi99d+MSBvaAIRFTxrUPN86pncS8duO07e0eIUNu4=;
-  b=RMmnUKlnruv2jxIdk59OyT5NNDUyR+xRjR2wzul1MF3JStR1Mdbu1JUV
-   UQGO7dhGpjzzMq7TSMBIBliNvIz7uYDUVLncgKev4shGK3FF9Bi2pyabF
-   3n9cPkPucyKygiCvU+FvFSD0xucRkpcgv4+D2YvkOrsFxP8lSqSPV5dzE
-   QZgkQqsaRO6T1viO2QE/vF3yUsOEs0XAnSxhmeWxuFIA+YJtEqlbDiVVn
-   jfgmjFuEsJJRCh/rOPSqkgCcemRPNuj2ZkYyFx0eHyUk3MJmJypl02pat
-   XIVxWtqrB/Btb0rXMPaceGukimXGe8w+TW9OH7e1Bfrx5vVK90oOeVQ1N
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="405831043"
+  t=1693015576; x=1724551576;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2boz+0DqsT89h8sY/taKcahLfp+lgCs1CjvxlvowQTM=;
+  b=jA1FcRGdY4519+aWWEki2ZKMSW7ruf5R+E2z36ACiDEzQD2KPG9Vrbv8
+   MXfhlMX05bhdU5+owrkGkBKw+2GP41M69GP5AyaGNRjp+wZUiHpTC73D7
+   VJeDJMXWVyxGjCslKIu7QUuSY2FK0PH0U5RWy6K+J/LTk7F//iscxN5oj
+   9LvHYtQCd5h2jkTKT4NR5M3GAaeDvm7GcEcETOBTEI0d/2PzQDRg56iAr
+   iwPFgxUSgWu3jEeeBD18OPSC11SDzjSfOgo+TZr9JrCALOLErz0PKIfLn
+   NLn/qaZwYjLd6w5EhsXSCJDStwGPfRuugHnUE/jjz5oOIv463YZp4NohH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="354365260"
 X-IronPort-AV: E=Sophos;i="6.02,202,1688454000"; 
-   d="scan'208";a="405831043"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 18:33:02 -0700
+   d="scan'208";a="354365260"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 19:06:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="767095322"
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="772686717"
 X-IronPort-AV: E=Sophos;i="6.02,202,1688454000"; 
-   d="scan'208";a="767095322"
+   d="scan'208";a="772686717"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2023 18:33:00 -0700
+  by orsmga001.jf.intel.com with ESMTP; 25 Aug 2023 19:06:10 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZiAd-0004Dp-17;
-	Sat, 26 Aug 2023 01:32:59 +0000
-Date: Sat, 26 Aug 2023 09:32:05 +0800
+	id 1qZigk-0004FT-0o;
+	Sat, 26 Aug 2023 02:06:10 +0000
+Date: Sat, 26 Aug 2023 10:05:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Ogness <john.ogness@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-6.5.y-rt-rebase 49/87]
- kernel/printk/printk.c:3361:6: warning: no previous prototype for function
- 'console_bkl_kthread_create'
-Message-ID: <202308260912.i1Fadnhp-lkp@intel.com>
+To: Animesh Manna <animesh.manna@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [Intel-gfx] [PATCH v4 4/6] drm/i915/panelreplay: Initializaton
+ and compute config for panel replay
+Message-ID: <202308260901.MphIjr2l-lkp@intel.com>
+References: <20230824040952.186407-5-animesh.manna@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,67 +48,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230824040952.186407-5-animesh.manna@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.5.y-rt-rebase
-head:   c328ba8602906864849212de9927db3542a6d9f1
-commit: ebf7d7c2929535b0203001866e5d1f816bc46c6f [49/87] printk: Add threaded printing support for BKL consoles.
-config: powerpc64-randconfig-r022-20230826 (https://download.01.org/0day-ci/archive/20230826/202308260912.i1Fadnhp-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308260912.i1Fadnhp-lkp@intel.com/reproduce)
+Hi Animesh,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-tip/drm-tip]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Animesh-Manna/drm-panelreplay-dpcd-register-definition-for-panelreplay/20230824-122224
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230824040952.186407-5-animesh.manna%40intel.com
+patch subject: [Intel-gfx] [PATCH v4 4/6] drm/i915/panelreplay: Initializaton and compute config for panel replay
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230826/202308260901.MphIjr2l-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230826/202308260901.MphIjr2l-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308260912.i1Fadnhp-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308260901.MphIjr2l-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/printk/printk.c:3361:6: warning: no previous prototype for function 'console_bkl_kthread_create' [-Wmissing-prototypes]
-    3361 | void console_bkl_kthread_create(void)
-         |      ^
-   kernel/printk/printk.c:3361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    3361 | void console_bkl_kthread_create(void)
-         | ^
-         | static 
+>> drivers/gpu/drm/i915/display/intel_dp.c:3776:27: warning: overlapping comparisons always evaluate to true [-Wtautological-overlap-compare]
+           if (vsc->revision != 0x5 || vsc->revision != 0x7)
+               ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +/console_bkl_kthread_create +3361 kernel/printk/printk.c
+vim +3776 drivers/gpu/drm/i915/display/intel_dp.c
 
-  3360	
-> 3361	void console_bkl_kthread_create(void)
-  3362	{
-  3363		struct task_struct *kt;
-  3364		struct console *c;
-  3365	
-  3366		lockdep_assert_held(&console_mutex);
-  3367	
-  3368		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-  3369			return;
-  3370	
-  3371		if (!printk_threads_enabled || console_bkl_kthread)
-  3372			return;
-  3373	
-  3374		for_each_console(c) {
-  3375			if (c->flags & CON_BOOT)
-  3376				return;
-  3377		}
-  3378	
-  3379		kt = kthread_run(console_bkl_kthread_func, NULL, "pr/bkl");
-  3380		if (IS_ERR(kt)) {
-  3381			pr_err("unable to start BKL printing thread\n");
-  3382			return;
-  3383		}
-  3384	
-  3385		console_bkl_kthread = kt;
-  3386	
-  3387		/*
-  3388		 * It is important that console printing threads are scheduled
-  3389		 * shortly after a printk call and with generous runtime budgets.
-  3390		 */
-  3391		sched_set_normal(console_bkl_kthread, -20);
-  3392	}
-  3393	
+  3751	
+  3752	static ssize_t intel_dp_vsc_sdp_pack(const struct drm_dp_vsc_sdp *vsc,
+  3753					     struct dp_sdp *sdp, size_t size)
+  3754	{
+  3755		size_t length = sizeof(struct dp_sdp);
+  3756	
+  3757		if (size < length)
+  3758			return -ENOSPC;
+  3759	
+  3760		memset(sdp, 0, size);
+  3761	
+  3762		/*
+  3763		 * Prepare VSC Header for SU as per DP 1.4a spec, Table 2-119
+  3764		 * VSC SDP Header Bytes
+  3765		 */
+  3766		sdp->sdp_header.HB0 = 0; /* Secondary-Data Packet ID = 0 */
+  3767		sdp->sdp_header.HB1 = vsc->sdp_type; /* Secondary-data Packet Type */
+  3768		sdp->sdp_header.HB2 = vsc->revision; /* Revision Number */
+  3769		sdp->sdp_header.HB3 = vsc->length; /* Number of Valid Data Bytes */
+  3770	
+  3771		/*
+  3772		 * Other than revision 0x5 which supports Pixel Encoding/Colorimetry
+  3773		 * Format as per DP 1.4a spec, revision 0x7 also supports Pixel
+  3774		 * Encoding/Colorimetry Format as per DP 2.0 spec.
+  3775		 */
+> 3776		if (vsc->revision != 0x5 || vsc->revision != 0x7)
+  3777			goto out;
+  3778	
+  3779		/* VSC SDP Payload for DB16 through DB18 */
+  3780		/* Pixel Encoding and Colorimetry Formats  */
+  3781		sdp->db[16] = (vsc->pixelformat & 0xf) << 4; /* DB16[7:4] */
+  3782		sdp->db[16] |= vsc->colorimetry & 0xf; /* DB16[3:0] */
+  3783	
+  3784		switch (vsc->bpc) {
+  3785		case 6:
+  3786			/* 6bpc: 0x0 */
+  3787			break;
+  3788		case 8:
+  3789			sdp->db[17] = 0x1; /* DB17[3:0] */
+  3790			break;
+  3791		case 10:
+  3792			sdp->db[17] = 0x2;
+  3793			break;
+  3794		case 12:
+  3795			sdp->db[17] = 0x3;
+  3796			break;
+  3797		case 16:
+  3798			sdp->db[17] = 0x4;
+  3799			break;
+  3800		default:
+  3801			MISSING_CASE(vsc->bpc);
+  3802			break;
+  3803		}
+  3804		/* Dynamic Range and Component Bit Depth */
+  3805		if (vsc->dynamic_range == DP_DYNAMIC_RANGE_CTA)
+  3806			sdp->db[17] |= 0x80;  /* DB17[7] */
+  3807	
+  3808		/* Content Type */
+  3809		sdp->db[18] = vsc->content_type & 0x7;
+  3810	
+  3811	out:
+  3812		return length;
+  3813	}
+  3814	
 
 -- 
 0-DAY CI Kernel Test Service
