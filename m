@@ -1,46 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2305581E;
-	Sat, 26 Aug 2023 06:08:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5574EB8;
+	Sat, 26 Aug 2023 06:59:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693030121; x=1724566121;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=neAxyf2cHVtg9QQF5swpcndy7EY6M9t8T21MbiT31Bs=;
-  b=jXtttgQmYINRGupOe72QgFQHbIr8PT8cyTJP4MNLPaDa/8emSs9iM7+S
-   ZlKqAgD4Ta1Oz2x2Zjcr3RuBoeTbPPIQmsvZ+yCWvTbNJ6Rj7+DF2+KFC
-   Es8ZJmA9nBHNceTY+/zXYww3FVyWlVQ/UM5rKCfvRXCwmhV8L1nBcHafB
-   VDbLzINv/wEPvFDisfGslBOmLD54zb1Y4Fk2DMWN+Tq6bnmmp2ZCHp+R5
-   //RQoN7IX4Bi/sbSh11cndCsvVxjWMl1lkIvGBvZxG3asNTOQxDWBHBbO
-   V5LeST+DvH4aJcPunaJgojEyf+/+8ify173I6E29WWaqsJfw5JgTuuiFw
+  t=1693033168; x=1724569168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yH9MujJ0iAGJ7g5COtkEwBRTd66O2dnJOAEBtemTLYQ=;
+  b=MKqlKhpLmUQXujQDLyDDSDwWQTHeRevsZPztlasl8V6Si33McMWehPyi
+   H3pkvXa76CYuiOg4nEekYMXXyWJ90OHSe9/ZIwKmfXAN0PrK+CD7XpYQR
+   fCF4XU3b/7RbsmWC+q+IfCkrX07PS1zIt1pz9HfDzIo92TEvTt7zQo+LL
+   vBosF0vdr7m1sC3SlPNigZo1kh1sgyaB1v7GKCjm6VuoVo+hs6lYjG3JS
+   EBJOMqtBKwFnM/JC/YI+0ToSjLVRSTYT9NblnyjsS5L8/oTTIrYz2TlzC
+   BjDaIkUyLuMPuqJRjZJlWLXXBuB/cRW196cwHrfIPI0oQ7F3M5pnePAw4
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="438793981"
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="359847788"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="438793981"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 23:08:40 -0700
+   d="scan'208";a="359847788"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 23:59:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="803171577"
+X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="807758131"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="803171577"
+   d="scan'208";a="807758131"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Aug 2023 23:08:38 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 25 Aug 2023 23:59:23 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qZmSS-0004PL-17;
-	Sat, 26 Aug 2023 06:07:51 +0000
-Date: Sat, 26 Aug 2023 14:06:52 +0800
+	id 1qZnGU-0004RP-1B;
+	Sat, 26 Aug 2023 06:59:22 +0000
+Date: Sat, 26 Aug 2023 14:58:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Minda Chen <minda.chen@starfivetech.com>
+To: Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [esmil:jh7110 69/80]
- drivers/pci/controller/plda/pcie-microchip-host.c:865:32: warning: cast from
- 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible
- function type
-Message-ID: <202308261443.sh83JGV7-lkp@intel.com>
+	Muchun Song <songmuchun@bytedance.com>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	David Hildenbrand <david@redhat.com>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	David Rientjes <rientjes@google.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+	Barry Song <song.bao.hua@hisilicon.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Xiongchun Duan <duanxiongchun@bytedance.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH 07/12] hugetlb: perform vmemmap restoration on a list of
+ pages
+Message-ID: <202308261407.9M957lhF-lkp@intel.com>
+References: <20230825190436.55045-8-mike.kravetz@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,60 +63,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230825190436.55045-8-mike.kravetz@oracle.com>
 
-tree:   https://github.com/esmil/linux jh7110
-head:   6a2688d7878cc6ba3ca037cac91659a45c1f3c0e
-commit: fa90a1aea29df94923ba7e58cdc94e954ff0da1b [69/80] PCI: microchip: Move pcie-microchip-host.c to plda directory
-config: arm64-randconfig-r011-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261443.sh83JGV7-lkp@intel.com/config)
+Hi Mike,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20230825]
+[cannot apply to akpm-mm/mm-everything v6.5-rc7 v6.5-rc6 v6.5-rc5 linus/master v6.5-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Kravetz/hugetlb-clear-flags-in-tail-pages-that-will-be-freed-individually/20230826-030805
+base:   next-20230825
+patch link:    https://lore.kernel.org/r/20230825190436.55045-8-mike.kravetz%40oracle.com
+patch subject: [PATCH 07/12] hugetlb: perform vmemmap restoration on a list of pages
+config: arm64-randconfig-r011-20230826 (https://download.01.org/0day-ci/archive/20230826/202308261407.9M957lhF-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261443.sh83JGV7-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230826/202308261407.9M957lhF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308261443.sh83JGV7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308261407.9M957lhF-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/plda/pcie-microchip-host.c:865:32: warning: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-     865 |         devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:381:38: note: expanded from macro 'devm_add_action_or_reset'
-     381 |         __devm_add_action_or_reset(release, action, data, #action)
-         |                                             ^~~~~~
-   1 warning generated.
+   In file included from mm/hugetlb.c:49:
+>> mm/hugetlb_vmemmap.h:50:2: error: void function 'hugetlb_vmemmap_restore_folios' should not return a value [-Wreturn-type]
+      50 |         return 0;
+         |         ^      ~
+   1 error generated.
 
 
-vim +865 drivers/pci/controller/plda/pcie-microchip-host.c
+vim +/hugetlb_vmemmap_restore_folios +50 mm/hugetlb_vmemmap.h
 
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  849  
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  850  static inline struct clk *mc_pcie_init_clk(struct device *dev, const char *id)
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  851  {
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  852  	struct clk *clk;
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  853  	int ret;
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  854  
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  855  	clk = devm_clk_get_optional(dev, id);
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  856  	if (IS_ERR(clk))
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  857  		return clk;
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  858  	if (!clk)
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  859  		return clk;
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  860  
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  861  	ret = clk_prepare_enable(clk);
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  862  	if (ret)
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  863  		return ERR_PTR(ret);
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  864  
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25 @865  	devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  866  				 clk);
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  867  
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  868  	return clk;
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  869  }
-6f15a9c9f94133 drivers/pci/controller/pcie-microchip-host.c Daire McNamara 2021-01-25  870  
-
-:::::: The code at line 865 was first introduced by commit
-:::::: 6f15a9c9f94133bee0d861a4bf25e10aaa95219d PCI: microchip: Add Microchip PolarFire PCIe controller driver
-
-:::::: TO: Daire McNamara <daire.mcnamara@microchip.com>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
+    47	
+    48	static inline void hugetlb_vmemmap_restore_folios(const struct hstate *h, struct list_head *folio_list)
+    49	{
+  > 50		return 0;
+    51	}
+    52	
 
 -- 
 0-DAY CI Kernel Test Service
