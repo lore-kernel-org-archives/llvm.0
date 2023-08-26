@@ -1,141 +1,72 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from r3-20.sinamail.sina.com.cn (r3-20.sinamail.sina.com.cn [202.108.3.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E0B7E
-	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 03:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693021285;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bCMDPqkdNDRKDQKN8OiGB7bHZ8y/+Qyewi485qBZcdc=;
-	b=UwCuct+tVQSAIDp3OS3cU6HlACGC7VWdWw1uMrnR1Aw1C4jXMUvjMTdbjCvaCndFDGqqx1
-	ISxqpWV765MPq0Vm+rksEZbc1XpxRo4c9LWddPWhZXAs2KM2ACoORcENOSimpTmnm16b9S
-	LH6lErsNR1Bmdj3kXzrfD0lkTLlIpnA=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-1MkgEW2ZNbaPDH6VvxiQ8A-1; Fri, 25 Aug 2023 23:41:24 -0400
-X-MC-Unique: 1MkgEW2ZNbaPDH6VvxiQ8A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA03829AA2D6
-	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 03:41:23 +0000 (UTC)
-Received: from [172.64.4.37] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8EB2B2166B26;
-	Sat, 26 Aug 2023 03:41:23 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 12 of 267): Test report for master
- (6.5.0-rc7, mainline.kernel.org-clang, 4942fed8)
-Date: Sat, 26 Aug 2023 03:41:23 -0000
-To: yizhan@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F387E
+	for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 03:58:22 +0000 (UTC)
+X-SMAIL-HELO: pek-lxu-l1.wrs.com
+Received: from unknown (HELO pek-lxu-l1.wrs.com)([111.198.228.11])
+	by sina.com (172.16.97.35) with ESMTP
+	id 64E977CA000117E0; Sat, 26 Aug 2023 11:55:55 +0800 (CST)
+X-Sender: eadavis@sina.com
+X-Auth-ID: eadavis@sina.com
+Authentication-Results: sina.com;
+	 spf=none smtp.mailfrom=eadavis@sina.com;
+	 dkim=none header.i=none;
+	 dmarc=none action=none header.from=eadavis@sina.com
+X-SMAIL-MID: 28739312976610
+X-SMAIL-UIID: AD8448E5DDE84815AB1AE318A0E7BB97-20230826-115555
+From: Edward AD <eadavis@sina.com>
+To: syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com
+Cc: adilger.kernel@dilger.ca,
+	jack@suse.cz,
+	linux-ext4@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	syzkaller-bugs@googlegroups.com,
+	trix@redhat.com,
+	tytso@mit.edu,
+	yi.zhang@huawei.com
+Subject: [PATCH] ext4: fix ext4_calculate_overhead use invliad j_inode
+Date: Sat, 26 Aug 2023 11:55:54 +0800
+Message-ID: <20230826035554.2849316-1-eadavis@sina.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <000000000000b1426e0603bc40b6@google.com>
+References: <000000000000b1426e0603bc40b6@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <21628.123082523412400195@us-mta-461.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+In ext4_calculate_overhead(), ext4_get_journal_inode() returned an invalid inode 
+pointer without processing. Here, an invalid pointer judgment condition is added 
+to avoid incorrect operation of invalid pointer j_inode.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Reported-by: syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com
+Fixes: 99d6c5d892bf ("ext4: ext4_get_{dev}_journal return proper error value")
+Signed-off-by: Edward AD <eadavis@sina.com>
+---
+ fs/ext4/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Kernel information:
-    Commit message: Merge tag 'riscv-for-linus-6.5-rc8' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/riscv/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101543
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9275770
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 34f5406c08da..0dac00954d25 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -4178,7 +4178,7 @@ int ext4_calculate_overhead(struct super_block *sb)
+ 	else if (ext4_has_feature_journal(sb) && !sbi->s_journal && j_inum) {
+ 		/* j_inum for internal journal is non-zero */
+ 		j_inode = ext4_get_journal_inode(sb, j_inum);
+-		if (j_inode) {
++		if (j_inode && !IS_ERR(j_inode)) {
+ 			j_blocks = j_inode->i_size >> sb->s_blocksize_bits;
+ 			overhead += EXT4_NUM_B2C(sbi, j_blocks);
+ 			iput(j_inode);
+-- 
+2.25.1
 
