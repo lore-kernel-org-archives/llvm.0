@@ -1,42 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B73A107B6;
-	Sat, 26 Aug 2023 21:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F3C100CC;
+	Sat, 26 Aug 2023 21:44:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693085899; x=1724621899;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6YfwtJnMYiDpOsuCosAbWSEaeo4PxA5FMRqrslczDRk=;
-  b=C4yLfGG7p+doHUsBulkh75+BEkEfMJSmUn7/eCBu04ttYh6LH9is9/DD
-   ydDxuofhsHvIQAZ4B7V60eTNGiJPbOmEjQ1W4grn1j+GzGvof0jEsn/C2
-   nUYkPy79vpAUDrM4hJos4Yb8s31rbYNelKV9KgLHwXM/zwV80+YNevX0e
-   DCmniquvQuiieCEnFzuCDFK6ML7WyG2rpg8W2zKSz+3xPjh8Cpp8VsIIl
-   F8X2fDDcj2yxg82UUaVGcZf5kDIkhGWY9dKTkdmE+3s7qxI0iMRoRLQfm
-   Ae5LdPLk5Ir6orfTI0pP+t2rDZGdTQ24BMyo4hrqKKwb+luj+SWtMTF3t
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="377635115"
+  t=1693086285; x=1724622285;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LA68/YEgXZrAzt9woUUD7igKvQPU44gdit0ruhpq4+4=;
+  b=D2XMZAjNQXsaCgAtX3GT2vmW1VGtHsaH2vQdvu2DoIKcwPB1Qa2Hhsem
+   5UWLTfNTNaUaD0HY6rSP0eVlzyYcpE4fSM5d3mioxwckujMsINTCkhUSj
+   R6it92uZxLHn1hz0tWko2WPmTxADZOXMthqNSgX+DlBeJbU0PcY39gcle
+   /B9OvOzURnwYYMWFklJjCE3YN20hLSVUgOu/MCfNaf5q2h/RURWs5FM96
+   pxr08NEBkUL7Tnmyly79raXe4QG3jZ1Z6VEI07F2XUrgCNwRSyqZE0Hln
+   gEvLcxBahtXuYwtzUllEpjflQNt5vVGrjbAMywOWlshGeeirrtQ5841SD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="355232467"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="377635115"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 14:38:18 -0700
+   d="scan'208";a="355232467"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2023 14:44:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="1068606152"
+X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="772851383"
 X-IronPort-AV: E=Sophos;i="6.02,203,1688454000"; 
-   d="scan'208";a="1068606152"
+   d="scan'208";a="772851383"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2023 14:38:17 -0700
+  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2023 14:44:39 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qa0yE-00056f-1K;
-	Sat, 26 Aug 2023 21:37:36 +0000
-Date: Sun, 27 Aug 2023 05:33:23 +0800
+	id 1qa14n-000575-2j;
+	Sat, 26 Aug 2023 21:44:24 +0000
+Date: Sun, 27 Aug 2023 05:43:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qais.yousef@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:sched-setscheduler-hide 2/11]
- kernel/rcu/tree_plugin.h:1192:21: warning: unused variable 'sp'
-Message-ID: <202308270544.JPqA8NOZ-lkp@intel.com>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	rrameshbabu@nvidia.com, jikos@kernel.org,
+	benjamin.tissoires@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH 3/3] HID: nvidia-shield: Introduce thunderstrike_destroy()
+Message-ID: <202308270516.Ch4MucBs-lkp@intel.com>
+References: <4c9a8c7f6b4eb879dd7ef4d44bb6a80b3f126d25.1693070958.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,67 +51,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <4c9a8c7f6b4eb879dd7ef4d44bb6a80b3f126d25.1693070958.git.christophe.jaillet@wanadoo.fr>
 
-tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
-head:   ee8dbca703c8d81200c2be455c377bab893206c4
-commit: 029b407f286d7bc9a7ace79c65483efa8ead8671 [2/11] rcu: Use a new sched_set_rcu_fifo() to set gp kthread prio
-config: i386-buildonly-randconfig-003-20230827 (https://download.01.org/0day-ci/archive/20230827/202308270544.JPqA8NOZ-lkp@intel.com/config)
+Hi Christophe,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linux-next/master]
+[cannot apply to linus/master v6.5-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/HID-nvidia-shield-Fix-a-missing-led_classdev_unregister-in-the-probe-error-handling-path/20230827-014602
+base:   linux-next/master
+patch link:    https://lore.kernel.org/r/4c9a8c7f6b4eb879dd7ef4d44bb6a80b3f126d25.1693070958.git.christophe.jaillet%40wanadoo.fr
+patch subject: [PATCH 3/3] HID: nvidia-shield: Introduce thunderstrike_destroy()
+config: i386-buildonly-randconfig-003-20230827 (https://download.01.org/0day-ci/archive/20230827/202308270516.Ch4MucBs-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230827/202308270544.JPqA8NOZ-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230827/202308270516.Ch4MucBs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308270544.JPqA8NOZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308270516.Ch4MucBs-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/rcu/tree.c:5017:
->> kernel/rcu/tree_plugin.h:1192:21: warning: unused variable 'sp' [-Wunused-variable]
-           struct sched_param sp;
-                              ^
+>> drivers/hid/hid-nvidia-shield.c:1046:24: warning: variable 'ts' set but not used [-Wunused-but-set-variable]
+           struct thunderstrike *ts;
+                                 ^
    1 warning generated.
 
 
-vim +/sp +1192 kernel/rcu/tree_plugin.h
+vim +/ts +1046 drivers/hid/hid-nvidia-shield.c
 
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1183  
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1184  /*
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1185   * Create an RCU-boost kthread for the specified node if one does not
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1186   * already exist.  We only create this kthread for preemptible RCU.
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1187   */
-3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1188  static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1189  {
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1190  	unsigned long flags;
-3ef5a1c3821ab6 kernel/rcu/tree_plugin.h Paul E. McKenney 2021-04-05  1191  	int rnp_index = rnp - rcu_get_root();
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07 @1192  	struct sched_param sp;
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1193  	struct task_struct *t;
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1194  
-218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1195  	mutex_lock(&rnp->boost_kthread_mutex);
-3ef5a1c3821ab6 kernel/rcu/tree_plugin.h Paul E. McKenney 2021-04-05  1196  	if (rnp->boost_kthread_task || !rcu_scheduler_fully_active)
-218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1197  		goto out;
-3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1198  
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1199  	t = kthread_create(rcu_boost_kthread, (void *)rnp,
-5b61b0baa9e802 kernel/rcutree_plugin.h  Mike Galbraith   2011-08-19  1200  			   "rcub/%d", rnp_index);
-3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1201  	if (WARN_ON_ONCE(IS_ERR(t)))
-218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1202  		goto out;
-3545832fc22e23 kernel/rcu/tree_plugin.h Byungchul Park   2019-07-01  1203  
-2a67e741bbbc02 kernel/rcu/tree_plugin.h Peter Zijlstra   2015-10-08  1204  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1205  	rnp->boost_kthread_task = t;
-67c583a7de3433 kernel/rcu/tree_plugin.h Boqun Feng       2015-12-29  1206  	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-029b407f286d7b kernel/rcu/tree_plugin.h Qais Yousef      2020-07-23  1207  	rcu_set_gp_prio(t);
-9a432736904d38 kernel/rcutree_plugin.h  Paul E. McKenney 2011-05-30  1208  	wake_up_process(t); /* get to TASK_INTERRUPTIBLE quickly. */
-218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1209  
-218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1210   out:
-218b957a6959a2 kernel/rcu/tree_plugin.h David Woodhouse  2021-12-08  1211  	mutex_unlock(&rnp->boost_kthread_mutex);
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1212  }
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1213  
-
-:::::: The code at line 1192 was first introduced by commit
-:::::: 27f4d28057adf98750cf863c40baefb12f5b6d21 rcu: priority boosting for TREE_PREEMPT_RCU
-
-:::::: TO: Paul E. McKenney <paul.mckenney@linaro.org>
-:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1042  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1043  static int shield_probe(struct hid_device *hdev, const struct hid_device_id *id)
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1044  {
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1045  	struct shield_device *shield_dev = NULL;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08 @1046  	struct thunderstrike *ts;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1047  	int ret;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1048  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1049  	ret = hid_parse(hdev);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1050  	if (ret) {
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1051  		hid_err(hdev, "Parse failed\n");
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1052  		return ret;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1053  	}
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1054  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1055  	switch (id->product) {
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1056  	case USB_DEVICE_ID_NVIDIA_THUNDERSTRIKE_CONTROLLER:
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1057  		shield_dev = thunderstrike_create(hdev);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1058  		break;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1059  	}
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1060  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1061  	if (unlikely(!shield_dev)) {
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1062  		hid_err(hdev, "Failed to identify SHIELD device\n");
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1063  		return -ENODEV;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1064  	}
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1065  	if (IS_ERR(shield_dev)) {
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1066  		hid_err(hdev, "Failed to create SHIELD device\n");
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1067  		return PTR_ERR(shield_dev);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1068  	}
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1069  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1070  	ts = container_of(shield_dev, struct thunderstrike, base);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1071  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1072  	ret = hid_hw_start(hdev, HID_CONNECT_HIDINPUT);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1073  	if (ret) {
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1074  		hid_err(hdev, "Failed to start HID device\n");
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1075  		goto err_haptics;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1076  	}
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1077  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1078  	ret = hid_hw_open(hdev);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1079  	if (ret) {
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1080  		hid_err(hdev, "Failed to open HID device\n");
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1081  		goto err_stop;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1082  	}
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1083  
+3ab196f882377e Rahul Rameshbabu   2023-08-07  1084  	thunderstrike_device_init_info(shield_dev);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1085  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1086  	return ret;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1087  
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1088  err_stop:
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1089  	hid_hw_stop(hdev);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1090  err_haptics:
+2cc4637842495c Christophe JAILLET 2023-08-26  1091  	thunderstrike_destroy(hdev);
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1092  	return ret;
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1093  }
+09308562d4afb1 Rahul Rameshbabu   2023-06-08  1094  
 
 -- 
 0-DAY CI Kernel Test Service
