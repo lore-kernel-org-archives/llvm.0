@@ -1,126 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFC062F;
-	Sun, 27 Aug 2023 10:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693133218; x=1724669218;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sDDzkQzb757ene7HMEX/SXvVxG8zNuK5WjwaRpDHGik=;
-  b=aKQ1zVQcuj+9vDYqaBLgdsrsLh/oDO/rXaUWHH4SxRs92nSncx2mzDxm
-   CvMcYdEenn24CXVkkeTmD6wxyW9Q70cB4xGijUKMsWir8m246sDN0xBdj
-   hhFUYD0eW6QlWL9fdtqPh2tsnoHJ5r1vvlsaFiwswT3+GEIxL1S5x8UHf
-   iot7eO7hf/MrP8PmLsZhFN2/mY2m5bNoc6Q6WJHqeNsfrV0LGa4gAA8/H
-   Gz7RbCM7Yiod0vP6g2OVLPMOhQI1OPEcwsxH840wu/LwpWkmMoGb8nqim
-   j/qy9MeWj6eQciU2rXBf5gONXd9Mi46/C0dR8rUjsPCjkOpW/uYDJf8Ny
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="359926533"
-X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
-   d="scan'208";a="359926533"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2023 03:46:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="731527841"
-X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
-   d="scan'208";a="731527841"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 27 Aug 2023 03:46:54 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qaDI9-0005hL-2I;
-	Sun, 27 Aug 2023 10:46:50 +0000
-Date: Sun, 27 Aug 2023 18:46:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org,
-	Guo Ren <guoren@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	Nam Cao <namcaov@gmail.com>
-Subject: Re: [PATCH] riscv: Only consider swbp/ss handlers for correct
- privileged mode
-Message-ID: <202308271841.HlnnHFL7-lkp@intel.com>
-References: <20230827083949.204927-1-bjorn@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BB463A5;
+	Sun, 27 Aug 2023 11:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1693135922;
+	bh=5T04emPiqpwjpNOBK+5sgoQ1jikwwcTW1EnGrCwmyWI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=pWlsL+flxMUz3Q14GgXrF5FSQcEnP9YkMOy1C5dUcQTGzK4Y7QfnFIgoBeVCIc4tn
+	 8b0Ev6/OX3HA2zcg1iutNZCPZbobXD+5I8CgyyYWQM+c8grkscZL6gQDnYE/0KskaD
+	 fowZiu/2ueFkNQycn7boPlbPuaPHnML1o5rbp/z2Rtk6v1cPh8/FvnhZXybHYUL81C
+	 huRq1tUsiHoKYsRmtqNxjmHKAXuJLBY2DDGTYZMt21RHai7q6rMKJmPteRLlsYBqov
+	 QcmWzJ2k15ukvKdX2AYllASLh65JWwXMatNs83rKOy8bb50WoiLFWFQg3bOGYv38jI
+	 upoNjBk1QIyqg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4RYWkB32t0z4wZn;
+	Sun, 27 Aug 2023 21:32:02 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Nathan Chancellor
+ <nathan@kernel.org>, kernel test robot <lkp@intel.com>
+Subject: Re: [linuxppc:next-test 85/129] arch/powerpc/xmon/xmon.c:489:12:
+ error: stack frame size (2160) exceeds limit (2048) in 'xmon_core'
+In-Reply-To: <CAKwvOdk=UvBxv7a2cV-Z_zK0CwzPSjBnQ0SQHaVAEUodA=hfQQ@mail.gmail.com>
+References: <202308260344.Vc4Giuk7-lkp@intel.com>
+ <CAKwvOdk=UvBxv7a2cV-Z_zK0CwzPSjBnQ0SQHaVAEUodA=hfQQ@mail.gmail.com>
+Date: Sun, 27 Aug 2023 21:32:00 +1000
+Message-ID: <874jkkvhzj.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230827083949.204927-1-bjorn@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Björn,
+Nick Desaulniers <ndesaulniers@google.com> writes:
+> On Fri, Aug 25, 2023 at 12:17=E2=80=AFPM kernel test robot <lkp@intel.com=
+> wrote:
+>>
+>> tree:   https://github.com/linuxppc/linux next-test
+>> head:   c37b6908f7b2bd24dcaaf14a180e28c9132b9c58
+>> commit: 7f3c5d099b6f8452dc4dcfe4179ea48e6a13d0eb [85/129] Revert "powerp=
+c/xmon: Relax frame size for clang"
+>> config: powerpc64-randconfig-r006-20230825 (https://download.01.org/0day=
+-ci/archive/20230826/202308260344.Vc4Giuk7-lkp@intel.com/config)
+>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git=
+ f28c006a5895fc0e329fe15fead81e37457cb1d1)
+>
+> Hi Michael,
+> Given this report and
+> https://github.com/ClangBuiltLinux/linux/issues/252#issuecomment-16903712=
+56,
+> it seems that it's still possible to trigger this warning (and build
+> failure with CONFIG_WERROR). Is it possible to drop my patch at this
+> point?
 
-kernel test robot noticed the following build warnings:
+It's too late to drop it, so we'd need to do a revert.
 
-[auto build test WARNING on 7d2f353b2682dcfe5f9bc71e5b61d5b61770d98e]
+But rather than just a straight revert maybe we can do something that's
+more tightly focused, ie. just to specific Clang versions?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bj-rn-T-pel/riscv-Only-consider-swbp-ss-handlers-for-correct-privileged-mode/20230827-164313
-base:   7d2f353b2682dcfe5f9bc71e5b61d5b61770d98e
-patch link:    https://lore.kernel.org/r/20230827083949.204927-1-bjorn%40kernel.org
-patch subject: [PATCH] riscv: Only consider swbp/ss handlers for correct privileged mode
-config: riscv-randconfig-001-20230827 (https://download.01.org/0day-ci/archive/20230827/202308271841.HlnnHFL7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230827/202308271841.HlnnHFL7-lkp@intel.com/reproduce)
+> I'll need to go back to the drawing board with these configs +
+> specific versions of clang to better understand what's going wrong
+> here.  Sorry for the trouble.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308271841.HlnnHFL7-lkp@intel.com/
+No worries.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/sched/core.c:49:
-   In file included from include/linux/kprobes.h:32:
->> arch/riscv/include/asm/kprobes.h:44:62: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-      44 | static inline bool kprobe_breakpoint_handler(struct pt_regs *)
-         |                                                              ^
-   arch/riscv/include/asm/kprobes.h:49:63: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-      49 | static inline bool kprobe_single_step_handler(struct pt_regs *)
-         |                                                               ^
-   kernel/sched/core.c:3695:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-    3695 | static inline bool rq_has_pinned_tasks(struct rq *rq)
-         |                    ^
-   kernel/sched/core.c:5821:20: warning: unused function 'sched_tick_start' [-Wunused-function]
-    5821 | static inline void sched_tick_start(int cpu) { }
-         |                    ^
-   kernel/sched/core.c:5822:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-    5822 | static inline void sched_tick_stop(int cpu) { }
-         |                    ^
-   kernel/sched/core.c:6522:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
-    6522 | static inline void sched_core_cpu_starting(unsigned int cpu) {}
-         |                    ^
-   kernel/sched/core.c:6523:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-    6523 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-         |                    ^
-   kernel/sched/core.c:6524:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-    6524 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
-         |                    ^
-   8 warnings generated.
-
-
-vim +44 arch/riscv/include/asm/kprobes.h
-
-    38	
-    39	void arch_remove_kprobe(struct kprobe *p);
-    40	int kprobe_fault_handler(struct pt_regs *regs, unsigned int trapnr);
-    41	bool kprobe_breakpoint_handler(struct pt_regs *regs);
-    42	bool kprobe_single_step_handler(struct pt_regs *regs);
-    43	#else
-  > 44	static inline bool kprobe_breakpoint_handler(struct pt_regs *)
-    45	{
-    46		return false;
-    47	}
-    48	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+cheers
