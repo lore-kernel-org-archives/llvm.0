@@ -1,141 +1,147 @@
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD6236A
-	for <llvm@lists.linux.dev>; Sun, 27 Aug 2023 01:23:36 +0000 (UTC)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1c4c6717e61so1563433fac.1
-        for <llvm@lists.linux.dev>; Sat, 26 Aug 2023 18:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693099415; x=1693704215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+UJWYdABUudEik4UApcn9d5OCq8NnpJS1prRVjkwYng=;
-        b=YILrZSpuc6tXjA/KHYsuhflzF+WKOnz8QU8X4oG3sPB1G6jmpg4T+P9citxRoQQLrS
-         q3JrSlkaAKpFMBuWPBKj2rf2c51iDXM1leXYfcnREUoQjUTi6i0wE/OY/PBQmzmecfuR
-         1tbbQkbyEuNgn4A6k9aaA86ThgcTGTKCwcWUKt0O+6l0j43c/VpV86NhMhRy2HyioA/d
-         w6BgFrEZEaL5K6lm5hbFkbnsKw44XgYA9ql462ORAQgPXD+M0yrLWAmUAHRNXYMGOCar
-         yUB9qmxQmbj/a/k/bbQTWgyoHJi/yGbUZj92f4KWb/5VtrcW6cDx1cpolY5eGqGQdBPb
-         CtrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693099415; x=1693704215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+UJWYdABUudEik4UApcn9d5OCq8NnpJS1prRVjkwYng=;
-        b=fDb5w2qqGFcC6oNylt0/JcAFjdifUL536EbKjeBZQ53w3/w6yiQBpLa5kXm9iZHqQs
-         i4gvW4cCtE4E2d3pwXTyQS2E5GfOKKwajDEyxSYXavBtuY3lV9KLmcPCRMt9/ndlUZNh
-         k2N3M2olPnOM1aZo0OQf7O+pgL4YN5WcSLMjv98mvqyGBqlD2vZTkigEX+x1JoE6TCZ3
-         u8xynanj9OT16DtzgFBj4D+0euiV0fh8K4Gn1TZ+X+ococdieY8WF3Tkcn8tCvOWcxXN
-         WBbF7UI7sINVFJXErxzlOoIOI3hX1p3Nqsqg1YRnSH0YpqBrNkl/qN8ItjBNGi6PEiLB
-         v4hA==
-X-Gm-Message-State: AOJu0YzSqPAb3qyoNAWdSQpt4NzUrrCT+v+AXfuEd++1E1/tKJQadOlZ
-	xFXVsDH7zE4Sz30gCkWoKC/N7byBspfaZTfMRmI=
-X-Google-Smtp-Source: AGHT+IHp6Gw67GwbCZWDbOFLnMaGjVW+v2aVpG+5nmMeu0ci2bsbjgYHz/3wd3D5c7iC/6kpTuOR/Kdd5zr4t6SfodQ=
-X-Received: by 2002:a05:6870:4709:b0:1b0:43b6:e13b with SMTP id
- b9-20020a056870470900b001b043b6e13bmr8363532oaq.54.1693099415128; Sat, 26 Aug
- 2023 18:23:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDA962F
+	for <llvm@lists.linux.dev>; Sun, 27 Aug 2023 03:01:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693105273;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VPTWZQoknRgdoWGRXgPUxbXyt+VQ3bC1DP8UcKKl5Lw=;
+	b=S5x9ifiK1oJqnTKUJYF1Zt3kGIYHl9p+vZo6Ni2kD5PK24Vu/T9X3ajaUpv96UZ/6pAeZv
+	YvxTJophwO90rmgjctAwJ0qvTv0aW+vBLP8QwjfbcECQsT20WGplpzEZGQZ5hL0a6lAQLL
+	uI2ppe3ahZhWZwHytdNFkH6JPmCcEY0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-mFmPlwg9PoejlVbkvMS-TA-1; Sat, 26 Aug 2023 23:01:12 -0400
+X-MC-Unique: mFmPlwg9PoejlVbkvMS-TA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5EE4185A78B
+	for <llvm@lists.linux.dev>; Sun, 27 Aug 2023 03:01:11 +0000 (UTC)
+Received: from [172.64.4.37] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0F7B3C15BAD;
+	Sun, 27 Aug 2023 03:01:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 19 of 267): Test report for master
+ (6.5.0-rc7, mainline.kernel.org-clang, 28f20a19)
+Date: Sun, 27 Aug 2023 03:01:10 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230802092647.3000666-1-sergio.paracuellos@gmail.com>
- <CAKwvOd=SvHUPd8+sWtqgxghPEciD5sqPiggZx+OOEqxtJrML6Q@mail.gmail.com>
- <9a22ecee-ebb0-437e-bd2b-99b5c6944855@app.fastmail.com> <CAMhs-H-2g2QF8NjZOknEop_3UFc_R3YYhpEveU2fc-Ks-iM1bA@mail.gmail.com>
- <b0e203e7-3b3c-40ad-8d99-e43415c0d3c5@app.fastmail.com>
-In-Reply-To: <b0e203e7-3b3c-40ad-8d99-e43415c0d3c5@app.fastmail.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Sun, 27 Aug 2023 03:23:23 +0200
-Message-ID: <CAMhs-H9uWCLEN3z8sfO0hzCbbJy7eNLc7dsD5=RmZmdvcFs9Rw@mail.gmail.com>
-Subject: Re: [PATCH] clk: ralink: mtmips: quiet unused variable warning
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, clang-built-linux <llvm@lists.linux.dev>, 
-	kernel test robot <lkp@intel.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <07683.123082623011200217@us-mta-616.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+Hi, we tested your kernel and here are the results:
 
-Sorry for the late response. I was on a family vacation trip.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-On Thu, Aug 3, 2023 at 9:58=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
->
-> On Thu, Aug 3, 2023, at 00:35, Sergio Paracuellos wrote:
-> > Hi Arnd.
-> >
-> > El El jue, 3 ago 2023 a las 0:02, Arnd Bergmann <arnd@kernel.org> escri=
-bi=C3=B3:
-> >> On Wed, Aug 2, 2023, at 23:26, Nick Desaulniers wrote:
-> >> > On Wed, Aug 2, 2023 at 2:26=E2=80=AFAM Sergio Paracuellos <sergio.pa=
-racuellos@gmail.com> wrote:
-> >> >>
-> >> >> When CONFIG_OF is disabled then the matching table is not reference=
-d and
-> >> >> the following warning appears:
-> >> >>
-> >> >> drivers/clk/ralink/clk-mtmips.c:821:34: warning: unused variable 'm=
-tmips_of_match' [-Wunused-const-variable]
-> >> >> 821 |   static const struct of_device_id mtmips_of_match[] =3D {
-> >> >>     |                          ^
-> >> >>
-> >> >> Silence it declaring 'mtmips_of_match' with '__maybe_unused'.
-> >> >>
-> >> >> Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for M=
-TMIPS SoCs")
-> >> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> >> Closes: https://lore.kernel.org/oe-kbuild-all/202307242310.CdOnd2py=
--lkp@intel.com/
-> >> >> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >> >
-> >> > I think this is fine; Arnd or Nathan do you have a preference? or th=
-oughts here?
-> >> >
-> >> > If not, thanks for the patch.
-> >> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >> >
-> >> > (I have a slight preference for wrapping the use in `#ifdef CONFIG_O=
-F`
-> >> > since with the approach used by this patch, if all users are removed
-> >> > we will never get a warning for this var. But it's a weak preference=
-;
-> >> > it's more important to me that we don't have -Werror promote this
-> >> > warning to a build breakage)
-> >>
-> >> I don't understand why there are two match tables in the same
-> >> driver, with almost the same contents. I have not looked very
-> >> closely here, but why can't we just drop the mtmips_clk_of_match[]
-> >> table (the one without the .data fields) and use the same
-> >> table for both? Is this because of the ralink,rt2880-reset entry
-> >> that is missing in mtmips_of_match, or is that another bug?
-> >
-> > ralink,rt2880-reset is for old dts compatibility and only applies to
-> > reset driver. The one with data fields apply for clocks and is needed.
->
-> Ok, I see. It still looks like the two tables can simply be
-> merged by adding the ralink,rt2880-reset entry to mtmips_of_match[],
-> which will allow it to be used for mtmips_clk_driver (which doesn't
-> use the data) as well as for mtmips_clk_init() (which doesn't
-> need get called for ralink,rt2880-reset).
+Tested-by: CKI Project <cki-project@redhat.com>
 
-I think I see your point, thank you. I'll do some test with this
-approach and will send a new patch properly addressing this.
+Kernel information:
+    Commit message: Merge tag 'x86-urgent-2023-08-26' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
-Thanks,
-    Sergio Paracuellos
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/101642
 
->
-> >> I also see that there is both a platform_driver instance for
-> >> late probing and a list of CLK_OF_DECLARE_DRIVER() entries.
-> >> Do we need both here?
-> >
-> > This system controller driver provide clock and reset controllers.
-> > Clock cannot be a platform driver since we need to set
-> > mips_hpr_frequency at a very early sargento. Reset stuff can be a
-> > platform driver so both of them are needed.
->
->      Arnd
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests: block/001 (stress device hotplugging) time=
+out
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/719
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D560797 comm=3D"rpcbin=
+d" src=3D64008 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:traceroute_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
