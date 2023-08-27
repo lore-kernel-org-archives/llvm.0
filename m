@@ -1,44 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DE42115;
-	Sun, 27 Aug 2023 09:14:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC654430;
+	Sun, 27 Aug 2023 10:06:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693127688; x=1724663688;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s/oGnlJieEgL+CIkLK5s/5+SachWchw9Xu862OmgmHo=;
-  b=ZRF+8TA5dTdr36Ih+9A4ywbPSSRQHY1TckZWuw9LQpDYBe89N/1CtS44
-   v6yzviNoxN86Ad8aBsb22rhNZa8rLX1zAUsbQlYk4nhNtzFtZT0tgcCz1
-   QtkjCeHdhE6zy970nwhdToi1rV5km57kEnbfzVSMvOxdR32sDN4ElmGYo
-   l9R7rhvIEqkcWz6Nuc+2PPQqTE6Dxt6xqLRZQK1+c36nWy4ojZslRIoG/
-   pe61n1J5/pg1Qtq0bcg6aRUvNzYgCtVIGxgMF9UfDdFGrOntNmKR1FxaO
-   HwmyOSQeDSJrxdD/IOEJkvLUWmeuafOcO2MZWWyjrNOYtztuIWPEujMwE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="365133118"
+  t=1693130803; x=1724666803;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4To0BMq1nUUO1Qml1nnwtlY+kEjbsZeCP7EQYcP0WJs=;
+  b=L9EcLOXOmCLossSyQZEUdP7elUQ6omhu3ruV1p8gB4eBdQ0xWcU549Rt
+   Wy29YiLiIJI8P9sCegMvrcSYYA7aFiRHuvBvHuY1x99tlx6R5JmDcEe9m
+   X6RCQC17sVSMksUVSENi+WKxmqUOytt+NxyJoN8OLcSZNda5Dk8Yoq2t6
+   Djgyh+6Dy7YPh+DmSu8Ma44UihtLn1P77G+WMJy1D6A78SawSzh7wWMmz
+   eKUe7Q/GqOHWhgw8CFEM046T8z9RRVr5ooL4mDXWxTmZk6GWXf+79Ub4G
+   KexptOlIOpgC2sBbm74PeKfeK7TQqtT3MHB69BhRiYygHLAj2UyvrqM9t
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="378715519"
 X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
-   d="scan'208";a="365133118"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2023 02:14:46 -0700
+   d="scan'208";a="378715519"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2023 03:06:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="741062959"
+X-IronPort-AV: E=McAfee;i="6600,9927,10814"; a="803396499"
 X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
-   d="scan'208";a="741062959"
+   d="scan'208";a="803396499"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Aug 2023 02:14:42 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 27 Aug 2023 03:06:40 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qaBr0-0005b5-0m;
-	Sun, 27 Aug 2023 09:14:42 +0000
-Date: Sun, 27 Aug 2023 17:14:08 +0800
+	id 1qaCfH-0005ep-3B;
+	Sun, 27 Aug 2023 10:06:39 +0000
+Date: Sun, 27 Aug 2023 18:06:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuyi Zhou <zhouchuyi@bytedance.com>
+To: Qais Yousef <qyousef@layalina.io>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH bpf-next 1/4] bpf: Introduce css_task open-coded
- iterator kfuncs
-Message-ID: <202308271613.AkJ57Io7-lkp@intel.com>
-References: <20230827072057.1591929-2-zhouchuyi@bytedance.com>
+Subject: [qais-yousef:sched-setscheduler-hide 11/12]
+ drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared
+ function '__module_param_call'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202308271711.CaOUqEZz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,114 +47,434 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230827072057.1591929-2-zhouchuyi@bytedance.com>
 
-Hi Chuyi,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chuyi-Zhou/bpf-Introduce-css_task-open-coded-iterator-kfuncs/20230827-152340
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230827072057.1591929-2-zhouchuyi%40bytedance.com
-patch subject: [RFC PATCH bpf-next 1/4] bpf: Introduce css_task open-coded iterator kfuncs
-config: riscv-randconfig-r005-20230827 (https://download.01.org/0day-ci/archive/20230827/202308271613.AkJ57Io7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230827/202308271613.AkJ57Io7-lkp@intel.com/reproduce)
+tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
+head:   2fb1bbc283d33b7edd57b0279c54d0250d91e9f3
+commit: 51d86e5ab04ef58e95586730ea4dfa1c7aedb354 [11/12] kthread: Provide a mechanism to control kthread sched_attr
+config: x86_64-randconfig-016-20230827 (https://download.01.org/0day-ci/archive/20230827/202308271711.CaOUqEZz-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230827/202308271711.CaOUqEZz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308271613.AkJ57Io7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308271711.CaOUqEZz-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/task_iter.c:839:24: error: invalid application of 'sizeof' to an incomplete type 'struct css_task_iter'
-     839 |         kit->css_it = kzalloc(sizeof(struct css_task_iter), GFP_KERNEL);
-         |                               ^     ~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/task_iter.c:827:9: note: forward declaration of 'struct css_task_iter'
-     827 |         struct css_task_iter *css_it;
-         |                ^
->> kernel/bpf/task_iter.c:842:2: error: call to undeclared function 'css_task_iter_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     842 |         css_task_iter_start(css, flags, kit->css_it);
-         |         ^
-   kernel/bpf/task_iter.c:842:2: note: did you mean '__sg_page_iter_start'?
-   include/linux/scatterlist.h:573:6: note: '__sg_page_iter_start' declared here
-     573 | void __sg_page_iter_start(struct sg_page_iter *piter,
-         |      ^
->> kernel/bpf/task_iter.c:830:17: warning: no previous prototype for function 'bpf_iter_css_task_new' [-Wmissing-prototypes]
-     830 | __bpf_kfunc int bpf_iter_css_task_new(struct bpf_iter_css_task *it,
-         |                 ^
-   kernel/bpf/task_iter.c:830:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     830 | __bpf_kfunc int bpf_iter_css_task_new(struct bpf_iter_css_task *it,
-         |             ^
-         |             static 
->> kernel/bpf/task_iter.c:852:9: error: call to undeclared function 'css_task_iter_next'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     852 |         return css_task_iter_next(kit->css_it);
-         |                ^
->> kernel/bpf/task_iter.c:852:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct task_struct *' [-Wint-conversion]
-     852 |         return css_task_iter_next(kit->css_it);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/task_iter.c:846:33: warning: no previous prototype for function 'bpf_iter_css_task_next' [-Wmissing-prototypes]
-     846 | __bpf_kfunc struct task_struct *bpf_iter_css_task_next(struct bpf_iter_css_task *it)
-         |                                 ^
-   kernel/bpf/task_iter.c:846:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     846 | __bpf_kfunc struct task_struct *bpf_iter_css_task_next(struct bpf_iter_css_task *it)
-         |             ^
-         |             static 
->> kernel/bpf/task_iter.c:861:2: error: call to undeclared function 'css_task_iter_end'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     861 |         css_task_iter_end(kit->css_it);
-         |         ^
->> kernel/bpf/task_iter.c:855:18: warning: no previous prototype for function 'bpf_iter_css_task_destroy' [-Wmissing-prototypes]
-     855 | __bpf_kfunc void bpf_iter_css_task_destroy(struct bpf_iter_css_task *it)
-         |                  ^
-   kernel/bpf/task_iter.c:855:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     855 | __bpf_kfunc void bpf_iter_css_task_destroy(struct bpf_iter_css_task *it)
-         |             ^
-         |             static 
-   3 warnings and 5 errors generated.
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   threads[i] = kthread_run(__find_race, &data, "dmabuf/%d", i);
+                                ^
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:17:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_policy);             \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:18:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, long, sched_nice);                        \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:19:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_priority);           \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:20:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_runtime);       \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:21:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_deadline);      \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:22:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_period);        \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:23:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_util_min);           \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence-chain.c:463:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:24:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_util_max);           \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+   drivers/dma-buf/st-dma-fence-chain.c:583:8: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           tsk = kthread_run(__wait_fence_chains, &fc, "dmabuf/wait");
+                 ^
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:17:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_policy);             \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+   drivers/dma-buf/st-dma-fence-chain.c:583:8: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:18:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, long, sched_nice);                        \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+   drivers/dma-buf/st-dma-fence-chain.c:583:8: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:19:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_priority);           \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+   drivers/dma-buf/st-dma-fence-chain.c:583:8: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:20:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_runtime);       \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+   drivers/dma-buf/st-dma-fence-chain.c:583:8: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:21:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_deadline);      \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+   drivers/dma-buf/st-dma-fence-chain.c:583:8: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+--
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           t[i].task = kthread_run(thread_signal_callback, &t[i],
+                                       ^
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:17:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_policy);             \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:18:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, long, sched_nice);                        \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:19:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_priority);           \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:20:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_runtime);       \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:21:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_deadline);      \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:22:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long long, sched_period);        \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:23:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_util_min);           \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+>> drivers/dma-buf/st-dma-fence.c:541:16: error: call to undeclared function '__module_param_call'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+   include/linux/kthread.h:109:5: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                     ^
+   include/linux/kthread.h:80:2: note: expanded from macro 'kthread_create'
+           kthread_param(namefmt);                                                 \
+           ^
+   include/linux/kthread.h:24:2: note: expanded from macro 'kthread_param'
+           __kthread_param(name, unsigned long, sched_util_max);           \
+           ^
+   include/linux/kthread.h:14:2: note: expanded from macro '__kthread_param'
+           ___kthread_param(name, type, attr, 0644)        \
+           ^
+   include/linux/kthread.h:10:2: note: expanded from macro '___kthread_param'
+           __module_param_call("kthread." name ".", attr , &param_ops_##attr, &attr, perm, -1, 0); \
+           ^
+   8 errors generated.
 
 
-vim +839 kernel/bpf/task_iter.c
+vim +/__module_param_call +463 drivers/dma-buf/st-dma-fence-chain.c
 
-   829	
- > 830	__bpf_kfunc int bpf_iter_css_task_new(struct bpf_iter_css_task *it,
-   831			struct cgroup_subsys_state *css, unsigned int flags)
-   832	{
-   833		struct bpf_iter_css_task_kern *kit = (void *)it;
-   834	
-   835		BUILD_BUG_ON(sizeof(struct bpf_iter_css_task_kern) != sizeof(struct bpf_iter_css_task));
-   836		BUILD_BUG_ON(__alignof__(struct bpf_iter_css_task_kern) !=
-   837						__alignof__(struct bpf_iter_css_task));
-   838	
- > 839		kit->css_it = kzalloc(sizeof(struct css_task_iter), GFP_KERNEL);
-   840		if (!kit->css_it)
-   841			return -ENOMEM;
- > 842		css_task_iter_start(css, flags, kit->css_it);
-   843		return 0;
-   844	}
-   845	
- > 846	__bpf_kfunc struct task_struct *bpf_iter_css_task_next(struct bpf_iter_css_task *it)
-   847	{
-   848		struct bpf_iter_css_task_kern *kit = (void *)it;
-   849	
-   850		if (!kit->css_it)
-   851			return NULL;
- > 852		return css_task_iter_next(kit->css_it);
-   853	}
-   854	
- > 855	__bpf_kfunc void bpf_iter_css_task_destroy(struct bpf_iter_css_task *it)
-   856	{
-   857		struct bpf_iter_css_task_kern *kit = (void *)it;
-   858	
-   859		if (!kit->css_it)
-   860			return;
- > 861		css_task_iter_end(kit->css_it);
-   862		kfree(kit->css_it);
-   863	}
-   864	
+dc2f7e67a28a5c Chris Wilson 2020-04-09  441  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  442  static int find_race(void *arg)
+dc2f7e67a28a5c Chris Wilson 2020-04-09  443  {
+dc2f7e67a28a5c Chris Wilson 2020-04-09  444  	struct find_race data;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  445  	int ncpus = num_online_cpus();
+dc2f7e67a28a5c Chris Wilson 2020-04-09  446  	struct task_struct **threads;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  447  	unsigned long count;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  448  	int err;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  449  	int i;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  450  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  451  	err = fence_chains_init(&data.fc, CHAIN_SZ, seqno_inc);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  452  	if (err)
+dc2f7e67a28a5c Chris Wilson 2020-04-09  453  		return err;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  454  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  455  	threads = kmalloc_array(ncpus, sizeof(*threads), GFP_KERNEL);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  456  	if (!threads) {
+dc2f7e67a28a5c Chris Wilson 2020-04-09  457  		err = -ENOMEM;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  458  		goto err;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  459  	}
+dc2f7e67a28a5c Chris Wilson 2020-04-09  460  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  461  	atomic_set(&data.children, 0);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  462  	for (i = 0; i < ncpus; i++) {
+dc2f7e67a28a5c Chris Wilson 2020-04-09 @463  		threads[i] = kthread_run(__find_race, &data, "dmabuf/%d", i);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  464  		if (IS_ERR(threads[i])) {
+dc2f7e67a28a5c Chris Wilson 2020-04-09  465  			ncpus = i;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  466  			break;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  467  		}
+dc2f7e67a28a5c Chris Wilson 2020-04-09  468  		atomic_inc(&data.children);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  469  		get_task_struct(threads[i]);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  470  	}
+dc2f7e67a28a5c Chris Wilson 2020-04-09  471  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  472  	wait_var_event_timeout(&data.children,
+dc2f7e67a28a5c Chris Wilson 2020-04-09  473  			       !atomic_read(&data.children),
+dc2f7e67a28a5c Chris Wilson 2020-04-09  474  			       5 * HZ);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  475  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  476  	for (i = 0; i < ncpus; i++) {
+dc2f7e67a28a5c Chris Wilson 2020-04-09  477  		int ret;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  478  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  479  		ret = kthread_stop(threads[i]);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  480  		if (ret && !err)
+dc2f7e67a28a5c Chris Wilson 2020-04-09  481  			err = ret;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  482  		put_task_struct(threads[i]);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  483  	}
+dc2f7e67a28a5c Chris Wilson 2020-04-09  484  	kfree(threads);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  485  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  486  	count = 0;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  487  	for (i = 0; i < data.fc.chain_length; i++)
+dc2f7e67a28a5c Chris Wilson 2020-04-09  488  		if (dma_fence_is_signaled(data.fc.fences[i]))
+dc2f7e67a28a5c Chris Wilson 2020-04-09  489  			count++;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  490  	pr_info("Completed %lu cycles\n", count);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  491  
+dc2f7e67a28a5c Chris Wilson 2020-04-09  492  err:
+dc2f7e67a28a5c Chris Wilson 2020-04-09  493  	fence_chains_fini(&data.fc);
+dc2f7e67a28a5c Chris Wilson 2020-04-09  494  	return err;
+dc2f7e67a28a5c Chris Wilson 2020-04-09  495  }
+dc2f7e67a28a5c Chris Wilson 2020-04-09  496  
+
+:::::: The code at line 463 was first introduced by commit
+:::::: dc2f7e67a28a5cbe4ea905dafaa6903df670014a dma-buf: Exercise dma-fence-chain under selftests
+
+:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
+:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
 
 -- 
 0-DAY CI Kernel Test Service
