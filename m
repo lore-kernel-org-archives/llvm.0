@@ -1,56 +1,56 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5711C15
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 22:25:52 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-58d428d4956so53283447b3.0
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 15:25:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1031C15
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 22:25:54 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d78452de9cbso3928667276.2
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 15:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693261551; x=1693866351;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=whuv4S/qXJ8VQLIk5LEoFSmpFljXlYmrEoJuQBk2GD4=;
-        b=aEdfAKE2aENnO6tvTzasPUqknc7wJ6diEIJLvmUQxxJpKywDYrFsVaCYoE3h51sd7c
-         H+oNWaX4aq3A9uIj9bL7KrPvklouBN4OyA/O+XRgrZAULDLLXXawVpiMY5oabbtF/wrO
-         T4Y17/d+q5j7Mm+T/22mbRuV9bHjI2eqFaVVdQSE7hMYmEMWSjjjJb5MbTTUnpKCk0Xu
-         7xk5D3xPPMOUz/9r1kmavYv+JGeABhxJbcya7t+GEsGBOZ0ciJaeoY4ZWJy299oj0ESY
-         qDYS3ugO2ay3oFwjN3PzQ/KJQjiYf+YEkyAwmBnSaJWMkXK+sjdejHWq2+Umb4RQ3ZHZ
-         Q89Q==
+        d=google.com; s=20221208; t=1693261553; x=1693866353;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F4UULv7dEfmxkqrWSwHKGjuNFOLz/KrJvgWNb6lbuCs=;
+        b=2kejcxIi3hXJKdZ1GkMysAMauwtVpiO3wB0YJXxm7YLfO/aBFv5JnmffdBZJEtO1n4
+         vYy3Nj/ny3dFOO26EZvSSF7ssb/5RCa1/gNfHjWztYGwYMST20i5OgA4xd0Q9ZSLTEZe
+         8E05Pcd2zETrYDm76HD4gD/UW+wi0++6YhbZkcC/WK9cY5tbs1gwSyk6qlJ/v+jXbGGu
+         23sfZf9CyO1lVUYs5JUujdvX0fLdYXcDqwDu0VPZFbs0UiAaPzba4FXw59jipxriO6bp
+         aurqy2AcFS9uSKPfYLzJs0CXRpTAiBQWRDczqiBKps2GMFGa6eVLlGmKJN4I+0pV2Ywu
+         HErw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693261551; x=1693866351;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=whuv4S/qXJ8VQLIk5LEoFSmpFljXlYmrEoJuQBk2GD4=;
-        b=Xs1RS8ovQIR663s2u+UfANzmFKhagGdUTMEh2OFdu8+Ks0ijfeh+K1oEvCzBtSi7ZG
-         PlRnOa2AdN8PK3vE76HFODBiPAmTQWY2/Y8bqkRb9QaIxzG6EMKZeHZnicHbbKJNIR4q
-         Xq8MCEutLgbEZ9tySUjxpQOgC16ny10fkl+25+lZ77EXWPhujrRg7av5ZGqyVfb8NGxn
-         UaNOIlLcM0ZhLBg9da/jc2bF4u3BQWxo6Gf2yppsQTIxaZbRwCkCnFRd4bWRYMN4BK7c
-         UW1tH0jPv1lfK9vlBQDNs+L6h72IBaEggXuFEYlzIDH67OBHd362/0K+G2HGQR/OFNAc
-         a/FQ==
-X-Gm-Message-State: AOJu0Yx5qi8GZav0XpX8PLtAh+Ji7WyjyJWiJmyEzHiezSzz+2c2cz5V
-	P3NQDSfE2So8nmzUmDt0hyIqfvBjamtkm8z3q9Q=
-X-Google-Smtp-Source: AGHT+IE7Nhcb/ZUZVQuQ5+u99sOJ9CdIHBMpQ83N0Fim/iD9z8v4Zjz9mkQBdpgoc9W3GrUHfZjMtDEsE8i0aeHVjQI=
+        d=1e100.net; s=20221208; t=1693261553; x=1693866353;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F4UULv7dEfmxkqrWSwHKGjuNFOLz/KrJvgWNb6lbuCs=;
+        b=Z2xnvDwbjLlBt561AZIGEBmONK0JmjK/176H6DuBep63wcUMzGQSOIwHas/GAf2P04
+         D2ChMmSzGQQt1QQstaWOCwT6jSLxqZ6IdkEb9eA/+xWugmYtM5xphR4iQaiDiGPQOiNU
+         ojRwJ7+rhAfPczMCL25s/6TJiKQ8qIxKu4dQ1DlQEHMXBb6AV8TW7khuyeT4isU2PXBW
+         nAlUSqEqXRaxZblAeXlpIz0m90geIpdEl9yiYUFq3TTuOe+c/xlVDDgebjkPznGvDHBY
+         liPTwSiXPntnfN98Ek2BkkdeFUMVrUtEnut9DYpyWr9rKqjZ/qX7dJ/tuVzlh1CrXw0E
+         rWmQ==
+X-Gm-Message-State: AOJu0YypZDKbhqGtYKnFpuvUcHHjkhWlpCf4JcFGUNuKM7z8PtJJQ+1q
+	g8gRAjybYZU0cO+B4nUAmndfysO9nJjwcos+9UA=
+X-Google-Smtp-Source: AGHT+IHebjexSi29sxNXIEYT2we/AIAJmtzB8YnCDOBzFlC85j7fdHzaoXP6O7kQ+CL4Fb+jcj+UYQmnlgWna+E5nYI=
 X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:b64:7817:9989:9eba])
- (user=ndesaulniers job=sendgmr) by 2002:a81:7653:0:b0:586:5d03:67c8 with SMTP
- id j19-20020a817653000000b005865d0367c8mr899523ywk.3.1693261550964; Mon, 28
- Aug 2023 15:25:50 -0700 (PDT)
-Date: Mon, 28 Aug 2023 15:25:46 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a25:ce44:0:b0:d72:8661:ee25 with SMTP
+ id x65-20020a25ce44000000b00d728661ee25mr835131ybe.2.1693261553140; Mon, 28
+ Aug 2023 15:25:53 -0700 (PDT)
+Date: Mon, 28 Aug 2023 15:25:47 -0700
+In-Reply-To: <20230828-scsi_fortify-v1-0-8dde624a3b2c@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAOoe7WQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2MDCyML3eLk4sz4tPyiksy0Sl3LNIsUI3PLpDTLxEQloJaCotS0zAqwcdG xtbUAr2FdoF4AAAA=
+References: <20230828-scsi_fortify-v1-0-8dde624a3b2c@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693261549; l=1211;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693261549; l=2310;
  i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
- bh=TGWROu4XNrgfx+3UVHqDnOnYYRlkH/LvjbNZAKHZcUI=; b=XYoq8WEHFYZk0OilZBxoZZDH9/jZiqs7gMqgs5QyaYYkDOElw0g9B4HqjTu1AEVRVmw6fBvvf
- Ta1Q02qYmpODS2FmJeLM2eUD1tbl9vpZGTd9Fq02p9gFPekMg5OCxXH
+ bh=Ftz8IPZZMe52YKzLHVvnEUhXYdkgyGJWBaj7UgdHpqk=; b=iH/FxqmBBcMZZaaHpoka8f2O5LUsN1gUPcfI94im4BVVB2bk2tNsg449r71D9h0uE967DIv+l
+ StL9iHKe4jeDQkraBppk0fVa0b2INXDjY9hVIKt4WfTZ/GlkIPGiKOW
 X-Mailer: b4 0.12.3
-Message-ID: <20230828-scsi_fortify-v1-0-8dde624a3b2c@google.com>
-Subject: [PATCH 0/2] scsi: fix 2 cases of -Wfortify-source
+Message-ID: <20230828-scsi_fortify-v1-1-8dde624a3b2c@google.com>
+Subject: [PATCH 1/2] scsi: myrb: fix -Wfortify-source
 From: Nick Desaulniers <ndesaulniers@google.com>
 To: Hannes Reinecke <hare@kernel.org>, "James E.J. Bottomley" <jejb@linux.ibm.com>, 
 	"Martin K. Petersen" <martin.petersen@oracle.com>, Nathan Chancellor <nathan@kernel.org>
@@ -60,37 +60,68 @@ Cc: Tom Rix <trix@redhat.com>, linux-scsi@vger.kernel.org,
 Content-Type: text/plain; charset="utf-8"
 
 clang-18 has improved its support for detecting operations that will
-truncate values at runtime via -wfortify-source resulting in two new
-warnings (or errors with CONFIG_WERROR=y):
+truncate values at runtime via -Wfortify-source.
 
+Fixes the warning:
   drivers/scsi/myrb.c:1906:10: warning: 'snprintf' will always be
   truncated; specified size is 32, but format string expands to at least
   34 [-Wfortify-source]
 
-  drivers/scsi/myrs.c:1089:10: warning: 'snprintf' will always be
-  truncated; specified size is 32, but format string expands to at least
-  34 [-Wfortify-source]
+In particular, the string literal "physical device - not rebuilding\n"
+is indeed 34B by my count.
 
 When we have a string literal that does not contain any format flags,
 rather than use snprintf (sometimes with a size that's too small), let's
 use sprintf.
 
-This is pattern is cleaned up throughout two files.
+This is pattern is cleaned up throughout the file.
 
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1923
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-Nick Desaulniers (2):
-      scsi: myrb: fix -Wfortify-source
-      scsi: myrs: fix -Wfortify-source
+ drivers/scsi/myrb.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- drivers/scsi/myrb.c |  8 ++++----
- drivers/scsi/myrs.c | 14 +++++++-------
- 2 files changed, 11 insertions(+), 11 deletions(-)
----
-base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-change-id: 20230828-scsi_fortify-9f8d279bf9aa
+diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
+index ca2e932dd9b7..c2bdff36a6f1 100644
+--- a/drivers/scsi/myrb.c
++++ b/drivers/scsi/myrb.c
+@@ -1767,7 +1767,7 @@ static ssize_t raid_state_show(struct device *dev,
+ 	int ret;
+ 
+ 	if (!sdev->hostdata)
+-		return snprintf(buf, 16, "Unknown\n");
++		return sprintf(buf, "Unknown\n");
+ 
+ 	if (sdev->channel == myrb_logical_channel(sdev->host)) {
+ 		struct myrb_ldev_info *ldev_info = sdev->hostdata;
+@@ -1890,7 +1890,7 @@ static ssize_t raid_level_show(struct device *dev,
+ 					ldev_info->state);
+ 		return snprintf(buf, 32, "%s\n", name);
+ 	}
+-	return snprintf(buf, 32, "Physical Drive\n");
++	return sprintf(buf, "Physical Drive\n");
+ }
+ static DEVICE_ATTR_RO(raid_level);
+ 
+@@ -1903,13 +1903,13 @@ static ssize_t rebuild_show(struct device *dev,
+ 	unsigned char status;
+ 
+ 	if (sdev->channel < myrb_logical_channel(sdev->host))
+-		return snprintf(buf, 32, "physical device - not rebuilding\n");
++		return sprintf(buf, "physical device - not rebuilding\n");
+ 
+ 	status = myrb_get_rbld_progress(cb, &rbld_buf);
+ 
+ 	if (rbld_buf.ldev_num != sdev->id ||
+ 	    status != MYRB_STATUS_SUCCESS)
+-		return snprintf(buf, 32, "not rebuilding\n");
++		return sprintf(buf, "not rebuilding\n");
+ 
+ 	return snprintf(buf, 32, "rebuilding block %u of %u\n",
+ 			rbld_buf.ldev_size - rbld_buf.blocks_left,
 
-Best regards,
 -- 
-Nick Desaulniers <ndesaulniers@google.com>
+2.42.0.rc2.253.gd59a3bf2b4-goog
 
