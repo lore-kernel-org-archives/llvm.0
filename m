@@ -1,113 +1,95 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFF810F4
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:39:13 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d72f3290e6eso4493973276.3
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 13:39:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54EE10F4
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:46:21 +0000 (UTC)
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-64f42fcd809so23921136d6.1
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 13:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693255152; x=1693859952;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XhrkWiQBnHmzMnkAE+NYbdoZdy6UiyASIH0GRgNQ/sU=;
-        b=urfxC/+oTHLuj+i6cn0/azuq+FFaWj+TnME6nhesd8cw0L5Hhx/TUyll1F+Er3mk1V
-         EPtJEawuJ7LmK9shNHvS9h/gGI6VsaHwg4Nca8og7fCRD7CQB4X3Kfa9FsaRnST6k8xO
-         0dr5yHSkjVGAHS3J7o6VojOEbV63NzFkgqMmpXOQ582xX256DdnHrjUmmPC4cmLFHEin
-         Z1O8sfXNGBnPb7WSs4WCuskoLd5HzDd2PmDt8VBcd9vco3CTPXvj+3hemrc7Ly+8daso
-         R24co0ytNidRJebijXU8YN6wM8GK/12rUxTgs3qJ/AEYZkHtELGzmn5jHkz2rJQRiQlW
-         odaQ==
+        d=google.com; s=20221208; t=1693255580; x=1693860380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H7cGBaZtnuz7U/mKhzjR4bKOZX6dGdxxWroEwQu01Qs=;
+        b=nAehlfuCID2vKFOa+zGc/7AgD86D7BjGRTA4uu3o4wduhiHo7j0qnCJEbqyuLrL+zO
+         odNd5YM8kIb9akpesE3VMlFzy6rhRsQ25i+MHnaexYervUoiUjst9S5KzkgNCkbfGxGx
+         +ux7YBAMWxVIhWj1ENCoKewPtJ9ADwgjWS7pbz8FOOXbI1T7glY6pbSaF0ZYS1w+Gw87
+         7R9Qug07y58Ez/RVYZTvcmCNXE96Cnc+1WRrKqWIXqh/43jRQpS+txUIUQMy5QefPGyG
+         CjsLYV7CqL97j50Gh7nE4au9wUH8YfCeaqanNdOanHQoYnqbrCR6AQfdYlYxKakcXUjY
+         6Iiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693255152; x=1693859952;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XhrkWiQBnHmzMnkAE+NYbdoZdy6UiyASIH0GRgNQ/sU=;
-        b=dUQEldJPf4+6dU2OMFG0MIuYsuEcYjnXk8VWxSghXsMkXKGskw9eAjR0/E3ISSV6HF
-         Q9svAvqBJb00s9VO/Y8DMfQE+f4tangzF9xmJf59NFjgeaDaFX3dmjnRitR/AeiBVeQ2
-         WJqcoxyHUPrifrT9WU6j971ND/5Hj99q7o7qPcbAVxj7vjKn9LufqC7ToI2tGbfz+enW
-         RSKynf6pLFaSTiRzhawRurhx+TjA0OMivDfNJ3w68ipGD+o5g9nxDj+ZxwsOgUFvzmV/
-         oQHGIjtEtOuCD/Z8lrkoCOpxAnip8NDeysamg/yxRhMXY5BMZtEeBqI9mJZYy/den5tQ
-         0ajw==
-X-Gm-Message-State: AOJu0YyA6txigFGOR3Q3ocvr9TPaVrf+c/BZE0tGjN2MY5cCMyMMdyFl
-	e5S8J5ZOEUhQbPdfhabIKOS2kAQThagv7VMm3hI=
-X-Google-Smtp-Source: AGHT+IGlwLCXXsjKROwMA/eBuqL6pO5hd66mEIQL7qVwZn+m6vX+Qy5OakE1dsfnaIt9WkB4KXLqeb7R2EWnAWB0U3E=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:b64:7817:9989:9eba])
- (user=ndesaulniers job=sendgmr) by 2002:a25:74c6:0:b0:d0c:c83b:94ed with SMTP
- id p189-20020a2574c6000000b00d0cc83b94edmr811734ybc.10.1693255152253; Mon, 28
- Aug 2023 13:39:12 -0700 (PDT)
-Date: Mon, 28 Aug 2023 13:39:06 -0700
+        d=1e100.net; s=20221208; t=1693255580; x=1693860380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H7cGBaZtnuz7U/mKhzjR4bKOZX6dGdxxWroEwQu01Qs=;
+        b=PTZKAzhx6IKX2+idtYSsXMVmXUkeVu1b2hBxxO3DoSWMOMER6x/kN8VN9fVPUDBPUX
+         UVSZ/0om9rRxgwQoPDGcWjpQYjsr5gcs18Juf7bjHhYBI5XY+qwKZZZ3K6mU9WR1QbUj
+         YNPOp2NmH2pV2SDv5hftxDq4aCuy1kEJoHuiZSaPJfYSH9Xt2RJ2U7nsamvfEs+4rvUu
+         rAOf+jO2SSfP7EnCkaQw6O4W7UAyd/QbwChBzxDsym777YCMJRmdrPgxsDxqPx3xrtGX
+         p5VKAaSGLE+n1Tol5RVq/tQ872cGCEN7rK305k+6lPLdF1kPahDXI8G6tSUGJM2obxWY
+         ZaOA==
+X-Gm-Message-State: AOJu0YwzjwIRHaC37rObv1hluoeCE4xafxgXWQvMmVScdbXvsomKiK+r
+	U3FZqJL2mSa3jCLLiOf69+8SsKVcOQJeQunvZdr7d/mfb9bA6aYBYxt4Kg==
+X-Google-Smtp-Source: AGHT+IH1TPqo+GwPajQYw6rkNND6qvYrnrykcAFznacrevvYzxbg8mVexim6BjdM1RMx0c5Y8HUfAZmbEVYwQ8H9I1o=
+X-Received: by 2002:a0c:aacc:0:b0:647:8e35:623b with SMTP id
+ g12-20020a0caacc000000b006478e35623bmr25156356qvb.15.1693255580294; Mon, 28
+ Aug 2023 13:46:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAOkF7WQC/3WMwQ7CIBAFf6XZsxhAKtiT/2Eao7hQEi1kaYim4
- d/F3j3Oy5tZISMFzDB0KxCWkEOcG8hdB3a6zR5ZeDQGyeWBG2lYSvZK2K5ICzsqraR2XFkU0JR E6MJ7y13GxlPIS6TPVi/it/4JFcEE08r1/d0Ic+L67GP0T9zb+IKx1voFZACn56kAAAA=
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693255150; l=2020;
- i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
- bh=xcYx2Rp6x+lRWSqPslFnv6rJuAz/HxMw+0OdY1ALQZs=; b=v17oTu32hcx8X2o5oavi8I5UUOWMaIGdmbzoTP9nH19+mbccNNnrpEkGWrOiXO5zDJPWL5d/n
- rm1iEXciqeaAqQHb6RBdzIzkcNFhLuv32jqEmsXHABpaRsTnDZThqrj
-X-Mailer: b4 0.12.3
-Message-ID: <20230828-ppc_rerevert-v2-1-46b71a3656c6@google.com>
-Subject: [PATCH v2] reapply: powerpc/xmon: Relax frame size for clang
+MIME-Version: 1.0
+References: <916414bcf1c349e8a3dc78cb208bf30f@AcuMS.aculab.com>
+In-Reply-To: <916414bcf1c349e8a3dc78cb208bf30f@AcuMS.aculab.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
+Date: Mon, 28 Aug 2023 13:46:09 -0700
+Message-ID: <CAKwvOdm-3TK-wcu-PHq27QKMcLFUG352uDCvPSUx8-K8YPvSvQ@mail.gmail.com>
+Subject: Re: clang mis-compiles "x"[2]
+To: David Laight <David.Laight@aculab.com>
+Cc: "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is a manual revert of commit
-7f3c5d099b6f8452dc4dcfe4179ea48e6a13d0eb, but using
-ccflags-$(CONFIG_CC_IS_CLANG) which is shorter.
+On Mon, Aug 28, 2023 at 9:44=E2=80=AFAM David Laight <David.Laight@aculab.c=
+om> wrote:
+>
+> Clang mis-compiles:
+>
+> int foo(void) { return "a"[2]; }
+>
+> to be just a 'ret' instruction.
+>
+> While clearly non-sensical returning the input value of %rax
+> doesn't make any sense.
+>
+> gcc generates a real string and then returns the byte after
+> the '\0' - which is (sort of) what the code asks for.
 
-Turns out that this is reproducible still under specific compiler
-versions (mea culpa: I did not test every supported version of clang),
-and even a few randconfigs bots found.
+Reports of what code is generated when there is very clearly UB are
+inappropriate for this list.
 
-We'll have to revisit this again in the future, for now back this out.
+I encourage you to inspect the output of -fsanitize=3Dundefined before
+making such reports to compiler vendors.
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/252#issuecomment-1690371256
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/llvm/202308260344.Vc4Giuk7-lkp@intel.com/
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes in v2:
-- Use ccflags-$(CONFIG_CC_IS_CLANG) as per Nathan.
-- Move that to be below the initial setting of ccflags-y as per Nathan.
-- Add Nathan's Suggested-by and Reviewed-by tags.
-- Update commit message slightly, including oneline.
-- Link to v1: https://lore.kernel.org/r/20230828-ppc_rerevert-v1-1-74f55b818907@google.com
----
- arch/powerpc/xmon/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+https://godbolt.org/z/o4E6o33fP
 
-diff --git a/arch/powerpc/xmon/Makefile b/arch/powerpc/xmon/Makefile
-index 7705aa74a24d..682c7c0a6f77 100644
---- a/arch/powerpc/xmon/Makefile
-+++ b/arch/powerpc/xmon/Makefile
-@@ -12,6 +12,10 @@ ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
- 
- ccflags-$(CONFIG_PPC64) := $(NO_MINIMAL_TOC)
- 
-+# Clang stores addresses on the stack causing the frame size to blow
-+# out. See https://github.com/ClangBuiltLinux/linux/issues/252
-+ccflags-$(CONFIG_CC_IS_CLANG) += -Wframe-larger-than=4096
-+
- obj-y			+= xmon.o nonstdio.o spr_access.o xmon_bpts.o
- 
- ifdef CONFIG_XMON_DISASSEMBLY
+Perhaps you're conflating the address of one past the end of an object
+being defined, vs the value one past the end of an object which is
+not.
 
----
-base-commit: 2ee82481c392eec06a7ef28df61b7f0d8e45be2e
-change-id: 20230828-ppc_rerevert-647427f04ce1
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
+>
+>
 
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
 
+--=20
+Thanks,
+~Nick Desaulniers
