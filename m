@@ -1,40 +1,40 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33671134D4
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:08:26 +0000 (UTC)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-64ccdf8820dso16119996d6.1
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 13:08:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF477134D4
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:09:25 +0000 (UTC)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-65166804282so5130876d6.0
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 13:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693253306; x=1693858106;
+        d=google.com; s=20221208; t=1693253364; x=1693858164;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M2+qVsaXdLTsy8mg6pGvQHUvderx4lfV30Z5HIuY1+Y=;
-        b=yi1i6aEUNV6Qent4k4+KIb3P+t5OCKy8tEdDNnYv5Me976ss1z5VpIKPxmapvArSmX
-         /6BGUtFK0J97BB79v3fdqw6cDWA8t145TE9JsZJjR4iJIYQ4mLnj2DhYoeVdWLA+SLe0
-         j8DXROTQsKQ2dc4ocQXlOK9SDwxJtXqvIuNHDiu8xuJUwsw68nP+vLjOankBie0BIVO+
-         AHhzpc2H8VnGTG3VPF+rUsfZvUDNIgeX6w6JwcT78M84oU7wu54/Gyvmdd7kItWnDowa
-         VupCdLaJd0zKKsDl5rJM7L7E0IiPTfRfepRj6SHBLnGdSmi0fDUkBj7967xJKkYvorHW
-         xvSA==
+        bh=O8dPY9eCAsS9DxNmXw4q9BxGXE3hbCpPhG8iHRwXkCE=;
+        b=oexC9A9Wf9nYL1LbjiQA91QzC/pvV+ufWECVAjaNfuTiCKzbMNaIeF+ziNstzvQJHy
+         BLnC3OIhII0n/jIW8KXrEZ4DRwH22ttaRAiXdYFYm7lXcSemweoyJw/lieJSzOp3Wxut
+         QYcrfuxCkolkZg2th18Wrp1Ced3wbhdAktE71LZYSh+Gm+ufSVBnOZSzzreu/wpxh8Ib
+         slwhsUM3jTyCim/OG4IuWcTwu20ubG9h2fWWI6HVgn21V3l9d/QI4kiqfVaJJxZysukV
+         /GdUAgZBRljTlTNcRiLQ9U/l7dgLMu/8dPkZohEVKbwwNiwNMbvaueF0Q8+PS0fRPiyu
+         8uQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693253306; x=1693858106;
+        d=1e100.net; s=20221208; t=1693253364; x=1693858164;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M2+qVsaXdLTsy8mg6pGvQHUvderx4lfV30Z5HIuY1+Y=;
-        b=ecTxW9japgA7eT3Bz1r+qdj/pD6UPRwMbS2VDTamyaNYkMGfAUk+EIiMQG2U8q+1+g
-         o65GCp4MKIHSUieXgmt5F2oup1YyhcXbcFx4nI9OR8Ns/W/SfgDEkj+uyRpPAuLTsT7q
-         rvTWLExq4o7X55jVz6WckluEcBs0CCup0YQIiOA5GgNGYrQzEwfeR02TM9MkfjiXuzFu
-         qon3zvS84dbCxSY+In3bOS5w8CD8NsOYFDFDq1y7MCbn/OVOerWvn75G2VeaLORDMUEa
-         LH5y86dL8+w4hx7vZQQYQ09TELnaP9WuVO+hgXjtDkifaVkaz74k1BuyjIDeaGba+cam
-         XQvA==
-X-Gm-Message-State: AOJu0YyVfmx858usa/Qvc9Vrf2jRqt9XAQQURORUDWXaT/MmcGOpn/To
-	MXhcQl5CxTcX2N7NZP3XmHlFNt2wiSvHQgWSUHweSA==
-X-Google-Smtp-Source: AGHT+IHLh0iIaQ6u8fM2OIiv0nnAJ3/sE2P1M4e2AtTLSIF54pmCBliNk4DSDZgYTfw84lI+2vNTo9FlhKfGHUMayUI=
-X-Received: by 2002:a0c:b418:0:b0:63d:30a:d9ea with SMTP id
- u24-20020a0cb418000000b0063d030ad9eamr874949qve.18.1693253305710; Mon, 28 Aug
- 2023 13:08:25 -0700 (PDT)
+        bh=O8dPY9eCAsS9DxNmXw4q9BxGXE3hbCpPhG8iHRwXkCE=;
+        b=Z+FmO22uMI7zCDjhiONb57vDpF2jw83cTL/Iyx8wl9M0XC1MjgIGZzLevf6Gh4kjKf
+         /LG5sOI0puyLpQEYihXTqMyOQYHVdAqjAhPZotkPvfCvDShzMJp2AcdQw+af4xz6saBw
+         WHlcxhE1vC0bKgUV9tFGGUdQVDBGUMdseDEuPr/NMGyqHbp1bvVWSt/4hW1gIYkC2+rP
+         S+rlSoz+xiiiE1Uq1qfGrOdnXjC8VBPAgWDVXmRRq9EVuOs2j9U2DUir34lM5wXfQgWB
+         OxE+aeY5rQUKl1ID3/1YJ4UNbjzwOHBSQTpjCLAZ23EDvf89LpgTS7oInIlfAxMWb5EY
+         KG/g==
+X-Gm-Message-State: AOJu0Yyk7aFnfL4i9p7VTXMlPz3CyFzgoRgd9fliQuMiZEEqFvlmigAi
+	orqM3Ud4xrE3h69HYCYJ2zuZgiSeXnDhalHs5pk4rA==
+X-Google-Smtp-Source: AGHT+IEJ6EmXGksnoAvaX9OGIo+HeNz5gIXPkKZOVrXcfunLXoAFwiCa8KE27zaQHT0TJqbMt5OwZFE1kBHJq0UmQwo=
+X-Received: by 2002:a0c:e448:0:b0:647:3346:1289 with SMTP id
+ d8-20020a0ce448000000b0064733461289mr871860qvm.11.1693253364609; Mon, 28 Aug
+ 2023 13:09:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,188 +47,51 @@ References: <ZOkGCSNr0VN2VIJJ@p100> <CAHk-=wjZwSymfuGvf7TX3UQLU1OMN1FZMnEA-Hja0r
  <CAGG=3QWcZPYqHMcjwuYDz1+OQhzS40hmhdOvSBZBQOkhs8YAQQ@mail.gmail.com>
  <CAGG=3QX8AaTedPy-joWm6yp+TFHBVXm59OcvxkdLGsSuDjem5g@mail.gmail.com>
  <CAHk-=wjQpXpnGAwvv-oBi+cQ0g+D9rTK5STkXSSV4a90FPR+EQ@mail.gmail.com>
- <CAKwvOdm_y6UOnxFrAiDxou2jc8CRUvyhfH9kAdc3PG0=bEvduw@mail.gmail.com> <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
+ <CAKwvOdm_y6UOnxFrAiDxou2jc8CRUvyhfH9kAdc3PG0=bEvduw@mail.gmail.com>
+ <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com> <CAMuHMdXZ4fGjjXguftvrB69rt7dR6ngFA46YB8oGpk2_issJzA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXZ4fGjjXguftvrB69rt7dR6ngFA46YB8oGpk2_issJzA@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 28 Aug 2023 13:08:14 -0700
-Message-ID: <CAKwvOdn6jepCcp31XsO268CHcN3FB9-ScA5pw160sJEh+vQjjQ@mail.gmail.com>
+Date: Mon, 28 Aug 2023 13:09:13 -0700
+Message-ID: <CAKwvOdm4148KZ=eiGU-K0M-1RX_Fwnrh0n0Cj_ON+N63D5AfAQ@mail.gmail.com>
 Subject: Re: [PATCH] lib/clz_ctz.c: Fix __clzdi2() and __ctzdi2() for 32-bit kernels
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Bill Wendling <morbo@google.com>, Helge Deller <deller@gmx.de>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, 
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Bill Wendling <morbo@google.com>, 
+	Helge Deller <deller@gmx.de>, Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, 
 	linux-parisc@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Chanho Min <chanho.min@lge.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <keescook@chromium.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, 
+	Chanho Min <chanho.min@lge.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Kees Cook <keescook@chromium.org>, clang-built-linux <llvm@lists.linux.dev>, 
 	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 25, 2023 at 6:08=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon, Aug 28, 2023 at 12:33=E2=80=AFAM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
 >
-> On Fri, 25 Aug 2023 at 17:52, Nick Desaulniers <ndesaulniers@google.com> =
-wrote:
-> >
-> > So 2 concerns where "I'll do it in inline asm" can pessimize codegen:
-> > 1. You alluded to this, but what happens when one of these functions
-> > is called with a constant?
+> Hi Linus,
 >
-> This is why our headers have a lot of __builtin_constant_p()'s in them..
+> On Sat, Aug 26, 2023 at 3:08=E2=80=AFAM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> > On Fri, 25 Aug 2023 at 17:52, Nick Desaulniers <ndesaulniers@google.com=
+> wrote:
+> > And quite often we simply use other names - but then we also do *not*
+> > build with -freestanding, because -freestanding has at least
+> > traditionally meant that the compiler won't optimize the simple and
+> > obvious cases (typically things like "memcpy with a constant size").
 >
-> In this particular case, see the x86 asm/bitops.h code:
+> Several architectures (incl. x86, but excl. amd64) do build the kernel wi=
+th
+> -freestanding.
 >
->     #define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) :
-> variable_ffs(x))
->
-> but this is actually quite a common pattern, and it's often not about
-> something like __builtin_ffs() at all.
+> IIRC, the issue was that without that, gcc was "optimizing" calls
+> to standard functions (implemented as inline optimized assembler
+> functions) by replacing them with calls to other standard functions
+> (also implemented as inline optimized assembler functions).  As the
+> latter became external calls, this defeated the optimized assembler
+> implementation, and could even cause build failures if no external
+> implementation was available.
 
-I was a reviewer on commit fdb6649ab7c1 ("x86/asm/bitops: Use
-__builtin_ctzl() to evaluate constant expressions"); I'm familiar with
-the pattern.
-
->
-> See all the other __builtin_constant_p()'s that we have in that same
-> file because we basically just use different code sequences for
-> constants.
->
-> And that file isn't even unusual. We use it quite a lot when we care
-> about code generation for some particular case.
-
-More so my point was x86 bitops is missing
-commit 2fcff790dcb4 ("powerpc: Use builtin functions for fls()/__fls()/fls6=
-4()")
-treatment.
-
-I've sent https://lore.kernel.org/llvm/20230828-x86_fls-v1-1-e6a31b9f79c3@g=
-oogle.com/.
-
->
-> > 2. by providing the definition of a symbol typically provided by libc
-> > (and then not building with -ffreestanding) pessimizes libcall
-> > optimization.
->
-> .. and this is partly why we often avoid libgcc things, and do certain
-> things by hand.
-
-(Sorry if the following rant is prior knowledge, it's mostly for
-reference for others cc'ed who might not know this)
-
-Careful, `-ffreestanding` and libgcc are two orthogonal things (at
-least in my mind).
-
--ffreestanding is to libc as --rtlib=3D is to the compiler runtime
-(which is distinct from the libc)
-
-`-ffreestanding` is more about "does the runtime environment somehow
-provide libc symbols."
-
-libgcc (or llvm's equivalent "compiler-rt") is not responsible for
-providing symbols from libc.  `--rtlib=3D` controls what compiler
-runtime will be used, but in my experience, today's compilers don't
-make codegen decisions on that value.  These are mostly runtime
-helpers for "idk how to do <complicated math thing, such as double
-word division>" or "maybe you didn't want that inline."
-
-What's brittle about making codegen decisions with regards to these
-flags though is that these dependencies grow over time, and yet it's
-not possible today (AFAIK) to specify what's the minimum target to
-support.
-
-For instance, IIRC glibc recently added support for one of the
-kernel's string.h routines, maybe strlcpy or something.
-https://sourceware.org/git/?p=3Dglibc.git;a=3Dcommit;h=3D454a20c8756c9c1d55=
-419153255fc7692b3d2199
-
-When is it safe for the compiler to start transforming calls to other
-functions into calls to strlcpy?  (Guess: year 2033, because:) What
-happens when dynamically linking against older versions of glib that
-do not provide that symbol?
-
->
-> The classic rule is "Don't do 64-bit divisions using the C '/' operator".
->
-> So in the kernel you have to use do_div() and friends, because the
-> library versions are often disgusting and might not know that 64/32 is
-> much much cheaper and is what you want.
-
-And thus the same problem exists for the kernel wrt --rtlib that I
-alluded to above for strlcpy.  By providing a partial implementation
-of a compiler runtime (--rtlib=3D), the compiler will frequently emit
-libcalls to symbols for which the kernel hasn't provided.  You can
-avoid open coded double word division in the kernel all you want but:
-1. again you're probably pessimizing division by constant remainder by
-using div64_u64.  GCC is *really* good at replacing these when the
-divisor is constant; IME better than clang.
-2. even avoiding open coded division, the compiler can still insert
-division; loop-elision can replace loops outright if the trip count is
-adjusted by a determinable value. (see 3220022038b9).
-
-By providing a partial compiler runtime, and then using every -mno-
-flag in the book, you tie the compiler's hands wrt what it can emit vs
-libcall.  There's not even a way to express to today's compiler that
-"we have a compiler runtime, it's just straight up missing things."
-
-Personally, I think a clang-tidy check for open coded division is
-perhaps a better way to enforce the kernel's posture than providing
-half a compiler runtime then doing gymnastics in the code to work
-around the emission of libcalls to __divdi3() or__aeabi_uldivmod()
-(mostly on 32b platforms).  A linkage failure is nice, but only occurs
-on 32b targets and it doesn't disambiguate between the case of
-developer open coded division vs compiler inserted division.
-
->
-> And quite often we simply use other names - but then we also do *not*
-> build with -freestanding, because -freestanding has at least
-> traditionally meant that the compiler won't optimize the simple and
-> obvious cases (typically things like "memcpy with a constant size").
-
-Personal opinion: we very much do NOT want to use -ffreestanding for
-those libcall optimizations.
-
-I discussed this recently with ARCH=3Dloongarch folks:
-commit 3f301dc292eb ("LoongArch: Replace -ffreestanding with
-finer-grained -fno-builtin's")
-
-It is my intention to remove -ffreestanding from ARCH=3Di386.
-https://github.com/ClangBuiltLinux/linux/issues/1583
-
-I had to first fix a bug in LLVM though
-https://reviews.llvm.org/D125285
-So rather than remove it outright, we might need to retain it for
-builds with older releases of clang for now.
-
-Though as you allude to down thread, perhaps some things that were the
-case in linux 1.0 / gcc 1.40 no longer hold.  Which is why adding such
-flags to kernel makefiles really ought to be accompanied by a comment
-in sources linking to an issue tracker report, so that we might clean
-these up one day.
-
->
-> So we mix and match and pick the best option.
-
-Gross, and like *could you not?*  I suspect it's more so the case of a
-developer not realising it's perhaps a compiler bug, or not reporting
-such bug, and trying flags they're heard of once until something
-links.
-
-Any use of -ffreestanding for any arch had better have a comment to a
-compiler vendor's bug tracker laying out why that's necessary for that
-arch and not others.
-
-Many kernel developers are allergic to filing formal compiler bugs in
-places where compiler vendors are looking, IME.
-
->
-> The kernel really doesn't care about architecture portability, because
-> honestly, something like "ffs()" is entirely *trivial* to get right,
-> compared to the real differences between architectures (eg VM and IO
-> differences etc).
->
->              Linus
-
-
+That's what the -fno-builtin-* flags are for, IMO, though those also
+have toolchain portability issues IME.
 
 --=20
 Thanks,
