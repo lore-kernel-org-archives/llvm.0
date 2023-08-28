@@ -1,98 +1,143 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71603EC2
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 07:33:38 +0000 (UTC)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-58df8cab1f2so33113527b3.3
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 00:33:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693208017; x=1693812817;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=twwg7V6K5h5vu0zZiNn8PwZ/O/DRHer4vjbsqZJL+Zo=;
-        b=ESFkwWv6Pqm0Sdj5DG4jlPcL5GkmVj9CkR8A3ETRNEHo3VeJI2LIn3CD5/WawaXbsK
-         858no+xSOC3WZEGmnbApcMwmxUlgpxb+xx3dpO9TPbZ3FFkfHqgNSvsgbdUb2o00FwT7
-         sfJXw22YxkHatV1HNCWxQAT1C7BGIcZ+160hAiQrVZTn6iyDvXK5PftNb9PTh532hFle
-         ajzUYkUG1gxr680T8Q+glUJC19UXeZ4pvHREg5EoQxoqX7bFypHWu6Zqn8FiNrvuKm8Y
-         0sh72FpeNt3lkRZ1yalq0LUy4y0u856027lf2xScBvHIPt9fVumHQqpJsb4aCPYO/Fo2
-         mqJA==
-X-Gm-Message-State: AOJu0Yy17gsdwTPz1BCpbmMVSF+MZD0APMg7hiyWqY03HXwKJbzm8gKu
-	tiCFadldE5pL0L2qPCFeveO/gScXOlJDfw==
-X-Google-Smtp-Source: AGHT+IETpSlJwSNkzzrcXoF2s9AzNRBqF1hYWzcj12jtEn2tDvu0ptSymuYhFolJbI5LEoozqDudmA==
-X-Received: by 2002:a81:914f:0:b0:586:9c8b:ae7 with SMTP id i76-20020a81914f000000b005869c8b0ae7mr26568411ywg.46.1693208017046;
-        Mon, 28 Aug 2023 00:33:37 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id c19-20020a81df13000000b0058442f46fbfsm1982836ywn.44.2023.08.28.00.33.36
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Aug 2023 00:33:36 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-58df8cab1f2so33113117b3.3
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 00:33:36 -0700 (PDT)
-X-Received: by 2002:a25:9cc3:0:b0:d09:a51:8e7a with SMTP id
- z3-20020a259cc3000000b00d090a518e7amr23396808ybo.47.1693208016589; Mon, 28
- Aug 2023 00:33:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26F33C0A
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 08:11:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693210271;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zPc1s0esAWlnukjvhH/sOjd8pfNdjXTYQb/72BPeVrw=;
+	b=D1UKPyWBhOV/GZB1ucus5ytK83GP7L/kLI6H73vefLY4jqo6Yq9Pe/m5YK7Y5AN4iLISYA
+	rBW5h86YugqrfEgKh/m3d0PTsBHKTmQCqdcRS/86VpGT2Z+EtrFPe4CkcGdoSf0cUS4Wth
+	zpst0yX98RceieF7y2G+uigDi+YV7tY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-72o7WjG0MweQzG2j8VIlJw-1; Mon, 28 Aug 2023 04:11:10 -0400
+X-MC-Unique: 72o7WjG0MweQzG2j8VIlJw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F32E9855717
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 08:11:09 +0000 (UTC)
+Received: from [172.64.4.37] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E3A09140E962;
+	Mon, 28 Aug 2023 08:11:09 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 25 of 267): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 2dde18cd)
+Date: Mon, 28 Aug 2023 08:11:09 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <ZOkGCSNr0VN2VIJJ@p100> <CAHk-=wjZwSymfuGvf7TX3UQLU1OMN1FZMnEA-Hja0ruqyhMK4A@mail.gmail.com>
- <CAHk-=whVvD05T0yD5DQj803uETLD6qDq-Vx-SiLPcrL=eO77LQ@mail.gmail.com>
- <CAKwvOdnYauyrzz7-ceH-MP_KZ5ED8oYxjRx_Xei68=tUOSeKyA@mail.gmail.com>
- <CAGG=3QWcZPYqHMcjwuYDz1+OQhzS40hmhdOvSBZBQOkhs8YAQQ@mail.gmail.com>
- <CAGG=3QX8AaTedPy-joWm6yp+TFHBVXm59OcvxkdLGsSuDjem5g@mail.gmail.com>
- <CAHk-=wjQpXpnGAwvv-oBi+cQ0g+D9rTK5STkXSSV4a90FPR+EQ@mail.gmail.com>
- <CAKwvOdm_y6UOnxFrAiDxou2jc8CRUvyhfH9kAdc3PG0=bEvduw@mail.gmail.com> <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 28 Aug 2023 09:33:25 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXZ4fGjjXguftvrB69rt7dR6ngFA46YB8oGpk2_issJzA@mail.gmail.com>
-Message-ID: <CAMuHMdXZ4fGjjXguftvrB69rt7dR6ngFA46YB8oGpk2_issJzA@mail.gmail.com>
-Subject: Re: [PATCH] lib/clz_ctz.c: Fix __clzdi2() and __ctzdi2() for 32-bit kernels
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Helge Deller <deller@gmx.de>, Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Chanho Min <chanho.min@lge.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Kees Cook <keescook@chromium.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <11949.123082804111000218@us-mta-479.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hi, we tested your kernel and here are the results:
 
-On Sat, Aug 26, 2023 at 3:08=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Fri, 25 Aug 2023 at 17:52, Nick Desaulniers <ndesaulniers@google.com> =
-wrote:
-> And quite often we simply use other names - but then we also do *not*
-> build with -freestanding, because -freestanding has at least
-> traditionally meant that the compiler won't optimize the simple and
-> obvious cases (typically things like "memcpy with a constant size").
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Several architectures (incl. x86, but excl. amd64) do build the kernel with
--freestanding.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-IIRC, the issue was that without that, gcc was "optimizing" calls
-to standard functions (implemented as inline optimized assembler
-functions) by replacing them with calls to other standard functions
-(also implemented as inline optimized assembler functions).  As the
-latter became external calls, this defeated the optimized assembler
-implementation, and could even cause build failures if no external
-implementation was available.
+Kernel information:
+    Commit message: Linux 6.5
 
-Gr{oetje,eeting}s,
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/101674
 
-                        Geert
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
