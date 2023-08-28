@@ -1,77 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D0910FE;
-	Mon, 28 Aug 2023 08:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1302C433C7;
-	Mon, 28 Aug 2023 08:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693212373;
-	bh=ShxAP8o2gjfAvr5N5Uh585qdijxqK7UHIqgxosZq5sQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DD6hkCiJLbbvDvlThdBiZfq9gC7sXdHeYgX9mQH5it0Dz38WDSSJES3r3jSOt+6Ey
-	 hlISeRUaik3SnmapOZnmuGR2hSf1D5K1jgRU0UxX0IkLdCszahFwwpYJ9Oy6dZZi3M
-	 VUVWxzoUFrMbsqC1GuPV5UNRBH1OlSHbkL0/DMFlIDdsDD7ixm1usZ7LvHVqPGqKzA
-	 dTBvaLYtUbjkwGgd4ZSCaHthjFmze7ie2Sbxj0eDJ9PUkCoucYFY889H5yQ8Rsu0zY
-	 suidRDyQ48sdvrm83PkqGgI0DI0CCY2VUlm9sXiMBZdPKgtF3Avj+F/XbUooK0YFHC
-	 pudNYkQcUh+Yw==
-Message-ID: <e74c2316-60d1-245f-c671-5cd19c3ef42c@kernel.org>
-Date: Mon, 28 Aug 2023 10:46:09 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36E92591;
+	Mon, 28 Aug 2023 09:08:15 +0000 (UTC)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+	id 1qaYDl-008S2d-8i; Mon, 28 Aug 2023 17:07:42 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 28 Aug 2023 17:07:42 +0800
+Date: Mon, 28 Aug 2023 17:07:42 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: kernel test robot <lkp@intel.com>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	linuxppc-dev@lists.ozlabs.org
+Cc: Danny Tsen <dtsen@linux.ibm.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: crypto: powerpc/chacha20,poly1305-p10 - Add dependency on VSX
+Message-ID: <ZOxj3rFGVcRUzgwb@gondor.apana.org.au>
+References: <202308251906.SYawej6g-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [stable:linux-6.4.y 600/1652] ERROR: modpost: __ex_table+0x222c
- references non-executable section '.rodata'
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Dan Carpenter <error27@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sasha Levin <sashal@kernel.org>
-References: <202308091247.i8jNaJgR-lkp@intel.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <202308091247.i8jNaJgR-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202308251906.SYawej6g-lkp@intel.com>
 
-On 09/08/2023 06:07, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.4.y
-> head:   38ca69782268c8e9578ba2f1fccf931f643eb8da
-> commit: 884756f0203f9478391389465f8d6184223572be [600/1652] w1: fix loop in w1_fini()
-> config: riscv-randconfig-r042-20230731 (https://download.01.org/0day-ci/archive/20230809/202308091247.i8jNaJgR-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230809/202308091247.i8jNaJgR-lkp@intel.com/reproduce)
+On Fri, Aug 25, 2023 at 07:44:32PM +0800, kernel test robot wrote:
+>
+> All errors (new ones prefixed by >>):
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308091247.i8jNaJgR-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
+>    In file included from arch/powerpc/crypto/poly1305-p10-glue.c:19:
 
 ...
 
-> WARNING: modpost: vmlinux.o(__ex_table+0x2248): Section mismatch in reference from the (unknown reference) (unknown) to the (unknown reference) .debug_str:(unknown)
-> ERROR: modpost: __ex_table+0x2248 references non-executable section '.debug_str'
-> WARNING: modpost: vmlinux.o(__ex_table+0x225c): Section mismatch in reference from the (unknown reference) (unknown) to the variable .rodata.str1.1:.L.str.29
-> ERROR: modpost: __ex_table+0x225c references non-executable section '.rodata.str1.1'
-> WARNING: modpost: vmlinux.o: section mismatch in reference: fixed_mdio_bus_exit (section: .exit.text) -> set_reset_devices (section: .init.text)
-> WARNING: modpost: vmlinux.o: section mismatch in reference: fixed_mdio_bus_exit (section: .exit.text) -> set_reset_devices (section: .init.text)
-> WARNING: modpost: vmlinux.o: section mismatch in reference: smsc911x_cleanup_module (section: .exit.text) -> set_reset_devices (section: .init.text)
-> WARNING: modpost: vmlinux.o: section mismatch in reference: smsc911x_cleanup_module (section: .exit.text) -> set_reset_devices (section: .init.text)
-> WARNING: modpost: vmlinux.o: section mismatch in reference: mipid02_i2c_driver_exit (section: .exit.text) -> set_reset_devices (section: .init.text)
-> WARNING: modpost: vmlinux.o: section mismatch in reference: mipid02_i2c_driver_exit (section: .exit.text) -> set_reset_devices (section: .init.text)
-> WARNING: modpost: vmlinux.o: section mismatch in reference: w1_family_0d_exit (section: .exit.text) -> set_reset_devices (section: .init.text)
-> WARNING: modpost: vmlinux.o: section mismatch in reference: w1_family_0d_exit (section: .exit.text) -> set_reset_devices (section: .init.text)
+> ae3a197e3d0bfe3 David Howells    2012-03-28  75  
+> ae3a197e3d0bfe3 David Howells    2012-03-28  76  #ifdef CONFIG_VSX
+> d1e1cf2e38def30 Anton Blanchard  2015-10-29  77  extern void enable_kernel_vsx(void);
+> ae3a197e3d0bfe3 David Howells    2012-03-28  78  extern void flush_vsx_to_thread(struct task_struct *);
+> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  79  static inline void disable_kernel_vsx(void)
+> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  80  {
+> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  81  	msr_check_and_clear(MSR_FP|MSR_VEC|MSR_VSX);
+> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  82  }
+> bd73758803c2eed Christophe Leroy 2021-03-09  83  #else
+> bd73758803c2eed Christophe Leroy 2021-03-09  84  static inline void enable_kernel_vsx(void)
+> bd73758803c2eed Christophe Leroy 2021-03-09  85  {
+> bd73758803c2eed Christophe Leroy 2021-03-09 @86  	BUILD_BUG();
+> bd73758803c2eed Christophe Leroy 2021-03-09  87  }
+> bd73758803c2eed Christophe Leroy 2021-03-09  88  
 
-False positive. I don't think my patch caused it, but rather just
-touched the file thus the same old warning pops up.
+---8<---
+Add dependency on VSX as otherwise the build will fail without
+it.
 
-Best regards,
-Krzysztof
+Fixes: 161fca7e3e90 ("crypto: powerpc - Add chacha20/poly1305-p10 to Kconfig and Makefile")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202308251906.SYawej6g-lkp@intel.com/
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
+diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
+index f25024afdda5..7a66d7c0e6a2 100644
+--- a/arch/powerpc/crypto/Kconfig
++++ b/arch/powerpc/crypto/Kconfig
+@@ -113,7 +113,7 @@ config CRYPTO_AES_GCM_P10
+ 
+ config CRYPTO_CHACHA20_P10
+ 	tristate "Ciphers: ChaCha20, XChacha20, XChacha12 (P10 or later)"
+-	depends on PPC64 && CPU_LITTLE_ENDIAN
++	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_CHACHA_GENERIC
+ 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
+@@ -127,7 +127,7 @@ config CRYPTO_CHACHA20_P10
+ 
+ config CRYPTO_POLY1305_P10
+ 	tristate "Hash functions: Poly1305 (P10 or later)"
+-	depends on PPC64 && CPU_LITTLE_ENDIAN
++	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
+ 	select CRYPTO_HASH
+ 	select CRYPTO_LIB_POLY1305_GENERIC
+ 	help
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
