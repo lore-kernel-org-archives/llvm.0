@@ -1,140 +1,113 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD29A134D4
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:13:41 +0000 (UTC)
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-64f383be0d4so22268416d6.3
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 13:13:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFF810F4
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:39:13 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d72f3290e6eso4493973276.3
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 13:39:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693253620; x=1693858420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iPlx3ixDZIyJnbVh1BXs5jAUX+MLuQTLGqaMbx/eBOE=;
-        b=I6BL5BJo8rpiMQo7XBz8CqFcWk0omwpKUrB5OqgGz8+kIPPaPJzF6nouz33xUZoaUP
-         Jz0N4fYzCRVFhsnSeLBxlWou72tQOyfL5RnUQJSxeIYQge3y6lzb/sJwoDJVw3exIw1t
-         vKBCFB06m7HN81GljhVq+tZyQvzevKDSt5vgfLXdYbq3ZGkG11VS5JJ+IfZHLyZ1YpyZ
-         pj2Y0xgGwTE6k64rbwOy0Ve5zrN/8IqRsyVXvHys5aWavfctD3dZVWM4WZQhOA9u0iKl
-         AFjF7pHA/oElKR6c0q3Sk7keEoj6T7II/HwmydSgWXvNf5cCeNjwGdss1AcoiKcpxfBT
-         xHEA==
+        d=google.com; s=20221208; t=1693255152; x=1693859952;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XhrkWiQBnHmzMnkAE+NYbdoZdy6UiyASIH0GRgNQ/sU=;
+        b=urfxC/+oTHLuj+i6cn0/azuq+FFaWj+TnME6nhesd8cw0L5Hhx/TUyll1F+Er3mk1V
+         EPtJEawuJ7LmK9shNHvS9h/gGI6VsaHwg4Nca8og7fCRD7CQB4X3Kfa9FsaRnST6k8xO
+         0dr5yHSkjVGAHS3J7o6VojOEbV63NzFkgqMmpXOQ582xX256DdnHrjUmmPC4cmLFHEin
+         Z1O8sfXNGBnPb7WSs4WCuskoLd5HzDd2PmDt8VBcd9vco3CTPXvj+3hemrc7Ly+8daso
+         R24co0ytNidRJebijXU8YN6wM8GK/12rUxTgs3qJ/AEYZkHtELGzmn5jHkz2rJQRiQlW
+         odaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693253620; x=1693858420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iPlx3ixDZIyJnbVh1BXs5jAUX+MLuQTLGqaMbx/eBOE=;
-        b=cZAa8ue9EaTjRNyWf70s3W5qE/EeIqrKSri/dP5NsOy3VlkZFtB3phps5pJdRPd6mp
-         cVBDO+B3tudz4cHSfwcGd9PzALOFIHRU9z0DxRnQZtU2LvPQZihKWb8uPrabakT8doVd
-         DzMY59wrvfSWn16o457+xFztGZSabTbTj2RpcXVLmu4ImhNfSaC1Mhz6eqq4/Blr3VWF
-         cPCLD6eoJp2hgOfTxkHc/eXpL8+8ilv7dcEbgVckCVvW1BYn0QMC6GW8FXZXOqgnCN4G
-         01CuC/cCjS2KB8x+HAyJUJWy6rIDA5La2p56BZkluomlz0CpSi3sGmNHPUfXn1RvQaEt
-         PUNQ==
-X-Gm-Message-State: AOJu0Ywy7KREhj4JgLseFCqT6Fo23UBkjeuSuEufsYOBDr+PGqisylCP
-	QCNWtY1FLH4QA1nnqa+IvHMqaWFhXOxr2tXBL0CYOA==
-X-Google-Smtp-Source: AGHT+IH+a4xXxSWRIXzFZiXI1vjuHKVktsasFxFyvyPHbSnDpJ806vs4iN2e/8Qo00cv0Qn5LOK6cRLB5Ri8cboGlyw=
-X-Received: by 2002:a0c:e413:0:b0:64b:997f:5a7e with SMTP id
- o19-20020a0ce413000000b0064b997f5a7emr30979975qvl.8.1693253620349; Mon, 28
- Aug 2023 13:13:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693255152; x=1693859952;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XhrkWiQBnHmzMnkAE+NYbdoZdy6UiyASIH0GRgNQ/sU=;
+        b=dUQEldJPf4+6dU2OMFG0MIuYsuEcYjnXk8VWxSghXsMkXKGskw9eAjR0/E3ISSV6HF
+         Q9svAvqBJb00s9VO/Y8DMfQE+f4tangzF9xmJf59NFjgeaDaFX3dmjnRitR/AeiBVeQ2
+         WJqcoxyHUPrifrT9WU6j971ND/5Hj99q7o7qPcbAVxj7vjKn9LufqC7ToI2tGbfz+enW
+         RSKynf6pLFaSTiRzhawRurhx+TjA0OMivDfNJ3w68ipGD+o5g9nxDj+ZxwsOgUFvzmV/
+         oQHGIjtEtOuCD/Z8lrkoCOpxAnip8NDeysamg/yxRhMXY5BMZtEeBqI9mJZYy/den5tQ
+         0ajw==
+X-Gm-Message-State: AOJu0YyA6txigFGOR3Q3ocvr9TPaVrf+c/BZE0tGjN2MY5cCMyMMdyFl
+	e5S8J5ZOEUhQbPdfhabIKOS2kAQThagv7VMm3hI=
+X-Google-Smtp-Source: AGHT+IGlwLCXXsjKROwMA/eBuqL6pO5hd66mEIQL7qVwZn+m6vX+Qy5OakE1dsfnaIt9WkB4KXLqeb7R2EWnAWB0U3E=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:b64:7817:9989:9eba])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:74c6:0:b0:d0c:c83b:94ed with SMTP
+ id p189-20020a2574c6000000b00d0cc83b94edmr811734ybc.10.1693255152253; Mon, 28
+ Aug 2023 13:39:12 -0700 (PDT)
+Date: Mon, 28 Aug 2023 13:39:06 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <ZOkGCSNr0VN2VIJJ@p100> <CAHk-=wjZwSymfuGvf7TX3UQLU1OMN1FZMnEA-Hja0ruqyhMK4A@mail.gmail.com>
- <CAHk-=whVvD05T0yD5DQj803uETLD6qDq-Vx-SiLPcrL=eO77LQ@mail.gmail.com>
- <CAKwvOdnYauyrzz7-ceH-MP_KZ5ED8oYxjRx_Xei68=tUOSeKyA@mail.gmail.com>
- <CAGG=3QWcZPYqHMcjwuYDz1+OQhzS40hmhdOvSBZBQOkhs8YAQQ@mail.gmail.com>
- <CAGG=3QX8AaTedPy-joWm6yp+TFHBVXm59OcvxkdLGsSuDjem5g@mail.gmail.com>
- <CAHk-=wjQpXpnGAwvv-oBi+cQ0g+D9rTK5STkXSSV4a90FPR+EQ@mail.gmail.com>
- <CAKwvOdm_y6UOnxFrAiDxou2jc8CRUvyhfH9kAdc3PG0=bEvduw@mail.gmail.com>
- <CAHk-=wgJzMzPFTCzejWs1WM4=74z2VENyOzySnucrXG3i=ajrw@mail.gmail.com>
- <CAMuHMdXZ4fGjjXguftvrB69rt7dR6ngFA46YB8oGpk2_issJzA@mail.gmail.com> <CAHk-=wgefVmehW7oFrXLYYogqfoBQaku8Qm4o3+95Xwv=he+iQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgefVmehW7oFrXLYYogqfoBQaku8Qm4o3+95Xwv=he+iQ@mail.gmail.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAOkF7WQC/3WMwQ7CIBAFf6XZsxhAKtiT/2Eao7hQEi1kaYim4
+ d/F3j3Oy5tZISMFzDB0KxCWkEOcG8hdB3a6zR5ZeDQGyeWBG2lYSvZK2K5ICzsqraR2XFkU0JR E6MJ7y13GxlPIS6TPVi/it/4JFcEE08r1/d0Ic+L67GP0T9zb+IKx1voFZACn56kAAAA=
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693255150; l=2020;
+ i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
+ bh=xcYx2Rp6x+lRWSqPslFnv6rJuAz/HxMw+0OdY1ALQZs=; b=v17oTu32hcx8X2o5oavi8I5UUOWMaIGdmbzoTP9nH19+mbccNNnrpEkGWrOiXO5zDJPWL5d/n
+ rm1iEXciqeaAqQHb6RBdzIzkcNFhLuv32jqEmsXHABpaRsTnDZThqrj
+X-Mailer: b4 0.12.3
+Message-ID: <20230828-ppc_rerevert-v2-1-46b71a3656c6@google.com>
+Subject: [PATCH v2] reapply: powerpc/xmon: Relax frame size for clang
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 28 Aug 2023 13:13:29 -0700
-Message-ID: <CAKwvOdmmMHRtLG5447KhLMTFD=1AjZeu1m3ZKdy=jHHkG16qUw@mail.gmail.com>
-Subject: Re: [PATCH] lib/clz_ctz.c: Fix __clzdi2() and __ctzdi2() for 32-bit kernels
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Bill Wendling <morbo@google.com>, Helge Deller <deller@gmx.de>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Chanho Min <chanho.min@lge.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Kees Cook <keescook@chromium.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel test robot <lkp@intel.com>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Aug 28, 2023 at 9:25=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, 28 Aug 2023 at 00:33, Geert Uytterhoeven <geert@linux-m68k.org> w=
-rote:
-> >
-> > Several architectures (incl. x86, but excl. amd64) do build the kernel =
-with
-> > -freestanding.
-> >
-> > IIRC, the issue was that without that, gcc was "optimizing" calls
-> > to standard functions (implemented as inline optimized assembler
-> > functions) by replacing them with calls to other standard functions
-> > (also implemented as inline optimized assembler functions).
->
-> So using -ffreestanding is definitely the right thing to do for a
-> kernel in theory. It's very much supposed to tell the compiler to not
+This is a manual revert of commit
+7f3c5d099b6f8452dc4dcfe4179ea48e6a13d0eb, but using
+ccflags-$(CONFIG_CC_IS_CLANG) which is shorter.
 
--ffreestanding is probably a good suggestion for any embedded
-platform.  But given the size of the kernel, and similarities of
-symbols and their semantics expected by the compiler and provided by
-the kernel, I think -ffreestanding should not be set at this point for
-the Linux kernel.
+Turns out that this is reproducible still under specific compiler
+versions (mea culpa: I did not test every supported version of clang),
+and even a few randconfigs bots found.
 
-> assume a standard libc, and without that gcc will do various
-> transformations that make sense when you "know" what libc does, but
-> may not make sense in the limited library model of a kernel.
->
-> So without it, gcc will do things like converting a 'printf()' call
-> without any conversion characters to a much cheaper 'puts()' etc. Now,
-> we often avoid that issue entirely by having our own function names
-> (ie printk()), but we do tend to use the *really* core C library
-> names.
->
-> Anyway, it turns out that some of the things you miss out on with
-> -ffreestanding are kind of important. In particular, at least gcc will
-> stop some 'memcpy()' optimizations too, which ends up being pretty
-> horrendous.
->
-> So while -ffreestanding would be the right thing to do in theory, in
-> practice it's actually pretty horrible. It's a big hammer that affects
-> a lot of things, and while many of them make sense for a kernel, some
-> of them are really bad. Which is why x86-64 no longer uses it.
+We'll have to revisit this again in the future, for now back this out.
 
-I agree.
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/252#issuecomment-1690371256
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/llvm/202308260344.Vc4Giuk7-lkp@intel.com/
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Changes in v2:
+- Use ccflags-$(CONFIG_CC_IS_CLANG) as per Nathan.
+- Move that to be below the initial setting of ccflags-y as per Nathan.
+- Add Nathan's Suggested-by and Reviewed-by tags.
+- Update commit message slightly, including oneline.
+- Link to v1: https://lore.kernel.org/r/20230828-ppc_rerevert-v1-1-74f55b818907@google.com
+---
+ arch/powerpc/xmon/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->
-> I would actually suggest other architectures take a look if they care
-> at all about code generation. In particular, look at the x86-64
-> version of 'string.h' in
->
->   arch/x86/include/asm/string_64.h
->
-> and note the difference with the 32-bit one. The 32-bit one is the
-> "this is how we used to do it" that nobody cared enough to change. The
-> 64-bit one is much simpler and actually generates better code simply
-> because gcc recognizes memcpy() and friends, and will then inline it
-> when small etc.
->
-> The *downside* is that now you have to trust the compiler to do the
-> right thing. And that will depend on compiler version etc. There's a
-> reason why 32-bit x86 does everything by hand: when your compiler
-> history starts at gcc-1.40, things are simply *very* different from
-> when you now rely on gcc-5.1 and newer...
->
-> Put another way: gcc has changed, and what used to make sense probably
-> doesn't make sense any more.
+diff --git a/arch/powerpc/xmon/Makefile b/arch/powerpc/xmon/Makefile
+index 7705aa74a24d..682c7c0a6f77 100644
+--- a/arch/powerpc/xmon/Makefile
++++ b/arch/powerpc/xmon/Makefile
+@@ -12,6 +12,10 @@ ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+ 
+ ccflags-$(CONFIG_PPC64) := $(NO_MINIMAL_TOC)
+ 
++# Clang stores addresses on the stack causing the frame size to blow
++# out. See https://github.com/ClangBuiltLinux/linux/issues/252
++ccflags-$(CONFIG_CC_IS_CLANG) += -Wframe-larger-than=4096
++
+ obj-y			+= xmon.o nonstdio.o spr_access.o xmon_bpts.o
+ 
+ ifdef CONFIG_XMON_DISASSEMBLY
 
-Yep, I think it's time to review the use of -ffreestanding in the linux ker=
-nel.
---=20
-Thanks,
-~Nick Desaulniers
+---
+base-commit: 2ee82481c392eec06a7ef28df61b7f0d8e45be2e
+change-id: 20230828-ppc_rerevert-647427f04ce1
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
+
