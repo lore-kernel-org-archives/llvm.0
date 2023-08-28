@@ -1,156 +1,93 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E421C15
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 22:25:56 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-58fb8933e18so50704987b3.3
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 15:25:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F411186C
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 22:46:58 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1bf48546ccfso18179035ad.2
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 15:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693261555; x=1693866355;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WL1tQymiA0QNtSV27nV5+wlwcB60k6N2NSD+c5q8HQg=;
-        b=JoHOoN5AHuQ86eXhnjG3U070yK9cvNyS2AVvroFNhguy50VpeQ6WU9xS9/gk+nVAW8
-         cB8tMKGkgUUYQ7fBsfIXzzgEUTzDq1UXuakUOvqqjLSyjTSUfSlvxTT2LARSAcZCsL+6
-         qb2mda588RKdSlMncA/n0D8yWn/Pb/YH/EzPY/9s+I2xe65rmxP+Zibu7Uj+CeUAwaFK
-         LnYAkfhxfXxdUg66d9HTkdIepibDIgth6uCGBkmKPmIdVHDcWJKPY2US7FNfuaioy3Z6
-         Z0kBxnEJ61tDFKgoC79rSf2QJwuSxRyoBJCn1REEKlemHGgSt2TQ/310romCB3WlO2oN
-         tO9Q==
+        d=google.com; s=20221208; t=1693262818; x=1693867618;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jfbVDtnUzC7S/98XQMX9mkLUChZIIcF3EqTa705rK40=;
+        b=DpUgaRdGmyys0YbzcJ+/+C/4TT7jf1NRTxh6quRzHmf0W7ShC/TICRXTpcZ+bfooDZ
+         MGEwb57HzW4HbsZv5qXAym6Vuj27xlfQRiC7IqWvDgw6tbgIsCaLtpawdHEDSOzx6h/C
+         KdyPPAxwPmi/1KKanDD8q1ldw/5UXMQMWlcwjeePUW9NFPerJvASgEvRs1+i1viJg2sW
+         4M54QrmCfMkGjh1r23unlGBCYVLiyLoj+GtplXm8aPBKD0pPKmqMO1jqR/CZrZyGuecf
+         NHMVctNEvEYrD6lKE8Ul/08Ky52jOkCUMqMH62NW8vYpwWQcamzhUW4QOVJJStjHcvjI
+         BlaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693261555; x=1693866355;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WL1tQymiA0QNtSV27nV5+wlwcB60k6N2NSD+c5q8HQg=;
-        b=kScPcz/RsBdJTLPZxK7q73bEw8XzGd7cXP3DN5m9O8Z2ErQygxhjLOAwz0nAo24cOn
-         fXphgLZD4x1KGq/33nmG8ebzmqz5/YoUtkwj/YvOgabVhy69pKnPUEP8wXvZtfHzSwwd
-         UIjg4QXWGemowCgr5UhbRWXldzcCFur8QUVrKWytvKOez90JxIG9jHYqdi9B0idyUEBZ
-         R7AbxWVPYxy5XkRlqoN8+qEOGK5zYBgkG0kXRK81Dg0wIN9mk3dPOZXiKxLsYFtPW8c3
-         GQq1YFAKE+hneIUga7tCCfGM+ckurX0suHsOA+9S3fXpi29bDfVG6mggWj6koeXylCS0
-         clMA==
-X-Gm-Message-State: AOJu0YypyO/68eeAq+bLCoU/KFbapy9lyUfnr/586eA8UizE+kBof9U8
-	WAtw+Ri40Inxbu5R/S3Ola7sZ06Ay8EdBakVQJg=
-X-Google-Smtp-Source: AGHT+IEHx1L4auj/EdI7SADc9H3MwvX/vPnn5w8vp1/S1Yz4HvTE6wVG99CwlClV81ou70LXLC9pxdtTeMr8Ap710PU=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:b64:7817:9989:9eba])
- (user=ndesaulniers job=sendgmr) by 2002:a81:ae06:0:b0:573:87b9:7ee9 with SMTP
- id m6-20020a81ae06000000b0057387b97ee9mr829678ywh.4.1693261555125; Mon, 28
- Aug 2023 15:25:55 -0700 (PDT)
-Date: Mon, 28 Aug 2023 15:25:48 -0700
-In-Reply-To: <20230828-scsi_fortify-v1-0-8dde624a3b2c@google.com>
+        d=1e100.net; s=20221208; t=1693262818; x=1693867618;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jfbVDtnUzC7S/98XQMX9mkLUChZIIcF3EqTa705rK40=;
+        b=F7wu8iEj8Murq/5OAeN+oa4il+lT4wnlNO0CKgdqbMdAxlDSfvBiOlzzrhz5f5zKr7
+         sfRV32wtb33vM2GN1GELTR4wyrdwGWIupG8SLv4WwQl9Myst3JyQcbePH31Jzn2syGnY
+         etVfBc4oHvIKeHeASiLRsReqqnFfm0A1E4Y5eZLegDM1s7svdmrb658g4Evac+ZzWaCg
+         es06HzbjfgsoTDTRU7N2ksX0iaV5K8n19dt+vCpnv4ME84HUYxdUxgldPkVBZ0kIzps2
+         gjrDSQSKaYQ1GUApuO8fVpBHPwmfJcJdWJXaWNQZeOQTm7GMCfeSE4U9pMGP8M4KRSt8
+         UeqQ==
+X-Gm-Message-State: AOJu0Yxvdnf0kTZMDk6+EqsJCroJpTZdsY3x4+cj7kvckZpwabTPm+LI
+	Vqj2MNqptm/I+W+1VcNcj9H3lw==
+X-Google-Smtp-Source: AGHT+IFspYfjLzYgSOwGtPHy8bxl+y+5JkPrvkKdfXKLBR1uq/L9AkoAEuEDtgywPH8Tn+brWT5PnQ==
+X-Received: by 2002:a17:902:dacd:b0:1c0:c86a:5425 with SMTP id q13-20020a170902dacd00b001c0c86a5425mr11041619plx.19.1693262818063;
+        Mon, 28 Aug 2023 15:46:58 -0700 (PDT)
+Received: from google.com ([2620:15c:2d1:203:b64:7817:9989:9eba])
+        by smtp.gmail.com with ESMTPSA id jg12-20020a17090326cc00b001b8b07bc600sm7904627plb.186.2023.08.28.15.46.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Aug 2023 15:46:57 -0700 (PDT)
+Date: Mon, 28 Aug 2023 15:46:52 -0700
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Stefan Haberland <sth@linux.ibm.com>,
+	Jan =?iso-8859-1?Q?H=F6ppner?= <hoeppner@linux.ibm.com>,
+	Peter Oberparleiter <oberpar@linux.ibm.com>,
+	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org, nathan@kernel.org,
+	llvm@lists.linux.dev, David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH 1/1] s390/dasd: fix string length handling
+Message-ID: <ZO0j3M8KFWeEznXy@google.com>
+References: <20230828153142.2843753-1-hca@linux.ibm.com>
+ <20230828153142.2843753-2-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230828-scsi_fortify-v1-0-8dde624a3b2c@google.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693261549; l=3338;
- i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
- bh=QVZghMLPP42usKlaJQTZjiZHzXDWVKPfY+QwZHJyIKk=; b=PtTKGhzagQppTiG/eusxtBe/ncoCdao9ylHQtdEesrL9MNPm094c3VNQzvmSFiFi+bCIdx0j0
- /87XN3v+sIwCZ8O5qbGc7RbENymwoeWEuxMauBVAgPfdGfwDIBsvuap
-X-Mailer: b4 0.12.3
-Message-ID: <20230828-scsi_fortify-v1-2-8dde624a3b2c@google.com>
-Subject: [PATCH 2/2] scsi: myrs: fix -Wfortify-source
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Hannes Reinecke <hare@kernel.org>, "James E.J. Bottomley" <jejb@linux.ibm.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Nathan Chancellor <nathan@kernel.org>
-Cc: Tom Rix <trix@redhat.com>, linux-scsi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230828153142.2843753-2-hca@linux.ibm.com>
 
-clang-18 has improved its support for detecting operations that will
-truncate values at runtime via -Wfortify-source.
+On Mon, Aug 28, 2023 at 05:31:42PM +0200, Heiko Carstens wrote:
+> Building dasd_eckd.o with latest clang reveals this bug:
+> 
+>     CC      drivers/s390/block/dasd_eckd.o
+>       drivers/s390/block/dasd_eckd.c:1082:3: warning: 'snprintf' will always be truncated;
+>       specified size is 1, but format string expands to at least 11 [-Wfortify-source]
+>        1082 |                 snprintf(print_uid, sizeof(*print_uid),
+>             |                 ^
+>       drivers/s390/block/dasd_eckd.c:1087:3: warning: 'snprintf' will always be truncated;
+>       specified size is 1, but format string expands to at least 10 [-Wfortify-source]
+>        1087 |                 snprintf(print_uid, sizeof(*print_uid),
+>             |                 ^
+> 
+> Fix this by moving and using the existing UID_STRLEN for the arrays
+> that are being written to. Also rename UID_STRLEN to DASD_UID_STRLEN
+> to clarify its scope.
+> 
+> Fixes: 23596961b437 ("s390/dasd: split up dasd_eckd_read_conf")
+> Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 
-Fixes the warning:
-  drivers/scsi/myrs.c:1089:10: warning: 'snprintf' will always be
-  truncated; specified size is 32, but format string expands to at least
-  34 [-Wfortify-source]
-
-In particular, the string literal "physical device - not rebuilding\n"
-is indeed 34B by my count.
-
-When we have a string literal that does not contain any format flags,
-rather than use snprintf (sometimes with a size that's too small), let's
-use sprintf.
-
-This is pattern is cleaned up throughout the file.
+Thanks for the patch! Nathan just reported a bunch of these. I took a
+look at these two and thought "yeah that's clearly a bug in the kernel
+sources." Fix LGTM.
 
 Reported-by: Nathan Chancellor <nathan@kernel.org>
 Closes: https://github.com/ClangBuiltLinux/linux/issues/1923
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- drivers/scsi/myrs.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
-index a1eec65a9713..729f08379bd0 100644
---- a/drivers/scsi/myrs.c
-+++ b/drivers/scsi/myrs.c
-@@ -939,7 +939,7 @@ static ssize_t raid_state_show(struct device *dev,
- 	int ret;
- 
- 	if (!sdev->hostdata)
--		return snprintf(buf, 16, "Unknown\n");
-+		return sprintf(buf, "Unknown\n");
- 
- 	if (sdev->channel >= cs->ctlr_info->physchan_present) {
- 		struct myrs_ldev_info *ldev_info = sdev->hostdata;
-@@ -1058,7 +1058,7 @@ static ssize_t raid_level_show(struct device *dev,
- 	const char *name = NULL;
- 
- 	if (!sdev->hostdata)
--		return snprintf(buf, 16, "Unknown\n");
-+		return sprintf(buf, "Unknown\n");
- 
- 	if (sdev->channel >= cs->ctlr_info->physchan_present) {
- 		struct myrs_ldev_info *ldev_info;
-@@ -1086,7 +1086,7 @@ static ssize_t rebuild_show(struct device *dev,
- 	unsigned char status;
- 
- 	if (sdev->channel < cs->ctlr_info->physchan_present)
--		return snprintf(buf, 32, "physical device - not rebuilding\n");
-+		return sprintf(buf, "physical device - not rebuilding\n");
- 
- 	ldev_info = sdev->hostdata;
- 	ldev_num = ldev_info->ldev_num;
-@@ -1102,7 +1102,7 @@ static ssize_t rebuild_show(struct device *dev,
- 				(size_t)ldev_info->rbld_lba,
- 				(size_t)ldev_info->cfg_devsize);
- 	} else
--		return snprintf(buf, 32, "not rebuilding\n");
-+		return sprintf(buf, "not rebuilding\n");
- }
- 
- static ssize_t rebuild_store(struct device *dev,
-@@ -1190,7 +1190,7 @@ static ssize_t consistency_check_show(struct device *dev,
- 	unsigned short ldev_num;
- 
- 	if (sdev->channel < cs->ctlr_info->physchan_present)
--		return snprintf(buf, 32, "physical device - not checking\n");
-+		return sprintf(buf, "physical device - not checking\n");
- 
- 	ldev_info = sdev->hostdata;
- 	if (!ldev_info)
-@@ -1202,7 +1202,7 @@ static ssize_t consistency_check_show(struct device *dev,
- 				(size_t)ldev_info->cc_lba,
- 				(size_t)ldev_info->cfg_devsize);
- 	else
--		return snprintf(buf, 32, "not checking\n");
-+		return sprintf(buf, "not checking\n");
- }
- 
- static ssize_t consistency_check_store(struct device *dev,
-@@ -1376,7 +1376,7 @@ static ssize_t processor_show(struct device *dev,
- 			       info->cpu[1].cpu_name,
- 			       second_processor, info->cpu[1].cpu_count);
- 	else
--		ret = snprintf(buf, 64, "1: absent\n2: absent\n");
-+		ret = sprintf(buf, "1: absent\n2: absent\n");
- 
- 	return ret;
- }
-
--- 
-2.42.0.rc2.253.gd59a3bf2b4-goog
-
+I also like David's idea of passing `char ident [DASD_UID_STRLEN]`, too,
+but I don't feel strongly either way.
