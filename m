@@ -1,101 +1,73 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D092611C8D
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 10:17:08 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 459A51F460;
-	Mon, 28 Aug 2023 10:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1693217821; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8WzDkkOqXyxAW32MenOUeYu097Eo7SdlcGQval63I74=;
-	b=EEBmCGQOH+CjpytQ23tFboiOF5bUumEY42hJJmF9uR7EkxZGEF7NpwuSdKVnkYVGiyq9ph
-	btR4PFUGX2KK96gSKU7+t7x+AadDXdkhXvSdKoUh0M5Rz1i+Wz2YcROCo6UHkpal/UHsbt
-	+bN9l1hmQ0Yip+ggLTWWdAAzC/7pIfQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1693217821;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8WzDkkOqXyxAW32MenOUeYu097Eo7SdlcGQval63I74=;
-	b=iJfZWaN15mnddcMeDrgjmcOL1xf+ot/rKn3Bjl7gEH7L0hVn9qRHB1AOCGhQPtY8CyGCUP
-	kAtYDa9Yuvbf0oBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 30A66139CC;
-	Mon, 28 Aug 2023 10:17:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id +D7WCx107GQvTgAAMHmgww
-	(envelope-from <jack@suse.cz>); Mon, 28 Aug 2023 10:17:01 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 7A6CAA0774; Mon, 28 Aug 2023 12:17:00 +0200 (CEST)
-Date: Mon, 28 Aug 2023 12:17:00 +0200
-From: Jan Kara <jack@suse.cz>
-To: Edward AD <eadavis@sina.com>
-Cc: syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com,
-	adilger.kernel@dilger.ca, jack@suse.cz, linux-ext4@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu,
-	yi.zhang@huawei.com
-Subject: Re: [PATCH] ext4: fix ext4_calculate_overhead use invliad j_inode
-Message-ID: <20230828101700.i3exsxt7bxz53kau@quack3>
-References: <000000000000b1426e0603bc40b6@google.com>
- <20230826035554.2849316-1-eadavis@sina.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E1711C9F
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 12:27:51 +0000 (UTC)
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-79d8edd6d99so961687241.3
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 05:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693225670; x=1693830470;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mD8rjBVWRUnVFIrMO4cA1ZPhi9N2+KrE61nTEBLn+r8=;
+        b=w2wX8EBOtv0qHfJ40DEvdYIUkVY21B1Li/gT5HMgGkzlmFM75fFKNc3D6dVlQ7YQv2
+         b/ZNO4vnByOP/dUANkhAq+6bRSPeVB/bw5kbGpEOq4x/eu/DLbBVwFpIFNKqbRNQiLsj
+         TxrxcHFIvd6bp0TkUSeVXXvZ/PO296+4OgMQqPnUYGvnTbG82lXs/qdTPLXgQ+V76fj+
+         J7pvLOKe3GgKu+mB/iowEbK2UwyxT5qZkChG4+MAZHMA39GzTYxrSIbGrkscdXFNntac
+         hkQO6hnYR2s9VWJ9nJMouraPmYAhyK7GYNH5ZtuIWf/6BRD1cYITQXg0RwcLzu3OzL7X
+         cOcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693225670; x=1693830470;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mD8rjBVWRUnVFIrMO4cA1ZPhi9N2+KrE61nTEBLn+r8=;
+        b=P7WgLKAIsniLbhwCh3pPXy+YnWWsT7csvO+LsoFgh1YicEe+4mqQ3jVPWAcdz3dX1m
+         0OZlKWIDmRcti9kLnFuCcGebxXWHIgZi1omP+5EYGX6jF04KDH4ZRJh8fENnQp7GToaO
+         o1rmMSmfYmZoXD6ODlaQKYH4FkLwBagu5c9toiwr2cUur4tkwCIJZXONDLp2y3Yvcdo/
+         JA9bcdPoF/AFNG63tFgYnzc8elSoSBagz4xCjp8iyF5VqcL5tov6ps79ApY3Mwo8l7UR
+         nx1Q9sEPBnDexgVpqCdd9F/YzHN0eVEeJHl4FEia65KC3Gth6R1oFjkiCAlJuPLQ4m3W
+         nlhQ==
+X-Gm-Message-State: AOJu0YwCMKBHIIo8uv1o0MBZzfLssKQedsEyfmQ43iznPkPjINl+TQeg
+	ZQvM76ngRHM6glu9UyOttv+QawT4SPfoCav7Z4rVU64NcxnJ2OLlon0=
+X-Google-Smtp-Source: AGHT+IF0RiZ0dNfm1hl6bCcyi1b7qOZTEPlRkMEvYAZgrIt+/7pxC7vY4qFsDn3YySHb9VtQ1bv6mghrSZupPrXVSTg=
+X-Received: by 2002:a05:6102:3bc4:b0:44d:4aa1:9d3e with SMTP id
+ a4-20020a0561023bc400b0044d4aa19d3emr19174288vsv.0.1693225670012; Mon, 28 Aug
+ 2023 05:27:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230826035554.2849316-1-eadavis@sina.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 28 Aug 2023 17:57:38 +0530
+Message-ID: <CA+G9fYscGFiG1TVLyfETVu3NV5BAe8sCOXRGDnky-w31aB6yVQ@mail.gmail.com>
+Subject: clang: net: qed_main.c:1227:3: error: 'snprintf' will always be
+ truncated; specified size is 16, but format string expands to at least 18 [-Werror,-Wfortify-source]
+To: clang-built-linux <llvm@lists.linux.dev>, linux-stable <stable@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org
+Cc: Netdev <netdev@vger.kernel.org>, David Miller <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Sasha Levin <sashal@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat 26-08-23 11:55:54, Edward AD wrote:
-> In ext4_calculate_overhead(), ext4_get_journal_inode() returned an invalid inode 
-> pointer without processing. Here, an invalid pointer judgment condition is added 
-> to avoid incorrect operation of invalid pointer j_inode.
-> 
-> Reported-by: syzbot+b3123e6d9842e526de39@syzkaller.appspotmail.com
-> Fixes: 99d6c5d892bf ("ext4: ext4_get_{dev}_journal return proper error value")
-> Signed-off-by: Edward AD <eadavis@sina.com>
+[My two cents]
 
-Thanks for the fixup but Ted has already merged the fixup from Zhang Yi [1].
+stable-rc linux-6.1.y and linux-6.4.y x86 clang-nightly builds fail with
+following warnings / errors.
 
-								Honza
+Build errors:
+--------------
+drivers/net/ethernet/qlogic/qed/qed_main.c:1227:3: error: 'snprintf'
+will always be truncated; specified size is 16, but format string
+expands to at least 18 [-Werror,-Wfortify-source]
+ 1227 |                 snprintf(name, NAME_SIZE, "slowpath-%02x:%02x.%02x",
+      |                 ^
+1 error generated.
 
-[1] https://lore.kernel.org/all/20230826011029.2023140-1-yi.zhang@huaweicloud.com
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-
-> ---
->  fs/ext4/super.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 34f5406c08da..0dac00954d25 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -4178,7 +4178,7 @@ int ext4_calculate_overhead(struct super_block *sb)
->  	else if (ext4_has_feature_journal(sb) && !sbi->s_journal && j_inum) {
->  		/* j_inum for internal journal is non-zero */
->  		j_inode = ext4_get_journal_inode(sb, j_inum);
-> -		if (j_inode) {
-> +		if (j_inode && !IS_ERR(j_inode)) {
->  			j_blocks = j_inode->i_size >> sb->s_blocksize_bits;
->  			overhead += EXT4_NUM_B2C(sbi, j_blocks);
->  			iput(j_inode);
-> -- 
-> 2.25.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+--
+Linaro LKFT
+https://lkft.linaro.org
