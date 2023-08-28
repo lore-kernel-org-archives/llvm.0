@@ -1,96 +1,83 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87E7134D3
-	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 17:24:58 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-58d37b541a2so51067697b3.2
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 10:24:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CED134D3
+	for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 17:30:21 +0000 (UTC)
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-44d5696fad1so850365137.1
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 10:30:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693243498; x=1693848298;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/oLxkqcj6idE2RAd7eB+LLnuv7c2HnjVXYsMqqnGgg8=;
-        b=Q3kdIiExrixB0kXpfSIkMi+WUhVxAjzZp1Gb0Pv92AW7RoauqfxFtrlVmmUAgDr92G
-         YT3v72v+p4ZdtUIfnVnnt4izhXVNFK2RaLOtbuijsYwyUD4zlE5ZbDmmOGaAteX6o2I0
-         rjeRnbkLNa7xN4WC/7Tk4ej57vemznhk7e5+sQX87NqNVIdfOnOonenrEBGV5LTpv70m
-         EOK8gmCgoWq+WNRgfDYABZPBFV68uSsbt77FNJ7F9JS4Xut8mVJOPGih8H/fPSEU0DjS
-         zU3AeR8ISUVZQ07y8530/l9a8o/ybm02tigJ6dk72/7WTDAqn5kOIPfrsnSyTGte3I4b
-         8nDA==
+        d=linaro.org; s=google; t=1693243820; x=1693848620;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2WXMkuXavCrvB5E1bSmvUXIa9Xz7X0iJQJfaZFxRihk=;
+        b=C8lvsFNOYMem0PLD28/tzEAE2qEIzHidIey+CQoeI/aBZ0YTVeFVWYombQUGViO2+t
+         W+80eJyqOHVAhZryw0bNoYX3j/u3RqY/2VyNLWozWheCAXYLfsy/KIYqgCFnx1sFctD0
+         p2186BC1f9D4So9WK6jNJQGqgNlb7+Lja2enTtdMHhCtoNj2eUKz2kLeO5be6yyyL+lF
+         RdVmYG4sDir0f1W8QK+9BrR5dPRK+3o0W+LIVIpDg8HDpY+UqWCIMMxE45JqAlv43aCH
+         +6F0q9p4NMRxZRB4hzh9Oe+sr5oOX9C5kkiVwlU2BIH1WtM4s3T9DgcxAVgrZzlRWRZT
+         FmDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693243498; x=1693848298;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/oLxkqcj6idE2RAd7eB+LLnuv7c2HnjVXYsMqqnGgg8=;
-        b=AXo1mEFnPB7aUBJ16PTs0RvoCGEDO6zQShXEcHxa/aA127Yiyf/v8jeqdEJdhI8V43
-         MY0IuwERjIZ7uBnbzs16Y4klar/8vrRXEpF94lstU7QIJiC4GliebsRmghDwCcLvsCYu
-         lRON2aI1KbkZcU/GKdENtPV/cdC50QqaivKkvAcidIbXia8uo5jTVIDSjpXR/qb8TRyd
-         Z64L59yLQvEm5NE9GrL+NG+DZk2f+SCdCrjhV9hPsM5iY7HZItCobmcQDdr4QJUFetyQ
-         oHa3TO+Zaoh4RsyAwsUw1zimomS1BE3Y0y4jhmiJ3yucliLSp8Z0UKmxgj0O5ck16Zhj
-         uAVQ==
-X-Gm-Message-State: AOJu0YwxLGOkbfUfYcNycriOppcSjJM3FkVzEFAIwfOmfui3njKTJXat
-	gxocaIpWd5a8uu4tPU3tiWSJORE6LwISifI6Y3A=
-X-Google-Smtp-Source: AGHT+IGK2UAO+x9AivLfeQCbe/oWqNS//H5fFRBkRtH1NHfK+e8tED1exgd39eYPQHfAxiWZ7GpFXPzi/ILoF0aXDNM=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:b64:7817:9989:9eba])
- (user=ndesaulniers job=sendgmr) by 2002:a25:d809:0:b0:d01:60ec:d0e with SMTP
- id p9-20020a25d809000000b00d0160ec0d0emr864417ybg.9.1693243497711; Mon, 28
- Aug 2023 10:24:57 -0700 (PDT)
-Date: Mon, 28 Aug 2023 10:24:56 -0700
+        d=1e100.net; s=20221208; t=1693243820; x=1693848620;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2WXMkuXavCrvB5E1bSmvUXIa9Xz7X0iJQJfaZFxRihk=;
+        b=FGrzXECychsfhsSmcdiz6EUGGB5jQ1RY5LCZlopiCCkP1cnH2eXfkppDG/Qh46e32K
+         ei2AJvrZye+E7icX6g40gz9cU/y8MZyCCc2gTDzoYVM5pv2uCh8rp2yKMSReHh+ukRpd
+         d2vDthYN5pG4qzKEk5xakLn1fzMOStKrLqCGME8h1amXVVB1IJ9nStBxM9RUK2zejouu
+         0PgAhGk4yMmRF4t6a5o/IeCWV3yq9bCQmxOE87dBrKOsOX5dHLCHy5cOAbdoXVI0OJcf
+         gvd3irJAry0FUmCb+jsukckNzfK+tKAJDrGvIYbZOoS1BSUz+C6gyuCgHi6jN+z3AlQe
+         s1eA==
+X-Gm-Message-State: AOJu0YzA5o7aVvmJhVHxisV5fO1Zhgc17vMUerh7oactlczLDassL0ci
+	3p+gD4PinXRJEAdblaLdkdQRJ/n50jhfhKPmVHhD7w==
+X-Google-Smtp-Source: AGHT+IGgcJ/msAlUq9iW+kDjKzwJiwE02t53bR7UOEBKquUn9g7lTmqYj/TpdAvPJIlxRJNe5bMBS4W5kuKO4v5LwKk=
+X-Received: by 2002:a67:f8d5:0:b0:44e:9a71:27a1 with SMTP id
+ c21-20020a67f8d5000000b0044e9a7127a1mr7609225vsp.17.1693243820627; Mon, 28
+ Aug 2023 10:30:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAGfY7GQC/x2MQQqAIBAAvyJ7TjBFkL4SEaJr7UVFKQLp7y0dh
- 2FmQMdG2GERAxre1KlkhnkSEE6fD5QUmUErbZTTTsYS+p7ouaqMxhtrfUwuKeCgNmTxz9btfT+ CiCgEXAAAAA==
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693243496; l=1285;
- i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
- bh=zCJ5iDIwWerWby5h6qezWElTcBWFCjLXZm+/Emze4k4=; b=Be7HD5ZZzeKJKDc7FCdvIqAeEUnkF5wWw4dcsSwn+XM/KS7qdTk8/xSGsBu46LPiDpE8tF4YV
- kYUBq67QmrBC/DHsEyUTt2eT9Z3C+LmJgo+FpAyYBzTdDk7AxcVeK1l
-X-Mailer: b4 0.12.3
-Message-ID: <20230828-docs_fixup-v1-1-cc78af124667@google.com>
-Subject: [PATCH] Documentation/llvm: fix typo in link
-From: ndesaulniers@google.com
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>, 
+MIME-Version: 1.0
+References: <CA+G9fYscGFiG1TVLyfETVu3NV5BAe8sCOXRGDnky-w31aB6yVQ@mail.gmail.com>
+ <2023082853-ladylike-clanking-3dbb@gregkh>
+In-Reply-To: <2023082853-ladylike-clanking-3dbb@gregkh>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 28 Aug 2023 23:00:08 +0530
+Message-ID: <CA+G9fYtS-Pe0L9PsjTdEjnysuX9Ax+04jgZSkJAFqsGHC1Xm=w@mail.gmail.com>
+Subject: Re: clang: net: qed_main.c:1227:3: error: 'snprintf' will always be
+ truncated; specified size is 16, but format string expands to at least 18 [-Werror,-Wfortify-source]
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>, linux-stable <stable@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>, 
+	David Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Sasha Levin <sashal@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 
-Fixes the following observed build failure from `make htmldocs`:
-  Documentation/kbuild/llvm.rst:127: ERROR: Unknown target name:
-  "reprocible_builds".
+On Mon, 28 Aug 2023 at 20:22, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Aug 28, 2023 at 05:57:38PM +0530, Naresh Kamboju wrote:
+> > [My two cents]
+> >
+> > stable-rc linux-6.1.y and linux-6.4.y x86 clang-nightly builds fail with
+> > following warnings / errors.
+> >
+> > Build errors:
+> > --------------
+> > drivers/net/ethernet/qlogic/qed/qed_main.c:1227:3: error: 'snprintf'
+> > will always be truncated; specified size is 16, but format string
+> > expands to at least 18 [-Werror,-Wfortify-source]
+> >  1227 |                 snprintf(name, NAME_SIZE, "slowpath-%02x:%02x.%02x",
+> >       |                 ^
+> > 1 error generated.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> Is this also an issue in 6.5?
 
-Fixes: bda09c0e14a4 ("Documentation/llvm: refresh docs")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/linux-next/20230828145737.6ff53bc9@canb.auug.org.au/
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- Documentation/kbuild/llvm.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I see it on 6.5, Linux next-20230828 tag, stable 6.4 and 6.1.
 
-diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-index 384622dd36b7..b1d97fafddcf 100644
---- a/Documentation/kbuild/llvm.rst
-+++ b/Documentation/kbuild/llvm.rst
-@@ -126,7 +126,7 @@ Ccache
- 
- ``ccache`` can be used with ``clang`` to improve subsequent builds, (though
- KBUILD_BUILD_TIMESTAMP_ should be set to a deterministic value between builds
--in order to avoid 100% cache misses, see Reprocible_builds_ for more info):
-+in order to avoid 100% cache misses, see Reproducible_builds_ for more info):
- 
- 	KBUILD_BUILD_TIMESTAMP='' make LLVM=1 CC="ccache clang"
- 
-
----
-base-commit: 2ee82481c392eec06a7ef28df61b7f0d8e45be2e
-change-id: 20230828-docs_fixup-d3a355adf8f0
-
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
-
+- Naresh
