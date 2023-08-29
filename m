@@ -1,143 +1,227 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFC113ADA
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 08:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693299073;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JjwpKvHUxYMbrM9wup0Va8u7n0TtooLgrs7gfwTzO5c=;
-	b=YzkudH1iKnTsNxbr2T+xRxdVuOT/JsNAE+sMRUJbBOGJo6du+te1sGiPlV7malxI4aAXlo
-	IqQXMb0Vf5bIorLGQFbBUDTqOQPkMQ7Gqdj5J/rBawE1OzJheAEfKV46OzFCdmgf1QDE7w
-	YHwugjyeN98lHS6lUUpTb6bRfttBsMw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-iASk1tpiNIqImoHuhQggpw-1; Tue, 29 Aug 2023 04:51:12 -0400
-X-MC-Unique: iASk1tpiNIqImoHuhQggpw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C10CC101A52E
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 08:51:11 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id AF18DC15BAE;
-	Tue, 29 Aug 2023 08:51:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 15 of 267): Test report for master
- (6.5.0, mainline.kernel.org-clang, 42a7f6e3)
-Date: Tue, 29 Aug 2023 08:51:11 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D290B13ADA;
+	Tue, 29 Aug 2023 08:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693299346; x=1724835346;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zU8HnXI0OoZea1cBwO3xuOCr3H8ytiNTf5s4hGlu9Po=;
+  b=ljR6EeCgenz6szgmPwTDXzOPJPL4ym2KgAwEW/n1m+cSwoQqOpfm5QFh
+   i/gp/tUtnjLztkSZSToMxHta/5TOUnU1778FeR+y9WqRqfY4JT/jq0iIo
+   ZcDJG+As6A6ohX8pT1vh02QAkRE3wdfcIOjos8SXIO0AyLEEf/Qa7uQE7
+   z70vIMVRg5D6evKpG41egzqj/g6PdepywhgBJWhLwK6TJftGvNtNd4zLC
+   rTFpLIbnz6kNA1uEksaJ3lU5mD8mMqqhRjsedTnglTtkDWZ3/iXiM++CD
+   Zll9FDxgKuDeiv8FToxDes876Q907UrWHVHW+w4eDQyUf3JAdwI2zg9W5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="379088347"
+X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
+   d="scan'208";a="379088347"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 01:55:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="882234947"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Aug 2023 01:55:32 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qauVS-0008ap-2h;
+	Tue, 29 Aug 2023 08:55:26 +0000
+Date: Tue, 29 Aug 2023 16:55:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ira Weiny <ira.weiny@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Navneet Singh <navneet.singh@intel.com>
+Subject: [weiny2:dcd-v2-2023-08-28 24/36] drivers/cxl/core/hdm.c:431:31:
+ warning: format specifies type 'unsigned long long' but the argument has
+ type 'resource_size_t' (aka 'unsigned int')
+Message-ID: <202308291652.Z9t9Czds-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <74450.123082904511200292@us-mta-629.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/weiny2/linux-kernel.git dcd-v2-2023-08-28
+head:   4e8d6c7176cb59f986a4365a6c6bd7d3610c229e
+commit: 7331cb03643ce725e68eaaec47bcacd02b208ee1 [24/36] cxl/port: Add Dynamic Capacity size support to endpoint decoders
+config: i386-buildonly-randconfig-003-20230829 (https://download.01.org/0day-ci/archive/20230829/202308291652.Z9t9Czds-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230829/202308291652.Z9t9Czds-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308291652.Z9t9Czds-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'x86_microcode_for_v6.6_rc1' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/tip/tip
+>> drivers/cxl/core/hdm.c:431:31: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+                                   port->id, cxled->cxld.id, base, skipped);
+                                                             ^~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:272:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:59: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:246:65: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:222:15: note: expanded from macro '__dynamic_func_call_cls'
+                   func(&id, ##__VA_ARGS__);                       \
+                               ^~~~~~~~~~~
+   drivers/cxl/core/hdm.c:431:37: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+                                   port->id, cxled->cxld.id, base, skipped);
+                                                                   ^~~~~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:272:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:59: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:246:65: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:222:15: note: expanded from macro '__dynamic_func_call_cls'
+                   func(&id, ##__VA_ARGS__);                       \
+                               ^~~~~~~~~~~
+   drivers/cxl/core/hdm.c:730:3: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+                   start, size, skip);
+                   ^~~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:272:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:59: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:246:65: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:222:15: note: expanded from macro '__dynamic_func_call_cls'
+                   func(&id, ##__VA_ARGS__);                       \
+                               ^~~~~~~~~~~
+   drivers/cxl/core/hdm.c:730:16: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+                   start, size, skip);
+                                ^~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:272:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:59: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:246:65: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:222:15: note: expanded from macro '__dynamic_func_call_cls'
+                   func(&id, ##__VA_ARGS__);                       \
+                               ^~~~~~~~~~~
+   4 warnings generated.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101852
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1509
-            Affected tests:
-                  x86_64 - xfstests - cifsv3.11
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+vim +431 drivers/cxl/core/hdm.c
 
+   389	
+   390	static int __cxl_dpa_reserve(struct cxl_endpoint_decoder *cxled,
+   391				     resource_size_t base, resource_size_t len,
+   392				     resource_size_t skipped)
+   393	{
+   394		struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
+   395		struct cxl_port *port = cxled_to_port(cxled);
+   396		struct cxl_dev_state *cxlds = cxlmd->cxlds;
+   397		struct device *dev = &port->dev;
+   398		struct resource *res;
+   399	
+   400		lockdep_assert_held_write(&cxl_dpa_rwsem);
+   401	
+   402		if (!len) {
+   403			dev_warn(dev, "decoder%d.%d: empty reservation attempted\n",
+   404				 port->id, cxled->cxld.id);
+   405			return -EINVAL;
+   406		}
+   407	
+   408		if (cxled->dpa_res) {
+   409			dev_dbg(dev, "decoder%d.%d: existing allocation %pr assigned\n",
+   410				port->id, cxled->cxld.id, cxled->dpa_res);
+   411			return -EBUSY;
+   412		}
+   413	
+   414		if (port->hdm_end + 1 != cxled->cxld.id) {
+   415			/*
+   416			 * Assumes alloc and commit order is always in hardware instance
+   417			 * order per expectations from 8.2.5.12.20 Committing Decoder
+   418			 * Programming that enforce decoder[m] committed before
+   419			 * decoder[m+1] commit start.
+   420			 */
+   421			dev_dbg(dev, "decoder%d.%d: expected decoder%d.%d\n", port->id,
+   422				cxled->cxld.id, port->id, port->hdm_end + 1);
+   423			return -EBUSY;
+   424		}
+   425	
+   426		if (skipped) {
+   427			int rc = cxl_reserve_dpa_skip(cxled, base, skipped);
+   428	
+   429			if (rc) {
+   430				dev_dbg(dev, "decoder%d.%d: failed to reserve skipped space; %#llx - %#llx\n",
+ > 431					port->id, cxled->cxld.id, base, skipped);
+   432				return rc;
+   433			}
+   434		}
+   435		res = __request_region(&cxlds->dpa_res, base, len,
+   436				       dev_name(&cxled->cxld.dev), 0);
+   437		if (!res) {
+   438			dev_dbg(dev, "decoder%d.%d: failed to reserve allocation\n",
+   439				port->id, cxled->cxld.id);
+   440			cxl_skip_release(cxled);
+   441			return -EBUSY;
+   442		}
+   443		cxled->dpa_res = res;
+   444		cxled->skip = skipped;
+   445	
+   446		for (int mode = CXL_DECODER_DC0; mode <= CXL_DECODER_DC7; mode++) {
+   447			int index = dc_mode_to_region_index(mode);
+   448	
+   449			if (resource_contains(&cxlds->dc_res[index], res)) {
+   450				cxled->mode = mode;
+   451				goto success;
+   452			}
+   453		}
+   454		if (resource_contains(&cxlds->pmem_res, res))
+   455			cxled->mode = CXL_DECODER_PMEM;
+   456		else if (resource_contains(&cxlds->ram_res, res))
+   457			cxled->mode = CXL_DECODER_RAM;
+   458		else {
+   459			dev_dbg(dev, "decoder%d.%d: %pr mixed\n", port->id,
+   460				cxled->cxld.id, cxled->dpa_res);
+   461			cxled->mode = CXL_DECODER_MIXED;
+   462		}
+   463	
+   464	success:
+   465		dev_dbg(dev, "decoder%d.%d: %pr mode: %d\n", port->id, cxled->cxld.id,
+   466			cxled->dpa_res, cxled->mode);
+   467		port->hdm_end++;
+   468		get_device(&cxled->cxld.dev);
+   469		return 0;
+   470	}
+   471	
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
