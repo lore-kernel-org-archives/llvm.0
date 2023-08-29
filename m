@@ -1,103 +1,150 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCFC28E7
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 15:43:09 +0000 (UTC)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-76ef03f76c7so298500685a.3
-        for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 08:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693323788; x=1693928588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lBTH3KqXgFJRqcMAbzLE/ja4EQ9oM7ASpBmuXdwwsEI=;
-        b=HVI6FJsyGs541XjaMgVduX7Uc1sfhiaAfYG1AooHHyQPpd7jEsnrKktawbP7iuEXzU
-         ujwrfFOLNG61awVH7O8MajC8Kn1E7Xrc2PPeNuAnMVUU+QrRxcqQY14cINXgTirBcRoo
-         9Kt1S7N1bkJR92e8IosfYJ0EhZJw5Ai8ZnNLNtGxk01jR1/Idy5BfjQd4NjWYszST29F
-         5sDRHiy/fBOYAVK4kzMJ8JimZATeE55gclkMQ6T4VXRP+nVed0rYVZqaiaJem2VXcsM1
-         8W0Bjmb+wH93fcCd/n6lPfcJG1SFYUHs1pDyNFaeDZjJDqb1zKoqRjTle/fFPK6zFBSP
-         PfdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693323788; x=1693928588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lBTH3KqXgFJRqcMAbzLE/ja4EQ9oM7ASpBmuXdwwsEI=;
-        b=l62FYR5P8BUstjX2+tUpnX4LJAD6Rj8GDlIJmKukxK2Q2VZTirmt0MTCj39wCz877M
-         +5VXk7cweINXilTwKouMJqrzqhkG6Ru56QoWfhZG8gkGIH+0nOMZVQGQZIAWeVKk70KA
-         nmbQJP41HOrgIOYyCDKpDVLHN2ZiqRiZHsX4ApczZ/qVTNOMZ1kd74Fwdj5aJXaSNn9b
-         cFjeCX+92UBJ+svS/ktnGw43a+D2opyY36vp5aw/hiKzoE6W0oBmzjx01o7W4OB+d8w6
-         4K3RXVilnOoIA62fK/CfsipuP+5k1vKhJ26Rg1ZdlITArjCJDFWsTSL2jQnVC3gHRO3e
-         WXNg==
-X-Gm-Message-State: AOJu0Yyu0PAlsuzOoSGk/Ptcn0MvQAA8k7EXMjRU9VBGSpim37dQdU+8
-	IGOzcDfYmwuyM1WWWl6QtvozPc7Nzf1AxfdcqqActQ==
-X-Google-Smtp-Source: AGHT+IFI195D/AC2c/3Bu7IIaQoiyLB0K4oEif6OroPsGolMUfKUAgcMd4pgiugVDhV5XGVzvFQe2vWKh9zFprkhljc=
-X-Received: by 2002:a0c:f484:0:b0:64f:4e7a:bc3a with SMTP id
- i4-20020a0cf484000000b0064f4e7abc3amr24893513qvm.26.1693323788232; Tue, 29
- Aug 2023 08:43:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89A72C80;
+	Tue, 29 Aug 2023 16:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693326828; x=1724862828;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LbBndQ30pApFIdN1pPSoRCOwu6jKcidtzAZxrTxto+I=;
+  b=G0mPdmDJyd0ZFftYDC1qtsdyRxiN4gpfjuxiq7XvUYR83T7NilQOG4IC
+   mvbpVNehg+xBptDZpExL21wpo+9EDcVc3v4FjchcDyUHg8aaeVDivhmDa
+   lrbbMONM+156SM5sy+jMr95Q/+q8kOG2KguvLrkj9solvalS76YYMp1gZ
+   JKTKvlHjQNJGt1O/2zSYK1YOLlRl51//a4iVsIQ+n+G6ijDOIq4c5WeT8
+   Ab5jpK1v2aWqR1jmPxUCn3W+CYgqCOPvsWbN+qSDyzgbTS/SbVhJGK3pK
+   B2o/fWnV6biXXqTnOK5QbG2O3WEsUCwPFwxGYmSBuoYDaUYLZEBsko2zD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="461793835"
+X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
+   d="scan'208";a="461793835"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 09:28:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="741883388"
+X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
+   d="scan'208";a="741883388"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Aug 2023 09:27:56 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qb1ZL-0008u3-28;
+	Tue, 29 Aug 2023 16:27:55 +0000
+Date: Wed, 30 Aug 2023 00:27:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Meng Li <li.meng@amd.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Huang Rui <ray.huang@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	x86@kernel.org, linux-acpi@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kselftest@vger.kernel.org,
+	Nathan Fontenot <nathan.fontenot@amd.com>,
+	Deepak Sharma <deepak.sharma@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Shimmer Huang <shimmer.huang@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V4 4/7] cpufreq: Add a notification message that the
+ highest perf has changed
+Message-ID: <202308300057.ASUJQpsV-lkp@intel.com>
+References: <20230829064340.1136448-5-li.meng@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230828153142.2843753-1-hca@linux.ibm.com> <20230828153142.2843753-2-hca@linux.ibm.com>
- <f0419f6428ad404386ebca813dc1ec03@AcuMS.aculab.com> <ZO0k1Par4i4FBCWF@google.com>
- <20230829074854.7031-A-hca@linux.ibm.com>
-In-Reply-To: <20230829074854.7031-A-hca@linux.ibm.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 29 Aug 2023 08:42:57 -0700
-Message-ID: <CAKwvOd=23+rjzB96jpYgb4-J2jniTWXbT+638gQJ2mmShVfN=A@mail.gmail.com>
-Subject: Re: [PATCH 1/1] s390/dasd: fix string length handling
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: David Laight <David.Laight@aculab.com>, Jens Axboe <axboe@kernel.dk>, 
-	Stefan Haberland <sth@linux.ibm.com>, =?UTF-8?B?SmFuIEjDtnBwbmVy?= <hoeppner@linux.ibm.com>, 
-	Peter Oberparleiter <oberpar@linux.ibm.com>, 
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230829064340.1136448-5-li.meng@amd.com>
 
-On Tue, Aug 29, 2023 at 12:49=E2=80=AFAM Heiko Carstens <hca@linux.ibm.com>=
- wrote:
->
-> On Mon, Aug 28, 2023 at 03:51:00PM -0700, Nick Desaulniers wrote:
-> > On Mon, Aug 28, 2023 at 05:18:37PM +0000, David Laight wrote:
-> > > From: Heiko Carstens
-> > > > Sent: 28 August 2023 16:32
-> > > >   if (strlen(uid.vduit) > 0)
-> > >
-> > > Does the compiler know enough to optimise that brain-dead test?
-> > >
-> >
-> > For the purposes of skipping diagnostics, no; clang performs semantic
-> > analysis BEFORE optimization (which is handled by LLVM). As such, clang
-> > will produce diagnostics on dead code.
-> >
-> > Partly because LLVM isn't very ergonomic at emitting diagnostics from
-> > the backend, partly because Clang code owner and developers don't want
-> > clang to emit diagnostics dependent on optimization level.
-> >
-> > I disagree with my compatriots, and you can read more thoughts here:
-> > https://discourse.llvm.org/t/rfc-improving-clangs-middle-and-back-end-d=
-iagnostics/69261?u=3Dnickdesaulniers
->
-> Maybe I misunderstand what you write above, however clang (latest+greates=
-t)
-> does indeed optimize the strlen() away and generates code which only test=
-s
-> if uid.vduit[0] is zero or not.
+Hi Meng,
 
-Oh, yeah, sorry I was talking about something else. Nevermind my point.
+kernel test robot noticed the following build errors:
 
->
-> Unlike gcc, which does not optimize this away and which uses the strlen()
-> inline assembly provided via string.h...
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v6.5 next-20230829]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-heh, I feel like I was just having a conversation yesterday with
-someone about pessimizing compile-time calculations...
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230829-144723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230829064340.1136448-5-li.meng%40amd.com
+patch subject: [PATCH V4 4/7] cpufreq: Add a notification message that the highest perf has changed
+config: i386-randconfig-r031-20230829 (https://download.01.org/0day-ci/archive/20230830/202308300057.ASUJQpsV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308300057.ASUJQpsV-lkp@intel.com/reproduce)
 
---=20
-Thanks,
-~Nick Desaulniers
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308300057.ASUJQpsV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/acpi/processor_driver.c:88:3: error: call to undeclared function 'cpufreq_update_highest_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   cpufreq_update_highest_perf(pr->id);
+                   ^
+   1 error generated.
+
+
+vim +/cpufreq_update_highest_perf +88 drivers/acpi/processor_driver.c
+
+    53	
+    54	static void acpi_processor_notify(acpi_handle handle, u32 event, void *data)
+    55	{
+    56		struct acpi_device *device = data;
+    57		struct acpi_processor *pr;
+    58		int saved;
+    59	
+    60		if (device->handle != handle)
+    61			return;
+    62	
+    63		pr = acpi_driver_data(device);
+    64		if (!pr)
+    65			return;
+    66	
+    67		switch (event) {
+    68		case ACPI_PROCESSOR_NOTIFY_PERFORMANCE:
+    69			saved = pr->performance_platform_limit;
+    70			acpi_processor_ppc_has_changed(pr, 1);
+    71			if (saved == pr->performance_platform_limit)
+    72				break;
+    73			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    74							  dev_name(&device->dev), event,
+    75							  pr->performance_platform_limit);
+    76			break;
+    77		case ACPI_PROCESSOR_NOTIFY_POWER:
+    78			acpi_processor_power_state_has_changed(pr);
+    79			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    80							  dev_name(&device->dev), event, 0);
+    81			break;
+    82		case ACPI_PROCESSOR_NOTIFY_THROTTLING:
+    83			acpi_processor_tstate_has_changed(pr);
+    84			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    85							  dev_name(&device->dev), event, 0);
+    86			break;
+    87		case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
+  > 88			cpufreq_update_highest_perf(pr->id);
+    89			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    90							  dev_name(&device->dev), event, 0);
+    91			break;
+    92		default:
+    93			acpi_handle_debug(handle, "Unsupported event [0x%x]\n", event);
+    94			break;
+    95		}
+    96	
+    97		return;
+    98	}
+    99	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
