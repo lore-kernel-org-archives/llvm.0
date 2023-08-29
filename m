@@ -1,271 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1729FA47
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 03:35:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F64C433CB
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 03:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693280128;
-	bh=iKPhNGsCL/Ygu2pp1A7Oz7Q5BwJOM7t42N7oX6j1hcc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EPvN6oKb2ozqhKwXfu2Q3lqyDo2gy67g8X6d6rAjEXIsdkDI6lgwZYYQ2/vcZyhJW
-	 cE6MMgHL/7N6jk+Igh/8OZ5nNwEdMn+rZ9zKe2pztkRYd9pxPTMu327v5b8QvePOxG
-	 oQkQU414P5ivtvhcQ3mSVV2eYoD0PWbPg3s/ml0CkFbKMGnhRepq423yKpNGTvZPaa
-	 w/aTbPMaXi7FwllFkbFF9suXpbvA6CGf8Q6Y6lhT9te4m/BeHG2OAoYLtxEb/jedbs
-	 48pbt2EnPYlTczuHS8W8NCZGJHQXTv3L/H5cbadVRJtOgQRCa4XqyoSTP780QLRsYm
-	 9uDXfhdc3VhLg==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-52683da3f5cso5061057a12.3
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:35:28 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxLEkJKXp215Q0SXuouObBU04u+vPZLz3Cou1Znw3Z1brD9TFUl
-	bY+SjTCbdEAjXgmlbQ7mQnBTYAlJdOhUmYrCYWg=
-X-Google-Smtp-Source: AGHT+IFogORrIkVNKaIApsKdGJMvVvslXlT/2lRzZp/Uwa0P3GPm5dbqlCk8/vdnBCygmxeMeKCVxcAvJvJ7ZtZOPcE=
-X-Received: by 2002:aa7:c04c:0:b0:522:3a89:a79d with SMTP id
- k12-20020aa7c04c000000b005223a89a79dmr19326892edo.2.1693280126664; Mon, 28
- Aug 2023 20:35:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C5BA47;
+	Tue, 29 Aug 2023 03:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693280816; x=1724816816;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=w+oqeIKOCQszQbYPvuCX5twmJ+ekHnH2XenvbmGFI8c=;
+  b=PTZnmMNsr2VEzpbE2CgOnnFoGXSWmJLfTkj95v2dpFO+KwNpZbBX22Fd
+   EQLO7x/h34k6m2ralzYOyqMP+gJi5x2u0+3a2FK1DjpmszsJgtW5GPhTh
+   CKFK2dFi2B+ElJ7WvfgJdmWg7w5bPO8gW/O5bmeWSvnnbu4P7fURrMz1T
+   Y2Tk15KYjrfvkoVmOc2BWFAvALDjeWtfTcLg7uHI7QWyXfhQtSNR8Anj9
+   NBmSOTbUqV8kymT0En63vwkiWQyhfhYMhkr/8YdWL4RsIQCtvAHpCWMYo
+   Xw5yt3A1j/oMyoZm82tlIFhmNtQKIngH+P7eEW7FdjBYGl626x6Hb3aR/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="355593218"
+X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
+   d="scan'208";a="355593218"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 20:46:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="803939190"
+X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
+   d="scan'208";a="803939190"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Aug 2023 20:46:54 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qapgs-0008MC-0a;
+	Tue, 29 Aug 2023 03:46:54 +0000
+Date: Tue, 29 Aug 2023 11:46:45 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [PATCH net v3 2/3] ipv6: ignore dst hint for multipath routes
+Message-ID: <202308291103.hzyzyCB5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230828195833.756747-8-samitolvanen@google.com> <20230828195833.756747-10-samitolvanen@google.com>
-In-Reply-To: <20230828195833.756747-10-samitolvanen@google.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 29 Aug 2023 11:35:15 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTuwrKpYXLF2QR44PAz-Wk+2iE07M0UnhNHgPs0YNcQMQ@mail.gmail.com>
-Message-ID: <CAJF2gTTuwrKpYXLF2QR44PAz-Wk+2iE07M0UnhNHgPs0YNcQMQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] riscv: Deduplicate IRQ stack switching
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>, 
-	Clement Leger <cleger@rivosinc.com>, Deepak Gupta <debug@rivosinc.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Fangrui Song <maskray@google.com>, linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Aug 29, 2023 at 3:58=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> With CONFIG_IRQ_STACKS, we switch to a separate per-CPU IRQ stack
-> before calling handle_riscv_irq or __do_softirq. We currently
-> have duplicate inline assembly snippets for stack switching in
-> both code paths. Now that we can access per-CPU variables in
-> assembly, implement call_on_irq_stack in assembly, and use that
-> instead of redudant inline assembly.
->
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/riscv/include/asm/asm.h       |  5 +++++
->  arch/riscv/include/asm/irq_stack.h |  3 +++
->  arch/riscv/kernel/asm-offsets.c    |  5 +++++
->  arch/riscv/kernel/entry.S          | 30 +++++++++++++++++++++++++
->  arch/riscv/kernel/irq.c            | 35 +++++++-----------------------
->  arch/riscv/kernel/traps.c          | 32 ++++-----------------------
->  6 files changed, 55 insertions(+), 55 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-> index bfb4c26f113c..8e446be2d57c 100644
-> --- a/arch/riscv/include/asm/asm.h
-> +++ b/arch/riscv/include/asm/asm.h
-> @@ -104,6 +104,11 @@
->  .endm
->  #endif /* CONFIG_SMP */
->
-> +.macro load_per_cpu dst ptr tmp
-> +       asm_per_cpu \dst \ptr \tmp
-> +       REG_L \dst, 0(\dst)
-> +.endm
-> +
->         /* save all GPs except x1 ~ x5 */
->         .macro save_from_x6_to_x31
->         REG_S x6,  PT_T1(sp)
-> diff --git a/arch/riscv/include/asm/irq_stack.h b/arch/riscv/include/asm/=
-irq_stack.h
-> index e4042d297580..6441ded3b0cf 100644
-> --- a/arch/riscv/include/asm/irq_stack.h
-> +++ b/arch/riscv/include/asm/irq_stack.h
-> @@ -12,6 +12,9 @@
->
->  DECLARE_PER_CPU(ulong *, irq_stack_ptr);
->
-> +asmlinkage void call_on_irq_stack(struct pt_regs *regs,
-> +                                 void (*func)(struct pt_regs *));
-> +
->  #ifdef CONFIG_VMAP_STACK
->  /*
->   * To ensure that VMAP'd stack overflow detection works correctly, all V=
-MAP'd
-> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offs=
-ets.c
-> index 9f535d5de33f..0af8860f9d68 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -14,6 +14,7 @@
->  #include <asm/thread_info.h>
->  #include <asm/ptrace.h>
->  #include <asm/cpu_ops_sbi.h>
-> +#include <asm/stacktrace.h>
->  #include <asm/suspend.h>
->
->  void asm_offsets(void);
-> @@ -480,4 +481,8 @@ void asm_offsets(void)
->         OFFSET(KERNEL_MAP_VIRT_ADDR, kernel_mapping, virt_addr);
->         OFFSET(SBI_HART_BOOT_TASK_PTR_OFFSET, sbi_hart_boot_data, task_pt=
-r);
->         OFFSET(SBI_HART_BOOT_STACK_PTR_OFFSET, sbi_hart_boot_data, stack_=
-ptr);
-> +
-> +       DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe),=
- STACK_ALIGN));
-> +       OFFSET(STACKFRAME_FP, stackframe, fp);
-> +       OFFSET(STACKFRAME_RA, stackframe, ra);
->  }
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 3d11aa3af105..a306562636e4 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -218,6 +218,36 @@ SYM_CODE_START(ret_from_fork)
->         tail syscall_exit_to_user_mode
->  SYM_CODE_END(ret_from_fork)
->
-> +#ifdef CONFIG_IRQ_STACKS
-> +/*
-> + * void call_on_irq_stack(struct pt_regs *regs,
-> + *                       void (*func)(struct pt_regs *));
-> + *
-> + * Calls func(regs) using the per-CPU IRQ stack.
-> + */
-> +SYM_FUNC_START(call_on_irq_stack)
-> +       /* Create a frame record to save ra and s0 (fp) */
-> +       addi    sp, sp, -STACKFRAME_SIZE_ON_STACK
-> +       REG_S   ra, STACKFRAME_RA(sp)
-> +       REG_S   s0, STACKFRAME_FP(sp)
-> +       addi    s0, sp, STACKFRAME_SIZE_ON_STACK
-> +
-> +       /* Switch to the per-CPU IRQ stack and call the handler */
-> +       load_per_cpu t0, irq_stack_ptr, t1
-> +       li      t1, IRQ_STACK_SIZE
-> +       add     sp, t0, t1
-> +       jalr    a1
-> +
-> +       /* Switch back to the thread stack and restore ra and s0 */
-> +       addi    sp, s0, -STACKFRAME_SIZE_ON_STACK
-> +       REG_L   ra, STACKFRAME_RA(sp)
-> +       REG_L   s0, STACKFRAME_FP(sp)
-> +       addi    sp, sp, STACKFRAME_SIZE_ON_STACK
-> +
-> +       ret
-> +SYM_FUNC_END(call_on_irq_stack)
-> +#endif /* CONFIG_IRQ_STACKS */
-> +
->  /*
->   * Integer register context switch
->   * The callee-saved registers must be saved and restored.
-> diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-> index a8efa053c4a5..95dafdcbd135 100644
-> --- a/arch/riscv/kernel/irq.c
-> +++ b/arch/riscv/kernel/irq.c
-> @@ -61,35 +61,16 @@ static void init_irq_stacks(void)
->  #endif /* CONFIG_VMAP_STACK */
->
->  #ifdef CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK
-> +static void ___do_softirq(struct pt_regs *regs)
-> +{
-> +       __do_softirq();
-> +}
-> +
->  void do_softirq_own_stack(void)
->  {
-> -#ifdef CONFIG_IRQ_STACKS
-> -       if (on_thread_stack()) {
-> -               ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
-> -                                       + IRQ_STACK_SIZE/sizeof(ulong);
-> -               __asm__ __volatile(
-> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
-> -               REG_S"  ra, (sp)                \n"
-> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
-> -               REG_S"  s0, (sp)                \n"
-> -               "addi   s0, sp, 2*"RISCV_SZPTR "\n"
-> -               "move   sp, %[sp]               \n"
-> -               "call   __do_softirq            \n"
-> -               "addi   sp, s0, -2*"RISCV_SZPTR"\n"
-> -               REG_L"  s0, (sp)                \n"
-> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
-> -               REG_L"  ra, (sp)                \n"
-> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
-> -               :
-> -               : [sp] "r" (sp)
-> -               : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
-> -                 "t0", "t1", "t2", "t3", "t4", "t5", "t6",
-> -#ifndef CONFIG_FRAME_POINTER
-> -                 "s0",
-> -#endif
-> -                 "memory");
-> -       } else
-> -#endif
-> +       if (on_thread_stack())
-> +               call_on_irq_stack(NULL, ___do_softirq);
-> +       else
->                 __do_softirq();
->  }
->  #endif /* CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK */
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index a05905d88802..1fe6b475cdfb 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -350,34 +350,10 @@ static void noinstr handle_riscv_irq(struct pt_regs=
- *regs)
->  asmlinkage void noinstr do_irq(struct pt_regs *regs)
->  {
->         irqentry_state_t state =3D irqentry_enter(regs);
-> -#ifdef CONFIG_IRQ_STACKS
-> -       if (on_thread_stack()) {
-> -               ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
-> -                                       + IRQ_STACK_SIZE/sizeof(ulong);
-> -               __asm__ __volatile(
-> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
-> -               REG_S"  ra, (sp)                \n"
-> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
-> -               REG_S"  s0, (sp)                \n"
-> -               "addi   s0, sp, 2*"RISCV_SZPTR "\n"
-> -               "move   sp, %[sp]               \n"
-> -               "move   a0, %[regs]             \n"
-> -               "call   handle_riscv_irq        \n"
-> -               "addi   sp, s0, -2*"RISCV_SZPTR"\n"
-> -               REG_L"  s0, (sp)                \n"
-> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
-> -               REG_L"  ra, (sp)                \n"
-> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
-> -               :
-> -               : [sp] "r" (sp), [regs] "r" (regs)
-> -               : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
-> -                 "t0", "t1", "t2", "t3", "t4", "t5", "t6",
-> -#ifndef CONFIG_FRAME_POINTER
-> -                 "s0",
-> -#endif
-> -                 "memory");
-> -       } else
-> -#endif
-> +
-> +       if (IS_ENABLED(CONFIG_IRQ_STACKS) && on_thread_stack())
-> +               call_on_irq_stack(regs, handle_riscv_irq);
-A good code optimization for maintenance.
+In-Reply-To: <20230828113221.20123-3-sriram.yagnaraman@est.tech>
+References: <20230828113221.20123-3-sriram.yagnaraman@est.tech>
+TO: Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+CC: netdev@vger.kernel.org
+CC: linux-kselftest@vger.kernel.org
+CC: "David S . Miller" <davem@davemloft.net>
+CC: Eric Dumazet <edumazet@google.com>
+CC: Jakub Kicinski <kuba@kernel.org>
+CC: Paolo Abeni <pabeni@redhat.com>
+CC: David Ahern <dsahern@kernel.org>
+CC: Ido Schimmel <idosch@nvidia.com>
+CC: Shuah Khan <skhan@linuxfoundation.org>
+CC: Petr Machata <petrm@nvidia.com>
+CC: Sriram Yagnaraman <sriram.yagnaraman@est.tech>
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Hi Sriram,
 
-> +       else
->                 handle_riscv_irq(regs);
->
->         irqentry_exit(regs, state);
-> --
-> 2.42.0.rc2.253.gd59a3bf2b4-goog
->
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on net/main]
 
---=20
-Best Regards
- Guo Ren
+url:    https://github.com/intel-lab-lkp/linux/commits/Sriram-Yagnaraman/ipv4-ignore-dst-hint-for-multipath-routes/20230828-203216
+base:   net/main
+patch link:    https://lore.kernel.org/r/20230828113221.20123-3-sriram.yagnaraman%40est.tech
+patch subject: [PATCH net v3 2/3] ipv6: ignore dst hint for multipath routes
+config: riscv-randconfig-r033-20230829 (https://download.01.org/0day-ci/archive/20230829/202308291103.hzyzyCB5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230829/202308291103.hzyzyCB5-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308291103.hzyzyCB5-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0xc1c): relocation R_RISCV_HI20 out of range: 529094 is not in [-524288, 524287]; references .L.str.17
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function perf_trace_initcall_level: .text+0x3d8): relocation R_RISCV_HI20 out of range: 531219 is not in [-524288, 524287]; references __per_cpu_offset
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(mm/percpu.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function perf_trace_initcall_start: .text+0x620): relocation R_RISCV_HI20 out of range: 531219 is not in [-524288, 524287]; references __per_cpu_offset
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(mm/percpu.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function perf_trace_initcall_finish: .text+0x848): relocation R_RISCV_HI20 out of range: 531219 is not in [-524288, 524287]; references __per_cpu_offset
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(mm/percpu.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function rcu_read_unlock: .text+0x9b8): relocation R_RISCV_HI20 out of range: 529605 is not in [-524288, 524287]; references rcu_lock_map
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(kernel/rcu/update.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
