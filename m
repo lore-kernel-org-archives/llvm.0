@@ -1,144 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC11120F4
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 07:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693293674;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AU1pU2xd+/MHrNtADs/19+VJKQqMZJ11iPaoDFbQN98=;
-	b=NfvK2b7WxTlqfgFvnpXP0xlTBNyuQ5gyeBsIwby0xTIDtIl9xXqMymQMqckTI9wy523N5P
-	uYiMdk0x7S07nS9pxI7IrAXOSEOm+Y9TCt+FXVaod7Rw8BT7ewZofHAGPvm5ymQ2piduwt
-	jHfq7NhDWYzJwE0rdw3onlcCJhqZyVo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-DmxweXzpM-e8ifPldLUrig-1; Tue, 29 Aug 2023 03:21:13 -0400
-X-MC-Unique: DmxweXzpM-e8ifPldLUrig-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EDFB085CCE0
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 07:21:12 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C3B9D140E950;
-	Tue, 29 Aug 2023 07:21:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 13 of 267): Test report for master
- (6.5.0, mainline.kernel.org-clang, 6f49693a)
-Date: Tue, 29 Aug 2023 07:21:12 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB4D23D2
+	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 07:49:17 +0000 (UTC)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37T74kMu013266;
+	Tue, 29 Aug 2023 07:49:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=ckVtaW3Av7rhPz61zCIjVcwCeNTazlrt+S3eW9iMvO8=;
+ b=ALdS1y2FAlsYwkcJfa4Eew9RWLm0727iXBapjEs4EJV1ElsFwrXE74L+Bt+xJnyriKwd
+ 7OMpsHcS/dv0W9FUHdYu0JWs1+IJxFNrqW5xl2jstCfaL2LeTcN7NNusjqGzoIammQ51
+ xcjJhQle4RZnimVnPQMzHLWXrirtiX48Rcbkd4IYg/4AiNBDjLXw3VDmRXIHL+ia9ChW
+ Rl0v3Ksz8PJhpkg8ztABEAVxlCWPzmMR4og65FirdJAXnZjyQYBzDHCSK4LkORe34qLe
+ KY2xxj3EjG0SeAghsrz3WhdXHrwkUPFH7aIfAbtcneVjRcb2RGl3W79dkk+Cz3SGZTrN Zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sr7eq55k0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 29 Aug 2023 07:49:03 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37T7bHo2010923;
+	Tue, 29 Aug 2023 07:49:02 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sr7eq55jf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 29 Aug 2023 07:49:02 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37T7BNlu014392;
+	Tue, 29 Aug 2023 07:49:01 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3sqvqn1q93-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 29 Aug 2023 07:49:01 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37T7mvrn24314488
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 29 Aug 2023 07:48:58 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DA3A32004D;
+	Tue, 29 Aug 2023 07:48:57 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 92E6520043;
+	Tue, 29 Aug 2023 07:48:57 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.148])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue, 29 Aug 2023 07:48:57 +0000 (GMT)
+Date: Tue, 29 Aug 2023 09:48:54 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: David Laight <David.Laight@aculab.com>, Jens Axboe <axboe@kernel.dk>,
+        Stefan Haberland <sth@linux.ibm.com>,
+        Jan =?iso-8859-1?Q?H=F6ppner?= <hoeppner@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 1/1] s390/dasd: fix string length handling
+Message-ID: <20230829074854.7031-A-hca@linux.ibm.com>
+References: <20230828153142.2843753-1-hca@linux.ibm.com>
+ <20230828153142.2843753-2-hca@linux.ibm.com>
+ <f0419f6428ad404386ebca813dc1ec03@AcuMS.aculab.com>
+ <ZO0k1Par4i4FBCWF@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZO0k1Par4i4FBCWF@google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: y46bi7daQElJu--EkUjZczd_-Y4Td4G0
+X-Proofpoint-GUID: 7QC5Ip_ZajZ5JM4o_i4KsZT-el29xkT-
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <06302.123082903211300371@us-mta-477.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-29_04,2023-08-28_04,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 phishscore=0 suspectscore=0 clxscore=1011
+ spamscore=0 impostorscore=0 mlxlogscore=394 malwarescore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2308290064
 
-Hi, we tested your kernel and here are the results:
+On Mon, Aug 28, 2023 at 03:51:00PM -0700, Nick Desaulniers wrote:
+> On Mon, Aug 28, 2023 at 05:18:37PM +0000, David Laight wrote:
+> > From: Heiko Carstens
+> > > Sent: 28 August 2023 16:32
+> > >  	if (strlen(uid.vduit) > 0)
+> > 
+> > Does the compiler know enough to optimise that brain-dead test?
+> > 
+> 
+> For the purposes of skipping diagnostics, no; clang performs semantic
+> analysis BEFORE optimization (which is handled by LLVM). As such, clang
+> will produce diagnostics on dead code.
+> 
+> Partly because LLVM isn't very ergonomic at emitting diagnostics from
+> the backend, partly because Clang code owner and developers don't want
+> clang to emit diagnostics dependent on optimization level.
+> 
+> I disagree with my compatriots, and you can read more thoughts here:
+> https://discourse.llvm.org/t/rfc-improving-clangs-middle-and-back-end-diagnostics/69261?u=nickdesaulniers
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Maybe I misunderstand what you write above, however clang (latest+greatest)
+does indeed optimize the strlen() away and generates code which only tests
+if uid.vduit[0] is zero or not.
 
-
-Kernel information:
-    Commit message: Merge tag 'smp-core-2023-08-28' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101848
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9306620
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
-          x86_64 (debug) - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9306322
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Unlike gcc, which does not optimize this away and which uses the strlen()
+inline assembly provided via string.h...
