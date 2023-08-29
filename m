@@ -1,68 +1,271 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821E7A44
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 02:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FDEC43391
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 02:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1729FA47
+	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 03:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F64C433CB
+	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 03:35:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693277521;
-	bh=2000Dx0x8NNTq7L+dJqIL03ECHKc97oVrelzhqq6/Pw=;
+	s=k20201202; t=1693280128;
+	bh=iKPhNGsCL/Ygu2pp1A7Oz7Q5BwJOM7t42N7oX6j1hcc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QZ5ffKhPD1X96SZPyeV4VN9gIYpwU5fZDAizE2VHatDN/MFfEDNsIut0RysqlB3L6
-	 Y4yyfrJWfxsHrgXlFID71IotFy+HQJKBq7/0JFKJYAb0NbJJRVeXAPJiBXqox2M+Gs
-	 ykLmQx9yQGV504o220EqgYA/av407zE3LwgfMlp0KqdMslAuJfEhTBvyeZyGvebegJ
-	 Z1z9YUr63hLI6MUkRqfOQdpsukzELJWZ8/RS7IKY/F6rx94/SHyEFqcfZuJG/4MEPD
-	 O9Y8BmfuquQFOzraBVTHNztp6X5/urrO5m0ykVtYdPsQPdrJDRuF+rE1UVywnambeX
-	 W6H+HazCg6Iog==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5733710eecaso2367678eaf.1
-        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 19:52:00 -0700 (PDT)
-X-Gm-Message-State: AOJu0YyK4PgW7uiI8kV6goyNsPxcl5rOWY+U8B06ymnHkcVI7DW+qQH9
-	0mYyryKMHl5IyiUuYSQt2mvab0V/x783//kWaZo=
-X-Google-Smtp-Source: AGHT+IHh9n2KRQMtYFZZOKN9WQyZD4/Tr4GBxeaC+6K3pNzt9Sh/NcnxYsBVMXQR/MYKkSdKycJPP2Sl6nskxhoY/vQ=
-X-Received: by 2002:a4a:6211:0:b0:56e:a1d3:747e with SMTP id
- x17-20020a4a6211000000b0056ea1d3747emr12840728ooc.6.1693277520114; Mon, 28
- Aug 2023 19:52:00 -0700 (PDT)
+	b=EPvN6oKb2ozqhKwXfu2Q3lqyDo2gy67g8X6d6rAjEXIsdkDI6lgwZYYQ2/vcZyhJW
+	 cE6MMgHL/7N6jk+Igh/8OZ5nNwEdMn+rZ9zKe2pztkRYd9pxPTMu327v5b8QvePOxG
+	 oQkQU414P5ivtvhcQ3mSVV2eYoD0PWbPg3s/ml0CkFbKMGnhRepq423yKpNGTvZPaa
+	 w/aTbPMaXi7FwllFkbFF9suXpbvA6CGf8Q6Y6lhT9te4m/BeHG2OAoYLtxEb/jedbs
+	 48pbt2EnPYlTczuHS8W8NCZGJHQXTv3L/H5cbadVRJtOgQRCa4XqyoSTP780QLRsYm
+	 9uDXfhdc3VhLg==
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-52683da3f5cso5061057a12.3
+        for <llvm@lists.linux.dev>; Mon, 28 Aug 2023 20:35:28 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxLEkJKXp215Q0SXuouObBU04u+vPZLz3Cou1Znw3Z1brD9TFUl
+	bY+SjTCbdEAjXgmlbQ7mQnBTYAlJdOhUmYrCYWg=
+X-Google-Smtp-Source: AGHT+IFogORrIkVNKaIApsKdGJMvVvslXlT/2lRzZp/Uwa0P3GPm5dbqlCk8/vdnBCygmxeMeKCVxcAvJvJ7ZtZOPcE=
+X-Received: by 2002:aa7:c04c:0:b0:522:3a89:a79d with SMTP id
+ k12-20020aa7c04c000000b005223a89a79dmr19326892edo.2.1693280126664; Mon, 28
+ Aug 2023 20:35:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230828-docs_fixup-v1-1-cc78af124667@google.com>
-In-Reply-To: <20230828-docs_fixup-v1-1-cc78af124667@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 29 Aug 2023 11:51:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT08zhGgrDWdjKv17S30KPJ++JsBmaCwudTkMAdJR_M=Q@mail.gmail.com>
-Message-ID: <CAK7LNAT08zhGgrDWdjKv17S30KPJ++JsBmaCwudTkMAdJR_M=Q@mail.gmail.com>
-Subject: Re: [PATCH] Documentation/llvm: fix typo in link
-To: ndesaulniers@google.com
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20230828195833.756747-8-samitolvanen@google.com> <20230828195833.756747-10-samitolvanen@google.com>
+In-Reply-To: <20230828195833.756747-10-samitolvanen@google.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 29 Aug 2023 11:35:15 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTuwrKpYXLF2QR44PAz-Wk+2iE07M0UnhNHgPs0YNcQMQ@mail.gmail.com>
+Message-ID: <CAJF2gTTuwrKpYXLF2QR44PAz-Wk+2iE07M0UnhNHgPs0YNcQMQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] riscv: Deduplicate IRQ stack switching
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>, 
+	Clement Leger <cleger@rivosinc.com>, Deepak Gupta <debug@rivosinc.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Fangrui Song <maskray@google.com>, linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 29, 2023 at 8:20=E2=80=AFAM <ndesaulniers@google.com> wrote:
+On Tue, Aug 29, 2023 at 3:58=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
 >
-> Fixes the following observed build failure from `make htmldocs`:
->   Documentation/kbuild/llvm.rst:127: ERROR: Unknown target name:
->   "reprocible_builds".
+> With CONFIG_IRQ_STACKS, we switch to a separate per-CPU IRQ stack
+> before calling handle_riscv_irq or __do_softirq. We currently
+> have duplicate inline assembly snippets for stack switching in
+> both code paths. Now that we can access per-CPU variables in
+> assembly, implement call_on_irq_stack in assembly, and use that
+> instead of redudant inline assembly.
 >
-> Fixes: bda09c0e14a4 ("Documentation/llvm: refresh docs")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/linux-next/20230828145737.6ff53bc9@canb.a=
-uug.org.au/
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 > ---
+>  arch/riscv/include/asm/asm.h       |  5 +++++
+>  arch/riscv/include/asm/irq_stack.h |  3 +++
+>  arch/riscv/kernel/asm-offsets.c    |  5 +++++
+>  arch/riscv/kernel/entry.S          | 30 +++++++++++++++++++++++++
+>  arch/riscv/kernel/irq.c            | 35 +++++++-----------------------
+>  arch/riscv/kernel/traps.c          | 32 ++++-----------------------
+>  6 files changed, 55 insertions(+), 55 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+> index bfb4c26f113c..8e446be2d57c 100644
+> --- a/arch/riscv/include/asm/asm.h
+> +++ b/arch/riscv/include/asm/asm.h
+> @@ -104,6 +104,11 @@
+>  .endm
+>  #endif /* CONFIG_SMP */
+>
+> +.macro load_per_cpu dst ptr tmp
+> +       asm_per_cpu \dst \ptr \tmp
+> +       REG_L \dst, 0(\dst)
+> +.endm
+> +
+>         /* save all GPs except x1 ~ x5 */
+>         .macro save_from_x6_to_x31
+>         REG_S x6,  PT_T1(sp)
+> diff --git a/arch/riscv/include/asm/irq_stack.h b/arch/riscv/include/asm/=
+irq_stack.h
+> index e4042d297580..6441ded3b0cf 100644
+> --- a/arch/riscv/include/asm/irq_stack.h
+> +++ b/arch/riscv/include/asm/irq_stack.h
+> @@ -12,6 +12,9 @@
+>
+>  DECLARE_PER_CPU(ulong *, irq_stack_ptr);
+>
+> +asmlinkage void call_on_irq_stack(struct pt_regs *regs,
+> +                                 void (*func)(struct pt_regs *));
+> +
+>  #ifdef CONFIG_VMAP_STACK
+>  /*
+>   * To ensure that VMAP'd stack overflow detection works correctly, all V=
+MAP'd
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offs=
+ets.c
+> index 9f535d5de33f..0af8860f9d68 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -14,6 +14,7 @@
+>  #include <asm/thread_info.h>
+>  #include <asm/ptrace.h>
+>  #include <asm/cpu_ops_sbi.h>
+> +#include <asm/stacktrace.h>
+>  #include <asm/suspend.h>
+>
+>  void asm_offsets(void);
+> @@ -480,4 +481,8 @@ void asm_offsets(void)
+>         OFFSET(KERNEL_MAP_VIRT_ADDR, kernel_mapping, virt_addr);
+>         OFFSET(SBI_HART_BOOT_TASK_PTR_OFFSET, sbi_hart_boot_data, task_pt=
+r);
+>         OFFSET(SBI_HART_BOOT_STACK_PTR_OFFSET, sbi_hart_boot_data, stack_=
+ptr);
+> +
+> +       DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe),=
+ STACK_ALIGN));
+> +       OFFSET(STACKFRAME_FP, stackframe, fp);
+> +       OFFSET(STACKFRAME_RA, stackframe, ra);
+>  }
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 3d11aa3af105..a306562636e4 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -218,6 +218,36 @@ SYM_CODE_START(ret_from_fork)
+>         tail syscall_exit_to_user_mode
+>  SYM_CODE_END(ret_from_fork)
+>
+> +#ifdef CONFIG_IRQ_STACKS
+> +/*
+> + * void call_on_irq_stack(struct pt_regs *regs,
+> + *                       void (*func)(struct pt_regs *));
+> + *
+> + * Calls func(regs) using the per-CPU IRQ stack.
+> + */
+> +SYM_FUNC_START(call_on_irq_stack)
+> +       /* Create a frame record to save ra and s0 (fp) */
+> +       addi    sp, sp, -STACKFRAME_SIZE_ON_STACK
+> +       REG_S   ra, STACKFRAME_RA(sp)
+> +       REG_S   s0, STACKFRAME_FP(sp)
+> +       addi    s0, sp, STACKFRAME_SIZE_ON_STACK
+> +
+> +       /* Switch to the per-CPU IRQ stack and call the handler */
+> +       load_per_cpu t0, irq_stack_ptr, t1
+> +       li      t1, IRQ_STACK_SIZE
+> +       add     sp, t0, t1
+> +       jalr    a1
+> +
+> +       /* Switch back to the thread stack and restore ra and s0 */
+> +       addi    sp, s0, -STACKFRAME_SIZE_ON_STACK
+> +       REG_L   ra, STACKFRAME_RA(sp)
+> +       REG_L   s0, STACKFRAME_FP(sp)
+> +       addi    sp, sp, STACKFRAME_SIZE_ON_STACK
+> +
+> +       ret
+> +SYM_FUNC_END(call_on_irq_stack)
+> +#endif /* CONFIG_IRQ_STACKS */
+> +
+>  /*
+>   * Integer register context switch
+>   * The callee-saved registers must be saved and restored.
+> diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+> index a8efa053c4a5..95dafdcbd135 100644
+> --- a/arch/riscv/kernel/irq.c
+> +++ b/arch/riscv/kernel/irq.c
+> @@ -61,35 +61,16 @@ static void init_irq_stacks(void)
+>  #endif /* CONFIG_VMAP_STACK */
+>
+>  #ifdef CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK
+> +static void ___do_softirq(struct pt_regs *regs)
+> +{
+> +       __do_softirq();
+> +}
+> +
+>  void do_softirq_own_stack(void)
+>  {
+> -#ifdef CONFIG_IRQ_STACKS
+> -       if (on_thread_stack()) {
+> -               ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
+> -                                       + IRQ_STACK_SIZE/sizeof(ulong);
+> -               __asm__ __volatile(
+> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> -               REG_S"  ra, (sp)                \n"
+> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> -               REG_S"  s0, (sp)                \n"
+> -               "addi   s0, sp, 2*"RISCV_SZPTR "\n"
+> -               "move   sp, %[sp]               \n"
+> -               "call   __do_softirq            \n"
+> -               "addi   sp, s0, -2*"RISCV_SZPTR"\n"
+> -               REG_L"  s0, (sp)                \n"
+> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
+> -               REG_L"  ra, (sp)                \n"
+> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
+> -               :
+> -               : [sp] "r" (sp)
+> -               : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+> -                 "t0", "t1", "t2", "t3", "t4", "t5", "t6",
+> -#ifndef CONFIG_FRAME_POINTER
+> -                 "s0",
+> -#endif
+> -                 "memory");
+> -       } else
+> -#endif
+> +       if (on_thread_stack())
+> +               call_on_irq_stack(NULL, ___do_softirq);
+> +       else
+>                 __do_softirq();
+>  }
+>  #endif /* CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK */
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index a05905d88802..1fe6b475cdfb 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -350,34 +350,10 @@ static void noinstr handle_riscv_irq(struct pt_regs=
+ *regs)
+>  asmlinkage void noinstr do_irq(struct pt_regs *regs)
+>  {
+>         irqentry_state_t state =3D irqentry_enter(regs);
+> -#ifdef CONFIG_IRQ_STACKS
+> -       if (on_thread_stack()) {
+> -               ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
+> -                                       + IRQ_STACK_SIZE/sizeof(ulong);
+> -               __asm__ __volatile(
+> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> -               REG_S"  ra, (sp)                \n"
+> -               "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> -               REG_S"  s0, (sp)                \n"
+> -               "addi   s0, sp, 2*"RISCV_SZPTR "\n"
+> -               "move   sp, %[sp]               \n"
+> -               "move   a0, %[regs]             \n"
+> -               "call   handle_riscv_irq        \n"
+> -               "addi   sp, s0, -2*"RISCV_SZPTR"\n"
+> -               REG_L"  s0, (sp)                \n"
+> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
+> -               REG_L"  ra, (sp)                \n"
+> -               "addi   sp, sp, "RISCV_SZPTR   "\n"
+> -               :
+> -               : [sp] "r" (sp), [regs] "r" (regs)
+> -               : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+> -                 "t0", "t1", "t2", "t3", "t4", "t5", "t6",
+> -#ifndef CONFIG_FRAME_POINTER
+> -                 "s0",
+> -#endif
+> -                 "memory");
+> -       } else
+> -#endif
+> +
+> +       if (IS_ENABLED(CONFIG_IRQ_STACKS) && on_thread_stack())
+> +               call_on_irq_stack(regs, handle_riscv_irq);
+A good code optimization for maintenance.
 
-I will squash this into your original commit.
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-Thanks.
-
+> +       else
+>                 handle_riscv_irq(regs);
+>
+>         irqentry_exit(regs, state);
+> --
+> 2.42.0.rc2.253.gd59a3bf2b4-goog
+>
 
 
 --=20
 Best Regards
-Masahiro Yamada
+ Guo Ren
