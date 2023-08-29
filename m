@@ -1,144 +1,211 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C2F6AA3
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 10:21:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693304473;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XYJNPlFwpO9nw1dXlk7074lvs6QgNh1TnQqNdAe0TW0=;
-	b=JqrWDXEXOD+3y7EeedXW5P3rIeAZy7nRybEHwmjVT4Z7OblaQn9ZMPt2f4bCVOhXQG4gos
-	hFkgODsxmMrEisw08wqNnPGgT184lnBOQ3jAsaWMW+pu1bSN7kWb/m5YrZgO5f97YGn7hN
-	m0fYEzHzntlYe8gjd9evKDF/1fxjgNg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-94-TtbGKx35MQ6YZ311fPLD6Q-1; Tue, 29 Aug 2023 06:21:12 -0400
-X-MC-Unique: TtbGKx35MQ6YZ311fPLD6Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2367857A84
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 10:21:11 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B01EA4021C8;
-	Tue, 29 Aug 2023 10:21:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 15 of 267): Test report for master
- (6.5.0, mainline.kernel.org-clang, 6383cb42)
-Date: Tue, 29 Aug 2023 10:21:11 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E4A1548D;
+	Tue, 29 Aug 2023 11:28:41 +0000 (UTC)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1qawtj-0000jk-0q; Tue, 29 Aug 2023 13:28:39 +0200
+Message-ID: <26aa6f92-2376-51a4-bbdc-abbbd62c23d2@leemhuis.info>
+Date: Tue, 29 Aug 2023 13:28:37 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <36160.123082906211200157@us-mta-94.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+Content-Language: en-US, de-DE
+To: Shreeya Patel <shreeya.patel@collabora.com>,
+ Linux regressions mailing list <regressions@lists.linux.dev>,
+ Masahiro Yamada <masahiroy@kernel.org>
+Cc: Greg KH <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
+ =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+ Michal Marek <michal.lkml@markovi.net>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+ Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+ denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
+ kernelci@lists.linux.dev, Collabora Kernel ML <kernel@collabora.com>
+References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
+ <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+ <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
+ <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
+ <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <2023052247-bobtail-factsheet-d104@gregkh>
+ <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
+ <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
+ <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
+ <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
+ <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
+ <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
+ <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693308521;f33d514a;
+X-HE-SMSGID: 1qawtj-0000jk-0q
 
-Hi, we tested your kernel and here are the results:
+On 11.07.23 13:16, Shreeya Patel wrote:
+> On 10/07/23 17:39, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+>> for once, to make this easily accessible to everyone.
+>>
+>> Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
+>> progress made to address this? Or is this maybe (accidentally?) fixed
+>> with 6.5-rc1?
+> 
+> I still see the regression happening so it doesn't seem to be fixed.
+> https://linux.kernelci.org/test/case/id/64ac675a8aebf63753bb2a8c/
+> 
+> Masahiro had submitted a fix for this issue here.
+> 
+> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
+> 
+> But I don't see any movement there. Masahiro, are you planning to send a
+> v2 for it?
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+That was weeks ago and we didn't get a answer. :-/ Was this fixed in
+between? Doesn't look like it from here, but I might be missing something.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-Kernel information:
-    Commit message: Merge tag 'for-linus-6.6-rc1-tag' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/xen/tip
+#regzbot poke
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101856
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1509
-            Affected tests:
-                  x86_64 - xfstests - cifsv3.11
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>> On 20.06.23 06:19, Masahiro Yamada wrote:
+>>> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
+>>> <shreeya.patel@collabora.com> wrote:
+>>>> On 24/05/23 02:57, Nick Desaulniers wrote:
+>>>>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
+>>>>> <shreeya.patel@collabora.com> wrote:
+>>>>>> Hi Nick and Masahiro,
+>>>>>>
+>>>>>> On 23/05/23 01:22, Nick Desaulniers wrote:
+>>>>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH
+>>>>>>> <gregkh@linuxfoundation.org> wrote:
+>>>>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
+>>>>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers
+>>>>>>>>> <ndesaulniers@google.com> wrote:
+>>>>>>>>>> It could be; if the link order was changed, it's possible that
+>>>>>>>>>> this
+>>>>>>>>>> target may be hitting something along the lines of:
+>>>>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the
+>>>>>>>>>> "static
+>>>>>>>>>> initialization order fiasco"
+>>>>>>>>>>
+>>>>>>>>>> I'm struggling to think of how this appears in C codebases, but I
+>>>>>>>>>> swear years ago I had a discussion with GKH (maybe?) about
+>>>>>>>>>> this. I
+>>>>>>>>>> think I was playing with converting Kbuild to use Ninja rather
+>>>>>>>>>> than
+>>>>>>>>>> Make; the resulting kernel image wouldn't boot because I had
+>>>>>>>>>> modified
+>>>>>>>>>> the order the object files were linked in.  If you were to
+>>>>>>>>>> randomly
+>>>>>>>>>> shuffle the object files in the kernel, I recall some hazard
+>>>>>>>>>> that may
+>>>>>>>>>> prevent boot.
+>>>>>>>>> I thought that was specifically a C++ problem? But then again, the
+>>>>>>>>> kernel docs explicitly say that the ordering of obj-y goals in
+>>>>>>>>> kbuild is
+>>>>>>>>> significant in some instances [1]:
+>>>>>>>> Yes, it matters, you can not change it.  If you do, systems will
+>>>>>>>> break.
+>>>>>>>> It is the only way we have of properly ordering our init calls
+>>>>>>>> within
+>>>>>>>> the same "level".
+>>>>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
+>>>>>>>
+>>>>>>> (There's a joke in there similar to the use of regexes to solve a
+>>>>>>> problem resulting in two new problems; initcalls have levels for
+>>>>>>> ordering, but we still have (unexpressed) dependencies between calls
+>>>>>>> of the same level; brittle!).
+>>>>>>>
+>>>>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
+>>>>>>>
+>>>>>>> Ricardo,
+>>>>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
+>>>>>>> mentions that there's a kernel command line param `initcall_debug`.
+>>>>>>> Perhaps that can be used to see if
+>>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
+>>>>>>> ordering, resulting in a config that cannot boot?
+>>>>>> Here are the links to Lava jobs ran with initcall_debug added to the
+>>>>>> kernel command line.
+>>>>>>
+>>>>>> 1. Where regression happens
+>>>>>> (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
+>>>>>> https://lava.collabora.dev/scheduler/job/10417706
+>>>>>> <https://lava.collabora.dev/scheduler/job/10417706>
+>>>>>>
+>>>>>> 2. With a revert of the commit
+>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926
+>>>>>> https://lava.collabora.dev/scheduler/job/10418012
+>>>>>> <https://lava.collabora.dev/scheduler/job/10418012>
+>>>>> Thanks!
+>>>>>
+>>>>> Yeah, I can see a diff in the initcall ordering as a result of
+>>>>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
+>>>>>
+>>>>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
+>>>>>
+>>>>> Not just different orderings, but some initcalls seem unique to the
+>>>>> before vs. after, which is troubling. (example init_events and
+>>>>> init_fs_sysctls respectively)
+>>>>>
+>>>>> That isn't conclusive evidence that changes to initcall ordering are
+>>>>> to blame, but I suspect confirming that precisely to be very very time
+>>>>> consuming.
+>>>>>
+>>>>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
+>>>>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
+>>>>> mainline.
+>>>> I'm not sure if you followed the conversation but we are still seeing
+>>>> this regression with the latest kernel builds and would like to know if
+>>>> you plan to revert 5750121ae738?
+>>>
+>>> Reverting 5750121ae738 does not solve the issue
+>>> because the issue happens even before 5750121ae738.
+>>> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
+>>> fails to boot in the same way.
+>>>
+>>> The revert would hide the issue on a particular build setup.
+>>>
+>>>
+>>> I submitted a patch to more pin-point the issue.
+>>> Let's see how it goes.
+>>> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
+>>>
+>>>
+>>> (BTW, the initcall order is unrelated)
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>>
+>>>> Thanks,
+>>>> Shreeya Patel
+>>>>
+>>>>>> Thanks,
+>>>>>> Shreeya Patel
+>>>>>>
+>>> -- 
+>>> Best Regards
+>>> Masahiro Yamada
+>>>
+>>>
+> 
+> 
