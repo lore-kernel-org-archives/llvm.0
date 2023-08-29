@@ -1,150 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89A72C80;
-	Tue, 29 Aug 2023 16:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693326828; x=1724862828;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LbBndQ30pApFIdN1pPSoRCOwu6jKcidtzAZxrTxto+I=;
-  b=G0mPdmDJyd0ZFftYDC1qtsdyRxiN4gpfjuxiq7XvUYR83T7NilQOG4IC
-   mvbpVNehg+xBptDZpExL21wpo+9EDcVc3v4FjchcDyUHg8aaeVDivhmDa
-   lrbbMONM+156SM5sy+jMr95Q/+q8kOG2KguvLrkj9solvalS76YYMp1gZ
-   JKTKvlHjQNJGt1O/2zSYK1YOLlRl51//a4iVsIQ+n+G6ijDOIq4c5WeT8
-   Ab5jpK1v2aWqR1jmPxUCn3W+CYgqCOPvsWbN+qSDyzgbTS/SbVhJGK3pK
-   B2o/fWnV6biXXqTnOK5QbG2O3WEsUCwPFwxGYmSBuoYDaUYLZEBsko2zD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="461793835"
-X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
-   d="scan'208";a="461793835"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 09:28:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="741883388"
-X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
-   d="scan'208";a="741883388"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 29 Aug 2023 09:27:56 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qb1ZL-0008u3-28;
-	Tue, 29 Aug 2023 16:27:55 +0000
-Date: Wed, 30 Aug 2023 00:27:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Meng Li <li.meng@amd.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Huang Rui <ray.huang@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	x86@kernel.org, linux-acpi@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org,
-	Nathan Fontenot <nathan.fontenot@amd.com>,
-	Deepak Sharma <deepak.sharma@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Shimmer Huang <shimmer.huang@amd.com>,
-	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: Re: [PATCH V4 4/7] cpufreq: Add a notification message that the
- highest perf has changed
-Message-ID: <202308300057.ASUJQpsV-lkp@intel.com>
-References: <20230829064340.1136448-5-li.meng@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A372C80
+	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 16:34:08 +0000 (UTC)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-64f4ac604c2so23497066d6.1
+        for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 09:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693326847; x=1693931647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LGsDVPWOpoywEhWw8HT//mJDHXUKsrBgXetl/SfpAlg=;
+        b=1K0rBSTZDMdrhpABunn+tXDq7Ccn5arb3W+Y4ZhXI10vS4l5m5d5rtZNtUmzkkEkXI
+         Q690R7o+OwhN5MY6Ib20jEyzOv7sK67Puk/9ZSh13MzSg1hjV3QZDr2t0tRV857LqguZ
+         VOXu/MypAzTrTpL/GR3mofIC2hcKyBKUZ8CZzSh5bmbqBy4U2Ngh28aZBOAuuWRBxp4o
+         x/hOxW8/u4f5hOQeSv3LSD391ngBH2+sraOh0BRQwWMoTegRWk5GIUVtVCDtngAYWRpC
+         Tyq2seM1htg0pCRQuAucqkVca/68WKQBu6pPHdjk7IrUSnFST9sIkjWFF1XWhxvAKEdx
+         fzkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693326847; x=1693931647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LGsDVPWOpoywEhWw8HT//mJDHXUKsrBgXetl/SfpAlg=;
+        b=dmVMpxh/nJtKgy427KFeP1EmZ6DmjWhEfXhPJ1Kee7HdhjlgycbGHrUS+TNnJEMIba
+         Yj6glRP85Ve6/C9sqkpHXpst7Y3DQgO4S4f1UPGYyxK9ljQt2C9+aFAWdS3+N66jspGt
+         z7ERs+e/SbZxoWpE/ASui0hT3CAYRORp/l4koNUwG5rcAf6ndQy9T9ENWHdgaGjzrmOD
+         B4pIRHFY/r0+uJP9je1ZwFE8LPoKQU4lljRWP2EOWZM3q4Z4RBoL6WnofpSAZOOVoUhc
+         W8IB3zfi/EWmiA55AkzZgrbCjwatn0e9ozQFAvFTeh/LoSDbIafg/vXD0hZXEFvsDaAm
+         /ZlA==
+X-Gm-Message-State: AOJu0Yx2jI/GX2ukLlxvNhnOZNz5zwoBoJ2kvOvFpYqR5ucNOPEYmt31
+	kyHGANb/Uk2joq3cNGKc2zy8HrZA7UZ87yy7rk+MWQ==
+X-Google-Smtp-Source: AGHT+IE+wTlCEKPVucMTcrwfInkaLdK3d8WRVLrtrQZu+jWq8ID6sU0nBxel/3drbHiCg9eWgApzw1Pq1W7N3TWjS0w=
+X-Received: by 2002:a0c:e254:0:b0:64f:8bdd:873 with SMTP id
+ x20-20020a0ce254000000b0064f8bdd0873mr8855884qvl.3.1693326847036; Tue, 29 Aug
+ 2023 09:34:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230829064340.1136448-5-li.meng@amd.com>
+References: <20230828-scsi_fortify-v1-0-8dde624a3b2c@google.com> <CAKwvOdmaeupeLgJWjMD4iJ1pi9NFTN-MTp3uC0jDVp2T2+Ctxw@mail.gmail.com>
+In-Reply-To: <CAKwvOdmaeupeLgJWjMD4iJ1pi9NFTN-MTp3uC0jDVp2T2+Ctxw@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 29 Aug 2023 09:33:55 -0700
+Message-ID: <CAKwvOdmpSmWGUA-SHJ9PofayfxFc--MJuxgQ0cU8bnDB6c=wag@mail.gmail.com>
+Subject: Re: [PATCH 0/2] scsi: fix 2 cases of -Wfortify-source
+To: Kees Cook <keescook@chromium.org>
+Cc: Tom Rix <trix@redhat.com>, linux-scsi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, "James E.J. Bottomley" <jejb@linux.ibm.com>, 
+	Hannes Reinecke <hare@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Meng,
+On Mon, Aug 28, 2023 at 4:41=E2=80=AFPM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Mon, Aug 28, 2023 at 3:25=E2=80=AFPM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > clang-18 has improved its support for detecting operations that will
+> > truncate values at runtime via -wfortify-source resulting in two new
+>
+> ^ -Wfortify-source
+>
+> > warnings (or errors with CONFIG_WERROR=3Dy):
+> >
+> >   drivers/scsi/myrb.c:1906:10: warning: 'snprintf' will always be
+> >   truncated; specified size is 32, but format string expands to at leas=
+t
+> >   34 [-Wfortify-source]
+> >
+> >   drivers/scsi/myrs.c:1089:10: warning: 'snprintf' will always be
+> >   truncated; specified size is 32, but format string expands to at leas=
+t
+> >   34 [-Wfortify-source]
+> >
+> > When we have a string literal that does not contain any format flags,
+> > rather than use snprintf (sometimes with a size that's too small), let'=
+s
+> > use sprintf.
+>
+> Even better, Ard points out this could be strcpy (or one of the
+> variants). Will send a v2 tomorrow.
 
-kernel test robot noticed the following build errors:
+Oh strcpy doesn't return the number of bytes copied, which is what the
+users here need.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.5 next-20230829]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+(The size of dst is also unknown).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230829-144723
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230829064340.1136448-5-li.meng%40amd.com
-patch subject: [PATCH V4 4/7] cpufreq: Add a notification message that the highest perf has changed
-config: i386-randconfig-r031-20230829 (https://download.01.org/0day-ci/archive/20230830/202308300057.ASUJQpsV-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308300057.ASUJQpsV-lkp@intel.com/reproduce)
+Any thoughts on?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308300057.ASUJQpsV-lkp@intel.com/
+/* strcpy but return the length of src and requires a literal. */
+#define strcpy_literal(dst, src) ({ \
+  strcpy(dst, src ""); \
+  __builtin_strlen(src); \
+})
 
-All errors (new ones prefixed by >>):
+Uses a trick I learned from Abseil for ensuring that a parameter must
+be a string literal. The C preprocessor will concatenate those
+strings, or parsing will fail.
 
->> drivers/acpi/processor_driver.c:88:3: error: call to undeclared function 'cpufreq_update_highest_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   cpufreq_update_highest_perf(pr->id);
-                   ^
-   1 error generated.
+Then these drivers can do:
+
+return strcpy_literal(buf, "physical device - not checking\n");
+
+If that's not blood curdling, any thoughts on where best to place this
+to hide it from others? Maybe just define it in both .c files?
 
 
-vim +/cpufreq_update_highest_perf +88 drivers/acpi/processor_driver.c
+>
+> >
+> > This is pattern is cleaned up throughout two files.
+> >
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> > Nick Desaulniers (2):
+> >       scsi: myrb: fix -Wfortify-source
+> >       scsi: myrs: fix -Wfortify-source
+> >
+> >  drivers/scsi/myrb.c |  8 ++++----
+> >  drivers/scsi/myrs.c | 14 +++++++-------
+> >  2 files changed, 11 insertions(+), 11 deletions(-)
+> > ---
+> > base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
+> > change-id: 20230828-scsi_fortify-9f8d279bf9aa
+> >
+> > Best regards,
+> > --
+> > Nick Desaulniers <ndesaulniers@google.com>
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-    53	
-    54	static void acpi_processor_notify(acpi_handle handle, u32 event, void *data)
-    55	{
-    56		struct acpi_device *device = data;
-    57		struct acpi_processor *pr;
-    58		int saved;
-    59	
-    60		if (device->handle != handle)
-    61			return;
-    62	
-    63		pr = acpi_driver_data(device);
-    64		if (!pr)
-    65			return;
-    66	
-    67		switch (event) {
-    68		case ACPI_PROCESSOR_NOTIFY_PERFORMANCE:
-    69			saved = pr->performance_platform_limit;
-    70			acpi_processor_ppc_has_changed(pr, 1);
-    71			if (saved == pr->performance_platform_limit)
-    72				break;
-    73			acpi_bus_generate_netlink_event(device->pnp.device_class,
-    74							  dev_name(&device->dev), event,
-    75							  pr->performance_platform_limit);
-    76			break;
-    77		case ACPI_PROCESSOR_NOTIFY_POWER:
-    78			acpi_processor_power_state_has_changed(pr);
-    79			acpi_bus_generate_netlink_event(device->pnp.device_class,
-    80							  dev_name(&device->dev), event, 0);
-    81			break;
-    82		case ACPI_PROCESSOR_NOTIFY_THROTTLING:
-    83			acpi_processor_tstate_has_changed(pr);
-    84			acpi_bus_generate_netlink_event(device->pnp.device_class,
-    85							  dev_name(&device->dev), event, 0);
-    86			break;
-    87		case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
-  > 88			cpufreq_update_highest_perf(pr->id);
-    89			acpi_bus_generate_netlink_event(device->pnp.device_class,
-    90							  dev_name(&device->dev), event, 0);
-    91			break;
-    92		default:
-    93			acpi_handle_debug(handle, "Unsupported event [0x%x]\n", event);
-    94			break;
-    95		}
-    96	
-    97		return;
-    98	}
-    99	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+--=20
+Thanks,
+~Nick Desaulniers
