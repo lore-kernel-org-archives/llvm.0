@@ -1,150 +1,98 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42A263C0
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 10:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693303819;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=H2v/sPFhaDKMxtZ+QO8edWBgE8vGCDcNKF2NqzSotvc=;
-	b=cMRORvVXsHgHcLeb4M8mpvu+lVQeWfu1An/eGEO/nJ7aBrE70puzjDl++l9gc0cFKqoLlg
-	Hk7bqf9C5+lznpLI3epnLIV0Egg6szvtJQbqxaLyKpn9FHy+VYYfeSp+bwL37vHCKFYTZZ
-	u8NtxLcIatVewSYyUcbCnow2Nmbgpaw=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-AnIfHhBIOUOtyr5flJkZng-1; Tue, 29 Aug 2023 06:10:17 -0400
-X-MC-Unique: AnIfHhBIOUOtyr5flJkZng-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E425B1C0CCAD
-	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 10:10:16 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CC294492C13;
-	Tue, 29 Aug 2023 10:10:16 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 22 of 267): Test report for master
- (6.5.0, mainline.kernel.org-clang, 97efd283)
-Date: Tue, 29 Aug 2023 10:10:16 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C646AA3;
+	Tue, 29 Aug 2023 10:19:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693304400; x=1724840400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=C2z3xUDpBI57xEzPF0joZwUCPxyXmBpgtj+e7mXqqDM=;
+  b=lk/S90rOhXRaK2ra1lFrzWjJK/D/ZXV+9Y2DCnkRdUy0xPgBFS/1VAb+
+   MH2udtb1bytMVQSCdBKuFasLjn+1qg/OKfgaAYeJbspHPvWP4Vn8rSk/j
+   Peg4PuiTPnAfyO7eugOmQEZUZREs0choZCpYAXZzSHbXFATyuzQcwy1k5
+   hYoqUlgBhEnRO6uhaxhXxYpjUHUu569c3qI/kLvfyQcgUxGBj9PBEMnmh
+   MW03LYsm3VL2JKoAUIAdtVS45MyOymGtduw2UxB3Nw4lzQ7OYvuTL85M+
+   BzP8414cb6hz2bcNzK6O/frcDUke24uOAWcgvJ2NQ9X4zyfxelppQEq9L
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="354846738"
+X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
+   d="scan'208";a="354846738"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 03:19:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="732157262"
+X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
+   d="scan'208";a="732157262"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 29 Aug 2023 03:19:56 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qavpD-0008e7-1Y;
+	Tue, 29 Aug 2023 10:19:55 +0000
+Date: Tue, 29 Aug 2023 18:19:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andreas Gruenbacher <agruenba@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	cluster-devel@redhat.com
+Subject: [gfs2:for-later 27/30] kernel/kthread.c:738: warning: Function
+ parameter or member 'k' not described in 'kthread_stop_put'
+Message-ID: <202308291833.73wBCBdr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <40591.123082906101700594@us-mta-580.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-later
+head:   b10d94a0cbfc4bbfdf6dcdaa966fb4f17eee08f1
+commit: d3a19da72d2ef3e8f1d756b9f859a93ef84c3078 [27/30] kthread: Add kthread_stop_put
+config: i386-buildonly-randconfig-001-20230829 (https://download.01.org/0day-ci/archive/20230829/202308291833.73wBCBdr-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230829/202308291833.73wBCBdr-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308291833.73wBCBdr-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'x86-cleanups-2023-08-28' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/101854
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9308047
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: xfstests - cifsv3.11: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1509
-            Affected tests:
-                  x86_64 - xfstests - cifsv3.11
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> kernel/kthread.c:738: warning: Function parameter or member 'k' not described in 'kthread_stop_put'
 
 
+vim +738 kernel/kthread.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   721	
+   722	/**
+   723	 * kthread_stop_put - stop a thread and put its task struct
+   724	 *
+   725	 * Stops a kthread and put its task_struct.  This is meant for callers
+   726	 * holding an extra reference on the task struct obtained by something
+   727	 * like:
+   728	 *
+   729	 *   t = kthread_create(...);
+   730	 *   if (!IS_ERR(t)) {
+   731	 *     get_task_struct(t);
+   732	 *     wake_up_process(t)
+   733	 *   }
+   734	 *
+   735	 * Returns the result of kthread_stop().
+   736	 */
+   737	int kthread_stop_put(struct task_struct *k)
+ > 738	{
+   739		int ret;
+   740	
+   741		ret = kthread_stop(k);
+   742		put_task_struct(k);
+   743		return ret;
+   744	}
+   745	EXPORT_SYMBOL(kthread_stop_put);
+   746	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
