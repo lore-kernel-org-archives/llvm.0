@@ -1,211 +1,105 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E4A1548D;
-	Tue, 29 Aug 2023 11:28:41 +0000 (UTC)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1qawtj-0000jk-0q; Tue, 29 Aug 2023 13:28:39 +0200
-Message-ID: <26aa6f92-2376-51a4-bbdc-abbbd62c23d2@leemhuis.info>
-Date: Tue, 29 Aug 2023 13:28:37 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C707814F66;
+	Tue, 29 Aug 2023 11:48:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1693309705;
+	bh=V7fp4M9m50UUinbeFQ1LBWrcpG397hshYrmRg4hs78o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=ld+GC+EV4Zu+j0MWCz9YSYef3C+5Ig5srlyGRbxzJY1VRX0A7tAuee/Im30uP23XS
+	 hLzLy9MNLElY+77KNRrDZEApxw+r5WXfZwXLZcU0I3Cv7AR0bs4GwHj6m0RgIcl5i7
+	 pGHiKFSI7QYWqvakfvamyqq4K+T1GGciAx9EE2HYz3bN9YsyVmAEscsInMPGLvjZA+
+	 uqZZ4mPASaPlNfTNNtBEbdCyjg8orG0ECVaNS/VCcauiGQifpBvDFD0sWz3/o2UAIS
+	 DMYxgWIOUFvZZgoFj9GTgdvF228twAda/t9F60m7bebZnCe9RECs8yLjJKc0GGaGI9
+	 sAAMichvM70mw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4RZm090DPRz4wxQ;
+	Tue, 29 Aug 2023 21:48:25 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Herbert Xu <herbert@gondor.apana.org.au>, kernel test robot
+ <lkp@intel.com>, Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+ linuxppc-dev@lists.ozlabs.org
+Cc: Danny Tsen <dtsen@linux.ibm.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Linux Memory Management List
+ <linux-mm@kvack.org>
+Subject: Re: crypto: powerpc/chacha20,poly1305-p10 - Add dependency on VSX
+In-Reply-To: <ZOxj3rFGVcRUzgwb@gondor.apana.org.au>
+References: <202308251906.SYawej6g-lkp@intel.com>
+ <ZOxj3rFGVcRUzgwb@gondor.apana.org.au>
+Date: Tue, 29 Aug 2023 21:48:17 +1000
+Message-ID: <87msyakr26.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Content-Language: en-US, de-DE
-To: Shreeya Patel <shreeya.patel@collabora.com>,
- Linux regressions mailing list <regressions@lists.linux.dev>,
- Masahiro Yamada <masahiroy@kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
- =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
- Michal Marek <michal.lkml@markovi.net>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
- denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
- kernelci@lists.linux.dev, Collabora Kernel ML <kernel@collabora.com>
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
- <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh>
- <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
- <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
- <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
- <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
- <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
- <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
- <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693308521;f33d514a;
-X-HE-SMSGID: 1qawtj-0000jk-0q
+Content-Type: text/plain
 
-On 11.07.23 13:16, Shreeya Patel wrote:
-> On 10/07/23 17:39, Linux regression tracking (Thorsten Leemhuis) wrote:
->> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
->> for once, to make this easily accessible to everyone.
+Herbert Xu <herbert@gondor.apana.org.au> writes:
+> On Fri, Aug 25, 2023 at 07:44:32PM +0800, kernel test robot wrote:
 >>
->> Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
->> progress made to address this? Or is this maybe (accidentally?) fixed
->> with 6.5-rc1?
-> 
-> I still see the regression happening so it doesn't seem to be fixed.
-> https://linux.kernelci.org/test/case/id/64ac675a8aebf63753bb2a8c/
-> 
-> Masahiro had submitted a fix for this issue here.
-> 
-> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
-> 
-> But I don't see any movement there. Masahiro, are you planning to send a
-> v2 for it?
+>> All errors (new ones prefixed by >>):
+>> 
+>>    In file included from arch/powerpc/crypto/poly1305-p10-glue.c:19:
+>
+> ...
+>
+>> ae3a197e3d0bfe3 David Howells    2012-03-28  75  
+>> ae3a197e3d0bfe3 David Howells    2012-03-28  76  #ifdef CONFIG_VSX
+>> d1e1cf2e38def30 Anton Blanchard  2015-10-29  77  extern void enable_kernel_vsx(void);
+>> ae3a197e3d0bfe3 David Howells    2012-03-28  78  extern void flush_vsx_to_thread(struct task_struct *);
+>> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  79  static inline void disable_kernel_vsx(void)
+>> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  80  {
+>> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  81  	msr_check_and_clear(MSR_FP|MSR_VEC|MSR_VSX);
+>> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  82  }
+>> bd73758803c2eed Christophe Leroy 2021-03-09  83  #else
+>> bd73758803c2eed Christophe Leroy 2021-03-09  84  static inline void enable_kernel_vsx(void)
+>> bd73758803c2eed Christophe Leroy 2021-03-09  85  {
+>> bd73758803c2eed Christophe Leroy 2021-03-09 @86  	BUILD_BUG();
+>> bd73758803c2eed Christophe Leroy 2021-03-09  87  }
+>> bd73758803c2eed Christophe Leroy 2021-03-09  88  
+>
+> ---8<---
+> Add dependency on VSX as otherwise the build will fail without
+> it.
+>
+> Fixes: 161fca7e3e90 ("crypto: powerpc - Add chacha20/poly1305-p10 to Kconfig and Makefile")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202308251906.SYawej6g-lkp@intel.com/
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-That was weeks ago and we didn't get a answer. :-/ Was this fixed in
-between? Doesn't look like it from here, but I might be missing something.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+cheers
 
-#regzbot poke
-
->> On 20.06.23 06:19, Masahiro Yamada wrote:
->>> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
->>> <shreeya.patel@collabora.com> wrote:
->>>> On 24/05/23 02:57, Nick Desaulniers wrote:
->>>>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
->>>>> <shreeya.patel@collabora.com> wrote:
->>>>>> Hi Nick and Masahiro,
->>>>>>
->>>>>> On 23/05/23 01:22, Nick Desaulniers wrote:
->>>>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH
->>>>>>> <gregkh@linuxfoundation.org> wrote:
->>>>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
->>>>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers
->>>>>>>>> <ndesaulniers@google.com> wrote:
->>>>>>>>>> It could be; if the link order was changed, it's possible that
->>>>>>>>>> this
->>>>>>>>>> target may be hitting something along the lines of:
->>>>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the
->>>>>>>>>> "static
->>>>>>>>>> initialization order fiasco"
->>>>>>>>>>
->>>>>>>>>> I'm struggling to think of how this appears in C codebases, but I
->>>>>>>>>> swear years ago I had a discussion with GKH (maybe?) about
->>>>>>>>>> this. I
->>>>>>>>>> think I was playing with converting Kbuild to use Ninja rather
->>>>>>>>>> than
->>>>>>>>>> Make; the resulting kernel image wouldn't boot because I had
->>>>>>>>>> modified
->>>>>>>>>> the order the object files were linked in.  If you were to
->>>>>>>>>> randomly
->>>>>>>>>> shuffle the object files in the kernel, I recall some hazard
->>>>>>>>>> that may
->>>>>>>>>> prevent boot.
->>>>>>>>> I thought that was specifically a C++ problem? But then again, the
->>>>>>>>> kernel docs explicitly say that the ordering of obj-y goals in
->>>>>>>>> kbuild is
->>>>>>>>> significant in some instances [1]:
->>>>>>>> Yes, it matters, you can not change it.  If you do, systems will
->>>>>>>> break.
->>>>>>>> It is the only way we have of properly ordering our init calls
->>>>>>>> within
->>>>>>>> the same "level".
->>>>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
->>>>>>>
->>>>>>> (There's a joke in there similar to the use of regexes to solve a
->>>>>>> problem resulting in two new problems; initcalls have levels for
->>>>>>> ordering, but we still have (unexpressed) dependencies between calls
->>>>>>> of the same level; brittle!).
->>>>>>>
->>>>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
->>>>>>>
->>>>>>> Ricardo,
->>>>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
->>>>>>> mentions that there's a kernel command line param `initcall_debug`.
->>>>>>> Perhaps that can be used to see if
->>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
->>>>>>> ordering, resulting in a config that cannot boot?
->>>>>> Here are the links to Lava jobs ran with initcall_debug added to the
->>>>>> kernel command line.
->>>>>>
->>>>>> 1. Where regression happens
->>>>>> (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
->>>>>> https://lava.collabora.dev/scheduler/job/10417706
->>>>>> <https://lava.collabora.dev/scheduler/job/10417706>
->>>>>>
->>>>>> 2. With a revert of the commit
->>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926
->>>>>> https://lava.collabora.dev/scheduler/job/10418012
->>>>>> <https://lava.collabora.dev/scheduler/job/10418012>
->>>>> Thanks!
->>>>>
->>>>> Yeah, I can see a diff in the initcall ordering as a result of
->>>>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
->>>>>
->>>>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
->>>>>
->>>>> Not just different orderings, but some initcalls seem unique to the
->>>>> before vs. after, which is troubling. (example init_events and
->>>>> init_fs_sysctls respectively)
->>>>>
->>>>> That isn't conclusive evidence that changes to initcall ordering are
->>>>> to blame, but I suspect confirming that precisely to be very very time
->>>>> consuming.
->>>>>
->>>>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
->>>>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
->>>>> mainline.
->>>> I'm not sure if you followed the conversation but we are still seeing
->>>> this regression with the latest kernel builds and would like to know if
->>>> you plan to revert 5750121ae738?
->>>
->>> Reverting 5750121ae738 does not solve the issue
->>> because the issue happens even before 5750121ae738.
->>> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
->>> fails to boot in the same way.
->>>
->>> The revert would hide the issue on a particular build setup.
->>>
->>>
->>> I submitted a patch to more pin-point the issue.
->>> Let's see how it goes.
->>> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
->>>
->>>
->>> (BTW, the initcall order is unrelated)
->>>
->>>
->>>
->>>
->>>
->>>>
->>>> Thanks,
->>>> Shreeya Patel
->>>>
->>>>>> Thanks,
->>>>>> Shreeya Patel
->>>>>>
->>> -- 
->>> Best Regards
->>> Masahiro Yamada
->>>
->>>
-> 
-> 
+> diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
+> index f25024afdda5..7a66d7c0e6a2 100644
+> --- a/arch/powerpc/crypto/Kconfig
+> +++ b/arch/powerpc/crypto/Kconfig
+> @@ -113,7 +113,7 @@ config CRYPTO_AES_GCM_P10
+>  
+>  config CRYPTO_CHACHA20_P10
+>  	tristate "Ciphers: ChaCha20, XChacha20, XChacha12 (P10 or later)"
+> -	depends on PPC64 && CPU_LITTLE_ENDIAN
+> +	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
+>  	select CRYPTO_SKCIPHER
+>  	select CRYPTO_LIB_CHACHA_GENERIC
+>  	select CRYPTO_ARCH_HAVE_LIB_CHACHA
+> @@ -127,7 +127,7 @@ config CRYPTO_CHACHA20_P10
+>  
+>  config CRYPTO_POLY1305_P10
+>  	tristate "Hash functions: Poly1305 (P10 or later)"
+> -	depends on PPC64 && CPU_LITTLE_ENDIAN
+> +	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
+>  	select CRYPTO_HASH
+>  	select CRYPTO_LIB_POLY1305_GENERIC
+>  	help
+> -- 
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
