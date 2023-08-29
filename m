@@ -1,41 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F2514AAF;
-	Tue, 29 Aug 2023 20:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E579018AE7;
+	Tue, 29 Aug 2023 22:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693342211; x=1724878211;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=KYmFPHXnaFkGmxAMbMwXDRJruRZ6CnBvhtFyYf6OTNo=;
-  b=lWdWOTrFlXfu5ygqDtWDGSA9t2c880mjEek13v7zDiqvLnvlB/S4MHve
-   VD52Ln/tQSqmsqV07e+nNYPysSO4rMn9b4jQ+NYZ7lCmrNVJN56i+lI45
-   sKeawd90M9SLTt7lM0tBNE/lqZqn3TxQk43HOcpoq1LtcX8TXL+fcm4Ad
-   y5qkZlAosqlmCDqOdqubAvXMyB5ydRaOlm9qf9X1AddZETvVyCSL/RyCr
-   r2b5+yG84y5Zwst1ZodfKH3DSzb2b4xZG0nKzK8H1S3ncSvo5FlHeyJU8
-   NY6Hvxx11CvsHuKhwK4yX10oGvdMmqxlB9/KdsZpP+pmPSVItrJs26YA+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="374378340"
+  t=1693347002; x=1724883002;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SNME3gdnLMyvcTJqOztxL04quPuggWUGzV6ZO1yQO/E=;
+  b=jlifVRHaUI51mdK+k/3fhLX1XmKyDmGlPx+MZl5SwS1PL6vGYTMi1FT5
+   QjrsS9acd1HBOrsK9FjFzlwGRIUhVKEh3U49s4yrHWIJpl4S8F3QHAgaO
+   /B/WtQxfU404KWYrzfa0hahMA5btzpFEiJockGP41BVAppNhdJW7Q5r78
+   jrlglja+kVHQrJ+bmYsFWTo9Znd5sq5c3KivayvvbKRWtRygRTT6LiyTT
+   xNZVR7IcL8cfUuNbaZaa4shpMMv5YNXTIU6oVI1XGriN9UGoDA0l4rnPQ
+   r9YoQmKUyXL5NjYFr9DWAL12KA8W42WtkTsJQqq0f5GEkDuisPS7+IEh1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="360487662"
 X-IronPort-AV: E=Sophos;i="6.02,211,1688454000"; 
-   d="scan'208";a="374378340"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 13:50:09 -0700
+   d="scan'208";a="360487662"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 15:10:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="688642495"
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="828992526"
 X-IronPort-AV: E=Sophos;i="6.02,211,1688454000"; 
-   d="scan'208";a="688642495"
+   d="scan'208";a="828992526"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 29 Aug 2023 13:50:08 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Aug 2023 15:10:00 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qb5f5-00094R-1Z;
-	Tue, 29 Aug 2023 20:50:07 +0000
-Date: Wed, 30 Aug 2023 04:49:42 +0800
+	id 1qb6uN-00098V-1H;
+	Tue, 29 Aug 2023 22:09:59 +0000
+Date: Wed, 30 Aug 2023 06:09:46 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: arch/x86/kvm/kvm-amd.o: warning: objtool:
- __svm_sev_es_vcpu_run+0x4a: BP used as a scratch register
-Message-ID: <202308300414.IzgpaT6c-lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-vfs:b4/vfs-super-mtd 51/51] ld.lld: error: undefined
+ symbol: sget_dev
+Message-ID: <202308300527.BmzoWgGu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,31 +47,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: Masahiro Yamada <masahiroy@kernel.org>
-CC: Nicolas Schier <nicolas@fjasle.eu>
-CC: Sami Tolvanen <samitolvanen@google.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eaf9f4649cf03ba3442712497a30686380ba7c23
-commit: c25e1c55822f9b3b53ccbf88b85644317a525752 kbuild: do not create *.prelink.o for Clang LTO or IBT
-date:   1 year, 3 months ago
-config: x86_64-randconfig-012-20230830 (https://download.01.org/0day-ci/archive/20230830/202308300414.IzgpaT6c-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git b4/vfs-super-mtd
+head:   a115996e417a9245d3f9974b94f649479ad76f99
+commit: a115996e417a9245d3f9974b94f649479ad76f99 [51/51] mtd: key superblock by device number
+config: x86_64-randconfig-071-20230830 (https://download.01.org/0day-ci/archive/20230830/202308300527.BmzoWgGu-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308300414.IzgpaT6c-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308300527.BmzoWgGu-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308300414.IzgpaT6c-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308300527.BmzoWgGu-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   arch/x86/kvm/kvm-amd.o: warning: objtool: __svm_vcpu_run+0xe2: BP used as a scratch register
->> arch/x86/kvm/kvm-amd.o: warning: objtool: __svm_sev_es_vcpu_run+0x4a: BP used as a scratch register
-
-
-objdump-func vmlinux.o __svm_sev_es_vcpu_run:
+>> ld.lld: error: undefined symbol: sget_dev
+   >>> referenced by mtdsuper.c:33 (drivers/mtd/mtdsuper.c:33)
+   >>>               vmlinux.o:(mtd_get_sb)
 
 -- 
 0-DAY CI Kernel Test Service
