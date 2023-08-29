@@ -1,45 +1,42 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBF27FF;
-	Tue, 29 Aug 2023 02:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C54A46;
+	Tue, 29 Aug 2023 02:12:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693275177; x=1724811177;
+  t=1693275179; x=1724811179;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DjDNFSblYIja8+wb0vvteObAXVoWNmEys8fAnIs3+oA=;
-  b=VC4yHEOvo8OJOS2uETobUpxQF7dRrh9o46QfzdSGFxWi8jbnOvWWdL16
-   LEKH+mo/BX2XhrdvfSxHqF/z50FrUOfU82qnqAAKv8f6tUE/8RKVCpILf
-   GhFbEAwzh6Ec6p65MUu7pFcX5jZHlRK/LiElJlXg2wG0ZNr0a6g3x1qG1
-   x7G5tWxB+Zt8wE8HB881WxnQTAZ9bXOltz+isW5mswvxKo/5qwaP2tBq/
-   cJ7crpGT2UnapBGyqSfL1vhNrNBA9QW/N1hXTuZa8frpkkb4cd+sa+jfe
-   v6yEy+yRglU9quUMgO3GUNizh2G9jOAOJRKbMth+apSbN9lZV8LisnbtF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="375221649"
+  bh=MKFCiVVPZOPqsN6iqmSmKmlrOThu5P5XXnUlWnT/0A4=;
+  b=Mp2z+IPsfNFTZ7xWoCOdOIEfLp7x44sEKkYw9ZPOWiMBI3g9Xj195kxR
+   YltjbPWrxwfHhp2OheDn6VRZ2pZFQD08GfkbpWqQZdfbUClqaE2dBHNh6
+   DPkLBdFGZyr2DaDPk2Faa8wvEAYhtHkrLLC2mO9g9A42850HzPZJxX6wd
+   QKCmtblC8sj+rv19rXg6mrDILj/WBsWKp1Hn9zL47UVTvCIN8XHfxNLXW
+   kDg8huG+jWvmoerMDxdNb12fnYcv0zZ1ohSQL+4Ht1fXW9FObrRbQaxu5
+   EuKgVneGUfVoNC/w8iDVJLg1Z7Ls9RGUhnk1H0ViH263De4l3ccFkyDXJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="375221648"
 X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
-   d="scan'208";a="375221649"
+   d="scan'208";a="375221648"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 19:12:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="741637746"
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="741637745"
 X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
-   d="scan'208";a="741637746"
+   d="scan'208";a="741637745"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
   by fmsmga007.fm.intel.com with ESMTP; 28 Aug 2023 19:12:53 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qaoDt-0008HD-0a;
+	id 1qaoDt-0008HF-0e;
 	Tue, 29 Aug 2023 02:12:53 +0000
-Date: Tue, 29 Aug 2023 10:12:28 +0800
+Date: Tue, 29 Aug 2023 10:12:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Umang Jain <umang.jain@ideasonboard.com>
-Subject: [pinchartl:rpi/v6.5/isp/v2 9/24]
- drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:517:17: warning: implicit
- truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1
-Message-ID: <202308291030.dfFJKL96-lkp@intel.com>
+To: Max Filippov <jcmvbkbc@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jcmvbkbc-xtensa:xtensa-6.5-esp32 24/34]
+ drivers/misc/esp32-ipc.c:142: undefined reference to `devm_of_iomap'
+Message-ID: <202308291003.7IYFUKpc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,181 +46,167 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git rpi/v6.5/isp/v2
-head:   f21e9808068119a1ea8f1ddb5677c982b79ac10d
-commit: e67ba2c176b1030aeaa370a3979e178eb71a775d [9/24] staging: vc04_services: Add new vc-sm-cma driver
-config: arm-randconfig-001-20230829 (https://download.01.org/0day-ci/archive/20230829/202308291030.dfFJKL96-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230829/202308291030.dfFJKL96-lkp@intel.com/reproduce)
+tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-6.5-esp32
+head:   edbe560c2ce9974f4b2e47ca13050e6a62d604b3
+commit: 20b0bc011b5325431d41d666f8f949d0c6ede432 [24/34] esp_wifi: add IPC transport
+config: um-randconfig-r022-20230829 (https://download.01.org/0day-ci/archive/20230829/202308291003.7IYFUKpc-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230829/202308291003.7IYFUKpc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308291030.dfFJKL96-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308291003.7IYFUKpc-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:517:17: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
-           buffer->in_use = 1;
-                          ^ ~
-   drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:416:1: warning: no previous prototype for function 'vc_sm_cma_import_dmabuf_internal' [-Wmissing-prototypes]
-   vc_sm_cma_import_dmabuf_internal(struct sm_state_t *state,
-   ^
-   drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:415:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   2 warnings generated.
+   In file included from drivers/misc/esp32-ipc.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/misc/esp32-ipc.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/misc/esp32-ipc.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/misc/esp32-ipc.c:145:13: warning: cast to 'void *' from smaller integer type 'u32' (aka 'unsigned int') [-Wint-to-void-pointer-cast]
+     145 |         hw->hw_q = (void *)readl(p);
+         |                    ^~~~~~~~~~~~~~~~
+   drivers/misc/esp32-ipc.c:221:34: warning: unused variable 'esp32_ipc_match' [-Wunused-const-variable]
+     221 | static const struct of_device_id esp32_ipc_match[] = {
+         |                                  ^
+   14 warnings generated.
+--
+   /usr/bin/ld: init/main.o: warning: relocation in read-only section `.ref.text'
+   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: drivers/misc/esp32-ipc.o: in function `esp32_ipc_probe':
+>> drivers/misc/esp32-ipc.c:142: undefined reference to `devm_of_iomap'
+>> /usr/bin/ld: drivers/misc/esp32-ipc.c:146: undefined reference to `devm_iounmap'
+   /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ESP32_IPC
+   Depends on [n]: OF [=n] && HAS_IOMEM [=n]
+   Selected by [y]:
+   - ESP32_WIFI_SHMEM [=y] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ESPRESSIF [=y]
 
 
-vim +/int +517 drivers/staging/vc04_services/vc-sm-cma/vc_sm.c
+vim +142 drivers/misc/esp32-ipc.c
 
-   413	
-   414	/* Import a dma_buf to be shared with VC. */
-   415	int
-   416	vc_sm_cma_import_dmabuf_internal(struct sm_state_t *state,
-   417					 struct dma_buf *dma_buf,
-   418					 int fd,
-   419					 struct dma_buf **imported_buf)
-   420	{
-   421		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-   422		struct vc_sm_buffer *buffer = NULL;
-   423		struct vc_sm_import import = { };
-   424		struct vc_sm_import_result result = { };
-   425		struct dma_buf_attachment *attach = NULL;
-   426		struct sg_table *sgt = NULL;
-   427		dma_addr_t dma_addr;
-   428		int ret = 0;
-   429		int status;
-   430	
-   431		/* Setup our allocation parameters */
-   432		pr_debug("%s: importing dma_buf %p/fd %d\n", __func__, dma_buf, fd);
-   433	
-   434		if (fd < 0)
-   435			get_dma_buf(dma_buf);
-   436		else
-   437			dma_buf = dma_buf_get(fd);
-   438	
-   439		if (!dma_buf)
-   440			return -EINVAL;
-   441	
-   442		attach = dma_buf_attach(dma_buf, &sm_state->pdev->dev);
-   443		if (IS_ERR(attach)) {
-   444			ret = PTR_ERR(attach);
-   445			goto error;
-   446		}
-   447	
-   448		sgt = dma_buf_map_attachment_unlocked(attach, DMA_BIDIRECTIONAL);
-   449		if (IS_ERR(sgt)) {
-   450			ret = PTR_ERR(sgt);
-   451			goto error;
-   452		}
-   453	
-   454		/* Verify that the address block is contiguous */
-   455		if (sgt->nents != 1) {
-   456			ret = -ENOMEM;
-   457			goto error;
-   458		}
-   459	
-   460		/* Allocate local buffer to track this allocation. */
-   461		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-   462		if (!buffer) {
-   463			ret = -ENOMEM;
-   464			goto error;
-   465		}
-   466	
-   467		import.type = VC_SM_ALLOC_NON_CACHED;
-   468		dma_addr = sg_dma_address(sgt->sgl);
-   469		import.addr = (u32)dma_addr;
-   470		if ((import.addr & 0xC0000000) != 0xC0000000) {
-   471			pr_err("%s: Expecting an uncached alias for dma_addr %pad\n",
-   472			       __func__, &dma_addr);
-   473			import.addr |= 0xC0000000;
-   474		}
-   475		import.size = sg_dma_len(sgt->sgl);
-   476		import.allocator = current->tgid;
-   477		import.kernel_id = get_kernel_id(buffer);
-   478	
-   479		memcpy(import.name, VC_SM_RESOURCE_NAME_DEFAULT,
-   480		       sizeof(VC_SM_RESOURCE_NAME_DEFAULT));
-   481	
-   482		pr_debug("[%s]: attempt to import \"%s\" data - type %u, addr %pad, size %u.\n",
-   483			 __func__, import.name, import.type, &dma_addr, import.size);
-   484	
-   485		/* Allocate the videocore buffer. */
-   486		status = vc_sm_cma_vchi_import(sm_state->sm_handle, &import, &result,
-   487					       &sm_state->int_trans_id);
-   488		if (status == -EINTR) {
-   489			pr_debug("[%s]: requesting import memory action restart (trans_id: %u)\n",
-   490				 __func__, sm_state->int_trans_id);
-   491			ret = -ERESTARTSYS;
-   492			sm_state->restart_sys = -EINTR;
-   493			sm_state->int_action = VC_SM_MSG_TYPE_IMPORT;
-   494			goto error;
-   495		} else if (status || !result.res_handle) {
-   496			pr_debug("[%s]: failed to import memory on videocore (status: %u, trans_id: %u)\n",
-   497				 __func__, status, sm_state->int_trans_id);
-   498			ret = -ENOMEM;
-   499			goto error;
-   500		}
-   501	
-   502		mutex_init(&buffer->lock);
-   503		INIT_LIST_HEAD(&buffer->attachments);
-   504		memcpy(buffer->name, import.name,
-   505		       min(sizeof(buffer->name), sizeof(import.name) - 1));
-   506	
-   507		/* Keep track of the buffer we created. */
-   508		buffer->vc_handle = result.res_handle;
-   509		buffer->size = import.size;
-   510		buffer->vpu_state = VPU_MAPPED;
-   511	
-   512		buffer->imported_dma_buf = dma_buf;
-   513	
-   514		buffer->attach = attach;
-   515		buffer->sgt = sgt;
-   516		buffer->dma_addr = dma_addr;
- > 517		buffer->in_use = 1;
-   518		buffer->kernel_id = import.kernel_id;
-   519	
-   520		/*
-   521		 * We're done - we need to export a new dmabuf chaining through most
-   522		 * functions, but enabling us to release our own internal references
-   523		 * here.
-   524		 */
-   525		exp_info.ops = &dma_buf_import_ops;
-   526		exp_info.size = import.size;
-   527		exp_info.flags = O_RDWR;
-   528		exp_info.priv = buffer;
-   529	
-   530		buffer->dma_buf = dma_buf_export(&exp_info);
-   531		if (IS_ERR(buffer->dma_buf)) {
-   532			ret = PTR_ERR(buffer->dma_buf);
-   533			goto error;
-   534		}
-   535	
-   536		vc_sm_add_resource(buffer);
-   537	
-   538		*imported_buf = buffer->dma_buf;
-   539	
-   540		return 0;
-   541	
-   542	error:
-   543		if (result.res_handle) {
-   544			struct vc_sm_free_t free = { result.res_handle, 0 };
-   545	
-   546			vc_sm_cma_vchi_free(sm_state->sm_handle, &free,
-   547					    &sm_state->int_trans_id);
-   548		}
-   549		free_kernel_id(import.kernel_id);
-   550		kfree(buffer);
-   551		if (sgt)
-   552			dma_buf_unmap_attachment_unlocked(attach, sgt, DMA_BIDIRECTIONAL);
-   553		if (attach)
-   554			dma_buf_detach(dma_buf, attach);
-   555		dma_buf_put(dma_buf);
-   556		return ret;
-   557	}
-   558	
+4886a7e20027ff Max Filippov 2023-08-11  137  
+4886a7e20027ff Max Filippov 2023-08-11  138  static int init_hw(struct platform_device *pdev, struct esp32_ipc *hw)
+4886a7e20027ff Max Filippov 2023-08-11  139  {
+4886a7e20027ff Max Filippov 2023-08-11  140  	void __user *p;
+4886a7e20027ff Max Filippov 2023-08-11  141  
+4886a7e20027ff Max Filippov 2023-08-11 @142  	p = devm_of_iomap(&pdev->dev, pdev->dev.of_node, 0, NULL);
+4886a7e20027ff Max Filippov 2023-08-11  143  	if (IS_ERR(p))
+4886a7e20027ff Max Filippov 2023-08-11  144  		return PTR_ERR(p);
+4886a7e20027ff Max Filippov 2023-08-11 @145  	hw->hw_q = (void *)readl(p);
+4886a7e20027ff Max Filippov 2023-08-11 @146  	devm_iounmap(&pdev->dev, p);
+4886a7e20027ff Max Filippov 2023-08-11  147  
+4886a7e20027ff Max Filippov 2023-08-11  148  	hw->regs = devm_of_iomap(&pdev->dev, pdev->dev.of_node, 1, NULL);
+4886a7e20027ff Max Filippov 2023-08-11  149  	if (IS_ERR(hw->regs))
+4886a7e20027ff Max Filippov 2023-08-11  150  		return PTR_ERR(hw->regs);
+4886a7e20027ff Max Filippov 2023-08-11  151  
+4886a7e20027ff Max Filippov 2023-08-11  152  	dev_dbg(&pdev->dev, "%s: regs = %p, queues = %p\n",
+4886a7e20027ff Max Filippov 2023-08-11  153  		__func__, hw->regs, hw->hw_q);
+4886a7e20027ff Max Filippov 2023-08-11  154  	if (hw->hw_q) {
+4886a7e20027ff Max Filippov 2023-08-11  155  		u32 i;
+4886a7e20027ff Max Filippov 2023-08-11  156  
+4886a7e20027ff Max Filippov 2023-08-11  157  		for (i = 0; i < 2; ++i) {
+4886a7e20027ff Max Filippov 2023-08-11  158  			dev_dbg(&pdev->dev, "%s: queue %d: offset = %d, mask = %x\n",
+4886a7e20027ff Max Filippov 2023-08-11  159  				__func__, i,
+4886a7e20027ff Max Filippov 2023-08-11  160  				hw->hw_q[i].offset,
+4886a7e20027ff Max Filippov 2023-08-11  161  				hw->hw_q[i].mask);
+4886a7e20027ff Max Filippov 2023-08-11  162  		}
+4886a7e20027ff Max Filippov 2023-08-11  163  	} else {
+4886a7e20027ff Max Filippov 2023-08-11  164  		return -ENODEV;
+4886a7e20027ff Max Filippov 2023-08-11  165  	}
+4886a7e20027ff Max Filippov 2023-08-11  166  
+4886a7e20027ff Max Filippov 2023-08-11  167  	hw->irq = platform_get_irq(pdev, 0);
+4886a7e20027ff Max Filippov 2023-08-11  168  	if (hw->irq >= 0) {
+4886a7e20027ff Max Filippov 2023-08-11  169  		int ret;
+4886a7e20027ff Max Filippov 2023-08-11  170  
+4886a7e20027ff Max Filippov 2023-08-11  171  		ret = devm_request_threaded_irq(&pdev->dev, hw->irq,
+4886a7e20027ff Max Filippov 2023-08-11  172  						esp32_ipc_irq_handler,
+4886a7e20027ff Max Filippov 2023-08-11  173  						esp32_ipc_thread_handler,
+4886a7e20027ff Max Filippov 2023-08-11  174  						IRQF_SHARED, pdev->name, hw);
+4886a7e20027ff Max Filippov 2023-08-11  175  		if (ret < 0) {
+4886a7e20027ff Max Filippov 2023-08-11  176  			dev_err(&pdev->dev, "request_irq %d failed\n", hw->irq);
+4886a7e20027ff Max Filippov 2023-08-11  177  			return ret;
+4886a7e20027ff Max Filippov 2023-08-11  178  		}
+4886a7e20027ff Max Filippov 2023-08-11  179  	} else {
+4886a7e20027ff Max Filippov 2023-08-11  180  		dev_err(&pdev->dev, "missing IRQ property\n");
+4886a7e20027ff Max Filippov 2023-08-11  181  		return -ENODEV;
+4886a7e20027ff Max Filippov 2023-08-11  182  	}
+4886a7e20027ff Max Filippov 2023-08-11  183  
+4886a7e20027ff Max Filippov 2023-08-11  184  	return 0;
+4886a7e20027ff Max Filippov 2023-08-11  185  }
+4886a7e20027ff Max Filippov 2023-08-11  186  
+
+:::::: The code at line 142 was first introduced by commit
+:::::: 4886a7e20027ffdd9ec581eee4deb20d3d407ba5 misc/esp32-ipc: introduce generic IPC for ESP32
+
+:::::: TO: Max Filippov <jcmvbkbc@gmail.com>
+:::::: CC: Max Filippov <jcmvbkbc@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
