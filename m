@@ -1,105 +1,142 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C707814F66;
-	Tue, 29 Aug 2023 11:48:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1693309705;
-	bh=V7fp4M9m50UUinbeFQ1LBWrcpG397hshYrmRg4hs78o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=ld+GC+EV4Zu+j0MWCz9YSYef3C+5Ig5srlyGRbxzJY1VRX0A7tAuee/Im30uP23XS
-	 hLzLy9MNLElY+77KNRrDZEApxw+r5WXfZwXLZcU0I3Cv7AR0bs4GwHj6m0RgIcl5i7
-	 pGHiKFSI7QYWqvakfvamyqq4K+T1GGciAx9EE2HYz3bN9YsyVmAEscsInMPGLvjZA+
-	 uqZZ4mPASaPlNfTNNtBEbdCyjg8orG0ECVaNS/VCcauiGQifpBvDFD0sWz3/o2UAIS
-	 DMYxgWIOUFvZZgoFj9GTgdvF228twAda/t9F60m7bebZnCe9RECs8yLjJKc0GGaGI9
-	 sAAMichvM70mw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2621116
+	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 12:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693310483;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=itj5rg8d4kBFei/K0+gHKDPQ9yF9ZNzbPTCuLvpJ7/4=;
+	b=LiT3kT9mfja/YfiiVu8Qdw3ULFr1gZn7gn+KQzLzkCcmGC3EHwyG1ICrq6QUIuEMRT7K/J
+	3TEcbyXQQOvwIl152R8/nSLo4JTUUG7wXgMKStb928aZaPVbbQ60iqHrepzd5TPOxrstFW
+	Z+gd2qMSQElG57yjGGpM3yzJsDndUT8=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-088KQ2mcNoOswsCrEyQjbA-1; Tue, 29 Aug 2023 08:01:14 -0400
+X-MC-Unique: 088KQ2mcNoOswsCrEyQjbA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4RZm090DPRz4wxQ;
-	Tue, 29 Aug 2023 21:48:25 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Herbert Xu <herbert@gondor.apana.org.au>, kernel test robot
- <lkp@intel.com>, Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
- linuxppc-dev@lists.ozlabs.org
-Cc: Danny Tsen <dtsen@linux.ibm.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>
-Subject: Re: crypto: powerpc/chacha20,poly1305-p10 - Add dependency on VSX
-In-Reply-To: <ZOxj3rFGVcRUzgwb@gondor.apana.org.au>
-References: <202308251906.SYawej6g-lkp@intel.com>
- <ZOxj3rFGVcRUzgwb@gondor.apana.org.au>
-Date: Tue, 29 Aug 2023 21:48:17 +1000
-Message-ID: <87msyakr26.fsf@mail.lhotse>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E64233C0BE33
+	for <llvm@lists.linux.dev>; Tue, 29 Aug 2023 12:01:13 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CA6FAC15BAE;
+	Tue, 29 Aug 2023 12:01:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 16 of 267): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 1c59d383)
+Date: Tue, 29 Aug 2023 12:01:13 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <65634.123082908011401840@us-mta-611.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Herbert Xu <herbert@gondor.apana.org.au> writes:
-> On Fri, Aug 25, 2023 at 07:44:32PM +0800, kernel test robot wrote:
->>
->> All errors (new ones prefixed by >>):
->> 
->>    In file included from arch/powerpc/crypto/poly1305-p10-glue.c:19:
->
-> ...
->
->> ae3a197e3d0bfe3 David Howells    2012-03-28  75  
->> ae3a197e3d0bfe3 David Howells    2012-03-28  76  #ifdef CONFIG_VSX
->> d1e1cf2e38def30 Anton Blanchard  2015-10-29  77  extern void enable_kernel_vsx(void);
->> ae3a197e3d0bfe3 David Howells    2012-03-28  78  extern void flush_vsx_to_thread(struct task_struct *);
->> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  79  static inline void disable_kernel_vsx(void)
->> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  80  {
->> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  81  	msr_check_and_clear(MSR_FP|MSR_VEC|MSR_VSX);
->> 3eb5d5888dc68c9 Anton Blanchard  2015-10-29  82  }
->> bd73758803c2eed Christophe Leroy 2021-03-09  83  #else
->> bd73758803c2eed Christophe Leroy 2021-03-09  84  static inline void enable_kernel_vsx(void)
->> bd73758803c2eed Christophe Leroy 2021-03-09  85  {
->> bd73758803c2eed Christophe Leroy 2021-03-09 @86  	BUILD_BUG();
->> bd73758803c2eed Christophe Leroy 2021-03-09  87  }
->> bd73758803c2eed Christophe Leroy 2021-03-09  88  
->
-> ---8<---
-> Add dependency on VSX as otherwise the build will fail without
-> it.
->
-> Fixes: 161fca7e3e90 ("crypto: powerpc - Add chacha20/poly1305-p10 to Kconfig and Makefile")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202308251906.SYawej6g-lkp@intel.com/
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Hi, we tested your kernel and here are the results:
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-cheers
 
-> diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
-> index f25024afdda5..7a66d7c0e6a2 100644
-> --- a/arch/powerpc/crypto/Kconfig
-> +++ b/arch/powerpc/crypto/Kconfig
-> @@ -113,7 +113,7 @@ config CRYPTO_AES_GCM_P10
->  
->  config CRYPTO_CHACHA20_P10
->  	tristate "Ciphers: ChaCha20, XChacha20, XChacha12 (P10 or later)"
-> -	depends on PPC64 && CPU_LITTLE_ENDIAN
-> +	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
->  	select CRYPTO_SKCIPHER
->  	select CRYPTO_LIB_CHACHA_GENERIC
->  	select CRYPTO_ARCH_HAVE_LIB_CHACHA
-> @@ -127,7 +127,7 @@ config CRYPTO_CHACHA20_P10
->  
->  config CRYPTO_POLY1305_P10
->  	tristate "Hash functions: Poly1305 (P10 or later)"
-> -	depends on PPC64 && CPU_LITTLE_ENDIAN
-> +	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
->  	select CRYPTO_HASH
->  	select CRYPTO_LIB_POLY1305_GENERIC
->  	help
-> -- 
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Kernel information:
+    Commit message: Merge tag 'linux-kselftest-nolibc-6.6-rc1' of git://git=
+.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/101861
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9311465
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
