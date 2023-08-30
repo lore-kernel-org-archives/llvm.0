@@ -1,195 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6421871;
-	Wed, 30 Aug 2023 08:12:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693383124; x=1724919124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NLA577Vbz9l1Z7rb4/Ush7mC1wsa+w2D3P685aR9pSc=;
-  b=CQspWy7s5+YjFBCl61egX3Cc0ugOui+gdLzDFVBQMNLM9pRwY6mcZ4gj
-   89WLSJCnAfGIPNglPXWonIji+L0xiAkn1ZXB1LSRlTd0ARkPUNjrfSl4o
-   SNQe6v8tSxowVvDSZV8d2Fp5t+5xQ7clm5xagtPez6PrYV8OpY/O07qNr
-   t01lKSSss1Wd4jife8UPsQ3DLCYHUyknHasJSkAX1abPseci4nakp/zSB
-   srSDHQZe2w7cV7+w7LBIdskpoGGb7c5lyi59rpG6jSEyCLpbquuc1u8EE
-   u4BBZbzw3JaHCZaupTIWD304Lu8Z7SBTJ08NuKruLeI6xbKwNpZ+5NdFT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="441941425"
-X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="441941425"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 01:12:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="804429518"
-X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="804429518"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Aug 2023 01:12:00 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qbGIx-0009bP-1U;
-	Wed, 30 Aug 2023 08:11:59 +0000
-Date: Wed, 30 Aug 2023 16:11:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:ceph-iter 32/36] fs/ceph/addr.c:255:36: error: no
- member named 'length' in 'struct ceph_osd_data'
-Message-ID: <202308301622.0KJv3351-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6437C1872
+	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 08:25:11 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-d776e1f181bso5103786276.3
+        for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 01:25:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693383910; x=1693988710;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XG62sgnGcJnF0tJvK3oQY2fo6A4TDxZZoS0niAlQiv4=;
+        b=A892/KwwStwq5du86nGH2MLAUoWwFCLls6nxnjm6OU9CS/kMDZyHPcYAod5IozmnrJ
+         funTir/M6KgObTOLCWghZmgL0spmOO4k/BD+jdc2mBVT82mZTu57g1EkqYpyksyZiikL
+         2PWCAmU7fGpdatjIu/uJ6Z+riG4HjddXAtEctJ/Wr7SKMw5hDIq8Hh97jOlwkfvqiYi7
+         IS67Ntjc69SHNKDn7cQpWaVVbypFeXJHtsCe+Z0wegz+SpoBSsT98t6W5OHt/pd9y6rs
+         imEVFWCau0sTMkHEU9C6AXX92s9q/TsFNU5M9ywbzHedZkukj3XmyZfvTe1yBBx48N9Q
+         jWbw==
+X-Gm-Message-State: AOJu0YxBYZ1eszDqmktiEuHFIK/er0QgSXt2DQrRtPv1CYATfW/D3kax
+	10FPYzy0Wo39iMd16zz8b0U0SzSbov30eg==
+X-Google-Smtp-Source: AGHT+IEkQGyBrYudd55d8ZrIUQQy6D2vayuAVduGzW5jjXdaITSAA1c1rCsuVmmsJ8veKuicyBPnjA==
+X-Received: by 2002:a5b:60a:0:b0:d7a:c493:ef35 with SMTP id d10-20020a5b060a000000b00d7ac493ef35mr1360462ybq.58.1693383910067;
+        Wed, 30 Aug 2023 01:25:10 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id 188-20020a2506c5000000b00d17586ff1f7sm2615279ybg.28.2023.08.30.01.25.09
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Aug 2023 01:25:09 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-d7b91422da8so982524276.2
+        for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 01:25:09 -0700 (PDT)
+X-Received: by 2002:a25:dcf:0:b0:d6b:8ea4:b8a1 with SMTP id
+ 198-20020a250dcf000000b00d6b8ea4b8a1mr1475047ybn.12.1693383909143; Wed, 30
+ Aug 2023 01:25:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
+In-Reply-To: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 30 Aug 2023 10:24:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWiC4v9fctp18bRrEH-m_-0VjMg9+XpON8vdRYwniTU3g@mail.gmail.com>
+Message-ID: <CAMuHMdWiC4v9fctp18bRrEH-m_-0VjMg9+XpON8vdRYwniTU3g@mail.gmail.com>
+Subject: Re: [PATCH] soc: renesas: rmobile-sysc: fix -Wvoid-pointer-to-enum-cast
+ warning
+To: Justin Stitt <justinstitt@google.com>
+Cc: Magnus Damm <magnus.damm@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
-head:   d9c2320ef61eb3f02f0f9cbb4b8811c9991160ac
-commit: 12c2f80c4fdfc960bf346b28229c9257010864b9 [32/36] ceph: Remove CEPH_OS_DATA_TYPE_PAGES and its attendant helpers
-config: x86_64-randconfig-011-20230830 (https://download.01.org/0day-ci/archive/20230830/202308301622.0KJv3351-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308301622.0KJv3351-lkp@intel.com/reproduce)
+Hi Justin,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308301622.0KJv3351-lkp@intel.com/
+On Tue, Aug 15, 2023 at 12:11=E2=80=AFAM Justin Stitt <justinstitt@google.c=
+om> wrote:
+> When building with clang 18 I see the following warning:
+> |      drivers/soc/renesas/rmobile-sysc.c:193:22: warning: cast to smalle=
+r integer
+> |               type 'enum pd_types' from 'const void *' [-Wvoid-pointer-=
+to-enum-cast]
+> |        193 |                 add_special_pd(np, (enum pd_types)id->data=
+);
+>
+> This is due to the fact that `id->data` is a void* and `enum pd_types`
+> has the size of an integer. This cast from pointer-width to int-width
+> causes truncation and possible data loss. Instead, cast to `uintptr_t`
+> which has the same width as void*.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
 
-All errors (new ones prefixed by >>):
+scripts/checkpatch.pl:
 
->> fs/ceph/addr.c:255:36: error: no member named 'length' in 'struct ceph_osd_data'
-                                    req->r_end_latency, osd_data->length, err);
-                                                        ~~~~~~~~  ^
->> fs/ceph/addr.c:272:56: error: no member named 'pages' in 'struct ceph_osd_data'
-                           err = ceph_fscrypt_decrypt_extents(inode, osd_data->pages,
-                                                                     ~~~~~~~~  ^
->> fs/ceph/addr.c:280:24: error: use of undeclared identifier 'CEPH_OSD_DATA_TYPE_PAGES'
-           if (osd_data->type == CEPH_OSD_DATA_TYPE_PAGES) {
-                                 ^
-   fs/ceph/addr.c:281:34: error: no member named 'pages' in 'struct ceph_osd_data'
-                   ceph_put_page_vector(osd_data->pages,
-                                        ~~~~~~~~  ^
->> fs/ceph/addr.c:282:35: error: no member named 'offset' in 'struct ceph_osd_data'
-                                        calc_pages_for(osd_data->offset,
-                                                       ~~~~~~~~  ^
-   fs/ceph/addr.c:283:16: error: no member named 'length' in 'struct ceph_osd_data'
-                                           osd_data->length), false);
-                                           ~~~~~~~~  ^
-   fs/ceph/addr.c:882:28: error: use of undeclared identifier 'CEPH_OSD_DATA_TYPE_PAGES'
-                   BUG_ON(osd_data->type != CEPH_OSD_DATA_TYPE_PAGES);
-                                            ^
-   fs/ceph/addr.c:883:20: error: no member named 'length' in 'struct ceph_osd_data'
-                   len += osd_data->length;
-                          ~~~~~~~~  ^
-   fs/ceph/addr.c:884:45: error: no member named 'offset' in 'struct ceph_osd_data'
-                   num_pages = calc_pages_for((u64)osd_data->offset,
-                                                   ~~~~~~~~  ^
-   fs/ceph/addr.c:885:24: error: no member named 'length' in 'struct ceph_osd_data'
-                                              (u64)osd_data->length);
-                                                   ~~~~~~~~  ^
-   fs/ceph/addr.c:888:21: error: no member named 'pages' in 'struct ceph_osd_data'
-                           page = osd_data->pages[j];
-                                  ~~~~~~~~  ^
-   fs/ceph/addr.c:891:40: error: no member named 'pages' in 'struct ceph_osd_data'
-                                   fscrypt_free_bounce_page(osd_data->pages[j]);
-                                                            ~~~~~~~~  ^
-   fs/ceph/addr.c:892:15: error: no member named 'pages' in 'struct ceph_osd_data'
-                                   osd_data->pages[j] = page;
-                                   ~~~~~~~~  ^
-   fs/ceph/addr.c:913:38: error: no member named 'length' in 'struct ceph_osd_data'
-                         ceph_vinop(inode), osd_data->length,
-                                            ~~~~~~~~  ^
-   include/linux/ceph/ceph_debug.h:39:6: note: expanded from macro 'doutc'
-                           ##__VA_ARGS__);                         \
-                             ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   fs/ceph/addr.c:916:27: error: no member named 'pages' in 'struct ceph_osd_data'
-                   release_pages(osd_data->pages, num_pages);
-                                 ~~~~~~~~  ^
->> fs/ceph/addr.c:925:16: error: no member named 'pages_from_pool' in 'struct ceph_osd_data'
-           if (osd_data->pages_from_pool)
-               ~~~~~~~~  ^
-   fs/ceph/addr.c:926:26: error: no member named 'pages' in 'struct ceph_osd_data'
-                   mempool_free(osd_data->pages, ceph_wb_pagevec_pool);
-                                ~~~~~~~~  ^
-   fs/ceph/addr.c:928:19: error: no member named 'pages' in 'struct ceph_osd_data'
-                   kfree(osd_data->pages);
-                         ~~~~~~~~  ^
-   fs/ceph/addr.c:2116:2: error: call to undeclared function 'osd_req_op_raw_data_in_pages'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           osd_req_op_raw_data_in_pages(rd_req, 0, pages, PAGE_SIZE,
-           ^
-   fs/ceph/addr.c:2116:2: note: did you mean 'osd_req_op_raw_data_in_databuf'?
-   include/linux/ceph/osd_client.h:465:6: note: 'osd_req_op_raw_data_in_databuf' declared here
-   void osd_req_op_raw_data_in_databuf(struct ceph_osd_request *osd_req,
-        ^
-   19 errors generated.
+    WARNING: Reported-by: should be immediately followed by Closes:
+with a URL to the report
 
+Hence changing the Link: tag to a Closes: tag.
 
-vim +255 fs/ceph/addr.c
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Note: It should be noted that there is likely no data loss occurring in
+> this case since the enum only has a few fields. The narrowing cast from
+> pointer to int will not lose any data.
 
-f0702876e152f0 Jeff Layton   2020-06-01  242  
-f0702876e152f0 Jeff Layton   2020-06-01  243  static void finish_netfs_read(struct ceph_osd_request *req)
-f0702876e152f0 Jeff Layton   2020-06-01  244  {
-eb8405d4debe40 Jeff Layton   2023-01-02  245  	struct inode *inode = req->r_inode;
-8cc5ed1b046309 Xiubo Li      2023-06-12  246  	struct ceph_fs_client *fsc = ceph_inode_to_fs_client(inode);
-a62395e8e6ec3f Xiubo Li      2023-06-12  247  	struct ceph_client *cl = fsc->client;
-f0702876e152f0 Jeff Layton   2020-06-01  248  	struct ceph_osd_data *osd_data = osd_req_op_extent_osd_data(req, 0);
-6a19114b8e7f1e David Howells 2022-02-17  249  	struct netfs_io_subrequest *subreq = req->r_priv;
-773e261d0fe08f Jeff Layton   2022-02-26  250  	struct ceph_osd_req_op *op = &req->r_ops[0];
-f0702876e152f0 Jeff Layton   2020-06-01  251  	int err = req->r_result;
-773e261d0fe08f Jeff Layton   2022-02-26  252  	bool sparse = (op->op == CEPH_OSD_OP_SPARSE_READ);
-f0702876e152f0 Jeff Layton   2020-06-01  253  
-8ae99ae2b40766 Xiubo Li      2021-03-22  254  	ceph_update_read_metrics(&fsc->mdsc->metric, req->r_start_latency,
-903f4fec78dd05 Xiubo Li      2021-05-13 @255  				 req->r_end_latency, osd_data->length, err);
-f0702876e152f0 Jeff Layton   2020-06-01  256  
-a62395e8e6ec3f Xiubo Li      2023-06-12  257  	doutc(cl, "result %d subreq->len=%zu i_size=%lld\n", req->r_result,
-f0702876e152f0 Jeff Layton   2020-06-01  258  	      subreq->len, i_size_read(req->r_inode));
-f0702876e152f0 Jeff Layton   2020-06-01  259  
-f0702876e152f0 Jeff Layton   2020-06-01  260  	/* no object means success but no data */
-eb8405d4debe40 Jeff Layton   2023-01-02  261  	if (err == -ENOENT)
-f0702876e152f0 Jeff Layton   2020-06-01  262  		err = 0;
-f0702876e152f0 Jeff Layton   2020-06-01  263  	else if (err == -EBLOCKLISTED)
-f0702876e152f0 Jeff Layton   2020-06-01  264  		fsc->blocklisted = true;
-f0702876e152f0 Jeff Layton   2020-06-01  265  
-eb8405d4debe40 Jeff Layton   2023-01-02  266  	if (err >= 0) {
-eb8405d4debe40 Jeff Layton   2023-01-02  267  		if (sparse && err > 0)
-eb8405d4debe40 Jeff Layton   2023-01-02  268  			err = ceph_sparse_ext_map_end(op);
-eb8405d4debe40 Jeff Layton   2023-01-02  269  		if (err < subreq->len)
-f0702876e152f0 Jeff Layton   2020-06-01  270  			__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
-eb8405d4debe40 Jeff Layton   2023-01-02  271  		if (IS_ENCRYPTED(inode) && err > 0) {
-eb8405d4debe40 Jeff Layton   2023-01-02 @272  			err = ceph_fscrypt_decrypt_extents(inode, osd_data->pages,
-eb8405d4debe40 Jeff Layton   2023-01-02  273  					subreq->start, op->extent.sparse_ext,
-eb8405d4debe40 Jeff Layton   2023-01-02  274  					op->extent.sparse_ext_cnt);
-eb8405d4debe40 Jeff Layton   2023-01-02  275  			if (err > subreq->len)
-eb8405d4debe40 Jeff Layton   2023-01-02  276  				err = subreq->len;
-eb8405d4debe40 Jeff Layton   2023-01-02  277  		}
-eb8405d4debe40 Jeff Layton   2023-01-02  278  	}
-f0702876e152f0 Jeff Layton   2020-06-01  279  
-eb8405d4debe40 Jeff Layton   2023-01-02 @280  	if (osd_data->type == CEPH_OSD_DATA_TYPE_PAGES) {
-eb8405d4debe40 Jeff Layton   2023-01-02  281  		ceph_put_page_vector(osd_data->pages,
-1477e5b1f22848 David Howells 2023-04-20 @282  				     calc_pages_for(osd_data->offset,
-eb8405d4debe40 Jeff Layton   2023-01-02  283  					osd_data->length), false);
-eb8405d4debe40 Jeff Layton   2023-01-02  284  	}
-7467b04418d929 Jeff Layton   2022-06-07  285  	netfs_subreq_terminated(subreq, err, false);
-f0702876e152f0 Jeff Layton   2020-06-01  286  	iput(req->r_inode);
-c94d5671d6e1a4 Xiubo Li      2023-05-09  287  	ceph_dec_osd_stopping_blocker(fsc->mdsc);
-f0702876e152f0 Jeff Layton   2020-06-01  288  }
-f0702876e152f0 Jeff Layton   2020-06-01  289  
+Indeed, the theoretical narrowing could only happen on a 64-bit
+platform, while this driver is only used on arm32.
 
-:::::: The code at line 255 was first introduced by commit
-:::::: 903f4fec78dd05a48fdccdf4539c040fb2d5bbf4 ceph: add IO size metrics support
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.7.
 
-:::::: TO: Xiubo Li <xiubli@redhat.com>
-:::::: CC: Ilya Dryomov <idryomov@gmail.com>
+Gr{oetje,eeting}s,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
