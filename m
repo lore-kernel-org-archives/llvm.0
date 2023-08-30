@@ -1,159 +1,82 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4FD3C0B
-	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 11:11:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693393887;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YkfXLLZPdnlle8q4yKZTtEXZcfGpqEWCMLyy7kXfRnw=;
-	b=Xp8qhHVwHd96nOCOdZOcU7HVRhGPSMemxfGFsamlI9LE0iZqXf0c6CVx0/PyWb4ku8MZ6q
-	IfLLUBhk2X3JYNQWAc1ZV+KFT5cLshdKDASA4iSL4zKXJ9K/SD5nb1n4lTL02QRjM3duk7
-	OxLuSO7xxiLM76GdZOFi1S5rhtXnA/U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-z-hlGWniMaqRs8TCpRDxlA-1; Wed, 30 Aug 2023 07:11:26 -0400
-X-MC-Unique: z-hlGWniMaqRs8TCpRDxlA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F4070803F3A
-	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 11:11:25 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A15DC140E96E;
-	Wed, 30 Aug 2023 11:11:25 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 14 of 271): Test report for master
- (6.5.0, mainline.kernel.org-clang, 6c1b980a)
-Date: Wed, 30 Aug 2023 11:11:25 -0000
-To: haliu@redhat.com, yinxu@redhat.com, llvm@lists.linux.dev, zlang@redhat.com,
- jiji@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D024428
+	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 13:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A2C51C433CA;
+	Wed, 30 Aug 2023 13:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1693401634;
+	bh=CJBJ2HCdIV23BWEwO+d38KcZ6JefgcQDI6BR3xU4VoU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=T3ICMT9Or6XLc2djfkBLwb8a8KothXh8yCKem9PNWTvsVBHojItKJXqGS7RT/vhJH
+	 YJ1LQNAYtqeOoQDg5wo7dvLHFArDvh3cCikEd/tYHiIm1HPrLZSYXiYO7Ygp6uIxBc
+	 xYo53fzyvqs9zYfoOxoLXnNdmRwDIEmJPbDcEKrLzijFwdzwisoUvoROT87ytHIH2y
+	 mxyg6kS/BVLMES/D0gbmY+/93QYFU4/1JOJm4CKtOhHW2ql89T6E9Ogpvyl8Y2U0OZ
+	 ZEACKVKN0rv/otxJw2C7DpXIfZX37nQMTur6yazgtukoYukst4l5DqW7dF/2GMw5zY
+	 vgKReZJ90DbyA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88292E29F3D;
+	Wed, 30 Aug 2023 13:20:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <99523.123083007112600663@us-mta-639.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/6] riscv: KCFI support
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <169340163454.19859.5631159121933404323.git-patchwork-notify@kernel.org>
+Date: Wed, 30 Aug 2023 13:20:34 +0000
+References: <20230710183544.999540-8-samitolvanen@google.com>
+In-Reply-To: <20230710183544.999540-8-samitolvanen@google.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, keescook@chromium.org,
+ nathan@kernel.org, ndesaulniers@google.com, conor.dooley@microchip.com,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org
 
-Hi, we tested your kernel and here are the results:
+Hello:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
+On Mon, 10 Jul 2023 18:35:45 +0000 you wrote:
+> This series adds KCFI support for RISC-V. KCFI is a fine-grained
+> forward-edge control-flow integrity scheme supported in Clang >=16,
+> which ensures indirect calls in instrumented code can only branch to
+> functions whose type matches the function pointer type, thus making
+> code reuse attacks more difficult.
+> 
+> Patch 1 implements a pt_regs based syscall wrapper to address
+> function pointer type mismatches in syscall handling. Patches 2 and 3
+> annotate indirectly called assembly functions with CFI types. Patch 4
+> implements error handling for indirect call checks. Patch 5 disables
+> CFI for arch/riscv/purgatory. Patch 6 finally allows CONFIG_CFI_CLANG
+> to be enabled for RISC-V.
+> 
+> [...]
 
-Kernel information:
-    Commit message: Merge tag 'dma-mapping-6.6-2023-08-29' of git://git.inf=
-radead.org/users/hch/dma-mapping
+Here is the summary with links:
+  - [v2,1/6] riscv: Implement syscall wrappers
+    https://git.kernel.org/riscv/c/08d0ce30e0e4
+  - [v2,2/6] riscv: Add types to indirectly called assembly functions
+    https://git.kernel.org/riscv/c/5f59c6855bad
+  - [v2,3/6] riscv: Add ftrace_stub_graph
+    https://git.kernel.org/riscv/c/f3a0c23f2539
+  - [v2,4/6] riscv: Add CFI error handling
+    https://git.kernel.org/riscv/c/af0ead42f693
+  - [v2,5/6] riscv/purgatory: Disable CFI
+    https://git.kernel.org/riscv/c/a72ab0361110
+  - [v2,6/6] riscv: Allow CONFIG_CFI_CLANG to be selected
+    https://git.kernel.org/riscv/c/74f8fc31feb4
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102107
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9327552
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-         ppc64le - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9327209
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-           s390x - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9327611
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-          x86_64 - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9327479
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9327374
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-          x86_64 (debug) - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9327380
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
