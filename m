@@ -1,118 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0BB1FB3;
-	Wed, 30 Aug 2023 10:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693392649; x=1724928649;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xZIAz4H04illlGVj1BWzvAHFTUBeqvwxJkL5gpigeyo=;
-  b=XYaiHijfWQ+zzFo5MoNfl2WHD4QHJf7bCBg8QGTAJYsdM08Ix54eNswH
-   JvaNMKyVCXTZfi6LLUb3YciLjoxTaDynkRQ446CvpjMJZtiKK6ZyYF7AN
-   zEHLQKpAt1h7Bj4w9/S8Ue44QF0dU8vYPdUKl4I+0YXu1WedmSNhqAHOa
-   pYRBYaxlHNLeEhCOr6m/ElhQErXDRrbXDAbuEUT7W9Fyacb5FUAJuCCOy
-   83uKYmKb5dDnXxvw/1/QJYpACXRUnD6UIn3CGaX72DDGpDE0wVoOG5nzg
-   HAjINfeP3QqtEJjee3lwY1LEACOvnuP0nUZMZ+A8fn6Q0FNDmqXYneYmI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="375566731"
-X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="375566731"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 03:50:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="985700320"
-X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="985700320"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Aug 2023 03:50:45 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qbIma-0009k9-24;
-	Wed, 30 Aug 2023 10:50:44 +0000
-Date: Wed, 30 Aug 2023 18:50:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Naresh Solanki <naresh.solanki@9elements.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	zev@bewilderbeest.net,
-	Naresh Solanki <Naresh.Solanki@9elements.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] regulator: userspace-consumer: Retrieve supplies
- from DT
-Message-ID: <202308301833.WqS6n2RU-lkp@intel.com>
-References: <20230829141413.2605621-1-Naresh.Solanki@9elements.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4FD3C0B
+	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 11:11:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693393887;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YkfXLLZPdnlle8q4yKZTtEXZcfGpqEWCMLyy7kXfRnw=;
+	b=Xp8qhHVwHd96nOCOdZOcU7HVRhGPSMemxfGFsamlI9LE0iZqXf0c6CVx0/PyWb4ku8MZ6q
+	IfLLUBhk2X3JYNQWAc1ZV+KFT5cLshdKDASA4iSL4zKXJ9K/SD5nb1n4lTL02QRjM3duk7
+	OxLuSO7xxiLM76GdZOFi1S5rhtXnA/U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-z-hlGWniMaqRs8TCpRDxlA-1; Wed, 30 Aug 2023 07:11:26 -0400
+X-MC-Unique: z-hlGWniMaqRs8TCpRDxlA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F4070803F3A
+	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 11:11:25 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A15DC140E96E;
+	Wed, 30 Aug 2023 11:11:25 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 14 of 271): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 6c1b980a)
+Date: Wed, 30 Aug 2023 11:11:25 -0000
+To: haliu@redhat.com, yinxu@redhat.com, llvm@lists.linux.dev, zlang@redhat.com,
+ jiji@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230829141413.2605621-1-Naresh.Solanki@9elements.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <99523.123083007112600663@us-mta-639.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Naresh,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 8950c4a350c188deb5f5b05df3244d4db82fe3d8]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/regulator-userspace-consumer-Retrieve-supplies-from-DT/20230829-222520
-base:   8950c4a350c188deb5f5b05df3244d4db82fe3d8
-patch link:    https://lore.kernel.org/r/20230829141413.2605621-1-Naresh.Solanki%409elements.com
-patch subject: [RESEND PATCH] regulator: userspace-consumer: Retrieve supplies from DT
-config: i386-buildonly-randconfig-001-20230830 (https://download.01.org/0day-ci/archive/20230830/202308301833.WqS6n2RU-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308301833.WqS6n2RU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308301833.WqS6n2RU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/regulator/userspace-consumer.c:164:2: error: call to undeclared function 'for_each_property_of_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           for_each_property_of_node(pdev->dev.of_node, prop) {
-           ^
->> drivers/regulator/userspace-consumer.c:164:52: error: expected ';' after expression
-           for_each_property_of_node(pdev->dev.of_node, prop) {
-                                                             ^
-                                                             ;
-   drivers/regulator/userspace-consumer.c:200:3: error: call to undeclared function 'for_each_property_of_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   for_each_property_of_node(pdev->dev.of_node, prop) {
-                   ^
-   drivers/regulator/userspace-consumer.c:200:53: error: expected ';' after expression
-                   for_each_property_of_node(pdev->dev.of_node, prop) {
-                                                                     ^
-                                                                     ;
-   4 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/for_each_property_of_node +164 drivers/regulator/userspace-consumer.c
+Kernel information:
+    Commit message: Merge tag 'dma-mapping-6.6-2023-08-29' of git://git.inf=
+radead.org/users/hch/dma-mapping
 
-   158	
-   159	static int get_num_supplies(struct platform_device *pdev)
-   160	{
-   161		struct  property *prop;
-   162		int num_supplies = 0;
-   163	
- > 164		for_each_property_of_node(pdev->dev.of_node, prop) {
-   165			const char *prop_name = prop->name;
-   166			int len = strlen(prop_name);
-   167	
-   168			if (len > SUPPLY_SUFFIX_LEN && \
-   169			    strcmp(prop_name + len - SUPPLY_SUFFIX_LEN, SUPPLY_SUFFIX) == 0) {
-   170				num_supplies++;
-   171			}
-   172		}
-   173		return num_supplies;
-   174	}
-   175	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102107
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9327552
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+         ppc64le - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9327209
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+           s390x - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9327611
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+          x86_64 - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9327479
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9327374
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+          x86_64 (debug) - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9327380
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
