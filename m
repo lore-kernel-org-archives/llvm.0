@@ -1,43 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749178C11;
-	Wed, 30 Aug 2023 23:27:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693438074; x=1724974074;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VHdO7Km7hDnxEZJnPfVqbHExuNDJIw+PaW+L//vn5DU=;
-  b=C8A4LAQGJlpiNzoLAYR6pKGEAwWgx4O2uTPDIuay4hqetKZ4gEgnIQ5g
-   C7iJbCtXxADVe4ozrVS9G/Voz0ySkskYatZAXvGYkNIQ9bMPk9izbqwQY
-   XCeQ6xRdFeNO3qP0bz9PRKnqcdyza3saUF8aUhnz1U/XRHQRwDKWgPybi
-   2gjmhwi/TKK3/RmfX7rQeZ+TMQMQXFi1rpBGZ9iCO7FRHRJqKJYaIva+G
-   7XcQ3NN91Ir805fDAtx13FhsfvTq9jEH+60FpBeqO7n9SXCTRgiWwZqKP
-   U51k9UvH+AlBx0e0eWCJ1OMLm8JFXMoccPgXDyrufjx7VVdVcTvZWyvOm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="375724590"
-X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="375724590"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 16:27:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="768577704"
-X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="768577704"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 30 Aug 2023 16:27:49 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qbUbE-000ALK-1T;
-	Wed, 30 Aug 2023 23:27:48 +0000
-Date: Thu, 31 Aug 2023 07:27:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexey Gladkov <legion@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [legion:sysctl-next 1/5] fs/proc/proc_sysctl.c:599:29: error:
- incompatible pointer types passing 'struct file *' to parameter of type
- 'struct file *'
-Message-ID: <202308310742.GSxmIxRV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65838C1C
+	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 23:44:36 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-68c576d35feso170346b3a.2
+        for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 16:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1693439076; x=1694043876; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iloc+1foZTd3D7il1KXtcra5Lia6qDKnkjAXReM/7hY=;
+        b=RTmWklR7x+zpQowuoj0AKxImjZmPL15tEhbLYvoudu1V/c8hW6Ur6uzGWPZ9xqdWq/
+         ibgTXG1TwcH9XXM2ezdQ8WmCk1lCGSavAaDrnL3wzl03e8EcrujlvalIg07QE0cREDzC
+         xcl6O/xSS7vXirSUEZyfwXHQtaV1DJVAIURuk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693439076; x=1694043876;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Iloc+1foZTd3D7il1KXtcra5Lia6qDKnkjAXReM/7hY=;
+        b=aW3c/PFCawKu7sZAdmaUWiCO0jmO59wQ42+OqYfxMh87/vn5nyiAM++GdvjV9SuiuV
+         9Xvp80JGkqcv6ycncjQAYw3Rw49i7n6aQ/N0pg/JCp40m2ZUeH3k7EUXp0eSM/PiwqXt
+         DRCb13K9uN+izdmSybAt3xbOPconS1nvhwNB7X+2aP7k/uUYi1n/ABMNt78EN5g89SMn
+         HJgbSVHWrchujJd7kqV4+dSvT7aQdu2mwoALKJ5uKmY8rfpypzbUy1iZJofH5N6ZzK2b
+         ohF8LOCJu3P7fcu36FB3PWXouoipbcQwZV8W/BuRzmSPLcPs9BRxGm+H/AbBSpwAHehG
+         UkAQ==
+X-Gm-Message-State: AOJu0YxRlGknOAvzlKrnTlmpvCfMHcryPuPTRLPj4aApgyBTNBmgrE+u
+	VOy2vx2rPMEbOoLJA6kZ7aC0JA==
+X-Google-Smtp-Source: AGHT+IHYyQVG26HerVdU+4vxHN6Ebsm8IcJMnKrdHcXsURJ/juD8+fBTCoS9l7E6Cm3dE+6RAuDQ6g==
+X-Received: by 2002:a05:6a21:66cb:b0:138:2fb8:6b42 with SMTP id ze11-20020a056a2166cb00b001382fb86b42mr3570828pzb.14.1693439076090;
+        Wed, 30 Aug 2023 16:44:36 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x26-20020aa784da000000b0064d57ecaa1dsm125836pfn.28.2023.08.30.16.44.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 16:44:35 -0700 (PDT)
+Date: Wed, 30 Aug 2023 16:44:35 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, akpm@linux-foundation.org,
+	Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+	Conor Dooley <conor@kernel.org>, ndesaulniers@google.com,
+	trix@redhat.com, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev, lkp@intel.com
+Subject: Re: [PATCH] lib/Kconfig.debug: Restrict DEBUG_INFO_SPLIT for RISC-V
+Message-ID: <202308301644.AABBE6694@keescook>
+References: <20230816-riscv-debug_info_split-v1-1-d1019d6ccc11@kernel.org>
+ <mhng-747958b0-514c-4fc8-ac37-0769562ba385@palmer-ri-x1c9>
+ <20230830153646.GA954264@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,208 +55,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230830153646.GA954264@dev-arch.thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/legion/linux.git sysctl-next
-head:   5db649a3f876dee97af2da8462e4314424a04675
-commit: b3d9978143d4fa8d26fb6efee0a4e615ad987715 [1/5] sysctl: API extension for handling sysctl
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230831/202308310742.GSxmIxRV-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308310742.GSxmIxRV-lkp@intel.com/reproduce)
+On Wed, Aug 30, 2023 at 08:36:46AM -0700, Nathan Chancellor wrote:
+> On Wed, Aug 30, 2023 at 06:22:45AM -0700, Palmer Dabbelt wrote:
+> > On Wed, 16 Aug 2023 10:35:43 PDT (-0700), nathan@kernel.org wrote:
+> > > When building for ARCH=riscv using LLVM < 14, there is an error with
+> > > CONFIG_DEBUG_INFO_SPLIT=y:
+> > > 
+> > >   error: A dwo section may not contain relocations
+> > > 
+> > > This was worked around in LLVM 15 by disallowing '-gsplit-dwarf' with
+> > > '-mrelax' (the default), so CONFIG_DEBUG_INFO_SPLIT is not selectable
+> > > with newer versions of LLVM:
+> > > 
+> > >   $ clang --target=riscv64-linux-gnu -gsplit-dwarf -c -o /dev/null -x c /dev/null
+> > >   clang: error: -gsplit-dwarf is unsupported with RISC-V linker relaxation (-mrelax)
+> > > 
+> > > GCC silently had a similar issue that was resolved with GCC 12.x.
+> > > Restrict CONFIG_DEBUG_INFO_SPLIT for RISC-V when using LLVM or GCC <
+> > > 12.x to avoid these known issues.
+> > > 
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1914
+> > > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99090
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/all/202308090204.9yZffBWo-lkp@intel.com/
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > > Since this only impacts RISC-V, it seems reasonable that this would go
+> > > in via their tree but I have added Andrew in case he wants to take it.
+> > > ---
+> > >  lib/Kconfig.debug | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > > index d6798513a8c2..bd51274f4771 100644
+> > > --- a/lib/Kconfig.debug
+> > > +++ b/lib/Kconfig.debug
+> > > @@ -355,6 +355,11 @@ endchoice # "Compressed Debug information"
+> > >  config DEBUG_INFO_SPLIT
+> > >  	bool "Produce split debuginfo in .dwo files"
+> > >  	depends on $(cc-option,-gsplit-dwarf)
+> > > +	# RISC-V linker relaxation + -gsplit-dwarf has issues with LLVM and GCC
+> > > +	# prior to 12.x:
+> > > +	# https://github.com/llvm/llvm-project/issues/56642
+> > > +	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99090
+> > > +	depends on !RISCV || GCC_VERSION >= 120000
+> > >  	help
+> > >  	  Generate debug info into separate .dwo files. This significantly
+> > >  	  reduces the build directory size for builds with DEBUG_INFO,
+> > 
+> > Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > 
+> > Not sure who's taking stuff for lib/Kconfig.debug, I can take it via the
+> > RISC-V tree if folks are OK with it.  Kees and Andrew were the last to touch
+> > it.
+> 
+> I don't think lib/Kconfig.debug has a formal maintainer. Given that and
+> the fact that this change only affects RISC-V, I think it is entirely
+> reasonable for you to take it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308310742.GSxmIxRV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/proc/proc_sysctl.c:6:
-   include/linux/sysctl.h:148:38: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-           int (*open) (struct inode *, struct file *);
-                                               ^
-   include/linux/sysctl.h:149:41: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-           int (*release) (struct inode *, struct file *);
-                                                  ^
-   include/linux/sysctl.h:150:26: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-           ssize_t (*read) (struct file *, char *, size_t *, loff_t *);
-                                   ^
-   include/linux/sysctl.h:151:27: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-           ssize_t (*write) (struct file *, char *, size_t *, loff_t *);
-                                    ^
-   In file included from fs/proc/proc_sysctl.c:17:
-   In file included from include/linux/bpf-cgroup.h:5:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/proc/proc_sysctl.c:17:
-   In file included from include/linux/bpf-cgroup.h:5:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/proc/proc_sysctl.c:17:
-   In file included from include/linux/bpf-cgroup.h:5:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> fs/proc/proc_sysctl.c:599:29: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
-                   error = table->fops.write(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
-                                             ^~~~~~~~~~~~~
-   fs/proc/proc_sysctl.c:601:28: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
-                   error = table->fops.read(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
-                                            ^~~~~~~~~~~~~
-   fs/proc/proc_sysctl.c:656:33: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
-                   ret = table->fops.open(inode, filp);
-                                                 ^~~~
-   fs/proc/proc_sysctl.c:677:36: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
-                   ret = table->fops.release(inode, filp);
-                                                    ^~~~
-   16 warnings and 4 errors generated.
-
-
-vim +599 fs/proc/proc_sysctl.c
-
-   550	
-   551	static ssize_t proc_sys_call_handler(struct kiocb *iocb, struct iov_iter *iter,
-   552			int write)
-   553	{
-   554		struct inode *inode = file_inode(iocb->ki_filp);
-   555		struct ctl_table_header *head = grab_header(inode);
-   556		struct ctl_table *table = PROC_I(inode)->sysctl_entry;
-   557		size_t count = iov_iter_count(iter);
-   558		char *kbuf;
-   559		ssize_t error;
-   560	
-   561		if (IS_ERR(head))
-   562			return PTR_ERR(head);
-   563	
-   564		/*
-   565		 * At this point we know that the sysctl was not unregistered
-   566		 * and won't be until we finish.
-   567		 */
-   568		error = -EPERM;
-   569		if (sysctl_perm(head, table, write ? MAY_WRITE : MAY_READ))
-   570			goto out;
-   571	
-   572		/* if that can happen at all, it should be -EINVAL, not -EISDIR */
-   573		error = -EINVAL;
-   574		if (!table->proc_handler && !table->fops.read && !table->fops.write)
-   575			goto out;
-   576	
-   577		/* don't even try if the size is too large */
-   578		error = -ENOMEM;
-   579		if (count >= KMALLOC_MAX_SIZE)
-   580			goto out;
-   581		kbuf = kvzalloc(count + 1, GFP_KERNEL);
-   582		if (!kbuf)
-   583			goto out;
-   584	
-   585		if (write) {
-   586			error = -EFAULT;
-   587			if (!copy_from_iter_full(kbuf, count, iter))
-   588				goto out_free_buf;
-   589			kbuf[count] = '\0';
-   590		}
-   591	
-   592		error = BPF_CGROUP_RUN_PROG_SYSCTL(head, table, write, iocb->ki_filp,
-   593						   &kbuf, &count, &iocb->ki_pos);
-   594		if (error)
-   595			goto out_free_buf;
-   596	
-   597		/* careful: calling conventions are nasty here */
-   598		if (write && table->fops.write)
- > 599			error = table->fops.write(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
-   600		else if (!write && table->fops.read)
-   601			error = table->fops.read(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
-   602		else if (table->proc_handler)
-   603			error = table->proc_handler(table, write, kbuf, &count, &iocb->ki_pos);
-   604		else
-   605			error = -EINVAL;
-   606	
-   607		if (error)
-   608			goto out_free_buf;
-   609	
-   610		if (!write) {
-   611			error = -EFAULT;
-   612			if (copy_to_iter(kbuf, count, iter) < count)
-   613				goto out_free_buf;
-   614		}
-   615	
-   616		error = count;
-   617	out_free_buf:
-   618		kvfree(kbuf);
-   619	out:
-   620		sysctl_head_finish(head);
-   621	
-   622		return error;
-   623	}
-   624	
+Agreed -- got for it. :)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
