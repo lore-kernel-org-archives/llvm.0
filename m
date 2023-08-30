@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D024428
-	for <llvm@lists.linux.dev>; Wed, 30 Aug 2023 13:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A2C51C433CA;
-	Wed, 30 Aug 2023 13:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9143046BD;
+	Wed, 30 Aug 2023 13:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0191DC43142;
+	Wed, 30 Aug 2023 13:20:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693401634;
-	bh=CJBJ2HCdIV23BWEwO+d38KcZ6JefgcQDI6BR3xU4VoU=;
+	s=k20201202; t=1693401635;
+	bh=KzwJRFCBiaAVTS0ZoB4zQT8L/wyozk8i7uO2fyuq0gc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=T3ICMT9Or6XLc2djfkBLwb8a8KothXh8yCKem9PNWTvsVBHojItKJXqGS7RT/vhJH
-	 YJ1LQNAYtqeOoQDg5wo7dvLHFArDvh3cCikEd/tYHiIm1HPrLZSYXiYO7Ygp6uIxBc
-	 xYo53fzyvqs9zYfoOxoLXnNdmRwDIEmJPbDcEKrLzijFwdzwisoUvoROT87ytHIH2y
-	 mxyg6kS/BVLMES/D0gbmY+/93QYFU4/1JOJm4CKtOhHW2ql89T6E9Ogpvyl8Y2U0OZ
-	 ZEACKVKN0rv/otxJw2C7DpXIfZX37nQMTur6yazgtukoYukst4l5DqW7dF/2GMw5zY
-	 vgKReZJ90DbyA==
+	b=sLYgIWC03UyP+2MVxVmpI51YEVIhuWcMENrYJjYx523pfTx/AXlQmbOaYPeNkYYiw
+	 U/1gCBRvdDdqF9hWU/oI72hmkTdORtk1rLC235U4Enw7h3kb0CbMBthE/oXJ5YP8Lc
+	 YEpPyfN69zAZuGnGMGzdSpeu8Kn1weeWxUOAsABQxhHDi+w/wxL5+ucklGjQnWNvA5
+	 m8VDdzLAgoryT4fyZUllUB7drwD/btzX2A59iOWCe8UEFQXnMxvw2uYMiR4qdCxtVU
+	 6LiQKU3T6NT+CscAHOn65TiTZk7WisBvSTbVe+Wu57/BnqYWOc8Wo0XyIF83S7NEFC
+	 s+5CDZENrInbA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88292E29F3D;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3363E4509F;
 	Wed, 30 Aug 2023 13:20:34 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -26,53 +26,39 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/6] riscv: KCFI support
+Subject: Re: [PATCH] lib/Kconfig.debug: Restrict DEBUG_INFO_SPLIT for RISC-V
 From: patchwork-bot+linux-riscv@kernel.org
 Message-Id: 
- <169340163454.19859.5631159121933404323.git-patchwork-notify@kernel.org>
+ <169340163492.19859.13643349679698398127.git-patchwork-notify@kernel.org>
 Date: Wed, 30 Aug 2023 13:20:34 +0000
-References: <20230710183544.999540-8-samitolvanen@google.com>
-In-Reply-To: <20230710183544.999540-8-samitolvanen@google.com>
-To: Sami Tolvanen <samitolvanen@google.com>
+References: <20230816-riscv-debug_info_split-v1-1-d1019d6ccc11@kernel.org>
+In-Reply-To: <20230816-riscv-debug_info_split-v1-1-d1019d6ccc11@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, keescook@chromium.org,
- nathan@kernel.org, ndesaulniers@google.com, conor.dooley@microchip.com,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, akpm@linux-foundation.org,
+ conor@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ llvm@lists.linux.dev, patches@lists.linux.dev, lkp@intel.com
 
 Hello:
 
-This series was applied to riscv/linux.git (for-next)
+This patch was applied to riscv/linux.git (for-next)
 by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Mon, 10 Jul 2023 18:35:45 +0000 you wrote:
-> This series adds KCFI support for RISC-V. KCFI is a fine-grained
-> forward-edge control-flow integrity scheme supported in Clang >=16,
-> which ensures indirect calls in instrumented code can only branch to
-> functions whose type matches the function pointer type, thus making
-> code reuse attacks more difficult.
+On Wed, 16 Aug 2023 10:35:43 -0700 you wrote:
+> When building for ARCH=riscv using LLVM < 14, there is an error with
+> CONFIG_DEBUG_INFO_SPLIT=y:
 > 
-> Patch 1 implements a pt_regs based syscall wrapper to address
-> function pointer type mismatches in syscall handling. Patches 2 and 3
-> annotate indirectly called assembly functions with CFI types. Patch 4
-> implements error handling for indirect call checks. Patch 5 disables
-> CFI for arch/riscv/purgatory. Patch 6 finally allows CONFIG_CFI_CLANG
-> to be enabled for RISC-V.
+>   error: A dwo section may not contain relocations
+> 
+> This was worked around in LLVM 15 by disallowing '-gsplit-dwarf' with
+> '-mrelax' (the default), so CONFIG_DEBUG_INFO_SPLIT is not selectable
+> with newer versions of LLVM:
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,1/6] riscv: Implement syscall wrappers
-    https://git.kernel.org/riscv/c/08d0ce30e0e4
-  - [v2,2/6] riscv: Add types to indirectly called assembly functions
-    https://git.kernel.org/riscv/c/5f59c6855bad
-  - [v2,3/6] riscv: Add ftrace_stub_graph
-    https://git.kernel.org/riscv/c/f3a0c23f2539
-  - [v2,4/6] riscv: Add CFI error handling
-    https://git.kernel.org/riscv/c/af0ead42f693
-  - [v2,5/6] riscv/purgatory: Disable CFI
-    https://git.kernel.org/riscv/c/a72ab0361110
-  - [v2,6/6] riscv: Allow CONFIG_CFI_CLANG to be selected
-    https://git.kernel.org/riscv/c/74f8fc31feb4
+  - lib/Kconfig.debug: Restrict DEBUG_INFO_SPLIT for RISC-V
+    https://git.kernel.org/riscv/c/9fa9a5f2714d
 
 You are awesome, thank you!
 -- 
