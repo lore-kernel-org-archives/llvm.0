@@ -1,43 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09747490;
-	Wed, 30 Aug 2023 23:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749178C11;
+	Wed, 30 Aug 2023 23:27:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693436851; x=1724972851;
+  t=1693438074; x=1724974074;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QSKYUsFqI+LygtpkrTM9ItsjjZIO3j6QIm+f61dx4hs=;
-  b=Urfcq+H8QZ1/aMFLJ47har0U+TqPhmuz7UrEogCcq4DwI/+Bgv1+3KUZ
-   YHCWxZUQmb3XVlxmgq97wReG1bvXk9f5zQmzvXJ7jOF0d8xfPJLLPZuBs
-   fNi1frFX/oftADGa70NmLavP/SCn45s6VP04A3jTAeYes6VGvDwI2lAPE
-   C7Q43OpwR1kkR0YV05Tm12frgeXOclk73GCJqE7K9e+cq/uZ9cAix01YK
-   ED3FJ6waTCKGokWuF8jk5nxFWcRIQBDdJkKxqkrDua6LamjwYOCSoNbdA
-   mBfU+Vus+u4IVNmNzvPIC7hdA6EkDyqWPun4SZUbNPgYW9ZkcXdXao1It
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="360756515"
+  bh=VHdO7Km7hDnxEZJnPfVqbHExuNDJIw+PaW+L//vn5DU=;
+  b=C8A4LAQGJlpiNzoLAYR6pKGEAwWgx4O2uTPDIuay4hqetKZ4gEgnIQ5g
+   C7iJbCtXxADVe4ozrVS9G/Voz0ySkskYatZAXvGYkNIQ9bMPk9izbqwQY
+   XCeQ6xRdFeNO3qP0bz9PRKnqcdyza3saUF8aUhnz1U/XRHQRwDKWgPybi
+   2gjmhwi/TKK3/RmfX7rQeZ+TMQMQXFi1rpBGZ9iCO7FRHRJqKJYaIva+G
+   7XcQ3NN91Ir805fDAtx13FhsfvTq9jEH+60FpBeqO7n9SXCTRgiWwZqKP
+   U51k9UvH+AlBx0e0eWCJ1OMLm8JFXMoccPgXDyrufjx7VVdVcTvZWyvOm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="375724590"
 X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="360756515"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 16:07:30 -0700
+   d="scan'208";a="375724590"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 16:27:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="985946636"
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="768577704"
 X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="985946636"
+   d="scan'208";a="768577704"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Aug 2023 16:07:29 -0700
+  by orsmga008.jf.intel.com with ESMTP; 30 Aug 2023 16:27:49 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qbUHY-000AJL-1I;
-	Wed, 30 Aug 2023 23:07:28 +0000
-Date: Thu, 31 Aug 2023 07:06:59 +0800
+	id 1qbUbE-000ALK-1T;
+	Wed, 30 Aug 2023 23:27:48 +0000
+Date: Thu, 31 Aug 2023 07:27:34 +0800
 From: kernel test robot <lkp@intel.com>
 To: Alexey Gladkov <legion@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [legion:sysctl-next 5/5] kernel/ucount.c:66:2: error: incompatible
- function pointer types initializing 'int (*)(struct inode *, struct file *)'
- with an expression of type 'int (struct inode *, struct file *)'
-Message-ID: <202308310731.0LSwarYJ-lkp@intel.com>
+Subject: [legion:sysctl-next 1/5] fs/proc/proc_sysctl.c:599:29: error:
+ incompatible pointer types passing 'struct file *' to parameter of type
+ 'struct file *'
+Message-ID: <202308310742.GSxmIxRV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,234 +49,204 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/legion/linux.git sysctl-next
 head:   5db649a3f876dee97af2da8462e4314424a04675
-commit: 5db649a3f876dee97af2da8462e4314424a04675 [5/5] ucounts: Convert user_table to static array [WIP]
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20230831/202308310731.0LSwarYJ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308310731.0LSwarYJ-lkp@intel.com/reproduce)
+commit: b3d9978143d4fa8d26fb6efee0a4e615ad987715 [1/5] sysctl: API extension for handling sysctl
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230831/202308310742.GSxmIxRV-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308310742.GSxmIxRV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308310731.0LSwarYJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308310742.GSxmIxRV-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/ucount.c:4:
-   include/linux/sysctl.h:91:31: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-      91 | ssize_t proc_read_bool(struct file *, char *, size_t *, loff_t *);
-         |                               ^
-   include/linux/sysctl.h:92:32: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-      92 | ssize_t proc_write_bool(struct file *, char *, size_t *, loff_t *);
-         |                                ^
-   include/linux/sysctl.h:94:33: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-      94 | ssize_t proc_read_intvec(struct file *, char *, size_t *, loff_t *);
-         |                                 ^
-   include/linux/sysctl.h:95:34: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-      95 | ssize_t proc_write_intvec(struct file *, char *, size_t *, loff_t *);
-         |                                  ^
-   include/linux/sysctl.h:97:41: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-      97 | ssize_t proc_read_intvec_jiffies(struct file *, char *, size_t *, loff_t *);
-         |                                         ^
-   include/linux/sysctl.h:98:42: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-      98 | ssize_t proc_write_intvec_jiffies(struct file *, char *, size_t *, loff_t *);
-         |                                          ^
-   include/linux/sysctl.h:100:40: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     100 | ssize_t proc_read_intvec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                        ^
-   include/linux/sysctl.h:101:41: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     101 | ssize_t proc_write_intvec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                         ^
-   include/linux/sysctl.h:103:44: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     103 | ssize_t proc_read_intvec_ms_jiffies(struct file *, char *, size_t *, loff_t *);
-         |                                            ^
-   include/linux/sysctl.h:104:45: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     104 | ssize_t proc_write_intvec_ms_jiffies(struct file *, char *, size_t *, loff_t *);
-         |                                             ^
-   include/linux/sysctl.h:106:33: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     106 | ssize_t proc_read_string(struct file *, char *, size_t *, loff_t *);
-         |                                 ^
-   include/linux/sysctl.h:107:34: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     107 | ssize_t proc_write_string(struct file *, char *, size_t *, loff_t *);
-         |                                  ^
-   include/linux/sysctl.h:109:39: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     109 | ssize_t proc_read_u8vec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                       ^
-   include/linux/sysctl.h:110:40: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     110 | ssize_t proc_write_u8vec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                        ^
-   include/linux/sysctl.h:112:34: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     112 | ssize_t proc_read_uintvec(struct file *, char *, size_t *, loff_t *);
-         |                                  ^
-   include/linux/sysctl.h:113:35: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     113 | ssize_t proc_write_uintvec(struct file *, char *, size_t *, loff_t *);
-         |                                   ^
-   include/linux/sysctl.h:115:41: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     115 | ssize_t proc_read_uintvec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                         ^
-   include/linux/sysctl.h:116:42: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     116 | ssize_t proc_write_uintvec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                          ^
-   include/linux/sysctl.h:118:42: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     118 | ssize_t proc_read_ulongvec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                          ^
-   include/linux/sysctl.h:119:43: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     119 | ssize_t proc_write_ulongvec_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                           ^
-   include/linux/sysctl.h:121:53: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     121 | ssize_t proc_read_ulongvec_ms_jiffies_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                                     ^
-   include/linux/sysctl.h:122:54: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     122 | ssize_t proc_write_ulongvec_ms_jiffies_minmax(struct file *, char *, size_t *, loff_t *);
-         |                                                      ^
-   include/linux/sysctl.h:181:38: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     181 |         int (*open) (struct inode *, struct file *);
-         |                                             ^
-   include/linux/sysctl.h:182:41: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     182 |         int (*release) (struct inode *, struct file *);
-         |                                                ^
-   include/linux/sysctl.h:183:26: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     183 |         ssize_t (*read) (struct file *, char *, size_t *, loff_t *);
-         |                                 ^
-   include/linux/sysctl.h:184:27: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
-     184 |         ssize_t (*write) (struct file *, char *, size_t *, loff_t *);
-         |                                  ^
->> kernel/ucount.c:66:2: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, struct file *)' [-Wincompatible-function-pointer-types]
-      66 |         UCOUNT_ENTRY(SYSCTL_MAX_USER_NAMESPACES, "max_user_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:59:16: note: expanded from macro 'UCOUNT_ENTRY'
-      59 |                 .fops.open      = proc_ucount_open,             \
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/ucount.c:66:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      66 |         UCOUNT_ENTRY(SYSCTL_MAX_USER_NAMESPACES, "max_user_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:60:16: note: expanded from macro 'UCOUNT_ENTRY'
-      60 |                 .fops.read      = proc_read_ulongvec_minmax,    \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:66:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      66 |         UCOUNT_ENTRY(SYSCTL_MAX_USER_NAMESPACES, "max_user_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:61:17: note: expanded from macro 'UCOUNT_ENTRY'
-      61 |                 .fops.write     = proc_write_ulongvec_minmax,   \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:67:2: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, struct file *)' [-Wincompatible-function-pointer-types]
-      67 |         UCOUNT_ENTRY(SYSCTL_MAX_PID_NAMESPACES, "max_pid_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:59:16: note: expanded from macro 'UCOUNT_ENTRY'
-      59 |                 .fops.open      = proc_ucount_open,             \
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/ucount.c:67:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      67 |         UCOUNT_ENTRY(SYSCTL_MAX_PID_NAMESPACES, "max_pid_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:60:16: note: expanded from macro 'UCOUNT_ENTRY'
-      60 |                 .fops.read      = proc_read_ulongvec_minmax,    \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:67:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      67 |         UCOUNT_ENTRY(SYSCTL_MAX_PID_NAMESPACES, "max_pid_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:61:17: note: expanded from macro 'UCOUNT_ENTRY'
-      61 |                 .fops.write     = proc_write_ulongvec_minmax,   \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:68:2: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, struct file *)' [-Wincompatible-function-pointer-types]
-      68 |         UCOUNT_ENTRY(SYSCTL_MAX_UTS_NAMESPACES, "max_uts_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:59:16: note: expanded from macro 'UCOUNT_ENTRY'
-      59 |                 .fops.open      = proc_ucount_open,             \
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/ucount.c:68:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      68 |         UCOUNT_ENTRY(SYSCTL_MAX_UTS_NAMESPACES, "max_uts_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:60:16: note: expanded from macro 'UCOUNT_ENTRY'
-      60 |                 .fops.read      = proc_read_ulongvec_minmax,    \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:68:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      68 |         UCOUNT_ENTRY(SYSCTL_MAX_UTS_NAMESPACES, "max_uts_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:61:17: note: expanded from macro 'UCOUNT_ENTRY'
-      61 |                 .fops.write     = proc_write_ulongvec_minmax,   \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:69:2: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, struct file *)' [-Wincompatible-function-pointer-types]
-      69 |         UCOUNT_ENTRY(SYSCTL_MAX_IPC_NAMESPACES, "max_ipc_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:59:16: note: expanded from macro 'UCOUNT_ENTRY'
-      59 |                 .fops.open      = proc_ucount_open,             \
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/ucount.c:69:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      69 |         UCOUNT_ENTRY(SYSCTL_MAX_IPC_NAMESPACES, "max_ipc_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:60:16: note: expanded from macro 'UCOUNT_ENTRY'
-      60 |                 .fops.read      = proc_read_ulongvec_minmax,    \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:69:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      69 |         UCOUNT_ENTRY(SYSCTL_MAX_IPC_NAMESPACES, "max_ipc_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:61:17: note: expanded from macro 'UCOUNT_ENTRY'
-      61 |                 .fops.write     = proc_write_ulongvec_minmax,   \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:70:2: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, struct file *)' [-Wincompatible-function-pointer-types]
-      70 |         UCOUNT_ENTRY(SYSCTL_MAX_NET_NAMESPACES, "max_net_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:59:16: note: expanded from macro 'UCOUNT_ENTRY'
-      59 |                 .fops.open      = proc_ucount_open,             \
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/ucount.c:70:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      70 |         UCOUNT_ENTRY(SYSCTL_MAX_NET_NAMESPACES, "max_net_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:60:16: note: expanded from macro 'UCOUNT_ENTRY'
-      60 |                 .fops.read      = proc_read_ulongvec_minmax,    \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:70:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      70 |         UCOUNT_ENTRY(SYSCTL_MAX_NET_NAMESPACES, "max_net_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:61:17: note: expanded from macro 'UCOUNT_ENTRY'
-      61 |                 .fops.write     = proc_write_ulongvec_minmax,   \
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:71:2: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, struct file *)' [-Wincompatible-function-pointer-types]
-      71 |         UCOUNT_ENTRY(SYSCTL_MAX_MNT_NAMESPACES, "max_mnt_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:59:16: note: expanded from macro 'UCOUNT_ENTRY'
-      59 |                 .fops.open      = proc_ucount_open,             \
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/ucount.c:71:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t *, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long *, long long *)') with an expression of type 'ssize_t (struct file *, char *, size_t *, loff_t *)' (aka 'long (struct file *, char *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-      71 |         UCOUNT_ENTRY(SYSCTL_MAX_MNT_NAMESPACES, "max_mnt_namespaces"),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/ucount.c:60:16: note: expanded from macro 'UCOUNT_ENTRY'
-      60 |                 .fops.read      = proc_read_ulongvec_minmax,    \
+   In file included from fs/proc/proc_sysctl.c:6:
+   include/linux/sysctl.h:148:38: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
+           int (*open) (struct inode *, struct file *);
+                                               ^
+   include/linux/sysctl.h:149:41: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
+           int (*release) (struct inode *, struct file *);
+                                                  ^
+   include/linux/sysctl.h:150:26: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
+           ssize_t (*read) (struct file *, char *, size_t *, loff_t *);
+                                   ^
+   include/linux/sysctl.h:151:27: warning: declaration of 'struct file' will not be visible outside of this function [-Wvisibility]
+           ssize_t (*write) (struct file *, char *, size_t *, loff_t *);
+                                    ^
+   In file included from fs/proc/proc_sysctl.c:17:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from fs/proc/proc_sysctl.c:17:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from fs/proc/proc_sysctl.c:17:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> fs/proc/proc_sysctl.c:599:29: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
+                   error = table->fops.write(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
+                                             ^~~~~~~~~~~~~
+   fs/proc/proc_sysctl.c:601:28: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
+                   error = table->fops.read(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
+                                            ^~~~~~~~~~~~~
+   fs/proc/proc_sysctl.c:656:33: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
+                   ret = table->fops.open(inode, filp);
+                                                 ^~~~
+   fs/proc/proc_sysctl.c:677:36: error: incompatible pointer types passing 'struct file *' to parameter of type 'struct file *' [-Werror,-Wincompatible-pointer-types]
+                   ret = table->fops.release(inode, filp);
+                                                    ^~~~
+   16 warnings and 4 errors generated.
 
 
-vim +66 kernel/ucount.c
+vim +599 fs/proc/proc_sysctl.c
 
-    53	
-    54	#define UCOUNT_ENTRY(index, name)				\
-    55		[index] = {						\
-    56			.procname	= name,				\
-    57			.maxlen		= sizeof(long),			\
-    58			.mode		= 0666,				\
-    59			.fops.open	= proc_ucount_open,		\
-    60			.fops.read	= proc_read_ulongvec_minmax,	\
-    61			.fops.write	= proc_write_ulongvec_minmax,	\
-    62			.extra1		= &ue_zero,			\
-    63			.extra2		= &ue_int_max,			\
-    64		}
-    65	static struct ctl_table user_table[] = {
-  > 66		UCOUNT_ENTRY(SYSCTL_MAX_USER_NAMESPACES, "max_user_namespaces"),
-    67		UCOUNT_ENTRY(SYSCTL_MAX_PID_NAMESPACES, "max_pid_namespaces"),
-    68		UCOUNT_ENTRY(SYSCTL_MAX_UTS_NAMESPACES, "max_uts_namespaces"),
-    69		UCOUNT_ENTRY(SYSCTL_MAX_IPC_NAMESPACES, "max_ipc_namespaces"),
-    70		UCOUNT_ENTRY(SYSCTL_MAX_NET_NAMESPACES, "max_net_namespaces"),
-    71		UCOUNT_ENTRY(SYSCTL_MAX_MNT_NAMESPACES, "max_mnt_namespaces"),
-    72		UCOUNT_ENTRY(SYSCTL_MAX_CGROUP_NAMESPACES, "max_cgroup_namespaces"),
-    73		UCOUNT_ENTRY(SYSCTL_MAX_TIME_NAMESPACES, "max_time_namespaces"),
-    74	#ifdef CONFIG_INOTIFY_USER
-    75		UCOUNT_ENTRY(SYSCTL_MAX_INOTIFY_INSTANCES, "max_inotify_instances"),
-    76		UCOUNT_ENTRY(SYSCTL_MAX_INOTIFY_WATCHES, "max_inotify_watches"),
-    77	#endif
-    78	#ifdef CONFIG_FANOTIFY
-    79		UCOUNT_ENTRY(SYSCTL_MAX_FANOTIFY_GROUPS, "max_fanotify_groups"),
-    80		UCOUNT_ENTRY(SYSCTL_MAX_FANOTIFY_MARKS, "max_fanotify_marks"),
-    81	#endif
-    82		{ }
-    83	};
-    84	
+   550	
+   551	static ssize_t proc_sys_call_handler(struct kiocb *iocb, struct iov_iter *iter,
+   552			int write)
+   553	{
+   554		struct inode *inode = file_inode(iocb->ki_filp);
+   555		struct ctl_table_header *head = grab_header(inode);
+   556		struct ctl_table *table = PROC_I(inode)->sysctl_entry;
+   557		size_t count = iov_iter_count(iter);
+   558		char *kbuf;
+   559		ssize_t error;
+   560	
+   561		if (IS_ERR(head))
+   562			return PTR_ERR(head);
+   563	
+   564		/*
+   565		 * At this point we know that the sysctl was not unregistered
+   566		 * and won't be until we finish.
+   567		 */
+   568		error = -EPERM;
+   569		if (sysctl_perm(head, table, write ? MAY_WRITE : MAY_READ))
+   570			goto out;
+   571	
+   572		/* if that can happen at all, it should be -EINVAL, not -EISDIR */
+   573		error = -EINVAL;
+   574		if (!table->proc_handler && !table->fops.read && !table->fops.write)
+   575			goto out;
+   576	
+   577		/* don't even try if the size is too large */
+   578		error = -ENOMEM;
+   579		if (count >= KMALLOC_MAX_SIZE)
+   580			goto out;
+   581		kbuf = kvzalloc(count + 1, GFP_KERNEL);
+   582		if (!kbuf)
+   583			goto out;
+   584	
+   585		if (write) {
+   586			error = -EFAULT;
+   587			if (!copy_from_iter_full(kbuf, count, iter))
+   588				goto out_free_buf;
+   589			kbuf[count] = '\0';
+   590		}
+   591	
+   592		error = BPF_CGROUP_RUN_PROG_SYSCTL(head, table, write, iocb->ki_filp,
+   593						   &kbuf, &count, &iocb->ki_pos);
+   594		if (error)
+   595			goto out_free_buf;
+   596	
+   597		/* careful: calling conventions are nasty here */
+   598		if (write && table->fops.write)
+ > 599			error = table->fops.write(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
+   600		else if (!write && table->fops.read)
+   601			error = table->fops.read(iocb->ki_filp, kbuf, &count, &iocb->ki_pos);
+   602		else if (table->proc_handler)
+   603			error = table->proc_handler(table, write, kbuf, &count, &iocb->ki_pos);
+   604		else
+   605			error = -EINVAL;
+   606	
+   607		if (error)
+   608			goto out_free_buf;
+   609	
+   610		if (!write) {
+   611			error = -EFAULT;
+   612			if (copy_to_iter(kbuf, count, iter) < count)
+   613				goto out_free_buf;
+   614		}
+   615	
+   616		error = count;
+   617	out_free_buf:
+   618		kvfree(kbuf);
+   619	out:
+   620		sysctl_head_finish(head);
+   621	
+   622		return error;
+   623	}
+   624	
 
 -- 
 0-DAY CI Kernel Test Service
