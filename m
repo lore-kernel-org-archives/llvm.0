@@ -1,42 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E1020FC;
-	Wed, 30 Aug 2023 10:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0BB1FB3;
+	Wed, 30 Aug 2023 10:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693391357; x=1724927357;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hlCHDwzO9I7pdjBo3fG2owpnDQOc0e1ih0Ar6il9ukk=;
-  b=GoZqRUgdO7GUQBqTlA83Adzl63D/gftxowVY+P3FMNR8az0QlUys+naK
-   CsWdVUSPtwqB4YYJJiJxPZzgOVqFTghRiSEatlIqcy//pUJg4f6FSqDDE
-   Yb5YU5Cxw9SF6cFIBNGkLFo9PrPdjRz/muvyS9UczYiV6NKxcIFS7ZkKG
-   c72MNWOC1ffenAV5Hl1PHIjKgjvbw2gEyi9GmrvHLN3cbtuRUfvSQGHWm
-   xHEb/4onmW7S5BJeveNXO6hRFeUn6n2eSxlbCp+AQrw2UxMAHosW4hnE/
-   AIA6rmSBtG7eMSjn8vMhhwjSgiF7THJ4wDx/+cTeVdQMULmfF+HuKUUWg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="355113896"
+  t=1693392649; x=1724928649;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xZIAz4H04illlGVj1BWzvAHFTUBeqvwxJkL5gpigeyo=;
+  b=XYaiHijfWQ+zzFo5MoNfl2WHD4QHJf7bCBg8QGTAJYsdM08Ix54eNswH
+   JvaNMKyVCXTZfi6LLUb3YciLjoxTaDynkRQ446CvpjMJZtiKK6ZyYF7AN
+   zEHLQKpAt1h7Bj4w9/S8Ue44QF0dU8vYPdUKl4I+0YXu1WedmSNhqAHOa
+   pYRBYaxlHNLeEhCOr6m/ElhQErXDRrbXDAbuEUT7W9Fyacb5FUAJuCCOy
+   83uKYmKb5dDnXxvw/1/QJYpACXRUnD6UIn3CGaX72DDGpDE0wVoOG5nzg
+   HAjINfeP3QqtEJjee3lwY1LEACOvnuP0nUZMZ+A8fn6Q0FNDmqXYneYmI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="375566731"
 X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="355113896"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 03:29:06 -0700
+   d="scan'208";a="375566731"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 03:50:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="768366973"
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="985700320"
 X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="768366973"
+   d="scan'208";a="985700320"
 Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 30 Aug 2023 03:29:04 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 30 Aug 2023 03:50:45 -0700
 Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qbIRa-0009iO-2Q;
-	Wed, 30 Aug 2023 10:29:03 +0000
-Date: Wed, 30 Aug 2023 18:28:43 +0800
+	id 1qbIma-0009k9-24;
+	Wed, 30 Aug 2023 10:50:44 +0000
+Date: Wed, 30 Aug 2023 18:50:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
+To: Naresh Solanki <naresh.solanki@9elements.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>
-Subject: kernel/fork.c:1962: warning: bad line:
-Message-ID: <202308301820.d4bxzPI0-lkp@intel.com>
+	zev@bewilderbeest.net,
+	Naresh Solanki <Naresh.Solanki@9elements.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH] regulator: userspace-consumer: Retrieve supplies
+ from DT
+Message-ID: <202308301833.WqS6n2RU-lkp@intel.com>
+References: <20230829141413.2605621-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,125 +52,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230829141413.2605621-1-Naresh.Solanki@9elements.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6c1b980a7e79e55e951b4b2c47eefebc75071209
-commit: 6ae930d9dbf2d093157be33428538c91966d8a9f pid: add pidfd_prepare()
-date:   5 months ago
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20230830/202308301820.d4bxzPI0-lkp@intel.com/config)
+Hi Naresh,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 8950c4a350c188deb5f5b05df3244d4db82fe3d8]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/regulator-userspace-consumer-Retrieve-supplies-from-DT/20230829-222520
+base:   8950c4a350c188deb5f5b05df3244d4db82fe3d8
+patch link:    https://lore.kernel.org/r/20230829141413.2605621-1-Naresh.Solanki%409elements.com
+patch subject: [RESEND PATCH] regulator: userspace-consumer: Retrieve supplies from DT
+config: i386-buildonly-randconfig-001-20230830 (https://download.01.org/0day-ci/archive/20230830/202308301833.WqS6n2RU-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308301820.d4bxzPI0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308301833.WqS6n2RU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308301820.d4bxzPI0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308301833.WqS6n2RU-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   kernel/fork.c:1261: warning: Function parameter or member 'mm' not described in 'set_mm_exe_file'
-   kernel/fork.c:1261: warning: Function parameter or member 'new_exe_file' not described in 'set_mm_exe_file'
-   kernel/fork.c:1298: warning: Function parameter or member 'mm' not described in 'replace_mm_exe_file'
-   kernel/fork.c:1298: warning: Function parameter or member 'new_exe_file' not described in 'replace_mm_exe_file'
-   kernel/fork.c:1350: warning: Function parameter or member 'mm' not described in 'get_mm_exe_file'
-   kernel/fork.c:1369: warning: Function parameter or member 'task' not described in 'get_task_exe_file'
-   kernel/fork.c:1393: warning: Function parameter or member 'task' not described in 'get_task_mm'
->> kernel/fork.c:1962: warning: bad line: 
->> kernel/fork.c:1983: warning: Function parameter or member 'ret' not described in '__pidfd_prepare'
->> kernel/fork.c:1983: warning: Excess function parameter 'pidfd' description in '__pidfd_prepare'
->> kernel/fork.c:2032: warning: Function parameter or member 'ret' not described in 'pidfd_prepare'
->> kernel/fork.c:2032: warning: Excess function parameter 'pidfd' description in 'pidfd_prepare'
-   kernel/fork.c:3048: warning: expecting prototype for clone3(). Prototype was for sys_clone3() instead
+>> drivers/regulator/userspace-consumer.c:164:2: error: call to undeclared function 'for_each_property_of_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           for_each_property_of_node(pdev->dev.of_node, prop) {
+           ^
+>> drivers/regulator/userspace-consumer.c:164:52: error: expected ';' after expression
+           for_each_property_of_node(pdev->dev.of_node, prop) {
+                                                             ^
+                                                             ;
+   drivers/regulator/userspace-consumer.c:200:3: error: call to undeclared function 'for_each_property_of_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   for_each_property_of_node(pdev->dev.of_node, prop) {
+                   ^
+   drivers/regulator/userspace-consumer.c:200:53: error: expected ';' after expression
+                   for_each_property_of_node(pdev->dev.of_node, prop) {
+                                                                     ^
+                                                                     ;
+   4 errors generated.
 
 
-vim +1962 kernel/fork.c
+vim +/for_each_property_of_node +164 drivers/regulator/userspace-consumer.c
 
-  1953	
-  1954	/**
-  1955	 * __pidfd_prepare - allocate a new pidfd_file and reserve a pidfd
-  1956	 * @pid:   the struct pid for which to create a pidfd
-  1957	 * @flags: flags of the new @pidfd
-  1958	 * @pidfd: the pidfd to return
-  1959	 *
-  1960	 * Allocate a new file that stashes @pid and reserve a new pidfd number in the
-  1961	 * caller's file descriptor table. The pidfd is reserved but not installed yet.
-> 1962	
-  1963	 * The helper doesn't perform checks on @pid which makes it useful for pidfds
-  1964	 * created via CLONE_PIDFD where @pid has no task attached when the pidfd and
-  1965	 * pidfd file are prepared.
-  1966	 *
-  1967	 * If this function returns successfully the caller is responsible to either
-  1968	 * call fd_install() passing the returned pidfd and pidfd file as arguments in
-  1969	 * order to install the pidfd into its file descriptor table or they must use
-  1970	 * put_unused_fd() and fput() on the returned pidfd and pidfd file
-  1971	 * respectively.
-  1972	 *
-  1973	 * This function is useful when a pidfd must already be reserved but there
-  1974	 * might still be points of failure afterwards and the caller wants to ensure
-  1975	 * that no pidfd is leaked into its file descriptor table.
-  1976	 *
-  1977	 * Return: On success, a reserved pidfd is returned from the function and a new
-  1978	 *         pidfd file is returned in the last argument to the function. On
-  1979	 *         error, a negative error code is returned from the function and the
-  1980	 *         last argument remains unchanged.
-  1981	 */
-  1982	static int __pidfd_prepare(struct pid *pid, unsigned int flags, struct file **ret)
-> 1983	{
-  1984		int pidfd;
-  1985		struct file *pidfd_file;
-  1986	
-  1987		if (flags & ~(O_NONBLOCK | O_RDWR | O_CLOEXEC))
-  1988			return -EINVAL;
-  1989	
-  1990		pidfd = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
-  1991		if (pidfd < 0)
-  1992			return pidfd;
-  1993	
-  1994		pidfd_file = anon_inode_getfile("[pidfd]", &pidfd_fops, pid,
-  1995						flags | O_RDWR | O_CLOEXEC);
-  1996		if (IS_ERR(pidfd_file)) {
-  1997			put_unused_fd(pidfd);
-  1998			return PTR_ERR(pidfd_file);
-  1999		}
-  2000		get_pid(pid); /* held by pidfd_file now */
-  2001		*ret = pidfd_file;
-  2002		return pidfd;
-  2003	}
-  2004	
-  2005	/**
-  2006	 * pidfd_prepare - allocate a new pidfd_file and reserve a pidfd
-  2007	 * @pid:   the struct pid for which to create a pidfd
-  2008	 * @flags: flags of the new @pidfd
-  2009	 * @pidfd: the pidfd to return
-  2010	 *
-  2011	 * Allocate a new file that stashes @pid and reserve a new pidfd number in the
-  2012	 * caller's file descriptor table. The pidfd is reserved but not installed yet.
-  2013	 *
-  2014	 * The helper verifies that @pid is used as a thread group leader.
-  2015	 *
-  2016	 * If this function returns successfully the caller is responsible to either
-  2017	 * call fd_install() passing the returned pidfd and pidfd file as arguments in
-  2018	 * order to install the pidfd into its file descriptor table or they must use
-  2019	 * put_unused_fd() and fput() on the returned pidfd and pidfd file
-  2020	 * respectively.
-  2021	 *
-  2022	 * This function is useful when a pidfd must already be reserved but there
-  2023	 * might still be points of failure afterwards and the caller wants to ensure
-  2024	 * that no pidfd is leaked into its file descriptor table.
-  2025	 *
-  2026	 * Return: On success, a reserved pidfd is returned from the function and a new
-  2027	 *         pidfd file is returned in the last argument to the function. On
-  2028	 *         error, a negative error code is returned from the function and the
-  2029	 *         last argument remains unchanged.
-  2030	 */
-  2031	int pidfd_prepare(struct pid *pid, unsigned int flags, struct file **ret)
-> 2032	{
-  2033		if (!pid || !pid_has_task(pid, PIDTYPE_TGID))
-  2034			return -EINVAL;
-  2035	
-  2036		return __pidfd_prepare(pid, flags, ret);
-  2037	}
-  2038	
+   158	
+   159	static int get_num_supplies(struct platform_device *pdev)
+   160	{
+   161		struct  property *prop;
+   162		int num_supplies = 0;
+   163	
+ > 164		for_each_property_of_node(pdev->dev.of_node, prop) {
+   165			const char *prop_name = prop->name;
+   166			int len = strlen(prop_name);
+   167	
+   168			if (len > SUPPLY_SUFFIX_LEN && \
+   169			    strcmp(prop_name + len - SUPPLY_SUFFIX_LEN, SUPPLY_SUFFIX) == 0) {
+   170				num_supplies++;
+   171			}
+   172		}
+   173		return num_supplies;
+   174	}
+   175	
 
 -- 
 0-DAY CI Kernel Test Service
