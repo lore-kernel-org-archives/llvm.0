@@ -1,192 +1,144 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B3E5399
-	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 22:26:50 +0000 (UTC)
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-64f457c97a3so7687296d6.2
-        for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 15:26:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A980A19BCF
+	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 23:18:23 +0000 (UTC)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-500b0f06136so2643003e87.0
+        for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 16:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693520809; x=1694125609; darn=lists.linux.dev;
+        d=google.com; s=20221208; t=1693523901; x=1694128701; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WKlkGKYCgrWeKXNqJyo7pWKtqd+Hx7OjZxfb5gEIfrY=;
-        b=Vjp8JvrSy1xNO+snAymvpyOnE3l0oSmtvAa5hVDdr1H603iD7N9QRgxSPYEM4dvbZd
-         2l6LFXHC764cbSfJOkhMS64LNNWHuaBtYNuw73/mquPcDez6RitG2iokz6bJqPzpnhdg
-         AWv4ypmFedGqwLNJ0xi1Mrse5iXDV4J38fAP6v144Fsfa+rZaKYGr4CRaeaGJlCeDr10
-         By16c/Y73cwCK9P7wDCwoddLg1RHOc/q8FdyXUvbs6hWAKPlXJccCI8CXBeDLe87idiL
-         hc8reIEpGvOO53Nt3xGG+O83fj62mMmNlEySFNEfI1MLOJk2UizWEkh6fi1jllsX5TqZ
-         cDSA==
+        bh=KQdtXN7BCCE8wEkmepaEXr3RJP5QKmKAaoV5neq+eqc=;
+        b=EG024z401SZKrd+yNmK9Dh7viiY1MSU+FX/g6a8ZpUPJekLy5SjwXqeI4F0ImHcwnf
+         7OOZrUGnWhRExtK6GS8T0RZm6nqyl9h9KOUSv7bBtGro4F7UFr5r0YpSYDtm/YSFOJuz
+         k+9O6YqdptGU23kxO3m97BwmaMnA1HGMKkp5POg6BUDMVpB1YsjV9NSqmBywbnHJGKKF
+         LmTXNq3g10kHYKvdjiMRNcnZ35Q89Sj3NjAG8SOvhjtTOr8hwh9/ujaOwBltL1yyhbcB
+         e7YG43xYE0U3lyTnP9RfA8snOTY0iakuyKHObWU6rHVwGnLXvpeRJ0PU2bSdZFyBHUsh
+         PiVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693520809; x=1694125609;
+        d=1e100.net; s=20221208; t=1693523901; x=1694128701;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WKlkGKYCgrWeKXNqJyo7pWKtqd+Hx7OjZxfb5gEIfrY=;
-        b=UdJtAp4o8x80yfrR0ypJgIRi0FghYGTu/2iYlYOycf9dE/xXerENXzgX4Gklg7VIUF
-         J3vhp5BF4+jixcKnGj2H4x3fzC12vy/irA90rN4Enp8VHoAYB7VdRtT/vujB3BnMHspy
-         Hkb7/ywq49NTuBaDOY5iLbDOYr+XVNwDg4wfpCyN9ViqCBcypZkDDlMpVdZIfSgrBxtO
-         AVqrRp6kZSIuZUxl+7UF6MK63IjgaHSfX6B2n8CrjH5NZwsKmhS+D+4fjAg17Gv1K1dC
-         DQAYSPVFxQdJkTwDu6nJOPRvsb5eHaEFwAabLoZpGRaR7KZto06wl+U58yEYg1y3JQL0
-         723Q==
-X-Gm-Message-State: AOJu0YyV5CUvf6fUtg7WyCmNM8PCBx4Llcdylx1g1UFUcFbxxWwBOoKI
-	DbKIMXzhqZ3ieKkhESlU13zsPOYxj0B3gM7T7q0mTg==
-X-Google-Smtp-Source: AGHT+IHqutLf/Ndx2phVAuqZjb5qjCQ920NGHqHCD34nUPgPY+PJcMk8FLCrkS7O1NZpBb1oQRUn/bM3dMgktFBGgQY=
-X-Received: by 2002:ad4:45aa:0:b0:64c:e8a3:fb68 with SMTP id
- y10-20020ad445aa000000b0064ce8a3fb68mr646024qvu.3.1693520809085; Thu, 31 Aug
- 2023 15:26:49 -0700 (PDT)
+        bh=KQdtXN7BCCE8wEkmepaEXr3RJP5QKmKAaoV5neq+eqc=;
+        b=Hk6LIe+sDJwKdYfhfLjiN0kIMzyM+CFnhX3bArH3Gig/JngjKpaSFypNKYxvVKvQST
+         rhdh6OwV18wCqWLbSDrpXQsKEZWAa2zHvU+rJlMvgplfqNgkZtfxPbta3sLXtjmhESg5
+         JjaTmf0xPKf6UmVTAb6Z3a+S1BZGfMj7wWoAvUxFp7635e4h5rpCdIo02mzzjN4cXjG0
+         kDTZTHOlkObBsDouVMzEDimbLqX994SvtGnnZH2xIQs5KPte+Z3wO8AYk+n6MSPBnlWA
+         wjh9/ynFxHA1jMRSaj7bwqsVzyolhl5Tr4AK3SBSVs1UL9fzjcbL/fsWbf5N2dt7FxH8
+         kYVQ==
+X-Gm-Message-State: AOJu0YzTAFERq4q5M5AKzlwJfV7b5OQqlXLtmRjNp2LLUhN9fdy5PHiO
+	kVPjxaCNCt008GTnnsdp2eTx/AZoEJK6z3NVqaxcNQ==
+X-Google-Smtp-Source: AGHT+IGF7FARKDfzgNhZTrXEMgQ33Qx24qL0GzFdC/NvjWYOlsJlssFkiz5fqsRhqRad7l2kK7m8mYKpWFTOO6p+9Lw=
+X-Received: by 2002:a05:6512:69:b0:500:95f6:ba3d with SMTP id
+ i9-20020a056512006900b0050095f6ba3dmr388357lfo.21.1693523901350; Thu, 31 Aug
+ 2023 16:18:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdn0xoVWjQ6ufM_rojtKb0f1i1hW-J_xYGfKDNFdHwaeHQ@mail.gmail.com>
- <9d2bb495-0c1d-0d1b-96ea-4b1110d45b79@gmx.de> <ZPEEzkQcQOP9yVFF@ls3530>
- <CAKwvOdkXmEe46cG9Hn837215ghWA7UNKtg7ZQM8CpQcEQnoWfg@mail.gmail.com> <ZPERGqgkUwcWvr+4@ls3530>
-In-Reply-To: <ZPERGqgkUwcWvr+4@ls3530>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 31 Aug 2023 15:26:35 -0700
-Message-ID: <CAKwvOdkqZwF_HqyPhm3hxOVpsWqhN4X=bwUw66=ZkPSpwGpLAA@mail.gmail.com>
-Subject: Re: truncation in drivers/video/fbdev/neofb.c
-To: Helge Deller <deller@gmx.de>
-Cc: linux-fbdev@vger.kernel.org, dri-devel <dri-devel@lists.freedesktop.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Kees Cook <keescook@chromium.org>, Justin Stitt <justinstitt@google.com>
+References: <20230829-missingvardecl-audit-v1-1-34efeb7f3539@google.com> <202308311409.F4EC8BC674@keescook>
+In-Reply-To: <202308311409.F4EC8BC674@keescook>
+From: Justin Stitt <justinstitt@google.com>
+Date: Thu, 31 Aug 2023 16:18:10 -0700
+Message-ID: <CAFhGd8rZdRw1EX-=d7o57TqUc2OacNK-Uciniup=bvtyfsoxgw@mail.gmail.com>
+Subject: Re: [PATCH] x86/audit: fix -Wmissing-variable-declarations warning
+ for ia32_xyz_class
+To: Kees Cook <keescook@chromium.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 31, 2023 at 3:16=E2=80=AFPM Helge Deller <deller@gmx.de> wrote:
+On Thu, Aug 31, 2023 at 2:11=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
 >
-> * Nick Desaulniers <ndesaulniers@google.com>:
-> > On Thu, Aug 31, 2023 at 2:23=E2=80=AFPM Helge Deller <deller@gmx.de> wr=
-ote:
-> > >
-> > > * Helge Deller <deller@gmx.de>:
-> > > > On 8/29/23 18:45, Nick Desaulniers wrote:
-> > > > > A recent change in clang made it better about spotting snprintf t=
-hat
-> > > > > will result in truncation.  Nathan reported the following instanc=
-es:
-> > > > >
-> > > > > drivers/video/fbdev/neofb.c:1959:3: warning: 'snprintf' will alwa=
-ys be
-> > > > > truncated; specified size is 16, but format string expands to at =
-least
-> > > > > 17 [-Wfortify-source]
-> > >
-> > > FYI, I've added the patch below to the fbdev for-next git tree.
-> > > [...]
+> On Tue, Aug 29, 2023 at 10:33:16PM +0000, Justin Stitt wrote:
+> > When building x86 defconfig with Clang-18 I get the following warnings:
+> > | arch/x86/ia32/audit.c:6:10: warning: no previous extern declaration f=
+or non-static variable 'ia32_dir_class' [-Wmissing-variable-declarations]
+> > |     6 | unsigned ia32_dir_class[] =3D {
+> > | arch/x86/ia32/audit.c:11:10: warning: no previous extern declaration =
+for non-static variable 'ia32_chattr_class' [-Wmissing-variable-declaration=
+s]
+> > |    11 | unsigned ia32_chattr_class[] =3D {
+> > | arch/x86/ia32/audit.c:16:10: warning: no previous extern declaration =
+for non-static variable 'ia32_write_class' [-Wmissing-variable-declarations=
+]
+> > |    16 | unsigned ia32_write_class[] =3D {
+> > | arch/x86/ia32/audit.c:21:10: warning: no previous extern declaration =
+for non-static variable 'ia32_read_class' [-Wmissing-variable-declarations]
+> > |    21 | unsigned ia32_read_class[] =3D {
+> > | arch/x86/ia32/audit.c:26:10: warning: no previous extern declaration =
+for non-static variable 'ia32_signal_class' [-Wmissing-variable-declaration=
+s]
+> > |    26 | unsigned ia32_signal_class[] =3D {
 > >
-> > This indeed makes the warning go away, but that's more so due to the
-> > use of strscpy now rather than snprintf.  That alone is a good change
-> > but we still have definite truncation.  See below:
-> > [...]
+> > These warnings occur due to their respective extern declarations being
+> > scoped inside of audit_classes_init as well as only being enabled with
+> > `CONFIG_IA32_EMULATION=3Dy`:
+> > | static int __init audit_classes_init(void)
+> > | {
+> > | #ifdef CONFIG_IA32_EMULATION
+> > |     extern __u32 ia32_dir_class[];
+> > |     extern __u32 ia32_write_class[];
+> > |     extern __u32 ia32_read_class[];
+> > |     extern __u32 ia32_chattr_class[];
+> > |     audit_register_class(AUDIT_CLASS_WRITE_32, ia32_write_class);
+> > |     audit_register_class(AUDIT_CLASS_READ_32, ia32_read_class);
+> > |     audit_register_class(AUDIT_CLASS_DIR_WRITE_32, ia32_dir_class);
+> > |     audit_register_class(AUDIT_CLASS_CHATTR_32, ia32_chattr_class);
+> > | #endif
+> > |     audit_register_class(AUDIT_CLASS_WRITE, write_class);
+> > |     audit_register_class(AUDIT_CLASS_READ, read_class);
+> > |     audit_register_class(AUDIT_CLASS_DIR_WRITE, dir_class);
+> > |     audit_register_class(AUDIT_CLASS_CHATTR, chattr_class);
+> > |     return 0;
+> > | }
+> >
+> > Lift the extern declarations to their own header and resolve scoping
+> > issues (and thus fix the warnings).
+> >
+> > Moreover, change __u32 to unsigned so that we match the definitions:
+> > | unsigned ia32_dir_class[] =3D {
+> > | #include <asm-generic/audit_dir_write.h>
+> > | ~0U
+> > | };
+> > |
+> > | unsigned ia32_chattr_class[] =3D {
+> > | #include <asm-generic/audit_change_attr.h>
+> > | ~0U
+> > | };
+> > | ...
 >
-> Nick, thanks for your review and findings!
-> Now every string should be max. 15 chars (which fits with the trailing
-> NUL into the char[16] array).
->
-> Helge
->
->
-> Subject: [PATCH] fbdev: neofb: Shorten Neomagic product name in info stru=
-ct
->
-> Avoid those compiler warnings:
-> neofb.c:1959:3: warning: 'snprintf' will always be truncated;
->    specified size is 16, but format string expands to at least 17 [-Wfort=
-ify-source]
->
-> Signed-off-by: Helge Deller <deller@gmx.de>
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> Link: https://lore.kernel.org/all/CAKwvOdn0xoVWjQ6ufM_rojtKb0f1i1hW-J_xYG=
-fKDNFdHwaeHQ@mail.gmail.com/
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1923
+> I would expect checkpatch to warn about bare "unsigned", which is frown
+> on these days. :) I think __u32 should be fine here...? (Why is it __u32
+> instead of u32, btw?)
 
-ah yeah LGTM
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> diff --git a/drivers/video/fbdev/neofb.c b/drivers/video/fbdev/neofb.c
-> index d2f622b4c372..b58b11015c0c 100644
-> --- a/drivers/video/fbdev/neofb.c
-> +++ b/drivers/video/fbdev/neofb.c
-> @@ -1948,49 +1948,40 @@ static struct fb_info *neo_alloc_fb_info(struct p=
-ci_dev *dev,
->
->         switch (info->fix.accel) {
->         case FB_ACCEL_NEOMAGIC_NM2070:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 128");
-> +               strscpy(info->fix.id, "MagicGraph128", sizeof(info->fix.i=
-d));
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2090:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 128V");
-> +               strscpy(info->fix.id, "MagicGraph128V", sizeof(info->fix.=
-id));
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2093:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 128ZV");
-> +               strscpy(info->fix.id, "MagicGraph128ZV", sizeof(info->fix=
-.id));
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2097:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 128ZV+");
-> +               strscpy(info->fix.id, "Mag.Graph128ZV+", sizeof(info->fix=
-.id));
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2160:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 128XD");
-> +               strscpy(info->fix.id, "MagicGraph128XD", sizeof(info->fix=
-.id));
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2200:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 256AV");
-> +               strscpy(info->fix.id, "MagicGraph256AV", sizeof(info->fix=
-.id));
->                 info->flags |=3D FBINFO_HWACCEL_IMAGEBLIT |
->                                FBINFO_HWACCEL_COPYAREA |
->                                FBINFO_HWACCEL_FILLRECT;
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2230:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 256AV+");
-> +               strscpy(info->fix.id, "Mag.Graph256AV+", sizeof(info->fix=
-.id));
->                 info->flags |=3D FBINFO_HWACCEL_IMAGEBLIT |
->                                FBINFO_HWACCEL_COPYAREA |
->                                FBINFO_HWACCEL_FILLRECT;
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2360:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 256ZX");
-> +               strscpy(info->fix.id, "MagicGraph256ZX", sizeof(info->fix=
-.id));
->                 info->flags |=3D FBINFO_HWACCEL_IMAGEBLIT |
->                                FBINFO_HWACCEL_COPYAREA |
->                                FBINFO_HWACCEL_FILLRECT;
->                 break;
->         case FB_ACCEL_NEOMAGIC_NM2380:
-> -               snprintf(info->fix.id, sizeof(info->fix.id),
-> -                               "MagicGraph 256XL+");
-> +               strscpy(info->fix.id, "Mag.Graph256XL+", sizeof(info->fix=
-.id));
->                 info->flags |=3D FBINFO_HWACCEL_IMAGEBLIT |
->                                FBINFO_HWACCEL_COPYAREA |
->                                FBINFO_HWACCEL_FILLRECT;
->
+Yeah, checkpatch doesn't like it. I was just trying to mirror the
+implementation in audit.c as closely as possible:
+|     unsigned ia32_dir_class[] =3D {
+|       #include <asm-generic/audit_dir_write.h>
+|       ~0U
+|     };
 
 
---=20
-Thanks,
-~Nick Desaulniers
+>
+> But otherwise, yes, looks good.
+
+Thanks for the feedback here. Should I send a v2 where I changed _all_
+instances of `unsigned` in both audit.c and audit.h to be `u32`? Or
+perhaps, `unsigned int`.
+
+>
+> -Kees
+>
+> --
+> Kees Cook
