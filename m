@@ -1,151 +1,111 @@
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CA811CB6
-	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 17:45:29 +0000 (UTC)
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-7a2ab581cb1so508082241.1
-        for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 10:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693503927; x=1694108727; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3PjK5svytdPnfL/m49ERN9u4S1TwPwbqfx3ubmgNjKU=;
-        b=ccik1C9rfTfT6xbtLwDFIr0w7VR0VEReoAzYff1dCiq/qKlTieIzLNKFiiuDJFqoya
-         Qdjhd/Lo5qxiomRxpH5E2n8n3xRroFm0aqeQXE89ZLpGm7Go/M1WqYtAIv52hz1Y69uM
-         xvc233lNaJAQvaYMcTlN+jPsF4Gp9mRvvYRdk9dUsW/QuYhuqD4S4n9p9CJ/LAE6eoJX
-         VD94mupN1PA23Q7KwF7Lk9S5ZgejP4Un5bKPcy6fOh+InYe1/OWI7dmBuDGYsYRf52Jx
-         0+LylQXSUrMTpuWaiwt3U0c+BztnVTllJ0FuLlPlr0bmu+9gGt6e1N/8jRsIDMeUiTqh
-         KOCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693503927; x=1694108727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3PjK5svytdPnfL/m49ERN9u4S1TwPwbqfx3ubmgNjKU=;
-        b=LX67LQKtFZz78YDHm4/VdvuPmHTFtji1hTst7ymEAjZdlKDNHHDfNgZJ1p1GlKVi8p
-         yjeQ2fvW95rBKB7tvny2Mx6LkzQFz0klVIovhzSf9fG9sKsno69VabTTnBkeACW8w6x0
-         yGaoCrkDeGHUq6iN2Ns6JTcCuh0AXeO/lPT1SaSvLJLv6xAi1bBJL1UgeXFMyrUGm4e1
-         xbGgO+SMoJkpJgDH37hByheNtVSLawkTy6CsgLbPXrMrL7ITosjTi1laWmCg3pNF27CC
-         v6SGzpfqCC5wOTeBAb24wN3hJx1VF0gaQKmSKWh6FK7TjzeY4I9/k/rn68zbU9gSsZk+
-         ygHg==
-X-Gm-Message-State: AOJu0YxBZK5DzlDr+UrS9E6RLGKCsCbtw9pxsv9gaZmyFuEvVf/6f3Jm
-	2k2KO1unQShle2p5FFKkfdmRFOwKg8gW9jvPIKXYwY/DsAK265SwQOyTlA==
-X-Google-Smtp-Source: AGHT+IG8BqfOc+i/pC5a+VFjpVFvwTp8C3RAGfiGDVzaaOGyaIVdjNITr/9eCzx5MI1wddTNQ8wQyEs4KSVjahijWRs=
-X-Received: by 2002:a67:f947:0:b0:44d:5718:d72a with SMTP id
- u7-20020a67f947000000b0044d5718d72amr270390vsq.11.1693503927565; Thu, 31 Aug
- 2023 10:45:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032F311CB6
+	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 17:50:39 +0000 (UTC)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1qbloA-00021P-AQ; Thu, 31 Aug 2023 19:50:18 +0200
+Message-ID: <676f392a-12bb-b9ce-0b69-7d27261eaf33@leemhuis.info>
+Date: Thu, 31 Aug 2023 19:50:16 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdk_GVOdT==9=X=+s=xaD4PrvwXWoKePNJJ5WRmYHkrTqg@mail.gmail.com>
- <20230830194920.GA2263564@dev-arch.thelio-3990X>
-In-Reply-To: <20230830194920.GA2263564@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 31 Aug 2023 10:45:13 -0700
-Message-ID: <CAKwvOd=+Uuzm5w=mbmry5VNX4sjg+=MbZ-h3GmNZMqh+YmTCqA@mail.gmail.com>
-Subject: Re: RFC: blocking posts to the older mailing list
-To: clang-built-linux <llvm@lists.linux.dev>
-Cc: clang-built-linux <clang-built-linux@googlegroups.com>, 
-	Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [v2] RISC-V: Add ptrace support for vectors
+Content-Language: en-US, de-DE
+To: Conor Dooley <conor@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andy Chiu <andy.chiu@sifive.com>, linux-riscv@lists.infradead.org,
+ palmer@dabbelt.com, greentime.hu@sifive.com, guoren@linux.alibaba.com,
+ 20230816155450.26200-4-andy.chiu@sifive.com, bjorn@kernel.org,
+ Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>,
+ Kees Cook <keescook@chromium.org>, Vincent Chen <vincent.chen@sifive.com>,
+ Heiko Stuebner <heiko@sntech.de>, Conor Dooley <conor.dooley@microchip.com>,
+ Benjamin Gray <bgray@linux.ibm.com>, Qing Zhang <zhangqing@loongson.cn>,
+ Baruch Siach <baruch@tkos.co.il>, Rolf Eike Beer <eb@emlix.com>,
+ llvm@lists.linux.dev, nathan@kernel.org
+References: <20230825050248.32681-1-andy.chiu@sifive.com>
+ <ZPDIQEVaEJHXR5IW@google.com> <20230831-resize-spherical-4f46639097b8@spud>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20230831-resize-spherical-4f46639097b8@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693504240;67e64508;
+X-HE-SMSGID: 1qbloA-00021P-AQ
 
-On Wed, Aug 30, 2023 at 12:49=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> On Wed, Aug 30, 2023 at 11:46:39AM -0700, 'Nick Desaulniers' via Clang Bu=
-ilt Linux wrote:
-> > Hi folks,
-> > We established the newer mailing list <llvm@lists.linux.dev> a few
-> > years ago with archives available at https://lore.kernel.org/llvm/.
-> >
-> > This is in preference to our previous mailing list
-> > <clang-built-linux@googlegroups.com> with archives available at
-> > https://groups.google.com/g/clang-built-linux.
-> >
-> > These can both be found on our homepage
-> > <https://clangbuiltlinux.github.io/>.  While it was our intent to
-> > deprecate the old list (and still is), we have not yet taken any
-> > action to actually block new posts on the old one.
-> >
-> > RFC but my plan is to change the following settings on the old google g=
-roup:
-> > 1. Who can post: anyone on the web -> group owners
-> > 2. Who can contact group owners: anyone on the web -> group members
-> > 3. Message moderation: no moderation -> moderate all
-> > 4. New member restrictions: no restrictions -> new members cannot post
-> > 5. Rejected message notification: off -> on
-> > 6. Include default rejected message response: unchecked -> checked
-> > with link to new ML as message
+On 31.08.23 19:17, Conor Dooley wrote:
+> On Thu, Aug 31, 2023 at 10:05:04AM -0700, Nick Desaulniers wrote:
+>> On Fri, Aug 25, 2023 at 05:02:46AM +0000, Andy Chiu wrote:
+>>> This patch add back the ptrace support with the following fix:
+>>>  - Define NT_RISCV_CSR and re-number NT_RISCV_VECTOR to prevent
+>>>    conflicting with gdb's NT_RISCV_CSR.
+>>>  - Use struct __riscv_v_regset_state to handle ptrace requests
+>>>
+>>> Since gdb does not directly include the note description header in
+>>> Linux and has already defined NT_RISCV_CSR as 0x900, we decide to
+>>> sync with gdb and renumber NT_RISCV_VECTOR to solve and prevent future
+>>> conflicts.
+>>>
+>>> Fixes: 0c59922c769a ("riscv: Add ptrace vector support")
+>>> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+>>
+>> Hi Andy, this is causing an instance of -Wunused-variable. PTAL.
+>>
+>> Please use the following tags on the fix:
+>>
+>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>> Closes: https://lore.kernel.org/linux-next/64f03ea1.170a0220.d3dbf.11fd@mx.google.com/
+>>
+>> Let's see if I can get the regzbot tag correct; first time trying it.
+>> #regzbot introduced dbe46b094026
 
-These changes are now live and in effect.
+Nick, thx for trying, but FWIW, that's was slightly off, but there might
+be a easy workaround. To explain for anyone that cares:
 
->
-> This sounds reasonable to me. I am still subscribed to the old list and
-> the only stuff I have really seen sent to it is just junk/spam, with the
-> occasional mail that was sent to clang-built-linux@ and llvm@, so there
-> should be no functional loss. I think we have been clear enough with
-> people who were still using the old mailing list that they should
-> completely switch over to the new one. If they mess up and get a message
-> that the mail was rejected with an explanation of why, it will be even
-> more obvious what to do :)
->
-> > Then update our homepage to note that the archive for the old ML is
-> > explicitly deprecated.
+Due to that '#regzbot introduced ...' regzbot will consider the mail
+with the "#regzbot introduced dbe46b094026" (e.g. the msg from Nick with
+the msgid ZPDIQEVaEJHXR5IW@google.com) as a report for this regression
+and thus look out for patches and commits with a tag like this:
 
-merged: https://github.com/ClangBuiltLinux/ClangBuiltLinux.github.io/pull/5=
-7
+ Closes: https://lore.kernel.org/all/ZPDIQEVaEJHXR5IW@google.com/
 
-> >
-> > I think that will prevent further confusion, and sorry that I haven't
-> > taken these steps sooner!
-> >
-> > Thoughts?
->
-> +1 from me
->
-> > Another outstanding issue is that it doesn't seem like there's
-> > available tools for exporting the old google groups archive, AFAIK.  I
-> > would love to be corrected though.
->
-> Unfortunately, the tool I think I had looked into using at one point is
-> now marked as deprecated/broken:
->
-> https://github.com/icy/google-group-crawler
->
-> So aside from us looking into how to export the archives that we should
-> have in our own inboxes as mbox files or seeing if someone else has
-> built a tool of that sort, I am not sure that we have much recourse for
-> getting those archives out of Google Groups... Fortunately, I am not
-> sure that we had many discussions on the list that were not also Cc'd to
-> some list that lore.kernel.org archives. In fact, you can use the c: and
-> t: search option to find messges that we sent to that list that got
-> archived on lore:
->
-> https://lore.kernel.org/all/?q=3Dc:clang-built-linux@googlegroups.com+OR+=
-t:clang-built-linux@googlegroups.com
->
-> So I think that might just be good enough to say between our issue
-> tracker and what we have on lore, potential loss of access to our Google
-> Groups archive should the service shut down or experience some sort of
-> data loss should not impact our ability to look back for answers about
-> why we did or did not do something.
+Which is kinda correct, as your mail *is* a report about the regression,
+so some developer might use this. But in this case that's not what Nick
+wanted, as there was an earlier report that was even specified. But
+well, that might make it easy to fix, as we could simply tell regzbot
+about the duplicate. Nick could have done that in his mail, but I can do
+it in this one was well (as it's a indirect reply to the report from
+Nick that regzbot track) that 64f03ea1.170a0220.d3dbf.11fd@mx.google.com
+is a duplicate of ZPDIQEVaEJHXR5IW@google.com:
 
-Added to https://github.com/ClangBuiltLinux/ClangBuiltLinux.github.io/pull/=
-57.
+#regzbot dup-of:
+https://lore.kernel.org/linux-next/64f03ea1.170a0220.d3dbf.11fd@mx.google.com/
 
->
-> Thanks for writing this up and keeping us consistent!
->
-> Cheers,
-> Nathan
+Let's see if this works. I haven't used this much, so maybe something
+might go sideways; but in theory this should work and then regzbot would
+do the right thing. At least normally:
 
+> See <20230830203754.24940-1-palmer@rivosinc.com> for the fix.
+> 
+> That has you gave regzbot prob won't be stable though, branch needs a
+> rebase to add missing SoB tags from its committer.
 
+You mean the commit-id of the change currently known as dbe46b094026
+will change? Ughh, yeah, that's unfortunate and something regzbot is not
+yet prepared for.
 
---=20
-Thanks,
-~Nick Desaulniers
+Hmmmm. Haven't had this case yet, as regzbot until now is not used much
+for -next. Not sure how to best handle that. Sure, regzbot could notice
+"the commit formerly known as cafec0c0 is now now c0c0cafe, as the
+subject, author, and modified files roughly match" -- but I'm not sure
+if that's a good idea, as developers like Conor might integrate simple
+fixes like the one for the problem at hand during the rebase. So maybe
+at this point it becomes "some human needs to look into this and tell
+regzbot what to do". :-/
+
+Ciao, Thorsten
