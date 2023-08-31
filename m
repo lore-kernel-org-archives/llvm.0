@@ -1,164 +1,281 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33AE15A0
-	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 03:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693453289;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PWpiEvVm/pBWAPQdTDAv8ZtPCFddaZljr9MzWTlYTPo=;
-	b=gEXqK1zNO9XcOwCpzQTRSi+k/ku5qZLkLhDyYrWod3c9ShYxrTAPxnjjU0EtxuH5fM4zlY
-	dmBkypqXut688/DRfFksG7ruBucyo/1iE1+lMJKfMVkVrdvWwd2+1iTQQ3OxoKH3SRUXJh
-	R+sdphA4rGplzOODP5blnatz1YH0gSs=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-442-L2zyFo1gM-2KG5o93NASew-1; Wed, 30 Aug 2023 23:41:28 -0400
-X-MC-Unique: L2zyFo1gM-2KG5o93NASew-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC4DD29A9D3E
-	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 03:41:27 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 939752166B25;
-	Thu, 31 Aug 2023 03:41:27 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 271): Test report for master
- (6.5.0, mainline.kernel.org-clang, 53ea7f62)
-Date: Thu, 31 Aug 2023 03:41:27 -0000
-To: haliu@redhat.com, yinxu@redhat.com, yiyan@redhat.com, llvm@lists.linux.dev,
- zlang@redhat.com, bhe@redhat.com, xiawu@redhat.com, jiji@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A2915C0;
+	Thu, 31 Aug 2023 03:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693453442; x=1724989442;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kAaZOeNsdL5P/yGFCiqwFfNpIqEhs1nJURY5/4CQBWg=;
+  b=Lqao6Tf9TcGu15PAAleGwWr5P5kWG8DZFg543Mo+LCpTL6j0fSgF8MTA
+   QbyXuyeUGx8XeeNPFG110WXCIzZXcEkHx9myR3VXmDr8/08MTOpgSQ+E7
+   x1B/J3oMf89xWnOaV/V2tn1bDWpjZVVuF1ykNnzQ4aeeQElykXSdrZdYZ
+   9d8xNbLyz4uvSbMZuisWLS12W2Jrg2S6yWHAYhfVtlXzNBC1mtH/oQhe/
+   ct46P5u+lZ8wjhO4fcObukpbIl6b3iaFvt/Tj9R7HiE87qgG8TEB8ok0l
+   w4JXElVe+Y4SjyBQD6hIYLF0WmckhyfgYapmmnqlLjBNi22SuhxwKuhJe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="355300781"
+X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
+   d="scan'208";a="355300781"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 20:44:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="742472241"
+X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
+   d="scan'208";a="742472241"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Aug 2023 20:44:00 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qbYb9-000AZ2-1G;
+	Thu, 31 Aug 2023 03:43:59 +0000
+Date: Thu, 31 Aug 2023 11:43:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Herring <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:for-kernelci 5/7] drivers/char/tpm/tpm_i2c_nuvoton.c:549:25:
+ error: incompatible pointer types passing 'struct device *' to parameter of
+ type 'const struct i2c_client *'
+Message-ID: <202308311153.mMpnkwUs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <92887.123083023412800108@us-mta-442.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
+head:   2f859c7b504dbff5d4770187e5416610db4625e3
+commit: ac865741027a59abe81c2e7d30edfd26082751f3 [5/7] Use of_device_get_match_data
+config: hexagon-randconfig-r013-20230831 (https://download.01.org/0day-ci/archive/20230831/202308311153.mMpnkwUs-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308311153.mMpnkwUs-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308311153.mMpnkwUs-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/char/tpm/tpm_i2c_nuvoton.c:19:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/char/tpm/tpm_i2c_nuvoton.c:19:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/char/tpm/tpm_i2c_nuvoton.c:19:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   In file included from drivers/char/tpm/tpm_i2c_nuvoton.c:23:
+   In file included from drivers/char/tpm/tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+>> drivers/char/tpm/tpm_i2c_nuvoton.c:549:25: error: incompatible pointer types passing 'struct device *' to parameter of type 'const struct i2c_client *' [-Werror,-Wincompatible-pointer-types]
+           if (i2c_get_match_data(dev))
+                                  ^~~
+   include/linux/i2c.h:370:57: note: passing argument to parameter 'client' here
+   const void *i2c_get_match_data(const struct i2c_client *client);
+                                                           ^
+   drivers/char/tpm/tpm_i2c_nuvoton.c:527:30: warning: unused variable 'id' [-Wunused-variable]
+           const struct i2c_device_id *id = i2c_client_get_device_id(client);
+                                       ^
+   8 warnings and 1 error generated.
+--
+   In file included from drivers/mtd/nand/raw/vf610_nfc.c:27:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/mtd/nand/raw/vf610_nfc.c:27:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/mtd/nand/raw/vf610_nfc.c:27:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/mtd/nand/raw/vf610_nfc.c:845:8: error: use of undeclared label 'err_disable_clk'
+                   goto err_disable_clk;
+                        ^
+   6 warnings and 1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'xfs-6.6-merge-1' of git://git.kernel.org/pub=
-/scm/fs/xfs/xfs-linux
+vim +549 drivers/char/tpm/tpm_i2c_nuvoton.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102295
+   524	
+   525	static int i2c_nuvoton_probe(struct i2c_client *client)
+   526	{
+   527		const struct i2c_device_id *id = i2c_client_get_device_id(client);
+   528		int rc;
+   529		struct tpm_chip *chip;
+   530		struct device *dev = &client->dev;
+   531		struct priv_data *priv;
+   532		u32 vid = 0;
+   533	
+   534		rc = get_vid(client, &vid);
+   535		if (rc)
+   536			return rc;
+   537	
+   538		dev_info(dev, "VID: %04X DID: %02X RID: %02X\n", (u16) vid,
+   539			 (u8) (vid >> 16), (u8) (vid >> 24));
+   540	
+   541		chip = tpmm_chip_alloc(dev, &tpm_i2c);
+   542		if (IS_ERR(chip))
+   543			return PTR_ERR(chip);
+   544	
+   545		priv = devm_kzalloc(dev, sizeof(struct priv_data), GFP_KERNEL);
+   546		if (!priv)
+   547			return -ENOMEM;
+   548	
+ > 549		if (i2c_get_match_data(dev))
+   550			chip->flags |= TPM_CHIP_FLAG_TPM2;
+   551	
+   552		init_waitqueue_head(&priv->read_queue);
+   553	
+   554		/* Default timeouts */
+   555		chip->timeout_a = msecs_to_jiffies(TPM_I2C_SHORT_TIMEOUT);
+   556		chip->timeout_b = msecs_to_jiffies(TPM_I2C_LONG_TIMEOUT);
+   557		chip->timeout_c = msecs_to_jiffies(TPM_I2C_SHORT_TIMEOUT);
+   558		chip->timeout_d = msecs_to_jiffies(TPM_I2C_SHORT_TIMEOUT);
+   559	
+   560		dev_set_drvdata(&chip->dev, priv);
+   561	
+   562		/*
+   563		 * I2C intfcaps (interrupt capabilitieis) in the chip are hard coded to:
+   564		 *   TPM_INTF_INT_LEVEL_LOW | TPM_INTF_DATA_AVAIL_INT
+   565		 * The IRQ should be set in the i2c_board_info (which is done
+   566		 * automatically in of_i2c_register_devices, for device tree users */
+   567		priv->irq = client->irq;
+   568		if (client->irq) {
+   569			dev_dbg(dev, "%s() priv->irq\n", __func__);
+   570			rc = devm_request_irq(dev, client->irq,
+   571					      i2c_nuvoton_int_handler,
+   572					      IRQF_TRIGGER_LOW,
+   573					      dev_name(&chip->dev),
+   574					      chip);
+   575			if (rc) {
+   576				dev_err(dev, "%s() Unable to request irq: %d for use\n",
+   577					__func__, priv->irq);
+   578				priv->irq = 0;
+   579			} else {
+   580				chip->flags |= TPM_CHIP_FLAG_IRQ;
+   581				/* Clear any pending interrupt */
+   582				i2c_nuvoton_ready(chip);
+   583				/* - wait for TPM_STS==0xA0 (stsValid, commandReady) */
+   584				rc = i2c_nuvoton_wait_for_stat(chip,
+   585							       TPM_STS_COMMAND_READY,
+   586							       TPM_STS_COMMAND_READY,
+   587							       chip->timeout_b,
+   588							       NULL);
+   589				if (rc == 0) {
+   590					/*
+   591					 * TIS is in ready state
+   592					 * write dummy byte to enter reception state
+   593					 * TPM_DATA_FIFO_W <- rc (0)
+   594					 */
+   595					rc = i2c_nuvoton_write_buf(client,
+   596								   TPM_DATA_FIFO_W,
+   597								   1, (u8 *) (&rc));
+   598					if (rc < 0)
+   599						return rc;
+   600					/* TPM_STS <- 0x40 (commandReady) */
+   601					i2c_nuvoton_ready(chip);
+   602				} else {
+   603					/*
+   604					 * timeout_b reached - command was
+   605					 * aborted. TIS should now be in idle state -
+   606					 * only TPM_STS_VALID should be set
+   607					 */
+   608					if (i2c_nuvoton_read_status(chip) !=
+   609					    TPM_STS_VALID)
+   610						return -EIO;
+   611				}
+   612			}
+   613		}
+   614	
+   615		return tpm_chip_register(chip);
+   616	}
+   617	
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336281
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-         ppc64le - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336420
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-         ppc64le - kdump - sysrq-c
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336437
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
-         ppc64le - kdump - file-load
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336438
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
-           s390x - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336340
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-          x86_64 - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336474
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336378
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-          x86_64 (debug) - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9336384
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
