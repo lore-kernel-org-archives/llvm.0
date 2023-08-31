@@ -1,139 +1,141 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1919D125CB
-	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 16:40:44 +0000 (UTC)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-9a5e37a39ecso112641166b.3
-        for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 09:40:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58CA182DB
+	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 17:05:10 +0000 (UTC)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1c1f7f7151fso7586275ad.1
+        for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 10:05:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693500043; x=1694104843; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=drcv5mKJ9RhO4L7vLkvVuevPSBYeBJBAmcU4Oua4F00=;
-        b=kJC2OdlDUiLj41uzmETx/d5sATDNSIYPE+AOqdpjiLfaCPl7J225X6msfC1sGuhme2
-         7SioRcl2teMwjsjSiB5kVW09eetl2Tp/MrPDLT9soOaDZ2+LsdFQxmORHZon5mLCEhBW
-         GugBJR+UIy2YHp/OSv41n6Oah9a9tA5CmzHZIVgILCzYvueAUHMhv+csTczzBbWEDPVE
-         zYovhEZbyd3Nv7vwusv/pgZVnbT54sMa7WlptHZguhcR1Hq/tiExirlfK6WAeagRYM7c
-         Yfywtgy5x3JUhPbsancSgK7byas9FfYyqID2NDy6h+UAwHiOdLHmJQNEiEwhRRsqyrqT
-         tOrg==
+        d=google.com; s=20221208; t=1693501510; x=1694106310; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Pfgsvrc0Cq27hkjNFeSrt/ZRRwqRHUfzicJWZVHKsE=;
+        b=LQyUEOTKM78p3O1n1xQke1ser95JfruXcGZi0DEIpkY2B8OeDhHr2nwl1/rhurjCwo
+         iugFGS5KD0ZcsjkVuzUb3+OQarT1KKon1Zu3844BXXYpb0wKufcPuAmgoGIiituHv1St
+         VbqwgSDjF+oK2X9R3XxrhWdhBDjicrk87ifWR42Z2pTAcZQpyJEwjVhzxHoXpF0Z4PFL
+         Ee3uisiQF2S+TFGZ/SWV4awVHpCWDIWD6IXgCDGvicrV8dsahdn7FJ1KfYfsnI9isFhy
+         N5pXviyT4HYt4CSGv5gh4onYrhjgnPzRVlTUvwFH9kZecR8+rZ5twoSlcbovzTEBh660
+         nceg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693500043; x=1694104843;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=drcv5mKJ9RhO4L7vLkvVuevPSBYeBJBAmcU4Oua4F00=;
-        b=W0cCqbNfCILSUvCsFby5xnq5AxMAEGXTDLMKQumoiFr0CvAVd6OSPwF2VATjV8CImE
-         xvws3voK/UTvE0op+/rxTPAT3Hzh7m4y2KY3bbV19ec1r5kZ3z1x8WuIavpnz10FagsC
-         dyymp/vQ8YR+6A2UYU+JOSiwAyHdtwc66KOss7/gMeGE2hJKDODHk/EMmJr0aeKex0+U
-         x757qV8KzdeMIaCePffC4+1+Xvib5uEvisLprtKyWrXZ9Y6TYxcAeTLSqURiyzIRTXRa
-         q46UwZW2XY66aywdltGO6vn1m13qsX8qgdunMui46Z0NYuNRRcc4E2ScbpVq8r1phAcZ
-         c+bg==
-X-Gm-Message-State: AOJu0Ywu2CY+igboik4pBtjaNacm3ZKEyPRwqjJlLMsEhHnCb/hO6xaY
-	XISsgf/49Ay0GrYcOTvQSTtWcbT+Dg4gCYd62ZLSng==
-X-Google-Smtp-Source: AGHT+IGV24LZs9Ao9Nl3shUgQtSezVqin+bodeBsASR3yYN0F0gmiEmn2HA+jI3wOLaoklU27jzdjhbQxQ19eonVUNw=
-X-Received: by 2002:a17:906:8450:b0:9a1:db2e:9dbb with SMTP id
- e16-20020a170906845000b009a1db2e9dbbmr4355097ejy.0.1693500042855; Thu, 31 Aug
- 2023 09:40:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693501510; x=1694106310;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Pfgsvrc0Cq27hkjNFeSrt/ZRRwqRHUfzicJWZVHKsE=;
+        b=QmaB4pGu47yheDZRZlkcV3P5fNiFnvltlVd6svTVSc3ES/ltksRAag1N3JpKofltPd
+         pSFBE4wVVLmmv7hkLc31Tk+iYKowgWV/+Xlm3CAGjmOmP5E6AeLevstfN259GeSx4avW
+         RqJcZ8WCJZcyLRuPR9lNzrJpkcTidPy15X5cCBgXfIlPMzXW4lnP+eYh5koODe6gWIo9
+         AlzTKZ0JnPtCMj4QKwiZAUQdUcRlORcbtajeQJujaCvi/5vlY7s7Y5+xLPKN4kGGCr/j
+         DoUCKu2K0zrGoIzKGtC2ZAy55EEy99Lf+c6Y4D09fetiP07srUflGW4LVRk+Y0ekg4XW
+         LN5g==
+X-Gm-Message-State: AOJu0YwVyTPFi3gUofZOaVqgmERKuokSdbYCR0yXmaz4U3FDLSqwZGoB
+	p0FiCBQ/zEkYVgpkektmMsxIjg==
+X-Google-Smtp-Source: AGHT+IEZpQJrLUAw1zvueub9KSo50xfn8glzjY4X7tAZK7QAtkNzy8u/SGkRxjDte9gslzgHknYZ+Q==
+X-Received: by 2002:a17:903:1cf:b0:1b9:e8a5:3699 with SMTP id e15-20020a17090301cf00b001b9e8a53699mr288895plh.21.1693501509951;
+        Thu, 31 Aug 2023 10:05:09 -0700 (PDT)
+Received: from google.com ([2620:15c:2d1:203:892a:3b04:5286:6211])
+        by smtp.gmail.com with ESMTPSA id jo6-20020a170903054600b001c1f0b3e900sm1477603plb.229.2023.08.31.10.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Aug 2023 10:05:09 -0700 (PDT)
+Date: Thu, 31 Aug 2023 10:05:04 -0700
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Andy Chiu <andy.chiu@sifive.com>
+Cc: linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+	greentime.hu@sifive.com, guoren@linux.alibaba.com,
+	20230816155450.26200-4-andy.chiu@sifive.com, bjorn@kernel.org,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Vincent Chen <vincent.chen@sifive.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Benjamin Gray <bgray@linux.ibm.com>,
+	Qing Zhang <zhangqing@loongson.cn>,
+	Baruch Siach <baruch@tkos.co.il>, Rolf Eike Beer <eb@emlix.com>,
+	llvm@lists.linux.dev, nathan@kernel.org, regressions@leemhuis.info
+Subject: Re: [v2] RISC-V: Add ptrace support for vectors
+Message-ID: <ZPDIQEVaEJHXR5IW@google.com>
+References: <20230825050248.32681-1-andy.chiu@sifive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230830175335.1536008-5-yosryahmed@google.com> <202308311025.538QuXBV-lkp@intel.com>
-In-Reply-To: <202308311025.538QuXBV-lkp@intel.com>
-From: Yosry Ahmed <yosryahmed@google.com>
-Date: Thu, 31 Aug 2023 09:40:03 -0700
-Message-ID: <CAJD7tkbo28Mc9ydPnqL_gKmi-QZGORE-FVcZcQnsLVTCA1UBzA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] mm: memcg: use non-unified stats flushing for
- userspace reads
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeelb@google.com>, Muchun Song <muchun.song@linux.dev>, 
-	Ivan Babrou <ivan@cloudflare.com>, Tejun Heo <tj@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230825050248.32681-1-andy.chiu@sifive.com>
 
-On Wed, Aug 30, 2023 at 8:08=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Yosry,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on akpm-mm/mm-everything]
-> [also build test WARNING on linus/master next-20230830]
-> [cannot apply to v6.5]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/mm-mem=
-cg-properly-name-and-document-unified-stats-flushing/20230831-015518
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-ev=
-erything
-> patch link:    https://lore.kernel.org/r/20230830175335.1536008-5-yosryah=
-med%40google.com
-> patch subject: [PATCH v3 4/4] mm: memcg: use non-unified stats flushing f=
-or userspace reads
-> config: i386-randconfig-r013-20230831 (https://download.01.org/0day-ci/ar=
-chive/20230831/202308311025.538QuXBV-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git =
-ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20230831/202308311025.538QuXBV-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308311025.538QuXBV-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> mm/memcontrol.c:667:6: warning: no previous prototype for function 'me=
-m_cgroup_user_flush_stats' [-Wmissing-prototypes]
->    void mem_cgroup_user_flush_stats(struct mem_cgroup *memcg)
->         ^
->    mm/memcontrol.c:667:1: note: declare 'static' if the function is not i=
-ntended to be used outside of this translation unit
->    void mem_cgroup_user_flush_stats(struct mem_cgroup *memcg)
->    ^
->    static
->    1 warning generated.
+On Fri, Aug 25, 2023 at 05:02:46AM +0000, Andy Chiu wrote:
+> This patch add back the ptrace support with the following fix:
+>  - Define NT_RISCV_CSR and re-number NT_RISCV_VECTOR to prevent
+>    conflicting with gdb's NT_RISCV_CSR.
+>  - Use struct __riscv_v_regset_state to handle ptrace requests
+> 
+> Since gdb does not directly include the note description header in
+> Linux and has already defined NT_RISCV_CSR as 0x900, we decide to
+> sync with gdb and renumber NT_RISCV_VECTOR to solve and prevent future
+> conflicts.
+> 
+> Fixes: 0c59922c769a ("riscv: Add ptrace vector support")
+> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
 
-Ah silly mistake on my end. Will send v4 after making
-mem_cgroup_user_flush_stats() static.
+Hi Andy, this is causing an instance of -Wunused-variable. PTAL.
 
->
->
-> vim +/mem_cgroup_user_flush_stats +667 mm/memcontrol.c
->
->    658
->    659  /*
->    660   * mem_cgroup_user_flush_stats - do a stats flush for a user read
->    661   * @memcg: memory cgroup to flush
->    662   *
->    663   * Flush the subtree of @memcg. A mutex is used for userspace rea=
-ders to gate
->    664   * the global rstat spinlock. This protects in-kernel flushers fr=
-om userspace
->    665   * readers hogging the lock.
->    666   */
->  > 667  void mem_cgroup_user_flush_stats(struct mem_cgroup *memcg)
->    668  {
->    669          mutex_lock(&stats_user_flush_mutex);
->    670          do_stats_flush(memcg);
->    671          mutex_unlock(&stats_user_flush_mutex);
->    672  }
->    673
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Please use the following tags on the fix:
+
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Closes: https://lore.kernel.org/linux-next/64f03ea1.170a0220.d3dbf.11fd@mx.google.com/
+
+Let's see if I can get the regzbot tag correct; first time trying it.
+
+#regzbot introduced dbe46b094026
+
+> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> index 487303e3ef22..9a87e5d490b5 100644
+> --- a/arch/riscv/kernel/ptrace.c
+> +++ b/arch/riscv/kernel/ptrace.c
+> @@ -81,6 +84,71 @@ static int riscv_fpr_set(struct task_struct *target,
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_RISCV_ISA_V
+> +static int riscv_vr_get(struct task_struct *target,
+> +			const struct user_regset *regset,
+> +			struct membuf to)
+> +{
+> +	struct __riscv_v_ext_state *vstate = &target->thread.vstate;
+> +	struct __riscv_v_regset_state ptrace_vstate;
+> +
+> +	if (!riscv_v_vstate_query(task_pt_regs(target)))
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Ensure the vector registers have been saved to the memory before
+> +	 * copying them to membuf.
+> +	 */
+> +	if (target == current)
+> +		riscv_v_vstate_save(current, task_pt_regs(current));
+> +
+> +	ptrace_vstate.vstart = vstate->vstart;
+> +	ptrace_vstate.vl = vstate->vl;
+> +	ptrace_vstate.vtype = vstate->vtype;
+> +	ptrace_vstate.vcsr = vstate->vcsr;
+> +	ptrace_vstate.vlenb = vstate->vlenb;
+> +
+> +	/* Copy vector header from vstate. */
+> +	membuf_write(&to, &ptrace_vstate, sizeof(struct __riscv_v_regset_state));
+> +
+> +	/* Copy all the vector registers from vstate. */
+> +	return membuf_write(&to, vstate->datap, riscv_v_vsize);
+> +}
+> +
+> +static int riscv_vr_set(struct task_struct *target,
+> +			const struct user_regset *regset,
+> +			unsigned int pos, unsigned int count,
+> +			const void *kbuf, const void __user *ubuf)
+> +{
+> +	int ret, size;
+
+^ arch/riscv/kernel/ptrace.c:123:11: warning: unused variable 'size' [-Wunused-variable]
