@@ -1,158 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42666EA1
-	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 03:01:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693450889;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=B2JSoZ83zuEDHVN+zyutZ36aCYCbR0G1m+ckPxwpuns=;
-	b=Iq/Y+4j19EzSPZX5EETKV7GnXyzi1XTw8JHQUXnqcjEkpeIYxKM5AMQUJLCvllI99NUsMx
-	NOscoXoxkAuhXxNAxjmliBHFWz/dgfH98Quld/OBiwTXHzTB7yjuqiTPXYB+t1j90tGr3x
-	kfOcI6N8f9hRNgQ23EttPBGtpIZULrQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-99-7FpYpJ7GN0aF8NJ1bM4OTQ-1; Wed, 30 Aug 2023 23:01:28 -0400
-X-MC-Unique: 7FpYpJ7GN0aF8NJ1bM4OTQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CA018564F0
-	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 03:01:28 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2189040C6F4C;
-	Thu, 31 Aug 2023 03:01:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 271): Test report for master
- (6.5.0, mainline.kernel.org-clang, 1687d8ac)
-Date: Thu, 31 Aug 2023 03:01:28 -0000
-To: haliu@redhat.com, yinxu@redhat.com, yiyan@redhat.com, llvm@lists.linux.dev,
- zlang@redhat.com, bhe@redhat.com, xiawu@redhat.com, jiji@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691D0111F;
+	Thu, 31 Aug 2023 03:08:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693451332; x=1724987332;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mYEk4LI2pL8XWPF1zKc5qz6vdX12xJGX7KbAifejJ34=;
+  b=UZtGHNNWwwj2ldnqfJWH/0ZvdoRN1Lqr0yzfyzd2CR/bHI7kxUmiIrgd
+   rjb6onbHY1aKEMR+IBpzvpRF/GP9O5pG/uRD41SYRnRbFYHEWsZZwS5ax
+   Z8fPNK5/BBnPhbsR20x1zEC96at88HwA7Zm4E+P2mst+pZCjdO713a9JT
+   A6OJOhqi6tcWkiWWyyZOMB51urbWs2aiJ0ZqQ6KN1HF9ihwLJcjjs5+21
+   JtJb+42qsORIfntfpsBM1x3fjMQge5HLbkPKle2viY7QzQ8TUlQZ+9LI9
+   GBru/cOe5XlXogZ8pwnzEOFRUPBe01cartEBYjNMUHRu7qEoRegvPXE3O
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="462175913"
+X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
+   d="scan'208";a="462175913"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 20:08:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="913042869"
+X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
+   d="scan'208";a="913042869"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 30 Aug 2023 20:08:47 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qbY34-000AWX-1Y;
+	Thu, 31 Aug 2023 03:08:46 +0000
+Date: Thu, 31 Aug 2023 11:08:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yosry Ahmed <yosryahmed@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeelb@google.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Ivan Babrou <ivan@cloudflare.com>, Tejun Heo <tj@kernel.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH v3 4/4] mm: memcg: use non-unified stats flushing for
+ userspace reads
+Message-ID: <202308311025.538QuXBV-lkp@intel.com>
+References: <20230830175335.1536008-5-yosryahmed@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <18360.123083023012800461@us-mta-99.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230830175335.1536008-5-yosryahmed@google.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Yosry,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master next-20230830]
+[cannot apply to v6.5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'x86_apic_for_6.6-rc1' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/tip/tip
+url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/mm-memcg-properly-name-and-document-unified-stats-flushing/20230831-015518
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230830175335.1536008-5-yosryahmed%40google.com
+patch subject: [PATCH v3 4/4] mm: memcg: use non-unified stats flushing for userspace reads
+config: i386-randconfig-r013-20230831 (https://download.01.org/0day-ci/archive/20230831/202308311025.538QuXBV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308311025.538QuXBV-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102279
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308311025.538QuXBV-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335118
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-         ppc64le - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335306
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-         ppc64le - kdump - sysrq-c
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335323
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
-         ppc64le - kdump - file-load
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335324
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
-           s390x - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335064
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-          x86_64 - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335211
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335013
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-          x86_64 (debug) - Networking sctp-auth: sockopts test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9335019
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Setup
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> mm/memcontrol.c:667:6: warning: no previous prototype for function 'mem_cgroup_user_flush_stats' [-Wmissing-prototypes]
+   void mem_cgroup_user_flush_stats(struct mem_cgroup *memcg)
+        ^
+   mm/memcontrol.c:667:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mem_cgroup_user_flush_stats(struct mem_cgroup *memcg)
+   ^
+   static 
+   1 warning generated.
 
 
+vim +/mem_cgroup_user_flush_stats +667 mm/memcontrol.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   658	
+   659	/*
+   660	 * mem_cgroup_user_flush_stats - do a stats flush for a user read
+   661	 * @memcg: memory cgroup to flush
+   662	 *
+   663	 * Flush the subtree of @memcg. A mutex is used for userspace readers to gate
+   664	 * the global rstat spinlock. This protects in-kernel flushers from userspace
+   665	 * readers hogging the lock.
+   666	 */
+ > 667	void mem_cgroup_user_flush_stats(struct mem_cgroup *memcg)
+   668	{
+   669		mutex_lock(&stats_user_flush_mutex);
+   670		do_stats_flush(memcg);
+   671		mutex_unlock(&stats_user_flush_mutex);
+   672	}
+   673	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
