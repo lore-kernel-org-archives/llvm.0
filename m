@@ -1,129 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F184111722;
-	Thu, 31 Aug 2023 14:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693490501; x=1725026501;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OfZ7zTbIJkqPsN8qUSYq3+PItW+TPqpQwhSyp4ZYK4M=;
-  b=JO3uI0oFZKEYwT0l62C2iUlgx9Ej3KaQpRdmlsF9nGW4WuVxUmkTVXGN
-   wWhZOsJ9uaBbK6I6SaZJsMPAMpz+M+ucpNuZQP1k4djk9aD2JwJIB3Rcw
-   UXWfwFKuqID22HQAhwcg5MP+uYjdkVFo4GbzTaS/rFFvCe8cvQLIY8lvY
-   jkXOTt/6BcfwLYqMGHvnIKh5sJWvG6dHpcI7eKMLrhh/W+gZmIs5eBNOs
-   0c+Qac75f7bgyrylJp2dRn06JQYc98ecuoA4t4Xy40h+Wvj7igheNGj1x
-   aTLFldMzH7aFh8x4k6UtQh7NGV4A9RnU4+fLkrmq2PD6xYLvM4SgllFQP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="366167778"
-X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
-   d="scan'208";a="366167778"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 06:39:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="739532428"
-X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
-   d="scan'208";a="739532428"
-Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 31 Aug 2023 06:39:51 -0700
-Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qbhtl-0000Bv-0R;
-	Thu, 31 Aug 2023 13:39:49 +0000
-Date: Thu, 31 Aug 2023 21:39:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devel@driverdev.osuosl.org,
-	Alistair Francis <alistair.francis@wdc.com>
-Subject: [driver-core:debugfs_cleanup 7/7] fs/sysfs/file.c:397:8: warning:
- variable 'uid' is uninitialized when used here
-Message-ID: <202308312145.bv4S52ys-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632F0125A8
+	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 14:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693491088;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FkpQ5+hsZ2i0kD9n4FvKbnQgSKueewMjrZJfxMj714g=;
+	b=Zk8LOkqiWF8OTyMZoXjBgCZWiksfTG3et2F2JQJfruhsfofcuTeLwzJy3513bQxsAwKKD6
+	sOuNiw3kML3sdHPDr7Tf6h9RcWyhTTdImrQgfHsnFbQoay3jfD0kc/+MfvlSlx5AKu/sZ9
+	Qqa7ZIWplrksYoiucS0khs8kIJTqRfk=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-250-oGOpgNq1MUmUbKoZBudnIA-1; Thu, 31 Aug 2023 10:11:24 -0400
+X-MC-Unique: oGOpgNq1MUmUbKoZBudnIA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0739F2804619
+	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 14:11:24 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DF6C72166B25;
+	Thu, 31 Aug 2023 14:11:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 271): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 4debf771)
+Date: Thu, 31 Aug 2023 14:11:23 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <54941.123083110112400241@us-mta-250.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git debugfs_cleanup
-head:   2929d17b58d02dcf52d0345fa966c616e09a5afa
-commit: 2929d17b58d02dcf52d0345fa966c616e09a5afa [7/7] sysfs: do not create empty directories if no attributes are present
-config: i386-randconfig-012-20230831 (https://download.01.org/0day-ci/archive/20230831/202308312145.bv4S52ys-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308312145.bv4S52ys-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308312145.bv4S52ys-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/sysfs/file.c:397:8: warning: variable 'uid' is uninitialized when used here [-Wuninitialized]
-                                             uid, gid, kobj, NULL);
-                                             ^~~
-   fs/sysfs/file.c:383:2: note: variable 'uid' is declared here
-           kuid_t uid;
-           ^
->> fs/sysfs/file.c:397:13: warning: variable 'gid' is uninitialized when used here [-Wuninitialized]
-                                             uid, gid, kobj, NULL);
-                                                  ^~~
-   fs/sysfs/file.c:384:2: note: variable 'gid' is declared here
-           kgid_t gid;
-           ^
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/uid +397 fs/sysfs/file.c
+Kernel information:
+    Commit message: Merge tag 'for-linus-iommufd' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/jgg/iommufd
 
-   372	
-   373	/**
-   374	 * sysfs_add_file_to_group - add an attribute file to a pre-existing group.
-   375	 * @kobj: object we're acting for.
-   376	 * @attr: attribute descriptor.
-   377	 * @group: group name.
-   378	 */
-   379	int sysfs_add_file_to_group(struct kobject *kobj,
-   380			const struct attribute *attr, const char *group)
-   381	{
-   382		struct kernfs_node *parent;
-   383		kuid_t uid;
-   384		kgid_t gid;
-   385		int error;
-   386	
-   387		if (group) {
-   388			parent = kernfs_find_and_get(kobj->sd, group);
-   389		} else {
-   390			parent = kobj->sd;
-   391			kernfs_get(parent);
-   392		}
-   393	
-   394		if (!parent) {
-   395			parent = kernfs_create_dir_ns(kobj->sd, group,
-   396						  S_IRWXU | S_IRUGO | S_IXUGO,
- > 397						  uid, gid, kobj, NULL);
-   398			if (IS_ERR(parent)) {
-   399				if (PTR_ERR(parent) == -EEXIST)
-   400					sysfs_warn_dup(kobj->sd, group);
-   401				return PTR_ERR(parent);
-   402			}
-   403	
-   404			kernfs_get(parent);
-   405		}
-   406	
-   407		kobject_get_ownership(kobj, &uid, &gid);
-   408		error = sysfs_add_file_mode_ns(parent, attr, attr->mode, uid, gid,
-   409					       NULL);
-   410		kernfs_put(parent);
-   411	
-   412		return error;
-   413	}
-   414	EXPORT_SYMBOL_GPL(sysfs_add_file_to_group);
-   415	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102322
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9342248
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9342438
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] Networking sctp-auth: sockopts test: /usr/bin/dnf=
+ install -y lksctp-tools-devel gcc file /boot/config-6.5.0 is not owned by =
+any package-modules-extra-file /boot/config-6.5.0 is not owned by any packa=
+ge
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/merge_requests/2395
+            Affected tests:
+                 aarch64 - Networking sctp-auth: sockopts test
+                 ppc64le - Networking sctp-auth: sockopts test
+                   s390x - Networking sctp-auth: sockopts test
+                  x86_64 - Networking sctp-auth: sockopts test
+                  x86_64 (debug) - Networking sctp-auth: sockopts test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
