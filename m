@@ -1,143 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DF51846;
-	Thu, 31 Aug 2023 05:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693460433; x=1724996433;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SHvOXGkPw3yE4XyDCe8NvC7RTlByibkXrEbveLr96Xk=;
-  b=C9jeae/z/cBI1MYicpV+0ERafHUlCmuTxndsIcrFx2dRDSnzpitVcyxG
-   Nf6tTKYkPnAbJm12W5iKS0jITevRGSK+XbeQruvblp1NuXTdU2GS9pBx5
-   rZ4WTIZh64m8OrZ/1skn24OiI2uX7HB2Nv+N0Uf4DejjiZC8+cq6NTZNv
-   oKMPycN81b9nVgXWjfXYi7gE7UcS2X5X1CChcmAtTdsrs1+uiX3OI9ebf
-   gqvypIYk8msn9craX1h75935Tc40FnCMPr9v7TIE2KLHSa7gJbZrqe9Wa
-   wXCIFDNnkQsIeI3WY+lvAzJypyX6Rz/XqeynICQtrz8XtgdvJ2uubVSzx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="462198287"
-X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
-   d="scan'208";a="462198287"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 22:40:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="804803931"
-X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
-   d="scan'208";a="804803931"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Aug 2023 22:40:30 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qbaPt-000Ai3-2l;
-	Thu, 31 Aug 2023 05:40:29 +0000
-Date: Thu, 31 Aug 2023 13:40:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robertosassu:ima-evm-lsms-v2-devel-v6 23/25]
- security/integrity/evm/evm_main.c:930:5: warning: no previous prototype for
- function 'evm_inode_init_security'
-Message-ID: <202308311311.GtN4xOFb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7AC1C20
+	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 07:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693465394;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rZ5OaoIUIgLV7bxzj/REzLbtjpCdYZrVRkrwXszAwIs=;
+	b=UGaeE2TJAmU+Ln0aHLuc7cyIMTzZ6WIxYbj0+BfppSpZUgZI9vbsfTI05Kd01ly89F1por
+	Ho9lNSxBOeiI4TWksY2CImtfLUjPCLmHIWUBAiW3CmPLFHizNBshLcVBViNGUXEAknAYi1
+	q4QO39sewLtM1CMhd5ZEbcvDlLMdYxA=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-2vJSX1LYPKe6WaTNOKq8bw-1; Thu, 31 Aug 2023 03:01:25 -0400
+X-MC-Unique: 2vJSX1LYPKe6WaTNOKq8bw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDF113C0F697
+	for <llvm@lists.linux.dev>; Thu, 31 Aug 2023 07:01:24 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B3E3FC15BAE;
+	Thu, 31 Aug 2023 07:01:24 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 20 of 271): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 4fb0dacb)
+Date: Thu, 31 Aug 2023 07:01:24 -0000
+To: haliu@redhat.com, yinxu@redhat.com, yiyan@redhat.com, llvm@lists.linux.dev,
+ zlang@redhat.com, bhe@redhat.com, xiawu@redhat.com, jiji@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <03010.123083103012500533@us-mta-671.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/robertosassu/linux ima-evm-lsms-v2-devel-v6
-head:   8d3db5840032b2f14a363ad273bc13baeaec3cc5
-commit: 07adc69271289ead1d641de66c78e118ce1e4672 [23/25] evm: Move to LSM infrastructure
-config: hexagon-randconfig-001-20230831 (https://download.01.org/0day-ci/archive/20230831/202308311311.GtN4xOFb-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308311311.GtN4xOFb-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308311311.GtN4xOFb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> security/integrity/evm/evm_main.c:930:5: warning: no previous prototype for function 'evm_inode_init_security' [-Wmissing-prototypes]
-   int evm_inode_init_security(struct inode *inode, struct inode *dir,
-       ^
-   security/integrity/evm/evm_main.c:930:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int evm_inode_init_security(struct inode *inode, struct inode *dir,
-   ^
-   static 
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/evm_inode_init_security +930 security/integrity/evm/evm_main.c
+Kernel information:
+    Commit message: Merge tag 'sound-6.6-rc1' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/tiwai/sound
 
-66dbc325afcef9 Mimi Zohar            2011-03-15  926  
-cb72318069d5e9 Mimi Zohar            2011-03-09  927  /*
-9eea2904292c2d Roberto Sassu         2021-05-14  928   * evm_inode_init_security - initializes security.evm HMAC value
-cb72318069d5e9 Mimi Zohar            2011-03-09  929   */
-6db7d1dee80039 Roberto Sassu         2023-06-10 @930  int evm_inode_init_security(struct inode *inode, struct inode *dir,
-6db7d1dee80039 Roberto Sassu         2023-06-10  931  			    const struct qstr *qstr, struct xattr *xattrs,
-6db7d1dee80039 Roberto Sassu         2023-06-10  932  			    int *xattr_count)
-cb72318069d5e9 Mimi Zohar            2011-03-09  933  {
-650b29dbdf2caf Thiago Jung Bauermann 2019-06-11  934  	struct evm_xattr *xattr_data;
-c31288e56c1a7b Roberto Sassu         2023-06-10  935  	struct xattr *xattr, *evm_xattr;
-c31288e56c1a7b Roberto Sassu         2023-06-10  936  	bool evm_protected_xattrs = false;
-cb72318069d5e9 Mimi Zohar            2011-03-09  937  	int rc;
-cb72318069d5e9 Mimi Zohar            2011-03-09  938  
-c31288e56c1a7b Roberto Sassu         2023-06-10  939  	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs)
-c31288e56c1a7b Roberto Sassu         2023-06-10  940  		return 0;
-c31288e56c1a7b Roberto Sassu         2023-06-10  941  
-c31288e56c1a7b Roberto Sassu         2023-06-10  942  	/*
-c31288e56c1a7b Roberto Sassu         2023-06-10  943  	 * security_inode_init_security() makes sure that the xattrs array is
-c31288e56c1a7b Roberto Sassu         2023-06-10  944  	 * contiguous, there is enough space for security.evm, and that there is
-c31288e56c1a7b Roberto Sassu         2023-06-10  945  	 * a terminator at the end of the array.
-c31288e56c1a7b Roberto Sassu         2023-06-10  946  	 */
-c31288e56c1a7b Roberto Sassu         2023-06-10  947  	for (xattr = xattrs; xattr->name; xattr++) {
-c31288e56c1a7b Roberto Sassu         2023-06-10  948  		if (evm_protected_xattr(xattr->name))
-c31288e56c1a7b Roberto Sassu         2023-06-10  949  			evm_protected_xattrs = true;
-c31288e56c1a7b Roberto Sassu         2023-06-10  950  	}
-c31288e56c1a7b Roberto Sassu         2023-06-10  951  
-c31288e56c1a7b Roberto Sassu         2023-06-10  952  	/* EVM xattr not needed. */
-c31288e56c1a7b Roberto Sassu         2023-06-10  953  	if (!evm_protected_xattrs)
-5a4730ba9517cf Mimi Zohar            2011-08-11  954  		return 0;
-cb72318069d5e9 Mimi Zohar            2011-03-09  955  
-6db7d1dee80039 Roberto Sassu         2023-06-10  956  	evm_xattr = lsm_get_xattr_slot(xattrs, xattr_count);
-c31288e56c1a7b Roberto Sassu         2023-06-10  957  	/*
-c31288e56c1a7b Roberto Sassu         2023-06-10  958  	 * Array terminator (xattr name = NULL) must be the first non-filled
-c31288e56c1a7b Roberto Sassu         2023-06-10  959  	 * xattr slot.
-c31288e56c1a7b Roberto Sassu         2023-06-10  960  	 */
-c31288e56c1a7b Roberto Sassu         2023-06-10  961  	WARN_ONCE(evm_xattr != xattr,
-c31288e56c1a7b Roberto Sassu         2023-06-10  962  		  "%s: xattrs terminator is not the first non-filled slot\n",
-c31288e56c1a7b Roberto Sassu         2023-06-10  963  		  __func__);
-6db7d1dee80039 Roberto Sassu         2023-06-10  964  
-cb72318069d5e9 Mimi Zohar            2011-03-09  965  	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
-cb72318069d5e9 Mimi Zohar            2011-03-09  966  	if (!xattr_data)
-cb72318069d5e9 Mimi Zohar            2011-03-09  967  		return -ENOMEM;
-cb72318069d5e9 Mimi Zohar            2011-03-09  968  
-650b29dbdf2caf Thiago Jung Bauermann 2019-06-11  969  	xattr_data->data.type = EVM_XATTR_HMAC;
-6db7d1dee80039 Roberto Sassu         2023-06-10  970  	rc = evm_init_hmac(inode, xattrs, xattr_data->digest);
-cb72318069d5e9 Mimi Zohar            2011-03-09  971  	if (rc < 0)
-cb72318069d5e9 Mimi Zohar            2011-03-09  972  		goto out;
-cb72318069d5e9 Mimi Zohar            2011-03-09  973  
-cb72318069d5e9 Mimi Zohar            2011-03-09  974  	evm_xattr->value = xattr_data;
-cb72318069d5e9 Mimi Zohar            2011-03-09  975  	evm_xattr->value_len = sizeof(*xattr_data);
-9548906b2bb7ff Tetsuo Handa          2013-07-25  976  	evm_xattr->name = XATTR_EVM_SUFFIX;
-cb72318069d5e9 Mimi Zohar            2011-03-09  977  	return 0;
-cb72318069d5e9 Mimi Zohar            2011-03-09  978  out:
-cb72318069d5e9 Mimi Zohar            2011-03-09  979  	kfree(xattr_data);
-cb72318069d5e9 Mimi Zohar            2011-03-09  980  	return rc;
-cb72318069d5e9 Mimi Zohar            2011-03-09  981  }
-cb72318069d5e9 Mimi Zohar            2011-03-09  982  EXPORT_SYMBOL_GPL(evm_inode_init_security);
-cb72318069d5e9 Mimi Zohar            2011-03-09  983  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102307
 
-:::::: The code at line 930 was first introduced by commit
-:::::: 6db7d1dee8003921b353d7e613471fe8995f46b5 evm: Align evm_inode_init_security() definition with LSM infrastructure
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338546
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+         ppc64le - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338047
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+         ppc64le - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338064
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
+         ppc64le - kdump - file-load
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338065
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
+           s390x - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338263
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+          x86_64 - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338473
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338212
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+          x86_64 (debug) - Networking sctp-auth: sockopts test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9338218
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Setup
 
-:::::: TO: Roberto Sassu <roberto.sassu@huawei.com>
-:::::: CC: Paul Moore <paul@paul-moore.com>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
