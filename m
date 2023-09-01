@@ -1,45 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8136820E1;
-	Fri,  1 Sep 2023 17:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7618BC136;
+	Fri,  1 Sep 2023 20:09:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693588526; x=1725124526;
+  t=1693598996; x=1725134996;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=6kECMR3TsoTyX6e3AyBY/WAprVQoVnA4ZZcOQNyGCpQ=;
-  b=minA6nIixmSkPjkIIbMdX74WMFGbn+TuOhijQPN4MDzzuOukT3sBdhot
-   t70Rmijp+zOfPlIcSp+WZsYHMGcm8BakFcSVMXPKNA0OAn0h9CiNk1DMg
-   vGsKpqe89fySJ/sw93+ZzDHpQr9ErgYU4QtoUDAzc1UZ8VtwRTnMgXyOF
-   TZsWwNu6JxCRI7TNbXmFy2TOOY0TlpeVug17cZQoZRzebRn4Cs6yNOe6V
-   QhZmhjvRSoZNAvbRfv1CVDB5/+/N7OvznwIII2ozcfCz9yRYNwnt7atfT
-   rZxqnwMLo4TYg9N7oVt8Ryz03Ygm40bsrQgii1FCavmWEAq/NSgb57cUT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="361290923"
+  bh=vOvv4kcnqTdtoCPK+gY/aJlakeUeKn0WaUK1Kp42IrU=;
+  b=cIcUF80qJNCtJSuUun1LyxjbrnHCkqsDifc9Lf5gk2n+GR84Q2AvXRtq
+   CDlt0cY/IwyqOxLpB7of+eBLwpkYIIGwsBnkWIWOTr4w18D1vM+AsT2bZ
+   dgAYiwQsj7xdpXo7wjy5XGCw1A+YQ9ZPgQkadQMwSqZd/xVjYk4qVC7Xu
+   iF6kxcsd8iWCttLqatuCpk+fUrM+MtR5FCQ78Y0Qs+qw0nORWCtJ21BnM
+   9yGUBAY+nvrR7AqqlJHtCEd1N4fDSPlT+zaVd9pRRjtQBY496gw/hryWX
+   NIhwLK//HHcmhubzGJtnJrNbpIa60VGtvCe7Xd47sdmbL5vjR75ru8L9h
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="366528885"
 X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
-   d="scan'208";a="361290923"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 10:14:50 -0700
+   d="scan'208";a="366528885"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 13:09:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="883251213"
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="913811051"
 X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
-   d="scan'208";a="883251213"
+   d="scan'208";a="913811051"
 Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Sep 2023 10:14:50 -0700
+  by orsmga005.jf.intel.com with ESMTP; 01 Sep 2023 13:09:52 -0700
 Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qc7jK-0001VW-22;
-	Fri, 01 Sep 2023 17:14:46 +0000
-Date: Sat, 2 Sep 2023 01:14:20 +0800
+	id 1qcASk-0001bn-0D;
+	Fri, 01 Sep 2023 20:09:50 +0000
+Date: Sat, 2 Sep 2023 04:09:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Earl Chew <earl.chew@yahoo.ca>, linux-kernel@vger.kernel.org,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org
+To: Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de, daniel@ffwll.ch,
+	javierm@redhat.com, sam@ravnborg.org, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peter@hurleysoftware.com, earl.chew@yahoo.ca
-Subject: Re: [PATCH 2/3] tty: Serialise racing tiocspgrp() callers
-Message-ID: <202309020016.GL35iYlP-lkp@intel.com>
-References: <20230901015030.2469062-3-earl.chew@yahoo.ca>
+	linux-kernel@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH 4/7] fbdev/core: Move logo functions into separate source
+ file
+Message-ID: <202309020305.jCImaNGf-lkp@intel.com>
+References: <20230829142109.4521-5-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,93 +51,149 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230901015030.2469062-3-earl.chew@yahoo.ca>
+In-Reply-To: <20230829142109.4521-5-tzimmermann@suse.de>
 
-Hi Earl,
+Hi Thomas,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus linus/master v6.5 next-20230831]
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master next-20230831]
+[cannot apply to v6.5]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Earl-Chew/tty-Serialise-racing-tiocspgrp-callers/20230901-095411
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20230901015030.2469062-3-earl.chew%40yahoo.ca
-patch subject: [PATCH 2/3] tty: Serialise racing tiocspgrp() callers
-config: mips-randconfig-r025-20230901 (https://download.01.org/0day-ci/archive/20230902/202309020016.GL35iYlP-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230902/202309020016.GL35iYlP-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/fbdev-au1200fb-Do-not-display-boot-up-logo/20230829-222419
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230829142109.4521-5-tzimmermann%40suse.de
+patch subject: [PATCH 4/7] fbdev/core: Move logo functions into separate source file
+config: mips-rs90_defconfig (https://download.01.org/0day-ci/archive/20230902/202309020305.jCImaNGf-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230902/202309020305.jCImaNGf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309020016.GL35iYlP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309020305.jCImaNGf-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/tty/tty_jobctrl.c:35: warning: Function parameter or member 'ctrl_lock' not described in '__tty_check_change_locked'
->> drivers/tty/tty_jobctrl.c:35: warning: expecting prototype for __tty_check_change(). Prototype was for __tty_check_change_locked() instead
+>> drivers/video/fbdev/core/fb_logo.c:433:5: warning: no previous prototype for function 'fb_prepare_logo' [-Wmissing-prototypes]
+     433 | int fb_prepare_logo(struct fb_info *info, int rotate)
+         |     ^
+   drivers/video/fbdev/core/fb_logo.c:433:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     433 | int fb_prepare_logo(struct fb_info *info, int rotate)
+         | ^
+         | static 
+>> drivers/video/fbdev/core/fb_logo.c:506:5: warning: no previous prototype for function 'fb_show_logo' [-Wmissing-prototypes]
+     506 | int fb_show_logo(struct fb_info *info, int rotate)
+         |     ^
+   drivers/video/fbdev/core/fb_logo.c:506:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     506 | int fb_show_logo(struct fb_info *info, int rotate)
+         | ^
+         | static 
+   2 warnings generated.
 
 
-vim +35 drivers/tty/tty_jobctrl.c
+vim +/fb_prepare_logo +433 drivers/video/fbdev/core/fb_logo.c
 
-a1235b3eb10086b Nicolas Pitre 2017-04-12  21  
-a1235b3eb10086b Nicolas Pitre 2017-04-12  22  /**
-6ef6785d781e9ce Lee Jones     2021-05-20  23   *	__tty_check_change	-	check for POSIX terminal changes
-a1235b3eb10086b Nicolas Pitre 2017-04-12  24   *	@tty: tty to check
-bc38fe241bc320f Lee Jones     2020-11-04  25   *	@sig: signal to send
-a1235b3eb10086b Nicolas Pitre 2017-04-12  26   *
-a1235b3eb10086b Nicolas Pitre 2017-04-12  27   *	If we try to write to, or set the state of, a terminal and we're
-a1235b3eb10086b Nicolas Pitre 2017-04-12  28   *	not in the foreground, send a SIGTTOU.  If the signal is blocked or
-a1235b3eb10086b Nicolas Pitre 2017-04-12  29   *	ignored, go ahead and perform the operation.  (POSIX 7.2)
-a1235b3eb10086b Nicolas Pitre 2017-04-12  30   *
-64d608db38ffc0c Jiri Slaby    2021-05-05  31   *	Locking: ctrl.lock
-a1235b3eb10086b Nicolas Pitre 2017-04-12  32   */
-9aa37b12858f4bd Earl Chew     2023-08-31  33  static int __tty_check_change_locked(struct tty_struct *tty, int sig,
-9aa37b12858f4bd Earl Chew     2023-08-31  34  				     spinlock_t *ctrl_lock)
-a1235b3eb10086b Nicolas Pitre 2017-04-12 @35  {
-a1235b3eb10086b Nicolas Pitre 2017-04-12  36  	unsigned long flags;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  37  	struct pid *pgrp, *tty_pgrp;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  38  	int ret = 0;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  39  
-9aa37b12858f4bd Earl Chew     2023-08-31  40  	BUG_ON(ctrl_lock && (
-9aa37b12858f4bd Earl Chew     2023-08-31  41  	       ctrl_lock != &tty->ctrl.lock || !spin_is_locked(ctrl_lock)));
-9aa37b12858f4bd Earl Chew     2023-08-31  42  
-a1235b3eb10086b Nicolas Pitre 2017-04-12  43  	if (current->signal->tty != tty)
-a1235b3eb10086b Nicolas Pitre 2017-04-12  44  		return 0;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  45  
-a1235b3eb10086b Nicolas Pitre 2017-04-12  46  	rcu_read_lock();
-a1235b3eb10086b Nicolas Pitre 2017-04-12  47  	pgrp = task_pgrp(current);
-a1235b3eb10086b Nicolas Pitre 2017-04-12  48  
-9aa37b12858f4bd Earl Chew     2023-08-31  49  	if (!ctrl_lock)
-64d608db38ffc0c Jiri Slaby    2021-05-05  50  		spin_lock_irqsave(&tty->ctrl.lock, flags);
-64d608db38ffc0c Jiri Slaby    2021-05-05  51  	tty_pgrp = tty->ctrl.pgrp;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  52  
-cf90c06f8115016 David Emett   2019-03-10  53  	if (tty_pgrp && pgrp != tty_pgrp) {
-a1235b3eb10086b Nicolas Pitre 2017-04-12  54  		if (is_ignored(sig)) {
-a1235b3eb10086b Nicolas Pitre 2017-04-12  55  			if (sig == SIGTTIN)
-a1235b3eb10086b Nicolas Pitre 2017-04-12  56  				ret = -EIO;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  57  		} else if (is_current_pgrp_orphaned())
-a1235b3eb10086b Nicolas Pitre 2017-04-12  58  			ret = -EIO;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  59  		else {
-a1235b3eb10086b Nicolas Pitre 2017-04-12  60  			kill_pgrp(pgrp, sig, 1);
-a1235b3eb10086b Nicolas Pitre 2017-04-12  61  			set_thread_flag(TIF_SIGPENDING);
-a1235b3eb10086b Nicolas Pitre 2017-04-12  62  			ret = -ERESTARTSYS;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  63  		}
-a1235b3eb10086b Nicolas Pitre 2017-04-12  64  	}
-9aa37b12858f4bd Earl Chew     2023-08-31  65  	if (!ctrl_lock)
-03beb0c7227a52e Earl Chew     2023-08-31  66  		spin_unlock_irqrestore(&tty->ctrl.lock, flags);
-a1235b3eb10086b Nicolas Pitre 2017-04-12  67  	rcu_read_unlock();
-a1235b3eb10086b Nicolas Pitre 2017-04-12  68  
-a1235b3eb10086b Nicolas Pitre 2017-04-12  69  	if (!tty_pgrp)
-a1235b3eb10086b Nicolas Pitre 2017-04-12  70  		tty_warn(tty, "sig=%d, tty->pgrp == NULL!\n", sig);
-a1235b3eb10086b Nicolas Pitre 2017-04-12  71  
-a1235b3eb10086b Nicolas Pitre 2017-04-12  72  	return ret;
-a1235b3eb10086b Nicolas Pitre 2017-04-12  73  }
-a1235b3eb10086b Nicolas Pitre 2017-04-12  74  
+   432	
+ > 433	int fb_prepare_logo(struct fb_info *info, int rotate)
+   434	{
+   435		int depth = fb_get_color_depth(&info->var, &info->fix);
+   436		unsigned int yres;
+   437		int height;
+   438	
+   439		memset(&fb_logo, 0, sizeof(struct logo_data));
+   440	
+   441		if (info->flags & FBINFO_MISC_TILEBLITTING ||
+   442		    info->fbops->owner || !fb_logo_count)
+   443			return 0;
+   444	
+   445		if (info->fix.visual == FB_VISUAL_DIRECTCOLOR) {
+   446			depth = info->var.blue.length;
+   447			if (info->var.red.length < depth)
+   448				depth = info->var.red.length;
+   449			if (info->var.green.length < depth)
+   450				depth = info->var.green.length;
+   451		}
+   452	
+   453		if (info->fix.visual == FB_VISUAL_STATIC_PSEUDOCOLOR && depth > 4) {
+   454			/* assume console colormap */
+   455			depth = 4;
+   456		}
+   457	
+   458		/* Return if no suitable logo was found */
+   459		fb_logo.logo = fb_find_logo(depth);
+   460	
+   461		if (!fb_logo.logo)
+   462			return 0;
+   463	
+   464		if (rotate == FB_ROTATE_UR || rotate == FB_ROTATE_UD)
+   465			yres = info->var.yres;
+   466		else
+   467			yres = info->var.xres;
+   468	
+   469		if (fb_logo.logo->height > yres) {
+   470			fb_logo.logo = NULL;
+   471			return 0;
+   472		}
+   473	
+   474		/* What depth we asked for might be different from what we get */
+   475		if (fb_logo.logo->type == LINUX_LOGO_CLUT224)
+   476			fb_logo.depth = 8;
+   477		else if (fb_logo.logo->type == LINUX_LOGO_VGA16)
+   478			fb_logo.depth = 4;
+   479		else
+   480			fb_logo.depth = 1;
+   481	
+   482	
+   483		if (fb_logo.depth > 4 && depth > 4) {
+   484			switch (info->fix.visual) {
+   485			case FB_VISUAL_TRUECOLOR:
+   486				fb_logo.needs_truepalette = 1;
+   487				break;
+   488			case FB_VISUAL_DIRECTCOLOR:
+   489				fb_logo.needs_directpalette = 1;
+   490				fb_logo.needs_cmapreset = 1;
+   491				break;
+   492			case FB_VISUAL_PSEUDOCOLOR:
+   493				fb_logo.needs_cmapreset = 1;
+   494				break;
+   495			}
+   496		}
+   497	
+   498		height = fb_logo.logo->height;
+   499		if (fb_center_logo)
+   500			height += (yres - fb_logo.logo->height) / 2;
+   501	
+   502		return fb_prepare_extra_logos(info, height, yres);
+   503	}
+   504	EXPORT_SYMBOL(fb_prepare_logo);
+   505	
+ > 506	int fb_show_logo(struct fb_info *info, int rotate)
+   507	{
+   508		unsigned int count;
+   509		int y;
+   510	
+   511		if (!fb_logo_count)
+   512			return 0;
+   513	
+   514		count = fb_logo_count < 0 ? num_online_cpus() : fb_logo_count;
+   515		y = fb_show_logo_line(info, rotate, fb_logo.logo, 0, count);
+   516		y = fb_show_extra_logos(info, y, rotate);
+   517	
+   518		return y;
+   519	}
+   520	EXPORT_SYMBOL(fb_show_logo);
+   521	#else
+   522	int fb_prepare_logo(struct fb_info *info, int rotate)
+   523	{
+   524		return 0;
+   525	}
+   526	EXPORT_SYMBOL(fb_prepare_logo);
+   527	
 
 -- 
 0-DAY CI Kernel Test Service
