@@ -1,152 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF27399
-	for <llvm@lists.linux.dev>; Fri,  1 Sep 2023 09:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693559424;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=sbB47KiN++7jjVx/0y0XMGC0uGfpz7xDdcnLi/yClDQ=;
-	b=OXCGemE/hVlZIWHcKnoia+BS1Yj4HYgg6RTmjD+bKNCla2OV3DelA7CNQmsxiV1KrECqkF
-	vhegqrdHiXO9lEWKgkUkzt7KimHoAhzgozXO32V5RtTVylEp6aU1G/owXJX6MGaf33L0aO
-	nWtgVRkP8X3/exnkrUYyNQXttCSy3zU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-255-d5E-ulzdNjWeA6c4cKdj6Q-1; Fri, 01 Sep 2023 05:10:22 -0400
-X-MC-Unique: d5E-ulzdNjWeA6c4cKdj6Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5A7D85CBE6
-	for <llvm@lists.linux.dev>; Fri,  1 Sep 2023 09:10:21 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9415B40C6F4C;
-	Fri,  1 Sep 2023 09:10:21 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 8 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, 99d99825)
-Date: Fri, 01 Sep 2023 09:10:21 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F87AD37;
+	Fri,  1 Sep 2023 12:05:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693569939; x=1725105939;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=caNakZH9YjCnGo0l+D2FWgRJLy+hkGbPW4FWIljcbcw=;
+  b=QR088QqWkyWQ81Rt9Bl1El5aHPMNt2sXBFBTRxwsHAekBha+KHEqqQ6D
+   istoHENNJizJQf3SFPQifX5DAilnHh2bIcJCYnRNrnWKLk42vCEwx//ng
+   o6K9K1cOkt+vQBLjWKRK9vzTqe5ssxRAowyNDypTiSwurBbKwRu3RRkH5
+   Wb6CXaxBpYILEqzbcG90uSphJwdcURQvjRuXJehyp5RSHMHSsRVssKBDU
+   YAVSVNeiNVGlGMDjiUko4GUqhmQXnYkBjPnfZRBzNz/crZ/Jxak0HYF0d
+   zvqiy/Z9FGL7etAUocv+vH08PpL1Dpz1/fMPMVgwn9yvocya8j0UVqycb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="407197706"
+X-IronPort-AV: E=Sophos;i="6.02,219,1688454000"; 
+   d="scan'208";a="407197706"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 05:05:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="854688044"
+X-IronPort-AV: E=Sophos;i="6.02,219,1688454000"; 
+   d="scan'208";a="854688044"
+Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 01 Sep 2023 05:05:37 -0700
+Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qc2u7-0001G5-13;
+	Fri, 01 Sep 2023 12:05:35 +0000
+Date: Fri, 1 Sep 2023 20:04:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Herring <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:for-kernelci 5/8]
+ drivers/regulator/da9121-regulator.c:1133:24: warning: cast to smaller
+ integer type 'enum da9121_subvariant' from 'const void *'
+Message-ID: <202309011945.r85ZYDiY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <64761.123090105102200251@us-mta-255.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
+head:   a143793949161ccf952d0b50ee37e442cf8c02e9
+commit: 0be56945298277377b33c8b380b610d449ec9db7 [5/8] Use of_device_get_match_data
+config: x86_64-buildonly-randconfig-001-20230901 (https://download.01.org/0day-ci/archive/20230901/202309011945.r85ZYDiY-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230901/202309011945.r85ZYDiY-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309011945.r85ZYDiY-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.6-1' of git://git.linux-nfs.org/pr=
-ojects/anna/linux-nfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102557
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9354016
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         ppc64le - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9354452
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9354247
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9354254
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9354300
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9354307
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9354050
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
+>> drivers/regulator/da9121-regulator.c:1133:24: warning: cast to smaller integer type 'enum da9121_subvariant' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           chip->subvariant_id = (enum da9121_subvariant)i2c_get_match_data(i2c);
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
+vim +1133 drivers/regulator/da9121-regulator.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1119	
+  1120	static int da9121_i2c_probe(struct i2c_client *i2c)
+  1121	{
+  1122		struct da9121 *chip;
+  1123		const int mask_all[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
+  1124		int ret = 0;
+  1125	
+  1126		chip = devm_kzalloc(&i2c->dev, sizeof(struct da9121), GFP_KERNEL);
+  1127		if (!chip) {
+  1128			ret = -ENOMEM;
+  1129			goto error;
+  1130		}
+  1131	
+  1132		chip->pdata = i2c->dev.platform_data;
+> 1133		chip->subvariant_id = (enum da9121_subvariant)i2c_get_match_data(i2c);
+  1134	
+  1135		ret = da9121_assign_chip_model(i2c, chip);
+  1136		if (ret < 0)
+  1137			goto error;
+  1138	
+  1139		ret = regmap_bulk_write(chip->regmap, DA9121_REG_SYS_MASK_0, mask_all, 4);
+  1140		if (ret != 0) {
+  1141			dev_err(chip->dev, "Failed to set IRQ masks: %d\n", ret);
+  1142			goto error;
+  1143		}
+  1144	
+  1145		ret = da9121_set_regulator_config(chip);
+  1146		if (ret < 0)
+  1147			goto error;
+  1148	
+  1149		ret = da9121_config_irq(i2c, chip);
+  1150	
+  1151	error:
+  1152		return ret;
+  1153	}
+  1154	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
