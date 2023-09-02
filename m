@@ -1,134 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D545919A
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 02:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693621827;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=aiDC/HHrHzL84SKy/Lces7Q3HGf7hP2vWk7wZhZRkMI=;
-	b=Xqx24vK+u8lnmQxWAi5VnZpdACWijmJ92iulv+Fxm0/YjeN2H6mcFVBk+lXAxtfaSW8tWv
-	gX+W2o5Lad5BsxMvXR9j/xEyT5gVsIdvcT1lL7Nyx9egqqOu6BaK8zj72NFAyq83NiPFbf
-	Pd0uU+5yjtH+R8MYHPil1R2JfSD7edc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-691-lmlU773eMg-5BHE9uRGOkg-1; Fri, 01 Sep 2023 22:30:26 -0400
-X-MC-Unique: lmlU773eMg-5BHE9uRGOkg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EFC1B800193
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 02:30:25 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C5C7B1005B8C;
-	Sat,  2 Sep 2023 02:30:25 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 8 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, e0152e74)
-Date: Sat, 02 Sep 2023 02:30:25 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39FFF17D5;
+	Sat,  2 Sep 2023 03:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693624208; x=1725160208;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RQYMw3C5Ao+7QRxm40nkIsp0UEDewAvQ/88diMLzTus=;
+  b=R/d9YsD5kF4rJDoUUp+lR101YUTZ1KNG9TMJts1e0RuyltuVVsIOWJHn
+   ZWWHUb86rgx/7c0DgwD1ELZWm0UwpUy5GvSkbha1Uv7FiTSEBi2H5g3Ax
+   VQueKUVNoMmkb9qyejkf9AGhrcQzNtqA4ESbmi3XccEO1CQ1nIQmr1p55
+   y1BvELtzi1gNpwJCKhJyvhMTRQ5PVKSLpQxnT+z4tRnerqAtUCJDW0JBQ
+   sGE6Db/REz70NOLxNhwptBOwIhpaCc7pppG0YllqCJM+t02ZKsqn52nVJ
+   gU83PLsbHzS4I6qvRrgbTkR/jZKuImho4exAW1P/gO1wyyaGza1G7LEe8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="380133235"
+X-IronPort-AV: E=Sophos;i="6.02,221,1688454000"; 
+   d="scan'208";a="380133235"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 20:10:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="805652530"
+X-IronPort-AV: E=Sophos;i="6.02,221,1688454000"; 
+   d="scan'208";a="805652530"
+Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Sep 2023 20:10:04 -0700
+Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qcH1O-0001ts-0X;
+	Sat, 02 Sep 2023 03:10:02 +0000
+Date: Sat, 2 Sep 2023 11:09:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aaron Lu <aaron.lu@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [aaronlu:sis_profile 1/1] kernel/sched/fair.c:7127:28: warning:
+ unknown attribute 'noipa' ignored
+Message-ID: <202309021102.1PYSPEeh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <52206.123090122302600334@us-mta-691.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/aaronlu/linux.git sis_profile
+head:   fc546923e1057cfeec0069d46f12fdabcb0d31c9
+commit: fc546923e1057cfeec0069d46f12fdabcb0d31c9 [1/1] profile select_idle_sibling()
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230902/202309021102.1PYSPEeh-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230902/202309021102.1PYSPEeh-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309021102.1PYSPEeh-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'riscv-for-linus-6.6-mw1' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/riscv/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102677
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9360128
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9360137
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
+>> kernel/sched/fair.c:7127:28: warning: unknown attribute 'noipa' ignored [-Wunknown-attributes]
+   static int __attribute__ ((noipa)) select_idle_sibling(struct task_struct *p, int prev, int target)
+                              ^~~~~
+   1 warning generated.
 
 
+vim +/noipa +7127 kernel/sched/fair.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  7123	
+  7124	/*
+  7125	 * Try and locate an idle core/thread in the LLC cache domain.
+  7126	 */
+> 7127	static int __attribute__ ((noipa)) select_idle_sibling(struct task_struct *p, int prev, int target)
+  7128	{
+  7129		bool has_idle_core = false;
+  7130		struct sched_domain *sd;
+  7131		unsigned long task_util, util_min, util_max;
+  7132		int i, recent_used_cpu;
+  7133	
+  7134		/*
+  7135		 * On asymmetric system, update task utilization because we will check
+  7136		 * that the task fits with cpu's capacity.
+  7137		 */
+  7138		if (sched_asym_cpucap_active()) {
+  7139			sync_entity_load_avg(&p->se);
+  7140			task_util = task_util_est(p);
+  7141			util_min = uclamp_eff_value(p, UCLAMP_MIN);
+  7142			util_max = uclamp_eff_value(p, UCLAMP_MAX);
+  7143		}
+  7144	
+  7145		/*
+  7146		 * per-cpu select_rq_mask usage
+  7147		 */
+  7148		lockdep_assert_irqs_disabled();
+  7149	
+  7150		if ((available_idle_cpu(target) || sched_idle_cpu(target)) &&
+  7151		    asym_fits_cpu(task_util, util_min, util_max, target))
+  7152			return target | CPU_TARGET;
+  7153	
+  7154		/*
+  7155		 * If the previous CPU is cache affine and idle, don't be stupid:
+  7156		 */
+  7157		if (prev != target && cpus_share_cache(prev, target) &&
+  7158		    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
+  7159		    asym_fits_cpu(task_util, util_min, util_max, prev))
+  7160			return prev | CPU_PREV;
+  7161	
+  7162		/*
+  7163		 * Allow a per-cpu kthread to stack with the wakee if the
+  7164		 * kworker thread and the tasks previous CPUs are the same.
+  7165		 * The assumption is that the wakee queued work for the
+  7166		 * per-cpu kthread that is now complete and the wakeup is
+  7167		 * essentially a sync wakeup. An obvious example of this
+  7168		 * pattern is IO completions.
+  7169		 */
+  7170		if (is_per_cpu_kthread(current) &&
+  7171		    in_task() &&
+  7172		    prev == smp_processor_id() &&
+  7173		    this_rq()->nr_running <= 1 &&
+  7174		    asym_fits_cpu(task_util, util_min, util_max, prev)) {
+  7175			return prev;
+  7176		}
+  7177	
+  7178		/* Check a recently used CPU as a potential idle candidate: */
+  7179		recent_used_cpu = p->recent_used_cpu;
+  7180		p->recent_used_cpu = prev;
+  7181		if (recent_used_cpu != prev &&
+  7182		    recent_used_cpu != target &&
+  7183		    cpus_share_cache(recent_used_cpu, target) &&
+  7184		    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
+  7185		    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
+  7186		    asym_fits_cpu(task_util, util_min, util_max, recent_used_cpu))
+  7187			return recent_used_cpu | CPU_RECENT;
+  7188	
+  7189		/*
+  7190		 * For asymmetric CPU capacity systems, our domain of interest is
+  7191		 * sd_asym_cpucapacity rather than sd_llc.
+  7192		 */
+  7193		if (sched_asym_cpucap_active()) {
+  7194			sd = rcu_dereference(per_cpu(sd_asym_cpucapacity, target));
+  7195			/*
+  7196			 * On an asymmetric CPU capacity system where an exclusive
+  7197			 * cpuset defines a symmetric island (i.e. one unique
+  7198			 * capacity_orig value through the cpuset), the key will be set
+  7199			 * but the CPUs within that cpuset will not have a domain with
+  7200			 * SD_ASYM_CPUCAPACITY. These should follow the usual symmetric
+  7201			 * capacity path.
+  7202			 */
+  7203			if (sd) {
+  7204				i = select_idle_capacity(p, sd, target);
+  7205				return ((unsigned)i < nr_cpumask_bits) ? i : target;
+  7206			}
+  7207		}
+  7208	
+  7209		sd = rcu_dereference(per_cpu(sd_llc, target));
+  7210		if (!sd)
+  7211			return target;
+  7212	
+  7213		if (sched_smt_active()) {
+  7214			has_idle_core = test_idle_cores(target);
+  7215	
+  7216			if (!has_idle_core && cpus_share_cache(prev, target)) {
+  7217				i = select_idle_smt(p, prev);
+  7218				if ((unsigned int)i < nr_cpumask_bits)
+  7219					return i | CPU_IDLE_SMT;
+  7220			}
+  7221		}
+  7222	
+  7223		i = select_idle_cpu(p, sd, has_idle_core, target);
+  7224		if ((unsigned)i < nr_cpumask_bits)
+  7225			return i | CPU_IDLE_CPU;
+  7226	
+  7227		return target | CPU_FALLBACK;
+  7228	}
+  7229	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
