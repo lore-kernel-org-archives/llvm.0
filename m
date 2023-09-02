@@ -1,43 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47F719C
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 00:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D339A17C8
+	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 01:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693615885;
+	s=mimecast20190719; t=1693618883;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZfcxoBbv2w5W5LIU3M9Cf4i9xJ3QtLLRlc5R48MOdTM=;
-	b=FVYv3WRNNSBZGlzlMLX8qRAevzu8mhSRL48X+R98dirZ0dDmTKzqZL007JQlKzKGMdvlFG
-	NTcpT8+xg+sI7HLL2FtTeVL2zmlIuOFLvO0yX3lx929ekgCr+OzVsAOQA06PGKK4/8yM/f
-	FFzClv/EPTQnH4HpN1vGT4jX5oMAPk4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-wMtFEA03PJ-AM9fAbHe0NA-1; Fri, 01 Sep 2023 20:51:24 -0400
-X-MC-Unique: wMtFEA03PJ-AM9fAbHe0NA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	bh=96QSdr2cSzFTJP7X0hR3ETm6gGK3ecFtPuSF3QpwbcU=;
+	b=F+SmFrT++4fKNb7E0o8EyOER6b3RXy59ftFYSKVZkZT8dCkMJx0dngICFIAYKmNBMcn9LS
+	OJwRrKelcznvXEn0pkXUWHLT5Jm/NuUR6luuQfvjOY7vp2cJeezYdxck0ZsO+ilv+7ktKF
+	Jz5vBUple1wVysTxupSZKsZ+p/PyDs8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-380-K8ELSRclMDy6nuYgAaib-w-1; Fri, 01 Sep 2023 21:41:22 -0400
+X-MC-Unique: K8ELSRclMDy6nuYgAaib-w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E095110264C1
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 00:51:23 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1FD929AB452
+	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 01:41:21 +0000 (UTC)
 Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C764949310F;
-	Sat,  2 Sep 2023 00:51:23 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9F870400E410;
+	Sat,  2 Sep 2023 01:41:21 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 9 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, 1c9f8dff)
-Date: Sat, 02 Sep 2023 00:51:23 -0000
-To: llvm@lists.linux.dev, zlang@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 6 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, b84acc11)
+Date: Sat, 02 Sep 2023 01:41:21 -0000
+To: yizhan@redhat.com, llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <92468.123090120512400383@us-mta-138.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <98893.123090121412200105@us-mta-380.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,27 +52,27 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'char-misc-6.6-rc1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/gregkh/char-misc
+    Commit message: Merge tag 'fbdev-for-6.6-rc1' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/deller/linux-fbdev
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102692
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102697
 
 One or more kernel tests failed:
     Unrecognized or new issues:
+          x86_64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9365286
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/block/001
           x86_64 (debug) - POSIX pjd-fstest suites
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9364670
+9365439
                    Non-passing subtests:
                        =E2=9D=8C FAIL /01_dmesg_check
 
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
         Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
 exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
 no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
@@ -81,8 +81,18 @@ t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
             Affected tests:
                  aarch64 - Reboot test
                  ppc64le - Reboot test
-                   s390x - Reboot test
                   x86_64 - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
         Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
 ': No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -96,18 +106,6 @@ l-tests/-/issues/1418
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
 
 
 
