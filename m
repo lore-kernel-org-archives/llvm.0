@@ -1,83 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D14185D;
-	Sat,  2 Sep 2023 05:36:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693632971; x=1725168971;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=87QQmU2C6Z9RmWs5uWLJ6n52UmZjsrxNuNfTRt5GDmI=;
-  b=c+3vFMFaZxQuAkkhyVFyNXeW/JubB5Y4W/sDKcCs+kLOZgXJ9Ck5jXFo
-   YbEjVQm8bvCrVXpRdjW3EJoeTBF9oZ2+27Fii8c7f7XHhXLwZ0iQKvWDV
-   X7sCcr70hnOxAv1GF8of9BYs1KozCVUtdKmOfYGkqTvzViMI/oyY5L6E3
-   7cN2g3joPur24QZ0Q936o2JrEDrpEHwpUj+fgltkSc7oSMYaVSxfIir1/
-   Gt6u4vJIVdQLbOg23LUKZrSu8FBCd+Pr5nshrn831cS7FvxWGr77dyloS
-   CY8r1EZsQ6ErgUZYsdlcX0/m68U5/mUnCFrL0KHBae97crCM+je8CaR94
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="375252492"
-X-IronPort-AV: E=Sophos;i="6.02,221,1688454000"; 
-   d="scan'208";a="375252492"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 22:36:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="830334527"
-X-IronPort-AV: E=Sophos;i="6.02,221,1688454000"; 
-   d="scan'208";a="830334527"
-Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Sep 2023 22:36:09 -0700
-Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qcJIk-00021H-2n;
-	Sat, 02 Sep 2023 05:36:06 +0000
-Date: Sat, 2 Sep 2023 13:35:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:for-kernelci 53/68] drivers/regulator/act8865-regulator.c:147:
- warning: cannot understand function prototype: 'struct act8865_platform_data
- '
-Message-ID: <202309021320.CVZxVD53-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D39723AA
+	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 07:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693639286;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=b2S58+ZMGv3XHHedJsrflh+ekdPuNQRcxUDMCfoojG0=;
+	b=RoMQLeP7gZrQAeBjj+ADaNfk2FTzlbd06FL2pa5/XXX7rYEYpVCE+FeWiKWVkVWPl3c5c8
+	th/eE0cIpVgOKiTuWiz2u32OVfGiGsSstTCMTvCLY0B+u5+Df3CccHF5fM317LZ1BVxgQV
+	2iDq6Ys+CfoeAbelwsJCmqGTU3ru9N0=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-567-ZMEN7wrjMiCHwY1ZgyP3Xg-1; Sat, 02 Sep 2023 03:21:24 -0400
+X-MC-Unique: ZMEN7wrjMiCHwY1ZgyP3Xg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B048381DCA4
+	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 07:21:24 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 103FB4043CED;
+	Sat,  2 Sep 2023 07:21:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 29aa98d0)
+Date: Sat, 02 Sep 2023 07:21:23 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <67762.123090203212400241@us-mta-567.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
-head:   9ece0c059fa7600e46d8e2deecc2fa1bd86cde7e
-commit: f327da53dd2f08aba1fe28957fbe8fb26e489b15 [53/68] regulator: Use device_get_match_data()
-config: i386-randconfig-016-20230902 (https://download.01.org/0day-ci/archive/20230902/202309021320.CVZxVD53-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230902/202309021320.CVZxVD53-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309021320.CVZxVD53-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/regulator/act8865-regulator.c:147: warning: cannot understand function prototype: 'struct act8865_platform_data '
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +147 drivers/regulator/act8865-regulator.c
+Kernel information:
+    Commit message: Merge tag 'for-linus-2023083101' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/hid/hid
 
-   141	
-   142	/**
-   143	 * act8865_platform_data - platform data for act8865
-   144	 * @num_regulators: number of regulators used
-   145	 * @regulators: pointer to regulators used
-   146	 */
- > 147	struct act8865_platform_data {
-   148		int num_regulators;
-   149		struct act8865_regulator_data *regulators;
-   150	};
-   151	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102738
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9371610
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
