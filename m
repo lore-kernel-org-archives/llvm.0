@@ -1,138 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6E023AA
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 08:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693641629;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lngHpqzYejcFjHG+tr+PaaHAmEEWMAh5+NxR9zF1tXY=;
-	b=IgqfM9sYS62BQWU8+8DiFxJEPTDJqKWJO8WjMayMVpb0i7znjv4sZhXEeaI7/CwkgugvAe
-	stR4DDuKBhKzZaSncAx5dCozfrQP1pUtqDgKvANw/kFqAJ6+BizFrk17LZ8Dz52h8/ZfUJ
-	DjIbMqmZKWiRNXx06Vhr2QCvZUbBROs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-ND6J_CSFN52Bl-l7HyDpxg-1; Sat, 02 Sep 2023 04:00:27 -0400
-X-MC-Unique: ND6J_CSFN52Bl-l7HyDpxg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 964961817904
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 08:00:27 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 79FCA200BA73;
-	Sat,  2 Sep 2023 08:00:27 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, bd30fe6a)
-Date: Sat, 02 Sep 2023 08:00:27 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B5123AA;
+	Sat,  2 Sep 2023 08:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693641679; x=1725177679;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ebdB24sLPTjqP+v05AA9FnLG98VAqFbBwd+5w00gKm4=;
+  b=IPcIYxVrMsf2tRfhFANbRIA9Ho2T7N8t9/CK5ggqGqBbgQpDmQMjllKW
+   FLJNdBwuEXITsMssJ9YqO/3lnifF5KnqYIkwoRxFarZa/Pk8QdBRLLDS2
+   lRpecOYFWoQIZ0pa9S9WIwiW1fvwXGDc9B+MO3i4F4JF2gcRAgECuTN0n
+   gxPUtLDzmu56t21E2+WNPYFGXCfKGp+eYfVtQo1tO02E59wkdB5kB9mEZ
+   NETZ8+8pkyqH2qZQvdD5jNazVAZD7B15IAQd1BXgELfLpNKDtn5KCXr6G
+   GVBhql4oVEktXTs/53znBx17wuAHmNJN5ZM5v06S5ZD3NVgwSaTp49i+G
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="355855005"
+X-IronPort-AV: E=Sophos;i="6.02,222,1688454000"; 
+   d="scan'208";a="355855005"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2023 01:01:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="769426306"
+X-IronPort-AV: E=Sophos;i="6.02,222,1688454000"; 
+   d="scan'208";a="769426306"
+Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 Sep 2023 01:01:13 -0700
+Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qcLZ9-00029H-0T;
+	Sat, 02 Sep 2023 08:01:11 +0000
+Date: Sat, 2 Sep 2023 16:00:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chunhai Guo <guochunhai@vivo.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-f2fs-devel@lists.sourceforge.net,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>,
+	Chao Yu <chao@kernel.org>
+Subject: [jaegeuk-f2fs:dev-test 30/30] ERROR: modpost: "__blk_flush_plug"
+ [fs/f2fs/f2fs.ko] undefined!
+Message-ID: <202309021523.UcS7T7mp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <17304.123090204002700862@us-mta-517.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+head:   e1e9b8062c74af76b78d10a821cc6c786592209c
+commit: e1e9b8062c74af76b78d10a821cc6c786592209c [30/30] f2fs: replace blk_finish_plug() with blk_flush_plug()
+config: i386-randconfig-013-20230902 (https://download.01.org/0day-ci/archive/20230902/202309021523.UcS7T7mp-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230902/202309021523.UcS7T7mp-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309021523.UcS7T7mp-lkp@intel.com/
 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Kernel information:
-    Commit message: Merge tag 'wq-for-6.6' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/tj/wq
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_damage_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_dp_mst_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_format_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_framebuffer_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_managed_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_mm_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_modes_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_plane_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_probe_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_rect_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-abt-y030xx067a.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-newvision-nv3052c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-novatek-nt39016.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/cirrus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_mipi_dbi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-slimbus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-sccb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spi-avmm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/null_blk/null_blk.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/misc/mei/mei-gsc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/core/cxl_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_mem.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_acpi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_port.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/advansys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/aha1740.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/ppa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/imm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/host/nvme-fabrics.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/host/nvme-fc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-loop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet-fc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-fcloop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-fsl-lib.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/appletalk/ipddp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/firewire-uapi-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/charlcd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ali1563.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/tuners/tda9887.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/twl4030_wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/simatic-ipc-wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/cpufreq-dt-platdev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/of_mmc_spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_emmc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-apollolake.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-f7188x.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/gsmi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/memconsole.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/memconsole-x86-legacy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/crypto/atmel-sha204a.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-rst.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-smartconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/classmate-laptop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/firmware_attributes_class.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/cxl_pmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/core/dev_addr_lists_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_plug.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_ets.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_mqprio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_cbs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_basic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_u32.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netlink/netlink_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack_netlink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_defrag_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_reject_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/unix/unix_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_defrag_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_reject_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/vmw_vsock/vsock_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/chnl_net.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif_socket.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif_usb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/hsr/hsr.o
+>> ERROR: modpost: "__blk_flush_plug" [fs/f2fs/f2fs.ko] undefined!
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102741
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9372274
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9372283
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
