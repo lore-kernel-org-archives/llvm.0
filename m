@@ -1,112 +1,158 @@
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C42C9445
-	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 22:47:55 +0000 (UTC)
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-571194584e2so578189eaf.3
-        for <llvm@lists.linux.dev>; Sun, 03 Sep 2023 15:47:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FAABA31
+	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 23:09:52 +0000 (UTC)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1c50438636fso802767fac.1
+        for <llvm@lists.linux.dev>; Sun, 03 Sep 2023 16:09:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693781274; x=1694386074; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jTpRzKKPcflfMotZqn/EuHDpmA3Dpx0bR9KzRWNQ8CA=;
-        b=XyiUKuEz0ssz2Ik+rOdb6xB8LHfyvhzRCZanN/zTxDndnk3leYvxxHmUDj73khBvvg
-         zseY1/CHeapR30m7pCs5Y4hhCvHXZAA2M/j2hrKEeWINziK47PR8heBGkV4pVSR95Xd+
-         lBP0L1S2mIzz0n/5YVkSU52oWq7k/lpWqXEtif60Odah1NCwVJF7Hyl6jEr6vcC2COG0
-         lOHYHsQFByQ7dxlbk/BH9rG9uCyitCQcEMbh8SI7QDh3bs6j127Sy9qNPOwunKDTABXz
-         c4R2nxw81+acWVNtwcj2yK2a2VdS1VmnGCSngzuhB0b6N+PliBY4nAlZ1s4gNdrk7Drw
-         hRlg==
+        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1693782592; x=1694387392; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UiJZGoOQnH5exzVzd3ArFdofBPAwCupRSoYg3cTCcl4=;
+        b=M0T0mdYhylh4QYE+OrVQFm+KHg3AMvK/goy0KDUTqXV4YQ6ujZEIkYEsvqSdVpL7mn
+         E1ERQ+CcLUz7PCamm+tgTIW6mCn5CZTik5Nv8CzGENxeNO8DJ5YMSwEZLI5pUb+MGru3
+         vCK87k27KVq5HdiN96SCBmf4QWBSDez5QWXxixIh0BhnpqR+WL5xCScFGcErMlouKcBI
+         NDYduQfo0oDJOv/RNge45uR4o8MCxS/CEaKUamUmgVPtlNNVE/eVjojE9c3RwqVjvpvQ
+         uD8zNm/gevKigXN5jdiBEAEbT4Y6ivRWvEwOjE/s86oMhNRdKMCiD2jqWCO+98k6RNco
+         xrGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693781274; x=1694386074;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jTpRzKKPcflfMotZqn/EuHDpmA3Dpx0bR9KzRWNQ8CA=;
-        b=l0UoAOfE4D/HqVpiDo3ajDt2JKADkuy753uXQzR3/FhXCum+saBxr6xddA1Sp1v5LR
-         r11UQU/f+o8iMS6AoCunw4bHvtIO/nbdSvTw/iPUqzbGJj62rsqt1ccvCj2P7ISd+HWa
-         8x/RoGuWJ9G1lCEJLvOTqNtu9tTKp6NsaiVmQmo0uuAIx0IpwmHmSfdp8xulILFT18lI
-         HDb+znP1El8B5ED3Sp0EOAMWoDnRPi7S5lryhbfmY439Uv2kVPTJkbfxbiKa7WjsJUGz
-         ETVPtRcjhTfIxRn2VoeU10tvSgqZuBuvC8mFEUEl/fOhFLDDbxLQ0yHGp8SbHkPRRMWc
-         waCw==
-X-Gm-Message-State: AOJu0YyqYCHq7d3cOp4I0TrMjpIDWUMhLvWzoT+IX5OTLFBjk9ygdRXk
-	sKBad1ppsscsPbtchjFOWUNEMbxpd1WVUNMYaMA=
-X-Google-Smtp-Source: AGHT+IHTd6MlXrnOCrfi9djKCiTH2QWP90e7G83CiNXHFAlfTnFmDirKNEOi/0fmGWMf/Ypx/Z30DjjRWhA4Zv/VtkI=
-X-Received: by 2002:a4a:3410:0:b0:56d:e6:21bf with SMTP id b16-20020a4a3410000000b0056d00e621bfmr6787218ooa.0.1693781274367;
- Sun, 03 Sep 2023 15:47:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693782592; x=1694387392;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UiJZGoOQnH5exzVzd3ArFdofBPAwCupRSoYg3cTCcl4=;
+        b=LjuEFzqKZpkd9uOCVdENbNqmRk/jUWWSM5am74wCrbtMyXM8+dG4ORZ4pQUHqBIaTo
+         oTthVEBbSEmLFyIhI2anPRZ3RzkwIk0MniBelRo294wfK1zX/w++KINhPxEdQuSNFlGl
+         DJfd5owfjmNrN4hf9eLCUGEOJ3g/pCj7KqlUaC2UehczWv74rCnuUF4d8zoon4KIelWq
+         p/uRiRvh7W6FsKnJvd5sxRMliSj4+zlcx5BcURd0BwOhyTJdGPsgwDb+ogQFX4k7F7OD
+         UI5L8DkZQKPGDZ6zBftHbFMQMzOBG1rEwlVM6zMGs3AcPc9jYvRwaIdKgsTPIq/NIhsD
+         LSrQ==
+X-Gm-Message-State: AOJu0YzNongNemi9NFoHnu1Zfk9+7JaSrl++gYJvCA3Ho9dZe64EBqIf
+	9GmcKSWyJbIlDpCDP8ojWXpdMg==
+X-Google-Smtp-Source: AGHT+IEY9L6RiWSxw7RgazDOdiSC3je0FKTZcPb7XeMYLT6y7s/BQQv5ki4pLBVh/yALQVuumWl9DA==
+X-Received: by 2002:a05:6870:a413:b0:1d1:1ea:9aa with SMTP id m19-20020a056870a41300b001d101ea09aamr11784656oal.27.1693782591707;
+        Sun, 03 Sep 2023 16:09:51 -0700 (PDT)
+Received: from dread.disaster.area (pa49-195-66-88.pa.nsw.optusnet.com.au. [49.195.66.88])
+        by smtp.gmail.com with ESMTPSA id u191-20020a6379c8000000b0056368adf5e2sm6392080pgc.87.2023.09.03.16.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Sep 2023 16:09:51 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+	(envelope-from <david@fromorbit.com>)
+	id 1qcwE0-00ASwR-29;
+	Mon, 04 Sep 2023 09:09:48 +1000
+Date: Mon, 4 Sep 2023 09:09:48 +1000
+From: Dave Chinner <david@fromorbit.com>
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>,
+	brauner@kernel.org, djwong@kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org,
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+	trix@redhat.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [xfs?] INFO: task hung in __fdget_pos (4)
+Message-ID: <ZPUSPAnuGLLe3QWH@dread.disaster.area>
+References: <000000000000e6432a06046c96a5@google.com>
+ <ZPQYyMBFmqrfqafL@dread.disaster.area>
+ <20230903083357.75mq5l43gakuc2z7@f>
+ <ZPUIQzsCSNlnBFHB@dread.disaster.area>
+ <CAGudoHE_-2765EttOV_6B9EeSuOxqo1MiRCyFP9y=GbSeCMtZg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Received: by 2002:a8a:60c:0:b0:4f0:1250:dd51 with HTTP; Sun, 3 Sep 2023
- 15:47:53 -0700 (PDT)
-In-Reply-To: <ZPUIQzsCSNlnBFHB@dread.disaster.area>
-References: <000000000000e6432a06046c96a5@google.com> <ZPQYyMBFmqrfqafL@dread.disaster.area>
- <20230903083357.75mq5l43gakuc2z7@f> <ZPUIQzsCSNlnBFHB@dread.disaster.area>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Mon, 4 Sep 2023 00:47:53 +0200
-Message-ID: <CAGudoHE_-2765EttOV_6B9EeSuOxqo1MiRCyFP9y=GbSeCMtZg@mail.gmail.com>
-Subject: Re: [syzbot] [xfs?] INFO: task hung in __fdget_pos (4)
-To: Dave Chinner <david@fromorbit.com>
-Cc: syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>, 
-	brauner@kernel.org, djwong@kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org, llvm@lists.linux.dev, 
-	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGudoHE_-2765EttOV_6B9EeSuOxqo1MiRCyFP9y=GbSeCMtZg@mail.gmail.com>
 
-On 9/4/23, Dave Chinner <david@fromorbit.com> wrote:
-> On Sun, Sep 03, 2023 at 10:33:57AM +0200, Mateusz Guzik wrote:
->> On Sun, Sep 03, 2023 at 03:25:28PM +1000, Dave Chinner wrote:
->> > On Sat, Sep 02, 2023 at 09:11:34PM -0700, syzbot wrote:
->> > > Hello,
->> > >
->> > > syzbot found the following issue on:
->> > >
->> > > HEAD commit:    b97d64c72259 Merge tag
->> > > '6.6-rc-smb3-client-fixes-part1' of..
->> > > git tree:       upstream
->> > > console output:
->> > > https://syzkaller.appspot.com/x/log.txt?x=14136d8fa80000
->> > > kernel config:
->> > > https://syzkaller.appspot.com/x/.config?x=958c1fdc38118172
->> > > dashboard link:
->> > > https://syzkaller.appspot.com/bug?extid=e245f0516ee625aaa412
->> > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for
->> > > Debian) 2.40
->> > >
->> > > Unfortunately, I don't have any reproducer for this issue yet.
->> >
->> > Been happening for months, apparently, yet for some reason it now
->> > thinks a locking hang in __fdget_pos() is an XFS issue?
->> >
->> > #syz set subsystems: fs
->> >
->>
->> The report does not have info necessary to figure this out -- no
->> backtrace for whichever thread which holds f_pos_lock. I clicked on a
->> bunch of other reports and it is the same story.
->
-> That's true, but there's nothing that points at XFS in *any* of the
-> bug reports. Indeed, log from the most recent report doesn't have
-> any of the output from the time stuff hung. i.e. the log starts
-> at kernel time 669.487771 seconds, and the hung task report is at:
->
+On Mon, Sep 04, 2023 at 12:47:53AM +0200, Mateusz Guzik wrote:
+> On 9/4/23, Dave Chinner <david@fromorbit.com> wrote:
+> > On Sun, Sep 03, 2023 at 10:33:57AM +0200, Mateusz Guzik wrote:
+> >> On Sun, Sep 03, 2023 at 03:25:28PM +1000, Dave Chinner wrote:
+> >> > On Sat, Sep 02, 2023 at 09:11:34PM -0700, syzbot wrote:
+> >> > > Hello,
+> >> > >
+> >> > > syzbot found the following issue on:
+> >> > >
+> >> > > HEAD commit:    b97d64c72259 Merge tag
+> >> > > '6.6-rc-smb3-client-fixes-part1' of..
+> >> > > git tree:       upstream
+> >> > > console output:
+> >> > > https://syzkaller.appspot.com/x/log.txt?x=14136d8fa80000
+> >> > > kernel config:
+> >> > > https://syzkaller.appspot.com/x/.config?x=958c1fdc38118172
+> >> > > dashboard link:
+> >> > > https://syzkaller.appspot.com/bug?extid=e245f0516ee625aaa412
+> >> > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for
+> >> > > Debian) 2.40
+> >> > >
+> >> > > Unfortunately, I don't have any reproducer for this issue yet.
+> >> >
+> >> > Been happening for months, apparently, yet for some reason it now
+> >> > thinks a locking hang in __fdget_pos() is an XFS issue?
+> >> >
+> >> > #syz set subsystems: fs
+> >> >
+> >>
+> >> The report does not have info necessary to figure this out -- no
+> >> backtrace for whichever thread which holds f_pos_lock. I clicked on a
+> >> bunch of other reports and it is the same story.
+> >
+> > That's true, but there's nothing that points at XFS in *any* of the
+> > bug reports. Indeed, log from the most recent report doesn't have
+> > any of the output from the time stuff hung. i.e. the log starts
+> > at kernel time 669.487771 seconds, and the hung task report is at:
+> >
+> 
+> I did not mean to imply this is an xfs problem.
+> 
+> You wrote reports have been coming in for months so it is pretty clear
+> nobody is investigating.
 
-I did not mean to imply this is an xfs problem.
+Which is pretty much the case for all filesystem bug reports from
+syzbot except for those reported against XFS. Almost nobody else is
+doing immediately triage syzbot reports, so they just sit there
+gathering dust.
 
-You wrote reports have been coming in for months so it is pretty clear
-nobody is investigating. I figured I'm going to change that bit.
+This reflects they reality that syzbot is doing stuff that just
+doesn't happen to filesystems in production systems. Users will
+almost never see these issues in real life because they aren't
+corrupting the crap out their filesystems and running randomly
+generated syscalls on them.
 
->> Can the kernel be configured to dump backtraces from *all* threads?
->
-> It already is (sysrq-t), but I'm not sure that will help - if it is
-> a leaked unlock then nothing will show up at all.
->
+> I figured I'm going to change that bit.
 
-See the other part of the thread, I roped in someone from syzkaller
-along with the question if they can use sysrq t.
+I wish you the best of luck.
 
+> >> Can the kernel be configured to dump backtraces from *all* threads?
+> >
+> > It already is (sysrq-t), but I'm not sure that will help - if it is
+> > a leaked unlock then nothing will show up at all.
+> 
+> See the other part of the thread, I roped in someone from syzkaller
+> along with the question if they can use sysrq t.
+
+Yes, I saw that. I'm just saying that there's a real good chance it
+won't actually help and will just generate a heap more report noise.
+Stack traces from all the idle tasks don't really tell us anything
+about what went wrong....
+
+Lockdep reports and logs are difficult enough to parse at the best
+of times, adding more noise won't help anyone. We already have the
+output of sysrq-l (from the nmi sent to all cpus before panic), so
+the only remaining really useful debugging output missing is sysrq-w
+(blocked tasks).
+
+If something is blocked holding the f_pos_lock long enough to
+trigger the hung task timer, then whatever task is holding it must
+be blocked itself on something else. The sysrq-w output will dump
+that without adding all the idle task noise....
+
+Cheers,
+
+Dave.
 -- 
-Mateusz Guzik <mjguzik gmail.com>
+Dave Chinner
+david@fromorbit.com
