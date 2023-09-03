@@ -1,94 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BABB9621;
-	Sun,  3 Sep 2023 00:43:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693701820; x=1725237820;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=rswJvSBgJXUsmMslG0htBAQt0JUxYWgZcAJX+0u++QM=;
-  b=bdwHMWsDEXA5lDhPNE6eBai4jJzv6iL6ltidjhP6/ym6fb5HWCfk8mjm
-   omrZf6IJeSfVa/ANXT22I4O2HW4U8o4WHdi2L0sWLC+FgvHCJmsSERcTb
-   ksx312/ivUQeI2/ZgRs+x9jk23Z7tjVF1JhOLirGsYl1L18UDhhaoMVcH
-   3ntNvHKZ3Kya2rCdDfmTFX83T4BA33bULg5ldwHseI5XA95d4zNG/vx80
-   +hpYH5DnJMhEdMjjhyQQjNjj74YgrdnBjTyxvERLUuzU1f79cGRmKDICY
-   mGe0lYy6Y1dyVg1+/S3fEtnOqhFH53GOHBTY3TmYv0QnTBg1HOWGSMfOk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="442813496"
-X-IronPort-AV: E=Sophos;i="6.02,223,1688454000"; 
-   d="scan'208";a="442813496"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2023 17:43:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="1071164745"
-X-IronPort-AV: E=Sophos;i="6.02,223,1688454000"; 
-   d="scan'208";a="1071164745"
-Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2023 17:43:37 -0700
-Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qcbDC-0002kN-27;
-	Sun, 03 Sep 2023 00:43:34 +0000
-Date: Sun, 3 Sep 2023 08:42:50 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: ld.lld: error: vmlinux.a(init/main.o):(function get_cpu_mask:
- .text+0x14): relocation R_RISCV_HI20 out of range: 526890 is not in
- [-524288, 524287]; references cpu_bit_bitmap
-Message-ID: <202309030807.lgGb87Ej-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A2E7F
+	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 02:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693708551;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lZ82Ej3Smn6d1BBa4nXXT8wAKG9On+JLGf7tk7dbqAo=;
+	b=Nx9eZaZSXIy7dLFgD4ppLOXalPSbUZmfeY14RLsDGQoDukriVSFIHRmCSXIOoF1uOxVQam
+	yAvUt4rMZg97K4DXHIXAdmqCIj2k0cpK8znyWEdhv9wobhGqT8CW0HoIPwxmroUvy+XmT0
+	ONPcz1v1GYK+wQ9pKuT67L/TpDNOcWY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-207-BL7h47WfP5GrJJqR6veBUA-1; Sat, 02 Sep 2023 22:31:55 -0400
+X-MC-Unique: BL7h47WfP5GrJJqR6veBUA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A36D110264C1
+	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 02:31:55 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 807BD493110;
+	Sun,  3 Sep 2023 02:31:55 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 11 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, b70100f2)
+Date: Sun, 03 Sep 2023 02:31:55 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <62924.123090222315500401@us-mta-207.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Filipe Manana <fdmanana@suse.com>
-CC: David Sterba <dsterba@suse.com>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   92901222f83d988617aee37680cb29e1a743b5e4
-commit: 8dbfc14fc736eb701089aff09645c3d4ad3decb1 btrfs: account block group tree when calculating global reserve size
-date:   6 weeks ago
-config: riscv-randconfig-r033-20230903 (https://download.01.org/0day-ci/archive/20230903/202309030807.lgGb87Ej-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230903/202309030807.lgGb87Ej-lkp@intel.com/reproduce)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309030807.lgGb87Ej-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+Kernel information:
+    Commit message: Merge tag 'probes-v6.6' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/trace/linux-trace
 
->> ld.lld: error: vmlinux.a(init/main.o):(function get_cpu_mask: .text+0x14): relocation R_RISCV_HI20 out of range: 526890 is not in [-524288, 524287]; references cpu_bit_bitmap
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(kernel/cpu.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0x3a): relocation R_RISCV_HI20 out of range: 528511 is not in [-524288, 524287]; references __stack_chk_guard
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(arch/riscv/kernel/process.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0x198): relocation R_RISCV_HI20 out of range: 528511 is not in [-524288, 524287]; references initcall_calltime
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0x1ca): relocation R_RISCV_HI20 out of range: 527690 is not in [-524288, 524287]; references .L.str.53
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0x70): relocation R_RISCV_HI20 out of range: 528112 is not in [-524288, 524287]; references blacklisted_initcalls
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function do_one_initcall: .text+0xc8): relocation R_RISCV_HI20 out of range: 528511 is not in [-524288, 524287]; references initcall_debug
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102795
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9377046
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
