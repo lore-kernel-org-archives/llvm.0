@@ -1,127 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DF2258F
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 23:51:24 +0000 (UTC)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-7HYfVyV0NLCVVYX_1apPig-1; Sat, 02 Sep 2023 19:51:22 -0400
-X-MC-Unique: 7HYfVyV0NLCVVYX_1apPig-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 46E698002B2
-	for <llvm@lists.linux.dev>; Sat,  2 Sep 2023 23:51:22 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1AB03400E401;
-	Sat,  2 Sep 2023 23:51:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 16 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, ee40d543)
-Date: Sat, 02 Sep 2023 23:51:22 -0000
-To: llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A470BA2D;
+	Sun,  3 Sep 2023 00:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693699238; x=1725235238;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S7WTD2QPamIUc8oBQm9Uxb5b3h5Y3eYUXwjTlcmGics=;
+  b=n6KiOxPOY0nSN2fp/utnYPr785ynnGGfj96s833TNJ9D+OdwwE+K2QLM
+   F16Db2vaExBYTv7qs6D6Mdv3KfgCbwFgsJYhFwpmfRsd1XVLx9EXylk/6
+   RnFIiy+ecLgz4JN4SS7SL1BWviLp4tcP3JFGxziMFPq5m/1O7HtCV3EwF
+   hhfuo/JwVGhxP8K5wQZR6K2dS70raeJNohI1MRZnIZ3+JAgIXrWHAoe0X
+   r6Ct/PA81XmO2SAxeNWpRFcyJQC6bSuL6DD5fR0LTZP0nzl++uIo8ny9w
+   P0lxxlUplhbcDeZf6cAu4tUn0iGoSH998qPbeKGpd/S2+2nx/imgRFkVf
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="366635029"
+X-IronPort-AV: E=Sophos;i="6.02,223,1688454000"; 
+   d="scan'208";a="366635029"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2023 17:00:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="1071158258"
+X-IronPort-AV: E=Sophos;i="6.02,223,1688454000"; 
+   d="scan'208";a="1071158258"
+Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2023 17:00:35 -0700
+Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qcaXZ-0002hn-0Z;
+	Sun, 03 Sep 2023 00:00:33 +0000
+Date: Sun, 3 Sep 2023 08:00:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: arch/powerpc/kvm/../../../virt/kvm/vfio.c:89:7: warning: attribute
+ declaration must precede definition
+Message-ID: <202309030741.82aLACDG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <94874.123090219512200257@us-mta-637.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   92901222f83d988617aee37680cb29e1a743b5e4
+commit: c1cce6d079b875396c9a7c6838fc5b024758e540 vfio: Compile vfio_group infrastructure optionally
+date:   6 weeks ago
+config: powerpc64-randconfig-r005-20230903 (https://download.01.org/0day-ci/archive/20230903/202309030741.82aLACDG-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230903/202309030741.82aLACDG-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309030741.82aLACDG-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: mm/pagewalk: fix bootstopping regression from extra pte=
-_unmap()
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102788
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9376008
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests: block/001 (stress device hotplugging) time=
-out
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/719
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> arch/powerpc/kvm/../../../virt/kvm/vfio.c:89:7: warning: attribute declaration must precede definition [-Wignored-attributes]
+           fn = symbol_get(vfio_file_iommu_group);
+                ^
+   include/linux/module.h:805:60: note: expanded from macro 'symbol_get'
+   #define symbol_get(x) ({ extern typeof(x) x __attribute__((weak,visibility("hidden"))); &(x); })
+                                                              ^
+   include/linux/vfio.h:294:35: note: previous definition is here
+   static inline struct iommu_group *vfio_file_iommu_group(struct file *file)
+                                     ^
+>> arch/powerpc/kvm/../../../virt/kvm/vfio.c:89:7: warning: attribute declaration must precede definition [-Wignored-attributes]
+           fn = symbol_get(vfio_file_iommu_group);
+                ^
+   include/linux/module.h:805:65: note: expanded from macro 'symbol_get'
+   #define symbol_get(x) ({ extern typeof(x) x __attribute__((weak,visibility("hidden"))); &(x); })
+                                                                   ^
+   include/linux/vfio.h:294:35: note: previous definition is here
+   static inline struct iommu_group *vfio_file_iommu_group(struct file *file)
+                                     ^
+   2 warnings generated.
 
 
+vim +89 arch/powerpc/kvm/../../../virt/kvm/vfio.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+4b22ef042d6f54 Jason Gunthorpe      2022-10-07  82  
+4b22ef042d6f54 Jason Gunthorpe      2022-10-07  83  #ifdef CONFIG_SPAPR_TCE_IOMMU
+50d63b5bbfd122 Jason Gunthorpe      2022-05-04  84  static struct iommu_group *kvm_vfio_file_iommu_group(struct file *file)
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  85  {
+50d63b5bbfd122 Jason Gunthorpe      2022-05-04  86  	struct iommu_group *(*fn)(struct file *file);
+50d63b5bbfd122 Jason Gunthorpe      2022-05-04  87  	struct iommu_group *ret;
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  88  
+50d63b5bbfd122 Jason Gunthorpe      2022-05-04 @89  	fn = symbol_get(vfio_file_iommu_group);
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  90  	if (!fn)
+50d63b5bbfd122 Jason Gunthorpe      2022-05-04  91  		return NULL;
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  92  
+50d63b5bbfd122 Jason Gunthorpe      2022-05-04  93  	ret = fn(file);
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  94  
+50d63b5bbfd122 Jason Gunthorpe      2022-05-04  95  	symbol_put(vfio_file_iommu_group);
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  96  
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  97  	return ret;
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  98  }
+121f80ba68f1a5 Alexey Kardashevskiy 2017-03-22  99  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 89 was first introduced by commit
+:::::: 50d63b5bbfd12262069ad062611cd5e69c5e9e05 vfio: Change vfio_external_user_iommu_id() to vfio_file_iommu_group()
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
