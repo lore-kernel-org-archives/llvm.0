@@ -1,142 +1,84 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C9120FE
-	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 12:07:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693742823;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ww/X9A++x5CfrbV8/KeMYfQ017da0o9tfjIpanjcu1A=;
-	b=gYIHUzJIXKocEn1kdMKrMDOjyXm1JIyMZ8gefz0MwMX+73mPfsWB5WcUWre3cv5uiSH64B
-	BiARikvuiX0lZ15aqGUmCkewZZjBf7xknQVr9Cq9ERRm13W5NihvJmRiWBqgNsjcie9vLs
-	ozx4OoBgPfjuEg98ZlMLkKhYYMfew/M=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-662-gH05CQy0MrqxcWW0FCvmgg-1; Sun, 03 Sep 2023 08:07:02 -0400
-X-MC-Unique: gH05CQy0MrqxcWW0FCvmgg-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a34d3e5ebso35642066b.3
-        for <llvm@lists.linux.dev>; Sun, 03 Sep 2023 05:07:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693742821; x=1694347621;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ww/X9A++x5CfrbV8/KeMYfQ017da0o9tfjIpanjcu1A=;
-        b=InvrHUPujKtbzXPI7N1Zj0KmcCSQDpmXqVfWCcUouiVqMXhbxQ7X7P9XQcmF3UcEVh
-         nVJbrapTrr9B2iVPVrY6TvjwNmwIUV1axpyQFfrmMyci7TWfZAJqoCVGwwVdl3jkdVTr
-         7olh8+5UfQheyQCav2cmkXHAsBIemqTlS4Obql9hjUR71lwaw5twkR1Gu7M8VxBz0ZSW
-         Hsad2Lvjlwco6vcvIAubfBh9p1VrvnLqKW2JOYcvzqR3vCyOMvMUQ6RW9pQ+kdDQE/T7
-         jTG6FgNz5+ihM/N1fJc73gmfKNcEKP3IMv92AO5Yg262IJf+yH7fqyCHTIOmnZ62SUGy
-         ZG5g==
-X-Gm-Message-State: AOJu0YzMnwc2ZWEKZNgZw5YRbEqXliFbvdbm5eILi1Oc3kOU6cIczAtY
-	Sm1jBetyS8FnfEisizmodPGBBpVVPNODbouYH9sv/V26mCdmekPKMhX15Kg327bPazOtJ8hC57D
-	lqdxpJxAdqf3WeBWNNFHeCQ==
-X-Received: by 2002:a17:907:2c77:b0:9a1:be50:ae61 with SMTP id ib23-20020a1709072c7700b009a1be50ae61mr4520751ejc.69.1693742820840;
-        Sun, 03 Sep 2023 05:07:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEZI9cDOCy5Of03hhWcDQWRttrAYSGtOIHFJh+LXh/+REb+CH5467mefoQoU9OhSTXlKuV8Rg==
-X-Received: by 2002:a17:907:2c77:b0:9a1:be50:ae61 with SMTP id ib23-20020a1709072c7700b009a1be50ae61mr4520740ejc.69.1693742820494;
-        Sun, 03 Sep 2023 05:07:00 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id ov22-20020a170906fc1600b00992c92af6f4sm4781695ejb.144.2023.09.03.05.06.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Sep 2023 05:06:59 -0700 (PDT)
-Message-ID: <da3fe9b0-9a64-e912-d8ec-b3e9acd1813e@redhat.com>
-Date: Sun, 3 Sep 2023 14:06:58 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AFC3D8B
+	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 18:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=S9Vu6m4/BeTB9HCncSagEJ1QKniB6AXPYafpsvd+t/Y=; b=Hz8Rmv8O0J2BQeSNcabh+Masdo
+	83vXuhpL/rmZRAyGK/sdDLMDWcoPLWqjyjoTZVq2EK9MHu5USNzF07SWBN//D9CoRrK4EfXj6HiOu
+	rIbcpi8cYA6CCGFrzL8EkiILQfT9h/ix/FIKmyDT7SPteIyYOtNnPW48R6jEv10NLDQ4OYuW9KlVt
+	fPnTxHMbCgwiTmYAyCxgCjczVVZUBzuyWMwXAqh7vyvittDtBpTMBpsxXuHDMjItIU7/pPhIY5t+J
+	dmaUY/ekdwOg31wUNKABWQA8QzDpTJvjIlyALWnL3MpWLvJKPuilp2Lip1LFj3/N3jVAF6KaYecJs
+	MflbsOrw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qcrPa-0037Rq-20;
+	Sun, 03 Sep 2023 18:01:26 +0000
+Date: Sun, 3 Sep 2023 19:01:26 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Dave Chinner <david@fromorbit.com>,
+	syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>,
+	brauner@kernel.org, djwong@kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org,
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+	trix@redhat.com
+Subject: Re: [syzbot] [xfs?] INFO: task hung in __fdget_pos (4)
+Message-ID: <20230903180126.GL3390869@ZenIV>
+References: <000000000000e6432a06046c96a5@google.com>
+ <ZPQYyMBFmqrfqafL@dread.disaster.area>
+ <20230903083357.75mq5l43gakuc2z7@f>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: ld.lld: error: undefined symbol: sysfs_format_mac
-To: Randy Dunlap <rdunlap@infradead.org>, kernel test robot <lkp@intel.com>,
- David Thompson <davthompson@nvidia.com>,
- "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
- Vadim Pasternak <vadimp@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Shravan Kumar Ramani <shravankr@nvidia.com>
-References: <202309031058.JvwNDBKt-lkp@intel.com>
- <e566266a-f6f8-bad2-884d-22c394be52be@infradead.org>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <e566266a-f6f8-bad2-884d-22c394be52be@infradead.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US, nl
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230903083357.75mq5l43gakuc2z7@f>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi,
-
-On 9/3/23 06:32, Randy Dunlap wrote:
+On Sun, Sep 03, 2023 at 10:33:57AM +0200, Mateusz Guzik wrote:
+> On Sun, Sep 03, 2023 at 03:25:28PM +1000, Dave Chinner wrote:
+> > On Sat, Sep 02, 2023 at 09:11:34PM -0700, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following issue on:
+> > > 
+> > > HEAD commit:    b97d64c72259 Merge tag '6.6-rc-smb3-client-fixes-part1' of..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=14136d8fa80000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=958c1fdc38118172
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=e245f0516ee625aaa412
+> > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> > > 
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > 
+> > Been happening for months, apparently, yet for some reason it now
+> > thinks a locking hang in __fdget_pos() is an XFS issue?
+> > 
+> > #syz set subsystems: fs
+> > 
 > 
+> The report does not have info necessary to figure this out -- no
+> backtrace for whichever thread which holds f_pos_lock. I clicked on a
+> bunch of other reports and it is the same story.
 > 
-> On 9/2/23 19:39, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   92901222f83d988617aee37680cb29e1a743b5e4
->> commit: 7e38a7422f128e7d7ba24b444e957d585dbb272f mlxbf-bootctl: Support sysfs entries for MFG fields
->> date:   10 days ago
->> config: arm64-randconfig-r024-20230902 (https://download.01.org/0day-ci/archive/20230903/202309031058.JvwNDBKt-lkp@intel.com/config)
->> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230903/202309031058.JvwNDBKt-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202309031058.JvwNDBKt-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> ld.lld: error: undefined symbol: sysfs_format_mac
->>    >>> referenced by xarray.c
+> Can the kernel be configured to dump backtraces from *all* threads?
 > 
-> I don't see what xarray.c has to do with this.
-> 
-> This happens when CONFIG_NET is not enabled.
+> If there is no feature like that I can hack it up.
 
-Right, so this suggests that config MLXBF_BOOTCTL in
-drivers/platform/mellanox/Kconfig needs a:
+<break>t
 
-	depends on NET
+over serial console, or echo t >/proc/sysrq-trigger would do it...
 
-David, Vadim, can one of you submit a patch for this?
-
-Then I'll get that queued up as a 6.6 fix.
-
-Regards,
-
-Hans
-
-
-p.s.
-
-I wonder if it would not be better to just turn into
-a static inline helper instead of an exported symbol.
-
-It is really just a small wrapper around sysfs_emit():
-
-ssize_t sysfs_format_mac(char *buf, const unsigned char *addr, int len)
-{
-        return sysfs_emit(buf, "%*phC\n", len, addr);
-}
-EXPORT_SYMBOL(sysfs_format_mac);
-
-Making this a static inline thus should not grow the code
-size, while removing a symbol from the exported symbol list.
-
-Regards,
-
-Hans
-
-
-
-
->>    >>>               vmlinux.o:(oob_mac_show)
->>
-> 
-
+"Locking hang in __fdget_pos()" would mean either something stuck inside
+->read/->write/->read_iter/->write_iter/->llseek instance, making
+any further syscalls in that bunch on the same open file to block,
+or a lost fdput_pos() somewhere; AFAICS, we don't have anything of
+the latter variety, but the former is too wide to tell anything
+useful.
