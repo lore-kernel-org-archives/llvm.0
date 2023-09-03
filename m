@@ -1,73 +1,140 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747E3361;
-	Sun,  3 Sep 2023 04:32:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=NGaWMFB3Js4EqhYK2Uby5E6+yUktsZoYj36TrbJ23CA=; b=lnv7ObQpRtY1SmqbbcrDPSQCFL
-	SA+4DB/IiUr975FYtyZ/uYk73koGLdRT3Q82kADmZsnb8CAsz9+bPlgSXbgjIQBl0VuiWkV1OhBF9
-	Bt4rpp0n+ec+C/pF+EhIBraqJgcH4mMrrtnXZEjYjkpEffZF57COeJjr7AJMHXxD14dYV1OiMlZs/
-	++DWISF96fvux5AImdTA4VFxhQ7weq+7xjJZNaKHyOXJPBrmEejQ5GLVUwe3Ry7nqyRfWUa5nrKHA
-	3rFLx5K2cruua3li1ZymROb6b5uoyJPhOTzUUXh0wMrW5hi+cfA8Jnac9Hw4Hq1Spg/tuX6LWmRhY
-	ml2R0JHw==;
-Received: from [2601:1c2:980:9ec0::2764]
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1qcemr-0025EH-1L;
-	Sun, 03 Sep 2023 04:32:37 +0000
-Message-ID: <e566266a-f6f8-bad2-884d-22c394be52be@infradead.org>
-Date: Sat, 2 Sep 2023 21:32:34 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E31D7F0
+	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 05:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693717290;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2teUbsiKg56RZ6fQigMg0UV9De0i2F/lkBmDbw1haJA=;
+	b=gMfJwICUZH/FDj00Q8xS8ik7Oa+z9SVA/L+WvYZh3LIxoRYZHrt9DQi6nusc94Mh3PUoDP
+	ZKMem4iTYaHxWUGAlL75g4yA4TS3GWtLaFVgZEehdd6DrVL97LVmf7FYaxCLo+/gfNL6a2
+	MorhRPmi84sgtLkRviwwfF5XgcW8f4E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-361-ikgQlEKEMTKVyXuDorKRow-1; Sun, 03 Sep 2023 01:01:26 -0400
+X-MC-Unique: ikgQlEKEMTKVyXuDorKRow-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFB9A800193
+	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 05:01:25 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 92E48400E13F;
+	Sun,  3 Sep 2023 05:01:25 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 92901222)
+Date: Sun, 03 Sep 2023 05:01:25 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: ld.lld: error: undefined symbol: sysfs_format_mac
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, David Thompson
- <davthompson@nvidia.com>,
- "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
- Shravan Kumar Ramani <shravankr@nvidia.com>
-References: <202309031058.JvwNDBKt-lkp@intel.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202309031058.JvwNDBKt-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <45003.123090301012600169@us-mta-361.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'f2fs-for-6-6-rc1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/jaegeuk/f2fs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102803
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9378365
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9378456
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
 
 
-On 9/2/23 19:39, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   92901222f83d988617aee37680cb29e1a743b5e4
-> commit: 7e38a7422f128e7d7ba24b444e957d585dbb272f mlxbf-bootctl: Support sysfs entries for MFG fields
-> date:   10 days ago
-> config: arm64-randconfig-r024-20230902 (https://download.01.org/0day-ci/archive/20230903/202309031058.JvwNDBKt-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230903/202309031058.JvwNDBKt-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202309031058.JvwNDBKt-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: sysfs_format_mac
->    >>> referenced by xarray.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-I don't see what xarray.c has to do with this.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-This happens when CONFIG_NET is not enabled.
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
->    >>>               vmlinux.o:(oob_mac_show)
-> 
-
--- 
-~Randy
