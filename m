@@ -1,140 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E31D7F0
-	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 05:01:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693717290;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2teUbsiKg56RZ6fQigMg0UV9De0i2F/lkBmDbw1haJA=;
-	b=gMfJwICUZH/FDj00Q8xS8ik7Oa+z9SVA/L+WvYZh3LIxoRYZHrt9DQi6nusc94Mh3PUoDP
-	ZKMem4iTYaHxWUGAlL75g4yA4TS3GWtLaFVgZEehdd6DrVL97LVmf7FYaxCLo+/gfNL6a2
-	MorhRPmi84sgtLkRviwwfF5XgcW8f4E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-ikgQlEKEMTKVyXuDorKRow-1; Sun, 03 Sep 2023 01:01:26 -0400
-X-MC-Unique: ikgQlEKEMTKVyXuDorKRow-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFB9A800193
-	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 05:01:25 +0000 (UTC)
-Received: from [172.64.14.60] (unknown [10.30.33.250])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 92E48400E13F;
-	Sun,  3 Sep 2023 05:01:25 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, 92901222)
-Date: Sun, 03 Sep 2023 05:01:25 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07E01115
+	for <llvm@lists.linux.dev>; Sun,  3 Sep 2023 05:25:33 +0000 (UTC)
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3a7e68f4214so375387b6e.1
+        for <llvm@lists.linux.dev>; Sat, 02 Sep 2023 22:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1693718732; x=1694323532; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j+Eh2A53idbaKGC4D48PHUvqh0huBtkkZ1MnEHrGGnU=;
+        b=fnImMDwidOo8AZBfSNG3PSZHMH3QyCIlZt7ftIezZwdI3u7ialLZ8Y19tBI+6jrspb
+         +sFFHTiSEHL0wLGlhr6HfQkSavKR8+6dXNXyA37Yw4phycLQJgtN4tI5ebVXcxQrZuIC
+         cB5VOh5FVYixZZ+vFdNnjLugW8dHD/v2w+dg3VwS7LLSv4UtlJuSaSmCN21v9RPJMRVE
+         5gz4MlU1F1YV2bTCflcjB8oUJxI4Hve/PJ22o63D4u2NiC0TSlfnabZUT95y65g6jysh
+         QDLn53wEwosvTzEr6GbM3fB0eLmelPOhO2j7jY+6B7ii97jlskPDyKiQ+eHAIxi2uqhm
+         5HTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693718732; x=1694323532;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j+Eh2A53idbaKGC4D48PHUvqh0huBtkkZ1MnEHrGGnU=;
+        b=U9Mhy16zo8MbB/FNtKFottkS0bNh5NoU6loM3FnUIIfXANclDIFXWoEKqqxui/+kfy
+         yiFn2H4XHSdUev2yl9bWZCh/uTXwpUSVUvi4PrFnXcv9Hi4j0jodnJTDXe6VkYfUhEqt
+         z+VWJ4B53+6ic5COlXz3GQmI0Ad6EC/7LvO9M1QzzK7aE5z/PJJIlDaQu488EhyQRgRZ
+         AG6+fhD5+q3nOBivgjjY6F7htBKeksIS+UReFuMTMwczBaANIz3m9PmJgBRMtP1Qk90Z
+         Ey1ih7NVLI0z/cSTZts9AW9eHMQJbL03hgvYNOAZK4URY5CnJqOMoJCOQhn4clAsbpbH
+         IS2w==
+X-Gm-Message-State: AOJu0Yzb6tECkETiwo6IzjJq9JzwSLXwgy+afmAT+SR9DHmG/31aE+g3
+	+szYP8ouAlwdo0WBXA1ohcXEAQ==
+X-Google-Smtp-Source: AGHT+IGNq/nmzcBfE8tNNcctP8MOqZWNtdKzxAcW4XkHpsLIVYvoFFHRLzprcuZfIYR0M4JgREsJXw==
+X-Received: by 2002:a05:6808:138d:b0:3a7:82e8:8fd1 with SMTP id c13-20020a056808138d00b003a782e88fd1mr8799733oiw.20.1693718732506;
+        Sat, 02 Sep 2023 22:25:32 -0700 (PDT)
+Received: from dread.disaster.area (pa49-195-66-88.pa.nsw.optusnet.com.au. [49.195.66.88])
+        by smtp.gmail.com with ESMTPSA id 5-20020a170902c24500b001bbd1562e75sm5391337plg.55.2023.09.02.22.25.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Sep 2023 22:25:31 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+	(envelope-from <david@fromorbit.com>)
+	id 1qcfc0-00A8ep-2J;
+	Sun, 03 Sep 2023 15:25:28 +1000
+Date: Sun, 3 Sep 2023 15:25:28 +1000
+From: Dave Chinner <david@fromorbit.com>
+To: syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>
+Cc: brauner@kernel.org, djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+	syzkaller-bugs@googlegroups.com, trix@redhat.com,
+	viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [xfs?] INFO: task hung in __fdget_pos (4)
+Message-ID: <ZPQYyMBFmqrfqafL@dread.disaster.area>
+References: <000000000000e6432a06046c96a5@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <45003.123090301012600169@us-mta-361.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000e6432a06046c96a5@google.com>
 
-Hi, we tested your kernel and here are the results:
+On Sat, Sep 02, 2023 at 09:11:34PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    b97d64c72259 Merge tag '6.6-rc-smb3-client-fixes-part1' of..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14136d8fa80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=958c1fdc38118172
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e245f0516ee625aaa412
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Been happening for months, apparently, yet for some reason it now
+thinks a locking hang in __fdget_pos() is an XFS issue?
 
+#syz set subsystems: fs
 
-Kernel information:
-    Commit message: Merge tag 'f2fs-for-6-6-rc1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/jaegeuk/f2fs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102803
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9378365
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9378456
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Dave Chinner
+david@fromorbit.com
