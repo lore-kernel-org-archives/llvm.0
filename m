@@ -1,136 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8687F;
-	Sun,  3 Sep 2023 04:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693714425; x=1725250425;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hO4+GpU7gjMqt16YCjeaGqSeKGZh9XCZPAXBLn+0UAc=;
-  b=HxBMxrCBRiZXbpePb4wo7PKOJUdemaDdbqvt2/xkOkWXa0u6vr8bJw6F
-   d3Wl/tKCZG6Kvy9HN1ri+L3NMutZw/ZFxQN+HQ1GW9toGmxP2+2X86xh9
-   k/WGbMILi/7uIuajmDWB0CWfF9asRXvjCtzhmuRY/8RyUotJuJ6YIU7v6
-   umge1A3CXZclkU8jYsfqfJBgMTcP3lt7Pz1/0thzEse/hyxgh2KNHpDYE
-   BODhRhPBzAlcPbZ+RCpGHQZFRPJsJC1JPfvUH8uIynIIusofcvsPTmMkd
-   s5DvV84MYVDfy8am6r66mReMqrfbP2q1+NAjw3pjaF/NtDu2akvWy8S5k
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="376352497"
-X-IronPort-AV: E=Sophos;i="6.02,223,1688454000"; 
-   d="scan'208";a="376352497"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2023 21:13:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="914133740"
-X-IronPort-AV: E=Sophos;i="6.02,223,1688454000"; 
-   d="scan'208";a="914133740"
-Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 02 Sep 2023 21:13:42 -0700
-Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qceUW-0002sj-1e;
-	Sun, 03 Sep 2023 04:13:40 +0000
-Date: Sun, 3 Sep 2023 12:12:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:uclamp-max-aggregation 2/2]
- kernel/sched/cpufreq_schedutil.c:285:10: error: call to undeclared function
- 'uclamp_util_with'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202309031224.6sucWvg7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747E3361;
+	Sun,  3 Sep 2023 04:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=NGaWMFB3Js4EqhYK2Uby5E6+yUktsZoYj36TrbJ23CA=; b=lnv7ObQpRtY1SmqbbcrDPSQCFL
+	SA+4DB/IiUr975FYtyZ/uYk73koGLdRT3Q82kADmZsnb8CAsz9+bPlgSXbgjIQBl0VuiWkV1OhBF9
+	Bt4rpp0n+ec+C/pF+EhIBraqJgcH4mMrrtnXZEjYjkpEffZF57COeJjr7AJMHXxD14dYV1OiMlZs/
+	++DWISF96fvux5AImdTA4VFxhQ7weq+7xjJZNaKHyOXJPBrmEejQ5GLVUwe3Ry7nqyRfWUa5nrKHA
+	3rFLx5K2cruua3li1ZymROb6b5uoyJPhOTzUUXh0wMrW5hi+cfA8Jnac9Hw4Hq1Spg/tuX6LWmRhY
+	ml2R0JHw==;
+Received: from [2601:1c2:980:9ec0::2764]
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1qcemr-0025EH-1L;
+	Sun, 03 Sep 2023 04:32:37 +0000
+Message-ID: <e566266a-f6f8-bad2-884d-22c394be52be@infradead.org>
+Date: Sat, 2 Sep 2023 21:32:34 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://github.com/qais-yousef/linux uclamp-max-aggregation
-head:   1c5e789f50e8f3bce19ec226e1971186ab7d35c6
-commit: 1c5e789f50e8f3bce19ec226e1971186ab7d35c6 [2/2] sched/uclamp: Remove rq max aggregation
-config: i386-buildonly-randconfig-004-20230903 (https://download.01.org/0day-ci/archive/20230903/202309031224.6sucWvg7-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230903/202309031224.6sucWvg7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309031224.6sucWvg7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/sched/build_utility.c:69:
->> kernel/sched/cpufreq_schedutil.c:285:10: error: call to undeclared function 'uclamp_util_with'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           boost = uclamp_util_with(boost, cpu_rq(sg_cpu->cpu)->curr);
-                   ^
-   kernel/sched/cpufreq_schedutil.c:285:10: note: did you mean 'uclamp_rq_util_with'?
-   kernel/sched/sched.h:3029:15: note: 'uclamp_rq_util_with' declared here
-   unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
-                 ^
-   1 error generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: ld.lld: error: undefined symbol: sysfs_format_mac
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, David Thompson
+ <davthompson@nvidia.com>,
+ "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+ Shravan Kumar Ramani <shravankr@nvidia.com>
+References: <202309031058.JvwNDBKt-lkp@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202309031058.JvwNDBKt-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +/uclamp_util_with +285 kernel/sched/cpufreq_schedutil.c
 
-   235	
-   236	/**
-   237	 * sugov_iowait_apply() - Apply the IO boost to a CPU.
-   238	 * @sg_cpu: the sugov data for the cpu to boost
-   239	 * @time: the update time from the caller
-   240	 * @max_cap: the max CPU capacity
-   241	 *
-   242	 * A CPU running a task which woken up after an IO operation can have its
-   243	 * utilization boosted to speed up the completion of those IO operations.
-   244	 * The IO boost value is increased each time a task wakes up from IO, in
-   245	 * sugov_iowait_apply(), and it's instead decreased by this function,
-   246	 * each time an increase has not been requested (!iowait_boost_pending).
-   247	 *
-   248	 * A CPU which also appears to have been idle for at least one tick has also
-   249	 * its IO boost utilization reset.
-   250	 *
-   251	 * This mechanism is designed to boost high frequently IO waiting tasks, while
-   252	 * being more conservative on tasks which does sporadic IO operations.
-   253	 */
-   254	static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
-   255				       unsigned long max_cap)
-   256	{
-   257		unsigned long boost;
-   258	
-   259		/* No boost currently required */
-   260		if (!sg_cpu->iowait_boost)
-   261			return;
-   262	
-   263		/* Reset boost if the CPU appears to have been idle enough */
-   264		if (sugov_iowait_reset(sg_cpu, time, false))
-   265			return;
-   266	
-   267		if (!sg_cpu->iowait_boost_pending) {
-   268			/*
-   269			 * No boost pending; reduce the boost value.
-   270			 */
-   271			sg_cpu->iowait_boost >>= 1;
-   272			if (sg_cpu->iowait_boost < IOWAIT_BOOST_MIN) {
-   273				sg_cpu->iowait_boost = 0;
-   274				return;
-   275			}
-   276		}
-   277	
-   278		sg_cpu->iowait_boost_pending = false;
-   279	
-   280		/*
-   281		 * sg_cpu->util is already in capacity scale; convert iowait_boost
-   282		 * into the same scale so we can compare.
-   283		 */
-   284		boost = (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
- > 285		boost = uclamp_util_with(boost, cpu_rq(sg_cpu->cpu)->curr);
-   286		if (sg_cpu->util < boost)
-   287			sg_cpu->util = boost;
-   288	}
-   289	
+On 9/2/23 19:39, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   92901222f83d988617aee37680cb29e1a743b5e4
+> commit: 7e38a7422f128e7d7ba24b444e957d585dbb272f mlxbf-bootctl: Support sysfs entries for MFG fields
+> date:   10 days ago
+> config: arm64-randconfig-r024-20230902 (https://download.01.org/0day-ci/archive/20230903/202309031058.JvwNDBKt-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230903/202309031058.JvwNDBKt-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202309031058.JvwNDBKt-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: sysfs_format_mac
+>    >>> referenced by xarray.c
+
+I don't see what xarray.c has to do with this.
+
+This happens when CONFIG_NET is not enabled.
+
+>    >>>               vmlinux.o:(oob_mac_show)
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+~Randy
