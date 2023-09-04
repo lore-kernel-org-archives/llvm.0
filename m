@@ -1,113 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6A737E;
-	Mon,  4 Sep 2023 04:17:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693801027; x=1725337027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CpGwqWAtA/9ynEZ5PCzAiS9mPBBLeJgq8BRk/fK8g1g=;
-  b=HiguDE9YeKWBsDytG1hz7v/smGZL9zNqkuXEePWSS985OswuX/IpJ0wm
-   jrjTlewhs5bHWegTzxJ9jNtBhPeZOKYOR3ZMUpDHnKpPk+Qw3rCOCha7l
-   yfIVnG3Oc8PcJUXtd9PcVy2Thk304++5xAKFdOzwuUc9xVkf+y4/U/qEa
-   x1+SQS1EV/atuGpIKgk08eCbB00j+Tut7kKNEeg3iMSHIK4qoYKE5CkUy
-   9wynFT3oGPHyF2lBuWk03U/tSB/PhA5/dk+McXlHfeDT96jaU5oMyuENI
-   L5ztYweCShO9USZGuOVJ195P89HO/GC8SV/SLIFBmO+u5yiaL6CD5myoI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="380306266"
-X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
-   d="scan'208";a="380306266"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2023 21:17:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="734183717"
-X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
-   d="scan'208";a="734183717"
-Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 03 Sep 2023 21:17:04 -0700
-Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qd11E-00009j-1N;
-	Mon, 04 Sep 2023 04:16:58 +0000
-Date: Mon, 4 Sep 2023 12:16:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tao Su <tao1.su@linux.intel.com>, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, seanjc@google.com,
-	pbonzini@redhat.com, chao.gao@intel.com, guang.zeng@intel.com,
-	yi1.lai@intel.com, tao1.su@linux.intel.com
-Subject: Re: [PATCH 2/2] KVM: x86: Clear X2APIC_ICR_UNUSED_12 after
- APIC-write VM-exit
-Message-ID: <202309041224.CDj6t1BN-lkp@intel.com>
-References: <20230904013555.725413-3-tao1.su@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A827FE
+	for <llvm@lists.linux.dev>; Mon,  4 Sep 2023 06:09:06 +0000 (UTC)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57358a689d2so820848eaf.2
+        for <llvm@lists.linux.dev>; Sun, 03 Sep 2023 23:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693807745; x=1694412545; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ow7q3YrPUF4rmCouRThEW+Kvbo87wf7uRShpFG7WQ+4=;
+        b=o6zX3EORDod2keYavZTNJA+Rm+F//XmlLuvTMauU1ys+6zl9aCCIM3GVqgQzgOcQ6N
+         sndWPIFPKTgyy7vzgbkb1y15pufmcDPWNScBzg/AB+myZR1hS4wroOc7ruJ4FHhxaPpz
+         s+O8Y4D1xvzh0qstXgVw/YX9tfm68QCQ3vlPK8/uFntZ4NjmSv8EYsxHTmiC3UwlD+he
+         jsgFfZOduSycO//O+6jOS7tn5oonUZLCxMmZTFm2CLnz7z6zc1qFmAd+srWZkzJ17mXW
+         YOV8ucz9B0t0F5Ly+TlmHM0s4GCFSq1qrxnDYypYavftVczEvK5oIGX2VnaAYnXPEm9z
+         Eu5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693807745; x=1694412545;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ow7q3YrPUF4rmCouRThEW+Kvbo87wf7uRShpFG7WQ+4=;
+        b=Fk+gWaojrHWhN+SxYsgUjlZp2OxzJ4T1HP20eWsuhoWpNvnmNqeuFMoM/11dbIqhNJ
+         oTqhuYw9nWcf/Hmm7fh1orEpEHae2jIGeR2o3FTtpSbGjiL+683oaBSU3OxUHCh5KO9H
+         px/c/9yzkMOImZ+812hGeWRu/JBLGmxK9UxC85H83B19cXdRYDbYh0imMQG+Ilw/J5/W
+         s0Xy1UhSDjAqU9dDJ5RlTynBnSZHeuNt+9Uess3Ab3CPyfL5XJJxxwybX+4eMjJna2bw
+         eO6x7Pys6DeueyfshmmxBqelcK7Fsu1VAT4QinSHuPbdps/KIxkWFgNhxgHK+WQ/qAVF
+         cKlA==
+X-Gm-Message-State: AOJu0Yw1XE8as2zSyMTRf3GVLiYKE9UNSu0P94+tmMKhiOp6XUGnnZTq
+	yOL3/jU2VigvvVclk8OHMbxOKbj6xwbkmX9jw3I=
+X-Google-Smtp-Source: AGHT+IG3nFFAktlP9gmDSjBy/AiFL1SeCq2TBV9/SIjBnmsOMwtrgoMqg4CTLO3DAnZc3DUpprjq7FXCKzDH/DjnUXw=
+X-Received: by 2002:a4a:8089:0:b0:56e:466c:7393 with SMTP id
+ z9-20020a4a8089000000b0056e466c7393mr7339052oof.5.1693807745127; Sun, 03 Sep
+ 2023 23:09:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230904013555.725413-3-tao1.su@linux.intel.com>
+Received: by 2002:a8a:60c:0:b0:4f0:1250:dd51 with HTTP; Sun, 3 Sep 2023
+ 23:09:04 -0700 (PDT)
+In-Reply-To: <20230904032658.GA701295@mit.edu>
+References: <000000000000e6432a06046c96a5@google.com> <ZPQYyMBFmqrfqafL@dread.disaster.area>
+ <20230903083357.75mq5l43gakuc2z7@f> <ZPUIQzsCSNlnBFHB@dread.disaster.area>
+ <20230903231338.GN3390869@ZenIV> <ZPU2n48GoSRMBc7j@dread.disaster.area> <20230904032658.GA701295@mit.edu>
+From: Mateusz Guzik <mjguzik@gmail.com>
+Date: Mon, 4 Sep 2023 08:09:04 +0200
+Message-ID: <CAGudoHGtPOj-HpA25nAkQFmth0F=6WpMFbaqSuu+b34vd243SQ@mail.gmail.com>
+Subject: Re: [syzbot] [xfs?] INFO: task hung in __fdget_pos (4)
+To: "Theodore Ts'o" <tytso@mit.edu>
+Cc: Dave Chinner <david@fromorbit.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+	syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>, brauner@kernel.org, 
+	djwong@kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org, llvm@lists.linux.dev, 
+	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Tao,
+On 9/4/23, Theodore Ts'o <tytso@mit.edu> wrote:
+> On Mon, Sep 04, 2023 at 11:45:03AM +1000, Dave Chinner wrote:
+>> Entirely possible - this is syzbot we are talking about here.
+>> Especially if reiser or ntfs has been tested back before the logs we
+>> have start, as both are known to corrupt memory and/or leak locks
+>> when trying to parse corrupt filesystem images that syzbot feeds
+>> them.  That's why we largely ignore syzbot reports that involve
+>> those filesystems...
+>>
+>> Unfortunately, the logs from what was being done around when the
+>> tasks actually hung are long gone (seems like only the last 20-30s
+>> of log activity is reported) so when the hung task timer goes off
+>> at 143s, there is nothing left to tell us what might have caused it.
+>>
+>> IOWs, it's entirely possible that it is a memory corruption that
+>> has resulted in a leaked lock somewhere...
+>
+> ... and this is why I ignore any syzbot report that doesn't have a C
+> reproducer.  Life is too short to waste time with what is very likely
+> syzbot noise....  And I'd much rather opt out of the gamification of
+> syzbot dashboards designed to use dark patterns to guilt developers to
+> work on "issues" that very likely have no real impact on real life
+> actual user impact, if it might cause developers and maintainers to
+> burn out and quit.
+>
+> Basically, if syzbot won't prioritize things for us, it's encumbent on
+> us to prioritize things for our own mental health.  And so syzbot
+> issues without a real reproducer are very low on my priority list; I
+> have things I can work on that are much more likely to make real world
+> impact.  Even ones that have a real reproducer, there are certain
+> classes of bugs (e.g., "locking bugs" that require a badly corrupted
+> file system, or things that are just denial of service attacks if
+> you're too stupid to insert a USB thumb drive found in a parking lock
+> --- made worse by GNOME who has decided to default mount any random
+> USB thumb drive inserted into a system, even a server system that has
+> GNOME installed, thanks to some idiotic decision made by some random
+> Red Hat product manager), that I just ignore because I don't have
+> infinite amounts of time to coddle stupid Red Hat distro tricks.
+>
 
-kernel test robot noticed the following build warnings:
+Hello everyone.
 
-[auto build test WARNING on 708283abf896dd4853e673cc8cba70acaf9bf4ea]
+When I first stumbled upon this report I was almost completely
+oblivious to syzbot vs fsdevel -- I only knew you guys are not fond of
+ntfs reports, which made sense but was not indicating there are much
+bigger issues.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tao-Su/x86-apic-Introduce-X2APIC_ICR_UNUSED_12-for-x2APIC-mode/20230904-093801
-base:   708283abf896dd4853e673cc8cba70acaf9bf4ea
-patch link:    https://lore.kernel.org/r/20230904013555.725413-3-tao1.su%40linux.intel.com
-patch subject: [PATCH 2/2] KVM: x86: Clear X2APIC_ICR_UNUSED_12 after APIC-write VM-exit
-config: x86_64-randconfig-003-20230904 (https://download.01.org/0day-ci/archive/20230904/202309041224.CDj6t1BN-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230904/202309041224.CDj6t1BN-lkp@intel.com/reproduce)
+Given this and other responses I poked around the history and that
+made it apparent there are long-standing non-technical problems going
+here, none of which I intend to deal with.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309041224.CDj6t1BN-lkp@intel.com/
+That is to say I'm bailing from this thread.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/lapic.c:2445:30: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-                   kvm_x2apic_icr_write(apic, val);
-                                              ^~~
-   arch/x86/kvm/lapic.c:2435:9: note: initialize the variable 'val' to silence this warning
-           u64 val;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/val +2445 arch/x86/kvm/lapic.c
-
-  2430	
-  2431	/* emulate APIC access in a trap manner */
-  2432	void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
-  2433	{
-  2434		struct kvm_lapic *apic = vcpu->arch.apic;
-  2435		u64 val;
-  2436	
-  2437		/*
-  2438		 * ICR is a single 64-bit register when x2APIC is enabled.  For legacy
-  2439		 * xAPIC, ICR writes need to go down the common (slightly slower) path
-  2440		 * to get the upper half from ICR2.
-  2441		 *
-  2442		 * TODO: optimize to just emulate side effect w/o one more write
-  2443		 */
-  2444		if (apic_x2apic_mode(apic) && offset == APIC_ICR) {
-> 2445			kvm_x2apic_icr_write(apic, val);
-  2446		} else {
-  2447			val = kvm_lapic_get_reg(apic, offset);
-  2448			kvm_lapic_reg_write(apic, offset, (u32)val);
-  2449		}
-  2450	}
-  2451	EXPORT_SYMBOL_GPL(kvm_apic_write_nodecode);
-  2452	
-
+Cheers and sorry for poking the nest,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mateusz Guzik <mjguzik gmail.com>
