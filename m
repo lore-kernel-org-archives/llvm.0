@@ -1,117 +1,142 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A827FE
-	for <llvm@lists.linux.dev>; Mon,  4 Sep 2023 06:09:06 +0000 (UTC)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57358a689d2so820848eaf.2
-        for <llvm@lists.linux.dev>; Sun, 03 Sep 2023 23:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693807745; x=1694412545; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow7q3YrPUF4rmCouRThEW+Kvbo87wf7uRShpFG7WQ+4=;
-        b=o6zX3EORDod2keYavZTNJA+Rm+F//XmlLuvTMauU1ys+6zl9aCCIM3GVqgQzgOcQ6N
-         sndWPIFPKTgyy7vzgbkb1y15pufmcDPWNScBzg/AB+myZR1hS4wroOc7ruJ4FHhxaPpz
-         s+O8Y4D1xvzh0qstXgVw/YX9tfm68QCQ3vlPK8/uFntZ4NjmSv8EYsxHTmiC3UwlD+he
-         jsgFfZOduSycO//O+6jOS7tn5oonUZLCxMmZTFm2CLnz7z6zc1qFmAd+srWZkzJ17mXW
-         YOV8ucz9B0t0F5Ly+TlmHM0s4GCFSq1qrxnDYypYavftVczEvK5oIGX2VnaAYnXPEm9z
-         Eu5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693807745; x=1694412545;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ow7q3YrPUF4rmCouRThEW+Kvbo87wf7uRShpFG7WQ+4=;
-        b=Fk+gWaojrHWhN+SxYsgUjlZp2OxzJ4T1HP20eWsuhoWpNvnmNqeuFMoM/11dbIqhNJ
-         oTqhuYw9nWcf/Hmm7fh1orEpEHae2jIGeR2o3FTtpSbGjiL+683oaBSU3OxUHCh5KO9H
-         px/c/9yzkMOImZ+812hGeWRu/JBLGmxK9UxC85H83B19cXdRYDbYh0imMQG+Ilw/J5/W
-         s0Xy1UhSDjAqU9dDJ5RlTynBnSZHeuNt+9Uess3Ab3CPyfL5XJJxxwybX+4eMjJna2bw
-         eO6x7Pys6DeueyfshmmxBqelcK7Fsu1VAT4QinSHuPbdps/KIxkWFgNhxgHK+WQ/qAVF
-         cKlA==
-X-Gm-Message-State: AOJu0Yw1XE8as2zSyMTRf3GVLiYKE9UNSu0P94+tmMKhiOp6XUGnnZTq
-	yOL3/jU2VigvvVclk8OHMbxOKbj6xwbkmX9jw3I=
-X-Google-Smtp-Source: AGHT+IG3nFFAktlP9gmDSjBy/AiFL1SeCq2TBV9/SIjBnmsOMwtrgoMqg4CTLO3DAnZc3DUpprjq7FXCKzDH/DjnUXw=
-X-Received: by 2002:a4a:8089:0:b0:56e:466c:7393 with SMTP id
- z9-20020a4a8089000000b0056e466c7393mr7339052oof.5.1693807745127; Sun, 03 Sep
- 2023 23:09:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1F71367
+	for <llvm@lists.linux.dev>; Mon,  4 Sep 2023 07:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693813225;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+Vd3ivuRDLoc+LzEmvbKdRER7YM75DvB0nSG/Qp7u3s=;
+	b=Tmyo1OBEFADccizWzavZQb9CG/dqDGNjowEZIlqCFn3xQFMvMYwNTXTu/S/FbSTQbpapqi
+	pL/CYXiLfLZpZkXIKu+S9rviIrbE8t5zEM342TO7ysoout9oyGqhl1F8RHZEsEr9Cq42ww
+	hHOTFmALww3Lx5FqDLIZUUv3GVtmUKU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-491-xZkHekLLMQqZ5SDpCugCQg-1; Mon, 04 Sep 2023 03:40:23 -0400
+X-MC-Unique: xZkHekLLMQqZ5SDpCugCQg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DEB2805BFB
+	for <llvm@lists.linux.dev>; Mon,  4 Sep 2023 07:40:23 +0000 (UTC)
+Received: from [172.64.14.60] (unknown [10.30.33.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7ADCD2013570;
+	Mon,  4 Sep 2023 07:40:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 708283ab)
+Date: Mon, 04 Sep 2023 07:40:23 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Received: by 2002:a8a:60c:0:b0:4f0:1250:dd51 with HTTP; Sun, 3 Sep 2023
- 23:09:04 -0700 (PDT)
-In-Reply-To: <20230904032658.GA701295@mit.edu>
-References: <000000000000e6432a06046c96a5@google.com> <ZPQYyMBFmqrfqafL@dread.disaster.area>
- <20230903083357.75mq5l43gakuc2z7@f> <ZPUIQzsCSNlnBFHB@dread.disaster.area>
- <20230903231338.GN3390869@ZenIV> <ZPU2n48GoSRMBc7j@dread.disaster.area> <20230904032658.GA701295@mit.edu>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Mon, 4 Sep 2023 08:09:04 +0200
-Message-ID: <CAGudoHGtPOj-HpA25nAkQFmth0F=6WpMFbaqSuu+b34vd243SQ@mail.gmail.com>
-Subject: Re: [syzbot] [xfs?] INFO: task hung in __fdget_pos (4)
-To: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Dave Chinner <david@fromorbit.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>, brauner@kernel.org, 
-	djwong@kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org, llvm@lists.linux.dev, 
-	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <73824.123090403402300500@us-mta-491.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/4/23, Theodore Ts'o <tytso@mit.edu> wrote:
-> On Mon, Sep 04, 2023 at 11:45:03AM +1000, Dave Chinner wrote:
->> Entirely possible - this is syzbot we are talking about here.
->> Especially if reiser or ntfs has been tested back before the logs we
->> have start, as both are known to corrupt memory and/or leak locks
->> when trying to parse corrupt filesystem images that syzbot feeds
->> them.  That's why we largely ignore syzbot reports that involve
->> those filesystems...
->>
->> Unfortunately, the logs from what was being done around when the
->> tasks actually hung are long gone (seems like only the last 20-30s
->> of log activity is reported) so when the hung task timer goes off
->> at 143s, there is nothing left to tell us what might have caused it.
->>
->> IOWs, it's entirely possible that it is a memory corruption that
->> has resulted in a leaked lock somewhere...
->
-> ... and this is why I ignore any syzbot report that doesn't have a C
-> reproducer.  Life is too short to waste time with what is very likely
-> syzbot noise....  And I'd much rather opt out of the gamification of
-> syzbot dashboards designed to use dark patterns to guilt developers to
-> work on "issues" that very likely have no real impact on real life
-> actual user impact, if it might cause developers and maintainers to
-> burn out and quit.
->
-> Basically, if syzbot won't prioritize things for us, it's encumbent on
-> us to prioritize things for our own mental health.  And so syzbot
-> issues without a real reproducer are very low on my priority list; I
-> have things I can work on that are much more likely to make real world
-> impact.  Even ones that have a real reproducer, there are certain
-> classes of bugs (e.g., "locking bugs" that require a badly corrupted
-> file system, or things that are just denial of service attacks if
-> you're too stupid to insert a USB thumb drive found in a parking lock
-> --- made worse by GNOME who has decided to default mount any random
-> USB thumb drive inserted into a system, even a server system that has
-> GNOME installed, thanks to some idiotic decision made by some random
-> Red Hat product manager), that I just ignore because I don't have
-> infinite amounts of time to coddle stupid Red Hat distro tricks.
->
+Hi, we tested your kernel and here are the results:
 
-Hello everyone.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-When I first stumbled upon this report I was almost completely
-oblivious to syzbot vs fsdevel -- I only knew you guys are not fond of
-ntfs reports, which made sense but was not indicating there are much
-bigger issues.
 
-Given this and other responses I poked around the history and that
-made it apparent there are long-standing non-technical problems going
-here, none of which I intend to deal with.
+Kernel information:
+    Commit message: Merge tag 'dmaengine-6.6-rc1' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/vkoul/dmaengine
 
-That is to say I'm bailing from this thread.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102819
 
-Cheers and sorry for poking the nest,
--- 
-Mateusz Guzik <mjguzik gmail.com>
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9380373
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
