@@ -1,66 +1,43 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725147E
-	for <llvm@lists.linux.dev>; Mon,  4 Sep 2023 08:55:52 +0000 (UTC)
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-563f8e8a53dso425789a12.3
-        for <llvm@lists.linux.dev>; Mon, 04 Sep 2023 01:55:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1693817751; x=1694422551; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Bv44DxuNITNpd4qmM6vPqTpOEKj8EebxgG2BGExGRc=;
-        b=1eYgej6Tghct/xeaW2FeMOXK7lOPcexstlNs8+yxWuOTcvEnayI8HWzRheCEcrH47q
-         1Me65J4vqopsf9fsuVqEhNVRrAZfJmfDn90/cxpY15zY6AOXjbatjiTVp0u3s2lHuRxz
-         yrYdwzmiEQwD6PpfncXRXOM9HVmIorGFcgpDHiEvoZ3zXm9dKdeMnedkS1+G89e71bvU
-         TnL7J0+m2zvv+Ir8ZJ9G+vmhNLVBkWIxTySkZfbK8jP8OfsbmDZRVBW8Rna8bzOV29eo
-         Mx2P7w+EiMHeavZfUJz0hdamNZnJeHZG5+kki2MlOly9U6hr2GImsOy+qn0UMUkZ2wKC
-         WDMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693817752; x=1694422552;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Bv44DxuNITNpd4qmM6vPqTpOEKj8EebxgG2BGExGRc=;
-        b=ASmsoQKl51pf1dsRi6a+MVswg7tuwlb99cg1wJ9O76wM+PA5fqMdbs52Ii871927q/
-         1mT0G/uhropiJsdvTcSXhUoBWMUNY3V92YxXEmuKdIBiBvCwpsPcaojGwqDYDGjuCe/f
-         KY+F4jOKMv910XF/BW6pDVd6obylvzr+jd+/pVZKxcBr3oYCt4em4EmAxBurkYQXlIwv
-         dcyBoATyedFaRZBqcXI69r412cxSnp+mC6h43wmDRq+JJ/y1yJpzN7qZJOGXEPXm5/4X
-         1N9N8/k3RZuT/xbW/ArY3zrMgPzc8f6IzSNewk1c8WEScZfKFLCF7kHhXXzGZx1PME5x
-         t6Lw==
-X-Gm-Message-State: AOJu0YyVHAlQtrrVPvevWl0x2Nk3PPfEU3V+4F/XFKbSHbt2GH3DrtWC
-	AWJYDmTBE2mWcdcDf0RTIuwHeQ==
-X-Google-Smtp-Source: AGHT+IHeoMKsRckRtk2mpp27WiGyUYVnjLYXKja/59GxduUL+F6fIrYIlPB5LwoH/z6bxVuWblRoFA==
-X-Received: by 2002:a05:6a21:33a1:b0:137:7198:af9b with SMTP id yy33-20020a056a2133a100b001377198af9bmr9168852pzb.56.1693817751696;
-        Mon, 04 Sep 2023 01:55:51 -0700 (PDT)
-Received: from dread.disaster.area (pa49-195-66-88.pa.nsw.optusnet.com.au. [49.195.66.88])
-        by smtp.gmail.com with ESMTPSA id c24-20020a62e818000000b006828e49c04csm6870058pfi.75.2023.09.04.01.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Sep 2023 01:55:51 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-	(envelope-from <david@fromorbit.com>)
-	id 1qd5N6-00Ae83-1u;
-	Mon, 04 Sep 2023 18:55:48 +1000
-Date: Mon, 4 Sep 2023 18:55:48 +1000
-From: Dave Chinner <david@fromorbit.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Mateusz Guzik <mjguzik@gmail.com>,
-	syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>,
-	djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com,
-	viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] [xfs?] INFO: task hung in __fdget_pos (4)
-Message-ID: <ZPWblP6LFKRcUFcv@dread.disaster.area>
-References: <000000000000e6432a06046c96a5@google.com>
- <ZPQYyMBFmqrfqafL@dread.disaster.area>
- <20230903083357.75mq5l43gakuc2z7@f>
- <ZPUIQzsCSNlnBFHB@dread.disaster.area>
- <CAGudoHE_-2765EttOV_6B9EeSuOxqo1MiRCyFP9y=GbSeCMtZg@mail.gmail.com>
- <ZPUSPAnuGLLe3QWH@dread.disaster.area>
- <20230904-beleben-adipositas-ac1ed398927d@brauner>
- <20230904-nashorn-gemeckert-3ca91ef71695@brauner>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A34B15AB;
+	Mon,  4 Sep 2023 12:35:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693830954; x=1725366954;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KHo2uXBPUoUZkLcloIlDvQry2MWmGHn4YHZjhc47z/8=;
+  b=kpKUsxSAcKWkxiEsAka7PZE6tVQXgYW6TPHEObsbr270w7gNB7Vj7yKO
+   qCpc5nkmRRqJhby0ozWDaqsgpW4kMkPP3cTu3RiHsowqwPw+fkydiNZ5G
+   t5SItokqh1WUe01NYtViqlHq/Na9fOykP1b3B1yH9gGc85S7mP3GGPiLc
+   ETE7Y/ScJ2ggFNOhwFPFlpiMnIq15Zc0c4kZNDFO3v0yfLSldwncsZ89B
+   aW9mGoRvPr+fHNm0S9oIDvodih6MwNlzCvs4IkZgSAvKxFU/yL0weFglw
+   hmLlw20irK+1Uit4Hcz6OM6yvXV1dOP4NJehcgyapcPOy3w9Y7MvbWt9o
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="376525500"
+X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
+   d="scan'208";a="376525500"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 05:35:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="830897034"
+X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
+   d="scan'208";a="830897034"
+Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Sep 2023 05:35:51 -0700
+Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qd8o1-0000Tv-1p;
+	Mon, 04 Sep 2023 12:35:49 +0000
+Date: Mon, 4 Sep 2023 20:35:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
+Subject: drivers/clk/clk-asm9260.c:258:17: warning: variable 'hw' set but not
+ used
+Message-ID: <202309042014.IWERPl09-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,27 +46,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230904-nashorn-gemeckert-3ca91ef71695@brauner>
 
-On Mon, Sep 04, 2023 at 10:23:33AM +0200, Christian Brauner wrote:
-> > > Which is pretty much the case for all filesystem bug reports from
-> 
-> I think we should at least consider the option of reducing the number of
-> filesystems syzbot tests. Filesystems that are orphaned or that have no
-> active maintainers for a long period of time just produce noise.
+Hi Dmitry,
 
-I wish you good luck in convincing the syzbot maintainers that
-testing obsolete, unmaintained and/or deprecated code should be
-outside the scope of what syzbot exercises...
+FYI, the error/warning still remains.
 
-> Slapping tags such as [ntfs3?] or [reiserfs?] really don't help to
-> reduce the noise.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   708283abf896dd4853e673cc8cba70acaf9bf4ea
+commit: f5290d8e4f0caa81a491448a27dd70e726095d07 clk: asm9260: use parent index to link the reference clock
+date:   11 months ago
+config: arm-randconfig-r001-20230904 (https://download.01.org/0day-ci/archive/20230904/202309042014.IWERPl09-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230904/202309042014.IWERPl09-lkp@intel.com/reproduce)
 
-Yup - they can't be trusted to be correct, so it does nothing to
-reduce the noise. There's been two false XFS categorisations
-in just the last half a day....
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309042014.IWERPl09-lkp@intel.com/
 
--Dave.
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/clk-asm9260.c:258:17: warning: variable 'hw' set but not used [-Wunused-but-set-variable]
+           struct clk_hw *hw, *pll_hw;
+                          ^
+   1 warning generated.
+
+
+vim +/hw +258 drivers/clk/clk-asm9260.c
+
+   255	
+   256	static void __init asm9260_acc_init(struct device_node *np)
+   257	{
+ > 258		struct clk_hw *hw, *pll_hw;
+
 -- 
-Dave Chinner
-david@fromorbit.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
