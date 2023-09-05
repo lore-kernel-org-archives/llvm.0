@@ -1,44 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE2CCA6F;
-	Tue,  5 Sep 2023 11:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E3CC8F5;
+	Tue,  5 Sep 2023 11:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693913524; x=1725449524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XJ2N4hJNoTugXqEkQ/NpaGXbaCTW9rLOmF2B1mceIbA=;
-  b=nq3sj80e2olp8E87ql2AplhSW3RZErSNSOS64dE1HMnB0Kxy6823gWXL
-   gLHoHoCnDt5JIz5xzNE2B9ROdrXj1tr2A9CBTLkTvNUQvaHBImusWa1YO
-   ZdvNrLctotPTMgZaJgWMhvOvbBqq7vETQjTQHmHCmfvSI31RceStEd9hx
-   N9bOb8eWt5czGxOeWp2RUvVFKD7KpS37FgcD/ZQLpV+oj5tmQHNulv9WF
-   a9bkuVNs20d49jk2jGXX3jiJCayXKQpAKo8ZUn/6ouD+vitMk3MGw0Pvv
-   yrij+oOjMyKuv4+B6i/8bTgkseQJbXtXcgi2nOpvDgGDlXOw8xTMMiDoP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="366993167"
+  t=1693914167; x=1725450167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q8RbTZpvR8BqCfFmIMTLy6/7rh/8GrEuAQsQyFcENA0=;
+  b=YisbqhI6C1RjOigsenhTRnwy3aWaGeDxpa6ddPm2ysHjyaM/3oCIgqBf
+   rDdSzO2v0h0IjXwBMQR3YMeEyPOKNkW3aAJb7Hy1lI6bD1YSwEuwu6eER
+   AsJtZ1PrZOM/rNB1afYBn5oFoaRBYeyRIRnAdMlC0fTC+7p/n2LNdmY4e
+   ApJzmZGzeHhrmkWfvsp8wYojVj9rpq8s8e3Mo6rf/rTDHz5P05CzZmOEh
+   Y1h2nBApOLJGNjH8ZUyBsTHBVIcameAaY8AleIY5JSTnUdLd+3cKNHp67
+   g3iywc6cfpkE26N7PRCVB/gd66M0OQ9i62lN1evV+7Qrt9/D4mw9/wnkR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="356268138"
 X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="366993167"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 04:31:43 -0700
+   d="scan'208";a="356268138"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 04:42:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="806569195"
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="914808977"
 X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="806569195"
+   d="scan'208";a="914808977"
 Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Sep 2023 04:31:41 -0700
+  by orsmga005.jf.intel.com with ESMTP; 05 Sep 2023 04:42:44 -0700
 Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qdUHQ-0001b7-0M;
-	Tue, 05 Sep 2023 11:31:36 +0000
-Date: Tue, 5 Sep 2023 19:31:20 +0800
+	id 1qdUS9-0001bf-2w;
+	Tue, 05 Sep 2023 11:42:41 +0000
+Date: Tue, 5 Sep 2023 19:42:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Animesh Manna <animesh.manna@intel.com>,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/firmware/efi/libstub/alignedmem.c:27: warning: Function
- parameter or member 'memory_type' not described in
- 'efi_allocate_pages_aligned'
-Message-ID: <202309051916.yJ8EbH5d-lkp@intel.com>
+	jani.nikula@intel.com
+Subject: Re: [Intel-gfx] [PATCH v5 3/6] drm/i915/panelreplay: Initializaton
+ and compute config for panel replay
+Message-ID: <202309051920.FD7yiD3K-lkp@intel.com>
+References: <20230905073551.958368-4-animesh.manna@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,54 +49,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230905073551.958368-4-animesh.manna@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3f86ed6ec0b390c033eae7f9c487a3fea268e027
-commit: 9cf42bca30e98a1c6c9e8abf876940a551eaa3d1 efi: libstub: use EFI_LOADER_CODE region when moving the kernel in memory
-date:   10 months ago
-config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230905/202309051916.yJ8EbH5d-lkp@intel.com/config)
+Hi Animesh,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-tip/drm-tip]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Animesh-Manna/drm-panelreplay-dpcd-register-definition-for-panelreplay/20230905-154811
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230905073551.958368-4-animesh.manna%40intel.com
+patch subject: [Intel-gfx] [PATCH v5 3/6] drm/i915/panelreplay: Initializaton and compute config for panel replay
+config: i386-randconfig-003-20230905 (https://download.01.org/0day-ci/archive/20230905/202309051920.FD7yiD3K-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230905/202309051916.yJ8EbH5d-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230905/202309051920.FD7yiD3K-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309051916.yJ8EbH5d-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309051920.FD7yiD3K-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/firmware/efi/libstub/alignedmem.c:27: warning: Function parameter or member 'memory_type' not described in 'efi_allocate_pages_aligned'
+>> drivers/gpu/drm/i915/display/intel_dp.c:3779:27: error: overlapping comparisons always evaluate to true [-Werror,-Wtautological-overlap-compare]
+           if (vsc->revision != 0x5 || vsc->revision != 0x7)
+               ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +27 drivers/firmware/efi/libstub/alignedmem.c
+vim +3779 drivers/gpu/drm/i915/display/intel_dp.c
 
-43b1df0e013c25 Ard Biesheuvel 2020-03-27   7  
-43b1df0e013c25 Ard Biesheuvel 2020-03-27   8  /**
-43b1df0e013c25 Ard Biesheuvel 2020-03-27   9   * efi_allocate_pages_aligned() - Allocate memory pages
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  10   * @size:	minimum number of bytes to allocate
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  11   * @addr:	On return the address of the first allocated page. The first
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  12   *		allocated page has alignment EFI_ALLOC_ALIGN which is an
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  13   *		architecture dependent multiple of the page size.
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  14   * @max:	the address that the last allocated memory page shall not
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  15   *		exceed
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  16   * @align:	minimum alignment of the base of the allocation
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  17   *
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  18   * Allocate pages as EFI_LOADER_DATA. The allocated pages are aligned according
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  19   * to @align, which should be >= EFI_ALLOC_ALIGN. The last allocated page will
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  20   * not exceed the address given by @max.
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  21   *
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  22   * Return:	status code
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  23   */
-43b1df0e013c25 Ard Biesheuvel 2020-03-27  24  efi_status_t efi_allocate_pages_aligned(unsigned long size, unsigned long *addr,
-9cf42bca30e98a Ard Biesheuvel 2022-08-02  25  					unsigned long max, unsigned long align,
-9cf42bca30e98a Ard Biesheuvel 2022-08-02  26  					int memory_type)
-43b1df0e013c25 Ard Biesheuvel 2020-03-27 @27  {
-
-:::::: The code at line 27 was first introduced by commit
-:::::: 43b1df0e013c25abb536699f46d0e9f291b586a0 efi/libstub: Add API function to allocate aligned memory
-
-:::::: TO: Ard Biesheuvel <ardb@kernel.org>
-:::::: CC: Ard Biesheuvel <ardb@kernel.org>
+  3754	
+  3755	static ssize_t intel_dp_vsc_sdp_pack(const struct drm_dp_vsc_sdp *vsc,
+  3756					     struct dp_sdp *sdp, size_t size)
+  3757	{
+  3758		size_t length = sizeof(struct dp_sdp);
+  3759	
+  3760		if (size < length)
+  3761			return -ENOSPC;
+  3762	
+  3763		memset(sdp, 0, size);
+  3764	
+  3765		/*
+  3766		 * Prepare VSC Header for SU as per DP 1.4a spec, Table 2-119
+  3767		 * VSC SDP Header Bytes
+  3768		 */
+  3769		sdp->sdp_header.HB0 = 0; /* Secondary-Data Packet ID = 0 */
+  3770		sdp->sdp_header.HB1 = vsc->sdp_type; /* Secondary-data Packet Type */
+  3771		sdp->sdp_header.HB2 = vsc->revision; /* Revision Number */
+  3772		sdp->sdp_header.HB3 = vsc->length; /* Number of Valid Data Bytes */
+  3773	
+  3774		/*
+  3775		 * Other than revision 0x5 which supports Pixel Encoding/Colorimetry
+  3776		 * Format as per DP 1.4a spec, revision 0x7 also supports Pixel
+  3777		 * Encoding/Colorimetry Format as per DP 2.0 spec.
+  3778		 */
+> 3779		if (vsc->revision != 0x5 || vsc->revision != 0x7)
+  3780			goto out;
+  3781	
+  3782		/* VSC SDP Payload for DB16 through DB18 */
+  3783		/* Pixel Encoding and Colorimetry Formats  */
+  3784		sdp->db[16] = (vsc->pixelformat & 0xf) << 4; /* DB16[7:4] */
+  3785		sdp->db[16] |= vsc->colorimetry & 0xf; /* DB16[3:0] */
+  3786	
+  3787		switch (vsc->bpc) {
+  3788		case 6:
+  3789			/* 6bpc: 0x0 */
+  3790			break;
+  3791		case 8:
+  3792			sdp->db[17] = 0x1; /* DB17[3:0] */
+  3793			break;
+  3794		case 10:
+  3795			sdp->db[17] = 0x2;
+  3796			break;
+  3797		case 12:
+  3798			sdp->db[17] = 0x3;
+  3799			break;
+  3800		case 16:
+  3801			sdp->db[17] = 0x4;
+  3802			break;
+  3803		default:
+  3804			MISSING_CASE(vsc->bpc);
+  3805			break;
+  3806		}
+  3807		/* Dynamic Range and Component Bit Depth */
+  3808		if (vsc->dynamic_range == DP_DYNAMIC_RANGE_CTA)
+  3809			sdp->db[17] |= 0x80;  /* DB17[7] */
+  3810	
+  3811		/* Content Type */
+  3812		sdp->db[18] = vsc->content_type & 0x7;
+  3813	
+  3814	out:
+  3815		return length;
+  3816	}
+  3817	
 
 -- 
 0-DAY CI Kernel Test Service
