@@ -1,131 +1,151 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9991A38
-	for <llvm@lists.linux.dev>; Tue,  5 Sep 2023 07:11:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693897880;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dVii08SL8r67szAzEifbx4hqk1P/jPUord0Tl9lCwAg=;
-	b=RzEBm5pzjHHK6UDbYVZsejJ5pBEoDrsb1DQ9ae/1id0ZrI2Ho74+NAOxdo3nqp4XD7xbH3
-	MY6GVZZ5EjqvPvgVfsl+8gF9uWlW00o8N2jHDvNviK782mzOxNP388g7+rHEX3xVL1prvi
-	OM4nQfFFVKYnHbPnr2noRh7ZxHd32RY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-691-spVwUBhkOiudZtCButcYWA-1; Tue, 05 Sep 2023 03:11:16 -0400
-X-MC-Unique: spVwUBhkOiudZtCButcYWA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79FAD9423C0
-	for <llvm@lists.linux.dev>; Tue,  5 Sep 2023 07:11:16 +0000 (UTC)
-Received: from [172.64.4.20] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6403AC02996;
-	Tue,  5 Sep 2023 07:11:16 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, 3f86ed6e)
-Date: Tue, 05 Sep 2023 07:11:16 -0000
-To: llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D321C38;
+	Tue,  5 Sep 2023 07:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693900384; x=1725436384;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AnzlJ/ONUPwEn3gpEL9v0QBU/P1wozxQo+07ttxfhWs=;
+  b=T/x/GxgIWWXeXffA+bsOGaGQo0QUgqA59lLLiXzl9Sy+fj2AQH0S+v62
+   cnWYo224Za6JqNtFJ5GgOfb9AQbd+vq2/uFxk0CwyqQ+USym7f9JRap5R
+   4hq1wx7Cd2NLUQHcYO8fhLkuBOn09V0rqmtoRYrjcdZOitR1HseOXPXVL
+   m2mf+zusRjN/UH/YANFFKhP+EiKbACId1n96yngJhWS7pIsZXzETzhsHw
+   lscpcUC5nZ5M73XLzTYBt9TQtw6bz+FT04EvosuQ+CGnlS67pPIxIWdAm
+   waG66nqskahi+sGCUfiLmWGPdWr3/EaK9E2NGE3SQMAcYvTlermpvHhgN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="356224962"
+X-IronPort-AV: E=Sophos;i="6.02,228,1688454000"; 
+   d="scan'208";a="356224962"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 00:52:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="690841279"
+X-IronPort-AV: E=Sophos;i="6.02,228,1688454000"; 
+   d="scan'208";a="690841279"
+Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 05 Sep 2023 00:52:53 -0700
+Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qdQri-0001Oz-32;
+	Tue, 05 Sep 2023 07:52:50 +0000
+Date: Tue, 5 Sep 2023 15:52:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
+	andi.shyti@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	aryan.srivastava@alliedtelesis.co.nz, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c:octeon:Add block-mode r/w
+Message-ID: <202309051505.K5sogLFe-lkp@intel.com>
+References: <20230904231439.485925-1-aryan.srivastava@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <80764.123090503111600334@us-mta-691.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230904231439.485925-1-aryan.srivastava@alliedtelesis.co.nz>
 
-Hi, we tested your kernel and here are the results:
+Hi Aryan,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v6.5 next-20230905]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'arc-6.6-rc1' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/vgupta/arc
+url:    https://github.com/intel-lab-lkp/linux/commits/Aryan-Srivastava/i2c-octeon-Add-block-mode-r-w/20230905-071739
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/20230904231439.485925-1-aryan.srivastava%40alliedtelesis.co.nz
+patch subject: [PATCH] i2c:octeon:Add block-mode r/w
+config: riscv-randconfig-001-20230905 (https://download.01.org/0day-ci/archive/20230905/202309051505.K5sogLFe-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230905/202309051505.K5sogLFe-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/102907
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309051505.K5sogLFe-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9388196
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                  x86_64 - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/i2c/busses/i2c-octeon-core.c:725:8: error: use of undeclared label 'ret'
+     725 |                 goto ret;
+         |                      ^
+   1 error generated.
 
 
+vim +/ret +725 drivers/i2c/busses/i2c-octeon-core.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   674	
+   675	/* high-level-controller composite block write+write, m[0]len<=2, m[1]len<=1024 */
+   676	static int octeon_i2c_hlc_block_comp_write(struct octeon_i2c *i2c, struct i2c_msg *msgs)
+   677	{
+   678		bool set_ext = false;
+   679		int i, j, len, ret = 0;
+   680		u64 cmd, buf = 0, ext = 0;
+   681	
+   682		octeon_i2c_hlc_enable(i2c);
+   683		octeon_i2c_block_enable(i2c);
+   684	
+   685		/* Write (size - 1) into block control register */
+   686		len = msgs[1].len - 1;
+   687		octeon_i2c_writeq_flush((u64)(len), i2c->twsi_base + TWSI_BLOCK_CTL(i2c));
+   688	
+   689		/* Prepare core command */
+   690		cmd = SW_TWSI_V | SW_TWSI_SOVR;
+   691		cmd |= (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
+   692	
+   693		if (msgs[0].flags & I2C_M_TEN)
+   694			cmd |= SW_TWSI_OP_10_IA;
+   695		else
+   696			cmd |= SW_TWSI_OP_7_IA;
+   697	
+   698		if (msgs[0].len == 2) {
+   699			cmd |= SW_TWSI_EIA;
+   700			ext |= (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
+   701			set_ext = true;
+   702			cmd |= (u64)msgs[0].buf[1] << SW_TWSI_IA_SHIFT;
+   703		} else {
+   704			cmd |= (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
+   705		}
+   706	
+   707		/* Write msg into FIFO buffer */
+   708		octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI_BLOCK_STS(i2c));
+   709		for (i = 0; i < len; i += 8) {
+   710			buf = 0;
+   711			for (j = 7; j >= 0; j--)
+   712				buf |= (msgs[1].buf[i + (7 - j)] << (8 * j));
+   713			octeon_i2c_writeq_flush(buf, i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
+   714		}
+   715		if (set_ext)
+   716			octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
+   717	
+   718		/* Send command to core (send data in FIFO) */
+   719		octeon_i2c_hlc_int_clear(i2c);
+   720		octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
+   721	
+   722		/* Wait for transaction to complete */
+   723		ret = octeon_i2c_hlc_wait(i2c);
+   724		if (ret)
+ > 725			goto ret;
+   726	
+   727		cmd = __raw_readq(i2c->twsi_base + SW_TWSI(i2c));
+   728		if ((cmd & SW_TWSI_R) == 0)
+   729			return octeon_i2c_check_status(i2c, false);
+   730	
+   731		octeon_i2c_block_disable(i2c);
+   732		return ret;
+   733	}
+   734	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
