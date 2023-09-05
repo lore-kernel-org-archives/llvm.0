@@ -1,143 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1916138;
-	Tue,  5 Sep 2023 09:28:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693906123; x=1725442123;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0DR/G0UhyVG5ezWuiUzUoHRpGIb4iCTcoAthz7qJHk8=;
-  b=nfQv/D8vVtOqRA7rCqR4P8Qv0+GA9GM7n4df9at+sVZ76Vv0SrN3p5fM
-   S7oVspd34BfCasxw+WQ1xReVItHyYHKfiFX7jVPqEHAFEe5Y1vybATTix
-   tmRWGBIH0xmx3YpRI3r761WvFqfLQJbb2kxZI0b5pczfhwjbUNmsE6D0c
-   F60QCTS9rP7M5FMGQveliGZTQGuE5lRXTk9tltU0AFdDMwvTsPVQEw41t
-   zZnYcCEc84AnKUzWbkj245lsSeHhw7IkYYauQqacaWKxhs/9WK3EevzUR
-   KiCgYgkcjgGW2sEcb2u6llqPQiimlMgspzNC7Vb/e3Ts/jlRQnbIeXEfW
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="376678229"
-X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="376678229"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 02:28:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="987756186"
-X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="987756186"
-Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Sep 2023 02:28:40 -0700
-Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qdSMQ-0001UY-2q;
-	Tue, 05 Sep 2023 09:28:38 +0000
-Date: Tue, 5 Sep 2023 17:28:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/firmware/efi/libstub/efi-stub-helper.c:662: warning:
- Function parameter or member 'out' not described in 'efi_load_initrd'
-Message-ID: <202309051737.HzLpuGnc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E456F6AAB
+	for <llvm@lists.linux.dev>; Tue,  5 Sep 2023 10:12:24 +0000 (UTC)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-99c4923195dso349774566b.2
+        for <llvm@lists.linux.dev>; Tue, 05 Sep 2023 03:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693908742; x=1694513542; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e86Wy3ATT/OU246cW5x4ED89M09p8uuT794yspAsqs0=;
+        b=k5i8bn8lEgP1kHgEq+Rl/146LZqUvhkRKXQz7A0gdlnatbdm6dPzeLeS/kcuSRjVEV
+         +UDTZH50rGrI3Y9b9Xh1/et7wPIF06oenswfHLuqnHyceDW8eLGEdI8EdtPIOreW+lW6
+         ewGPVB+S5DncNcN96GjGU3CRyhKObzmxLv3XdnZzKuH7QcW/+uiPDEOV1XyiISGcXqlE
+         QMSUGOd+OcoxtTHxVaCkMVZUP1UcS3OYnxjPngJl3cZB8i3t2kZM3P+mqG5QnHpEio6D
+         oLTSTFVFKeBy/Fk/mxdgmW4s1wn5VYdYJ9yjPpCeNXsgDuMsJP+7lO9WTFNvE3c9/1s1
+         2HCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693908742; x=1694513542;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e86Wy3ATT/OU246cW5x4ED89M09p8uuT794yspAsqs0=;
+        b=MaGCC1zwqwLR/ZPfxI3B1xlIpG3RE/d8L8aKzuJH0hPuuRTLexFjEUpWJriwp1QR36
+         oZoHQoOV1mRrVPr6Xd5YirjRVWVct+jYW8P3HJ/8gIkGWbp/VuhYwvypzR3qVZjAo3by
+         baznt+Fn/2N54XLpg9XerfBmL8uxg8GwrqqWTHDunho3pAPdb8pEmiyEHwvfONQVESBi
+         yd7A4ZJJQ5/5RRxKH3XcUwV5CIxs5szwcgLicGToZQLiOHVb8GH96FnXgv+27oEsGg3k
+         km4hSXqqZdUHOgSFKiF6uEb3GMz5mNi2TbP4g4lf/BM/1isSS/krGZ52BJcu2I17w31v
+         PZdg==
+X-Gm-Message-State: AOJu0YztjAQyeIjtMFQzJAtSHqegMlpohMgP9drg64wT5vOZMiiPUtaA
+	YhFVh8nApxFOKIPNOP0V2rLD++QKvUU0sRVnnAY=
+X-Google-Smtp-Source: AGHT+IFtEs9mWFBpsEix5UrjaXNdwrMvnwAb1slyKTXl/nh9oMhqDvJ0A0+iT+S2hQ1QIcGFmai0uRh3p878HQXM3/A=
+X-Received: by 2002:a17:906:3185:b0:9a1:c00e:60c5 with SMTP id
+ 5-20020a170906318500b009a1c00e60c5mr9033774ejy.48.1693908742368; Tue, 05 Sep
+ 2023 03:12:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date: Tue, 5 Sep 2023 12:12:11 +0200
+Message-ID: <CAKXUXMzR4830pmUfWnwVjGk94inpQ0iz_uXiOnrE2kyV7SUPpg@mail.gmail.com>
+Subject: Include bac7a1fff792 ("lib/ubsan: remove returns-nonnull-attribute
+ checks") into linux-4.14.y
+To: Andrey Ryabinin <aryabinin@virtuozzo.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
+	kasan-dev <kasan-dev@googlegroups.com>, llvm@lists.linux.dev, 
+	linux- stable <stable@vger.kernel.org>
+Cc: Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	eb-gft-team@globallogic.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3f86ed6ec0b390c033eae7f9c487a3fea268e027
-commit: f4dc7fffa9873db50ec25624572f8217a6225de8 efi: libstub: unify initrd loading between architectures
-date:   11 months ago
-config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230905/202309051737.HzLpuGnc-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230905/202309051737.HzLpuGnc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309051737.HzLpuGnc-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Function parameter or member 'initrd' not described in 'efi_load_initrd_dev_path'
-   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Excess function parameter 'load_addr' description in 'efi_load_initrd_dev_path'
-   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Excess function parameter 'load_size' description in 'efi_load_initrd_dev_path'
->> drivers/firmware/efi/libstub/efi-stub-helper.c:662: warning: Function parameter or member 'out' not described in 'efi_load_initrd'
+Dear Andrey, dear Nick, dear Greg, dear Sasha,
 
 
-vim +662 drivers/firmware/efi/libstub/efi-stub-helper.c
+Compiling the kernel with UBSAN enabled and with gcc-8 and later fails when:
 
-f046fff8bc4c4d Ilias Apalodimas    2021-11-19  649  
-8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  650  /**
-8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  651   * efi_load_initrd() - Load initial RAM disk
-8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  652   * @image:	EFI loaded image protocol
-947228cb9f1a2c Atish Patra         2021-07-02  653   * @soft_limit:	preferred address for loading the initrd
-947228cb9f1a2c Atish Patra         2021-07-02  654   * @hard_limit:	upper limit address for loading the initrd
-8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  655   *
-8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  656   * Return:	status code
-8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  657   */
-f61900fd0ebf6c Arvind Sankar       2020-04-30  658  efi_status_t efi_load_initrd(efi_loaded_image_t *image,
-f61900fd0ebf6c Arvind Sankar       2020-04-30  659  			     unsigned long soft_limit,
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  660  			     unsigned long hard_limit,
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  661  			     const struct linux_efi_initrd **out)
-f61900fd0ebf6c Arvind Sankar       2020-04-30 @662  {
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  663  	efi_guid_t tbl_guid = LINUX_EFI_INITRD_MEDIA_GUID;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  664  	efi_status_t status = EFI_SUCCESS;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  665  	struct linux_efi_initrd initrd, *tbl;
-f61900fd0ebf6c Arvind Sankar       2020-04-30  666  
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  667  	if (!IS_ENABLED(CONFIG_BLK_DEV_INITRD) || efi_noinitrd)
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  668  		return EFI_SUCCESS;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  669  
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  670  	status = efi_load_initrd_dev_path(&initrd, hard_limit);
-f61900fd0ebf6c Arvind Sankar       2020-04-30  671  	if (status == EFI_SUCCESS) {
-f61900fd0ebf6c Arvind Sankar       2020-04-30  672  		efi_info("Loaded initrd from LINUX_EFI_INITRD_MEDIA_GUID device path\n");
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  673  		if (initrd.size > 0)
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  674  			efi_measure_initrd(initrd.base, initrd.size);
-f61900fd0ebf6c Arvind Sankar       2020-04-30  675  	} else if (status == EFI_NOT_FOUND) {
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  676  		status = efi_load_initrd_cmdline(image, &initrd, soft_limit,
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  677  						 hard_limit);
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  678  		/* command line loader disabled or no initrd= passed? */
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  679  		if (status == EFI_UNSUPPORTED || status == EFI_NOT_READY)
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  680  			return EFI_SUCCESS;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  681  		if (status == EFI_SUCCESS)
-f61900fd0ebf6c Arvind Sankar       2020-04-30  682  			efi_info("Loaded initrd from command line option\n");
-f61900fd0ebf6c Arvind Sankar       2020-04-30  683  	}
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  684  	if (status != EFI_SUCCESS)
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  685  		goto failed;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  686  
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  687  	status = efi_bs_call(allocate_pool, EFI_LOADER_DATA, sizeof(initrd),
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  688  			     (void **)&tbl);
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  689  	if (status != EFI_SUCCESS)
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  690  		goto free_initrd;
-f046fff8bc4c4d Ilias Apalodimas    2021-11-19  691  
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  692  	*tbl = initrd;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  693  	status = efi_bs_call(install_configuration_table, &tbl_guid, tbl);
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  694  	if (status != EFI_SUCCESS)
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  695  		goto free_tbl;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  696  
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  697  	if (out)
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  698  		*out = tbl;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  699  	return EFI_SUCCESS;
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  700  
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  701  free_tbl:
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  702  	efi_bs_call(free_pool, tbl);
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  703  free_initrd:
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  704  	efi_free(initrd.size, initrd.base);
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  705  failed:
-f4dc7fffa9873d Ard Biesheuvel      2022-09-16  706  	efi_err("Failed to load initrd: 0x%lx\n", status);
-f61900fd0ebf6c Arvind Sankar       2020-04-30  707  	return status;
-f61900fd0ebf6c Arvind Sankar       2020-04-30  708  }
-14c574f35cfbc9 Arvind Sankar       2020-05-18  709  
+  commit 1e1b6d63d634 ("lib/string.c: implement stpcpy") is applied, and
+  commit bac7a1fff792 ("lib/ubsan: remove returns-nonnull-attribute checks") is
+  not applied.
 
-:::::: The code at line 662 was first introduced by commit
-:::::: f61900fd0ebf6c6b91719d63272a54f4d11051df efi/libstub: Unify initrd loading across architectures
+To reproduce, run:
 
-:::::: TO: Arvind Sankar <nivedita@alum.mit.edu>
-:::::: CC: Ard Biesheuvel <ardb@kernel.org>
+  tuxmake -r docker -a arm64 -t gcc-13 -k allnoconfig --kconfig-add
+CONFIG_UBSAN=y
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+It then fails with:
+
+  aarch64-linux-gnu-ld: lib/string.o: in function `stpcpy':
+  string.c:(.text+0x694): undefined reference to
+`__ubsan_handle_nonnull_return_v1'
+  string.c:(.text+0x694): relocation truncated to fit:
+R_AARCH64_CALL26 against undefined symbol
+`__ubsan_handle_nonnull_return_v1'
+
+Below you find a complete list of architectures, compiler versions and kernel
+versions that I have tested with.
+
+As commit bac7a1fff792 ("lib/ubsan: remove returns-nonnull-attribute checks") is
+included in v4.16, and commit 1e1b6d63d634 ("lib/string.c: implement stpcpy") is
+included in v5.9, this is not an issue that can happen on any mainline release
+or the stable releases v4.19.y and later.
+
+In the v4.14.y branch, however, commit 1e1b6d63d634 ("lib/string.c: implement
+stpcpy") was included with v4.14.200 as commit b6d38137c19f and commit
+bac7a1fff792 ("lib/ubsan: remove returns-nonnull-attribute checks") from
+mainline was not included yet. Hence, this reported failure with UBSAN can be
+observed on v4.14.y with recent gcc versions.
+
+Greg, once checked and confirmed by Andrey or Nick, could you please include
+commit bac7a1fff792 ("lib/ubsan: remove returns-nonnull-attribute checks") into
+the linux-4.14.y branch?
+
+The commit applies directly, without any change, on v4.14.200 to v4.14.325.
+
+With that, future versions of v4.14.y will have a working UBSAN with the recent
+gcc compiler versions.
+
+Note: For any users, intending to run UBSAN on versions 4.14.200 to v4.14.325,
+e.g., for bisecting UBSAN-detected kernel bugs on the linux-4.14.y branch, they
+would simply need to apply commit bac7a1fff792 on those release versions.
+
+
+Appendix of my full testing record:
+
+For arm64 and x86-64 architecture, I tested this whole matrix of combinations of
+building v4.14.200, i.e., the first version that failed with the reported build
+failure and v4.14.325, i.e., the latest v4.14 release version at the time of
+writing.
+
+On v4.14.200 and on v4.14.325:
+
+  x86_64:
+    gcc-7:     unsupported configuration (according to tuxmake)
+    gcc-8:     affected and resolved by cherry-picking bac7a1fff792
+    gcc-9:     affected and resolved by cherry-picking bac7a1fff792
+    gcc-10:    affected and resolved by cherry-picking bac7a1fff792
+    gcc-11:
+      v4.14.200 fails with an unrelated build error on this compiler and arch
+      v4.14.325 affected and resolved by cherry-picking bac7a1fff792
+    gcc-12:
+      v4.14.200 fails with an unrelated build error on this compiler and arch
+      v4.14.325 affected and resolved by cherry-picking bac7a1fff792
+    gcc-13:
+      v4.14.200 fails with an unrelated build error on this compiler and arch
+      v4.14.325 affected and resolved by cherry-picking bac7a1fff792
+    clang-9:   unsupported configuration (according to tuxmake)
+    clang-10:  not affected, builds with and without cherry-picking bac7a1fff792
+    clang-17:  not affected, builds with and without cherry-picking bac7a1fff792
+
+  arm64:
+    gcc-7:     unsupported configuration (according to tuxmake)
+    gcc-8:     affected and resolved by cherry-picking bac7a1fff792
+    gcc-9:     affected and resolved by cherry-picking bac7a1fff792
+    gcc-10:    affected and resolved by cherry-picking bac7a1fff792
+    gcc-11:    affected and resolved by cherry-picking bac7a1fff792
+    gcc-12:    affected and resolved by cherry-picking bac7a1fff792
+    gcc-13:    affected and resolved by cherry-picking bac7a1fff792
+    clang-9:   unsupported configuration (according to tuxmake)
+    clang-10:  not affected, builds with and without cherry-picking bac7a1fff792
+    clang-17:  not affected, builds with and without cherry-picking bac7a1fff792
+
+
+Best regards,
+
+Lukas
