@@ -1,44 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DF01FA4;
-	Tue,  5 Sep 2023 08:04:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1916138;
+	Tue,  5 Sep 2023 09:28:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693901097; x=1725437097;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TjkU5C7YEJNf+omUGGBB9Q+W1jCtCApBBKERLuMV3CY=;
-  b=CGZVYpwy1qj4hRMr8KiZ5r4+RiFRlEWxxXY+g6ynuMpRf9UwCFCGN8Lx
-   gcJTKWnA1YUvXdptgs6ezl1ouoc5/wDlOfMZf2ckXhk0nKM0/DZlQjba1
-   YbYKoif/w2qVzNwjQEpPJ3/JFpI6N70DqToj5Cs0JURTDXeC9rFvFWRU2
-   NoJfybqnBsjhnZe4RGKHVLpWw9YjTresqVfsQHlh3oRCPR3KDMQlAgQ5F
-   i2GF8uZHsQx2CUZuB92/B4RROGODuSKMn1zhf228Anb4/e20ces34dkxy
-   IJH8e11LNrsKJ2CLHppKBwImJn3QbJB4OgNB7RxC9mnPlLUxvW+yAz14/
+  t=1693906123; x=1725442123;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0DR/G0UhyVG5ezWuiUzUoHRpGIb4iCTcoAthz7qJHk8=;
+  b=nfQv/D8vVtOqRA7rCqR4P8Qv0+GA9GM7n4df9at+sVZ76Vv0SrN3p5fM
+   S7oVspd34BfCasxw+WQ1xReVItHyYHKfiFX7jVPqEHAFEe5Y1vybATTix
+   tmRWGBIH0xmx3YpRI3r761WvFqfLQJbb2kxZI0b5pczfhwjbUNmsE6D0c
+   F60QCTS9rP7M5FMGQveliGZTQGuE5lRXTk9tltU0AFdDMwvTsPVQEw41t
+   zZnYcCEc84AnKUzWbkj245lsSeHhw7IkYYauQqacaWKxhs/9WK3EevzUR
+   KiCgYgkcjgGW2sEcb2u6llqPQiimlMgspzNC7Vb/e3Ts/jlRQnbIeXEfW
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="379455982"
-X-IronPort-AV: E=Sophos;i="6.02,228,1688454000"; 
-   d="scan'208";a="379455982"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 01:04:55 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="376678229"
+X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
+   d="scan'208";a="376678229"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 02:28:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="864613174"
-X-IronPort-AV: E=Sophos;i="6.02,228,1688454000"; 
-   d="scan'208";a="864613174"
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="987756186"
+X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
+   d="scan'208";a="987756186"
 Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Sep 2023 01:04:53 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 05 Sep 2023 02:28:40 -0700
 Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qdR3L-0001Pm-1g;
-	Tue, 05 Sep 2023 08:04:51 +0000
-Date: Tue, 5 Sep 2023 16:04:30 +0800
+	id 1qdSMQ-0001UY-2q;
+	Tue, 05 Sep 2023 09:28:38 +0000
+Date: Tue, 5 Sep 2023 17:28:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] ALSA: seq: Fix snd_seq_expand_var_event() call to
- user-space
-Message-ID: <202309051551.x8wzvudr-lkp@intel.com>
-References: <20230905052631.18240-1-tiwai@suse.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/firmware/efi/libstub/efi-stub-helper.c:662: warning:
+ Function parameter or member 'out' not described in 'efi_load_initrd'
+Message-ID: <202309051737.HzLpuGnc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,68 +46,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230905052631.18240-1-tiwai@suse.de>
 
-Hi Takashi,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.5 next-20230905]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Takashi-Iwai/ALSA-seq-Fix-snd_seq_expand_var_event-call-to-user-space/20230905-132920
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230905052631.18240-1-tiwai%40suse.de
-patch subject: [PATCH] ALSA: seq: Fix snd_seq_expand_var_event() call to user-space
-config: arm-randconfig-r014-20230905 (https://download.01.org/0day-ci/archive/20230905/202309051551.x8wzvudr-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230905/202309051551.x8wzvudr-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3f86ed6ec0b390c033eae7f9c487a3fea268e027
+commit: f4dc7fffa9873db50ec25624572f8217a6225de8 efi: libstub: unify initrd loading between architectures
+date:   11 months ago
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230905/202309051737.HzLpuGnc-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230905/202309051737.HzLpuGnc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309051551.x8wzvudr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309051737.HzLpuGnc-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> sound/core/seq/seq_memory.c:194:4: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-     194 |                         clear_user((__force void __user *)buf + len, newlen - len);
-         |                         ^~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Function parameter or member 'initrd' not described in 'efi_load_initrd_dev_path'
+   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Excess function parameter 'load_addr' description in 'efi_load_initrd_dev_path'
+   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Excess function parameter 'load_size' description in 'efi_load_initrd_dev_path'
+>> drivers/firmware/efi/libstub/efi-stub-helper.c:662: warning: Function parameter or member 'out' not described in 'efi_load_initrd'
 
 
-vim +/warn_unused_result +194 sound/core/seq/seq_memory.c
+vim +662 drivers/firmware/efi/libstub/efi-stub-helper.c
 
-   173	
-   174	int snd_seq_expand_var_event(const struct snd_seq_event *event, int count, char *buf,
-   175				     int in_kernel, int size_aligned)
-   176	{
-   177		int len, newlen, err;
-   178	
-   179		len = get_var_len(event);
-   180		if (len < 0)
-   181			return len;
-   182		newlen = len;
-   183		if (size_aligned > 0)
-   184			newlen = roundup(len, size_aligned);
-   185		if (count < newlen)
-   186			return -EAGAIN;
-   187		err = expand_var_event(event, 0, len, buf, in_kernel);
-   188		if (err < 0)
-   189			return err;
-   190		if (len != newlen) {
-   191			if (in_kernel)
-   192				memset(buf + len, 0, newlen - len);
-   193			else
- > 194				clear_user((__force void __user *)buf + len, newlen - len);
-   195		}
-   196		return newlen;
-   197	}
-   198	EXPORT_SYMBOL(snd_seq_expand_var_event);
-   199	
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  649  
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  650  /**
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  651   * efi_load_initrd() - Load initial RAM disk
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  652   * @image:	EFI loaded image protocol
+947228cb9f1a2c Atish Patra         2021-07-02  653   * @soft_limit:	preferred address for loading the initrd
+947228cb9f1a2c Atish Patra         2021-07-02  654   * @hard_limit:	upper limit address for loading the initrd
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  655   *
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  656   * Return:	status code
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  657   */
+f61900fd0ebf6c Arvind Sankar       2020-04-30  658  efi_status_t efi_load_initrd(efi_loaded_image_t *image,
+f61900fd0ebf6c Arvind Sankar       2020-04-30  659  			     unsigned long soft_limit,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  660  			     unsigned long hard_limit,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  661  			     const struct linux_efi_initrd **out)
+f61900fd0ebf6c Arvind Sankar       2020-04-30 @662  {
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  663  	efi_guid_t tbl_guid = LINUX_EFI_INITRD_MEDIA_GUID;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  664  	efi_status_t status = EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  665  	struct linux_efi_initrd initrd, *tbl;
+f61900fd0ebf6c Arvind Sankar       2020-04-30  666  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  667  	if (!IS_ENABLED(CONFIG_BLK_DEV_INITRD) || efi_noinitrd)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  668  		return EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  669  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  670  	status = efi_load_initrd_dev_path(&initrd, hard_limit);
+f61900fd0ebf6c Arvind Sankar       2020-04-30  671  	if (status == EFI_SUCCESS) {
+f61900fd0ebf6c Arvind Sankar       2020-04-30  672  		efi_info("Loaded initrd from LINUX_EFI_INITRD_MEDIA_GUID device path\n");
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  673  		if (initrd.size > 0)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  674  			efi_measure_initrd(initrd.base, initrd.size);
+f61900fd0ebf6c Arvind Sankar       2020-04-30  675  	} else if (status == EFI_NOT_FOUND) {
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  676  		status = efi_load_initrd_cmdline(image, &initrd, soft_limit,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  677  						 hard_limit);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  678  		/* command line loader disabled or no initrd= passed? */
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  679  		if (status == EFI_UNSUPPORTED || status == EFI_NOT_READY)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  680  			return EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  681  		if (status == EFI_SUCCESS)
+f61900fd0ebf6c Arvind Sankar       2020-04-30  682  			efi_info("Loaded initrd from command line option\n");
+f61900fd0ebf6c Arvind Sankar       2020-04-30  683  	}
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  684  	if (status != EFI_SUCCESS)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  685  		goto failed;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  686  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  687  	status = efi_bs_call(allocate_pool, EFI_LOADER_DATA, sizeof(initrd),
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  688  			     (void **)&tbl);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  689  	if (status != EFI_SUCCESS)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  690  		goto free_initrd;
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  691  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  692  	*tbl = initrd;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  693  	status = efi_bs_call(install_configuration_table, &tbl_guid, tbl);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  694  	if (status != EFI_SUCCESS)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  695  		goto free_tbl;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  696  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  697  	if (out)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  698  		*out = tbl;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  699  	return EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  700  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  701  free_tbl:
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  702  	efi_bs_call(free_pool, tbl);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  703  free_initrd:
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  704  	efi_free(initrd.size, initrd.base);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  705  failed:
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  706  	efi_err("Failed to load initrd: 0x%lx\n", status);
+f61900fd0ebf6c Arvind Sankar       2020-04-30  707  	return status;
+f61900fd0ebf6c Arvind Sankar       2020-04-30  708  }
+14c574f35cfbc9 Arvind Sankar       2020-05-18  709  
+
+:::::: The code at line 662 was first introduced by commit
+:::::: f61900fd0ebf6c6b91719d63272a54f4d11051df efi/libstub: Unify initrd loading across architectures
+
+:::::: TO: Arvind Sankar <nivedita@alum.mit.edu>
+:::::: CC: Ard Biesheuvel <ardb@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
