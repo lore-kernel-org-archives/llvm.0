@@ -1,78 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B8A375;
-	Tue,  5 Sep 2023 00:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693875007; x=1725411007;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=4VtcMEkbZ9aQnj+tKP/+4JpgwolQ39AxmYETeZqdGgc=;
-  b=jNj0pf6I5h9Nz+/DJ0AmXrUaTmjV6am751TNbFtrCGh3yRUfo/plilo/
-   1A5Ll44tcriJwEb8JuCivksPZfbzZF18djaoo6jNnPh5hdd2LZqJpfFnL
-   K/pVj/fOmcQMRPTubOsTX1wl54RwaXKIgCH7v/Im6dyQC3Q1UvzyHjUJg
-   7O51bI2+8nxNp2IbsUQctnZvSEy6y5LVsgKhqrREUrbWiU44YDIVHSEVT
-   g9XP6OrG/tupttl1lpYL9INWjslv6PyVlL2IdkfwC3FAtdAOU1IJ5/5KT
-   fu/L9Zown4/TQM8lQJqVvBA+q+TGHmugla2JmKVogFAE3qECzCObrBDHy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="379385646"
-X-IronPort-AV: E=Sophos;i="6.02,227,1688454000"; 
-   d="scan'208";a="379385646"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 17:50:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="987618099"
-X-IronPort-AV: E=Sophos;i="6.02,227,1688454000"; 
-   d="scan'208";a="987618099"
-Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 04 Sep 2023 17:50:05 -0700
-Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qdKGZ-00012J-0X;
-	Tue, 05 Sep 2023 00:50:03 +0000
-Date: Tue, 5 Sep 2023 08:47:44 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: pwm_mediatek_apply() falls through to
- next function raspberrypi_pwm_probe()
-Message-ID: <202309050808.lYfMGbcj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7848633
+	for <llvm@lists.linux.dev>; Tue,  5 Sep 2023 02:41:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1693881677;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HC3YvdmN3ib1mV+wmHBUh1bVl14WZpaYH7mbR7c8XtU=;
+	b=Ygb3mT5G6Aekqomg9lS8og2goZqEEDs9b2S7amegKwVYfrVE4QtquJv8xskXojjK5EyiP3
+	eSgvCMHuGPA3uTF0LRiuJwww3zoHiKNzADLeoiqi1Nb9F3K0+xX6mqRW4bF05IRBSzsUJS
+	zXaRV8FKuyOSKPUclyTB5M3ECe4YF1I=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-Wv8-n4_UN-6EusPczHPs7Q-1; Mon, 04 Sep 2023 22:41:16 -0400
+X-MC-Unique: Wv8-n4_UN-6EusPczHPs7Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0BD4E3C0D869
+	for <llvm@lists.linux.dev>; Tue,  5 Sep 2023 02:41:16 +0000 (UTC)
+Received: from [172.64.4.20] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id ECFC62026D4B;
+	Tue,  5 Sep 2023 02:41:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 7a1415ee)
+Date: Tue, 05 Sep 2023 02:41:15 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <49277.123090422411600134@us-mta-613.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Hans de Goede <hdegoede@redhat.com>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3f86ed6ec0b390c033eae7f9c487a3fea268e027
-commit: 3cd8cc98d63492f6f69edd4486c9bd1fe29f91c3 platform/x86: Drop the PMC_ATOM Kconfig option
-date:   1 year, 3 months ago
-config: x86_64-buildonly-randconfig-001-20230905 (https://download.01.org/0day-ci/archive/20230905/202309050808.lYfMGbcj-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230905/202309050808.lYfMGbcj-lkp@intel.com/reproduce)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309050808.lYfMGbcj-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Kernel information:
+    Commit message: Merge tag 'm68knommu-for-v6.6' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/gerg/m68knommu
 
-   vmlinux.o: warning: objtool: ibt_selftest+0xf: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: fault_in_readable+0xd4: call to __tsan_volatile_write1() with UACCESS enabled
->> vmlinux.o: warning: objtool: pwm_mediatek_apply() falls through to next function raspberrypi_pwm_probe()
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x2d: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ibt_selftest+0x19: return with modified stack frame
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xd6: relocation to !ENDBR: native_write_cr4+0x4
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xe2: relocation to !ENDBR: native_write_cr4+0x4
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xf0: relocation to !ENDBR: native_write_cr4+0x5
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xfc: relocation to !ENDBR: native_write_cr4+0x5
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/102897
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9385870
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
