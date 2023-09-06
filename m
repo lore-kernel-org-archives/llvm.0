@@ -1,50 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B53125AF;
-	Wed,  6 Sep 2023 22:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FED9125D1;
+	Wed,  6 Sep 2023 22:48:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694039110; x=1725575110;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CmXryx634wZP08eFToMJDCeQYd4QcOqBm1Z7tFNrDfo=;
-  b=Xos/quwKTvK/loWvc1WoV4zC9OlmhqdjTpq40BIvDOaCrUnSvGle7bUf
-   6D8Kl+FZjjUIT5MvxsUiv2E3p+14RIRACkhlrTTKaML/Q6uqGwiTiX+Zh
-   PWx9jiUwFzR+2g+ywe3+/IXU8XF9ZlEzsDXWtg4QrmnQeDNDSe3IiXsMm
-   NbWu1wZLCPAqqADwxoluA3tbY/t1EiMWnVMgNCk7sdNuDdL0UAAdkcZCD
-   me043M3M5RctmJo1Y6ic7BDj0XFx16LFymhRVIoZdQAjIxDWVK7cCX4aW
-   p35t9nzfreq18Sj/kMvfJIa2sLqvLfxrubRfBX591It6Z7S/rxoI3VC5f
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="441185994"
+  t=1694040494; x=1725576494;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+MX9kv0UICmveqsK8mmPgfTB03+w/QtqW94cq0y3TnE=;
+  b=NtIXWdIJqNAHcDwF369fLvaObZaUIVE8+sNgkwzP8LEjtjPejkr3VyM0
+   RcPqHSOrjbDGuDo1JmNe1tFag8y9De1wpW2C/hQswg/FKBMr6c029z8sR
+   7Czs0zJPtnktwlHtkEYO3RszS2jiPUTCjXxHKZ/y+rrA4nPepusvBSiQ/
+   I95CsIw/wa7X3wAwjGW0fdJqodzzNjNQtD2RN1bVY/MjcaF5K9JInhYMA
+   MZJ/sllwHFpQEjAkh/U4NMv4jRy4zTBlWwb4tml+r8NCzcm0NvW3air4x
+   tKIwAkuea6GC7e+GkPR+zG/47d6L9Fj6h7E/fjBNMfyevSogsik/qrQEG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="376103973"
 X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="441185994"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 15:25:09 -0700
+   d="scan'208";a="376103973"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 15:48:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="718443691"
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="856650663"
 X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="718443691"
+   d="scan'208";a="856650663"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2023 15:25:06 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 06 Sep 2023 15:48:07 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qe0xM-0000dn-2B;
-	Wed, 06 Sep 2023 22:25:04 +0000
-Date: Thu, 7 Sep 2023 06:24:28 +0800
+	id 1qe1Jd-0000ep-0v;
+	Wed, 06 Sep 2023 22:48:05 +0000
+Date: Thu, 7 Sep 2023 06:47:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nick Alcock <nick.alcock@oracle.com>
+To: Min Li <lnimi@hotmail.com>, richardcochran@gmail.com, lee@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kris Van Hees <kris.van.hees@oracle.com>,
-	Tomas Jedlicka <tomas.jedlicka@oracle.com>,
-	Eugene Loh <eugene.loh@oracle.com>,
-	David Mc Lean <david.mclean@oracle.com>,
-	Vincent Lim <vincent.lim@oracle.com>
-Subject: [oracle-dtrace:v2/6.5 10/13] drivers/virt/acrn/irqfd.c:146:32:
- error: incompatible function pointer types passing 'void (struct file *,
- wait_queue_head_t *, poll_table *)' (aka 'void (struct file *, struct
- wait_queue_head *, struct poll_table_struct *)') to parameter of type
- 'poll_qu...
-Message-ID: <202309070606.cYhMhndO-lkp@intel.com>
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	Min Li <min.li.xe@renesas.com>
+Subject: Re: [PATCH net 1/1] ptp: clockmatrix: support 32-bit address space
+Message-ID: <202309070602.ai5WsjEa-lkp@intel.com>
+References: <MW5PR03MB6932BFFE31583BBF02CD9488A0EFA@MW5PR03MB6932.namprd03.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,117 +48,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <MW5PR03MB6932BFFE31583BBF02CD9488A0EFA@MW5PR03MB6932.namprd03.prod.outlook.com>
 
-tree:   https://github.com/oracle/dtrace-linux-kernel v2/6.5
-head:   1120d1c598d4ae2d08278969b9001a866aa8273a
-commit: 051cfd2102807119e31bdd4947d18388b3df5fd3 [10/13] waitfd: new syscall implementing waitpid() over fds
-config: x86_64-randconfig-013-20230907 (https://download.01.org/0day-ci/archive/20230907/202309070606.cYhMhndO-lkp@intel.com/config)
+Hi Min,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/ptp-clockmatrix-support-32-bit-address-space/20230907-005615
+base:   net/main
+patch link:    https://lore.kernel.org/r/MW5PR03MB6932BFFE31583BBF02CD9488A0EFA%40MW5PR03MB6932.namprd03.prod.outlook.com
+patch subject: [PATCH net 1/1] ptp: clockmatrix: support 32-bit address space
+config: x86_64-buildonly-randconfig-003-20230907 (https://download.01.org/0day-ci/archive/20230907/202309070602.ai5WsjEa-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070606.cYhMhndO-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070602.ai5WsjEa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309070606.cYhMhndO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309070602.ai5WsjEa-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/virt/acrn/irqfd.c:146:32: error: incompatible function pointer types passing 'void (struct file *, wait_queue_head_t *, poll_table *)' (aka 'void (struct file *, struct wait_queue_head *, struct poll_table_struct *)') to parameter of type 'poll_queue_proc' (aka 'void (*)(struct file *, struct wait_queue_head *, struct poll_table_struct *, unsigned long)') [-Wincompatible-function-pointer-types]
-           init_poll_funcptr(&irqfd->pt, hsm_irqfd_poll_func);
-                                         ^~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:82:70: note: passing argument to parameter 'qproc' here
-   static inline void init_poll_funcptr(poll_table *pt, poll_queue_proc qproc)
-                                                                        ^
-   1 error generated.
+>> drivers/ptp/ptp_clockmatrix.c:1257:50: warning: implicit conversion from 'int' to 'u16' (aka 'unsigned short') changes value from 537972560 to 53072 [-Wconstant-conversion]
+           u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
+               ~~~~~~~                                     ^~~~~~~
+   include/linux/mfd/idt8a340_reg.h:454:43: note: expanded from macro 'SCRATCH'
+   #define SCRATCH                           0x2010cf50
+                                             ^~~~~~~~~~
+   include/linux/mfd/idt8a340_reg.h:673:55: note: expanded from macro 'IDTCM_FW_REG'
+   #define IDTCM_FW_REG(FW, VER, REG)      (((FW) < (VER)) ? (REG) : (REG##_##VER))
+                                                              ^~~
+   drivers/ptp/ptp_clockmatrix.c:1257:16: warning: implicit conversion from 'int' to 'u16' (aka 'unsigned short') changes value from 537972556 to 53068 [-Wconstant-conversion]
+           u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
+               ~~~~~~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mfd/idt8a340_reg.h:673:63: note: expanded from macro 'IDTCM_FW_REG'
+   #define IDTCM_FW_REG(FW, VER, REG)      (((FW) < (VER)) ? (REG) : (REG##_##VER))
+                                                                      ^~~~~~~~~~~
+   <scratch space>:171:1: note: expanded from here
+   SCRATCH_V520
+   ^~~~~~~~~~~~
+   include/linux/mfd/idt8a340_reg.h:455:43: note: expanded from macro 'SCRATCH_V520'
+   #define SCRATCH_V520                      0x2010cf4c
+                                             ^~~~~~~~~~
+   2 warnings generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for VMLINUX_MAP
-   Depends on [n]: EXPERT [=n]
-   Selected by [y]:
-   - KALLMODSYMS [=y] && KALLSYMS [=y]
 
+vim +1257 drivers/ptp/ptp_clockmatrix.c
 
-vim +146 drivers/virt/acrn/irqfd.c
-
-aa3b483ff1d71c Shuo Liu    2021-02-07  104  
-aa3b483ff1d71c Shuo Liu    2021-02-07  105  /*
-aa3b483ff1d71c Shuo Liu    2021-02-07  106   * Assign an eventfd to a VM and create a HSM irqfd associated with the
-aa3b483ff1d71c Shuo Liu    2021-02-07  107   * eventfd. The properties of the HSM irqfd are built from a &struct
-aa3b483ff1d71c Shuo Liu    2021-02-07  108   * acrn_irqfd.
-aa3b483ff1d71c Shuo Liu    2021-02-07  109   */
-aa3b483ff1d71c Shuo Liu    2021-02-07  110  static int acrn_irqfd_assign(struct acrn_vm *vm, struct acrn_irqfd *args)
-aa3b483ff1d71c Shuo Liu    2021-02-07  111  {
-aa3b483ff1d71c Shuo Liu    2021-02-07  112  	struct eventfd_ctx *eventfd = NULL;
-aa3b483ff1d71c Shuo Liu    2021-02-07  113  	struct hsm_irqfd *irqfd, *tmp;
-dcf9625f2adf33 Yejune Deng 2021-02-21  114  	__poll_t events;
-aa3b483ff1d71c Shuo Liu    2021-02-07  115  	struct fd f;
-aa3b483ff1d71c Shuo Liu    2021-02-07  116  	int ret = 0;
-aa3b483ff1d71c Shuo Liu    2021-02-07  117  
-aa3b483ff1d71c Shuo Liu    2021-02-07  118  	irqfd = kzalloc(sizeof(*irqfd), GFP_KERNEL);
-aa3b483ff1d71c Shuo Liu    2021-02-07  119  	if (!irqfd)
-aa3b483ff1d71c Shuo Liu    2021-02-07  120  		return -ENOMEM;
-aa3b483ff1d71c Shuo Liu    2021-02-07  121  
-aa3b483ff1d71c Shuo Liu    2021-02-07  122  	irqfd->vm = vm;
-aa3b483ff1d71c Shuo Liu    2021-02-07  123  	memcpy(&irqfd->msi, &args->msi, sizeof(args->msi));
-aa3b483ff1d71c Shuo Liu    2021-02-07  124  	INIT_LIST_HEAD(&irqfd->list);
-aa3b483ff1d71c Shuo Liu    2021-02-07  125  	INIT_WORK(&irqfd->shutdown, hsm_irqfd_shutdown_work);
-aa3b483ff1d71c Shuo Liu    2021-02-07  126  
-aa3b483ff1d71c Shuo Liu    2021-02-07  127  	f = fdget(args->fd);
-aa3b483ff1d71c Shuo Liu    2021-02-07  128  	if (!f.file) {
-aa3b483ff1d71c Shuo Liu    2021-02-07  129  		ret = -EBADF;
-aa3b483ff1d71c Shuo Liu    2021-02-07  130  		goto out;
-aa3b483ff1d71c Shuo Liu    2021-02-07  131  	}
-aa3b483ff1d71c Shuo Liu    2021-02-07  132  
-aa3b483ff1d71c Shuo Liu    2021-02-07  133  	eventfd = eventfd_ctx_fileget(f.file);
-aa3b483ff1d71c Shuo Liu    2021-02-07  134  	if (IS_ERR(eventfd)) {
-aa3b483ff1d71c Shuo Liu    2021-02-07  135  		ret = PTR_ERR(eventfd);
-aa3b483ff1d71c Shuo Liu    2021-02-07  136  		goto fail;
-aa3b483ff1d71c Shuo Liu    2021-02-07  137  	}
-aa3b483ff1d71c Shuo Liu    2021-02-07  138  
-aa3b483ff1d71c Shuo Liu    2021-02-07  139  	irqfd->eventfd = eventfd;
-aa3b483ff1d71c Shuo Liu    2021-02-07  140  
-aa3b483ff1d71c Shuo Liu    2021-02-07  141  	/*
-aa3b483ff1d71c Shuo Liu    2021-02-07  142  	 * Install custom wake-up handling to be notified whenever underlying
-aa3b483ff1d71c Shuo Liu    2021-02-07  143  	 * eventfd is signaled.
-aa3b483ff1d71c Shuo Liu    2021-02-07  144  	 */
-aa3b483ff1d71c Shuo Liu    2021-02-07  145  	init_waitqueue_func_entry(&irqfd->wait, hsm_irqfd_wakeup);
-aa3b483ff1d71c Shuo Liu    2021-02-07 @146  	init_poll_funcptr(&irqfd->pt, hsm_irqfd_poll_func);
-aa3b483ff1d71c Shuo Liu    2021-02-07  147  
-aa3b483ff1d71c Shuo Liu    2021-02-07  148  	mutex_lock(&vm->irqfds_lock);
-aa3b483ff1d71c Shuo Liu    2021-02-07  149  	list_for_each_entry(tmp, &vm->irqfds, list) {
-aa3b483ff1d71c Shuo Liu    2021-02-07  150  		if (irqfd->eventfd != tmp->eventfd)
-aa3b483ff1d71c Shuo Liu    2021-02-07  151  			continue;
-aa3b483ff1d71c Shuo Liu    2021-02-07  152  		ret = -EBUSY;
-aa3b483ff1d71c Shuo Liu    2021-02-07  153  		mutex_unlock(&vm->irqfds_lock);
-aa3b483ff1d71c Shuo Liu    2021-02-07  154  		goto fail;
-aa3b483ff1d71c Shuo Liu    2021-02-07  155  	}
-aa3b483ff1d71c Shuo Liu    2021-02-07  156  	list_add_tail(&irqfd->list, &vm->irqfds);
-aa3b483ff1d71c Shuo Liu    2021-02-07  157  	mutex_unlock(&vm->irqfds_lock);
-aa3b483ff1d71c Shuo Liu    2021-02-07  158  
-aa3b483ff1d71c Shuo Liu    2021-02-07  159  	/* Check the pending event in this stage */
-dcf9625f2adf33 Yejune Deng 2021-02-21  160  	events = vfs_poll(f.file, &irqfd->pt);
-aa3b483ff1d71c Shuo Liu    2021-02-07  161  
-a758b7c4c6f21f Yejune Deng 2021-03-10  162  	if (events & EPOLLIN)
-aa3b483ff1d71c Shuo Liu    2021-02-07  163  		acrn_irqfd_inject(irqfd);
-aa3b483ff1d71c Shuo Liu    2021-02-07  164  
-aa3b483ff1d71c Shuo Liu    2021-02-07  165  	fdput(f);
-aa3b483ff1d71c Shuo Liu    2021-02-07  166  	return 0;
-aa3b483ff1d71c Shuo Liu    2021-02-07  167  fail:
-aa3b483ff1d71c Shuo Liu    2021-02-07  168  	if (eventfd && !IS_ERR(eventfd))
-aa3b483ff1d71c Shuo Liu    2021-02-07  169  		eventfd_ctx_put(eventfd);
-aa3b483ff1d71c Shuo Liu    2021-02-07  170  
-aa3b483ff1d71c Shuo Liu    2021-02-07  171  	fdput(f);
-aa3b483ff1d71c Shuo Liu    2021-02-07  172  out:
-aa3b483ff1d71c Shuo Liu    2021-02-07  173  	kfree(irqfd);
-aa3b483ff1d71c Shuo Liu    2021-02-07  174  	return ret;
-aa3b483ff1d71c Shuo Liu    2021-02-07  175  }
-aa3b483ff1d71c Shuo Liu    2021-02-07  176  
-
-:::::: The code at line 146 was first introduced by commit
-:::::: aa3b483ff1d71c50b33db154048dff9a8f08ac71 virt: acrn: Introduce irqfd
-
-:::::: TO: Shuo Liu <shuo.a.liu@intel.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1253  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1254  static int idtcm_load_firmware(struct idtcm *idtcm,
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1255  			       struct device *dev)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1256  {
+794c3dffacc166 Min Li        2021-09-13 @1257  	u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
+7ea5fda2b1325e Min Li        2020-07-28  1258  	char fname[128] = FW_FILENAME;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1259  	const struct firmware *fw;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1260  	struct idtcm_fwrc *rec;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1261  	u32 regaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1262  	int err;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1263  	s32 len;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1264  	u8 val;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1265  	u8 loaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1266  
+7ea5fda2b1325e Min Li        2020-07-28  1267  	if (firmware) /* module parameter */
+7ea5fda2b1325e Min Li        2020-07-28  1268  		snprintf(fname, sizeof(fname), "%s", firmware);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1269  
+930dfa56315517 Min Li        2021-09-24  1270  	dev_info(idtcm->dev, "requesting firmware '%s'", fname);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1271  
+7ea5fda2b1325e Min Li        2020-07-28  1272  	err = request_firmware(&fw, fname, dev);
+7ea5fda2b1325e Min Li        2020-07-28  1273  	if (err) {
+930dfa56315517 Min Li        2021-09-24  1274  		dev_err(idtcm->dev,
+1c49d3e947783b Vincent Cheng 2021-02-17  1275  			"Failed at line %d in %s!", __LINE__, __func__);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1276  		return err;
+7ea5fda2b1325e Min Li        2020-07-28  1277  	}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1278  
+930dfa56315517 Min Li        2021-09-24  1279  	dev_dbg(idtcm->dev, "firmware size %zu bytes", fw->size);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1280  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1281  	rec = (struct idtcm_fwrc *) fw->data;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1282  
+794c3dffacc166 Min Li        2021-09-13  1283  	if (contains_full_configuration(idtcm, fw))
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1284  		idtcm_state_machine_reset(idtcm);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1285  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1286  	for (len = fw->size; len > 0; len -= sizeof(*rec)) {
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1287  		if (rec->reserved) {
+930dfa56315517 Min Li        2021-09-24  1288  			dev_err(idtcm->dev,
+1c49d3e947783b Vincent Cheng 2021-02-17  1289  				"bad firmware, reserved field non-zero");
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1290  			err = -EINVAL;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1291  		} else {
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1292  			regaddr = rec->hiaddr << 8;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1293  			regaddr |= rec->loaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1294  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1295  			val = rec->value;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1296  			loaddr = rec->loaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1297  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1298  			rec++;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1299  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1300  			err = check_and_set_masks(idtcm, regaddr, val);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1301  		}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1302  
+7ea5fda2b1325e Min Li        2020-07-28  1303  		if (err != -EINVAL) {
+7ea5fda2b1325e Min Li        2020-07-28  1304  			err = 0;
+7ea5fda2b1325e Min Li        2020-07-28  1305  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1306  			/* Top (status registers) and bottom are read-only */
+ea86327f3d85be Min Li        2023-09-06  1307  			if (regaddr < SCSR_ADDR(GPIO_USER_CONTROL) || regaddr >= scratch)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1308  				continue;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1309  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1310  			/* Page size 128, last 4 bytes of page skipped */
+77fdb168a3e2a6 Vincent Cheng 2021-02-17  1311  			if ((loaddr > 0x7b && loaddr <= 0x7f) || loaddr > 0xfb)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1312  				continue;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1313  
+ea86327f3d85be Min Li        2023-09-06  1314  			err = idtcm_write(idtcm, SCSR_BASE, regaddr, &val, sizeof(val));
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1315  		}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1316  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1317  		if (err)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1318  			goto out;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1319  	}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1320  
+7ea5fda2b1325e Min Li        2020-07-28  1321  	display_pll_and_masks(idtcm);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1322  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1323  out:
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1324  	release_firmware(fw);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1325  	return err;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1326  }
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1327  
 
 -- 
 0-DAY CI Kernel Test Service
