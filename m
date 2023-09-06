@@ -1,43 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C721410954;
-	Wed,  6 Sep 2023 20:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF056ADB;
+	Wed,  6 Sep 2023 20:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694030944; x=1725566944;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4zbbsbp2M3N6rp1vVer/mw6eN3apx+wIABk1HQsL0yM=;
-  b=aEzub9cSF/+EvP5fpUaYgMdYBjCMm3lshhr1SbwJCvA2hw0oLIo9vxUA
-   MSeUZbVgVh+/8RYFWN8NfhB2yRsy6WOyKxtbi8ThP+xKLat1RLMOXjL0g
-   fHHNtRMMyE+Dd1M48yX+edE2k5B8ZZfa7qUwq1tAVLUfm55IFV/1KBMWJ
-   UVBYYcaPwNL7ZOAqyqJbRZRlIug8ygtTU95e8csBXMo3QScKNsjF84hHf
-   KDt8evqDDDmG0Mrlklo4gZ9UCjB4efxomu/j5KEE2Jhl8HhL+sx6gSAnM
-   GLmhbBg6Yw5PuuwIPePbV7WntzKHWPwlwSGHdpzyMsjbPqjhzkmPh3tMx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="463547342"
+  t=1694033649; x=1725569649;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VqeF0aeYObOh3hd+HV3wpbgpW4Kt9ciCv6dvaF8ZXEw=;
+  b=md6NdBtY8PNuUErFNalNAB2ut4Z26i4jdVYBeY3FNwfCIXOz/f1tAqxD
+   l6/yhXfvyvb1OVFnWsMRY9HwXuK/lyehQQA36ABDL8HOUs/QRijIZlT64
+   Yjl23AqRUh2mJYsL6filb3aUUSJjmYGddfq3wg3waKSI7MlZPsaOYLRJt
+   ry/2BfxRuLlVcsdWE7nC6YHIIUZE2jUUdoaxVpQeBs3UTWFRCNo5C1f4b
+   rZu2HBtq8wHamUXX8xolIYG07LWcH2OYjNCMFJNuDoRQ3Kgu+XdpOf0hz
+   +OAEkf3gcYfyooR9qSn7EKRjVqNcI2AE6nFUDA7RincK5JZa1qDnbRQwK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="374574271"
 X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="463547342"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 13:09:01 -0700
+   d="scan'208";a="374574271"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 13:54:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="856600049"
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="915430165"
 X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="856600049"
+   d="scan'208";a="915430165"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Sep 2023 13:09:00 -0700
+  by orsmga005.jf.intel.com with ESMTP; 06 Sep 2023 13:54:02 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qdype-0000Yh-16;
-	Wed, 06 Sep 2023 20:08:58 +0000
-Date: Thu, 7 Sep 2023 04:08:10 +0800
+	id 1qdzXE-0000Zn-1e;
+	Wed, 06 Sep 2023 20:54:00 +0000
+Date: Thu, 7 Sep 2023 04:53:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [frederic-dynticks:rcu/dev 7/9] include/linux/rcutree.h:119:25:
- error: type specifier missing, defaults to 'int'; ISO C99 and later do not
- support implicit int
-Message-ID: <202309070437.lfDlvu65-lkp@intel.com>
+To: Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anish Moorthy <amoorthy@google.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Mike Kravetz <mike.kravetz@oracle.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Christian Brauner <brauner@kernel.org>, peterx@redhat.com,
+	linux-fsdevel@vger.kernel.org,
+	Andrea Arcangeli <aarcange@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	James Houghton <jthoughton@google.com>,
+	Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH 2/7] poll: Add a poll_flags for poll_queue_proc()
+Message-ID: <202309070440.eKzBcg8X-lkp@intel.com>
+References: <20230905214235.320571-3-peterx@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,89 +61,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230905214235.320571-3-peterx@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
-head:   748148886e34351abeb1ba226107d86437bda722
-commit: 38b6f851c89d305fdbbcf2ec53aa3033e1870678 [7/9] rcu: Conditionally build CPU-hotplug down related functions
-config: mips-randconfig-r026-20230907 (https://download.01.org/0day-ci/archive/20230907/202309070437.lfDlvu65-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070437.lfDlvu65-lkp@intel.com/reproduce)
+Hi Peter,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Xu/mm-userfaultfd-Make-uffd-read-wait-event-exclusive/20230906-054430
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230905214235.320571-3-peterx%40redhat.com
+patch subject: [PATCH 2/7] poll: Add a poll_flags for poll_queue_proc()
+config: hexagon-randconfig-002-20230906 (https://download.01.org/0day-ci/archive/20230907/202309070440.eKzBcg8X-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070440.eKzBcg8X-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309070437.lfDlvu65-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309070440.eKzBcg8X-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:15:
-   In file included from include/linux/workqueue.h:16:
-   In file included from include/linux/rcupdate.h:261:
-   include/linux/rcutree.h:119:1: error: unknown type name 'define'
-     119 | define rcutree_dead_cpu NULL
-         | ^
->> include/linux/rcutree.h:119:25: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     119 | define rcutree_dead_cpu NULL
-         |                         ^
-   include/linux/stddef.h:8:16: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |                ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:15:
-   In file included from include/linux/workqueue.h:16:
-   In file included from include/linux/rcupdate.h:261:
->> include/linux/rcutree.h:119:25: error: expected ')'
-   include/linux/stddef.h:8:23: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |                       ^
-   include/linux/rcutree.h:119:25: note: to match this '('
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:15:
-   In file included from include/linux/workqueue.h:16:
-   In file included from include/linux/rcupdate.h:261:
->> include/linux/rcutree.h:120:1: error: expected function body after function declarator
-     120 | define rcutree_dying_cpu NULL
-         | ^
-   4 errors generated.
-   make[3]: *** [scripts/Makefile.build:116: arch/mips/kernel/asm-offsets.s] Error 1 shuffle=2807344482
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1275: prepare0] Error 2 shuffle=2807344482
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:234: __sub-make] Error 2 shuffle=2807344482
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:234: __sub-make] Error 2 shuffle=2807344482
-   make: Target 'prepare' not remade because of errors.
+   In file included from drivers/vhost/vhost.c:14:
+   In file included from include/uapi/linux/vhost.h:14:
+   In file included from include/uapi/linux/vhost_types.h:16:
+   In file included from include/linux/virtio_config.h:7:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/vhost/vhost.c:14:
+   In file included from include/uapi/linux/vhost.h:14:
+   In file included from include/uapi/linux/vhost_types.h:16:
+   In file included from include/linux/virtio_config.h:7:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/vhost/vhost.c:14:
+   In file included from include/uapi/linux/vhost.h:14:
+   In file included from include/uapi/linux/vhost_types.h:16:
+   In file included from include/linux/virtio_config.h:7:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/vhost/vhost.c:193:41: error: incompatible function pointer types passing 'int (wait_queue_entry_t *, unsigned int, int, void *, poll_flags)' (aka 'int (struct wait_queue_entry *, unsigned int, int, void *, unsigned int)') to parameter of type 'wait_queue_func_t' (aka 'int (*)(struct wait_queue_entry *, unsigned int, int, void *)') [-Werror,-Wincompatible-function-pointer-types]
+           init_waitqueue_func_entry(&poll->wait, vhost_poll_wakeup);
+                                                  ^~~~~~~~~~~~~~~~~
+   include/linux/wait.h:90:80: note: passing argument to parameter 'func' here
+   init_waitqueue_func_entry(struct wait_queue_entry *wq_entry, wait_queue_func_t func)
+                                                                                  ^
+>> drivers/vhost/vhost.c:194:34: error: incompatible function pointer types passing 'void (struct file *, wait_queue_head_t *, poll_table *)' (aka 'void (struct file *, struct wait_queue_head *, struct poll_table_struct *)') to parameter of type 'poll_queue_proc' (aka 'void (*)(struct file *, struct wait_queue_head *, struct poll_table_struct *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types]
+           init_poll_funcptr(&poll->table, vhost_poll_func);
+                                           ^~~~~~~~~~~~~~~
+   include/linux/poll.h:76:70: note: passing argument to parameter 'qproc' here
+   static inline void init_poll_funcptr(poll_table *pt, poll_queue_proc qproc)
+                                                                        ^
+>> drivers/vhost/vhost.c:215:57: error: too few arguments to function call, expected 5, have 4
+                   vhost_poll_wakeup(&poll->wait, 0, 0, poll_to_key(mask));
+                   ~~~~~~~~~~~~~~~~~                                     ^
+   drivers/vhost/vhost.c:164:12: note: 'vhost_poll_wakeup' declared here
+   static int vhost_poll_wakeup(wait_queue_entry_t *wait, unsigned mode, int sync,
+              ^
+   6 warnings and 3 errors generated.
 
 
-vim +/int +119 include/linux/rcutree.h
+vim +193 drivers/vhost/vhost.c
 
-   113	
-   114	#ifdef CONFIG_HOTPLUG_CPU
-   115	int rcutree_dead_cpu(unsigned int cpu);
-   116	int rcutree_dying_cpu(unsigned int cpu);
-   117	int rcutree_offline_cpu(unsigned int cpu);
-   118	#else
- > 119	define rcutree_dead_cpu NULL
- > 120	define rcutree_dying_cpu NULL
-   121	define rcutree_offline_cpu NULL
-   122	#endif
-   123	
+87d6a412bd1ed8 Michael S. Tsirkin 2010-09-02  187  
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  188  /* Init poll structure */
+c23f3445e68e1d Tejun Heo          2010-06-02  189  void vhost_poll_init(struct vhost_poll *poll, vhost_work_fn_t fn,
+493b94bf5ae0f6 Mike Christie      2023-06-26  190  		     __poll_t mask, struct vhost_dev *dev,
+493b94bf5ae0f6 Mike Christie      2023-06-26  191  		     struct vhost_virtqueue *vq)
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  192  {
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14 @193  	init_waitqueue_func_entry(&poll->wait, vhost_poll_wakeup);
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14 @194  	init_poll_funcptr(&poll->table, vhost_poll_func);
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  195  	poll->mask = mask;
+c23f3445e68e1d Tejun Heo          2010-06-02  196  	poll->dev = dev;
+2b8b328b61c799 Jason Wang         2013-01-28  197  	poll->wqh = NULL;
+493b94bf5ae0f6 Mike Christie      2023-06-26  198  	poll->vq = vq;
+c23f3445e68e1d Tejun Heo          2010-06-02  199  
+87d6a412bd1ed8 Michael S. Tsirkin 2010-09-02  200  	vhost_work_init(&poll->work, fn);
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  201  }
+6ac1afbf6132df Asias He           2013-05-06  202  EXPORT_SYMBOL_GPL(vhost_poll_init);
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  203  
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  204  /* Start polling a file. We add ourselves to file's wait queue. The caller must
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  205   * keep a reference to a file until after vhost_poll_stop is called. */
+2b8b328b61c799 Jason Wang         2013-01-28  206  int vhost_poll_start(struct vhost_poll *poll, struct file *file)
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  207  {
+e6c8adca20ba45 Al Viro            2017-07-03  208  	__poll_t mask;
+d47effe1be0c4f Krishna Kumar      2011-03-01  209  
+70181d51209cbc Jason Wang         2013-04-10  210  	if (poll->wqh)
+70181d51209cbc Jason Wang         2013-04-10  211  		return 0;
+70181d51209cbc Jason Wang         2013-04-10  212  
+9965ed174e7d38 Christoph Hellwig  2018-03-05  213  	mask = vfs_poll(file, &poll->table);
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  214  	if (mask)
+3ad6f93e98d6df Al Viro            2017-07-03 @215  		vhost_poll_wakeup(&poll->wait, 0, 0, poll_to_key(mask));
+a9a08845e9acbd Linus Torvalds     2018-02-11  216  	if (mask & EPOLLERR) {
+dc6455a71c7fc5 Jason Wang         2018-03-27  217  		vhost_poll_stop(poll);
+896fc242bc1d26 Yunsheng Lin       2019-08-20  218  		return -EINVAL;
+2b8b328b61c799 Jason Wang         2013-01-28  219  	}
+2b8b328b61c799 Jason Wang         2013-01-28  220  
+896fc242bc1d26 Yunsheng Lin       2019-08-20  221  	return 0;
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  222  }
+6ac1afbf6132df Asias He           2013-05-06  223  EXPORT_SYMBOL_GPL(vhost_poll_start);
+3a4d5c94e95935 Michael S. Tsirkin 2010-01-14  224  
 
 -- 
 0-DAY CI Kernel Test Service
