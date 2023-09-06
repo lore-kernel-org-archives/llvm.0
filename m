@@ -1,47 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9A61094E;
-	Wed,  6 Sep 2023 17:55:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694022907; x=1725558907;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uKc2vIxZ5t5hEIJqryozRehG3E5LEwLrG2mWcWCU0CQ=;
-  b=D/FVCDGmqWfSHQq/041wrA0PMEopurmrCyg56XVjcrp5YH5Cmei4PaY3
-   SR+e0Wgm8TNvaqCT+kIvsCMiLW90qWYcBK/U9rNSNktaNYS3b4CRBJRXw
-   VnDMW5bpM1dfgOBtivqVeoBWdRAELcsSxV/B/6mzXiEi6u1vl3IkEXD34
-   267ScUp6aDqh/Tki1qtaCdfyUvBir4wlZobmjfK1CRWOmQoOau/YtJ0pY
-   CZbMiqBI8MsZi6vb4rUBqj/Ug7kxY7xW/OQ4/9IYPWEuKnGAUBP4Ua2ZO
-   x3UHXUZNOFshoQfm+PEocYNxImR4bIzINSGcZBz7kW3uJzC8rq0XkbuIK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="367360950"
-X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
-   d="scan'208";a="367360950"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 10:54:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="915383862"
-X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
-   d="scan'208";a="915383862"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 06 Sep 2023 10:54:44 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qdwjh-0000T1-34;
-	Wed, 06 Sep 2023 17:54:41 +0000
-Date: Thu, 7 Sep 2023 01:54:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nick Alcock <nick.alcock@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kris Van Hees <kris.van.hees@oracle.com>,
-	Tomas Jedlicka <tomas.jedlicka@oracle.com>,
-	Eugene Loh <eugene.loh@oracle.com>,
-	David Mc Lean <david.mclean@oracle.com>,
-	Vincent Lim <vincent.lim@oracle.com>
-Subject: [oracle-dtrace:v2/6.5 10/13] <stdin>:1570:2: warning: syscall waitfd
- not implemented
-Message-ID: <202309070101.tNtpY4OH-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F92B10953
+	for <llvm@lists.linux.dev>; Wed,  6 Sep 2023 18:06:03 +0000 (UTC)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-68e29792976so106721b3a.2
+        for <llvm@lists.linux.dev>; Wed, 06 Sep 2023 11:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1694023563; x=1694628363; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O40bo/gxfF03whhMFXEqEedi7R6NFirN94zwY0Dca7U=;
+        b=mhSqXweigSouippr7ceGnG4R3WqWvfAM4ECXGSnnsCQ7/pWNZhwryYrObVrkFNBHad
+         JxlQgtNYETmDt3jwgtJjLx78eBgccHl0fFlDbHxon6xRAqdM0jmmZYt15QpBtCkfAbij
+         pFjMo94SFD8lh0jEsJBCFZk5Dz4HJuLpQIOrk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694023563; x=1694628363;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O40bo/gxfF03whhMFXEqEedi7R6NFirN94zwY0Dca7U=;
+        b=g8rdFDN44OHSm//gIZsmpx/v8rAjq10fdmb4VH1r23CBoFYj53sCrOtu8OKnFsX/JC
+         gf1lumzZ5BUyn5tJ3WnF3ks7aAUrCBZrxm/hHuxBDkPWRAgELEKkqEJDJvkLuT35vYtu
+         btgi0OcnaF36rZVmzvULdbPGPmhk6wXxAn8qS2sInSesO+C6a+oEpeBPwp/ErFU1hFsG
+         iH/uIDJ6mGrFIMwPc4s7W4kPkMsUVH+oUTDayJQtetIXABNCcxrIbhAucDfAbC7ufcTk
+         8KDqnAEmfdGRkMuxxBoTBTUIcUcfvscgGm0EkXwKwofvCjA4KvjUQ+SdPVPrzGyCvPxz
+         2DGg==
+X-Gm-Message-State: AOJu0YwAEtQSX0mi5HUn6NGFKpS7n5hkQHTuXA/WbypRCgBY7W+58m8O
+	w3PB7akN71RNUUodYCKqrW+/Mw==
+X-Google-Smtp-Source: AGHT+IFVidGBv05UhqX2YIvVWb0IhPX+FPDQhL5+tVhZ0nsxBP5ZEoBlEwgCMn0DOZzFYA3QvqJ9WQ==
+X-Received: by 2002:a05:6a00:80c:b0:68a:55ff:3a02 with SMTP id m12-20020a056a00080c00b0068a55ff3a02mr17550041pfk.18.1694023563375;
+        Wed, 06 Sep 2023 11:06:03 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id fm14-20020a056a002f8e00b0068c6889e146sm11398521pfb.98.2023.09.06.11.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Sep 2023 11:06:02 -0700 (PDT)
+Date: Wed, 6 Sep 2023 11:06:02 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Song Liu <song@kernel.org>, Fangrui Song <maskray@google.com>
+Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com, x86@kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] x86/vmlinux: Fix linker fill bytes for ld.lld
+Message-ID: <202309061102.DB794AD295@keescook>
+References: <20230906175215.2236033-1-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,104 +51,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230906175215.2236033-1-song@kernel.org>
 
-tree:   https://github.com/oracle/dtrace-linux-kernel v2/6.5
-head:   1120d1c598d4ae2d08278969b9001a866aa8273a
-commit: 051cfd2102807119e31bdd4947d18388b3df5fd3 [10/13] waitfd: new syscall implementing waitpid() over fds
-config: s390-randconfig-001-20230906 (https://download.01.org/0day-ci/archive/20230907/202309070101.tNtpY4OH-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070101.tNtpY4OH-lkp@intel.com/reproduce)
+On Wed, Sep 06, 2023 at 10:52:15AM -0700, Song Liu wrote:
+> With ":text =0xcccc", ld.lld fills unused text area with 0xcccc0000.
+> Example objdump -D output:
+> 
+> ffffffff82b04203:       00 00                   add    %al,(%rax)
+> ffffffff82b04205:       cc                      int3
+> ffffffff82b04206:       cc                      int3
+> ffffffff82b04207:       00 00                   add    %al,(%rax)
+> ffffffff82b04209:       cc                      int3
+> ffffffff82b0420a:       cc                      int3
+> 
+> Replace it with ":text =0xcccccccc", so we get the following instead:
+> 
+> ffffffff82b04203:       cc                      int3
+> ffffffff82b04204:       cc                      int3
+> ffffffff82b04205:       cc                      int3
+> ffffffff82b04206:       cc                      int3
+> ffffffff82b04207:       cc                      int3
+> ffffffff82b04208:       cc                      int3
+> 
+> gcc/ld doesn't seem to have the same issue. The generated code stays the
+> same for gcc/ld.
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: x86@kernel.org
+> Signed-off-by: Song Liu <song@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309070101.tNtpY4OH-lkp@intel.com/
+Ah! Thanks for the catch... I wonder if ld.lld should be fixed too? My
+understanding was that ":text =...." was defined as being explicitly
+u16?
 
-All warnings (new ones prefixed by >>):
-
->> <stdin>:1570:2: warning: syscall waitfd not implemented [-W#warnings]
-    1570 | #warning syscall waitfd not implemented
-         |  ^
-   1 warning generated.
---
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   12 warnings generated.
->> <stdin>:1570:2: warning: syscall waitfd not implemented [-W#warnings]
-    1570 | #warning syscall waitfd not implemented
-         |  ^
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for VMLINUX_MAP
-   Depends on [n]: EXPERT [=n]
-   Selected by [y]:
-   - KALLMODSYMS [=y] && KALLSYMS [=y]
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
