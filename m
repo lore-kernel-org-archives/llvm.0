@@ -1,36 +1,36 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293E61094E;
-	Wed,  6 Sep 2023 17:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9A61094E;
+	Wed,  6 Sep 2023 17:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694022905; x=1725558905;
+  t=1694022907; x=1725558907;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S1h9zZPwVqKLJZyN5pX1WMd4v/YvzjQVLqpdiSYUz+c=;
-  b=DiL+Wi1B4phX1j8svKr2sO46cPg5BKqRnUE5PRrW/lIrnAJv9A1xaOBV
-   DLn/CwKhvegbJZQ0N67bJwYpQG/Q1yGHRIJy+yTHzdsrC25FwAn61G1gt
-   Afe1DYp7I7sIJiN8iJEXMK5+dvTNvoQm9h8rgbHu4k2hcbZk88c9PWijK
-   fwnWx82KvyjbKQTsaIWdlgUusUNo1GoVYNQzuINGnlIw0Zjo8Vsu9kpC6
-   bz88J54I3evid0NvIbBLOGTqOYitrFM4okyRjz1qvmEmRcn2w4UyId5mp
-   x38DwDMVtvOIv07M9cQQ8zsjkF2AUkElD5sDS1cU4ucOAqMKJAuCDQcmn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="367360945"
+  bh=uKc2vIxZ5t5hEIJqryozRehG3E5LEwLrG2mWcWCU0CQ=;
+  b=D/FVCDGmqWfSHQq/041wrA0PMEopurmrCyg56XVjcrp5YH5Cmei4PaY3
+   SR+e0Wgm8TNvaqCT+kIvsCMiLW90qWYcBK/U9rNSNktaNYS3b4CRBJRXw
+   VnDMW5bpM1dfgOBtivqVeoBWdRAELcsSxV/B/6mzXiEi6u1vl3IkEXD34
+   267ScUp6aDqh/Tki1qtaCdfyUvBir4wlZobmjfK1CRWOmQoOau/YtJ0pY
+   CZbMiqBI8MsZi6vb4rUBqj/Ug7kxY7xW/OQ4/9IYPWEuKnGAUBP4Ua2ZO
+   x3UHXUZNOFshoQfm+PEocYNxImR4bIzINSGcZBz7kW3uJzC8rq0XkbuIK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="367360950"
 X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
-   d="scan'208";a="367360945"
+   d="scan'208";a="367360950"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 10:54:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="915383861"
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="915383862"
 X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
-   d="scan'208";a="915383861"
+   d="scan'208";a="915383862"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
   by orsmga005.jf.intel.com with ESMTP; 06 Sep 2023 10:54:44 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qdwji-0000T4-06;
-	Wed, 06 Sep 2023 17:54:42 +0000
-Date: Thu, 7 Sep 2023 01:54:18 +0800
+	id 1qdwjh-0000T1-34;
+	Wed, 06 Sep 2023 17:54:41 +0000
+Date: Thu, 7 Sep 2023 01:54:17 +0800
 From: kernel test robot <lkp@intel.com>
 To: Nick Alcock <nick.alcock@oracle.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -39,9 +39,9 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Eugene Loh <eugene.loh@oracle.com>,
 	David Mc Lean <david.mclean@oracle.com>,
 	Vincent Lim <vincent.lim@oracle.com>
-Subject: [oracle-dtrace:v2/6.5 10/13] fs/waitfd.c:94:1: error: conflicting
- types for 'sys_waitfd'
-Message-ID: <202309070116.O5gD8FA9-lkp@intel.com>
+Subject: [oracle-dtrace:v2/6.5 10/13] <stdin>:1570:2: warning: syscall waitfd
+ not implemented
+Message-ID: <202309070101.tNtpY4OH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,230 +54,99 @@ Content-Disposition: inline
 tree:   https://github.com/oracle/dtrace-linux-kernel v2/6.5
 head:   1120d1c598d4ae2d08278969b9001a866aa8273a
 commit: 051cfd2102807119e31bdd4947d18388b3df5fd3 [10/13] waitfd: new syscall implementing waitpid() over fds
-config: powerpc-randconfig-r026-20230906 (https://download.01.org/0day-ci/archive/20230907/202309070116.O5gD8FA9-lkp@intel.com/config)
+config: s390-randconfig-001-20230906 (https://download.01.org/0day-ci/archive/20230907/202309070101.tNtpY4OH-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070116.O5gD8FA9-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070101.tNtpY4OH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309070116.O5gD8FA9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309070101.tNtpY4OH-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/waitfd.c:94:1: error: conflicting types for 'sys_waitfd'
-      94 | SYSCALL_DEFINE4(waitfd, int __maybe_unused, which, pid_t, upid, int, options,
-         | ^
-   include/linux/syscalls.h:222:36: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:230:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   arch/powerpc/include/asm/syscall_wrapper.h:19:7: note: expanded from macro '__SYSCALL_DEFINEx'
-      19 |         long sys##name(const struct pt_regs *regs);                     \
-         |              ^
-   <scratch space>:173:1: note: expanded from here
-     173 | sys_waitfd
-         | ^
-   include/linux/syscalls.h:1282:17: note: previous declaration is here
-    1282 | asmlinkage long sys_waitfd(int which, pid_t upid, int options, int flags);
-         |                 ^
-   fs/waitfd.c:94:29: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      94 | SYSCALL_DEFINE4(waitfd, int __maybe_unused, which, pid_t, upid, int, options,
-         |                             ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:36: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                    ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
-     122 | #define __TYPE_AS(t, v) __same_type((__force t)0, v)
-         |                                              ^
-   include/linux/compiler_types.h:338:63: note: expanded from macro '__same_type'
-     338 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   fs/waitfd.c:94:29: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      94 | SYSCALL_DEFINE4(waitfd, int __maybe_unused, which, pid_t, upid, int, options,
-         |                             ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:57: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                                         ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
-     122 | #define __TYPE_AS(t, v) __same_type((__force t)0, v)
-         |                                              ^
-   include/linux/compiler_types.h:338:63: note: expanded from macro '__same_type'
-     338 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   fs/waitfd.c:95:7: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      95 |                 int __maybe_unused, flags)
-         |                     ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:36: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                    ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
-     122 | #define __TYPE_AS(t, v) __same_type((__force t)0, v)
-         |                                              ^
-   include/linux/compiler_types.h:338:63: note: expanded from macro '__same_type'
-     338 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   fs/waitfd.c:95:7: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      95 |                 int __maybe_unused, flags)
-         |                     ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:57: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                                         ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
-     122 | #define __TYPE_AS(t, v) __same_type((__force t)0, v)
-         |                                              ^
-   include/linux/compiler_types.h:338:63: note: expanded from macro '__same_type'
-     338 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
->> fs/waitfd.c:94:1: error: conflicting types for 'sys_waitfd'
-      94 | SYSCALL_DEFINE4(waitfd, int __maybe_unused, which, pid_t, upid, int, options,
-         | ^
-   include/linux/syscalls.h:222:36: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:230:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   arch/powerpc/include/asm/syscall_wrapper.h:23:7: note: expanded from macro '__SYSCALL_DEFINEx'
-      23 |         long sys##name(const struct pt_regs *regs)                      \
-         |              ^
-   <scratch space>:179:1: note: expanded from here
-     179 | sys_waitfd
-         | ^
-   include/linux/syscalls.h:1282:17: note: previous declaration is here
-    1282 | asmlinkage long sys_waitfd(int which, pid_t upid, int options, int flags);
-         |                 ^
-   fs/waitfd.c:94:29: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      94 | SYSCALL_DEFINE4(waitfd, int __maybe_unused, which, pid_t, upid, int, options,
-         |                             ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:36: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                    ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
-     122 | #define __TYPE_AS(t, v) __same_type((__force t)0, v)
-         |                                              ^
-   include/linux/compiler_types.h:338:63: note: expanded from macro '__same_type'
-     338 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   fs/waitfd.c:94:29: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      94 | SYSCALL_DEFINE4(waitfd, int __maybe_unused, which, pid_t, upid, int, options,
-         |                             ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:57: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                                         ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
-     122 | #define __TYPE_AS(t, v) __same_type((__force t)0, v)
-         |                                              ^
-   include/linux/compiler_types.h:338:63: note: expanded from macro '__same_type'
-     338 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   fs/waitfd.c:95:7: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      95 |                 int __maybe_unused, flags)
-         |                     ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:36: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                    ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
-     122 | #define __TYPE_AS(t, v) __same_type((__force t)0, v)
-         |                                              ^
-   include/linux/compiler_types.h:338:63: note: expanded from macro '__same_type'
-     338 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   fs/waitfd.c:95:7: warning: '__unused__' attribute ignored when parsing type [-Wignored-attributes]
-      95 |                 int __maybe_unused, flags)
-         |                     ^~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:344:56: note: expanded from macro '__maybe_unused'
-     344 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^~~~~~~~~~
-   include/linux/syscalls.h:222:64: note: expanded from macro 'SYSCALL_DEFINE4'
-     222 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                                                ^~~~~~~~~~~
-   include/linux/syscalls.h:230:30: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |                                     ^~~~~~~~~~~
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/syscalls.h:125:57: note: expanded from macro '__TYPE_IS_LL'
-     125 | #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
-         |                                                         ^
-   include/linux/syscalls.h:122:46: note: expanded from macro '__TYPE_AS'
+>> <stdin>:1570:2: warning: syscall waitfd not implemented [-W#warnings]
+    1570 | #warning syscall waitfd not implemented
+         |  ^
+   1 warning generated.
+--
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   12 warnings generated.
+>> <stdin>:1570:2: warning: syscall waitfd not implemented [-W#warnings]
+    1570 | #warning syscall waitfd not implemented
+         |  ^
+   1 warning generated.
 
-
-vim +/sys_waitfd +94 fs/waitfd.c
-
-    93	
-  > 94	SYSCALL_DEFINE4(waitfd, int __maybe_unused, which, pid_t, upid, int, options,
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for VMLINUX_MAP
+   Depends on [n]: EXPERT [=n]
+   Selected by [y]:
+   - KALLMODSYMS [=y] && KALLSYMS [=y]
 
 -- 
 0-DAY CI Kernel Test Service
