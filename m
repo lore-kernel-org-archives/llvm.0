@@ -1,57 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3FD125A9;
-	Wed,  6 Sep 2023 22:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B433125A4;
+	Wed,  6 Sep 2023 22:14:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694037732; x=1725573732;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pAdvumZWRQ6k+Y91B7l2q4WBR9cPrmf9k41yWB8wT30=;
-  b=eOsz1FZB2RQz51aN5rA3NHoZxMfZz/MD9HgEQQj4svU5cKKddg6RiI7K
-   UcqIaySlKolOomOQRfsNrZyki6CYjnesRrwqmM00ku3rhQ3xpOWTEhzuR
-   1kPX7rd3fSHRyFTAvXelOX9+FLQwyiBT9K9KrtAKhdPZeDTjkymY8EdhL
-   99UrYpUcESpXeLMGisBBk6UgTkCrlKrIXFemlGxb5n38rAoZZG72a3nku
-   /9caA70INBHo756w86myvVzstTynf8ORw2+7UKVG30z11XSDdyX8fx+/C
-   e4GuOK8YS++zpByrTKsy9qUi0YK22xg+ZRN7J7aQTCo1IuYD64DC295Te
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="357507870"
+  t=1694038449; x=1725574449;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=foDuTahEzXPVoihmRP2VP39CyZ4Klb0IgnHAZEgS2PI=;
+  b=kmj8gIjxzkzDm4jdGaw6L6G9jeQgepp5n40TlEVhpbCidOJLMscFStsJ
+   Wi6nHBT2ivGKsyFyqhtA5SeDdQ5g0Mw4WzQXJPXPrce0OwXBhWIHQnpsi
+   8+8vQFpR5WBrHugv5doZwdkAaw2Nu8Ge9ZJvMJlomi6aX+tLcA0NTxA+Y
+   tKZZPkRzmV7Dbyy2cGy0X8V0nD8KNsLo1US47jNBELK+K12k5SwJL954P
+   TN4y4+FMljjiUJMPJCDrrmR5xYZLno5hWoaigjItd95Vdu+hPOWez8YjR
+   b48cqHXxENknnVEXxIibgj9J34jbfTmB8h+fEYgpiDWJ1Hz8A+FAsw/FW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="362231075"
 X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="357507870"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 15:02:11 -0700
+   d="scan'208";a="362231075"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 15:14:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="718438474"
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="988481269"
 X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="718438474"
+   d="scan'208";a="988481269"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2023 15:02:06 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 06 Sep 2023 15:14:06 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qe0b6-0000d2-00;
-	Wed, 06 Sep 2023 22:02:04 +0000
-Date: Thu, 7 Sep 2023 06:01:50 +0800
+	id 1qe0mi-0000dS-1H;
+	Wed, 06 Sep 2023 22:14:04 +0000
+Date: Thu, 7 Sep 2023 06:13:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nitesh Shetty <nj.shetty@samsung.com>, Jens Axboe <axboe@kernel.dk>,
-	Jonathan Corbet <corbet@lwn.net>, Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>
+To: Nick Alcock <nick.alcock@oracle.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	martin.petersen@oracle.com, mcgrof@kernel.org, gost.dev@samsung.com,
-	Nitesh Shetty <nj.shetty@samsung.com>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	Anuj Gupta <anuj20.g@samsung.com>,
-	Vincent Fu <vincent.fu@samsung.com>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v15 12/12] null_blk: add support for copy offload
-Message-ID: <202309070542.P9utuu9p-lkp@intel.com>
-References: <20230906163844.18754-13-nj.shetty@samsung.com>
+	Kris Van Hees <kris.van.hees@oracle.com>,
+	Tomas Jedlicka <tomas.jedlicka@oracle.com>,
+	Victor Erminpour <victor.erminpour@oracle.com>
+Subject: [oracle-dtrace:v2/6.5 12/13] ld.lld: error: no input files
+Message-ID: <202309070648.I5OqZ3UX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,82 +47,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230906163844.18754-13-nj.shetty@samsung.com>
 
-Hi Nitesh,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on c50216cfa084d5eb67dc10e646a3283da1595bb6]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nitesh-Shetty/block-Introduce-queue-limits-and-sysfs-for-copy-offload-support/20230907-015817
-base:   c50216cfa084d5eb67dc10e646a3283da1595bb6
-patch link:    https://lore.kernel.org/r/20230906163844.18754-13-nj.shetty%40samsung.com
-patch subject: [PATCH v15 12/12] null_blk: add support for copy offload
-config: arm-randconfig-001-20230907 (https://download.01.org/0day-ci/archive/20230907/202309070542.P9utuu9p-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070542.P9utuu9p-lkp@intel.com/reproduce)
+tree:   https://github.com/oracle/dtrace-linux-kernel v2/6.5
+head:   1120d1c598d4ae2d08278969b9001a866aa8273a
+commit: 8eb9c2162bfbe04cdd23185854d8d298497b35e8 [12/13] ctf: generate CTF information for the kernel
+config: hexagon-randconfig-001-20230906 (https://download.01.org/0day-ci/archive/20230907/202309070648.I5OqZ3UX-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070648.I5OqZ3UX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309070542.P9utuu9p-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309070648.I5OqZ3UX-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/block/null_blk/main.c:15:
-   In file included from drivers/block/null_blk/./trace.h:104:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:237:
->> drivers/block/null_blk/./trace.h:94:34: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                             __entry->dst, __entry->src, __entry->len)
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/trace/stages/stage3_trace_output.h:6:17: note: expanded from macro '__entry'
-   #define __entry field
-                   ^
-   include/trace/stages/stage3_trace_output.h:9:43: note: expanded from macro 'TP_printk'
-   #define TP_printk(fmt, args...) fmt "\n", args
-                                   ~~~       ^
-   include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:107:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^~~~
-   include/trace/trace_events.h:203:27: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_event_printf(iter, print);                                \
-                                    ^~~~~
-   1 warning generated.
-
-
-vim +94 drivers/block/null_blk/./trace.h
-
-    72	
-    73	TRACE_EVENT(nullb_copy_op,
-    74			TP_PROTO(struct request *req,
-    75				 sector_t dst, sector_t src, size_t len),
-    76			TP_ARGS(req, dst, src, len),
-    77			TP_STRUCT__entry(
-    78					 __array(char, disk, DISK_NAME_LEN)
-    79					 __field(enum req_op, op)
-    80					 __field(sector_t, dst)
-    81					 __field(sector_t, src)
-    82					 __field(size_t, len)
-    83			),
-    84			TP_fast_assign(
-    85				       __entry->op = req_op(req);
-    86				       __assign_disk_name(__entry->disk, req->q->disk);
-    87				       __entry->dst = dst;
-    88				       __entry->src = src;
-    89				       __entry->len = len;
-    90			),
-    91			TP_printk("%s req=%-15s: dst=%llu, src=%llu, len=%lu",
-    92				  __print_disk_name(__entry->disk),
-    93				  blk_op_str(__entry->op),
-  > 94				  __entry->dst, __entry->src, __entry->len)
-    95	);
-    96	#endif /* _TRACE_NULLB_H */
-    97	
+   ld.lld: set maximum concurrency to 16, specify --threads= to change
+>> ld.lld: error: no input files
 
 -- 
 0-DAY CI Kernel Test Service
