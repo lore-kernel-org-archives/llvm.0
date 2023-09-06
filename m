@@ -1,135 +1,154 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6A310971
-	for <llvm@lists.linux.dev>; Wed,  6 Sep 2023 18:27:57 +0000 (UTC)
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-40a47e8e38dso40471cf.1
-        for <llvm@lists.linux.dev>; Wed, 06 Sep 2023 11:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1694024876; x=1694629676; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TrGg9NVcpdceTuuEZVHwG7gAd6aReinJXpTg+Gi7ctg=;
-        b=G4pePGaNYLfM365ukF7W5kmZ2HGQ2bCILAcRA/AzwM1GY6d8GpSksbRvj+HyOfLlJa
-         0ZZdHLqhIMDzZTFzmfvBfnC4f3FD627TRGeQWGzEErPgLhJefaxUEP4yahicufthsops
-         2svnLwPD6ibUYOnBRCEdshvsfnLWO7LyNY0o5viEAZT4yLrdWIQafGIRJo+z+YT49Jay
-         wfD5EWGvvz5xFGKWVuctBdBI+DMRZNgABN5wrKKaiCEZDuIa/55RlNec0KHjXcqfncbt
-         4ojJjq0LLfebWsyRMLTrWWyGh9ew4OqMzwOpHoHY3Uh9jatDjPDJKTSR82OZH4qRKJcj
-         K44g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694024876; x=1694629676;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TrGg9NVcpdceTuuEZVHwG7gAd6aReinJXpTg+Gi7ctg=;
-        b=blWS1vL6ILKn/eBkLxPLJxUbePfycWM7kfIHHxWLL0wLGfiuHN2aVIpj7028bKLzv2
-         RxXgmb+hr1CRtmZDfPzzOa4iBQfdblKoQHCkyL1BPUC9TdXfxuzV4UuJMhRgtzcIfyNJ
-         Iqpa7Te2Uie6kWmvR0aHSXSkCbC9fl83HBk6XL/gExivDmPCaP9ENnQeXIjGR6hTF+vi
-         uLo+CMbdJvqlPYKy/+yZDGzuxSoY+eN7E9jUReZk5DASqzC0AiKyy/nUVX5/RdY/QgGX
-         MCu/twcLuUrWeTua4zfr2ll3m95gwxCkqIE5ZFocvPDyYxSaIwwlYpQjHHM4lBvh7uXk
-         9cUw==
-X-Gm-Message-State: AOJu0Yx3GlzI2aNPQ8/omhReskC4rQuSjSUDrkJpNwkKTEcdlAyRHmLA
-	6Hq4ahPJwkKqponVSkPhC5jARKjHcMpcvLPDtAn4kw==
-X-Google-Smtp-Source: AGHT+IGfhsqbbGDD5lwj9bjClvIiOtUBeYARpoOKPx35Vis2UUsegJQmDLBEycqg/MKRy/f3hzjjEdT6fkYJQlZShf8=
-X-Received: by 2002:a05:622a:4407:b0:403:f5b8:2bd2 with SMTP id
- ka7-20020a05622a440700b00403f5b82bd2mr13558qtb.9.1694024876090; Wed, 06 Sep
- 2023 11:27:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805E26AB1;
+	Wed,  6 Sep 2023 18:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694025653; x=1725561653;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9Fn+IWxIZRqo/a0kImotkbpgDdvl3jc7ik0ZYox/Ixs=;
+  b=MZYphPeOV9lyR57NRlyI7EIxWgTUqpk8zpZtfilw9ULJ2TCWCTNXVOPa
+   uZxBa1GUDj00s0x1dNfGuZ4n6qD/y4JJgRsoPC1ae6bkd+Rj+kmtW4G9s
+   pk6t2JQQJh6GEiGgb1J86ybnVe+SJTbB/0MpnbQImsMFD73bF3Qt7eGiL
+   067fWk56tKAZTG+gG6oNjV2vu0ycwgYmUym7mujzKYC6H7o71uU4W3bFc
+   /4LsRQgWRc0CSParoqz/j+Xnt7bQuHDKxLuzFku+Qt9Pk/Gbm/S1O2YXg
+   EiKK8CNkpYQehO2E7P6E673wCqDSVyBlWspAlyyfN6p3MaXFmvFTGzgxZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="377065712"
+X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
+   d="scan'208";a="377065712"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 11:40:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="988383588"
+X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
+   d="scan'208";a="988383588"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 06 Sep 2023 11:40:50 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qdxSK-0000Ud-38;
+	Wed, 06 Sep 2023 18:40:48 +0000
+Date: Thu, 7 Sep 2023 02:40:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liam Beguin <liambeguin@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [jic23-iio:testing 50/62] drivers/iio/adc/ltc2309.c:160:6: warning:
+ no previous prototype for function 'ltc2309_regulator_disable'
+Message-ID: <202309070238.rgcHNjNX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230906175215.2236033-1-song@kernel.org> <202309061102.DB794AD295@keescook>
- <34CC4A68-CE36-4DE5-B1A1-AB7FD075C0EB@fb.com>
-In-Reply-To: <34CC4A68-CE36-4DE5-B1A1-AB7FD075C0EB@fb.com>
-From: Fangrui Song <maskray@google.com>
-Date: Wed, 6 Sep 2023 11:27:44 -0700
-Message-ID: <CAFP8O3+Rrs7rs5nO3cQbpeayE2vQXTmaaaEfY_weyCGCuBYrFQ@mail.gmail.com>
-Subject: Re: [PATCH] x86/vmlinux: Fix linker fill bytes for ld.lld
-To: Song Liu <songliubraving@meta.com>
-Cc: Kees Cook <keescook@chromium.org>, Song Liu <song@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Kernel Team <kernel-team@meta.com>, 
-	"x86@kernel.org" <x86@kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Sep 6, 2023 at 11:16=E2=80=AFAM Song Liu <songliubraving@meta.com> =
-wrote:
->
->
->
-> > On Sep 6, 2023, at 11:06 AM, Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Wed, Sep 06, 2023 at 10:52:15AM -0700, Song Liu wrote:
-> >> With ":text =3D0xcccc", ld.lld fills unused text area with 0xcccc0000.
-> >> Example objdump -D output:
-> >>
-> >> ffffffff82b04203:       00 00                   add    %al,(%rax)
-> >> ffffffff82b04205:       cc                      int3
-> >> ffffffff82b04206:       cc                      int3
-> >> ffffffff82b04207:       00 00                   add    %al,(%rax)
-> >> ffffffff82b04209:       cc                      int3
-> >> ffffffff82b0420a:       cc                      int3
-> >>
-> >> Replace it with ":text =3D0xcccccccc", so we get the following instead=
-:
-> >>
-> >> ffffffff82b04203:       cc                      int3
-> >> ffffffff82b04204:       cc                      int3
-> >> ffffffff82b04205:       cc                      int3
-> >> ffffffff82b04206:       cc                      int3
-> >> ffffffff82b04207:       cc                      int3
-> >> ffffffff82b04208:       cc                      int3
-> >>
-> >> gcc/ld doesn't seem to have the same issue. The generated code stays t=
-he
-> >> same for gcc/ld.
-> >>
-> >> Cc: Kees Cook <keescook@chromium.org>
-> >> Cc: x86@kernel.org
-> >> Signed-off-by: Song Liu <song@kernel.org>
-> >
-> > Ah! Thanks for the catch... I wonder if ld.lld should be fixed too? My
-> > understanding was that ":text =3D...." was defined as being explicitly
-> > u16?
->
-> Per my experiment, gcc/ld gives same output for :text =3D0xcc, :text =3D0=
-xcccc,
-> and :text =3D0xcccccccc; while ld.lld handles :text =3D as u32, so :text =
-=3D0xcc
-> with ld.lld gives:
->
-> ffffffff82b042a1:       00 cc                   add    %cl,%ah
-> ffffffff82b042a3:       00 00                   add    %al,(%rax)
-> ffffffff82b042a5:       00 cc                   add    %cl,%ah
-> ffffffff82b042a7:       00 00                   add    %al,(%rax)
-> ffffffff82b042a9:       00 cc                   add    %cl,%ah
-> ffffffff82b042ab:       00 00                   add    %al,(%rax)
->
-> I am not sure what the right behavior is per specification.
->
-> Thanks,
-> Song
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   184d37294d1b4f21a2a625be10133aafb270d591
+commit: ca4c617015ff7803b72a2afc1bd45c9c5b570492 [50/62] iio: adc: add ltc2309 support
+config: hexagon-randconfig-r031-20230907 (https://download.01.org/0day-ci/archive/20230907/202309070238.rgcHNjNX-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309070238.rgcHNjNX-lkp@intel.com/reproduce)
 
-AFAIK GNU ld's behavior is not documented here
-https://sourceware.org/binutils/docs/ld/Output-Section-Fill.html
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309070238.rgcHNjNX-lkp@intel.com/
 
-The Output Section Fill syntax allows an expression. It seems that if
-you use =3D0xcc+0, GNU ld will use a 4-byte filler as well, similar to
-gold and ld.lld.
+All warnings (new ones prefixed by >>):
 
-Frankly, I feel that GNU ld behavior should not be relied upon. lld's
-comment states that it is a deliberate choice to follow gold instead
-of GNU ld here.
+   In file included from drivers/iio/adc/ltc2309.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/iio/adc/ltc2309.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/iio/adc/ltc2309.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/iio/adc/ltc2309.c:160:6: warning: no previous prototype for function 'ltc2309_regulator_disable' [-Wmissing-prototypes]
+   void ltc2309_regulator_disable(void *regulator)
+        ^
+   drivers/iio/adc/ltc2309.c:160:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void ltc2309_regulator_disable(void *regulator)
+   ^
+   static 
+   7 warnings generated.
 
-I'll elaborate a bit and add this discrepancy to my
-https://maskray.me/blog/2020-12-19-lld-and-gnu-linker-incompatibilities
-:)
 
+vim +/ltc2309_regulator_disable +160 drivers/iio/adc/ltc2309.c
 
+   159	
+ > 160	void ltc2309_regulator_disable(void *regulator)
+   161	{
+   162		regulator_disable(regulator);
+   163	}
+   164	
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
