@@ -1,252 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA00A53;
-	Tue,  5 Sep 2023 23:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837C9C433CA;
-	Tue,  5 Sep 2023 23:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693955204;
-	bh=QQ+Y7wEtz+kXYSbt5wclwVZagbHgBVjGTkbxadwLDG0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=FQzH5/VFiTVnvr6iYubVj9yTYZFPmX0ybuOzE//f4oGSKkk2XOOepZWVHH+ajJVkB
-	 +dM4j5mxx/U/oPAqWnOVEIIJVuq3wNOM5DHdYw5tEnrDhf1cdeLNvjMunb4scJT8mr
-	 mzKJzZ1gJy8DNl+Ogc6k4mqMtbQQ0mgR3zbgXOQufXc4/NwTU+0hXrSDRZ4/jr4OUX
-	 p/cCxGkTIVWycwODghk0/rsKbpm+EW/aY4vn5BdLJCqHr42quDc+4ADN+WsqRAB6MZ
-	 7v42QmdOumES3w0fzC8K7tcLiofVuylbVF0DdeFhS3DkjxBdiDAsff+7KtIlwiGLi4
-	 IvSoIztU7z2hQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 05 Sep 2023 16:06:33 -0700
-Subject: [PATCH] LoongArch: Drop unused parse_r and parse_v macros
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635B762F
+	for <llvm@lists.linux.dev>; Wed,  6 Sep 2023 00:57:50 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1bee82fad0fso20449335ad.2
+        for <llvm@lists.linux.dev>; Tue, 05 Sep 2023 17:57:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1693961869; x=1694566669; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QylyR/V4a/iloEizCjqHR8j3LR/2OkmoSdq06y9bpgA=;
+        b=CnJr/o30PhkWOXdf2frCo+VFnb2WrkS3bvc2wF0EqiIVK1JSeqxWjiLNMbtBwxkwNZ
+         LVbmVDBRBUTuTJw6DI97aOLQIOpOW1QrQCIGA6InKCpS8VOQyedhlpEUXhQa43wmmROh
+         O8C7cOXomLb3x8qc+NoJuEGQqO1RseHciXKvumYx1P6DVHIuK/mXlNb9/jiA4hKPUOY8
+         M9M4Rh/p6kVqvwvu+fclz1sfgdJQao27IMbOniuxPEp8DxjWBzhAUokby541l1dfpRfG
+         JrjlJy9+XhCTF91ad9VqXLGACtZjeNBCy8d+9L6LGXdxpCBFttBYC6qnMbmPreVzr8+e
+         zEVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693961869; x=1694566669;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QylyR/V4a/iloEizCjqHR8j3LR/2OkmoSdq06y9bpgA=;
+        b=QGYz42bD9vsElMgOp3pAX9GWDEE/er76wg1yQTsEFVnHvjnfsjgTiWskabOuOzfCNo
+         4CU+C0pzboH640PoRLTIoex4DsugJMIWJQKvMKCf+qlOV6RLk6UTOpDnMTCCNI1OSPBM
+         c/pb5inP4KDDwltMM4YbOvt/iz+X0x8UpBRhT3x5UKcgXQ6D3GY4O67Nuwk3pjBt0PD9
+         0U73q+Pjb1VoUTd8JDqnYIA2fGlHdM6wIjB7iksa3xcG5vphI4xnBNhCpF3XIM+R9zeN
+         SkP6mzDkeNn/KD65XbmOpOHjXR9k6Cc9C3CyT3jvp1w7M4BcuSQzbQgjfLN1euoEKJJi
+         TcPA==
+X-Gm-Message-State: AOJu0Yw0D5FZguMfuHvZlCHKNQ8CYf8ObGq5AxyshQPrNB3MYB74tPg7
+	drxmiO+uQVDAcu/D20PqORj9oQ==
+X-Google-Smtp-Source: AGHT+IF0I2dTAW5uJjtjWKvpHN+bNGE6Id1TKCrAoe/eUrakK2FLP0Esb3kXlLmIbMydGX9awrj92Q==
+X-Received: by 2002:a17:902:c941:b0:1bb:32de:95c5 with SMTP id i1-20020a170902c94100b001bb32de95c5mr12833518pla.65.1693961869557;
+        Tue, 05 Sep 2023 17:57:49 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id v6-20020a170902b7c600b001c0a4146961sm9899762plz.19.2023.09.05.17.57.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 17:57:49 -0700 (PDT)
+Date: Tue, 05 Sep 2023 17:57:49 -0700 (PDT)
+X-Google-Original-Date: Tue, 05 Sep 2023 17:57:36 PDT (-0700)
+Subject:     Re: [linux-next:master 13230/13643] arch/riscv/errata/andes/errata.c:46:14: warning: result of comparison of constant 9223372036854811205 with expression of type 'unsigned long' is always true
+In-Reply-To: <CA+V-a8v6P_BXKd+XzCToczNOV9g9jS=r3isisSAuh=xXfZ32UQ@mail.gmail.com>
+CC: lkp@intel.com, prabhakar.mahadev-lad.rj@bp.renesas.com, llvm@lists.linux.dev,
+  oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org, Conor Dooley <conor.dooley@microchip.com>
+From: Palmer Dabbelt <palmer@rivosinc.com>
+To: prabhakar.csengg@gmail.com, Geert Uytterhoeven <geert+renesas@glider.be>
+Message-ID: <mhng-809e676e-6b96-4bc5-9dd1-c6b31d53f179@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230905-loongarch-fix-clang-lto-parse_r-v1-1-d991ee630222@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAHi092QC/x2NUQqDMBAFryL73YVoFW2vUqTE9KkLIZGNSEG8e
- 5d+DgwzJxWooNCzOklxSJGcDOpbRWH1aQHLx5ga19zdw3Ucc06L17DyLF8O0RyOe+bNa8FbeZj
- aYe5rAD6QVTaFif/Da7yuH/SVVPpxAAAA
-To: chenhuacai@kernel.org, kernel@xen0n.name
-Cc: loongarch@lists.linux.dev, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5128; i=nathan@kernel.org;
- h=from:subject:message-id; bh=QQ+Y7wEtz+kXYSbt5wclwVZagbHgBVjGTkbxadwLDG0=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCnft7Q0qL68Ln+9ovX/j3esT68dNljR51097+mBN9cfy
- 9eUbBQ81lHKwiDGwSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmYp7CyHD2rKqyh+bkzwzP
- Hbsu+GsfXLXFQ9t5e43pZb+TTAY8nK8Y/hlP+MHmuuiRwcrXEtrnOeKc/a1V+xznM2xPWtnNp3t
- UjxUA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-When building with CONFIG_LTO_CLANG_FULL, there are several errors due
-to the way that parse_r is defined with an __asm__ statement in a
-header:
+On Tue, 05 Sep 2023 03:20:17 PDT (-0700), prabhakar.csengg@gmail.com wrote:
+> On Fri, Sep 1, 2023 at 10:58 PM kernel test robot <lkp@intel.com> wrote:
+>>
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+>> head:   a47fc304d2b678db1a5d760a7d644dac9b067752
+>> commit: f2863f30d1b05e5ecf61c063609cb974954d47f8 [13230/13643] riscv: errata: Add Andes alternative ports
+>> config: riscv-randconfig-r015-20230902 (https://download.01.org/0day-ci/archive/20230902/202309020548.rbrIJu6S-lkp@intel.com/config)
+>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230902/202309020548.rbrIJu6S-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202309020548.rbrIJu6S-lkp@intel.com/
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>    arch/riscv/errata/andes/errata.c:29:16: error: variable has incomplete type 'struct sbiret'
+>>       29 |         struct sbiret ret;
+>>          |                       ^
+>>    arch/riscv/errata/andes/errata.c:29:9: note: forward declaration of 'struct sbiret'
+>>       29 |         struct sbiret ret;
+>>          |                ^
+>>    arch/riscv/errata/andes/errata.c:35:8: error: call to undeclared function 'sbi_ecall'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>>       35 |         ret = sbi_ecall(ANDESTECH_SBI_EXT_ANDES, ANDES_SBI_EXT_IOCP_SW_WORKAROUND,
+>>          |               ^
+>> >> arch/riscv/errata/andes/errata.c:46:14: warning: result of comparison of constant 9223372036854811205 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
+>>       46 |         if (arch_id != ANDESTECH_AX45MP_MARCHID || impid != ANDESTECH_AX45MP_MIMPID)
+>>          |             ~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
+>>    1 warning and 2 errors generated.
+>>
+> After applying the below four patches we shouldn't be seeing this
+> randconfig warnings:
+>
+> https://patchwork.kernel.org/project/linux-riscv/patch/20230901105111.311200-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> https://patchwork.kernel.org/project/linux-riscv/patch/20230901105858.311745-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> https://patchwork.kernel.org/project/linux-riscv/patch/20230901110320.312674-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> https://patchwork.kernel.org/project/linux-riscv/patch/20230901110936.313171-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 
-  ld.lld: error: ld-temp.o <inline asm>:105:1: macro 'parse_r' is already defined
-  .macro  parse_r var r
-  ^
+Thanks, these are in the testing queue.  I'll pick them up for the merge 
+window unless something goes off the rails.
 
-This was an issue for arch/mips as well, which was resolved by
-commit 67512a8cf5a7 ("MIPS: Avoid macro redefinitions").
++Geert, who acked the SOC one.
 
-However, parse_r is unused in arch/loongarch after
-commit 83d8b38967d2 ("LoongArch: Simplify the invtlb wrappers"), so
-doing the same change does not make much sense now. Just remove parse_r
-(and parse_v, which is also unused) to resolve the redefinition error.
-If it needs to be brought back due to an actual use, it should be
-brought back with the same changes as the aforementioned arch/mips
-commit.
-
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1924
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/loongarch/include/asm/asmmacro.h  | 107 ---------------------------------
- arch/loongarch/include/asm/loongarch.h |  43 -------------
- 2 files changed, 150 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
-index 8aaecd85aa81..c9544f358c33 100644
---- a/arch/loongarch/include/asm/asmmacro.h
-+++ b/arch/loongarch/include/asm/asmmacro.h
-@@ -10,113 +10,6 @@
- #include <asm/fpregdef.h>
- #include <asm/loongarch.h>
- 
--	.macro	parse_v var val
--	\var	= \val
--	.endm
--
--	.macro	parse_r var r
--	\var	= -1
--	.ifc	\r, $r0
--	\var	= 0
--	.endif
--	.ifc	\r, $r1
--	\var	= 1
--	.endif
--	.ifc	\r, $r2
--	\var	= 2
--	.endif
--	.ifc	\r, $r3
--	\var	= 3
--	.endif
--	.ifc	\r, $r4
--	\var	= 4
--	.endif
--	.ifc	\r, $r5
--	\var	= 5
--	.endif
--	.ifc	\r, $r6
--	\var	= 6
--	.endif
--	.ifc	\r, $r7
--	\var	= 7
--	.endif
--	.ifc	\r, $r8
--	\var	= 8
--	.endif
--	.ifc	\r, $r9
--	\var	= 9
--	.endif
--	.ifc	\r, $r10
--	\var	= 10
--	.endif
--	.ifc	\r, $r11
--	\var	= 11
--	.endif
--	.ifc	\r, $r12
--	\var	= 12
--	.endif
--	.ifc	\r, $r13
--	\var	= 13
--	.endif
--	.ifc	\r, $r14
--	\var	= 14
--	.endif
--	.ifc	\r, $r15
--	\var	= 15
--	.endif
--	.ifc	\r, $r16
--	\var	= 16
--	.endif
--	.ifc	\r, $r17
--	\var	= 17
--	.endif
--	.ifc	\r, $r18
--	\var	= 18
--	.endif
--	.ifc	\r, $r19
--	\var	= 19
--	.endif
--	.ifc	\r, $r20
--	\var	= 20
--	.endif
--	.ifc	\r, $r21
--	\var	= 21
--	.endif
--	.ifc	\r, $r22
--	\var	= 22
--	.endif
--	.ifc	\r, $r23
--	\var	= 23
--	.endif
--	.ifc	\r, $r24
--	\var	= 24
--	.endif
--	.ifc	\r, $r25
--	\var	= 25
--	.endif
--	.ifc	\r, $r26
--	\var	= 26
--	.endif
--	.ifc	\r, $r27
--	\var	= 27
--	.endif
--	.ifc	\r, $r28
--	\var	= 28
--	.endif
--	.ifc	\r, $r29
--	\var	= 29
--	.endif
--	.ifc	\r, $r30
--	\var	= 30
--	.endif
--	.ifc	\r, $r31
--	\var	= 31
--	.endif
--	.iflt	\var
--	.error	"Unable to parse register name \r"
--	.endif
--	.endm
--
- 	.macro	cpu_save_nonscratch thread
- 	stptr.d	s0, \thread, THREAD_REG23
- 	stptr.d	s1, \thread, THREAD_REG24
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index d1324e8accfe..33531d432b49 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -12,49 +12,6 @@
- #ifndef __ASSEMBLY__
- #include <larchintrin.h>
- 
--/*
-- * parse_r var, r - Helper assembler macro for parsing register names.
-- *
-- * This converts the register name in $n form provided in \r to the
-- * corresponding register number, which is assigned to the variable \var. It is
-- * needed to allow explicit encoding of instructions in inline assembly where
-- * registers are chosen by the compiler in $n form, allowing us to avoid using
-- * fixed register numbers.
-- *
-- * It also allows newer instructions (not implemented by the assembler) to be
-- * transparently implemented using assembler macros, instead of needing separate
-- * cases depending on toolchain support.
-- *
-- * Simple usage example:
-- * __asm__ __volatile__("parse_r addr, %0\n\t"
-- *			"#invtlb op, 0, %0\n\t"
-- *			".word ((0x6498000) | (addr << 10) | (0 << 5) | op)"
-- *			: "=r" (status);
-- */
--
--/* Match an individual register number and assign to \var */
--#define _IFC_REG(n)				\
--	".ifc	\\r, $r" #n "\n\t"		\
--	"\\var	= " #n "\n\t"			\
--	".endif\n\t"
--
--__asm__(".macro	parse_r var r\n\t"
--	"\\var	= -1\n\t"
--	_IFC_REG(0)  _IFC_REG(1)  _IFC_REG(2)  _IFC_REG(3)
--	_IFC_REG(4)  _IFC_REG(5)  _IFC_REG(6)  _IFC_REG(7)
--	_IFC_REG(8)  _IFC_REG(9)  _IFC_REG(10) _IFC_REG(11)
--	_IFC_REG(12) _IFC_REG(13) _IFC_REG(14) _IFC_REG(15)
--	_IFC_REG(16) _IFC_REG(17) _IFC_REG(18) _IFC_REG(19)
--	_IFC_REG(20) _IFC_REG(21) _IFC_REG(22) _IFC_REG(23)
--	_IFC_REG(24) _IFC_REG(25) _IFC_REG(26) _IFC_REG(27)
--	_IFC_REG(28) _IFC_REG(29) _IFC_REG(30) _IFC_REG(31)
--	".iflt	\\var\n\t"
--	".error	\"Unable to parse register name \\r\"\n\t"
--	".endif\n\t"
--	".endm");
--
--#undef _IFC_REG
--
- /* CPUCFG */
- #define read_cpucfg(reg) __cpucfg(reg)
- 
-
----
-base-commit: 68800bf8cd1a5e392089f10c58730a4e6a82e41d
-change-id: 20230905-loongarch-fix-clang-lto-parse_r-8b48f71eeeac
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+>
+> Cheers,
+> Prabhakar
+>
+>>
+>> vim +46 arch/riscv/errata/andes/errata.c
+>>
+>>     40
+>>     41  static bool errata_probe_iocp(unsigned int stage, unsigned long arch_id, unsigned long impid)
+>>     42  {
+>>     43          if (!IS_ENABLED(CONFIG_ERRATA_ANDES_CMO))
+>>     44                  return false;
+>>     45
+>>   > 46          if (arch_id != ANDESTECH_AX45MP_MARCHID || impid != ANDESTECH_AX45MP_MIMPID)
+>>     47                  return false;
+>>     48
+>>     49          if (!ax45mp_iocp_sw_workaround())
+>>     50                  return false;
+>>     51
+>>     52          /* Set this just to make core cbo code happy */
+>>     53          riscv_cbom_block_size = 1;
+>>     54          riscv_noncoherent_supported();
+>>     55
+>>     56          return true;
+>>     57  }
+>>     58
+>>
+>> --
+>> 0-DAY CI Kernel Test Service
+>> https://github.com/intel/lkp-tests/wiki
+>>
