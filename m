@@ -1,143 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317F87EC
-	for <llvm@lists.linux.dev>; Thu,  7 Sep 2023 01:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694049079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=S0G+pUsazh5wNRL96fW+9BSlN3ptRvX+0QiSQ4gnFjs=;
-	b=Li6nWi785yPayAM7VI47mViuKx4glJcaPw5NuMZoz39Bc3K2wC8SR1Uxn90BP1bzhoBG1G
-	lAFVICt1lFBfwGyNUQEEfS3ZKpJJqCcvoNXzXVOvS6SjDAQEyKaX7Yx83iZZP6tplKps5G
-	sHSLqZHFDZSHQjCGkQxHLnZ3MWX9AQU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-694-4ut4TQfzNQSjH2WQXcoYbA-1; Wed, 06 Sep 2023 21:11:17 -0400
-X-MC-Unique: 4ut4TQfzNQSjH2WQXcoYbA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C43A1817077
-	for <llvm@lists.linux.dev>; Thu,  7 Sep 2023 01:11:16 +0000 (UTC)
-Received: from [172.64.4.20] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9814740C2070;
-	Thu,  7 Sep 2023 01:11:16 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, 744a7594)
-Date: Thu, 07 Sep 2023 01:11:16 -0000
-To: zlang@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2499A29;
+	Thu,  7 Sep 2023 01:36:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778ABC433C8;
+	Thu,  7 Sep 2023 01:36:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694050598;
+	bh=K1eFDAwhbRf7Pi6Pvuv3Qv4AccmUHTSMDwU5bRVVpoU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OmR3VWiuKBu6GwGNUSNd/MTIwDc2lN3s9oD9qTLLLOvpx4VjHIkDYIbbaSekHuTMf
+	 gEQhrzH/s6OG1XnUU+C7WBj1NAydN/XQkcuDKPsc3E9MJLO0Bc7LJ71DPUgT6/LNsq
+	 +sosp/3Y5JAhIJKnvn3SlcCZoGiJk7ikbkem40YGTcmt0XS0iFVsr3NT7wUYxZLkG7
+	 oqIQj/7pNqtXT+/874Z2UujbfvvAvZYy3kXUc6fnWDyeXoDmS5NczNI4C0ke/RvNMS
+	 3JGFgkB5NMYzq8yAGiAgpAWLWvX2+aY2ElQ8EoFAboZ2Hofw5zR2FJlUuoKQy4QGsu
+	 W7K2pdIuFnwEQ==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so3312054a12.1;
+        Wed, 06 Sep 2023 18:36:38 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzM1qcBJglOR6pqCnI7cWujvBnWqIAMSEGQn10zold8IJbdE+6r
+	FqnYAX7e92oFor9srKQivX/jhYNtTRt/odovvx8=
+X-Google-Smtp-Source: AGHT+IFSrgaoII2JeLHGoz+iy1OHR9VPNyJD5qJLZ1Uu0jZu49j7lK4FXM+HkkDci6x1+pekg5uDLrwJI5OAzveExq8=
+X-Received: by 2002:a05:6402:3551:b0:52a:586a:b19a with SMTP id
+ f17-20020a056402355100b0052a586ab19amr1333622edd.21.1694050596696; Wed, 06
+ Sep 2023 18:36:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <49370.123090621111700146@us-mta-694.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20230905-loongarch-fix-clang-lto-parse_r-v1-1-d991ee630222@kernel.org>
+ <241da154-3092-7dc2-09b5-8e9cc7cac5be@xen0n.name>
+In-Reply-To: <241da154-3092-7dc2-09b5-8e9cc7cac5be@xen0n.name>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 7 Sep 2023 09:36:25 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4ZxssZDCTuQUF7UZ7v+O0hN+7Hmw2qwVFUDBDuewGL8w@mail.gmail.com>
+Message-ID: <CAAhV-H4ZxssZDCTuQUF7UZ7v+O0hN+7Hmw2qwVFUDBDuewGL8w@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Drop unused parse_r and parse_v macros
+To: WANG Xuerui <kernel@xen0n.name>
+Cc: Nathan Chancellor <nathan@kernel.org>, loongarch@lists.linux.dev, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Queued for loongarch-next, thanks.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Huacai
 
-
-Kernel information:
-    Commit message: Merge tag 'input-for-v6.6-rc0' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/dtor/input
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/103251
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9421391
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1722
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 ppc64le - Storage - mdadm upstream test
-                  x86_64 - Storage - mdadm upstream test
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+On Wed, Sep 6, 2023 at 4:36=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wrot=
+e:
+>
+> On 9/6/23 07:06, Nathan Chancellor wrote:
+> > When building with CONFIG_LTO_CLANG_FULL, there are several errors due
+> > to the way that parse_r is defined with an __asm__ statement in a
+> > header:
+> >
+> >    ld.lld: error: ld-temp.o <inline asm>:105:1: macro 'parse_r' is alre=
+ady defined
+> >    .macro  parse_r var r
+> >    ^
+> >
+> > This was an issue for arch/mips as well, which was resolved by
+> > commit 67512a8cf5a7 ("MIPS: Avoid macro redefinitions").
+> >
+> > However, parse_r is unused in arch/loongarch after
+> > commit 83d8b38967d2 ("LoongArch: Simplify the invtlb wrappers"), so
+> > doing the same change does not make much sense now. Just remove parse_r
+> > (and parse_v, which is also unused) to resolve the redefinition error.
+> > If it needs to be brought back due to an actual use, it should be
+> > brought back with the same changes as the aforementioned arch/mips
+> > commit.
+> >
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1924
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >   arch/loongarch/include/asm/asmmacro.h  | 107 ------------------------=
+---------
+> >   arch/loongarch/include/asm/loongarch.h |  43 -------------
+> >   2 files changed, 150 deletions(-)
+>
+> Doh, I must have overlooked this when I last refactored the relevant
+> helpers. Thanks for the clean-up!
+>
+> Reviewed-by: WANG Xuerui <git@xen0n.name>
+>
+> --
+> WANG "xen0n" Xuerui
+>
+> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+>
