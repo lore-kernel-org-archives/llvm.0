@@ -1,44 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCFD125DB;
-	Thu,  7 Sep 2023 20:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31E71400E;
+	Thu,  7 Sep 2023 20:28:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694117218; x=1725653218;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ji5oa4nWlim8LvXhOALWeS/GKJBN6DVAonZWF2hx+Q8=;
-  b=g9UCljdQ+SdAXwP8C72525j3M9zL3kvinW4tZqDaMS5t0y0KtxlkznQd
-   Tg2zl0bB1JPs07h4EUeKztXX3oBqtjZhIsP4TMz1BHY6SPAQV9JiCih6X
-   UGyG1mvNjwWn25x02HC/9n8+1pz1nMwvfK8T/i6GV4wuME1cGSEpLjjz1
-   4CrkZWst7p957BZYVr3XPx9/yZC2jwroM1fcItPMJrpMmZjkCHZR0yfiU
-   u01VMUo/+ASNWeVj0jMQXvTB88yhXhz+hAR38BaZOaUWiQFdtrjpRaWj1
-   L3ke2/Qc7rFPfzi4SOk84MMsa6gAB9I7uGQxq4Z3oTlh5WRPpKJqz04LC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="377372758"
+  t=1694118516; x=1725654516;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BB+LQdugJZ7GbL9afXRYDqv7rBUtA0qIbYwIhow0bK0=;
+  b=UpgwkilhiRozgUEcQGv2ONXDOML4H+P2kc61th9Cd1HEzCs18uOodL9u
+   zCKQxFlR3iQMrrlqzYq/CcWDENELKd+mFFPq5e74Wf7sk/V+htkkPfHCj
+   9VuoeBRANnNWGDhUkXgtdYbdjZLiPFa8MeJfz2UzyeXg3RHA1oxV7eXS8
+   xx1I8LXcJjy7i5XxVB8+LT4EtDvKXjWWBjC74ra6YkomvAPfou2Bvc95j
+   wSZHSUo3DQ0OOmzZGm4ePPE9OLC5HpI99jOQ2iS06abcIe4S84k6qdDOV
+   kS+COxOh0+aHy5YLFShyU27TPkoS/is3ZFpxPkN0IAcUudt/HLQccuqKp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="443884594"
 X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="377372758"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 13:06:32 -0700
+   d="scan'208";a="443884594"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 13:28:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="857026720"
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="988926604"
 X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="857026720"
+   d="scan'208";a="988926604"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Sep 2023 13:06:31 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 07 Sep 2023 13:28:31 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qeLGn-0001Xv-09;
-	Thu, 07 Sep 2023 20:06:29 +0000
-Date: Fri, 8 Sep 2023 04:06:17 +0800
+	id 1qeLc5-0001Z3-2K;
+	Thu, 07 Sep 2023 20:28:29 +0000
+Date: Fri, 8 Sep 2023 04:27:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ken Xue <Ken.Xue@amd.com>, linux-acpi@vger.kernel.org,
-	rafael@kernel.org, andriy.shevchenko@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Ken.Xue@amd.com
-Subject: Re: [PATCH] acpi: trigger wakeup key event from power button
-Message-ID: <202309080351.xHt2qhP2-lkp@intel.com>
-References: <20230907074342.7722-1-Ken.Xue@amd.com>
+To: Tony Luck <tony.luck@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-ia64@vger.kernel.org
+Subject: [aegl:resctrl2_v65 2/4]
+ fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c:55:32: warning: unused variable
+ 'mon_feature'
+Message-ID: <202309080444.lKTIXlIS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,57 +47,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230907074342.7722-1-Ken.Xue@amd.com>
 
-Hi Ken,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master next-20230907]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ken-Xue/acpi-trigger-wakeup-key-event-from-power-button/20230907-232828
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230907074342.7722-1-Ken.Xue%40amd.com
-patch subject: [PATCH] acpi: trigger wakeup key event from power button
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230908/202309080351.xHt2qhP2-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git resctrl2_v65
+head:   13c888afbee9f7da0a4a969617dea9889da9d711
+commit: 48b1b4708de24b0c1dff810db00317c3fdcf7bab [2/4] resctrl2: Arch x86 modules for most of the legacy control/monitor functions
+config: x86_64-randconfig-r011-20230908 (https://download.01.org/0day-ci/archive/20230908/202309080444.lKTIXlIS-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309080351.xHt2qhP2-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309080444.lKTIXlIS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309080351.xHt2qhP2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309080444.lKTIXlIS-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/i915/display/intel_lvds.c:30:
->> include/acpi/button.h:11:45: warning: declaration of 'struct acpi_device' will not be visible outside of this function [-Wvisibility]
-   extern void acpi_power_button_wakeup(struct acpi_device *device);
-                                               ^
+>> fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c:55:32: warning: unused variable 'mon_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id mon_feature[] = {
+                                  ^
+   1 warning generated.
+--
+>> fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c:55:32: warning: unused variable 'mon_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id mon_feature[] = {
+                                  ^
+   1 warning generated.
+--
+>> fs/resctrl2/arch/x86/rdt_llc_occupancy.c:55:32: warning: unused variable 'mon_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id mon_feature[] = {
+                                  ^
+   1 warning generated.
+--
+>> fs/resctrl2/arch/x86/rdt_mbm_total_rate.c:55:32: warning: unused variable 'mon_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id mon_feature[] = {
+                                  ^
+   1 warning generated.
+--
+>> fs/resctrl2/arch/x86/rdt_l3_cat.c:571:32: warning: unused variable 'cat_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id cat_feature[] = {
+                                  ^
+   1 warning generated.
+--
+>> fs/resctrl2/arch/x86/rdt_l2_cat.c:571:32: warning: unused variable 'cat_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id cat_feature[] = {
+                                  ^
+   1 warning generated.
+--
+>> fs/resctrl2/arch/x86/rdt_l3_mba.c:247:32: warning: unused variable 'mba_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id mba_feature[] = {
+                                  ^
+   1 warning generated.
+--
+>> fs/resctrl2/arch/x86/rdt_mbm_local_rate.c:55:32: warning: unused variable 'mon_feature' [-Wunused-const-variable]
+   static const struct x86_cpu_id mon_feature[] = {
+                                  ^
    1 warning generated.
 
 
-vim +11 include/acpi/button.h
-
-     8	
-     9	#if IS_ENABLED(CONFIG_ACPI_BUTTON)
-    10	extern int acpi_lid_open(void);
-  > 11	extern void acpi_power_button_wakeup(struct acpi_device *device);
-    12	#else
-    13	static inline int acpi_lid_open(void)
-    14	{
-    15		return 1;
-    16	}
-    17	static inline void acpi_power_button_wakeup(struct acpi_device *device)
-    18	{
-    19		return;
-    20	}
-    21	#endif /* IS_ENABLED(CONFIG_ACPI_BUTTON) */
-    22	
+vim +/mon_feature +55 fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c
 
 -- 
 0-DAY CI Kernel Test Service
