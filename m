@@ -1,205 +1,272 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3427B14295;
-	Thu,  7 Sep 2023 22:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694127467; x=1725663467;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NiD2jrGgGfQ6xnh6f7vp7lyP6csMdiSncB/f8Y5qcyU=;
-  b=cAJhv9LnpCUS0jwnL5ja1lhmJruc2bwDTAgOU+62/nVVv6GolM7llc31
-   JSIUizXh0FrOXFTz7S6A2f2DBU7F2+j/0LETrsGYrWd6GbDU8k9E4c3Eb
-   C5Ygxj3EA8zATHzPMSKGW2/LnoN44Roaf86CJIUq3F3MAb/jfeq69eBCV
-   0xKk+FgXGBxJgwWbzHlq5VLUgnAbUJoJ3u6iriGpqZvQ5uUK/Wuiiu3Hj
-   soY2VbmbEW4MEN2YLb9wEBQTvJe4CEaiX5eRlcmhHe+oWAzh4VU+yjbwb
-   8yBeFqVEuer1wC8UN5f6d4C6W5/tS5wyDXamB7gQiRsCbGOOP0FTC0vA0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="443927702"
-X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="443927702"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 15:57:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="807721018"
-X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="807721018"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Sep 2023 15:57:37 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qeNwM-0001gT-2V;
-	Thu, 07 Sep 2023 22:57:34 +0000
-Date: Fri, 8 Sep 2023 06:57:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lu Hongfei <luhongfei@vivo.com>, Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Stanley Chu <stanley.chu@mediatek.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bean Huo <beanhuo@micron.com>,
-	Asutosh Das <quic_asutoshd@quicinc.com>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-	Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: Re: [PATCH 3/3] scsi: ufs: core: Add exception event handler to
- implicitly handle WB buffer resize event
-Message-ID: <202309080646.NhYcVypx-lkp@intel.com>
-References: <20230907094517.1961-1-luhongfei@vivo.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BA41426E
+	for <llvm@lists.linux.dev>; Thu,  7 Sep 2023 23:08:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 327ADC433C7
+	for <llvm@lists.linux.dev>; Thu,  7 Sep 2023 23:08:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694128127;
+	bh=dwU0cggUZuUj8xz1J+Ttvroipumx77lnmqiIHmYTCJI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=t16bBPmWFTaeGkKD6Vuny5I0wpUxFECxfgIyaoxFAuNZPzpo/X6e/ilimWCmJfL+2
+	 I4h+YohnsfQ7yfyYlzQyiKH8o9NrfN9+p0XDfkjs70IpNgEjX0G0T9S06xcNpfHW84
+	 FwSjyhwf/srK84Dz8A6N8OgBsLF/d4qSD/E4uMvH080newrOLAWQW+3i12G/R95kb9
+	 Z4Or6HuEZ6+bjgfSuSasz1whc70SMLIPWiMHNEnlhwSc9hC0EWaUwbp4dpZxGRwJC5
+	 28Cy99yc0LHBzdPMTsMnmV7BFWFOHgCUZbKygXi65EiSIZzY1m+zKn2jUqyYAsvlOP
+	 UsolUQB93j0JA==
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-31f7638be6eso643844f8f.3
+        for <llvm@lists.linux.dev>; Thu, 07 Sep 2023 16:08:47 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yw+JOX8b7MmzJ1OCtOUBqeI8QEHwaS+eZB93C6RFTnwqsIM6f2b
+	uk4LmiJkcWCUWCqB7Ao7CEIH3U1unxXwh7nlcr0=
+X-Google-Smtp-Source: AGHT+IE0owwZKnabFPS9/99R5zr4I9QIppyU7eX2Dd5VukMAFWby5ukuNPdc/8yyiuTSzVS853rFdqGdDhwgkZxKGAU=
+X-Received: by 2002:a05:6512:280d:b0:500:a60d:c677 with SMTP id
+ cf13-20020a056512280d00b00500a60dc677mr547393lfb.59.1694128104311; Thu, 07
+ Sep 2023 16:08:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230907094517.1961-1-luhongfei@vivo.com>
+References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
+In-Reply-To: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
+From: Song Liu <song@kernel.org>
+Date: Thu, 7 Sep 2023 16:08:11 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5_qAvV0N3o+hOiAnb1=buJ1pLzqYW9D+Bwft6hxJvAeQ@mail.gmail.com>
+Message-ID: <CAPhsuW5_qAvV0N3o+hOiAnb1=buJ1pLzqYW9D+Bwft6hxJvAeQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] kexec: Fix kexec_file_load for llvm16 with PGO
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
+	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
+	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Simon Horman <horms@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	stable@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lu,
+Hi Ricardo and folks,
 
-kernel test robot noticed the following build errors:
+On Fri, May 19, 2023 at 7:48=E2=80=AFAM Ricardo Ribalda <ribalda@chromium.o=
+rg> wrote:
+>
+> When upreving llvm I realised that kexec stopped working on my test
+> platform.
+>
+> The reason seems to be that due to PGO there are multiple .text sections
+> on the purgatory, and kexec does not supports that.
+>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-[auto build test ERROR on mkp-scsi/for-next]
-[also build test ERROR on jejb-scsi/for-next linus/master v6.5 next-20230907]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We are seeing WARNINGs like the following while kexec'ing a PGO and
+LTO enabled kernel:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lu-Hongfei/scsi-ufs-core-allow-host-driver-to-enable-wb-buffer-resize-function/20230907-234105
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230907094517.1961-1-luhongfei%40vivo.com
-patch subject: [PATCH 3/3] scsi: ufs: core: Add exception event handler to implicitly handle WB buffer resize event
-config: hexagon-randconfig-002-20230908 (https://download.01.org/0day-ci/archive/20230908/202309080646.NhYcVypx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309080646.NhYcVypx-lkp@intel.com/reproduce)
+WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
+kexec_load_purgatory+0x37f/0x390
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309080646.NhYcVypx-lkp@intel.com/
+AFAICT, the warning was added by this set, and it was triggered when
+we have many .text sections
+in purgatory.ro. The kexec was actually successful. So I wonder
+whether we really need the
+WARNING here. If we disable LTO (PGO is still enabled), we don't see
+the WARNING any more.
 
-All errors (new ones prefixed by >>):
+I also tested an older kernel (5.19 based), where we also see many
+.text sections with LTO. It
+kexec()'ed fine. (It doesn't have the WARN_ON() in
+kexec_purgatory_setup_sechdrs).
 
-   In file included from drivers/ufs/core/ufshcd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/ufs/core/ufshcd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/ufs/core/ufshcd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/ufs/core/ufshcd.c:322:19: error: member reference type 'struct ufs_dev_info' is not a pointer; did you mean to use '.'?
-     322 |         if (hba->dev_info->wspecversion >= 0x410
-         |             ~~~~~~~~~~~~~^~
-         |                          .
-   drivers/ufs/core/ufshcd.c:323:22: error: member reference type 'struct ufs_dev_info' is not a pointer; did you mean to use '.'?
-     323 |             && hba->dev_info->b_presrv_uspc_en
-         |                ~~~~~~~~~~~~~^~
-         |                             .
->> drivers/ufs/core/ufshcd.c:326:3: error: call to undeclared function 'ufshcd_enable_ee'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     326 |                 ufshcd_enable_ee(hba, mask);
-         |                 ^
-   drivers/ufs/core/ufshcd.c:326:3: note: did you mean 'ufshcd_enable_irq'?
-   drivers/ufs/core/ufshcd.c:291:20: note: 'ufshcd_enable_irq' declared here
-     291 | static inline void ufshcd_enable_irq(struct ufs_hba *hba)
-         |                    ^
->> drivers/ufs/core/ufshcd.c:5642:19: error: static declaration of 'ufshcd_enable_ee' follows non-static declaration
-    5642 | static inline int ufshcd_enable_ee(struct ufs_hba *hba, u16 mask)
-         |                   ^
-   drivers/ufs/core/ufshcd.c:326:3: note: previous implicit declaration is here
-     326 |                 ufshcd_enable_ee(hba, mask);
-         |                 ^
-   drivers/ufs/core/ufshcd.c:10216:44: warning: shift count >= width of type [-Wshift-count-overflow]
-    10216 |                 if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
-          |                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   7 warnings and 4 errors generated.
+Please help us fix this properly (as I really don't know much about kexec).
+
+Thanks in advance,
+Song
 
 
-vim +322 drivers/ufs/core/ufshcd.c
+Here is readelf -S output on purgatory.ro.
 
-   306	
-   307	static void ufshcd_configure_wb(struct ufs_hba *hba)
-   308	{
-   309		u16 mask = 0;
-   310	
-   311		if (!ufshcd_is_wb_allowed(hba))
-   312			return;
-   313	
-   314		ufshcd_wb_toggle(hba, true);
-   315	
-   316		ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
-   317	
-   318		if (ufshcd_is_wb_buf_flush_allowed(hba))
-   319			ufshcd_wb_toggle_buf_flush(hba, true);
-   320	
-   321		/* Enable the WRITEBOOSTER_RESIZE_HINT exception mechanism. */
- > 322		if (hba->dev_info->wspecversion >= 0x410
-   323		    && hba->dev_info->b_presrv_uspc_en
-   324		    && ufshcd_is_wb_buf_resize_allowed(hba)) {
-   325			mask |= MASK_EE_WRITEBOOSTER_RESIZE_HINT;
- > 326			ufshcd_enable_ee(hba, mask);
-   327		}
-   328	}
-   329	
+With LTO:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+readelf -W -S purgatory.ro
+There are 48 section headers, starting at offset 0x4a10:
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size
+ ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000
+000000 00      0   0  0
+  [ 1] .text             PROGBITS        0000000000000000 000040
+0000d0 00  AX  0   0 16
+  [ 2] .data             PROGBITS        0000000000000000 001000
+001000 00  WA  0   0 4096
+  [ 3] .rela.text        RELA            0000000000000000 003788
+000228 18   I 45   1  8
+  [ 4] .rodata           PROGBITS        0000000000000000 002000
+0000e0 00   A  0   0 16
+  [ 5] .rela.rodata      RELA            0000000000000000 0039b0
+000030 18   I 45   4  8
+  [ 6] .bss              NOBITS          0000000000000000 0020e0
+001000 00  WA  0   0 4096
+  [ 7] .text.purgatory   PROGBITS        0000000000000000 0020e0
+0000df 00  AX  0   0 16
+  [ 8] .rela.text.purgatory RELA            0000000000000000 0039e0
+000060 18   I 45   7  8
+  [ 9] .text.warn        PROGBITS        0000000000000000 0021c0
+000001 00  AX  0   0 16
+  [10] .kexec-purgatory  PROGBITS        0000000000000000 0021d0
+000120 00  WA  0   0 16
+  [11] .comment          PROGBITS        0000000000000000 003a40
+000046 01  MS  0   0  1
+  [12] .llvm_addrsig     LOOS+0xfff4c03  0000000000000000 003a86
+000005 00   E  0   0  1
+  [13] .text.sha256_update PROGBITS        0000000000000000 0022f0
+0008eb 00  AX  0   0 16
+  [14] .rela.text.sha256_update RELA            0000000000000000
+003a90 000060 18   I 45  13  8
+  [15] .text.sha224_update PROGBITS        0000000000000000 002be0
+00000c 00  AX  0   0 16
+  [16] .rela.text.sha224_update RELA            0000000000000000
+003af0 000018 18   I 45  15  8
+  [17] .text.sha256_final PROGBITS        0000000000000000 002bf0
+0000cd 00  AX  0   0 16
+  [18] .rela.text.sha256_final RELA            0000000000000000 003b08
+000030 18   I 45  17  8
+  [19] .text.sha224_final PROGBITS        0000000000000000 002cc0
+0000bd 00  AX  0   0 16
+  [20] .rela.text.sha224_final RELA            0000000000000000 003b38
+000030 18   I 45  19  8
+  [21] .text.sha256      PROGBITS        0000000000000000 002d80
+00011d 00  AX  0   0 16
+  [22] .rela.text.sha256 RELA            0000000000000000 003b68
+000030 18   I 45  21  8
+  [23] .modinfo          PROGBITS        0000000000000000 002e9d
+000039 00   A  0   0  1
+  [24] .rodata.SHA256_K  PROGBITS        0000000000000000 002ee0
+000100 00   A  0   0 16
+  [25] .rodata.__sha256_final.padding PROGBITS        0000000000000000
+002fe0 000040 00   A  0   0 16
+  [26] .text.memcmp      PROGBITS        0000000000000000 003020
+00000b 00  AX  0   0 16
+  [27] .text.bcmp        PROGBITS        0000000000000000 003030
+00000b 00  AX  0   0 16
+  [28] .text.strcmp      PROGBITS        0000000000000000 003040
+000041 00  AX  0   0 16
+  [29] .text.strncmp     PROGBITS        0000000000000000 003090
+00003a 00  AX  0   0 16
+  [30] .text.strnlen     PROGBITS        0000000000000000 0030d0
+000039 00  AX  0   0 16
+  [31] .text.atou        PROGBITS        0000000000000000 003110
+000035 00  AX  0   0 16
+  [32] .text.simple_strtoull PROGBITS        0000000000000000 003150
+0000b6 00  AX  0   0 16
+  [33] .text.simple_strtol PROGBITS        0000000000000000 003210
+0001b6 00  AX  0   0 16
+  [34] .text.strlen      PROGBITS        0000000000000000 0033d0
+00001c 00  AX  0   0 16
+  [35] .text.strstr      PROGBITS        0000000000000000 0033f0
+00005f 00  AX  0   0 16
+  [36] .text.strchr      PROGBITS        0000000000000000 003450
+000022 00  AX  0   0 16
+  [37] .text.kstrtoull   PROGBITS        0000000000000000 003480
+000142 00  AX  0   0 16
+  [38] .text.boot_kstrtoul PROGBITS        0000000000000000 0035d0
+00000c 00  AX  0   0 16
+  [39] .rela.text.boot_kstrtoul RELA            0000000000000000
+003b98 000018 18   I 45  38  8
+  [40] .text.memset      PROGBITS        0000000000000000 0035e0
+00001f 00  AX  0   0 16
+  [41] .text.memmove     PROGBITS        0000000000000000 003600
+0000a6 00  AX  0   0 16
+  [42] .text.memcpy      PROGBITS        0000000000000000 0036b0
+0000a6 00  AX  0   0 16
+  [43] .rodata.str1.1    PROGBITS        0000000000000000 003756
+000032 01 AMS  0   0  1
+  [44] .note.GNU-stack   PROGBITS        0000000000000000 003bb0
+000000 00      0   0  1
+  [45] .symtab           SYMTAB          0000000000000000 003bb0
+000948 18     47  68  8
+  [46] .shstrtab         STRTAB          0000000000000000 0044f8
+0002cd 00      0   0  1
+  [47] .strtab           STRTAB          0000000000000000 0047c5
+000248 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+
+
+Without LTO:
+
+readelf -W -S purgatory.ro
+There are 16 section headers, starting at offset 0x4130:
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size
+ ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000
+000000 00      0   0  0
+  [ 1] .text             PROGBITS        0000000000000000 000040
+00131b 00  AX  0   0 16
+  [ 2] .rela.text        RELA            0000000000000000 003290
+000480 18   I 13   1  8
+  [ 3] .kexec-purgatory  PROGBITS        0000000000000000 001360
+000120 00  WA  0   0 16
+  [ 4] .comment          PROGBITS        0000000000000000 003710
+000046 01  MS  0   0  1
+  [ 5] .llvm_addrsig     LOOS+0xfff4c03  0000000000000000 003756
+000005 00   E  0   0  1
+  [ 6] .data             PROGBITS        0000000000000000 002000
+001000 00  WA  0   0 4096
+  [ 7] .rodata           PROGBITS        0000000000000000 003000
+000220 00   A  0   0 16
+  [ 8] .rela.rodata      RELA            0000000000000000 003760
+000030 18   I 13   7  8
+  [ 9] .bss              NOBITS          0000000000000000 003220
+001000 00  WA  0   0 4096
+  [10] .modinfo          PROGBITS        0000000000000000 003220
+000039 00   A  0   0  1
+  [11] .rodata.str1.1    PROGBITS        0000000000000000 003259
+000032 01 AMS  0   0  1
+  [12] .note.GNU-stack   PROGBITS        0000000000000000 003790
+000000 00      0   0  1
+  [13] .symtab           SYMTAB          0000000000000000 003790
+0006d8 18     15  43  8
+  [14] .shstrtab         STRTAB          0000000000000000 003e68
+00009c 00      0   0  1
+  [15] .strtab           STRTAB          0000000000000000 003f04
+00022b 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+
+[...]
+
+> Ricardo Ribalda (4):
+>       kexec: Support purgatories with .text.hot sections
+>       x86/purgatory: Remove PGO flags
+>       powerpc/purgatory: Remove PGO flags
+>       riscv/purgatory: Remove PGO flags
+>
+>  arch/powerpc/purgatory/Makefile |  5 +++++
+>  arch/riscv/purgatory/Makefile   |  5 +++++
+>  arch/x86/purgatory/Makefile     |  5 +++++
+>  kernel/kexec_file.c             | 14 +++++++++++++-
+>  4 files changed, 28 insertions(+), 1 deletion(-)
+> ---
+> base-commit: 58390c8ce1bddb6c623f62e7ed36383e7fa5c02f
+> change-id: 20230321-kexec_clang16-4510c23d129c
+>
+> Best regards,
+> --
+> Ricardo Ribalda Delgado <ribalda@chromium.org>
+>
