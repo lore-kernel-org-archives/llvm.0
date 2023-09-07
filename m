@@ -1,81 +1,104 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D8111CA8
-	for <llvm@lists.linux.dev>; Thu,  7 Sep 2023 19:01:30 +0000 (UTC)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6535b9caa1eso12241526d6.0
-        for <llvm@lists.linux.dev>; Thu, 07 Sep 2023 12:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1694113289; x=1694718089; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=UaLNjN3ZJ7PyVOlkdkv0QrmrabX8B4mPti5Xlo/jWYU=;
-        b=syxMUgsqFT0is5h53WnkfaZPkPEwBNBT+9uHZjHygF607MuZv1ZjvG0kGPBRTCiP4e
-         MowTsTxMzZsZQ0um2kj9YWD9Wb54ZSMDW9DngPRFQ2KqVfg+0BBBKwOmzjf3xXRp0ziM
-         E2W+eOQ0ZkKjMtFd0eR13C8kzfzv5IsYWpARJHeQJZAfRMIEAAwF5H+dXbbookVeh301
-         u7/rVret8XM9v4c0HPYhNRZEfWaQ+3XghROjtGH0QMvMhHuP8sZkmgVjo1u57RjNkRNE
-         Y1Ij/8szAhCTBKdQOrzI2rvFdYTXyY18i6d2Zx6QLEei4tpal5qesB1mYj9lBMyiTMqj
-         aUzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694113289; x=1694718089;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UaLNjN3ZJ7PyVOlkdkv0QrmrabX8B4mPti5Xlo/jWYU=;
-        b=UEAt48qk6AcdQMOPNpmrCl2s1kpS2b9C3IhLQUODO5qAsWFnENF7n+llYA+l9YAP1Y
-         GGnjcQzwH0luXY8EmOr6WCpCPS2LyAriFm87HNOMl6ZXvDd7NLyFayfpIGekcKI674nU
-         +TyzUBT5Wf9vz5PFMEJQNtAj9/e+kwNbgYrrRMtZoPf6d37Et/hLhItOEXZ7SZZSQtc4
-         /iDVX2to7x0zcExEOfMqQ0pV2uIqEJvTAxeQqQkjmw4im1S80r1bSUqB60b6R+GDA6uJ
-         R5MBA+X1JDLKYNquq/CEFTgDS3ho0dVYIq1gzjYeafbe6qzTbmrwjmNeWRryVz+0EZ0b
-         shOw==
-X-Gm-Message-State: AOJu0Yy06VYrmKLzbMyNqojxHMkyS2KQpS5tN6clHxDq5vTr71NJQJ+A
-	Xjnniuqoo6J4LTugqHyI2Fg6EsyFMZT1Xiu1R/PlAA==
-X-Google-Smtp-Source: AGHT+IHXzTMMD4Rl71NhyoDZ0xSQVibyb32ap43DMerFHyxkAyTKG1EhA6m83AXV+G9mbNxFiKQB8OTbxV/k4hrgonw=
-X-Received: by 2002:a0c:e14e:0:b0:64f:53a8:5d0f with SMTP id
- c14-20020a0ce14e000000b0064f53a85d0fmr462867qvl.20.1694113289437; Thu, 07 Sep
- 2023 12:01:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCFD125DB;
+	Thu,  7 Sep 2023 20:06:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694117218; x=1725653218;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ji5oa4nWlim8LvXhOALWeS/GKJBN6DVAonZWF2hx+Q8=;
+  b=g9UCljdQ+SdAXwP8C72525j3M9zL3kvinW4tZqDaMS5t0y0KtxlkznQd
+   Tg2zl0bB1JPs07h4EUeKztXX3oBqtjZhIsP4TMz1BHY6SPAQV9JiCih6X
+   UGyG1mvNjwWn25x02HC/9n8+1pz1nMwvfK8T/i6GV4wuME1cGSEpLjjz1
+   4CrkZWst7p957BZYVr3XPx9/yZC2jwroM1fcItPMJrpMmZjkCHZR0yfiU
+   u01VMUo/+ASNWeVj0jMQXvTB88yhXhz+hAR38BaZOaUWiQFdtrjpRaWj1
+   L3ke2/Qc7rFPfzi4SOk84MMsa6gAB9I7uGQxq4Z3oTlh5WRPpKJqz04LC
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="377372758"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="377372758"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 13:06:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="857026720"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="857026720"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Sep 2023 13:06:31 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qeLGn-0001Xv-09;
+	Thu, 07 Sep 2023 20:06:29 +0000
+Date: Fri, 8 Sep 2023 04:06:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ken Xue <Ken.Xue@amd.com>, linux-acpi@vger.kernel.org,
+	rafael@kernel.org, andriy.shevchenko@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Ken.Xue@amd.com
+Subject: Re: [PATCH] acpi: trigger wakeup key event from power button
+Message-ID: <202309080351.xHt2qhP2-lkp@intel.com>
+References: <20230907074342.7722-1-Ken.Xue@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 7 Sep 2023 12:01:18 -0700
-Message-ID: <CAKwvOdnaEakT_y8TA9b_nMY3kMp=xxqKpGQPc2drNqRdV39RQw@mail.gmail.com>
-Subject: duplicate BTF_IDs leading to symbol redefinition errors?
-To: bpf <bpf@vger.kernel.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>, Stanislav Fomichev <sdf@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230907074342.7722-1-Ken.Xue@amd.com>
 
-So we've got a curious report recently:
-https://github.com/ClangBuiltLinux/linux/issues/1913
+Hi Ken,
 
-ld.lld: error: ld-temp.o <inline asm>:14577:1: symbol
-'__BTF_ID__struct__cgroup__624' is already defined
-__BTF_ID__struct__cgroup__624:
-^
+kernel test robot noticed the following build warnings:
 
-It's been hard to pin down a SHA and .config to reproduce this, but
-looking at the definition of BTF_ID's usage of __ID's usage of
-__COUNTER__, and the two statements:
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master next-20230907]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-kernel/bpf/helpers.c:2460:BTF_ID(struct, cgroup)
-kernel/bpf/verifier.c:5075:BTF_ID(struct, cgroup)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ken-Xue/acpi-trigger-wakeup-key-event-from-power-button/20230907-232828
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230907074342.7722-1-Ken.Xue%40amd.com
+patch subject: [PATCH] acpi: trigger wakeup key event from power button
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230908/202309080351.xHt2qhP2-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309080351.xHt2qhP2-lkp@intel.com/reproduce)
 
-Is it possible that __COUNTER__ could evaluate to the same value
-across 2 different translation units, leading to a name collision like
-the above?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309080351.xHt2qhP2-lkp@intel.com/
 
-looking at another usage of BTF_ID other than struct
-cgroup;kernel/bpf/helpers.c:2461:BTF_ID(func, bpf_cgroup_release)
-is only defined in one translation unit
+All warnings (new ones prefixed by >>):
 
-Should one of those two `BTF_ID(struct, cgroup)` be removed? Is there
-some other way we can avoid these collisions in the future?
+   In file included from drivers/gpu/drm/i915/display/intel_lvds.c:30:
+>> include/acpi/button.h:11:45: warning: declaration of 'struct acpi_device' will not be visible outside of this function [-Wvisibility]
+   extern void acpi_power_button_wakeup(struct acpi_device *device);
+                                               ^
+   1 warning generated.
 
-Was this a previously observed/fixed issue?
+
+vim +11 include/acpi/button.h
+
+     8	
+     9	#if IS_ENABLED(CONFIG_ACPI_BUTTON)
+    10	extern int acpi_lid_open(void);
+  > 11	extern void acpi_power_button_wakeup(struct acpi_device *device);
+    12	#else
+    13	static inline int acpi_lid_open(void)
+    14	{
+    15		return 1;
+    16	}
+    17	static inline void acpi_power_button_wakeup(struct acpi_device *device)
+    18	{
+    19		return;
+    20	}
+    21	#endif /* IS_ENABLED(CONFIG_ACPI_BUTTON) */
+    22	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
