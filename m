@@ -1,142 +1,85 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D50F36F
-	for <llvm@lists.linux.dev>; Thu,  7 Sep 2023 04:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694062276;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=St1/GBUbTdmRNZaW4Et1xOS01aTMHJY2QY/B1Wn1pwI=;
-	b=hWCKAZWVZMAcSTRjzJua9irx0V2GsR4bRAy6zbSfeJXipXLX3/MPeZzDqxyJAjzXXeCq7b
-	bu8p1PHMj3OLH9y3BdUjlddoepBrMwvHxBh/A4uTc7a4Vh1a6iNsaOLgiMSLv+IKnpmYCo
-	p55Gay0D3VEleYDaxDErjUSDQZ3Fb4g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-ut5EbFvGM7aZl55umBYXxw-1; Thu, 07 Sep 2023 00:51:15 -0400
-X-MC-Unique: ut5EbFvGM7aZl55umBYXxw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D7988164FB
-	for <llvm@lists.linux.dev>; Thu,  7 Sep 2023 04:51:15 +0000 (UTC)
-Received: from [172.64.4.20] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 39EFB1121314;
-	Thu,  7 Sep 2023 04:51:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, 7ba2090c)
-Date: Thu, 07 Sep 2023 04:51:15 -0000
-To: zlang@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AF315AF;
+	Thu,  7 Sep 2023 08:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694074796; x=1725610796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6xfcYc3m7uxT3N5X0sc3GtT4sgpqUv1hPqm7Ew2kiHU=;
+  b=GpzkWBFq+VXOUheJ/ttp/01htZWtlf9a/J3hSt8cX7dRU5TlaEiy3NP0
+   ApnKaDtBZqCByt2lrBItYH4THP4SH0f7r8XKWZz1mfLz+v05FVkL3GVFq
+   e2iVYEah0mw09WMFz9eJIPRl2CJ6rE5hRoxRVjWEXLkXNHvvgtW1kXuob
+   hnNiYEWNf4KXcy7UWBIuhFosY3VC+6gIdPl4AD1OOQ9X/4VSIIqb2hjJ3
+   QCoVpZATsSeCpjKqRz6tJMgBS71jxoqqcZn0hUuwWshx1YOvaZOCD1Ryr
+   nzB66npVvTOeYTfbC7j5xM4E2UkvlMWVV7j0fGdsHx/oq5JL4RbwTz63c
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="377206459"
+X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
+   d="scan'208";a="377206459"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:19:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="915636989"
+X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
+   d="scan'208";a="915636989"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Sep 2023 01:19:54 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qeAEy-000127-2E;
+	Thu, 07 Sep 2023 08:19:52 +0000
+Date: Thu, 7 Sep 2023 16:18:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lukasz Majewski <lukma@denx.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 RFC 2/4] net: dsa: Extend ksz9477 TAG setup to support
+ HSR frames duplication
+Message-ID: <202309071548.IH5VPHAf-lkp@intel.com>
+References: <20230904120209.741207-3-lukma@denx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <74917.123090700511500627@us-mta-192.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230904120209.741207-3-lukma@denx.de>
 
-Hi, we tested your kernel and here are the results:
+Hi Lukasz,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on v6.5]
+[also build test ERROR on next-20230907]
+[cannot apply to net-next/main net/main linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'ceph-for-6.6-rc1' of https://github.com/ceph=
-/ceph-client
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Majewski/net-dsa-Extend-the-ksz_device-structure-to-hold-info-about-HSR-ports/20230904-200547
+base:   v6.5
+patch link:    https://lore.kernel.org/r/20230904120209.741207-3-lukma%40denx.de
+patch subject: [PATCH v3 RFC 2/4] net: dsa: Extend ksz9477 TAG setup to support HSR frames duplication
+config: i386-randconfig-011-20230906 (https://download.01.org/0day-ci/archive/20230907/202309071548.IH5VPHAf-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230907/202309071548.IH5VPHAf-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/103283
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309071548.IH5VPHAf-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9424006
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1722
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 ppc64le - Storage - mdadm upstream test
-                  x86_64 - Storage - mdadm upstream test
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Reboot test
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> ld.lld: error: undefined symbol: ksz_hsr_get_ports
+   >>> referenced by tag_ksz.c:298 (net/dsa/tag_ksz.c:298)
+   >>>               vmlinux.o:(ksz9477_xmit)
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
