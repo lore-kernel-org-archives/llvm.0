@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44F330F91
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 19:31:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE1DC43395;
-	Fri,  8 Sep 2023 19:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AD9210F
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 19:33:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56ED2C43397;
+	Fri,  8 Sep 2023 19:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694201491;
-	bh=yegpmFKqZADs6elVAH1kxXTwTX9xDIpofYJDh7KGPhk=;
+	s=k20201202; t=1694201618;
+	bh=F4faGuWQnASEi0inkuVom0wfJnle1bp2YiQ8dPBGAVQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WUVwk8cGExllQlCjYaElwxp64xKMK3Kk1F3G3ndilWn2VLg0tvAFnoReSIdfSx7jD
-	 oEENagaVKzoKWP9XvQQUEsZjag7gw+1KHhYBSgr5NzJsBE9dTS2cUXzJoTZuGBHMsL
-	 5/jfVprQJ9+HzAqKlsHTRmYY57sHuHZJUALUwr0EyFjhmSBnPweHJU2SKSWupOlxsQ
-	 qSKmqKRBAQCAsS8PlhQBCEnN2WPA9r28tiMWqv2KucQhrerTdlNwSWp2PvB/gyAGVS
-	 VSkIYuIjC3OT850GeV0cSkBSai07KCKEq9OLf6Vjoa12PhmGhZl+ctoTQkd7H43ExY
-	 c313dAKAEk3Kw==
+	b=gUbUiZfcaLmGGb/W9PRzNdeVrCHVo5aTYKqQWfc846Xo6mjkApb/zG/zzraKpiUBB
+	 PMyR1h1X0Hgio8nDV5+y4+T7MInLPNNeeITRgewzPd0NkBepY9ZZr0YBGnbKmsQkdZ
+	 w8BZL4inubxGtpfgcS6d9lJjbyZPngciO+FXbgORY5p42oQdG0MokWZ3vo5b9jjqmM
+	 a0TP1gUxwqcEkkUsJPqbRJ6gvmbRNu7oHzAx0yc+PVBcnoKDOh+znQ4fhledv8C5kS
+	 5LW8VAy2XiaJ3GO4mdsBE89e+ij0JhRh5WsnTHw2Za/c0O/mZ93KOCkCiV2R1T0MDD
+	 o33Rr43EPSUFg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -27,12 +27,12 @@ Cc: Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.5 27/36] io_uring: annotate the struct io_kiocb slab for appropriate user copy
-Date: Fri,  8 Sep 2023 15:28:38 -0400
-Message-Id: <20230908192848.3462476-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.4 22/31] io_uring: annotate the struct io_kiocb slab for appropriate user copy
+Date: Fri,  8 Sep 2023 15:31:51 -0400
+Message-Id: <20230908193201.3462957-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230908192848.3462476-1-sashal@kernel.org>
-References: <20230908192848.3462476-1-sashal@kernel.org>
+In-Reply-To: <20230908193201.3462957-1-sashal@kernel.org>
+References: <20230908193201.3462957-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.2
+X-stable-base: Linux 6.4.15
 Content-Transfer-Encoding: 8bit
 
 From: Jens Axboe <axboe@kernel.dk>
@@ -119,10 +119,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 93db3e4e7b688..5006b14f97e1e 100644
+index a57bdf336ca8a..f1bda21fe934a 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -4615,8 +4615,20 @@ static int __init io_uring_init(void)
+@@ -4591,8 +4591,20 @@ static int __init io_uring_init(void)
  
  	io_uring_optable_init();
  
