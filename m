@@ -1,131 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C14830F9C
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 22:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E969AC433C7
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 22:53:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694213617;
-	bh=KwM170Ct57lq4vNZ7xSkyIS4SWaJogcjmhutnsYYUvg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CYRNpMfX8tuCfTVRu31LYxhAcpvx7MEpkmXdlllQAK89CegGbwEnv0w/59s4rPPlO
-	 mdSbzm67i5v5WWF1mDG8y5CR6811hr4ak28m4Avd+n/ySC6ujkXiIcz0ZCWQCfoCOg
-	 bcGPf61WrSNAXkizp538IbRjxmaHn4lmcu/y6rT/ExE20Ru4411WrrDRzaqlDTqPBu
-	 WX3yWMZvNeaN9zH1PRGHGGFTv2E3Tafo6Jy/QAZAVknSRJOks0zDCg/kIysqvjC0Ue
-	 x10laWymbfHcW+g4wT0Tk1GosYvk+0YKyXBwcOtQfhYfqCLAQOGWXqxDo6zxbc+ZYw
-	 TEe7kUgbDJM2w==
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4013454fa93so29312915e9.0
-        for <llvm@lists.linux.dev>; Fri, 08 Sep 2023 15:53:37 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxFmYgRfTCgT2Oku+B4fe76PUr6vvTVOWaGy4UzraWCYpWbS67w
-	+9D8oqbdYeV55jY/JdoZBaKNYf6KIEnPSMWnzIA=
-X-Google-Smtp-Source: AGHT+IFxzWHrgwn9Er+VZvUvTkc7+KPn5VFwMJdiU1jtuP4KYojqei7vjyha6oz515UbclFjbQ87OxJGnp5Vhfvbj6U=
-X-Received: by 2002:ac2:4bc5:0:b0:4fe:7e1f:766a with SMTP id
- o5-20020ac24bc5000000b004fe7e1f766amr3386244lfq.24.1694213595847; Fri, 08 Sep
- 2023 15:53:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB55111B
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 22:59:42 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1bf7a6509deso19718245ad.3
+        for <llvm@lists.linux.dev>; Fri, 08 Sep 2023 15:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1694213982; x=1694818782; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ETim7bqC4c0aI+Gj1+8OKYYdNlAwl+LsLJgDB3GOPU0=;
+        b=KCfTGgm2dF76kO05VFToS9YMiEcHm/E67oPUYmQBKUcccylLIVdntShcqBpiEEFMw3
+         EsISHLx6hRrsx7VQV8SzXoP1mqXfvCD8InplQZdj8oZIWJH3h02WA96G7ihJmYAuYaS/
+         u/Iad5Cta2DRoCVIIN21GgzXxKsiQH87NUWVQ/jD0AK14kWFRjekUJk+hmP1f55VZNKQ
+         NKPLEGYDDrfMi1n5jkgvMek664JnT/8EoKJBfzXXrofsGZ4G3EMNhinM7R25WAmhlOC3
+         A8AUf0gyOwEygXTQiaBqtkqTd4v7/XpDCAxI55lnKUsKv3WXgPy2kd6yiakppo1W1uqu
+         n85Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694213982; x=1694818782;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ETim7bqC4c0aI+Gj1+8OKYYdNlAwl+LsLJgDB3GOPU0=;
+        b=xLFEYvh41EUrc7bqb5vOJm3xpo6VU6kr2NlSc43b3r5WKpErigbYjgwdZftAMLPJay
+         D88CHWr1F/hCZtcphfgenTmtQyXVwNhcJuxG3lKknwhYH0u519tE0z9El25zz7+txw8y
+         UsfCsnwXh17WlcBahSc78oDbC2Alfw0X+eFRA76LKDa7L8nk4V8h/NYUHFdGk/XCMHeC
+         mxWHK/KK26UU9u/JszLC+MJ3oy3fytpQFnMnWDscTfHKP1alP0A8Hbm0OVyo/lbXT4FE
+         wPuCKCoQzjgFtz3tclVwHAOfm0hOZxw5XBMUd3mXW+6kVbiG0q0I2dKipGg0t+BcKuyp
+         y19g==
+X-Gm-Message-State: AOJu0Yw/Pd5RaBXVzIHCO5v2eF69moiIuM41veomUIOU11yJxP3Kckdz
+	+rFI88v1VLwlX4+eLgxEylyhJg==
+X-Google-Smtp-Source: AGHT+IHrseoLZKz9f+X23SUo9lh+9srjRT/B0C9SNO5Kl8Ketugg/YTE6oE1r1EnvshvFys7O6MlqQ==
+X-Received: by 2002:a17:902:834c:b0:1c0:a417:ccb2 with SMTP id z12-20020a170902834c00b001c0a417ccb2mr3011165pln.35.1694213982229;
+        Fri, 08 Sep 2023 15:59:42 -0700 (PDT)
+Received: from google.com ([2620:15c:2d1:203:d39f:a985:2060:eedd])
+        by smtp.gmail.com with ESMTPSA id y12-20020a1709027c8c00b001ba066c589dsm2060747pll.137.2023.09.08.15.59.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Sep 2023 15:59:41 -0700 (PDT)
+Date: Fri, 8 Sep 2023 15:59:36 -0700
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Song Liu <song@kernel.org>
+Cc: linux-kernel@vger.kernel.org, songliubraving@fb.com,
+	Ricardo Ribalda <ribalda@chromium.org>, kexec@lists.infradead.org,
+	x86@kernel.org, samitolvanen@google.com, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/purgatory: Remove LTO flags
+Message-ID: <ZPunWKU/TlrN9xiH@google.com>
+References: <20230908225353.984169-1-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
- <CAPhsuW5_qAvV0N3o+hOiAnb1=buJ1pLzqYW9D+Bwft6hxJvAeQ@mail.gmail.com>
- <CANiDSCu2YLaXv2DkfzN0GbTF1b79HnqPG=GWqodDr4X9krGjUA@mail.gmail.com>
- <CAPhsuW5JDPk7ZEthu7cowqp6emQOXsWgSvPM+kvnERPq4RR83w@mail.gmail.com> <CANiDSCtbo1ws7hTgeha8+V8g198GN1_NAdWV+9Hi5UZgk0cfUA@mail.gmail.com>
-In-Reply-To: <CANiDSCtbo1ws7hTgeha8+V8g198GN1_NAdWV+9Hi5UZgk0cfUA@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 8 Sep 2023 15:53:02 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7N2ZxO5KubvK4O7EganpGeFFMtx4JGE9sGO5OnzWscgg@mail.gmail.com>
-Message-ID: <CAPhsuW7N2ZxO5KubvK4O7EganpGeFFMtx4JGE9sGO5OnzWscgg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/4] kexec: Fix kexec_file_load for llvm16 with PGO
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
-	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
-	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Simon Horman <horms@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	stable@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230908225353.984169-1-song@kernel.org>
 
-On Fri, Sep 8, 2023 at 2:52=E2=80=AFPM Ricardo Ribalda <ribalda@chromium.or=
-g> wrote:
->
-> Hi Song
->
-> On Fri, 8 Sept 2023 at 23:48, Song Liu <song@kernel.org> wrote:
-> >
-> > Hi Ricardo,
-> >
-> > Thanks for your kind reply.
-> >
-> > On Fri, Sep 8, 2023 at 2:18=E2=80=AFPM Ricardo Ribalda <ribalda@chromiu=
-m.org> wrote:
-> > >
-> > > Hi Song
-> > >
-> > > On Fri, 8 Sept 2023 at 01:08, Song Liu <song@kernel.org> wrote:
-> > > >
-> > > > Hi Ricardo and folks,
-> > > >
-> > > > On Fri, May 19, 2023 at 7:48=E2=80=AFAM Ricardo Ribalda <ribalda@ch=
-romium.org> wrote:
-> > > > >
-> > > > > When upreving llvm I realised that kexec stopped working on my te=
-st
-> > > > > platform.
-> > > > >
-> > > > > The reason seems to be that due to PGO there are multiple .text s=
-ections
-> > > > > on the purgatory, and kexec does not supports that.
-> > > > >
-> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > >
-> > > > We are seeing WARNINGs like the following while kexec'ing a PGO and
-> > > > LTO enabled kernel:
-> > > >
-> > > > WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
-> > > > kexec_load_purgatory+0x37f/0x390
-> > > >
-> > > > AFAICT, the warning was added by this set, and it was triggered whe=
-n
-> > > > we have many .text sections
-> > > > in purgatory.ro. The kexec was actually successful. So I wonder
-> > > > whether we really need the
-> > > > WARNING here. If we disable LTO (PGO is still enabled), we don't se=
-e
-> > > > the WARNING any more.
-> > > >
-> > > > I also tested an older kernel (5.19 based), where we also see many
-> > > > .text sections with LTO. It
-> > > > kexec()'ed fine. (It doesn't have the WARN_ON() in
-> > > > kexec_purgatory_setup_sechdrs).
-> > >
-> > > You have been "lucky" that the code has chosen the correct start
-> > > address, you need to modify the linker script of your kernel to
-> > > disable PGO.
-> > > You need to backport a patch like this:
-> > > https://lore.kernel.org/lkml/CAPhsuW5_qAvV0N3o+hOiAnb1=3DbuJ1pLzqYW9D=
-+Bwft6hxJvAeQ@mail.gmail.com/T/#md68b7f832216b0c56bbec0c9b07332e180b9ba2b
-> >
-> > We already have this commit in our branch. AFAICT, the issue was
-> > triggered by LTO. So something like the following seems fixes it
-> > (I haven't finished the end-to-end test yet). Does this change make
-> > sense to you?
->
-> if the end-to-end works, please send it as a patch to the mailing list.
->
-> Thanks! :)
+On Fri, Sep 08, 2023 at 03:53:53PM -0700, Song Liu wrote:
+> With LTO enabled, ld.lld generates multiple .text sections for
+> purgatory.ro:
+> 
+> $ readelf -S purgatory.ro  | grep " .text"
+>   [ 1] .text             PROGBITS         0000000000000000  00000040
+>   [ 7] .text.purgatory   PROGBITS         0000000000000000  000020e0
+>   [ 9] .text.warn        PROGBITS         0000000000000000  000021c0
+>   [13] .text.sha256_upda PROGBITS         0000000000000000  000022f0
+>   [15] .text.sha224_upda PROGBITS         0000000000000000  00002be0
+>   [17] .text.sha256_fina PROGBITS         0000000000000000  00002bf0
+>   [19] .text.sha224_fina PROGBITS         0000000000000000  00002cc0
+> 
+> This cause WARNING from kexec_purgatory_setup_sechdrs():
+> 
+> WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
+> kexec_load_purgatory+0x37f/0x390
+> 
+> Fix this by disabling LTO for purgatory.
+> 
+> Fixes: 8652d44f466a ("kexec: support purgatories with .text.hot sections")
+> Cc: Ricardo Ribalda <ribalda@chromium.org>
+> Cc: kexec@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: x86@kernel.org
+> Signed-off-by: Song Liu <song@kernel.org>
+> 
+> ---
+> AFAICT, x86 is the only arch that supports LTO and purgatory.
+> ---
+>  arch/x86/purgatory/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index c2a29be35c01..9c0bff4992ea 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -19,6 +19,10 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS -D__NO_FORTIFY
+>  # optimization flags.
+>  KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS))
+>  
+> +# When LTO is enabled, llvm emits many text sections, which is not supported
+> +# by kexec. Remove -flto=* flags.
+> +KBUILD_CFLAGS := $(filter-out -flto=%,$(KBUILD_CFLAGS))
 
-OK, it works (AFAICT). Sending the patch.
+Thanks for the patch!
 
-Thanks,
-Song
+Please prefer something akin to:
+commit 6e20f18579c5 ("efi/libstub: disable LTO")
+
+Please also CC Sami and llvm@lists.linux.dev for v2.
+
+Pretty sure we use a linker script to rejoin .text.* elsewhere in the
+kernel, but it doesn't look like x86 purgatory has one.
+
+> +
+>  # When linking purgatory.ro with -r unresolved symbols are not checked,
+>  # also link a purgatory.chk binary without -r to check for unresolved symbols.
+>  PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
+> -- 
+> 2.34.1
+> 
