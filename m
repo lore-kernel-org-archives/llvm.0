@@ -1,42 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8556E1111;
-	Fri,  8 Sep 2023 02:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC211112;
+	Fri,  8 Sep 2023 03:18:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694139889; x=1725675889;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AACIgoRMA6S0P2z6aevBgcmvr/dHpIzhLw/Za3zWxFc=;
-  b=RJDe4slHd9twYBSfjqeo71YS/MNYZ/A9vjlwj5gVMNm5i1/s4i4Kcbxx
-   w6zrmSyhIfW7itOUSyRa5HHBkQyAwINU+k2hCLsXeAf6UmhOxcrCAr4Hs
-   7Ad7+CCQAJf+347tPhMATjGuRbSI8tNUX/dpdScbmAszaaQIwCCRumpSM
-   eYT/wfSPlQxOGTvnhlyKdJN8XSy1amLN4wBqTbCf2q+9l7ZQEKenbsoUS
-   bwPKNphVdKT18t/VkjTpfKHj8uX8Ht4gYL9r8ntY9PuRRJ49VAYzK005q
-   e6p8PexYRPCihFkH0zTOmJr17Zd/krpgyUqRxu0P7h3c0/kT4Q84K8cAl
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="362597257"
+  t=1694143130; x=1725679130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oVRh3cA4wodne8omB5dWpaFCF6ymIphW1ZyNXeyQkJk=;
+  b=II5VxR6XOlxPHy383HlNLO27NTBzZdFMHqWMBmolScV6J4EZHq0sL6DE
+   J0zOKYAs8GUrtv5XfvfIut4hRG2uX3iSrghZeMK3/+z26uXud6A53dxJE
+   /AVyYopNxjp+91JhJxOVM38u8pOepRyIjScez5pmhse60PaD74+ykHF21
+   KK+e/DRyjbeZT9HebbDDevtcsEV/wlsxJuAjgRUFKW1P+kEzPljEl9S35
+   0X56N+2r/mbN2s3Zwcl30RaoUIxs+n+iYlaKq55uBPQxC/FibXepgq0CI
+   3pEA1AFY59qE4Xfr5fM24h7s2cNdoQ1xMTYohEt7mYnfxIofNT9c8tjdM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="376451968"
 X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="362597257"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 19:24:46 -0700
+   d="scan'208";a="376451968"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 20:18:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="807781841"
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="718974117"
 X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="807781841"
+   d="scan'208";a="718974117"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Sep 2023 19:24:45 -0700
+  by orsmga006.jf.intel.com with ESMTP; 07 Sep 2023 20:18:46 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qeRAo-0001pr-2O;
-	Fri, 08 Sep 2023 02:24:42 +0000
-Date: Fri, 8 Sep 2023 10:23:50 +0800
+	id 1qeS15-0001rz-2f;
+	Fri, 08 Sep 2023 03:18:43 +0000
+Date: Fri, 8 Sep 2023 11:17:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:rmap_id 2/4] kernel/fork.c:939:2: error: implicit
- declaration of function 'mm_free_rmap_id' is invalid in C99
-Message-ID: <202309081027.tRNUzl73-lkp@intel.com>
+To: Phil Sutter <phil@nwl.cc>, Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netfilter-devel@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+	audit@vger.kernel.org
+Subject: Re: [nf PATCH 1/2] netfilter: nf_tables: Fix entries val in rule
+ reset audit log
+Message-ID: <202309081138.IpMoJwFy-lkp@intel.com>
+References: <20230908002229.1409-2-phil@nwl.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,153 +49,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230908002229.1409-2-phil@nwl.cc>
 
-tree:   https://github.com/davidhildenbrand/linux rmap_id
-head:   17125381adce3cd008977d62b31863b283bf75bb
-commit: 1730d1c9fe15d22df5daa27747c938e2093f1541 [2/4] rmap_id per MM
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230908/202309081027.tRNUzl73-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309081027.tRNUzl73-lkp@intel.com/reproduce)
+Hi Phil,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on netfilter-nf/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Phil-Sutter/netfilter-nf_tables-Fix-entries-val-in-rule-reset-audit-log/20230908-082530
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git main
+patch link:    https://lore.kernel.org/r/20230908002229.1409-2-phil%40nwl.cc
+patch subject: [nf PATCH 1/2] netfilter: nf_tables: Fix entries val in rule reset audit log
+config: mips-randconfig-r002-20230908 (https://download.01.org/0day-ci/archive/20230908/202309081138.IpMoJwFy-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309081138.IpMoJwFy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309081027.tRNUzl73-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309081138.IpMoJwFy-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   kernel/fork.c:833:9: warning: 'mm_alloc_rmap_id' macro redefined [-Wmacro-redefined]
-   #define mm_alloc_rmap_id(mm)
-           ^
-   kernel/fork.c:832:9: note: previous definition is here
-   #define mm_alloc_rmap_id(mm)    (0)
-           ^
->> kernel/fork.c:939:2: error: implicit declaration of function 'mm_free_rmap_id' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           mm_free_rmap_id(mm);
-           ^
-   kernel/fork.c:939:2: note: did you mean 'mm_free_pgd'?
-   kernel/fork.c:801:20: note: 'mm_free_pgd' declared here
-   static inline void mm_free_pgd(struct mm_struct *mm)
-                      ^
-   kernel/fork.c:1321:26: error: expected expression
-           if (mm_alloc_rmap_id(mm))
-                                   ^
-   kernel/fork.c:1322:22: error: expected ';' after goto statement
-                   goto fail_no_rmapid
-                                      ^
-                                      ;
-   kernel/fork.c:1343:2: error: implicit declaration of function 'mm_free_rmap_id' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           mm_free_rmap_id(mm);
-           ^
-   kernel/fork.c:1322:8: error: use of undeclared label 'fail_no_rmapid'
-                   goto fail_no_rmapid
-                        ^
-   13 warnings and 5 errors generated.
+>> net/netfilter/nf_tables_api.c:3536:11: warning: comparison of distinct pointer types ('typeof (idx) *' (aka 'unsigned int *') and 'typeof (cb->args[0]) *' (aka 'long *')) [-Wcompare-distinct-pointer-types]
+    3536 |                 s_idx = max(idx, cb->args[0]);
+         |                         ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+      74 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/mm_free_rmap_id +939 kernel/fork.c
+vim +3536 net/netfilter/nf_tables_api.c
 
-   923	
-   924	/*
-   925	 * Called when the last reference to the mm
-   926	 * is dropped: either by a lazy thread or by
-   927	 * mmput. Free the page directory and the mm.
-   928	 */
-   929	void __mmdrop(struct mm_struct *mm)
-   930	{
-   931		BUG_ON(mm == &init_mm);
-   932		WARN_ON_ONCE(mm == current->mm);
-   933	
-   934		/* Ensure no CPUs are using this as their lazy tlb mm */
-   935		cleanup_lazy_tlbs(mm);
-   936	
-   937		WARN_ON_ONCE(mm == current->active_mm);
-   938		mm_free_pgd(mm);
- > 939		mm_free_rmap_id(mm);
-   940		destroy_context(mm);
-   941		mmu_notifier_subscriptions_destroy(mm);
-   942		check_mm(mm);
-   943		put_user_ns(mm->user_ns);
-   944		mm_pasid_drop(mm);
-   945		mm_destroy_cid(mm);
-   946		percpu_counter_destroy_many(mm->rss_stat, NR_MM_COUNTERS);
-   947	
-   948		free_mm(mm);
-   949	}
-   950	EXPORT_SYMBOL_GPL(__mmdrop);
-   951	
+  3486	
+  3487	static int nf_tables_dump_rules(struct sk_buff *skb,
+  3488					struct netlink_callback *cb)
+  3489	{
+  3490		const struct nfgenmsg *nfmsg = nlmsg_data(cb->nlh);
+  3491		const struct nft_rule_dump_ctx *ctx = cb->data;
+  3492		struct nft_table *table;
+  3493		const struct nft_chain *chain;
+  3494		unsigned int idx = 0, s_idx;
+  3495		struct net *net = sock_net(skb->sk);
+  3496		int family = nfmsg->nfgen_family;
+  3497		struct nftables_pernet *nft_net;
+  3498		bool reset = false;
+  3499		int ret;
+  3500	
+  3501		if (NFNL_MSG_TYPE(cb->nlh->nlmsg_type) == NFT_MSG_GETRULE_RESET)
+  3502			reset = true;
+  3503	
+  3504		rcu_read_lock();
+  3505		nft_net = nft_pernet(net);
+  3506		cb->seq = READ_ONCE(nft_net->base_seq);
+  3507	
+  3508		list_for_each_entry_rcu(table, &nft_net->tables, list) {
+  3509			if (family != NFPROTO_UNSPEC && family != table->family)
+  3510				continue;
+  3511	
+  3512			if (ctx && ctx->table && strcmp(ctx->table, table->name) != 0)
+  3513				continue;
+  3514	
+  3515			if (ctx && ctx->table && ctx->chain) {
+  3516				struct rhlist_head *list, *tmp;
+  3517	
+  3518				list = rhltable_lookup(&table->chains_ht, ctx->chain,
+  3519						       nft_chain_ht_params);
+  3520				if (!list)
+  3521					goto done;
+  3522	
+  3523				rhl_for_each_entry_rcu(chain, tmp, list, rhlhead) {
+  3524					if (!nft_is_active(net, chain))
+  3525						continue;
+  3526					__nf_tables_dump_rules(skb, &idx,
+  3527							       cb, table, chain, reset);
+  3528					break;
+  3529				}
+  3530				if (reset && idx > cb->args[0])
+  3531					audit_log_rule_reset(table, cb->seq,
+  3532							     idx - cb->args[0]);
+  3533				goto done;
+  3534			}
+  3535	
+> 3536			s_idx = max(idx, cb->args[0]);
+  3537			list_for_each_entry_rcu(chain, &table->chains, list) {
+  3538				ret = __nf_tables_dump_rules(skb, &idx,
+  3539							     cb, table, chain, reset);
+  3540				if (ret)
+  3541					break;
+  3542			}
+  3543			if (reset && idx > s_idx)
+  3544				audit_log_rule_reset(table, cb->seq, idx - s_idx);
+  3545	
+  3546			if ((ctx && ctx->table) || ret)
+  3547				break;
+  3548		}
+  3549	done:
+  3550		rcu_read_unlock();
+  3551	
+  3552		cb->args[0] = idx;
+  3553		return skb->len;
+  3554	}
+  3555	
 
 -- 
 0-DAY CI Kernel Test Service
