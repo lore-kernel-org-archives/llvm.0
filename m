@@ -1,168 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC211112;
-	Fri,  8 Sep 2023 03:18:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694143130; x=1725679130;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oVRh3cA4wodne8omB5dWpaFCF6ymIphW1ZyNXeyQkJk=;
-  b=II5VxR6XOlxPHy383HlNLO27NTBzZdFMHqWMBmolScV6J4EZHq0sL6DE
-   J0zOKYAs8GUrtv5XfvfIut4hRG2uX3iSrghZeMK3/+z26uXud6A53dxJE
-   /AVyYopNxjp+91JhJxOVM38u8pOepRyIjScez5pmhse60PaD74+ykHF21
-   KK+e/DRyjbeZT9HebbDDevtcsEV/wlsxJuAjgRUFKW1P+kEzPljEl9S35
-   0X56N+2r/mbN2s3Zwcl30RaoUIxs+n+iYlaKq55uBPQxC/FibXepgq0CI
-   3pEA1AFY59qE4Xfr5fM24h7s2cNdoQ1xMTYohEt7mYnfxIofNT9c8tjdM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="376451968"
-X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="376451968"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 20:18:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="718974117"
-X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="718974117"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Sep 2023 20:18:46 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qeS15-0001rz-2f;
-	Fri, 08 Sep 2023 03:18:43 +0000
-Date: Fri, 8 Sep 2023 11:17:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Phil Sutter <phil@nwl.cc>, Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netfilter-devel@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-	audit@vger.kernel.org
-Subject: Re: [nf PATCH 1/2] netfilter: nf_tables: Fix entries val in rule
- reset audit log
-Message-ID: <202309081138.IpMoJwFy-lkp@intel.com>
-References: <20230908002229.1409-2-phil@nwl.cc>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0125EEDB
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 05:11:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694149877;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=m939/O+S2oZJh/Ky3pK3EciVvMMSAE3d0VvJOoU9Yh4=;
+	b=exMuAkJLGvseG+hmwSsmS8KKIYp8hreSMT7a6e6gS0d5XbUsQBHuDzShKukJLrdN8ue1lM
+	+I9vpasr1SPziip1rSkY9unrjMPAGOu6JYCPiPaIJJc97ZxDbmpNCJV51P0kXd2kSDXKWU
+	FmBzk2rHXQ17h4hanWg7g/2DyyqmSgE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-591-vwGhRXKKMACIKG_JA97-Jw-1; Fri, 08 Sep 2023 01:11:16 -0400
+X-MC-Unique: vwGhRXKKMACIKG_JA97-Jw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8DB5800888
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 05:11:15 +0000 (UTC)
+Received: from [172.64.4.20] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CE77E63F78;
+	Fri,  8 Sep 2023 05:11:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 4a0fc73d)
+Date: Fri, 08 Sep 2023 05:11:15 -0000
+To: zlang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230908002229.1409-2-phil@nwl.cc>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <67555.123090801111600359@us-mta-591.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Phil,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on netfilter-nf/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Phil-Sutter/netfilter-nf_tables-Fix-entries-val-in-rule-reset-audit-log/20230908-082530
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git main
-patch link:    https://lore.kernel.org/r/20230908002229.1409-2-phil%40nwl.cc
-patch subject: [nf PATCH 1/2] netfilter: nf_tables: Fix entries val in rule reset audit log
-config: mips-randconfig-r002-20230908 (https://download.01.org/0day-ci/archive/20230908/202309081138.IpMoJwFy-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309081138.IpMoJwFy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309081138.IpMoJwFy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/netfilter/nf_tables_api.c:3536:11: warning: comparison of distinct pointer types ('typeof (idx) *' (aka 'unsigned int *') and 'typeof (cb->args[0]) *' (aka 'long *')) [-Wcompare-distinct-pointer-types]
-    3536 |                 s_idx = max(idx, cb->args[0]);
-         |                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +3536 net/netfilter/nf_tables_api.c
+Kernel information:
+    Commit message: Merge tag 's390-6.6-2' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/s390/linux
 
-  3486	
-  3487	static int nf_tables_dump_rules(struct sk_buff *skb,
-  3488					struct netlink_callback *cb)
-  3489	{
-  3490		const struct nfgenmsg *nfmsg = nlmsg_data(cb->nlh);
-  3491		const struct nft_rule_dump_ctx *ctx = cb->data;
-  3492		struct nft_table *table;
-  3493		const struct nft_chain *chain;
-  3494		unsigned int idx = 0, s_idx;
-  3495		struct net *net = sock_net(skb->sk);
-  3496		int family = nfmsg->nfgen_family;
-  3497		struct nftables_pernet *nft_net;
-  3498		bool reset = false;
-  3499		int ret;
-  3500	
-  3501		if (NFNL_MSG_TYPE(cb->nlh->nlmsg_type) == NFT_MSG_GETRULE_RESET)
-  3502			reset = true;
-  3503	
-  3504		rcu_read_lock();
-  3505		nft_net = nft_pernet(net);
-  3506		cb->seq = READ_ONCE(nft_net->base_seq);
-  3507	
-  3508		list_for_each_entry_rcu(table, &nft_net->tables, list) {
-  3509			if (family != NFPROTO_UNSPEC && family != table->family)
-  3510				continue;
-  3511	
-  3512			if (ctx && ctx->table && strcmp(ctx->table, table->name) != 0)
-  3513				continue;
-  3514	
-  3515			if (ctx && ctx->table && ctx->chain) {
-  3516				struct rhlist_head *list, *tmp;
-  3517	
-  3518				list = rhltable_lookup(&table->chains_ht, ctx->chain,
-  3519						       nft_chain_ht_params);
-  3520				if (!list)
-  3521					goto done;
-  3522	
-  3523				rhl_for_each_entry_rcu(chain, tmp, list, rhlhead) {
-  3524					if (!nft_is_active(net, chain))
-  3525						continue;
-  3526					__nf_tables_dump_rules(skb, &idx,
-  3527							       cb, table, chain, reset);
-  3528					break;
-  3529				}
-  3530				if (reset && idx > cb->args[0])
-  3531					audit_log_rule_reset(table, cb->seq,
-  3532							     idx - cb->args[0]);
-  3533				goto done;
-  3534			}
-  3535	
-> 3536			s_idx = max(idx, cb->args[0]);
-  3537			list_for_each_entry_rcu(chain, &table->chains, list) {
-  3538				ret = __nf_tables_dump_rules(skb, &idx,
-  3539							     cb, table, chain, reset);
-  3540				if (ret)
-  3541					break;
-  3542			}
-  3543			if (reset && idx > s_idx)
-  3544				audit_log_rule_reset(table, cb->seq, idx - s_idx);
-  3545	
-  3546			if ((ctx && ctx->table) || ret)
-  3547				break;
-  3548		}
-  3549	done:
-  3550		rcu_read_unlock();
-  3551	
-  3552		cb->args[0] = idx;
-  3553		return skb->len;
-  3554	}
-  3555	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/103451
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9438024
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
