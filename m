@@ -1,151 +1,198 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D750AEA0
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 02:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694139021;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=coaUAdAtLOIJZUGKdWMmMuXE143QGXV7xnmcKoisHl4=;
-	b=K1024N1+kNza6wsvpvBxgSOzgPKYtDEInL5A2E3GhwAuZA7CMJt7SV+d6CwczhcX0GmkWZ
-	wZoFsvTjW0SGrm55SqiuHhUi/xc9XMXTaexOC0yjRlimYw71FeyTevAiGHOSzYxOegEFiv
-	gOvLFrLkWszuhM0wj3J1VRkrOCqel1Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-yepYgdvHMWeSC6ItZKYm9Q-1; Thu, 07 Sep 2023 22:10:19 -0400
-X-MC-Unique: yepYgdvHMWeSC6ItZKYm9Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9ED6F86802D
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 02:10:19 +0000 (UTC)
-Received: from [172.64.4.20] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8597A493110;
-	Fri,  8 Sep 2023 02:10:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, dd1386dd)
-Date: Fri, 08 Sep 2023 02:10:19 -0000
-To: zlang@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8556E1111;
+	Fri,  8 Sep 2023 02:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694139889; x=1725675889;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AACIgoRMA6S0P2z6aevBgcmvr/dHpIzhLw/Za3zWxFc=;
+  b=RJDe4slHd9twYBSfjqeo71YS/MNYZ/A9vjlwj5gVMNm5i1/s4i4Kcbxx
+   w6zrmSyhIfW7itOUSyRa5HHBkQyAwINU+k2hCLsXeAf6UmhOxcrCAr4Hs
+   7Ad7+CCQAJf+347tPhMATjGuRbSI8tNUX/dpdScbmAszaaQIwCCRumpSM
+   eYT/wfSPlQxOGTvnhlyKdJN8XSy1amLN4wBqTbCf2q+9l7ZQEKenbsoUS
+   bwPKNphVdKT18t/VkjTpfKHj8uX8Ht4gYL9r8ntY9PuRRJ49VAYzK005q
+   e6p8PexYRPCihFkH0zTOmJr17Zd/krpgyUqRxu0P7h3c0/kT4Q84K8cAl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="362597257"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="362597257"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 19:24:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="807781841"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="807781841"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Sep 2023 19:24:45 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qeRAo-0001pr-2O;
+	Fri, 08 Sep 2023 02:24:42 +0000
+Date: Fri, 8 Sep 2023 10:23:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:rmap_id 2/4] kernel/fork.c:939:2: error: implicit
+ declaration of function 'mm_free_rmap_id' is invalid in C99
+Message-ID: <202309081027.tRNUzl73-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <14812.123090722101900733@us-mta-187.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/davidhildenbrand/linux rmap_id
+head:   17125381adce3cd008977d62b31863b283bf75bb
+commit: 1730d1c9fe15d22df5daa27747c938e2093f1541 [2/4] rmap_id per MM
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230908/202309081027.tRNUzl73-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309081027.tRNUzl73-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309081027.tRNUzl73-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/fork.c:34:
+   In file included from include/linux/mempolicy.h:15:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/fork.c:34:
+   In file included from include/linux/mempolicy.h:15:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/fork.c:34:
+   In file included from include/linux/mempolicy.h:15:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   kernel/fork.c:833:9: warning: 'mm_alloc_rmap_id' macro redefined [-Wmacro-redefined]
+   #define mm_alloc_rmap_id(mm)
+           ^
+   kernel/fork.c:832:9: note: previous definition is here
+   #define mm_alloc_rmap_id(mm)    (0)
+           ^
+>> kernel/fork.c:939:2: error: implicit declaration of function 'mm_free_rmap_id' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           mm_free_rmap_id(mm);
+           ^
+   kernel/fork.c:939:2: note: did you mean 'mm_free_pgd'?
+   kernel/fork.c:801:20: note: 'mm_free_pgd' declared here
+   static inline void mm_free_pgd(struct mm_struct *mm)
+                      ^
+   kernel/fork.c:1321:26: error: expected expression
+           if (mm_alloc_rmap_id(mm))
+                                   ^
+   kernel/fork.c:1322:22: error: expected ';' after goto statement
+                   goto fail_no_rmapid
+                                      ^
+                                      ;
+   kernel/fork.c:1343:2: error: implicit declaration of function 'mm_free_rmap_id' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           mm_free_rmap_id(mm);
+           ^
+   kernel/fork.c:1322:8: error: use of undeclared label 'fail_no_rmapid'
+                   goto fail_no_rmapid
+                        ^
+   13 warnings and 5 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'xtensa-20230905' of https://github.com/jcmvb=
-kbc/linux-xtensa
+vim +/mm_free_rmap_id +939 kernel/fork.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/103441
+   923	
+   924	/*
+   925	 * Called when the last reference to the mm
+   926	 * is dropped: either by a lazy thread or by
+   927	 * mmput. Free the page directory and the mm.
+   928	 */
+   929	void __mmdrop(struct mm_struct *mm)
+   930	{
+   931		BUG_ON(mm == &init_mm);
+   932		WARN_ON_ONCE(mm == current->mm);
+   933	
+   934		/* Ensure no CPUs are using this as their lazy tlb mm */
+   935		cleanup_lazy_tlbs(mm);
+   936	
+   937		WARN_ON_ONCE(mm == current->active_mm);
+   938		mm_free_pgd(mm);
+ > 939		mm_free_rmap_id(mm);
+   940		destroy_context(mm);
+   941		mmu_notifier_subscriptions_destroy(mm);
+   942		check_mm(mm);
+   943		put_user_ns(mm->user_ns);
+   944		mm_pasid_drop(mm);
+   945		mm_destroy_cid(mm);
+   946		percpu_counter_destroy_many(mm->rss_stat, NR_MM_COUNTERS);
+   947	
+   948		free_mm(mm);
+   949	}
+   950	EXPORT_SYMBOL_GPL(__mmdrop);
+   951	
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9436534
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1722
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 ppc64le - Storage - mdadm upstream test
-                  x86_64 - Storage - mdadm upstream test
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                  x86_64 - Reboot test
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
