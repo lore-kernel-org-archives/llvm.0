@@ -1,132 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163CC30FBE
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 21:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B22EC433CA
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 21:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694209744;
-	bh=qBwdoqG1zVNvc3aShF3LCnCCMv6kyB9Wvl1DSPjBmKw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b+FKEU+g3RoTsJUevp6033Y4qIcN/ll6hmMmE86DeGmIEi/PUnrq7r2DFXsxvKKHF
-	 C1K0NY38P6m+zyHHIulDkdfqnpUoMt8DnIKy8QvZmr8T7oEu4EtulpiRB7u3pgZGVK
-	 nfHXeL5EsghiygGRZOtO5ketg3VY4/R0Y/SS9F8Sq4KFYswemGoGe5H8okHFzUtJLQ
-	 y93zjDsWymgpod7Sqqf3qM3OQH9E32zF1pPQS5uYI4qxi3MgXqjWsOw9a8kyrUdw/f
-	 avjJ0WmDBAAOszroHaSrY/vLHaCgFB9xH70AcgavT1Y/CtozgqtninGOh8x4og9Jge
-	 j71QXgD0wP9Ig==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-52683da3f5cso3291902a12.3
-        for <llvm@lists.linux.dev>; Fri, 08 Sep 2023 14:49:04 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yy8g4yHtqNZYVaSoDs+xa77CQhzshArNkRNb8BJ6rrZCBegOw01
-	OG+wGrSoggcamp2eaoWxkMZjUrLf415eii9h078=
-X-Google-Smtp-Source: AGHT+IHdt83V5zkWEI/zYp4eQdKOInBkQ/fcJo2LzCdTQtPBOg8u/Zxe/xPeFmYww3NGkOx3GITH5AX6OshJOu4NSCM=
-X-Received: by 2002:a05:6512:3a87:b0:4fb:8bab:48b6 with SMTP id
- q7-20020a0565123a8700b004fb8bab48b6mr3731344lfu.52.1694209722018; Fri, 08 Sep
- 2023 14:48:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA4A30FB8;
+	Fri,  8 Sep 2023 21:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694209774; x=1725745774;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ugbmmZHWI8UpAx4ybKJuqBElMoFDfDGro8HHktoWgQY=;
+  b=l4I4zvx/EzhNmsNj155KeeuTCGWNycGgALo+ph5CGKIV8ctCrF/FeQBH
+   q1nAUPhvz9ApBJIoOH+bJYw1BjLdlhZrdxhFNNKTlrfg/4VODfLcqigEy
+   b3SGmoYs8SDkJYlsBus43iLm4A+rz06D7DnV10kSThZTXQhogUvGimer8
+   dirNPpFW+zeXdh4xazxZ59zE9/MDDLSQ7NbPL180K7AM9ZItm2sE1Ttqa
+   HTB7Z+yYu0Wotxf49pNh7mhoEcvd0QBhXS8JCkM8ANPw9Ty0UMWtcKb4o
+   bfhf1XnMc9jnHyubn91b9asaZ6mEVmLhyi1z/FvjZrR/V/GoQWXtVp/27
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="357219724"
+X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
+   d="scan'208";a="357219724"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 14:49:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="885811725"
+X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
+   d="scan'208";a="885811725"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Sep 2023 14:49:14 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qejM1-0002di-1F;
+	Fri, 08 Sep 2023 21:49:29 +0000
+Date: Sat, 9 Sep 2023 05:48:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Binding <sbinding@opensource.cirrus.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+	patches@opensource.cirrus.com,
+	Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
+	Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v2 1/2] ALSA: hda: cs35l41: Support mute notifications
+ for CS35L41 HDA
+Message-ID: <202309090555.tnWpQ7Gh-lkp@intel.com>
+References: <20230908133421.2483508-2-sbinding@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
- <CAPhsuW5_qAvV0N3o+hOiAnb1=buJ1pLzqYW9D+Bwft6hxJvAeQ@mail.gmail.com> <CANiDSCu2YLaXv2DkfzN0GbTF1b79HnqPG=GWqodDr4X9krGjUA@mail.gmail.com>
-In-Reply-To: <CANiDSCu2YLaXv2DkfzN0GbTF1b79HnqPG=GWqodDr4X9krGjUA@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 8 Sep 2023 14:48:29 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5JDPk7ZEthu7cowqp6emQOXsWgSvPM+kvnERPq4RR83w@mail.gmail.com>
-Message-ID: <CAPhsuW5JDPk7ZEthu7cowqp6emQOXsWgSvPM+kvnERPq4RR83w@mail.gmail.com>
-Subject: Re: [PATCH v7 0/4] kexec: Fix kexec_file_load for llvm16 with PGO
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
-	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
-	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Simon Horman <horms@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	stable@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230908133421.2483508-2-sbinding@opensource.cirrus.com>
 
-Hi Ricardo,
+Hi Stefan,
 
-Thanks for your kind reply.
+kernel test robot noticed the following build errors:
 
-On Fri, Sep 8, 2023 at 2:18=E2=80=AFPM Ricardo Ribalda <ribalda@chromium.or=
-g> wrote:
->
-> Hi Song
->
-> On Fri, 8 Sept 2023 at 01:08, Song Liu <song@kernel.org> wrote:
-> >
-> > Hi Ricardo and folks,
-> >
-> > On Fri, May 19, 2023 at 7:48=E2=80=AFAM Ricardo Ribalda <ribalda@chromi=
-um.org> wrote:
-> > >
-> > > When upreving llvm I realised that kexec stopped working on my test
-> > > platform.
-> > >
-> > > The reason seems to be that due to PGO there are multiple .text secti=
-ons
-> > > on the purgatory, and kexec does not supports that.
-> > >
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> >
-> > We are seeing WARNINGs like the following while kexec'ing a PGO and
-> > LTO enabled kernel:
-> >
-> > WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
-> > kexec_load_purgatory+0x37f/0x390
-> >
-> > AFAICT, the warning was added by this set, and it was triggered when
-> > we have many .text sections
-> > in purgatory.ro. The kexec was actually successful. So I wonder
-> > whether we really need the
-> > WARNING here. If we disable LTO (PGO is still enabled), we don't see
-> > the WARNING any more.
-> >
-> > I also tested an older kernel (5.19 based), where we also see many
-> > .text sections with LTO. It
-> > kexec()'ed fine. (It doesn't have the WARN_ON() in
-> > kexec_purgatory_setup_sechdrs).
->
-> You have been "lucky" that the code has chosen the correct start
-> address, you need to modify the linker script of your kernel to
-> disable PGO.
-> You need to backport a patch like this:
-> https://lore.kernel.org/lkml/CAPhsuW5_qAvV0N3o+hOiAnb1=3DbuJ1pLzqYW9D+Bwf=
-t6hxJvAeQ@mail.gmail.com/T/#md68b7f832216b0c56bbec0c9b07332e180b9ba2b
+[auto build test ERROR on tiwai-sound/for-next]
+[also build test ERROR on tiwai-sound/for-linus linus/master next-20230908]
+[cannot apply to v6.5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-We already have this commit in our branch. AFAICT, the issue was
-triggered by LTO. So something like the following seems fixes it
-(I haven't finished the end-to-end test yet). Does this change make
-sense to you?
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Binding/ALSA-hda-cs35l41-Support-mute-notifications-for-CS35L41-HDA/20230908-213735
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230908133421.2483508-2-sbinding%40opensource.cirrus.com
+patch subject: [PATCH v2 1/2] ALSA: hda: cs35l41: Support mute notifications for CS35L41 HDA
+config: riscv-randconfig-001-20230909 (https://download.01.org/0day-ci/archive/20230909/202309090555.tnWpQ7Gh-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309090555.tnWpQ7Gh-lkp@intel.com/reproduce)
 
-Thanks again,
-Song
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309090555.tnWpQ7Gh-lkp@intel.com/
 
-diff --git i/arch/x86/purgatory/Makefile w/arch/x86/purgatory/Makefile
-index 8f71aaa04cc2..dc306fa7197d 100644
---- i/arch/x86/purgatory/Makefile
-+++ w/arch/x86/purgatory/Makefile
-@@ -19,6 +19,10 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
- # optimization flags.
- KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D%
--fprofile-use=3D%,$(KBUILD_CFLAGS))
+All errors (new ones prefixed by >>):
 
-+# When LTO is enabled, llvm emits many text sections, which is not support=
-ed
-+# by kexec. Remove -flto=3D* flags.
-+KBUILD_CFLAGS :=3D $(filter-out -flto=3D%,$(KBUILD_CFLAGS))
-+
- # When linking purgatory.ro with -r unresolved symbols are not checked,
- # also link a purgatory.chk binary without -r to check for unresolved symb=
-ols.
- PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+>> sound/pci/hda/patch_realtek.c:6718:31: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           spec->comps[i].acpi_notify(acpi_device_handle(spec->comps[i].adev), event,
+                                                      ^
+   sound/pci/hda/patch_realtek.c:6718:31: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'acpi_handle' (aka 'void *') [-Wint-conversion]
+                           spec->comps[i].acpi_notify(acpi_device_handle(spec->comps[i].adev), event,
+                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/pci/hda/patch_realtek.c:6737:7: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           if (!acpi_device_handle(adev))
+                ^
+   sound/pci/hda/patch_realtek.c:6745:41: error: incomplete definition of type 'struct acpi_device'
+                   ret = acpi_install_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
+                                                     ~~~~^
+   include/linux/acpi.h:790:8: note: forward declaration of 'struct acpi_device'
+   struct acpi_device;
+          ^
+   sound/pci/hda/patch_realtek.c:6766:7: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           if (!acpi_device_handle(adev))
+                ^
+   sound/pci/hda/patch_realtek.c:6769:39: error: incomplete definition of type 'struct acpi_device'
+           ret = acpi_remove_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
+                                            ~~~~^
+   include/linux/acpi.h:790:8: note: forward declaration of 'struct acpi_device'
+   struct acpi_device;
+          ^
+   6 errors generated.
+
+
+vim +/acpi_device_handle +6718 sound/pci/hda/patch_realtek.c
+
+  6707	
+  6708	static void comp_acpi_device_notify(acpi_handle handle, u32 event, void *data)
+  6709	{
+  6710		struct hda_codec *cdc = data;
+  6711		struct alc_spec *spec = cdc->spec;
+  6712		int i;
+  6713	
+  6714		codec_info(cdc, "ACPI Notification %d\n", event);
+  6715	
+  6716		for (i = 0; i < HDA_MAX_COMPONENTS; i++) {
+  6717			if (spec->comps[i].dev && spec->comps[i].acpi_notify)
+> 6718				spec->comps[i].acpi_notify(acpi_device_handle(spec->comps[i].adev), event,
+  6719							   spec->comps[i].dev);
+  6720		}
+  6721	}
+  6722	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
