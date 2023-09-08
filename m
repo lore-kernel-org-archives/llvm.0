@@ -1,71 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8113C4C93;
-	Fri,  8 Sep 2023 16:15:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E2DC433C7;
-	Fri,  8 Sep 2023 16:15:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694189729;
-	bh=2w5Z4GfoET6f+1/N/jA7cwHt2hyj4wSuPoLNS7aECD0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=jYrrFR9Dgd5k7JRcgUBVAjm4nwG7TSoXGy3O4sKlnmaeSJhMdQAyXRux6tk8aTDoP
-	 wmTEqjnC6QNnMpn4oAca6EoNHOXHWQm4SCiH8jtqHWTuDAFRK57E/2Sofd+MMtRN95
-	 F8SfBPHtWOlK6lZknvERf+yZa+Fy1dq6+MqywcLrSdrHnp4iCanYBMg5vjO4GOaXnj
-	 WBYmT4A7BBVu1e0VmR2yP+lKiO+UxBZOjR8wZKIUbJJJrTewDnFRk/WRnTbUCEqDpQ
-	 dn3S+noN5lImROnIRUixlEoocIIh+SobC8k91UlJj40kKCYFQ/ytwBMtAuXhqD6BAz
-	 z4NQJej5DoKUQ==
-Date: Fri, 8 Sep 2023 09:15:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Apply 13e07691a16f and co. to linux-6.1.y
-Message-ID: <20230908161526.GA3344687@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F28E63CD
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 16:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76524C433D9;
+	Fri,  8 Sep 2023 16:52:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1694191938;
+	bh=5LDnx1kiSNw+cr0KJs7Lcc/o++ZlvaW4rZe2kw+298o=;
+	h=Subject:To:Cc:From:Date:From;
+	b=gDlw2+MmdtVMA5KaWUkuxSZuu5jZMyjgAIHaVlDHGBh1xhuIBI3j3eBq37H8FnUTr
+	 dYXWopRNf4cgwD2RZMK3KGW93ghWkREKBVaLGMQB3CZuHfnVsAopJVJuOXBWVqO3rV
+	 FZwnbN4fkCaiPVTklBe5v3VbxliShKMxvfzubyuA=
+Subject: Patch "tools lib subcmd: Add dependency test to install_headers" has been added to the 6.1-stable tree
+To: acme@redhat.com,alexander.shishkin@linux.intel.com,eranian@google.com,gregkh@linuxfoundation.org,irogers@google.com,jolsa@kernel.org,jpoimboe@kernel.org,llvm@lists.linux.dev,mark.rutland@arm.com,masahiroy@kernel.org,mingo@redhat.com,namhyung@kernel.org,nathan@kernel.org,ndesaulniers@google.com,nicolas@fjasle.eu,peterz@infradead.org,trix@redhat.com
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Fri, 08 Sep 2023 17:52:15 +0100
+Message-ID: <2023090815-desktop-moonscape-77e1@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore 
 
-Hi Greg and Sasha,
 
-Please consider applying the following commits to 6.1 (they all picked
-cleanly for me):
+This is a note to let you know that I've just added the patch titled
 
-630ae80ea1dd ("tools lib subcmd: Add install target")
-77dce6890a2a ("tools lib subcmd: Make install_headers clearer")
-5d890591db6b ("tools lib subcmd: Add dependency test to install_headers")
-0e43662e61f2 ("tools/resolve_btfids: Use pkg-config to locate libelf")
-af03299d8536 ("tools/resolve_btfids: Install subcmd headers")
-13e07691a16f ("tools/resolve_btfids: Alter how HOSTCC is forced")
-56a2df7615fa ("tools/resolve_btfids: Compile resolve_btfids as host program")
-e0975ab92f24 ("tools/resolve_btfids: Tidy HOST_OVERRIDES")
-2531ba0e4ae6 ("tools/resolve_btfids: Pass HOSTCFLAGS as EXTRA_CFLAGS to prepare targets")
-edd75c802855 ("tools/resolve_btfids: Fix setting HOSTCFLAGS")
+    tools lib subcmd: Add dependency test to install_headers
 
-The most critical change is 13e07691a16f, which resolves a missing
-EXTRA_CFLAGS to the libsubcmd build. Without that EXTRA_CFLAGS, the
-Android hermetic toolchain kernel build fails on host distributions
-using glibc 2.38 and newer. The majority of those commits are strictly
-needed due to dependency/fixes requirements, the few that are not still
-seem to be worth bringing in for ease of backporting the rest and do not
-appear to cause any problems.
+to the 6.1-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
-I proposed another solution downstream, which may be more palatable if
-people have concerns about this list of changes and the risk of
-regressions, but Ian seemed to have some concerns on that thread around
-that path and suggested this series of backports instead:
+The filename of the patch is:
+     tools-lib-subcmd-add-dependency-test-to-install_headers.patch
+and it can be found in the queue-6.1 subdirectory.
 
-https://android-review.googlesource.com/c/kernel/common/+/2745896
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
 
-While the number of patches seems large, the final changes are pretty
-well self-contained.
 
-Cheers,
-Nathan
+From 5d890591db6bed8ca69bd4bfe0cdaca372973033 Mon Sep 17 00:00:00 2001
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 1 Dec 2022 20:57:41 -0800
+Subject: tools lib subcmd: Add dependency test to install_headers
+
+From: Ian Rogers <irogers@google.com>
+
+commit 5d890591db6bed8ca69bd4bfe0cdaca372973033 upstream.
+
+Compute the headers to be installed from their source headers and make
+each have its own build target to install it. Using dependencies
+avoids headers being reinstalled and getting a new timestamp which
+then causes files that depend on the header to be rebuilt.
+
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Link: https://lore.kernel.org/r/20221202045743.2639466-4-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ tools/lib/subcmd/Makefile |   23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+--- a/tools/lib/subcmd/Makefile
++++ b/tools/lib/subcmd/Makefile
+@@ -89,10 +89,10 @@ define do_install_mkdir
+ endef
+ 
+ define do_install
+-	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
+-		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
++	if [ ! -d '$2' ]; then             \
++		$(INSTALL) -d -m 755 '$2'; \
+ 	fi;                                             \
+-	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
++	$(INSTALL) $1 $(if $3,-m $3,) '$2'
+ endef
+ 
+ install_lib: $(LIBFILE)
+@@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
+ 		$(call do_install_mkdir,$(libdir_SQ)); \
+ 		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
+ 
+-install_headers:
+-	$(call QUIET_INSTALL, libsubcmd_headers) \
+-		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
++HDRS := exec-cmd.h help.h pager.h parse-options.h run-command.h
++INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/subcmd
++INSTALL_HDRS := $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
++
++$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
++	$(call QUIET_INSTALL, $@) \
++		$(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
++
++install_headers: $(INSTALL_HDRS)
++	$(call QUIET_INSTALL, libsubcmd_headers)
+ 
+ install: install_lib install_headers
+ 
+
+
+Patches currently in stable-queue which might be from irogers@google.com are
+
+queue-6.1/tools-lib-subcmd-make-install_headers-clearer.patch
+queue-6.1/tools-resolve_btfids-compile-resolve_btfids-as-host-program.patch
+queue-6.1/tools-lib-subcmd-add-install-target.patch
+queue-6.1/tools-resolve_btfids-install-subcmd-headers.patch
+queue-6.1/tools-resolve_btfids-tidy-host_overrides.patch
+queue-6.1/tools-resolve_btfids-pass-hostcflags-as-extra_cflags-to-prepare-targets.patch
+queue-6.1/tools-lib-subcmd-add-dependency-test-to-install_headers.patch
+queue-6.1/tools-resolve_btfids-alter-how-hostcc-is-forced.patch
