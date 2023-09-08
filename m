@@ -1,166 +1,313 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918301C39;
-	Fri,  8 Sep 2023 20:35:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694205332; x=1725741332;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/bncr1Ewy9MJxYyo7xuKZBLH3XCuABIF3wexXDpjY5g=;
-  b=QZXteK0qouSzq5v/cuagn5Yk8FP5QlacQAwt85IcblbDWVRXiudTgpd3
-   w4fjjSrOvU2m/6YnCI87o90vXzdOq4219AKqy4Dhr6CG9zcnt2oqI2Vr6
-   Z/s39P7y484u7BqTSJwXKW0chQRBJ2J9xbGu7k5phX0QcMXgCn0+vZbpN
-   YfJ+7uNSooTql7mU6yz9k6Rv4it4Uh5sz8VYQXrilK9yzM+cQUbcadw1y
-   SaHkBXm7CqYN5Tq/YY7hZta2M3eX1jwRS5vjOr2e8g1O37SJ0ZNCXwRhV
-   jR5Z50wiDivjF9saB7C9offE40Fjaku5OChmmYomBmXkYiauaCngr/L+q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="368005349"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="368005349"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 13:35:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="808132018"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="808132018"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Sep 2023 13:35:29 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qeiCM-0002ag-3B;
-	Fri, 08 Sep 2023 20:35:26 +0000
-Date: Sat, 9 Sep 2023 04:34:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefan Binding <sbinding@opensource.cirrus.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-	patches@opensource.cirrus.com,
-	Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
-	Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: Re: [PATCH v2 1/2] ALSA: hda: cs35l41: Support mute notifications
- for CS35L41 HDA
-Message-ID: <202309090456.mBm0zTlw-lkp@intel.com>
-References: <20230908133421.2483508-2-sbinding@opensource.cirrus.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DDE1C39
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 21:17:48 +0000 (UTC)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-493a661d7b6so1149388e0c.1
+        for <llvm@lists.linux.dev>; Fri, 08 Sep 2023 14:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1694207867; x=1694812667; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XnJ9NkW8BTRsxIdMlLXJ5rwc8+Tbh47+Ek7xSWs8OfM=;
+        b=RsuzCS3R/YX9pFmVFkfkLhtJgjrWOoFdJH7xGc9/pc3Tj4OFSndCrqFYg2NGUsmsi1
+         Ne25Heqd6+m77kLzvf6NPij/47MpsVge2oZklt+0jNJUzyTaslNk5E+oaUaA52eqeXbR
+         W2apgP+pIKEbWI2my4pIcz/13Q7i3zbfGA4xc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694207867; x=1694812667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XnJ9NkW8BTRsxIdMlLXJ5rwc8+Tbh47+Ek7xSWs8OfM=;
+        b=nHKbpKOcRnYNaPgm8dkupJ/8v3LXRZFIRYdNYF7MWgvqTVKXC78RwxgRf0F9vmSUsV
+         Lm3dGml9WuHJfs81HVoJvjuoEEVdEYraT2AUIcfvvPq6OjCwk42x5ccU5j3HYyC1ktA/
+         em/bftVTG+1ICJyoscJOgP/zcadGFTP7bpzJXgUDrrTQblKsqsrKQY/k8gwVO9rj9QD4
+         XcfcyE/G+1ll88EAs/AJg3H95DamdSSbZuYc4EHozeVO1A9xMaoBqCILQZAqEnvVJNx6
+         05ZyKloJ79tCNO4j1fyyeLP8EaTc2+J4QQwIXoVVwypuqtU0oQAm/YdFp0yMcibL2ZdW
+         GJfQ==
+X-Gm-Message-State: AOJu0YyNKZQ7+uPQGF8cNsUK5C7aAvaADs9cI6Z918WnbPIJLuBicWMX
+	tPvQ09FHUAXHi/eRFX3nK4JWIXhHSQJgVkXA8bk=
+X-Google-Smtp-Source: AGHT+IGF3mYi//HE/EMXV4lcM/BPQBD5Fsa1Zcd9l1Nx/j7sBPZK/2sWsoH5CStIkiSstOSyRle7Ew==
+X-Received: by 2002:a05:6122:250d:b0:48d:969:af8b with SMTP id cl13-20020a056122250d00b0048d0969af8bmr4590273vkb.1.1694207867497;
+        Fri, 08 Sep 2023 14:17:47 -0700 (PDT)
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
+        by smtp.gmail.com with ESMTPSA id j4-20020ac5c644000000b00495b9898e73sm491146vkl.33.2023.09.08.14.17.46
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Sep 2023 14:17:46 -0700 (PDT)
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-493a661d7b6so1149365e0c.1
+        for <llvm@lists.linux.dev>; Fri, 08 Sep 2023 14:17:46 -0700 (PDT)
+X-Received: by 2002:a05:6214:4012:b0:64b:926a:e7fc with SMTP id
+ kd18-20020a056214401200b0064b926ae7fcmr9448898qvb.21.1694207845301; Fri, 08
+ Sep 2023 14:17:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230908133421.2483508-2-sbinding@opensource.cirrus.com>
+References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org> <CAPhsuW5_qAvV0N3o+hOiAnb1=buJ1pLzqYW9D+Bwft6hxJvAeQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW5_qAvV0N3o+hOiAnb1=buJ1pLzqYW9D+Bwft6hxJvAeQ@mail.gmail.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Fri, 8 Sep 2023 23:17:11 +0200
+X-Gmail-Original-Message-ID: <CANiDSCu2YLaXv2DkfzN0GbTF1b79HnqPG=GWqodDr4X9krGjUA@mail.gmail.com>
+Message-ID: <CANiDSCu2YLaXv2DkfzN0GbTF1b79HnqPG=GWqodDr4X9krGjUA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] kexec: Fix kexec_file_load for llvm16 with PGO
+To: Song Liu <song@kernel.org>
+Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
+	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
+	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Simon Horman <horms@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	stable@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stefan,
+Hi Song
 
-kernel test robot noticed the following build errors:
+On Fri, 8 Sept 2023 at 01:08, Song Liu <song@kernel.org> wrote:
+>
+> Hi Ricardo and folks,
+>
+> On Fri, May 19, 2023 at 7:48=E2=80=AFAM Ricardo Ribalda <ribalda@chromium=
+.org> wrote:
+> >
+> > When upreving llvm I realised that kexec stopped working on my test
+> > platform.
+> >
+> > The reason seems to be that due to PGO there are multiple .text section=
+s
+> > on the purgatory, and kexec does not supports that.
+> >
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+>
+> We are seeing WARNINGs like the following while kexec'ing a PGO and
+> LTO enabled kernel:
+>
+> WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
+> kexec_load_purgatory+0x37f/0x390
+>
+> AFAICT, the warning was added by this set, and it was triggered when
+> we have many .text sections
+> in purgatory.ro. The kexec was actually successful. So I wonder
+> whether we really need the
+> WARNING here. If we disable LTO (PGO is still enabled), we don't see
+> the WARNING any more.
+>
+> I also tested an older kernel (5.19 based), where we also see many
+> .text sections with LTO. It
+> kexec()'ed fine. (It doesn't have the WARN_ON() in
+> kexec_purgatory_setup_sechdrs).
 
-[auto build test ERROR on tiwai-sound/for-next]
-[also build test ERROR on tiwai-sound/for-linus linus/master next-20230908]
-[cannot apply to v6.5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You have been "lucky" that the code has chosen the correct start
+address, you need to modify the linker script of your kernel to
+disable PGO.
+You need to backport a patch like this:
+https://lore.kernel.org/lkml/CAPhsuW5_qAvV0N3o+hOiAnb1=3DbuJ1pLzqYW9D+Bwft6=
+hxJvAeQ@mail.gmail.com/T/#md68b7f832216b0c56bbec0c9b07332e180b9ba2b
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Binding/ALSA-hda-cs35l41-Support-mute-notifications-for-CS35L41-HDA/20230908-213735
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230908133421.2483508-2-sbinding%40opensource.cirrus.com
-patch subject: [PATCH v2 1/2] ALSA: hda: cs35l41: Support mute notifications for CS35L41 HDA
-config: x86_64-buildonly-randconfig-002-20230909 (https://download.01.org/0day-ci/archive/20230909/202309090456.mBm0zTlw-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309090456.mBm0zTlw-lkp@intel.com/reproduce)
+(assuming x86)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309090456.mBm0zTlw-lkp@intel.com/
+Regards
 
-All errors (new ones prefixed by >>):
+>
+> Please help us fix this properly (as I really don't know much about kexec=
+).
+>
+> Thanks in advance,
+> Song
+>
+>
+> Here is readelf -S output on purgatory.ro.
+>
+> With LTO:
+>
+> readelf -W -S purgatory.ro
+> There are 48 section headers, starting at offset 0x4a10:
+>
+> Section Headers:
+>   [Nr] Name              Type            Address          Off    Size
+>  ES Flg Lk Inf Al
+>   [ 0]                   NULL            0000000000000000 000000
+> 000000 00      0   0  0
+>   [ 1] .text             PROGBITS        0000000000000000 000040
+> 0000d0 00  AX  0   0 16
+>   [ 2] .data             PROGBITS        0000000000000000 001000
+> 001000 00  WA  0   0 4096
+>   [ 3] .rela.text        RELA            0000000000000000 003788
+> 000228 18   I 45   1  8
+>   [ 4] .rodata           PROGBITS        0000000000000000 002000
+> 0000e0 00   A  0   0 16
+>   [ 5] .rela.rodata      RELA            0000000000000000 0039b0
+> 000030 18   I 45   4  8
+>   [ 6] .bss              NOBITS          0000000000000000 0020e0
+> 001000 00  WA  0   0 4096
+>   [ 7] .text.purgatory   PROGBITS        0000000000000000 0020e0
+> 0000df 00  AX  0   0 16
+>   [ 8] .rela.text.purgatory RELA            0000000000000000 0039e0
+> 000060 18   I 45   7  8
+>   [ 9] .text.warn        PROGBITS        0000000000000000 0021c0
+> 000001 00  AX  0   0 16
+>   [10] .kexec-purgatory  PROGBITS        0000000000000000 0021d0
+> 000120 00  WA  0   0 16
+>   [11] .comment          PROGBITS        0000000000000000 003a40
+> 000046 01  MS  0   0  1
+>   [12] .llvm_addrsig     LOOS+0xfff4c03  0000000000000000 003a86
+> 000005 00   E  0   0  1
+>   [13] .text.sha256_update PROGBITS        0000000000000000 0022f0
+> 0008eb 00  AX  0   0 16
+>   [14] .rela.text.sha256_update RELA            0000000000000000
+> 003a90 000060 18   I 45  13  8
+>   [15] .text.sha224_update PROGBITS        0000000000000000 002be0
+> 00000c 00  AX  0   0 16
+>   [16] .rela.text.sha224_update RELA            0000000000000000
+> 003af0 000018 18   I 45  15  8
+>   [17] .text.sha256_final PROGBITS        0000000000000000 002bf0
+> 0000cd 00  AX  0   0 16
+>   [18] .rela.text.sha256_final RELA            0000000000000000 003b08
+> 000030 18   I 45  17  8
+>   [19] .text.sha224_final PROGBITS        0000000000000000 002cc0
+> 0000bd 00  AX  0   0 16
+>   [20] .rela.text.sha224_final RELA            0000000000000000 003b38
+> 000030 18   I 45  19  8
+>   [21] .text.sha256      PROGBITS        0000000000000000 002d80
+> 00011d 00  AX  0   0 16
+>   [22] .rela.text.sha256 RELA            0000000000000000 003b68
+> 000030 18   I 45  21  8
+>   [23] .modinfo          PROGBITS        0000000000000000 002e9d
+> 000039 00   A  0   0  1
+>   [24] .rodata.SHA256_K  PROGBITS        0000000000000000 002ee0
+> 000100 00   A  0   0 16
+>   [25] .rodata.__sha256_final.padding PROGBITS        0000000000000000
+> 002fe0 000040 00   A  0   0 16
+>   [26] .text.memcmp      PROGBITS        0000000000000000 003020
+> 00000b 00  AX  0   0 16
+>   [27] .text.bcmp        PROGBITS        0000000000000000 003030
+> 00000b 00  AX  0   0 16
+>   [28] .text.strcmp      PROGBITS        0000000000000000 003040
+> 000041 00  AX  0   0 16
+>   [29] .text.strncmp     PROGBITS        0000000000000000 003090
+> 00003a 00  AX  0   0 16
+>   [30] .text.strnlen     PROGBITS        0000000000000000 0030d0
+> 000039 00  AX  0   0 16
+>   [31] .text.atou        PROGBITS        0000000000000000 003110
+> 000035 00  AX  0   0 16
+>   [32] .text.simple_strtoull PROGBITS        0000000000000000 003150
+> 0000b6 00  AX  0   0 16
+>   [33] .text.simple_strtol PROGBITS        0000000000000000 003210
+> 0001b6 00  AX  0   0 16
+>   [34] .text.strlen      PROGBITS        0000000000000000 0033d0
+> 00001c 00  AX  0   0 16
+>   [35] .text.strstr      PROGBITS        0000000000000000 0033f0
+> 00005f 00  AX  0   0 16
+>   [36] .text.strchr      PROGBITS        0000000000000000 003450
+> 000022 00  AX  0   0 16
+>   [37] .text.kstrtoull   PROGBITS        0000000000000000 003480
+> 000142 00  AX  0   0 16
+>   [38] .text.boot_kstrtoul PROGBITS        0000000000000000 0035d0
+> 00000c 00  AX  0   0 16
+>   [39] .rela.text.boot_kstrtoul RELA            0000000000000000
+> 003b98 000018 18   I 45  38  8
+>   [40] .text.memset      PROGBITS        0000000000000000 0035e0
+> 00001f 00  AX  0   0 16
+>   [41] .text.memmove     PROGBITS        0000000000000000 003600
+> 0000a6 00  AX  0   0 16
+>   [42] .text.memcpy      PROGBITS        0000000000000000 0036b0
+> 0000a6 00  AX  0   0 16
+>   [43] .rodata.str1.1    PROGBITS        0000000000000000 003756
+> 000032 01 AMS  0   0  1
+>   [44] .note.GNU-stack   PROGBITS        0000000000000000 003bb0
+> 000000 00      0   0  1
+>   [45] .symtab           SYMTAB          0000000000000000 003bb0
+> 000948 18     47  68  8
+>   [46] .shstrtab         STRTAB          0000000000000000 0044f8
+> 0002cd 00      0   0  1
+>   [47] .strtab           STRTAB          0000000000000000 0047c5
+> 000248 00      0   0  1
+> Key to Flags:
+>   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+>   L (link order), O (extra OS processing required), G (group), T (TLS),
+>   C (compressed), x (unknown), o (OS specific), E (exclude),
+>   l (large), p (processor specific)
+>
+>
+> Without LTO:
+>
+> readelf -W -S purgatory.ro
+> There are 16 section headers, starting at offset 0x4130:
+>
+> Section Headers:
+>   [Nr] Name              Type            Address          Off    Size
+>  ES Flg Lk Inf Al
+>   [ 0]                   NULL            0000000000000000 000000
+> 000000 00      0   0  0
+>   [ 1] .text             PROGBITS        0000000000000000 000040
+> 00131b 00  AX  0   0 16
+>   [ 2] .rela.text        RELA            0000000000000000 003290
+> 000480 18   I 13   1  8
+>   [ 3] .kexec-purgatory  PROGBITS        0000000000000000 001360
+> 000120 00  WA  0   0 16
+>   [ 4] .comment          PROGBITS        0000000000000000 003710
+> 000046 01  MS  0   0  1
+>   [ 5] .llvm_addrsig     LOOS+0xfff4c03  0000000000000000 003756
+> 000005 00   E  0   0  1
+>   [ 6] .data             PROGBITS        0000000000000000 002000
+> 001000 00  WA  0   0 4096
+>   [ 7] .rodata           PROGBITS        0000000000000000 003000
+> 000220 00   A  0   0 16
+>   [ 8] .rela.rodata      RELA            0000000000000000 003760
+> 000030 18   I 13   7  8
+>   [ 9] .bss              NOBITS          0000000000000000 003220
+> 001000 00  WA  0   0 4096
+>   [10] .modinfo          PROGBITS        0000000000000000 003220
+> 000039 00   A  0   0  1
+>   [11] .rodata.str1.1    PROGBITS        0000000000000000 003259
+> 000032 01 AMS  0   0  1
+>   [12] .note.GNU-stack   PROGBITS        0000000000000000 003790
+> 000000 00      0   0  1
+>   [13] .symtab           SYMTAB          0000000000000000 003790
+> 0006d8 18     15  43  8
+>   [14] .shstrtab         STRTAB          0000000000000000 003e68
+> 00009c 00      0   0  1
+>   [15] .strtab           STRTAB          0000000000000000 003f04
+> 00022b 00      0   0  1
+> Key to Flags:
+>   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+>   L (link order), O (extra OS processing required), G (group), T (TLS),
+>   C (compressed), x (unknown), o (OS specific), E (exclude),
+>   l (large), p (processor specific)
+>
+> [...]
+>
+> > Ricardo Ribalda (4):
+> >       kexec: Support purgatories with .text.hot sections
+> >       x86/purgatory: Remove PGO flags
+> >       powerpc/purgatory: Remove PGO flags
+> >       riscv/purgatory: Remove PGO flags
+> >
+> >  arch/powerpc/purgatory/Makefile |  5 +++++
+> >  arch/riscv/purgatory/Makefile   |  5 +++++
+> >  arch/x86/purgatory/Makefile     |  5 +++++
+> >  kernel/kexec_file.c             | 14 +++++++++++++-
+> >  4 files changed, 28 insertions(+), 1 deletion(-)
+> > ---
+> > base-commit: 58390c8ce1bddb6c623f62e7ed36383e7fa5c02f
+> > change-id: 20230321-kexec_clang16-4510c23d129c
+> >
+> > Best regards,
+> > --
+> > Ricardo Ribalda Delgado <ribalda@chromium.org>
+> >
 
->> sound/pci/hda/patch_realtek.c:6718:31: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           spec->comps[i].acpi_notify(acpi_device_handle(spec->comps[i].adev), event,
-                                                      ^
->> sound/pci/hda/patch_realtek.c:6718:31: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'acpi_handle' (aka 'void *') [-Wint-conversion]
-                           spec->comps[i].acpi_notify(acpi_device_handle(spec->comps[i].adev), event,
-                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/pci/hda/patch_realtek.c:6737:7: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!acpi_device_handle(adev))
-                ^
->> sound/pci/hda/patch_realtek.c:6745:41: error: incomplete definition of type 'struct acpi_device'
-                   ret = acpi_install_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
-                                                     ~~~~^
-   include/linux/acpi.h:790:8: note: forward declaration of 'struct acpi_device'
-   struct acpi_device;
-          ^
-   sound/pci/hda/patch_realtek.c:6766:7: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!acpi_device_handle(adev))
-                ^
-   sound/pci/hda/patch_realtek.c:6769:39: error: incomplete definition of type 'struct acpi_device'
-           ret = acpi_remove_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
-                                            ~~~~^
-   include/linux/acpi.h:790:8: note: forward declaration of 'struct acpi_device'
-   struct acpi_device;
-          ^
-   6 errors generated.
 
 
-vim +/acpi_device_handle +6718 sound/pci/hda/patch_realtek.c
-
-  6707	
-  6708	static void comp_acpi_device_notify(acpi_handle handle, u32 event, void *data)
-  6709	{
-  6710		struct hda_codec *cdc = data;
-  6711		struct alc_spec *spec = cdc->spec;
-  6712		int i;
-  6713	
-  6714		codec_info(cdc, "ACPI Notification %d\n", event);
-  6715	
-  6716		for (i = 0; i < HDA_MAX_COMPONENTS; i++) {
-  6717			if (spec->comps[i].dev && spec->comps[i].acpi_notify)
-> 6718				spec->comps[i].acpi_notify(acpi_device_handle(spec->comps[i].adev), event,
-  6719							   spec->comps[i].dev);
-  6720		}
-  6721	}
-  6722	
-  6723	static int comp_bind(struct device *dev)
-  6724	{
-  6725		struct hda_codec *cdc = dev_to_hda_codec(dev);
-  6726		struct alc_spec *spec = cdc->spec;
-  6727		struct acpi_device *adev;
-  6728		bool support_notifications = false;
-  6729		int ret;
-  6730		int i;
-  6731	
-  6732		ret = component_bind_all(dev, spec->comps);
-  6733		if (ret)
-  6734			return ret;
-  6735	
-  6736		adev = spec->comps[0].adev;
-  6737		if (!acpi_device_handle(adev))
-  6738			return 0;
-  6739	
-  6740		for (i = 0; i < HDA_MAX_COMPONENTS; i++)
-  6741			support_notifications = support_notifications ||
-  6742				spec->comps[i].acpi_notifications_supported;
-  6743	
-  6744		if (support_notifications) {
-> 6745			ret = acpi_install_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
-  6746							comp_acpi_device_notify, cdc);
-  6747			if (ret < 0) {
-  6748				codec_warn(cdc, "Failed to install notify handler: %d\n", ret);
-  6749				return 0;
-  6750			}
-  6751	
-  6752			codec_dbg(cdc, "Notify handler installed\n");
-  6753		}
-  6754	
-  6755		return 0;
-  6756	}
-  6757	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Ricardo Ribalda
