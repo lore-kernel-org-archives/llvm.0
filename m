@@ -1,150 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AD9210F
-	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 19:33:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56ED2C43397;
-	Fri,  8 Sep 2023 19:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694201618;
-	bh=F4faGuWQnASEi0inkuVom0wfJnle1bp2YiQ8dPBGAVQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gUbUiZfcaLmGGb/W9PRzNdeVrCHVo5aTYKqQWfc846Xo6mjkApb/zG/zzraKpiUBB
-	 PMyR1h1X0Hgio8nDV5+y4+T7MInLPNNeeITRgewzPd0NkBepY9ZZr0YBGnbKmsQkdZ
-	 w8BZL4inubxGtpfgcS6d9lJjbyZPngciO+FXbgORY5p42oQdG0MokWZ3vo5b9jjqmM
-	 a0TP1gUxwqcEkkUsJPqbRJ6gvmbRNu7oHzAx0yc+PVBcnoKDOh+znQ4fhledv8C5kS
-	 5LW8VAy2XiaJ3GO4mdsBE89e+ij0JhRh5WsnTHw2Za/c0O/mZ93KOCkCiV2R1T0MDD
-	 o33Rr43EPSUFg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	Breno Leitao <leitao@debian.org>,
-	Sasha Levin <sashal@kernel.org>,
-	keescook@chromium.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	io-uring@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.4 22/31] io_uring: annotate the struct io_kiocb slab for appropriate user copy
-Date: Fri,  8 Sep 2023 15:31:51 -0400
-Message-Id: <20230908193201.3462957-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230908193201.3462957-1-sashal@kernel.org>
-References: <20230908193201.3462957-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C964730F96;
+	Fri,  8 Sep 2023 20:02:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694203356; x=1725739356;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Z2eRznisfaCGh3sB2nSbxNSb7+xlwh9YF8VD+SQe0So=;
+  b=KdORv7AK4Kk2bfZmz4hiACmJlioWWuTx2DXJC0MuHuZP8gpfDSU4GnFO
+   i4tZ48WViJ2N4eis7YJaT12ad4qgvrGGKpnnTK1hVD2XpnwcENG7UGqnn
+   FY24VLORF3Rqd8looiEYbubeMhSFl+9crORa53NanBz7vKo6zmQnlSyBe
+   OyYuH9L1DA7p6npC7BhpFxhsnZqiFgDEWSHbBf7TLc/kspKRypam4glAO
+   j5wQwtziSO9NYFHFn9UksXnYL8z5yEDoGWsTB+Gsx2WboJK8N2naTu19P
+   wtjpHiSm/ZHJ/5oj4Z6HRC0Vsum2MRa8ipHWueVVdDp2ICGcRHPbApc1F
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="358036793"
+X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
+   d="scan'208";a="358036793"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 13:02:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="777703831"
+X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
+   d="scan'208";a="777703831"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Sep 2023 13:02:27 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qehgP-0002YZ-0L;
+	Fri, 08 Sep 2023 20:02:25 +0000
+Date: Sat, 9 Sep 2023 04:02:02 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
+ kallsyms_lookup_name: .text+0x7c): relocation R_RISCV_PCREL_HI20 out of
+ range: -524527 is not in [-524288, 524287]; references
+ kallsyms_seqs_of_names
+Message-ID: <202309090319.qinh8x9I-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.15
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Jens Axboe <axboe@kernel.dk>
+CC: linux-kernel@vger.kernel.org
+TO: Zhen Lei <thunder.leizhen@huawei.com>
+CC: Luis Chamberlain <mcgrof@kernel.org>
 
-[ Upstream commit b97f96e22f051d59d07a527dbd7d90408b661ca8 ]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a48fa7efaf1161c1c898931fe4c7f0070964233a
+commit: 60443c88f3a89fd303a9e8c0e84895910675c316 kallsyms: Improve the performance of kallsyms_lookup_name()
+date:   10 months ago
+config: riscv-randconfig-r021-20230908 (https://download.01.org/0day-ci/archive/20230909/202309090319.qinh8x9I-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309090319.qinh8x9I-lkp@intel.com/reproduce)
 
-When compiling the kernel with clang and having HARDENED_USERCOPY
-enabled, the liburing openat2.t test case fails during request setup:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309090319.qinh8x9I-lkp@intel.com/
 
-usercopy: Kernel memory overwrite attempt detected to SLUB object 'io_kiocb' (offset 24, size 24)!
-------------[ cut here ]------------
-kernel BUG at mm/usercopy.c:102!
-invalid opcode: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC
-CPU: 3 PID: 413 Comm: openat2.t Tainted: G                 N 6.4.3-g6995e2de6891-dirty #19
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.org 04/01/2014
-RIP: 0010:usercopy_abort+0x84/0x90
-Code: ce 49 89 ce 48 c7 c3 68 48 98 82 48 0f 44 de 48 c7 c7 56 c6 94 82 4c 89 de 48 89 c1 41 52 41 56 53 e8 e0 51 c5 00 48 83 c4 18 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 41 57 41 56
-RSP: 0018:ffffc900016b3da0 EFLAGS: 00010296
-RAX: 0000000000000062 RBX: ffffffff82984868 RCX: 4e9b661ac6275b00
-RDX: ffff8881b90ec580 RSI: ffffffff82949a64 RDI: 00000000ffffffff
-RBP: 0000000000000018 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffc900016b3c88 R11: ffffc900016b3c30 R12: 00007ffe549659e0
-R13: ffff888119014000 R14: 0000000000000018 R15: 0000000000000018
-FS:  00007f862e3ca680(0000) GS:ffff8881b90c0000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005571483542a8 CR3: 0000000118c11000 CR4: 00000000003506e0
-Call Trace:
- <TASK>
- ? __die_body+0x63/0xb0
- ? die+0x9d/0xc0
- ? do_trap+0xa7/0x180
- ? usercopy_abort+0x84/0x90
- ? do_error_trap+0xc6/0x110
- ? usercopy_abort+0x84/0x90
- ? handle_invalid_op+0x2c/0x40
- ? usercopy_abort+0x84/0x90
- ? exc_invalid_op+0x2f/0x40
- ? asm_exc_invalid_op+0x16/0x20
- ? usercopy_abort+0x84/0x90
- __check_heap_object+0xe2/0x110
- __check_object_size+0x142/0x3d0
- io_openat2_prep+0x68/0x140
- io_submit_sqes+0x28a/0x680
- __se_sys_io_uring_enter+0x120/0x580
- do_syscall_64+0x3d/0x80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x55714834de26
-Code: ca 01 0f b6 82 d0 00 00 00 8b ba cc 00 00 00 45 31 c0 31 d2 41 b9 08 00 00 00 83 e0 01 c1 e0 04 41 09 c2 b8 aa 01 00 00 0f 05 <c3> 66 0f 1f 84 00 00 00 00 00 89 30 eb 89 0f 1f 40 00 8b 00 a8 06
-RSP: 002b:00007ffe549659c8 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
-RAX: ffffffffffffffda RBX: 00007ffe54965a50 RCX: 000055714834de26
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000008
-R10: 0000000000000000 R11: 0000000000000246 R12: 000055714834f057
-R13: 00007ffe54965a50 R14: 0000000000000001 R15: 0000557148351dd8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
+All errors (new ones prefixed by >>):
 
-when it tries to copy struct open_how from userspace into the per-command
-space in the io_kiocb. There's nothing wrong with the copy, but we're
-missing the appropriate annotations for allowing user copies to/from the
-io_kiocb slab.
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_name: .text+0x7c): relocation R_RISCV_PCREL_HI20 out of range: -524527 is not in [-524288, 524287]; references kallsyms_seqs_of_names
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
 
-Allow copies in the per-command area, which is from the 'file' pointer to
-when 'opcode' starts. We do have existing user copies there, but they are
-not all annotated like the one that openat2_prep() uses,
-copy_struct_from_user(). But in practice opcodes should be allowed to
-copy data into their per-command area in the io_kiocb.
-
-Reported-by: Breno Leitao <leitao@debian.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- io_uring/io_uring.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index a57bdf336ca8a..f1bda21fe934a 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -4591,8 +4591,20 @@ static int __init io_uring_init(void)
- 
- 	io_uring_optable_init();
- 
--	req_cachep = KMEM_CACHE(io_kiocb, SLAB_HWCACHE_ALIGN | SLAB_PANIC |
--				SLAB_ACCOUNT | SLAB_TYPESAFE_BY_RCU);
-+	/*
-+	 * Allow user copy in the per-command field, which starts after the
-+	 * file in io_kiocb and until the opcode field. The openat2 handling
-+	 * requires copying in user memory into the io_kiocb object in that
-+	 * range, and HARDENED_USERCOPY will complain if we haven't
-+	 * correctly annotated this range.
-+	 */
-+	req_cachep = kmem_cache_create_usercopy("io_kiocb",
-+				sizeof(struct io_kiocb), 0,
-+				SLAB_HWCACHE_ALIGN | SLAB_PANIC |
-+				SLAB_ACCOUNT | SLAB_TYPESAFE_BY_RCU,
-+				offsetof(struct io_kiocb, cmd.data),
-+				sizeof_field(struct io_kiocb, cmd.data), NULL);
-+
- 	return 0;
- };
- __initcall(io_uring_init);
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
