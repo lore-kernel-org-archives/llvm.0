@@ -1,111 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB0610EE;
-	Fri,  8 Sep 2023 22:44:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694213076; x=1725749076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zf+tVjsSKgFi0jhBNB9VQt0g+v5xRPMZjUr6WJSIP/M=;
-  b=h5O4Tu94K8s6+qHtUrK5kEq2uhjcX4nwHJsJud0CzDPAi2ofV37u6nyr
-   tWmj5gAGQ9haAeREES27iXAI6UKx20dXEZcEiPxavOTFF4i2Ajc1sSeJ9
-   ntqSSoPong81pl38MC+fmT50Eg+cKy6HNbVlj4AUTAMtKMF3Bm/hCAXEC
-   IsZJiQ+/etPySk5IDlmCyvmsUuRekPrgScIwXivEVkO4h9X/vLTX43bzH
-   SOJ4aKRRgP3J6R9qxLZefL3rUWq7KbfjhgRE5Wco5AIxk9YTTf9C1yc9p
-   nv6HxurypAKF0Hba1WPhlmmtbNsuV8t4wY4TvioQ0oq3kxiMzRdjwxbpB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="375137686"
-X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
-   d="scan'208";a="375137686"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 15:44:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="989425052"
-X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
-   d="scan'208";a="989425052"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Sep 2023 15:44:33 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qekDH-0002gl-2L;
-	Fri, 08 Sep 2023 22:44:31 +0000
-Date: Sat, 9 Sep 2023 06:43:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry.memverge@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 3/3] mm/migrate: Create move_phys_pages syscall
-Message-ID: <202309090612.A9EmQIQ1-lkp@intel.com>
-References: <20230907075453.350554-4-gregory.price@memverge.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C14830F9C
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 22:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E969AC433C7
+	for <llvm@lists.linux.dev>; Fri,  8 Sep 2023 22:53:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694213617;
+	bh=KwM170Ct57lq4vNZ7xSkyIS4SWaJogcjmhutnsYYUvg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=CYRNpMfX8tuCfTVRu31LYxhAcpvx7MEpkmXdlllQAK89CegGbwEnv0w/59s4rPPlO
+	 mdSbzm67i5v5WWF1mDG8y5CR6811hr4ak28m4Avd+n/ySC6ujkXiIcz0ZCWQCfoCOg
+	 bcGPf61WrSNAXkizp538IbRjxmaHn4lmcu/y6rT/ExE20Ru4411WrrDRzaqlDTqPBu
+	 WX3yWMZvNeaN9zH1PRGHGGFTv2E3Tafo6Jy/QAZAVknSRJOks0zDCg/kIysqvjC0Ue
+	 x10laWymbfHcW+g4wT0Tk1GosYvk+0YKyXBwcOtQfhYfqCLAQOGWXqxDo6zxbc+ZYw
+	 TEe7kUgbDJM2w==
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4013454fa93so29312915e9.0
+        for <llvm@lists.linux.dev>; Fri, 08 Sep 2023 15:53:37 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxFmYgRfTCgT2Oku+B4fe76PUr6vvTVOWaGy4UzraWCYpWbS67w
+	+9D8oqbdYeV55jY/JdoZBaKNYf6KIEnPSMWnzIA=
+X-Google-Smtp-Source: AGHT+IFxzWHrgwn9Er+VZvUvTkc7+KPn5VFwMJdiU1jtuP4KYojqei7vjyha6oz515UbclFjbQ87OxJGnp5Vhfvbj6U=
+X-Received: by 2002:ac2:4bc5:0:b0:4fe:7e1f:766a with SMTP id
+ o5-20020ac24bc5000000b004fe7e1f766amr3386244lfq.24.1694213595847; Fri, 08 Sep
+ 2023 15:53:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230907075453.350554-4-gregory.price@memverge.com>
+References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
+ <CAPhsuW5_qAvV0N3o+hOiAnb1=buJ1pLzqYW9D+Bwft6hxJvAeQ@mail.gmail.com>
+ <CANiDSCu2YLaXv2DkfzN0GbTF1b79HnqPG=GWqodDr4X9krGjUA@mail.gmail.com>
+ <CAPhsuW5JDPk7ZEthu7cowqp6emQOXsWgSvPM+kvnERPq4RR83w@mail.gmail.com> <CANiDSCtbo1ws7hTgeha8+V8g198GN1_NAdWV+9Hi5UZgk0cfUA@mail.gmail.com>
+In-Reply-To: <CANiDSCtbo1ws7hTgeha8+V8g198GN1_NAdWV+9Hi5UZgk0cfUA@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Fri, 8 Sep 2023 15:53:02 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7N2ZxO5KubvK4O7EganpGeFFMtx4JGE9sGO5OnzWscgg@mail.gmail.com>
+Message-ID: <CAPhsuW7N2ZxO5KubvK4O7EganpGeFFMtx4JGE9sGO5OnzWscgg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] kexec: Fix kexec_file_load for llvm16 with PGO
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
+	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
+	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Simon Horman <horms@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	stable@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Gregory,
+On Fri, Sep 8, 2023 at 2:52=E2=80=AFPM Ricardo Ribalda <ribalda@chromium.or=
+g> wrote:
+>
+> Hi Song
+>
+> On Fri, 8 Sept 2023 at 23:48, Song Liu <song@kernel.org> wrote:
+> >
+> > Hi Ricardo,
+> >
+> > Thanks for your kind reply.
+> >
+> > On Fri, Sep 8, 2023 at 2:18=E2=80=AFPM Ricardo Ribalda <ribalda@chromiu=
+m.org> wrote:
+> > >
+> > > Hi Song
+> > >
+> > > On Fri, 8 Sept 2023 at 01:08, Song Liu <song@kernel.org> wrote:
+> > > >
+> > > > Hi Ricardo and folks,
+> > > >
+> > > > On Fri, May 19, 2023 at 7:48=E2=80=AFAM Ricardo Ribalda <ribalda@ch=
+romium.org> wrote:
+> > > > >
+> > > > > When upreving llvm I realised that kexec stopped working on my te=
+st
+> > > > > platform.
+> > > > >
+> > > > > The reason seems to be that due to PGO there are multiple .text s=
+ections
+> > > > > on the purgatory, and kexec does not supports that.
+> > > > >
+> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > >
+> > > > We are seeing WARNINGs like the following while kexec'ing a PGO and
+> > > > LTO enabled kernel:
+> > > >
+> > > > WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
+> > > > kexec_load_purgatory+0x37f/0x390
+> > > >
+> > > > AFAICT, the warning was added by this set, and it was triggered whe=
+n
+> > > > we have many .text sections
+> > > > in purgatory.ro. The kexec was actually successful. So I wonder
+> > > > whether we really need the
+> > > > WARNING here. If we disable LTO (PGO is still enabled), we don't se=
+e
+> > > > the WARNING any more.
+> > > >
+> > > > I also tested an older kernel (5.19 based), where we also see many
+> > > > .text sections with LTO. It
+> > > > kexec()'ed fine. (It doesn't have the WARN_ON() in
+> > > > kexec_purgatory_setup_sechdrs).
+> > >
+> > > You have been "lucky" that the code has chosen the correct start
+> > > address, you need to modify the linker script of your kernel to
+> > > disable PGO.
+> > > You need to backport a patch like this:
+> > > https://lore.kernel.org/lkml/CAPhsuW5_qAvV0N3o+hOiAnb1=3DbuJ1pLzqYW9D=
++Bwft6hxJvAeQ@mail.gmail.com/T/#md68b7f832216b0c56bbec0c9b07332e180b9ba2b
+> >
+> > We already have this commit in our branch. AFAICT, the issue was
+> > triggered by LTO. So something like the following seems fixes it
+> > (I haven't finished the end-to-end test yet). Does this change make
+> > sense to you?
+>
+> if the end-to-end works, please send it as a patch to the mailing list.
+>
+> Thanks! :)
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+OK, it works (AFAICT). Sending the patch.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on tip/x86/asm linus/master next-20230908]
-[cannot apply to arnd-asm-generic/master v6.5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/mm-migrate-remove-unused-mm-argument-from-do_move_pages_to_node/20230909-004600
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230907075453.350554-4-gregory.price%40memverge.com
-patch subject: [RFC PATCH 3/3] mm/migrate: Create move_phys_pages syscall
-config: x86_64-buildonly-randconfig-002-20230909 (https://download.01.org/0day-ci/archive/20230909/202309090612.A9EmQIQ1-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309090612.A9EmQIQ1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309090612.A9EmQIQ1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/migrate.c:2182:42: error: no member named 'owner' in 'struct mm_struct'
-           struct task_struct *owner = vma->vm_mm->owner;
-                                       ~~~~~~~~~~  ^
-   1 error generated.
-
-
-vim +2182 mm/migrate.c
-
-  2170	
-  2171	/*
-  2172	 * Walks each vma mapping a given page and determines if those
-  2173	 * vma's are both migratable, and that the target node is within
-  2174	 * the allowed cpuset of the owning task.
-  2175	 */
-  2176	static bool phys_page_migratable(struct folio *folio,
-  2177					 struct vm_area_struct *vma,
-  2178					 unsigned long address,
-  2179					 void *arg)
-  2180	{
-  2181		struct rmap_page_ctxt *ctxt = (struct rmap_page_ctxt *)arg;
-> 2182		struct task_struct *owner = vma->vm_mm->owner;
-  2183		nodemask_t task_nodes = cpuset_mems_allowed(owner);
-  2184	
-  2185		ctxt->found |= true;
-  2186		ctxt->migratable &= vma_migratable(vma);
-  2187		ctxt->node_allowed &= node_isset(ctxt->node, task_nodes);
-  2188	
-  2189		return ctxt->migratable && ctxt->node_allowed;
-  2190	}
-  2191	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Song
