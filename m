@@ -1,55 +1,29 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F976AA2;
-	Fri,  8 Sep 2023 14:55:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694184916; x=1725720916;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hRPta3ptzMNjQT7WswU+lJMeajZApy8eHTToKWyCnrg=;
-  b=ni1J1s3emKWzYX2GVe7EgTWHDOlJtxlAg28MmntIn1failtywlofoLuk
-   UuAI0Q2fBsjYa/nKENa6Z8P6Z6URPZT4VDXUYL+ypagqqXKWyg6zo7Cst
-   W8E06/3ZArfxAgRNQIScRFBsWT+Oa3MJq/eGoR0+Tjar1kNjkIK2lWRg/
-   qv2iciD1jbk8WyE7nVbSMvw7ctHNL7Rt35h4OliaC+kc+TePs0LGwcaf8
-   Ax3NAfzATMIfPhAI0pJCoVp9cN5z3zR+/gDvN9deoolyYYohNj73Sv3ba
-   5bsWdalwBXk8SRngrfwRhBYtOD1pRbjK/clxtydprMrWwoCjzP2kG6dQk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="357969727"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="357969727"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 07:55:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="1073339873"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="1073339873"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2023 07:55:10 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qect2-0002Mq-27;
-	Fri, 08 Sep 2023 14:55:08 +0000
-Date: Fri, 8 Sep 2023 22:55:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tengfei Fan <quic_tengfan@quicinc.com>, agross@kernel.org,
-	andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	tglx@linutronix.de, maz@kernel.org, lee@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	robimarko@gmail.com, quic_gurus@quicinc.com,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
-	quic_shashim@quicinc.com, quic_kaushalk@quicinc.com,
-	quic_tdas@quicinc.com, quic_tingweiz@quicinc.com,
-	quic_aiquny@quicinc.com, kernel@quicinc.com,
-	quic_bjorande@quicinc.com, Ajit Pandey <quic_ajipan@quicinc.com>,
-	Tengfei Fan <quic_tengfan@quicinc.com>
-Subject: Re: [PATCH 5/6] arm64: dts: qcom: sm4450: Add RPMH and Global clock
- controller
-Message-ID: <202309082243.JImHPFSN-lkp@intel.com>
-References: <20230908065847.28382-6-quic_tengfan@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8113C4C93;
+	Fri,  8 Sep 2023 16:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E2DC433C7;
+	Fri,  8 Sep 2023 16:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694189729;
+	bh=2w5Z4GfoET6f+1/N/jA7cwHt2hyj4wSuPoLNS7aECD0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=jYrrFR9Dgd5k7JRcgUBVAjm4nwG7TSoXGy3O4sKlnmaeSJhMdQAyXRux6tk8aTDoP
+	 wmTEqjnC6QNnMpn4oAca6EoNHOXHWQm4SCiH8jtqHWTuDAFRK57E/2Sofd+MMtRN95
+	 F8SfBPHtWOlK6lZknvERf+yZa+Fy1dq6+MqywcLrSdrHnp4iCanYBMg5vjO4GOaXnj
+	 WBYmT4A7BBVu1e0VmR2yP+lKiO+UxBZOjR8wZKIUbJJJrTewDnFRk/WRnTbUCEqDpQ
+	 dn3S+noN5lImROnIRUixlEoocIIh+SobC8k91UlJj40kKCYFQ/ytwBMtAuXhqD6BAz
+	 z4NQJej5DoKUQ==
+Date: Fri, 8 Sep 2023 09:15:26 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Apply 13e07691a16f and co. to linux-6.1.y
+Message-ID: <20230908161526.GA3344687@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,44 +32,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230908065847.28382-6-quic_tengfan@quicinc.com>
 
-Hi Tengfei,
+Hi Greg and Sasha,
 
-kernel test robot noticed the following build errors:
+Please consider applying the following commits to 6.1 (they all picked
+cleanly for me):
 
-[auto build test ERROR on a47fc304d2b678db1a5d760a7d644dac9b067752]
+630ae80ea1dd ("tools lib subcmd: Add install target")
+77dce6890a2a ("tools lib subcmd: Make install_headers clearer")
+5d890591db6b ("tools lib subcmd: Add dependency test to install_headers")
+0e43662e61f2 ("tools/resolve_btfids: Use pkg-config to locate libelf")
+af03299d8536 ("tools/resolve_btfids: Install subcmd headers")
+13e07691a16f ("tools/resolve_btfids: Alter how HOSTCC is forced")
+56a2df7615fa ("tools/resolve_btfids: Compile resolve_btfids as host program")
+e0975ab92f24 ("tools/resolve_btfids: Tidy HOST_OVERRIDES")
+2531ba0e4ae6 ("tools/resolve_btfids: Pass HOSTCFLAGS as EXTRA_CFLAGS to prepare targets")
+edd75c802855 ("tools/resolve_btfids: Fix setting HOSTCFLAGS")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tengfei-Fan/dt-bindings-firmware-document-Qualcomm-SM4450-SCM/20230908-150308
-base:   a47fc304d2b678db1a5d760a7d644dac9b067752
-patch link:    https://lore.kernel.org/r/20230908065847.28382-6-quic_tengfan%40quicinc.com
-patch subject: [PATCH 5/6] arm64: dts: qcom: sm4450: Add RPMH and Global clock controller
-config: arm64-randconfig-r024-20230908 (https://download.01.org/0day-ci/archive/20230908/202309082243.JImHPFSN-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309082243.JImHPFSN-lkp@intel.com/reproduce)
+The most critical change is 13e07691a16f, which resolves a missing
+EXTRA_CFLAGS to the libsubcmd build. Without that EXTRA_CFLAGS, the
+Android hermetic toolchain kernel build fails on host distributions
+using glibc 2.38 and newer. The majority of those commits are strictly
+needed due to dependency/fixes requirements, the few that are not still
+seem to be worth bringing in for ease of backporting the rest and do not
+appear to cause any problems.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309082243.JImHPFSN-lkp@intel.com/
+I proposed another solution downstream, which may be more palatable if
+people have concerns about this list of changes and the risk of
+regressions, but Ian seemed to have some concerns on that thread around
+that path and suggested this series of backports instead:
 
-All errors (new ones prefixed by >>):
+https://android-review.googlesource.com/c/kernel/common/+/2745896
 
-   In file included from arch/arm64/boot/dts/qcom/sm4450-qrd.dts:8:
->> arch/arm64/boot/dts/qcom/sm4450.dtsi:7:10: fatal error: 'dt-bindings/clock/qcom,sm4450-gcc.h' file not found
-   #include <dt-bindings/clock/qcom,sm4450-gcc.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+While the number of patches seems large, the final changes are pretty
+well self-contained.
 
-
-vim +7 arch/arm64/boot/dts/qcom/sm4450.dtsi
-
-   > 7	#include <dt-bindings/clock/qcom,sm4450-gcc.h>
-     8	#include <dt-bindings/gpio/gpio.h>
-     9	#include <dt-bindings/interrupt-controller/arm-gic.h>
-    10	#include <dt-bindings/soc/qcom,rpmh-rsc.h>
-    11	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
