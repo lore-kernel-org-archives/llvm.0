@@ -1,43 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDC815B4
-	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 04:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D64620
+	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 04:31:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694232078;
+	s=mimecast20190719; t=1694233888;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=Ho5YNlTCV5B7hnSa5f4vPCKQqy20ZEEXVM0RQm9YCeA=;
-	b=HZ+ibASKWqWbWESF21jVHdj/PySnLLTRsqLrGC/yN8fFhWRCrWuRIx04bem3JjhsJFGHOx
-	qGYd1O/p0stC6TZCElikINAdfnRW56OrkUgz/SeeHB+gu9diAPDhmevwgP7/f3NZvRxXTS
-	6KgbyNzNmYIP4txtZs7osQX+4Cq/1MQ=
+	bh=S6sc9n1h74WNVbTHd/FCCteI6MYCEK4/uji193YmWB4=;
+	b=NEgtSmoN2ZGDGj3LiT3ToH3dFjurcLetfRCHphXxhX1w51qe5EvLi0jwb8u9vSLCKs5r6L
+	JYvDImwwC15VEZT/Nw0qxHfKLRZ77yooLh1xFEzxO4m+r73aWb+hWivzN53GAhKvMhDAz/
+	ud3ER5xn2btNHTxvgu5+Yk2KVEJ/8k8=
 Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-94-InWBag0rN3KAQ4UXjdpJqQ-1; Sat, 09 Sep 2023 00:01:16 -0400
-X-MC-Unique: InWBag0rN3KAQ4UXjdpJqQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-441-sK_phMUiNneDg2gyzSaizw-1; Sat, 09 Sep 2023 00:31:27 -0400
+X-MC-Unique: sK_phMUiNneDg2gyzSaizw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A432229AA2C0
-	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 04:01:16 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B621D29A9CA2
+	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 04:31:26 +0000 (UTC)
 Received: from [172.64.4.20] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 849F240C2070;
-	Sat,  9 Sep 2023 04:01:16 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A06BFC03295;
+	Sat,  9 Sep 2023 04:31:26 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 13 of 234): Test report for master
- (6.5.0, mainline.kernel.org-clang, 32bf43e4)
-Date: Sat, 09 Sep 2023 04:01:16 -0000
-To: yizhan@redhat.com, zlang@redhat.com, llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, ca9c7abf)
+Date: Sat, 09 Sep 2023 04:31:26 -0000
+To: zlang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <57815.123090900011600957@us-mta-94.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <35894.123090900312700238@us-mta-441.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,64 +52,22 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'thermal-6.6-rc1-3' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/rafael/linux-pm
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/103642
+    https://datawarehouse.cki-project.org/kcidb/checkouts/103638
 
 One or more kernel tests failed:
     Unrecognized or new issues:
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9452103
           x86_64 (debug) - POSIX pjd-fstest suites
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9452170
+9451225
                    Non-passing subtests:
                        =E2=9D=8C FAIL /01_dmesg_check
 
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1722
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 ppc64le - Storage - mdadm upstream test
-                  x86_64 - Storage - mdadm upstream test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
         Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
 amdgpu]
             URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
@@ -128,7 +86,46 @@ d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
+                  x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
 
