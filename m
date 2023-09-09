@@ -1,133 +1,194 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73276290D
-	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 12:38:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1694263072;
-	bh=csz18VraFRi13HIr9tA4FquSiE/zkwn2nKkegmwzvbU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KWzO3Xi6yIVu5yWa4rifqlul/0Mb4sXTtL8USUWHCEzFw0xkcbwXZCeq96S5nA87a
-	 ilfQvjNAdMlKiZqZq3y0uLcOZvbTL1TlGEDqAv13SuNrhdDlmwNyIrbpXlykT0Ashx
-	 M2p5vdNYRildyCbAM5OI3gYVpOhn7vgfld5a7952XAjsIoeNZec72oQPFYMGPHBYu/
-	 Ibkzi9FCL6ZEwYXXxyhtVbcKtqHRbNGynVY+R9BkV9TB90Ff6mKtr0IQ5FD2oFW9g2
-	 O7LLehn7losMyTzYBzxyjEguSOnhV0+lGnIg5Mo3D62lTGqdkeKqoekhhQUpvwSyhg
-	 e/fGf6xP6Tg9w==
-Received: from [IPV6:2606:6d00:100:4000:cacb:9855:de1f:ded2] (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4RjXZ85b17z1PGv;
-	Sat,  9 Sep 2023 08:37:52 -0400 (EDT)
-Message-ID: <1fae4a2f-eaf1-c54c-9ec5-040b2714709e@efficios.com>
-Date: Sat, 9 Sep 2023 08:39:11 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA0F63BF;
+	Sat,  9 Sep 2023 13:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694265145; x=1725801145;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=15t7zWA9xu82ZCsQXv78V6pCDtb/+pClxIL7uf0dfsk=;
+  b=ddyrx5hm/HWWtgtWFDaFK9OmFh9X23I6jDrvSzf9n9gz25LN8NSyeg6i
+   3XHy3+pUG2mv20pNzN4oO9gIiT6/Xase41tebCE4Lpxl28whIZjVzYcJh
+   QZAW6MDQY78Ed8oRxp/tgLSog8NtD5qAycvVOVZ+GjDzSVcjEjoUPMnjO
+   olInYuNrN2dOg81v44ZQO9ImrsZcqtYZpmX6hgoiQCoCp3qGWpHHHbbzL
+   fdG1UcQ9Z9jopVWzPgqgOnFE9KYxn5SIJV9FmEkTKuXmB4PgibTCDMEim
+   YCmxhUL4jBW9Q2tmTgA3EwV69CDPKEwjaAlkSyioatpWloovfcZ8qOobL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="376728906"
+X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
+   d="scan'208";a="376728906"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2023 06:12:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="866407085"
+X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
+   d="scan'208";a="866407085"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 09 Sep 2023 06:12:21 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qexl5-0003Wz-1J;
+	Sat, 09 Sep 2023 13:12:19 +0000
+Date: Sat, 9 Sep 2023 21:12:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>, linus.walleij@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: Re: [PATCH 2/2] pinctrl: pinmux: Use dev_err_probe() in pin_request()
+Message-ID: <202309092056.azXQNtDr-lkp@intel.com>
+References: <20230909063613.2867-3-jernej.skrabec@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH RFC] selftests/rseq: fix kselftest Clang build warnings
-Content-Language: en-US
-To: Justin Stitt <justinstitt@google.com>,
- Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230908-kselftest-param_test-c-v1-1-e35bd9052d61@google.com>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230908-kselftest-param_test-c-v1-1-e35bd9052d61@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230909063613.2867-3-jernej.skrabec@gmail.com>
 
-On 9/8/23 19:03, Justin Stitt wrote:
-> Hi,
-> 
-> I am experiencing many warnings when trying to build tools/testing/selftests.
-> 
-> Here's one such example from rseq tree:
-> |  param_test.c:1234:10: error: address argument to atomic operation must be a pointer to _Atomic type ('intptr_t *' (aka 'long *') invalid)
-> |   1234 |         while (!atomic_load(&args->percpu_list_ptr)) {}
-> |        |                 ^           ~~~~~~~~~~~~~~~~~~~~~~
-> |  /usr/local/google/home/justinstitt/repos/tc-build/build/llvm/final/lib/clang/18/include/stdatomic.h:140:29: note: expanded from macro 'atomic_load'
-> |    140 | #define atomic_load(object) __c11_atomic_load(object, __ATOMIC_SEQ_CST)
-> |        |                             ^                 ~~~~~~
-> 
-> I added the _Atomic type in various locations to silence _all_ (10) of these
-> warnings. I'm wondering, though, perhaps the absence of these _Atomic
-> types in the first place is on purpose? Am I on the right track to fix
-> these warnings without damaging the legitimacy of the tests at hand?
-> 
-> I'd like some feedback about where to go from here and if others are
-> experiencing the same issues. Thanks!
-> 
-> FWIW here's my specific build incantation on Clang-18 (49d41de57896e935cd5726719c5208bce22694ae):
-> $ make LLVM=1 -j128 ARCH=x86_64 mrproper headers defconfig kselftest-merge
-> $ make LLVM=1 ARCH=x86_64 -C tools/testing/selftests
+Hi Jernej,
 
-I should have used the __atomic_load_n() compiler builtin rather than 
-atomic_load(), mainly because it does not require the _Atomic annotation 
-to each type it touches.
+kernel test robot noticed the following build warnings:
 
-Thanks,
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next linus/master v6.5 next-20230908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Mathieu
+url:    https://github.com/intel-lab-lkp/linux/commits/Jernej-Skrabec/pinctrl-pinmux-Remove-duplicate-error-message-in-pin_request/20230909-143817
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20230909063613.2867-3-jernej.skrabec%40gmail.com
+patch subject: [PATCH 2/2] pinctrl: pinmux: Use dev_err_probe() in pin_request()
+config: arm-randconfig-001-20230909 (https://download.01.org/0day-ci/archive/20230909/202309092056.azXQNtDr-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309092056.azXQNtDr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309092056.azXQNtDr-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pinctrl/pinmux.c:191:31: warning: incompatible pointer to integer conversion passing 'char[23]' to parameter of type 'int' [-Wint-conversion]
+                   dev_err_probe(pctldev->dev, "pin-%d (%s) status %d\n",
+                                               ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:1218:64: note: passing argument to parameter 'err' here
+   __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+                                                                  ^
+>> drivers/pinctrl/pinmux.c:192:10: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
+                                 pin, owner, status);
+                                 ^~~
+   include/linux/device.h:1218:81: note: passing argument to parameter 'fmt' here
+   __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+                                                                                   ^
+   2 warnings generated.
 
 
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1698
-> Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues/61
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
->   tools/testing/selftests/rseq/param_test.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
-> index bf951a490bb4..94802aeed2c6 100644
-> --- a/tools/testing/selftests/rseq/param_test.c
-> +++ b/tools/testing/selftests/rseq/param_test.c
-> @@ -356,7 +356,7 @@ struct inc_thread_test_data {
->   };
->   
->   struct percpu_list_node {
-> -	intptr_t data;
-> +	_Atomic intptr_t data;
->   	struct percpu_list_node *next;
->   };
->   
-> @@ -1212,8 +1212,8 @@ static int set_signal_handler(void)
->   /* Test MEMBARRIER_CMD_PRIVATE_RESTART_RSEQ_ON_CPU membarrier command. */
->   #ifdef TEST_MEMBARRIER
->   struct test_membarrier_thread_args {
-> -	int stop;
-> -	intptr_t percpu_list_ptr;
-> +	_Atomic int stop;
-> +	_Atomic intptr_t percpu_list_ptr;
->   };
->   
->   /* Worker threads modify data in their "active" percpu lists. */
-> @@ -1240,7 +1240,7 @@ void *test_membarrier_worker_thread(void *arg)
->   			int cpu = get_current_cpu_id();
->   
->   			ret = rseq_offset_deref_addv(RSEQ_MO_RELAXED, RSEQ_PERCPU,
-> -				&args->percpu_list_ptr,
-> +				(intptr_t*)&args->percpu_list_ptr,
->   				sizeof(struct percpu_list_entry) * cpu, 1, cpu);
->   		} while (rseq_unlikely(ret));
->   	}
-> 
-> ---
-> base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-> change-id: 20230908-kselftest-param_test-c-1763b62e762f
-> 
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
-> 
+vim +191 drivers/pinctrl/pinmux.c
+
+   101	
+   102	/**
+   103	 * pin_request() - request a single pin to be muxed in, typically for GPIO
+   104	 * @pctldev: the associated pin controller device
+   105	 * @pin: the pin number in the global pin space
+   106	 * @owner: a representation of the owner of this pin; typically the device
+   107	 *	name that controls its mux function, or the requested GPIO name
+   108	 * @gpio_range: the range matching the GPIO pin if this is a request for a
+   109	 *	single GPIO pin
+   110	 */
+   111	static int pin_request(struct pinctrl_dev *pctldev,
+   112			       int pin, const char *owner,
+   113			       struct pinctrl_gpio_range *gpio_range)
+   114	{
+   115		struct pin_desc *desc;
+   116		const struct pinmux_ops *ops = pctldev->desc->pmxops;
+   117		int status = -EINVAL;
+   118	
+   119		desc = pin_desc_get(pctldev, pin);
+   120		if (desc == NULL) {
+   121			dev_err(pctldev->dev,
+   122				"pin %d is not registered so it cannot be requested\n",
+   123				pin);
+   124			goto out;
+   125		}
+   126	
+   127		dev_dbg(pctldev->dev, "request pin %d (%s) for %s\n",
+   128			pin, desc->name, owner);
+   129	
+   130		if ((!gpio_range || ops->strict) &&
+   131		    desc->mux_usecount && strcmp(desc->mux_owner, owner)) {
+   132			dev_err(pctldev->dev,
+   133				"pin %s already requested by %s; cannot claim for %s\n",
+   134				desc->name, desc->mux_owner, owner);
+   135			goto out;
+   136		}
+   137	
+   138		if ((gpio_range || ops->strict) && desc->gpio_owner) {
+   139			dev_err(pctldev->dev,
+   140				"pin %s already requested by %s; cannot claim for %s\n",
+   141				desc->name, desc->gpio_owner, owner);
+   142			goto out;
+   143		}
+   144	
+   145		if (gpio_range) {
+   146			desc->gpio_owner = owner;
+   147		} else {
+   148			desc->mux_usecount++;
+   149			if (desc->mux_usecount > 1)
+   150				return 0;
+   151	
+   152			desc->mux_owner = owner;
+   153		}
+   154	
+   155		/* Let each pin increase references to this module */
+   156		if (!try_module_get(pctldev->owner)) {
+   157			dev_err(pctldev->dev,
+   158				"could not increase module refcount for pin %d\n",
+   159				pin);
+   160			status = -EINVAL;
+   161			goto out_free_pin;
+   162		}
+   163	
+   164		/*
+   165		 * If there is no kind of request function for the pin we just assume
+   166		 * we got it by default and proceed.
+   167		 */
+   168		if (gpio_range && ops->gpio_request_enable)
+   169			/* This requests and enables a single GPIO pin */
+   170			status = ops->gpio_request_enable(pctldev, gpio_range, pin);
+   171		else if (ops->request)
+   172			status = ops->request(pctldev, pin);
+   173		else
+   174			status = 0;
+   175	
+   176		if (status)
+   177			module_put(pctldev->owner);
+   178	
+   179	out_free_pin:
+   180		if (status) {
+   181			if (gpio_range) {
+   182				desc->gpio_owner = NULL;
+   183			} else {
+   184				desc->mux_usecount--;
+   185				if (!desc->mux_usecount)
+   186					desc->mux_owner = NULL;
+   187			}
+   188		}
+   189	out:
+   190		if (status)
+ > 191			dev_err_probe(pctldev->dev, "pin-%d (%s) status %d\n",
+ > 192				      pin, owner, status);
+   193	
+   194		return status;
+   195	}
+   196	
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
