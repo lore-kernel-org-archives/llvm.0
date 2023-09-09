@@ -1,45 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85786FB4;
-	Sat,  9 Sep 2023 13:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3DE1FAB;
+	Sat,  9 Sep 2023 21:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694267187; x=1725803187;
+  t=1694294093; x=1725830093;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L/J2oj1wFgrbLdAStJtFXG99YZ0s8wTr/c9SvUrqHmM=;
-  b=XSTFLXfPTo2JkdE6G5fWOz/zINLgwPJesF1V3d6h2xc3y3JLxz3ify3/
-   Pu/EcSiiWsqzcD/BLDKS11481OK+pXi0Wm728I02ddj2JreFB36f986bX
-   Xs2NtETIk8NsryYBNq6M/nOU/XAXV9pFMpzChPEfEaIneRYCWynXl88nc
-   USnD8U0slTZx0lwL+T+GpR4bDgMl4UyhCmRYRT2jB+cUWQJcfvgJMnCKC
-   DMSVl0QtKsWh01Ems7M6gdF1ntXcytJ2U2WMes6r+CfgZzHS8LytEzwJI
-   uLemzSnfcWvn0APXo5qF6bHDuytpwU+XYnPum7ULxUNbBH2j/eYMdgCJo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="377733872"
-X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
-   d="scan'208";a="377733872"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2023 06:46:24 -0700
+  bh=pHkJrugcxiHznL/9pviAG6OrRB9F9fk7qrGG2FAK6QE=;
+  b=WyZoeDf1qStncX2p3DwOPcqKXAE7cmMW1uSrsSJFf7h69jYXdgjS6XpI
+   4nbSeUxMLcCYaACngQ1jcCilUAgDFy4fmONSLeQoAXsSnzvreBh+aHuch
+   vlY4c17Wf4BZY9kEjuxbKmQbBsyM+UoGePXFcKHt40PV5mjQiEKw2p7xF
+   s6hD58ErSBUNiBU57WoMMZroIJNWLrToAyqJnn3qxWZjbNna5cMVWy0Jm
+   ZIK3+mrrFAq5e/CtF3nMTjyFEuSkLp6Qm9TBjRuYTm96pcx6hAFjs5iOk
+   VKxO49UTMizmXMn+vrFQ31sP1DmMtALdS+kIBjYrOrYmbsGMjG69v0DW0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="441863055"
+X-IronPort-AV: E=Sophos;i="6.02,240,1688454000"; 
+   d="scan'208";a="441863055"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2023 14:14:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="857735638"
-X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
-   d="scan'208";a="857735638"
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="886028476"
+X-IronPort-AV: E=Sophos;i="6.02,240,1688454000"; 
+   d="scan'208";a="886028476"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Sep 2023 06:46:22 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 09 Sep 2023 14:14:30 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qeyI0-0003Ye-1m;
-	Sat, 09 Sep 2023 13:46:20 +0000
-Date: Sat, 9 Sep 2023 21:46:19 +0800
+	id 1qf5Hz-0003wr-2c;
+	Sat, 09 Sep 2023 21:14:47 +0000
+Date: Sun, 10 Sep 2023 05:14:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dillon Varone <Dillon.Varone@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>, Jun Lei <Jun.Lei@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1684:6:
- warning: stack frame size (2072) exceeds limit (2048) in
- 'dml32_ModeSupportAndSystemConfigurationFull'
-Message-ID: <202309092155.8xQKDjJA-lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:x86/guarded_kvm_headers 2/19]
+ drivers/vfio/vfio_main.c:1379:29: error: incomplete definition of type
+ 'struct vfio_group'
+Message-ID: <202309100504.KDK9plcm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,48 +47,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6099776f9f268e61fe5ecd721f994a8cfce5306f
-commit: ce902d987a8caa5c9a96080e280ecc992414a127 drm/amd/display: Enforce minimum prefetch time for low memclk on DCN32
-date:   10 months ago
-config: x86_64-randconfig-015-20230909 (https://download.01.org/0day-ci/archive/20230909/202309092155.8xQKDjJA-lkp@intel.com/config)
+tree:   https://github.com/sean-jc/linux x86/guarded_kvm_headers
+head:   a4cf1960322069d95b013d644a0121858e5c996f
+commit: 9a113a1eb83dc18c8f26462b8781d0a59f8c607e [2/19] KVM: vfio: Pass in kvm_{get,put}_kvm() helpers instead of doing symbol lookups
+config: x86_64-randconfig-075-20230910 (https://download.01.org/0day-ci/archive/20230910/202309100504.KDK9plcm-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309092155.8xQKDjJA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230910/202309100504.KDK9plcm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309092155.8xQKDjJA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309100504.KDK9plcm-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1684:6: warning: stack frame size (2072) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-   void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        ^
-   1076/2072 (51.93%) spills, 996/2072 (48.07%) variables
-   1 warning generated.
+>> drivers/vfio/vfio_main.c:1379:29: error: incomplete definition of type 'struct vfio_group'
+                   vfio_device_set_kvm(&group->kvm_ref, kvm, get_kvm, put_kvm);
+                                        ~~~~~^
+   drivers/vfio/vfio.h:29:9: note: forward declaration of 'struct vfio_group'
+           struct vfio_group *group;
+                  ^
+   1 error generated.
 
 
-vim +/dml32_ModeSupportAndSystemConfigurationFull +1684 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c
+vim +1379 drivers/vfio/vfio_main.c
 
-1b54a0121dba12 Rodrigo Siqueira 2022-07-22  1683  
-dda4fb85e433f7 Aurabindo Pillai 2022-02-21 @1684  void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-dda4fb85e433f7 Aurabindo Pillai 2022-02-21  1685  {
-7acc487ab57e07 Alex Deucher     2022-07-20  1686  	struct vba_vars_st *v = &mode_lib->vba;
-7acc487ab57e07 Alex Deucher     2022-07-20  1687  	int i, j;
-7acc487ab57e07 Alex Deucher     2022-07-20  1688  	unsigned int k, m;
-dda4fb85e433f7 Aurabindo Pillai 2022-02-21  1689  	unsigned int MaximumMPCCombine;
-7acc487ab57e07 Alex Deucher     2022-07-20  1690  	unsigned int NumberOfNonCombinedSurfaceOfMaximumBandwidth;
-7acc487ab57e07 Alex Deucher     2022-07-20  1691  	unsigned int TotalSlots;
-f4b4e41a2e0527 Jun Lei          2022-06-24  1692  	bool CompBufReservedSpaceNeedAdjustment;
-f4b4e41a2e0527 Jun Lei          2022-06-24  1693  	bool CompBufReservedSpaceNeedAdjustmentSingleDPP;
-dda4fb85e433f7 Aurabindo Pillai 2022-02-21  1694  
-
-:::::: The code at line 1684 was first introduced by commit
-:::::: dda4fb85e433f761eedaed0005a2bc20d705d504 drm/amd/display: DML changes for DCN32/321
-
-:::::: TO: Aurabindo Pillai <aurabindo.pillai@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+  1363	
+  1364	/**
+  1365	 * vfio_file_set_kvm - Link a kvm with VFIO drivers
+  1366	 * @file: VFIO group file or VFIO device file
+  1367	 * @kvm: KVM to link
+  1368	 * @get_kvm: Callback to get a reference to @kvm
+  1369	 * @put_kvm: Callback to put a reference to @kvm
+  1370	 */
+  1371	void vfio_file_set_kvm(struct file *file, struct kvm *kvm,
+  1372			       bool (*get_kvm)(struct kvm *kvm),
+  1373			       void (*put_kvm)(struct kvm *kvm))
+  1374	{
+  1375		struct vfio_group *group;
+  1376	
+  1377		group = vfio_group_from_file(file);
+  1378		if (group)
+> 1379			vfio_device_set_kvm(&group->kvm_ref, kvm, get_kvm, put_kvm);
+  1380	
+  1381		if (vfio_device_from_file(file))
+  1382			vfio_device_file_set_kvm(file, kvm, get_kvm, put_kvm);
+  1383	}
+  1384	EXPORT_SYMBOL_GPL(vfio_file_set_kvm);
+  1385	#endif
+  1386	
 
 -- 
 0-DAY CI Kernel Test Service
