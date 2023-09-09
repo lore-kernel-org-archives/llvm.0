@@ -1,103 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBEF15B4;
-	Sat,  9 Sep 2023 03:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694231565; x=1725767565;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=5jmsiqnlfi0/iUuKVVXAn8i93l/x7fRdY+INKVfRR3w=;
-  b=F5Qa0FTTJa21q81SdjC42MTHfEdLfEJqsUcTpNRUojmTBzy1Wm6IN1R+
-   n6ygR66qyHaL3JvlyI50XKj8bPgDgIePeX6m1E8K/HHro7k29EEFCKSln
-   ld97k6/HPP+zVvm4Gt1CE43m969VcKpV2ItVHEYxXcwS825iQy5H6KqJO
-   MzaVi9eguJqNi6UEEM0DhJ1xJy23/bnrJ4FUpwPWe+QtAE+fbuH/Bb2Kd
-   UaSAbDzbT2rqHBVGkHZRBNkYP63dBprf/zcz2zg2+IwUQrweiaSpynBWR
-   jVhgYF84i28F1OgJoZzh1sKO5alReuoSKdwIF0r1qu75ybk49K+HTdRQV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="376697959"
-X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
-   d="scan'208";a="376697959"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 20:52:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="857632570"
-X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
-   d="scan'208";a="857632570"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Sep 2023 20:52:42 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qep1U-0002tb-2Q;
-	Sat, 09 Sep 2023 03:52:40 +0000
-Date: Sat, 9 Sep 2023 11:52:14 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
- kallsyms_expand_symbol: .text+0x312): relocation R_RISCV_PCREL_HI20 out of
- range: -524388 is not in [-524288, 524287]; references kallsyms_names
-Message-ID: <202309091100.M8NNLyhb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDC815B4
+	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 04:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694232078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ho5YNlTCV5B7hnSa5f4vPCKQqy20ZEEXVM0RQm9YCeA=;
+	b=HZ+ibASKWqWbWESF21jVHdj/PySnLLTRsqLrGC/yN8fFhWRCrWuRIx04bem3JjhsJFGHOx
+	qGYd1O/p0stC6TZCElikINAdfnRW56OrkUgz/SeeHB+gu9diAPDhmevwgP7/f3NZvRxXTS
+	6KgbyNzNmYIP4txtZs7osQX+4Cq/1MQ=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-InWBag0rN3KAQ4UXjdpJqQ-1; Sat, 09 Sep 2023 00:01:16 -0400
+X-MC-Unique: InWBag0rN3KAQ4UXjdpJqQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A432229AA2C0
+	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 04:01:16 +0000 (UTC)
+Received: from [172.64.4.20] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 849F240C2070;
+	Sat,  9 Sep 2023 04:01:16 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 13 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 32bf43e4)
+Date: Sat, 09 Sep 2023 04:01:16 -0000
+To: yizhan@redhat.com, zlang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <57815.123090900011600957@us-mta-94.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Jesse Taube <mr.bossman075@gmail.com>
-CC: Conor Dooley <conor.dooley@microchip.com>
-CC: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Hi, we tested your kernel and here are the results:
 
-Hi Jesse,
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   32bf43e4efdb87e0f7e90ba3883e07b8522322ad
-commit: 49f965b6fbca63904d7397ce96066fa992f401a3 soc: canaan: Make K210_SYSCTL depend on CLK_K210
-date:   6 months ago
-config: riscv-randconfig-r002-20230909 (https://download.01.org/0day-ci/archive/20230909/202309091100.M8NNLyhb-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309091100.M8NNLyhb-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'thermal-6.6-rc1-3' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/rafael/linux-pm
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309091100.M8NNLyhb-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/103642
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9452103
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9452170
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
 
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_expand_symbol: .text+0x312): relocation R_RISCV_PCREL_HI20 out of range: -524388 is not in [-524288, 524287]; references kallsyms_names
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_expand_symbol: .text+0x352): relocation R_RISCV_PCREL_HI20 out of range: -524388 is not in [-524288, 524287]; references kallsyms_token_index
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_expand_symbol: .text+0x35a): relocation R_RISCV_PCREL_HI20 out of range: -524388 is not in [-524288, 524287]; references kallsyms_token_table
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function get_symbol_pos: .text+0x51a): relocation R_RISCV_PCREL_HI20 out of range: -524388 is not in [-524288, 524287]; references kallsyms_offsets
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function get_symbol_pos: .text+0x538): relocation R_RISCV_PCREL_HI20 out of range: -524388 is not in [-524288, 524287]; references kallsyms_num_syms
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function get_symbol_pos: .text+0x542): relocation R_RISCV_PCREL_HI20 out of range: -524388 is not in [-524288, 524287]; references kallsyms_relative_base
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function get_symbol_offset: .text+0x742): relocation R_RISCV_PCREL_HI20 out of range: -524388 is not in [-524288, 524287]; references kallsyms_markers
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
