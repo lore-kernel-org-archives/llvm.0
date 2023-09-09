@@ -1,348 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A008EA8
-	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 00:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ACACC433CB;
-	Sat,  9 Sep 2023 00:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694219895;
-	bh=c7A2T2kDMKnljYsyhWTIiqMgRghvPMAiuvkhE7iublY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Rb9mC/2+CsKfkIAzADNB1R4kkTNwDxmKWzqS29+2qRxKEARPWcAUzTsnWvAkhHZCP
-	 x3BZn0NJGr0Ice9uUDSdrgP4dYCfh49LmWdqiU3RibccrCuGqGttPJAoU4Xaue0mN+
-	 JRftnN2wZrZeozNf5A9AoQJIXHZJ8TywxGTcb0OCeMcqA7Xjs7UUPJDOVr7guJKUKd
-	 /cCiDy81+CGCPHO2NICaasGhkoDwcxpRr0V+wkLYnK8swOnl+CHcPJwOVANsCGvd+T
-	 YtkzAIsTAFjDKEYgMzEY/mpsXwNyGtLuPKTQBGTFRSo4fsrwbxcCrbbLS1uxSgBJpB
-	 BWGkxzp97dORQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Sasha Levin <sashal@kernel.org>,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	ndesaulniers@google.com,
-	peterz@infradead.org,
-	ajones@ventanamicro.com,
-	heiko@sntech.de,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	liaochang1@huawei.com,
-	namcaov@gmail.com,
-	andy.chiu@sifive.com,
-	guoren@kernel.org,
-	alexghiti@rivosinc.com,
-	bjorn@rivosinc.com,
-	jeeheng.sia@starfivetech.com,
-	jszhang@kernel.org,
-	greentime.hu@sifive.com,
-	masahiroy@kernel.org,
-	apatel@ventanamicro.com,
-	mnissler@rivosinc.com,
-	coelacanthushex@gmail.com,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.4 25/25] riscv: Add CFI error handling
-Date: Fri,  8 Sep 2023 20:37:13 -0400
-Message-Id: <20230909003715.3579761-25-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
-References: <20230909003715.3579761-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382B31101;
+	Sat,  9 Sep 2023 02:07:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694225264; x=1725761264;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+2GzycsrEbxGzb/cRjA+uHgIgiF2vHA83XeBJ+cEL3o=;
+  b=ZIyHTz94l9GXTCSnPMkayups2jbNmKYQrUFlum86MkMaOJuhGpLJv4Ga
+   NnKTcG73esHpxkqLHFmw+2AARRPQPekPPixGR8q27Mxq21U6ofkWZDCv9
+   5JrVUjtB7Wdol5R2WD0F+vV80xc+xkQVcXwpJIb8xJVvrazr6gDoL5ZtL
+   3XGwybT9wPb2fKT4L5R87X/LY69lJ1PJLelh57LWHkgHzeTXoYMNqOkcQ
+   Bl4+Hs1URhRVq/9+k3VLfG5PMBsy9grck4R56lgcw+byqGv12rD74OpyC
+   lDHzPT5ah7s1Fj5LNaHJua91NUxibbux+nVocvTIUW2RacLObXaZfQhjF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="441796061"
+X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
+   d="scan'208";a="441796061"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 19:07:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="771950762"
+X-IronPort-AV: E=Sophos;i="6.02,238,1688454000"; 
+   d="scan'208";a="771950762"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 08 Sep 2023 19:07:40 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qenNp-0002pr-3D;
+	Sat, 09 Sep 2023 02:07:37 +0000
+Date: Sat, 9 Sep 2023 10:06:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jinjie Ruan <ruanjinjie@huawei.com>, lars.povlsen@microchip.com,
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-arm-kernel@lists.infradead.org,
+	netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ruanjinjie@huawei.com
+Subject: Re: [PATCH net 4/5] net: microchip: sparx5: Fix possible memory
+ leaks in test_vcap_xn_rule_creator()
+Message-ID: <202309090950.uOTEKQq3-lkp@intel.com>
+References: <20230908040011.2620468-5-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.15
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230908040011.2620468-5-ruanjinjie@huawei.com>
 
-From: Sami Tolvanen <samitolvanen@google.com>
+Hi Jinjie,
 
-[ Upstream commit af0ead42f69389cd4ed68e1a4c6cde45c0adb35c ]
+kernel test robot noticed the following build warnings:
 
-With CONFIG_CFI_CLANG, the compiler injects a type preamble immediately
-before each function and a check to validate the target function type
-before indirect calls:
+[auto build test WARNING on net/main]
 
-  ; type preamble
-    .word <id>
-  function:
-    ...
-  ; indirect call check
-    lw      t1, -4(a0)
-    lui     t2, <hi20>
-    addiw   t2, t2, <lo12>
-    beq     t1, t2, .Ltmp0
-    ebreak
-  .Ltmp0:
-    jarl    a0
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/net-microchip-sparx5-Fix-memory-leak-for-vcap_api_rule_add_keyvalue_test/20230908-120533
+base:   net/main
+patch link:    https://lore.kernel.org/r/20230908040011.2620468-5-ruanjinjie%40huawei.com
+patch subject: [PATCH net 4/5] net: microchip: sparx5: Fix possible memory leaks in test_vcap_xn_rule_creator()
+config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20230909/202309090950.uOTEKQq3-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309090950.uOTEKQq3-lkp@intel.com/reproduce)
 
-Implement error handling code for the ebreak traps emitted for the
-checks. This produces the following oops on a CFI failure (generated
-using lkdtm):
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309090950.uOTEKQq3-lkp@intel.com/
 
-[   21.177245] CFI failure at lkdtm_indirect_call+0x22/0x32 [lkdtm]
-(target: lkdtm_increment_int+0x0/0x18 [lkdtm]; expected type: 0x3ad55aca)
-[   21.178483] Kernel BUG [#1]
-[   21.178671] Modules linked in: lkdtm
-[   21.179037] CPU: 1 PID: 104 Comm: sh Not tainted
-6.3.0-rc6-00037-g37d5ec6297ab #1
-[   21.179511] Hardware name: riscv-virtio,qemu (DT)
-[   21.179818] epc : lkdtm_indirect_call+0x22/0x32 [lkdtm]
-[   21.180106]  ra : lkdtm_CFI_FORWARD_PROTO+0x48/0x7c [lkdtm]
-[   21.180426] epc : ffffffff01387092 ra : ffffffff01386f14 sp : ff20000000453cf0
-[   21.180792]  gp : ffffffff81308c38 tp : ff6000000243f080 t0 : ff20000000453b78
-[   21.181157]  t1 : 000000003ad55aca t2 : 000000007e0c52a5 s0 : ff20000000453d00
-[   21.181506]  s1 : 0000000000000001 a0 : ffffffff0138d170 a1 : ffffffff013870bc
-[   21.181819]  a2 : b5fea48dd89aa700 a3 : 0000000000000001 a4 : 0000000000000fff
-[   21.182169]  a5 : 0000000000000004 a6 : 00000000000000b7 a7 : 0000000000000000
-[   21.182591]  s2 : ff20000000453e78 s3 : ffffffffffffffea s4 : 0000000000000012
-[   21.183001]  s5 : ff600000023c7000 s6 : 0000000000000006 s7 : ffffffff013882a0
-[   21.183653]  s8 : 0000000000000008 s9 : 0000000000000002 s10: ffffffff0138d878
-[   21.184245]  s11: ffffffff0138d878 t3 : 0000000000000003 t4 : 0000000000000000
-[   21.184591]  t5 : ffffffff8133df08 t6 : ffffffff8133df07
-[   21.184858] status: 0000000000000120 badaddr: 0000000000000000
-cause: 0000000000000003
-[   21.185415] [<ffffffff01387092>] lkdtm_indirect_call+0x22/0x32 [lkdtm]
-[   21.185772] [<ffffffff01386f14>] lkdtm_CFI_FORWARD_PROTO+0x48/0x7c [lkdtm]
-[   21.186093] [<ffffffff01383552>] lkdtm_do_action+0x22/0x34 [lkdtm]
-[   21.186445] [<ffffffff0138350c>] direct_entry+0x128/0x13a [lkdtm]
-[   21.186817] [<ffffffff8033ed8c>] full_proxy_write+0x58/0xb2
-[   21.187352] [<ffffffff801d4fe8>] vfs_write+0x14c/0x33a
-[   21.187644] [<ffffffff801d5328>] ksys_write+0x64/0xd4
-[   21.187832] [<ffffffff801d53a6>] sys_write+0xe/0x1a
-[   21.188171] [<ffffffff80003996>] ret_from_syscall+0x0/0x2
-[   21.188595] Code: 0513 0f65 a303 ffc5 53b7 7e0c 839b 2a53 0363 0073 (9002) 9582
-[   21.189178] ---[ end trace 0000000000000000 ]---
-[   21.189590] Kernel panic - not syncing: Fatal exception
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com> # ISA bits
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Link: https://lore.kernel.org/r/20230710183544.999540-12-samitolvanen@google.com
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/riscv/Kconfig            |  1 +
- arch/riscv/include/asm/cfi.h  | 22 ++++++++++
- arch/riscv/include/asm/insn.h | 10 +++++
- arch/riscv/kernel/Makefile    |  2 +
- arch/riscv/kernel/cfi.c       | 77 +++++++++++++++++++++++++++++++++++
- arch/riscv/kernel/traps.c     |  4 +-
- 6 files changed, 115 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/include/asm/cfi.h
- create mode 100644 arch/riscv/kernel/cfi.c
+   In file included from drivers/net/ethernet/microchip/vcap/vcap_api.c:3584:
+>> drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:246:6: warning: no previous prototype for function 'test_vcap_xn_rule_creator' [-Wmissing-prototypes]
+     246 | void test_vcap_xn_rule_creator(struct kunit *test, int cid, enum vcap_user user,
+         |      ^
+   drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:246:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     246 | void test_vcap_xn_rule_creator(struct kunit *test, int cid, enum vcap_user user,
+         | ^
+         | static 
+   1 warning generated.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 052845384ed38..36dd0390b8257 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -45,6 +45,7 @@ config RISCV
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
-+	select ARCH_USES_CFI_TRAPS if CFI_CLANG
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_GENERAL_HUGETLB if !RISCV_ISA_SVNAPOT
-diff --git a/arch/riscv/include/asm/cfi.h b/arch/riscv/include/asm/cfi.h
-new file mode 100644
-index 0000000000000..56bf9d69d5e38
---- /dev/null
-+++ b/arch/riscv/include/asm/cfi.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_RISCV_CFI_H
-+#define _ASM_RISCV_CFI_H
-+
-+/*
-+ * Clang Control Flow Integrity (CFI) support.
-+ *
-+ * Copyright (C) 2023 Google LLC
-+ */
-+
-+#include <linux/cfi.h>
-+
-+#ifdef CONFIG_CFI_CLANG
-+enum bug_trap_type handle_cfi_failure(struct pt_regs *regs);
-+#else
-+static inline enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
-+{
-+	return BUG_TRAP_TYPE_NONE;
-+}
-+#endif /* CONFIG_CFI_CLANG */
-+
-+#endif /* _ASM_RISCV_CFI_H */
-diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
-index 603095c913e37..bbd878d4815ce 100644
---- a/arch/riscv/include/asm/insn.h
-+++ b/arch/riscv/include/asm/insn.h
-@@ -63,6 +63,7 @@
- #define RVG_RS1_OPOFF		15
- #define RVG_RS2_OPOFF		20
- #define RVG_RD_OPOFF		7
-+#define RVG_RS1_MASK		GENMASK(4, 0)
- #define RVG_RD_MASK		GENMASK(4, 0)
- 
- /* The bit field of immediate value in RVC J instruction */
-@@ -130,6 +131,7 @@
- #define RVC_C2_RS1_OPOFF	7
- #define RVC_C2_RS2_OPOFF	2
- #define RVC_C2_RD_OPOFF		7
-+#define RVC_C2_RS1_MASK		GENMASK(4, 0)
- 
- /* parts of opcode for RVG*/
- #define RVG_OPCODE_FENCE	0x0f
-@@ -269,6 +271,10 @@ static __always_inline bool riscv_insn_is_c_jalr(u32 code)
- #define RV_X(X, s, mask)  (((X) >> (s)) & (mask))
- #define RVC_X(X, s, mask) RV_X(X, s, mask)
- 
-+#define RV_EXTRACT_RS1_REG(x) \
-+	({typeof(x) x_ = (x); \
-+	(RV_X(x_, RVG_RS1_OPOFF, RVG_RS1_MASK)); })
-+
- #define RV_EXTRACT_RD_REG(x) \
- 	({typeof(x) x_ = (x); \
- 	(RV_X(x_, RVG_RD_OPOFF, RVG_RD_MASK)); })
-@@ -296,6 +302,10 @@ static __always_inline bool riscv_insn_is_c_jalr(u32 code)
- 	(RV_X(x_, RV_B_IMM_11_OPOFF, RV_B_IMM_11_MASK) << RV_B_IMM_11_OFF) | \
- 	(RV_IMM_SIGN(x_) << RV_B_IMM_SIGN_OFF); })
- 
-+#define RVC_EXTRACT_C2_RS1_REG(x) \
-+	({typeof(x) x_ = (x); \
-+	(RV_X(x_, RVC_C2_RS1_OPOFF, RVC_C2_RS1_MASK)); })
-+
- #define RVC_EXTRACT_JTYPE_IMM(x) \
- 	({typeof(x) x_ = (x); \
- 	(RVC_X(x_, RVC_J_IMM_3_1_OPOFF, RVC_J_IMM_3_1_MASK) << RVC_J_IMM_3_1_OFF) | \
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 153864e4f3996..c173a7cbf4e11 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -90,6 +90,8 @@ obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
- 
- obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
- 
-+obj-$(CONFIG_CFI_CLANG)		+= cfi.o
-+
- obj-$(CONFIG_EFI)		+= efi.o
- obj-$(CONFIG_COMPAT)		+= compat_syscall_table.o
- obj-$(CONFIG_COMPAT)		+= compat_signal.o
-diff --git a/arch/riscv/kernel/cfi.c b/arch/riscv/kernel/cfi.c
-new file mode 100644
-index 0000000000000..820158d7a2913
---- /dev/null
-+++ b/arch/riscv/kernel/cfi.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Clang Control Flow Integrity (CFI) support.
-+ *
-+ * Copyright (C) 2023 Google LLC
-+ */
-+#include <asm/cfi.h>
-+#include <asm/insn.h>
-+
-+/*
-+ * Returns the target address and the expected type when regs->epc points
-+ * to a compiler-generated CFI trap.
-+ */
-+static bool decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
-+			    u32 *type)
-+{
-+	unsigned long *regs_ptr = (unsigned long *)regs;
-+	int rs1_num;
-+	u32 insn;
-+
-+	*target = *type = 0;
-+
-+	/*
-+	 * The compiler generates the following instruction sequence
-+	 * for indirect call checks:
-+	 *
-+	 *   lw      t1, -4(<reg>)
-+	 *   lui     t2, <hi20>
-+	 *   addiw   t2, t2, <lo12>
-+	 *   beq     t1, t2, .Ltmp1
-+	 *   ebreak  ; <- regs->epc
-+	 *   .Ltmp1:
-+	 *   jalr    <reg>
-+	 *
-+	 * We can read the expected type and the target address from the
-+	 * registers passed to the beq/jalr instructions.
-+	 */
-+	if (get_kernel_nofault(insn, (void *)regs->epc - 4))
-+		return false;
-+	if (!riscv_insn_is_beq(insn))
-+		return false;
-+
-+	*type = (u32)regs_ptr[RV_EXTRACT_RS1_REG(insn)];
-+
-+	if (get_kernel_nofault(insn, (void *)regs->epc) ||
-+	    get_kernel_nofault(insn, (void *)regs->epc + GET_INSN_LENGTH(insn)))
-+		return false;
-+
-+	if (riscv_insn_is_jalr(insn))
-+		rs1_num = RV_EXTRACT_RS1_REG(insn);
-+	else if (riscv_insn_is_c_jalr(insn))
-+		rs1_num = RVC_EXTRACT_C2_RS1_REG(insn);
-+	else
-+		return false;
-+
-+	*target = regs_ptr[rs1_num];
-+
-+	return true;
-+}
-+
-+/*
-+ * Checks if the ebreak trap is because of a CFI failure, and handles the trap
-+ * if needed. Returns a bug_trap_type value similarly to report_bug.
-+ */
-+enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
-+{
-+	unsigned long target;
-+	u32 type;
-+
-+	if (!is_cfi_trap(regs->epc))
-+		return BUG_TRAP_TYPE_NONE;
-+
-+	if (!decode_cfi_insn(regs, &target, &type))
-+		return report_cfi_failure_noaddr(regs, regs->epc);
-+
-+	return report_cfi_failure(regs, regs->epc, &target, type);
-+}
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index bd19e885dcec1..8db848e2c244c 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -21,6 +21,7 @@
- 
- #include <asm/asm-prototypes.h>
- #include <asm/bug.h>
-+#include <asm/cfi.h>
- #include <asm/csr.h>
- #include <asm/processor.h>
- #include <asm/ptrace.h>
-@@ -242,7 +243,8 @@ void handle_break(struct pt_regs *regs)
- 								== NOTIFY_STOP)
- 		return;
- #endif
--	else if (report_bug(regs->epc, regs) == BUG_TRAP_TYPE_WARN)
-+	else if (report_bug(regs->epc, regs) == BUG_TRAP_TYPE_WARN ||
-+		 handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN)
- 		regs->epc += get_break_insn_length(regs->epc);
- 	else
- 		die(regs, "Kernel BUG");
+
+vim +/test_vcap_xn_rule_creator +246 drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
+
+   244	
+   245	/* Helper function to create a rule of a specific size */
+ > 246	void test_vcap_xn_rule_creator(struct kunit *test, int cid, enum vcap_user user,
+   247				       u16 priority,
+   248				       int id, int size, int expected_addr)
+   249	{
+   250		struct vcap_rule *rule;
+   251		struct vcap_rule_internal *ri;
+   252		enum vcap_keyfield_set keyset = VCAP_KFS_NO_VALUE;
+   253		enum vcap_actionfield_set actionset = VCAP_AFS_NO_VALUE;
+   254		int ret;
+   255	
+   256		/* init before testing */
+   257		memset(test_updateaddr, 0, sizeof(test_updateaddr));
+   258		test_updateaddridx = 0;
+   259		test_move_addr = 0;
+   260		test_move_offset = 0;
+   261		test_move_count = 0;
+   262	
+   263		switch (size) {
+   264		case 2:
+   265			keyset = VCAP_KFS_ETAG;
+   266			actionset = VCAP_AFS_CLASS_REDUCED;
+   267			break;
+   268		case 3:
+   269			keyset = VCAP_KFS_PURE_5TUPLE_IP4;
+   270			actionset = VCAP_AFS_CLASSIFICATION;
+   271			break;
+   272		case 6:
+   273			keyset = VCAP_KFS_NORMAL_5TUPLE_IP4;
+   274			actionset = VCAP_AFS_CLASSIFICATION;
+   275			break;
+   276		case 12:
+   277			keyset = VCAP_KFS_NORMAL_7TUPLE;
+   278			actionset = VCAP_AFS_FULL;
+   279			break;
+   280		default:
+   281			break;
+   282		}
+   283	
+   284		/* Check that a valid size was used */
+   285		KUNIT_ASSERT_NE(test, VCAP_KFS_NO_VALUE, keyset);
+   286	
+   287		/* Allocate the rule */
+   288		rule = vcap_alloc_rule(&test_vctrl, &test_netdev, cid, user, priority,
+   289				       id);
+   290		KUNIT_EXPECT_PTR_NE(test, NULL, rule);
+   291	
+   292		ri = (struct vcap_rule_internal *)rule;
+   293	
+   294		/* Override rule keyset */
+   295		ret = vcap_set_rule_set_keyset(rule, keyset);
+   296	
+   297		/* Add rule actions : there must be at least one action */
+   298		ret = vcap_rule_add_action_u32(rule, VCAP_AF_ISDX_VAL, 0);
+   299	
+   300		/* Override rule actionset */
+   301		ret = vcap_set_rule_set_actionset(rule, actionset);
+   302	
+   303		ret = vcap_val_rule(rule, ETH_P_ALL);
+   304		KUNIT_EXPECT_EQ(test, 0, ret);
+   305		KUNIT_EXPECT_EQ(test, keyset, rule->keyset);
+   306		KUNIT_EXPECT_EQ(test, actionset, rule->actionset);
+   307		KUNIT_EXPECT_EQ(test, size, ri->size);
+   308	
+   309		/* Add rule with write callback */
+   310		ret = vcap_add_rule(rule);
+   311		KUNIT_EXPECT_EQ(test, 0, ret);
+   312		KUNIT_EXPECT_EQ(test, expected_addr, ri->addr);
+   313		vcap_free_rule(rule);
+   314	}
+   315	
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
