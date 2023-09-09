@@ -1,45 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD201FAB;
-	Sat,  9 Sep 2023 10:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F971FAB;
+	Sat,  9 Sep 2023 10:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694254028; x=1725790028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E5kgblMB7JiKmXG1Rz+9maFmsoais6/+oJ9GGpqltdg=;
-  b=COuR6BKDkkQbrAsaN3mFgfKFE8oRQqwu9tFq2J0WAws3Sc7BLiNegt1c
-   T8L08BBNwjVodMIlTGKUGC8ikfqjEqrQiPMs3JD1bwt1OliBAZA6CyXPF
-   GWrCO6sefYQ4yTK0esUgwTQkXSCuHb93I4FuluZRwztYlI6akBEN9cFvF
-   Rq2w5GqHneXM7lnzhBktuBXnphLWglPPxuS/Ylnm1v5sRPvy3dgY6YM/6
-   ysevPJovh6M0ncpNwRNim1YdwMc0+9ei0IemCdVz7cUeFUfoBBt4j49KY
-   Sca1Ps21laPC8so3WXQr0arWiXyoJMBqKXcWUsa/aNWbuhogTndYyNKvi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="357275532"
+  t=1694254630; x=1725790630;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KrN0QfcILxXkPjYs8S8tWAvasNVGZItQXG+0dHGyA+g=;
+  b=YjHxhnIBloZkYG5H3vGqGEXUwWwNB5A8FLaZPrA3wtUHkEVnFG9XPDwa
+   iew5sR2VOipduvNid4fMCcsIy2KqFcbHdeqWK2h3nYPBP73ktX4rU1OUF
+   CeT20YT+VUMxC6VHzb3wUC+IcDr9Bvs4cdASnUPIBCoUNZGswT74GuP9W
+   N7cC4bHbWneVvDgYik3pty57hIk85ceblW8nFIbdFhXGagQQN5O+caT8I
+   mEgGWfnTUKS6bOaHY519+fU7yfHUJ0tC1nYsay5Qa0CCKlRQBzU1W4mX7
+   118IOb+PVWfWJQfZ7tzvxXRfQ3wRHWl4vLcPCbo5/B52D7BqStks+Foke
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="362860039"
 X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
-   d="scan'208";a="357275532"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2023 03:07:07 -0700
+   d="scan'208";a="362860039"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2023 03:17:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="745868179"
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="1073591152"
 X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
-   d="scan'208";a="745868179"
+   d="scan'208";a="1073591152"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Sep 2023 03:07:05 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 09 Sep 2023 03:17:08 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qeurn-0003He-0V;
-	Sat, 09 Sep 2023 10:07:03 +0000
-Date: Sat, 9 Sep 2023 18:06:18 +0800
+	id 1qev1W-0003IY-0O;
+	Sat, 09 Sep 2023 10:17:06 +0000
+Date: Sat, 9 Sep 2023 18:16:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jernej Skrabec <jernej.skrabec@gmail.com>, linus.walleij@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: Re: [PATCH 2/2] pinctrl: pinmux: Use dev_err_probe() in pin_request()
-Message-ID: <202309091724.tJzAxzS5-lkp@intel.com>
-References: <20230909063613.2867-3-jernej.skrabec@gmail.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hverkuil-media-tree:enc-dec-cmd 28/31]
+ drivers/media/platform/allegro-dvt/allegro-core.c:2822:3: error: call to
+ undeclared function 'v4l2_m2m_last_buffer_done'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202309091857.hmzD9eCZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,146 +47,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230909063613.2867-3-jernej.skrabec@gmail.com>
 
-Hi Jernej,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next linus/master v6.5 next-20230908]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jernej-Skrabec/pinctrl-pinmux-Remove-duplicate-error-message-in-pin_request/20230909-143817
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20230909063613.2867-3-jernej.skrabec%40gmail.com
-patch subject: [PATCH 2/2] pinctrl: pinmux: Use dev_err_probe() in pin_request()
-config: hexagon-randconfig-002-20230909 (https://download.01.org/0day-ci/archive/20230909/202309091724.tJzAxzS5-lkp@intel.com/config)
+tree:   git://linuxtv.org/hverkuil/media_tree.git enc-dec-cmd
+head:   2036ca38beff822c3ebbf9ae60b5bb184cbe6e19
+commit: 7c08f89f12294f745b7202b12d8e1f7e4a6a936f [28/31] media: core: v4l2-mem2mem: remove v4l2_m2m_last_buffer_done
+config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20230909/202309091857.hmzD9eCZ-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309091724.tJzAxzS5-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309091857.hmzD9eCZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309091724.tJzAxzS5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309091857.hmzD9eCZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/pinctrl/pinmux.c:191:31: error: incompatible pointer to integer conversion passing 'char[23]' to parameter of type 'int' [-Wint-conversion]
-     191 |                 dev_err_probe(pctldev->dev, "pin-%d (%s) status %d\n",
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:1218:64: note: passing argument to parameter 'err' here
-    1218 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                                ^
->> drivers/pinctrl/pinmux.c:192:10: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
-     192 |                               pin, owner, status);
-         |                               ^~~
-   include/linux/device.h:1218:81: note: passing argument to parameter 'fmt' here
-    1218 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                                                 ^
-   2 errors generated.
+>> drivers/media/platform/allegro-dvt/allegro-core.c:2822:3: error: call to undeclared function 'v4l2_m2m_last_buffer_done'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2822 |                 v4l2_m2m_last_buffer_done(channel->fh.m2m_ctx, vbuf);
+         |                 ^
+   drivers/media/platform/allegro-dvt/allegro-core.c:2822:3: note: did you mean 'v4l2_m2m_dst_buf_remove'?
+   include/media/v4l2-mem2mem.h:748:1: note: 'v4l2_m2m_dst_buf_remove' declared here
+     748 | v4l2_m2m_dst_buf_remove(struct v4l2_m2m_ctx *m2m_ctx)
+         | ^
+   1 error generated.
+--
+>> drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:1871:3: error: call to undeclared function 'v4l2_m2m_last_buffer_done'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1871 |                 v4l2_m2m_last_buffer_done(ctx->fh.m2m_ctx, vbuf);
+         |                 ^
+   drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:1871:3: note: did you mean 'v4l2_m2m_dst_buf_remove'?
+   include/media/v4l2-mem2mem.h:748:1: note: 'v4l2_m2m_dst_buf_remove' declared here
+     748 | v4l2_m2m_dst_buf_remove(struct v4l2_m2m_ctx *m2m_ctx)
+         | ^
+   1 error generated.
+--
+>> drivers/media/platform/verisilicon/hantro_v4l2.c:892:3: error: call to undeclared function 'v4l2_m2m_last_buffer_done'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     892 |                 v4l2_m2m_last_buffer_done(ctx->fh.m2m_ctx, vbuf);
+         |                 ^
+   drivers/media/platform/verisilicon/hantro_v4l2.c:892:3: note: did you mean 'v4l2_m2m_dst_buf_remove'?
+   include/media/v4l2-mem2mem.h:748:1: note: 'v4l2_m2m_dst_buf_remove' declared here
+     748 | v4l2_m2m_dst_buf_remove(struct v4l2_m2m_ctx *m2m_ctx)
+         | ^
+   1 error generated.
 
 
-vim +191 drivers/pinctrl/pinmux.c
+vim +/v4l2_m2m_last_buffer_done +2822 drivers/media/platform/allegro-dvt/allegro-core.c
 
-   101	
-   102	/**
-   103	 * pin_request() - request a single pin to be muxed in, typically for GPIO
-   104	 * @pctldev: the associated pin controller device
-   105	 * @pin: the pin number in the global pin space
-   106	 * @owner: a representation of the owner of this pin; typically the device
-   107	 *	name that controls its mux function, or the requested GPIO name
-   108	 * @gpio_range: the range matching the GPIO pin if this is a request for a
-   109	 *	single GPIO pin
-   110	 */
-   111	static int pin_request(struct pinctrl_dev *pctldev,
-   112			       int pin, const char *owner,
-   113			       struct pinctrl_gpio_range *gpio_range)
-   114	{
-   115		struct pin_desc *desc;
-   116		const struct pinmux_ops *ops = pctldev->desc->pmxops;
-   117		int status = -EINVAL;
-   118	
-   119		desc = pin_desc_get(pctldev, pin);
-   120		if (desc == NULL) {
-   121			dev_err(pctldev->dev,
-   122				"pin %d is not registered so it cannot be requested\n",
-   123				pin);
-   124			goto out;
-   125		}
-   126	
-   127		dev_dbg(pctldev->dev, "request pin %d (%s) for %s\n",
-   128			pin, desc->name, owner);
-   129	
-   130		if ((!gpio_range || ops->strict) &&
-   131		    desc->mux_usecount && strcmp(desc->mux_owner, owner)) {
-   132			dev_err(pctldev->dev,
-   133				"pin %s already requested by %s; cannot claim for %s\n",
-   134				desc->name, desc->mux_owner, owner);
-   135			goto out;
-   136		}
-   137	
-   138		if ((gpio_range || ops->strict) && desc->gpio_owner) {
-   139			dev_err(pctldev->dev,
-   140				"pin %s already requested by %s; cannot claim for %s\n",
-   141				desc->name, desc->gpio_owner, owner);
-   142			goto out;
-   143		}
-   144	
-   145		if (gpio_range) {
-   146			desc->gpio_owner = owner;
-   147		} else {
-   148			desc->mux_usecount++;
-   149			if (desc->mux_usecount > 1)
-   150				return 0;
-   151	
-   152			desc->mux_owner = owner;
-   153		}
-   154	
-   155		/* Let each pin increase references to this module */
-   156		if (!try_module_get(pctldev->owner)) {
-   157			dev_err(pctldev->dev,
-   158				"could not increase module refcount for pin %d\n",
-   159				pin);
-   160			status = -EINVAL;
-   161			goto out_free_pin;
-   162		}
-   163	
-   164		/*
-   165		 * If there is no kind of request function for the pin we just assume
-   166		 * we got it by default and proceed.
-   167		 */
-   168		if (gpio_range && ops->gpio_request_enable)
-   169			/* This requests and enables a single GPIO pin */
-   170			status = ops->gpio_request_enable(pctldev, gpio_range, pin);
-   171		else if (ops->request)
-   172			status = ops->request(pctldev, pin);
-   173		else
-   174			status = 0;
-   175	
-   176		if (status)
-   177			module_put(pctldev->owner);
-   178	
-   179	out_free_pin:
-   180		if (status) {
-   181			if (gpio_range) {
-   182				desc->gpio_owner = NULL;
-   183			} else {
-   184				desc->mux_usecount--;
-   185				if (!desc->mux_usecount)
-   186					desc->mux_owner = NULL;
-   187			}
-   188		}
-   189	out:
-   190		if (status)
- > 191			dev_err_probe(pctldev->dev, "pin-%d (%s) status %d\n",
- > 192				      pin, owner, status);
-   193	
-   194		return status;
-   195	}
-   196	
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2804  
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2805  static void allegro_buf_queue(struct vb2_buffer *vb)
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2806  {
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2807  	struct allegro_channel *channel = vb2_get_drv_priv(vb->vb2_queue);
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2808  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2809  	struct vb2_queue *q = vb->vb2_queue;
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2810  
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2811  	if (V4L2_TYPE_IS_CAPTURE(q->type) &&
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2812  	    vb2_is_streaming(q) &&
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2813  	    v4l2_m2m_dst_buf_is_last(channel->fh.m2m_ctx)) {
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2814  		unsigned int i;
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2815  
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2816  		for (i = 0; i < vb->num_planes; i++)
+05fd87b8d9a607 drivers/media/platform/allegro-dvt/allegro-core.c Dafna Hirschfeld 2021-12-01  2817  			vb2_set_plane_payload(vb, i, 0);
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2818  
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2819  		vbuf->field = V4L2_FIELD_NONE;
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2820  		vbuf->sequence = channel->csequence++;
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2821  
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02 @2822  		v4l2_m2m_last_buffer_done(channel->fh.m2m_ctx, vbuf);
+0e13f6f6ff9d06 drivers/media/platform/allegro-dvt/allegro-core.c Michael Tretter  2020-12-02  2823  		allegro_channel_eos_event(channel);
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2824  		return;
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2825  	}
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2826  
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2827  	v4l2_m2m_buf_queue(channel->fh.m2m_ctx, vbuf);
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2828  }
+f20387dfd06569 drivers/staging/media/allegro-dvt/allegro-core.c  Michael Tretter  2019-05-28  2829  
+
+:::::: The code at line 2822 was first introduced by commit
+:::::: 0e13f6f6ff9d065cf0aba26a6f4f9c851c92a9d2 media: allegro: remove custom drain state handling
+
+:::::: TO: Michael Tretter <m.tretter@pengutronix.de>
+:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
