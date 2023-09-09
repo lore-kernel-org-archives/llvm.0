@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843EF7E5
-	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 00:37:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D311EC116A5;
-	Sat,  9 Sep 2023 00:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A008EA8
+	for <llvm@lists.linux.dev>; Sat,  9 Sep 2023 00:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ACACC433CB;
+	Sat,  9 Sep 2023 00:38:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694219831;
-	bh=waP6Wsv+uLctdAq/ErHS9ag0S0CbxUZd9rhTZHMiE3U=;
+	s=k20201202; t=1694219895;
+	bh=c7A2T2kDMKnljYsyhWTIiqMgRghvPMAiuvkhE7iublY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FgbstGDga0UZxFPIkFmFh4drjrkKG852zT5NMUFT9bocQKUur4K5YQ4Ds6NWvs1kw
-	 OldRINdfXVEF6mwW3OrtdQdFlNja6mfk2pnwyrmbljLTkmGsGGoEduBp1x/eGJLmqG
-	 Pd2bjQiMDyvP5HML4SGMLyqmZsqHwkb4f7hbCFPnAVNM07+DDWxcH037wyV5W3Yj37
-	 Th2Ydsf1ej3EQLQ3TTebRoeqh5e37CvIFYKJBwX8qmAWr2c1eLo8ku7QG0AKfHVbNM
-	 0RQk2Ep8LU+/0+kjFsRk+kDONva2T/zQ07+/ZmHj3hVHtcWZTNcSAzNg411DYe5YT5
-	 1PmjaKkwIye1g==
+	b=Rb9mC/2+CsKfkIAzADNB1R4kkTNwDxmKWzqS29+2qRxKEARPWcAUzTsnWvAkhHZCP
+	 x3BZn0NJGr0Ice9uUDSdrgP4dYCfh49LmWdqiU3RibccrCuGqGttPJAoU4Xaue0mN+
+	 JRftnN2wZrZeozNf5A9AoQJIXHZJ8TywxGTcb0OCeMcqA7Xjs7UUPJDOVr7guJKUKd
+	 /cCiDy81+CGCPHO2NICaasGhkoDwcxpRr0V+wkLYnK8swOnl+CHcPJwOVANsCGvd+T
+	 YtkzAIsTAFjDKEYgMzEY/mpsXwNyGtLuPKTQBGTFRSo4fsrwbxcCrbbLS1uxSgBJpB
+	 BWGkxzp97dORQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -32,26 +32,27 @@ Cc: Sami Tolvanen <samitolvanen@google.com>,
 	ajones@ventanamicro.com,
 	heiko@sntech.de,
 	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	liaochang1@huawei.com,
 	namcaov@gmail.com,
 	andy.chiu@sifive.com,
-	jszhang@kernel.org,
 	guoren@kernel.org,
-	bjorn@rivosinc.com,
 	alexghiti@rivosinc.com,
-	apatel@ventanamicro.com,
-	masahiroy@kernel.org,
-	greentime.hu@sifive.com,
+	bjorn@rivosinc.com,
 	jeeheng.sia@starfivetech.com,
-	xianting.tian@linux.alibaba.com,
+	jszhang@kernel.org,
+	greentime.hu@sifive.com,
+	masahiroy@kernel.org,
+	apatel@ventanamicro.com,
+	mnissler@rivosinc.com,
 	coelacanthushex@gmail.com,
 	linux-riscv@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.5 28/28] riscv: Add CFI error handling
-Date: Fri,  8 Sep 2023 20:36:02 -0400
-Message-Id: <20230909003604.3579407-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.4 25/25] riscv: Add CFI error handling
+Date: Fri,  8 Sep 2023 20:37:13 -0400
+Message-Id: <20230909003715.3579761-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003604.3579407-1-sashal@kernel.org>
-References: <20230909003604.3579407-1-sashal@kernel.org>
+In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
+References: <20230909003715.3579761-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,7 +61,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.2
+X-stable-base: Linux 6.4.15
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -143,11 +144,11 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  create mode 100644 arch/riscv/kernel/cfi.c
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index bea7b73e895dd..6f16e8a7ec75e 100644
+index 052845384ed38..36dd0390b8257 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -48,6 +48,7 @@ config RISCV
- 	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
+@@ -45,6 +45,7 @@ config RISCV
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
  	select ARCH_USE_MEMTEST
  	select ARCH_USE_QUEUED_RWLOCKS
 +	select ARCH_USES_CFI_TRAPS if CFI_CLANG
@@ -183,7 +184,7 @@ index 0000000000000..56bf9d69d5e38
 +
 +#endif /* _ASM_RISCV_CFI_H */
 diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
-index fce00400c9bcc..06e439eeef9ad 100644
+index 603095c913e37..bbd878d4815ce 100644
 --- a/arch/riscv/include/asm/insn.h
 +++ b/arch/riscv/include/asm/insn.h
 @@ -63,6 +63,7 @@
@@ -202,7 +203,7 @@ index fce00400c9bcc..06e439eeef9ad 100644
  
  /* parts of opcode for RVG*/
  #define RVG_OPCODE_FENCE	0x0f
-@@ -289,6 +291,10 @@ static __always_inline bool riscv_insn_is_c_jalr(u32 code)
+@@ -269,6 +271,10 @@ static __always_inline bool riscv_insn_is_c_jalr(u32 code)
  #define RV_X(X, s, mask)  (((X) >> (s)) & (mask))
  #define RVC_X(X, s, mask) RV_X(X, s, mask)
  
@@ -213,7 +214,7 @@ index fce00400c9bcc..06e439eeef9ad 100644
  #define RV_EXTRACT_RD_REG(x) \
  	({typeof(x) x_ = (x); \
  	(RV_X(x_, RVG_RD_OPOFF, RVG_RD_MASK)); })
-@@ -316,6 +322,10 @@ static __always_inline bool riscv_insn_is_c_jalr(u32 code)
+@@ -296,6 +302,10 @@ static __always_inline bool riscv_insn_is_c_jalr(u32 code)
  	(RV_X(x_, RV_B_IMM_11_OPOFF, RV_B_IMM_11_MASK) << RV_B_IMM_11_OFF) | \
  	(RV_IMM_SIGN(x_) << RV_B_IMM_SIGN_OFF); })
  
@@ -225,10 +226,10 @@ index fce00400c9bcc..06e439eeef9ad 100644
  	({typeof(x) x_ = (x); \
  	(RVC_X(x_, RVC_J_IMM_3_1_OPOFF, RVC_J_IMM_3_1_MASK) << RVC_J_IMM_3_1_OFF) | \
 diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 506cc4a9a45a5..6ac56af42f4a0 100644
+index 153864e4f3996..c173a7cbf4e11 100644
 --- a/arch/riscv/kernel/Makefile
 +++ b/arch/riscv/kernel/Makefile
-@@ -91,6 +91,8 @@ obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
+@@ -90,6 +90,8 @@ obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
  
  obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
  
@@ -321,7 +322,7 @@ index 0000000000000..820158d7a2913
 +	return report_cfi_failure(regs, regs->epc, &target, type);
 +}
 diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index f798c853bede6..19807c4d3805d 100644
+index bd19e885dcec1..8db848e2c244c 100644
 --- a/arch/riscv/kernel/traps.c
 +++ b/arch/riscv/kernel/traps.c
 @@ -21,6 +21,7 @@
@@ -332,7 +333,7 @@ index f798c853bede6..19807c4d3805d 100644
  #include <asm/csr.h>
  #include <asm/processor.h>
  #include <asm/ptrace.h>
-@@ -271,7 +272,8 @@ void handle_break(struct pt_regs *regs)
+@@ -242,7 +243,8 @@ void handle_break(struct pt_regs *regs)
  								== NOTIFY_STOP)
  		return;
  #endif
