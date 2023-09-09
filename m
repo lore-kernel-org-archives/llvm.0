@@ -1,43 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BE815D4;
-	Sat,  9 Sep 2023 05:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2958917CA;
+	Sat,  9 Sep 2023 07:08:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694236792; x=1725772792;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=6RFRvnZEGBESuA+ExdFFFUwuz07LHaNuvmoSb/21WdA=;
-  b=OA7D3Um2sgd6GmfRRHu5vou8LxRay4nhUErBO7qv+oWyua+QUVtxFy34
-   WukplW3Z5X3J8Bt8TyBInUPC8nqa4OTQbp3rOxBO1dj++mkhWdn9azXvD
-   BlpAjakiXr+wp4F79JRkl5+L2kkAPHvNkc+hG2qOc/mnZnplVarYRl9Jv
-   ItHoEmtRHtJAIjPrpKlflY8QTHmRG+yJx/5aSIzas+6+tAN3xNWA2EzPb
-   snFjVV+O35GZtVsa1l6bGScwVLODrnX7UTh9p69Syqk9nz4X1E3e7A8ws
-   LQJ/rGVuG8BDPXJdHAKIYFJ6TsYYx/pGiidPGX+h9ufrAorpeNcoF3JND
+  t=1694243331; x=1725779331;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KrKhDuWr6UX9MAg3f7uKu0qBifumK7xGup2UZw3Ljfg=;
+  b=cRe7xh52G5KCHSNhiruFZmo4/kU/nVdJN/tJT+Pcrw80XfInUToo9mWv
+   GmThHk/SnhJtd906TK8rvFmL0kWOcCUo+9vk5Ll7LUsFEMrfH97dTnjsy
+   f6mb6ZlMXY+6UO7HTI5xPMR+ZDM3qM7TwbvQbfQmnQ/WXYKsEfw2fyVgN
+   izxs6qAkxiNbjZqcZVRidrByeIJVrvLEdNRhsvQZFsE/Z1BnLmxkMGwTo
+   irYDbbQ1FRWj+tUKwzVoBO+P/Zv+NWxWxDemZbbKKiD4s+npkRlpDHziH
+   tLhKmJqNCv9QkoAJb611x4JYoaVXjjif/6iTDDGyUzXeNdJtqsHTPpnPn
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="357259401"
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="444231722"
 X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
-   d="scan'208";a="357259401"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 22:19:46 -0700
+   d="scan'208";a="444231722"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2023 00:08:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="742742152"
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="777827615"
 X-IronPort-AV: E=Sophos;i="6.02,239,1688454000"; 
-   d="scan'208";a="742742152"
+   d="scan'208";a="777827615"
 Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 08 Sep 2023 22:19:45 -0700
+  by orsmga001.jf.intel.com with ESMTP; 09 Sep 2023 00:08:48 -0700
 Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qeqNj-0002x5-0J;
-	Sat, 09 Sep 2023 05:19:43 +0000
-Date: Sat, 9 Sep 2023 13:19:12 +0800
+	id 1qes5G-00032d-0n;
+	Sat, 09 Sep 2023 07:08:46 +0000
+Date: Sat, 9 Sep 2023 15:07:51 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
- kallsyms_on_each_match_symbol: .text+0x908): relocation R_RISCV_PCREL_HI20
- out of range: -524528 is not in [-524288, 524287]; references
- kallsyms_relative_base
-Message-ID: <202309091338.yB6FrBkQ-lkp@intel.com>
+To: Wayne Lin <Wayne.Lin@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, Lyude Paul <lyude@redhat.com>
+Subject: [drm-misc:drm-misc-next 2/2]
+ drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:368:21:
+ warning: variable 'old_payload' is uninitialized when used here
+Message-ID: <202309091509.IBo0CGxg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,48 +48,82 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: Zhen Lei <thunder.leizhen@huawei.com>
-CC: Luis Chamberlain <mcgrof@kernel.org>
-
-Hi Zhen,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   32bf43e4efdb87e0f7e90ba3883e07b8522322ad
-commit: 4dc533e0f2c04174e1ae4aa98e7cffc1c04b9998 kallsyms: Add helper kallsyms_on_each_match_symbol()
-date:   10 months ago
-config: riscv-randconfig-r021-20230908 (https://download.01.org/0day-ci/archive/20230909/202309091338.yB6FrBkQ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309091338.yB6FrBkQ-lkp@intel.com/reproduce)
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   5aa1dfcdf0a429e4941e2eef75b006a8c7a8ac49
+commit: 5aa1dfcdf0a429e4941e2eef75b006a8c7a8ac49 [2/2] drm/mst: Refactor the flow for payload allocation/removement
+config: arm64-randconfig-r034-20230909 (https://download.01.org/0day-ci/archive/20230909/202309091509.IBo0CGxg-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309091509.IBo0CGxg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309091338.yB6FrBkQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309091509.IBo0CGxg-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x908): relocation R_RISCV_PCREL_HI20 out of range: -524528 is not in [-524288, 524287]; references kallsyms_relative_base
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x914): relocation R_RISCV_PCREL_HI20 out of range: -524528 is not in [-524288, 524287]; references kallsyms_seqs_of_names
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x91c): relocation R_RISCV_PCREL_HI20 out of range: -524528 is not in [-524288, 524287]; references kallsyms_offsets
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_names: .text+0x144): relocation R_RISCV_PCREL_HI20 out of range: -524527 is not in [-524288, 524287]; references kallsyms_num_syms
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_names: .text+0x17c): relocation R_RISCV_PCREL_HI20 out of range: -524527 is not in [-524288, 524287]; references kallsyms_seqs_of_names
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
+>> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:368:21: warning: variable 'old_payload' is uninitialized when used here [-Wuninitialized]
+     368 |                                                  new_payload, old_payload);
+         |                                                               ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:344:61: note: initialize the variable 'old_payload' to silence this warning
+     344 |         struct drm_dp_mst_atomic_payload *new_payload, *old_payload;
+         |                                                                    ^
+         |                                                                     = NULL
+   1 warning generated.
+
+
+vim +/old_payload +368 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c
+
+   335	
+   336	bool dm_helpers_dp_mst_send_payload_allocation(
+   337			struct dc_context *ctx,
+   338			const struct dc_stream_state *stream,
+   339			bool enable)
+   340	{
+   341		struct amdgpu_dm_connector *aconnector;
+   342		struct drm_dp_mst_topology_state *mst_state;
+   343		struct drm_dp_mst_topology_mgr *mst_mgr;
+   344		struct drm_dp_mst_atomic_payload *new_payload, *old_payload;
+   345		enum mst_progress_status set_flag = MST_ALLOCATE_NEW_PAYLOAD;
+   346		enum mst_progress_status clr_flag = MST_CLEAR_ALLOCATED_PAYLOAD;
+   347		int ret = 0;
+   348	
+   349		aconnector = (struct amdgpu_dm_connector *)stream->dm_stream_context;
+   350	
+   351		if (!aconnector || !aconnector->mst_root)
+   352			return false;
+   353	
+   354		mst_mgr = &aconnector->mst_root->mst_mgr;
+   355		mst_state = to_drm_dp_mst_topology_state(mst_mgr->base.state);
+   356	
+   357		new_payload = drm_atomic_get_mst_payload_state(mst_state, aconnector->mst_output_port);
+   358	
+   359		if (!enable) {
+   360			set_flag = MST_CLEAR_ALLOCATED_PAYLOAD;
+   361			clr_flag = MST_ALLOCATE_NEW_PAYLOAD;
+   362		}
+   363	
+   364		if (enable) {
+   365			ret = drm_dp_add_payload_part2(mst_mgr, mst_state->base.state, new_payload);
+   366		} else {
+   367			dm_helpers_construct_old_payload(stream->link, mst_state->pbn_div,
+ > 368							 new_payload, old_payload);
+   369			drm_dp_remove_payload_part2(mst_mgr, mst_state, old_payload, new_payload);
+   370		}
+   371	
+   372		if (ret) {
+   373			amdgpu_dm_set_mst_status(&aconnector->mst_status,
+   374				set_flag, false);
+   375		} else {
+   376			amdgpu_dm_set_mst_status(&aconnector->mst_status,
+   377				set_flag, true);
+   378			amdgpu_dm_set_mst_status(&aconnector->mst_status,
+   379				clr_flag, false);
+   380		}
+   381	
+   382		return true;
+   383	}
+   384	
 
 -- 
 0-DAY CI Kernel Test Service
