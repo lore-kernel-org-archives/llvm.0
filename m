@@ -1,170 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D2CA3B;
-	Sun, 10 Sep 2023 00:32:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694305926; x=1725841926;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ogKDOjx2dSxZbUXxCQ9VmGzjND6gVaC8vCUMG/dlN7o=;
-  b=Hxb9YW7hwJz6mYUur5EcqNA+RNuGZRd31cLhzcl82eVbznnrcv/idYQA
-   QdP/aGCtN5NspAIUdOlKg/e2nPoDrMZetKKtNoZOwCuIb7WtDbci+0XMW
-   UVfeEp0pomDTmy7mnkG7CES+P3QyDTg9Drm2iv0dVoX5jg0O8LoCtVjMp
-   w2x6NrpsTrZ5UlQMPWooL0aIov7iYUh2Ge/NRV8JKC3pUpdNqGutq0qn6
-   bDAlv9eICCH2HHKYJS2UVQOg4pPTNdt4Pcu9ATj5wm/asZ+Bwg0lxdU1E
-   O1TDnyBosOAIU7Cw1oVrc4lflcEe4hxMUitxbNqoCmwYsYJU71ZCm1cOV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="368119149"
-X-IronPort-AV: E=Sophos;i="6.02,240,1688454000"; 
-   d="scan'208";a="368119149"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2023 17:32:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="916583516"
-X-IronPort-AV: E=Sophos;i="6.02,240,1688454000"; 
-   d="scan'208";a="916583516"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Sep 2023 17:32:03 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qf8Mr-000464-0J;
-	Sun, 10 Sep 2023 00:32:01 +0000
-Date: Sun, 10 Sep 2023 08:31:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Potapenko <glider@google.com>, dvyukov@google.com,
-	elver@google.com, akpm@linux-foundation.org, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH 2/2] kmsan: prevent optimizations in memcpy tests
-Message-ID: <202309100805.cRHktAYd-lkp@intel.com>
-References: <20230907130642.245222-2-glider@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F8F1377
+	for <llvm@lists.linux.dev>; Sun, 10 Sep 2023 01:51:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694310681;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JS8fPykA/7kQFDdz3v3hqWVTR1wfiFVp6qz3jSxEkpM=;
+	b=BPuE0b+JoKCvbIWb39wa8std4441Jk++iXuMIATByXLTQn3j3qTtClKlPkX8nAp5hGWMKE
+	8ucHLXCqD8cLI/tBx83xT4fNAUA8YgwDRY1i158+aTd8fP/8IzzohPouY3JHD6KaMhk2XE
+	SuUiigkb1iiHCKw0hiGwRZNBq/9fhCI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-439-kiXoYOV2NhCRoLHjFc7n1Q-1; Sat, 09 Sep 2023 21:51:17 -0400
+X-MC-Unique: kiXoYOV2NhCRoLHjFc7n1Q-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DF8568AA803
+	for <llvm@lists.linux.dev>; Sun, 10 Sep 2023 01:51:16 +0000 (UTC)
+Received: from [172.64.4.20] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BAE20404119;
+	Sun, 10 Sep 2023 01:51:16 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
+ (6.5.0, mainline.kernel.org-clang, 6b41fb27)
+Date: Sun, 10 Sep 2023 01:51:16 -0000
+To: zlang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230907130642.245222-2-glider@google.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <21117.123090921511700209@us-mta-439.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexander,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.5 next-20230908]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Potapenko/kmsan-prevent-optimizations-in-memcpy-tests/20230907-210817
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230907130642.245222-2-glider%40google.com
-patch subject: [PATCH 2/2] kmsan: prevent optimizations in memcpy tests
-config: x86_64-buildonly-randconfig-006-20230910 (https://download.01.org/0day-ci/archive/20230910/202309100805.cRHktAYd-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230910/202309100805.cRHktAYd-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309100805.cRHktAYd-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/kmsan/kmsan_test.c:414:16: error: passing 'volatile void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           return memcpy(dst, src, size);
-                         ^~~
-   arch/x86/include/asm/string_64.h:18:27: note: passing argument to parameter 'to' here
-   extern void *memcpy(void *to, const void *from, size_t len);
-                             ^
->> mm/kmsan/kmsan_test.c:414:21: error: passing 'const volatile void *' to parameter of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           return memcpy(dst, src, size);
-                              ^~~
-   arch/x86/include/asm/string_64.h:18:43: note: passing argument to parameter 'from' here
-   extern void *memcpy(void *to, const void *from, size_t len);
-                                             ^
->> mm/kmsan/kmsan_test.c:468:21: error: passing 'volatile int *' to parameter of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           kmsan_check_memory(&uninit_src, sizeof(uninit_src));
-                              ^~~~~~~~~~~
-   include/linux/kmsan-checks.h:47:37: note: passing argument to parameter 'address' here
-   void kmsan_check_memory(const void *address, size_t size);
-                                       ^
-   3 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +414 mm/kmsan/kmsan_test.c
+Kernel information:
+    Commit message: Merge tag 'driver-core-6.6-rc1-2' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/gregkh/driver-core
 
-   409	
-   410	/* Prevent the compiler from inlining a memcpy() call. */
-   411	static noinline void *memcpy_noinline(volatile void *dst,
-   412					      const volatile void *src, size_t size)
-   413	{
- > 414		return memcpy(dst, src, size);
-   415	}
-   416	
-   417	/* Test case: ensure that memcpy() correctly copies initialized values. */
-   418	static void test_init_memcpy(struct kunit *test)
-   419	{
-   420		EXPECTATION_NO_REPORT(expect);
-   421		volatile int src;
-   422		volatile int dst = 0;
-   423	
-   424		src = 1;
-   425		kunit_info(
-   426			test,
-   427			"memcpy()ing aligned initialized src to aligned dst (no reports)\n");
-   428		memcpy_noinline((void *)&dst, (void *)&src, sizeof(src));
-   429		kmsan_check_memory((void *)&dst, sizeof(dst));
-   430		KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-   431	}
-   432	
-   433	/*
-   434	 * Test case: ensure that memcpy() correctly copies uninitialized values between
-   435	 * aligned `src` and `dst`.
-   436	 */
-   437	static void test_memcpy_aligned_to_aligned(struct kunit *test)
-   438	{
-   439		EXPECTATION_UNINIT_VALUE_FN(expect, "test_memcpy_aligned_to_aligned");
-   440		volatile int uninit_src;
-   441		volatile int dst = 0;
-   442	
-   443		kunit_info(
-   444			test,
-   445			"memcpy()ing aligned uninit src to aligned dst (UMR report)\n");
-   446		memcpy_noinline((void *)&dst, (void *)&uninit_src, sizeof(uninit_src));
-   447		kmsan_check_memory((void *)&dst, sizeof(dst));
-   448		KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-   449	}
-   450	
-   451	/*
-   452	 * Test case: ensure that memcpy() correctly copies uninitialized values between
-   453	 * aligned `src` and unaligned `dst`.
-   454	 *
-   455	 * Copying aligned 4-byte value to an unaligned one leads to touching two
-   456	 * aligned 4-byte values. This test case checks that KMSAN correctly reports an
-   457	 * error on the first of the two values.
-   458	 */
-   459	static void test_memcpy_aligned_to_unaligned(struct kunit *test)
-   460	{
-   461		EXPECTATION_UNINIT_VALUE_FN(expect, "test_memcpy_aligned_to_unaligned");
-   462		volatile int uninit_src;
-   463		volatile char dst[8] = { 0 };
-   464	
-   465		kunit_info(
-   466			test,
-   467			"memcpy()ing aligned uninit src to unaligned dst (UMR report)\n");
- > 468		kmsan_check_memory(&uninit_src, sizeof(uninit_src));
-   469		memcpy_noinline((void *)&dst[1], (void *)&uninit_src,
-   470				sizeof(uninit_src));
-   471		kmsan_check_memory((void *)dst, 4);
-   472		KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-   473	}
-   474	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/103695
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9459016
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
