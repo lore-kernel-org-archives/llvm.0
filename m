@@ -1,219 +1,231 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C13AC129;
-	Mon, 11 Sep 2023 10:05:37 +0000 (UTC)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1qfdnT-0005NQ-Cf; Mon, 11 Sep 2023 12:05:35 +0200
-Message-ID: <859c6dde-37ad-492e-baa0-4ea100d8381f@leemhuis.info>
-Date: Mon, 11 Sep 2023 12:05:34 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507BDC8C3;
+	Mon, 11 Sep 2023 11:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694431503; x=1725967503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mQ18HF8CxAHMvt6q6+349EE7f3bgZdnvZXZpld8oC/Y=;
+  b=SxuAzOegGD3yZXLxZhH3gpmNqNzQ5Ybz+pId+sDMWtzCEF+2THA7vxU4
+   tEBagF7qj+bPn5SEh39qZOcPfYR9Ra7m9I54sTbJAs2RwRIR5ZfZLvANQ
+   INSkJJy5ZPYQ/32A035E0kqKkLZ/c6buagAJ4H3GqfuS2EqPghj0exLQh
+   lwxMVRcZqqe3rX02NqI67wpafjyObcNF/i4E3NosnbYxEghK5l+8pQzMx
+   oqi+6TT7oi2/wsrUx58UzgXgNI/2mdFHBWu4MVS7kuhVqlSftydny3ae4
+   o77LjN0QAlnHqS0eUgS7fg0RvqZLdExpNRiKN1VYVlHp9Uwg1meiElU7K
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="363078869"
+X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
+   d="scan'208";a="363078869"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:25:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="719958933"
+X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
+   d="scan'208";a="719958933"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 11 Sep 2023 04:25:00 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qff2I-00068z-0F;
+	Mon, 11 Sep 2023 11:24:58 +0000
+Date: Mon, 11 Sep 2023 19:24:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Yakunin, Dmitry (Nebius)" <zeil@nebius.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 1/3] cgroup: list all subsystem states in debugfs
+ files
+Message-ID: <202309111928.paKg0L1X-lkp@intel.com>
+References: <20230911075437.74027-2-zeil@nebius.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Content-Language: en-US, de-DE
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-To: Shreeya Patel <shreeya.patel@collabora.com>,
- Linux regressions mailing list <regressions@lists.linux.dev>,
- Masahiro Yamada <masahiroy@kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
- =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
- Michal Marek <michal.lkml@markovi.net>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
- denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
- kernelci@lists.linux.dev, Collabora Kernel ML <kernel@collabora.com>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh>
- <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
- <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
- <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
- <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
- <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
- <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
- <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
- <26aa6f92-2376-51a4-bbdc-abbbd62c23d2@leemhuis.info>
-In-Reply-To: <26aa6f92-2376-51a4-bbdc-abbbd62c23d2@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1694426738;169257d2;
-X-HE-SMSGID: 1qfdnT-0005NQ-Cf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230911075437.74027-2-zeil@nebius.com>
 
-On 29.08.23 13:28, Linux regression tracking (Thorsten Leemhuis) wrote:
-> On 11.07.23 13:16, Shreeya Patel wrote:
->> On 10/07/23 17:39, Linux regression tracking (Thorsten Leemhuis) wrote:
->>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
->>> for once, to make this easily accessible to everyone.
->>>
->>> Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
->>> progress made to address this? Or is this maybe (accidentally?) fixed
->>> with 6.5-rc1?
->>
->> I still see the regression happening so it doesn't seem to be fixed.
->> https://linux.kernelci.org/test/case/id/64ac675a8aebf63753bb2a8c/
->>
->> Masahiro had submitted a fix for this issue here.
->>
->> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
->>
->> But I don't see any movement there. Masahiro, are you planning to send a
->> v2 for it?
-> 
-> That was weeks ago and we didn't get a answer. :-/ Was this fixed in
-> between? Doesn't look like it from here, but I might be missing something.
+Hi Dmitry,
 
-Still no reply. :-/
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Shreeya Patel, does the problem still happen with 6.6-rc1 and do you
-still want to see it fixed? In that case our only option to get things
-rolling again might be to involve Linus, unless someone in the CC list
-has a idea to resolve this. Might also be good to know if reverting the
-culprit fixes the problem.
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master v6.6-rc1 next-20230911]
+[cannot apply to tj-cgroup/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yakunin-Dmitry-Nebius/cgroup-list-all-subsystem-states-in-debugfs-files/20230911-155716
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230911075437.74027-2-zeil%40nebius.com
+patch subject: [RFC PATCH 1/3] cgroup: list all subsystem states in debugfs files
+config: hexagon-randconfig-002-20230911 (https://download.01.org/0day-ci/archive/20230911/202309111928.paKg0L1X-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230911/202309111928.paKg0L1X-lkp@intel.com/reproduce)
 
-#regzbot poke
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309111928.paKg0L1X-lkp@intel.com/
 
->>> On 20.06.23 06:19, Masahiro Yamada wrote:
->>>> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
->>>> <shreeya.patel@collabora.com> wrote:
->>>>> On 24/05/23 02:57, Nick Desaulniers wrote:
->>>>>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
->>>>>> <shreeya.patel@collabora.com> wrote:
->>>>>>> Hi Nick and Masahiro,
->>>>>>>
->>>>>>> On 23/05/23 01:22, Nick Desaulniers wrote:
->>>>>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH
->>>>>>>> <gregkh@linuxfoundation.org> wrote:
->>>>>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
->>>>>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers
->>>>>>>>>> <ndesaulniers@google.com> wrote:
->>>>>>>>>>> It could be; if the link order was changed, it's possible that
->>>>>>>>>>> this
->>>>>>>>>>> target may be hitting something along the lines of:
->>>>>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the
->>>>>>>>>>> "static
->>>>>>>>>>> initialization order fiasco"
->>>>>>>>>>>
->>>>>>>>>>> I'm struggling to think of how this appears in C codebases, but I
->>>>>>>>>>> swear years ago I had a discussion with GKH (maybe?) about
->>>>>>>>>>> this. I
->>>>>>>>>>> think I was playing with converting Kbuild to use Ninja rather
->>>>>>>>>>> than
->>>>>>>>>>> Make; the resulting kernel image wouldn't boot because I had
->>>>>>>>>>> modified
->>>>>>>>>>> the order the object files were linked in.  If you were to
->>>>>>>>>>> randomly
->>>>>>>>>>> shuffle the object files in the kernel, I recall some hazard
->>>>>>>>>>> that may
->>>>>>>>>>> prevent boot.
->>>>>>>>>> I thought that was specifically a C++ problem? But then again, the
->>>>>>>>>> kernel docs explicitly say that the ordering of obj-y goals in
->>>>>>>>>> kbuild is
->>>>>>>>>> significant in some instances [1]:
->>>>>>>>> Yes, it matters, you can not change it.  If you do, systems will
->>>>>>>>> break.
->>>>>>>>> It is the only way we have of properly ordering our init calls
->>>>>>>>> within
->>>>>>>>> the same "level".
->>>>>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
->>>>>>>>
->>>>>>>> (There's a joke in there similar to the use of regexes to solve a
->>>>>>>> problem resulting in two new problems; initcalls have levels for
->>>>>>>> ordering, but we still have (unexpressed) dependencies between calls
->>>>>>>> of the same level; brittle!).
->>>>>>>>
->>>>>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
->>>>>>>>
->>>>>>>> Ricardo,
->>>>>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
->>>>>>>> mentions that there's a kernel command line param `initcall_debug`.
->>>>>>>> Perhaps that can be used to see if
->>>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
->>>>>>>> ordering, resulting in a config that cannot boot?
->>>>>>> Here are the links to Lava jobs ran with initcall_debug added to the
->>>>>>> kernel command line.
->>>>>>>
->>>>>>> 1. Where regression happens
->>>>>>> (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
->>>>>>> https://lava.collabora.dev/scheduler/job/10417706
->>>>>>> <https://lava.collabora.dev/scheduler/job/10417706>
->>>>>>>
->>>>>>> 2. With a revert of the commit
->>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926
->>>>>>> https://lava.collabora.dev/scheduler/job/10418012
->>>>>>> <https://lava.collabora.dev/scheduler/job/10418012>
->>>>>> Thanks!
->>>>>>
->>>>>> Yeah, I can see a diff in the initcall ordering as a result of
->>>>>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
->>>>>>
->>>>>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
->>>>>>
->>>>>> Not just different orderings, but some initcalls seem unique to the
->>>>>> before vs. after, which is troubling. (example init_events and
->>>>>> init_fs_sysctls respectively)
->>>>>>
->>>>>> That isn't conclusive evidence that changes to initcall ordering are
->>>>>> to blame, but I suspect confirming that precisely to be very very time
->>>>>> consuming.
->>>>>>
->>>>>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
->>>>>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
->>>>>> mainline.
->>>>> I'm not sure if you followed the conversation but we are still seeing
->>>>> this regression with the latest kernel builds and would like to know if
->>>>> you plan to revert 5750121ae738?
->>>>
->>>> Reverting 5750121ae738 does not solve the issue
->>>> because the issue happens even before 5750121ae738.
->>>> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
->>>> fails to boot in the same way.
->>>>
->>>> The revert would hide the issue on a particular build setup.
->>>>
->>>>
->>>> I submitted a patch to more pin-point the issue.
->>>> Let's see how it goes.
->>>> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
->>>>
->>>>
->>>> (BTW, the initcall order is unrelated)
->>>>
->>>>
->>>>
->>>>
->>>>
->>>>>
->>>>> Thanks,
->>>>> Shreeya Patel
->>>>>
->>>>>>> Thanks,
->>>>>>> Shreeya Patel
->>>>>>>
->>>> -- 
->>>> Best Regards
->>>> Masahiro Yamada
->>>>
->>>>
->>
->>
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/cgroup/cgroup.c:31:
+   In file included from kernel/cgroup/cgroup-internal.h:5:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/cgroup/cgroup.c:31:
+   In file included from kernel/cgroup/cgroup-internal.h:5:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/cgroup/cgroup.c:31:
+   In file included from kernel/cgroup/cgroup-internal.h:5:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> kernel/cgroup/cgroup.c:7078:7: warning: no previous prototype for function 'css_debugfs_seqfile_start' [-Wmissing-prototypes]
+    7078 | void *css_debugfs_seqfile_start(struct seq_file *m, loff_t *pos)
+         |       ^
+   kernel/cgroup/cgroup.c:7078:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    7078 | void *css_debugfs_seqfile_start(struct seq_file *m, loff_t *pos)
+         | ^
+         | static 
+>> kernel/cgroup/cgroup.c:7090:7: warning: no previous prototype for function 'css_debugfs_seqfile_next' [-Wmissing-prototypes]
+    7090 | void *css_debugfs_seqfile_next(struct seq_file *m, void *v, loff_t *pos)
+         |       ^
+   kernel/cgroup/cgroup.c:7090:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    7090 | void *css_debugfs_seqfile_next(struct seq_file *m, void *v, loff_t *pos)
+         | ^
+         | static 
+>> kernel/cgroup/cgroup.c:7101:6: warning: no previous prototype for function 'css_debugfs_seqfile_stop' [-Wmissing-prototypes]
+    7101 | void css_debugfs_seqfile_stop(struct seq_file *m, void *v)
+         |      ^
+   kernel/cgroup/cgroup.c:7101:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    7101 | void css_debugfs_seqfile_stop(struct seq_file *m, void *v)
+         | ^
+         | static 
+>> kernel/cgroup/cgroup.c:7106:5: warning: no previous prototype for function 'css_debugfs_seqfile_show' [-Wmissing-prototypes]
+    7106 | int css_debugfs_seqfile_show(struct seq_file *m, void *v)
+         |     ^
+   kernel/cgroup/cgroup.c:7106:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    7106 | int css_debugfs_seqfile_show(struct seq_file *m, void *v)
+         | ^
+         | static 
+   10 warnings generated.
+
+
+vim +/css_debugfs_seqfile_start +7078 kernel/cgroup/cgroup.c
+
+  7076	
+  7077	#ifdef CONFIG_DEBUG_FS
+> 7078	void *css_debugfs_seqfile_start(struct seq_file *m, loff_t *pos)
+  7079	{
+  7080		struct cgroup_subsys *ss = m->private;
+  7081		struct cgroup_subsys_state *css;
+  7082		int id = *pos;
+  7083	
+  7084		rcu_read_lock();
+  7085		css = idr_get_next(&ss->css_idr, &id);
+  7086		*pos = id;
+  7087		return css;
+  7088	}
+  7089	
+> 7090	void *css_debugfs_seqfile_next(struct seq_file *m, void *v, loff_t *pos)
+  7091	{
+  7092		struct cgroup_subsys *ss = m->private;
+  7093		struct cgroup_subsys_state *css;
+  7094		int id = *pos + 1;
+  7095	
+  7096		css = idr_get_next(&ss->css_idr, &id);
+  7097		*pos = id;
+  7098		return css;
+  7099	}
+  7100	
+> 7101	void css_debugfs_seqfile_stop(struct seq_file *m, void *v)
+  7102	{
+  7103		rcu_read_unlock();
+  7104	}
+  7105	
+> 7106	int css_debugfs_seqfile_show(struct seq_file *m, void *v)
+  7107	{
+  7108		struct cgroup_subsys *ss = m->private;
+  7109		struct cgroup_subsys_state *css = v;
+  7110		/* data is NULL for root cgroup_subsys_state */
+  7111		struct percpu_ref_data *data = css->refcnt.data;
+  7112		size_t buflen;
+  7113		char *buf;
+  7114		int len;
+  7115	
+  7116		seq_printf(m, "css=%pK cgroup=%pK id=%d ino=%lu flags=%#x refcnt=%lu path=",
+  7117			   css, css->cgroup, css->id, cgroup_ino(css->cgroup),
+  7118			   css->flags, data ? atomic_long_read(&data->count) : 0);
+  7119	
+  7120		buflen = seq_get_buf(m, &buf);
+  7121		if (buf) {
+  7122			len = cgroup_path(css->cgroup, buf, buflen);
+  7123			seq_commit(m, len < buflen ? len : -1);
+  7124		}
+  7125	
+  7126		if (ss->css_dump) {
+  7127			seq_puts(m, " -- ");
+  7128			ss->css_dump(css, m);
+  7129		}
+  7130	
+  7131		seq_putc(m, '\n');
+  7132		return 0;
+  7133	}
+  7134	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
