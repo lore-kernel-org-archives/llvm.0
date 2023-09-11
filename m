@@ -1,194 +1,201 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1210F23D9
-	for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 20:49:33 +0000 (UTC)
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-655e49717c2so10462136d6.0
-        for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 13:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694465373; x=1695070173; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uk1XDmqFwXUmTLSDlfzOoXD9AdaNAh9AxlQYo7gmX+U=;
-        b=i8hyn6bpMkTmIqALqdb4QEd6GXFXsDqLp4JnFRIs/uS9y+CkaM5aNl1PHkd2Vzzy48
-         aWj4eZlmTaXvvHwKyrQh9HPOjepCg+wI4bAyEZVRXyUQcQiDes+/60qF+zi3AzqOBTN/
-         U9GMr1Er7rTZiukzWcGpzy2xphf1EGRAz3RFtqBK59F6L65HLlHhLONX5VntVvjoQzYR
-         D2jUElJO9aUfZ3vmdgW4lfOT+Xzjkgce9/pLDW5ay+iIGYbNk6vxLxbg7hodTWOvNAQi
-         iED3vtq7QqHRSZqwfnLu8aD/fjyHhJBnO7uoZcvHKk8eLq63GBwPtF6e9udkHI5NBdNH
-         rR0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694465373; x=1695070173;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uk1XDmqFwXUmTLSDlfzOoXD9AdaNAh9AxlQYo7gmX+U=;
-        b=kuGaT6HcHs0sPe7wIRSNpJFsXYL8OjRLTD+QUghRk/c3od21YYo2igSagjMddvXhUH
-         0Fgg/lEJBj1TgzpAtMdiLG05iQ/To29ypzjWBY7e2RC1Q4pN4TuIJPwHyFqR2kUgY1xc
-         j5r6IC4BsbzwwktPGzkOU3elDzlRVLdBR3bz3yW7ph683gT3E57cbJ2Js0qd6VlJeR4A
-         Jr5mguvwn6dAjzbHBNHmp8aB34Z2zmhqsQQEEeL1QEXY+WZeevs9yCAwf3U7uqhHtlls
-         +tr1TsE82lIOIDXuVRtkCI0aZ+wzTrRCdmgh1sG8piuRIG4Np6qEi+DO7d1PLiNrxZ+C
-         Zxng==
-X-Gm-Message-State: AOJu0YyVBNL+65jBerNWkzWHhxffuodMXCbAiFComFwnBQQCWzI3i9k4
-	fx+FfZW4EL3imyVApUeubQUpxf7SN5yij4MmaK3/gw==
-X-Google-Smtp-Source: AGHT+IHyaS9QKpap21B51umX64WFD1kwW1xpsmjerzMmTR5YKpb3rU4yHxt08JSEW/yD0p6ZFSUJGrDbdT7FWwaJzkc=
-X-Received: by 2002:a0c:efce:0:b0:63d:6138:1027 with SMTP id
- a14-20020a0cefce000000b0063d61381027mr10551959qvt.42.1694465372796; Mon, 11
- Sep 2023 13:49:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419838C08;
+	Mon, 11 Sep 2023 22:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694470134; x=1726006134;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W/uyQm7bKFLaA8kTTensqk8xGU67xd00d8UbqkoUevA=;
+  b=EWdr2FPspFhoQSlbS33ogXhtwNBbthAQAUMzW6hemayIs2naZ5x3eZDd
+   KsAjvCWqtQK0DRvmDYL12pY9FCAQXedFqhUHHrrDG5ZjgFHw5d10RCsV0
+   bHxYU13Tf30miUsG/wyU6Czsmh1fjGSD0egflFWssBdEN61POyETFuLVn
+   wRWeTCk6fQyOAd+tWi331Zse7ozgafIHDTeC7ZwmufMfdZhTy6BNVpHah
+   LQRuBn4pYIrvCK0ETwE+ZUD0VinHoUE+XG2CYdZrzkRlfrh3HmqMwfMtK
+   8SuYT8KsbjaEe8hMfqX5OSsH5pbqmGpaULSm6dSyeikr/zsISYSL3ZW09
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="464589454"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="464589454"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 15:08:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="720143377"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="720143377"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 11 Sep 2023 15:08:50 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qfp5M-0006n8-14;
+	Mon, 11 Sep 2023 22:08:48 +0000
+Date: Tue, 12 Sep 2023 06:08:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Samuel Holland <samuel@sholland.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	linux-riscv@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH 7/7] riscv: mm: Combine the SMP and non-SMP TLB flushing
+ code
+Message-ID: <202309120544.bc0uet1N-lkp@intel.com>
+References: <20230909201727.10909-8-samuel@sholland.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230905-missingvardecl2-init-main-c-v2-1-08498a9cf740@google.com>
- <CAKwvOd=uqAf3bX=5FTQ2JdvLmN7m4rS55cXuT01xbRqBN21NaQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=uqAf3bX=5FTQ2JdvLmN7m4rS55cXuT01xbRqBN21NaQ@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 11 Sep 2023 13:49:22 -0700
-Message-ID: <CAKwvOd=er2cLyzz2B-dAeR1mFi8YkN5ouuK4-qxhsCmEdJyqBA@mail.gmail.com>
-Subject: Re: [PATCH v2] init: fix -Wmissing-variable-declarations clang warning
-To: Justin Stitt <justinstitt@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
-	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Bill Wendling <morbo@google.com>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230909201727.10909-8-samuel@sholland.org>
 
-On Mon, Sep 11, 2023 at 1:46=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Tue, Sep 5, 2023 at 3:43=E2=80=AFPM Justin Stitt <justinstitt@google.c=
-om> wrote:
-> >
-> > When building x86/defconfig with Clang-18 I encounter the following war=
-ning:
-> > | init/main.c:189:13: warning: no previous extern declaration for non-s=
-tatic variable 'envp_init' [-Wmissing-variable-declarations]
-> > |   189 | const char *envp_init[MAX_INIT_ENVS+2] =3D { "HOME=3D/", "TER=
-M=3Dlinux", NULL, };
-> > | init/main.c:189:7: note: declare 'static' if the variable is not inte=
-nded to be used outside of this translation unit
-> > |   189 | const char *envp_init[MAX_INIT_ENVS+2] =3D { "HOME=3D/", "TER=
-M=3Dlinux", NULL, };
-> >
-> > Make `envp_init` static and provide `handle_initrd` its own copy.
-> >
-> > This silences the warning and makes the code more readable as you no
-> > longer have to track down extern definitions inside of `handle_initrd`.
-> > It is now more self-contained.
->
-> But this is now creating duplicate string arrays in the kernel image.
->
-> Why can't this be:
-> 1. declared in include/linux/initrd.h
-> 2. defined in init/main.c
-> 3. referenced in init/do_mounts.c
->
-> The extern declaration in init/do_mounts_initrd.c isn't even correct!
-> It's missing a `const`! That's the kind of monkey business this
-> warning is trying to help avoid. C has headers for this reason, let's
-> use them.
->
-> Perhaps users of call_usermodehelper_setup need an update, or
-> envp_init actually should not be const.
+Hi Samuel,
 
-I prefer v1 as the basis; though as kbuild test robot noted to you,
-there are other references to envp_init that now need to be cleaned up
-in addition.
+kernel test robot noticed the following build errors:
 
-When you say you build tested v1, I assume you only built init/main.o
-and not vmlinux. Make sure to build test ALL files which refer to
-variables you've modified.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.6-rc1 next-20230911]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-call_usermodehelper_setup and its callers either need to be cleaned
-up, or we should consider dropping const.
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/riscv-Apply-SiFive-CIP-1200-workaround-to-single-ASID-sfence-vma/20230910-042028
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230909201727.10909-8-samuel%40sholland.org
+patch subject: [PATCH 7/7] riscv: mm: Combine the SMP and non-SMP TLB flushing code
+config: riscv-randconfig-r005-20230912 (https://download.01.org/0day-ci/archive/20230912/202309120544.bc0uet1N-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309120544.bc0uet1N-lkp@intel.com/reproduce)
 
->
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1920
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > ---
-> > The kernel test robot didn't like v1 of this patch and I prefer Kees'
-> > approach to simplifying this code anyways so I'm sending this v2.
-> > Hopefully the CI builds clean (as I am locally using their repro).
-> >
-> > Changes in v2:
-> > - Make envp_init static and provide handle_initrd() with a copy (thanks=
- Kees)
-> > - Rebase onto mainline (2dde18cd1d8fa)
-> > - Link to v1: https://lore.kernel.org/r/20230830-missingvardecl2-init-m=
-ain-c-v1-1-59007a637259@google.com
-> > ---
-> > Note: build-tested only.
-> >
-> > It should be noted that `handle_initrd` has been marked as deprecated
-> > and perhaps the entire thing can be removed as per it's own message:
-> > | using deprecated initrd support, will be removed in 2021.
-> > ---
-> >  init/do_mounts_initrd.c | 4 ++--
-> >  init/main.c             | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/init/do_mounts_initrd.c b/init/do_mounts_initrd.c
-> > index 425f4bcf4b77..154bd0de85a6 100644
-> > --- a/init/do_mounts_initrd.c
-> > +++ b/init/do_mounts_initrd.c
-> > @@ -87,7 +87,7 @@ static void __init handle_initrd(char *root_device_na=
-me)
-> >  {
-> >         struct subprocess_info *info;
-> >         static char *argv[] =3D { "linuxrc", NULL, };
-> > -       extern char *envp_init[];
-> > +       static char *envp[] =3D { "HOME=3D/", "TERM=3Dlinux", NULL, };
-> >         int error;
-> >
-> >         pr_warn("using deprecated initrd support, will be removed in 20=
-21.\n");
-> > @@ -100,7 +100,7 @@ static void __init handle_initrd(char *root_device_=
-name)
-> >         init_mkdir("/old", 0700);
-> >         init_chdir("/old");
-> >
-> > -       info =3D call_usermodehelper_setup("/linuxrc", argv, envp_init,
-> > +       info =3D call_usermodehelper_setup("/linuxrc", argv, envp,
-> >                                          GFP_KERNEL, init_linuxrc, NULL=
-, NULL);
-> >         if (!info)
-> >                 return;
-> > diff --git a/init/main.c b/init/main.c
-> > index ad920fac325c..9a473107bb8f 100644
-> > --- a/init/main.c
-> > +++ b/init/main.c
-> > @@ -186,7 +186,7 @@ static int __init set_reset_devices(char *str)
-> >  __setup("reset_devices", set_reset_devices);
-> >
-> >  static const char *argv_init[MAX_INIT_ARGS+2] =3D { "init", NULL, };
-> > -const char *envp_init[MAX_INIT_ENVS+2] =3D { "HOME=3D/", "TERM=3Dlinux=
-", NULL, };
-> > +static const char *envp_init[MAX_INIT_ENVS+2] =3D { "HOME=3D/", "TERM=
-=3Dlinux", NULL, };
-> >  static const char *panic_later, *panic_param;
-> >
-> >  static bool __init obsolete_checksetup(char *line)
-> >
-> > ---
-> > base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-> > change-id: 20230830-missingvardecl2-init-main-c-93dc1013ff8a
-> >
-> > Best regards,
-> > --
-> > Justin Stitt <justinstitt@google.com>
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309120544.bc0uet1N-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:117:
+>> arch/riscv/include/asm/tlbflush.h:60:2: error: call to undeclared function 'flush_tlb_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      60 |         flush_tlb_all();
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     100 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:1075:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
 
 
+vim +/flush_tlb_all +60 arch/riscv/include/asm/tlbflush.h
 
---=20
-Thanks,
-~Nick Desaulniers
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10  55  
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10  56  /* Flush a range of kernel pages */
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10  57  static inline void flush_tlb_kernel_range(unsigned long start,
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10  58  	unsigned long end)
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10  59  {
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10 @60  	flush_tlb_all();
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10  61  }
+fab957c11efe2f4 Palmer Dabbelt 2017-07-10  62  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
