@@ -1,111 +1,257 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f77.google.com (mail-pj1-f77.google.com [209.85.216.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683EF5699;
-	Mon, 11 Sep 2023 23:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694473315; x=1726009315;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SJjqIEs3BpehUYyropfNGyc1F1+vwavmpmiIpcemogE=;
-  b=f+UePbcwjAtSvy875p8zG8sXo/OIiPuTrUk0FkJ0xs/gOIVKa/ACLVvX
-   AAHY1bpUb4szEE2DW0T485WEwRmzSyFoAvyUTATdoDp/vOl6NnaZG+6JT
-   OebM0sdnwDkk3hxp69yq6eFQEQ4DnENS6luZ7fEbUXF7YI75BEvKPxqaw
-   Or9ZOnra9+wXpIqrPcQ4tn7PnZvXZbxkCGOH6GHT095OmshPS7ayY2er5
-   6Vx39syoxoT+E0RVtRGiIxGH57Lhcjd9GIQbYMZsMu5OfgkFBZtAV11zP
-   EJv7W0D4Bb9wDflxRjg1L/kEGtoqe6ITNwiKOSJTwcZKYqaO97OQvQVQA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="382039406"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="382039406"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 16:01:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="720162063"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="720162063"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 11 Sep 2023 16:01:53 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qfpuh-0006qU-0e;
-	Mon, 11 Sep 2023 23:01:51 +0000
-Date: Tue, 12 Sep 2023 07:01:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:pr/186 9/9] drivers/gpu/drm/apple/dcp.c:455:2: warning:
- add explicit braces to avoid dangling else
-Message-ID: <202309120640.fKUAz3Jc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6EF8C1F
+	for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 23:29:59 +0000 (UTC)
+Received: by mail-pj1-f77.google.com with SMTP id 98e67ed59e1d1-26d1ec91c8aso6284819a91.2
+        for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 16:29:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694474999; x=1695079799;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cLNqe0waU0vWs6WPgQQQfHWM0cAFJrnUfdwq9iT01aw=;
+        b=lagmIqBUtOhUkdULU4eOy3MmdsgzXjIMr+zdrZfwRdfriWW0QPEfHP+kGRcU2tOQxa
+         ku0tJKbumion/2QoxDjNwqh6CkpyGmJxg9wxhhaXHX8XI0wtSDrW/M+r3RV7j6DhtbPL
+         DaomWoiLlnaD2YbqqTQr8IJmrG8g5N2egkxbFUpsAthaSSXxoL6khzQSbjalontrP71H
+         JmhmBEtLrpeVrrtW66ky/sPB6ycN+/CI4BbXinu2oOIhSguGWPIPBts/oUe+79GT9SGY
+         oZpmJOdmjxdtgxBi6sGPXi6TpQrcUz3O5kq5M81Zc2tm7FaPjYitjyLhlknW+v2oXOOP
+         Omaw==
+X-Gm-Message-State: AOJu0YwerFOwSTRGP98FJMiLLBTHYjZ94goEEsmNPR+tTMqZIiwHXqxz
+	trvGtkvw3XjU2E/pzJbxpA+kyNOPTWZD9nl10X0xuVYtXNtg
+X-Google-Smtp-Source: AGHT+IFs1yrquwoHqfPZkpXHNGT+N/Migq2QN9BSa8CWZDf0+l+v+7weWgR6gLRv0Phkhw6svkF187lCi8wo/7A2IjNId5bUtybg
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a17:90b:100a:b0:268:776:e26 with SMTP id
+ gm10-20020a17090b100a00b0026807760e26mr2939684pjb.5.1694474999131; Mon, 11
+ Sep 2023 16:29:59 -0700 (PDT)
+Date: Mon, 11 Sep 2023 16:29:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006777d506051db4fd@google.com>
+Subject: [syzbot] [ntfs3?] KASAN: slab-use-after-free Read in ntfs_write_bh
+From: syzbot <syzbot+bc79f8d1898960d41073@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/AsahiLinux/linux pr/186
-head:   4030a6363f99fa38544b1556016ce71676406070
-commit: 4030a6363f99fa38544b1556016ce71676406070 [9/9] drm: apple: Update supported firmware versions to 12.3 and 13.5
-config: arm64-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230912/202309120640.fKUAz3Jc-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309120640.fKUAz3Jc-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309120640.fKUAz3Jc-lkp@intel.com/
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    0bb80ecc33a8 Linux 6.6-rc1
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d3b308680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df91a3034fe3f122
+dashboard link: https://syzkaller.appspot.com/bug?extid=bc79f8d1898960d41073
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
->> drivers/gpu/drm/apple/dcp.c:455:2: warning: add explicit braces to avoid dangling else [-Wdangling-else]
-           else if (strncmp(compat_str, "13.5.0", sizeof(compat_str)) == 0)
-           ^
-   1 warning generated.
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1d506cf29d25/disk-0bb80ecc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ca5b56af4b3e/vmlinux-0bb80ecc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/aa88aed611c1/bzImage-0bb80ecc.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bc79f8d1898960d41073@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in ntfs_write_bh+0x49/0x7b0 fs/ntfs3/fsntfs.c:1401
+Read of size 8 at addr ffff88807c08a000 by task syz-executor.0/29687
+
+CPU: 1 PID: 29687 Comm: syz-executor.0 Not tainted 6.6.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/04/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:364 [inline]
+ print_report+0x163/0x540 mm/kasan/report.c:475
+ kasan_report+0x175/0x1b0 mm/kasan/report.c:588
+ ntfs_write_bh+0x49/0x7b0 fs/ntfs3/fsntfs.c:1401
+ mi_write+0x9b/0x200 fs/ntfs3/record.c:346
+ ni_write_inode+0x619/0x1080 fs/ntfs3/frecord.c:3360
+ write_inode fs/fs-writeback.c:1456 [inline]
+ __writeback_single_inode+0x69b/0xfa0 fs/fs-writeback.c:1668
+ writeback_single_inode+0x21b/0x790 fs/fs-writeback.c:1724
+ sync_inode_metadata+0xcc/0x130 fs/fs-writeback.c:2786
+ ntfs_set_state+0x556/0x730 fs/ntfs3/fsntfs.c:995
+ ntfs_create_inode+0x502/0x3b00 fs/ntfs3/inode.c:1307
+ ntfs_atomic_open+0x423/0x570 fs/ntfs3/namei.c:422
+ atomic_open fs/namei.c:3358 [inline]
+ lookup_open fs/namei.c:3466 [inline]
+ open_last_lookups fs/namei.c:3563 [inline]
+ path_openat+0x1044/0x3180 fs/namei.c:3793
+ do_filp_open+0x234/0x490 fs/namei.c:3823
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1422
+ do_sys_open fs/open.c:1437 [inline]
+ __do_sys_openat fs/open.c:1453 [inline]
+ __se_sys_openat fs/open.c:1448 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1448
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4ee967cae9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4eea3170c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007f4ee979bf80 RCX: 00007f4ee967cae9
+RDX: 000000000000275a RSI: 0000000020000040 RDI: ffffffffffffff9c
+RBP: 00007f4ee96c847a R08: 0000000000000000 R09: 0000000000000000
+R10: 0b00000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 000000000000000b R14: 00007f4ee979bf80 R15: 00007ffda859bad8
+ </TASK>
+
+Allocated by task 5123:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:198 [inline]
+ __do_kmalloc_node mm/slab_common.c:1023 [inline]
+ __kmalloc_node_track_caller+0xb6/0x230 mm/slab_common.c:1043
+ kmalloc_reserve+0xf3/0x260 net/core/skbuff.c:581
+ __alloc_skb+0x1b1/0x420 net/core/skbuff.c:650
+ alloc_skb include/linux/skbuff.h:1286 [inline]
+ nsim_dev_trap_skb_build drivers/net/netdevsim/dev.c:748 [inline]
+ nsim_dev_trap_report drivers/net/netdevsim/dev.c:805 [inline]
+ nsim_dev_trap_report_work+0x250/0xa90 drivers/net/netdevsim/dev.c:850
+ process_one_work+0x781/0x1130 kernel/workqueue.c:2630
+ process_scheduled_works kernel/workqueue.c:2703 [inline]
+ worker_thread+0xabf/0x1060 kernel/workqueue.c:2784
+ kthread+0x2b8/0x350 kernel/kthread.c:388
+ ret_from_fork+0x48/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+
+Freed by task 5123:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ kasan_save_free_info+0x28/0x40 mm/kasan/generic.c:522
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:164 [inline]
+ slab_free_hook mm/slub.c:1800 [inline]
+ slab_free_freelist_hook mm/slub.c:1826 [inline]
+ slab_free mm/slub.c:3809 [inline]
+ __kmem_cache_free+0x25f/0x3b0 mm/slub.c:3822
+ skb_kfree_head net/core/skbuff.c:945 [inline]
+ skb_free_head net/core/skbuff.c:957 [inline]
+ skb_release_data+0x660/0x850 net/core/skbuff.c:987
+ skb_release_all net/core/skbuff.c:1053 [inline]
+ __kfree_skb net/core/skbuff.c:1067 [inline]
+ consume_skb+0xb3/0x150 net/core/skbuff.c:1283
+ nsim_dev_trap_report drivers/net/netdevsim/dev.c:821 [inline]
+ nsim_dev_trap_report_work+0x761/0xa90 drivers/net/netdevsim/dev.c:850
+ process_one_work+0x781/0x1130 kernel/workqueue.c:2630
+ process_scheduled_works kernel/workqueue.c:2703 [inline]
+ worker_thread+0xabf/0x1060 kernel/workqueue.c:2784
+ kthread+0x2b8/0x350 kernel/kthread.c:388
+ ret_from_fork+0x48/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+
+The buggy address belongs to the object at ffff88807c08a000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 0 bytes inside of
+ freed 4096-byte region [ffff88807c08a000, ffff88807c08b000)
+
+The buggy address belongs to the physical page:
+page:ffffea0001f02200 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7c088
+head:ffffea0001f02200 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000000840(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000000840 ffff888012842140 dead000000000100 dead000000000122
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 4483, tgid 4483 (udevd), ts 395872759792, free_ts 395835757815
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1536
+ prep_new_page mm/page_alloc.c:1543 [inline]
+ get_page_from_freelist+0x31db/0x3360 mm/page_alloc.c:3170
+ __alloc_pages+0x255/0x670 mm/page_alloc.c:4426
+ alloc_slab_page+0x6a/0x160 mm/slub.c:1870
+ allocate_slab mm/slub.c:2017 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2070
+ ___slab_alloc+0xade/0x1100 mm/slub.c:3223
+ __slab_alloc mm/slub.c:3322 [inline]
+ __slab_alloc_node mm/slub.c:3375 [inline]
+ slab_alloc_node mm/slub.c:3468 [inline]
+ __kmem_cache_alloc_node+0x1af/0x270 mm/slub.c:3517
+ __do_kmalloc_node mm/slab_common.c:1022 [inline]
+ __kmalloc+0xa8/0x230 mm/slab_common.c:1036
+ kmalloc include/linux/slab.h:603 [inline]
+ tomoyo_realpath_from_path+0xcf/0x5e0 security/tomoyo/realpath.c:251
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_check_open_permission+0x254/0x4e0 security/tomoyo/file.c:771
+ security_file_open+0x63/0xa0 security/security.c:2836
+ do_dentry_open+0x325/0x1430 fs/open.c:916
+ do_open fs/namei.c:3639 [inline]
+ path_openat+0x27bb/0x3180 fs/namei.c:3796
+ do_filp_open+0x234/0x490 fs/namei.c:3823
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1422
+ do_sys_open fs/open.c:1437 [inline]
+ __do_sys_openat fs/open.c:1453 [inline]
+ __se_sys_openat fs/open.c:1448 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1448
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1136 [inline]
+ free_unref_page_prepare+0x8c3/0x9f0 mm/page_alloc.c:2312
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:2405
+ discard_slab mm/slub.c:2116 [inline]
+ __unfreeze_partials+0x1dc/0x220 mm/slub.c:2655
+ put_cpu_partial+0x116/0x180 mm/slub.c:2731
+ __slab_free+0x2b6/0x390 mm/slub.c:3679
+ qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:185
+ kasan_quarantine_reduce+0x14b/0x160 mm/kasan/quarantine.c:292
+ __kasan_slab_alloc+0x23/0x70 mm/kasan/common.c:305
+ kasan_slab_alloc include/linux/kasan.h:188 [inline]
+ slab_post_alloc_hook+0x6c/0x3b0 mm/slab.h:762
+ slab_alloc_node mm/slub.c:3478 [inline]
+ slab_alloc mm/slub.c:3486 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3493 [inline]
+ kmem_cache_alloc+0x123/0x300 mm/slub.c:3502
+ getname_flags+0xbc/0x4e0 fs/namei.c:140
+ user_path_at_empty+0x2e/0x180 fs/namei.c:2909
+ do_readlinkat+0x118/0x3b0 fs/stat.c:533
+ __do_sys_readlink fs/stat.c:566 [inline]
+ __se_sys_readlink fs/stat.c:563 [inline]
+ __x64_sys_readlink+0x7f/0x90 fs/stat.c:563
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88807c089f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88807c089f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88807c08a000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff88807c08a080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807c08a100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-vim +455 drivers/gpu/drm/apple/dcp.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   427	
-   428	static enum dcp_firmware_version dcp_check_firmware_version(struct device *dev)
-   429	{
-   430		char compat_str[DCP_FW_VERSION_STR_LEN];
-   431		char fw_str[DCP_FW_VERSION_STR_LEN];
-   432		int ret;
-   433	
-   434		/* firmware version is just informative */
-   435		dcp_read_fw_version(dev, "apple,firmware-version", fw_str);
-   436	
-   437		ret = dcp_read_fw_version(dev, "apple,firmware-compat", compat_str);
-   438		if (ret < 0) {
-   439			dev_err(dev, "Could not read 'apple,firmware-compat': %d\n", ret);
-   440			return DCP_FIRMWARE_UNKNOWN;
-   441		}
-   442	
-   443		if (strncmp(compat_str, "12.3.0", sizeof(compat_str)) == 0)
-   444			return DCP_FIRMWARE_V_12_3;
-   445		/*
-   446		 * m1n1 reports firmware version 13.5 as compatible with 13.3. This is
-   447		 * only true for the iomfb endpoint. The interface for the dptx-port
-   448		 * endpoint changed between 13.3 and 13.5. The driver will only support
-   449		 * firmware 13.5. Check the actual firmware version for compat version
-   450		 * 13.3 until m1n1 reports 13.5 as "firmware-compat".
-   451		 */
-   452		else if (strncmp(compat_str, "13.3.0", sizeof(compat_str)) == 0)
-   453			if (strncmp(fw_str, "13.5.0", sizeof(compat_str)) == 0)
-   454				return DCP_FIRMWARE_V_13_5;
- > 455		else if (strncmp(compat_str, "13.5.0", sizeof(compat_str)) == 0)
-   456			return DCP_FIRMWARE_V_13_5;
-   457	
-   458		dev_err(dev, "DCP firmware-compat %s (FW: %s) is not supported\n",
-   459			compat_str, fw_str);
-   460	
-   461		return DCP_FIRMWARE_UNKNOWN;
-   462	}
-   463	
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
