@@ -1,161 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4390514AA0
-	for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 16:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A361EC433CD
-	for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 16:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694449875;
-	bh=f3Qo6vrFojIPwWqmmZcbQ18TQJdcfxhyQGQLG3jKQTQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FCDAh3+lVLkldKUGjU089uedxOobflo8NE7QBVwSUeOeZY/HE2dsrqtbzUunspkxV
-	 DxaMX7tTQYQLvpgj2B2bMFVUcX82nXTRqwhGG5xBeeIZHLMT71IA00XrxUjmkJi2QE
-	 W0JcdypccA9nVQB3j6YGhtfwUE2ZhN+NFcR221G/11nuHwm8q/gLhArLxdGzHaDPC7
-	 XM7YVffg12FPAVg7uNZ1qhmdm7fGZthHeQXEorK3aF973wvhbHz5ygH1daiwjm+DwJ
-	 tU7JXRi48nitrD7dfF02JkhmIa8p8MNOKthxcRhZJfOZy6xv7JZJAAs0GJN/bc4Jrj
-	 RlpeiVGtS5yjA==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-502a25ab777so4730103e87.2
-        for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 09:31:15 -0700 (PDT)
-X-Gm-Message-State: AOJu0Ywfj3U+h7WhcLc0tFeH0+6H765X6dDgKtKk98z8I2fNpaAAWpHZ
-	0vCvTuPq+SsQqKgOWya8xHXpM8zuIbOC2HAw178=
-X-Google-Smtp-Source: AGHT+IFUCSWoNbCnVdv+73dqZmj9FkBmSsJ2WzqpqM3ykhn0+wQPE5+sRP8nObYHWezRHG2xouoG5bQu8UF0YTh+jWU=
-X-Received: by 2002:a05:6512:281c:b0:4fe:ecd:4950 with SMTP id
- cf28-20020a056512281c00b004fe0ecd4950mr10349873lfb.1.1694449873780; Mon, 11
- Sep 2023 09:31:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC1D154AC
+	for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 16:53:56 +0000 (UTC)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so12371030a12.1
+        for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 09:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1694451234; x=1695056034; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Dil3AF3ivz/ToEVTlg8BOkOK0mtIGthLdRVu/NjOrE=;
+        b=1Y5OBr0czOyAFuIaI4Y0SEs2m2zd2nYa64ox9nmffG+ONzcxVMINqMrPDb0e0UFuW2
+         hiFHcUmj1tZv3WGcD/yEPyb9QO+Fj3LeVvGKdomjmNUIRvO89FERXlZai1+e4QvXWHER
+         u9wSE28El000DFYZlHRZ5FkSzeLdyvqVLSpHwYdyEglUrV8zWPd4GeLswMOKJlZJPV5d
+         aR0yJ04K0B7wKR218OZCLOrBQnlR6egU5nd5G7LIHxfQshzObjqUyVtuhveJGV8V2giH
+         kO/wCHGVnbuLwIoJN7Hsg97obXTEwqxpplq2kCMoW1PurgnpIcNKmTqK2ZtDksPuiO2G
+         uAyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694451234; x=1695056034;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Dil3AF3ivz/ToEVTlg8BOkOK0mtIGthLdRVu/NjOrE=;
+        b=kihTNIQmUwSuDyEMx3CbiRlWfisC3154XWZtzGQsHShrHgqLbuoNOFoiL1nnCHgy6L
+         fE+R/ku7UiVvmJYjXdEDbQ8h9kuys0RVvyJiDIbSn1bH1+XU5USW+mdo3chK1i9BRHRX
+         n1saVyAfI8tJlHkR5E90a4ExOv2DcDaq7sa34RvRafTms/2HM/tw0p7N1XExh0lx6DhA
+         pbhYRF7gK1i+XvvNLuw0wH57QBufyz7ffu4wL5j83XGh89AQ3dFvUdTL1XtJO38V1OSZ
+         Q6ZHSE3tv2i2XZEHOhabiuDINdLFox2if/q+VEXzj3uTxsmT6FH8VUp7OOPhArTGU9kU
+         fwBA==
+X-Gm-Message-State: AOJu0YxnIr6PRjjfBrtvD+D2q7sAc+i54xxJsTmG28A9yK6tsVYpyC9R
+	hd4+TGD+9VElOpDQtGkz0bgME3M/Drj93paD4Awoag==
+X-Google-Smtp-Source: AGHT+IHpnsplbhCWyXsLea9xYfcD8KhYxmy/z4GHnoz3De2gJtqqVq+4rH/NcrjQl6AWw6VQpu+zBtispfqR1F8E6MQ=
+X-Received: by 2002:a50:ee89:0:b0:523:37f0:2d12 with SMTP id
+ f9-20020a50ee89000000b0052337f02d12mr304272edr.17.1694451234408; Mon, 11 Sep
+ 2023 09:53:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230908231244.1092614-1-song@kernel.org> <CAKwvOdmGSNj0FF0Mx97xAq6Zn5nc816k1QMzXQtR2C+VDq_3+Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdmGSNj0FF0Mx97xAq6Zn5nc816k1QMzXQtR2C+VDq_3+Q@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Mon, 11 Sep 2023 09:31:01 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4CejZE443U1U+Svc-auPvOp97UcS3Die=rkstz0HRExw@mail.gmail.com>
-Message-ID: <CAPhsuW4CejZE443U1U+Svc-auPvOp97UcS3Die=rkstz0HRExw@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/purgatory: Remove LTO flags
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, kexec@lists.infradead.org, x86@kernel.org, 
+References: <20230908-kselftest-param_test-c-v1-1-e35bd9052d61@google.com> <1fae4a2f-eaf1-c54c-9ec5-040b2714709e@efficios.com>
+In-Reply-To: <1fae4a2f-eaf1-c54c-9ec5-040b2714709e@efficios.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Mon, 11 Sep 2023 09:53:42 -0700
+Message-ID: <CAFhGd8rHmQrThrCVHmVAp7fDFRidOAPR9Z6JFBpqAswX8dLGgw@mail.gmail.com>
+Subject: Re: [PATCH RFC] selftests/rseq: fix kselftest Clang build warnings
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 11, 2023 at 9:00=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Sat, Sep 9, 2023 at 5:37=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
 >
-> On Fri, Sep 8, 2023 at 4:13=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+> On 9/8/23 19:03, Justin Stitt wrote:
+> > Hi,
 > >
-> > With LTO enabled, ld.lld generates multiple .text sections for
-> > purgatory.ro:
+> > I am experiencing many warnings when trying to build tools/testing/self=
+tests.
 > >
-> > $ readelf -S purgatory.ro  | grep " .text"
-> >   [ 1] .text             PROGBITS         0000000000000000  00000040
-> >   [ 7] .text.purgatory   PROGBITS         0000000000000000  000020e0
-> >   [ 9] .text.warn        PROGBITS         0000000000000000  000021c0
-> >   [13] .text.sha256_upda PROGBITS         0000000000000000  000022f0
-> >   [15] .text.sha224_upda PROGBITS         0000000000000000  00002be0
-> >   [17] .text.sha256_fina PROGBITS         0000000000000000  00002bf0
-> >   [19] .text.sha224_fina PROGBITS         0000000000000000  00002cc0
+> > Here's one such example from rseq tree:
+> > |  param_test.c:1234:10: error: address argument to atomic operation mu=
+st be a pointer to _Atomic type ('intptr_t *' (aka 'long *') invalid)
+> > |   1234 |         while (!atomic_load(&args->percpu_list_ptr)) {}
+> > |        |                 ^           ~~~~~~~~~~~~~~~~~~~~~~
+> > |  /usr/local/google/home/justinstitt/repos/tc-build/build/llvm/final/l=
+ib/clang/18/include/stdatomic.h:140:29: note: expanded from macro 'atomic_l=
+oad'
+> > |    140 | #define atomic_load(object) __c11_atomic_load(object, __ATOM=
+IC_SEQ_CST)
+> > |        |                             ^                 ~~~~~~
 > >
-> > This cause WARNING from kexec_purgatory_setup_sechdrs():
+> > I added the _Atomic type in various locations to silence _all_ (10) of =
+these
+> > warnings. I'm wondering, though, perhaps the absence of these _Atomic
+> > types in the first place is on purpose? Am I on the right track to fix
+> > these warnings without damaging the legitimacy of the tests at hand?
 > >
-> > WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
-> > kexec_load_purgatory+0x37f/0x390
+> > I'd like some feedback about where to go from here and if others are
+> > experiencing the same issues. Thanks!
 > >
-> > Fix this by disabling LTO for purgatory.
+> > FWIW here's my specific build incantation on Clang-18 (49d41de57896e935=
+cd5726719c5208bce22694ae):
+> > $ make LLVM=3D1 -j128 ARCH=3Dx86_64 mrproper headers defconfig kselftes=
+t-merge
+> > $ make LLVM=3D1 ARCH=3Dx86_64 -C tools/testing/selftests
 >
-> Thanks for the v2!
->
-> >
-> > Fixes: 8652d44f466a ("kexec: support purgatories with .text.hot section=
-s")
->
-> Dunno that this fixes tag is precise.  I think perhaps
->
-> Fixes: b33fff07e3e3 ("x86, build: allow LTO to be selected")
+> I should have used the __atomic_load_n() compiler builtin rather than
+> atomic_load(), mainly because it does not require the _Atomic annotation
+> to each type it touches.
 
-Thanks for the correction!
+Would you like me to send a patch in with this change?
 
 >
-> would be more precise.
+> Thanks,
 >
-> > Cc: Ricardo Ribalda <ribalda@chromium.org>
-> > Cc: Sami Tolvanen <samitolvanen@google.com>
-> > Cc: kexec@lists.infradead.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: x86@kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Song Liu <song@kernel.org>
+> Mathieu
+>
+>
+> >
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1698
+> > Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues=
+/61
+> > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > ---
+> >   tools/testing/selftests/rseq/param_test.c | 8 ++++----
+> >   1 file changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/=
+selftests/rseq/param_test.c
+> > index bf951a490bb4..94802aeed2c6 100644
+> > --- a/tools/testing/selftests/rseq/param_test.c
+> > +++ b/tools/testing/selftests/rseq/param_test.c
+> > @@ -356,7 +356,7 @@ struct inc_thread_test_data {
+> >   };
+> >
+> >   struct percpu_list_node {
+> > -     intptr_t data;
+> > +     _Atomic intptr_t data;
+> >       struct percpu_list_node *next;
+> >   };
+> >
+> > @@ -1212,8 +1212,8 @@ static int set_signal_handler(void)
+> >   /* Test MEMBARRIER_CMD_PRIVATE_RESTART_RSEQ_ON_CPU membarrier command=
+. */
+> >   #ifdef TEST_MEMBARRIER
+> >   struct test_membarrier_thread_args {
+> > -     int stop;
+> > -     intptr_t percpu_list_ptr;
+> > +     _Atomic int stop;
+> > +     _Atomic intptr_t percpu_list_ptr;
+> >   };
+> >
+> >   /* Worker threads modify data in their "active" percpu lists. */
+> > @@ -1240,7 +1240,7 @@ void *test_membarrier_worker_thread(void *arg)
+> >                       int cpu =3D get_current_cpu_id();
+> >
+> >                       ret =3D rseq_offset_deref_addv(RSEQ_MO_RELAXED, R=
+SEQ_PERCPU,
+> > -                             &args->percpu_list_ptr,
+> > +                             (intptr_t*)&args->percpu_list_ptr,
+> >                               sizeof(struct percpu_list_entry) * cpu, 1=
+, cpu);
+> >               } while (rseq_unlikely(ret));
+> >       }
 > >
 > > ---
-> > AFAICT, x86 is the only arch that supports LTO and purgatory.
+> > base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
+> > change-id: 20230908-kselftest-param_test-c-1763b62e762f
 > >
-> > Changes in v2:
-> > 1. Use CC_FLAGS_LTO instead of hardcode -flto. (Nick Desaulniers)
-> > ---
-> >  arch/x86/purgatory/Makefile | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> > index c2a29be35c01..08aa0f25f12a 100644
-> > --- a/arch/x86/purgatory/Makefile
-> > +++ b/arch/x86/purgatory/Makefile
-> > @@ -19,6 +19,10 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS -D__NO_FORT=
-IFY
-> >  # optimization flags.
-> >  KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
-=3D%,$(KBUILD_CFLAGS))
-> >
-> > +# When LTO is enabled, llvm emits many text sections, which is not sup=
-ported
-> > +# by kexec. Remove -flto=3D* flags.
->
-> -flto* in LLVM implies -ffunction-sections, which creates a .text.<fn
-> name> section per function definition to facilitate -Wl,--gc-sections.
->
-> Overall the question here is "do we really need to optimize kexec?"
->
-> If the answer is yes, then this patch AND 8652d44f466a are both
-> pessimizing kexec (though having it work at all is strictly better
-> than not at all).  The best fix IMO would be to provide a linker
-> script for this purgatory image that rejoins the text sections back
-> into one .text.  For example:
->
-> commit eff8728fe698 ("vmlinux.lds.h: Add PGO and AutoFDO input sections")
->
-> I assume people do care about the time to kexec, hence the raison
-> d'etre for projects like kpatch.
-
-AFAICT, optimizations like LTO and PGO can give a few % of
-improvement, which is probably not important for kexec. The benefit
-is in the order of seconds (or less?). The benefit of kpatch is that we
-can keep the workload running while fixing the kernel bug. Based on
-our experience at Meta, it may take hours to graceful shutdown the
-application to run kexec. In this case, a few seconds of improvement
-(via LTO/PGO purgatory) doesn't save us much.
-
-Thanks,
-Song
-
->
-> I'm fine to sign off on this approach if we don't really care, or want
-> to care more later, but we can do better here.
->
-> > +KBUILD_CFLAGS :=3D $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
-> > +
-> >  # When linking purgatory.ro with -r unresolved symbols are not checked=
-,
-> >  # also link a purgatory.chk binary without -r to check for unresolved =
-symbols.
-> >  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+> > Best regards,
 > > --
-> > 2.34.1
+> > Justin Stitt <justinstitt@google.com>
 > >
->
 >
 > --
-> Thanks,
-> ~Nick Desaulniers
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
+>
