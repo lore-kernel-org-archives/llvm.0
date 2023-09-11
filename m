@@ -1,72 +1,131 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A52D11718
-	for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 15:04:18 +0000 (UTC)
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4142ca41b89so31996311cf.0
-        for <llvm@lists.linux.dev>; Mon, 11 Sep 2023 08:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1694444658; x=1695049458; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=72EyxoHPMhyqLAN1Oi5hC6bDHujWPuBTVHMDoLceg0U=;
-        b=lEubZhVx0a7u4YwK8QO6Ll8/CELSokjGkgx2CGpcKUYsE4+U94GGdX0JeGDG9hBcIN
-         EbVScNEP/s9lbMBWj5efaHukY2soQiJATLuDU0WMDfEOte0xXjAKciAhrHsm7Dn4vzUD
-         +5hT+rspmC/qs+EplpEiDU/cR6DjHh/nhUZXK7Cvc+7LPWD7WF001NReGQIqFpNWuNl1
-         43pjHC7i3B01DKgmUfYbLkjlkEQo154H60K6Loehi22zkXrB9x9ulBCsYQ1o3ljiw4ni
-         VjvJ0PbwAZmctexCFtBfhkneiZnbi0ngj2FOea0gWtyfZsmV0qlLa1o7y4UzyvRVlqma
-         lwfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694444658; x=1695049458;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=72EyxoHPMhyqLAN1Oi5hC6bDHujWPuBTVHMDoLceg0U=;
-        b=RBKtkWDj/j6v8cWGiNRiiaXVDX2K6cpLaBPbRjWMg207NLkJLOpWbl9nWixopwhiYZ
-         VLkT/f4xm6XgdnrR41AFnFjSgBcrIZ9WxD7xmrvBti5sg4nQK1lVsEaO73kDQbHRouCx
-         M85d//Zn9mSCieFy+R5xb3RRfN2T7hH4YDK4+xq8/w4pqw1PwxetP6GOHqj/7V8WkocC
-         q+Pi4BPUytDpoMz/L6BhSFh3qCrFASGrdTGn+lhP1CT69ZGUzqmwkITavg0Vbx0qwC1l
-         Blcnxa1ZGye5fvT8FkMCbl0F7DubhTxlh/jY/eFX4Dlpdkx8dX5IlONTYfDUdabLJluY
-         JBOg==
-X-Gm-Message-State: AOJu0YwPFN5+S6UC1rXYz3MUOCaqUIVrJghVAsGb3Bv0qe3WlHG1ctrL
-	2DbGROzr7orkEv1ELA4JHP1MR7FBlSxy61K/rexYAg==
-X-Google-Smtp-Source: AGHT+IEy+PPH0r7bh0RyH/liXMUverdXDjbmX5RZMKLrtXIE9sF+UTS35KMMBa00g3J4ID/JpCvC9ESAIt2ZGXz6O90=
-X-Received: by 2002:a0c:b30c:0:b0:64f:4dbe:c675 with SMTP id
- s12-20020a0cb30c000000b0064f4dbec675mr9695545qve.25.1694444657841; Mon, 11
- Sep 2023 08:04:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B76E57C;
+	Mon, 11 Sep 2023 15:05:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF5BC433C9;
+	Mon, 11 Sep 2023 15:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1694444721;
+	bh=ZW+Q1JOHZ/uDaaroiW9oP5TW2ELU1qx2psiVBuG2scQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=OFzQEkS/HF0zKqCIdwlTu/T50chShWZjHXyfSt98Ubj9+pA7qH3pSyZTkFsn3dGV5
+	 fMtUR9T59JoSLujFOQa8PBxN3pPjBlgglscoA7eG+apOR4tABcbix4QKW01y3nwvlV
+	 jSETHIRks23rdXqmTQCMcAjCCBDYHV4BTIVJohe8=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Stephane Eranian <eranian@google.com>,
+	Tom Rix <trix@redhat.com>,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 6.1 093/600] tools lib subcmd: Add dependency test to install_headers
+Date: Mon, 11 Sep 2023 15:42:06 +0200
+Message-ID: <20230911134636.353908314@linuxfoundation.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911134633.619970489@linuxfoundation.org>
+References: <20230911134633.619970489@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230909003715.3579761-25-sashal@kernel.org> <mhng-e2cedb63-0933-4752-bfd8-592e4e1f6e2c@palmer-ri-x1c9>
-In-Reply-To: <mhng-e2cedb63-0933-4752-bfd8-592e4e1f6e2c@palmer-ri-x1c9>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 11 Sep 2023 08:03:38 -0700
-Message-ID: <CABCJKucm3KjYKgjP9OT4GLe8KZ3QxpRk9GqPD5JgwMaoZumnQQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.4 25/25] riscv: Add CFI error handling
-To: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: sashal@kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	keescook@chromium.org, Conor Dooley <conor.dooley@microchip.com>, nathan@kernel.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, ndesaulniers@google.com, 
-	peterz@infradead.org, ajones@ventanamicro.com, heiko@sntech.de, 
-	prabhakar.mahadev-lad.rj@bp.renesas.com, liaochang1@huawei.com, 
-	namcaov@gmail.com, andy.chiu@sifive.com, guoren@kernel.org, 
-	alexghiti@rivosinc.com, Bjorn Topel <bjorn@rivosinc.com>, jeeheng.sia@starfivetech.com, 
-	jszhang@kernel.org, greentime.hu@sifive.com, masahiroy@kernel.org, 
-	apatel@ventanamicro.com, mnissler@rivosinc.com, coelacanthushex@gmail.com, 
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 8, 2023 at 8:33=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com> =
-wrote:
-> Sami probably understands the dependencies better than I do, but I don't
-> think this one is sane to just backport -- there's a whole series here,
-> and IIRC we had to set up some clang bits for it to work correctly.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
-Agreed, it doesn't really make sense to backport this patch.
+------------------
 
-Sami
+From: Ian Rogers <irogers@google.com>
+
+commit 5d890591db6bed8ca69bd4bfe0cdaca372973033 upstream.
+
+Compute the headers to be installed from their source headers and make
+each have its own build target to install it. Using dependencies
+avoids headers being reinstalled and getting a new timestamp which
+then causes files that depend on the header to be rebuilt.
+
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Link: https://lore.kernel.org/r/20221202045743.2639466-4-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ tools/lib/subcmd/Makefile |   23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+--- a/tools/lib/subcmd/Makefile
++++ b/tools/lib/subcmd/Makefile
+@@ -89,10 +89,10 @@ define do_install_mkdir
+ endef
+ 
+ define do_install
+-	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
+-		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
++	if [ ! -d '$2' ]; then             \
++		$(INSTALL) -d -m 755 '$2'; \
+ 	fi;                                             \
+-	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
++	$(INSTALL) $1 $(if $3,-m $3,) '$2'
+ endef
+ 
+ install_lib: $(LIBFILE)
+@@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
+ 		$(call do_install_mkdir,$(libdir_SQ)); \
+ 		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
+ 
+-install_headers:
+-	$(call QUIET_INSTALL, libsubcmd_headers) \
+-		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
+-		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
++HDRS := exec-cmd.h help.h pager.h parse-options.h run-command.h
++INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/subcmd
++INSTALL_HDRS := $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
++
++$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
++	$(call QUIET_INSTALL, $@) \
++		$(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
++
++install_headers: $(INSTALL_HDRS)
++	$(call QUIET_INSTALL, libsubcmd_headers)
+ 
+ install: install_lib install_headers
+ 
+
+
