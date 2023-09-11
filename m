@@ -1,231 +1,197 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2114.outbound.protection.outlook.com [40.107.113.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507BDC8C3;
-	Mon, 11 Sep 2023 11:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694431503; x=1725967503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mQ18HF8CxAHMvt6q6+349EE7f3bgZdnvZXZpld8oC/Y=;
-  b=SxuAzOegGD3yZXLxZhH3gpmNqNzQ5Ybz+pId+sDMWtzCEF+2THA7vxU4
-   tEBagF7qj+bPn5SEh39qZOcPfYR9Ra7m9I54sTbJAs2RwRIR5ZfZLvANQ
-   INSkJJy5ZPYQ/32A035E0kqKkLZ/c6buagAJ4H3GqfuS2EqPghj0exLQh
-   lwxMVRcZqqe3rX02NqI67wpafjyObcNF/i4E3NosnbYxEghK5l+8pQzMx
-   oqi+6TT7oi2/wsrUx58UzgXgNI/2mdFHBWu4MVS7kuhVqlSftydny3ae4
-   o77LjN0QAlnHqS0eUgS7fg0RvqZLdExpNRiKN1VYVlHp9Uwg1meiElU7K
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="363078869"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="363078869"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:25:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="719958933"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="719958933"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 11 Sep 2023 04:25:00 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qff2I-00068z-0F;
-	Mon, 11 Sep 2023 11:24:58 +0000
-Date: Mon, 11 Sep 2023 19:24:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Yakunin, Dmitry (Nebius)" <zeil@nebius.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/3] cgroup: list all subsystem states in debugfs
- files
-Message-ID: <202309111928.paKg0L1X-lkp@intel.com>
-References: <20230911075437.74027-2-zeil@nebius.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AD0C8D6;
+	Mon, 11 Sep 2023 12:02:21 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dxnKoLUdWEflqpCofOEzN1rhyfuCK9GG0Z7waDtTbVq/T3FJUvVePxiNEHbuWCH9BzGUFCh7jIe0bGJhflBqAfpND2h60Ng9X6wLxsGPg3X4dDZBSUX1ywn5cKwhU2LlQfWgHMiRquGP/XL4l6UNUR9w5ld20iIJQXQFZuqFKwU+QgDGx7WuhqfToYKqRM5z19QoSMbKTVbwLepE7T1Bhx2wB8SNY2kxJtA5p/YQptTWGvwvLIzd5ctWmXOIA2t5bNGRSQumeDuscEtKFM8EJUjo9ca1/PVbhl4KeA9PUK44nR90Evki1DGnSgWHAb5oIakSUEy3VdmNMCxaUC/nMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HGJFhUHgcQiEVIqMTcoXfYdaxNvd9l5E0Iq/EeyYOFI=;
+ b=LZIvbvMUJC22+6ZqX/t1LeHta2KwSsVKkY1xrp55bKSdBcFTKRWVpKU8vfoZSsVseXCNaWp997leZVAVKX0hUjFFzCybRCa7hQzsz/fBJrcrLNjWDtVdWpZhcTJFI1zBtv751lPZmUnjmlPtMeKILcnVsJkCZBczHVnkRiaWtXxbMuKqjGzqGwEo9EQ/H8foyMfdAtDO3QUf/n09deVXaNoAkljaG38EhpFNXUG5i3rjl5C8EPIOYDAfWk4KSURrAyOAjLXxstbBDnF/1155J06jNOIxKJtDrkl0+g7nYQIV7zYYv7jpG5b9ahIydNg+s1oiqVeJiLAOExsjWlbQNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HGJFhUHgcQiEVIqMTcoXfYdaxNvd9l5E0Iq/EeyYOFI=;
+ b=nuxAFKv4XqM6q/x/XkIOhHrV3pRlhu9Z02cI5gAqUiIoPIVf5T5IvB05FBfoKO3xj4d2WBOVXdDOg2Okl0wG36PcMH5fm8DcphLhM7nQlL8KbpByLYexWKhxOCJaQ2jbgxxqlaym1h2JTLSWSHAjDOsYs5VVxLa+uBMDJA4dXxQ=
+Received: from OSZPR01MB7019.jpnprd01.prod.outlook.com (2603:1096:604:13c::8)
+ by TYCPR01MB11043.jpnprd01.prod.outlook.com (2603:1096:400:3ac::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.35; Mon, 11 Sep
+ 2023 12:02:17 +0000
+Received: from OSZPR01MB7019.jpnprd01.prod.outlook.com
+ ([fe80::9f88:8e:6f3e:640]) by OSZPR01MB7019.jpnprd01.prod.outlook.com
+ ([fe80::9f88:8e:6f3e:640%2]) with mapi id 15.20.6768.029; Mon, 11 Sep 2023
+ 12:02:13 +0000
+From: Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Palmer Dabbelt <palmer@rivosinc.com>, Conor Dooley
+	<conor.dooley@microchip.com>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, kernel test
+ robot <lkp@intel.com>, "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Subject: RE: ld.lld: error: relocation R_RISCV_LO12_I cannot be used against
+ symbol 'riscv_cbom_block_size'; recompile with -fPIC
+Thread-Topic: ld.lld: error: relocation R_RISCV_LO12_I cannot be used against
+ symbol 'riscv_cbom_block_size'; recompile with -fPIC
+Thread-Index: AQHZ5HTgjRz0ZBWpfUmCVDf7JeMlRrAVdvTw
+Date: Mon, 11 Sep 2023 12:02:13 +0000
+Message-ID:
+ <OSZPR01MB7019B9CB51DAE22757845D02AAF2A@OSZPR01MB7019.jpnprd01.prod.outlook.com>
+References: <202309111311.8tcq3KVc-lkp@intel.com>
+In-Reply-To: <202309111311.8tcq3KVc-lkp@intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OSZPR01MB7019:EE_|TYCPR01MB11043:EE_
+x-ms-office365-filtering-correlation-id: 1e9e4f70-98d3-4455-9b6d-08dbb2beef52
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ dS+mB9zr5WyI+kdCGSSHFAKSgPdWGNt+M09am0ykeNUyHQl1nf7GnvHizWQFir7O9vCSPoJRTWUND/Hu54XMqEnGv0s2CUq1bCo6cAXLuIGFbVD9GtslTPx3EYbCniqrBDgT+G3I4VHU0LJBajBFwVWX4MR4BenJliqrt7AhE41vQC+l/txPM//O7+9a4WHWKo+uXRHnHkT1AfPY4U94IkYCc5vx1Oyy6PwBaCbdFSUpxi72y59qz+DNqeKBlZbS/El9qZM+nDcMm9MmY+dmoZ4Il5UUjrxU2tesps8v75eulz8SFJ8uS8C0aSO5CkjR56ir2HwoKmuRFPBjiy+FxWYuReL/J8pi9r3wSG6HkKjmuQrkwMmDDXJPt59E/Eyf9+YiS39nGgNl/SYeBrlptieE6mHebUrSiljtmLSsIGRfMWmDIWeE33/+oOD/OIzPrT+r6j1lKPDj2kh9LKpiea7IhsXMWsQDFP/2ezIumuBQ8fVInMwdOnMtkEInWdhVbfmcHBtUuEKZI0EXINgJM2aTi7Q5/Uai08EPDtXP/aIE+BTa/F1RUBqPBostGX++fO9tg62dTg4VBzm6Spc9xhdN5yTN3meetsVscxup3Cw=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB7019.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(136003)(39860400002)(346002)(376002)(1800799009)(186009)(451199024)(6506007)(7696005)(71200400001)(9686003)(966005)(45080400002)(478600001)(83380400001)(26005)(2906002)(54906003)(64756008)(66446008)(66476007)(66946007)(66556008)(316002)(110136005)(76116006)(41300700001)(4326008)(5660300002)(8676002)(8936002)(122000001)(86362001)(33656002)(55016003)(38070700005)(38100700002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?LXGSolZHdnikJSoGdChFdUXmAhpqEUNgdqlQhzhHVFHSs4qrBHx7NXB4m5Xu?=
+ =?us-ascii?Q?awL7eAtHzVWUEJdlLfLzhktoZqOZbEwCauwKh77n5Ao8HppBefeeWfb3v/3E?=
+ =?us-ascii?Q?r/didL+mpopwsuuEaybDdC23giQrmWNhlxbeM3iNo2UUKZokCvRJjpOGQaN6?=
+ =?us-ascii?Q?S/Rj80KJJ5fcYEJovxG5KjaeypS+esTASyLqCfITMVUUbQ0BEDob7Z6vtkAg?=
+ =?us-ascii?Q?SefaDLjUvu+3c7G4bsFUF2VicMpON99cymZ/1HWwTrevWvREHlTGVWXyij+1?=
+ =?us-ascii?Q?2263iGcXALPk2HYGpxy+2HtaEuO6+kTguFbXvwm5KaJ8fj/VO60FzNLLcpTC?=
+ =?us-ascii?Q?EIH2wHPAL6gwhFpnda0nKkDwMri7LAMFrkzmWWH1w4cnJkuh6v6nH5LWsC3V?=
+ =?us-ascii?Q?fpzELkPvPgypTc69Caze0rxFF7hYsUpV5ykjY1Fcsn4PqdEP6ZBTCiX2vMpc?=
+ =?us-ascii?Q?paQTJd2FsADlFcKLFj1xvwO7r8cR0S7YhY8eFvHPq+T25icHA15IGVoFVcFz?=
+ =?us-ascii?Q?8RPJDlKJd85k7g5rlKgNI1HWxsWhGOS3NCdtglu/wkiJVKYm2cFFwYO1Hn9G?=
+ =?us-ascii?Q?tZTTL9ZzsQ26B5gjljCAXnkiWJraY7Oms73x2ew+20KYFAvmMn/eM4qgOIri?=
+ =?us-ascii?Q?xt020R+pkCqLb7tMQZUX8w+H0/Pc0/C1QMd2krByGyCRt19wknXgmmAxXHBH?=
+ =?us-ascii?Q?6HMy6wA3NUizXlQSg+ums5oh9uZ4XprQxVQ20wA62rHscUjc7AtSKQV8Gyp/?=
+ =?us-ascii?Q?Uf/LZzmhyQoO/BJWGe2zvdXZ3h4EXwVyHzbRumbFN6uHu7RtSqchIumQK9Ay?=
+ =?us-ascii?Q?adu2d1/oLWKGq3Ktf/m38k1SePQugjnAUXAFyQkYZPqsCvDmSZ8jYpJE74xy?=
+ =?us-ascii?Q?Z2H6x/6h4bUNDmTL43X7xtsecuUQNtJNSVkeZvilfxDxmA7bwqARbEJg3O3V?=
+ =?us-ascii?Q?GdV/yGPT5lxSILE/xxq/Ed+Eja20R62ELDdNaWLXg2YkwQLgwKZXsuBBQ+pW?=
+ =?us-ascii?Q?krzBB5UUStDRl/0WVka5iiSTeuVHS+raeamRzMjyegZzkKBs/MJXr69t42La?=
+ =?us-ascii?Q?PyN8b24BCxLq1pvyoYOFsVEkFmx4kazorkdwFTZ9zrwz0Dd/YUUwT2bW97eh?=
+ =?us-ascii?Q?f/fUsazcw/7672klpPmiKp4M4vh8Uwh6n6Sth6s2iO1lLJ8vQY8jW7YDDZw7?=
+ =?us-ascii?Q?gnfv+dc/vlEcoZhIM5nSbkRFkuu31PBFzqiwjkfAk0HdYUmOq/HptxjXo0Gu?=
+ =?us-ascii?Q?02DJk518BqZiITMv4NsIr71FjttrXV9R6eL/Y4QeYlMHF1Dl0d3gsVUjicJn?=
+ =?us-ascii?Q?vEiLb9eXPzEoQcY9tQxQGP8wTWLn7RWVUzUaHt7Xo4a67OaAWj67LY4QZOYk?=
+ =?us-ascii?Q?ZthYcODCQqHcsV6mNzBItAfbzd/QYUaTPbchpWYOUTrcPCRr7e3/PXI6BzQw?=
+ =?us-ascii?Q?HWkebc8GUX04PCTN11k9wFV7ozmQFZFQxXjfPlmYWHBkIXsIR1GBISy1BiKM?=
+ =?us-ascii?Q?+00dhoMKh856mkMl/ORubs93Z8nggZuIS7epP+9tcuesgJGNyBzVuRoiRhRp?=
+ =?us-ascii?Q?ysb0IQgpFwoNqxJTTg5l9hdWClIMSe9YW6lY6gRlmQ1kTW06jkySDkKdbxdH?=
+ =?us-ascii?Q?klUi1C6FkFYNGigH/y8H6s8=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230911075437.74027-2-zeil@nebius.com>
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB7019.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e9e4f70-98d3-4455-9b6d-08dbb2beef52
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2023 12:02:13.1248
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 65vGQ/otUfjnOWQKP+S1f1EsMoHkctkp7wDGSeLBUXtG//57ZiQ45mTzc/ezk1mDYIX4sJKP+7pnc07JPO5Oe8xOrh7SLooh8T3ZDRLZ9QqpImiH37k9OU14cDPthiMh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB11043
 
-Hi Dmitry,
+> Subject: ld.lld: error: relocation R_RISCV_LO12_I cannot be used against =
+symbol
+> 'riscv_cbom_block_size'; recompile with -fPIC
+>
+> tree:
+> https://git.kernel.org/pub/scm/linux%252
+> Fkernel%2Fgit%2Ftorvalds%2Flinux.git&data=3D05%7C01%7Cprabhakar.mahadev-
+> lad.rj%40bp.renesas.com%7Cecec6b2c35b049d7fd8108dbb28c01c7%7C53d82571da19=
+47e49cb4625a166a4a2a%7C0%7C0%
+> 7C638300086620501123%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi=
+V2luMzIiLCJBTiI6Ik1haWwiLCJXV
+> CI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DxoUqGHQlVoylBC9zBnMRblMOE%2Bt9rDia1H4WC=
+kBkxCQ%3D&reserved=3D0 master
+> head:   0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+> commit: e021ae7f5145d46ab64cb058cbffda31059f37e5 riscv: errata: Add Andes=
+ alternative ports
+> date:   10 days ago
+> config: riscv-randconfig-r022-20230911
+> (https://download.01.org/0day-
+> ci%2Farchive%2F20230911%2F202309111311.8tcq3KVc-
+> lkp%40intel.com%2Fconfig&data=3D05%7C01%7Cprabhakar.mahadev-
+> lad.rj%40bp.renesas.com%7Cecec6b2c35b049d7fd8108dbb28c01c7%7C53d82571da19=
+47e49cb4625a166a4a2a%7C0%7C0%
+> 7C638300086620501123%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi=
+V2luMzIiLCJBTiI6Ik1haWwiLCJXV
+> CI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DaRG4VodlKMfr0bONuloMO1w6MfUR38dzZopDwfw=
+hS%2Fg%3D&reserved=3D0)
+> compiler: clang version 14.0.6
+> (https://github.com/llvm/llvm-
+> project.git&data=3D05%7C01%7Cprabhakar.mahadev-
+> lad.rj%40bp.renesas.com%7Cecec6b2c35b049d7fd8108dbb28c01c7%7C53d82571da19=
+47e49cb4625a166a4a2a%7C0%7C0%
+> 7C638300086620501123%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi=
+V2luMzIiLCJBTiI6Ik1haWwiLCJXV
+> CI6Mn0%3D%7C3000%7C%7C%7C&sdata=3Drsx5fturDhSNLJMpH0%2B4Zw81HUTCQhE4F4ozq=
+FmFHic%3D&reserved=3D0
+> f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=3D1 build):
+> (https://download.01.org/0day-
+> ci%2Farchive%2F20230911%2F202309111311.8tcq3KVc-
+> lkp%40intel.com%2Freproduce&data=3D05%7C01%7Cprabhakar.mahadev-
+> lad.rj%40bp.renesas.com%7Cecec6b2c35b049d7fd8108dbb28c01c7%7C53d82571da19=
+47e49cb4625a166a4a2a%7C0%7C0%
+> 7C638300086620501123%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi=
+V2luMzIiLCJBTiI6Ik1haWwiLCJXV
+> CI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DGqbK0Gqs5bZx%2FKH44rtc8OW81JPDXx%2BjrTM=
+rPTdnF80%3D&reserved=3D0)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of the same
+> patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes:
+> | https://lore/
+> | .kernel.org%2Foe-kbuild-all%2F202309111311.8tcq3KVc-lkp%40intel.com%2F
+> | &data=3D05%7C01%7Cprabhakar.mahadev-lad.rj%40bp.renesas.com%7Cecec6b2c3=
+5
+> | b049d7fd8108dbb28c01c7%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C63
+> | 8300086620501123%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
+> | 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3Drk6abxEzT=
+c
+> | XeOYIVw0WOJ8IvdTPwPC94r68eFcIihEs%3D&reserved=3D0
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against
+> >> symbol 'riscv_cbom_block_size'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+>    >>> referenced by errata.c
+>    >>>               arch/riscv/errata/andes/errata.o:(andes_errata_patch=
+_func) in archive vmlinux.a
+>
+I did reproduce this issue locally. The andes errata is not compiled as med=
+any. The config is RELOCATABLE + MEDLOW. I can see the cacheflush.o is comp=
+iled with medany flag.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+I can fix the build by adding a medany flag as below:
++#ifdef CONFIG_RISCV_ALTERNATIVE_EARLY
++CFLAGS_errata.o :=3D -mcmodel=3Dmedany
+#endif
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.6-rc1 next-20230911]
-[cannot apply to tj-cgroup/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But I am not sure if this is correct approach. Any pointers on this?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yakunin-Dmitry-Nebius/cgroup-list-all-subsystem-states-in-debugfs-files/20230911-155716
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230911075437.74027-2-zeil%40nebius.com
-patch subject: [RFC PATCH 1/3] cgroup: list all subsystem states in debugfs files
-config: hexagon-randconfig-002-20230911 (https://download.01.org/0day-ci/archive/20230911/202309111928.paKg0L1X-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230911/202309111928.paKg0L1X-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309111928.paKg0L1X-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/cgroup/cgroup.c:31:
-   In file included from kernel/cgroup/cgroup-internal.h:5:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/cgroup/cgroup.c:31:
-   In file included from kernel/cgroup/cgroup-internal.h:5:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/cgroup/cgroup.c:31:
-   In file included from kernel/cgroup/cgroup-internal.h:5:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> kernel/cgroup/cgroup.c:7078:7: warning: no previous prototype for function 'css_debugfs_seqfile_start' [-Wmissing-prototypes]
-    7078 | void *css_debugfs_seqfile_start(struct seq_file *m, loff_t *pos)
-         |       ^
-   kernel/cgroup/cgroup.c:7078:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    7078 | void *css_debugfs_seqfile_start(struct seq_file *m, loff_t *pos)
-         | ^
-         | static 
->> kernel/cgroup/cgroup.c:7090:7: warning: no previous prototype for function 'css_debugfs_seqfile_next' [-Wmissing-prototypes]
-    7090 | void *css_debugfs_seqfile_next(struct seq_file *m, void *v, loff_t *pos)
-         |       ^
-   kernel/cgroup/cgroup.c:7090:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    7090 | void *css_debugfs_seqfile_next(struct seq_file *m, void *v, loff_t *pos)
-         | ^
-         | static 
->> kernel/cgroup/cgroup.c:7101:6: warning: no previous prototype for function 'css_debugfs_seqfile_stop' [-Wmissing-prototypes]
-    7101 | void css_debugfs_seqfile_stop(struct seq_file *m, void *v)
-         |      ^
-   kernel/cgroup/cgroup.c:7101:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    7101 | void css_debugfs_seqfile_stop(struct seq_file *m, void *v)
-         | ^
-         | static 
->> kernel/cgroup/cgroup.c:7106:5: warning: no previous prototype for function 'css_debugfs_seqfile_show' [-Wmissing-prototypes]
-    7106 | int css_debugfs_seqfile_show(struct seq_file *m, void *v)
-         |     ^
-   kernel/cgroup/cgroup.c:7106:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    7106 | int css_debugfs_seqfile_show(struct seq_file *m, void *v)
-         | ^
-         | static 
-   10 warnings generated.
-
-
-vim +/css_debugfs_seqfile_start +7078 kernel/cgroup/cgroup.c
-
-  7076	
-  7077	#ifdef CONFIG_DEBUG_FS
-> 7078	void *css_debugfs_seqfile_start(struct seq_file *m, loff_t *pos)
-  7079	{
-  7080		struct cgroup_subsys *ss = m->private;
-  7081		struct cgroup_subsys_state *css;
-  7082		int id = *pos;
-  7083	
-  7084		rcu_read_lock();
-  7085		css = idr_get_next(&ss->css_idr, &id);
-  7086		*pos = id;
-  7087		return css;
-  7088	}
-  7089	
-> 7090	void *css_debugfs_seqfile_next(struct seq_file *m, void *v, loff_t *pos)
-  7091	{
-  7092		struct cgroup_subsys *ss = m->private;
-  7093		struct cgroup_subsys_state *css;
-  7094		int id = *pos + 1;
-  7095	
-  7096		css = idr_get_next(&ss->css_idr, &id);
-  7097		*pos = id;
-  7098		return css;
-  7099	}
-  7100	
-> 7101	void css_debugfs_seqfile_stop(struct seq_file *m, void *v)
-  7102	{
-  7103		rcu_read_unlock();
-  7104	}
-  7105	
-> 7106	int css_debugfs_seqfile_show(struct seq_file *m, void *v)
-  7107	{
-  7108		struct cgroup_subsys *ss = m->private;
-  7109		struct cgroup_subsys_state *css = v;
-  7110		/* data is NULL for root cgroup_subsys_state */
-  7111		struct percpu_ref_data *data = css->refcnt.data;
-  7112		size_t buflen;
-  7113		char *buf;
-  7114		int len;
-  7115	
-  7116		seq_printf(m, "css=%pK cgroup=%pK id=%d ino=%lu flags=%#x refcnt=%lu path=",
-  7117			   css, css->cgroup, css->id, cgroup_ino(css->cgroup),
-  7118			   css->flags, data ? atomic_long_read(&data->count) : 0);
-  7119	
-  7120		buflen = seq_get_buf(m, &buf);
-  7121		if (buf) {
-  7122			len = cgroup_path(css->cgroup, buf, buflen);
-  7123			seq_commit(m, len < buflen ? len : -1);
-  7124		}
-  7125	
-  7126		if (ss->css_dump) {
-  7127			seq_puts(m, " -- ");
-  7128			ss->css_dump(css, m);
-  7129		}
-  7130	
-  7131		seq_putc(m, '\n');
-  7132		return 0;
-  7133	}
-  7134	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Prabhakar
