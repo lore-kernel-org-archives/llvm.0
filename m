@@ -1,201 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from smtp66.iad3b.emailsrvr.com (smtp66.iad3b.emailsrvr.com [146.20.161.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0D7168C9;
-	Tue, 12 Sep 2023 10:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694514446; x=1726050446;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qGr4kPRYNLBcmOoU7BZXbzH8qvdnbOtuzecITq1V4t4=;
-  b=aMEAudmneoAbHWYrtHWYf2GHFPGLOYkBZD8ChCvU87BkKJwnvVazu2sB
-   3hPjZFHaJR746zsLrSJuM38kekBBlZ6DMh/pAz0HuKb/ADyT/JL98J2ZA
-   xLjxYTSyrKzknk35zfOblVrPHGD2LgSNk5G6ZUWXPZtSdej+S2rX8qb0o
-   86k0YdwJxHn8LapJv549ezrEGqTA+SkRcdp8ui/jLSBUVARouaFRIGgBB
-   asFTkkZzIP6yJgLb9H0tQ/x6GZ53awH0TAbSq0mtC+8G9xtW1JLQ/J/hA
-   Gof4Ji83QscHJ7WphMVfqRq4wL3lJGmYar/x1GHL2IwUoXEdqCgez/1Vh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="444770770"
-X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="444770770"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 03:27:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="917387011"
-X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="917387011"
-Received: from lkp-server02.sh.intel.com (HELO 1e56c5165d33) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Sep 2023 03:27:24 -0700
-Received: from kbuild by 1e56c5165d33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qg0c6-0000GB-0m;
-	Tue, 12 Sep 2023 10:27:22 +0000
-Date: Tue, 12 Sep 2023 18:27:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 2179/4552] fs/bcachefs/btree_key_cache.c:701:33:
- warning: format specifies type 'size_t' (aka 'unsigned int') but the
- argument has type 'long'
-Message-ID: <202309121832.Vdd6Enjx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBEF17721
+	for <llvm@lists.linux.dev>; Tue, 12 Sep 2023 10:37:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+	s=20221208-6x11dpa4; t=1694513899;
+	bh=FH3C6DGeGqxyT5D0x1WZDEUoGXKaA0SlVyvXD/E86uk=;
+	h=Date:Subject:To:From:From;
+	b=Tq6xJ2+piqPbhOIJE69N/bFxHEol/tmPY3c/hCTgDQpjfzcL1PHLR0dKjZfF714V7
+	 Vl/6zaEzVFXQTpS59Oc3i3RhW8WqIwPdHyjcxiin/hSqOtSelQtRrdQ5MMJLWJtYqR
+	 D98zi0KdjdUX1nH+1iIJQBq7/UhFQ72R5qHGEl7g=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp17.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id C837BA00C7;
+	Tue, 12 Sep 2023 06:18:15 -0400 (EDT)
+Message-ID: <44acdea6-271f-4e71-a0b3-d74a92034a9a@mev.co.uk>
+Date: Tue, 12 Sep 2023 11:18:13 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/7] drivers/comedi: fix Python string escapes
+To: Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ llvm@lists.linux.dev, linux-pm@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ H Hartley Sweeten <hsweeten@visionengravers.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ linux-perf-users@vger.kernel.org,
+ Todd E Brandt <todd.e.brandt@linux.intel.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>
+References: <20230912060801.95533-1-bgray@linux.ibm.com>
+ <20230912060801.95533-4-bgray@linux.ibm.com>
+Content-Language: en-GB
+From: Ian Abbott <abbotti@mev.co.uk>
+Organization: MEV Ltd.
+In-Reply-To: <20230912060801.95533-4-bgray@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 263f4c94-c5b5-4040-bf22-1f7e4ea60010-1-1
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3c13c772fc233a10342c8e1605ff0855dfdf0c89
-commit: 0b07f462c6742128c9fcd67656fb110f2d39c4e1 [2179/4552] bcachefs: btree key cache locking improvements
-config: powerpc-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230912/202309121832.Vdd6Enjx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309121832.Vdd6Enjx-lkp@intel.com/reproduce)
+On 12/09/2023 07:07, Benjamin Gray wrote:
+> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
+> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
+> be a syntax error.
+> 
+> Fix these now to get ahead of it before it's an error.
+> 
+> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+> ---
+>   drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+> index 90378fb50580..d19101fc2a94 100755
+> --- a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+> +++ b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+> @@ -44,7 +44,7 @@ def routedict_to_structinit_single(name, D, return_name=False):
+>   
+>       lines.append('\t\t[B({})] = {{'.format(D0_sig))
+>       for D1_sig, value in D1:
+> -      if not re.match('[VIU]\([^)]*\)', value):
+> +      if not re.match(r'[VIU]\([^)]*\)', value):
+>           sys.stderr.write('Invalid register format: {}\n'.format(repr(value)))
+>           sys.stderr.write(
+>             'Register values should be formatted with V(),I(),or U()\n')
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309121832.Vdd6Enjx-lkp@intel.com/
+Looks good thanks!  I ran the modified script using 'make everything' in 
+the directory (after setting up a python venv to install ctypesgen) and 
+it didn't break anything. (There were some harmless errors output by 
+ctypesgen due to failing to parse some GCC extensions, but those are 
+nothing to do with this patch and the generated C files are OK.)
 
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:211:1: note: expanded from here
-     211 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/btree_key_cache.c:2:
-   In file included from fs/bcachefs/bcachefs.h:184:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:213:1: note: expanded from here
-     213 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/btree_key_cache.c:2:
-   In file included from fs/bcachefs/bcachefs.h:184:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
-     215 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/btree_key_cache.c:2:
-   In file included from fs/bcachefs/bcachefs.h:184:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
-     217 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/btree_key_cache.c:6:
-   fs/bcachefs/btree_locking.h:169:35: warning: implicit conversion from enumeration type 'enum btree_node_locked_type' to different enumeration type 'enum six_lock_type' [-Wenum-conversion]
-     169 |                         six_lock_increment(&b->c.lock, want);
-         |                         ~~~~~~~~~~~~~~~~~~             ^~~~
-   fs/bcachefs/btree_locking.h:202:46: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-     202 |                 btree_node_lock_increment(trans, b, level, type) ||
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~                  ^~~~
->> fs/bcachefs/btree_key_cache.c:701:33: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'long' [-Wformat]
-     701 |         pr_buf(out, "nr_keys:\t%zu\n",  atomic_long_read(&c->nr_keys));
-         |                                ~~~      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                %ld
-   fs/bcachefs/util.h:261:6: note: expanded from macro 'pr_buf'
-     261 |                                  __VA_ARGS__);                          \
-         |                                  ^~~~~~~~~~~
-   fs/bcachefs/btree_key_cache.c:702:34: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'long' [-Wformat]
-     702 |         pr_buf(out, "nr_dirty:\t%zu\n", atomic_long_read(&c->nr_dirty));
-         |                                 ~~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                 %ld
-   fs/bcachefs/util.h:261:6: note: expanded from macro 'pr_buf'
-     261 |                                  __VA_ARGS__);                          \
-         |                                  ^~~~~~~~~~~
-   10 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=n] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
-
-
-vim +701 fs/bcachefs/btree_key_cache.c
-
-   697	
-   698	void bch2_btree_key_cache_to_text(struct printbuf *out, struct btree_key_cache *c)
-   699	{
-   700		pr_buf(out, "nr_freed:\t%zu\n",	c->nr_freed);
- > 701		pr_buf(out, "nr_keys:\t%zu\n",	atomic_long_read(&c->nr_keys));
-   702		pr_buf(out, "nr_dirty:\t%zu\n",	atomic_long_read(&c->nr_dirty));
-   703	}
-   704	
+Reviewed-by: Ian Abbott <abbotti@mev.co.uk>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
+-=( registered in England & Wales.  Regd. number: 02862268.  )=-
+-=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
+-=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+
