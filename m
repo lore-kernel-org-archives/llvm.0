@@ -1,51 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1A8168DA;
-	Tue, 12 Sep 2023 14:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98D32F21;
+	Tue, 12 Sep 2023 14:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694527933; x=1726063933;
+  t=1694529275; x=1726065275;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=wbRiBFZ4+dx/HV/xU4htIqQ3xk7BwZ0yVTxG47NP2co=;
-  b=ASXcP4p/2UuHhqAXYyVEquscwMVpu60Q8p1n1jdkoidvu+cFSXbJ73kJ
-   AGfjHhVcPYQ7s1Y9qEehfjRlnWjHIvYU494ItWbvaMKv/yfuvf7gUwE39
-   iFkExogo/mHHqjdmkkSEslLJSGTg619jBvgNmVB+EcTsH92j2Cijm6OFw
-   GjWXubbKAI39gqCyOnp1xFu1nrnmJCYCYpG+DO/1sIEanK+xlub0KILyj
-   Z6Lk+IWArFXh1PtzC6Ng7NC75/pevk4X026Bp1FQqRnIvI8aSohTcWVwk
-   6Tb75j7+T/iCB1q+IliAw4GPtAbCi8GZg5w9RpzcoT5SnNaeHd8QY6wL7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="375715161"
+  bh=0OKqkQKJS3WV9cniVX/rAP6QHhyqfdQ6uX7H4idPa7o=;
+  b=kn91L6EWYqwRheSqqZ6BJReQWc6fjEH1V8Cm3pQWW2SAxp+H5OfAbvsQ
+   RgqG1cHNWd2yFS13KcCrpkMsQQjsRoL3/24z+JRl15rBKWQ2rYDqp1uV5
+   +THqg/+rfgMzT/X0txhNvp04ZzYU3FS/VcwHrYeZFJdVe/6b5IJfnTw+L
+   LTgZTMWm4xNtPtTB4w4G1zCUKv807isnRDBPmcAwrk8HDpXjjALOhTK97
+   h8wow2K6k1H3Xr7KV/ylWesSqRCZF+7azdq4LpSB67acDviabASkykOFs
+   QEcxnkCCbOfhUAOfuDY/X6x7tPlgoGc+CHqhEpb7pkTLOl5k07awWE8tt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="444824888"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="375715161"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 07:12:09 -0700
+   d="scan'208";a="444824888"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 07:34:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="809276394"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="917447259"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="809276394"
+   d="scan'208";a="917447259"
 Received: from lkp-server02.sh.intel.com (HELO 0a6943a0b3e1) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Sep 2023 07:12:05 -0700
+  by orsmga005.jf.intel.com with ESMTP; 12 Sep 2023 07:34:05 -0700
 Received: from kbuild by 0a6943a0b3e1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qg47V-00003L-2y;
-	Tue, 12 Sep 2023 14:12:01 +0000
-Date: Tue, 12 Sep 2023 22:11:56 +0800
+	id 1qg4So-00004t-2k;
+	Tue, 12 Sep 2023 14:34:02 +0000
+Date: Tue, 12 Sep 2023 22:33:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matthew Brost <matthew.brost@intel.com>,
-	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org
+To: Janne Grunau via B4 Relay <devnull+j.jannau.net@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	robdclark@chromium.org, thomas.hellstrom@linux.intel.com,
-	Matthew Brost <matthew.brost@intel.com>, sarah.walker@imgtec.com,
-	ketil.johnsen@arm.com, mcanal@igalia.com, Liviu.Dudau@arm.com,
-	luben.tuikov@amd.com, lina@asahilina.net, donald.robson@imgtec.com,
-	boris.brezillon@collabora.com, christian.koenig@amd.com,
-	faith.ekstrand@collabora.com
-Subject: Re: [PATCH v3 03/13] drm/sched: Move schedule policy to scheduler /
- entity
-Message-ID: <202309122100.HAEi8ytJ-lkp@intel.com>
-References: <20230912021615.2086698-4-matthew.brost@intel.com>
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev
+Subject: Re: [PATCH] drm/simpledrm: Add support for multiple "power-domains"
+Message-ID: <202309122212.MetCn4UK-lkp@intel.com>
+References: <20230910-simpledrm-multiple-power-domains-v1-1-f8718aefc685@jannau.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,105 +51,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230912021615.2086698-4-matthew.brost@intel.com>
+In-Reply-To: <20230910-simpledrm-multiple-power-domains-v1-1-f8718aefc685@jannau.net>
 
-Hi Matthew,
+Hi Janne,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on drm-exynos/exynos-drm-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.6-rc1 next-20230912]
-[cannot apply to drm-misc/drm-misc-next drm-intel/for-linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 15d30b46573d75f5cb58cfacded8ebab9c76a2b0]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Brost/drm-sched-Add-drm_sched_submit_-helpers/20230912-102001
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-patch link:    https://lore.kernel.org/r/20230912021615.2086698-4-matthew.brost%40intel.com
-patch subject: [PATCH v3 03/13] drm/sched: Move schedule policy to scheduler / entity
-config: arm64-randconfig-r032-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122100.HAEi8ytJ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122100.HAEi8ytJ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Janne-Grunau-via-B4-Relay/drm-simpledrm-Add-support-for-multiple-power-domains/20230911-004026
+base:   15d30b46573d75f5cb58cfacded8ebab9c76a2b0
+patch link:    https://lore.kernel.org/r/20230910-simpledrm-multiple-power-domains-v1-1-f8718aefc685%40jannau.net
+patch subject: [PATCH] drm/simpledrm: Add support for multiple "power-domains"
+config: arm64-randconfig-r003-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122212.MetCn4UK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122212.MetCn4UK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309122100.HAEi8ytJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309122212.MetCn4UK-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/v3d/v3d_sched.c:403:9: error: use of undeclared identifier 'ULL'
-                                ULL, "v3d_render", DRM_SCHED_POLICY_DEFAULT,
-                                ^
-   1 error generated.
+>> drivers/gpu/drm/tiny/simpledrm.c:506:24: warning: flag ' ' results in undefined behavior with 'p' conversion specifier [-Wformat]
+     506 |         drm_err(&sdev->dev, "% power-domains count:%d\n", __func__, sdev->pwr_dom_count);
+         |                              ~^~
+   include/drm/drm_print.h:469:39: note: expanded from macro 'drm_err'
+     469 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
+         |                                              ^~~
+   include/drm/drm_print.h:456:41: note: expanded from macro '__drm_printk'
+     456 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+         |                                                ^~~
+   include/linux/dev_printk.h:144:57: note: expanded from macro 'dev_err'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ^~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   1 warning generated.
 
 
-vim +/ULL +403 drivers/gpu/drm/v3d/v3d_sched.c
+vim +506 drivers/gpu/drm/tiny/simpledrm.c
 
-   381	
-   382	int
-   383	v3d_sched_init(struct v3d_dev *v3d)
-   384	{
-   385		int hw_jobs_limit = 1;
-   386		int job_hang_limit = 0;
-   387		int hang_limit_ms = 500;
-   388		int ret;
-   389	
-   390		ret = drm_sched_init(&v3d->queue[V3D_BIN].sched,
-   391				     &v3d_bin_sched_ops, NULL,
-   392				     hw_jobs_limit, job_hang_limit,
-   393				     msecs_to_jiffies(hang_limit_ms), NULL,
-   394				     NULL, "v3d_bin", DRM_SCHED_POLICY_DEFAULT,
-   395				     v3d->drm.dev);
-   396		if (ret)
-   397			return ret;
-   398	
-   399		ret = drm_sched_init(&v3d->queue[V3D_RENDER].sched,
-   400				     &v3d_render_sched_ops, NULL,
-   401				     hw_jobs_limit, job_hang_limit,
-   402				     msecs_to_jiffies(hang_limit_ms), NULL,
- > 403				     ULL, "v3d_render", DRM_SCHED_POLICY_DEFAULT,
-   404				     v3d->drm.dev);
-   405		if (ret)
-   406			goto fail;
-   407	
-   408		ret = drm_sched_init(&v3d->queue[V3D_TFU].sched,
-   409				     &v3d_tfu_sched_ops, NULL,
-   410				     hw_jobs_limit, job_hang_limit,
-   411				     msecs_to_jiffies(hang_limit_ms), NULL,
-   412				     NULL, "v3d_tfu", DRM_SCHED_POLICY_DEFAULT,
-   413				     v3d->drm.dev);
-   414		if (ret)
-   415			goto fail;
-   416	
-   417		if (v3d_has_csd(v3d)) {
-   418			ret = drm_sched_init(&v3d->queue[V3D_CSD].sched,
-   419					     &v3d_csd_sched_ops, NULL,
-   420					     hw_jobs_limit, job_hang_limit,
-   421					     msecs_to_jiffies(hang_limit_ms), NULL,
-   422					     NULL, "v3d_csd", DRM_SCHED_POLICY_DEFAULT,
-   423					     v3d->drm.dev);
-   424			if (ret)
-   425				goto fail;
-   426	
-   427			ret = drm_sched_init(&v3d->queue[V3D_CACHE_CLEAN].sched,
-   428					     &v3d_cache_clean_sched_ops, NULL,
-   429					     hw_jobs_limit, job_hang_limit,
-   430					     msecs_to_jiffies(hang_limit_ms), NULL,
-   431					     NULL, "v3d_cache_clean",
-   432					     DRM_SCHED_POLICY_DEFAULT, v3d->drm.dev);
-   433			if (ret)
-   434				goto fail;
-   435		}
-   436	
-   437		return 0;
-   438	
-   439	fail:
-   440		v3d_sched_fini(v3d);
-   441		return ret;
-   442	}
-   443	
+   477	
+   478	#if defined CONFIG_OF && defined CONFIG_PM_GENERIC_DOMAINS
+   479	/*
+   480	 * Generic power domain handling code.
+   481	 *
+   482	 * Here we handle the power-domains properties of our "simple-framebuffer"
+   483	 * dt node. This is only necessary if there is more than one power-domain.
+   484	 * A single power-domains is handled automatically by the driver core. Multiple
+   485	 * power-domains have to be handled by drivers since the driver core can't know
+   486	 * the correct power sequencing. Power sequencing is not an issue for simpledrm
+   487	 * since the bootloader has put the power domains already in the correct state.
+   488	 * simpledrm has only to ensure they remain active for its lifetime.
+   489	 *
+   490	 * When the driver unloads, we detach from the power-domains.
+   491	 *
+   492	 * We only complain about errors here, no action is taken as the most likely
+   493	 * error can only happen due to a mismatch between the bootloader which set
+   494	 * up the "simple-framebuffer" dt node, and the PM domain providers in the
+   495	 * device tree. Chances are that there are no adverse effects, and if there are,
+   496	 * a clean teardown of the fb probe will not help us much either. So just
+   497	 * complain and carry on, and hope that the user actually gets a working fb at
+   498	 * the end of things.
+   499	 */
+   500	static void simpledrm_device_detach_genpd(void *res)
+   501	{
+   502		int i;
+   503		struct simpledrm_device *sdev = /*(struct simpledrm_device *)*/res;
+   504	
+   505	
+ > 506		drm_err(&sdev->dev, "% power-domains count:%d\n", __func__, sdev->pwr_dom_count);
+   507		if (sdev->pwr_dom_count <= 1)
+   508			return;
+   509	
+   510		for (i = sdev->pwr_dom_count - 1; i >= 0; i--) {
+   511			if (!sdev->pwr_dom_links[i])
+   512				device_link_del(sdev->pwr_dom_links[i]);
+   513			if (!IS_ERR_OR_NULL(sdev->pwr_dom_devs[i]))
+   514				dev_pm_domain_detach(sdev->pwr_dom_devs[i], true);
+   515		}
+   516	}
+   517	
 
 -- 
 0-DAY CI Kernel Test Service
