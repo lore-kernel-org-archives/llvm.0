@@ -1,108 +1,159 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A5118F49;
-	Tue, 12 Sep 2023 13:50:59 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C146EC15;
-	Tue, 12 Sep 2023 06:51:35 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 642633F5A1;
-	Tue, 12 Sep 2023 06:50:56 -0700 (PDT)
-From: Ryan Roberts <ryan.roberts@arm.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	kernel test robot <oliver.sang@intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mark Brown <broonie@kernel.org>,
-	David Hildenbrand <david@redhat.com>,
-	Florent Revest <revest@chromium.org>,
-	=?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	oe-lkp@lists.linux.dev,
-	lkp@intel.com
-Subject: [PATCH v1] selftests: Link libasan statically for tests with -fsanitize=address
-Date: Tue, 12 Sep 2023 14:50:48 +0100
-Message-Id: <20230912135048.1755771-1-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1A8168DA;
+	Tue, 12 Sep 2023 14:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694527933; x=1726063933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wbRiBFZ4+dx/HV/xU4htIqQ3xk7BwZ0yVTxG47NP2co=;
+  b=ASXcP4p/2UuHhqAXYyVEquscwMVpu60Q8p1n1jdkoidvu+cFSXbJ73kJ
+   AGfjHhVcPYQ7s1Y9qEehfjRlnWjHIvYU494ItWbvaMKv/yfuvf7gUwE39
+   iFkExogo/mHHqjdmkkSEslLJSGTg619jBvgNmVB+EcTsH92j2Cijm6OFw
+   GjWXubbKAI39gqCyOnp1xFu1nrnmJCYCYpG+DO/1sIEanK+xlub0KILyj
+   Z6Lk+IWArFXh1PtzC6Ng7NC75/pevk4X026Bp1FQqRnIvI8aSohTcWVwk
+   6Tb75j7+T/iCB1q+IliAw4GPtAbCi8GZg5w9RpzcoT5SnNaeHd8QY6wL7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="375715161"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="375715161"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 07:12:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="809276394"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="809276394"
+Received: from lkp-server02.sh.intel.com (HELO 0a6943a0b3e1) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Sep 2023 07:12:05 -0700
+Received: from kbuild by 0a6943a0b3e1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qg47V-00003L-2y;
+	Tue, 12 Sep 2023 14:12:01 +0000
+Date: Tue, 12 Sep 2023 22:11:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew Brost <matthew.brost@intel.com>,
+	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	robdclark@chromium.org, thomas.hellstrom@linux.intel.com,
+	Matthew Brost <matthew.brost@intel.com>, sarah.walker@imgtec.com,
+	ketil.johnsen@arm.com, mcanal@igalia.com, Liviu.Dudau@arm.com,
+	luben.tuikov@amd.com, lina@asahilina.net, donald.robson@imgtec.com,
+	boris.brezillon@collabora.com, christian.koenig@amd.com,
+	faith.ekstrand@collabora.com
+Subject: Re: [PATCH v3 03/13] drm/sched: Move schedule policy to scheduler /
+ entity
+Message-ID: <202309122100.HAEi8ytJ-lkp@intel.com>
+References: <20230912021615.2086698-4-matthew.brost@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912021615.2086698-4-matthew.brost@intel.com>
 
-When dynamically linking, Address Sanitizer requires its library to be
-the first one to be loaded; this is apparently to ensure that every call
-to malloc is intercepted. If using LD_PRELOAD, those listed libraries
-will be loaded before the libraries listed in the program's ELF and will
-therefore violate this requirement, leading to the below failure and
-output from ASan.
+Hi Matthew,
 
-commit 58e2847ad2e6 ("selftests: line buffer test program's stdout")
-modified the kselftest runner to force line buffering by forcing the
-test programs to run through `stdbuf`. It turns out that stdbuf
-implements line buffering by injecting a library via LD_PRELOAD.
-Therefore selftests that use ASan started failing.
+kernel test robot noticed the following build errors:
 
-Fix this by statically linking libasan in the affected test programs,
-using the `-static-libasan` option. Note this is already the default for
-Clang, but not got GCC.
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on drm-exynos/exynos-drm-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.6-rc1 next-20230912]
+[cannot apply to drm-misc/drm-misc-next drm-intel/for-linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Test output sample for failing case:
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Brost/drm-sched-Add-drm_sched_submit_-helpers/20230912-102001
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+patch link:    https://lore.kernel.org/r/20230912021615.2086698-4-matthew.brost%40intel.com
+patch subject: [PATCH v3 03/13] drm/sched: Move schedule policy to scheduler / entity
+config: arm64-randconfig-r032-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122100.HAEi8ytJ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122100.HAEi8ytJ-lkp@intel.com/reproduce)
 
-  TAP version 13
-  1..3
-  # timeout set to 300
-  # selftests: openat2: openat2_test
-  # ==4052==ASan runtime does not come first in initial library list;
-  you should either link runtime to your application or manually preload
-  it with LD_PRELOAD.
-  not ok 1 selftests: openat2: openat2_test # exit=1
-  # timeout set to 300
-  # selftests: openat2: resolve_test
-  # ==4070==ASan runtime does not come first in initial library list;
-  you should either link runtime to your application or manually preload
-  it with LD_PRELOAD.
-  not ok 2 selftests: openat2: resolve_test # exit=1
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309122100.HAEi8ytJ-lkp@intel.com/
 
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-Fixes: 58e2847ad2e6 ("selftests: line buffer test program's stdout")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202309121342.97e2f008-oliver.sang@intel.com
----
- tools/testing/selftests/fchmodat2/Makefile | 2 +-
- tools/testing/selftests/openat2/Makefile   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-index 20839f8e43f2..71ec34bf1501 100644
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
+>> drivers/gpu/drm/v3d/v3d_sched.c:403:9: error: use of undeclared identifier 'ULL'
+                                ULL, "v3d_render", DRM_SCHED_POLICY_DEFAULT,
+                                ^
+   1 error generated.
 
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
- TEST_GEN_PROGS := fchmodat2_test
 
- include ../lib.mk
-diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-index 843ba56d8e49..254d676a2689 100644
---- a/tools/testing/selftests/openat2/Makefile
-+++ b/tools/testing/selftests/openat2/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
+vim +/ULL +403 drivers/gpu/drm/v3d/v3d_sched.c
 
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan
- TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
+   381	
+   382	int
+   383	v3d_sched_init(struct v3d_dev *v3d)
+   384	{
+   385		int hw_jobs_limit = 1;
+   386		int job_hang_limit = 0;
+   387		int hang_limit_ms = 500;
+   388		int ret;
+   389	
+   390		ret = drm_sched_init(&v3d->queue[V3D_BIN].sched,
+   391				     &v3d_bin_sched_ops, NULL,
+   392				     hw_jobs_limit, job_hang_limit,
+   393				     msecs_to_jiffies(hang_limit_ms), NULL,
+   394				     NULL, "v3d_bin", DRM_SCHED_POLICY_DEFAULT,
+   395				     v3d->drm.dev);
+   396		if (ret)
+   397			return ret;
+   398	
+   399		ret = drm_sched_init(&v3d->queue[V3D_RENDER].sched,
+   400				     &v3d_render_sched_ops, NULL,
+   401				     hw_jobs_limit, job_hang_limit,
+   402				     msecs_to_jiffies(hang_limit_ms), NULL,
+ > 403				     ULL, "v3d_render", DRM_SCHED_POLICY_DEFAULT,
+   404				     v3d->drm.dev);
+   405		if (ret)
+   406			goto fail;
+   407	
+   408		ret = drm_sched_init(&v3d->queue[V3D_TFU].sched,
+   409				     &v3d_tfu_sched_ops, NULL,
+   410				     hw_jobs_limit, job_hang_limit,
+   411				     msecs_to_jiffies(hang_limit_ms), NULL,
+   412				     NULL, "v3d_tfu", DRM_SCHED_POLICY_DEFAULT,
+   413				     v3d->drm.dev);
+   414		if (ret)
+   415			goto fail;
+   416	
+   417		if (v3d_has_csd(v3d)) {
+   418			ret = drm_sched_init(&v3d->queue[V3D_CSD].sched,
+   419					     &v3d_csd_sched_ops, NULL,
+   420					     hw_jobs_limit, job_hang_limit,
+   421					     msecs_to_jiffies(hang_limit_ms), NULL,
+   422					     NULL, "v3d_csd", DRM_SCHED_POLICY_DEFAULT,
+   423					     v3d->drm.dev);
+   424			if (ret)
+   425				goto fail;
+   426	
+   427			ret = drm_sched_init(&v3d->queue[V3D_CACHE_CLEAN].sched,
+   428					     &v3d_cache_clean_sched_ops, NULL,
+   429					     hw_jobs_limit, job_hang_limit,
+   430					     msecs_to_jiffies(hang_limit_ms), NULL,
+   431					     NULL, "v3d_cache_clean",
+   432					     DRM_SCHED_POLICY_DEFAULT, v3d->drm.dev);
+   433			if (ret)
+   434				goto fail;
+   435		}
+   436	
+   437		return 0;
+   438	
+   439	fail:
+   440		v3d_sched_fini(v3d);
+   441		return ret;
+   442	}
+   443	
 
- include ../lib.mk
---
-2.25.1
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
