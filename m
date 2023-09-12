@@ -1,90 +1,544 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CBA947B;
-	Tue, 12 Sep 2023 18:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694544681; x=1726080681;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m4ArRUJq81IoQwOUurgDTOz0S2e8/xwn1JxXLNRgGXc=;
-  b=D9B170+VMzpN6ux9v/C3QKGCapm34pk5/qi2YlqERKPpWTCy6GVbhBUl
-   x/lFA1NiwWIrUZn1F0vnM+i4zDirKgecChdrR7CSciqX1hzWPI7uPFz0J
-   ameNgbt6r3ASYCbmp8nLddJyn0MtPzoZiez7HybX40flZYu0Ue7B4d7LH
-   OLBQik5Bhg2GdhqPV1rXXl6cEYzwhCwAnrbVuSu/Gsuizhln196KMYKC+
-   IroKacPAXE1N6yuyRMfTU5MCu2k6VQuSyLYEEy+c2sdObKCKi889QSezl
-   qn0Rs7wOIE2bTSZlYO4lKeHFm6nwJLnUjSTpQ3SGMUJn/6D99PuuEvdFH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="382272922"
-X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
-   d="scan'208";a="382272922"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 11:51:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="887041629"
-X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
-   d="scan'208";a="887041629"
-Received: from lkp-server02.sh.intel.com (HELO 47e905db7d2b) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Sep 2023 11:50:45 -0700
-Received: from kbuild by 47e905db7d2b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qg8Tf-00008v-17;
-	Tue, 12 Sep 2023 18:51:11 +0000
-Date: Wed, 13 Sep 2023 02:50:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pingfan Liu <piliu@redhat.com>, linuxppc-dev@lists.ozlabs.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Baoquan He <bhe@redhat.com>, Pingfan Liu <piliu@redhat.com>,
-	kexec@lists.infradead.org, Mahesh Salgaonkar <mahesh@linux.ibm.com>,
-	Ming Lei <ming.lei@redhat.com>, Wen Xiong <wenxiong@linux.ibm.com>,
-	Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCHv6 1/3] powerpc/setup: Loosen the mapping between cpu
- logical id and its seq in dt
-Message-ID: <202309130232.N2REwHBv-lkp@intel.com>
-References: <20230911131855.40738-2-piliu@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A5FA920;
+	Tue, 12 Sep 2023 19:16:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B78C433C7;
+	Tue, 12 Sep 2023 19:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694546161;
+	bh=1B/YqhKkZLDmCMNMuAosUtGk5QHN9NXXS9k+cDsWH3o=;
+	h=From:Subject:Date:To:Cc:From;
+	b=LZv3sfD95nm2KEDBO21bnMb63wX0+2V/cOqFJo9GGBlo4GAK9zojsQKla24jnEmBC
+	 8Zi5WdfsTo8lN0dpWvZX6jfgq22TFR2YCd6bKXg9VSsC4CsmpIGgFqRhLyvutauscY
+	 0q03dweMoVDarZN4O/lTmJa1JDKwNbp0oii+ZX/Qhl3j4AzyM5A3sxdXGQzn/JYk0R
+	 +G3AswpHlSDXdig3xI8GO3+HY0k9BxcEgXt0yHJw4Dqe/lEjUQUnvgQTyjBSu3t0NF
+	 nt4VaTA9esjr+d0ygC1pP6g/Ij44GGmfVmUbcOCXhqDUkKObzp2jflosbGfLTwS5rb
+	 xpBfJILo2rPXA==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/7] bcachefs compiler warning fixes for 32-bit
+Date: Tue, 12 Sep 2023 12:15:37 -0700
+Message-Id: <20230912-bcachefs-warning-fixes-v1-0-a1cc83a38836@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230911131855.40738-2-piliu@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANm4AGUC/x3LQQqAIBBA0avIrBtIBaOuEi1Mx5qNhQMVhHdPW
+ j4+/wWhwiQwqRcKXSx85AbdKQi7zxshx2YwvbH9qA2uwYedkuDtS+a8YeKHBJO2LrloLQ0a2nw
+ W+kN756XWD2WD1O9oAAAA
+To: kent.overstreet@linux.dev
+Cc: bfoster@redhat.com, linux-bcachefs@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=23439; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=1B/YqhKkZLDmCMNMuAosUtGk5QHN9NXXS9k+cDsWH3o=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKkMO973VV5iXN/7ML040+GziMgGv9v5gqXepwRU/NX3B
+ by++3pHRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjI9T2MDHujjIr29GzYqyHL
+ +XbqPCH7Ptac70/n5j6TWqD675v19seMDLOeV4n/OuXgXnltx2zFKY89L0rNfhn1dVWm/oZTe47
+ GivIDAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Pingfan,
+Hi all,
 
-kernel test robot noticed the following build errors:
+This is a series of fixes for warnings that I now see from bcachefs when
+building my test matrix with LLVM in -next, mostly from 32-bit
+architectures. Most of the patches should be uncontroversial; the
+min_t/max_t changes are probably the worst ones.
 
-[auto build test ERROR on powerpc/fixes]
-[also build test ERROR on linus/master v6.6-rc1 next-20230912]
-[cannot apply to powerpc/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I still see several instances of -Wframe-larger-than when building for
+32-bit ARM (I am sure they will show up on other 32-bit architectures as
+well), which I am not entirely sure how to tackle. It looks like the
+majority of the instances are just due to large structures on the stack
+in combination with some inlining resulting in some spills, so it seems
+like moving to a heap allocation for some of those would the right fix
+but I know some maintainers would rather fix them in their own way,
+hence just the report. I have included the compiler output (clang and
+GCC in some cases) along with the output of clang's
+-Rpass-analysis=stack-frame-layout, which helps with seeing where the
+extra stack usage comes from. Tallying up the larger variables shows
+that most of these functions are pushing the 32-bit limit of 1024 bytes
+without any inlining (+/- 50-100 bytes in majority of cases).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pingfan-Liu/powerpc-setup-Loosen-the-mapping-between-cpu-logical-id-and-its-seq-in-dt/20230911-213042
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git fixes
-patch link:    https://lore.kernel.org/r/20230911131855.40738-2-piliu%40redhat.com
-patch subject: [PATCHv6 1/3] powerpc/setup: Loosen the mapping between cpu logical id and its seq in dt
-config: powerpc-randconfig-r032-20230912 (https://download.01.org/0day-ci/archive/20230913/202309130232.N2REwHBv-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309130232.N2REwHBv-lkp@intel.com/reproduce)
+===
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309130232.N2REwHBv-lkp@intel.com/
+fs/bcachefs/fs-common.c:356:5: error: stack frame size (1128) exceeds limit (1024) in 'bch2_rename_trans' [-Werror,-Wframe-larger-than]
+  356 | int bch2_rename_trans(struct btree_trans *trans,
+      |     ^
 
-All errors (new ones prefixed by >>):
+fs/bcachefs/fs-common.c:364:1: remark: 
+Function: bch2_rename_trans
+Offset: [SP+52], Type: Variable, Align: 4, Size: 4
+Offset: [SP+48], Type: Variable, Align: 8, Size: 4
+Offset: [SP+44], Type: Variable, Align: 4, Size: 4
+Offset: [SP+40], Type: Variable, Align: 8, Size: 4
+Offset: [SP+36], Type: Variable, Align: 4, Size: 4
+Offset: [SP+32], Type: Variable, Align: 8, Size: 40
+Offset: [SP+28], Type: Variable, Align: 4, Size: 4
+Offset: [SP+24], Type: Variable, Align: 8, Size: 4
+Offset: [SP+20], Type: Variable, Align: 4, Size: 4
+Offset: [SP+16], Type: Variable, Align: 8, Size: 4
+Offset: [SP+8], Type: Variable, Align: 8, Size: 4
+Offset: [SP+4], Type: Variable, Align: 4, Size: 4
+Offset: [SP+0], Type: Variable, Align: 8, Size: 4
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-424], Type: Variable, Align: 8, Size: 376
+Offset: [SP-456], Type: Variable, Align: 8, Size: 32
+Offset: [SP-576], Type: Variable, Align: 8, Size: 120
+Offset: [SP-696], Type: Variable, Align: 8, Size: 120
+Offset: [SP-816], Type: Variable, Align: 8, Size: 120
+Offset: [SP-936], Type: Variable, Align: 8, Size: 120
+Offset: [SP-960], Type: Variable, Align: 8, Size: 24
+Offset: [SP-984], Type: Variable, Align: 8, Size: 24
+Offset: [SP-1000], Type: Variable, Align: 8, Size: 16
+Offset: [SP-1016], Type: Variable, Align: 8, Size: 16
+Offset: [SP-1024], Type: Variable, Align: 8, Size: 8
+Offset: [SP-1032], Type: Variable, Align: 8, Size: 8
+Offset: [SP-1036], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1040], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1044], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1048], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1052], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1056], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1060], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1064], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+  364 | {
+      | ^
 
->> ld.lld: error: undefined symbol: boot_cpu_hwid
-   >>> referenced by setup-common.c:0 (arch/powerpc/kernel/setup-common.c:0)
-   >>>               arch/powerpc/kernel/setup-common.o:(smp_setup_cpu_maps) in archive vmlinux.a
-   >>> referenced by setup-common.c:0 (arch/powerpc/kernel/setup-common.c:0)
-   >>>               arch/powerpc/kernel/setup-common.o:(smp_setup_cpu_maps) in archive vmlinux.a
+===
 
+fs/bcachefs/reflink.c:244:5: error: stack frame size (1256) exceeds limit (1024) in 'bch2_remap_range' [-Werror,-Wframe-larger-than]
+  244 | s64 bch2_remap_range(struct bch_fs *c,
+      |     ^
+
+fs/bcachefs/reflink.c: In function 'bch2_remap_range':
+fs/bcachefs/reflink.c:399:1: error: the frame size of 1192 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+  399 | }
+      | ^
+
+fs/bcachefs/reflink.c:249:1: remark: 
+Function: bch2_remap_range
+Offset: [SP+56], Type: Variable, Align: 8, Size: 4
+Offset: [SP+52], Type: Variable, Align: 4, Size: 4
+Offset: [SP+48], Type: Variable, Align: 8, Size: 4
+Offset: [SP+44], Type: Variable, Align: 4, Size: 4
+Offset: [SP+40], Type: Variable, Align: 8, Size: 4
+Offset: [SP+36], Type: Variable, Align: 4, Size: 4
+Offset: [SP+32], Type: Variable, Align: 8, Size: 4
+Offset: [SP+28], Type: Variable, Align: 4, Size: 4
+Offset: [SP+24], Type: Variable, Align: 8, Size: 4
+Offset: [SP+20], Type: Variable, Align: 4, Size: 4
+Offset: [SP+16], Type: Variable, Align: 8, Size: 4
+Offset: [SP+12], Type: Variable, Align: 4, Size: 4
+Offset: [SP+8], Type: Variable, Align: 8, Size: 4
+Offset: [SP+4], Type: Variable, Align: 4, Size: 4
+Offset: [SP+0], Type: Variable, Align: 8, Size: 4
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-360], Type: Variable, Align: 8, Size: 312
+Offset: [SP-464], Type: Variable, Align: 8, Size: 104
+Offset: [SP-568], Type: Variable, Align: 8, Size: 104
+Offset: [SP-688], Type: Variable, Align: 8, Size: 120
+Offset: [SP-808], Type: Variable, Align: 8, Size: 120
+Offset: [SP-968], Type: Variable, Align: 8, Size: 160
+Offset: [SP-1088], Type: Variable, Align: 8, Size: 120
+Offset: [SP-1096], Type: Variable, Align: 4, Size: 8
+Offset: [SP-1100], Type: Variable, Align: 4, Size: 4
+Offset: [SP-1104], Type: Variable, Align: 4, Size: 4
+Offset: [SP-1108], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1112], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1116], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1120], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1124], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1128], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1132], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1136], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1140], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1144], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1148], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1152], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1156], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1160], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1164], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1168], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1172], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1176], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1180], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1184], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1188], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1192], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1196], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1200], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1204], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1208], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1212], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1216], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+  249 | {
+      | ^
+
+===
+
+fs/bcachefs/recovery.c: In function 'bch2_fs_initialize':
+fs/bcachefs/recovery.c:1057:1: error: the frame size of 1096 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+ 1057 | }
+      | ^
+
+fs/bcachefs/recovery.c:924:5: error: stack frame size (1184) exceeds limit (1024) in 'bch2_fs_initialize' [-Werror,-Wframe-larger-than]
+  924 | int bch2_fs_initialize(struct bch_fs *c)
+      |     ^
+
+fs/bcachefs/recovery.c:925:1: remark: 
+Function: bch2_fs_initialize
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-440], Type: Variable, Align: 8, Size: 392
+Offset: [SP-752], Type: Variable, Align: 8, Size: 312
+Offset: [SP-912], Type: Variable, Align: 8, Size: 160
+Offset: [SP-1072], Type: Variable, Align: 8, Size: 160
+Offset: [SP-1088], Type: Variable, Align: 8, Size: 16
+Offset: [SP-1092], Type: Variable, Align: 4, Size: 4
+Offset: [SP-1096], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1100], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1104], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1108], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1112], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1116], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+  925 | {
+      | ^
+
+===
+
+fs/bcachefs/fs.c: In function 'bch2_rename2':
+fs/bcachefs/fs.c:639:1: error: the frame size of 1072 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+  639 | }
+      | ^
+
+fs/bcachefs/fs.c:534:12: error: stack frame size (1096) exceeds limit (1024) in 'bch2_rename2' [-Werror,-Wframe-larger-than]
+  534 | static int bch2_rename2(struct mnt_idmap *idmap,
+      |            ^
+
+fs/bcachefs/fs.c:538:1: remark: 
+Function: bch2_rename2
+Offset: [SP+4], Type: Variable, Align: 4, Size: 4
+Offset: [SP+0], Type: Variable, Align: 8, Size: 4
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-360], Type: Variable, Align: 8, Size: 312
+Offset: [SP-520], Type: Variable, Align: 8, Size: 160
+Offset: [SP-680], Type: Variable, Align: 8, Size: 160
+Offset: [SP-840], Type: Variable, Align: 8, Size: 160
+Offset: [SP-1000], Type: Variable, Align: 8, Size: 160
+Offset: [SP-1004], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1008], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1012], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1016], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1020], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1024], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1028], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1032], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1036], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+  538 | {
+      | ^
+
+===
+
+fs/bcachefs/fs-io.c: In function 'bchfs_fcollapse_finsert':
+fs/bcachefs/fs-io.c:749:1: error: the frame size of 1032 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+  749 | }
+      | ^
+
+fs/bcachefs/fs-io.c:573:13: error: stack frame size (1088) exceeds limit (1024) in 'bchfs_fcollapse_finsert' [-Werror,-Wframe-larger-than]
+  573 | static long bchfs_fcollapse_finsert(struct bch_inode_info *inode,
+      |             ^
+
+fs/bcachefs/fs-io.c:576:1: remark: 
+Function: bchfs_fcollapse_finsert
+Offset: [SP+8], Type: Variable, Align: 8, Size: 4
+Offset: [SP+4], Type: Variable, Align: 4, Size: 4
+Offset: [SP+0], Type: Variable, Align: 8, Size: 4
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-152], Type: Variable, Align: 8, Size: 104
+Offset: [SP-464], Type: Variable, Align: 8, Size: 312
+Offset: [SP-584], Type: Variable, Align: 8, Size: 120
+Offset: [SP-704], Type: Variable, Align: 8, Size: 120
+Offset: [SP-824], Type: Variable, Align: 8, Size: 120
+Offset: [SP-864], Type: Variable, Align: 8, Size: 40
+Offset: [SP-880], Type: Variable, Align: 8, Size: 16
+Offset: [SP-904], Type: Variable, Align: 8, Size: 20
+Offset: [SP-908], Type: Variable, Align: 4, Size: 4
+Offset: [SP-916], Type: Variable, Align: 4, Size: 8
+Offset: [SP-920], Type: Spill, Align: 4, Size: 4
+Offset: [SP-924], Type: Spill, Align: 4, Size: 4
+Offset: [SP-928], Type: Spill, Align: 4, Size: 4
+Offset: [SP-932], Type: Spill, Align: 4, Size: 4
+Offset: [SP-936], Type: Spill, Align: 4, Size: 4
+Offset: [SP-940], Type: Spill, Align: 4, Size: 4
+Offset: [SP-944], Type: Spill, Align: 4, Size: 4
+Offset: [SP-948], Type: Spill, Align: 4, Size: 4
+Offset: [SP-952], Type: Spill, Align: 4, Size: 4
+Offset: [SP-956], Type: Spill, Align: 4, Size: 4
+Offset: [SP-960], Type: Spill, Align: 4, Size: 4
+Offset: [SP-964], Type: Spill, Align: 4, Size: 4
+Offset: [SP-968], Type: Spill, Align: 4, Size: 4
+Offset: [SP-972], Type: Spill, Align: 4, Size: 4
+Offset: [SP-976], Type: Spill, Align: 4, Size: 4
+Offset: [SP-980], Type: Spill, Align: 4, Size: 4
+Offset: [SP-984], Type: Spill, Align: 4, Size: 4
+Offset: [SP-988], Type: Spill, Align: 4, Size: 4
+Offset: [SP-992], Type: Spill, Align: 4, Size: 4
+Offset: [SP-996], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1000], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1004], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1008], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1012], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1016], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1020], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1024], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1028], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1032], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1036], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1040], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1044], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1048], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1052], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1056], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+  576 | {
+      | ^
+
+===
+
+fs/bcachefs/fsck.c:1806:5: error: stack frame size (1232) exceeds limit (1024) in 'bch2_check_dirents' [-Werror,-Wframe-larger-than]
+ 1806 | int bch2_check_dirents(struct bch_fs *c)
+      |     ^
+
+fs/bcachefs/fsck.c:1807:1: remark: 
+Function: bch2_check_dirents
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-424], Type: Variable, Align: 8, Size: 376
+Offset: [SP-464], Type: Variable, Align: 8, Size: 40
+Offset: [SP-776], Type: Variable, Align: 8, Size: 312
+Offset: [SP-816], Type: Variable, Align: 8, Size: 36
+Offset: [SP-856], Type: Variable, Align: 8, Size: 36
+Offset: [SP-896], Type: Variable, Align: 8, Size: 36
+Offset: [SP-1016], Type: Variable, Align: 8, Size: 120
+Offset: [SP-1020], Type: Variable, Align: 4, Size: 4
+Offset: [SP-1056], Type: Variable, Align: 8, Size: 32
+Offset: [SP-1080], Type: Variable, Align: 8, Size: 24
+Offset: [SP-1084], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1088], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1092], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1096], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1100], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1104], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1108], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1112], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1116], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1120], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1124], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1128], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1132], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1136], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1140], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1144], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1148], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1152], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1156], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1160], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1164], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1168], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1172], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1176], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1180], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1184], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1188], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1192], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1196], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+ 1807 | {
+      | ^
+
+===
+
+fs/bcachefs/fsck.c:1878:5: error: stack frame size (1040) exceeds limit (1024) in 'bch2_check_xattrs' [-Werror,-Wframe-larger-than]
+ 1878 | int bch2_check_xattrs(struct bch_fs *c)
+      |     ^
+
+fs/bcachefs/fsck.c:1879:1: remark: 
+Function: bch2_check_xattrs
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-424], Type: Variable, Align: 8, Size: 376
+Offset: [SP-456], Type: Variable, Align: 8, Size: 32
+Offset: [SP-768], Type: Variable, Align: 8, Size: 312
+Offset: [SP-808], Type: Variable, Align: 8, Size: 36
+Offset: [SP-928], Type: Variable, Align: 8, Size: 120
+Offset: [SP-952], Type: Variable, Align: 8, Size: 24
+Offset: [SP-956], Type: Spill, Align: 4, Size: 4
+Offset: [SP-960], Type: Spill, Align: 4, Size: 4
+Offset: [SP-964], Type: Spill, Align: 4, Size: 4
+Offset: [SP-968], Type: Spill, Align: 4, Size: 4
+Offset: [SP-972], Type: Spill, Align: 4, Size: 4
+Offset: [SP-976], Type: Spill, Align: 4, Size: 4
+Offset: [SP-980], Type: Spill, Align: 4, Size: 4
+Offset: [SP-984], Type: Spill, Align: 4, Size: 4
+Offset: [SP-988], Type: Spill, Align: 4, Size: 4
+Offset: [SP-992], Type: Spill, Align: 4, Size: 4
+Offset: [SP-996], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1000], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1004], Type: Spill, Align: 4, Size: 4
+Offset: [SP-1008], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+ 1879 | {
+      | ^
+
+===
+
+fs/bcachefs/fsck.c:359:12: error: stack frame size (1040) exceeds limit (1024) in 'reattach_inode' [-Werror,-Wframe-larger-than]
+  359 | static int reattach_inode(struct btree_trans *trans,
+      |            ^
+
+fs/bcachefs/fsck.c:362:1: remark: 
+Function: reattach_inode
+Offset: [SP-4], Type: Spill, Align: 4, Size: 4
+Offset: [SP-8], Type: Spill, Align: 4, Size: 4
+Offset: [SP-12], Type: Spill, Align: 4, Size: 4
+Offset: [SP-16], Type: Spill, Align: 4, Size: 4
+Offset: [SP-20], Type: Spill, Align: 4, Size: 4
+Offset: [SP-24], Type: Spill, Align: 4, Size: 4
+Offset: [SP-28], Type: Spill, Align: 4, Size: 4
+Offset: [SP-32], Type: Spill, Align: 4, Size: 4
+Offset: [SP-36], Type: Spill, Align: 4, Size: 4
+Offset: [SP-40], Type: Variable, Align: 4, Size: 4
+Offset: [SP-44], Type: Protector, Align: 4, Size: 4
+Offset: [SP-424], Type: Variable, Align: 8, Size: 376
+Offset: [SP-456], Type: Variable, Align: 8, Size: 32
+Offset: [SP-616], Type: Variable, Align: 8, Size: 160
+Offset: [SP-640], Type: Variable, Align: 8, Size: 20
+Offset: [SP-648], Type: Variable, Align: 4, Size: 8
+Offset: [SP-664], Type: Variable, Align: 8, Size: 16
+Offset: [SP-668], Type: Variable, Align: 4, Size: 4
+Offset: [SP-696], Type: Variable, Align: 8, Size: 24
+Offset: [SP-856], Type: Variable, Align: 8, Size: 160
+Offset: [SP-872], Type: Variable, Align: 8, Size: 16
+Offset: [SP-880], Type: Variable, Align: 8, Size: 8
+Offset: [SP-884], Type: Spill, Align: 4, Size: 4
+Offset: [SP-888], Type: Spill, Align: 4, Size: 4
+Offset: [SP-892], Type: Spill, Align: 4, Size: 4
+Offset: [SP-896], Type: Spill, Align: 4, Size: 4
+Offset: [SP-900], Type: Spill, Align: 4, Size: 4
+Offset: [SP-904], Type: Spill, Align: 4, Size: 4
+Offset: [SP-908], Type: Spill, Align: 4, Size: 4
+Offset: [SP-912], Type: Spill, Align: 4, Size: 4
+Offset: [SP-916], Type: Spill, Align: 4, Size: 4
+Offset: [SP-920], Type: Spill, Align: 4, Size: 4
+Offset: [SP-924], Type: Spill, Align: 4, Size: 4
+Offset: [SP-928], Type: Spill, Align: 4, Size: 4
+Offset: [SP-932], Type: Spill, Align: 4, Size: 4
+Offset: [SP-936], Type: Spill, Align: 4, Size: 4
+Offset: [SP-940], Type: Spill, Align: 4, Size: 4
+Offset: [SP-944], Type: Spill, Align: 4, Size: 4
+Offset: [SP-948], Type: Spill, Align: 4, Size: 4
+Offset: [SP-952], Type: Spill, Align: 4, Size: 4
+Offset: [SP-956], Type: Spill, Align: 4, Size: 4
+Offset: [SP-960], Type: Spill, Align: 4, Size: 4
+Offset: [SP-964], Type: Spill, Align: 4, Size: 4
+Offset: [SP-968], Type: Spill, Align: 4, Size: 4 [-Rpass-analysis=stack-frame-layout]
+  362 | {
+      | ^
+
+---
+Nathan Chancellor (7):
+      bcachefs: Fix -Wformat in bch2_set_bucket_needs_journal_commit()
+      bcachefs: Fix -Wformat in bch2_btree_key_cache_to_text()
+      bcachefs: Fix -Wformat in bch2_alloc_v4_invalid()
+      bcachefs: Fix -Wformat in bch2_bucket_gens_invalid()
+      bcachefs: Fix -Wincompatible-function-pointer-types-strict from key_invalid callbacks
+      bcachefs: Fix -Wcompare-distinct-pointer-types in do_encrypt()
+      bcachefs: Fix -Wcompare-distinct-pointer-types in bch2_copygc_get_buckets()
+
+ fs/bcachefs/alloc_background.c            |  4 ++--
+ fs/bcachefs/bkey_methods.c                | 10 +++++-----
+ fs/bcachefs/btree_key_cache.c             |  2 +-
+ fs/bcachefs/buckets_waiting_for_journal.c |  2 +-
+ fs/bcachefs/checksum.c                    |  2 +-
+ fs/bcachefs/movinggc.c                    |  2 +-
+ fs/bcachefs/subvolume.c                   |  2 +-
+ fs/bcachefs/subvolume.h                   |  2 +-
+ 8 files changed, 13 insertions(+), 13 deletions(-)
+---
+base-commit: e7e6c4189f70ab2d7c21eaec5b9e9c34527ef349
+change-id: 20230912-bcachefs-warning-fixes-f136f6d33e71
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
