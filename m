@@ -1,48 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98D32F21;
-	Tue, 12 Sep 2023 14:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438D018C04;
+	Tue, 12 Sep 2023 15:08:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694529275; x=1726065275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0OKqkQKJS3WV9cniVX/rAP6QHhyqfdQ6uX7H4idPa7o=;
-  b=kn91L6EWYqwRheSqqZ6BJReQWc6fjEH1V8Cm3pQWW2SAxp+H5OfAbvsQ
-   RgqG1cHNWd2yFS13KcCrpkMsQQjsRoL3/24z+JRl15rBKWQ2rYDqp1uV5
-   +THqg/+rfgMzT/X0txhNvp04ZzYU3FS/VcwHrYeZFJdVe/6b5IJfnTw+L
-   LTgZTMWm4xNtPtTB4w4G1zCUKv807isnRDBPmcAwrk8HDpXjjALOhTK97
-   h8wow2K6k1H3Xr7KV/ylWesSqRCZF+7azdq4LpSB67acDviabASkykOFs
-   QEcxnkCCbOfhUAOfuDY/X6x7tPlgoGc+CHqhEpb7pkTLOl5k07awWE8tt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="444824888"
+  t=1694531293; x=1726067293;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pdW0HPaTnq5k/XZoW2OVts3N3SQ0rkDluN6eNfWtXPU=;
+  b=GP2qFK+CL4JHBy2Uvh0B4ise2Wj3qZAS+DgFLmP0fVy6Ed/KB+uGXglp
+   +vsX1JCReKhg9v10dbmOCHMjL8XDjuD+8sZIk2jyC1tVeSBBpf873ebqr
+   W32xqr3uAubiCRHFajbNIybE3hqm5Cnn31irxeN5/+QANXPxZlRHpI58f
+   jA6I6a0lIaLFcSgogq0wVQ+UOI6wK2y38qJXU66+9ciP3aAJVau+YJkpj
+   rieYgqyxqwfnXqKG5Cp+X1iTv4Ll7R1/jh6MZRHDGScgf015XnTt7SPHP
+   LWDp3bGY/+DtduSN/BnQiqMRPEzdUc9lcBiFrRIIyMBauC+YuRgpoiz+G
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="377319371"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="444824888"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 07:34:08 -0700
+   d="scan'208";a="377319371"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 08:06:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="917447259"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="867419590"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="917447259"
+   d="scan'208";a="867419590"
 Received: from lkp-server02.sh.intel.com (HELO 0a6943a0b3e1) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Sep 2023 07:34:05 -0700
+  by orsmga004.jf.intel.com with ESMTP; 12 Sep 2023 08:06:21 -0700
 Received: from kbuild by 0a6943a0b3e1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qg4So-00004t-2k;
-	Tue, 12 Sep 2023 14:34:02 +0000
-Date: Tue, 12 Sep 2023 22:33:38 +0800
+	id 1qg4y3-00006B-0H;
+	Tue, 12 Sep 2023 15:06:19 +0000
+Date: Tue, 12 Sep 2023 23:06:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janne Grunau via B4 Relay <devnull+j.jannau.net@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+To: Kent Overstreet <kmo@daterainc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev
-Subject: Re: [PATCH] drm/simpledrm: Add support for multiple "power-domains"
-Message-ID: <202309122212.MetCn4UK-lkp@intel.com>
-References: <20230910-simpledrm-multiple-power-domains-v1-1-f8718aefc685@jannau.net>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 2362/4552] fs/bcachefs/reflink.c:85:6: warning:
+ no previous prototype for function 'bch2_reflink_v_merge'
+Message-ID: <202309122339.Gdj2Cei3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,93 +46,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230910-simpledrm-multiple-power-domains-v1-1-f8718aefc685@jannau.net>
 
-Hi Janne,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 15d30b46573d75f5cb58cfacded8ebab9c76a2b0]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Janne-Grunau-via-B4-Relay/drm-simpledrm-Add-support-for-multiple-power-domains/20230911-004026
-base:   15d30b46573d75f5cb58cfacded8ebab9c76a2b0
-patch link:    https://lore.kernel.org/r/20230910-simpledrm-multiple-power-domains-v1-1-f8718aefc685%40jannau.net
-patch subject: [PATCH] drm/simpledrm: Add support for multiple "power-domains"
-config: arm64-randconfig-r003-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122212.MetCn4UK-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   3c13c772fc233a10342c8e1605ff0855dfdf0c89
+commit: 2d1feb7b84307216167db8178df30a0c83c709c2 [2362/4552] bcachefs: Merging for indirect extents
+config: powerpc-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122339.Gdj2Cei3-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122212.MetCn4UK-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122339.Gdj2Cei3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309122212.MetCn4UK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309122339.Gdj2Cei3-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/tiny/simpledrm.c:506:24: warning: flag ' ' results in undefined behavior with 'p' conversion specifier [-Wformat]
-     506 |         drm_err(&sdev->dev, "% power-domains count:%d\n", __func__, sdev->pwr_dom_count);
-         |                              ~^~
-   include/drm/drm_print.h:469:39: note: expanded from macro 'drm_err'
-     469 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-         |                                              ^~~
-   include/drm/drm_print.h:456:41: note: expanded from macro '__drm_printk'
-     456 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-         |                                                ^~~
-   include/linux/dev_printk.h:144:57: note: expanded from macro 'dev_err'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ^~~
-   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   1 warning generated.
+   In file included from fs/bcachefs/reflink.c:2:
+   In file included from fs/bcachefs/bcachefs.h:184:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:672:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      48 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:211:1: note: expanded from here
+     211 | __do_insl
+         | ^
+   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
+     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from fs/bcachefs/reflink.c:2:
+   In file included from fs/bcachefs/bcachefs.h:184:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:672:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      50 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:213:1: note: expanded from here
+     213 | __do_outsb
+         | ^
+   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
+     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from fs/bcachefs/reflink.c:2:
+   In file included from fs/bcachefs/bcachefs.h:184:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:672:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      52 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:215:1: note: expanded from here
+     215 | __do_outsw
+         | ^
+   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
+     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from fs/bcachefs/reflink.c:2:
+   In file included from fs/bcachefs/bcachefs.h:184:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:672:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      54 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:217:1: note: expanded from here
+     217 | __do_outsl
+         | ^
+   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
+     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+>> fs/bcachefs/reflink.c:85:6: warning: no previous prototype for function 'bch2_reflink_v_merge' [-Wmissing-prototypes]
+      85 | bool bch2_reflink_v_merge(struct bch_fs *c, struct bkey_s _l, struct bkey_s_c _r)
+         |      ^
+   fs/bcachefs/reflink.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      85 | bool bch2_reflink_v_merge(struct bch_fs *c, struct bkey_s _l, struct bkey_s_c _r)
+         | ^
+         | static 
+   7 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
+   Selected by [y]:
+   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=n] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
 
-vim +506 drivers/gpu/drm/tiny/simpledrm.c
+vim +/bch2_reflink_v_merge +85 fs/bcachefs/reflink.c
 
-   477	
-   478	#if defined CONFIG_OF && defined CONFIG_PM_GENERIC_DOMAINS
-   479	/*
-   480	 * Generic power domain handling code.
-   481	 *
-   482	 * Here we handle the power-domains properties of our "simple-framebuffer"
-   483	 * dt node. This is only necessary if there is more than one power-domain.
-   484	 * A single power-domains is handled automatically by the driver core. Multiple
-   485	 * power-domains have to be handled by drivers since the driver core can't know
-   486	 * the correct power sequencing. Power sequencing is not an issue for simpledrm
-   487	 * since the bootloader has put the power domains already in the correct state.
-   488	 * simpledrm has only to ensure they remain active for its lifetime.
-   489	 *
-   490	 * When the driver unloads, we detach from the power-domains.
-   491	 *
-   492	 * We only complain about errors here, no action is taken as the most likely
-   493	 * error can only happen due to a mismatch between the bootloader which set
-   494	 * up the "simple-framebuffer" dt node, and the PM domain providers in the
-   495	 * device tree. Chances are that there are no adverse effects, and if there are,
-   496	 * a clean teardown of the fb probe will not help us much either. So just
-   497	 * complain and carry on, and hope that the user actually gets a working fb at
-   498	 * the end of things.
-   499	 */
-   500	static void simpledrm_device_detach_genpd(void *res)
-   501	{
-   502		int i;
-   503		struct simpledrm_device *sdev = /*(struct simpledrm_device *)*/res;
-   504	
-   505	
- > 506		drm_err(&sdev->dev, "% power-domains count:%d\n", __func__, sdev->pwr_dom_count);
-   507		if (sdev->pwr_dom_count <= 1)
-   508			return;
-   509	
-   510		for (i = sdev->pwr_dom_count - 1; i >= 0; i--) {
-   511			if (!sdev->pwr_dom_links[i])
-   512				device_link_del(sdev->pwr_dom_links[i]);
-   513			if (!IS_ERR_OR_NULL(sdev->pwr_dom_devs[i]))
-   514				dev_pm_domain_detach(sdev->pwr_dom_devs[i], true);
-   515		}
-   516	}
-   517	
+    84	
+  > 85	bool bch2_reflink_v_merge(struct bch_fs *c, struct bkey_s _l, struct bkey_s_c _r)
+    86	{
+    87		struct bkey_s_reflink_v   l = bkey_s_to_reflink_v(_l);
+    88		struct bkey_s_c_reflink_v r = bkey_s_c_to_reflink_v(_r);
+    89	
+    90		return l.v->refcount == r.v->refcount && bch2_extent_merge(c, _l, _r);
+    91	}
+    92	
 
 -- 
 0-DAY CI Kernel Test Service
