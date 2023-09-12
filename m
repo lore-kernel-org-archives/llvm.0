@@ -1,194 +1,250 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438D018C04;
-	Tue, 12 Sep 2023 15:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB9AA31;
+	Tue, 12 Sep 2023 15:19:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694531293; x=1726067293;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pdW0HPaTnq5k/XZoW2OVts3N3SQ0rkDluN6eNfWtXPU=;
-  b=GP2qFK+CL4JHBy2Uvh0B4ise2Wj3qZAS+DgFLmP0fVy6Ed/KB+uGXglp
-   +vsX1JCReKhg9v10dbmOCHMjL8XDjuD+8sZIk2jyC1tVeSBBpf873ebqr
-   W32xqr3uAubiCRHFajbNIybE3hqm5Cnn31irxeN5/+QANXPxZlRHpI58f
-   jA6I6a0lIaLFcSgogq0wVQ+UOI6wK2y38qJXU66+9ciP3aAJVau+YJkpj
-   rieYgqyxqwfnXqKG5Cp+X1iTv4Ll7R1/jh6MZRHDGScgf015XnTt7SPHP
-   LWDp3bGY/+DtduSN/BnQiqMRPEzdUc9lcBiFrRIIyMBauC+YuRgpoiz+G
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="377319371"
+  t=1694531949; x=1726067949;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Ty0WTJ45MpFjGOtFrD1gzOPCWauMejpNvUijz5/ZXkQ=;
+  b=IkhACld+8SVZa1tsIQHSpycusXG32l+6wPp6rQdf0HMPs/idYzMEEelU
+   NWq4XBllw1Oe66RdPmYpIgH3/vn68WDsyxOWxnSOtKy2Ct2FHCyccr6W0
+   jgM6GSjaeTpcqWQ7y8oplW1Cc7QyAiIOJrr6f3+H0+k+KYp0o8/Dg5QTL
+   Rqc4ARUTaQTzudLQpD/OI6P6hb4tREO4+KzOn8fJ7fppc7qEW5XaUrXoT
+   nWJZDvnPrztTOcGoWWR1rDQ5yQJ76JESJNPK8oiLaaOQ+8VTCtUK7xVzL
+   oXOY+1bJpRz/diAuENhLaXZKJzvBqikZRs4/ZBoBv1wZ8mqxV3U7P6Q9L
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="357837423"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="377319371"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 08:06:24 -0700
+   d="scan'208";a="357837423"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 08:19:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="867419590"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="833937200"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="867419590"
-Received: from lkp-server02.sh.intel.com (HELO 0a6943a0b3e1) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 12 Sep 2023 08:06:21 -0700
-Received: from kbuild by 0a6943a0b3e1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qg4y3-00006B-0H;
-	Tue, 12 Sep 2023 15:06:19 +0000
-Date: Tue, 12 Sep 2023 23:06:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 2362/4552] fs/bcachefs/reflink.c:85:6: warning:
- no previous prototype for function 'bch2_reflink_v_merge'
-Message-ID: <202309122339.Gdj2Cei3-lkp@intel.com>
+   d="scan'208";a="833937200"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by FMSMGA003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Sep 2023 08:19:05 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Tue, 12 Sep 2023 08:19:02 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Tue, 12 Sep 2023 08:19:01 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Tue, 12 Sep 2023 08:19:01 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Tue, 12 Sep 2023 08:19:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iSQB63vhx/QbvYQ5yWF0kBeBeGrWyHHfzeRNPye9Mrn0q0wym32IwRB9DWxEFE7TB+QzVcWk3pnzNB62QjNgo9xuJT9dVxu8G4HLxKkRw6TO2/J3MQXqJbRGE/TiJKYkyly2vEWLz6FAGwzxHum4mGC5RjgG1ISZa1o86LdeLa7y6QxKlxmlZuCm5UsomOGWuAYLCPKZUJOudEJcKYyGvEYU5k1UJ+UOmFeWl7a2J4B8TMBYLzWjCQ66vZ3nViMW36PUakbbv525ZW40Fnbiruz+i4Q8O8Q3FEfZEeuF77UQ2hQ0WvzZ2jZ+S6bK7N30FF+Dc3HNoUD0Mbe56pwy0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4/1nO+o+Bc9XLG7+ZRPOWcAkkFKBHecwH+fn4ArwZpA=;
+ b=BFYk08f9AD7rCDcdB6OV8FgrKyqRCP/8K/jl+wGTlZMZqRhoXluK9arWQCQI9zu2Yc96FBfnn9OkrSFVze+Rsnh0/6RkyyUZFQrMmpSFQTAq2SB3E+N4B+Re/hDZVL2mmDFC/taOWuU+Ix1Eim2NUOmFqMC/3iCZZ+coxLvM/VjUVVH5DQn+5PwBz1Hur1O5irvcwRDpTES9I0aU4SBmStKknCxT8eBdsjTduvwjGMm8a15YJmLszWk6QpbIWedQ4/Gdim11ghW2VPf1IP7ObwidgFOUPCCAtH3BT90c39rhY8WcZH7BoPayaQfNey0MU4mIvA4m/i8w89ZK5+XbQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com (2603:10b6:510:212::12)
+ by SJ0PR11MB6693.namprd11.prod.outlook.com (2603:10b6:a03:44b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Tue, 12 Sep
+ 2023 15:18:59 +0000
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::99cc:830:3ea5:d42b]) by PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::99cc:830:3ea5:d42b%3]) with mapi id 15.20.6745.035; Tue, 12 Sep 2023
+ 15:18:58 +0000
+Date: Tue, 12 Sep 2023 15:17:14 +0000
+From: Matthew Brost <matthew.brost@intel.com>
+To: kernel test robot <lkp@intel.com>
+CC: <dri-devel@lists.freedesktop.org>, <intel-xe@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<robdclark@chromium.org>, <thomas.hellstrom@linux.intel.com>,
+	<sarah.walker@imgtec.com>, <ketil.johnsen@arm.com>, <mcanal@igalia.com>,
+	<Liviu.Dudau@arm.com>, <luben.tuikov@amd.com>, <lina@asahilina.net>,
+	<donald.robson@imgtec.com>, <boris.brezillon@collabora.com>,
+	<christian.koenig@amd.com>, <faith.ekstrand@collabora.com>
+Subject: Re: [PATCH v3 03/13] drm/sched: Move schedule policy to scheduler /
+ entity
+Message-ID: <ZQCA+ioDY6gk/oiI@DUT025-TGLU.fm.intel.com>
+References: <20230912021615.2086698-4-matthew.brost@intel.com>
+ <202309122100.HAEi8ytJ-lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <202309122100.HAEi8ytJ-lkp@intel.com>
+X-ClientProxiedBy: BYAPR07CA0079.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::20) To PH7PR11MB6522.namprd11.prod.outlook.com
+ (2603:10b6:510:212::12)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR11MB6522:EE_|SJ0PR11MB6693:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1d102d80-8b8d-4439-eecb-08dbb3a3965d
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X0PqvrStGJUaxtmVJEUy9h56Rtk6OYWcLRYF7ViBYD/D9Pu5kWBjK+W+bAVONzKgfRPzUTtZAj8XXIfz8xdoE2jlb5l941qCfjtZKAi0D7dFS49Ln9mxlv+7DAxsdj6qg+WblnlpuZDJDFUJg3EzaVUoI/fq9FSRiURmbeOUVxoK7ibehUU1yTCukxrAtnEAmhP0WntJa8VTeC9a1AJSLNzaqqOgpNoJ9rY380uP+2aLTHmi4sxtt8wW93aFXDUpPLs3CVn32xNlGF5oSVRRXHNp92vHYu95H24aphRkgadfK4L5GW4J3SVVp/spWUGZ1PYnjYLYBnuTyBwaUHRuZRBlCMZQwDLrzWhVBvCQxo9WHzeAbtLQdeTPzjcfjLYn21ahK5PN71cvMAF5W7+wRPyeYdB1t/HWJQMpKWv89+5hMsHAI1cCSq+ih9t+Uzt0zCNESuYO6TUwKjBBdAjLXbpVeY06xy7m1sucgSBoPqCsOjIJ1ro6cZZ+WKU5cplPHBq44X5kUAhXrGPzGgVhNRecegJwpuwtRSMWAU598zx/DCBxYEUgEpEkj13V8kY7xEyiAk0pdFoPFvPj/vMvwA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6522.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(136003)(366004)(376002)(186009)(1800799009)(451199024)(6486002)(7416002)(41300700001)(6506007)(316002)(966005)(2906002)(478600001)(86362001)(66946007)(6636002)(66556008)(82960400001)(66476007)(38100700002)(6666004)(5660300002)(83380400001)(8936002)(8676002)(6862004)(26005)(4326008)(44832011)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iP1zMldrDox3JWf+g8NwecqJ243T5VKiTUcCsB06wNZ4DYhJ8+zmZ2025JoI?=
+ =?us-ascii?Q?x3ByOZED7esaJnmTV5iwG2K1Lg3UTFhCzGu8hfGODjAnvSE8IcFfoFQzJZiI?=
+ =?us-ascii?Q?M190ALfIGR9Y5ysq/8OUWosblHOoqlZVg3oZEPeFtAxShaAQDg9jhxbUhzG9?=
+ =?us-ascii?Q?OQg3OidUsj4USocrXW/ctgNiyVbKpbb57nETmwrusJe1uxYwQ+LuLwXS/OSy?=
+ =?us-ascii?Q?MKyFcfuz7h2MfYoglEn9yK4a2hhDwhes239U4CX5jYLAIfVm+gPf6NULyQg/?=
+ =?us-ascii?Q?cyiHO2lZFZ1lkPl8kf5OdmXepkU1jtANteA8Ch5H6cBQLiVBAEcvfgWUfXBc?=
+ =?us-ascii?Q?hCymixQYWwDJBUEXvafmv1yU5xZDR8cwWe2g7DYajmk9pmSMcm6uSWlbVvma?=
+ =?us-ascii?Q?V15GritkKzhDyl8zOQSl494iSz1KeB0rDAy6MZqF1opKfNiDrz7WPYw9m0z0?=
+ =?us-ascii?Q?otxWTMxNrRlH6gvCY9QsKn165xrb8XwabobhVK/je9W/FWHUBSWN0d8/KK9I?=
+ =?us-ascii?Q?yGw0MUvhZfl6fLNjCqX/p9GF0uK6RDpcC0RAYIkfnPKiYytOLzMnB0VcJokp?=
+ =?us-ascii?Q?DPnPe4B1Kov77cDUfrvlgtj36DaHTqIfTS+NIjTnEEFltdNlj9g81A9oVWiA?=
+ =?us-ascii?Q?0/qgY7I50CKwuLahcOJRKKCl5LyekQDqaLEa9IGF7BiUEARLbSAHcT2E0sLZ?=
+ =?us-ascii?Q?HhZBBAgGiQudIHDuE7jgErIv4EoEQ5CpjPLZFw+F8A1rvTHhzfh+HQAudHJ0?=
+ =?us-ascii?Q?JJy9H68cs1bzebGniwvyVV1w0l7clUoTLGbvJDn6BRWt4UF5fgKfyzoVBxOn?=
+ =?us-ascii?Q?moTnRYCLTCdb++GktiCmjEz6di+BWXAwyfx90OoKG1052PwYndXaR6RZwQpn?=
+ =?us-ascii?Q?zGa+YBEu88bdmnsoK5ygSFtPshlJVwzsS96n2DI2YJI91J+L4UbAyDUd2TCr?=
+ =?us-ascii?Q?RGnMS8OjshWfRwodkBgEwYAxV9jezyuYfbcFqSAr2o7Q1sknMjidJ+qrPjte?=
+ =?us-ascii?Q?asCqo9gZL7Yw3AZM1fw5Pr8qyu86+OMfOUo5hN2XvdQXF2Wk9+kNteRM5bG5?=
+ =?us-ascii?Q?PHNo/Uz9Kt07tArPuAEKpQBKt4Ai3TW2+MzC4gZFIL4YAeFsvxdRMuTFArLr?=
+ =?us-ascii?Q?P13fVGc4Ek9v9DTY/hhWA+Xu9pfuiSgrqqz7gR/UcUAo4tNm/i7JZY669Mmu?=
+ =?us-ascii?Q?+EF8s/X43ovkFWniozAPSNjjxpaozHzrbv7ZcmEM1TDqXayoE/dOIfUMrVR+?=
+ =?us-ascii?Q?YuIHgFslbp6FdKdc7cjJoSE2IB+b+ISLOy9jC39QrZsVjQQ9MZnNSoiX0BYz?=
+ =?us-ascii?Q?3Ihk5fn+WlCZBpZspWHqOteHxCbPxFyLVobFqLaPEGAR+vkYPYYpAZ8kVfWl?=
+ =?us-ascii?Q?kTZN86K9sWn7HNlV+9IEG7P2IKmVPbPbJ/QN4PrPFNWN3XgDR3v3qPTdhFfh?=
+ =?us-ascii?Q?CReR0xwvZE3aNSb/wcuChO9UePRuiH/gb3Om40w8QqRr21m/VgOpZb6xVPUg?=
+ =?us-ascii?Q?tDz9bv7wcA9TluKlM8/X6wMTGkHtPP8drEyzyAePGCJh58E45Pps8x7Im/mB?=
+ =?us-ascii?Q?73KfFxPQu8UlwI/cXKpAw603xW9CM2BXNDRIymXKAyBDQVkQvqjNi67B5SV/?=
+ =?us-ascii?Q?xw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d102d80-8b8d-4439-eecb-08dbb3a3965d
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6522.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2023 15:18:58.8309
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rnya9rbLo9zOUKKSfuRZRbuJGzcnQq2wgDGo4ZCPplJY+sqXcZjnp5d8ir7SsJJlBx2l0XxdMzNHGKfqfeKM8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB6693
+X-OriginatorOrg: intel.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3c13c772fc233a10342c8e1605ff0855dfdf0c89
-commit: 2d1feb7b84307216167db8178df30a0c83c709c2 [2362/4552] bcachefs: Merging for indirect extents
-config: powerpc-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122339.Gdj2Cei3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122339.Gdj2Cei3-lkp@intel.com/reproduce)
+On Tue, Sep 12, 2023 at 10:11:56PM +0800, kernel test robot wrote:
+> Hi Matthew,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on drm/drm-next]
+> [also build test ERROR on drm-exynos/exynos-drm-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.6-rc1 next-20230912]
+> [cannot apply to drm-misc/drm-misc-next drm-intel/for-linux-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Brost/drm-sched-Add-drm_sched_submit_-helpers/20230912-102001
+> base:   git://anongit.freedesktop.org/drm/drm drm-next
+> patch link:    https://lore.kernel.org/r/20230912021615.2086698-4-matthew.brost%40intel.com
+> patch subject: [PATCH v3 03/13] drm/sched: Move schedule policy to scheduler / entity
+> config: arm64-randconfig-r032-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122100.HAEi8ytJ-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122100.HAEi8ytJ-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202309122100.HAEi8ytJ-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/gpu/drm/v3d/v3d_sched.c:403:9: error: use of undeclared identifier 'ULL'
+>                                 ULL, "v3d_render", DRM_SCHED_POLICY_DEFAULT,
+>                                 ^
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309122339.Gdj2Cei3-lkp@intel.com/
+Typos, s/ULL/NULL in next rev.
 
-All warnings (new ones prefixed by >>):
+Matt
 
-   In file included from fs/bcachefs/reflink.c:2:
-   In file included from fs/bcachefs/bcachefs.h:184:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:211:1: note: expanded from here
-     211 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/reflink.c:2:
-   In file included from fs/bcachefs/bcachefs.h:184:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:213:1: note: expanded from here
-     213 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/reflink.c:2:
-   In file included from fs/bcachefs/bcachefs.h:184:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
-     215 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/reflink.c:2:
-   In file included from fs/bcachefs/bcachefs.h:184:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
-     217 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> fs/bcachefs/reflink.c:85:6: warning: no previous prototype for function 'bch2_reflink_v_merge' [-Wmissing-prototypes]
-      85 | bool bch2_reflink_v_merge(struct bch_fs *c, struct bkey_s _l, struct bkey_s_c _r)
-         |      ^
-   fs/bcachefs/reflink.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      85 | bool bch2_reflink_v_merge(struct bch_fs *c, struct bkey_s _l, struct bkey_s_c _r)
-         | ^
-         | static 
-   7 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=n] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
-
-
-vim +/bch2_reflink_v_merge +85 fs/bcachefs/reflink.c
-
-    84	
-  > 85	bool bch2_reflink_v_merge(struct bch_fs *c, struct bkey_s _l, struct bkey_s_c _r)
-    86	{
-    87		struct bkey_s_reflink_v   l = bkey_s_to_reflink_v(_l);
-    88		struct bkey_s_c_reflink_v r = bkey_s_c_to_reflink_v(_r);
-    89	
-    90		return l.v->refcount == r.v->refcount && bch2_extent_merge(c, _l, _r);
-    91	}
-    92	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>    1 error generated.
+> 
+> 
+> vim +/ULL +403 drivers/gpu/drm/v3d/v3d_sched.c
+> 
+>    381	
+>    382	int
+>    383	v3d_sched_init(struct v3d_dev *v3d)
+>    384	{
+>    385		int hw_jobs_limit = 1;
+>    386		int job_hang_limit = 0;
+>    387		int hang_limit_ms = 500;
+>    388		int ret;
+>    389	
+>    390		ret = drm_sched_init(&v3d->queue[V3D_BIN].sched,
+>    391				     &v3d_bin_sched_ops, NULL,
+>    392				     hw_jobs_limit, job_hang_limit,
+>    393				     msecs_to_jiffies(hang_limit_ms), NULL,
+>    394				     NULL, "v3d_bin", DRM_SCHED_POLICY_DEFAULT,
+>    395				     v3d->drm.dev);
+>    396		if (ret)
+>    397			return ret;
+>    398	
+>    399		ret = drm_sched_init(&v3d->queue[V3D_RENDER].sched,
+>    400				     &v3d_render_sched_ops, NULL,
+>    401				     hw_jobs_limit, job_hang_limit,
+>    402				     msecs_to_jiffies(hang_limit_ms), NULL,
+>  > 403				     ULL, "v3d_render", DRM_SCHED_POLICY_DEFAULT,
+>    404				     v3d->drm.dev);
+>    405		if (ret)
+>    406			goto fail;
+>    407	
+>    408		ret = drm_sched_init(&v3d->queue[V3D_TFU].sched,
+>    409				     &v3d_tfu_sched_ops, NULL,
+>    410				     hw_jobs_limit, job_hang_limit,
+>    411				     msecs_to_jiffies(hang_limit_ms), NULL,
+>    412				     NULL, "v3d_tfu", DRM_SCHED_POLICY_DEFAULT,
+>    413				     v3d->drm.dev);
+>    414		if (ret)
+>    415			goto fail;
+>    416	
+>    417		if (v3d_has_csd(v3d)) {
+>    418			ret = drm_sched_init(&v3d->queue[V3D_CSD].sched,
+>    419					     &v3d_csd_sched_ops, NULL,
+>    420					     hw_jobs_limit, job_hang_limit,
+>    421					     msecs_to_jiffies(hang_limit_ms), NULL,
+>    422					     NULL, "v3d_csd", DRM_SCHED_POLICY_DEFAULT,
+>    423					     v3d->drm.dev);
+>    424			if (ret)
+>    425				goto fail;
+>    426	
+>    427			ret = drm_sched_init(&v3d->queue[V3D_CACHE_CLEAN].sched,
+>    428					     &v3d_cache_clean_sched_ops, NULL,
+>    429					     hw_jobs_limit, job_hang_limit,
+>    430					     msecs_to_jiffies(hang_limit_ms), NULL,
+>    431					     NULL, "v3d_cache_clean",
+>    432					     DRM_SCHED_POLICY_DEFAULT, v3d->drm.dev);
+>    433			if (ret)
+>    434				goto fail;
+>    435		}
+>    436	
+>    437		return 0;
+>    438	
+>    439	fail:
+>    440		v3d_sched_fini(v3d);
+>    441		return ret;
+>    442	}
+>    443	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
