@@ -1,51 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B117218C3F;
-	Tue, 12 Sep 2023 16:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9B8A5C;
+	Tue, 12 Sep 2023 18:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694536182; x=1726072182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+ne2QoXtf7yPAarnt2iHbPmV1YKRfcKbyuDLCVGZRtY=;
-  b=FBg9lpxoZlWhYMBPkATdBBi5Vn106WjDb0mIvRFim52G+s09udBLI3ez
-   Uwb4PooEsGCHElPwjzfAKNJt5n9MrWZQVbkJMMyLa42BWnncAS5JpnZcm
-   ypYA9rKpRy723DfMAHRqSKqXH4WqvsL9i2Kj6d4KFzEtmwIAIaCwCX1Nd
-   pxzAf2PDhJU+ZEQepeMSBTutfp3ClmvPKMc6jMab79GOHbG8Mpnb3uMWE
-   9cdGZOpES98kaicXzTwBgkpV1tJNyEK1LaSBu0ics8SQy3sCsmOEB4ozw
-   oAYDU0vZ12rorFnh5nxghHyNi0NoFHDJ69Ow9U/3GQaEdVdz+gyOJPb70
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="464801237"
+  t=1694542115; x=1726078115;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=b6yNigstiY780CyDhxKzdcwcrOeTsjLeMc/f+b7IhLc=;
+  b=OsVLuqvIs0SlFQbpAX/ZwBaY1UymQE9H9PxhjH9nOrj0H/yJGdfwX1qm
+   O3DdmIHN/Hk9yB5ULEp77EC/SZXBHxeDjAMq6hXolrb3bxLOnbbIWdAA8
+   8uaX++nCGZmrmiFdYonKG9hU8C4owm0L8Fz3g88a8bcT6qZamxqYtM0Ox
+   VP9hBeHqAlbE1rSfI6Zyyt0ERbgfVMCvHySdWkN8arTl6ermAcsTsy5Vl
+   V4K6sDblRXuFLQsY6MBoeN2YTo9bfCwYJTQ8JMdsXJ/ETM2aZheCuBsZf
+   w7QqEAU/QAgTzVdp7GDKbqvZtgUGX3+ww6bn4pqdfq1OpjHza+eZhycB/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="377369268"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="464801237"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 09:20:47 -0700
+   d="scan'208";a="377369268"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 11:08:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="746957326"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="778900246"
 X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
-   d="scan'208";a="746957326"
-Received: from lkp-server02.sh.intel.com (HELO 0a6943a0b3e1) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Sep 2023 09:20:42 -0700
-Received: from kbuild by 0a6943a0b3e1 with local (Exim 4.96)
+   d="scan'208";a="778900246"
+Received: from lkp-server02.sh.intel.com (HELO 47e905db7d2b) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 12 Sep 2023 11:08:32 -0700
+Received: from kbuild by 47e905db7d2b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qg67w-0000E6-0b;
-	Tue, 12 Sep 2023 16:20:37 +0000
-Date: Wed, 13 Sep 2023 00:11:20 +0800
+	id 1qg7oI-00005Y-0q;
+	Tue, 12 Sep 2023 18:08:27 +0000
+Date: Wed, 13 Sep 2023 02:07:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shenghao Ding <shenghao-ding@ti.com>, tiwai@suse.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
-	andriy.shevchenko@linux.intel.com, lgirdwood@gmail.com,
-	perex@perex.cz, pierre-louis.bossart@linux.intel.com,
-	kevin-lu@ti.com, 13916275206@139.com, alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org, liam.r.girdwood@intel.com,
-	mengdong.lin@intel.com, baojun.xu@ti.com, thomas.gfeller@q-drop.com,
-	peeyush@ti.com, navada@ti.com, broonie@kernel.org,
-	gentuser@gmail.com, Shenghao Ding <shenghao-ding@ti.com>
-Subject: Re: [PATCH v1] ALSA: hda/tas2781: Support ACPI_ID both TXNW2781 and
- TIAS2781
-Message-ID: <202309122358.aEcJnIUJ-lkp@intel.com>
-References: <20230910072704.1359-1-shenghao-ding@ti.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:serial 66/74] drivers/tty/serial/sunplus-uart.c:520:77:
+ error: too few arguments to function call, expected 2, have 1
+Message-ID: <202309130221.R243EQjR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,97 +45,162 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230910072704.1359-1-shenghao-ding@ti.com>
 
-Hi Shenghao,
+Hi Thomas,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on tiwai-sound/for-linus linus/master v6.6-rc1 next-20230912]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ALSA-hda-tas2781-Support-ACPI_ID-both-TXNW2781-and-TIAS2781/20230910-153010
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230910072704.1359-1-shenghao-ding%40ti.com
-patch subject: [PATCH v1] ALSA: hda/tas2781: Support ACPI_ID both TXNW2781 and TIAS2781
-config: i386-buildonly-randconfig-003-20230912 (https://download.01.org/0day-ci/archive/20230912/202309122358.aEcJnIUJ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309122358.aEcJnIUJ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git serial
+head:   75adfb6dc779d7c86a2e31b3ca6b266b8a8ef854
+commit: 058734f3427903c0908ccc406a41babd0d4b2e5d [66/74] serial: sunplus-uart: Use port lock wrappers
+config: hexagon-randconfig-r022-20230912 (https://download.01.org/0day-ci/archive/20230913/202309130221.R243EQjR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309130221.R243EQjR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309122358.aEcJnIUJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309130221.R243EQjR-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/pci/hda/tas2781_hda_i2c.c:665:24: warning: variable 'tas_priv' is uninitialized when used here [-Wuninitialized]
-                   return dev_err_probe(tas_priv->dev, -ENODEV,
-                                        ^~~~~~~~
-   sound/pci/hda/tas2781_hda_i2c.c:656:33: note: initialize the variable 'tas_priv' to silence this warning
-           struct tasdevice_priv *tas_priv;
-                                          ^
-                                           = NULL
-   1 warning generated.
+      12 |         (void)(&__dummy == &__dummy2); \
+         |                ~~~~~~~~ ^  ~~~~~~~~~
+   In file included from drivers/tty/serial/sunplus-uart.c:29:
+   include/linux/serial_core.h:639:41: error: incompatible pointer to integer conversion passing 'unsigned long *' to parameter of type 'unsigned long'; dereference with * [-Wint-conversion]
+     639 |         return spin_trylock_irqsave(&up->lock, flags);
+         |                                                ^~~~~
+         |                                                *
+   include/linux/spinlock.h:421:49: note: expanded from macro 'spin_trylock_irqsave'
+     421 |         raw_spin_trylock_irqsave(spinlock_check(lock), flags); \
+         |                                                        ^~~~~
+   include/linux/spinlock.h:298:17: note: expanded from macro 'raw_spin_trylock_irqsave'
+     298 |         local_irq_save(flags); \
+         |                        ^~~~~
+   include/linux/irqflags.h:223:32: note: expanded from macro 'local_irq_save'
+     223 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^~~~~
+   include/linux/irqflags.h:195:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     195 |                 arch_irqs_disabled_flags(flags);        \
+         |                                          ^~~~~
+   arch/hexagon/include/asm/irqflags.h:24:59: note: passing argument to parameter 'flags' here
+      24 | static inline bool arch_irqs_disabled_flags(unsigned long flags)
+         |                                                           ^
+   In file included from drivers/tty/serial/sunplus-uart.c:29:
+   include/linux/serial_core.h:639:9: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned long **')) [-Wcompare-distinct-pointer-types]
+     639 |         return spin_trylock_irqsave(&up->lock, flags);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:421:2: note: expanded from macro 'spin_trylock_irqsave'
+     421 |         raw_spin_trylock_irqsave(spinlock_check(lock), flags); \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:300:9: note: expanded from macro 'raw_spin_trylock_irqsave'
+     300 |         1 : ({ local_irq_restore(flags); 0; }); \
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:229:8: note: expanded from macro 'local_irq_restore'
+     229 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:194:3: note: expanded from macro 'raw_irqs_disabled_flags'
+     194 |                 typecheck(unsigned long, flags);        \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
+      12 |         (void)(&__dummy == &__dummy2); \
+         |                ~~~~~~~~ ^  ~~~~~~~~~
+   In file included from drivers/tty/serial/sunplus-uart.c:29:
+   include/linux/serial_core.h:639:41: error: incompatible pointer to integer conversion passing 'unsigned long *' to parameter of type 'unsigned long'; dereference with * [-Wint-conversion]
+     639 |         return spin_trylock_irqsave(&up->lock, flags);
+         |                                                ^~~~~
+         |                                                *
+   include/linux/spinlock.h:421:49: note: expanded from macro 'spin_trylock_irqsave'
+     421 |         raw_spin_trylock_irqsave(spinlock_check(lock), flags); \
+         |                                                        ^~~~~
+   include/linux/spinlock.h:300:27: note: expanded from macro 'raw_spin_trylock_irqsave'
+     300 |         1 : ({ local_irq_restore(flags); 0; }); \
+         |                                  ^~~~~
+   include/linux/irqflags.h:229:32: note: expanded from macro 'local_irq_restore'
+     229 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^~~~~
+   include/linux/irqflags.h:195:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     195 |                 arch_irqs_disabled_flags(flags);        \
+         |                                          ^~~~~
+   arch/hexagon/include/asm/irqflags.h:24:59: note: passing argument to parameter 'flags' here
+      24 | static inline bool arch_irqs_disabled_flags(unsigned long flags)
+         |                                                           ^
+   In file included from drivers/tty/serial/sunplus-uart.c:29:
+   include/linux/serial_core.h:639:9: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned long **')) [-Wcompare-distinct-pointer-types]
+     639 |         return spin_trylock_irqsave(&up->lock, flags);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:421:2: note: expanded from macro 'spin_trylock_irqsave'
+     421 |         raw_spin_trylock_irqsave(spinlock_check(lock), flags); \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:300:9: note: expanded from macro 'raw_spin_trylock_irqsave'
+     300 |         1 : ({ local_irq_restore(flags); 0; }); \
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:231:3: note: expanded from macro 'local_irq_restore'
+     231 |                 raw_local_irq_restore(flags);           \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:183:3: note: expanded from macro 'raw_local_irq_restore'
+     183 |                 typecheck(unsigned long, flags);        \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
+      12 |         (void)(&__dummy == &__dummy2); \
+         |                ~~~~~~~~ ^  ~~~~~~~~~
+   In file included from drivers/tty/serial/sunplus-uart.c:29:
+   include/linux/serial_core.h:639:41: error: incompatible pointer to integer conversion passing 'unsigned long *' to parameter of type 'unsigned long'; dereference with * [-Wint-conversion]
+     639 |         return spin_trylock_irqsave(&up->lock, flags);
+         |                                                ^~~~~
+         |                                                *
+   include/linux/spinlock.h:421:49: note: expanded from macro 'spin_trylock_irqsave'
+     421 |         raw_spin_trylock_irqsave(spinlock_check(lock), flags); \
+         |                                                        ^~~~~
+   include/linux/spinlock.h:300:27: note: expanded from macro 'raw_spin_trylock_irqsave'
+     300 |         1 : ({ local_irq_restore(flags); 0; }); \
+         |                                  ^~~~~
+   include/linux/irqflags.h:231:25: note: expanded from macro 'local_irq_restore'
+     231 |                 raw_local_irq_restore(flags);           \
+         |                                       ^~~~~
+   include/linux/irqflags.h:185:26: note: expanded from macro 'raw_local_irq_restore'
+     185 |                 arch_local_irq_restore(flags);          \
+         |                                        ^~~~~
+   arch/hexagon/include/asm/irqflags.h:44:57: note: passing argument to parameter 'flags' here
+      44 | static inline void arch_local_irq_restore(unsigned long flags)
+         |                                                         ^
+>> drivers/tty/serial/sunplus-uart.c:520:77: error: too few arguments to function call, expected 2, have 1
+     520 |                 locked = uart_port_trylock_irqsave(&sunplus_console_ports[co->index]->port);
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~                                        ^
+   include/linux/serial_core.h:637:20: note: 'uart_port_trylock_irqsave' declared here
+     637 | static inline bool uart_port_trylock_irqsave(struct uart_port *up, unsigned long *flags)
+         |                    ^
+   11 warnings and 6 errors generated.
 
 
-vim +/tas_priv +665 sound/pci/hda/tas2781_hda_i2c.c
+vim +520 drivers/tty/serial/sunplus-uart.c
 
-   653	
-   654	static int tas2781_hda_i2c_probe(struct i2c_client *clt)
-   655	{
-   656		struct tasdevice_priv *tas_priv;
-   657		int ret, i;
-   658	
-   659		/* Check TIAS2781 or TXNW2781 */
-   660		for (i = 0; i < ARRAY_SIZE(tas2781_acpi_hda_match); i++)
-   661			if (strstr(dev_name(&clt->dev), tas2781_acpi_hda_match[i].id))
-   662				break;
-   663	
-   664		if (i == ARRAY_SIZE(tas2781_acpi_hda_match))
- > 665			return dev_err_probe(tas_priv->dev, -ENODEV,
-   666				"Device not available\n");
-   667	
-   668		tas_priv = tasdevice_kzalloc(clt);
-   669		if (!tas_priv)
-   670			return -ENOMEM;
-   671	
-   672		tas_priv->irq_info.irq = clt->irq;
-   673		ret = tas2781_read_acpi(tas_priv, tas2781_acpi_hda_match[i].id);
-   674		if (ret)
-   675			return dev_err_probe(tas_priv->dev, ret,
-   676				"Platform not supported\n");
-   677	
-   678		ret = tasdevice_init(tas_priv);
-   679		if (ret)
-   680			goto err;
-   681	
-   682		pm_runtime_set_autosuspend_delay(tas_priv->dev, 3000);
-   683		pm_runtime_use_autosuspend(tas_priv->dev);
-   684		pm_runtime_mark_last_busy(tas_priv->dev);
-   685		pm_runtime_set_active(tas_priv->dev);
-   686		pm_runtime_get_noresume(tas_priv->dev);
-   687		pm_runtime_enable(tas_priv->dev);
-   688	
-   689		pm_runtime_put_autosuspend(tas_priv->dev);
-   690	
-   691		ret = component_add(tas_priv->dev, &tas2781_hda_comp_ops);
-   692		if (ret) {
-   693			dev_err(tas_priv->dev, "Register component failed: %d\n", ret);
-   694			pm_runtime_disable(tas_priv->dev);
-   695			goto err;
-   696		}
-   697	
-   698		tas2781_reset(tas_priv);
-   699	err:
-   700		if (ret)
-   701			tas2781_hda_remove(&clt->dev);
-   702		return ret;
-   703	}
-   704	
+   507	
+   508	static void sunplus_console_write(struct console *co,
+   509					  const char *s,
+   510					  unsigned int count)
+   511	{
+   512		unsigned long flags;
+   513		int locked = 1;
+   514	
+   515		local_irq_save(flags);
+   516	
+   517		if (sunplus_console_ports[co->index]->port.sysrq)
+   518			locked = 0;
+   519		else if (oops_in_progress)
+ > 520			locked = uart_port_trylock_irqsave(&sunplus_console_ports[co->index]->port);
+   521		else
+   522			uart_port_lock(&sunplus_console_ports[co->index]->port);
+   523	
+   524		uart_console_write(&sunplus_console_ports[co->index]->port, s, count,
+   525				   sunplus_uart_console_putchar);
+   526	
+   527		if (locked)
+   528			uart_port_unlock(&sunplus_console_ports[co->index]->port);
+   529	
+   530		local_irq_restore(flags);
+   531	}
+   532	
 
 -- 
 0-DAY CI Kernel Test Service
