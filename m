@@ -1,55 +1,55 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8512D171AD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850C3171AC
 	for <llvm@lists.linux.dev>; Tue, 12 Sep 2023 06:08:47 +0000 (UTC)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38C66QTb019715;
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38C5mYkm022911;
 	Tue, 12 Sep 2023 06:08:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=pVsoSIX0LquyhqYU7mNO5pYiIavcWpaflJ3uRYxt3cM=;
- b=LWDxNvMG8lYzsC1aUXoW6JzDqfSHUsc3KXrSFlJ/IbbQdIBjS3awOnuZFmvHOvMK1GAD
- 9wgwsdHloDtmy90kM26tqaBl/twjnsHMiIFlARXGX9aCrIs2j17VJLo7ti+LsQK0+C1+
- 3tKUqsp2cav7K8MKsWjHBjV12+Y5jdsjlADptH9KxRLmDkON/C5bAy2UC8Q4V0a6cEGD
- lLqzv0S30HOwVFzd4m4ryAhR520vaDCWSbmkDtwaFCz6SXhDjcmYcy7c8JTtMzrPq+Uc
- YtQgJV1B7ZBID+vM/QHlMmxYK+5cyVZwsZQ6YZmkwRYrBzq8UJXzIRhrpycag4pEtlKB IA== 
+ bh=AHbcqJ2CieRG9hp04VV8TGkxNE1F6nI9dc1SB21bi+c=;
+ b=KL+HGGv6nI2bTy7njwn26PxsHbyEE1JS45DdUTWZ8bBeBB6Yj2aG4RzaFZ8rNn8JHjq6
+ 33w3Hk4LaJnp/RA7mIsjf7cFTcn2czaKsJB5NuIGmpRL1kux2V354quKyHE1xcstH0Eg
+ tMQ+gndQfl8DXw/cqpukXILWeSOwZJHCbUJ0UyHEfg9G8644BXDs4nw+/FE8HezRGpxN
+ buLU/gANH6WviS3YEL6oze0+hEJUql3t1foFx2TrdChLf51BVD3jy+lYMyp6bGgqi7c5
+ n7lQ/H69ONCv/hlh7o0kvJ8yU95dyajmY0vdOkvuSTly264aa2kvQupcsmq8MCRQtfbH yA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2j2m0m8y-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2gmraq03-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 12 Sep 2023 06:08:20 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38C66oJK022824;
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38C67JsQ018554;
 	Tue, 12 Sep 2023 06:08:19 GMT
 Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2j2m0m7m-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2gmrapy9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 12 Sep 2023 06:08:19 +0000
 Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38C5K8rm012005;
-	Tue, 12 Sep 2023 06:08:18 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t15r1r6aq-1
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38C5K8rl012005;
+	Tue, 12 Sep 2023 06:08:17 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t15r1r6ap-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 12 Sep 2023 06:08:17 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38C68GpI43450858
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38C68GcO28705526
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 12 Sep 2023 06:08:16 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 198242004B;
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0E64620040;
 	Tue, 12 Sep 2023 06:08:16 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8959D2004E;
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7FA5520043;
 	Tue, 12 Sep 2023 06:08:15 +0000 (GMT)
 Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
 	Tue, 12 Sep 2023 06:08:15 +0000 (GMT)
 Received: from bgray-lenovo-p15.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 42882604D2;
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 5956060595;
 	Tue, 12 Sep 2023 16:08:13 +1000 (AEST)
 From: Benjamin Gray <bgray@linux.ibm.com>
 To: linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -73,9 +73,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Ian Abbott <abbotti@mev.co.uk>,
         Todd E Brandt <todd.e.brandt@linux.intel.com>,
         Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
         Shuah Khan <shuah@kernel.org>, Benjamin Gray <bgray@linux.ibm.com>
-Subject: [PATCH v2 1/7] ia64: fix Python string escapes
-Date: Tue, 12 Sep 2023 16:07:55 +1000
-Message-ID: <20230912060801.95533-2-bgray@linux.ibm.com>
+Subject: [PATCH v2 4/7] scripts: fix Python string escapes
+Date: Tue, 12 Sep 2023 16:07:58 +1000
+Message-ID: <20230912060801.95533-5-bgray@linux.ibm.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912060801.95533-1-bgray@linux.ibm.com>
 References: <20230912060801.95533-1-bgray@linux.ibm.com>
@@ -87,15 +87,15 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EvGCAH8YbUzwSS0IFNvAtrUQxSrHti_W
-X-Proofpoint-ORIG-GUID: VcYwa2_Qk-Wr4TTJkO7Q7SON10cC7pI1
+X-Proofpoint-GUID: A2TrB0HujiOs_UwzMmju5UXnpzVKn05t
+X-Proofpoint-ORIG-GUID: 3euzVgIOZ-4yQSvwXOSBFMDwLp03uWEg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-12_03,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- phishscore=0 clxscore=1011 malwarescore=0 mlxlogscore=999
- priorityscore=1501 lowpriorityscore=0 spamscore=0 adultscore=0
- suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 suspectscore=0 clxscore=1015 mlxscore=0 spamscore=0
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2308100000 definitions=main-2309120050
 
 Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
@@ -106,22 +106,36 @@ Fix these now to get ahead of it before it's an error.
 
 Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
 ---
- arch/ia64/scripts/unwcheck.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/clang-tools/gen_compile_commands.py | 2 +-
+ scripts/gdb/linux/symbols.py                | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/ia64/scripts/unwcheck.py b/arch/ia64/scripts/unwcheck.py
-index 9581742f0db2..adc24152d3b9 100644
---- a/arch/ia64/scripts/unwcheck.py
-+++ b/arch/ia64/scripts/unwcheck.py
-@@ -21,7 +21,7 @@ if len(sys.argv) != 2:
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index a84cc5737c2c..649a80005c83 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file_path):
+     # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
+     # kernel version). The compile_commands.json file is not interepreted
+     # by Make, so this code replaces the escaped version with '#'.
+-    prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
++    prefix = command_prefix.replace('\\#', '#').replace('$(pound)', '#')
  
- readelf = os.getenv("READELF", "readelf")
+     # Use os.path.abspath() to normalize the path resolving '.' and '..' .
+     abs_path = os.path.abspath(os.path.join(root_directory, file_path))
+diff --git a/scripts/gdb/linux/symbols.py b/scripts/gdb/linux/symbols.py
+index 5179edd1b627..2a55c4b83306 100644
+--- a/scripts/gdb/linux/symbols.py
++++ b/scripts/gdb/linux/symbols.py
+@@ -82,7 +82,7 @@ lx-symbols command."""
+         self.module_files_updated = True
  
--start_pattern = re.compile("<([^>]*)>: \[0x([0-9a-f]+)-0x([0-9a-f]+)\]")
-+start_pattern = re.compile(r"<([^>]*)>: \[0x([0-9a-f]+)-0x([0-9a-f]+)\]")
- rlen_pattern  = re.compile(".*rlen=([0-9]+)")
- 
- def check_func (func, slots, rlen_sum):
+     def _get_module_file(self, module_name):
+-        module_pattern = ".*/{0}\.ko(?:.debug)?$".format(
++        module_pattern = r".*/{0}\.ko(?:.debug)?$".format(
+             module_name.replace("_", r"[_\-]"))
+         for name in self.module_files:
+             if re.match(module_pattern, name) and os.path.exists(name):
 -- 
 2.41.0
 
