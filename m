@@ -1,55 +1,55 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9578171AA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6D5171AB
 	for <llvm@lists.linux.dev>; Tue, 12 Sep 2023 06:08:40 +0000 (UTC)
 Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38C67nTB022948;
-	Tue, 12 Sep 2023 06:08:26 GMT
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38C67ptP023034;
+	Tue, 12 Sep 2023 06:08:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=q9Xb8j5HP9E1kLEc7j7wBE0qLNTgFJmUvEApSnloaJU=;
- b=EZaGrpLxF3ZbmbWexSEPuBHUXiu2FT2GLVmZlz2kKerksVJ4wPT1J/1zwr8n+eMiEQdy
- toyNgGg4hO3HWwgOSw5jhF7mslrFm/pHaT8VSLMOQM1vSwLZDbf61XgzDjoetPkZkI8b
- S6k1JQ/KPGf/R/+BsbS4OsrML3JbAQNg+baXE6b9lMqwAT2ENL5SqiqI921nMyqL9Uaq
- 1sIepKst/aPqS0nTfV0QaKAoSquWrxIO+m9KT5l1p6aiRgeasBCi83RkEAsm0omiS10s
- 0pD3fa4h5XpRsSudM1ePoJ5byD+Bf5EodWf49u1VPay++E8pKhdRLGkr1Wzxov9ASgSa FQ== 
+ bh=i/BWHqLFUbyvP7xwuZNU6sl0evU8IuBy8XSKXM7iy4M=;
+ b=aAvDBdoOF2s0iz8P+59qU5iannJGZ5Z/k3DfwMzND5xZNFUhooKFry4mSzQWnaD4kPkm
+ Uz/aS0PJGmDmgzdkAJhU+oZZUcC1HZNiHW/aVQER1DZdq1XD56GuVS1iYuU1abcuKupc
+ 27UkO8cGjNh3Zh+ZZ2IGtfAcZXkyC0ABACfjD81VknI+QJacjZ8x3UtZAu68PST6+BV/
+ POtmUjwpFhOHNEdn92kNoU/x1ky7v9XBInhZKxWG9W4/j9JBIYjt9QHXqZNC9nnEGBZC
+ FE1mkKh9lFwbt/K4yO09Rs2SeyumvI5lp3RQNHBr4LkzTtDzu5wGZB02wDLEPCZewPgn Gg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2jbhr2mw-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2jbhr2gm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Sep 2023 06:08:25 +0000
+	Tue, 12 Sep 2023 06:08:21 +0000
 Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38C67tp6023364;
-	Tue, 12 Sep 2023 06:08:24 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2jbhr2gv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Sep 2023 06:08:24 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38C5JffP011974;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38C68KlR026058;
 	Tue, 12 Sep 2023 06:08:20 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t15r1r6bf-1
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2jbhr2f5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 12 Sep 2023 06:08:20 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38C68I6U27722392
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38C50QcL024061;
+	Tue, 12 Sep 2023 06:08:18 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t131t14q9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Sep 2023 06:08:17 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38C68GK751511700
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 Sep 2023 06:08:19 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D77EB2004E;
-	Tue, 12 Sep 2023 06:08:18 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DBBF620040;
-	Tue, 12 Sep 2023 06:08:17 +0000 (GMT)
+	Tue, 12 Sep 2023 06:08:16 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 19B132004F;
+	Tue, 12 Sep 2023 06:08:16 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 894CD2004D;
+	Tue, 12 Sep 2023 06:08:15 +0000 (GMT)
 Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 12 Sep 2023 06:08:17 +0000 (GMT)
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 12 Sep 2023 06:08:15 +0000 (GMT)
 Received: from bgray-lenovo-p15.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 60CF16051E;
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 51EA460525;
 	Tue, 12 Sep 2023 16:08:13 +1000 (AEST)
 From: Benjamin Gray <bgray@linux.ibm.com>
 To: linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -73,9 +73,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Ian Abbott <abbotti@mev.co.uk>,
         Todd E Brandt <todd.e.brandt@linux.intel.com>,
         Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
         Shuah Khan <shuah@kernel.org>, Benjamin Gray <bgray@linux.ibm.com>
-Subject: [PATCH v2 5/7] tools/perf: fix Python string escapes
-Date: Tue, 12 Sep 2023 16:07:59 +1000
-Message-ID: <20230912060801.95533-6-bgray@linux.ibm.com>
+Subject: [PATCH v2 3/7] drivers/comedi: fix Python string escapes
+Date: Tue, 12 Sep 2023 16:07:57 +1000
+Message-ID: <20230912060801.95533-4-bgray@linux.ibm.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912060801.95533-1-bgray@linux.ibm.com>
 References: <20230912060801.95533-1-bgray@linux.ibm.com>
@@ -87,8 +87,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oXFyySFm0WnKsXVhO1yBMm10V3F6kD7H
-X-Proofpoint-ORIG-GUID: GD8A1lF_Ao7SODdN_F8A9yrRwXNibOzv
+X-Proofpoint-GUID: Ht3TfvFc0_YeVg_8IiUdPAm8k0D23rNZ
+X-Proofpoint-ORIG-GUID: muMt5JJeGDhOfEDCB02ZP0AzKiBwbhnu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-12_03,2023-09-05_01,2023-05-22_02
@@ -106,68 +106,22 @@ Fix these now to get ahead of it before it's an error.
 
 Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
 ---
- tools/perf/pmu-events/jevents.py                 | 2 +-
- tools/perf/scripts/python/arm-cs-trace-disasm.py | 4 ++--
- tools/perf/scripts/python/compaction-times.py    | 2 +-
- tools/perf/scripts/python/exported-sql-viewer.py | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index a7e88332276d..980f080a5a2c 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -83,7 +83,7 @@ def c_len(s: str) -> int:
-   """Return the length of s a C string
+diff --git a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+index 90378fb50580..d19101fc2a94 100755
+--- a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
++++ b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+@@ -44,7 +44,7 @@ def routedict_to_structinit_single(name, D, return_name=False):
  
-   This doesn't handle all escape characters properly. It first assumes
--  all \ are for escaping, it then adjusts as it will have over counted
-+  all \\ are for escaping, it then adjusts as it will have over counted
-   \\. The code uses \000 rather than \0 as a terminator as an adjacent
-   number would be folded into a string of \0 (ie. "\0" + "5" doesn't
-   equal a terminator followed by the number 5 but the escape of
-diff --git a/tools/perf/scripts/python/arm-cs-trace-disasm.py b/tools/perf/scripts/python/arm-cs-trace-disasm.py
-index d59ff53f1d94..de58991c78bb 100755
---- a/tools/perf/scripts/python/arm-cs-trace-disasm.py
-+++ b/tools/perf/scripts/python/arm-cs-trace-disasm.py
-@@ -45,8 +45,8 @@ parser = OptionParser(option_list=option_list)
- # Initialize global dicts and regular expression
- disasm_cache = dict()
- cpu_data = dict()
--disasm_re = re.compile("^\s*([0-9a-fA-F]+):")
--disasm_func_re = re.compile("^\s*([0-9a-fA-F]+)\s.*:")
-+disasm_re = re.compile(r"^\s*([0-9a-fA-F]+):")
-+disasm_func_re = re.compile(r"^\s*([0-9a-fA-F]+)\s.*:")
- cache_size = 64*1024
- 
- glb_source_file_name	= None
-diff --git a/tools/perf/scripts/python/compaction-times.py b/tools/perf/scripts/python/compaction-times.py
-index 2560a042dc6f..9401f7c14747 100644
---- a/tools/perf/scripts/python/compaction-times.py
-+++ b/tools/perf/scripts/python/compaction-times.py
-@@ -260,7 +260,7 @@ def pr_help():
- 
- comm_re = None
- pid_re = None
--pid_regex = "^(\d*)-(\d*)$|^(\d*)$"
-+pid_regex = r"^(\d*)-(\d*)$|^(\d*)$"
- 
- opt_proc = popt.DISP_DFL
- opt_disp = topt.DISP_ALL
-diff --git a/tools/perf/scripts/python/exported-sql-viewer.py b/tools/perf/scripts/python/exported-sql-viewer.py
-index 13f2d8a81610..121cf61ba1b3 100755
---- a/tools/perf/scripts/python/exported-sql-viewer.py
-+++ b/tools/perf/scripts/python/exported-sql-viewer.py
-@@ -677,8 +677,8 @@ class CallGraphModelBase(TreeModel):
- 			#   sqlite supports GLOB (text only) which uses * and ? and is case sensitive
- 			if not self.glb.dbref.is_sqlite3:
- 				# Escape % and _
--				s = value.replace("%", "\%")
--				s = s.replace("_", "\_")
-+				s = value.replace("%", "\\%")
-+				s = s.replace("_", "\\_")
- 				# Translate * and ? into SQL LIKE pattern characters % and _
- 				trans = string.maketrans("*?", "%_")
- 				match = " LIKE '" + str(s).translate(trans) + "'"
+     lines.append('\t\t[B({})] = {{'.format(D0_sig))
+     for D1_sig, value in D1:
+-      if not re.match('[VIU]\([^)]*\)', value):
++      if not re.match(r'[VIU]\([^)]*\)', value):
+         sys.stderr.write('Invalid register format: {}\n'.format(repr(value)))
+         sys.stderr.write(
+           'Register values should be formatted with V(),I(),or U()\n')
 -- 
 2.41.0
 
