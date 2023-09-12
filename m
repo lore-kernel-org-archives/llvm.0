@@ -1,129 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7C0EDE;
-	Tue, 12 Sep 2023 01:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694481008; x=1726017008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tGzkG5QJfkRexOBDeMPfPnpMWd67HwQMNA7xHo3Cbvs=;
-  b=OaPa8CG3eqzindEjYftR5NY7XduiyMgcxycLbULDkWFKfQDqw4z0uNQh
-   zUMGfvZp3KH7u72Kil1ULkSK7J5qmlQ5LKGeS/InKl2hQYCCrQGxZilV8
-   Wmg7Wxf6LenMzZMcAx1qfrAEb5q+rBlqdn7G5B/bOqo7SAiBVNr+8eYAG
-   DLD1ISIWn5gZt8a2puxC+2UwfgNkZ5WT/hxIfDX+IfaQkOeM8Qxepaz8y
-   xQMVLmHiXjJccX+kh7g+QWi0UTMSSEMExdmRkvu2C8DyAJwZgBjLcMMVE
-   tYAagno+nPY3vi5nzeJBxgR760nZ8q1ghtgC2sjwXTOeKnR7HcwiL+pkD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="464616353"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="464616353"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 18:10:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="867162249"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="867162249"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 11 Sep 2023 18:10:05 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qfruk-00071x-2c;
-	Tue, 12 Sep 2023 01:10:02 +0000
-Date: Tue, 12 Sep 2023 09:09:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 4/8] staging: rtl8192e: Use standard function in
- rtllib_rx_check_duplicate()
-Message-ID: <202309120956.6aSRBSxJ-lkp@intel.com>
-References: <c636aadd4cf4898c57c348a1d789790c5a459749.1694282907.git.philipp.g.hortmann@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F82115A2
+	for <llvm@lists.linux.dev>; Tue, 12 Sep 2023 01:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1694482733;
+	bh=e/MtnjLVSuAmechzlzx02wdSV0OA7qKD1FjdUlt9PcI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ECBUe5vjPPUgZ50JQeZl3PSxn/F2jWFEcsxaq9mfjSu0rMiU1jOK+UViwsd/soWE3
+	 +g9hRTwnA6nCpkawy2NiUaGv5JirKBU3ONshMvi/hU7umoWKI92+98RijMAUg7vQjl
+	 S7nY6Klq2314F458vSisQKTHiYpcumy2N4tzU5WjQt0AxojLeCtK8ql0Nf2SKZnn4O
+	 5NIz2NxzbfE+X/8FK+Px/Ew+I2LROeINhACxJV8QSNAoms+ScV4Luj8UeuuFBgR33e
+	 yPQWhXA+up+ntvi/riW6Xd8V1uTwNwV7ot0cs5DNNZ7x3kfDiHMOnR0ViUtCuWrcif
+	 rvroZw0ZVfwCw==
+Received: from [IPV6:2606:6d00:100:4000:cacb:9855:de1f:ded2] (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4Rl5pN6zdwz1PQV;
+	Mon, 11 Sep 2023 21:38:52 -0400 (EDT)
+Message-ID: <60a9eee6-1f9c-f9c1-33bb-007e22437087@efficios.com>
+Date: Mon, 11 Sep 2023 21:40:14 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c636aadd4cf4898c57c348a1d789790c5a459749.1694282907.git.philipp.g.hortmann@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH RFC] selftests/rseq: fix kselftest Clang build warnings
+Content-Language: en-US
+To: Justin Stitt <justinstitt@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230908-kselftest-param_test-c-v1-1-e35bd9052d61@google.com>
+ <1fae4a2f-eaf1-c54c-9ec5-040b2714709e@efficios.com>
+ <CAFhGd8rHmQrThrCVHmVAp7fDFRidOAPR9Z6JFBpqAswX8dLGgw@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <CAFhGd8rHmQrThrCVHmVAp7fDFRidOAPR9Z6JFBpqAswX8dLGgw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Philipp,
+On 9/11/23 12:53, Justin Stitt wrote:
+> On Sat, Sep 9, 2023 at 5:37 AM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> On 9/8/23 19:03, Justin Stitt wrote:
+>>> Hi,
+>>>
+>>> I am experiencing many warnings when trying to build tools/testing/selftests.
+>>>
+>>> Here's one such example from rseq tree:
+>>> |  param_test.c:1234:10: error: address argument to atomic operation must be a pointer to _Atomic type ('intptr_t *' (aka 'long *') invalid)
+>>> |   1234 |         while (!atomic_load(&args->percpu_list_ptr)) {}
+>>> |        |                 ^           ~~~~~~~~~~~~~~~~~~~~~~
+>>> |  /usr/local/google/home/justinstitt/repos/tc-build/build/llvm/final/lib/clang/18/include/stdatomic.h:140:29: note: expanded from macro 'atomic_load'
+>>> |    140 | #define atomic_load(object) __c11_atomic_load(object, __ATOMIC_SEQ_CST)
+>>> |        |                             ^                 ~~~~~~
+>>>
+>>> I added the _Atomic type in various locations to silence _all_ (10) of these
+>>> warnings. I'm wondering, though, perhaps the absence of these _Atomic
+>>> types in the first place is on purpose? Am I on the right track to fix
+>>> these warnings without damaging the legitimacy of the tests at hand?
+>>>
+>>> I'd like some feedback about where to go from here and if others are
+>>> experiencing the same issues. Thanks!
+>>>
+>>> FWIW here's my specific build incantation on Clang-18 (49d41de57896e935cd5726719c5208bce22694ae):
+>>> $ make LLVM=1 -j128 ARCH=x86_64 mrproper headers defconfig kselftest-merge
+>>> $ make LLVM=1 ARCH=x86_64 -C tools/testing/selftests
+>>
+>> I should have used the __atomic_load_n() compiler builtin rather than
+>> atomic_load(), mainly because it does not require the _Atomic annotation
+>> to each type it touches.
+> 
+> Would you like me to send a patch in with this change?
 
-kernel test robot noticed the following build warnings:
+Yes, please, although I suspect we'd want to turn atomic_store() into 
+builtins as well.
 
-[auto build test WARNING on staging/staging-testing]
+And use a release MO for stores, and acquire for loads. This should make 
+validators like TSAN happier.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Hortmann/staging-rtl8192e-Remove-useless-equation-in-debug-output/20230910-022154
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/c636aadd4cf4898c57c348a1d789790c5a459749.1694282907.git.philipp.g.hortmann%40gmail.com
-patch subject: [PATCH 4/8] staging: rtl8192e: Use standard function in rtllib_rx_check_duplicate()
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230912/202309120956.6aSRBSxJ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230912/202309120956.6aSRBSxJ-lkp@intel.com/reproduce)
+Thanks,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309120956.6aSRBSxJ-lkp@intel.com/
+Mathieu
 
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/rtl8192e/rtllib_rx.c:925:9: warning: variable 'fc' is uninitialized when used here [-Wuninitialized]
-                           if ((fc & (1 << 11)) && (frag == pRxTS->rx_last_frag_num) &&
-                                ^~
-   drivers/staging/rtl8192e/rtllib_rx.c:906:8: note: initialize the variable 'fc' to silence this warning
-           u16 fc, sc;
-                 ^
-                  = 0
-   1 warning generated.
-
-
-vim +/fc +925 drivers/staging/rtl8192e/rtllib_rx.c
-
-94a799425eee82 Larry Finger       2011-08-23  901  
-49aab5fd9df153 Larry Finger       2011-08-25  902  static int rtllib_rx_check_duplicate(struct rtllib_device *ieee,
-49aab5fd9df153 Larry Finger       2011-08-25  903  				     struct sk_buff *skb, u8 multicast)
-94a799425eee82 Larry Finger       2011-08-23  904  {
-94a799425eee82 Larry Finger       2011-08-23  905  	struct rtllib_hdr_4addr *hdr = (struct rtllib_hdr_4addr *)skb->data;
-94a799425eee82 Larry Finger       2011-08-23  906  	u16 fc, sc;
-ffed9955529a37 Philipp Hortmann   2023-09-09  907  	u8 frag;
-94a799425eee82 Larry Finger       2011-08-23  908  
-94a799425eee82 Larry Finger       2011-08-23  909  	sc = le16_to_cpu(hdr->seq_ctl);
-94a799425eee82 Larry Finger       2011-08-23  910  	frag = WLAN_GET_SEQ_FRAG(sc);
-94a799425eee82 Larry Finger       2011-08-23  911  
-ccdbe14b77a5e3 Philipp Hortmann   2022-11-13  912  	if (!ieee->ht_info->cur_rx_reorder_enable ||
-94a799425eee82 Larry Finger       2011-08-23  913  		!ieee->current_network.qos_data.active ||
-94a799425eee82 Larry Finger       2011-08-23  914  		!IsDataFrame(skb->data) ||
-94a799425eee82 Larry Finger       2011-08-23  915  		IsLegacyDataFrame(skb->data)) {
-ffed9955529a37 Philipp Hortmann   2023-09-09  916  		if (!ieee80211_is_beacon(hdr->frame_ctl)) {
-db8971b618ed96 Larry Finger       2011-08-25  917  			if (is_duplicate_packet(ieee, hdr))
-94a799425eee82 Larry Finger       2011-08-23  918  				return -1;
-94a799425eee82 Larry Finger       2011-08-23  919  		}
-94a799425eee82 Larry Finger       2011-08-23  920  	} else {
-2c47ae282a4bba Larry Finger       2011-07-18  921  		struct rx_ts_record *pRxTS = NULL;
-3a6b70c3f3558a Matthew Casey      2014-08-22  922  
-74724de1c40192 Larry Finger       2011-07-18  923  		if (GetTs(ieee, (struct ts_common_info **)&pRxTS, hdr->addr2,
-94a799425eee82 Larry Finger       2011-08-23  924  			(u8)Frame_QoSTID((u8 *)(skb->data)), RX_DIR, true)) {
-3b32b210c0717d William Durand     2021-03-01 @925  			if ((fc & (1 << 11)) && (frag == pRxTS->rx_last_frag_num) &&
-6d852649821da7 William Durand     2021-03-01  926  			    (WLAN_GET_SEQ_SEQ(sc) == pRxTS->rx_last_seq_num))
-94a799425eee82 Larry Finger       2011-08-23  927  				return -1;
-3b32b210c0717d William Durand     2021-03-01  928  			pRxTS->rx_last_frag_num = frag;
-6d852649821da7 William Durand     2021-03-01  929  			pRxTS->rx_last_seq_num = WLAN_GET_SEQ_SEQ(sc);
-94a799425eee82 Larry Finger       2011-08-23  930  		} else {
-11e672c3e2d2a1 Mateusz Kulikowski 2015-05-31  931  			netdev_warn(ieee->dev, "%s(): No TS! Skip the check!\n",
-11e672c3e2d2a1 Mateusz Kulikowski 2015-05-31  932  				    __func__);
-94a799425eee82 Larry Finger       2011-08-23  933  			return -1;
-94a799425eee82 Larry Finger       2011-08-23  934  		}
-94a799425eee82 Larry Finger       2011-08-23  935  	}
-94a799425eee82 Larry Finger       2011-08-23  936  
-94a799425eee82 Larry Finger       2011-08-23  937  	return 0;
-94a799425eee82 Larry Finger       2011-08-23  938  }
-db8971b618ed96 Larry Finger       2011-08-25  939  
+> 
+>>
+>> Thanks,
+>>
+>> Mathieu
+>>
+>>
+>>>
+>>> Link: https://github.com/ClangBuiltLinux/linux/issues/1698
+>>> Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues/61
+>>> Signed-off-by: Justin Stitt <justinstitt@google.com>
+>>> ---
+>>>    tools/testing/selftests/rseq/param_test.c | 8 ++++----
+>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
+>>> index bf951a490bb4..94802aeed2c6 100644
+>>> --- a/tools/testing/selftests/rseq/param_test.c
+>>> +++ b/tools/testing/selftests/rseq/param_test.c
+>>> @@ -356,7 +356,7 @@ struct inc_thread_test_data {
+>>>    };
+>>>
+>>>    struct percpu_list_node {
+>>> -     intptr_t data;
+>>> +     _Atomic intptr_t data;
+>>>        struct percpu_list_node *next;
+>>>    };
+>>>
+>>> @@ -1212,8 +1212,8 @@ static int set_signal_handler(void)
+>>>    /* Test MEMBARRIER_CMD_PRIVATE_RESTART_RSEQ_ON_CPU membarrier command. */
+>>>    #ifdef TEST_MEMBARRIER
+>>>    struct test_membarrier_thread_args {
+>>> -     int stop;
+>>> -     intptr_t percpu_list_ptr;
+>>> +     _Atomic int stop;
+>>> +     _Atomic intptr_t percpu_list_ptr;
+>>>    };
+>>>
+>>>    /* Worker threads modify data in their "active" percpu lists. */
+>>> @@ -1240,7 +1240,7 @@ void *test_membarrier_worker_thread(void *arg)
+>>>                        int cpu = get_current_cpu_id();
+>>>
+>>>                        ret = rseq_offset_deref_addv(RSEQ_MO_RELAXED, RSEQ_PERCPU,
+>>> -                             &args->percpu_list_ptr,
+>>> +                             (intptr_t*)&args->percpu_list_ptr,
+>>>                                sizeof(struct percpu_list_entry) * cpu, 1, cpu);
+>>>                } while (rseq_unlikely(ret));
+>>>        }
+>>>
+>>> ---
+>>> base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
+>>> change-id: 20230908-kselftest-param_test-c-1763b62e762f
+>>>
+>>> Best regards,
+>>> --
+>>> Justin Stitt <justinstitt@google.com>
+>>>
+>>
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> https://www.efficios.com
+>>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
