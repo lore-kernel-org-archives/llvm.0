@@ -1,55 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D96414F6F;
-	Wed, 13 Sep 2023 10:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58DF23A0;
+	Wed, 13 Sep 2023 10:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694600310; x=1726136310;
+  t=1694602346; x=1726138346;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jvJr9OQ5XaplZ2MlNIADa5rR127QA75ZhurnRWf+Y9g=;
-  b=jkWo0QUHh4tNXCEYqWHN3s0ORY1txbxcOME9ENcVijjbc6CbWeoThKe7
-   DCIAwhlfh5O2RzIRZsg+caBgtwjh6HAeryZ1KCkKEUAvN2uAsTw0dwZOh
-   Ts+loPeg8jpj2C8jUXZFulbq0Be8hCzOYV690CW8A/fd9sbLNIL3+Qu1d
-   9pv+z8A9nfu4zPUC6hucEUYDFNUEQ/MTCHHPbRo2YGEA0C1NV9rXhaTf/
-   H8NGZUBpHOgoiGyiwMKozRHZab5oUrBIVpcWgHpoiqD0YalmyixxY5tf+
-   i56BVHduNSgXXVpeCBWbmyDRGpuJOWidK0e7xFY3Xo+ydsvfvel9uCll/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="445058234"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="445058234"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 03:18:27 -0700
+  bh=uIXZmLagWKHpKAxrnpcZV9CNBqds5leMt0sK3E0/sCc=;
+  b=b3UIbLKk3LKG2bCFPqbfU3zUxGGKZ0BkoTl91ZMC1NJ1g6PjeetZxuHR
+   bGQ4IO53sb/M7ZHutm/zInIshmV1LaVD5ltZSeQT8Fyti48bF+NZlVonZ
+   3E11+QksACaPtyXSsMOJbe1yF0JY/ZUFvsYleTtgPHI9M9FU736ALfivv
+   puf3pStxlKgn/xy2IjldY/e/+V7X0ewuuzRqBdaIrFJAi8ee3yUBUXBcC
+   Xf/g8JOTvpX3qKlRBXHF44bQmDpYyq0837THTKwdvrBaDZzU69G5KrgyK
+   M/Q0YQnLacyD9frBEMfMfSEhSx+BElTt71bOmth2TfEV0pfUL5ETb5w4x
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="377538673"
+X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
+   d="scan'208";a="377538673"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 03:52:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="814171606"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="814171606"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="809636480"
+X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
+   d="scan'208";a="809636480"
 Received: from lkp-server02.sh.intel.com (HELO cf13c67269a2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2023 03:18:23 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 13 Sep 2023 03:52:22 -0700
 Received: from kbuild by cf13c67269a2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgMwt-0000OF-1K;
-	Wed, 13 Sep 2023 10:18:19 +0000
-Date: Wed, 13 Sep 2023 18:17:55 +0800
+	id 1qgNTo-0000Px-2m;
+	Wed, 13 Sep 2023 10:52:20 +0000
+Date: Wed, 13 Sep 2023 18:52:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
+To: "guojinhui.liam" <guojinhui.liam@bytedance.com>, rafael@kernel.org,
+	lenb@kernel.org, gregkh@linuxfoundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	linux-pm@vger.kernel.org,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	iain@orangesquash.org.uk,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Message-ID: <202309131834.q68yWKdZ-lkp@intel.com>
-References: <20230913040832.114610-3-mario.limonciello@amd.com>
+	lizefan.x@bytedance.com, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"guojinhui.liam" <guojinhui.liam@bytedance.com>
+Subject: Re: [PATCH] driver core: platform: set numa_node before
+ platform_add_device()
+Message-ID: <202309131848.CgiiHpZu-lkp@intel.com>
+References: <20230912070900.1862-1-guojinhui.liam@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,172 +51,174 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230913040832.114610-3-mario.limonciello@amd.com>
+In-Reply-To: <20230912070900.1862-1-guojinhui.liam@bytedance.com>
 
-Hi Mario,
+Hi guojinhui.liam,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 0bb80ecc33a8fb5a682236443c1e740d5c917d1d]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.6-rc1 next-20230913]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PCI-Move-the-PCI_CLASS_SERIAL_USB_USB4-definition-to-common-header/20230913-121559
-base:   0bb80ecc33a8fb5a682236443c1e740d5c917d1d
-patch link:    https://lore.kernel.org/r/20230913040832.114610-3-mario.limonciello%40amd.com
-patch subject: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4 controllers
-config: i386-randconfig-r023-20230913 (https://download.01.org/0day-ci/archive/20230913/202309131834.q68yWKdZ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131834.q68yWKdZ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/guojinhui-liam/driver-core-platform-set-numa_node-before-platform_add_device/20230912-151119
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230912070900.1862-1-guojinhui.liam%40bytedance.com
+patch subject: [PATCH] driver core: platform: set numa_node before platform_add_device()
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230913/202309131848.CgiiHpZu-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131848.CgiiHpZu-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309131834.q68yWKdZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309131848.CgiiHpZu-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/quirks.c:3890:15: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
-           while (child = pci_get_class(PCI_CLASS_SERIAL_USB_USB4, child)) {
-                  ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/quirks.c:3890:15: note: place parentheses around the assignment to silence this warning
-           while (child = pci_get_class(PCI_CLASS_SERIAL_USB_USB4, child)) {
-                        ^
-                  (                                                      )
-   drivers/pci/quirks.c:3890:15: note: use '==' to turn this assignment into an equality comparison
-           while (child = pci_get_class(PCI_CLASS_SERIAL_USB_USB4, child)) {
-                        ^
-                        ==
-   1 warning generated.
+   In file included from drivers/base/platform.c:15:
+   In file included from include/linux/of_irq.h:7:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/base/platform.c:15:
+   In file included from include/linux/of_irq.h:7:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/base/platform.c:15:
+   In file included from include/linux/of_irq.h:7:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/base/platform.c:846:28: error: implicit declaration of function 'acpi_get_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   set_dev_node(&pdev->dev, acpi_get_node(adev->handle));
+                                            ^
+   drivers/base/platform.c:846:28: note: did you mean 'acpi_get_name'?
+   include/acpi/acpixf.h:525:9: note: 'acpi_get_name' declared here
+                                acpi_get_name(acpi_handle object, u32 name_type,
+                                ^
+   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
+           static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
+                              ^
+   drivers/base/platform.c:846:46: error: incomplete definition of type 'struct acpi_device'
+                   set_dev_node(&pdev->dev, acpi_get_node(adev->handle));
+                                                          ~~~~^
+   include/linux/acpi.h:788:8: note: forward declaration of 'struct acpi_device'
+   struct acpi_device;
+          ^
+   12 warnings and 2 errors generated.
 
 
-vim +3890 drivers/pci/quirks.c
+vim +/acpi_get_node +846 drivers/base/platform.c
 
-  3775	
-  3776	/*
-  3777	 * Some AMD/ATI GPUS (HD8570 - Oland) report that a D3hot->D0 transition
-  3778	 * causes a reset (i.e., they advertise NoSoftRst-).  This transition seems
-  3779	 * to have no effect on the device: it retains the framebuffer contents and
-  3780	 * monitor sync.  Advertising this support makes other layers, like VFIO,
-  3781	 * assume pci_reset_function() is viable for this device.  Mark it as
-  3782	 * unavailable to skip it when testing reset methods.
-  3783	 */
-  3784	DECLARE_PCI_FIXUP_CLASS_HEADER(PCI_VENDOR_ID_ATI, PCI_ANY_ID,
-  3785				       PCI_CLASS_DISPLAY_VGA, 8, quirk_no_pm_reset);
-  3786	
-  3787	/*
-  3788	 * Thunderbolt controllers with broken MSI hotplug signaling:
-  3789	 * Entire 1st generation (Light Ridge, Eagle Ridge, Light Peak) and part
-  3790	 * of the 2nd generation (Cactus Ridge 4C up to revision 1, Port Ridge).
-  3791	 */
-  3792	static void quirk_thunderbolt_hotplug_msi(struct pci_dev *pdev)
-  3793	{
-  3794		if (pdev->is_hotplug_bridge &&
-  3795		    (pdev->device != PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C ||
-  3796		     pdev->revision <= 1))
-  3797			pdev->no_msi = 1;
-  3798	}
-  3799	DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_RIDGE,
-  3800				quirk_thunderbolt_hotplug_msi);
-  3801	DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EAGLE_RIDGE,
-  3802				quirk_thunderbolt_hotplug_msi);
-  3803	DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_PEAK,
-  3804				quirk_thunderbolt_hotplug_msi);
-  3805	DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
-  3806				quirk_thunderbolt_hotplug_msi);
-  3807	DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PORT_RIDGE,
-  3808				quirk_thunderbolt_hotplug_msi);
-  3809	
-  3810	#ifdef CONFIG_ACPI
-  3811	/*
-  3812	 * Apple: Shutdown Cactus Ridge Thunderbolt controller.
-  3813	 *
-  3814	 * On Apple hardware the Cactus Ridge Thunderbolt controller needs to be
-  3815	 * shutdown before suspend. Otherwise the native host interface (NHI) will not
-  3816	 * be present after resume if a device was plugged in before suspend.
-  3817	 *
-  3818	 * The Thunderbolt controller consists of a PCIe switch with downstream
-  3819	 * bridges leading to the NHI and to the tunnel PCI bridges.
-  3820	 *
-  3821	 * This quirk cuts power to the whole chip. Therefore we have to apply it
-  3822	 * during suspend_noirq of the upstream bridge.
-  3823	 *
-  3824	 * Power is automagically restored before resume. No action is needed.
-  3825	 */
-  3826	static void quirk_apple_poweroff_thunderbolt(struct pci_dev *dev)
-  3827	{
-  3828		acpi_handle bridge, SXIO, SXFP, SXLV;
-  3829	
-  3830		if (!x86_apple_machine)
-  3831			return;
-  3832		if (pci_pcie_type(dev) != PCI_EXP_TYPE_UPSTREAM)
-  3833			return;
-  3834	
-  3835		/*
-  3836		 * SXIO/SXFP/SXLF turns off power to the Thunderbolt controller.
-  3837		 * We don't know how to turn it back on again, but firmware does,
-  3838		 * so we can only use SXIO/SXFP/SXLF if we're suspending via
-  3839		 * firmware.
-  3840		 */
-  3841		if (!pm_suspend_via_firmware())
-  3842			return;
-  3843	
-  3844		bridge = ACPI_HANDLE(&dev->dev);
-  3845		if (!bridge)
-  3846			return;
-  3847	
-  3848		/*
-  3849		 * SXIO and SXLV are present only on machines requiring this quirk.
-  3850		 * Thunderbolt bridges in external devices might have the same
-  3851		 * device ID as those on the host, but they will not have the
-  3852		 * associated ACPI methods. This implicitly checks that we are at
-  3853		 * the right bridge.
-  3854		 */
-  3855		if (ACPI_FAILURE(acpi_get_handle(bridge, "DSB0.NHI0.SXIO", &SXIO))
-  3856		    || ACPI_FAILURE(acpi_get_handle(bridge, "DSB0.NHI0.SXFP", &SXFP))
-  3857		    || ACPI_FAILURE(acpi_get_handle(bridge, "DSB0.NHI0.SXLV", &SXLV)))
-  3858			return;
-  3859		pci_info(dev, "quirk: cutting power to Thunderbolt controller...\n");
-  3860	
-  3861		/* magic sequence */
-  3862		acpi_execute_simple_method(SXIO, NULL, 1);
-  3863		acpi_execute_simple_method(SXFP, NULL, 0);
-  3864		msleep(300);
-  3865		acpi_execute_simple_method(SXLV, NULL, 0);
-  3866		acpi_execute_simple_method(SXIO, NULL, 0);
-  3867		acpi_execute_simple_method(SXLV, NULL, 0);
-  3868	}
-  3869	DECLARE_PCI_FIXUP_SUSPEND_LATE(PCI_VENDOR_ID_INTEL,
-  3870				       PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
-  3871				       quirk_apple_poweroff_thunderbolt);
-  3872	
-  3873	
-  3874	/*
-  3875	 * Putting PCIe root ports on Ryzen SoCs with USB4 controllers into D3 power
-  3876	 * states may cause problems when the system attempts wake up from s2idle.
-  3877	 *
-  3878	 * This manifests as a missing wakeup interrupt on the following systems:
-  3879	 * Family 19h model 44h (PCI 0x14b9)
-  3880	 * Family 19h model 74h (PCI 0x14eb)
-  3881	 * Family 19h model 78h (PCI 0x14eb)
-  3882	 *
-  3883	 * Add a quirk to the root port if a USB4 controller is connected to it
-  3884	 * to avoid D3 power states.
-  3885	 */
-  3886	static void quirk_ryzen_rp_d3(struct pci_dev *pdev)
-  3887	{
-  3888		struct pci_dev *child = NULL;
-  3889	
-> 3890		while (child = pci_get_class(PCI_CLASS_SERIAL_USB_USB4, child)) {
-  3891			if (pci_upstream_bridge(child) != pdev)
-  3892				continue;
-  3893			pdev->dev_flags |= PCI_DEV_FLAGS_NO_WAKE_D3;
-  3894			pci_info(pdev, "quirk: disabling D3 for wakeup\n");
-  3895			break;
-  3896		}
-  3897	}
-  3898	DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x14b9, quirk_ryzen_rp_d3);
-  3899	DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x14eb, quirk_ryzen_rp_d3);
-  3900	#endif
-  3901	
+   797	
+   798	/**
+   799	 * platform_device_register_full - add a platform-level device with
+   800	 * resources and platform-specific data
+   801	 *
+   802	 * @pdevinfo: data used to create device
+   803	 *
+   804	 * Returns &struct platform_device pointer on success, or ERR_PTR() on error.
+   805	 */
+   806	struct platform_device *platform_device_register_full(
+   807			const struct platform_device_info *pdevinfo)
+   808	{
+   809		int ret;
+   810		struct platform_device *pdev;
+   811		struct acpi_device *adev = to_acpi_device_node(pdevinfo->fwnode);
+   812	
+   813		pdev = platform_device_alloc(pdevinfo->name, pdevinfo->id);
+   814		if (!pdev)
+   815			return ERR_PTR(-ENOMEM);
+   816	
+   817		pdev->dev.parent = pdevinfo->parent;
+   818		pdev->dev.fwnode = pdevinfo->fwnode;
+   819		pdev->dev.of_node = of_node_get(to_of_node(pdev->dev.fwnode));
+   820		pdev->dev.of_node_reused = pdevinfo->of_node_reused;
+   821	
+   822		if (pdevinfo->dma_mask) {
+   823			pdev->platform_dma_mask = pdevinfo->dma_mask;
+   824			pdev->dev.dma_mask = &pdev->platform_dma_mask;
+   825			pdev->dev.coherent_dma_mask = pdevinfo->dma_mask;
+   826		}
+   827	
+   828		ret = platform_device_add_resources(pdev,
+   829				pdevinfo->res, pdevinfo->num_res);
+   830		if (ret)
+   831			goto err;
+   832	
+   833		ret = platform_device_add_data(pdev,
+   834				pdevinfo->data, pdevinfo->size_data);
+   835		if (ret)
+   836			goto err;
+   837	
+   838		if (pdevinfo->properties) {
+   839			ret = device_create_managed_software_node(&pdev->dev,
+   840								  pdevinfo->properties, NULL);
+   841			if (ret)
+   842				goto err;
+   843		}
+   844	
+   845		if (adev)
+ > 846			set_dev_node(&pdev->dev, acpi_get_node(adev->handle));
+   847	
+   848		ret = platform_device_add(pdev);
+   849		if (ret) {
+   850	err:
+   851			ACPI_COMPANION_SET(&pdev->dev, NULL);
+   852			platform_device_put(pdev);
+   853			return ERR_PTR(ret);
+   854		}
+   855	
+   856		return pdev;
+   857	}
+   858	EXPORT_SYMBOL_GPL(platform_device_register_full);
+   859	
 
 -- 
 0-DAY CI Kernel Test Service
