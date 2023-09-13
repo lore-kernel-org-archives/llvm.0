@@ -1,44 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F33E10F5;
-	Wed, 13 Sep 2023 08:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93D51DDC0;
+	Wed, 13 Sep 2023 09:03:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694595068; x=1726131068;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CxZlJL4IZV34v0VOIj/Uns0IfPnLy4SJOkl5TJm3F50=;
-  b=CERfqWmdeNnn9QpmYyYxlFpm64ZhJfErFXGjbH4uAOJW3DNVS9otuppx
-   8uplqcRB7RcAQBJJhMloAhqPiM6Q/ssddlCF4wLXfKxeYETFjizBvyRw+
-   1rgYf/Aylital6eEFWxfbOWqEYxKpJTDLcD3b6fiFXUuFh4R3SCU9AQBn
-   Qmskikpf/w5B4g2diSm/qwouC0Pj1dJrC6P7a7OHuNjRQZVUJEyXvcBUI
-   ZsvR7ieycv0fp/qCGansaKkRvy6dEIM5sfkn7rdY0IpRM5niaqYamMBRc
-   c4zTX2WBzl+H1bGRVuJ+qtS5nQjs6qHNlUU3y7NlOupanZU5D/5qx6E8t
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="375934535"
+  t=1694595790; x=1726131790;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dxa1s4XwKeXVgdc9qv9AkmCDwZA82OCSSHsyB65KS+w=;
+  b=RApvCs1+K2BlokCwi0aOEewPYwRUu2LPzKhERISVwBQx3ekDzsHeff1n
+   oCAZa6Nd5cRzx6u9fOiUuZiwGWv/mXQl1m95KFql29kxbHO68Jh19fsjj
+   cdG3D5lDBwOIjm3Fnha502+yjJByENBPWKM3uwNx1yPuMY80Sj3gNKHLx
+   hv8FEwCWlXQ1QaLyUHI3ETqokoZASdVYzx9cm4ARjJjwWsBr9c9aYGex3
+   g0Wv07yIEArU3proOf113Z9DyF3HEbCeMISqj4y65MU9VuAVbkA0w+l+B
+   rKbLl5KhmkJe9vEOMqbJQS+4egplVyjXHdYnJUYcZCnl3/DraKyxOYOZZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="442637171"
 X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="375934535"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 01:51:07 -0700
+   d="scan'208";a="442637171"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 02:03:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="737415081"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="887253870"
 X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="737415081"
+   d="scan'208";a="887253870"
 Received: from lkp-server02.sh.intel.com (HELO cf13c67269a2) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 13 Sep 2023 01:51:05 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 13 Sep 2023 02:02:36 -0700
 Received: from kbuild by cf13c67269a2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgLaR-0000IP-0R;
-	Wed, 13 Sep 2023 08:51:03 +0000
-Date: Wed, 13 Sep 2023 16:50:42 +0800
+	id 1qgLm3-0000It-1b;
+	Wed, 13 Sep 2023 09:03:03 +0000
+Date: Wed, 13 Sep 2023 17:02:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 3370/4552] fs/bcachefs/alloc_background.c:627:10:
- warning: format specifies type 'unsigned long' but the argument has type
- 'size_t' (aka 'unsigned int')
-Message-ID: <202309131633.dudKjDW7-lkp@intel.com>
+To: Chuyi Zhou <zhouchuyi@bytedance.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+	tj@kernel.org, linux-kernel@vger.kernel.org,
+	Chuyi Zhou <zhouchuyi@bytedance.com>
+Subject: Re: [PATCH bpf-next v2 4/6] bpf: Introduce css_descendant open-coded
+ iterator kfuncs
+Message-ID: <202309131621.h5ogfV0Z-lkp@intel.com>
+References: <20230912070149.969939-5-zhouchuyi@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,171 +50,246 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230912070149.969939-5-zhouchuyi@bytedance.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e143016b56ecb0fcda5bb6026b0a25fe55274f56
-commit: 4be0d766a7e917bc514bd9f5ebeca365a2b22f07 [3370/4552] bcachefs: bucket_gens btree
-config: powerpc-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230913/202309131633.dudKjDW7-lkp@intel.com/config)
+Hi Chuyi,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chuyi-Zhou/cgroup-Prepare-for-using-css_task_iter_-in-BPF/20230912-150454
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230912070149.969939-5-zhouchuyi%40bytedance.com
+patch subject: [PATCH bpf-next v2 4/6] bpf: Introduce css_descendant open-coded iterator kfuncs
+config: hexagon-randconfig-r032-20230913 (https://download.01.org/0day-ci/archive/20230913/202309131621.h5ogfV0Z-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131633.dudKjDW7-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131621.h5ogfV0Z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309131633.dudKjDW7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309131621.h5ogfV0Z-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/bpf/task_iter.c:9:
+   In file included from include/linux/filter.h:9:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
-     215 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/alloc_background.c:2:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
-     217 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/alloc_background.c:5:
-   In file included from fs/bcachefs/backpointers.h:5:
-   fs/bcachefs/btree_iter.h:248:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
-     248 | static inline int btree_trans_restart_nounlock(struct btree_trans *trans, int err)
-         |        ^
-   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
-     215 | #define inline inline __gnu_inline __inline_maybe_unused notrace
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   kernel/bpf/task_iter.c:820:7: error: use of undeclared identifier 'CSS_TASK_ITER_PROCS'
+     820 |         case CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED:
+         |              ^
+   kernel/bpf/task_iter.c:820:29: error: use of undeclared identifier 'CSS_TASK_ITER_THREADED'
+     820 |         case CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED:
+         |                                    ^
+   kernel/bpf/task_iter.c:821:7: error: use of undeclared identifier 'CSS_TASK_ITER_PROCS'
+     821 |         case CSS_TASK_ITER_PROCS:
+         |              ^
+   kernel/bpf/task_iter.c:828:24: error: invalid application of 'sizeof' to an incomplete type 'struct css_task_iter'
+     828 |         kit->css_it = kzalloc(sizeof(struct css_task_iter), GFP_KERNEL);
+         |                               ^     ~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/task_iter.c:807:9: note: forward declaration of 'struct css_task_iter'
+     807 |         struct css_task_iter *css_it;
          |                ^
-   In file included from fs/bcachefs/alloc_background.c:5:
-   In file included from fs/bcachefs/backpointers.h:5:
-   fs/bcachefs/btree_iter.h:258:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
-     258 | static inline int btree_trans_restart(struct btree_trans *trans, int err)
-         |        ^
-   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
-     215 | #define inline inline __gnu_inline __inline_maybe_unused notrace
+   kernel/bpf/task_iter.c:831:2: error: call to undeclared function 'css_task_iter_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     831 |         css_task_iter_start(css, flags, kit->css_it);
+         |         ^
+   kernel/bpf/task_iter.c:831:2: note: did you mean '__sg_page_iter_start'?
+   include/linux/scatterlist.h:573:6: note: '__sg_page_iter_start' declared here
+     573 | void __sg_page_iter_start(struct sg_page_iter *piter,
+         |      ^
+   kernel/bpf/task_iter.c:810:17: warning: no previous prototype for function 'bpf_iter_css_task_new' [-Wmissing-prototypes]
+     810 | __bpf_kfunc int bpf_iter_css_task_new(struct bpf_iter_css_task *it,
+         |                 ^
+   kernel/bpf/task_iter.c:810:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     810 | __bpf_kfunc int bpf_iter_css_task_new(struct bpf_iter_css_task *it,
+         |             ^
+         |             static 
+   kernel/bpf/task_iter.c:841:9: error: call to undeclared function 'css_task_iter_next'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     841 |         return css_task_iter_next(kit->css_it);
          |                ^
-   In file included from fs/bcachefs/alloc_background.c:7:
-   In file included from fs/bcachefs/btree_io.h:7:
-   fs/bcachefs/btree_locking.h:88:46: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-      88 |         mark_btree_node_locked_noreset(path, level, type);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              ^~~~
-   fs/bcachefs/btree_locking.h:175:51: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-     175 |         mark_btree_node_locked_noreset(path, b->c.level, SIX_LOCK_intent);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                   ^~~~~~~~~~~~~~~
-   fs/bcachefs/btree_locking.h:241:33: warning: implicit conversion from enumeration type 'enum btree_node_locked_type' to different enumeration type 'enum six_lock_type' [-Wenum-conversion]
-     241 |                         six_lock_increment(&b->lock, want);
-         |                         ~~~~~~~~~~~~~~~~~~           ^~~~
-   fs/bcachefs/btree_locking.h:261:49: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-     261 |             btree_node_lock_increment(trans, b, level, type) ||
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~                  ^~~~
-   fs/bcachefs/btree_locking.h:288:49: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-     288 |         mark_btree_node_locked_noreset(path, b->level, SIX_LOCK_write);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 ^~~~~~~~~~~~~~
-   In file included from fs/bcachefs/alloc_background.c:7:
-   fs/bcachefs/btree_io.h:203:33: warning: implicit conversion from enumeration type 'enum btree_id' to different enumeration type 'enum btree_node_type' [-Wenum-conversion]
-     203 |             btree_node_type_is_extents(btree_id) &&
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~
-   fs/bcachefs/btree_io.h:220:33: warning: implicit conversion from enumeration type 'enum btree_id' to different enumeration type 'enum btree_node_type' [-Wenum-conversion]
-     220 |             btree_node_type_is_extents(btree_id) &&
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~
-   fs/bcachefs/alloc_background.c:272:10: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     272 |                 prt_printf(err, "bad val size (%lu != %u)",
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                %u
-     273 |                        bkey_val_u64s(k.k), alloc_v4_u64s(a.v));
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/bkey.h:47:27: note: expanded from macro 'bkey_val_u64s'
-      47 | #define bkey_val_u64s(_k)       ((_k)->u64s - BKEY_U64s)
+   kernel/bpf/task_iter.c:841:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct task_struct *' [-Wint-conversion]
+     841 |         return css_task_iter_next(kit->css_it);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/task_iter.c:835:33: warning: no previous prototype for function 'bpf_iter_css_task_next' [-Wmissing-prototypes]
+     835 | __bpf_kfunc struct task_struct *bpf_iter_css_task_next(struct bpf_iter_css_task *it)
          |                                 ^
-   fs/bcachefs/util.h:221:54: note: expanded from macro 'prt_printf'
-     221 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
->> fs/bcachefs/alloc_background.c:627:10: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     627 |                 prt_printf(err, "bad val size (%lu != %zu)",
-         |                                                ~~~
-         |                                                %zu
-     628 |                        bkey_val_bytes(k.k), sizeof(struct bch_bucket_gens));
-         |                        ^~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/util.h:221:54: note: expanded from macro 'prt_printf'
-     221 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/alloc_background.c:939:17: warning: no previous prototype for function 'bch2_get_key_or_hole' [-Wmissing-prototypes]
-     939 | struct bkey_s_c bch2_get_key_or_hole(struct btree_iter *iter, struct bpos end, struct bkey *hole)
+   kernel/bpf/task_iter.c:835:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     835 | __bpf_kfunc struct task_struct *bpf_iter_css_task_next(struct bpf_iter_css_task *it)
+         |             ^
+         |             static 
+   kernel/bpf/task_iter.c:850:2: error: call to undeclared function 'css_task_iter_end'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     850 |         css_task_iter_end(kit->css_it);
+         |         ^
+   kernel/bpf/task_iter.c:844:18: warning: no previous prototype for function 'bpf_iter_css_task_destroy' [-Wmissing-prototypes]
+     844 | __bpf_kfunc void bpf_iter_css_task_destroy(struct bpf_iter_css_task *it)
+         |                  ^
+   kernel/bpf/task_iter.c:844:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     844 | __bpf_kfunc void bpf_iter_css_task_destroy(struct bpf_iter_css_task *it)
+         |             ^
+         |             static 
+   kernel/bpf/task_iter.c:858:17: warning: no previous prototype for function 'bpf_iter_process_new' [-Wmissing-prototypes]
+     858 | __bpf_kfunc int bpf_iter_process_new(struct bpf_iter_process *it)
          |                 ^
-   fs/bcachefs/alloc_background.c:939:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     939 | struct bkey_s_c bch2_get_key_or_hole(struct btree_iter *iter, struct bpos end, struct bkey *hole)
-         | ^
-         | static 
-   fs/bcachefs/alloc_background.c:1003:17: warning: no previous prototype for function 'bch2_get_key_or_real_bucket_hole' [-Wmissing-prototypes]
-    1003 | struct bkey_s_c bch2_get_key_or_real_bucket_hole(struct btree_iter *iter, struct bkey *hole)
+   kernel/bpf/task_iter.c:858:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     858 | __bpf_kfunc int bpf_iter_process_new(struct bpf_iter_process *it)
+         |             ^
+         |             static 
+   kernel/bpf/task_iter.c:870:33: warning: no previous prototype for function 'bpf_iter_process_next' [-Wmissing-prototypes]
+     870 | __bpf_kfunc struct task_struct *bpf_iter_process_next(struct bpf_iter_process *it)
+         |                                 ^
+   kernel/bpf/task_iter.c:870:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     870 | __bpf_kfunc struct task_struct *bpf_iter_process_next(struct bpf_iter_process *it)
+         |             ^
+         |             static 
+   kernel/bpf/task_iter.c:879:18: warning: no previous prototype for function 'bpf_iter_process_destroy' [-Wmissing-prototypes]
+     879 | __bpf_kfunc void bpf_iter_process_destroy(struct bpf_iter_process *it)
+         |                  ^
+   kernel/bpf/task_iter.c:879:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     879 | __bpf_kfunc void bpf_iter_process_destroy(struct bpf_iter_process *it)
+         |             ^
+         |             static 
+>> kernel/bpf/task_iter.c:888:17: warning: no previous prototype for function 'bpf_iter_css_pre_new' [-Wmissing-prototypes]
+     888 | __bpf_kfunc int bpf_iter_css_pre_new(struct bpf_iter_css_pre *it,
          |                 ^
-   fs/bcachefs/alloc_background.c:1003:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1003 | struct bkey_s_c bch2_get_key_or_real_bucket_hole(struct btree_iter *iter, struct bkey *hole)
-         | ^
-         | static 
-   fs/bcachefs/alloc_background.c:81:20: warning: unused function 'alloc_field_v1_put' [-Wunused-function]
-      81 | static inline void alloc_field_v1_put(struct bkey_i_alloc *a, void **p,
+   kernel/bpf/task_iter.c:888:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     888 | __bpf_kfunc int bpf_iter_css_pre_new(struct bpf_iter_css_pre *it,
+         |             ^
+         |             static 
+   kernel/bpf/task_iter.c:904:13: error: call to undeclared function 'css_next_descendant_pre'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     904 |         kit->pos = css_next_descendant_pre(kit->pos, kit->root);
          |                    ^
-   20 warnings generated.
+   kernel/bpf/task_iter.c:904:11: error: incompatible integer to pointer conversion assigning to 'struct cgroup_subsys_state *' from 'int' [-Wint-conversion]
+     904 |         kit->pos = css_next_descendant_pre(kit->pos, kit->root);
+         |                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/bpf/task_iter.c:900:41: warning: no previous prototype for function 'bpf_iter_css_pre_next' [-Wmissing-prototypes]
+     900 | __bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_pre_next(struct bpf_iter_css_pre *it)
+         |                                         ^
+   kernel/bpf/task_iter.c:900:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     900 | __bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_pre_next(struct bpf_iter_css_pre *it)
+         |             ^
+         |             static 
+>> kernel/bpf/task_iter.c:908:18: warning: no previous prototype for function 'bpf_iter_css_pre_destroy' [-Wmissing-prototypes]
+     908 | __bpf_kfunc void bpf_iter_css_pre_destroy(struct bpf_iter_css_pre *it)
+         |                  ^
+   kernel/bpf/task_iter.c:908:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     908 | __bpf_kfunc void bpf_iter_css_pre_destroy(struct bpf_iter_css_pre *it)
+         |             ^
+         |             static 
+>> kernel/bpf/task_iter.c:912:17: warning: no previous prototype for function 'bpf_iter_css_post_new' [-Wmissing-prototypes]
+     912 | __bpf_kfunc int bpf_iter_css_post_new(struct bpf_iter_css_post *it,
+         |                 ^
+   kernel/bpf/task_iter.c:912:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     912 | __bpf_kfunc int bpf_iter_css_post_new(struct bpf_iter_css_post *it,
+         |             ^
+         |             static 
+   kernel/bpf/task_iter.c:928:13: error: call to undeclared function 'css_next_descendant_post'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     928 |         kit->pos = css_next_descendant_post(kit->pos, kit->root);
+         |                    ^
+   kernel/bpf/task_iter.c:928:11: error: incompatible integer to pointer conversion assigning to 'struct cgroup_subsys_state *' from 'int' [-Wint-conversion]
+     928 |         kit->pos = css_next_descendant_post(kit->pos, kit->root);
+         |                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/bpf/task_iter.c:924:41: warning: no previous prototype for function 'bpf_iter_css_post_next' [-Wmissing-prototypes]
+     924 | __bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_post_next(struct bpf_iter_css_post *it)
+         |                                         ^
+   kernel/bpf/task_iter.c:924:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     924 | __bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_post_next(struct bpf_iter_css_post *it)
+         |             ^
+         |             static 
+>> kernel/bpf/task_iter.c:932:18: warning: no previous prototype for function 'bpf_iter_css_post_destroy' [-Wmissing-prototypes]
+     932 | __bpf_kfunc void bpf_iter_css_post_destroy(struct bpf_iter_css_post *it)
+         |                  ^
+   kernel/bpf/task_iter.c:932:13: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     932 | __bpf_kfunc void bpf_iter_css_post_destroy(struct bpf_iter_css_post *it)
+         |             ^
+         |             static 
+   18 warnings and 12 errors generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=n] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
+vim +/bpf_iter_css_pre_new +888 kernel/bpf/task_iter.c
 
-vim +627 fs/bcachefs/alloc_background.c
-
-   621	
-   622	int bch2_bucket_gens_invalid(const struct bch_fs *c, struct bkey_s_c k,
-   623				     int rw, struct printbuf *err)
-   624	{
-   625		if (bkey_val_bytes(k.k) != sizeof(struct bch_bucket_gens)) {
-   626			prt_printf(err, "bad val size (%lu != %zu)",
- > 627			       bkey_val_bytes(k.k), sizeof(struct bch_bucket_gens));
-   628			return -BCH_ERR_invalid_bkey;
-   629		}
-   630	
-   631		return 0;
-   632	}
-   633	
+   878	
+ > 879	__bpf_kfunc void bpf_iter_process_destroy(struct bpf_iter_process *it)
+   880	{
+   881	}
+   882	
+   883	struct bpf_iter_css_kern {
+   884		struct cgroup_subsys_state *root;
+   885		struct cgroup_subsys_state *pos;
+   886	} __attribute__((aligned(8)));
+   887	
+ > 888	__bpf_kfunc int bpf_iter_css_pre_new(struct bpf_iter_css_pre *it,
+   889			struct cgroup_subsys_state *root)
+   890	{
+   891		struct bpf_iter_css_kern *kit = (void *)it;
+   892	
+   893		BUILD_BUG_ON(sizeof(struct bpf_iter_css_kern) != sizeof(struct bpf_iter_css_pre));
+   894		BUILD_BUG_ON(__alignof__(struct bpf_iter_css_kern) != __alignof__(struct bpf_iter_css_pre));
+   895		kit->root = root;
+   896		kit->pos = NULL;
+   897		return 0;
+   898	}
+   899	
+ > 900	__bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_pre_next(struct bpf_iter_css_pre *it)
+   901	{
+   902		struct bpf_iter_css_kern *kit = (void *)it;
+   903	
+ > 904		kit->pos = css_next_descendant_pre(kit->pos, kit->root);
+   905		return kit->pos;
+   906	}
+   907	
+ > 908	__bpf_kfunc void bpf_iter_css_pre_destroy(struct bpf_iter_css_pre *it)
+   909	{
+   910	}
+   911	
+ > 912	__bpf_kfunc int bpf_iter_css_post_new(struct bpf_iter_css_post *it,
+   913			struct cgroup_subsys_state *root)
+   914	{
+   915		struct bpf_iter_css_kern *kit = (void *)it;
+   916	
+   917		BUILD_BUG_ON(sizeof(struct bpf_iter_css_kern) != sizeof(struct bpf_iter_css_post));
+   918		BUILD_BUG_ON(__alignof__(struct bpf_iter_css_kern) != __alignof__(struct bpf_iter_css_post));
+   919		kit->root = root;
+   920		kit->pos = NULL;
+   921		return 0;
+   922	}
+   923	
+ > 924	__bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_post_next(struct bpf_iter_css_post *it)
+   925	{
+   926		struct bpf_iter_css_kern *kit = (void *)it;
+   927	
+ > 928		kit->pos = css_next_descendant_post(kit->pos, kit->root);
+   929		return kit->pos;
+   930	}
+   931	
+ > 932	__bpf_kfunc void bpf_iter_css_post_destroy(struct bpf_iter_css_post *it)
+   933	{
+   934	}
+   935	
 
 -- 
 0-DAY CI Kernel Test Service
