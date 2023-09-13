@@ -1,46 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9165E1A71C;
-	Wed, 13 Sep 2023 13:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65DB1A718;
+	Wed, 13 Sep 2023 13:56:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694610832; x=1726146832;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TvrCpOQI/H6x/uGnlR2xkO6OFiRPA7RLNj+S7U/qINw=;
-  b=hUxw29CPRGPP+22GANmJrG0z9gO+BekO6ZaT0b/ITkg8CnK396vqJDFn
-   ici7jCHgYaHKbDY3af1mcjFGMfYKZESR5fqWU8jUmqb2mrD55879VcV0o
-   5eVP8oXdBpGnvXRoU3gCYoFd3Gpdl5i9TAJZqpgsIuLjcTBrMDSmvfGtc
-   Z+gNs+6gF3Gz8QkViiUnDOsXzIbIJGvHuPrO6vl1nGxXRiVJg1zEQvuij
-   LiK0cqnsokCM83GPErYY8B7oke9NQVlD/r/6FgUxy4lzwan7eJlh9q9Lb
-   aLIyPLfioOk0VpeBzt1/mr7QhV+f86PY4XfeE9MHxNhbARXC6R4C5YXoI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="377568072"
+  t=1694613413; x=1726149413;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e2zyx5vdS/lyOSitc+nbQw3M6p7JLDxqpMkEW3uz0/c=;
+  b=iPhtqkDNoHSan620MRLWUXI1+9yNHEBEUgSqsNz5JgfYXEGJjrILccPd
+   GDXJD3kDOWWCp5eQ+fIeMbXto4bg8D5h5DQ84hDFUd/czZDByMT+WXPn/
+   X09En2Cl/AgrhkAJqCNV6oOjoeX6UZTvhYjHVe6v/709gyZ/VhI9Vv6FY
+   72Q7FsgGNzQPenvEXGZgyJUyj1NXSerOpDZwmr2pcQ41kO6NZl4jyUZ/e
+   XEsKDG+PZNjerOlSyHEBJvRzErGbVYghWq1exmBbIVYZ8lkXkBIx0VFgB
+   g2DyOU3T6q7vUXMnCU2S6TQGj/Pcohv8XVdPIjfBcfssX+8Sanh2szlbT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="442696789"
 X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="377568072"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 06:13:51 -0700
+   d="scan'208";a="442696789"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 06:56:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="1074955766"
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="747313787"
 X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="1074955766"
+   d="scan'208";a="747313787"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Sep 2023 06:13:48 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 13 Sep 2023 06:56:51 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgPgg-00005N-1I;
-	Wed, 13 Sep 2023 13:13:46 +0000
-Date: Wed, 13 Sep 2023 21:13:12 +0800
+	id 1qgQML-00008V-0w;
+	Wed, 13 Sep 2023 13:56:49 +0000
+Date: Wed, 13 Sep 2023 21:56:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ping Gan <jacky_gam_2001@163.com>, kbusch@kernel.org, axboe@kernel.dk,
-	hch@lst.de, sagi@grimberg.me, kch@nvidia.com,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ping_gan@dell.com,
-	jacky_gam_2001@163.com
-Subject: Re: [PATCH 2/4] nvmet: Add polling queue task for nvme target
-Message-ID: <202309132115.8j2dhGX4-lkp@intel.com>
-References: <84d7f188e892b5b0ba251a4601455d7a137075f3.1694592708.git.jacky_gam_2001@163.com>
+To: Kent Overstreet <kmo@daterainc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 3525/4552] fs/bcachefs/movinggc.c:176:21:
+ warning: comparison of distinct pointer types ('typeof (16UL) *' (aka
+ 'unsigned long *') and 'typeof (buckets_in_flight->nr / 4) *' (aka 'unsigned
+ int *'))
+Message-ID: <202309132139.VDIFJtS0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,170 +48,195 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <84d7f188e892b5b0ba251a4601455d7a137075f3.1694592708.git.jacky_gam_2001@163.com>
 
-Hi Ping,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on v6.6-rc1]
-[also build test WARNING on linus/master next-20230913]
-[cannot apply to hch-configfs/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ping-Gan/nvmet-Add-nvme-target-polling-queue-task-parameters/20230913-164112
-base:   v6.6-rc1
-patch link:    https://lore.kernel.org/r/84d7f188e892b5b0ba251a4601455d7a137075f3.1694592708.git.jacky_gam_2001%40163.com
-patch subject: [PATCH 2/4] nvmet: Add polling queue task for nvme target
-config: i386-randconfig-013-20230913 (https://download.01.org/0day-ci/archive/20230913/202309132115.8j2dhGX4-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309132115.8j2dhGX4-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e143016b56ecb0fcda5bb6026b0a25fe55274f56
+commit: dd49018737d4217648d553f13cc34483215a579b [3525/4552] bcachefs: Rhashtable based buckets_in_flight for copygc
+config: powerpc-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230913/202309132139.VDIFJtS0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309132139.VDIFJtS0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309132115.8j2dhGX4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309132139.VDIFJtS0-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/nvme/target/polling-queue-thread.c:278:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           ENQUEUE_PTRS(r, &r[1], prod_head, obj_table, n, void *);
-           ^
-   drivers/nvme/target/polling-queue-thread.c:151:3: note: expanded from macro 'ENQUEUE_PTRS'
-                   case 2: \
-                   ^
->> drivers/nvme/target/polling-queue-thread.c:278:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-   drivers/nvme/target/polling-queue-thread.c:153:3: note: expanded from macro 'ENQUEUE_PTRS'
-                   case 1: \
-                   ^
-   drivers/nvme/target/polling-queue-thread.c:298:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           DEQUEUE_PTRS(r, &r[1], cons_head, obj_table, n, void *);
-           ^
-   drivers/nvme/target/polling-queue-thread.c:182:3: note: expanded from macro 'DEQUEUE_PTRS'
-                   case 2: \
-                   ^
-   drivers/nvme/target/polling-queue-thread.c:298:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-   drivers/nvme/target/polling-queue-thread.c:184:3: note: expanded from macro 'DEQUEUE_PTRS'
-                   case 1: \
-                   ^
-   drivers/nvme/target/polling-queue-thread.c:357:1: warning: unused function '__nvmet_pq_ring_full' [-Wunused-function]
-   __nvmet_pq_ring_full(const struct nvmet_pq_ring *r)
-   ^
-   drivers/nvme/target/polling-queue-thread.c:366:1: warning: unused function '__nvmet_pq_ring_empty' [-Wunused-function]
-   __nvmet_pq_ring_empty(const struct nvmet_pq_ring *r)
-   ^
-   drivers/nvme/target/polling-queue-thread.c:375:1: warning: unused function '__nvmet_pq_ring_get_size' [-Wunused-function]
-   __nvmet_pq_ring_get_size(const struct nvmet_pq_ring *r)
-   ^
-   drivers/nvme/target/polling-queue-thread.c:384:1: warning: unused function '__nvmet_pq_ring_get_capacity' [-Wunused-function]
-   __nvmet_pq_ring_get_capacity(const struct nvmet_pq_ring *r)
-   ^
-   8 warnings generated.
---
->> drivers/nvme/target/polling-queue-thread.c:345: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Return the number of free entries in a ring.
-   drivers/nvme/target/polling-queue-thread.c:354: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Test if a ring is full.
-   drivers/nvme/target/polling-queue-thread.c:363: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Test if a ring is empty.
-   drivers/nvme/target/polling-queue-thread.c:372: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Return the size of the ring.
-   drivers/nvme/target/polling-queue-thread.c:381: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Return the number of elements which can be stored in the ring.
+      48 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:211:1: note: expanded from here
+     211 | __do_insl
+         | ^
+   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
+     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from fs/bcachefs/movinggc.c:8:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:672:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      50 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:213:1: note: expanded from here
+     213 | __do_outsb
+         | ^
+   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
+     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from fs/bcachefs/movinggc.c:8:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:672:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      52 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:215:1: note: expanded from here
+     215 | __do_outsw
+         | ^
+   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
+     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from fs/bcachefs/movinggc.c:8:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:672:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      54 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     669 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:217:1: note: expanded from here
+     217 | __do_outsl
+         | ^
+   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
+     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from fs/bcachefs/movinggc.c:11:
+   fs/bcachefs/btree_iter.h:257:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
+     257 | static inline int btree_trans_restart_nounlock(struct btree_trans *trans, int err)
+         |        ^
+   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
+     215 | #define inline inline __gnu_inline __inline_maybe_unused notrace
+         |                ^
+   In file included from fs/bcachefs/movinggc.c:11:
+   fs/bcachefs/btree_iter.h:268:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
+     268 | static inline int btree_trans_restart(struct btree_trans *trans, int err)
+         |        ^
+   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
+     215 | #define inline inline __gnu_inline __inline_maybe_unused notrace
+         |                ^
+>> fs/bcachefs/movinggc.c:176:21: warning: comparison of distinct pointer types ('typeof (16UL) *' (aka 'unsigned long *') and 'typeof (buckets_in_flight->nr / 4) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+     176 |         size_t nr_to_get = max(16UL, buckets_in_flight->nr / 4);
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:75:19: note: expanded from macro 'max'
+      75 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:37:24: note: expanded from macro '__careful_cmp'
+      37 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:27:4: note: expanded from macro '__safe_cmp'
+      27 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:21:28: note: expanded from macro '__typecheck'
+      21 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   9 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
+   Selected by [y]:
+   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=n] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
 
-vim +278 drivers/nvme/target/polling-queue-thread.c
+vim +176 fs/bcachefs/movinggc.c
 
-   265	
-   266	static inline u32
-   267	__nvmet_pq_ring_do_enqueue(struct nvmet_pq_ring *r,
-   268								void **obj_table, u32 n, u32 *free_space)
-   269	{
-   270		uint32_t prod_head, prod_next;
-   271		uint32_t free_entries;
-   272	
-   273		n = __nvmet_pq_ring_move_prod_head(r, n, &prod_head,
-   274										&prod_next, &free_entries);
-   275		if (n == 0)
-   276			goto end;
-   277	
- > 278		ENQUEUE_PTRS(r, &r[1], prod_head, obj_table, n, void *);
-   279	
-   280		__nvmet_pq_ring_update_tail(&r->prod, prod_head, prod_next, 1);
-   281	end:
-   282		if (free_space != NULL)
-   283			*free_space = free_entries - n;
-   284		return n;
-   285	}
-   286	
-   287	static inline u32
-   288	__nvmet_pq_ring_do_dequeue(struct nvmet_pq_ring *r,
-   289								void **obj_table, u32 n, u32 *available)
-   290	{
-   291		uint32_t cons_head, cons_next;
-   292		uint32_t entries;
-   293	
-   294		n = __nvmet_pq_ring_move_cons_head(r, n, &cons_head, &cons_next, &entries);
-   295		if (n == 0)
-   296			goto end;
-   297	
-   298		DEQUEUE_PTRS(r, &r[1], cons_head, obj_table, n, void *);
-   299	
-   300		__nvmet_pq_ring_update_tail(&r->cons, cons_head, cons_next, 0);
-   301	
-   302	end:
-   303		if (available != NULL)
-   304			*available = entries - n;
-   305		return n;
-   306	}
-   307	
-   308	static inline u32
-   309	nvmet_pq_ring_enqueue_bulk(struct nvmet_pq_ring *r,
-   310								void **obj_table, u32 n, u32 *free_space)
-   311	{
-   312		return __nvmet_pq_ring_do_enqueue(r, obj_table, n, free_space);
-   313	}
-   314	
-   315	static inline int
-   316	nvmet_pq_ring_enqueue(struct nvmet_pq_ring *r, void **obj)
-   317	{
-   318		return nvmet_pq_ring_enqueue_bulk(r, obj, 1, NULL) ? 0 : -ENOBUFS;
-   319	}
-   320	
-   321	static inline u32
-   322	nvmet_pq_ring_dequeue_bulk(struct nvmet_pq_ring *r,
-   323								void **obj_table, u32 n, u32 *available)
-   324	{
-   325		return __nvmet_pq_ring_do_dequeue(r, obj_table, n, available);
-   326	}
-   327	
-   328	static inline int
-   329	nvmet_pq_ring_dequeue(struct nvmet_pq_ring *r, void **obj_p)
-   330	{
-   331		return nvmet_pq_ring_dequeue_bulk(r, obj_p, 1, NULL) ? 0 : -ENOENT;
-   332	}
-   333	
-   334	static inline u32
-   335	__nvmet_pq_ring_count(const struct nvmet_pq_ring *r)
-   336	{
-   337		u32 prod_tail = smp_load_acquire(&r->prod.tail);
-   338		u32 cons_tail = smp_load_acquire(&r->cons.tail);
-   339		u32 count = (prod_tail - cons_tail) & r->mask;
-   340		u32 capacity = smp_load_acquire(&r->capacity);
-   341		return (count > capacity) ? capacity : count;
-   342	}
-   343	
-   344	/**
- > 345	 * Return the number of free entries in a ring.
-   346	 */
-   347	static inline u32
-   348	__nvmet_pq_ring_free_count(const struct nvmet_pq_ring *r)
-   349	{
-   350		return smp_load_acquire(&r->capacity) - __nvmet_pq_ring_count(r);
-   351	}
-   352	
+   167	
+   168	static int bch2_copygc_get_buckets(struct btree_trans *trans,
+   169				struct moving_context *ctxt,
+   170				struct buckets_in_flight *buckets_in_flight,
+   171				move_buckets *buckets)
+   172	{
+   173		struct bch_fs *c = trans->c;
+   174		struct btree_iter iter;
+   175		struct bkey_s_c k;
+ > 176		size_t nr_to_get = max(16UL, buckets_in_flight->nr / 4);
+   177		size_t saw = 0, in_flight = 0, not_movable = 0, sectors = 0;
+   178		int ret;
+   179	
+   180		move_buckets_wait(trans, ctxt, buckets_in_flight, false);
+   181	
+   182		ret = bch2_btree_write_buffer_flush(trans);
+   183		if (bch2_fs_fatal_err_on(ret, c, "%s: error %s from bch2_btree_write_buffer_flush()",
+   184					 __func__, bch2_err_str(ret)))
+   185			return ret;
+   186	
+   187		ret = for_each_btree_key2_upto(trans, iter, BTREE_ID_lru,
+   188					  lru_pos(BCH_LRU_FRAGMENTATION_START, 0, 0),
+   189					  lru_pos(BCH_LRU_FRAGMENTATION_START, U64_MAX, LRU_TIME_MAX),
+   190					  0, k, ({
+   191			struct move_bucket b = { .k.bucket = u64_to_bucket(k.k->p.offset) };
+   192			int ret = 0;
+   193	
+   194			saw++;
+   195	
+   196			if (!bch2_bucket_is_movable(trans, &b, lru_pos_time(k.k->p)))
+   197				not_movable++;
+   198			else if (bucket_in_flight(buckets_in_flight, b.k))
+   199				in_flight++;
+   200			else {
+   201				ret = darray_push(buckets, b) ?: buckets->nr >= nr_to_get;
+   202				if (ret >= 0)
+   203					sectors += b.sectors;
+   204			}
+   205			ret;
+   206		}));
+   207	
+   208		pr_debug("have: %zu (%zu) saw %zu in flight %zu not movable %zu got %zu (%zu)/%zu buckets ret %i",
+   209			 buckets_in_flight->nr, buckets_in_flight->sectors,
+   210			 saw, in_flight, not_movable, buckets->nr, sectors, nr_to_get, ret);
+   211	
+   212		return ret < 0 ? ret : 0;
+   213	}
+   214	
 
 -- 
 0-DAY CI Kernel Test Service
