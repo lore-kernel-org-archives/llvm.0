@@ -1,44 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624FB7FD;
-	Wed, 13 Sep 2023 03:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A158429B2;
+	Wed, 13 Sep 2023 05:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694576524; x=1726112524;
+  t=1694582284; x=1726118284;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FnoCl35Jnuf2N3Eg05aqIF9mIbC0SMuhkNALLM/8Zqc=;
-  b=OWYBCHVKOirEeGSAwzxtdAT6kkAKU3glspU/tsC9QdDRoJ2zYHDUhsUG
-   az6Zg4FgsvAvpcMMpZ+eD3mKRMcYbWqHMu/S+q4SyP+wC/JLGMJtMP4Kr
-   T3bvHohrwbB8/Uu1CfWZfNYdBCjg6Q3qNl0+GZmGmrjV7q4E56BKVm+ev
-   Dgx4wA5Bil5cFe0dSO1JyIrXChCgxwGmEXB8Bi0z340IxTfunZ+LkPZ3X
-   PNjKz0/h9tL4ztaXMRMTvTUjsmgKGOjbR67ekb/1D9ERSp9qx0dTaMPEP
-   Jmyn5uMg9Vks+xahxCNRPDOluL78pxEQs4I/Whl/UZLLTBMZbCHPyCfHj
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="442586163"
+  bh=0MTTJ5WPTXUcvaAJMn4bUQDnVLtuhsIiScJ+UeGHziI=;
+  b=R++UZS3tUnDqwRJEf4h2TkZ1D2voZXqUPOt/GlB1YMaN4H0B7mZb8whm
+   QK8PTsy+M715/AAA7gVoRIn1JNsG/F/iCOjQiIBjH/47LVDW0BQPWWJsD
+   cQFC6dBWMuYL4/UH+TOCesENj7UMSqF8ANzG6fpJjnEOC2yn7V/qwjVOX
+   JA9mVlsadEoVNGRbYSUr6vp6Bsz/rVL8jgI3KmZlTAFyVQfAAludqP44W
+   dDN1B+ZQESaXwQrQsmI+9yPDA66bcHZeHdMH3rWoEz1e+RiXhc7Xoc5hv
+   leahD3KnkPawHQMRdOI91DJByEGDwLdrcgzalvVQ+7qxmzsJsvhaQctal
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="464935325"
 X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="442586163"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 20:42:03 -0700
+   d="scan'208";a="464935325"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 22:18:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="747145572"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="779066500"
 X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="747145572"
-Received: from lkp-server02.sh.intel.com (HELO e6439d5ea182) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Sep 2023 20:42:01 -0700
-Received: from kbuild by e6439d5ea182 with local (Exim 4.96)
+   d="scan'208";a="779066500"
+Received: from lkp-server02.sh.intel.com (HELO cf13c67269a2) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 12 Sep 2023 22:18:02 -0700
+Received: from kbuild by cf13c67269a2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgGlL-00002d-22;
-	Wed, 13 Sep 2023 03:41:59 +0000
-Date: Wed, 13 Sep 2023 11:41:50 +0800
+	id 1qgIGF-000043-2W;
+	Wed, 13 Sep 2023 05:17:59 +0000
+Date: Wed, 13 Sep 2023 13:17:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 3349/4552] fs/bcachefs/alloc_background.c:272:10:
- warning: format specifies type 'unsigned long' but the argument has type
- 'unsigned int'
-Message-ID: <202309131127.7deYbx3z-lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:x86/call-stuff 2/7] arch/x86/hyperv/ivm.c:329:19:
+ error: use of undeclared identifier 'secondary_startup_64_no_verify'
+Message-ID: <202309131309.WGkTg6xs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,236 +46,123 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3c13c772fc233a10342c8e1605ff0855dfdf0c89
-commit: 11be8e8db283485aa09fa68985f2aee1af0097bf [3349/4552] bcachefs: New on disk format: Backpointers
-config: powerpc-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230913/202309131127.7deYbx3z-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131127.7deYbx3z-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/call-stuff
+head:   d2f1e5de6d9c9d8a18b40e9a3c5ce39863514093
+commit: 6387ccbd2d1078988f7499eb3be2ace23256d1be [2/7] x86/boot: Remove verify_cpu() from secondary_startup_64()
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230913/202309131309.WGkTg6xs-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131309.WGkTg6xs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309131127.7deYbx3z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309131309.WGkTg6xs-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:213:1: note: expanded from here
-     213 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/alloc_background.c:2:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
-     215 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/alloc_background.c:2:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
-     217 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/alloc_background.c:5:
-   In file included from fs/bcachefs/backpointers.h:5:
-   fs/bcachefs/btree_iter.h:248:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
-     248 | static inline int btree_trans_restart_nounlock(struct btree_trans *trans, int err)
-         |        ^
-   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
-     215 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                ^
-   In file included from fs/bcachefs/alloc_background.c:5:
-   In file included from fs/bcachefs/backpointers.h:5:
-   fs/bcachefs/btree_iter.h:258:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
-     258 | static inline int btree_trans_restart(struct btree_trans *trans, int err)
-         |        ^
-   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
-     215 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                ^
-   In file included from fs/bcachefs/alloc_background.c:7:
-   In file included from fs/bcachefs/btree_io.h:7:
-   fs/bcachefs/btree_locking.h:88:46: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-      88 |         mark_btree_node_locked_noreset(path, level, type);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              ^~~~
-   fs/bcachefs/btree_locking.h:175:51: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-     175 |         mark_btree_node_locked_noreset(path, b->c.level, SIX_LOCK_intent);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                   ^~~~~~~~~~~~~~~
-   fs/bcachefs/btree_locking.h:241:33: warning: implicit conversion from enumeration type 'enum btree_node_locked_type' to different enumeration type 'enum six_lock_type' [-Wenum-conversion]
-     241 |                         six_lock_increment(&b->lock, want);
-         |                         ~~~~~~~~~~~~~~~~~~           ^~~~
-   fs/bcachefs/btree_locking.h:261:49: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-     261 |             btree_node_lock_increment(trans, b, level, type) ||
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~                  ^~~~
-   fs/bcachefs/btree_locking.h:288:49: warning: implicit conversion from enumeration type 'enum six_lock_type' to different enumeration type 'enum btree_node_locked_type' [-Wenum-conversion]
-     288 |         mark_btree_node_locked_noreset(path, b->level, SIX_LOCK_write);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 ^~~~~~~~~~~~~~
-   In file included from fs/bcachefs/alloc_background.c:7:
-   fs/bcachefs/btree_io.h:203:33: warning: implicit conversion from enumeration type 'enum btree_id' to different enumeration type 'enum btree_node_type' [-Wenum-conversion]
-     203 |             btree_node_type_is_extents(btree_id) &&
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~
-   fs/bcachefs/btree_io.h:220:33: warning: implicit conversion from enumeration type 'enum btree_id' to different enumeration type 'enum btree_node_type' [-Wenum-conversion]
-     220 |             btree_node_type_is_extents(btree_id) &&
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~
->> fs/bcachefs/alloc_background.c:272:10: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     272 |                 prt_printf(err, "bad val size (%lu != %u)",
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                %u
-     273 |                        bkey_val_u64s(k.k), alloc_v4_u64s(a.v));
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/bkey.h:47:27: note: expanded from macro 'bkey_val_u64s'
-      47 | #define bkey_val_u64s(_k)       ((_k)->u64s - BKEY_U64s)
-         |                                 ^
-   fs/bcachefs/util.h:221:54: note: expanded from macro 'prt_printf'
-     221 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/alloc_background.c:81:20: warning: unused function 'alloc_field_v1_put' [-Wunused-function]
-      81 | static inline void alloc_field_v1_put(struct bkey_i_alloc *a, void **p,
-         |                    ^
-   17 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=n] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
+>> arch/x86/hyperv/ivm.c:329:19: error: use of undeclared identifier 'secondary_startup_64_no_verify'
+           vmsa->rip = (u64)secondary_startup_64_no_verify;
+                            ^
+   1 error generated.
 
 
-vim +272 fs/bcachefs/alloc_background.c
+vim +/secondary_startup_64_no_verify +329 arch/x86/hyperv/ivm.c
 
-   264	
-   265	int bch2_alloc_v4_invalid(const struct bch_fs *c, struct bkey_s_c k,
-   266				  int rw, struct printbuf *err)
-   267	{
-   268		struct bkey_s_c_alloc_v4 a = bkey_s_c_to_alloc_v4(k);
-   269	
-   270		if (alloc_v4_u64s(a.v) != bkey_val_u64s(k.k)) {
-   271			prt_printf(err, "bad val size (%lu != %u)",
- > 272			       bkey_val_u64s(k.k), alloc_v4_u64s(a.v));
-   273			return -BCH_ERR_invalid_bkey;
-   274		}
-   275	
-   276		if (!BCH_ALLOC_V4_BACKPOINTERS_START(a.v) &&
-   277		    BCH_ALLOC_V4_NR_BACKPOINTERS(a.v)) {
-   278			prt_printf(err, "invalid backpointers_start");
-   279			return -BCH_ERR_invalid_bkey;
-   280		}
-   281	
-   282		/*
-   283		 * XXX this is wrong, we'll be checking updates that happened from
-   284		 * before BCH_FS_CHECK_BACKPOINTERS_DONE
-   285		 */
-   286		if (rw == WRITE && test_bit(BCH_FS_CHECK_BACKPOINTERS_DONE, &c->flags)) {
-   287			unsigned i, bp_len = 0;
-   288	
-   289			for (i = 0; i < BCH_ALLOC_V4_NR_BACKPOINTERS(a.v); i++)
-   290				bp_len += alloc_v4_backpointers_c(a.v)[i].bucket_len;
-   291	
-   292			if (bp_len > a.v->dirty_sectors) {
-   293				prt_printf(err, "too many backpointers");
-   294				return -BCH_ERR_invalid_bkey;
-   295			}
-   296		}
-   297	
-   298		if (rw == WRITE) {
-   299			if (alloc_data_type(*a.v, a.v->data_type) != a.v->data_type) {
-   300				prt_printf(err, "invalid data type (got %u should be %u)",
-   301				       a.v->data_type, alloc_data_type(*a.v, a.v->data_type));
-   302				return -BCH_ERR_invalid_bkey;
-   303			}
-   304	
-   305			switch (a.v->data_type) {
-   306			case BCH_DATA_free:
-   307			case BCH_DATA_need_gc_gens:
-   308			case BCH_DATA_need_discard:
-   309				if (a.v->dirty_sectors ||
-   310				    a.v->cached_sectors ||
-   311				    a.v->stripe) {
-   312					prt_printf(err, "empty data type free but have data");
-   313					return -BCH_ERR_invalid_bkey;
-   314				}
-   315				break;
-   316			case BCH_DATA_sb:
-   317			case BCH_DATA_journal:
-   318			case BCH_DATA_btree:
-   319			case BCH_DATA_user:
-   320			case BCH_DATA_parity:
-   321				if (!a.v->dirty_sectors) {
-   322					prt_printf(err, "data_type %s but dirty_sectors==0",
-   323					       bch2_data_types[a.v->data_type]);
-   324					return -BCH_ERR_invalid_bkey;
-   325				}
-   326				break;
-   327			case BCH_DATA_cached:
-   328				if (!a.v->cached_sectors ||
-   329				    a.v->dirty_sectors ||
-   330				    a.v->stripe) {
-   331					prt_printf(err, "data type inconsistency");
-   332					return -BCH_ERR_invalid_bkey;
-   333				}
-   334	
-   335				if (!a.v->io_time[READ] &&
-   336				    test_bit(BCH_FS_CHECK_ALLOC_TO_LRU_REFS_DONE, &c->flags)) {
-   337					prt_printf(err, "cached bucket with read_time == 0");
-   338					return -BCH_ERR_invalid_bkey;
-   339				}
-   340				break;
-   341			case BCH_DATA_stripe:
-   342				if (!a.v->stripe) {
-   343					prt_printf(err, "data_type %s but stripe==0",
-   344					       bch2_data_types[a.v->data_type]);
-   345					return -BCH_ERR_invalid_bkey;
-   346				}
-   347				break;
-   348			}
-   349		}
-   350	
-   351		return 0;
-   352	}
-   353	
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  290  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  291  int hv_snp_boot_ap(int cpu, unsigned long start_ip)
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  292  {
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  293  	struct sev_es_save_area *vmsa = (struct sev_es_save_area *)
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  294  		__get_free_page(GFP_KERNEL | __GFP_ZERO);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  295  	struct sev_es_save_area *cur_vmsa;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  296  	struct desc_ptr gdtr;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  297  	u64 ret, retry = 5;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  298  	struct hv_enable_vp_vtl *start_vp_input;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  299  	unsigned long flags;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  300  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  301  	if (!vmsa)
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  302  		return -ENOMEM;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  303  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  304  	native_store_gdt(&gdtr);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  305  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  306  	vmsa->gdtr.base = gdtr.address;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  307  	vmsa->gdtr.limit = gdtr.size;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  308  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  309  	asm volatile("movl %%es, %%eax;" : "=a" (vmsa->es.selector));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  310  	hv_populate_vmcb_seg(vmsa->es, vmsa->gdtr.base);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  311  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  312  	asm volatile("movl %%cs, %%eax;" : "=a" (vmsa->cs.selector));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  313  	hv_populate_vmcb_seg(vmsa->cs, vmsa->gdtr.base);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  314  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  315  	asm volatile("movl %%ss, %%eax;" : "=a" (vmsa->ss.selector));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  316  	hv_populate_vmcb_seg(vmsa->ss, vmsa->gdtr.base);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  317  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  318  	asm volatile("movl %%ds, %%eax;" : "=a" (vmsa->ds.selector));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  319  	hv_populate_vmcb_seg(vmsa->ds, vmsa->gdtr.base);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  320  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  321  	vmsa->efer = native_read_msr(MSR_EFER);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  322  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  323  	asm volatile("movq %%cr4, %%rax;" : "=a" (vmsa->cr4));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  324  	asm volatile("movq %%cr3, %%rax;" : "=a" (vmsa->cr3));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  325  	asm volatile("movq %%cr0, %%rax;" : "=a" (vmsa->cr0));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  326  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  327  	vmsa->xcr0 = 1;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  328  	vmsa->g_pat = HV_AP_INIT_GPAT_DEFAULT;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24 @329  	vmsa->rip = (u64)secondary_startup_64_no_verify;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  330  	vmsa->rsp = (u64)&ap_start_stack[PAGE_SIZE];
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  331  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  332  	/*
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  333  	 * Set the SNP-specific fields for this VMSA:
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  334  	 *   VMPL level
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  335  	 *   SEV_FEATURES (matches the SEV STATUS MSR right shifted 2 bits)
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  336  	 */
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  337  	vmsa->vmpl = 0;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  338  	vmsa->sev_features = sev_status >> 2;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  339  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  340  	ret = snp_set_vmsa(vmsa, true);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  341  	if (!ret) {
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  342  		pr_err("RMPADJUST(%llx) failed: %llx\n", (u64)vmsa, ret);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  343  		free_page((u64)vmsa);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  344  		return ret;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  345  	}
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  346  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  347  	local_irq_save(flags);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  348  	start_vp_input = (struct hv_enable_vp_vtl *)ap_start_input_arg;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  349  	memset(start_vp_input, 0, sizeof(*start_vp_input));
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  350  	start_vp_input->partition_id = -1;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  351  	start_vp_input->vp_index = cpu;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  352  	start_vp_input->target_vtl.target_vtl = ms_hyperv.vtl;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  353  	*(u64 *)&start_vp_input->vp_context = __pa(vmsa) | 1;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  354  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  355  	do {
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  356  		ret = hv_do_hypercall(HVCALL_START_VP,
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  357  				      start_vp_input, NULL);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  358  	} while (hv_result(ret) == HV_STATUS_TIME_OUT && retry--);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  359  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  360  	local_irq_restore(flags);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  361  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  362  	if (!hv_result_success(ret)) {
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  363  		pr_err("HvCallStartVirtualProcessor failed: %llx\n", ret);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  364  		snp_cleanup_vmsa(vmsa);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  365  		vmsa = NULL;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  366  	}
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  367  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  368  	cur_vmsa = per_cpu(hv_sev_vmsa, cpu);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  369  	/* Free up any previous VMSA page */
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  370  	if (cur_vmsa)
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  371  		snp_cleanup_vmsa(cur_vmsa);
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  372  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  373  	/* Record the current VMSA page */
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  374  	per_cpu(hv_sev_vmsa, cpu) = vmsa;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  375  
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  376  	return ret;
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  377  }
+a67f6b60d6ed95 Dexuan Cui 2023-08-24  378  
+
+:::::: The code at line 329 was first introduced by commit
+:::::: a67f6b60d6ed953d5b23a22f26fc916aab630aaa x86/hyperv: Move the code in ivm.c around to avoid unnecessary ifdef's
+
+:::::: TO: Dexuan Cui <decui@microsoft.com>
+:::::: CC: Wei Liu <wei.liu@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
