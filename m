@@ -1,197 +1,164 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AABE29CA;
-	Wed, 13 Sep 2023 21:18:01 +0000 (UTC)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4e6so260818a12.0;
-        Wed, 13 Sep 2023 14:18:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694639879; x=1695244679; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EF449AIlL6XYD426YEW6S8zbtOg73mCSG4ZzOl+W5Oo=;
-        b=pygxdE+dcKC7/TrFIiWqSV9TuL/w/AEB5a9HmgJn6UDZpWo2hsmk4GblXK+LjoG9rp
-         bllPrDKCRWM+QQJP89SFDSef4LX9L6RGSWj62AewYy4F1Jx4uQ0J1hD+yqWs1hkX32te
-         9SqfQovuQNn5HaJXxgtRbtvbsnoqhq92pJVWnj4jH7RJC/ZsGnb1Qh1DbT5t597BW7p5
-         kZn80lgLYr2Oz32eNZnwEWzfxuTox2c8Ta5aubVD+fN+eUxr0SjKyZ4NVYZjWhiqBbMe
-         eLC3nrJTyX/SltszY7S0uUJGMEWsYwo7LV/yz9Go7rzaaJsNh9zSUI5xY//OkMvnR291
-         fPmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694639879; x=1695244679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EF449AIlL6XYD426YEW6S8zbtOg73mCSG4ZzOl+W5Oo=;
-        b=EySbAC7jBUIVMjPjUEfGlbdtkmaU5+NIvSXuqxm73ZxQfq5xuJrGo8tY0C4y4yvMyn
-         J1f6S6DzzrLvV29pjbw1m4gxvkGX0TIhZOTo7cDB2I3tCCDbYnteCWRfSPr1yxPOx3iH
-         EwB0GrQZFPTRbSJzf6NCrh5AtdMyihfBqJ+c22yUsfUy8jCz2lC0Gz5RqOTqcNirdxVr
-         spLA/Ls7tU/YiQon1j0dhvB+IRLrBWDKK862s3IhXrSHybKA0RxsP89pjTWAF1/2puGh
-         MRZpVZPhkoNZIvgvgqBvI7iuZJibHZu7ykp2bKPo+GKiPDwSzOsTVcldAi+JNrR8eY+7
-         n+pw==
-X-Gm-Message-State: AOJu0Yxy5i3eq7ZomwCatolOkACn+aMkYpYlxp22xkALT1CZpJiDf10A
-	znyjKQUURKW7tBWbijHrjfvlRlMOCO+K0dbUFqE=
-X-Google-Smtp-Source: AGHT+IETKy2hamoh5trTYjKH/mUZmeqeeIJzKFwxuCLL0meTkX20nzuzsF+vhZWUBzg2AV4JJHmDU2yE4G+n1Li3IIU=
-X-Received: by 2002:aa7:c459:0:b0:523:bfec:4913 with SMTP id
- n25-20020aa7c459000000b00523bfec4913mr3340114edr.0.1694639879272; Wed, 13 Sep
- 2023 14:17:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C7922EF5
+	for <llvm@lists.linux.dev>; Wed, 13 Sep 2023 21:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3923FC433C7;
+	Wed, 13 Sep 2023 21:33:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694640794;
+	bh=GECw0+37SQCQQnWytIJsIFg22BcKEch0lpmHe9Lude0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DmA6cZAtQ4BkUKquEbLhSWfE6bQ5r/Q1V2YQjbnHUfNgvpu8bm1QPgusB41tfGi24
+	 HXb7vzh3/UPHZbl8i8Gs+3NO1Oh7I1rhFzm5rZbkdCoHYFGjx44vfaFBHDcvbH44T9
+	 BPXcf215d7+e7afUmHeQUstDJY8lltG70ABoJZCMOKsnDWnojsTuf0OoBIcsSbfxq4
+	 bmMXIxxXX1EnetyTsQQy7ng28HBj70HJqdlQwaf9xgxk6GxmzQhz0fN4hkqSjLiUyM
+	 WFXaxTcUnnjn86+h5mnD4SzQA7Jrmqp5r4DFgggOtNgOdIvd7ARVnFzZZc2YS2zq0L
+	 rRjX92U77+jtg==
+Date: Wed, 13 Sep 2023 14:33:11 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: gjoyce@linux.vnet.ibm.com, linux-block@vger.kernel.org, axboe@kernel.dk,
+	jarkko@kernel.org, linuxppc-dev@lists.ozlabs.org,
+	jonathan.derrick@linux.dev, brking@linux.vnet.ibm.com,
+	msuchanek@suse.de, mpe@ellerman.id.au, nayna@linux.ibm.com,
+	akpm@linux-foundation.org, keyrings@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v7 1/3 RESEND] block:sed-opal: SED Opal keystore
+Message-ID: <20230913213311.GA3279202@dev-arch.thelio-3990X>
+References: <20230908153056.3503975-1-gjoyce@linux.vnet.ibm.com>
+ <20230908153056.3503975-2-gjoyce@linux.vnet.ibm.com>
+ <20230913165612.GA2213586@dev-arch.thelio-3990X>
+ <CAKwvOdnbKA-DiWRorWMR93JPFX-OjUjO=SQXSRf4=DpwzvZ=pQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230913-fix-wuninitialized-dm_helpers_dp_mst_send_payload_allocation-v1-1-2d1b0a3ef16c@kernel.org>
- <b11cce07-7e13-49b5-aed3-88517356281b@amd.com> <CADnq5_MsHwC94F_2SdyUM39FRoeVZMNa-8quxB4TVOVqM05=zQ@mail.gmail.com>
- <b1396feb-9bd5-4aa4-97b1-9d743fffe5ef@amd.com> <CADnq5_NZ6Bv5zyNxJc13Bb4bPmHTTDPEWqtV_VFt5y1gzsgGzQ@mail.gmail.com>
- <327f018f-c810-4e99-8003-f0dfa9f7d156@amd.com>
-In-Reply-To: <327f018f-c810-4e99-8003-f0dfa9f7d156@amd.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Wed, 13 Sep 2023 17:17:45 -0400
-Message-ID: <CADnq5_Oo9Qm+CHe3tdkN7fQ=ZMw5wZNssk3rxDRSPK8F9DxBDw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Fix -Wuninitialized in dm_helpers_dp_mst_send_payload_allocation()
-To: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, harry.wentland@amd.com, sunpeng.li@amd.com, 
-	Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com, christian.koenig@amd.com, 
-	Xinhui.Pan@amd.com, Wayne.Lin@amd.com, lyude@redhat.com, trix@redhat.com, 
-	llvm@lists.linux.dev, ndesaulniers@google.com, patches@lists.linux.dev, 
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdnbKA-DiWRorWMR93JPFX-OjUjO=SQXSRf4=DpwzvZ=pQ@mail.gmail.com>
 
-On Wed, Sep 13, 2023 at 4:46=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@amd.co=
-m> wrote:
->
-> On 9/13/23 16:03, Alex Deucher wrote:
-> > On Wed, Sep 13, 2023 at 3:57=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@am=
-d.com> wrote:
-> >>
-> >>
-> >> On 9/13/23 15:54, Alex Deucher wrote:
-> >>> On Wed, Sep 13, 2023 at 12:17=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz=
-@amd.com> wrote:
-> >>>>
-> >>>>
-> >>>> On 9/13/23 12:10, Nathan Chancellor wrote:
-> >>>>> When building with clang, there is a warning (or error when
-> >>>>> CONFIG_WERROR is set):
-> >>>>>
-> >>>>>      drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_help=
-ers.c:368:21: error: variable 'old_payload' is uninitialized when used here=
- [-Werror,-Wuninitialized]
-> >>>>>        368 |                                                  new_p=
-ayload, old_payload);
-> >>>>>            |                                                       =
-        ^~~~~~~~~~~
-> >>>>>      drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_help=
-ers.c:344:61: note: initialize the variable 'old_payload' to silence this w=
-arning
-> >>>>>        344 |         struct drm_dp_mst_atomic_payload *new_payload,=
- *old_payload;
-> >>>>>            |                                                       =
-             ^
-> >>>>>            |                                                       =
-              =3D NULL
-> >>>>>      1 error generated.
-> >>>>>
-> >>>>> This variable is not required outside of this function so allocate
-> >>>>> old_payload on the stack and pass it by reference to
-> >>>>> dm_helpers_construct_old_payload(), resolving the warning.
-> >>>>>
-> >>>>> Closes: https://github.com/ClangBuiltLinux/linux/issues/1931
-> >>>>> Fixes: 5aa1dfcdf0a4 ("drm/mst: Refactor the flow for payload alloca=
-tion/removement")
-> >>>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >>>>
-> >>>> Reviewed-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> >>>>
-> >>>> Hm, seems like this was pushed through drm-misc-next and as such our=
- CI
-> >>>> didn't get a chance to test it.
-> >>>
-> >>> Can you push this to drm-misc?  That is where Wayne's patches landed.
-> >>> If not, I can push it.
-> >>
-> >> No need, I cherry-picked Wayne's patches to amd-staging-drm-next and
-> >> applied Nathan's fix.
+On Wed, Sep 13, 2023 at 01:49:39PM -0700, Nick Desaulniers wrote:
+> On Wed, Sep 13, 2023 at 9:56 AM Nathan Chancellor <nathan@kernel.org> wrote:
 > >
-> > Yes, but we can only have patches go upstream via one tree.  Wayne's
-> > patches are in drm-misc, so that is where the fix should be.  It's
-> > fine to have them in amd-staging-drm-next for testing purposes, but I
-> > won't be upstreaming them via the amdgpu -next tree since they are
-> > already in drm-misc.
->
-> In that case can you push it to drm-misc?
-
-Pushed.  Thanks!
-
-Alex
-
-
-Alex
-
->
+> > Hi Greg,
 > >
-> > Alex
+> > On Fri, Sep 08, 2023 at 10:30:54AM -0500, gjoyce@linux.vnet.ibm.com wrote:
+> > > From: Greg Joyce <gjoyce@linux.vnet.ibm.com>
+> > >
+> > > Add read and write functions that allow SED Opal keys to stored
+> > > in a permanent keystore.
+> > >
+> > > Signed-off-by: Greg Joyce <gjoyce@linux.vnet.ibm.com>
+> > > Reviewed-by: Jonathan Derrick <jonathan.derrick@linux.dev>
+> > > ---
+> > >  block/Makefile               |  2 +-
+> > >  block/sed-opal-key.c         | 24 ++++++++++++++++++++++++
+> > >  include/linux/sed-opal-key.h | 15 +++++++++++++++
+> > >  3 files changed, 40 insertions(+), 1 deletion(-)
+> > >  create mode 100644 block/sed-opal-key.c
+> > >  create mode 100644 include/linux/sed-opal-key.h
+> > >
+> > > diff --git a/block/Makefile b/block/Makefile
+> > > index 46ada9dc8bbf..ea07d80402a6 100644
+> > > --- a/block/Makefile
+> > > +++ b/block/Makefile
+> > > @@ -34,7 +34,7 @@ obj-$(CONFIG_BLK_DEV_ZONED) += blk-zoned.o
+> > >  obj-$(CONFIG_BLK_WBT)                += blk-wbt.o
+> > >  obj-$(CONFIG_BLK_DEBUG_FS)   += blk-mq-debugfs.o
+> > >  obj-$(CONFIG_BLK_DEBUG_FS_ZONED)+= blk-mq-debugfs-zoned.o
+> > > -obj-$(CONFIG_BLK_SED_OPAL)   += sed-opal.o
+> > > +obj-$(CONFIG_BLK_SED_OPAL)   += sed-opal.o sed-opal-key.o
+> > >  obj-$(CONFIG_BLK_PM)         += blk-pm.o
+> > >  obj-$(CONFIG_BLK_INLINE_ENCRYPTION)  += blk-crypto.o blk-crypto-profile.o \
+> > >                                          blk-crypto-sysfs.o
+> > > diff --git a/block/sed-opal-key.c b/block/sed-opal-key.c
+> > > new file mode 100644
+> > > index 000000000000..16f380164c44
+> > > --- /dev/null
+> > > +++ b/block/sed-opal-key.c
+> > > @@ -0,0 +1,24 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * SED key operations.
+> > > + *
+> > > + * Copyright (C) 2022 IBM Corporation
+> > > + *
+> > > + * These are the accessor functions (read/write) for SED Opal
+> > > + * keys. Specific keystores can provide overrides.
+> > > + *
+> > > + */
+> > > +
+> > > +#include <linux/kernel.h>
+> > > +#include <linux/errno.h>
+> > > +#include <linux/sed-opal-key.h>
+> > > +
+> > > +int __weak sed_read_key(char *keyname, char *key, u_int *keylen)
+> > > +{
+> > > +     return -EOPNOTSUPP;
+> > > +}
+> > > +
+> > > +int __weak sed_write_key(char *keyname, char *key, u_int keylen)
+> > > +{
+> > > +     return -EOPNOTSUPP;
+> > > +}
 > >
-> >>
-> >>>
-> >>> Alex
-> >>>
-> >>>
-> >>>>
-> >>>>
-> >>>>> ---
-> >>>>>     drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 6 +=
-++---
-> >>>>>     1 file changed, 3 insertions(+), 3 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helper=
-s.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> >>>>> index 9ad509279b0a..c4c35f6844f4 100644
-> >>>>> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> >>>>> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> >>>>> @@ -341,7 +341,7 @@ bool dm_helpers_dp_mst_send_payload_allocation(
-> >>>>>         struct amdgpu_dm_connector *aconnector;
-> >>>>>         struct drm_dp_mst_topology_state *mst_state;
-> >>>>>         struct drm_dp_mst_topology_mgr *mst_mgr;
-> >>>>> -     struct drm_dp_mst_atomic_payload *new_payload, *old_payload;
-> >>>>> +     struct drm_dp_mst_atomic_payload *new_payload, old_payload;
-> >>>>>         enum mst_progress_status set_flag =3D MST_ALLOCATE_NEW_PAYL=
-OAD;
-> >>>>>         enum mst_progress_status clr_flag =3D MST_CLEAR_ALLOCATED_P=
-AYLOAD;
-> >>>>>         int ret =3D 0;
-> >>>>> @@ -365,8 +365,8 @@ bool dm_helpers_dp_mst_send_payload_allocation(
-> >>>>>                 ret =3D drm_dp_add_payload_part2(mst_mgr, mst_state=
-->base.state, new_payload);
-> >>>>>         } else {
-> >>>>>                 dm_helpers_construct_old_payload(stream->link, mst_=
-state->pbn_div,
-> >>>>> -                                              new_payload, old_pay=
-load);
-> >>>>> -             drm_dp_remove_payload_part2(mst_mgr, mst_state, old_p=
-ayload, new_payload);
-> >>>>> +                                              new_payload, &old_pa=
-yload);
-> >>>>> +             drm_dp_remove_payload_part2(mst_mgr, mst_state, &old_=
-payload, new_payload);
-> >>>>>         }
-> >>>>>
-> >>>>>         if (ret) {
-> >>>>>
-> >>>>> ---
-> >>>>> base-commit: 8569c31545385195bdb0c021124e68336e91c693
-> >>>>> change-id: 20230913-fix-wuninitialized-dm_helpers_dp_mst_send_paylo=
-ad_allocation-c37b33aaad18
-> >>>>>
-> >>>>> Best regards,
-> >>>> --
-> >>>> Hamza
-> >>>>
-> >> --
-> >> Hamza
-> >>
-> --
-> Hamza
->
+> > This change causes a build failure for certain clang configurations due
+> > to an unfortunate issue [1] with recordmcount, clang's integrated
+> > assembler, and object files that contain a section with only weak
+> > functions/symbols (in this case, the .text section in sed-opal-key.c),
+> > resulting in
+> >
+> >   Cannot find symbol for section 2: .text.
+> >   block/sed-opal-key.o: failed
+> >
+> > when building this file.
+> 
+> The definitions in
+> block/sed-opal-key.c
+> should be deleted. Instead, in
+> include/linux/sed-opal-key.h
+> CONFIG_PSERIES_PLPKS_SED should be used to define static inline
+> versions when CONFIG_PSERIES_PLPKS_SED is not defined.
+> 
+> #ifdef CONFIG_PSERIES_PLPKS_SED
+> int sed_read_key(char *keyname, char *key, u_int *keylen);
+> int sed_write_key(char *keyname, char *key, u_int keylen);
+> #else
+> static inline
+> int sed_read_key(char *keyname, char *key, u_int *keylen) {
+>   return -EOPNOTSUPP;
+> }
+> static inline
+> int sed_write_key(char *keyname, char *key, u_int keylen);
+>   return -EOPNOTSUPP;
+> }
+> #endif
+
+Ah yes, this is the other solution. I figured the way that it was
+written, sed_read_key() and sed_write_key() may be overridden by a
+different architecture or translation unit in the future but I think
+until it is needed, your solution would be perfectly fine. Thanks for
+taking a look!
+
+Cheers,
+Nathan
+
+> > Is there any real reason to have a separate translation unit for these
+> > two functions versus just having them living in sed-opal.c? Those two
+> > object files share the same Kconfig dependency. I am happy to send a
+> > patch if that is an acceptable approach.
+> >
+> > [1]: https://github.com/ClangBuiltLinux/linux/issues/981
+> >
+> > Cheers,
+> > Nathan
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
