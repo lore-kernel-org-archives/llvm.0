@@ -1,128 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB26F391;
-	Wed, 13 Sep 2023 18:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694630520; x=1726166520;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=efM8CDotFiLZ34XLPxPB/I5B9udJDpiuZFDvc+UHFlw=;
-  b=m4kMbcoFqNEyH6RZXRlbFMZ/DBVo9FktmGZIdzjTurqcQd0IX5Ydf0vY
-   p3lpGSTLYp6vxqfQ48LjVMq8xWJ3tLu3kbMbX3YGOcGuN1AHnQKqdP9xP
-   WsXtYSxJ3U9qdqBlGeHuWBz9JP7VWD0nMESndTDoMyG7tSUZwc74oxJTA
-   5g/JfzJMpxgOPzn2ml+lJXF3OOYKmDi8qwIloW0ZPO446ZcpIDpaB9CIV
-   cPPyZiKobKNtNjiEKmMT8y/gVOpESTa3UIXorW2O19TZtqLTEOM2U30V4
-   h5EEAf74sC9XUBe6VBQGjJ9siuBP8k4XsePrhU+djqDSfVDnvObDhvHYw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="377663155"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="377663155"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 11:41:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="991040388"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="991040388"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Sep 2023 11:41:57 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qgUoF-0000T7-0Y;
-	Wed, 13 Sep 2023 18:41:55 +0000
-Date: Thu, 14 Sep 2023 02:41:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, keescook@chromium.org,
-	brauner@kernel.org, lennart@poettering.net, kernel-team@meta.com,
-	sargun@sargun.me
-Subject: Re: [PATCH v4 bpf-next 06/12] bpf: take into account BPF token when
- fetching helper protos
-Message-ID: <202309140202.lwVDn4bK-lkp@intel.com>
-References: <20230912212906.3975866-7-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17CC33D4;
+	Wed, 13 Sep 2023 19:54:32 +0000 (UTC)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1d577c89a4fso123512fac.1;
+        Wed, 13 Sep 2023 12:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694634872; x=1695239672; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=osCTzI9cCYtzIuEZzi5z7ouWZ4LnqWzf0G6j+lNBEFY=;
+        b=eyXjhvUzXi4AMIGBrzx7zOJJOMe+Z85P4cYxlhkrjhALjOxF3OTa8prrh+o5slGIa6
+         v8HcTLgurrYbX4Gw8H2B/fcUyp+5ersMNxYAD1ZVjvQrsSJxgjqg0prUy991zXtexOd9
+         7G3EupJTdUXZ2DFrQMwbQI3gZzBTiwNvq2e9zjDLGuTphDXyaTvY86/rAnLE0GvJ4mRm
+         MARj2BOhVsPUpbtegFZwe7rPd/B+j17OBe3giBnh8lD856tLTz+m9b/YATitkD1OJdOU
+         bUDpR82+Eo0FZ47QGWoy0vMdguSxXwVKS3mq8n4aadoQjymyxzTwFyz0aU8yV3pBdcJp
+         PJig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694634872; x=1695239672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=osCTzI9cCYtzIuEZzi5z7ouWZ4LnqWzf0G6j+lNBEFY=;
+        b=szm03R9TKPLtlDd9Yi0cvymwluC6A+Ss/SCnfsTYjHiK4tk7HLPRZAtF7XQCVb3/cc
+         pgokVJ/ds1VK8GDasFbPc8V4oAqeRMH5cP1ay4njjRutSn4Brs41zGw0NKEIrfZL5nwY
+         610SeO1vpuiH6YuRvZG/yah9S3n2ka70FNXvKsuvlPD36r4qFEefCeoN8j6od/2mIr+8
+         PBuTRqwlQ4130N282nkO/RmSXCxGDAq2DmGwgR6Myi2AOX0GzFQJZKQGPUMnLFRoHI5J
+         BAh7N3IDN7oC3QEUsvcF46dVlGMSQo6qidD2w1i8RyVSpM+HX1q7p9rQXQOarUvZ4j/2
+         2lNg==
+X-Gm-Message-State: AOJu0YyIwqEX0CTI/yeu7gGrlkvZRFXrQiwdUW5XgTagfxL4aDs50MWi
+	vgAGQf5vrfF7STmJ1maIC73VAJ0dw8wwGIXilkQ=
+X-Google-Smtp-Source: AGHT+IFFiUKtj1CKnJq+Xei7nO7sjezhHA1Rs/tOdwnA4vpSxnZp2+wnMMXaGbu10QoLVHeTKAyYF6kNYzEuEmIMAoU=
+X-Received: by 2002:a05:6870:65a5:b0:1bf:4f42:de91 with SMTP id
+ fp37-20020a05687065a500b001bf4f42de91mr3748284oab.33.1694634871879; Wed, 13
+ Sep 2023 12:54:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230912212906.3975866-7-andrii@kernel.org>
+References: <20230913-fix-wuninitialized-dm_helpers_dp_mst_send_payload_allocation-v1-1-2d1b0a3ef16c@kernel.org>
+ <b11cce07-7e13-49b5-aed3-88517356281b@amd.com>
+In-Reply-To: <b11cce07-7e13-49b5-aed3-88517356281b@amd.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Wed, 13 Sep 2023 15:54:20 -0400
+Message-ID: <CADnq5_MsHwC94F_2SdyUM39FRoeVZMNa-8quxB4TVOVqM05=zQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: Fix -Wuninitialized in dm_helpers_dp_mst_send_payload_allocation()
+To: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, harry.wentland@amd.com, sunpeng.li@amd.com, 
+	Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com, christian.koenig@amd.com, 
+	Xinhui.Pan@amd.com, Wayne.Lin@amd.com, lyude@redhat.com, trix@redhat.com, 
+	llvm@lists.linux.dev, ndesaulniers@google.com, patches@lists.linux.dev, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrii,
+On Wed, Sep 13, 2023 at 12:17=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@amd.c=
+om> wrote:
+>
+>
+> On 9/13/23 12:10, Nathan Chancellor wrote:
+> > When building with clang, there is a warning (or error when
+> > CONFIG_WERROR is set):
+> >
+> >    drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:=
+368:21: error: variable 'old_payload' is uninitialized when used here [-Wer=
+ror,-Wuninitialized]
+> >      368 |                                                  new_payload=
+, old_payload);
+> >          |                                                             =
+  ^~~~~~~~~~~
+> >    drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:=
+344:61: note: initialize the variable 'old_payload' to silence this warning
+> >      344 |         struct drm_dp_mst_atomic_payload *new_payload, *old_=
+payload;
+> >          |                                                             =
+       ^
+> >          |                                                             =
+        =3D NULL
+> >    1 error generated.
+> >
+> > This variable is not required outside of this function so allocate
+> > old_payload on the stack and pass it by reference to
+> > dm_helpers_construct_old_payload(), resolving the warning.
+> >
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1931
+> > Fixes: 5aa1dfcdf0a4 ("drm/mst: Refactor the flow for payload allocation=
+/removement")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Reviewed-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+>
+> Hm, seems like this was pushed through drm-misc-next and as such our CI
+> didn't get a chance to test it.
 
-kernel test robot noticed the following build errors:
+Can you push this to drm-misc?  That is where Wayne's patches landed.
+If not, I can push it.
 
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bpf-add-BPF-token-delegation-mount-options-to-BPF-FS/20230913-053240
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230912212906.3975866-7-andrii%40kernel.org
-patch subject: [PATCH v4 bpf-next 06/12] bpf: take into account BPF token when fetching helper protos
-config: i386-randconfig-r015-20230913 (https://download.01.org/0day-ci/archive/20230914/202309140202.lwVDn4bK-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309140202.lwVDn4bK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309140202.lwVDn4bK-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/core/filter.c:11721:7: error: call to undeclared function 'bpf_token_capable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
-                ^
-   1 error generated.
+Alex
 
 
-vim +/bpf_token_capable +11721 net/core/filter.c
-
- 11687	
- 11688	static const struct bpf_func_proto *
- 11689	bpf_sk_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 11690	{
- 11691		const struct bpf_func_proto *func;
- 11692	
- 11693		switch (func_id) {
- 11694		case BPF_FUNC_skc_to_tcp6_sock:
- 11695			func = &bpf_skc_to_tcp6_sock_proto;
- 11696			break;
- 11697		case BPF_FUNC_skc_to_tcp_sock:
- 11698			func = &bpf_skc_to_tcp_sock_proto;
- 11699			break;
- 11700		case BPF_FUNC_skc_to_tcp_timewait_sock:
- 11701			func = &bpf_skc_to_tcp_timewait_sock_proto;
- 11702			break;
- 11703		case BPF_FUNC_skc_to_tcp_request_sock:
- 11704			func = &bpf_skc_to_tcp_request_sock_proto;
- 11705			break;
- 11706		case BPF_FUNC_skc_to_udp6_sock:
- 11707			func = &bpf_skc_to_udp6_sock_proto;
- 11708			break;
- 11709		case BPF_FUNC_skc_to_unix_sock:
- 11710			func = &bpf_skc_to_unix_sock_proto;
- 11711			break;
- 11712		case BPF_FUNC_skc_to_mptcp_sock:
- 11713			func = &bpf_skc_to_mptcp_sock_proto;
- 11714			break;
- 11715		case BPF_FUNC_ktime_get_coarse_ns:
- 11716			return &bpf_ktime_get_coarse_ns_proto;
- 11717		default:
- 11718			return bpf_base_func_proto(func_id, prog);
- 11719		}
- 11720	
- 11721		if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
- 11722			return NULL;
- 11723	
- 11724		return func;
- 11725	}
- 11726	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>
+> > ---
+> >   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c =
+b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> > index 9ad509279b0a..c4c35f6844f4 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> > @@ -341,7 +341,7 @@ bool dm_helpers_dp_mst_send_payload_allocation(
+> >       struct amdgpu_dm_connector *aconnector;
+> >       struct drm_dp_mst_topology_state *mst_state;
+> >       struct drm_dp_mst_topology_mgr *mst_mgr;
+> > -     struct drm_dp_mst_atomic_payload *new_payload, *old_payload;
+> > +     struct drm_dp_mst_atomic_payload *new_payload, old_payload;
+> >       enum mst_progress_status set_flag =3D MST_ALLOCATE_NEW_PAYLOAD;
+> >       enum mst_progress_status clr_flag =3D MST_CLEAR_ALLOCATED_PAYLOAD=
+;
+> >       int ret =3D 0;
+> > @@ -365,8 +365,8 @@ bool dm_helpers_dp_mst_send_payload_allocation(
+> >               ret =3D drm_dp_add_payload_part2(mst_mgr, mst_state->base=
+.state, new_payload);
+> >       } else {
+> >               dm_helpers_construct_old_payload(stream->link, mst_state-=
+>pbn_div,
+> > -                                              new_payload, old_payload=
+);
+> > -             drm_dp_remove_payload_part2(mst_mgr, mst_state, old_paylo=
+ad, new_payload);
+> > +                                              new_payload, &old_payloa=
+d);
+> > +             drm_dp_remove_payload_part2(mst_mgr, mst_state, &old_payl=
+oad, new_payload);
+> >       }
+> >
+> >       if (ret) {
+> >
+> > ---
+> > base-commit: 8569c31545385195bdb0c021124e68336e91c693
+> > change-id: 20230913-fix-wuninitialized-dm_helpers_dp_mst_send_payload_a=
+llocation-c37b33aaad18
+> >
+> > Best regards,
+> --
+> Hamza
+>
