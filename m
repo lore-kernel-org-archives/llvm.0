@@ -1,110 +1,130 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C99522F0E
-	for <llvm@lists.linux.dev>; Wed, 13 Sep 2023 22:06:52 +0000 (UTC)
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-69002ef0104so224354b3a.1
-        for <llvm@lists.linux.dev>; Wed, 13 Sep 2023 15:06:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CFCAD5C
+	for <llvm@lists.linux.dev>; Wed, 13 Sep 2023 22:19:04 +0000 (UTC)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-59bbed7353aso5508557b3.0
+        for <llvm@lists.linux.dev>; Wed, 13 Sep 2023 15:19:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694642811; x=1695247611; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=urxSjSL8TtkNIjZ7m8FLIkazvrzMdKz3VUacjiaJ2lk=;
-        b=RI5etOWfatoneCKt7/IdaD8aRRFofbEclndyWXJzuelnD380PNdSGf8SfV4C22HkzG
-         D0r/s6YZz4/uCnTK4SKRYefQRB2ME1hJos8zWlbUmdp6tKoxPM6DThXNkKtKT2apZRXr
-         uhclPPtGvX40XJ7rQLbgaGYKy5uu7BHWUE3zRSo0+C5Wld2vN5UaxQrks7FHDkbAfQWu
-         UcanfeH96cKgkuG84t8yeHEYP3u/3pJwwEvQfpjisbnYPI6ortNW9/yo3CIRvK1mq7Yk
-         qgQDo3N27AU0sTWy2HcWUO333O4pm1pYpzKo0Ftk/A/wgAi206oXGfov3I4wJCaHgXJe
-         YDVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694642811; x=1695247611;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1694643543; x=1695248343; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=urxSjSL8TtkNIjZ7m8FLIkazvrzMdKz3VUacjiaJ2lk=;
-        b=W1PrFAdxu7vEX4ObyrTJB9KGeU6dffbGXLkOrOWgdeM3UaGtvSfpv1/lAcav31n8YI
-         ZW/+w9X4ZC0Akcx1gY0+8+7L7zznN7ibfyDFjipVslIOCNoK46a7a675q3TtNJURBSez
-         rrdre2MuyBV1PZvreE+omkr/xVthy98nlXYVPCEBggCZ1S4yJHy9pGeRAbOPA+JbbWwF
-         rhXWLIgHVaAhPn55ARV3CJin8jNumEF/hfp8fbMwxzY9eVhVvIg/BqRlSjkMmio312DW
-         q9B2Wmdj4yzM734vsrXTMX8dh1l3GsMYoHpzY683p8UzS6hIb6l40LCUQ2+Q5WnjRvWB
-         m1Jw==
-X-Gm-Message-State: AOJu0Yz2AHEL5tTiznuuYYSOOuu8pSI+A9r6K/9rdfApgXII2omg23IH
-	SQkxd2dHvNh/f1xPzQU84/C8oF+vI/xqg6yPlYkePA==
-X-Google-Smtp-Source: AGHT+IG5lMN9N/NzZheFxGkrAa3zZ64Hdpr+KgHYX6YrzH90dnpy4eCfT7a9AYM2XtlTfn9FY4Ldpg==
-X-Received: by 2002:a6b:6d15:0:b0:795:196c:a074 with SMTP id a21-20020a6b6d15000000b00795196ca074mr4625700iod.3.1694642790891;
-        Wed, 13 Sep 2023 15:06:30 -0700 (PDT)
-Received: from google.com (26.103.132.34.bc.googleusercontent.com. [34.132.103.26])
-        by smtp.gmail.com with ESMTPSA id i9-20020a02cc49000000b0042b0de0b976sm31899jaq.154.2023.09.13.15.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 15:06:30 -0700 (PDT)
-Date: Wed, 13 Sep 2023 22:06:27 +0000
-From: Justin Stitt <justinstitt@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kent.overstreet@linux.dev, bfoster@redhat.com,
-	linux-bcachefs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 7/7] bcachefs: Fix -Wcompare-distinct-pointer-types in
- bch2_copygc_get_buckets()
-Message-ID: <20230913220627.stso6sxqyraizqod@google.com>
-References: <20230912-bcachefs-warning-fixes-v1-0-a1cc83a38836@kernel.org>
- <20230912-bcachefs-warning-fixes-v1-7-a1cc83a38836@kernel.org>
+        bh=5pve2evvQG8Wu6dcM6eIRAvQq/3oe/203mcy+b19gA8=;
+        b=Y7N3n2zkkK4BHbLGpRAzwQk8KFR6Z9zNgov5tnHdLohweaAS2pj3leANe96wGqYhUf
+         ETFpL945HhUmZ5oyD8f42919yE7RJBpqjEkUHGtdH/T1Q2ruQHS/4TVibkic0pGUp6L2
+         whWr9Pk6CaWYRkmU6KgBh0phnajy7I7sqlQ1anfFzgv/slntsGTeO/duJKo/okbYk+zw
+         Sx31DnOTi8w6h1+rg/MyEq6e4t2nqVMYo7XSm7sy5/F5+ug9nGQfnTf+ef0YDhGmCosI
+         L8dsMdsheSb94mcJyHZkJ4VnnZpK+B2QIB6JFtSMuEUUiRGqW8goEefxt/YdkYN69ZLd
+         xnoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694643543; x=1695248343;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5pve2evvQG8Wu6dcM6eIRAvQq/3oe/203mcy+b19gA8=;
+        b=A8ON30DLhbx7+u5qDFS5W7oc2UDgagTJec9q9EEx66NZ9VLmt7eAGwiyVFo/7gMs59
+         NcKjrLq2DrdX4WFJRcr1KwAkHqyg+2+TiUBwCaJl/CsTlntfcgq0Mdq+s+75YCgoOWhI
+         Vc2DIeVI5z36yuXOpVSjim+wOTNl0X2CHNecorwVKiC6+LcY88hK21bGgIoznJHiBDh/
+         2yeH0u1ZEZ3wbB/E1HbgGVcz7ZfUS4GxsHNn5ja1+lbuyNDydMcKbyPY6J69pzq53DTK
+         b610Mqg6D1MSbJ5vajy6IZJFEre0D6aN3CeSz0fvqhwNoCN+pBuzlvW4sg3lRlTN6WPu
+         F/fw==
+X-Gm-Message-State: AOJu0Ywz8KC91BXMyQ22WzsTpMFJhSJ/luq5lSdcdwV+T2zlrWfvrKz/
+	wx2GxOfwB2H2LCp6T/KsrW9dCCLLLNsIt6ts/ePL
+X-Google-Smtp-Source: AGHT+IHd6f6RECjVcqmCL7A7894346dihNwE1aPIds0EMQzgoG2VHb2Uwc+wEHwTPX1DhNcQCvdHYBRnbGkUN+jxvow=
+X-Received: by 2002:a81:91d3:0:b0:59b:52c2:5f15 with SMTP id
+ i202-20020a8191d3000000b0059b52c25f15mr19342ywg.25.1694643543316; Wed, 13 Sep
+ 2023 15:19:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230912-bcachefs-warning-fixes-v1-7-a1cc83a38836@kernel.org>
+References: <ZOXG/VVC1XRc7TtI@gmail.com> <202308240128.Gsn0b0Fv-lkp@intel.com>
+In-Reply-To: <202308240128.Gsn0b0Fv-lkp@intel.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 13 Sep 2023 18:18:52 -0400
+Message-ID: <CAHC9VhS2Smf9V0xJoBeuVfpMP2fhUnn8za_rLzJCmLB_-wBVLA@mail.gmail.com>
+Subject: Re: [PATCH] lsm: constify 'mnt_opts' parameter in security_free_mnt_opts()
+To: Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
+	selinux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, ztarkhani@microsoft.com, 
+	alison.schofield@intel.com, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 12, 2023 at 12:15:44PM -0700, Nathan Chancellor wrote:
-> When building bcachefs for 32-bit ARM, there is a warning when using
-> max() to compare an expression involving 'size_t' with an 'unsigned
-> long' literal:
+On Wed, Aug 23, 2023 at 1:22=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
 >
->   fs/bcachefs/movinggc.c:159:21: error: comparison of distinct pointer types ('typeof (16UL) *' (aka 'unsigned long *') and 'typeof (buckets_in_flight->nr / 4) *' (aka 'unsigned int *')) [-Werror,-Wcompare-distinct-pointer-types]
->     159 |         size_t nr_to_get = max(16UL, buckets_in_flight->nr / 4);
->         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   include/linux/minmax.h:76:19: note: expanded from macro 'max'
->      76 | #define max(x, y)       __careful_cmp(x, y, >)
->         |                         ^~~~~~~~~~~~~~~~~~~~~~
->   include/linux/minmax.h:38:24: note: expanded from macro '__careful_cmp'
->      38 |         __builtin_choose_expr(__safe_cmp(x, y), \
->         |                               ^~~~~~~~~~~~~~~~
->   include/linux/minmax.h:28:4: note: expanded from macro '__safe_cmp'
->      28 |                 (__typecheck(x, y) && __no_side_effects(x, y))
->         |                  ^~~~~~~~~~~~~~~~~
->   include/linux/minmax.h:22:28: note: expanded from macro '__typecheck'
->      22 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
->         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->   1 error generated.
+> Hi Khadija,
 >
-> On 64-bit architectures, size_t is 'unsigned long', so there is no
-> warning when comparing these two expressions. Use max_t(size_t, ...) for
-> this situation, eliminating the warning.
+> kernel test robot noticed the following build errors:
 >
-> Fixes: dd49018737d4 ("bcachefs: Rhashtable based buckets_in_flight for copygc")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Justin Stitt <justinstitt@google.com>
-> ---
->  fs/bcachefs/movinggc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> [auto build test ERROR on pcmoore-selinux/next]
+> [also build test ERROR on pcmoore-audit/next linus/master v6.5-rc7 next-2=
+0230823]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
-> diff --git a/fs/bcachefs/movinggc.c b/fs/bcachefs/movinggc.c
-> index 256431a6dc0c..1cb441d90b34 100644
-> --- a/fs/bcachefs/movinggc.c
-> +++ b/fs/bcachefs/movinggc.c
-> @@ -156,7 +156,7 @@ static int bch2_copygc_get_buckets(struct btree_trans *trans,
->  	struct bch_fs *c = trans->c;
->  	struct btree_iter iter;
->  	struct bkey_s_c k;
-> -	size_t nr_to_get = max(16UL, buckets_in_flight->nr / 4);
-> +	size_t nr_to_get = max_t(size_t, 16U, buckets_in_flight->nr / 4);
->  	size_t saw = 0, in_flight = 0, not_movable = 0, sectors = 0;
->  	int ret;
+> url:    https://github.com/intel-lab-lkp/linux/commits/Khadija-Kamran/lsm=
+-constify-mnt_opts-parameter-in-security_free_mnt_opts/20230823-170310
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.g=
+it next
+> patch link:    https://lore.kernel.org/r/ZOXG%2FVVC1XRc7TtI%40gmail.com
+> patch subject: [PATCH] lsm: constify 'mnt_opts' parameter in security_fre=
+e_mnt_opts()
+> config: riscv-randconfig-001-20230823 (https://download.01.org/0day-ci/ar=
+chive/20230824/202308240128.Gsn0b0Fv-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git =
+f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce: (https://download.01.org/0day-ci/archive/20230824/202308240128=
+.Gsn0b0Fv-lkp@intel.com/reproduce)
 >
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308240128.Gsn0b0Fv-lkp=
+@intel.com/
 >
-> --
-> 2.42.0
+> All errors (new ones prefixed by >>):
 >
+> >> fs/btrfs/super.c:1523:25: error: passing 'void **' to parameter of typ=
+e 'const void **' discards qualifiers in nested pointer types [-Werror,-Win=
+compatible-pointer-types-discards-qualifiers]
+>            security_free_mnt_opts(&new_sec_opts);
+>                                   ^~~~~~~~~~~~~
+>    include/linux/security.h:301:42: note: passing argument to parameter '=
+mnt_opts' here
+>    void security_free_mnt_opts(const void **mnt_opts);
+>                                             ^
+>    fs/btrfs/super.c:1536:25: error: passing 'void **' to parameter of typ=
+e 'const void **' discards qualifiers in nested pointer types [-Werror,-Win=
+compatible-pointer-types-discards-qualifiers]
+>            security_free_mnt_opts(&new_sec_opts);
+>                                   ^~~~~~~~~~~~~
+>    include/linux/security.h:301:42: note: passing argument to parameter '=
+mnt_opts' here
+>    void security_free_mnt_opts(const void **mnt_opts);
+>                                             ^
+>    fs/btrfs/super.c:1699:26: error: passing 'void **' to parameter of typ=
+e 'const void **' discards qualifiers in nested pointer types [-Werror,-Win=
+compatible-pointer-types-discards-qualifiers]
+>                    security_free_mnt_opts(&new_sec_opts);
+>                                           ^~~~~~~~~~~~~
+>    include/linux/security.h:301:42: note: passing argument to parameter '=
+mnt_opts' here
+>    void security_free_mnt_opts(const void **mnt_opts);
+>                                             ^
+>    3 errors generated.
+
+Hi Khadija, can you check to see if these errors can be resolved?
+
+--=20
+paul-moore.com
