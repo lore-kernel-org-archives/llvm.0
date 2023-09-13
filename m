@@ -1,48 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58DF23A0;
-	Wed, 13 Sep 2023 10:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08382210D;
+	Wed, 13 Sep 2023 11:04:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694602346; x=1726138346;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uIXZmLagWKHpKAxrnpcZV9CNBqds5leMt0sK3E0/sCc=;
-  b=b3UIbLKk3LKG2bCFPqbfU3zUxGGKZ0BkoTl91ZMC1NJ1g6PjeetZxuHR
-   bGQ4IO53sb/M7ZHutm/zInIshmV1LaVD5ltZSeQT8Fyti48bF+NZlVonZ
-   3E11+QksACaPtyXSsMOJbe1yF0JY/ZUFvsYleTtgPHI9M9FU736ALfivv
-   puf3pStxlKgn/xy2IjldY/e/+V7X0ewuuzRqBdaIrFJAi8ee3yUBUXBcC
-   Xf/g8JOTvpX3qKlRBXHF44bQmDpYyq0837THTKwdvrBaDZzU69G5KrgyK
-   M/Q0YQnLacyD9frBEMfMfSEhSx+BElTt71bOmth2TfEV0pfUL5ETb5w4x
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="377538673"
+  t=1694603068; x=1726139068;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o75pkzL8hE8MlB27drtG7HJ970mpOPOXAgZVWPdc4eQ=;
+  b=W3s8UvgzHQA3ZWY0PeGz7jE+B1q5AA5G/djdExk/4LEYMy2w1p5TZPXM
+   Nr0dP4PSOrR++YQUdx1XoNs8S2cn+2ZN+dUBsrsHDVg/6pAxrNDrcOZp8
+   ms0T1s4H4JwYQd0/H/J24ugaYLO+ie4hI1mLrFTvNVVI4JFWHRicquxj7
+   B33UNkBepI/8nQi5tXFNYpBetuUba/nl7ZzIPtl9DzVhJL0MjLOL2Tq/P
+   8nUXckDVzn9I2Tboiz6wMEKpnjQ025bZgPgNg69YRYz2et/7qY0QuDNn/
+   ox9iIN3dgB+TbH2Izw1gEmlqyjCoyhBpQ2nrF6swu8t+UYpv2szL5MNi3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="409578294"
 X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="377538673"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 03:52:25 -0700
+   d="scan'208";a="409578294"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 04:04:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="809636480"
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="1074910277"
 X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="809636480"
+   d="scan'208";a="1074910277"
 Received: from lkp-server02.sh.intel.com (HELO cf13c67269a2) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Sep 2023 03:52:22 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 13 Sep 2023 04:04:24 -0700
 Received: from kbuild by cf13c67269a2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgNTo-0000Px-2m;
-	Wed, 13 Sep 2023 10:52:20 +0000
-Date: Wed, 13 Sep 2023 18:52:16 +0800
+	id 1qgNfR-0000Qj-19;
+	Wed, 13 Sep 2023 11:04:21 +0000
+Date: Wed, 13 Sep 2023 19:03:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: "guojinhui.liam" <guojinhui.liam@bytedance.com>, rafael@kernel.org,
-	lenb@kernel.org, gregkh@linuxfoundation.org
+To: Daniel Rosenberg <drosen@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	lizefan.x@bytedance.com, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"guojinhui.liam" <guojinhui.liam@bytedance.com>
-Subject: Re: [PATCH] driver core: platform: set numa_node before
- platform_add_device()
-Message-ID: <202309131848.CgiiHpZu-lkp@intel.com>
-References: <20230912070900.1862-1-guojinhui.liam@bytedance.com>
+	linux-f2fs-devel@lists.sourceforge.net,
+	Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [jaegeuk-f2fs:dev-test 8/9] fs/f2fs/inode.c:320:7: warning: format
+ specifies type 'size_t' (aka 'unsigned int') but the argument has type
+ 'unsigned long'
+Message-ID: <202309131837.F3EVkv15-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,174 +48,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230912070900.1862-1-guojinhui.liam@bytedance.com>
 
-Hi guojinhui.liam,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.6-rc1 next-20230913]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/guojinhui-liam/driver-core-platform-set-numa_node-before-platform_add_device/20230912-151119
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230912070900.1862-1-guojinhui.liam%40bytedance.com
-patch subject: [PATCH] driver core: platform: set numa_node before platform_add_device()
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230913/202309131848.CgiiHpZu-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131848.CgiiHpZu-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+head:   67dadd6ef509ed922ec667ef6b0ef0cdbb2fe04c
+commit: e152f298a65c86ab89200d2d32132ab359c66a3c [8/9] f2fs: Support Block Size == Page Size
+config: arm-randconfig-r032-20230913 (https://download.01.org/0day-ci/archive/20230913/202309131837.F3EVkv15-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131837.F3EVkv15-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309131848.CgiiHpZu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309131837.F3EVkv15-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/base/platform.c:15:
-   In file included from include/linux/of_irq.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/base/platform.c:15:
-   In file included from include/linux/of_irq.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/base/platform.c:15:
-   In file included from include/linux/of_irq.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/base/platform.c:846:28: error: implicit declaration of function 'acpi_get_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   set_dev_node(&pdev->dev, acpi_get_node(adev->handle));
-                                            ^
-   drivers/base/platform.c:846:28: note: did you mean 'acpi_get_name'?
-   include/acpi/acpixf.h:525:9: note: 'acpi_get_name' declared here
-                                acpi_get_name(acpi_handle object, u32 name_type,
-                                ^
-   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
-           static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
-                              ^
-   drivers/base/platform.c:846:46: error: incomplete definition of type 'struct acpi_device'
-                   set_dev_node(&pdev->dev, acpi_get_node(adev->handle));
-                                                          ~~~~^
-   include/linux/acpi.h:788:8: note: forward declaration of 'struct acpi_device'
-   struct acpi_device;
-          ^
-   12 warnings and 2 errors generated.
+>> fs/f2fs/inode.c:320:7: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+     320 |                         f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, max: %zu",
+         |                                                                                                         ~~~
+         |                                                                                                         %lu
+     321 |                                   __func__, inode->i_ino, fi->i_inline_xattr_size,
+     322 |                                   MAX_INLINE_XATTR_SIZE);
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   fs/f2fs/f2fs.h:2321:39: note: expanded from macro 'f2fs_warn'
+    2321 |         f2fs_printk(sbi, KERN_WARNING fmt, ##__VA_ARGS__)
+         |                                       ~~~    ^~~~~~~~~~~
+   fs/f2fs/xattr.h:88:4: note: expanded from macro 'MAX_INLINE_XATTR_SIZE'
+      88 |                         (DEF_ADDRS_PER_INODE -                          \
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      89 |                         F2FS_TOTAL_EXTRA_ATTR_SIZE / sizeof(__le32) -   \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      90 |                         DEF_INLINE_RESERVED_SIZE -                      \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      91 |                         MIN_INLINE_DENTRY_SIZE / sizeof(__le32))
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/acpi_get_node +846 drivers/base/platform.c
+vim +320 fs/f2fs/inode.c
 
-   797	
-   798	/**
-   799	 * platform_device_register_full - add a platform-level device with
-   800	 * resources and platform-specific data
-   801	 *
-   802	 * @pdevinfo: data used to create device
-   803	 *
-   804	 * Returns &struct platform_device pointer on success, or ERR_PTR() on error.
-   805	 */
-   806	struct platform_device *platform_device_register_full(
-   807			const struct platform_device_info *pdevinfo)
-   808	{
-   809		int ret;
-   810		struct platform_device *pdev;
-   811		struct acpi_device *adev = to_acpi_device_node(pdevinfo->fwnode);
-   812	
-   813		pdev = platform_device_alloc(pdevinfo->name, pdevinfo->id);
-   814		if (!pdev)
-   815			return ERR_PTR(-ENOMEM);
-   816	
-   817		pdev->dev.parent = pdevinfo->parent;
-   818		pdev->dev.fwnode = pdevinfo->fwnode;
-   819		pdev->dev.of_node = of_node_get(to_of_node(pdev->dev.fwnode));
-   820		pdev->dev.of_node_reused = pdevinfo->of_node_reused;
-   821	
-   822		if (pdevinfo->dma_mask) {
-   823			pdev->platform_dma_mask = pdevinfo->dma_mask;
-   824			pdev->dev.dma_mask = &pdev->platform_dma_mask;
-   825			pdev->dev.coherent_dma_mask = pdevinfo->dma_mask;
-   826		}
-   827	
-   828		ret = platform_device_add_resources(pdev,
-   829				pdevinfo->res, pdevinfo->num_res);
-   830		if (ret)
-   831			goto err;
-   832	
-   833		ret = platform_device_add_data(pdev,
-   834				pdevinfo->data, pdevinfo->size_data);
-   835		if (ret)
-   836			goto err;
-   837	
-   838		if (pdevinfo->properties) {
-   839			ret = device_create_managed_software_node(&pdev->dev,
-   840								  pdevinfo->properties, NULL);
-   841			if (ret)
-   842				goto err;
-   843		}
-   844	
-   845		if (adev)
- > 846			set_dev_node(&pdev->dev, acpi_get_node(adev->handle));
-   847	
-   848		ret = platform_device_add(pdev);
-   849		if (ret) {
-   850	err:
-   851			ACPI_COMPANION_SET(&pdev->dev, NULL);
-   852			platform_device_put(pdev);
-   853			return ERR_PTR(ret);
-   854		}
-   855	
-   856		return pdev;
-   857	}
-   858	EXPORT_SYMBOL_GPL(platform_device_register_full);
-   859	
+698a5c8c8e0559 Yangtao Li   2023-04-08  278  
+e34438c903b653 Chao Yu      2018-06-29  279  static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+5d64600d4f337d Jaegeuk Kim  2018-04-24  280  {
+5d64600d4f337d Jaegeuk Kim  2018-04-24  281  	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+18dd6470c2d14d Chao Yu      2018-07-08  282  	struct f2fs_inode_info *fi = F2FS_I(inode);
+4c8ff7095bef64 Chao Yu      2019-11-01  283  	struct f2fs_inode *ri = F2FS_INODE(node_page);
+e34438c903b653 Chao Yu      2018-06-29  284  	unsigned long long iblocks;
+e34438c903b653 Chao Yu      2018-06-29  285  
+e34438c903b653 Chao Yu      2018-06-29  286  	iblocks = le64_to_cpu(F2FS_INODE(node_page)->i_blocks);
+e34438c903b653 Chao Yu      2018-06-29  287  	if (!iblocks) {
+dcbb4c10e6d969 Joe Perches  2019-06-18  288  		f2fs_warn(sbi, "%s: corrupted inode i_blocks i_ino=%lx iblocks=%llu, run fsck to fix.",
+e34438c903b653 Chao Yu      2018-06-29  289  			  __func__, inode->i_ino, iblocks);
+e34438c903b653 Chao Yu      2018-06-29  290  		return false;
+e34438c903b653 Chao Yu      2018-06-29  291  	}
+e34438c903b653 Chao Yu      2018-06-29  292  
+e34438c903b653 Chao Yu      2018-06-29  293  	if (ino_of_node(node_page) != nid_of_node(node_page)) {
+dcbb4c10e6d969 Joe Perches  2019-06-18  294  		f2fs_warn(sbi, "%s: corrupted inode footer i_ino=%lx, ino,nid: [%u, %u] run fsck to fix.",
+e34438c903b653 Chao Yu      2018-06-29  295  			  __func__, inode->i_ino,
+e34438c903b653 Chao Yu      2018-06-29  296  			  ino_of_node(node_page), nid_of_node(node_page));
+e34438c903b653 Chao Yu      2018-06-29  297  		return false;
+e34438c903b653 Chao Yu      2018-06-29  298  	}
+5d64600d4f337d Jaegeuk Kim  2018-04-24  299  
+f240d3aaf5a155 Chao Yu      2023-05-31  300  	if (f2fs_has_extra_attr(inode)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  301  		if (!f2fs_sb_has_extra_attr(sbi)) {
+dcbb4c10e6d969 Joe Perches  2019-06-18  302  			f2fs_warn(sbi, "%s: inode (ino=%lx) is with extra_attr, but extra_attr feature is off",
+76d56d4ab4f2a9 Chao Yu      2018-06-25  303  				  __func__, inode->i_ino);
+76d56d4ab4f2a9 Chao Yu      2018-06-25  304  			return false;
+76d56d4ab4f2a9 Chao Yu      2018-06-25  305  		}
+18dd6470c2d14d Chao Yu      2018-07-08  306  		if (fi->i_extra_isize > F2FS_TOTAL_EXTRA_ATTR_SIZE ||
+f240d3aaf5a155 Chao Yu      2023-05-31  307  			fi->i_extra_isize < F2FS_MIN_EXTRA_ATTR_SIZE ||
+18dd6470c2d14d Chao Yu      2018-07-08  308  			fi->i_extra_isize % sizeof(__le32)) {
+dcbb4c10e6d969 Joe Perches  2019-06-18  309  			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_extra_isize: %d, max: %zu",
+18dd6470c2d14d Chao Yu      2018-07-08  310  				  __func__, inode->i_ino, fi->i_extra_isize,
+18dd6470c2d14d Chao Yu      2018-07-08  311  				  F2FS_TOTAL_EXTRA_ATTR_SIZE);
+18dd6470c2d14d Chao Yu      2018-07-08  312  			return false;
+18dd6470c2d14d Chao Yu      2018-07-08  313  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  314  		if (f2fs_sb_has_flexible_inline_xattr(sbi) &&
+dd6c89b5f2b93c Chao Yu      2019-03-04  315  			f2fs_has_inline_xattr(inode) &&
+dd6c89b5f2b93c Chao Yu      2019-03-04  316  			(!fi->i_inline_xattr_size ||
+dd6c89b5f2b93c Chao Yu      2019-03-04  317  			fi->i_inline_xattr_size > MAX_INLINE_XATTR_SIZE)) {
+dcbb4c10e6d969 Joe Perches  2019-06-18  318  			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, max: %zu",
+dd6c89b5f2b93c Chao Yu      2019-03-04  319  				  __func__, inode->i_ino, fi->i_inline_xattr_size,
+dd6c89b5f2b93c Chao Yu      2019-03-04 @320  				  MAX_INLINE_XATTR_SIZE);
+dd6c89b5f2b93c Chao Yu      2019-03-04  321  			return false;
+dd6c89b5f2b93c Chao Yu      2019-03-04  322  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  323  		if (f2fs_sb_has_compression(sbi) &&
+f240d3aaf5a155 Chao Yu      2023-05-31  324  			fi->i_flags & F2FS_COMPR_FL &&
+f240d3aaf5a155 Chao Yu      2023-05-31  325  			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
+f240d3aaf5a155 Chao Yu      2023-05-31  326  						i_compress_flag)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  327  			if (!sanity_check_compress_inode(inode, ri))
+f240d3aaf5a155 Chao Yu      2023-05-31  328  				return false;
+f240d3aaf5a155 Chao Yu      2023-05-31  329  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  330  	} else if (f2fs_sb_has_flexible_inline_xattr(sbi)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  331  		f2fs_warn(sbi, "%s: corrupted inode ino=%lx, run fsck to fix.",
+f240d3aaf5a155 Chao Yu      2023-05-31  332  			  __func__, inode->i_ino);
+f240d3aaf5a155 Chao Yu      2023-05-31  333  		return false;
+f240d3aaf5a155 Chao Yu      2023-05-31  334  	}
+f240d3aaf5a155 Chao Yu      2023-05-31  335  
+f240d3aaf5a155 Chao Yu      2023-05-31  336  	if (!f2fs_sb_has_extra_attr(sbi)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  337  		if (f2fs_sb_has_project_quota(sbi)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  338  			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+f240d3aaf5a155 Chao Yu      2023-05-31  339  				  __func__, inode->i_ino, F2FS_FEATURE_PRJQUOTA);
+f240d3aaf5a155 Chao Yu      2023-05-31  340  			return false;
+f240d3aaf5a155 Chao Yu      2023-05-31  341  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  342  		if (f2fs_sb_has_inode_chksum(sbi)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  343  			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+f240d3aaf5a155 Chao Yu      2023-05-31  344  				  __func__, inode->i_ino, F2FS_FEATURE_INODE_CHKSUM);
+f240d3aaf5a155 Chao Yu      2023-05-31  345  			return false;
+f240d3aaf5a155 Chao Yu      2023-05-31  346  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  347  		if (f2fs_sb_has_flexible_inline_xattr(sbi)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  348  			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+f240d3aaf5a155 Chao Yu      2023-05-31  349  				  __func__, inode->i_ino, F2FS_FEATURE_FLEXIBLE_INLINE_XATTR);
+f240d3aaf5a155 Chao Yu      2023-05-31  350  			return false;
+f240d3aaf5a155 Chao Yu      2023-05-31  351  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  352  		if (f2fs_sb_has_inode_crtime(sbi)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  353  			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+f240d3aaf5a155 Chao Yu      2023-05-31  354  				  __func__, inode->i_ino, F2FS_FEATURE_INODE_CRTIME);
+f240d3aaf5a155 Chao Yu      2023-05-31  355  			return false;
+f240d3aaf5a155 Chao Yu      2023-05-31  356  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  357  		if (f2fs_sb_has_compression(sbi)) {
+f240d3aaf5a155 Chao Yu      2023-05-31  358  			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+f240d3aaf5a155 Chao Yu      2023-05-31  359  				  __func__, inode->i_ino, F2FS_FEATURE_COMPRESSION);
+f240d3aaf5a155 Chao Yu      2023-05-31  360  			return false;
+f240d3aaf5a155 Chao Yu      2023-05-31  361  		}
+f240d3aaf5a155 Chao Yu      2023-05-31  362  	}
+dd6c89b5f2b93c Chao Yu      2019-03-04  363  
+677a82b44ebf26 Chao Yu      2022-05-18  364  	if (f2fs_sanity_check_inline_data(inode)) {
+dcbb4c10e6d969 Joe Perches  2019-06-18  365  		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+bcbfbd604dcba4 Chao Yu      2018-06-29  366  			  __func__, inode->i_ino, inode->i_mode);
+bcbfbd604dcba4 Chao Yu      2018-06-29  367  		return false;
+bcbfbd604dcba4 Chao Yu      2018-06-29  368  	}
+bcbfbd604dcba4 Chao Yu      2018-06-29  369  
+bcbfbd604dcba4 Chao Yu      2018-06-29  370  	if (f2fs_has_inline_dentry(inode) && !S_ISDIR(inode->i_mode)) {
+dcbb4c10e6d969 Joe Perches  2019-06-18  371  		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_dentry, run fsck to fix",
+bcbfbd604dcba4 Chao Yu      2018-06-29  372  			  __func__, inode->i_ino, inode->i_mode);
+bcbfbd604dcba4 Chao Yu      2018-06-29  373  		return false;
+bcbfbd604dcba4 Chao Yu      2018-06-29  374  	}
+bcbfbd604dcba4 Chao Yu      2018-06-29  375  
+f6322f3f1212e0 Eric Biggers 2020-10-08  376  	if ((fi->i_flags & F2FS_CASEFOLD_FL) && !f2fs_sb_has_casefold(sbi)) {
+f6322f3f1212e0 Eric Biggers 2020-10-08  377  		f2fs_warn(sbi, "%s: inode (ino=%lx) has casefold flag, but casefold feature is off",
+f6322f3f1212e0 Eric Biggers 2020-10-08  378  			  __func__, inode->i_ino);
+f6322f3f1212e0 Eric Biggers 2020-10-08  379  		return false;
+f6322f3f1212e0 Eric Biggers 2020-10-08  380  	}
+f6322f3f1212e0 Eric Biggers 2020-10-08  381  
+5d64600d4f337d Jaegeuk Kim  2018-04-24  382  	return true;
+5d64600d4f337d Jaegeuk Kim  2018-04-24  383  }
+5d64600d4f337d Jaegeuk Kim  2018-04-24  384  
+
+:::::: The code at line 320 was first introduced by commit
+:::::: dd6c89b5f2b93ceced4111e7b69d4efd8c312713 f2fs: fix to do sanity check with inode.i_inline_xattr_size
+
+:::::: TO: Chao Yu <yuchao0@huawei.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
