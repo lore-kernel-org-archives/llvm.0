@@ -1,43 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3E322F11;
-	Wed, 13 Sep 2023 12:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9165E1A71C;
+	Wed, 13 Sep 2023 13:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694608305; x=1726144305;
+  t=1694610832; x=1726146832;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=b5NgqrTJ0esIoPR+LBJ3A85VBN5lGxnXjuGhgMNZkfw=;
-  b=jDNBVsqh/qjUV1G9n5NLOSKdiU9/2U41G6/8YG34ogJyh/pbP98z/hMc
-   IJBSX50n1rTVYXkKw/sGCMkX0Ir+ow4W2DOWJTuqAC6jYrJw1bRwRZKT6
-   GtTJHFr6FDp6O/8RkCfY1SSWBE7XaNVt8xxPHcDNSnoev5bQX2fDhXxzP
-   ide5Ua+w+IefSXMFnGiVQlgArfMJltA74UK5twQGuM//XQsh+VD8WBNNz
-   eoi1rUw7KtxUq+TlxW3coBgtYaIZjrn506PU/qJlgLXMJn8WhCSWOcf28
-   vbm26kYmPid6/ZKS0kTNoUktRtMN8BI9C0GeqAjrAyImBWOLXS8nLjYWY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="375975521"
+  bh=TvrCpOQI/H6x/uGnlR2xkO6OFiRPA7RLNj+S7U/qINw=;
+  b=hUxw29CPRGPP+22GANmJrG0z9gO+BekO6ZaT0b/ITkg8CnK396vqJDFn
+   ici7jCHgYaHKbDY3af1mcjFGMfYKZESR5fqWU8jUmqb2mrD55879VcV0o
+   5eVP8oXdBpGnvXRoU3gCYoFd3Gpdl5i9TAJZqpgsIuLjcTBrMDSmvfGtc
+   Z+gNs+6gF3Gz8QkViiUnDOsXzIbIJGvHuPrO6vl1nGxXRiVJg1zEQvuij
+   LiK0cqnsokCM83GPErYY8B7oke9NQVlD/r/6FgUxy4lzwan7eJlh9q9Lb
+   aLIyPLfioOk0VpeBzt1/mr7QhV+f86PY4XfeE9MHxNhbARXC6R4C5YXoI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="377568072"
 X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="375975521"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 05:31:43 -0700
+   d="scan'208";a="377568072"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 06:13:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="779171234"
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="1074955766"
 X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="779171234"
+   d="scan'208";a="1074955766"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Sep 2023 05:31:41 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 13 Sep 2023 06:13:48 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgP1u-00002z-17;
-	Wed, 13 Sep 2023 12:31:38 +0000
-Date: Wed, 13 Sep 2023 20:31:16 +0800
+	id 1qgPgg-00005N-1I;
+	Wed, 13 Sep 2023 13:13:46 +0000
+Date: Wed, 13 Sep 2023 21:13:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kairui Song <ryncsn@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 3/5] workingset: simplify lru_gen_test_recent
-Message-ID: <202309132012.STqLv8xb-lkp@intel.com>
-References: <20230912184511.49333-4-ryncsn@gmail.com>
+To: Ping Gan <jacky_gam_2001@163.com>, kbusch@kernel.org, axboe@kernel.dk,
+	hch@lst.de, sagi@grimberg.me, kch@nvidia.com,
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ping_gan@dell.com,
+	jacky_gam_2001@163.com
+Subject: Re: [PATCH 2/4] nvmet: Add polling queue task for nvme target
+Message-ID: <202309132115.8j2dhGX4-lkp@intel.com>
+References: <84d7f188e892b5b0ba251a4601455d7a137075f3.1694592708.git.jacky_gam_2001@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,102 +49,170 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230912184511.49333-4-ryncsn@gmail.com>
+In-Reply-To: <84d7f188e892b5b0ba251a4601455d7a137075f3.1694592708.git.jacky_gam_2001@163.com>
 
-Hi Kairui,
+Hi Ping,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.6-rc1]
-[cannot apply to akpm-mm/mm-everything next-20230913]
+[auto build test WARNING on v6.6-rc1]
+[also build test WARNING on linus/master next-20230913]
+[cannot apply to hch-configfs/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/workingset-simplify-and-use-a-more-intuitive-model/20230913-024648
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230912184511.49333-4-ryncsn%40gmail.com
-patch subject: [RFC PATCH v2 3/5] workingset: simplify lru_gen_test_recent
-config: s390-randconfig-r013-20230913 (https://download.01.org/0day-ci/archive/20230913/202309132012.STqLv8xb-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309132012.STqLv8xb-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ping-Gan/nvmet-Add-nvme-target-polling-queue-task-parameters/20230913-164112
+base:   v6.6-rc1
+patch link:    https://lore.kernel.org/r/84d7f188e892b5b0ba251a4601455d7a137075f3.1694592708.git.jacky_gam_2001%40163.com
+patch subject: [PATCH 2/4] nvmet: Add polling queue task for nvme target
+config: i386-randconfig-013-20230913 (https://download.01.org/0day-ci/archive/20230913/202309132115.8j2dhGX4-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309132115.8j2dhGX4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309132012.STqLv8xb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309132115.8j2dhGX4-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   mm/workingset.c:243:16: warning: unused variable 'workingset' [-Wunused-variable]
-           unsigned long workingset, active, inactive, inactive_file, inactive_anon = 0;
-                         ^
-   mm/workingset.c:243:36: warning: unused variable 'inactive' [-Wunused-variable]
-           unsigned long workingset, active, inactive, inactive_file, inactive_anon = 0;
-                                             ^
->> mm/workingset.c:503:61: error: too few arguments to function call, expected 5, have 3
-                   return lru_gen_test_recent(eviction_lruvec, file, eviction);
-                          ~~~~~~~~~~~~~~~~~~~                                ^
-   mm/workingset.c:415:13: note: 'lru_gen_test_recent' declared here
-   static bool lru_gen_test_recent(void *shadow, bool file, struct lruvec **lruvec,
-               ^
-   2 warnings and 1 error generated.
+>> drivers/nvme/target/polling-queue-thread.c:278:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           ENQUEUE_PTRS(r, &r[1], prod_head, obj_table, n, void *);
+           ^
+   drivers/nvme/target/polling-queue-thread.c:151:3: note: expanded from macro 'ENQUEUE_PTRS'
+                   case 2: \
+                   ^
+>> drivers/nvme/target/polling-queue-thread.c:278:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+   drivers/nvme/target/polling-queue-thread.c:153:3: note: expanded from macro 'ENQUEUE_PTRS'
+                   case 1: \
+                   ^
+   drivers/nvme/target/polling-queue-thread.c:298:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           DEQUEUE_PTRS(r, &r[1], cons_head, obj_table, n, void *);
+           ^
+   drivers/nvme/target/polling-queue-thread.c:182:3: note: expanded from macro 'DEQUEUE_PTRS'
+                   case 2: \
+                   ^
+   drivers/nvme/target/polling-queue-thread.c:298:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+   drivers/nvme/target/polling-queue-thread.c:184:3: note: expanded from macro 'DEQUEUE_PTRS'
+                   case 1: \
+                   ^
+   drivers/nvme/target/polling-queue-thread.c:357:1: warning: unused function '__nvmet_pq_ring_full' [-Wunused-function]
+   __nvmet_pq_ring_full(const struct nvmet_pq_ring *r)
+   ^
+   drivers/nvme/target/polling-queue-thread.c:366:1: warning: unused function '__nvmet_pq_ring_empty' [-Wunused-function]
+   __nvmet_pq_ring_empty(const struct nvmet_pq_ring *r)
+   ^
+   drivers/nvme/target/polling-queue-thread.c:375:1: warning: unused function '__nvmet_pq_ring_get_size' [-Wunused-function]
+   __nvmet_pq_ring_get_size(const struct nvmet_pq_ring *r)
+   ^
+   drivers/nvme/target/polling-queue-thread.c:384:1: warning: unused function '__nvmet_pq_ring_get_capacity' [-Wunused-function]
+   __nvmet_pq_ring_get_capacity(const struct nvmet_pq_ring *r)
+   ^
+   8 warnings generated.
+--
+>> drivers/nvme/target/polling-queue-thread.c:345: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Return the number of free entries in a ring.
+   drivers/nvme/target/polling-queue-thread.c:354: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Test if a ring is full.
+   drivers/nvme/target/polling-queue-thread.c:363: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Test if a ring is empty.
+   drivers/nvme/target/polling-queue-thread.c:372: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Return the size of the ring.
+   drivers/nvme/target/polling-queue-thread.c:381: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Return the number of elements which can be stored in the ring.
 
 
-vim +503 mm/workingset.c
+vim +278 drivers/nvme/target/polling-queue-thread.c
 
-   459	
-   460	/**
-   461	 * workingset_test_recent - tests if the shadow entry is for a folio that was
-   462	 * recently evicted. Also fills in @workingset with the value unpacked from
-   463	 * shadow.
-   464	 * @shadow: the shadow entry to be tested.
-   465	 * @file: whether the corresponding folio is from the file lru.
-   466	 * @workingset: where the workingset value unpacked from shadow should
-   467	 * be stored.
-   468	 *
-   469	 * Return: true if the shadow is for a recently evicted folio; false otherwise.
-   470	 */
-   471	bool workingset_test_recent(void *shadow, bool file, bool *workingset)
-   472	{
-   473		struct mem_cgroup *eviction_memcg;
-   474		struct lruvec *eviction_lruvec;
-   475		int memcgid;
-   476		struct pglist_data *pgdat;
-   477		unsigned long eviction;
-   478	
-   479		unpack_shadow(shadow, &memcgid, &pgdat, &eviction, workingset);
-   480	
-   481		/*
-   482		 * Look up the memcg associated with the stored ID. It might
-   483		 * have been deleted since the folio's eviction.
-   484		 *
-   485		 * Note that in rare events the ID could have been recycled
-   486		 * for a new cgroup that refaults a shared folio. This is
-   487		 * impossible to tell from the available data. However, this
-   488		 * should be a rare and limited disturbance, and activations
-   489		 * are always speculative anyway. Ultimately, it's the aging
-   490		 * algorithm's job to shake out the minimum access frequency
-   491		 * for the active cache.
-   492		 *
-   493		 * XXX: On !CONFIG_MEMCG, this will always return NULL; it
-   494		 * would be better if the root_mem_cgroup existed in all
-   495		 * configurations instead.
-   496		 */
-   497		eviction_memcg = mem_cgroup_from_id(memcgid);
-   498		if (!mem_cgroup_disabled() && !eviction_memcg)
-   499			return false;
-   500		eviction_lruvec = mem_cgroup_lruvec(eviction_memcg, pgdat);
-   501	
-   502		if (lru_gen_enabled())
- > 503			return lru_gen_test_recent(eviction_lruvec, file, eviction);
-   504	
-   505		return lru_refault(eviction_memcg, eviction_lruvec, eviction, file,
-   506				   EVICTION_BITS, bucket_order);
-   507	}
-   508	
+   265	
+   266	static inline u32
+   267	__nvmet_pq_ring_do_enqueue(struct nvmet_pq_ring *r,
+   268								void **obj_table, u32 n, u32 *free_space)
+   269	{
+   270		uint32_t prod_head, prod_next;
+   271		uint32_t free_entries;
+   272	
+   273		n = __nvmet_pq_ring_move_prod_head(r, n, &prod_head,
+   274										&prod_next, &free_entries);
+   275		if (n == 0)
+   276			goto end;
+   277	
+ > 278		ENQUEUE_PTRS(r, &r[1], prod_head, obj_table, n, void *);
+   279	
+   280		__nvmet_pq_ring_update_tail(&r->prod, prod_head, prod_next, 1);
+   281	end:
+   282		if (free_space != NULL)
+   283			*free_space = free_entries - n;
+   284		return n;
+   285	}
+   286	
+   287	static inline u32
+   288	__nvmet_pq_ring_do_dequeue(struct nvmet_pq_ring *r,
+   289								void **obj_table, u32 n, u32 *available)
+   290	{
+   291		uint32_t cons_head, cons_next;
+   292		uint32_t entries;
+   293	
+   294		n = __nvmet_pq_ring_move_cons_head(r, n, &cons_head, &cons_next, &entries);
+   295		if (n == 0)
+   296			goto end;
+   297	
+   298		DEQUEUE_PTRS(r, &r[1], cons_head, obj_table, n, void *);
+   299	
+   300		__nvmet_pq_ring_update_tail(&r->cons, cons_head, cons_next, 0);
+   301	
+   302	end:
+   303		if (available != NULL)
+   304			*available = entries - n;
+   305		return n;
+   306	}
+   307	
+   308	static inline u32
+   309	nvmet_pq_ring_enqueue_bulk(struct nvmet_pq_ring *r,
+   310								void **obj_table, u32 n, u32 *free_space)
+   311	{
+   312		return __nvmet_pq_ring_do_enqueue(r, obj_table, n, free_space);
+   313	}
+   314	
+   315	static inline int
+   316	nvmet_pq_ring_enqueue(struct nvmet_pq_ring *r, void **obj)
+   317	{
+   318		return nvmet_pq_ring_enqueue_bulk(r, obj, 1, NULL) ? 0 : -ENOBUFS;
+   319	}
+   320	
+   321	static inline u32
+   322	nvmet_pq_ring_dequeue_bulk(struct nvmet_pq_ring *r,
+   323								void **obj_table, u32 n, u32 *available)
+   324	{
+   325		return __nvmet_pq_ring_do_dequeue(r, obj_table, n, available);
+   326	}
+   327	
+   328	static inline int
+   329	nvmet_pq_ring_dequeue(struct nvmet_pq_ring *r, void **obj_p)
+   330	{
+   331		return nvmet_pq_ring_dequeue_bulk(r, obj_p, 1, NULL) ? 0 : -ENOENT;
+   332	}
+   333	
+   334	static inline u32
+   335	__nvmet_pq_ring_count(const struct nvmet_pq_ring *r)
+   336	{
+   337		u32 prod_tail = smp_load_acquire(&r->prod.tail);
+   338		u32 cons_tail = smp_load_acquire(&r->cons.tail);
+   339		u32 count = (prod_tail - cons_tail) & r->mask;
+   340		u32 capacity = smp_load_acquire(&r->capacity);
+   341		return (count > capacity) ? capacity : count;
+   342	}
+   343	
+   344	/**
+ > 345	 * Return the number of free entries in a ring.
+   346	 */
+   347	static inline u32
+   348	__nvmet_pq_ring_free_count(const struct nvmet_pq_ring *r)
+   349	{
+   350		return smp_load_acquire(&r->capacity) - __nvmet_pq_ring_count(r);
+   351	}
+   352	
 
 -- 
 0-DAY CI Kernel Test Service
