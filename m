@@ -1,129 +1,101 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8922628E
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 19:15:59 +0000 (UTC)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-57354433a7dso737229eaf.1
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 12:15:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57B41F60E
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 21:19:57 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59c0327b75dso7320707b3.2
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 14:19:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694718958; x=1695323758; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d/OKaoFTzHFPckQ8elHjeRhc3HPJtJWQjmgI/gL6p9I=;
-        b=MqsUZ4pdPNCvBJ/2eTjqqaJJ0eq9hClxV+ZB9KRE5cGVOZPsOFc08WLj1dYshAdehT
-         A3Az8FK0xFOJPqBSVW20kDE/lYX+drielg8mDNTNV6TtI7BMQXkOsFI9iHyCriBbo7gT
-         nOGq1VfUcX3DHqU0JRZZBhQOHiAgm3DO4oJaUmIDYWABhCqGyulBrGI4zwx9Gqm+ezE0
-         Si+qjRToVBZ3tHiogIgi/0omB5mFeKbrJvqqU+mhaVkBnU5kpQ+p4XI0EJ78S3IriNas
-         0UUZu0+ymIAraDagWexSvwRTubbtTOMz6FBNcIKbGEatSdpRgjTS1BBCIfQrnLLefs3e
-         eKNQ==
+        d=google.com; s=20230601; t=1694726397; x=1695331197; darn=lists.linux.dev;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gyCa8y2D4tfagLdEhZkffRRlznGd/QDpuIxcjKD4E/c=;
+        b=lRpGLfS8hMhpGJIqCvEyuEZ+mmAEetCUbeEybTOWBpyIoWGwDS+IxebOQaa7+P+WJP
+         h1eo/kMb/xTO48QHJG4Ths+VOZMrHFLl+VUZi+4y9Fzt8IHOfH4H41YAtSEur3eTaUMc
+         SfizOa42hzmlAe9p7CQSYWVer3SNPsT2Kq2HjMo3XCHOzpCC2uUVthmAFox47QIudHPA
+         3TE+QtrqdjH9ztllDtfjLyCsYCSH0Nzl/7iqsVpNBaiyx3ShydetLFFVkOpWq5XOxfPw
+         Ft87yX7z/dsEBF7PwKsKWXRW8rzmDn0qbzTfk7yVlsgE3PExE6hBVDCUd0y3D6VSMIcM
+         xw7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694718958; x=1695323758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d/OKaoFTzHFPckQ8elHjeRhc3HPJtJWQjmgI/gL6p9I=;
-        b=p8Pz38bBpwLooaBZpCbLOnyyyt5AmWk92QZcWTBSX0LYbgXtsFXqOx8QefENfxbZbg
-         jhYDlIyniZUIAcOLYBYcesACg7rEZf5VzLhLvARjr62plzvFzql7jkmNNEXXBczBr08c
-         vyIB8JwIhazXHsSNFArwOgQtfYaDZoL7L9F2DDfLv6M7Ar4b67WmfNkyzdysfeP9KPmv
-         ab73/yTKUXxzUDyKQz0gy0pD9DLBtFyGfYdKBcZttuyEaLtS0rwy+u0z8MwroAzFMaz0
-         90DVoCWhPbEcXRotbyMnN2NMNgXBDEn3121BNNka5fFq6uAV801Zf6zm++GsEp4yeqnw
-         pndQ==
-X-Gm-Message-State: AOJu0Yz97hFMOUI/3afxnU6S5/LZTSm7A+3UbRZUJSoHihmY0dobKlML
-	D5SvdqPBg/drpOHYqoiGhAJuxCC+c6VzHQEnoWZ8sQ==
-X-Google-Smtp-Source: AGHT+IFgjCX7b6T7mbh0ViVMGicpC/DaCfIz07Wpfl/pmZh0VIBshCVYBpO+RJhvDcH2HnGIfPB6GohIOiUqcipNCFE=
-X-Received: by 2002:a05:6358:7302:b0:135:4003:7857 with SMTP id
- d2-20020a056358730200b0013540037857mr3832327rwg.31.1694718958043; Thu, 14 Sep
- 2023 12:15:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694726397; x=1695331197;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gyCa8y2D4tfagLdEhZkffRRlznGd/QDpuIxcjKD4E/c=;
+        b=lnMEVzYowFgfKwehVrzbxC9B0KL1DLMhjquajGrMs6Gm3KwPbqE6OBXO0CCL90vjCO
+         ETCQbN0I5UGwBbbIrcNO3QRNiNigrUa1GrE7PtG1Fq8dROH7ndRDi1jCH/0fv3NUyPKl
+         x1CfZFFjaZAVJIlhZI8r9ELvtjDj/cTI+SFoAxOge5/Q+Qxsg2gRr2w3qnLhYdLNkO78
+         eRu4VxQKzCmIAkXiqJZ6d38dRUalFWR/peSX7YlQ1CYruWiQauobZ7bKnj0Kbmww0qrN
+         rJUdnOFSzHaI2Mj9+FNP+4jatmIUGyv7pkYyJkXKZG5HhadYcsF+MftT87/Myvvownlb
+         KDMA==
+X-Gm-Message-State: AOJu0Yw2Kw4MJrVy3X/gGEaULlPu6b5Wl/H8MzgRTkdJ6wrNppI2qGPI
+	iKaF/8vC/XXmVu40fmO3d+yijnpkhvi6
+X-Google-Smtp-Source: AGHT+IFICCNKx7p+w3Fwj7ubun2Y+fAPBczDWbh5iaJborCvmiUiAZpQehTzmuFkOiLw/9n5Yvv+V5nsTa3o
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:5357:1d03:3084:aacb])
+ (user=irogers job=sendgmr) by 2002:a05:690c:a8a:b0:59b:c6bb:babb with SMTP id
+ ci10-20020a05690c0a8a00b0059bc6bbbabbmr148679ywb.6.1694726397030; Thu, 14 Sep
+ 2023 14:19:57 -0700 (PDT)
+Date: Thu, 14 Sep 2023 14:19:43 -0700
+Message-Id: <20230914211948.814999-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230914170138.995606-1-song@kernel.org>
-In-Reply-To: <20230914170138.995606-1-song@kernel.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 14 Sep 2023 12:15:21 -0700
-Message-ID: <CABCJKufZJstbnjtcwKRY1CSE-eZBnbYScpD6wp9fMXmpFfdBoA@mail.gmail.com>
-Subject: Re: [PATCH v3] x86/purgatory: Remove LTO flags
-To: Song Liu <song@kernel.org>
-Cc: linux-kernel@vger.kernel.org, ndesaulniers@google.com, 
-	Ricardo Ribalda <ribalda@chromium.org>, kexec@lists.infradead.org, x86@kernel.org, 
-	llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
+Subject: [PATCH v1 0/5] Enable BPF skeletons by default
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nick Terrell <terrelln@fb.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	James Clark <james.clark@arm.com>, Kajol Jain <kjain@linux.ibm.com>, 
+	Patrice Duroux <patrice.duroux@gmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 14, 2023 at 10:02=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> -flto* implies -ffunction-sections. With LTO enabled, ld.lld generates
-> multiple .text sections for purgatory.ro:
->
-> $ readelf -S purgatory.ro  | grep " .text"
->   [ 1] .text             PROGBITS         0000000000000000  00000040
->   [ 7] .text.purgatory   PROGBITS         0000000000000000  000020e0
->   [ 9] .text.warn        PROGBITS         0000000000000000  000021c0
->   [13] .text.sha256_upda PROGBITS         0000000000000000  000022f0
->   [15] .text.sha224_upda PROGBITS         0000000000000000  00002be0
->   [17] .text.sha256_fina PROGBITS         0000000000000000  00002bf0
->   [19] .text.sha224_fina PROGBITS         0000000000000000  00002cc0
->
-> This cause WARNING from kexec_purgatory_setup_sechdrs():
->
-> WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
-> kexec_load_purgatory+0x37f/0x390
->
-> Fix this by disabling LTO for purgatory.
->
-> We could also fix this with an explicit linker script to rejoin .text.*
-> sections back into .text. However, given the benefit of LTOing pugatory
-> is small, simply disable the production of more .text.* sections for now.
->
-> Fixes: b33fff07e3e3 ("x86, build: allow LTO to be selected")
-> Cc: Ricardo Ribalda <ribalda@chromium.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: kexec@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: x86@kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Song Liu <song@kernel.org>
->
-> ---
-> AFAICT, x86 is the only arch that supports LTO and purgatory.
->
-> Changes in v3:
-> 1. Fix "Fixes" tag. (Nick Desaulniers)
-> 2. Add description of an alternative fix, with linker script.
->    (Nick Desaulniers)
->
-> Changes in v2:
-> 1. Use CC_FLAGS_LTO instead of hardcode -flto. (Nick Desaulniers)
-> ---
->  arch/x86/purgatory/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> index c2a29be35c01..08aa0f25f12a 100644
-> --- a/arch/x86/purgatory/Makefile
-> +++ b/arch/x86/purgatory/Makefile
-> @@ -19,6 +19,10 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS -D__NO_FORTIF=
-Y
->  # optimization flags.
->  KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
-=3D%,$(KBUILD_CFLAGS))
->
-> +# When LTO is enabled, llvm emits many text sections, which is not suppo=
-rted
-> +# by kexec. Remove -flto=3D* flags.
-> +KBUILD_CFLAGS :=3D $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
-> +
->  # When linking purgatory.ro with -r unresolved symbols are not checked,
->  # also link a purgatory.chk binary without -r to check for unresolved sy=
-mbols.
->  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+Enable BPF skeletons by default but warn don't fail if they can't be
+supported. This was the intended behavior for Linux 6.4 but it caused
+an issue captured in this thread:
+https://lore.kernel.org/lkml/20230503211801.897735-1-acme@kernel.org/
 
-LGTM, thanks for the patch!
+This issue isn't repeated here as the previous issue related to
+generating vmlinux.h, which is no longer performed by default as a
+checked-in vmlinux.h is used instead.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+Unlike with those changes, the BUILD_BPF_SKEL is kept and setting it
+to 0 disables BPF skeletons. Also, rather than fail the build due to a
+missed dependency, dependencies are checked and BPF skeletons disabled
+if they aren't present.
 
-Sami
+Some related commits:
+b7a2d774c9c5 perf build: Add ability to build with a generated vmlinux.h
+a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use subset of used structs + CO-RE
+a2af0f6b8ef7 perf build: Add system include paths to BPF builds
+5be6cecda080 perf bpf skels: Make vmlinux.h use bpf.h and perf_event.h in source directory
+9a2d5178b9d5 Revert "perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL"
+a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use subset of used structs + CO-RE
+1d7966547e11 perf build: Add warning for when vmlinux.h generation fails
+a980755beb5a perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
+
+Ian Rogers (5):
+  perf version: Add status of bpf skeletons
+  perf build: Default BUILD_BPF_SKEL, warn/disable for missing deps
+  perf test: Update build test for changed BPF skeleton defaults
+  perf test: Ensure EXTRA_TESTS is covered in build test
+  perf test: Detect off-cpu support from build options
+
+ tools/perf/Makefile.config              | 78 ++++++++++++++++---------
+ tools/perf/Makefile.perf                |  8 +--
+ tools/perf/builtin-version.c            |  1 +
+ tools/perf/tests/make                   |  7 ++-
+ tools/perf/tests/shell/record_offcpu.sh |  2 +-
+ 5 files changed, 59 insertions(+), 37 deletions(-)
+
+-- 
+2.42.0.459.ge4e396fd5e-goog
+
