@@ -1,58 +1,141 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A450F26E3C
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 22:19:57 +0000 (UTC)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-53074ee0c2aso2542a12.1
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 15:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694729995; x=1695334795; darn=lists.linux.dev;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dMsxVuhdFp5zH/Rhe12VoLyskw7df4SEAa1A1x2XSqM=;
-        b=m8vtnbT9VrTfG0EBwtaZ7+kIB5C/KyGHAbzElOcjs6QEnwibSvRD1BzSL/bTEuwF0E
-         9P4ztdpx4LBVc6qcvxRU1GmX7mxIkZ7fTL7xu++NmV0IRp1WDHzqVf3+7gFoS6YPwLRx
-         jJm0Fr4Jxi/+EfDWHnpLMK0QdTFy8dZBQL2kmkKQJl1PTMv/fSLsII1MueYRv+GpE2oo
-         klp3TFzfHor3n2STlsXSfNq3ym34U6ofWRl6fCJcQjII777CKFsNLE8TTjihebuBGild
-         ziZM53e4x8+sW5CTJyMrsLEKWuFqR25vYYClIX9d1gBDG7LlgzVl7dyO4ta3FRA/j+6M
-         YnEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694729995; x=1695334795;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dMsxVuhdFp5zH/Rhe12VoLyskw7df4SEAa1A1x2XSqM=;
-        b=gTXc7VHRgqK2j5PkALTwazJCfVc7bRYUaN/Q1Iahjn5ewcOBvXMcRFCNpNQS8UeD2H
-         mxrjScxOazzeJ6+rIkUXl7tUnnoMTv/WQGzt6XxhULnlLs5L4kQpBIoiD3Vm7eFFJxuW
-         3RV6BYTzDyL1+KrYaYlm41KsovmBvt+F4EUQyr0PErNygY7aSz58vontDywK8o/6b6B6
-         qdq45V6bF722NYllb3/ltLRGN0+V/su9ysheT5doDt7XpqgO0fvIEF7yemShcB2moYTk
-         VRhF5IDAidpY1rxvzxGabgt7r5Fu6UXX6VO8nPW1fKoKb/poKeDI+4JMbyCMo2ZI+uDY
-         fQrw==
-X-Gm-Message-State: AOJu0YwG1UyYL5zkgx9IorofGNPDkHs1KkA+ZpWoshrASnxInNgL4ySz
-	60cZadzg2ooB1H1t3zCs7Yi/sUOWX8vdT6cfok5tZlEGikxUPrSKOhFC
-X-Google-Smtp-Source: AGHT+IEmXmCj9R58Yxr/2vYzGy8w/YGgKXl+TDAxKiQglA7xfbOu6VZ461kqY0Or3p4rM568oVBr5F3VeyXP0IJZ9VU=
-X-Received: by 2002:a50:f60c:0:b0:523:b133:57fe with SMTP id
- c12-20020a50f60c000000b00523b13357femr31194edn.1.1694729995280; Thu, 14 Sep
- 2023 15:19:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840623C05;
+	Thu, 14 Sep 2023 22:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694731853; x=1726267853;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z4ug5or7k4TrDT2AACbO1c08ViFDiZBOj1Rlt1drq4M=;
+  b=P/JodmYGtohxpM0pmJ00w53BTb6NniwJy5H2TeVO5durT/8Cl8mRA5hD
+   4KqYJmsMJM0ZWBL60e8KtoGWhMmOR+QbS7kHYsMX9quSr4SkEjOnaoUk1
+   CKFF0KD+yaUI+QwSjYO7RvSjeOqBKjwTXPvtdvqD267BSZ82r5eW6elMZ
+   jP0QLYid7Y19yWV42jydW5XfBbRo6Su1gussAHR8otyN0mjqbMi8BRhBv
+   b6+wVC2KRQEY6EEijfkx5+CGVanIC1hkvHF1LdT+/ELR6rNPkb3CYSw1s
+   D8J9jeRkU4B5aRWKR/kJ3fBK74j6qG3XDXso2h0QmSuEXL1q3ts9E16oN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="445548759"
+X-IronPort-AV: E=Sophos;i="6.02,147,1688454000"; 
+   d="scan'208";a="445548759"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 15:41:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="859899147"
+X-IronPort-AV: E=Sophos;i="6.02,147,1688454000"; 
+   d="scan'208";a="859899147"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Sep 2023 15:41:52 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qgv1y-000293-0b;
+	Thu, 14 Sep 2023 22:41:50 +0000
+Date: Fri, 15 Sep 2023 06:41:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [broonie-ci:arm64-gcs 24/39]
+ include/uapi/asm-generic/unistd.h:827:11: error: array designator index
+ (453) exceeds array bounds (453)
+Message-ID: <202309150640.Qv36FvN5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 14 Sep 2023 15:19:37 -0700
-Message-ID: <CAGG=3QVwmn+sLdWUb87hbDEBy63KdYgvExOWJFC6n0wajzhemA@mail.gmail.com>
-Subject: [Announcement] Clang-Built Linux Meetup Signup!
-To: clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git arm64-gcs
+head:   5886243daf585a7ed8f45646340af1ee602e1edd
+commit: 21d72b8bd77f499b2d293febab37b9dbae5e46d4 [24/39] arm64/mm: Implement map_shadow_stack()
+config: hexagon-randconfig-r012-20230913 (https://download.01.org/0day-ci/archive/20230915/202309150640.Qv36FvN5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230915/202309150640.Qv36FvN5-lkp@intel.com/reproduce)
 
-We have a webpage for those who are attending. It's just to give us a
-general idea of who's coming, so it's a very short form:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309150640.Qv36FvN5-lkp@intel.com/
 
-    http://shortn/_MtOydwQiGs
+All errors (new ones prefixed by >>):
 
-Hope to see you there!
+   In file included from arch/hexagon/kernel/syscalltab.c:8:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from arch/hexagon/kernel/syscalltab.c:8:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from arch/hexagon/kernel/syscalltab.c:8:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   In file included from arch/hexagon/kernel/syscalltab.c:18:
+   In file included from arch/hexagon/include/uapi/asm/unistd.h:40:
+>> include/uapi/asm-generic/unistd.h:827:11: error: array designator index (453) exceeds array bounds (453)
+   __SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
+             ^~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/unistd.h:826:31: note: expanded from macro '__NR_map_shadow_stack'
+   #define __NR_map_shadow_stack 453
+                                 ^~~
+   arch/hexagon/kernel/syscalltab.c:15:30: note: expanded from macro '__SYSCALL'
+   #define __SYSCALL(nr, call) [nr] = (call),
+                                ^~
+   6 warnings and 1 error generated.
 
--bw
+
+vim +827 include/uapi/asm-generic/unistd.h
+
+   825	
+   826	#define __NR_map_shadow_stack 453
+ > 827	__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
+   828	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
