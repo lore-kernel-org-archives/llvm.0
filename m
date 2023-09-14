@@ -1,43 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00566250E2;
-	Wed, 13 Sep 2023 23:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339CA388;
+	Thu, 14 Sep 2023 01:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694648412; x=1726184412;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C1FDyltSoQ3qjQLQbuNS/6kccI9mTJ4EheIrqfUnPWo=;
-  b=Ohh0CMdr9KkYIXqc3BS+lnCAq4qY7hf/SJoB0hD++ofoEgdX7djAGkFi
-   GrynWQhCxwl/pPrv/Bakr74IqI3XGK3yAsD9gpI2eKqcyGndQGvjmxW6n
-   MQ3lzh8PA/OaDEyA/5MYIUnragnh9zww49tkbFPQocsYb5JNGNzSNOPuL
-   mxQD5J8FKjw4IQRy8mlJH+PhU584DbzLKpCoViQ0vk9GAAv14j0G26Gbn
-   ayIY+llTnJvvOL0/+nfXXJmAyPIUC1WqyWK1J5CkxxlmW/V/VxVV+Dsjb
-   VCCOkf882OLUn8vVfFavF+pngtJhBpMQ2OzbKG8RnCaKrMKNys+1Lb3aE
+  t=1694654888; x=1726190888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KUZZZootIzMTjL3t3FoSdrqHXOcpL2Kjq549EzIG2Bk=;
+  b=d4ToUwSyCxvGeOC+c6TvOagxoKSkVRwnrMnn+motX3HsZeu40PMpfbBL
+   r8j44bt/MVEF++EN4zMyDl6RsAFN3Ec/E8iGauSPUmyP/YtmPi98mO780
+   jZEQz90bPX/B4Xf9MPcFQ3UdbvafIOlype5EM/VPRUxqwy4lYSf9TnaUY
+   gBugnj1LzFgfCcPGjpPjD+idM3/vx1e3KmucIU5P/LjTlyVYRyp8O4O70
+   CGL3rwPxdZDR9kjDc0M9lBt3snivXhN1D7eX0ZgqJwwfKSPwzgsqlT0Uo
+   ByWRRdWCO+pe+aAgWm4Sy0onYwrJLVDS8895M5pzenjdjd++oLCAyW7Sc
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="445244050"
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="363864226"
 X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="445244050"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 16:40:08 -0700
+   d="scan'208";a="363864226"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:28:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="834516968"
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="814470949"
 X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="834516968"
+   d="scan'208";a="814470949"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Sep 2023 16:40:06 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2023 18:28:02 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgZSn-0000oj-00;
-	Wed, 13 Sep 2023 23:40:05 +0000
-Date: Thu, 14 Sep 2023 07:39:56 +0800
+	id 1qgb9D-0000wC-2h;
+	Thu, 14 Sep 2023 01:27:59 +0000
+Date: Thu, 14 Sep 2023 09:27:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 3807/4552] fs/bcachefs/snapshot.c:942:5: warning:
- no previous prototype for function 'bch2_snapshot_node_delete'
-Message-ID: <202309140719.SIXNytRW-lkp@intel.com>
+To: Miklos Szeredi <mszeredi@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 2/3] add statmnt(2) syscall
+Message-ID: <202309140946.BQUL96wT-lkp@intel.com>
+References: <20230913152238.905247-3-mszeredi@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,247 +46,176 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230913152238.905247-3-mszeredi@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e143016b56ecb0fcda5bb6026b0a25fe55274f56
-commit: c25d6a495d7f6c73c4f14d31c5e1b80ff8cbe338 [3807/4552] bcachefs: Cleanup redundant snapshot nodes
-config: powerpc-randconfig-r006-20230912 (https://download.01.org/0day-ci/archive/20230914/202309140719.SIXNytRW-lkp@intel.com/config)
+Hi Miklos,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/x86/asm]
+[also build test ERROR on linux/master linus/master v6.6-rc1 next-20230913]
+[cannot apply to arnd-asm-generic/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Miklos-Szeredi/add-unique-mount-ID/20230913-232732
+base:   tip/x86/asm
+patch link:    https://lore.kernel.org/r/20230913152238.905247-3-mszeredi%40redhat.com
+patch subject: [RFC PATCH 2/3] add statmnt(2) syscall
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230914/202309140946.BQUL96wT-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309140719.SIXNytRW-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309140946.BQUL96wT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309140719.SIXNytRW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309140946.BQUL96wT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/snapshot.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
+   In file included from fs/namespace.c:11:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
    In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:211:1: note: expanded from here
-     211 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/snapshot.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/namespace.c:11:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
    In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:213:1: note: expanded from here
-     213 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/snapshot.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/namespace.c:11:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
    In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
-     215 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/bcachefs/snapshot.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
-     217 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> fs/bcachefs/snapshot.c:942:5: warning: no previous prototype for function 'bch2_snapshot_node_delete' [-Wmissing-prototypes]
-     942 | int bch2_snapshot_node_delete(struct btree_trans *trans, u32 id)
-         |     ^
-   fs/bcachefs/snapshot.c:942:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     942 | int bch2_snapshot_node_delete(struct btree_trans *trans, u32 id)
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from fs/namespace.c:11:
+   include/linux/syscalls.h:412:15: warning: declaration of 'struct statmnt' will not be visible outside of this function [-Wvisibility]
+     412 |                             struct statmnt __user *buf, size_t bufsize,
+         |                                    ^
+   fs/namespace.c:4690:18: warning: no previous prototype for function 'lookup_mnt_in_ns' [-Wmissing-prototypes]
+    4690 | struct vfsmount *lookup_mnt_in_ns(u64 id, struct mnt_namespace *ns)
+         |                  ^
+   fs/namespace.c:4690:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    4690 | struct vfsmount *lookup_mnt_in_ns(u64 id, struct mnt_namespace *ns)
          | ^
          | static 
-   7 warnings generated.
+   fs/namespace.c:4750:10: error: unknown type name 'stmt_str_t'
+    4750 |                        stmt_str_t *str)
+         |                        ^
+>> fs/namespace.c:4960:1: error: conflicting types for 'sys_statmnt'
+    4960 | SYSCALL_DEFINE5(statmnt, u64, mnt_id,
+         | ^
+   include/linux/syscalls.h:223:36: note: expanded from macro 'SYSCALL_DEFINE5'
+     223 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:230:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:244:18: note: expanded from macro '__SYSCALL_DEFINEx'
+     244 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
+         |                         ^
+   <scratch space>:99:1: note: expanded from here
+      99 | sys_statmnt
+         | ^
+   include/linux/syscalls.h:411:17: note: previous declaration is here
+     411 | asmlinkage long sys_statmnt(u64 mnt_id, u64 mask,
+         |                 ^
+   14 warnings and 2 errors generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=n] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
+vim +/sys_statmnt +4960 fs/namespace.c
 
-vim +/bch2_snapshot_node_delete +942 fs/bcachefs/snapshot.c
-
-   941	
- > 942	int bch2_snapshot_node_delete(struct btree_trans *trans, u32 id)
-   943	{
-   944		struct bch_fs *c = trans->c;
-   945		struct btree_iter iter, p_iter = (struct btree_iter) { NULL };
-   946		struct btree_iter c_iter = (struct btree_iter) { NULL };
-   947		struct btree_iter tree_iter = (struct btree_iter) { NULL };
-   948		struct bkey_s_c_snapshot s;
-   949		u32 parent_id, child_id;
-   950		unsigned i;
-   951		int ret = 0;
-   952	
-   953		s = bch2_bkey_get_iter_typed(trans, &iter, BTREE_ID_snapshots, POS(0, id),
-   954					     BTREE_ITER_INTENT, snapshot);
-   955		ret = bkey_err(s);
-   956		bch2_fs_inconsistent_on(bch2_err_matches(ret, ENOENT), c,
-   957					"missing snapshot %u", id);
-   958	
-   959		if (ret)
-   960			goto err;
-   961	
-   962		BUG_ON(s.v->children[1]);
-   963	
-   964		parent_id = le32_to_cpu(s.v->parent);
-   965		child_id = le32_to_cpu(s.v->children[0]);
-   966	
-   967		if (parent_id) {
-   968			struct bkey_i_snapshot *parent;
-   969	
-   970			parent = bch2_bkey_get_mut_typed(trans, &p_iter,
-   971					     BTREE_ID_snapshots, POS(0, parent_id),
-   972					     0, snapshot);
-   973			ret = PTR_ERR_OR_ZERO(parent);
-   974			bch2_fs_inconsistent_on(bch2_err_matches(ret, ENOENT), c,
-   975						"missing snapshot %u", parent_id);
-   976			if (unlikely(ret))
-   977				goto err;
-   978	
-   979			/* find entry in parent->children for node being deleted */
-   980			for (i = 0; i < 2; i++)
-   981				if (le32_to_cpu(parent->v.children[i]) == id)
-   982					break;
-   983	
-   984			if (bch2_fs_inconsistent_on(i == 2, c,
-   985						"snapshot %u missing child pointer to %u",
-   986						parent_id, id))
-   987				goto err;
-   988	
-   989			parent->v.children[i] = le32_to_cpu(child_id);
-   990	
-   991			normalize_snapshot_child_pointers(&parent->v);
-   992		}
-   993	
-   994		if (child_id) {
-   995			struct bkey_i_snapshot *child;
-   996	
-   997			child = bch2_bkey_get_mut_typed(trans, &c_iter,
-   998					     BTREE_ID_snapshots, POS(0, child_id),
-   999					     0, snapshot);
-  1000			ret = PTR_ERR_OR_ZERO(child);
-  1001			bch2_fs_inconsistent_on(bch2_err_matches(ret, ENOENT), c,
-  1002						"missing snapshot %u", child_id);
-  1003			if (unlikely(ret))
-  1004				goto err;
-  1005	
-  1006			child->v.parent = cpu_to_le32(parent_id);
-  1007	
-  1008			if (!child->v.parent) {
-  1009				child->v.skip[0] = 0;
-  1010				child->v.skip[1] = 0;
-  1011				child->v.skip[2] = 0;
-  1012			}
-  1013		}
-  1014	
-  1015		if (!parent_id) {
-  1016			/*
-  1017			 * We're deleting the root of a snapshot tree: update the
-  1018			 * snapshot_tree entry to point to the new root, or delete it if
-  1019			 * this is the last snapshot ID in this tree:
-  1020			 */
-  1021			struct bkey_i_snapshot_tree *s_t;
-  1022	
-  1023			BUG_ON(s.v->children[1]);
-  1024	
-  1025			s_t = bch2_bkey_get_mut_typed(trans, &tree_iter,
-  1026					BTREE_ID_snapshot_trees, POS(0, le32_to_cpu(s.v->tree)),
-  1027					0, snapshot_tree);
-  1028			ret = PTR_ERR_OR_ZERO(s_t);
-  1029			if (ret)
-  1030				goto err;
-  1031	
-  1032			if (s.v->children[0]) {
-  1033				s_t->v.root_snapshot = s.v->children[0];
-  1034			} else {
-  1035				s_t->k.type = KEY_TYPE_deleted;
-  1036				set_bkey_val_u64s(&s_t->k, 0);
-  1037			}
-  1038		}
-  1039	
-  1040		ret = bch2_btree_delete_at(trans, &iter, 0);
-  1041	err:
-  1042		bch2_trans_iter_exit(trans, &tree_iter);
-  1043		bch2_trans_iter_exit(trans, &p_iter);
-  1044		bch2_trans_iter_exit(trans, &c_iter);
-  1045		bch2_trans_iter_exit(trans, &iter);
-  1046		return ret;
-  1047	}
-  1048	
+  4959	
+> 4960	SYSCALL_DEFINE5(statmnt, u64, mnt_id,
+  4961			u64, mask, struct statmnt __user *, buf,
+  4962			size_t, bufsize, unsigned int, flags)
+  4963	{
+  4964		struct vfsmount *mnt;
+  4965		int err;
+  4966	
+  4967		if (flags)
+  4968			return -EINVAL;
+  4969	
+  4970		down_read(&namespace_sem);
+  4971		mnt = lookup_mnt_in_ns(mnt_id, current->nsproxy->mnt_ns);
+  4972		err = -ENOENT;
+  4973		if (mnt) {
+  4974			struct stmt_state s = {
+  4975				.mask = mask,
+  4976				.buf = buf,
+  4977				.bufsize = bufsize,
+  4978				.mnt = mnt,
+  4979				.pos = sizeof(*buf),
+  4980			};
+  4981	
+  4982			get_fs_root(current->fs, &s.root);
+  4983			err = do_statmnt(&s);
+  4984			path_put(&s.root);
+  4985		}
+  4986		up_read(&namespace_sem);
+  4987	
+  4988		return err;
+  4989	}
+  4990	
 
 -- 
 0-DAY CI Kernel Test Service
