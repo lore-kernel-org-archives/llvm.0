@@ -1,71 +1,112 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17B62E685
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 16:34:32 +0000 (UTC)
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4121b5334f3so6985141cf.0
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 09:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694709271; x=1695314071; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XASZo9YTM/nTEYGFKuVlo/54fQU/sete5YVGxHMmtGE=;
-        b=d2iPirXJkMKBJmJCliWxf8dgS0klwVPNGmrTG6/n2RpZ/13yBHHkQOAjYOTPKfX4d/
-         WHT6OcgS7ikc4km5NezznJVgGXXbIIHezYWRRtF0L1GlcgMPHSCtpsXrX4TIRyQXjR8b
-         eNZNNwrO4+QZBxV3S4l2oYTSLYs3cHJUq49MDZBrah9G0j7/BDBSFNgiOZmYFMOtkD7T
-         ly0UfaOPebRTuLdd845Fuw+0BpQLEKOhP5ua2kRlOxqkOrMIcLGRx117lPqXYDIFIXH9
-         mDVwBy2WnPhgYhEzzGm9gHVyUfM9Yr0JqpVjJy5fiCpJUlRhPFD1S8lQAHzzT4zEyvAX
-         i7iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694709271; x=1695314071;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XASZo9YTM/nTEYGFKuVlo/54fQU/sete5YVGxHMmtGE=;
-        b=SurKdTqwWLNTKTcr63hDzbUouLmFDPBOkWc6+buShM1VEKWOSxsE1V7xHCpat2kuI2
-         XMX6QFLSzOn2QC+VuypQF+jp5EzqU27Rm1uSY7RWOGNNkTOLzzTG/VnEvncqFmeRLpXT
-         +Q6/5Go/ru0ee0FS8x54qQPoTGr2dv4YS9gg2dFcSbv6V+v3bZH1fDUzm/yIx1PCQSCf
-         aQjIWHSWm/1pRlpj4JAwJOzoCZ62SOLrU/KvgGjcQeCT2aaO0axqaI3OSufdP1xGx6Un
-         DlbBadYkBmd1wMdppx+YTuDPP0UAM3qon1ZfZ4Bl8Tm7s8Rt7XMQxIvfIuC3xikY0+z+
-         uYYw==
-X-Gm-Message-State: AOJu0Yxj+HXBGmnLJRUolG95WaS1EOthSKy5cm1KxtXAptKeoz4dyi1Z
-	gxH0N33UiBPqiQdo/bFj7HED0Qo7VH494h/nHjL/3g==
-X-Google-Smtp-Source: AGHT+IHg7UmjBEGVkEhvOpg5Q7l9qEP6HqefOiFuxlirIIM6Mj2/H8NYbCInlRHktmnsTl9fFeuW1sLvb4zQBpyU210=
-X-Received: by 2002:a05:6214:12e:b0:64f:59b8:cfd9 with SMTP id
- w14-20020a056214012e00b0064f59b8cfd9mr5860447qvs.18.1694709271421; Thu, 14
- Sep 2023 09:34:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FB621355
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 17:01:58 +0000 (UTC)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38E8WM3L014633
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 10:01:58 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t3xraumfd-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 10:01:57 -0700
+Received: from twshared24695.38.frc1.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 14 Sep 2023 10:01:54 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+	id D443F2458D1EB; Thu, 14 Sep 2023 10:01:50 -0700 (PDT)
+From: Song Liu <song@kernel.org>
+To: <linux-kernel@vger.kernel.org>
+CC: <ndesaulniers@google.com>, Song Liu <song@kernel.org>,
+        Ricardo Ribalda
+	<ribalda@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, <kexec@lists.infradead.org>,
+        <x86@kernel.org>, <llvm@lists.linux.dev>
+Subject: [PATCH v3] x86/purgatory: Remove LTO flags
+Date: Thu, 14 Sep 2023 10:01:38 -0700
+Message-ID: <20230914170138.995606-1-song@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230908231244.1092614-1-song@kernel.org> <CAPhsuW5Xy_K=6u4s=pNAZ8+eGBtX8v16Fr+9quL-FftEu+DWOA@mail.gmail.com>
-In-Reply-To: <CAPhsuW5Xy_K=6u4s=pNAZ8+eGBtX8v16Fr+9quL-FftEu+DWOA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 14 Sep 2023 09:34:17 -0700
-Message-ID: <CAKwvOdk6FeQjbh7b5K4pps50HZa6Riw6o7huGKzYcHFk_R8MLg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/purgatory: Remove LTO flags
-To: Song Liu <song@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, kexec@lists.infradead.org, x86@kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: A2WxpgtsoNZh_TfcmsHJVwzR6jWLI6xP
+X-Proofpoint-GUID: A2WxpgtsoNZh_TfcmsHJVwzR6jWLI6xP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-14_09,2023-09-14_01,2023-05-22_02
 
-On Thu, Sep 14, 2023 at 9:31=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> What would be the next step for this work? We hope to back port it
-> to our production kernel soon.
+-flto* implies -ffunction-sections. With LTO enabled, ld.lld generates
+multiple .text sections for purgatory.ro:
 
-Please send a v3 with the fixes tag updated.  I wouldn't mind if you
-added a comment to the commit message to the effect of:
+$ readelf -S purgatory.ro  | grep " .text"
+  [ 1] .text             PROGBITS         0000000000000000  00000040
+  [ 7] .text.purgatory   PROGBITS         0000000000000000  000020e0
+  [ 9] .text.warn        PROGBITS         0000000000000000  000021c0
+  [13] .text.sha256_upda PROGBITS         0000000000000000  000022f0
+  [15] .text.sha224_upda PROGBITS         0000000000000000  00002be0
+  [17] .text.sha256_fina PROGBITS         0000000000000000  00002bf0
+  [19] .text.sha224_fina PROGBITS         0000000000000000  00002cc0
 
-We could also add the use of an explicit linker script to rejoin
-.text.* sections back into .text.  Simply disable the production of
-more .text.* sections for now; -flto* implies -ffunction-sections.
+This cause WARNING from kexec_purgatory_setup_sechdrs():
 
+WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
+kexec_load_purgatory+0x37f/0x390
+
+Fix this by disabling LTO for purgatory.
+
+We could also fix this with an explicit linker script to rejoin .text.*
+sections back into .text. However, given the benefit of LTOing pugatory
+is small, simply disable the production of more .text.* sections for now.
+
+Fixes: b33fff07e3e3 ("x86, build: allow LTO to be selected")
+Cc: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: kexec@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: x86@kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Song Liu <song@kernel.org>
+
+---
+AFAICT, x86 is the only arch that supports LTO and purgatory.
+
+Changes in v3:
+1. Fix "Fixes" tag. (Nick Desaulniers)
+2. Add description of an alternative fix, with linker script.
+   (Nick Desaulniers)
+
+Changes in v2:
+1. Use CC_FLAGS_LTO instead of hardcode -flto. (Nick Desaulniers)
+---
+ arch/x86/purgatory/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index c2a29be35c01..08aa0f25f12a 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -19,6 +19,10 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS -D__NO_FORTIF=
+Y
+ # optimization flags.
+ KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=3D=
+%,$(KBUILD_CFLAGS))
+=20
++# When LTO is enabled, llvm emits many text sections, which is not suppo=
+rted
++# by kexec. Remove -flto=3D* flags.
++KBUILD_CFLAGS :=3D $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
++
+ # When linking purgatory.ro with -r unresolved symbols are not checked,
+ # also link a purgatory.chk binary without -r to check for unresolved sy=
+mbols.
+ PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
 --=20
-Thanks,
-~Nick Desaulniers
+2.34.1
+
