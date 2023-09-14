@@ -1,49 +1,51 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57B41F60E
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 21:19:57 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59c0327b75dso7320707b3.2
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 14:19:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490D326E14
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 21:20:00 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d81841ef79bso1768962276.1
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 14:20:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694726397; x=1695331197; darn=lists.linux.dev;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gyCa8y2D4tfagLdEhZkffRRlznGd/QDpuIxcjKD4E/c=;
-        b=lRpGLfS8hMhpGJIqCvEyuEZ+mmAEetCUbeEybTOWBpyIoWGwDS+IxebOQaa7+P+WJP
-         h1eo/kMb/xTO48QHJG4Ths+VOZMrHFLl+VUZi+4y9Fzt8IHOfH4H41YAtSEur3eTaUMc
-         SfizOa42hzmlAe9p7CQSYWVer3SNPsT2Kq2HjMo3XCHOzpCC2uUVthmAFox47QIudHPA
-         3TE+QtrqdjH9ztllDtfjLyCsYCSH0Nzl/7iqsVpNBaiyx3ShydetLFFVkOpWq5XOxfPw
-         Ft87yX7z/dsEBF7PwKsKWXRW8rzmDn0qbzTfk7yVlsgE3PExE6hBVDCUd0y3D6VSMIcM
-         xw7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694726397; x=1695331197;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20230601; t=1694726399; x=1695331199; darn=lists.linux.dev;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gyCa8y2D4tfagLdEhZkffRRlznGd/QDpuIxcjKD4E/c=;
-        b=lnMEVzYowFgfKwehVrzbxC9B0KL1DLMhjquajGrMs6Gm3KwPbqE6OBXO0CCL90vjCO
-         ETCQbN0I5UGwBbbIrcNO3QRNiNigrUa1GrE7PtG1Fq8dROH7ndRDi1jCH/0fv3NUyPKl
-         x1CfZFFjaZAVJIlhZI8r9ELvtjDj/cTI+SFoAxOge5/Q+Qxsg2gRr2w3qnLhYdLNkO78
-         eRu4VxQKzCmIAkXiqJZ6d38dRUalFWR/peSX7YlQ1CYruWiQauobZ7bKnj0Kbmww0qrN
-         rJUdnOFSzHaI2Mj9+FNP+4jatmIUGyv7pkYyJkXKZG5HhadYcsF+MftT87/Myvvownlb
-         KDMA==
-X-Gm-Message-State: AOJu0Yw2Kw4MJrVy3X/gGEaULlPu6b5Wl/H8MzgRTkdJ6wrNppI2qGPI
-	iKaF/8vC/XXmVu40fmO3d+yijnpkhvi6
-X-Google-Smtp-Source: AGHT+IFICCNKx7p+w3Fwj7ubun2Y+fAPBczDWbh5iaJborCvmiUiAZpQehTzmuFkOiLw/9n5Yvv+V5nsTa3o
+        bh=H3jVQnyzaN1ERNCJQeHBDC5w9lFgMjdheWTQKUJ7noQ=;
+        b=pMky9gOk8qc+R/mQMp9zF4YYkaTWKM6tjgqjpO+YtXmYiAUcfs7FjZACD5Bj7Cx5xb
+         ZVA1/Jd8JxUbSAc5kovBGnWZP7Dbn5xmUu5mCGWbRbcW8QEm4KzKJrrmF/HU+5UrhIhz
+         q7/elRAqq53IMoQ9L1nQMoXGn/5qERwiDFJHS4WpjBYEASyRItcU+b0ofQveT5toCuqI
+         KB6z01yU5L1WC8wE/MPb/SBEmyuC/rGeTpRRRJ9MPzXGvIDjAWxfH8AUc4fuVi1EpQZH
+         eBphkhNy3rEWTD7GZGTqqig4T4UnZH9l6Axzg4olJtR9gmInw3HeXQVIkJ37pL3tEbLA
+         JnGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694726399; x=1695331199;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3jVQnyzaN1ERNCJQeHBDC5w9lFgMjdheWTQKUJ7noQ=;
+        b=HHb/12FpmVimO0zBczKLhpgsYYitBINR2HktDqgbLND2SRTEt+RxSopskiQHACP86u
+         ViW1o9PjuwfWT9kK1mCEXGRHZn5OlA5V7VgdQypgOpcR7+dFAUrfsZnSP5wt4+frOI9T
+         DlPd6C3qv+fP6qP5b26T/9i2YW9xuLPGmKp3+tUAYMV0Vyn1YvdOSqP5lHWzSjY4Pt4x
+         Vwfr67XXa3FItUgE/7oRdmZ4mka7IobUaXls5K0KJKauklfwBPgUbDd02EtJ/Qok0Ngf
+         iKkvO0f3ilLc/EOJXY5Yf8LtvRYPTj6/ISU97uNpU2SX3W2FHBjsMrL6TcQFVCzAlZMF
+         lFqg==
+X-Gm-Message-State: AOJu0YynqAzv3QLCw9cutSKML2OJmLIwwpuuhg5gU/jmWzwJ2Sp8rBXe
+	pQ1GfQKUQZdTqai9/mhs25Z9gHx7IkGd
+X-Google-Smtp-Source: AGHT+IFf8LiHETjdJOMkgyABGonPNfygVlLPcRmeIzrdeNSCgieUQG/MM4JXzNQp5a4GH33BKmh9TwiXvCaP
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:5357:1d03:3084:aacb])
- (user=irogers job=sendgmr) by 2002:a05:690c:a8a:b0:59b:c6bb:babb with SMTP id
- ci10-20020a05690c0a8a00b0059bc6bbbabbmr148679ywb.6.1694726397030; Thu, 14 Sep
- 2023 14:19:57 -0700 (PDT)
-Date: Thu, 14 Sep 2023 14:19:43 -0700
-Message-Id: <20230914211948.814999-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a05:6902:1102:b0:d0b:d8cd:e661 with SMTP
+ id o2-20020a056902110200b00d0bd8cde661mr203768ybu.12.1694726399348; Thu, 14
+ Sep 2023 14:19:59 -0700 (PDT)
+Date: Thu, 14 Sep 2023 14:19:44 -0700
+In-Reply-To: <20230914211948.814999-1-irogers@google.com>
+Message-Id: <20230914211948.814999-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20230914211948.814999-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Subject: [PATCH v1 0/5] Enable BPF skeletons by default
+Subject: [PATCH v1 1/5] perf version: Add status of bpf skeletons
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -58,44 +60,52 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	bpf@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Enable BPF skeletons by default but warn don't fail if they can't be
-supported. This was the intended behavior for Linux 6.4 but it caused
-an issue captured in this thread:
-https://lore.kernel.org/lkml/20230503211801.897735-1-acme@kernel.org/
+Add status for BPF skeletons, to see if a build has them enabled:
+```
+$ perf version --build-options
+perf version 6.6.rc1.g0381ae36d1a6
+                 dwarf: [ OFF ]  # HAVE_DWARF_SUPPORT
+    dwarf_getlocations: [ OFF ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+                libbfd: [ OFF ]  # HAVE_LIBBFD_SUPPORT
+            debuginfod: [ OFF ]  # HAVE_DEBUGINFOD_SUPPORT
+                libelf: [ OFF ]  # HAVE_LIBELF_SUPPORT
+               libnuma: [ OFF ]  # HAVE_LIBNUMA_SUPPORT
+numa_num_possible_cpus: [ OFF ]  # HAVE_LIBNUMA_SUPPORT
+               libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+             libunwind: [ OFF ]  # HAVE_LIBUNWIND_SUPPORT
+    libdw-dwarf-unwind: [ OFF ]  # HAVE_DWARF_SUPPORT
+                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+                   bpf: [ OFF ]  # HAVE_LIBBPF_SUPPORT
+                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+               libpfm4: [ on  ]  # HAVE_LIBPFM
+         libtraceevent: [ on  ]  # HAVE_LIBTRACEEVENT
+         bpf_skeletons: [ OFF ]  # HAVE_BPF_SKEL
+```
 
-This issue isn't repeated here as the previous issue related to
-generating vmlinux.h, which is no longer performed by default as a
-checked-in vmlinux.h is used instead.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-version.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Unlike with those changes, the BUILD_BPF_SKEL is kept and setting it
-to 0 disables BPF skeletons. Also, rather than fail the build due to a
-missed dependency, dependencies are checked and BPF skeletons disabled
-if they aren't present.
-
-Some related commits:
-b7a2d774c9c5 perf build: Add ability to build with a generated vmlinux.h
-a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use subset of used structs + CO-RE
-a2af0f6b8ef7 perf build: Add system include paths to BPF builds
-5be6cecda080 perf bpf skels: Make vmlinux.h use bpf.h and perf_event.h in source directory
-9a2d5178b9d5 Revert "perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL"
-a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use subset of used structs + CO-RE
-1d7966547e11 perf build: Add warning for when vmlinux.h generation fails
-a980755beb5a perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
-
-Ian Rogers (5):
-  perf version: Add status of bpf skeletons
-  perf build: Default BUILD_BPF_SKEL, warn/disable for missing deps
-  perf test: Update build test for changed BPF skeleton defaults
-  perf test: Ensure EXTRA_TESTS is covered in build test
-  perf test: Detect off-cpu support from build options
-
- tools/perf/Makefile.config              | 78 ++++++++++++++++---------
- tools/perf/Makefile.perf                |  8 +--
- tools/perf/builtin-version.c            |  1 +
- tools/perf/tests/make                   |  7 ++-
- tools/perf/tests/shell/record_offcpu.sh |  2 +-
- 5 files changed, 59 insertions(+), 37 deletions(-)
-
+diff --git a/tools/perf/builtin-version.c b/tools/perf/builtin-version.c
+index e5859c70e195..ac20c2b9bbc2 100644
+--- a/tools/perf/builtin-version.c
++++ b/tools/perf/builtin-version.c
+@@ -81,6 +81,7 @@ static void library_status(void)
+ 	STATUS(HAVE_ZSTD_SUPPORT, zstd);
+ 	STATUS(HAVE_LIBPFM, libpfm4);
+ 	STATUS(HAVE_LIBTRACEEVENT, libtraceevent);
++	STATUS(HAVE_BPF_SKEL, bpf_skeletons);
+ }
+ 
+ int cmd_version(int argc, const char **argv)
 -- 
 2.42.0.459.ge4e396fd5e-goog
 
