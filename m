@@ -1,125 +1,116 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DD7224F2
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 09:52:34 +0000 (UTC)
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5009d4a4897so1310903e87.0
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 02:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694685153; x=1695289953; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GN8ytPq7BJ4KPt7TJ0dTMIMvhtcsDk2MyD/gO1nB0y4=;
-        b=OuBMvlvIS461IRXEqbgNFEHIE/ixpbAEhfyqNv7V3cjEYglN2QWL4hRD6dT64aDDYz
-         MN3ypTlNsQIQZI//HdeklDyl/KQBSE+40kPcHd5sDjW2jjUur4WPV94fM1ZBU/4kAYvp
-         FyCRTYAPGsAO7y2ylN/URO7gQGfcmsoEMtN2umEho6eMEU74EVO2AMnSyxjgs8SCBiuy
-         LVmsJkExQmFq0bRogbwMfAdFOZf64RNiFS29CvBUruC3fWXh5U2Xbi1BLfKWPVic/gcz
-         SdM9PAfpSqmW/CFr068QaR0nZDqrZXjzfQzHtKT4QUt6Bq5LTvAsYVEAXJSzH4DsKSm8
-         j81w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694685153; x=1695289953;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GN8ytPq7BJ4KPt7TJ0dTMIMvhtcsDk2MyD/gO1nB0y4=;
-        b=q1Pggy4oM+Q77BCJ5WtZVe72FZUtgCgM5fCzUmYKp0pLYEKpvcy1GQJtyqkWgb3o7B
-         SYoQK6/npQZnCO7aw/cbeLWXg8/fB22QHaHNc81yqwb3NF0VwPUrs3gMxqhSBQgVBW3L
-         dlb2Bpv8kIPrG8Tf+8DpHK2/mZmtVOqjpBGzAAxzbDQWt6eFgKZsv6Uxm4VKe1CK/43x
-         t/Z9VN9Z7PeLTXDnELDeP4ouQwEf5hWStEwm3h+aEYoZrb9Qhp7Xzw/p+X2e9ew3Caxx
-         Nw3iojbB0YuFPSbd8hYUkIm+OOglyTiaeHxgiR0fBWyP5yPhxRRopRJWskNpeA2AkDNn
-         +lgA==
-X-Gm-Message-State: AOJu0Yzt9yw8B7smImXPM602xdkQ/RHsjxw+E1RcX5OD0EUY+ceHgyTG
-	aauCCdxZzZtKwq/I5NSyU70=
-X-Google-Smtp-Source: AGHT+IGeOefCnnsoPvyMmIk0zg+5/TvlLnDgZJwi/81IC5W9Bi2z9/z9bJQiU3/JuL3fhkRMZtSynw==
-X-Received: by 2002:a05:6512:3b0d:b0:501:c406:c296 with SMTP id f13-20020a0565123b0d00b00501c406c296mr5239850lfv.31.1694685152802;
-        Thu, 14 Sep 2023 02:52:32 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id i3-20020aa7c703000000b0051dfa2e30b2sm704330edq.9.2023.09.14.02.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 02:52:32 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 14 Sep 2023 11:52:30 +0200
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Marcus Seyfarth <m.seyfarth@gmail.com>, bpf <bpf@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Stanislav Fomichev <sdf@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>
-Subject: Re: duplicate BTF_IDs leading to symbol redefinition errors?
-Message-ID: <ZQLX3oSCk95Qf4Ma@krava>
-References: <CAKwvOdnaEakT_y8TA9b_nMY3kMp=xxqKpGQPc2drNqRdV39RQw@mail.gmail.com>
- <ZPozfCEF9SV2ADQ5@krava>
- <ZPsJ4AAqNMchvms/@krava>
- <CAKwvOd==X0exrhmsqX1j1WFX77xe8W7xPbfiCY+Rt6abgmkMCQ@mail.gmail.com>
- <ZPuA5+HmbcdBLbIq@krava>
- <ZQLBm8sC+V53CIzD@krava>
- <CAK7LNATiHvOXiWQi9gXJO9rZbT_MFm6NddaWqoY4ykNWf+OYsQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A5D328CF
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 16:31:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC31FC433D9
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 16:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694709072;
+	bh=yK9wOyly7qXn00unB+iWDobdGAfW+ysMR294jVlJehY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YnPF73tA4FJIt1zHgix/GbKseAd2p1qSvJtvFEtLKU3tglVfdtSVXz45R90EkROQz
+	 4DpirqdSNTq64df/D8anke/yvRlxoNEUDu6aYxjnyf/Z4JUO9LnCsZyYHmiNwgiMcl
+	 5IHyGhGtTIOsXVfp3AD3GwKvno+ZwQOi+qR6VWpQzoWEZVywa6c35nRqcoNhN4VWYA
+	 /D479EcO6+Df3QjJVMxfSgNkUz4ldk4Dp1pbDkeAG5mCGwgVWRYgOavhfoCQE6MtkC
+	 2uV3mPcZf7JO5x//6SjPYIaphF1Hg5cdZ+WD+0lZMajeZUHbBOuVZHsm1/woQ9/MyH
+	 wCdJ6RKgfup4Q==
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2bfb1167277so18765931fa.2
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 09:31:12 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxTXyz3kahzWPjSakosFXOAOZM49moyVlpf2URKEAR+w8h4cFeM
+	0T8Gq2BkZWl56cacHEsN+g6Rde7DXcxkLT+SMNY=
+X-Google-Smtp-Source: AGHT+IEyDvQTasFSMTuQOc1lTVEzqzqm8NEorFEDvZRS+lGp6oHxPgR0Z57DdvNG5dUkvLYrxKYK4WrAwjGHajHGftg=
+X-Received: by 2002:a2e:3012:0:b0:2b9:aa4d:3719 with SMTP id
+ w18-20020a2e3012000000b002b9aa4d3719mr5166010ljw.12.1694709070929; Thu, 14
+ Sep 2023 09:31:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNATiHvOXiWQi9gXJO9rZbT_MFm6NddaWqoY4ykNWf+OYsQ@mail.gmail.com>
+References: <20230908231244.1092614-1-song@kernel.org>
+In-Reply-To: <20230908231244.1092614-1-song@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Thu, 14 Sep 2023 09:30:56 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5Xy_K=6u4s=pNAZ8+eGBtX8v16Fr+9quL-FftEu+DWOA@mail.gmail.com>
+Message-ID: <CAPhsuW5Xy_K=6u4s=pNAZ8+eGBtX8v16Fr+9quL-FftEu+DWOA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/purgatory: Remove LTO flags
+To: linux-kernel@vger.kernel.org
+Cc: ndesaulniers@google.com, Ricardo Ribalda <ribalda@chromium.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, kexec@lists.infradead.org, x86@kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 14, 2023 at 05:30:51PM +0900, Masahiro Yamada wrote:
+Hi folks,
 
-SNIP
+On Fri, Sep 8, 2023 at 4:13=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+>
+> With LTO enabled, ld.lld generates multiple .text sections for
+> purgatory.ro:
+>
+> $ readelf -S purgatory.ro  | grep " .text"
+>   [ 1] .text             PROGBITS         0000000000000000  00000040
+>   [ 7] .text.purgatory   PROGBITS         0000000000000000  000020e0
+>   [ 9] .text.warn        PROGBITS         0000000000000000  000021c0
+>   [13] .text.sha256_upda PROGBITS         0000000000000000  000022f0
+>   [15] .text.sha224_upda PROGBITS         0000000000000000  00002be0
+>   [17] .text.sha256_fina PROGBITS         0000000000000000  00002bf0
+>   [19] .text.sha224_fina PROGBITS         0000000000000000  00002cc0
+>
+> This cause WARNING from kexec_purgatory_setup_sechdrs():
+>
+> WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
+> kexec_load_purgatory+0x37f/0x390
+>
+> Fix this by disabling LTO for purgatory.
+>
+> Fixes: 8652d44f466a ("kexec: support purgatories with .text.hot sections"=
+)
+> Cc: Ricardo Ribalda <ribalda@chromium.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: kexec@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: x86@kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Song Liu <song@kernel.org>
 
-> > > so the change is about adding unique id that's basically path of
-> > > the object stored in base32 so it could be used as symbol, so we
-> > > don't really need to read the actual file
-> > >
-> > > the problem is when BTF_ID definition like:
-> > >
-> > > BTF_ID(struct, cgroup)
-> > >
-> > > translates in 2 separate objects into same symbol name because of
-> > > the matching __COUNTER__ macro values (like 380 below)
-> > >
-> > >   __BTF_ID__struct__cgroup__380
-> > >
-> > > this change just adds unique id of the path name at the end of the
-> > > symbol with:
-> > >
-> > >   echo -n 'kernel/bpf/helpers' | base32 -w0 --> NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
-> > >
-> > > so the symbol looks like:
-> > >
-> > >   __BTF_ID__struct__cgroup__380NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
-> > >
-> > > and is unique over the sources
-> > >
-> > > but I still hope we could come up with some better solution ;-)
-> >
-> > so far the only better solution I could come up with is to use
-> > cksum (also from coreutils) instead of base32, which makes the
-> > BTF_ID_BASE value compact
-> >
-> > I'll run test to find out how much it hurts the build time
-> >
-> > jirka
-> 
-> 
-> 
-> Seems a bad idea to me.
-> 
-> It would fork a new shell and chsum for all files,
-> while only a few of them need it.
+What would be the next step for this work? We hope to back port it
+to our production kernel soon.
 
-right, I have a change to limit this on kernel and net directories,
-but it's still bad
+Thanks,
+Song
 
-> 
-> Better to consult BTF forks.
-
-perhaps there's better way within kbuild to get unique id/value
-for each object file?
-
-thanks,
-jirka
+>
+> ---
+> AFAICT, x86 is the only arch that supports LTO and purgatory.
+>
+> Changes in v2:
+> 1. Use CC_FLAGS_LTO instead of hardcode -flto. (Nick Desaulniers)
+> ---
+>  arch/x86/purgatory/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index c2a29be35c01..08aa0f25f12a 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -19,6 +19,10 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS -D__NO_FORTIF=
+Y
+>  # optimization flags.
+>  KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
+=3D%,$(KBUILD_CFLAGS))
+>
+> +# When LTO is enabled, llvm emits many text sections, which is not suppo=
+rted
+> +# by kexec. Remove -flto=3D* flags.
+> +KBUILD_CFLAGS :=3D $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
+> +
+>  # When linking purgatory.ro with -r unresolved symbols are not checked,
+>  # also link a purgatory.chk binary without -r to check for unresolved sy=
+mbols.
+>  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+> --
+> 2.34.1
+>
