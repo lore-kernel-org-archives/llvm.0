@@ -1,222 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339CA388;
-	Thu, 14 Sep 2023 01:28:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694654888; x=1726190888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KUZZZootIzMTjL3t3FoSdrqHXOcpL2Kjq549EzIG2Bk=;
-  b=d4ToUwSyCxvGeOC+c6TvOagxoKSkVRwnrMnn+motX3HsZeu40PMpfbBL
-   r8j44bt/MVEF++EN4zMyDl6RsAFN3Ec/E8iGauSPUmyP/YtmPi98mO780
-   jZEQz90bPX/B4Xf9MPcFQ3UdbvafIOlype5EM/VPRUxqwy4lYSf9TnaUY
-   gBugnj1LzFgfCcPGjpPjD+idM3/vx1e3KmucIU5P/LjTlyVYRyp8O4O70
-   CGL3rwPxdZDR9kjDc0M9lBt3snivXhN1D7eX0ZgqJwwfKSPwzgsqlT0Uo
-   ByWRRdWCO+pe+aAgWm4Sy0onYwrJLVDS8895M5pzenjdjd++oLCAyW7Sc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="363864226"
-X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="363864226"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:28:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="814470949"
-X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="814470949"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2023 18:28:02 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qgb9D-0000wC-2h;
-	Thu, 14 Sep 2023 01:27:59 +0000
-Date: Thu, 14 Sep 2023 09:27:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miklos Szeredi <mszeredi@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/3] add statmnt(2) syscall
-Message-ID: <202309140946.BQUL96wT-lkp@intel.com>
-References: <20230913152238.905247-3-mszeredi@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3FC398
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 04:51:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694667086;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n0fvy01lBe9m2JtkAmh0hida4JoqiTuIKe566prxUWw=;
+	b=FYf0Nk6FX0dcvZA5Fnpu7PsCoBdsp8iuJs4ehdOTZ5mHG8QnGWs45pnP13bleqVtj5/1bz
+	s7k5NYa7QWbo/XTCD9WTClUJlf9iXNcAQdADnPDws4vsnj733wAINaqwzejx4PnF8o1DZL
+	S+R2UaK07W1uq/5AOEVtDofzlTYeOPY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-kuXyxOUUP3KruVNMADC0JQ-1; Thu, 14 Sep 2023 00:51:23 -0400
+X-MC-Unique: kuXyxOUUP3KruVNMADC0JQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40704101A550
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 04:51:23 +0000 (UTC)
+Received: from [172.64.4.92] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2CF232156721;
+	Thu, 14 Sep 2023 04:51:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 234): Test report for master
+ (6.6.0-rc1, mainline.kernel.org-clang, 23f108dc)
+Date: Thu, 14 Sep 2023 04:51:23 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913152238.905247-3-mszeredi@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <79149.123091400512300155@us-mta-141.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Miklos,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/x86/asm]
-[also build test ERROR on linux/master linus/master v6.6-rc1 next-20230913]
-[cannot apply to arnd-asm-generic/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Miklos-Szeredi/add-unique-mount-ID/20230913-232732
-base:   tip/x86/asm
-patch link:    https://lore.kernel.org/r/20230913152238.905247-3-mszeredi%40redhat.com
-patch subject: [RFC PATCH 2/3] add statmnt(2) syscall
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230914/202309140946.BQUL96wT-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309140946.BQUL96wT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309140946.BQUL96wT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:90:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:90:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:90:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from fs/namespace.c:11:
-   include/linux/syscalls.h:412:15: warning: declaration of 'struct statmnt' will not be visible outside of this function [-Wvisibility]
-     412 |                             struct statmnt __user *buf, size_t bufsize,
-         |                                    ^
-   fs/namespace.c:4690:18: warning: no previous prototype for function 'lookup_mnt_in_ns' [-Wmissing-prototypes]
-    4690 | struct vfsmount *lookup_mnt_in_ns(u64 id, struct mnt_namespace *ns)
-         |                  ^
-   fs/namespace.c:4690:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    4690 | struct vfsmount *lookup_mnt_in_ns(u64 id, struct mnt_namespace *ns)
-         | ^
-         | static 
-   fs/namespace.c:4750:10: error: unknown type name 'stmt_str_t'
-    4750 |                        stmt_str_t *str)
-         |                        ^
->> fs/namespace.c:4960:1: error: conflicting types for 'sys_statmnt'
-    4960 | SYSCALL_DEFINE5(statmnt, u64, mnt_id,
-         | ^
-   include/linux/syscalls.h:223:36: note: expanded from macro 'SYSCALL_DEFINE5'
-     223 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:230:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   include/linux/syscalls.h:244:18: note: expanded from macro '__SYSCALL_DEFINEx'
-     244 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-         |                         ^
-   <scratch space>:99:1: note: expanded from here
-      99 | sys_statmnt
-         | ^
-   include/linux/syscalls.h:411:17: note: previous declaration is here
-     411 | asmlinkage long sys_statmnt(u64 mnt_id, u64 mask,
-         |                 ^
-   14 warnings and 2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/sys_statmnt +4960 fs/namespace.c
+Kernel information:
+    Commit message: Merge tag 'tpmdd-v6.6-rc2' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/jarkko/linux-tpmdd
 
-  4959	
-> 4960	SYSCALL_DEFINE5(statmnt, u64, mnt_id,
-  4961			u64, mask, struct statmnt __user *, buf,
-  4962			size_t, bufsize, unsigned int, flags)
-  4963	{
-  4964		struct vfsmount *mnt;
-  4965		int err;
-  4966	
-  4967		if (flags)
-  4968			return -EINVAL;
-  4969	
-  4970		down_read(&namespace_sem);
-  4971		mnt = lookup_mnt_in_ns(mnt_id, current->nsproxy->mnt_ns);
-  4972		err = -ENOENT;
-  4973		if (mnt) {
-  4974			struct stmt_state s = {
-  4975				.mask = mask,
-  4976				.buf = buf,
-  4977				.bufsize = bufsize,
-  4978				.mnt = mnt,
-  4979				.pos = sizeof(*buf),
-  4980			};
-  4981	
-  4982			get_fs_root(current->fs, &s.root);
-  4983			err = do_statmnt(&s);
-  4984			path_put(&s.root);
-  4985		}
-  4986		up_read(&namespace_sem);
-  4987	
-  4988		return err;
-  4989	}
-  4990	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/104300
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9505482
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
