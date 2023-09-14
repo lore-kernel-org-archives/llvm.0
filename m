@@ -1,140 +1,116 @@
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25991C2A1
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 17:22:27 +0000 (UTC)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-64aaf3c16c2so7025146d6.3
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 10:22:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633D510A2F
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 17:41:41 +0000 (UTC)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-65627d49d24so3315856d6.2
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 10:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694712146; x=1695316946; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1694713300; x=1695318100; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A8eQORumJtaroUI8JT9bu5D1IY7lPGvpUmpxNHPhsvg=;
-        b=cicS9qJZ3zAIBa6W/MJG8zw66eH0w9o8q/iLroc6ZOcz4MSZxJ/dOywYwMW0L9oymX
-         /0YiYF5Flfw4ZpFlTYLMVjd7N8MPlzybxItRfrIC882/096SJGOdvO1ZR7TthsCD4wiF
-         NSjrimjAUwPF9R99Rfr9ee/YOUyqPGMfgjw/QDO+lHkRHi7+ma8hhRRlCXEiEkLkczfy
-         6To5wTdqYldaDelWfXDNQofo3glvUM7zaMN618NtvcfCga/ClAaHEqIoix39DzkUBoVl
-         sMKTNj3baukWLBE5H0MxsQBqJ5x/8h0i4eHtbgx3Lio0eLOeHexC7KzZgtVRH8umueBg
-         SQMQ==
+        bh=8/EpZ1GWHc4x/nG0Kx2s7S+DQIRkgyoK7g5ng753eM0=;
+        b=qxFGa1BELA32X6kevhoSIEIEXahZlqJlMQT/txfZwI3EVBQNWWwVse12QjPiIMeeH1
+         LLPZBaZh/g8l/pBdFac8VVyHIheOXZNV/qU6oZW6XC2dh/4mpDZ8HgbBnkwZBSP2pKKb
+         8CZgvvOgLZDp7LZ/qDYDlpUxt/mQ6ooLXc0HAh+XEVgq8qGLvtnpchdMcQowlcYGDs2w
+         qNIdSjZjqpsOFPqG42uwMoPRtK4Z6eC7/Szbz3o6ajThmlh//3UMZ+JBVhWgbWAI2Dbq
+         SawJw9wsrDCXjB6x76oE9s98hSl5yIseWw/H6yLYs5ZgD4o3ExL5Zv5AYiG4K69WHBlC
+         Rvtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694712146; x=1695316946;
+        d=1e100.net; s=20230601; t=1694713300; x=1695318100;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A8eQORumJtaroUI8JT9bu5D1IY7lPGvpUmpxNHPhsvg=;
-        b=cinVSyZEk8EGC5eErviqkI6+PV2CgnZbGSeviIXQDhkZLw4vKhNm6UIGi43EO0qckx
-         zE4MH3xL8vDS1YMBhGkZbLCvdJv29BeIAYx4YWBPNiqC9ZEZ4E0wLf1Oeqdjuwh3mM2I
-         faknLpsQlthDAoO9ZXZsR1ZI1lOnSE0Sg4WBYQ2K2+levvYLnEI9RgkUEW21r/pMl4YT
-         6gEaAzBQpbwVMKDc/rMcE2DgFbo3p48+UhivrmtA3JgE8duasLN1ayLtRwE6xccTITio
-         EyoZjj7ZnCh5UeQEj3NtbuvU/8tFuLmPBPxZJAw7fqHKOlvJloKPEQahrNV8RKgSSSJO
-         Dy0A==
-X-Gm-Message-State: AOJu0YzXqBckGuzo4pB7xlUDUmZnCF2NHVelaigNAWred/eswOSj0C55
-	duoOujCrzUhuCgWSvM3jqRvgbSmXfF+DtXfWK7Sq8g==
-X-Google-Smtp-Source: AGHT+IFA5G/u9fTxemIh7ppyemUF4heb6N+w5pTJ0x1vdhIE9rGnXqUnizt0BXWM/DV2ecQatLz805H4QnF5kKUSyAs=
-X-Received: by 2002:ad4:5851:0:b0:63d:7214:638e with SMTP id
- de17-20020ad45851000000b0063d7214638emr7042473qvb.56.1694712146470; Thu, 14
- Sep 2023 10:22:26 -0700 (PDT)
+        bh=8/EpZ1GWHc4x/nG0Kx2s7S+DQIRkgyoK7g5ng753eM0=;
+        b=Gs7YxsrRtXMNZd2COeZE1IQMEmcyOo007J9q0DnSzb13+zU8aD/II/l58y3t7xoLJ7
+         EN/tDXCymk45YUxafhFMBiqi/n5IHgZvEz3KstjRFStzdo+rINsT84B0rsvI5qfyhxln
+         2YpEn2eOPOU46KMiop+YXrmOUJS9bKL/SmsUyHR0TP9U025jP4y0et/jVYZoGVeB6/eJ
+         LF7M4sBsbytJY83canejIvQFF/dVoJoRtu2ZNGk3U4J4IXpZeDuGqspfm7mrTekQEAWV
+         QW/dtGY66mdXVEUAOxpQQK1X9cyGQPFXG72ASOptDsm6VuZNc7GDRBnLldVTcandEYk2
+         olzg==
+X-Gm-Message-State: AOJu0YzKiN+qfuLIaPcN67yyN38CCYgOMh5HG4mjbZr6Dl8jNbV2o7id
+	M6dqw7dqeYdGI7K5LnuvF55K6ehocJHnkklJaHxwWw==
+X-Google-Smtp-Source: AGHT+IGrRQUd9vGZgOD7XJuFKtsEk06aXUbUmblrVes6BRVOnec7PqkFsbqyvZZKUVdAqUve111n932fyZemZTPEoJE=
+X-Received: by 2002:a0c:cc03:0:b0:656:2f3f:852f with SMTP id
+ r3-20020a0ccc03000000b006562f3f852fmr1005291qvk.28.1694713300087; Thu, 14 Sep
+ 2023 10:41:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230914170138.995606-1-song@kernel.org>
-In-Reply-To: <20230914170138.995606-1-song@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 14 Sep 2023 10:22:12 -0700
-Message-ID: <CAKwvOdnisbzAx3eQD_U8gQU05WzuOr48VRJfySu5WRTWZVDiPw@mail.gmail.com>
-Subject: Re: [PATCH v3] x86/purgatory: Remove LTO flags
-To: Song Liu <song@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, kexec@lists.infradead.org, x86@kernel.org, 
-	llvm@lists.linux.dev
+References: <202309141433.6gzJPSYA-lkp@intel.com>
+In-Reply-To: <202309141433.6gzJPSYA-lkp@intel.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 14 Sep 2023 10:41:01 -0700
+Message-ID: <CABCJKuck=4TKdTjKqu6Qd6ZhqrtS+=a=zOz+G=vFuiMoyfXerA@mail.gmail.com>
+Subject: Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against
+ symbol '.L.str.6'; recompile with -fPIC
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>, 
+	Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 14, 2023 at 10:02=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+On Wed, Sep 13, 2023 at 11:14=E2=80=AFPM kernel test robot <lkp@intel.com> =
+wrote:
 >
-> -flto* implies -ffunction-sections. With LTO enabled, ld.lld generates
-> multiple .text sections for purgatory.ro:
+> Hi Sami,
 >
-> $ readelf -S purgatory.ro  | grep " .text"
->   [ 1] .text             PROGBITS         0000000000000000  00000040
->   [ 7] .text.purgatory   PROGBITS         0000000000000000  000020e0
->   [ 9] .text.warn        PROGBITS         0000000000000000  000021c0
->   [13] .text.sha256_upda PROGBITS         0000000000000000  000022f0
->   [15] .text.sha224_upda PROGBITS         0000000000000000  00002be0
->   [17] .text.sha256_fina PROGBITS         0000000000000000  00002bf0
->   [19] .text.sha224_fina PROGBITS         0000000000000000  00002cc0
+> FYI, the error/warning was bisected to this commit, please ignore it if i=
+t's irrelevant.
 >
-> This cause WARNING from kexec_purgatory_setup_sechdrs():
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   aed8aee11130a954356200afa3f1b8753e8a9482
+> commit: 74f8fc31feb4b756814ec0720f48ccdc1175f774 riscv: Allow CONFIG_CFI_=
+CLANG to be selected
+> date:   3 weeks ago
+> config: riscv-randconfig-r002-20230912 (https://download.01.org/0day-ci/a=
+rchive/20230914/202309141433.6gzJPSYA-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
+4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20230914/202309141433.6gzJPSYA-lkp@intel.com/reproduce)
 >
-> WARNING: CPU: 26 PID: 110894 at kernel/kexec_file.c:919
-> kexec_load_purgatory+0x37f/0x390
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202309141433.6gzJPSYA-lkp=
+@intel.com/
 >
-> Fix this by disabling LTO for purgatory.
+> All errors (new ones prefixed by >>):
 >
-> We could also fix this with an explicit linker script to rejoin .text.*
-> sections back into .text. However, given the benefit of LTOing pugatory
-
-s/pugatory/purgatory/
-
-(maybe the x86 maintainers can apply that fixup if/when picked up)
-
-> is small, simply disable the production of more .text.* sections for now.
->
-> Fixes: b33fff07e3e3 ("x86, build: allow LTO to be selected")
-> Cc: Ricardo Ribalda <ribalda@chromium.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: kexec@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: x86@kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Song Liu <song@kernel.org>
-
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> ---
-> AFAICT, x86 is the only arch that supports LTO and purgatory.
->
-> Changes in v3:
-> 1. Fix "Fixes" tag. (Nick Desaulniers)
-> 2. Add description of an alternative fix, with linker script.
->    (Nick Desaulniers)
->
-> Changes in v2:
-> 1. Use CC_FLAGS_LTO instead of hardcode -flto. (Nick Desaulniers)
-> ---
->  arch/x86/purgatory/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> index c2a29be35c01..08aa0f25f12a 100644
-> --- a/arch/x86/purgatory/Makefile
-> +++ b/arch/x86/purgatory/Makefile
-> @@ -19,6 +19,10 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS -D__NO_FORTIF=
-Y
->  # optimization flags.
->  KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
-=3D%,$(KBUILD_CFLAGS))
->
-> +# When LTO is enabled, llvm emits many text sections, which is not suppo=
-rted
-> +# by kexec. Remove -flto=3D* flags.
-> +KBUILD_CFLAGS :=3D $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
-> +
->  # When linking purgatory.ro with -r unresolved symbols are not checked,
->  # also link a purgatory.chk binary without -r to check for unresolved sy=
-mbols.
->  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+> >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '=
+.L.str.6'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+>    >>> referenced by errata.c:94 (arch/riscv/errata/sifive/errata.c:94)
+>    >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_pat=
+ch_func) in archive vmlinux.a
 > --
-> 2.34.1
->
+> >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol=
+ '.L.str.6'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+>    >>> referenced by errata.c:94 (arch/riscv/errata/sifive/errata.c:94)
+>    >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_pat=
+ch_func) in archive vmlinux.a
 
+This randconfig builds a fairly large 64-bit kernel with
+CONFIG_CMODEL_MEDLOW=3Dy. Switching to CMODEL_MEDANY fixed the linker
+error for me, although the laterr BTFIDS step still fails:
 
---=20
-Thanks,
-~Nick Desaulniers
+  BTFIDS  vmlinux
+WARN: resolve_btfids: unresolved symbol bpf_cpumask
+FAILED elf_update(WRITE): no error
+make[3]: *** [../scripts/Makefile.vmlinux:36: vmlinux] Error 255
+
+64-bit defconfig with CFI+CMODEL_MEDLOW works just fine and I can also
+reproduce the linker errors by building allyesconfig+CMODEL_MEDLOW
+without CFI, for example, so I assume the build failure with this
+config is expected. Is there anything we should do here?
+
+Sami
