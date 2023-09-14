@@ -1,244 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81608DF6A
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 08:31:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CAC5C433C7
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 08:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694680289;
-	bh=k/0vPNmdQxp4roO05xLF+5BGxvpy0UaoMlWwg/gjUYw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KBLbdm5XSr4YOPP50hwziS5CeE7cHiunWB2QZDI6JJyZcysHM12IVprRUwV2q7uzb
-	 W/hGItm0im0c4HBdRfHqcYlJepkILV8wLxzCu1ogRwPDt+blW+NwRX6g59fpm9JQna
-	 r2BVlxEqNak7lbXFjjSSYnhueJO8DWGLt/c79oSirZVsymbZEj2wIuiRAObEcQA6Jx
-	 tzyIwtTH7Vxy9i6rf/kFPv6h7qrhfYiMjafTlJeAHKyj5X1/tCrLlWPSaGl/4S661i
-	 anxtR0k4yAMLPEx/1QFWA/svKMn3vaMnVdZT+4l7IAe/wQLHP/zlyWBbcSGwcORHgc
-	 HLCdaOCkt3GzA==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5738cb00eebso418982eaf.2
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 01:31:29 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzQYrdBReKBI11Hrz3sENuKUGU7pFGp8nEN7H5tiQgB9H2SXu3y
-	vzujwM5yXT+LxfTnZV4Py4OSaWKQqp9JjN9QpJg=
-X-Google-Smtp-Source: AGHT+IERWFF+FecR/stxMweA/ZbnFj+Yx6vTn3rVN7pA2L8Z0Qooi0tRbAxNNKUXxB+3u7qUPfa14X2dOMNa8iCxDC8=
-X-Received: by 2002:a05:6870:2426:b0:1b7:670e:ad7a with SMTP id
- n38-20020a056870242600b001b7670ead7amr4754765oap.43.1694680288468; Thu, 14
- Sep 2023 01:31:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DD7224F2
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 09:52:34 +0000 (UTC)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5009d4a4897so1310903e87.0
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 02:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694685153; x=1695289953; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GN8ytPq7BJ4KPt7TJ0dTMIMvhtcsDk2MyD/gO1nB0y4=;
+        b=OuBMvlvIS461IRXEqbgNFEHIE/ixpbAEhfyqNv7V3cjEYglN2QWL4hRD6dT64aDDYz
+         MN3ypTlNsQIQZI//HdeklDyl/KQBSE+40kPcHd5sDjW2jjUur4WPV94fM1ZBU/4kAYvp
+         FyCRTYAPGsAO7y2ylN/URO7gQGfcmsoEMtN2umEho6eMEU74EVO2AMnSyxjgs8SCBiuy
+         LVmsJkExQmFq0bRogbwMfAdFOZf64RNiFS29CvBUruC3fWXh5U2Xbi1BLfKWPVic/gcz
+         SdM9PAfpSqmW/CFr068QaR0nZDqrZXjzfQzHtKT4QUt6Bq5LTvAsYVEAXJSzH4DsKSm8
+         j81w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694685153; x=1695289953;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GN8ytPq7BJ4KPt7TJ0dTMIMvhtcsDk2MyD/gO1nB0y4=;
+        b=q1Pggy4oM+Q77BCJ5WtZVe72FZUtgCgM5fCzUmYKp0pLYEKpvcy1GQJtyqkWgb3o7B
+         SYoQK6/npQZnCO7aw/cbeLWXg8/fB22QHaHNc81yqwb3NF0VwPUrs3gMxqhSBQgVBW3L
+         dlb2Bpv8kIPrG8Tf+8DpHK2/mZmtVOqjpBGzAAxzbDQWt6eFgKZsv6Uxm4VKe1CK/43x
+         t/Z9VN9Z7PeLTXDnELDeP4ouQwEf5hWStEwm3h+aEYoZrb9Qhp7Xzw/p+X2e9ew3Caxx
+         Nw3iojbB0YuFPSbd8hYUkIm+OOglyTiaeHxgiR0fBWyP5yPhxRRopRJWskNpeA2AkDNn
+         +lgA==
+X-Gm-Message-State: AOJu0Yzt9yw8B7smImXPM602xdkQ/RHsjxw+E1RcX5OD0EUY+ceHgyTG
+	aauCCdxZzZtKwq/I5NSyU70=
+X-Google-Smtp-Source: AGHT+IGeOefCnnsoPvyMmIk0zg+5/TvlLnDgZJwi/81IC5W9Bi2z9/z9bJQiU3/JuL3fhkRMZtSynw==
+X-Received: by 2002:a05:6512:3b0d:b0:501:c406:c296 with SMTP id f13-20020a0565123b0d00b00501c406c296mr5239850lfv.31.1694685152802;
+        Thu, 14 Sep 2023 02:52:32 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id i3-20020aa7c703000000b0051dfa2e30b2sm704330edq.9.2023.09.14.02.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 02:52:32 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 14 Sep 2023 11:52:30 +0200
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Marcus Seyfarth <m.seyfarth@gmail.com>, bpf <bpf@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Stanislav Fomichev <sdf@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>
+Subject: Re: duplicate BTF_IDs leading to symbol redefinition errors?
+Message-ID: <ZQLX3oSCk95Qf4Ma@krava>
+References: <CAKwvOdnaEakT_y8TA9b_nMY3kMp=xxqKpGQPc2drNqRdV39RQw@mail.gmail.com>
+ <ZPozfCEF9SV2ADQ5@krava>
+ <ZPsJ4AAqNMchvms/@krava>
+ <CAKwvOd==X0exrhmsqX1j1WFX77xe8W7xPbfiCY+Rt6abgmkMCQ@mail.gmail.com>
+ <ZPuA5+HmbcdBLbIq@krava>
+ <ZQLBm8sC+V53CIzD@krava>
+ <CAK7LNATiHvOXiWQi9gXJO9rZbT_MFm6NddaWqoY4ykNWf+OYsQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdnaEakT_y8TA9b_nMY3kMp=xxqKpGQPc2drNqRdV39RQw@mail.gmail.com>
- <ZPozfCEF9SV2ADQ5@krava> <ZPsJ4AAqNMchvms/@krava> <CAKwvOd==X0exrhmsqX1j1WFX77xe8W7xPbfiCY+Rt6abgmkMCQ@mail.gmail.com>
- <ZPuA5+HmbcdBLbIq@krava> <ZQLBm8sC+V53CIzD@krava>
-In-Reply-To: <ZQLBm8sC+V53CIzD@krava>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 14 Sep 2023 17:30:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATiHvOXiWQi9gXJO9rZbT_MFm6NddaWqoY4ykNWf+OYsQ@mail.gmail.com>
-Message-ID: <CAK7LNATiHvOXiWQi9gXJO9rZbT_MFm6NddaWqoY4ykNWf+OYsQ@mail.gmail.com>
-Subject: Re: duplicate BTF_IDs leading to symbol redefinition errors?
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Marcus Seyfarth <m.seyfarth@gmail.com>, 
-	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Stanislav Fomichev <sdf@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNATiHvOXiWQi9gXJO9rZbT_MFm6NddaWqoY4ykNWf+OYsQ@mail.gmail.com>
 
-On Thu, Sep 14, 2023 at 5:17=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
->
-> On Fri, Sep 08, 2023 at 10:15:35PM +0200, Jiri Olsa wrote:
-> > On Fri, Sep 08, 2023 at 10:14:56AM -0700, Nick Desaulniers wrote:
-> > > Thanks for the patch!
+On Thu, Sep 14, 2023 at 05:30:51PM +0900, Masahiro Yamada wrote:
+
+SNIP
+
+> > > so the change is about adding unique id that's basically path of
+> > > the object stored in base32 so it could be used as symbol, so we
+> > > don't really need to read the actual file
 > > >
-> > > + Marcus
+> > > the problem is when BTF_ID definition like:
 > > >
-> > > Marcus can you please test the below patch and provide your tested-by
-> > > and reported-by tags?
+> > > BTF_ID(struct, cgroup)
 > > >
-> > > On Fri, Sep 8, 2023 at 4:47=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com>=
- wrote:
-> > > >
-> > > > On Thu, Sep 07, 2023 at 10:33:00PM +0200, Jiri Olsa wrote:
-> > > > > On Thu, Sep 07, 2023 at 12:01:18PM -0700, Nick Desaulniers wrote:
-> > > > > > So we've got a curious report recently:
-> > > > > > https://github.com/ClangBuiltLinux/linux/issues/1913
-> > > > > >
-> > > > > > ld.lld: error: ld-temp.o <inline asm>:14577:1: symbol
-> > > > > > '__BTF_ID__struct__cgroup__624' is already defined
-> > > > > > __BTF_ID__struct__cgroup__624:
-> > > > > > ^
-> > > > > >
-> > > > > > It's been hard to pin down a SHA and .config to reproduce this,=
- but
-> > > > > > looking at the definition of BTF_ID's usage of __ID's usage of
-> > > > > > __COUNTER__, and the two statements:
-> > > > > >
-> > > > > > kernel/bpf/helpers.c:2460:BTF_ID(struct, cgroup)
-> > > > > > kernel/bpf/verifier.c:5075:BTF_ID(struct, cgroup)
-> > > > > >
-> > > > > > Is it possible that __COUNTER__ could evaluate to the same valu=
-e
-> > > > > > across 2 different translation units, leading to a name collisi=
-on like
-> > > > > > the above?
-> > > > >
-> > > > > hum, that probably the case, I see same counter values at differe=
-nt
-> > > > > __BTF_ID_ symbols:
-> > > > >
-> > > > > ffffffff833fe540 r __BTF_ID__struct__bpf_bloom_filter__380
-> > > > > ffffffff833fe548 r __BTF_ID__struct__bpf_queue_stack__380
-> > > > > ffffffff833fe578 r __BTF_ID__struct__cgroup__380
-> > > > >
-> > > > > perhaps we were just lucky not to hit that :-\
-> > > > >
-> > > > > >
-> > > > > > looking at another usage of BTF_ID other than struct
-> > > > > > cgroup;kernel/bpf/helpers.c:2461:BTF_ID(func, bpf_cgroup_releas=
-e)
-> > > > > > is only defined in one translation unit
-> > > > > >
-> > > > > > Should one of those two `BTF_ID(struct, cgroup)` be removed? Is=
- there
-> > > > > > some other way we can avoid these collisions in the future?
-> > > > >
-> > > > > need to find some way to make the symbol unique, will check
-> > > >
-> > > > the change below uses object's path as the __BTF_ID_.. symbol suffi=
-x to make
-> > > > it unique
-> > > >
-> > > > I'm still looking, but can't think of a better way so far, perhaps =
-somebody
-> > > > will have better idea
+> > > translates in 2 separate objects into same symbol name because of
+> > > the matching __COUNTER__ macro values (like 380 below)
 > > >
-> > > Another good approach; I had simply added __LINE__ into the paste.
-> > > https://github.com/ClangBuiltLinux/linux/issues/1913#issuecomment-171=
-0794319
-> > > Which just makes the probability of this occurring again smaller, but
-> > > still non-zero.
-> >
-> > yes, there's still possibility of the match
-> >
+> > >   __BTF_ID__struct__cgroup__380
 > > >
-> > > + Masahiro for thoughts on the invocation of echo and base32.  Looks
-> > > like base32 is part of coreutils. Kind of strange that coreutils isn'=
-t
-> > > listed in Documentation/process/changes.rst.  Would adding the usage
-> > > of base32 add a new dependency on coreutils?
+> > > this change just adds unique id of the path name at the end of the
+> > > symbol with:
 > > >
-> > > >
-> > > > jirka
-> > > >
-> > > >
-> > > > ---
-> > > > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> > > > index a3462a9b8e18..564953f9cbc7 100644
-> > > > --- a/include/linux/btf_ids.h
-> > > > +++ b/include/linux/btf_ids.h
-> > > > @@ -49,7 +49,7 @@ word                                             =
-     \
-> > > >         ____BTF_ID(symbol, word)
-> > > >
-> > > >  #define __ID(prefix) \
-> > > > -       __PASTE(prefix, __COUNTER__)
-> > > > +       __PASTE(__PASTE(prefix, __COUNTER__), BTF_ID_BASE)
+> > >   echo -n 'kernel/bpf/helpers' | base32 -w0 --> NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
 > > >
-> > > Do we still need __COUNTER__ if we're now using BTF_ID_BASE?
-> >
-> > yes we still need that because we could have same __BTF_ID__...
-> > symbol used multiple times within same object, and that's where
-> > __COUNTER__ makes the difference
-> >
+> > > so the symbol looks like:
 > > >
-> > > >
-> > > >  /*
-> > > >   * The BTF_ID defines unique symbol for each ID pointing
-> > > > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > > > index 68d0134bdbf9..2ef8b2798be0 100644
-> > > > --- a/scripts/Makefile.lib
-> > > > +++ b/scripts/Makefile.lib
-> > > > @@ -200,6 +200,10 @@ _c_flags +=3D $(if $(patsubst n%,, \
-> > > >         -D__KCSAN_INSTRUMENT_BARRIERS__)
-> > > >  endif
-> > > >
-> > > > +ifeq ($(CONFIG_DEBUG_INFO_BTF),y)
-> > > > +_c_flags +=3D -DBTF_ID_BASE=3D$(subst =3D,,$(shell echo -n $(modfi=
-le) | base32 -w0))
+> > >   __BTF_ID__struct__cgroup__380NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
 > > >
-> > > `man 1 base32` shows it can just read a file. Could the above be:
+> > > and is unique over the sources
 > > >
-> > > _c_flags +=3D -DBTF_ID_BASE=3D$(subst =3D,,$(shell base32 -w0 $(modfi=
-le)))
-> > >
-> > > ? (untested)
-> > >
-> > > Also, the output of
-> > >
-> > > $ base32 -w0 Documentation/process/changes.rst
-> > >
-> > > is 24456 characters.  This is going to blow up symbol tables. I
-> > > suppose ELF probably has some length limit on symbol names, too.  I
-> > > was nervous about my approaching appending __LINE__.
-> > >
-> > > Perhaps pipe the output to `head -c <n bytes>`?
+> > > but I still hope we could come up with some better solution ;-)
 > >
-> > so the change is about adding unique id that's basically path of
-> > the object stored in base32 so it could be used as symbol, so we
-> > don't really need to read the actual file
+> > so far the only better solution I could come up with is to use
+> > cksum (also from coreutils) instead of base32, which makes the
+> > BTF_ID_BASE value compact
 > >
-> > the problem is when BTF_ID definition like:
+> > I'll run test to find out how much it hurts the build time
 > >
-> > BTF_ID(struct, cgroup)
-> >
-> > translates in 2 separate objects into same symbol name because of
-> > the matching __COUNTER__ macro values (like 380 below)
-> >
-> >   __BTF_ID__struct__cgroup__380
-> >
-> > this change just adds unique id of the path name at the end of the
-> > symbol with:
-> >
-> >   echo -n 'kernel/bpf/helpers' | base32 -w0 --> NNSXE3TFNQXWE4DGF5UGK3D=
-QMVZHG
-> >
-> > so the symbol looks like:
-> >
-> >   __BTF_ID__struct__cgroup__380NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
-> >
-> > and is unique over the sources
-> >
-> > but I still hope we could come up with some better solution ;-)
->
-> so far the only better solution I could come up with is to use
-> cksum (also from coreutils) instead of base32, which makes the
-> BTF_ID_BASE value compact
->
-> I'll run test to find out how much it hurts the build time
->
-> jirka
+> > jirka
+> 
+> 
+> 
+> Seems a bad idea to me.
+> 
+> It would fork a new shell and chsum for all files,
+> while only a few of them need it.
 
+right, I have a change to limit this on kernel and net directories,
+but it's still bad
 
+> 
+> Better to consult BTF forks.
 
-Seems a bad idea to me.
+perhaps there's better way within kbuild to get unique id/value
+for each object file?
 
-It would fork a new shell and chsum for all files,
-while only a few of them need it.
-
-Better to consult BTF forks.
-
-
-
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+thanks,
+jirka
