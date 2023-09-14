@@ -1,111 +1,256 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9FACA4C;
-	Thu, 14 Sep 2023 08:13:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694679185; x=1726215185;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0HuLFSOV1iee1YccL1q6ba1Qi+BrJA064NEgTIarkeA=;
-  b=dWywPiy3LvKZ/LFTtRkaQCQtpH8j2wFOBZFD+ejf8e7T1KuZhUGo/YrB
-   YdNPw2jT0nUyQn4PAdgF4bCDaI7CBYKoh/o86FfjeYBvvhOmvARAhz4lS
-   pcL/SCekmP0k8EWGJnjej9YcydDM6SCcJxrDjEXwWgfAuloGEs18S5a3B
-   +/5d64FlvAXzPa3lmHlFsrkvhcwMyf+SvkGCsXx5vlBczDNP7nGHNb9wf
-   r4ZUXHY4+Yk/qnvXX7Ol7OrK2+/ok2nhBFZLwodSpFDagZUS/OuFkyc8p
-   FEC3dMHxr7iY5nZQu1jfpPqQo4+QU/SNl8lXaibld+sJmKAG8nEl3kL7J
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="382693806"
-X-IronPort-AV: E=Sophos;i="6.02,145,1688454000"; 
-   d="scan'208";a="382693806"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 01:13:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="1075270812"
-X-IronPort-AV: E=Sophos;i="6.02,145,1688454000"; 
-   d="scan'208";a="1075270812"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Sep 2023 01:13:01 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qghT9-0001MP-09;
-	Thu, 14 Sep 2023 08:12:59 +0000
-Date: Thu, 14 Sep 2023 16:12:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, thunder.leizhen@huawei.com,
-	catalin.marinas@arm.com, chenjiahao16@huawei.com,
-	kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, x86@kernel.org,
-	Baoquan He <bhe@redhat.com>
-Subject: Re: [PATCH v3 6/9] x86: kdump: use generic interface to simplify
- crashkernel reservation code
-Message-ID: <202309141534.moH4dTcz-lkp@intel.com>
-References: <20230914033142.676708-7-bhe@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C4328F8
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 08:17:36 +0000 (UTC)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-52a1ce529fdso741058a12.1
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 01:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694679454; x=1695284254; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s+4xA51e50qcAOLVbeVHWO2Emck9tyiK2RitlpZpuLo=;
+        b=SCL90GZbst2nsaprlTvtpeuFJzb6hSLNSEbtKw7rEChINh4wpjgqQf+rI67TgY8CRC
+         +n/eEf1bf1CdC0xOteub/5ik+N79LpaRrUS2JDf1Lc871Xp8kuCHlfTY58L0aIQo6GWa
+         DwTyXC6WByA+ytVymmm+stsdBM9Uefp7pTf3NCwW6vi2OMThTzI09KgrHgSu7hwyxFL3
+         IndTzJZ7wwYUs+HDdRvZjhtCXEOF55/parXds5VGf5QolqMJUWetyJDSdoe/ePIZV4BS
+         Vq0RfBeh0wuDO1YzXC6mGfNRE756uuy12lP3noH5dUHFicT+ezgMU3fBQPU4PiwXkiQx
+         f3Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694679454; x=1695284254;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s+4xA51e50qcAOLVbeVHWO2Emck9tyiK2RitlpZpuLo=;
+        b=FnJ2JQg1xvzO4GQ0BvQ3aXldiW50p0lu6HAKvdsSlz08qzv7gaJ3mgOGU2AUNRdhHK
+         bs+3TJNbHaSUS/0OUbSX/X0U9XqX1be+2lnYb7H4u7Om2Usl8FUX9GY4md63RVm7MmKR
+         K0TENd7zOnQaaVK81E+MbPfMFhoktHDgiJu5hjNDsMGLPao4+SXApzrB4kq5iEua6XW4
+         danheURT9bQgqvfu329aMKDD/DI4fH/14vGUN/kSZtzyG1MBveWqmK7vQSIY+TL+w+sg
+         qY/x6V8r2ItzvlaFW7UKBTbHHEZgnD6iTulBu9z7/IgRsfJUiZi4v+p/OEP/3cWekIME
+         1+KQ==
+X-Gm-Message-State: AOJu0YxKb4jbf/K1owisGvBxtUXECvcHFA7sCrRZ5zjPxelbo9M5JHER
+	8OMJq82JS7vVcUg/lUvxpl0=
+X-Google-Smtp-Source: AGHT+IEk66RycSq2aMAN7gAM5SD7uAov8vv/Ix10Nl9fbCXph87QAOEZ2YlWHc2WoH4gz4d1l+S8/Q==
+X-Received: by 2002:aa7:c71a:0:b0:522:1bdd:d41a with SMTP id i26-20020aa7c71a000000b005221bddd41amr4416512edq.4.1694679454408;
+        Thu, 14 Sep 2023 01:17:34 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id z11-20020aa7d40b000000b005255f5735adsm596795edq.24.2023.09.14.01.17.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 01:17:33 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 14 Sep 2023 10:17:31 +0200
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Marcus Seyfarth <m.seyfarth@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>, bpf <bpf@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Stanislav Fomichev <sdf@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>
+Subject: Re: duplicate BTF_IDs leading to symbol redefinition errors?
+Message-ID: <ZQLBm8sC+V53CIzD@krava>
+References: <CAKwvOdnaEakT_y8TA9b_nMY3kMp=xxqKpGQPc2drNqRdV39RQw@mail.gmail.com>
+ <ZPozfCEF9SV2ADQ5@krava>
+ <ZPsJ4AAqNMchvms/@krava>
+ <CAKwvOd==X0exrhmsqX1j1WFX77xe8W7xPbfiCY+Rt6abgmkMCQ@mail.gmail.com>
+ <ZPuA5+HmbcdBLbIq@krava>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230914033142.676708-7-bhe@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZPuA5+HmbcdBLbIq@krava>
 
-Hi Baoquan,
+On Fri, Sep 08, 2023 at 10:15:35PM +0200, Jiri Olsa wrote:
+> On Fri, Sep 08, 2023 at 10:14:56AM -0700, Nick Desaulniers wrote:
+> > Thanks for the patch!
+> > 
+> > + Marcus
+> > 
+> > Marcus can you please test the below patch and provide your tested-by
+> > and reported-by tags?
+> > 
+> > On Fri, Sep 8, 2023 at 4:47 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Thu, Sep 07, 2023 at 10:33:00PM +0200, Jiri Olsa wrote:
+> > > > On Thu, Sep 07, 2023 at 12:01:18PM -0700, Nick Desaulniers wrote:
+> > > > > So we've got a curious report recently:
+> > > > > https://github.com/ClangBuiltLinux/linux/issues/1913
+> > > > >
+> > > > > ld.lld: error: ld-temp.o <inline asm>:14577:1: symbol
+> > > > > '__BTF_ID__struct__cgroup__624' is already defined
+> > > > > __BTF_ID__struct__cgroup__624:
+> > > > > ^
+> > > > >
+> > > > > It's been hard to pin down a SHA and .config to reproduce this, but
+> > > > > looking at the definition of BTF_ID's usage of __ID's usage of
+> > > > > __COUNTER__, and the two statements:
+> > > > >
+> > > > > kernel/bpf/helpers.c:2460:BTF_ID(struct, cgroup)
+> > > > > kernel/bpf/verifier.c:5075:BTF_ID(struct, cgroup)
+> > > > >
+> > > > > Is it possible that __COUNTER__ could evaluate to the same value
+> > > > > across 2 different translation units, leading to a name collision like
+> > > > > the above?
+> > > >
+> > > > hum, that probably the case, I see same counter values at different
+> > > > __BTF_ID_ symbols:
+> > > >
+> > > > ffffffff833fe540 r __BTF_ID__struct__bpf_bloom_filter__380
+> > > > ffffffff833fe548 r __BTF_ID__struct__bpf_queue_stack__380
+> > > > ffffffff833fe578 r __BTF_ID__struct__cgroup__380
+> > > >
+> > > > perhaps we were just lucky not to hit that :-\
+> > > >
+> > > > >
+> > > > > looking at another usage of BTF_ID other than struct
+> > > > > cgroup;kernel/bpf/helpers.c:2461:BTF_ID(func, bpf_cgroup_release)
+> > > > > is only defined in one translation unit
+> > > > >
+> > > > > Should one of those two `BTF_ID(struct, cgroup)` be removed? Is there
+> > > > > some other way we can avoid these collisions in the future?
+> > > >
+> > > > need to find some way to make the symbol unique, will check
+> > >
+> > > the change below uses object's path as the __BTF_ID_.. symbol suffix to make
+> > > it unique
+> > >
+> > > I'm still looking, but can't think of a better way so far, perhaps somebody
+> > > will have better idea
+> > 
+> > Another good approach; I had simply added __LINE__ into the paste.
+> > https://github.com/ClangBuiltLinux/linux/issues/1913#issuecomment-1710794319
+> > Which just makes the probability of this occurring again smaller, but
+> > still non-zero.
+> 
+> yes, there's still possibility of the match
+> 
+> > 
+> > + Masahiro for thoughts on the invocation of echo and base32.  Looks
+> > like base32 is part of coreutils. Kind of strange that coreutils isn't
+> > listed in Documentation/process/changes.rst.  Would adding the usage
+> > of base32 add a new dependency on coreutils?
+> > 
+> > >
+> > > jirka
+> > >
+> > >
+> > > ---
+> > > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> > > index a3462a9b8e18..564953f9cbc7 100644
+> > > --- a/include/linux/btf_ids.h
+> > > +++ b/include/linux/btf_ids.h
+> > > @@ -49,7 +49,7 @@ word                                                  \
+> > >         ____BTF_ID(symbol, word)
+> > >
+> > >  #define __ID(prefix) \
+> > > -       __PASTE(prefix, __COUNTER__)
+> > > +       __PASTE(__PASTE(prefix, __COUNTER__), BTF_ID_BASE)
+> > 
+> > Do we still need __COUNTER__ if we're now using BTF_ID_BASE?
+> 
+> yes we still need that because we could have same __BTF_ID__...
+> symbol used multiple times within same object, and that's where
+> __COUNTER__ makes the difference
+> 
+> > 
+> > >
+> > >  /*
+> > >   * The BTF_ID defines unique symbol for each ID pointing
+> > > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> > > index 68d0134bdbf9..2ef8b2798be0 100644
+> > > --- a/scripts/Makefile.lib
+> > > +++ b/scripts/Makefile.lib
+> > > @@ -200,6 +200,10 @@ _c_flags += $(if $(patsubst n%,, \
+> > >         -D__KCSAN_INSTRUMENT_BARRIERS__)
+> > >  endif
+> > >
+> > > +ifeq ($(CONFIG_DEBUG_INFO_BTF),y)
+> > > +_c_flags += -DBTF_ID_BASE=$(subst =,,$(shell echo -n $(modfile) | base32 -w0))
+> > 
+> > `man 1 base32` shows it can just read a file. Could the above be:
+> > 
+> > _c_flags += -DBTF_ID_BASE=$(subst =,,$(shell base32 -w0 $(modfile)))
+> > 
+> > ? (untested)
+> > 
+> > Also, the output of
+> > 
+> > $ base32 -w0 Documentation/process/changes.rst
+> > 
+> > is 24456 characters.  This is going to blow up symbol tables. I
+> > suppose ELF probably has some length limit on symbol names, too.  I
+> > was nervous about my approaching appending __LINE__.
+> > 
+> > Perhaps pipe the output to `head -c <n bytes>`?
+> 
+> so the change is about adding unique id that's basically path of
+> the object stored in base32 so it could be used as symbol, so we
+> don't really need to read the actual file
+> 
+> the problem is when BTF_ID definition like:
+> 
+> BTF_ID(struct, cgroup)
+> 
+> translates in 2 separate objects into same symbol name because of
+> the matching __COUNTER__ macro values (like 380 below)
+> 
+>   __BTF_ID__struct__cgroup__380
+> 
+> this change just adds unique id of the path name at the end of the
+> symbol with:
+> 
+>   echo -n 'kernel/bpf/helpers' | base32 -w0 --> NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
+> 
+> so the symbol looks like:
+> 
+>   __BTF_ID__struct__cgroup__380NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
+> 
+> and is unique over the sources
+> 
+> but I still hope we could come up with some better solution ;-)
 
-kernel test robot noticed the following build warnings:
+so far the only better solution I could come up with is to use
+cksum (also from coreutils) instead of base32, which makes the
+BTF_ID_BASE value compact
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes linus/master v6.6-rc1 next-20230914]
-[cannot apply to arm64/for-next/core tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'll run test to find out how much it hurts the build time
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/crash_core-c-remove-unnecessary-parameter-of-function/20230914-113546
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/20230914033142.676708-7-bhe%40redhat.com
-patch subject: [PATCH v3 6/9] x86: kdump: use generic interface to simplify crashkernel reservation code
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20230914/202309141534.moH4dTcz-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309141534.moH4dTcz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309141534.moH4dTcz-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/setup.c:476:15: warning: no previous prototype for function 'crash_low_size_default' [-Wmissing-prototypes]
-   unsigned long crash_low_size_default(void)
-                 ^
-   arch/x86/kernel/setup.c:476:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long crash_low_size_default(void)
-   ^
-   static 
-   1 warning generated.
+jirka
 
 
-vim +/crash_low_size_default +476 arch/x86/kernel/setup.c
-
-   472	
-   473	/*
-   474	 * --------- Crashkernel reservation ------------------------------
-   475	 */
- > 476	unsigned long crash_low_size_default(void)
-   477	{
-   478	#ifdef CONFIG_X86_64
-   479		return max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20);
-   480	#else
-   481		return 0;
-   482	#endif
-   483	}
-   484	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index a3462a9b8e18..564953f9cbc7 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -49,7 +49,7 @@ word							\
+ 	____BTF_ID(symbol, word)
+ 
+ #define __ID(prefix) \
+-	__PASTE(prefix, __COUNTER__)
++	__PASTE(__PASTE(prefix, __COUNTER__), BTF_ID_BASE)
+ 
+ /*
+  * The BTF_ID defines unique symbol for each ID pointing
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 68d0134bdbf9..01b14e6a7df3 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -200,6 +200,10 @@ _c_flags += $(if $(patsubst n%,, \
+ 	-D__KCSAN_INSTRUMENT_BARRIERS__)
+ endif
+ 
++ifeq ($(CONFIG_DEBUG_INFO_BTF),y)
++_c_flags += -DBTF_ID_BASE=$(firstword $(shell echo -n $(modfile) | cksum))
++endif
++
+ # $(srctree)/$(src) for including checkin headers from generated source files
+ # $(objtree)/$(obj) for including generated headers from checkin source files
+ ifeq ($(KBUILD_EXTMOD),)
