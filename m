@@ -1,42 +1,42 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADB526E38
-	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 21:20:06 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d8186d705a9so1716749276.3
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 14:20:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5696826E3D
+	for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 21:20:09 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-594e8207103so19873737b3.2
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 14:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694726406; x=1695331206; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1694726408; x=1695331208; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qEBLCnDyHWS5IuPY851bB1uYjpvWDCqujKcJXiny/1I=;
-        b=YrzSWUnDn8YuOziuo6QiKAg2bxzvPqfvANL3P2YsjrObNC3t9SZVUw3Wg6inLJXSMK
-         RnOFnayP96KlBNBfvm+qXTG7Yn5RmPqWt8t0fxgvqjCg/EZ7wI+GEt6kW2tztyC/ognH
-         0R0MVwj2YR6Rfzqxk2o3YBkDv/dpj1JB5QBV572GhoynZUZQ0ReqVVpgODSYw4SuxCjs
-         kgZLLrTpvAZBhwUINR7roVtHXjqesjm1GVq+F5bMtPSH2Xe2o5o5RsqWzW1GUljIM1f0
-         CZYGtH/L5SThisyK/hM7Za9n2x+/UiXkhqtzh6GUtZYBSmsq6heGt3tULKyVNtzwRaVe
-         wa7Q==
+        bh=YO3ZTyHFm+00gT95r949gZji8+XYvbCsq+dhsmDC+Ok=;
+        b=eqWEWjn73YZnZIuaTSXTU4Qz3bz7g0fbwI2Y3jk1v4le+WIgfLOhhk3Yrs6LV2aMF9
+         C4V8rZfToK45B72tFIMFVysAT5/QCdSKdnfy8KVASXB2n5950n3E7YcFgeKEtrQvuG43
+         Z551iu58I0BcpUQNhhcmHjXNLXP/TM2AXhrvMakqyHvuNQAIFdcGrlaE8aGrjyfzKQO4
+         5hN9m6SKs2wkSlAl9ZihYm80XsMe0Uy933tO5jpuLsiytNaaiG0SHNxTa34Cal5ZyAZE
+         7CqyjF528utLgwfFEuoPafaM9Az+Ig3s5qKFkJZFAOBQshzfdnbwJVvAZYl2pmzXJUCI
+         C8Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694726406; x=1695331206;
+        d=1e100.net; s=20230601; t=1694726408; x=1695331208;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qEBLCnDyHWS5IuPY851bB1uYjpvWDCqujKcJXiny/1I=;
-        b=NQt5ZZDC24AjFcg4RxJpgPwXn5C7L4ThvcxY4v/7Kpi1Yyi/zQQHGBEosaQmtANWlo
-         Eha4rothZFkjf/4PKuZKrE9KVDJvBqmi+DAF8EL511c3S9VEE7zkfeJHudVkGGh/wNDe
-         RE/ayPx7AoBXnkcZjntp30THYRrmxnFcyXhaEiL3VyV7IJDU6XltmRHAlRM72v8HjqMO
-         Y9DZoj4HI4Hvm2UMgbVYfjY1BBVEGvyOBw1RORKF6nfZDF4gXXZFZR0R4Lv2FAaIvg4A
-         UJS7MF5ZF1TBzV8FvSyXh5f56E/aoU9aN79aCkYiz/c7nUX3d6nnC3nY2vtv0zXiXLir
-         9GMw==
-X-Gm-Message-State: AOJu0YxDMhavMmHxbNhMx5fZafx4iPOP3SIcKdjHCbGL6jWalH4rI45B
-	GerMzAoUTalTW6cj6/6DSFb81j8E8AAg
-X-Google-Smtp-Source: AGHT+IFjNitaNwEgv3EEZ6iXNRaR95WvUU1GpXUYm1fAho7ynBUmSGSSBv8y18SlBKTVkWFYTJLjScNmdKn2
+        bh=YO3ZTyHFm+00gT95r949gZji8+XYvbCsq+dhsmDC+Ok=;
+        b=Bv4hT74iMbhaqhVyXbjBB+/BY8vP2YGN2KDrypnA+sC+YmoL+w66aK7zwLlETWh+su
+         U1xPjN8az49s3a/JXzzrgdVpjk8k2dhlBtRJkFkUcsq9L7UeOiB58fVdDd53/27OTAxB
+         tRSZLh5B6uSNJtYPQ14FReuh3hsBbzTzuco+YOQnAYu2YO3SoOtoNzgm2PZsJwYfHb3/
+         ZF1uZKLmgSIxQt0XDpBhkq7QNd7xcYtTgS9rLOUvPNiaPwpGaeOTgQjYE13unDKdwqwy
+         Pr33d3YuG8AkHKzfAa7OfyV3UG1MVwBhQBzsuRQx2fu+GfRQ7ckzHpz3YBQtL6nRb4TL
+         tXNA==
+X-Gm-Message-State: AOJu0Yyf4inikYyl7QmvN3UL3N1BO2BOqsYJc1DaGM4KRdHd01o7cI4A
+	BA2pV9Br0TVHoWAe1s+R5vxSfR55IwMh
+X-Google-Smtp-Source: AGHT+IGCEX/KOyc+NQTtFfPYAWgFXG6kDLqyIKgl2lhi89WqTIgea5kl72TnA6Q8vTJoreHIXz9tXTcmvDM3
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:5357:1d03:3084:aacb])
- (user=irogers job=sendgmr) by 2002:a5b:bc6:0:b0:d7e:a025:2672 with SMTP id
- c6-20020a5b0bc6000000b00d7ea0252672mr153772ybr.9.1694726405869; Thu, 14 Sep
- 2023 14:20:05 -0700 (PDT)
-Date: Thu, 14 Sep 2023 14:19:47 -0700
+ (user=irogers job=sendgmr) by 2002:a81:af11:0:b0:589:a5c6:4a8e with SMTP id
+ n17-20020a81af11000000b00589a5c64a8emr175716ywh.1.1694726408395; Thu, 14 Sep
+ 2023 14:20:08 -0700 (PDT)
+Date: Thu, 14 Sep 2023 14:19:48 -0700
 In-Reply-To: <20230914211948.814999-1-irogers@google.com>
-Message-Id: <20230914211948.814999-5-irogers@google.com>
+Message-Id: <20230914211948.814999-6-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230914211948.814999-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Subject: [PATCH v1 4/5] perf test: Ensure EXTRA_TESTS is covered in build test
+Subject: [PATCH v1 5/5] perf test: Detect off-cpu support from build options
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -60,25 +60,27 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	bpf@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Add to run variable.
+Use perf version to detect whether BPF skeletons were enabled in a
+build rather than a failing perf record.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/make | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/tests/shell/record_offcpu.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index a3a0f2a8bba0..d9945ed25bc5 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -138,6 +138,7 @@ endif
- run += make_python_perf_so
- run += make_debug
- run += make_nondistro
-+run += make_extra_tests
- run += make_no_bpf_skel
- run += make_gen_vmlinux_h
- run += make_no_libperl
+diff --git a/tools/perf/tests/shell/record_offcpu.sh b/tools/perf/tests/shell/record_offcpu.sh
+index a0d14cd0aa79..a1ef8f0d2b5c 100755
+--- a/tools/perf/tests/shell/record_offcpu.sh
++++ b/tools/perf/tests/shell/record_offcpu.sh
+@@ -28,7 +28,7 @@ test_offcpu_priv() {
+     err=2
+     return
+   fi
+-  if perf record --off-cpu -o /dev/null --quiet true 2>&1 | grep BUILD_BPF_SKEL
++  if perf version --build-options 2>&1 | grep HAVE_BPF_SKEL | grep -q OFF
+   then
+     echo "off-cpu test [Skipped missing BPF support]"
+     err=2
 -- 
 2.42.0.459.ge4e396fd5e-goog
 
