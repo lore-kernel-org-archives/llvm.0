@@ -1,53 +1,59 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DDC1B26D
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:14:58 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1c0c6d4d650so23007735ad.0
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:14:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370B61B26D
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:15:13 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1c1ff5b741cso23500155ad.2
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:15:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694808898; x=1695413698; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1694808912; x=1695413712; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2adzcEiFT17X0tMOdRHOC+4xSYu7V9ABPtDWz0mCD/0=;
-        b=Tcwgf7vw4rD+1FJnY8nsV2YRYMimoL/Fezgtfn+J5N1dmX49G8UDxnVJ052utnDesj
-         eS+hF69K+YNLh7+Ad1OWVQBo7gaP1vZHR35qfVfyoA7hKwmZXrqnPqiebUgFBycQ9CT8
-         vOy5bEIuZ66dgS3xgjR2XTjUEhakqg8hrMUBc=
+        bh=DD0PB0X4P5RpnzepdYBK20P6YgyKEeTbO8VvW3SzPE0=;
+        b=G7JWx2QD222Z2e9SpslAnv1K13nQ6jarMgru0SCQs7Cx/tVX9UYu9ib6AUaKpL2Wvk
+         sphPLD1sFxtRzUPhEayRGOZRyMXk5lbHKDs9KSp5ZMrS+DZArMnQLTvHRxwDM2C7WlBw
+         v9r4P6ZYKoNm4CvSr+TgR818DOdhLxhumjmp4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694808898; x=1695413698;
+        d=1e100.net; s=20230601; t=1694808912; x=1695413712;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2adzcEiFT17X0tMOdRHOC+4xSYu7V9ABPtDWz0mCD/0=;
-        b=Q+0p6qW1TrIWWKOeBiXUmY5BgJ192x6H1ZxA4rHxvhsSglrM+BbdcPA2FzWftDCNCU
-         XGlEpBpB69jxzi303Y7ZIL+EcdQ8J/Yy5VnymOxkXt1UO6s6BWbknJYKZluRs9gMEHC4
-         ldoG4Zpby9qdA6pchkYoco7x4Pp0nHrzapBaGQZ+AvdaS3SchUaO5/krt0E6NuiuhxPb
-         tLdl/4On0y49lsqJzU0PXKKd0EVLfek3roqkP6XQEj5XD6o3evUBrKN6f+6kxsPPvoay
-         HgCsy4lcghKFv4TEPX8CcqhGYzg1KwRtQFKg02KMbUJJcXIo+3+pXyEyPISs3M0iGtuK
-         HlsQ==
-X-Gm-Message-State: AOJu0YxkoLjuaaIsfUPHRWku3aEfCrgmVs4SGnvOBFGF9lMs9d0f9Yu0
-	fR8fRmPL+0d6XXkAYsbm1l24z6xEv3pFnror6lo=
-X-Google-Smtp-Source: AGHT+IFl5ZOAgVGqBoYurT+RiGDKwf2m+mMLCPmLDws6lMZeLSgdeHZqG1yi5Xh/qs1zbtBogZWowg==
-X-Received: by 2002:a17:902:e882:b0:1bf:11ce:c6ae with SMTP id w2-20020a170902e88200b001bf11cec6aemr3250482plg.18.1694808898073;
-        Fri, 15 Sep 2023 13:14:58 -0700 (PDT)
+        bh=DD0PB0X4P5RpnzepdYBK20P6YgyKEeTbO8VvW3SzPE0=;
+        b=w6DYwd1sLMpAqMBl/bn7aNFyn1CYDiHPZLdoT7wblTwc469UJ6iVc3phNWH5fH6Esl
+         7oLoRDiU6n2Q15RlEWOeFcRk9AkLS1fXrNbcsSXfh56dlYjLvUWatA8SQvma5pmA/1a1
+         JyR6N6QhsX1arSL2HFNmg9pS5y2NgcptDTodt6LgGzu3wuH9OlnFxhWgaajNcK0DZYeq
+         CDUWDIVvVKQE90Q2aFp3h2SOr2c7NDbVdB8aOsYEAlKG2Kvr5HI2kbc2E1szBDg7IW9i
+         Kcl1kwDYF6I6734O0Iam3fYF9xy1+TVKOk0DOvV1V5imcAwO7fEoZqoATl7Llg0wbZto
+         4JZQ==
+X-Gm-Message-State: AOJu0YyaaU81tU27m7GIBT3hCsmKJQi2u14AsYuvM2AdMtNLbILbz4w3
+	WWuucpF/NypX1ajVt0M3dLGfZg==
+X-Google-Smtp-Source: AGHT+IFr13PLzk1XhNPHi5wQPBvpKN+JrCaS1AIy+WjDkGW+MxaOGCJr4sl9jUsUrz+Gxv7u4wWN9Q==
+X-Received: by 2002:a17:902:dac7:b0:1bf:4582:90d with SMTP id q7-20020a170902dac700b001bf4582090dmr3499033plx.46.1694808912608;
+        Fri, 15 Sep 2023 13:15:12 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902654200b001c43307f87asm1837631pln.91.2023.09.15.13.14.57
+        by smtp.gmail.com with ESMTPSA id u5-20020a170902b28500b001bb750189desm3860366plr.255.2023.09.15.13.15.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 13:14:57 -0700 (PDT)
+        Fri, 15 Sep 2023 13:15:12 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: David Howells <dhowells@redhat.com>
+To: Ilya Dryomov <idryomov@gmail.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	linux-afs@lists.infradead.org,
+	Xiubo Li <xiubli@redhat.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	ceph-devel@vger.kernel.org,
+	netdev@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] afs: Annotate struct afs_permits with __counted_by
-Date: Fri, 15 Sep 2023 13:14:56 -0700
-Message-Id: <20230915201456.never.529-kees@kernel.org>
+Subject: [PATCH] ceph: Annotate struct ceph_monmap with __counted_by
+Date: Fri, 15 Sep 2023 13:15:10 -0700
+Message-Id: <20230915201510.never.365-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -55,20 +61,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1254; i=keescook@chromium.org;
- h=from:subject:message-id; bh=C30Tpce9LuvDnPhShi9VewRUfa54HHSLTSiinU7ab60=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLtASGYM643odAtTW+2uVzG0JxIaa//Ye+Bts
- GG3+SOU75WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS7QAAKCRCJcvTf3G3A
- JmQ5D/939BFdVcrl8LsWHb25cdDVwqzcQu0ePiQa21qI3gkIx7d/C8DZ2qrX3QrHPyxnky+ufgQ
- 9Zl9fn6bdqHc6imsnBAAkRegAyTuYMtUmp6zi8w2Bzf9dT8r/xuT8GtAkMlo336a7xveH3luRbO
- MTr9lMWq4ZJ3GCh0FTdJmckVsF1hybn6tpSNZL4Y/I+pDLjDduYV0/VAwzRB5SWlre0mug2WBNk
- XgGKTUWr6zml7tQhaxlp2r8rgMuLcQTuwTty++KM6qyaDw4HNfJ5wfSF9UDjeJHS489LFQbaKMf
- JD0csUlqzQK9Azl1Fqed6jTMZL4924e8MnjWmZD7SgMa2mzDlFzDMenajpdoBypMvFqQwQKAXwo
- X4BSZvbaAg22gLUsQHDBNNqKLkhjYfvhE7AvGLCXu+f1m7P0zrjNKuX2YoEnYrj1M+n3+AJCO3j
- ix5OuhOhpXAJNFqJsHsVoS62xM2i4ui5ZpF9HMLGUNANCkwQeTKYk69PXhuZIu0M4aEfDKphuBt
- KMJdwM3G8URutOHI00MxVT7g14ZllYBBq5BmjfNgn8YKUPI+iARkBV+anvIM3LIKGKsU48jFCH9
- 2y3kY1IkkyCqw+M212bqRFmBVg18HbLa4Q0zv7sPzuZUf2DdSubfdtYc/RRjRx3oKgnwxo90i8o
- ZlTc3RO ZPK5Fl1w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2263; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=459xt744zpKd86AyMgpOkR51nqx31Cb+Bg+uK/o0T7M=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLtO5BRclquwJun9hzXP0EWlZ+GoTdZhGJ3lG
+ aGjx/Zz1HyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS7TgAKCRCJcvTf3G3A
+ JsmGEACL2A1XKUQWibswLmpq3EltVpG/A8eKgv6ea2LwVOAXy0x4SXG4cHd9Cu0nk/qHBUbSafm
+ /LRlD5lO/9C+ATYOdVAn9t0V3au/VIjn21sAW1gMsSMXTEBt4RYva6+8ekRrcCE6zJyxKRcZ8FV
+ 1TP0oLZ+aZEmq83/afsOUMhAKZ73EU1YJrP2y7qEuhd9AasIKJxUVGM7DVcfrya6r/JmudEniQ/
+ slYEzs/iOWTdsEj98u6gHbxVZWi3l4+Z2chqEOmaA47jYTbgLzIPmPYPYPcWB1kjzGWo7sTENSL
+ snWzCkLtSJUMzl4dC2P8qEjNTs9Z97Zfy+yyMAePSR5RQLGtIWKXITcZgFCekUIF7vLjevaPaV1
+ +LaCKf+sOzA2EWId/vEIG/kxz8h8dHLkrY/QRUmyY/uVFzbwLiOZE7DHTIBX2RKoIZGZEJUzBeR
+ WNBaLF/w+lrRYldhG58wFjnEbGbgvVMya2tw0RpvwrbwceT8tHUcSV7MEFW5AduNfn/W80+XcU3
+ WDRvge5QEdCUPgTXx/dF6CwMbzLuJM8bVq/JMoDpnZhUBciUwbOy/Mj2aVFC17+IUS36d5chuol
+ RHp8X04Aun56SGx2HOl8Y46SbRFH50UsjBo4xWwVLeRAjb1uW/Qjq7Ps3DWovxlJ5RdT/+l0n1p
+ IJga5Lu zADa1NNA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -78,31 +84,60 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct afs_permits.
+As found with Coccinelle[1], add __counted_by for struct ceph_monmap.
+Additionally, since the element count member must be set before accessing
+the annotated flexible array member, move its initialization earlier.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: David Howells <dhowells@redhat.com>
-Cc: Marc Dionne <marc.dionne@auristor.com>
-Cc: linux-afs@lists.infradead.org
+Cc: Ilya Dryomov <idryomov@gmail.com>
+Cc: Xiubo Li <xiubli@redhat.com>
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: ceph-devel@vger.kernel.org
+Cc: netdev@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- fs/afs/internal.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/ceph/mon_client.h | 2 +-
+ net/ceph/mon_client.c           | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-index 07433a5349ca..469a717467a4 100644
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@ -705,7 +705,7 @@ struct afs_permits {
- 	refcount_t		usage;
- 	unsigned short		nr_permits;	/* Number of records */
- 	bool			invalidated;	/* Invalidated due to key change */
--	struct afs_permit	permits[];	/* List of permits sorted by key pointer */
-+	struct afs_permit	permits[] __counted_by(nr_permits);	/* List of permits sorted by key pointer */
+diff --git a/include/linux/ceph/mon_client.h b/include/linux/ceph/mon_client.h
+index b658961156a0..7a9a40163c0f 100644
+--- a/include/linux/ceph/mon_client.h
++++ b/include/linux/ceph/mon_client.h
+@@ -19,7 +19,7 @@ struct ceph_monmap {
+ 	struct ceph_fsid fsid;
+ 	u32 epoch;
+ 	u32 num_mon;
+-	struct ceph_entity_inst mon_inst[];
++	struct ceph_entity_inst mon_inst[] __counted_by(num_mon);
  };
  
- /*
+ struct ceph_mon_client;
+diff --git a/net/ceph/mon_client.c b/net/ceph/mon_client.c
+index faabad6603db..f263f7e91a21 100644
+--- a/net/ceph/mon_client.c
++++ b/net/ceph/mon_client.c
+@@ -1136,6 +1136,7 @@ static int build_initial_monmap(struct ceph_mon_client *monc)
+ 			       GFP_KERNEL);
+ 	if (!monc->monmap)
+ 		return -ENOMEM;
++	monc->monmap->num_mon = num_mon;
+ 
+ 	for (i = 0; i < num_mon; i++) {
+ 		struct ceph_entity_inst *inst = &monc->monmap->mon_inst[i];
+@@ -1147,7 +1148,6 @@ static int build_initial_monmap(struct ceph_mon_client *monc)
+ 		inst->name.type = CEPH_ENTITY_TYPE_MON;
+ 		inst->name.num = cpu_to_le64(i);
+ 	}
+-	monc->monmap->num_mon = num_mon;
+ 	return 0;
+ }
+ 
 -- 
 2.34.1
 
