@@ -1,47 +1,44 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAFA1B26D
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:12:37 +0000 (UTC)
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-68fac346f6aso2315828b3a.3
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:12:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F291B26D
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:12:45 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1c337aeefbdso23570065ad.0
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694808757; x=1695413557; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1694808765; x=1695413565; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PrBmIK/7ZBFkfIJ+GoT9lofYoxjkLNz9RY+nH/vRJ5g=;
-        b=gWgm9g9C4uU9+CzZB20x3Zkw/qZkzWkt06FqW46Fbz5MtLj7maAHiV7dx4JOZ4EqwA
-         C9KmHfSXX+N1DaPWOkEvUZxENg7wCLEhSU7n7sWQDmZo/hBT3qxGORuV8BApxp9n6ULY
-         0pnrNO2WyQ9kd1uv9V+y1UBrTMGFjJY4lDnT4=
+        bh=/9ednYaRcJqbNHBCr/S6Xdi9dFFsTXXFXM7WGc+jfHE=;
+        b=SLYisVnYE/o+BmfToqhAK8zhgxIKCCpaZOU6Jf4uAm/E30knCGQNYl1OC/Y1oe+gHW
+         bA7mmSXQek5ufoJieDP7mGP3OFCw2hhe2xU9kdRQOXi/L5ad47wG6BKzdf/Aaet98Bli
+         +aNNyb5XOHW4Trb8VDrqD6qDgeohBcpGibyOg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694808757; x=1695413557;
+        d=1e100.net; s=20230601; t=1694808765; x=1695413565;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PrBmIK/7ZBFkfIJ+GoT9lofYoxjkLNz9RY+nH/vRJ5g=;
-        b=jd0fEXGtcTsGa05HTr71vnurPrrZLiZtD4WIwrCJFqIJpNwU1EZI2A2RSuzJv/8+qe
-         KJnQFJVLILdFJkhlDafEP/JdjGlxwXCVAS58olLfKbUDbkMnlPg4wG4/Re9RPROxlHmm
-         7nlka2Cgdea901OWvySyJeqc6zq2CDjLR8ZRGL56MJ8EcbOOEy4vmcTe2pJROX6Uu7re
-         JMTFnLF72zxA/npNyAHOnlu8cAmTkVNwKYOj5qPUnl3o37q6mSzzqDYVluPJFU8qjpDM
-         biHduY6w7bZLXvz3IxGylzYS0F0XtXiNRDY0DLQk6XvaxF62HgOZklUD3Vt25shh4Mja
-         T/fg==
-X-Gm-Message-State: AOJu0YypyD2qT2/XfzGmy8WZJtz9SrcCxNjpL+wePHaZOju428tzNZKb
-	G/lm03t9y1iFHROoeFrxiy0TQA==
-X-Google-Smtp-Source: AGHT+IHaSepHftYvn6j1J/8NjB2sQp1S0SXdFatkZesmqR96Dm0a8qXQYyp/030E766wL+sQ438gNQ==
-X-Received: by 2002:a05:6a00:1490:b0:690:454a:dc7b with SMTP id v16-20020a056a00149000b00690454adc7bmr3035526pfu.28.1694808757000;
-        Fri, 15 Sep 2023 13:12:37 -0700 (PDT)
+        bh=/9ednYaRcJqbNHBCr/S6Xdi9dFFsTXXFXM7WGc+jfHE=;
+        b=ZdERTgZIUrtTNvM9ca/SC3Ij5ZX7hbm7/5T7y8spMcfmWEKNUmFi/dFTEwP7ug/SaW
+         I2fTZT/xFiqjfHeqd9kPNYbfXCDVsno6gfL5akXSh56UPY+1IDn2lZtwojZIvTtRH/aD
+         mi3TbC8ul5H0I1YBt7JbRopC85HhWmej6gED2qMHsUZF1Y6SjrLBtXFXsOOOixEsVb8k
+         6NMqZ3htAogZj9FDJwtDmwBwfUIBjrrgoGrMnlPLjzeaiWGq1+wqS4Qi3K/Y0nLiDGH6
+         VDkFAJ1S75QEoKelUbDvS5cXtXuKEn8KOOECLDi+0geePJaxH3eSZKlsoOvKAMKwblHy
+         DZcA==
+X-Gm-Message-State: AOJu0Yw2f3gnu75x28Sua8y3+vF8tvBHhxwxmAcD8smyTNG75fW3yos+
+	f8QMH+43H74v7NcMn84mcaeM3w==
+X-Google-Smtp-Source: AGHT+IF26agxIuVbx2bzTaD9bnr+Fu0VoE03C3/1yq+KoExa8nJ3wdcTmCK/3DSQQpd1lF7ovsqncw==
+X-Received: by 2002:a17:902:b494:b0:1bc:6c8:cded with SMTP id y20-20020a170902b49400b001bc06c8cdedmr2417137plr.67.1694808765369;
+        Fri, 15 Sep 2023 13:12:45 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k192-20020a636fc9000000b0055bf13811f5sm2994033pgc.15.2023.09.15.13.12.36
+        by smtp.gmail.com with ESMTPSA id j10-20020a170902c3ca00b001c3cbedbc47sm3859508plj.6.2023.09.15.13.12.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 13:12:36 -0700 (PDT)
+        Fri, 15 Sep 2023 13:12:44 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Paul Cercueil <paul@crapouillou.net>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Harvey Hunt <harveyhuntnexus@gmail.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
-	linux-mips@vger.kernel.org,
 	linux-mtd@lists.infradead.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
@@ -49,9 +46,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] mtd: rawnand: ingenic: Annotate struct ingenic_nfc with __counted_by
-Date: Fri, 15 Sep 2023 13:12:35 -0700
-Message-Id: <20230915201234.never.868-kees@kernel.org>
+Subject: [PATCH] mtd: rawnand: marvell: Annotate struct marvell_nand_chip with __counted_by
+Date: Fri, 15 Sep 2023 13:12:43 -0700
+Message-Id: <20230915201243.never.235-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,20 +56,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1453; i=keescook@chromium.org;
- h=from:subject:message-id; bh=u7N1dQwnfrzLeR4rYuLcrvgfoIzHpMlv8osLJuSY2+Y=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLqzjowlIzJmYXlgsM3m8LT0SCSdfQTsxoB/i
- acbRSZ+5eeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS6swAKCRCJcvTf3G3A
- JsI5EACJLga/jCgx7S0K+M8EI9/HpJJsQ4twNYBlge15BlTjzWL6+s3zgE5f7UOcVRpkq67GHb+
- FeToD49bp07c9OF4Y2xbpjHB/lYhHing/bv51pliDDUlQLsWicGBOoaC2GT6lwt4fwpqSDtOa9A
- TA8a1qAJT9wj2WwiEU0Zj8IG49xkuILQt2a6r/pd5AgQQa/FUwVr15kSK7RmRRBejWggW+3rhCa
- rSgdqJU36g/RBkZcBEQHdRUimIo0VAeZ9ksIsMsxNhv3mxG4m9PXWkwjhDvGrmx+oK7OKRoTu2k
- 2b37q/dOck12rVK7Zp7OSOXKN09n1QsFSsw20fa4OPreJeAcpFZMJIJPaMZoNvIrcK6RFg0WJQ1
- pDaE7yH8U+FQPEIKFguHdPM1dKoDzLxtbmLgyIguyoTQr5el7bk3wxn8X53JOGpA24BQxsHR8nL
- WygbnLNvYhmDscT7wuWQ8ROnjn25sZUe5TZsLWij0dZdYprGIOy7I5CNhKmP0M3znYsHEJG4/Fh
- kk175ctq9KqoZmyeJFNBddnk+nbM0Cve21DvPxLyd2Al1nEp8yF9gZzqm6fHeT560E3Vg88ih4b
- YvODs23KDa5lanCSm99HJ7GXcQAXIj3w2WYkXFMQXl7bUZ+xamamKcWJeD14/oVwjqAkI2rGARw
- G1gmn7q 2KMQ5WVQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1327; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=TQ33NzB9u1hD2EeLpj7Zf3S9y0fIk3egTEL+4CNIaZM=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLq7Uo+K8oyZTYA57xeasyFe+Qr+U0ga005PU
+ otIx9G3DgCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS6uwAKCRCJcvTf3G3A
+ JsKoD/4pERGmBwMG1bnu0pOlCoKD7XbCGlqkd/EhEKPpQocWXRVqfmHIwKg9nm+oRxEEY/fQgRJ
+ HPDNMYrW4NCVpCfktLjVuNqULEYV1xQhPXiRPbtPoctSpCffUAcDGeSdxZ+ADTtOMCf9YMxZ86M
+ XeE5QMBNAWO10BnFaiCeF+DVmCbhIPN3voMjzZNhZrbp+4ZZHnkStN1CWXoqUdEFxmjTfye2xEo
+ 6GSoFfDAUz4lsOp4p23NBSGDoXS+hoVMhk5NCWJ5o2m1Tg3GM58ZAevy+KZG+bCZy68wh4S7FQQ
+ QX6fTuhdxeEsnWoOJeYfaHXkjDTJNn+kizzywtJNe5YfkZ6Sfc/NeMytmeOyQl/MskHmZDM30j8
+ naA4EfZc8RPme4ulzyVc2SWSMilvBlKUGF/rWF40drwKmQVBJN3ppGzcxkvvYuLlswVxmMnufHb
+ Veidh2Y/zUi/crLXAwAyph5HkKkLM3ugeU+mHQP/jsi1T4ckqzw0U9EHXgkUVm03oZ1pnzc86v9
+ 0ztGQr/8O+Sgok15/8FkWTTeS4qXajh/GTDLetIc4wxK21KZzQNRlQuTIXTCJUL3M9ZHuV3Wm0z
+ EfwVgQMW9MD9gPWZdJUzuZuFMYiEzHmKD0j52m0w7qb8t4STrDA6+OKfBN50dsM0Pivr2OSq6hz
+ afLGe7T gFR43eRA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -82,35 +79,32 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct ingenic_nfc.
+As found with Coccinelle[1], add __counted_by for struct marvell_nand_chip.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Harvey Hunt <harveyhuntnexus@gmail.com>
 Cc: Miquel Raynal <miquel.raynal@bootlin.com>
 Cc: Richard Weinberger <richard@nod.at>
 Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: linux-mips@vger.kernel.org
 Cc: linux-mtd@lists.infradead.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 2 +-
+ drivers/mtd/nand/raw/marvell_nand.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-index 6748226b8bd1..ce9ef4e65597 100644
---- a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-+++ b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-@@ -46,7 +46,7 @@ struct ingenic_nfc {
- 	struct nand_controller controller;
- 	unsigned int num_banks;
- 	struct list_head chips;
--	struct ingenic_nand_cs cs[];
-+	struct ingenic_nand_cs cs[] __counted_by(num_banks);
+diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw/marvell_nand.c
+index b841a81cb128..a46698744850 100644
+--- a/drivers/mtd/nand/raw/marvell_nand.c
++++ b/drivers/mtd/nand/raw/marvell_nand.c
+@@ -348,7 +348,7 @@ struct marvell_nand_chip {
+ 	int addr_cyc;
+ 	int selected_die;
+ 	unsigned int nsels;
+-	struct marvell_nand_chip_sel sels[];
++	struct marvell_nand_chip_sel sels[] __counted_by(nsels);
  };
  
- struct ingenic_nand {
+ static inline struct marvell_nand_chip *to_marvell_nand(struct nand_chip *chip)
 -- 
 2.34.1
 
