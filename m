@@ -1,52 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF1ADDD1;
-	Fri, 15 Sep 2023 09:45:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694771108; x=1726307108;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0rV9VG8TKb4cPuL/9qputjsI4zy07ien126tpL7W2Ic=;
-  b=GzrNnruiqSe5iu52tmc9OM2DWOpje7aV3xxPYbBWL4w/v8Uqzjw/seE2
-   I3zE9WtVmi7tvKCdqLhXJ3fwwFFqBks7amv2ctgF9W2s6XXvxASRqMzPS
-   88gVJnR5Hyp6TXQmG8uAEXQhKxq9/nB5oFQhtweaQmuQYinurdrokYKga
-   K3m9cVoumLnT5OL0JdiLg1dujEvn/jMsG1XY8f93ln7rvVvOy7B8PeK2g
-   I76cfLbJ/2u+CXlEqUrSk4yiIegV9rzItnwvVbUBNj1oBWXayLvT8FMIi
-   a2CC4qxzpkGq3jmFwxfInTw/DSOWccyTi6lA73r6jvcp6em/7o4z0487s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="379128434"
-X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
-   d="scan'208";a="379128434"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 02:45:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="774246375"
-X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
-   d="scan'208";a="774246375"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2023 02:45:01 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qh5Nj-0002mV-1R;
-	Fri, 15 Sep 2023 09:44:59 +0000
-Date: Fri, 15 Sep 2023 17:44:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	jolsa@kernel.org, kuba@kernel.org, toke@kernel.org,
-	willemb@google.com, dsahern@kernel.org, magnus.karlsson@intel.com,
-	bjorn@kernel.org, maciej.fijalkowski@intel.com, hawk@kernel.org,
-	yoong.siang.song@intel.com, netdev@vger.kernel.org,
-	xdp-hints@xdp-project.net
-Subject: Re: [PATCH bpf-next v2 2/9] xsk: add TX timestamp and TX checksum
- offload support
-Message-ID: <202309151727.81IIJrBK-lkp@intel.com>
-References: <20230914210452.2588884-3-sdf@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A26DDB7
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694783637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sb5wr0wfo93KZmmG9iONfAq+eRQpW+VSRFFBiRCmnG8=;
+	b=gLBdpzYqa9yQeB3Ocn/QJRj7z/GYsd3WCZrgwmkeTfmM1P00rxw58TxuSF8ZNZ81Fc1Ij7
+	eEpQjAqQMvU5/ACX/vXahlQckbDc/l3euv+txqM4B6aXsVfVqZqv5o6WnvbOCKfNd7xxDP
+	ExKGrpbB/9VbT7EW/pXlXytsmZ2to6w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-219-qPOpJlElMJyjGulFdS2cwQ-1; Fri, 15 Sep 2023 09:13:52 -0400
+X-MC-Unique: qPOpJlElMJyjGulFdS2cwQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1227858285;
+	Fri, 15 Sep 2023 13:13:51 +0000 (UTC)
+Received: from localhost (unknown [10.72.113.71])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 806C32026D68;
+	Fri, 15 Sep 2023 13:13:50 +0000 (UTC)
+Date: Fri, 15 Sep 2023 21:13:47 +0800
+From: Baoquan He <bhe@redhat.com>
+To: kernel test robot <lkp@intel.com>, akpm@linux-foundation.org
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, akpm@linux-foundation.org,
+	thunder.leizhen@huawei.com, catalin.marinas@arm.com,
+	chenjiahao16@huawei.com, kexec@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, x86@kernel.org
+Subject: Re: [PATCH v3 6/9] x86: kdump: use generic interface to simplify
+ crashkernel reservation code
+Message-ID: <ZQRYixr2AtJtRFrh@MiWiFi-R3L-srv>
+References: <20230914033142.676708-7-bhe@redhat.com>
+ <202309141534.moH4dTcz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,127 +47,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230914210452.2588884-3-sdf@google.com>
+In-Reply-To: <202309141534.moH4dTcz-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 
-Hi Stanislav,
+On 09/14/23 at 04:12pm, kernel test robot wrote:
+> Hi Baoquan,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on powerpc/next]
+> [also build test WARNING on powerpc/fixes linus/master v6.6-rc1 next-20230914]
+> [cannot apply to arm64/for-next/core tip/x86/core]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/crash_core-c-remove-unnecessary-parameter-of-function/20230914-113546
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+> patch link:    https://lore.kernel.org/r/20230914033142.676708-7-bhe%40redhat.com
+> patch subject: [PATCH v3 6/9] x86: kdump: use generic interface to simplify crashkernel reservation code
+> config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20230914/202309141534.moH4dTcz-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309141534.moH4dTcz-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202309141534.moH4dTcz-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> arch/x86/kernel/setup.c:476:15: warning: no previous prototype for function 'crash_low_size_default' [-Wmissing-prototypes]
+>    unsigned long crash_low_size_default(void)
+>                  ^
+>    arch/x86/kernel/setup.c:476:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    unsigned long crash_low_size_default(void)
+>    ^
+>    static 
+>    1 warning generated.
 
-kernel test robot noticed the following build warnings:
+Thanks for reporting this. I can reproduced this warning on x86_64
+machine by retrieving the LKP's config and build it with below command:
 
-[auto build test WARNING on bpf-next/master]
+	make ARCH=i386 -j128 W=1 arch/x86/kernel/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/xsk-Support-tx_metadata_len/20230915-051153
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230914210452.2588884-3-sdf%40google.com
-patch subject: [PATCH bpf-next v2 2/9] xsk: add TX timestamp and TX checksum offload support
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230915/202309151727.81IIJrBK-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230915/202309151727.81IIJrBK-lkp@intel.com/reproduce)
+I can fix it by moving crash_low_size_default() into arch/x86/include/asm/crash_core.h 
+and make it as static inline as below draft change.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309151727.81IIJrBK-lkp@intel.com/
+Hi Andrew,
 
-All warnings (new ones prefixed by >>):
+I should post v4 of the whole series or just v4 of this patch?
 
-   In file included from net/core/filter.c:21:
-   In file included from include/linux/bpf_verifier.h:7:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/core/filter.c:21:
-   In file included from include/linux/bpf_verifier.h:7:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/core/filter.c:21:
-   In file included from include/linux/bpf_verifier.h:7:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from net/core/filter.c:62:
->> include/net/xdp_sock.h:183:52: warning: declaration of 'struct xsk_tx_metadata_comp' will not be visible outside of this function [-Wvisibility]
-     183 | static inline void xsk_tx_metadata_complete(struct xsk_tx_metadata_comp *compl,
-         |                                                    ^
-   13 warnings generated.
+[PATCH v3 6/9] x86: kdump: use generic interface to simplify crashkernel reservation code
 
 
-vim +183 include/net/xdp_sock.h
+diff --git a/arch/x86/include/asm/crash_core.h b/arch/x86/include/asm/crash_core.h
+index 5fc5e4f94521..76af98f4e801 100644
+--- a/arch/x86/include/asm/crash_core.h
++++ b/arch/x86/include/asm/crash_core.h
+@@ -18,6 +18,7 @@
+  * no good way to detect the paging mode of the target kernel which will be
+  * loaded for dumping.
+  */
++extern unsigned long swiotlb_size_or_default(void);
+ 
+ #ifdef CONFIG_X86_32
+ # define CRASH_ADDR_LOW_MAX     SZ_512M
+@@ -29,6 +30,13 @@
+ 
+ # define DEFAULT_CRASH_KERNEL_LOW_SIZE crash_low_size_default()
+ 
+-extern unsigned long crash_low_size_default(void);
++static inline unsigned long crash_low_size_default(void)
++{
++#ifdef CONFIG_X86_64
++	return max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20);
++#else
++	return 0;
++#endif
++}
+ 
+ #endif /* _X86_CRASH_CORE_H */
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 0acc86587fc0..d7baa567c68e 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -470,18 +470,6 @@ static void __init memblock_x86_reserve_range_setup_data(void)
+ 	}
+ }
+ 
+-/*
+- * --------- Crashkernel reservation ------------------------------
+- */
+-unsigned long crash_low_size_default(void)
+-{
+-#ifdef CONFIG_X86_64
+-	return max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20);
+-#else
+-	return 0;
+-#endif
+-}
+-
+ static void __init arch_reserve_crashkernel(void)
+ {
+ 	unsigned long long crash_base, crash_size, low_size = 0;
 
-   182	
- > 183	static inline void xsk_tx_metadata_complete(struct xsk_tx_metadata_comp *compl,
-   184						    const struct xsk_tx_metadata_ops *ops,
-   185						    void *priv)
-   186	{
-   187	}
-   188	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
