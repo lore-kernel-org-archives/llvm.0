@@ -1,44 +1,41 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D1EED2;
-	Fri, 15 Sep 2023 02:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694746524; x=1726282524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aLKY0hRp8/R8+WbLPIjcPIdpei2Ch16j6F7Zhk8MChQ=;
-  b=lSoqb29zOGjQcVHOaKc9tlsWpSIqNGfYkyQeyMTDGIuCYFikqaWmrtDP
-   SLCMEwkx59KWW9B8o9MdQFZDGzB4h5kP6GyLDsRn2VzdnWXr+mJVcIfd6
-   DcBHP78ILvGeGnDK7FpMVo5Y/Ie6iLJg6cLur5JCHTnd2hC1/QM115hjw
-   66/q1nHCnHrpgCzccgXTGA7svNilNg99sZFM6KCZ0ocFEhvlvjoqwpPuB
-   bGiYQQ3iUu/NFHSKoGiByJjkOi+aRvq3hj0L3fLueR5jQLKVSv02Yt0T6
-   TM4EPHMIdiGVqrUUeWsBRIMDKwQY0cb2VC4CcRyHOXoyaDaL/aaSXj7rV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="443202128"
-X-IronPort-AV: E=Sophos;i="6.02,147,1688454000"; 
-   d="scan'208";a="443202128"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 19:55:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="721513511"
-X-IronPort-AV: E=Sophos;i="6.02,147,1688454000"; 
-   d="scan'208";a="721513511"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Sep 2023 19:55:12 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qgyz7-0002LP-2n;
-	Fri, 15 Sep 2023 02:55:09 +0000
-Date: Fri, 15 Sep 2023 10:54:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joe Thornber <ejt@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dm-devel@redhat.com, Mike Snitzer <snitzer@kernel.org>
-Subject: [device-mapper-dm:for-next 2/4]
- drivers/md/persistent-data/dm-extent-allocator.c:530:24: error: expected ';'
- after expression
-Message-ID: <202309151023.QPBCNoCN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C5B2571
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 03:34:03 +0000 (UTC)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-656307a52e8so3573676d6.1
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 20:34:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694748842; x=1695353642;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iaRpWeQBHF9xrScwEaYmj1hDO7gFWhFOcR6aMt6yIR4=;
+        b=Xk2EV8UX+NWwPWLSt8Fdd5WlzjR6m33bUasMXjoWjalsetrrfAjhrvuSyRpyQHXsqY
+         RKK5pDvY5SoZaHLWIMj1OUcLhXweq77yN67nc4DGMbx+FTpGesjh62ruJeH8g64E9pei
+         /qdvw3fsfg5FJLw2DSYSKLTOVtn7yYpbnBWP/wtLjsebFIP/az2ZRCpaW/nX2Q8JsUy6
+         TvjY5/WN7RROZj+SxHwPDAzCo0Kl+4HrksdbBa1n1iBWjN6Vo50ev00hT7pbdF0HHF5G
+         0k6lmWNegWd7zRcpd9eeV6PI0iEAtfU/mDPUnwnxhlC5M+fJgAsYkhhNdWVXuDHKcdVl
+         y0nQ==
+X-Gm-Message-State: AOJu0YxWwvEawsxb77DUcdUKc4isUg+gY6oyLq41LCcT7nokkZfGZA0S
+	4pyEKcQj1sLFEeo4L8d0nEIl
+X-Google-Smtp-Source: AGHT+IEBEYKRA2Zo7KXzkVVYdgYjkcKhhHD3gv62cQKEjoTRsB89tTRb5JOZnctFnGbpqENER6tIsg==
+X-Received: by 2002:a0c:b4c9:0:b0:635:f899:660b with SMTP id h9-20020a0cb4c9000000b00635f899660bmr523466qvf.36.1694748842373;
+        Thu, 14 Sep 2023 20:34:02 -0700 (PDT)
+Received: from localhost (pool-68-160-141-91.bstnma.fios.verizon.net. [68.160.141.91])
+        by smtp.gmail.com with ESMTPSA id e3-20020ad44183000000b0063d30c10f1esm781581qvp.70.2023.09.14.20.34.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 20:34:01 -0700 (PDT)
+Date: Thu, 14 Sep 2023 23:34:00 -0400
+From: Mike Snitzer <snitzer@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Joe Thornber <ejt@redhat.com>, dm-devel@redhat.com,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [device-mapper-dm:for-next 2/4]
+ drivers/md/persistent-data/dm-extent-allocator.c:530:24: error: expected ';
+ ' after expression
+Message-ID: <ZQPQqCzlu3AUtumF@redhat.com>
+References: <202309151023.QPBCNoCN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,58 +44,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202309151023.QPBCNoCN-lkp@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-head:   edcabec81f12dfc9b86b05084bba3232efdc5e4e
-commit: 59d814674dd66fc64ba229605174bfe0b8e566d5 [2/4] dm persistent data: Introduce extent allocator
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230915/202309151023.QPBCNoCN-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230915/202309151023.QPBCNoCN-lkp@intel.com/reproduce)
+On Thu, Sep 14 2023 at 10:54P -0400,
+kernel test robot <lkp@intel.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309151023.QPBCNoCN-lkp@intel.com/
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+> head:   edcabec81f12dfc9b86b05084bba3232efdc5e4e
+> commit: 59d814674dd66fc64ba229605174bfe0b8e566d5 [2/4] dm persistent data: Introduce extent allocator
+> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230915/202309151023.QPBCNoCN-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230915/202309151023.QPBCNoCN-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202309151023.QPBCNoCN-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/md/persistent-data/dm-extent-allocator.c:530:24: error: expected ';' after expression
+>            spin_unlock(&ea->lock)
+>                                  ^
+>                                  ;
+>    drivers/md/persistent-data/dm-extent-allocator.c:544:24: error: expected ';' after expression
+>            spin_unlock(&ea->lock)
+>                                  ^
+>                                  ;
+>    2 errors generated.
 
-All errors (new ones prefixed by >>):
 
->> drivers/md/persistent-data/dm-extent-allocator.c:530:24: error: expected ';' after expression
-           spin_unlock(&ea->lock)
-                                 ^
-                                 ;
-   drivers/md/persistent-data/dm-extent-allocator.c:544:24: error: expected ';' after expression
-           spin_unlock(&ea->lock)
-                                 ^
-                                 ;
-   2 errors generated.
-
-
-vim +530 drivers/md/persistent-data/dm-extent-allocator.c
-
-   511	
-   512	void dm_alloc_context_get(struct dm_extent_allocator *ea,
-   513				  struct dm_alloc_context *ac)
-   514	{
-   515		spin_lock(&ea->lock);
-   516		ac->ea = ea;
-   517	
-   518		ea->nr_allocation_contexts++;
-   519	
-   520		/*
-   521		 * We try and maintain a couple of nodes per alloc context to avoid sharing.
-   522		 * If allocation fails it's no big deal; we'll just get more fragmentation.
-   523		 */
-   524		if (ea->nr_preallocated_nodes < ea->nr_allocation_contexts * 2)
-   525			__prealloc_nodes(ea, 2, GFP_NOIO);
-   526	
-   527		list_add(&ac->list, &ea->allocation_contexts);
-   528		INIT_LIST_HEAD(&ac->holders_list);
-   529		ac->leaf = NULL;
- > 530		spin_unlock(&ea->lock)
-   531	}
-   532	EXPORT_SYMBOL_GPL(dm_alloc_context_get);
-   533	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+These were my fault.. Fixed, sorry about the noise.
