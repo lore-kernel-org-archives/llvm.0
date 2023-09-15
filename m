@@ -1,45 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59ED33F2;
-	Thu, 14 Sep 2023 23:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D1EED2;
+	Fri, 15 Sep 2023 02:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694734495; x=1726270495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QgmmQvr2VVCjTSIRZkudFML55JEhEzRCoQKAwYZ77zY=;
-  b=ev/YG5Ze9X7nUfQ4hxkPIWe4ofclHyCPg7UiAg7VJnfSvN7aisbEbdzz
-   QqMKS30Ak4TmO9lMNF7NId4yvkj9xaY/nwfy5ieMf71SVl1ccBw9cQAMM
-   U+6NYJGCkdi6TdAahe6357yojUXNtX8HfZgdnpvXp0pWB01+j5sElmi+l
-   fTPAsHf7aj3lXk4eLjq7+PDgDxYKaRx2YpH2lDAz0j9VborPVGEvGBfsr
-   xCjWa9XrSK51a7d2ttDG487fKoNcKsp0eqt+Gzn763CCkc/3vBmS1Mf3R
-   j5VkzGbTCn0mImGTgK6sYQmf7+qQyZoIEdbcD3C/JYkjrwdK+4mNYB4Kv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="465477141"
+  t=1694746524; x=1726282524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aLKY0hRp8/R8+WbLPIjcPIdpei2Ch16j6F7Zhk8MChQ=;
+  b=lSoqb29zOGjQcVHOaKc9tlsWpSIqNGfYkyQeyMTDGIuCYFikqaWmrtDP
+   SLCMEwkx59KWW9B8o9MdQFZDGzB4h5kP6GyLDsRn2VzdnWXr+mJVcIfd6
+   DcBHP78ILvGeGnDK7FpMVo5Y/Ie6iLJg6cLur5JCHTnd2hC1/QM115hjw
+   66/q1nHCnHrpgCzccgXTGA7svNilNg99sZFM6KCZ0ocFEhvlvjoqwpPuB
+   bGiYQQ3iUu/NFHSKoGiByJjkOi+aRvq3hj0L3fLueR5jQLKVSv02Yt0T6
+   TM4EPHMIdiGVqrUUeWsBRIMDKwQY0cb2VC4CcRyHOXoyaDaL/aaSXj7rV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="443202128"
 X-IronPort-AV: E=Sophos;i="6.02,147,1688454000"; 
-   d="scan'208";a="465477141"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 16:34:54 -0700
+   d="scan'208";a="443202128"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 19:55:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="991608349"
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="721513511"
 X-IronPort-AV: E=Sophos;i="6.02,147,1688454000"; 
-   d="scan'208";a="991608349"
+   d="scan'208";a="721513511"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Sep 2023 16:34:53 -0700
+  by orsmga006.jf.intel.com with ESMTP; 14 Sep 2023 19:55:12 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qgvrH-0002Aj-0O;
-	Thu, 14 Sep 2023 23:34:51 +0000
-Date: Fri, 15 Sep 2023 07:34:42 +0800
+	id 1qgyz7-0002LP-2n;
+	Fri, 15 Sep 2023 02:55:09 +0000
+Date: Fri, 15 Sep 2023 10:54:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes@sipsolutions.net>,
-	linux-wireless@vger.kernel.org
+To: Joe Thornber <ejt@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [PATCH v2] rfkill: sync before userspace visibility/changes
-Message-ID: <202309150719.OIX0u8eK-lkp@intel.com>
-References: <20230914153604.9d1ce0f43ac8.If977317d8f6a0f557090defcd6aef67628f62ff7@changeid>
+	dm-devel@redhat.com, Mike Snitzer <snitzer@kernel.org>
+Subject: [device-mapper-dm:for-next 2/4]
+ drivers/md/persistent-data/dm-extent-allocator.c:530:24: error: expected ';'
+ after expression
+Message-ID: <202309151023.QPBCNoCN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,69 +47,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230914153604.9d1ce0f43ac8.If977317d8f6a0f557090defcd6aef67628f62ff7@changeid>
 
-Hi Johannes,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v6.6-rc1 next-20230914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/rfkill-sync-before-userspace-visibility-changes/20230914-221103
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20230914153604.9d1ce0f43ac8.If977317d8f6a0f557090defcd6aef67628f62ff7%40changeid
-patch subject: [PATCH v2] rfkill: sync before userspace visibility/changes
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230915/202309150719.OIX0u8eK-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230915/202309150719.OIX0u8eK-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+head:   edcabec81f12dfc9b86b05084bba3232efdc5e4e
+commit: 59d814674dd66fc64ba229605174bfe0b8e566d5 [2/4] dm persistent data: Introduce extent allocator
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230915/202309151023.QPBCNoCN-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230915/202309151023.QPBCNoCN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309150719.OIX0u8eK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309151023.QPBCNoCN-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/rfkill/core.c:735:2: error: call to undeclared function 'rfkill_sync'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           rfkill_sync(rfkill);
-           ^
-   net/rfkill/core.c:759:2: error: call to undeclared function 'rfkill_sync'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           rfkill_sync(rfkill);
-           ^
-   net/rfkill/core.c:793:2: error: call to undeclared function 'rfkill_sync'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           rfkill_sync(rfkill);
-           ^
-   net/rfkill/core.c:818:2: error: call to undeclared function 'rfkill_sync'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           rfkill_sync(rfkill);
-           ^
-   net/rfkill/core.c:1044:13: error: static declaration of 'rfkill_sync' follows non-static declaration
-   static void rfkill_sync(struct rfkill *rfkill)
-               ^
-   net/rfkill/core.c:735:2: note: previous implicit declaration is here
-           rfkill_sync(rfkill);
-           ^
-   5 errors generated.
+>> drivers/md/persistent-data/dm-extent-allocator.c:530:24: error: expected ';' after expression
+           spin_unlock(&ea->lock)
+                                 ^
+                                 ;
+   drivers/md/persistent-data/dm-extent-allocator.c:544:24: error: expected ';' after expression
+           spin_unlock(&ea->lock)
+                                 ^
+                                 ;
+   2 errors generated.
 
 
-vim +/rfkill_sync +735 net/rfkill/core.c
+vim +530 drivers/md/persistent-data/dm-extent-allocator.c
 
-   728	
-   729	static ssize_t soft_show(struct device *dev, struct device_attribute *attr,
-   730				 char *buf)
-   731	{
-   732		struct rfkill *rfkill = to_rfkill(dev);
-   733	
-   734		mutex_lock(&rfkill_global_mutex);
- > 735		rfkill_sync(rfkill);
-   736		mutex_unlock(&rfkill_global_mutex);
-   737	
-   738		return sysfs_emit(buf, "%d\n", (rfkill->state & RFKILL_BLOCK_SW) ? 1 : 0);
-   739	}
-   740	
+   511	
+   512	void dm_alloc_context_get(struct dm_extent_allocator *ea,
+   513				  struct dm_alloc_context *ac)
+   514	{
+   515		spin_lock(&ea->lock);
+   516		ac->ea = ea;
+   517	
+   518		ea->nr_allocation_contexts++;
+   519	
+   520		/*
+   521		 * We try and maintain a couple of nodes per alloc context to avoid sharing.
+   522		 * If allocation fails it's no big deal; we'll just get more fragmentation.
+   523		 */
+   524		if (ea->nr_preallocated_nodes < ea->nr_allocation_contexts * 2)
+   525			__prealloc_nodes(ea, 2, GFP_NOIO);
+   526	
+   527		list_add(&ac->list, &ea->allocation_contexts);
+   528		INIT_LIST_HEAD(&ac->holders_list);
+   529		ac->leaf = NULL;
+ > 530		spin_unlock(&ea->lock)
+   531	}
+   532	EXPORT_SYMBOL_GPL(dm_alloc_context_get);
+   533	
 
 -- 
 0-DAY CI Kernel Test Service
