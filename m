@@ -1,59 +1,60 @@
 Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1942E30D06
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 19:58:52 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1bf7423ef3eso21516135ad.3
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 12:58:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EBF1B274
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 19:59:41 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1c4194f7635so14168595ad.0
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 12:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694807932; x=1695412732; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1694807981; x=1695412781; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9mvaVHg0XEhOTsWroaSMJTNrbWXg2FfhIFu4j+H929s=;
-        b=Stiax1JgTDOgXDDhiJZmcKA1EWdRM6tao3m8Q3Nno8sFDJhTBdEKlZaNzEIb0Gk594
-         Nxu2WrgLGZVkzX5K9LdnY6CBdbiWWoNwzm3RvE8adaRMmIjaKZqnEJg6SMimW4UFjmAL
-         romGxa5Yt8IJxi/zpAbYWBDMSwFnAXR9ctAuc=
+        bh=/QTAaYbGChQLUY+Gq2za7n5ZQvKf3nOru5ieThOaDQg=;
+        b=PEC/P41lIsIYYPUc3YJ3BfPtiZKVjNy7ON2eCQt9OLfaA3ttd5LfXPxn7lpQV+AqXL
+         MJRcTnQqCYpUE4u2RMNNwo1456UELCtYtmhfPawWdBaiazkl3LPOJJC5P9MqAD03pB0L
+         Vja+NeExtEb6lmOdjreMxyAbTKDDVZVexw3QY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694807932; x=1695412732;
+        d=1e100.net; s=20230601; t=1694807981; x=1695412781;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9mvaVHg0XEhOTsWroaSMJTNrbWXg2FfhIFu4j+H929s=;
-        b=mYVARqCBbOFPotJCGqc0JxPU/CGzg/bFkZ3Gc1AlWmU1z8AUFGPmr2IFByDD+2juw9
-         aVMYkosQPamdakmr2fTre7MwkJ2lB4LjVBRk6g4afHME5XrGWAaQn4+v4JJeNi3Hun2m
-         S6SelrsBIX7NjRVlVwfOiqPiNaY8hrRxkoe0TcuFqdQign4L8UwMURhLaIONseF7XDqJ
-         32okwqGjd9VdqifgrKRsDFo71y3SESY/AOKLBiGkieTyCdMLvCb/Qkpoh+Xudbwq0gtt
-         /0PGEBeIj3IcaOIofJPUhHrpAbvCbigENRg6yN4Hdw4IcUZN0fYwbzse/dFKKKmurrvY
-         AsHA==
-X-Gm-Message-State: AOJu0YxEbsrj8NXr+BA4oDuA53Rh9YBgjjiTbyg1YMLN/lqjQnsP1sOy
-	DKbHZU7KXu9WypOsYW6PRspheg==
-X-Google-Smtp-Source: AGHT+IF2fjZ/d33YdQNZ9Gnglfod4PZB1quLAoKZUVOZBf+nOkF+bnd0n+ISyIgWlIgPt6WDxryOvw==
-X-Received: by 2002:a17:90b:118e:b0:273:4c57:a7a8 with SMTP id gk14-20020a17090b118e00b002734c57a7a8mr2448516pjb.16.1694807932473;
-        Fri, 15 Sep 2023 12:58:52 -0700 (PDT)
+        bh=/QTAaYbGChQLUY+Gq2za7n5ZQvKf3nOru5ieThOaDQg=;
+        b=BhjLfyZtyHAvz3RpTOXD2by9+yIBvXM6Aw53GlpucBQ/iDXuJDvq4Fv25706E9t2c0
+         5/HQHYYnNstKVKHCFphNJB4HCHyF1hCdfQZm3rRBgDP05o/xFvVghK02llbcnTaCbahw
+         tf9FzMVe4I39tjNBa1J1/ZwIntQgppmE0PbEzezhP9wsxS4hFPN0U9C0FJGQtd+rriB/
+         Atu3+uJaRsqJ3077Q48n/3TtL4marNXgDvMGVHeyiZA+x9z63e9K2vULKJJOYzCBpwR/
+         7xxHOf3VXQGlIptTp/HOuTtjJFgT6WThM5HeVTaQT2fODuQPkegyeyyNS9YBYzDrKDNw
+         xyKw==
+X-Gm-Message-State: AOJu0YwBFqQbi3vtBldH4TZzv/tLMGy7gjcXkfECKTM6rOHeyLEAGYhi
+	33TmUpV2ts8MgoQUIrP0LJNWXw==
+X-Google-Smtp-Source: AGHT+IGYK7Py8XcBgcsBTxZTMvjHQKfVzB5OmfXsKXYmjNSdHYAcwM38OH4ue55Hb1gXlpvUJ8KkHA==
+X-Received: by 2002:a17:902:684d:b0:1bc:224a:45c2 with SMTP id f13-20020a170902684d00b001bc224a45c2mr6041713pln.15.1694807981241;
+        Fri, 15 Sep 2023 12:59:41 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id iq15-20020a17090afb4f00b002636e5c224asm3359563pjb.56.2023.09.15.12.58.51
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902a40400b001c407fac227sm3855508plq.41.2023.09.15.12.59.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 12:58:51 -0700 (PDT)
+        Fri, 15 Sep 2023 12:59:40 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Kees Cook <keescook@chromium.org>,
 	John Keeping <john@keeping.me.uk>,
-	Udipto Goswami <quic_ugoswami@quicinc.com>,
-	Linyu Yuan <quic_linyyuan@quicinc.com>,
+	Peter Chen <peter.chen@nxp.com>,
+	Hulk Robot <hulkci@huawei.com>,
+	Allen Pais <allen.lkml@gmail.com>,
+	Will McVicker <willmcvicker@google.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Zhang Qilong <zhangqilong3@huawei.com>,
 	linux-usb@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>,
-	Yuta Hayama <hayama@lineo.co.jp>,
+	Linyu Yuan <quic_linyyuan@quicinc.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_fs: Annotate struct ffs_buffer with __counted_by
-Date: Fri, 15 Sep 2023 12:58:49 -0700
-Message-Id: <20230915195849.never.275-kees@kernel.org>
+Subject: [PATCH] usb: gadget: f_midi: Annotate struct f_midi with __counted_by
+Date: Fri, 15 Sep 2023 12:59:39 -0700
+Message-Id: <20230915195938.never.611-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,20 +62,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1309; i=keescook@chromium.org;
- h=from:subject:message-id; bh=eL0i+HiP/slkBuDdJazClpDx64qWyMAqWkmawhHng5g=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLd56MZVta8tY42c7tMTyLS7qSe+Nf0e7Zm7F
- jrnBGfx5vSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS3eQAKCRCJcvTf3G3A
- JhSpD/4t0mJx7TYSiK5olhOCEucRjN/ZNuGdpy6IFT4GH/acg9kkJAPfX0JpIje/rvn3j+DhuUO
- fH3CWGN0o10V3xd2ciL59u04ho6iF0mG1MOSp+OnsE9xfVBCAQfNruRlDVyRENhS+/z4Io+1SvP
- l0TP8hpU+5TUl7Zy0oGfiNJL0Z415u5Lqu+7FOgJiua6S49DwtklzXaFwComGg0e1bH9wEYoB1s
- +D6tRCDcPTRz0dkDuplAjTdXsCsQJRvaCDJ+qqxYqRO+VwF8SLOujWl0bcoIhT4GWwGEtZzpNqT
- OiUmymTkI0NpNmkS7xjdt4Wn3lK2fPoItkkaPz5oxOCct/iq2bHeN9+B+RSw5eyAYKWawvfI1iB
- mIDM12iCWpXLeMvUPGYaWClXNr5lxPjTb673viG2rg+Tsgo9AsGJh6pO5RKnDRT/vBAFflO8ckx
- AYLYWXK4wF+w7D4nArHPe+HaIeJT8sCO+GM18mbUx/fTmZl50UNKGE4W+UskJOI4KrpC8TYYQF/
- 3v2LCC1qbkZbU0liGXGzC0DIDXNrwAcQPOxVRCMl1SEAslksgXA3pg/68lhepMyisRqewRUMYYJ
- UrajslA5m5q33PN0H5nC/LgV5zSGrqxYSXzv2Zr6QHzW66SKBVUhKJbXaOqDfH97IlGaI8ghjG2
- TTC4EPR H5+sovXA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2208; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=7ll080Ip8+xgpFyr1ptkCSq6rEkEIYaf1ZtwJzLxEFA=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLeqiItMEXLkRQ6I0AgJamBwTNeEi20eegnZt
+ l84WwSJaiuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS3qgAKCRCJcvTf3G3A
+ Jt0FD/4xkc6NwN+7lXbDMSm4p836lNJxBBL+/SGvtbx8Eh9D5gW27FBIx1e3Y+W0R7/CiQnJdvC
+ Q0numJF5+tgUVzR5ef5AIRZRrSuQC1OovDPs0lOar9jswym6HioJEY29phkpX8u8B/dQJiazIP4
+ OgoHGhaj8mVg/fbTbFi0RfyeScciuvBKdwKTrcL+u2O9Tjbaquwjg0L4J2t+Ka0fFW0yDuzyI4M
+ WtPAW1i5V9KEz0XTxGtMfAb966wgcc1cOszoqiNMSb4qro2RjomQLIBffiFL2UVCAHhDvlI0aRU
+ RrduhXmOJx0e+KPtPV9mgpJPinw8+MTo55974325aOLst/tii0/RrCvsEnedJK2bqy7COveWb00
+ VjG2aP6iHIx2TJ1slgBO+TecF1NeAe9eCOz/s/TkFOSaYfmUVVs3ZJ/5tmjoYzHXQfifjId8O8k
+ uxMMrDXmPYIBDXNP8sHd4zMHzHvRdAiL3T7Fh8kI7mPFYdfobFOfVqNA0hYZVf8TxBRv/egZR7t
+ k+NrSD3agAofKIDkcP9tEe/EqkDU0PgsMMCOEXysbZlXE87+k/nwnpGzH6hQr55vHTCKUL9L8SE
+ zBX5jFgLgc7kB2SpvHWvj9WL1+Kg1t7LcDQvmyAeh4rZkXnSkvDtNhlJUP5LZPS/Bcm29gzBplo
+ V2HLJoI /9JPsM2g==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -84,33 +85,55 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct ffs_buffer.
+As found with Coccinelle[1], add __counted_by for struct f_midi.
+Additionally, since the element count member must be set before accessing
+the annotated flexible array member, move its initialization earlier.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: John Keeping <john@keeping.me.uk>
-Cc: Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc: Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc: Peter Chen <peter.chen@nxp.com>
+Cc: Hulk Robot <hulkci@huawei.com>
+Cc: Allen Pais <allen.lkml@gmail.com>
+Cc: Will McVicker <willmcvicker@google.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Zhang Qilong <zhangqilong3@huawei.com>
 Cc: linux-usb@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/usb/gadget/function/f_fs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_midi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 6e9ef35a43a7..af400d083777 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -202,7 +202,7 @@ struct ffs_epfile {
- struct ffs_buffer {
- 	size_t length;
- 	char *data;
--	char storage[];
-+	char storage[] __counted_by(length);
+diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+index 2d02f25f9597..033e347554db 100644
+--- a/drivers/usb/gadget/function/f_midi.c
++++ b/drivers/usb/gadget/function/f_midi.c
+@@ -99,7 +99,7 @@ struct f_midi {
+ 	unsigned int in_last_port;
+ 	unsigned char free_ref;
+ 
+-	struct gmidi_in_port	in_ports_array[/* in_ports */];
++	struct gmidi_in_port	in_ports_array[] __counted_by(in_ports);
  };
  
- /*  ffs_io_data structure ***************************************************/
+ static inline struct f_midi *func_to_midi(struct usb_function *f)
+@@ -1349,6 +1349,7 @@ static struct usb_function *f_midi_alloc(struct usb_function_instance *fi)
+ 		status = -ENOMEM;
+ 		goto setup_fail;
+ 	}
++	midi->in_ports = opts->in_ports;
+ 
+ 	for (i = 0; i < opts->in_ports; i++)
+ 		midi->in_ports_array[i].cable = i;
+@@ -1359,7 +1360,6 @@ static struct usb_function *f_midi_alloc(struct usb_function_instance *fi)
+ 		status = -ENOMEM;
+ 		goto midi_free;
+ 	}
+-	midi->in_ports = opts->in_ports;
+ 	midi->out_ports = opts->out_ports;
+ 	midi->index = opts->index;
+ 	midi->buflen = opts->buflen;
 -- 
 2.34.1
 
