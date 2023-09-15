@@ -1,203 +1,77 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93797F
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 05:01:44 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d81841ef79bso2084655276.1
-        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 22:01:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC38A52
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 05:41:14 +0000 (UTC)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4005f0a6c2bso30515e9.1
+        for <llvm@lists.linux.dev>; Thu, 14 Sep 2023 22:41:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694754103; x=1695358903; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9rCph9Ke3trsfRl0d5Mycw1TxfealFq99Kh2f8hpgHs=;
-        b=afH9EvS3LXX8cXSoU8/p2JfJELbrRRHdTvS0eQC2y9pLRWmn7Sc5Cvr+a1+Xj3jddM
-         rlSbpQbQUhzcAvhFnpQIswUzQwefMvcch4XyaPQ6UWwOCBeWXHhh0MeYIQLzpLKZFjii
-         t8uwJmPN+KmNZqt1ISxrCk3SlAFzi5UjEO26wEm5eENxWQnedp7WqTF2hAIHJ3sYTgF3
-         ylLbnQDy1NmnhyOMhpAADL6yJ69eLIepoc/PpQa6y4R3becspzJnLJUpxFDNvK5SdwJ4
-         7I4MnCuxUJRcvdX9VmFUrnEoq3nRTAJ+58t6367nheOO5nW1TA2Ai80XTXMgpNDTdYtS
-         VLvw==
+        d=google.com; s=20230601; t=1694756473; x=1695361273; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=87Wnc7pVAI799isdkSampY1vXoiHF+D2AHzNc4Gf7LI=;
+        b=nRLT6gXBf1pTXRcRUOxHofr9LJCDRjUQw5fCA+SPS/rell686k88Dnv5muqk1I+JhL
+         cwRXCXVsZD6R1QqI3vefz1qDexNiej0lEDBCmmUn7B/Gc5azp91ebAcJdsR2lxwzx5aH
+         g3pp6wvhP6LuBePMtO3bkSZxTC05IgKJ+W9EVyQNJ5xll/iLl0hbB0weGIX5KKjHB+VS
+         AkR1z6TaOpiHdRTOUd7Ny1soThYGcKlp73oOe/dZK4DyJsiNL4b0kmXIMs+mCqtKIuJp
+         C+o/wWpoaMF4LOeeKoNvQ8CP5rwVv1lfoVsAcftLeUd5gZRbqF5EmAuiEvmSZjTAKPXx
+         bX9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694754103; x=1695358903;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9rCph9Ke3trsfRl0d5Mycw1TxfealFq99Kh2f8hpgHs=;
-        b=YBI+jsfvnaDHYDvyBEHhg8cOFOwUYrKjmL4PS+Hnk+LXHT/43xwcXhgA6/Z3Xf0vAa
-         bOjIgNY5kAGx6CMKLDQlMNzuyLk4nFwGbXgj7Xcvqp/4MdIehxr0WXT5Ybn+AIZI77Yo
-         VqN1cC+2eiKTxOKM9LtOaKKPLFMk+5WWT2urzddivjR4jas4oy0Q5xI9uMnfGvhLJobK
-         RStNGh3wy/ru+H0rRNYUU8vLxbP3XHMxiL1MC5YpaQHLhVmhX+zg0Zsu+Ftprl8zQs1H
-         d7BSYigzbwXcpGk/rt3+mlvg8E7VKG5aMfhy80qJdZXzE6U5sFlcBmYE2z+AbOJ9f6do
-         DBmg==
-X-Gm-Message-State: AOJu0YxcQhlyKMigOm5z1r+4/64SdfKy74LsviYxWsR3cchdXB6ryT9a
-	R7M0pVA/il4bD6zesysvHuUfD45bQko1Bw==
-X-Google-Smtp-Source: AGHT+IH5zlAB2HKrUfKZ3gto/cPG2gsfk0RtuOfBjG670gz/zKlu5ZCu6/j8d0kg3b2lpF9qSe5ELncZZj3OVA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:b312:0:b0:d0b:c67:de3b with SMTP id
- l18-20020a25b312000000b00d0b0c67de3bmr7744ybj.13.1694754103676; Thu, 14 Sep
- 2023 22:01:43 -0700 (PDT)
-Date: Fri, 15 Sep 2023 13:01:23 +0800
+        d=1e100.net; s=20230601; t=1694756473; x=1695361273;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=87Wnc7pVAI799isdkSampY1vXoiHF+D2AHzNc4Gf7LI=;
+        b=qyaO0bYw/U6iYVSD0HpdG5eYAu3sEb7s+Gq8B14NBG61hIUWn0yqBCI0W7SQkbomjt
+         BmS56hva4y9cT+AoNOPxmxNe9NsVFKUj9AH/Y1qEaY+4L5bVW8sIJyqRItninapLWH6A
+         q3/1moMI6q73Ng+M2VoLWo3bKlqHDzI+aHsYSB9W+i8dLU0Oj6NfosHa86KLX+Pe9Qct
+         X4KSJiVhKmW2GPhI4RdjVNmRMgcNbMSt/zzjJAkLRhnmb/4impiiIY5FrJ80KLpucT6I
+         18wjgKGtxPS5NPs2kQadp7TN8ViVCogSlvemqyKwyOYNNMUdgtxs3ozrOXn8fa8M1FhP
+         FUrg==
+X-Gm-Message-State: AOJu0YxVvM+HOrV6YxZARsXJ2Toq/7dLVMnsAHtelNEXKTlm51cQq03M
+	WGOMCCLeMzI+M6uq8Su9heJqzXplKtruePRoijSo
+X-Google-Smtp-Source: AGHT+IGM7N4hqYeaUT5nz5cwpj+sVZEKV7JoUJje6RYpqjTPFON3VGhEopM7yLALdrFgG6+0YJvZ28HW1looP4D5oU8=
+X-Received: by 2002:a05:600c:1d04:b0:403:352:5d9d with SMTP id
+ l4-20020a05600c1d0400b0040303525d9dmr52357wms.5.1694756472656; Thu, 14 Sep
+ 2023 22:41:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Message-ID: <20230915050125.3609689-1-davidgow@google.com>
-Subject: [RFC PATCH] kunit: Add a macro to wrap a deferred action function
-From: David Gow <davidgow@google.com>
-To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, dlatypov@google.com
-Cc: David Gow <davidgow@google.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Richard Fitzgerald <rf@opensource.cirrus.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+MIME-Version: 1.0
+References: <CAGG=3QVwmn+sLdWUb87hbDEBy63KdYgvExOWJFC6n0wajzhemA@mail.gmail.com>
+ <20230914232415.GA1067476@dev-arch.thelio-3990X>
+In-Reply-To: <20230914232415.GA1067476@dev-arch.thelio-3990X>
+From: Bill Wendling <morbo@google.com>
+Date: Thu, 14 Sep 2023 22:40:54 -0700
+Message-ID: <CAGG=3QVyHJdjGrPtpAPcSWN4aVV3z7rzxSdJcpgimOuda91JJQ@mail.gmail.com>
+Subject: Re: [Announcement] Clang-Built Linux Meetup Signup!
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-KUnit's deferred action API accepts a void(*)(void *) function pointer
-which is called when the test is exited. However, we very frequently
-want to use existing functions which accept a single pointer, but which
-may not be of type void*. While this is probably dodgy enough to be on
-the wrong side of the C standard, it's been often used for similar
-callbacks, and gcc's -Wcast-function-type seems to ignore cases where
-the only difference is the type of the argument, assuming it's
-compatible (i.e., they're both pointers to data).
+Try this one:
 
-However, clang 16 has introduced -Wcast-function-type-strict, which no
-longer permits any deviation in function pointer type. This seems to be
-because it'd break CFI, which validates the type of function calls.
+https://docs.google.com/forms/d/e/1FAIpQLSelo9EWhh2HTDY9kDLgm6okPQ0EVMGDq1X=
+8WBsVohdFDfVUXg/viewform?resourcekey=3D0-5StuGVUlJ-u9TutUZ-_tMA
 
-This rather ruins our attempts to cast functions to defer them, and
-leaves us with a few options:
-1. Stick our fingers in our ears an ignore the warning. (It's worked so
-   far, but probably isn't the right thing to do.)
-2. Find some horrible way of casting which fools the compiler into
-   letting us do the cast. (It'd still break CFI, though.)
-3. Disable the warning, and CFI for this function. This isn't optimal,
-   but may make sense for test-only code. However, I think we'd have to
-   do this for every function called, not just the caller, so maybe it's
-   not practical.
-4. Manually write wrappers around any such functions. This is ugly (do
-   we really want two copies of each function, one of which has no type
-   info and just forwards to the other). It could get repetitive.
-5. Generate these wrappers with a macro. That's what this patch does.
-
-I'm broadly okay with any of the options above, though whatever we go
-with will no doubt require some bikeshedding of details (should these
-wrappers be public, do we dedupe them, etc).
-
-Thoughts?
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-I finally got around to setting up clang 16 to look into these warnings:
-
-   lib/kunit/test.c:764:38: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-           if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree, data) != 0)
-                                               ^~~~~~~~~~~~~~~~~~~~~~~
-   lib/kunit/test.c:776:29: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-           kunit_release_action(test, (kunit_action_t *)kfree, (void *)ptr);
-                                      ^~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-It's probably something which needs fixing with wrappers, not with the
-"just keep casting things until the compiler forgets" strategy.
-
-There are few enough uses of kunit_add_action() that now's the time to
-change things if we want to fix these warnings (and, I guess, work with
-CFI). This patch uses an ugly macro, but we're definitely still at the
-point where doing this by hand might make more sense.
-
-Don't take this exact patch too seriously: it's mostly a discussion
-starter so we can decide on a plan.
-
-Cheers,
--- David
-
----
- include/kunit/resource.h  | 9 +++++++++
- lib/kunit/executor_test.c | 7 +++----
- lib/kunit/test.c          | 6 ++++--
- 3 files changed, 16 insertions(+), 6 deletions(-)
-
-diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-index c7383e90f5c9..4110e13970dc 100644
---- a/include/kunit/resource.h
-+++ b/include/kunit/resource.h
-@@ -390,6 +390,15 @@ void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
- /* A 'deferred action' function to be used with kunit_add_action. */
- typedef void (kunit_action_t)(void *);
- 
-+/* We can't cast function pointers to kunit_action_t if CFI is enabled. */
-+#define KUNIT_DEFINE_ACTION_WRAPPER(wrapper, orig, arg_type) \
-+	static void wrapper(void *in) \
-+	{ \
-+		arg_type arg = (arg_type)in; \
-+		orig(arg); \
-+	}
-+
-+
- /**
-  * kunit_add_action() - Call a function when the test ends.
-  * @test: Test case to associate the action with.
-diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-index b4f6f96b2844..14ac64f4f71b 100644
---- a/lib/kunit/executor_test.c
-+++ b/lib/kunit/executor_test.c
-@@ -256,9 +256,8 @@ kunit_test_suites(&executor_test_suite);
- 
- /* Test helpers */
- 
--/* Use the resource API to register a call to kfree(to_free).
-- * Since we never actually use the resource, it's safe to use on const data.
-- */
-+KUNIT_DEFINE_ACTION_WRAPPER(kfree_action_wrapper, kfree, const void *)
-+/* Use the resource API to register a call to kfree(to_free). */
- static void kfree_at_end(struct kunit *test, const void *to_free)
- {
- 	/* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
-@@ -266,7 +265,7 @@ static void kfree_at_end(struct kunit *test, const void *to_free)
- 		return;
- 
- 	kunit_add_action(test,
--			(kunit_action_t *)kfree,
-+			kfree_action_wrapper,
- 			(void *)to_free);
- }
- 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 421f13981412..41b7d9a090fb 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -804,6 +804,8 @@ static struct notifier_block kunit_mod_nb = {
- };
- #endif
- 
-+KUNIT_DEFINE_ACTION_WRAPPER(kfree_action_wrapper, kfree, const void *)
-+
- void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- {
- 	void *data;
-@@ -813,7 +815,7 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- 	if (!data)
- 		return NULL;
- 
--	if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree, data) != 0)
-+	if (kunit_add_action_or_reset(test, kfree_action_wrapper, data) != 0)
- 		return NULL;
- 
- 	return data;
-@@ -825,7 +827,7 @@ void kunit_kfree(struct kunit *test, const void *ptr)
- 	if (!ptr)
- 		return;
- 
--	kunit_release_action(test, (kunit_action_t *)kfree, (void *)ptr);
-+	kunit_release_action(test, kfree_action_wrapper, (void *)ptr);
- }
- EXPORT_SYMBOL_GPL(kunit_kfree);
- 
--- 
-2.42.0.459.ge4e396fd5e-goog
-
+On Thu, Sep 14, 2023 at 4:24=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Hey Bill,
+>
+> On Thu, Sep 14, 2023 at 03:19:37PM -0700, Bill Wendling wrote:
+> > Hello!
+> >
+> > We have a webpage for those who are attending. It's just to give us a
+> > general idea of who's coming, so it's a very short form:
+> >
+> >     http://shortn/_MtOydwQiGs
+>
+> This link appears broken to me, got a working one?
+>
+> Cheers,
+> Nathan
