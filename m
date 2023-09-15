@@ -1,42 +1,40 @@
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C03101C6
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:32:42 +0000 (UTC)
-Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C89F101C6
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:33:13 +0000 (UTC)
+Received: from eig-obgw-5007a.ext.cloudfilter.net ([10.0.29.141])
 	by cmsmtp with ESMTP
-	id hAM3q8doOOzKlhFUSqIB62; Fri, 15 Sep 2023 20:32:36 +0000
+	id hFDAqMEwDEoVshFTUqHrN0; Fri, 15 Sep 2023 20:31:37 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id hFURq9lwKqs1vhFURqTyjj; Fri, 15 Sep 2023 20:32:35 +0000
-X-Authority-Analysis: v=2.4 cv=OO40YAWB c=1 sm=1 tr=0 ts=6504bf63
+	id hFTTqIxrmHoqXhFTUqdxTy; Fri, 15 Sep 2023 20:31:36 +0000
+X-Authority-Analysis: v=2.4 cv=VP7OIvDX c=1 sm=1 tr=0 ts=6504bf28
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=mpaa-ttXAAAA:8 a=pGLkceISAAAA:8 a=QX4gbG5DAAAA:8
- a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=6heAxKwa5pAsJatQ0mat:22 a=AbAUZ8qAyYyZVLSsDulk:22
- a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=20KFwNOVAAAA:8 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=YoX3If6DFWHe0apXbcEA:9
+ a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=wABwCDb0dMxmvkzrv9cJSGwLJCvJu2+BGHLCoCFf7l4=; b=FhXotnDCnkoswCDdhWdbmVgtwF
-	lV9MVwHov2SKTYN+E2yViUEm0Bofr6mOVDT0jvE7AolG6hWla2fkY1upHAAoduTNjIwodYbA+RNUV
-	XsLmdfPR0oJwConQS+2hgiPL1zQl2yPjVmQbUxhOH0cJocMjAhpTV/DhFBoPBadgMPptil+wgKKyP
-	Nu6PbeOCf6oylC/sbMnC8rD6+hGJbBCwOISlzIrSRMJ+aMi3m6Cz12ePmCSw7bqaRtAsAKAHzMsJN
-	2TDU34DNdwtKOj+Q1FJ/VIf2MlcbXSH/ARIxQudkzuA+vUujeI5l/F/6Vu7IV+wzO/047qJXRuSPx
-	9QKPSXBw==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:40496 helo=[192.168.15.8])
+	bh=cWX46vWVpx+665oxq6ukgOT3sTNVyqzHepobvBTppu8=; b=kBxe0TfxNLJfSiSFl5mYKuxkfa
+	BJgznUheHQ0NM+RzA1nKCDRq36WV9mGnkAVLJ2STM9Civg4rKYMq2Ue4JxUNepjltoLEK+jXJb2b7
+	86ZvNDN0QulEbboPu+x2rdsn1M+/jNNZDopmxGSErfxg5yg9wdY8YcxzSatW5y3p2euUHG4phVa7J
+	44jnAlK3bHUDaGTwJHjKNbbc5PnMZE/RY4H8/1Qk+2gQNRsj0pAwpwH+wbpJNtdCTTP3dr4fxjAvd
+	hGIsUGd6xyMulOzK2E/maLsaMykZffihcFuKk+AhYycyjXPtOywLaj7IdFaCJXgYp8VTsT3AoWSaN
+	Ci6/USXQ==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:56308 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qhFUO-002OQb-0M;
-	Fri, 15 Sep 2023 15:32:32 -0500
-Message-ID: <1e5cfed9-7c4d-273c-2f72-180aeba2abf9@embeddedor.com>
-Date: Fri, 15 Sep 2023 14:33:19 -0600
+	id 1qhFTS-002NUI-34;
+	Fri, 15 Sep 2023 15:31:35 -0500
+Message-ID: <6f1ff9ac-e0cb-68f0-fa2f-91780a3eedb7@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:32:31 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,22 +43,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] wifi: mt76: Annotate struct mt76_rx_tid with __counted_by
+Subject: Re: [PATCH] dm: Annotate struct dm_bio_prison with __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Felix Fietkau <nbd@nbd.name>
-Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Ryder Lee
- <ryder.lee@mediatek.com>, Shayne Chen <shayne.chen@mediatek.com>,
- Sean Wang <sean.wang@mediatek.com>, Kalle Valo <kvalo@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux-wireless@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, Nathan Chancellor <nathan@kernel.org>,
+To: Kees Cook <keescook@chromium.org>, Alasdair Kergon <agk@redhat.com>
+Cc: Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+ Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230915200612.never.786-kees@kernel.org>
+References: <20230915200407.never.611-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230915200612.never.786-kees@kernel.org>
+In-Reply-To: <20230915200407.never.611-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -71,43 +64,35 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qhFUO-002OQb-0M
+X-Exim-ID: 1qhFTS-002NUI-34
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:40496
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:56308
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 155
+X-Email-Count: 116
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDv3DdmPnQpUDKTLCo/KWt6H+uQJHnRb6R9sW57HjciMxgBlU8AQZKrz+YTSuQQxImxOnuif1AklkKQAvAnXn9nptK4blP4IEHTTSnFQrTLqXaNRi5gx
- lmbZEVL3iH0BSSl/PijxAgpZeqDcmqpztW+LynxX81HUPbg0rSWjHIW85kcY9FeDBAlcyzG5Pf9XWcEh+41VWtwoBY/Y88CBz3E=
+X-CMAE-Envelope: MS4xfOtG0Ls4xTvfmkqES1CBUyx6mlQ9fsZ6rNcjZFVarBlvnV4BIYQKp2XB1llQnyywNtDWxE8MrW2lngCoypfI0sC17DJpSnlLib39v5WUL7JtD0nz2Wj2
+ o37Yx/ESlSqEch6xtKb1fhBwzd3dwIwVestZ+sSoLx/Vm4KhP3qqYjKjWFjNFY92ax+tGpYCgDQyHfPwRZpwbyf3mTiUIhg7A1E=
 
 
 
-On 9/15/23 14:06, Kees Cook wrote:
+On 9/15/23 14:04, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct mt76_rx_tid.
+> As found with Coccinelle[1], add __counted_by for struct dm_bio_prison.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Felix Fietkau <nbd@nbd.name>
-> Cc: Lorenzo Bianconi <lorenzo@kernel.org>
-> Cc: Ryder Lee <ryder.lee@mediatek.com>
-> Cc: Shayne Chen <shayne.chen@mediatek.com>
-> Cc: Sean Wang <sean.wang@mediatek.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
+> Cc: Alasdair Kergon <agk@redhat.com>
+> Cc: Mike Snitzer <snitzer@kernel.org>
+> Cc: dm-devel@redhat.com
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -117,19 +102,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/net/wireless/mediatek/mt76/mt76.h | 2 +-
+>   drivers/md/dm-bio-prison-v1.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wireless/mediatek/mt76/mt76.h
-> index e8757865a3d0..03ef617b1527 100644
-> --- a/drivers/net/wireless/mediatek/mt76/mt76.h
-> +++ b/drivers/net/wireless/mediatek/mt76/mt76.h
-> @@ -376,7 +376,7 @@ struct mt76_rx_tid {
->   
->   	u8 started:1, stopped:1, timer_pending:1;
->   
-> -	struct sk_buff *reorder_buf[];
-> +	struct sk_buff *reorder_buf[] __counted_by(size);
+> diff --git a/drivers/md/dm-bio-prison-v1.c b/drivers/md/dm-bio-prison-v1.c
+> index 92afdca760ae..9ab32abe5ed4 100644
+> --- a/drivers/md/dm-bio-prison-v1.c
+> +++ b/drivers/md/dm-bio-prison-v1.c
+> @@ -26,7 +26,7 @@ struct prison_region {
+>   struct dm_bio_prison {
+>   	mempool_t cell_pool;
+>   	unsigned int num_locks;
+> -	struct prison_region regions[];
+> +	struct prison_region regions[] __counted_by(num_locks);
 >   };
 >   
->   #define MT_TX_CB_DMA_DONE		BIT(0)
+>   static struct kmem_cache *_cell_cache;
