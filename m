@@ -1,61 +1,54 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97A21B26D
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:11:02 +0000 (UTC)
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-68fbbb953cfso2201898b3a.2
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:11:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62391B26D
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:12:02 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1c09673b006so20388565ad.1
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:12:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694808662; x=1695413462; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1694808722; x=1695413522; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yYyTWZUt+7ZftFyaVwIF3q4JJIqEmWXzwxBTEgPiLsM=;
-        b=Rc7qrvbv8ZGbl56B6W58YlYtuc5PPtpiD0F3ogMYV19T0VwuODLGGtNhbiDjTGn0h3
-         v3Hx9Ei3iXtFudnYzZl85DOOJTncrT73YXb6wSTyRWTgBeByLgF6tOleSlx0aI1tHwNj
-         RwGrxqlvbttdVyEWTswcBcApNuPNYt+/6GAWU=
+        bh=nHWelds/0UMwcBpnWos/aLtztFrXjkfJbKPQ2m0GJNU=;
+        b=HN+/Xc0TYz04f+e6STZANHwPuAg+vWn2oPFyJpkhgpLWWmxzcronq5DosjqAsPv0ZD
+         8+v145L7ct1OhPeY5tDF4xWzkyHqezJrty1C8SkkqZH84w1QcObChZLVdrx4QBN9aiDE
+         mrNZiuoIVo77e5SjB5KsCB8Omkw23oK7p5ZmU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694808662; x=1695413462;
+        d=1e100.net; s=20230601; t=1694808722; x=1695413522;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yYyTWZUt+7ZftFyaVwIF3q4JJIqEmWXzwxBTEgPiLsM=;
-        b=e7Aaqn7wHrlvYJ6mTrQFrjmAdIAsOaEC+mA6DAw6p62WeHZn2G88lRuSAXRU4SSRZv
-         pnXVZMcrDTJlo6ZxL28+teE0jWNtWIZBMU2FseIvJN12OM1i2gbJLvQ555K5EsmiduNP
-         shF9nar5QQPIhbSm+IEbZ1uSVL1s5S0CXjWaTfGEjb0D+yAcG55Ul1kMti4GnYU2fbtd
-         3HZOn2VPvXW6tYowEIzi4rxf9NiDwfGEFU0F2rjaW7MJMRk9Z68I0dE8yDIN48NF/Ub8
-         t544eT+g9Q2cNPHTdIGgyvdfY03g/0XKovX0pqQA7PqhHSZdj/lkiOooKrhdvX/BjK8e
-         a0Lw==
-X-Gm-Message-State: AOJu0YzAfHGT8r9sNZIVci4s0AmYrRVBTAjvGHBIDKzpQiE2TmiZ8nLm
-	21HCcsCv/gkiySz51tWarh8UMg==
-X-Google-Smtp-Source: AGHT+IEDSV8awiXKFjTQxmXG7wC3crhSU1Q4icaW4tWquFx3ETht6OwJCXXKcMHQsS6ncCtOGHBRjA==
-X-Received: by 2002:a05:6a00:1490:b0:68f:bb02:fdf with SMTP id v16-20020a056a00149000b0068fbb020fdfmr2977913pfu.27.1694808662059;
-        Fri, 15 Sep 2023 13:11:02 -0700 (PDT)
+        bh=nHWelds/0UMwcBpnWos/aLtztFrXjkfJbKPQ2m0GJNU=;
+        b=o4uJD6FHWImKNqbRJGqlkcY5oRY52+pRuCJDSgZnsQjogRnTL3F4GmO91fLtGpvMkb
+         tIYqCKODjZBGOSPdo+YYZuIdce0Qtt2vZDJ1hU+qiFu97tK8KL+UUg2ooI8YLZg1U3Uf
+         jky8bJK+hkSy+ruqs0wChDRv6qPtCZ/Sme6L6Nu+zY1TsELrdwPOmxvOWXZd27/2PWZC
+         tlHRYhaw2ey136u2cim0YzlMmGPrhNdyk0haTOR55kvewG2mfd7DOqz03WE8JKiYzh3G
+         kGXR3XI7m864ZDkS1Fmxh9MZyYVzli6hBT6rZ4MUt7Q64tueIFNry82is1ORAyn1THDB
+         69/A==
+X-Gm-Message-State: AOJu0YxWBypl83ZaAPR0K3iTXpfODx20vU8Ivs+td97cf4n3JnIKsfum
+	qkUR464DLJcVd501HYxS6ofRKA==
+X-Google-Smtp-Source: AGHT+IHiNyqrliN/74dUaaMOB5YH/EEzt/xoauvDLOTN5wb5Fju0foAYEpaV6viOplTZo5uTNSDJMw==
+X-Received: by 2002:a17:902:6bca:b0:1c3:a396:25b5 with SMTP id m10-20020a1709026bca00b001c3a39625b5mr2401710plt.61.1694808721930;
+        Fri, 15 Sep 2023 13:12:01 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id j7-20020a62e907000000b0068a2d78890csm3314062pfh.68.2023.09.15.13.11.01
+        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001b9de4fb749sm3898447plb.20.2023.09.15.13.12.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 13:11:01 -0700 (PDT)
+        Fri, 15 Sep 2023 13:12:01 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Pavel Machek <pavel@ucw.cz>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Lee Jones <lee@kernel.org>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Douglas Anderson <dianders@chromium.org>,
-	Anjelique Melendez <quic_amelende@quicinc.com>,
-	linux-leds@vger.kernel.org,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	linux-mtd@lists.infradead.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Lu Hongfei <luhongfei@vivo.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] leds: qcom-lpg: Annotate struct lpg_led with __counted_by
-Date: Fri, 15 Sep 2023 13:11:00 -0700
-Message-Id: <20230915201059.never.086-kees@kernel.org>
+Subject: [PATCH] mtd: Annotate struct lpddr_private with __counted_by
+Date: Fri, 15 Sep 2023 13:12:00 -0700
+Message-Id: <20230915201159.never.112-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,21 +56,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1354; i=keescook@chromium.org;
- h=from:subject:message-id; bh=Y0/PlP/xLr7YzJo0Pem42u6ey7XJQhlxkmcmoeZ54PU=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLpURuSmxHS+rma4Nt21+50VRplgQeWjMVGy4
- 5Ert+RNpSKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS6VAAKCRCJcvTf3G3A
- JoNOEACPpcWy+gFj1WvLs/yXGVwm+2Gvq0+xBvcHPgh27lwiuRDzyaSDcOH1HyLeRU6CRfj8JfC
- L8VastoTJD+lFPvY0bcTP7iDYufp7IIIoESFNM9gVcxhi5ePAsPDfWJyrLCRmN/ze8CNV/pLoGt
- ttmSzhIMWbdUf7h4kr9TxXFKbAZn/67+SINDuTEzNavBEzPV1UQY0+uSz3r+42I9UDJRncQ41SC
- TRi/+T5EYMMc8Q/kMD6OZDjRg4Wxy15h7MLf3TViTVD3tbcoQKXlLdZOeOp6syYfmxr+CNz2GQC
- CYoWHi55rW2yxWhHsowo8Qr195hK2GljTdUKfHRpDxK40cwOeKr0Xvrh45ekbZrT7PbOCRuTOfr
- 4kZ7hXrvwKgSvsaKHqIkfm+CfsN9LKHzZSPByCqVj0tG6sPXaVS5lmKaO6H8n8SRcGvgTKO9HEq
- x+qfKZUE9fZyJMygR4FDtfUHF0y/ie2TNLTt26thPSkUv/4X3zJBuwXpuKGQaqTq14Mx0etTHRs
- FE2f5mCgSlugSsepQP+TieqbYz82s0VH6k4XktE9HwXnJAWE81Z74RCWTXwebm/kypoG+63Pb4M
- 3Mp2+QClrMKmPRax+Vh5UQy6NSAxTWVreR5CG0iBDxV5wJunbLbl2FXVpkwOwATiTDwF3QcASUl
- JxFT9AM 5o2cLIWA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1238; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=gCkXC8MpJaPT99ttxM470YlQxkUzCuh2ydBh0veT0Pw=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLqQdMeeixNUCF5z4zedCX95mr3jXFz4Nb5Cs
+ 5V4tlXbBCCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS6kAAKCRCJcvTf3G3A
+ Jk8yD/9mHmYeZ4PilIA7bE0IVUOPX8xWImvE2StXacFdcKWj6g3dT1Z+QnG6UZ6K8E0IVbwxtWx
+ 0/u6hFgLlJcs7VYdQYDz6zlzN2DcqRSOQ2IfFjqwHVOA0VxKOMIZRLlsz2ZXr9Vgx4Lme5dVV+5
+ WSjxLhY/Aa77SDYccaT9iTj5whirBeTZ/+vPA6YK7bUhNpaRPqACjOUXlOhpwyirFk+PtJe1rci
+ unArKIBK5LaAqs+X0rqDR0pO3sL3YLFldvjdN8siCHGt6iEcP6G2Zp3AV9wjqnjH8UWylOIQX5t
+ fBXq2LKhG2ubRtRStk+p6y5uCBHE1/mhxLP8nflD1p74ErUwtR0wgAmkwQ5LQhNX0doFZJIVnh5
+ 5bnGARcrRIi2/9J4R5T9e27gNXb32m9ldgD/vE+nWoAd78lQuJ/zp/ElqbJ0riOEXSw/Ug+Pjw6
+ 4zAmyAm0rIrnzbZIezZ9boeyfe7ZalC5ywHALmoK4I5ymlp0BHznG/ylHJKuRCKB9usocw4mMkH
+ PkD55lpZ3U7R6j7pjvzZQ5C+9Mlf2siik3YLwqlhEl4kP6MI3UZnuZv0iGx2hMayqeo0ouuOI8V
+ J+rkTGfqayqeMzppAHp9ib6o/ji2/JoJYvT2rhZd5I4OllXNs2Rg3m97Ee0Iq0UEYje/AB9V/Ro
+ 46ySS5G +6Rqb3pg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -87,35 +79,32 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct lpg_led.
+As found with Coccinelle[1], add __counted_by for struct lpddr_private.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Lee Jones <lee@kernel.org>
-Cc: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Anjelique Melendez <quic_amelende@quicinc.com>
-Cc: linux-leds@vger.kernel.org
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: linux-mtd@lists.infradead.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/leds/rgb/leds-qcom-lpg.c | 2 +-
+ include/linux/mtd/qinfo.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
-index df469aaa7e6e..7d93e02a030a 100644
---- a/drivers/leds/rgb/leds-qcom-lpg.c
-+++ b/drivers/leds/rgb/leds-qcom-lpg.c
-@@ -173,7 +173,7 @@ struct lpg_led {
- 	struct led_classdev_mc mcdev;
- 
- 	unsigned int num_channels;
--	struct lpg_channel *channels[];
-+	struct lpg_channel *channels[] __counted_by(num_channels);
+diff --git a/include/linux/mtd/qinfo.h b/include/linux/mtd/qinfo.h
+index 2e3f43788d48..0421f12156b5 100644
+--- a/include/linux/mtd/qinfo.h
++++ b/include/linux/mtd/qinfo.h
+@@ -24,7 +24,7 @@ struct lpddr_private {
+ 	struct qinfo_chip *qinfo;
+ 	int numchips;
+ 	unsigned long chipshift;
+-	struct flchip chips[];
++	struct flchip chips[] __counted_by(numchips);
  };
  
- /**
+ /* qinfo_query_info structure contains request information for
 -- 
 2.34.1
 
