@@ -1,39 +1,39 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D141B26D
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:09:51 +0000 (UTC)
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-565e395e7a6so1603004a12.0
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:09:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4F31B26D
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:10:00 +0000 (UTC)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-577f6205f42so1887673a12.1
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694808591; x=1695413391; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1694808600; x=1695413400; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Muy93PhGxQI637LkltSivczIg7w0S2HDIxF5V69MsXg=;
-        b=S6KuOO9U4D9ie1krCCAI8iFWPNH3FYdEeQ+k5e+PpgF2LrckFCpQCwXINNyHkMkaSk
-         o3I50q4f/Cdls8SvsRQl5qSLCp0ZHgFO0yDvoLfu42Q4holbNxGDHCXV+YM+aI9/MYlQ
-         4aS7WTVetRPKURSwa/tptJnAAIBLJNAxABEMc=
+        bh=Nk/nOdWGEwQoqrorI1M5M4fwyDhM0MyESikBhRPJynY=;
+        b=Sd8s16lVUHz3APn7/M7WvVJyTo7G+CzHD2EXaJmvBbXUvhZA2gEl1fpc0f1IeCPgCb
+         1DlhiHDPWI5d2OvqlHQlJn90GmOANj/UK4lKppOOVWj8zAoLkwqH2C1/U4VDx7LWFUxn
+         zRI9qIsAD6NCvxbqkpwvQZuajUFBXjH1oYRgM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694808591; x=1695413391;
+        d=1e100.net; s=20230601; t=1694808600; x=1695413400;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Muy93PhGxQI637LkltSivczIg7w0S2HDIxF5V69MsXg=;
-        b=Lup3DE287bAG9/cUqu93ClAYFbgpjmLEJL2+I0O7o1c8ZOLbv92FJ0C+1olRWf3izz
-         pC6Btc4GKfnfwUBGVnC/atoeryi03w3ZC6xchR5zIyGmTw4kVXNRDWVWFr4wXEg2/uOc
-         lTfmZCXQm5GgeYWtX9Lfw0r5xoBuGCpoMZ6e5txVj6olQbAIbTmyMibXpCXkVy6INQ4c
-         mw+AY/6ZZL4ybAinjcZNZEmYGlWZeeKljBCj9jNXkmrtB5pQrg/k/In0mf1xAw/HNzCI
-         tUbK3fITD631UYsw8Cog0rgjwDy4y0ipBtbQG1jIx0346638288VaIZTfWOERQhRtcEX
-         axkA==
-X-Gm-Message-State: AOJu0Ywenzaiexkiixfp4u0hWUKQFVOay8rglxwJEpmkKWvAMj6FmBS9
-	cUSDHz1ZGlkIMc409y40GptpJg==
-X-Google-Smtp-Source: AGHT+IFrv22jckxNyFPHk4wkul59BZWPHDh4KeyX5yWqIvjMYexwtkhmjNCln5KRyZogKvg66UkBMg==
-X-Received: by 2002:a17:90a:130c:b0:269:621e:a673 with SMTP id h12-20020a17090a130c00b00269621ea673mr2603231pja.1.1694808590812;
-        Fri, 15 Sep 2023 13:09:50 -0700 (PDT)
+        bh=Nk/nOdWGEwQoqrorI1M5M4fwyDhM0MyESikBhRPJynY=;
+        b=jn1TwJbnJSgpalnmpWew6M0OH5BPJ6fRvu+DuZJ/tnm5rRzzyDdoNYxQZnU55tQuVa
+         LrHOa+f2hgHBAhhaveJfDHFb4V40kPcK08sq5VM9Lpx2N+yD5tl5Ip4MMVLfG9fgZD0P
+         1KmGLZRK+2cA3KxnxsI9SlILiW1F3vRY8wHdKkkYwqsJxzWb1B+eYGY7bGBT4qoE2oZK
+         6UFYyGYPXnxkmfj/dGlmQFbifg8WmQODMfvRZCKODLvs+FASFCUs5bWxeD7vKnNRJyMs
+         mPSp1v5MT19nustE5I9Xfc0OXbazagehUrNzAlul7pRsJoDgDcXoCshs8k7c/Xxs088C
+         JWjA==
+X-Gm-Message-State: AOJu0Yyuphw0tHlBpXam+fZ4A6zIWGdL79hZJda9jiuQBJYGwgMlg7lH
+	la568iYl2VjUe9Ih73e+X4kPVg==
+X-Google-Smtp-Source: AGHT+IFkfodOw8key9MPLTpF8gDPsl4mUuf9r5i/8RdhOSnfEKeLKI70UXE9EitqTTeBx6I3fzUqdQ==
+X-Received: by 2002:a05:6a20:9193:b0:130:7803:57bd with SMTP id v19-20020a056a20919300b00130780357bdmr3001465pzd.3.1694808600453;
+        Fri, 15 Sep 2023 13:10:00 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f2-20020a17090ace0200b002749fee7984sm1439060pju.22.2023.09.15.13.09.50
+        by smtp.gmail.com with ESMTPSA id j26-20020aa783da000000b006883561b421sm3321766pfn.162.2023.09.15.13.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 13:09:50 -0700 (PDT)
+        Fri, 15 Sep 2023 13:09:59 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Pavel Machek <pavel@ucw.cz>
 Cc: Kees Cook <keescook@chromium.org>,
@@ -45,9 +45,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] leds: cr0014114: Annotate struct cr0014114 with __counted_by
-Date: Fri, 15 Sep 2023 13:09:48 -0700
-Message-Id: <20230915200948.never.728-kees@kernel.org>
+Subject: [PATCH] leds: el15203000: Annotate struct el15203000 with __counted_by
+Date: Fri, 15 Sep 2023 13:09:56 -0700
+Message-Id: <20230915200955.never.871-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -55,20 +55,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1177; i=keescook@chromium.org;
- h=from:subject:message-id; bh=Ay/S96r+TTbAZJCf/FmudMqBXZB0z8bluDuDqSyybAY=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLoMRK4HKwbRdA/dQbibTN2neXE8kbK2imD47
- OJ+4vPf9VKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS6DAAKCRCJcvTf3G3A
- JgeFD/456XBWPDEoi/0lXVUiOYdHq9R99vQdrY+GKQhMNhO2/WY8oM+OfE51KIc6dW8iAM2/i7F
- SChkpSp3hLfJ7uYdd28ESePEquipBhWrrBb/q4/fS9f5jGNvW81W8QMRcVskWtj5Uic+kCnzf8V
- jK3aModQKGLsYkj2F6z0mYZV5w8mXznoG3ndXPezz6jsGsuTuBEMagzXvOaXr7KCDkJJ0UOG3gU
- GaSQN5EQydQ5CyAWpL+SjS/TYSniIgF9eqsEoZ4xiOPBmR91woy6FQn3Z4hrlir5Izm+Pmn2RvL
- QsUBHiY3uyWfNzyfg8H+yPhjUx0JNpQlUoLis7NUidDojd1bRSkXjiEKKkywOSEWS94XQRqoM9A
- EnyL7jM0sh+jJYgZNqNxYdXv2yONd77E/9+TVYG4ntdl5/CBbo9iUw5XAr6n2KO3bBsztkJ4KOO
- OP1DUkOvmelWQRajNYgxjsi3RWvUyMhOd3fipXAe5bex0BOiEIg+mjS5nuuHKEcj+mJ++dIzhLx
- t6Txfb40SANvVUZVgr+3KTXpkYgNAKWDKDqwI0bmWboS2HWzyAr2OzFbBvBh6Z5UpEdZWUhn4Q5
- Dj4geW1zSzfm1s0T9SL9D8tCJAz7WEM1mt5hRQgDb9mLZMYOc6K1EpgPA1SrKaiBtXgIIDOnekE
- Yw0266w 5tKVbWGg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1207; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=AuQmhyKilUvoXwglsma/MaTlIjm+821tEBgc3NFI2G0=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLoTgbluNuEb1ppIxCDVPhVSRR03x+HRH+wGk
+ TRaulMR7I2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS6EwAKCRCJcvTf3G3A
+ JmYoEACdL3vVF2NKECABdmlrHoQg7GoQpORVNGSD7el8DAMl2SBhoB09PyPXllokTqK9Wdil8zV
+ zZPIhIGvvUg5oG9N/OMZs9AwUK+CMQNWBG1YsP6za4n0V2TaobBHGIJmhYbBfcYx8ZgAp/bSWN+
+ TvG9AQpwF5p5NuHck+/CfHURygXTJpYCHco/6y8qBEuIttCFIsytyfX2AQPbQuSvDyoVXAcfxjb
+ iaKhvLFCMqVMnBmihmv6mFyiLZfARMGlfrvAAO642M46+/rMmAx0Fg0TCkLZDrmOwoOXUqiV4kj
+ BJSWoBKjM0hUxo0fXw/Ha5n6uDjLsZ9uXNh6cszZO9Dx1z1bCrAWDkyIKpryVLX4ZF0Xn2MZSD9
+ y2tF1ooPUPeZHIFOy+ZdXVrUI5Hrcgq6J/85H2zltLR30GOyvTV0cl4wD6vz7T1xZz6JT0jN//L
+ tBY+QCaBMaB2e7UPPX6ivy4npGZRvC93WHEHwYZ7pRXA6aDkDEL91tLzVdMdPeGvNvybrASe8sN
+ vwcfhZhL+89ozR+go0DF8VBaeAuHatpbKYiUM39R3IB+Lvn5c3v8fUxPUHvkZDJEvD0R7u8gsqi
+ tFykTaw5+cMlZFoLrXywMsHcXVrOccqZEt+dOi9SCZnr7CvdKlmoHc+hTlyIOli3HNATBr5UqqP
+ pJ1mVkd qJDn93uQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -78,7 +78,7 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct cr0014114.
+As found with Coccinelle[1], add __counted_by for struct el15203000.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
@@ -87,22 +87,22 @@ Cc: Lee Jones <lee@kernel.org>
 Cc: linux-leds@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/leds/leds-cr0014114.c | 2 +-
+ drivers/leds/leds-el15203000.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/leds/leds-cr0014114.c b/drivers/leds/leds-cr0014114.c
-index b33bca397ea6..c9914fc51f20 100644
---- a/drivers/leds/leds-cr0014114.c
-+++ b/drivers/leds/leds-cr0014114.c
-@@ -56,7 +56,7 @@ struct cr0014114 {
+diff --git a/drivers/leds/leds-el15203000.c b/drivers/leds/leds-el15203000.c
+index 7e7b617bcd56..d40194a3029f 100644
+--- a/drivers/leds/leds-el15203000.c
++++ b/drivers/leds/leds-el15203000.c
+@@ -80,7 +80,7 @@ struct el15203000 {
  	struct spi_device	*spi;
- 	u8			*buf;
  	unsigned long		delay;
--	struct cr0014114_led	leds[];
-+	struct cr0014114_led	leds[] __counted_by(count);
+ 	size_t			count;
+-	struct el15203000_led	leds[];
++	struct el15203000_led	leds[] __counted_by(count);
  };
  
- static void cr0014114_calc_crc(u8 *buf, const size_t len)
+ #define to_el15203000_led(d)	container_of(d, struct el15203000_led, ldev)
 -- 
 2.34.1
 
