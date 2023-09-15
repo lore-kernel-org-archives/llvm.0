@@ -1,51 +1,55 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8CA1B26D
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:14:07 +0000 (UTC)
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-573f722b86eso1924265a12.1
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:14:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897F21B26D
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:14:16 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1c43b4b02c1so7454285ad.3
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694808847; x=1695413647; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1694808856; x=1695413656; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oicgvy8ZQsJ/H+s8ny1gZL4bTkfKVCg2IoVNijyvIg8=;
-        b=kJn7dTV8+mybcZmx4niDEZdrYFanHl47dfh/gvRJ2lXUlIIhjahIXhCXubAtOvWa4W
-         XocF09hvM3T1J4x/EmiwP1UkjTLdY+KZLYvchTl2j1lLG7o2KcU4o7LWHBRPOER9WDiD
-         SLv6us6gtXpWtf4+GJ47FIeieudmYjyE7lnR0=
+        bh=9t4c7iG7BwJixU6psOPlOQYO3J4oZ/NM5PDqz6Jeo04=;
+        b=YgRd6n/fKL/oPE7NqctKiD2yg7mZqXCK2Biabn2I1WhRcYZVetIGS57dTpUR9A0CZN
+         kgU67ak9wk8letx/8AycRFNf7FT2nQOKyNEnIVaKjWhV3iEqors0NQa6xBv7VYFdYptR
+         jj1C73ow1A+r3EqKqaPLDPuEyZpH9oPCR6kEo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694808847; x=1695413647;
+        d=1e100.net; s=20230601; t=1694808856; x=1695413656;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oicgvy8ZQsJ/H+s8ny1gZL4bTkfKVCg2IoVNijyvIg8=;
-        b=MNRkTg+6egUW4fgKgFDzYu7xICUzYUcc0uUs4isflBKogYYnOsDGHCY7WNL03OXE99
-         hH28O6W/ewCPJ3+VPY6zzVIvk7jja2/amGCTxS5MO8V0nAre+bgM2+wefAZMwqwtaiPn
-         fuY/MgV4dnC3R19stAm3/+PRb6IJz8SjdpDN7xInBRIsVHfMPtHEpovbU4CS2tFmH1Bb
-         aiT1kyDz4eU4b/KcXDe7xnhlN347gRcvgyQEW45nf8wmXNgGF6Umxj/PSdENWTpNrDn7
-         P30woCZBaCoKsT+wo18habGjaOn1ZOUqjnVo8V/FRNVEln8wvfjDzOIyOSYWIoAAkryw
-         ljWA==
-X-Gm-Message-State: AOJu0YwiOxSwxfyjUfhNuMVWBe4dLXxeP7OKf2PRmfFYmc9N0ufO0+cV
-	IIBsWPofeZxGdvOtGXSZ4arIjg==
-X-Google-Smtp-Source: AGHT+IEfYZ/UgYfdCyr2ODsTNvO+DYWeLrEHu+ivgaehYmkWlq+ooFcHoKRvAx82GGQF2u3fKgu+EA==
-X-Received: by 2002:a17:90a:5305:b0:268:81c6:a01f with SMTP id x5-20020a17090a530500b0026881c6a01fmr2702511pjh.26.1694808847113;
-        Fri, 15 Sep 2023 13:14:07 -0700 (PDT)
+        bh=9t4c7iG7BwJixU6psOPlOQYO3J4oZ/NM5PDqz6Jeo04=;
+        b=kw0j8LDpArTBN958vQPxdyW7jx3rH4KLRyjvaI81XQd5/1QW/KLA6vxRuvc6oXQZX0
+         F1Ii1VQuJL8GfeipaXli9EiBny4TFQQbIVGRPA1zF8ytCeNWKKgt2OzoQXeIaczWaeEZ
+         pU4otNAEr5qDsjRgjEJxPA8P6Bz9vTcSAmKIYY1whbGUzJMRliug9Flcwwdd5NTHe7VJ
+         kUhlybvzS9ehNMJI5xppLZeVVKG47HTF2jCkLoNm2y3ABM6GEZXP93sLqbwiIkutWuK3
+         Kgjt0rIGuC/7OVONUsWAD2tif7zjIz1ScqpvDwFWKtcvJm1WZrsZtcFvJOWerK7oL6nh
+         ZtEw==
+X-Gm-Message-State: AOJu0YwErUij0IMbM8v3/2E4MelE5e3pN44eMsd2F89aT7zqLEtg5wrt
+	QTkUWN/r/ktaCndAH/a/6zMyXg==
+X-Google-Smtp-Source: AGHT+IGgXyGAghZv7pszt8rqPpCweXXdiMo6SZzmmUtM+9AUGmv0Zkuf+i1pa/kjEbWVyhBGaegRbw==
+X-Received: by 2002:a17:902:8691:b0:1c4:a16:f88f with SMTP id g17-20020a170902869100b001c40a16f88fmr2591006plo.36.1694808855939;
+        Fri, 15 Sep 2023 13:14:15 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id fu17-20020a17090ad19100b0027498485107sm1706587pjb.12.2023.09.15.13.14.06
+        by smtp.gmail.com with ESMTPSA id kg14-20020a170903060e00b001c41e1e9ca7sm3059479plb.215.2023.09.15.13.14.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 13:14:06 -0700 (PDT)
+        Fri, 15 Sep 2023 13:14:15 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Jan Kara <jack@suse.com>
+To: Benjamin LaHaise <bcrl@kvack.org>
 Cc: Kees Cook <keescook@chromium.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-aio@kvack.org,
+	linux-fsdevel@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] udf: Annotate struct udf_bitmap with __counted_by
-Date: Fri, 15 Sep 2023 13:14:05 -0700
-Message-Id: <20230915201404.never.574-kees@kernel.org>
+Subject: [PATCH] aio: Annotate struct kioctx_table with __counted_by
+Date: Fri, 15 Sep 2023 13:14:14 -0700
+Message-Id: <20230915201413.never.881-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -53,20 +57,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1040; i=keescook@chromium.org;
- h=from:subject:message-id; bh=BUpk+NqQMMN0qmYWwrmO8FxGwWxEGEYVaPG+zJ06MRo=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLsMQJt2qp7TQ1LA96Hxy7q1jthVYf/zpnN+m
- 6CUfAwnwb6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS7DAAKCRCJcvTf3G3A
- Jr7/D/9yErTRxAzHaDFDOzE/kRrbYmZ7UQLL6OxblKmIJk2ZNjhDFMvjmBuH9qGGUyuKFVZVNty
- jkmndMLGM7tb6dm0iw8UMVFvNrkZFV0EiHGODAYvPBU7d1oHnykVINhpUzNaHe2LWH0zwnZDAcS
- zzBQJCty+384+FztuKlLv1hAopQ2XSb88RAjjuL6wRs4oVX29cxtUqK6JkdH0e2KjD3Z0RIIZsb
- 8lEhJvCrXURb2xbk7wdfEZeYsoWtd2kVxRttuQHckbzpEUrm/MqdGT37LjfEpy74ca3xowvkNwV
- th0vm7VJkATIKsol5ZUnOlFiFNB4V7ebcoUB9Hh+XDdhVYK+eViNiim52AkJC41M069BDtSOENy
- QcyBtVXwG3dmdYqNt0vrYsFo2S2zC/qYY9c9HteiiwN44m8KcoB5XNojWp71FcecOT94VokbyWe
- mY3azzMBACSTYM4iIRfqBG7n5R3/R0OPwzoCQ3O963ohrgUMyl7/pwO9JV0nDDbAUCz9eFwG8h7
- zDVEbAMoYP1fqBqOaTvjGufri6IfzxzoFPUeRgqAgI2CWN226XpMfy6f8cGM6TqN5GkoRqJuHZU
- oTojGtvqPoo8XXIMtTfHBugsyIejsxCebBBoBonJ0yApGKcfrj4Q4zKG+6oXquYnMXA2yRrXosN
- eJT3+x/ OJ9Ye6Jg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1127; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=1qAoiZuMRAuvDZRUcSDPW5lLo0Ae9xZ4UiTXDEh1mTE=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLsWaTUS2aPe9DYGUrDZPo05lmzAICnFfTNt4
+ TuHABaIVB+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS7FgAKCRCJcvTf3G3A
+ JoNvD/wI9Ez/xecwMst1xwqWO5PzTIz1ZADRxzr2MoMrg+bF+zVBEO3uiWXoI4pY9farlKnMZOW
+ F5S+SAgyURn2G3c6PN1WVEuc3Y9424hN2if8MTSVs0Nbk2EYZYm06r4Douy2vRy0YkSAWpssZ4v
+ kymW916TdLMSRQ/VlhTwIqb/EogyHshGE7Zu0yDtUhDbfNo/bgJHm1Eb6BVnfWOYPkexC2wepRA
+ /2J8yT+u4nZPjAW/UCwuRiP1zLd+xRXCtOQ9gm8mzijyKmqsRVlbzYa5UgI1Qr2byEv0P+KjR+K
+ y6G/DhhriaqRy0FKJe0VObtQR56fWtLn/iUbIXW1qHAqKOVt3+/Xx/Qy+k6d9q+FucGZchog81Y
+ 2br884EAL0MMUhCaLcwaFg4xWRh29AeG8bLDSSNwC9EIOIo6FlJdiPX8HsYfDRb2OkHYBrsCpUi
+ suZXovmTwkZpy/XU8KHgnb7LmtJc2yZDea0oHJJbmJudfvmiUROsu2gT6uXwwCfFTZxacyfSznc
+ ASqN8epE+clvMgEB/6HAUJXqXXb33j045MB2iUYymLfTnXHdblZnb/8GXLjn8Vs2KlOKemgOj3C
+ lfmwn7j/b71qoQYPbLyXrt6loyYO6Zx7zzMnblLcq56S/LCrSIUYj5v7p70QXU/45+14jBKbzhy
+ hj/G1EM dIHavvSg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -76,29 +80,33 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct udf_bitmap.
+As found with Coccinelle[1], add __counted_by for struct kioctx_table.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Jan Kara <jack@suse.com>
+Cc: Benjamin LaHaise <bcrl@kvack.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: linux-aio@kvack.org
+Cc: linux-fsdevel@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- fs/udf/udf_sb.h | 2 +-
+ fs/aio.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/udf/udf_sb.h b/fs/udf/udf_sb.h
-index 9af6ff7f9747..f9a60bc1abcf 100644
---- a/fs/udf/udf_sb.h
-+++ b/fs/udf/udf_sb.h
-@@ -86,7 +86,7 @@ struct udf_virtual_data {
- struct udf_bitmap {
- 	__u32			s_extPosition;
- 	int			s_nr_groups;
--	struct buffer_head	*s_block_bitmap[];
-+	struct buffer_head	*s_block_bitmap[] __counted_by(s_nr_groups);
+diff --git a/fs/aio.c b/fs/aio.c
+index a4c2a6bac72c..f8589caef9c1 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -80,7 +80,7 @@ struct aio_ring {
+ struct kioctx_table {
+ 	struct rcu_head		rcu;
+ 	unsigned		nr;
+-	struct kioctx __rcu	*table[];
++	struct kioctx __rcu	*table[] __counted_by(nr);
  };
  
- struct udf_part_map {
+ struct kioctx_cpu {
 -- 
 2.34.1
 
