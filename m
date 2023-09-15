@@ -1,105 +1,124 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4B330CEE
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 19:06:29 +0000 (UTC)
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6561c09ead6so12304976d6.1
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 12:06:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BE530D01
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 19:58:19 +0000 (UTC)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-68fb85afef4so2456925b3a.1
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 12:58:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694804788; x=1695409588; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/NNdNMoPNLRC5J4Us7rjn5YK+Bn2P8ki5j52BrAmQfc=;
-        b=nkvUh/Ogk7bRHzhQk+y2OxGI+CauH6I0DiLK6Ua4M+yiArqFyjGJ1fLiVFfQjT23QO
-         3j7c9pPFQhQfM71I3rRQFLbnva+CrFk4pp4x58F7O6yMutTw86wCNgfgHFB0Y/69RmA1
-         jhHY5XRfwG6frVvaxSwKvXu7KwnrhZg50QvqKXWuJSl9LzSNtcQL2L5n+xsyd+dYnmMf
-         JSc8Bz+s7QA41W87gZIQlXKMKTKrqAm+QP/vvM2MRbriME7vqjM9uBnsZxjh8ztbiSgF
-         qkwheoRx9SN7tKrT2YFZumm0AtWIWpWZMeL23ME36koGlqagBCOxbyZb80FN37nymaxs
-         kK7w==
+        d=chromium.org; s=google; t=1694807899; x=1695412699; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zmHM4psXavgvDfuezLrO35so+CBMe74SVmqgDqqj+X4=;
+        b=RTSFESkkmcMHfj2nCo7Vcov3R9061FBKxwG5bYcFslef7nBBXubQ4XUzCDJk03itZx
+         mrkAeLkfWgB199HI68276roAvZXGDGotVVrdPBDY+3NbkUVOslSWFWGhl5GAkhJ+Qz8U
+         TDyaSkAA8KH4YfYeUWyCt7CkzrG56Hs0ntIyc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694804788; x=1695409588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/NNdNMoPNLRC5J4Us7rjn5YK+Bn2P8ki5j52BrAmQfc=;
-        b=HuzkBz9xcN1OaZCevNVD0q9WSk1pGh1AnL51/usHPp3ReAmwi4WcWlozhv2ZchWwwW
-         YcY0Aguca6Q9YWGiKx3SLRiGq97GOG2XH6X0DwyycTkP1wKInHrh7YgjfdqAIjHfaf8c
-         pLjIEjbLP7vsLf4Zaw/iNp6ldXgJ26cohzlyZjn17QK4ZQlIygb8VjfKb7SgybB0vGKP
-         Ux0zb+4ddJRHsr0Qtr526qOsATyfEillYB5RSrd0RJ3hIjZjlLtFUMTA47+xQwI9EH6r
-         G7sf979SNpJ8wEpA+ho89u31rsRH8MvMJ/gMPxw8Tys2BBRISHuCZcrFCNGgVFRLpvw5
-         1g+A==
-X-Gm-Message-State: AOJu0Yx9p3HBvxGWPlNDcHhKE3oKbvTBZxEfXC6nQWLomsV0y1FmUHFn
-	eUFHtu8gsrtyVlSEO9oeTLKwNhK1u2WRXbDqfmbT3g==
-X-Google-Smtp-Source: AGHT+IHnUmEPsIeFlP8ufy20De8OLVwpSSqcrp7lDWmTe6PTj/7WjDAOWdhgq5G3z26K+KHrakYbT0n8GVD/uGs4Htc=
-X-Received: by 2002:a0c:e301:0:b0:651:65ca:141d with SMTP id
- s1-20020a0ce301000000b0065165ca141dmr2504505qvl.37.1694804787931; Fri, 15 Sep
- 2023 12:06:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694807899; x=1695412699;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zmHM4psXavgvDfuezLrO35so+CBMe74SVmqgDqqj+X4=;
+        b=Huy98+jiGVrHL3TFgG4hNNfykhhexWIG/q9pqTQ7syk1I6JlLj54ynsFbwU/fkVt1b
+         b4SZuv2wQYJEAfLr47vzwKpHlnbqdSp7aY1dYazZeV9F/OxwYM3YSM7S0+FjosVF1WOo
+         cFezPpSMR97w1D1rOXZ1n0WjQgfsRUBx3W3aIlYTR7LCIkv9WGPPR6Dbav9DIdRbZEKC
+         Sb+zij20mJDjrdBLgAbFEWyQcapxmPtMtPxwIGZUZq8HK9p0UGq7YYUhg512is1stM8w
+         frBn9N4HH2FLu3MIYFfrP87IGatvO7s15nw+Qx/4TB83+mSy4vzs/NgjkWXC40ri9v2F
+         Wb6g==
+X-Gm-Message-State: AOJu0Yz/aiULua3Z98MfhOggqheI9yZoO/UfWitNZtI90+tBSuTY+KF2
+	urN8SVVt8xWNp3NGJRvELWrvDA==
+X-Google-Smtp-Source: AGHT+IHxg8lMUhQbD1ACheTV/Mn8ZmyK6E+Zn7O25oxU88CnFr5Q2FqS0QAIFWE5fO7vBsi6A8ggvA==
+X-Received: by 2002:a05:6a21:819e:b0:156:dc22:96a6 with SMTP id pd30-20020a056a21819e00b00156dc2296a6mr2747617pzb.55.1694807899302;
+        Fri, 15 Sep 2023 12:58:19 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s12-20020a62e70c000000b0068e4c5a4f3esm3314766pfh.71.2023.09.15.12.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Sep 2023 12:58:18 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Kees Cook <keescook@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	linux-usb@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] usb: Annotate struct urb_priv with __counted_by
+Date: Fri, 15 Sep 2023 12:58:16 -0700
+Message-Id: <20230915195812.never.371-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230915050125.3609689-1-davidgow@google.com>
-In-Reply-To: <20230915050125.3609689-1-davidgow@google.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 15 Sep 2023 12:05:50 -0700
-Message-ID: <CABCJKueOu+MwgvTcEUY51tJ1YjNjS-3zHhAHP=1TQUC1wd_1VA@mail.gmail.com>
-Subject: Re: [RFC PATCH] kunit: Add a macro to wrap a deferred action function
-To: David Gow <davidgow@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, dlatypov@google.com, 
-	Benjamin Berg <benjamin.berg@intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1658; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=/nlnwk1swWCmCy2+Sv6muF6tU55a2t3bsLZzpmMZ7jA=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLdYB58rdkB52xPa44fGOBHqVRz7lxkY6R3VI
+ m+mHExbT+qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS3WAAKCRCJcvTf3G3A
+ JmBcEACKNUOge0/I+8iiOTctI4cFdZB/+rB9Ls9SMAQ3HTYKIXbFV6eJFbPrC5AAdAGdsGyVCJH
+ 8DDCbKRazcLtk/2vGPm6G5nR2FlXm/Rc/JndCygWsLpIsgWs9NMtm1QZlN2rag2TywAY5O66Pdn
+ e6RWMDqHtBpjC8irzQ0bHTjkCF4IFlDefPhNEJFeuB9xZVfCsjs45uuDLMM2DL9DmxDIR9TztgP
+ aEEPH9ULbxtxiUGrldBOLZpYAS6RnlApwMLXomqII99vwWZEXdECUAWH/AMjYlGDmeuuZdeCGM2
+ zfYbE44jcYqSKf2LHciFpDQOTXbr9CLIIUlc7UbO+S45hQONplJEJIPy8E/l2vq+7tCcVJTcslf
+ vI7T7sGBuhZljTfaxI4E5EuKBMRLeO9Rna/e/MMp7lHnVerLm8cGrFa5+l+bcvTBsjFSozCuqsU
+ Xqan6V+WOLZxOz96eqfXe/e7Il1H1AgAhJy+btd3mtJMRKNEm1TzihpBWwcJ7SESPCQYwGFkeIg
+ iAws1DwbSOAIMRq0+yQ3wKSzcD+s2STzCWxnT71yFB1hSthlwFilQIvNlAkhUoEU5HNoO7arF5q
+ mB6ZLScLXIEtDto8BDzvd/u7lfKIBnlFXEvMEkB46kXMRcjHBaNclSDin1SO3xY9Mo0CchESmZP
+ 15qunaB jCdEo3fQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi David,
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-On Thu, Sep 14, 2023 at 10:01=E2=80=AFPM David Gow <davidgow@google.com> wr=
-ote:
->
-> KUnit's deferred action API accepts a void(*)(void *) function pointer
-> which is called when the test is exited. However, we very frequently
-> want to use existing functions which accept a single pointer, but which
-> may not be of type void*. While this is probably dodgy enough to be on
-> the wrong side of the C standard, it's been often used for similar
-> callbacks, and gcc's -Wcast-function-type seems to ignore cases where
-> the only difference is the type of the argument, assuming it's
-> compatible (i.e., they're both pointers to data).
->
-> However, clang 16 has introduced -Wcast-function-type-strict, which no
-> longer permits any deviation in function pointer type. This seems to be
-> because it'd break CFI, which validates the type of function calls.
->
-> This rather ruins our attempts to cast functions to defer them, and
-> leaves us with a few options:
-> 1. Stick our fingers in our ears an ignore the warning. (It's worked so
->    far, but probably isn't the right thing to do.)
-> 2. Find some horrible way of casting which fools the compiler into
->    letting us do the cast. (It'd still break CFI, though.)
-> 3. Disable the warning, and CFI for this function. This isn't optimal,
->    but may make sense for test-only code. However, I think we'd have to
->    do this for every function called, not just the caller, so maybe it's
->    not practical.
-> 4. Manually write wrappers around any such functions. This is ugly (do
->    we really want two copies of each function, one of which has no type
->    info and just forwards to the other). It could get repetitive.
-> 5. Generate these wrappers with a macro. That's what this patch does.
->
-> I'm broadly okay with any of the options above, though whatever we go
-> with will no doubt require some bikeshedding of details (should these
-> wrappers be public, do we dedupe them, etc).
->
-> Thoughts?
+As found with Coccinelle[1], add __counted_by for struct urb_priv.
 
-Using a macro to generate a wrapper is a reasonable approach IMO, and
-we've used it before in the kernel to fix type mismatches in
-indirectly called functions (v4l2-ioctl and cfg80211 come to mind at
-least).
+[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Sami
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/usb/host/ohci.h | 2 +-
+ drivers/usb/host/xhci.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/ohci.h b/drivers/usb/host/ohci.h
+index aac6285b37f8..1aba22784e05 100644
+--- a/drivers/usb/host/ohci.h
++++ b/drivers/usb/host/ohci.h
+@@ -337,7 +337,7 @@ typedef struct urb_priv {
+ 	u16			length;		// # tds in this request
+ 	u16			td_cnt;		// tds already serviced
+ 	struct list_head	pending;
+-	struct td		*td[];		// all TDs in this request
++	struct td		*td[] __counted_by(length); // all TDs in this request
+ 
+ } urb_priv_t;
+ 
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 7e282b4522c0..2f21c3a8565c 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1666,7 +1666,7 @@ struct xhci_scratchpad {
+ struct urb_priv {
+ 	int	num_tds;
+ 	int	num_tds_done;
+-	struct	xhci_td	td[];
++	struct	xhci_td	td[] __counted_by(num_tds);
+ };
+ 
+ /*
+-- 
+2.34.1
+
