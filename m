@@ -1,110 +1,136 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4A01B26D
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:15:30 +0000 (UTC)
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-68fbb10dec7so2356708b3a.3
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694808930; x=1695413730; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5U9yAMmxUGtlu2RTV+opnsRR/vKyQ1Eg6VpI2oRXqGs=;
-        b=EA3iQ+YCpPWNy2Q4zFtkdVoxkfSkjqlp1Vk4UW0kOvNsco0no8Uj1AOvmWvh5MKq/e
-         Z4/O2wUlCstB1eqyvmJYVP0Uj00Tj/9/26NgQgPzQT7fFRF/YXnQRTMmAlb9l3yTItrW
-         Ca4cuUTFQ/7gOrYvccaCiSZ1kgOLhWqR87RkQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694808930; x=1695413730;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5U9yAMmxUGtlu2RTV+opnsRR/vKyQ1Eg6VpI2oRXqGs=;
-        b=o0FHQ+w9QMe9QTH0j4+A1oZ99gUUaiftfZv5TsD39mMh3gt3keay6QdbRtz/EHwVjj
-         OHeghp46BF2vXvYCn+OR5ZhiXQTUzWBWSeryNKZRDAuL0iFr4Y0dfrvuZr81UJhkEmwj
-         24oRSyxWmQcvv83bXRM6RBkmBjzmgTlhokXYDXT2v3cNjqB00KQgCnDLLue0/s0OiGrs
-         4vF9PAv1pMdXMaKAcx7fD6Vw65aqMO7j7bGH3NyK3YNO9WKfYUlixM+SiUT0B5zjR9qc
-         H30k9gSdX1fBz1ukcSox+lPpZtEdw2Z0vHh27IIbB/vNltojMcFV5PzGVgnJjWSDdtc0
-         oolw==
-X-Gm-Message-State: AOJu0Yw3Z/G0XyrXhxZ1NcN7uBCxfSyl15KlXUrOJiNlfcZ7nhQcN8BQ
-	xIc5pmCCuMZgOfgqHxRiW6oUuw==
-X-Google-Smtp-Source: AGHT+IFiEOjtKML9hAMj7s89s+YrjEI9Ics/TkDbK27NvmtLHbxAe68D4A4yHfRZWvo9JI7q0ksJ7Q==
-X-Received: by 2002:a05:6a20:2583:b0:153:8754:8a7f with SMTP id k3-20020a056a20258300b0015387548a7fmr3347558pzd.4.1694808930405;
-        Fri, 15 Sep 2023 13:15:30 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u4-20020a62ed04000000b0068fb9965036sm3308876pfh.109.2023.09.15.13.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 13:15:29 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Mark Fasheh <mark@fasheh.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Joel Becker <jlbec@evilplan.org>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	ocfs2-devel@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] ocfs2: Annotate struct ocfs2_slot_info with __counted_by
-Date: Fri, 15 Sep 2023 13:15:23 -0700
-Message-Id: <20230915201522.never.979-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DF81B26D
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:16:54 +0000 (UTC)
+Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
+	by cmsmtp with ESMTP
+	id hAOdqk3iSQFHRhFFAqvKnp; Fri, 15 Sep 2023 20:16:48 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id hFFAqEDEap9rehFFAqa9cO; Fri, 15 Sep 2023 20:16:48 +0000
+X-Authority-Analysis: v=2.4 cv=Ztv+lv3G c=1 sm=1 tr=0 ts=6504bbb0
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=pGLkceISAAAA:8 a=Q-fNiiVtAAAA:8 a=VwQbUJbxAAAA:8 a=PW-KNzBFAAAA:8
+ a=20KFwNOVAAAA:8 a=bUQKSiCPAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9
+ a=QEXdDO2ut3YA:10 a=Fp8MccfUoT0GBdDC_Lng:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=84zbTXrhsdUYOv-GFPQN:22 a=-fHZXUhsFbuwFN3fwQAr:22 a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=KtMnX6dW2uHowtokVprvS0xbcPmVacza6Mwf4ovlm7w=; b=EbirQaotkGX6sWPICYXtUjafnE
+	K5Fz5wFHy8qSGnU7st/4bZkpJoi5AJfGYoJKDWVSm3LPzpyZF4jjD0wLj3bXnxT2E0gpilJ2nAnzc
+	oAAuuTwxVYi7E9AAvHJDoLKJ2n0ljTRHjrgjaEAeq8sbzwzrpUD3YU5Uwh7U5TYrrgyHJrmu1R2na
+	F7ultmNNhHqszIdAVJOTRmQARekSBr3yjtewPZIecgO+q82YmmCcMZkuZIWHebH0QROncxbQCywdi
+	QfGw9PbYmgrTces/Oq2tr50AgwqXOGY0i26gmG46us4VYrSk+OHM2X1LyT/mAnr7VVGxxAYFN0GGD
+	5Ppbrtnw==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:59654 helo=[192.168.15.8])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qhFF6-002AbG-2w;
+	Fri, 15 Sep 2023 15:16:44 -0500
+Message-ID: <fe901465-7820-104c-1761-2095d45cb96a@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:17:39 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1167; i=keescook@chromium.org;
- h=from:subject:message-id; bh=vVg/lwd/xTHPf1ncyCo+ObbQAlMJgY5cAnP5s625GBY=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLta7z/D+qrhNioYhLhzv1EUA9eiYGgPkff5E
- WkJ6ZVV9kOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS7WgAKCRCJcvTf3G3A
- Jm5LD/9AgxrbRwWNmusFfPJ9QxfnI7oMtHew9CbcXH9J5762zPWuOe5jVw8WhT+uByyd1i1mixz
- 5el5s969WpfACTpAWuJhC/dB7M4vQwfkdYngKRmI9ur1PJ+4t2AN44FzbEL0g2b3dm2/nYJqU2B
- 6Bn0Nq+cC8LlgpdU6T5vaEUHoMtls5+suDayovc5HuVQiWgA63f0jqxtvXW/eXzZ7PjtEuZrvut
- XMJyOwUDGcR86O4hFOt3lBOxZB/WNl/iYEJiAjksnRhkdshPp4fXzHQTxaHF4VgS993Y3T+1IWV
- 8GlRsZ/6SOwuRU8ZyH3298IY06+Ri3SP6ZGZTdDYELWaSBKTxDG8PTveGNZKjOy+whqwYugCb4p
- xp7eLci8exro42aA49ZptpY+0KaTLA10QN78NVp9rsHmzi1dV7bX9FbkeAk+gVE2mcy+iDmc65O
- 6bLjfR2vvXY8zgk250FYcXj8HrxcGjXAjw8ZWIEFRjY9IiH+F+8aGhc7QICsw/u0gUDjWZskoa2
- 6ir7iarUGsxSiSF0PfeRvgLppdp0iyrKw6u1FIdu1hVbHgTwK32rVJP3eENfmy9GK+DZrEKnVOq
- wXmADnU5lgUCfc3hTRxQhalNw9D6NVB3UClIcZ3ZI3ve7LH3ObESB1Q8b/RkX/Ks9y2PWyYg2Bf
- x8VFe1R RW1mYTMA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] wifi: brcmfmac: Annotate struct brcmf_gscan_config with
+ __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Arend van Spriel <aspriel@gmail.com>
+Cc: Franky Lin <franky.lin@broadcom.com>,
+ Hante Meuleman <hante.meuleman@broadcom.com>, Kalle Valo <kvalo@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Hector Martin <marcan@marcan.st>, Ryohei Kondo <ryohei.kondo@cypress.com>,
+ Hans de Goede <hdegoede@redhat.com>, linux-wireless@vger.kernel.org,
+ brcm80211-dev-list.pdl@broadcom.com, SHA-cyfmac-dev-list@infineon.com,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Linus Walleij <linus.walleij@linaro.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230915200542.never.417-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230915200542.never.417-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.21.192
+X-Source-L: No
+X-Exim-ID: 1qhFF6-002AbG-2w
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:59654
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfFCec9m/78bXvm7BSbNasS0AviIUyRgMkevpRa6NSdvY2r8oxBfOFC3PbW0ycyfSRWekNERqLR50I9szyYbY9+Db5IR38nes2uXt4A5c1rT39Hr8KED+
+ Obff/2WYCIzWNVHEVatZmPYXXYvsuSI1qDcPI/b3uHrBHBG0u59F9zK5/WrnxObI14zY75OsvfnjHajyb+eD0mt7k4o0ndaxQkk=
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
 
-As found with Coccinelle[1], add __counted_by for struct ocfs2_slot_info.
 
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+On 9/15/23 14:05, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct brcmf_gscan_config.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Arend van Spriel <aspriel@gmail.com>
+> Cc: Franky Lin <franky.lin@broadcom.com>
+> Cc: Hante Meuleman <hante.meuleman@broadcom.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Hector Martin <marcan@marcan.st>
+> Cc: Ryohei Kondo <ryohei.kondo@cypress.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: brcm80211-dev-list.pdl@broadcom.com
+> Cc: SHA-cyfmac-dev-list@infineon.com
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Cc: Mark Fasheh <mark@fasheh.com>
-Cc: Joel Becker <jlbec@evilplan.org>
-Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc: ocfs2-devel@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/ocfs2/slot_map.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-diff --git a/fs/ocfs2/slot_map.c b/fs/ocfs2/slot_map.c
-index da7718cef735..e544c704b583 100644
---- a/fs/ocfs2/slot_map.c
-+++ b/fs/ocfs2/slot_map.c
-@@ -37,7 +37,7 @@ struct ocfs2_slot_info {
- 	unsigned int si_blocks;
- 	struct buffer_head **si_bh;
- 	unsigned int si_num_slots;
--	struct ocfs2_slot si_slots[];
-+	struct ocfs2_slot si_slots[] __counted_by(si_num_slots);
- };
- 
- 
--- 
-2.34.1
+Thanks
+--
+Gustavo
 
+> ---
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h
+> index bece26741d3a..6eef6bc430e2 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h
+> @@ -1209,7 +1209,7 @@ struct brcmf_gscan_config {
+>   	u8 count_of_channel_buckets;
+>   	u8 retry_threshold;
+>   	__le16  lost_ap_window;
+> -	struct brcmf_gscan_bucket_config bucket[];
+> +	struct brcmf_gscan_bucket_config bucket[] __counted_by(count_of_channel_buckets);
+>   };
+>   
+>   /**
