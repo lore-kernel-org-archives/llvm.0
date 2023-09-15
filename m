@@ -1,41 +1,42 @@
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1546630CFF
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:50:36 +0000 (UTC)
-Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF3218E09
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:50:46 +0000 (UTC)
+Received: from eig-obgw-5009a.ext.cloudfilter.net ([10.0.29.176])
 	by cmsmtp with ESMTP
-	id hAM2qXdR6yYOwhFlsq0wJ7; Fri, 15 Sep 2023 20:50:36 +0000
+	id hCX4qkiGcQFHRhFm2qvYnY; Fri, 15 Sep 2023 20:50:46 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id hFlrqx8uTZRGzhFlrqOV2l; Fri, 15 Sep 2023 20:50:35 +0000
-X-Authority-Analysis: v=2.4 cv=PLscRNmC c=1 sm=1 tr=0 ts=6504c39b
+	id hFm1qDJpDr4o2hFm1qiw6K; Fri, 15 Sep 2023 20:50:45 +0000
+X-Authority-Analysis: v=2.4 cv=KIpJsXJo c=1 sm=1 tr=0 ts=6504c3a5
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=pGLkceISAAAA:8 a=20KFwNOVAAAA:8 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8
- a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=xmb-EsYY8bH0VWELuYED:22
+ a=x_RLF880AAAA:8 a=IXr_WNlcAAAA:8 a=SRrdq9N9AAAA:8 a=cm27Pg_UAAAA:8
+ a=VwQbUJbxAAAA:8 a=G5nsRgLVucSo8_3d1RoA:9 a=QEXdDO2ut3YA:10
+ a=jCPSC2jcP07J4OBJNHyf:22 a=K24ECnMRWNUKRqF_MnsZ:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=AjGcO6oz07-iQ99wixmX:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=bGxhVUtgvEtIdv5fdJaFlvXT8/mXEEnYVeDX80O0mX8=; b=pVxo90MtuiavN6bEoVO6DwiSj9
-	X7B/rqqGQsao/orbkh4UlEIIVyIl98hLd2mWBwQaUK9Z1mbR2G37nYMFvWZL3F71qEv7OY+oXglG5
-	rA+J0kWnfqnIdkAItqbXTEPpBsqGmHPP5Jc8M77613D98okLcnMdKj9srH8sRAqY+w0eCAG/wwCqK
-	zzFKVAe6wXu3WOabWWzdEVeTMvajCqeObw3OY84OAOeHiDP42lWwDkFvOadx5Msp39voUnAbjSrLe
-	sX3emfdNDgH5fvEh52X9LkYtobJrqPOUnOge6pDGCUEteStwQgtX0V0q8LqC5G2yfWSjXHW6ixTQ3
-	My8YkabQ==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:54838 helo=[192.168.15.8])
+	bh=nxvRp4DGgI/6MixR2WlqcSPhzQJquVqoPBvbY8UncWM=; b=nXds5WHz6Ptbe2/HB9I9kDCSE9
+	Lq4v3BlLXWKNpglWH8WUCFTaLFxUEvQTDIZ3Eu2EGfcCwxqhOh1rIKXB2uGfM96xUhyDGSTrWacb1
+	g27LYfvYcH/4en27z4xPrxykTLgF4Oqg+Yqy6Vqkr0ULxChC9vn7I9zzj4kbSDAN1Hlq3Z+O6Ws7i
+	C43pWD3m5jpbWgcLIQHLdjnDNkhMQHWxGJmdvd6t7fcUhqIbkxYch72CIMi9ovmzD53wlA6jKMHY5
+	dJpyYCIBHkPyVzJtyAHHhfrbsmsFqJ0le+cK81Jx/TUktXiZekpMflwTbs71bACupN1FMo7MBQKDB
+	P4bScZ+w==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:35644 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qhFlq-002fvY-1O;
-	Fri, 15 Sep 2023 15:50:34 -0500
-Message-ID: <631103a7-6119-145d-8230-5a97e1362785@embeddedor.com>
-Date: Fri, 15 Sep 2023 14:51:30 -0600
+	id 1qhFm0-002g5A-0y;
+	Fri, 15 Sep 2023 15:50:44 -0500
+Message-ID: <ae45f6a6-8870-d2c8-8c98-a9e7d9d1ba2f@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:51:40 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,17 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] ceph: Annotate struct ceph_osd_request with __counted_by
+Subject: Re: [PATCH] ocfs2: Annotate struct ocfs2_slot_info with __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Ilya Dryomov <idryomov@gmail.com>
-Cc: Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
- ceph-devel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+To: Kees Cook <keescook@chromium.org>, Mark Fasheh <mark@fasheh.com>
+Cc: Joel Becker <jlbec@evilplan.org>, Joseph Qi
+ <joseph.qi@linux.alibaba.com>, ocfs2-devel@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230915201517.never.373-kees@kernel.org>
+References: <20230915201522.never.979-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230915201517.never.373-kees@kernel.org>
+In-Reply-To: <20230915201522.never.979-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -65,18 +67,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qhFlq-002fvY-1O
+X-Exim-ID: 1qhFm0-002g5A-0y
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:54838
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:35644
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 481
+X-Email-Count: 492
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfJwVRupSW3X5heyQj889Yr+MEp5Xz+1kn+DhBDcTLeu72SZZX2UUQrq3qjJ2/TnxxGpK3q9sRyc0hv61VStyidoQrr8h/E0AbI4ziND9wnUPsxdz0l7C
- RxxMqM8JM/YkwcgyT5mTCkMAJz5fYapq/hZGLP/nnNxiLXOw8taqiut97EBWRTvnoR1Jpfdrm1z1+BL9zmrmQF7Ct7dS1yCCUUM=
+X-CMAE-Envelope: MS4xfNnPW0YkaqXRyug4OombrAlVeeoJOjY8G54ZtIlJ0LP7V69wlnAlXnfROevnMG7rXR+WP7GROUpM49mCWGw6ZSxtsYLEbwOVA60uoMkvX8YHzs9YUrWh
+ CRsvd+8EUXKZWiXi2ZvC6cnWfcQuB175O1KDLOmQLXuxi0Mb6Vo4bbyF/PQqe9/i1ti+myaxiloion4EOI2WNKR09ofXgqkfT0k=
 
 
 
@@ -87,14 +89,14 @@ On 9/15/23 14:15, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct ceph_osd_request.
+> As found with Coccinelle[1], add __counted_by for struct ocfs2_slot_info.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Ilya Dryomov <idryomov@gmail.com>
-> Cc: Xiubo Li <xiubli@redhat.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: ceph-devel@vger.kernel.org
+> Cc: Mark Fasheh <mark@fasheh.com>
+> Cc: Joel Becker <jlbec@evilplan.org>
+> Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
+> Cc: ocfs2-devel@lists.linux.dev
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -104,19 +106,19 @@ Thanks
 Gustavo
 
 > ---
->   include/linux/ceph/osd_client.h | 2 +-
+>   fs/ocfs2/slot_map.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/ceph/osd_client.h b/include/linux/ceph/osd_client.h
-> index bf9823956758..b8610e9d2471 100644
-> --- a/include/linux/ceph/osd_client.h
-> +++ b/include/linux/ceph/osd_client.h
-> @@ -278,7 +278,7 @@ struct ceph_osd_request {
->   	int r_attempts;
->   	u32 r_map_dne_bound;
->   
-> -	struct ceph_osd_req_op r_ops[];
-> +	struct ceph_osd_req_op r_ops[] __counted_by(r_num_ops);
+> diff --git a/fs/ocfs2/slot_map.c b/fs/ocfs2/slot_map.c
+> index da7718cef735..e544c704b583 100644
+> --- a/fs/ocfs2/slot_map.c
+> +++ b/fs/ocfs2/slot_map.c
+> @@ -37,7 +37,7 @@ struct ocfs2_slot_info {
+>   	unsigned int si_blocks;
+>   	struct buffer_head **si_bh;
+>   	unsigned int si_num_slots;
+> -	struct ocfs2_slot si_slots[];
+> +	struct ocfs2_slot si_slots[] __counted_by(si_num_slots);
 >   };
 >   
->   struct ceph_request_redirect {
+>   
