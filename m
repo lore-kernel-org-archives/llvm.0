@@ -1,15 +1,15 @@
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08CD30CFF
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:49:57 +0000 (UTC)
-Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31FB30CFF
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:50:07 +0000 (UTC)
+Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
 	by cmsmtp with ESMTP
-	id hALyqKlt9EoVshFlFqHyoL; Fri, 15 Sep 2023 20:49:57 +0000
+	id hF0XqlPijQFHRhFlPqvYXN; Fri, 15 Sep 2023 20:50:07 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id hFlEqWvhpl7rxhFlEqtd0v; Fri, 15 Sep 2023 20:49:57 +0000
-X-Authority-Analysis: v=2.4 cv=QJB7+yHL c=1 sm=1 tr=0 ts=6504c375
+	id hFlOqx8dxZRGzhFlPqOUo5; Fri, 15 Sep 2023 20:50:07 +0000
+X-Authority-Analysis: v=2.4 cv=PLscRNmC c=1 sm=1 tr=0 ts=6504c37f
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
@@ -23,20 +23,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WDzRH02xtZOdn1w3Mh08Uj0Kg1XXQkWl85TLPHbY12g=; b=EIxwvVaorObxr7NqbMU1wJcDoE
-	NPFsz2Y1DWsxWX4SI8bAsAyT9DCET++1EuNu5mqDWnMJ7pIDZrkAwb/yS81cne5/NBuGkEfQMrWga
-	FaPrjRUQd+Psnv9VfUNeIPFB7v759CWpg0L2YbbYC4eSEnaCwW4cqCynSultSXp20WF7qADhncX21
-	kY9uSy88hkjjqIQLHgjtbS7DGcUsj5ZtVdmCmwV4zsknKcZy4t7xhwSfCHvq4La5dL8oLsmaMWw1U
-	pponp75jC/r/M+4yWR1lqX0O8FpnavopKJz9JmX/e03HlUSs74m7OWpRHTRDGxqaMlSoxfiyrsx63
-	1JZjQ+ww==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:39494 helo=[192.168.15.8])
+	bh=hHBm32xy4jRkjVn0y/BB/KAWgaCViJxjs8zwN5fSv8o=; b=C9fEmdoUTe5k+Zz9HUgjJGddMx
+	SU7qhuX3vJeueDidE42Lg7b8eejFk7eKtkTzzhgKm5reudpykUqA9NorQqwrpb9St3swwj6IfUbrK
+	NpfY51iNUbip5VgK8gM5xTiHFWSlXpuIHW4oTq+3wsERqhuinyqVA28ir4UbgpWNFeH1kAS/IKqsj
+	C51AEuxEp5xC1gb2jiZaU9mb32SZgikgOy1v1dRyyCrL94rWB+2FWGAz0F0QBoGZzNYehYQB8nlTH
+	6VOZq3i38951kOypo7P3nh8oiJPgOshQoQfNk1aKg7TfogAk7VFNBxNBBHq8oq49qttqy2BWE3jeC
+	wjdqDuzg==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:39846 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qhFlD-002fGS-1V;
-	Fri, 15 Sep 2023 15:49:55 -0500
-Message-ID: <e558c8be-985b-014a-a0ff-34e84a2cb24c@embeddedor.com>
-Date: Fri, 15 Sep 2023 14:50:51 -0600
+	id 1qhFlN-002fV5-1O;
+	Fri, 15 Sep 2023 15:50:05 -0500
+Message-ID: <57b92e94-b9a6-c56f-0812-aa54d15e0c7d@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:51:01 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] afs: Annotate struct afs_addr_list with __counted_by
+Subject: Re: [PATCH] afs: Annotate struct afs_permits with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, David Howells <dhowells@redhat.com>
 Cc: Marc Dionne <marc.dionne@auristor.com>, linux-afs@lists.infradead.org,
@@ -53,9 +53,9 @@ Cc: Marc Dionne <marc.dionne@auristor.com>, linux-afs@lists.infradead.org,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230915201449.never.649-kees@kernel.org>
+References: <20230915201456.never.529-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230915201449.never.649-kees@kernel.org>
+In-Reply-To: <20230915201456.never.529-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -66,18 +66,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qhFlD-002fGS-1V
+X-Exim-ID: 1qhFlN-002fV5-1O
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:39494
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:39846
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 445
+X-Email-Count: 455
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfHRHgp0pcvk4b0wPPtfoBm3xwWO+XUt1S75nwOUt4UbIOSqSkeHyAM7GE+7SWvMIfMdEP/oy1vvNZXxblq067oYLsJqkHev8wZnTOaebaaOav+ptALcY
- WBLs0rIqdP1Ia7NlLXg0/ZG1gCd8bBrNLiu6+pF5n25QlgLW/7nRLHGxr7yH+KkyDfiOglL9po/ficE1A2Eh0PU0TBTkvxE2L6w=
+X-CMAE-Envelope: MS4xfGhzOiqckTcHPo/NLI6R9/lZ+yxgYn4POYxZIi0RGFZ26lTrY8KHO2ty0mEDcbrZpMaTSV9gJc2iq8M0ZRnQnuXjLE/7SsDi+GX6h1Bk8rZ7qriA93is
+ 7jFVb3qwKtu8tWFHA/SJdqTUT4MtYMDHyBKWUbbJvNrN+P78/wIPwN8StkmDxemzixDSPLW0CY6vbpFKg0mRABsrOBvcuGchHoQ=
 
 
 
@@ -88,7 +88,7 @@ On 9/15/23 14:14, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct afs_addr_list.
+> As found with Coccinelle[1], add __counted_by for struct afs_permits.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
@@ -108,15 +108,15 @@ Gustavo
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-> index da73b97e19a9..07433a5349ca 100644
+> index 07433a5349ca..469a717467a4 100644
 > --- a/fs/afs/internal.h
 > +++ b/fs/afs/internal.h
-> @@ -87,7 +87,7 @@ struct afs_addr_list {
->   	enum dns_lookup_status	status:8;
->   	unsigned long		failed;		/* Mask of addrs that failed locally/ICMP */
->   	unsigned long		responded;	/* Mask of addrs that responded */
-> -	struct sockaddr_rxrpc	addrs[];
-> +	struct sockaddr_rxrpc	addrs[] __counted_by(max_addrs);
->   #define AFS_MAX_ADDRESSES ((unsigned int)(sizeof(unsigned long) * 8))
+> @@ -705,7 +705,7 @@ struct afs_permits {
+>   	refcount_t		usage;
+>   	unsigned short		nr_permits;	/* Number of records */
+>   	bool			invalidated;	/* Invalidated due to key change */
+> -	struct afs_permit	permits[];	/* List of permits sorted by key pointer */
+> +	struct afs_permit	permits[] __counted_by(nr_permits);	/* List of permits sorted by key pointer */
 >   };
 >   
+>   /*
