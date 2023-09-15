@@ -1,242 +1,181 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7B06AD7;
-	Fri, 15 Sep 2023 09:33:53 +0000 (UTC)
-Received: from [IPV6:2405:201:0:21ea:7672:a60c:c80:abca] (unknown [IPv6:2405:201:0:21ea:7672:a60c:c80:abca])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: shreeya)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id B603C66072F9;
-	Fri, 15 Sep 2023 10:33:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1694770432;
-	bh=b4vRNHUDXfwABShZ8uXFXtw1t6P/fZTl2xv1VxRp3Sc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VLY45sPufM1XJF1mRdyJNHT2GsTPm+hVlLW/mtlyDefoEdznYinvNaKx9CnP+/8t7
-	 3uqYy5kIC/ZSdnqPNt33UYjW2SzxtkJVOgTEmrdJpZdt2NdHcehD6LToobFX3XAalt
-	 Za7Jr9n2RLwEzEfuitJetbstmLbgesHGHwgsIeUIeM/czYKjlFhJA1R9Jc/dWAj8Dn
-	 dgkxy5Cp0TIspu9L5a4LEQrE1RLDu2c3hl06Mk1jSxmGMsDv675GYyGTPApj+9dvev
-	 k07gnFUT1WMOBzFdg8Zn1SLgiAqMVzKE9Cx08lKfBALzHXulYznxC4k19vojt70bFU
-	 kQva9LYlm69ew==
-Message-ID: <b31cae57-89ab-eb8b-1085-1d7476735d58@collabora.com>
-Date: Fri, 15 Sep 2023 15:03:44 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF1ADDD1;
+	Fri, 15 Sep 2023 09:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694771108; x=1726307108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0rV9VG8TKb4cPuL/9qputjsI4zy07ien126tpL7W2Ic=;
+  b=GzrNnruiqSe5iu52tmc9OM2DWOpje7aV3xxPYbBWL4w/v8Uqzjw/seE2
+   I3zE9WtVmi7tvKCdqLhXJ3fwwFFqBks7amv2ctgF9W2s6XXvxASRqMzPS
+   88gVJnR5Hyp6TXQmG8uAEXQhKxq9/nB5oFQhtweaQmuQYinurdrokYKga
+   K3m9cVoumLnT5OL0JdiLg1dujEvn/jMsG1XY8f93ln7rvVvOy7B8PeK2g
+   I76cfLbJ/2u+CXlEqUrSk4yiIegV9rzItnwvVbUBNj1oBWXayLvT8FMIi
+   a2CC4qxzpkGq3jmFwxfInTw/DSOWccyTi6lA73r6jvcp6em/7o4z0487s
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="379128434"
+X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
+   d="scan'208";a="379128434"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 02:45:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="774246375"
+X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
+   d="scan'208";a="774246375"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2023 02:45:01 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qh5Nj-0002mV-1R;
+	Fri, 15 Sep 2023 09:44:59 +0000
+Date: Fri, 15 Sep 2023 17:44:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, kuba@kernel.org, toke@kernel.org,
+	willemb@google.com, dsahern@kernel.org, magnus.karlsson@intel.com,
+	bjorn@kernel.org, maciej.fijalkowski@intel.com, hawk@kernel.org,
+	yoong.siang.song@intel.com, netdev@vger.kernel.org,
+	xdp-hints@xdp-project.net
+Subject: Re: [PATCH bpf-next v2 2/9] xsk: add TX timestamp and TX checksum
+ offload support
+Message-ID: <202309151727.81IIJrBK-lkp@intel.com>
+References: <20230914210452.2588884-3-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Content-Language: en-US
-To: Linux regressions mailing list <regressions@lists.linux.dev>,
- Masahiro Yamada <masahiroy@kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
- =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
- Michal Marek <michal.lkml@markovi.net>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
- denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
- kernelci@lists.linux.dev, Collabora Kernel ML <kernel@collabora.com>
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh>
- <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
- <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
- <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
- <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
- <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
- <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
- <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
- <26aa6f92-2376-51a4-bbdc-abbbd62c23d2@leemhuis.info>
- <859c6dde-37ad-492e-baa0-4ea100d8381f@leemhuis.info>
-From: Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <859c6dde-37ad-492e-baa0-4ea100d8381f@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914210452.2588884-3-sdf@google.com>
 
-On 11/09/23 15:35, Thorsten Leemhuis wrote:
+Hi Stanislav,
 
-Hi Thorsten,
+kernel test robot noticed the following build warnings:
 
-> On 29.08.23 13:28, Linux regression tracking (Thorsten Leemhuis) wrote:
->> On 11.07.23 13:16, Shreeya Patel wrote:
->>> On 10/07/23 17:39, Linux regression tracking (Thorsten Leemhuis) wrote:
->>>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
->>>> for once, to make this easily accessible to everyone.
->>>>
->>>> Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
->>>> progress made to address this? Or is this maybe (accidentally?) fixed
->>>> with 6.5-rc1?
->>> I still see the regression happening so it doesn't seem to be fixed.
->>> https://linux.kernelci.org/test/case/id/64ac675a8aebf63753bb2a8c/
->>>
->>> Masahiro had submitted a fix for this issue here.
->>>
->>> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
->>>
->>> But I don't see any movement there. Masahiro, are you planning to send a
->>> v2 for it?
->> That was weeks ago and we didn't get a answer. :-/ Was this fixed in
->> between? Doesn't look like it from here, but I might be missing something.
-> Still no reply. :-/
->
-> Shreeya Patel, does the problem still happen with 6.6-rc1 and do you
-> still want to see it fixed? In that case our only option to get things
-> rolling again might be to involve Linus, unless someone in the CC list
-> has a idea to resolve this. Might also be good to know if reverting the
-> culprit fixes the problem.
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/xsk-Support-tx_metadata_len/20230915-051153
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230914210452.2588884-3-sdf%40google.com
+patch subject: [PATCH bpf-next v2 2/9] xsk: add TX timestamp and TX checksum offload support
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230915/202309151727.81IIJrBK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230915/202309151727.81IIJrBK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309151727.81IIJrBK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/core/filter.c:21:
+   In file included from include/linux/bpf_verifier.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/core/filter.c:21:
+   In file included from include/linux/bpf_verifier.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/core/filter.c:21:
+   In file included from include/linux/bpf_verifier.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from net/core/filter.c:62:
+>> include/net/xdp_sock.h:183:52: warning: declaration of 'struct xsk_tx_metadata_comp' will not be visible outside of this function [-Wvisibility]
+     183 | static inline void xsk_tx_metadata_complete(struct xsk_tx_metadata_comp *compl,
+         |                                                    ^
+   13 warnings generated.
 
 
-I don't see this issue happening on 6.6-rc1 kernel and it was only last 
-seen in 6.5 kernel.
-But there was no fix added to Kbuild in the meantime so not sure which 
-commit really fixed this issue.
+vim +183 include/net/xdp_sock.h
 
-For now we can mark this as resolved and I'll keep an eye on the future 
-test results to see if this pops up again.
+   182	
+ > 183	static inline void xsk_tx_metadata_complete(struct xsk_tx_metadata_comp *compl,
+   184						    const struct xsk_tx_metadata_ops *ops,
+   185						    void *priv)
+   186	{
+   187	}
+   188	
 
-
-Thanks,
-Shreeya Patel
-
-#regzbot resolve: Fixed in 6.6-rc1 kernel, fix commit is unknown.
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
->
-> #regzbot poke
->
->>>> On 20.06.23 06:19, Masahiro Yamada wrote:
->>>>> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
->>>>> <shreeya.patel@collabora.com> wrote:
->>>>>> On 24/05/23 02:57, Nick Desaulniers wrote:
->>>>>>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
->>>>>>> <shreeya.patel@collabora.com> wrote:
->>>>>>>> Hi Nick and Masahiro,
->>>>>>>>
->>>>>>>> On 23/05/23 01:22, Nick Desaulniers wrote:
->>>>>>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH
->>>>>>>>> <gregkh@linuxfoundation.org> wrote:
->>>>>>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
->>>>>>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers
->>>>>>>>>>> <ndesaulniers@google.com> wrote:
->>>>>>>>>>>> It could be; if the link order was changed, it's possible that
->>>>>>>>>>>> this
->>>>>>>>>>>> target may be hitting something along the lines of:
->>>>>>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the
->>>>>>>>>>>> "static
->>>>>>>>>>>> initialization order fiasco"
->>>>>>>>>>>>
->>>>>>>>>>>> I'm struggling to think of how this appears in C codebases, but I
->>>>>>>>>>>> swear years ago I had a discussion with GKH (maybe?) about
->>>>>>>>>>>> this. I
->>>>>>>>>>>> think I was playing with converting Kbuild to use Ninja rather
->>>>>>>>>>>> than
->>>>>>>>>>>> Make; the resulting kernel image wouldn't boot because I had
->>>>>>>>>>>> modified
->>>>>>>>>>>> the order the object files were linked in.  If you were to
->>>>>>>>>>>> randomly
->>>>>>>>>>>> shuffle the object files in the kernel, I recall some hazard
->>>>>>>>>>>> that may
->>>>>>>>>>>> prevent boot.
->>>>>>>>>>> I thought that was specifically a C++ problem? But then again, the
->>>>>>>>>>> kernel docs explicitly say that the ordering of obj-y goals in
->>>>>>>>>>> kbuild is
->>>>>>>>>>> significant in some instances [1]:
->>>>>>>>>> Yes, it matters, you can not change it.  If you do, systems will
->>>>>>>>>> break.
->>>>>>>>>> It is the only way we have of properly ordering our init calls
->>>>>>>>>> within
->>>>>>>>>> the same "level".
->>>>>>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
->>>>>>>>>
->>>>>>>>> (There's a joke in there similar to the use of regexes to solve a
->>>>>>>>> problem resulting in two new problems; initcalls have levels for
->>>>>>>>> ordering, but we still have (unexpressed) dependencies between calls
->>>>>>>>> of the same level; brittle!).
->>>>>>>>>
->>>>>>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
->>>>>>>>>
->>>>>>>>> Ricardo,
->>>>>>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
->>>>>>>>> mentions that there's a kernel command line param `initcall_debug`.
->>>>>>>>> Perhaps that can be used to see if
->>>>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
->>>>>>>>> ordering, resulting in a config that cannot boot?
->>>>>>>> Here are the links to Lava jobs ran with initcall_debug added to the
->>>>>>>> kernel command line.
->>>>>>>>
->>>>>>>> 1. Where regression happens
->>>>>>>> (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
->>>>>>>> https://lava.collabora.dev/scheduler/job/10417706
->>>>>>>> <https://lava.collabora.dev/scheduler/job/10417706>
->>>>>>>>
->>>>>>>> 2. With a revert of the commit
->>>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926
->>>>>>>> https://lava.collabora.dev/scheduler/job/10418012
->>>>>>>> <https://lava.collabora.dev/scheduler/job/10418012>
->>>>>>> Thanks!
->>>>>>>
->>>>>>> Yeah, I can see a diff in the initcall ordering as a result of
->>>>>>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
->>>>>>>
->>>>>>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
->>>>>>>
->>>>>>> Not just different orderings, but some initcalls seem unique to the
->>>>>>> before vs. after, which is troubling. (example init_events and
->>>>>>> init_fs_sysctls respectively)
->>>>>>>
->>>>>>> That isn't conclusive evidence that changes to initcall ordering are
->>>>>>> to blame, but I suspect confirming that precisely to be very very time
->>>>>>> consuming.
->>>>>>>
->>>>>>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
->>>>>>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
->>>>>>> mainline.
->>>>>> I'm not sure if you followed the conversation but we are still seeing
->>>>>> this regression with the latest kernel builds and would like to know if
->>>>>> you plan to revert 5750121ae738?
->>>>> Reverting 5750121ae738 does not solve the issue
->>>>> because the issue happens even before 5750121ae738.
->>>>> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
->>>>> fails to boot in the same way.
->>>>>
->>>>> The revert would hide the issue on a particular build setup.
->>>>>
->>>>>
->>>>> I submitted a patch to more pin-point the issue.
->>>>> Let's see how it goes.
->>>>> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
->>>>>
->>>>>
->>>>> (BTW, the initcall order is unrelated)
->>>>>
->>>>>
->>>>>
->>>>>
->>>>>
->>>>>> Thanks,
->>>>>> Shreeya Patel
->>>>>>
->>>>>>>> Thanks,
->>>>>>>> Shreeya Patel
->>>>>>>>
->>>>> -- 
->>>>> Best Regards
->>>>> Masahiro Yamada
->>>>>
->>>>>
->>>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
