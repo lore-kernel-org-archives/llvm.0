@@ -1,15 +1,15 @@
-Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE2310947
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:29:20 +0000 (UTC)
-Received: from eig-obgw-5006a.ext.cloudfilter.net ([10.0.29.179])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0961B288
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:30:52 +0000 (UTC)
+Received: from eig-obgw-5003a.ext.cloudfilter.net ([10.0.29.159])
 	by cmsmtp with ESMTP
-	id h8dGqbD6mez0ChFPUqBogX; Fri, 15 Sep 2023 20:27:28 +0000
+	id hAPUqiySsbK1VhFSmqlF5r; Fri, 15 Sep 2023 20:30:52 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id hFPpqTSDUyBEYhFPqqjoTZ; Fri, 15 Sep 2023 20:27:50 +0000
-X-Authority-Analysis: v=2.4 cv=durItns4 c=1 sm=1 tr=0 ts=6504be46
+	id hFSlqalOnPsxChFSlqus07; Fri, 15 Sep 2023 20:30:52 +0000
+X-Authority-Analysis: v=2.4 cv=BuqOfKb5 c=1 sm=1 tr=0 ts=6504befc
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
@@ -21,20 +21,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=a6FgjMylHXWTpHsDUs+9t/FgxU+P0Q11ISaPe1Rcv8w=; b=xWE1ePG1pJ/MBNbTKML7mWpv7+
-	hTvnsr9J5+w66OSudqoVfFSRzjW5ualO3+2HxahufVMkVae2VyPglsd2DeLXLnuV1Ne268PVqoGBF
-	gzuKSPgYIz+MgtmJ26p20dnfLIo8DVRgTtenBjGhRAdS2bJkRkrHDxTBcIuUxSVjYrRF49gs3R7ua
-	Ms4rqhUu2JQbzLFgPadTU4xcpViBtzieu9urP9YXMOfwBdpmznz+9rr/BLun/ZoSUCOGOjhB1NZ6s
-	mqxNn7VZdQMxomnxvX9BExnhmVSfJ0i9xHBOyYo9Tb+JkulIc3GUeS+WVY2uAjoqv0pbx1mT0eyBI
-	HuQ4ktjA==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:51030 helo=[192.168.15.8])
+	bh=kqpFc+6WUDnssAblCEJx9AOlPnNTHAR7+vmbVqfjYCw=; b=A2cpeTa8LyHMnqW5epBJVnKoth
+	Gp+/9Lk7FQ8D4FVKxWi19O6M0d540ICzsDM6YBsqCbUCi7s20XnaGCi+/D/+JibzAtaovUMhmnZcd
+	y9gRyf1xEK+AUUL6SV2MGxXLXZl3ML0Vhw2saf+47hulOKzMUguUBo+6jp5BH+TgRN+T6h52kDC28
+	s1KQozrbTsdOZf6T55kAM5Sifb1Sc7nQZ2ezhlIW19I8CVE+UfhFDsbQifQrOSWKp9Z7XN/ptLti/
+	Wm7iG927k61ueZAb4IXu2rVFrAZpDAB0jN4tvLXdMu3lUy2dwyzEBqNui9V5YqFGPPKPnluo+Lgin
+	IURVOC6A==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:55922 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qhFPo-002Jct-1H;
-	Fri, 15 Sep 2023 15:27:48 -0500
-Message-ID: <6bf23c7f-9f7f-1d9e-9aa0-e163608447ae@embeddedor.com>
-Date: Fri, 15 Sep 2023 14:28:44 -0600
+	id 1qhFSk-002MlD-1G;
+	Fri, 15 Sep 2023 15:30:50 -0500
+Message-ID: <030807ff-5fc0-3461-565e-be06bf0906dd@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:31:46 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,7 +43,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] dm raid: Annotate struct raid_set with __counted_by
+Subject: Re: [PATCH] dm crypt: Annotate struct crypt_config with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, Alasdair Kergon <agk@redhat.com>
 Cc: Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
@@ -51,9 +51,9 @@ Cc: Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230915200335.never.098-kees@kernel.org>
+References: <20230915200344.never.272-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230915200335.never.098-kees@kernel.org>
+In-Reply-To: <20230915200344.never.272-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -64,18 +64,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qhFPo-002Jct-1H
+X-Exim-ID: 1qhFSk-002MlD-1G
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:51030
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:55922
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 76
+X-Email-Count: 86
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDHCY3vvTAyWfGG/Ua3saMmPScQjbeTYomdk+okGRJYBIrUKYz1GJm21p6BEKkcej69EFbddKOMC1Bh1Xdt6o2ImhPm0ddU2UvXEP7e9vI4tQnG45dZr
- PzH1xIwi3LEUVfmVSLl6zxaakCdlUfL1kDWYm9amzNyT4PT07YyhE2WPRt3vRA0y7pNqAR7fPQxTIMzAFZ7gu/uMRqEnINPHNWk=
+X-CMAE-Envelope: MS4xfADpQx2CacKiXYddXDsGLyfAO7PM8JVE1hPhDSr0OLyJsn6ylKxRsvhOf+BE79RXfMqOqNJpFrTtVgf6+oLR+yn4LZW5mTvUvw7OxFZ0lNz8Zi8MfHL7
+ WAqBlSMN6UWW34MIsGgQeKm14sqB6Y2D+k7Rl8BfusuDDLUnuaBUHMWx/arA9bm7/xMopYv7+QCgHvE1LVV008Rcvu373Yue+Vw=
 
 
 
@@ -86,7 +86,7 @@ On 9/15/23 14:03, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct raid_set.
+> As found with Coccinelle[1], add __counted_by for struct crypt_config.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
@@ -102,19 +102,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/md/dm-raid.c | 2 +-
+>   drivers/md/dm-crypt.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/md/dm-raid.c b/drivers/md/dm-raid.c
-> index 5f9991765f27..9755788e8b78 100644
-> --- a/drivers/md/dm-raid.c
-> +++ b/drivers/md/dm-raid.c
-> @@ -254,7 +254,7 @@ struct raid_set {
->   		int mode;
->   	} journal_dev;
+> diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
+> index f2662c21a6df..f276e9460feb 100644
+> --- a/drivers/md/dm-crypt.c
+> +++ b/drivers/md/dm-crypt.c
+> @@ -224,7 +224,7 @@ struct crypt_config {
+>   	struct mutex bio_alloc_lock;
 >   
-> -	struct raid_dev dev[];
-> +	struct raid_dev dev[] __counted_by(raid_disks);
+>   	u8 *authenc_key; /* space for keys in authenc() format (if used) */
+> -	u8 key[];
+> +	u8 key[] __counted_by(key_size);
 >   };
 >   
->   static void rs_config_backup(struct raid_set *rs, struct rs_layout *l)
+>   #define MIN_IOS		64
