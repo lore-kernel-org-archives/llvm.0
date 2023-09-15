@@ -1,66 +1,105 @@
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925741774E
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 19:01:30 +0000 (UTC)
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3a9e0f4e17fso3719508b6e.2
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 12:01:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4B330CEE
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 19:06:29 +0000 (UTC)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6561c09ead6so12304976d6.1
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 12:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1694804788; x=1695409588; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/NNdNMoPNLRC5J4Us7rjn5YK+Bn2P8ki5j52BrAmQfc=;
+        b=nkvUh/Ogk7bRHzhQk+y2OxGI+CauH6I0DiLK6Ua4M+yiArqFyjGJ1fLiVFfQjT23QO
+         3j7c9pPFQhQfM71I3rRQFLbnva+CrFk4pp4x58F7O6yMutTw86wCNgfgHFB0Y/69RmA1
+         jhHY5XRfwG6frVvaxSwKvXu7KwnrhZg50QvqKXWuJSl9LzSNtcQL2L5n+xsyd+dYnmMf
+         JSc8Bz+s7QA41W87gZIQlXKMKTKrqAm+QP/vvM2MRbriME7vqjM9uBnsZxjh8ztbiSgF
+         qkwheoRx9SN7tKrT2YFZumm0AtWIWpWZMeL23ME36koGlqagBCOxbyZb80FN37nymaxs
+         kK7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694804489; x=1695409289;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jIsxNI68mB9Kq0lc2JZJzazFfrMrZvjV6QtMhALsulY=;
-        b=tBeZ4Bcc5JVljH0jLkPN72Nb/XIWiE4yJdZNbEAL/ffbeBYq2dUG/vjkb7rVdaULT9
-         5xQExiRjoy+iYQw6+YDxB+7XxjvUqzd047vbVcJT5iKleZ8dGzTd/hP+oZMCj02GB9d0
-         zCowNeqEbL7ZFlAjxTRZ7Lz7m881Wqe4LffCVXXJC7aKHbbUy9Sl4m9VMLk5LpRNmcCH
-         4UQ9EgOV1WukleFq3kHHenarBSRWU0aQncMyQmzXwZOpXj10QonNosPLiSu91xvla3qC
-         NSaqiZWUkpvk7Qcxfe4ehjqJXy37cmxYry/rr04H7gka6l4babYdNt6jg0bfrU56adVL
-         2YkQ==
-X-Gm-Message-State: AOJu0Yw1T5wcSBLfUL+N075J5G0EwRG0DuB0YbNvi/JKB49eMvuvVM5Q
-	QrOqZJXSCiGkWLmGP1UAfDAW8P2csnTA4ll3JDTfdvYwAFq4
-X-Google-Smtp-Source: AGHT+IEdW28QExD1CG+iyseqF14sfY7RwaCtlPwhqEcqryljdpqrzAKD69SsLJPnECJiegiA/z1xDUUpJu2RDnGpl364+DDKioM6
+        d=1e100.net; s=20230601; t=1694804788; x=1695409588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/NNdNMoPNLRC5J4Us7rjn5YK+Bn2P8ki5j52BrAmQfc=;
+        b=HuzkBz9xcN1OaZCevNVD0q9WSk1pGh1AnL51/usHPp3ReAmwi4WcWlozhv2ZchWwwW
+         YcY0Aguca6Q9YWGiKx3SLRiGq97GOG2XH6X0DwyycTkP1wKInHrh7YgjfdqAIjHfaf8c
+         pLjIEjbLP7vsLf4Zaw/iNp6ldXgJ26cohzlyZjn17QK4ZQlIygb8VjfKb7SgybB0vGKP
+         Ux0zb+4ddJRHsr0Qtr526qOsATyfEillYB5RSrd0RJ3hIjZjlLtFUMTA47+xQwI9EH6r
+         G7sf979SNpJ8wEpA+ho89u31rsRH8MvMJ/gMPxw8Tys2BBRISHuCZcrFCNGgVFRLpvw5
+         1g+A==
+X-Gm-Message-State: AOJu0Yx9p3HBvxGWPlNDcHhKE3oKbvTBZxEfXC6nQWLomsV0y1FmUHFn
+	eUFHtu8gsrtyVlSEO9oeTLKwNhK1u2WRXbDqfmbT3g==
+X-Google-Smtp-Source: AGHT+IHnUmEPsIeFlP8ufy20De8OLVwpSSqcrp7lDWmTe6PTj/7WjDAOWdhgq5G3z26K+KHrakYbT0n8GVD/uGs4Htc=
+X-Received: by 2002:a0c:e301:0:b0:651:65ca:141d with SMTP id
+ s1-20020a0ce301000000b0065165ca141dmr2504505qvl.37.1694804787931; Fri, 15 Sep
+ 2023 12:06:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1589:b0:3ad:aeed:7ed9 with SMTP id
- t9-20020a056808158900b003adaeed7ed9mr1009026oiw.2.1694804489679; Fri, 15 Sep
- 2023 12:01:29 -0700 (PDT)
-Date: Fri, 15 Sep 2023 12:01:29 -0700
-In-Reply-To: <0000000000005c2d1f05e8945724@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000925bf206056a6b69@google.com>
-Subject: Re: [syzbot] [ntfs3?] BUG: unable to handle kernel NULL pointer
- dereference in __d_instantiate
-From: syzbot <syzbot+29dc75ed37be943c610e@syzkaller.appspotmail.com>
-To: adilger@dilger.ca, almaz.alexandrovich@paragon-software.com, 
-	edward.lo@ambergroup.io, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, viro@zeniv.linux.org.uk
+References: <20230915050125.3609689-1-davidgow@google.com>
+In-Reply-To: <20230915050125.3609689-1-davidgow@google.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 15 Sep 2023 12:05:50 -0700
+Message-ID: <CABCJKueOu+MwgvTcEUY51tJ1YjNjS-3zHhAHP=1TQUC1wd_1VA@mail.gmail.com>
+Subject: Re: [RFC PATCH] kunit: Add a macro to wrap a deferred action function
+To: David Gow <davidgow@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, dlatypov@google.com, 
+	Benjamin Berg <benjamin.berg@intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot suspects this issue was fixed by commit:
+Hi David,
 
-commit 54e45702b648b7c0000e90b3e9b890e367e16ea8
-Author: Edward Lo <edward.lo@ambergroup.io>
-Date:   Thu Sep 22 16:50:23 2022 +0000
+On Thu, Sep 14, 2023 at 10:01=E2=80=AFPM David Gow <davidgow@google.com> wr=
+ote:
+>
+> KUnit's deferred action API accepts a void(*)(void *) function pointer
+> which is called when the test is exited. However, we very frequently
+> want to use existing functions which accept a single pointer, but which
+> may not be of type void*. While this is probably dodgy enough to be on
+> the wrong side of the C standard, it's been often used for similar
+> callbacks, and gcc's -Wcast-function-type seems to ignore cases where
+> the only difference is the type of the argument, assuming it's
+> compatible (i.e., they're both pointers to data).
+>
+> However, clang 16 has introduced -Wcast-function-type-strict, which no
+> longer permits any deviation in function pointer type. This seems to be
+> because it'd break CFI, which validates the type of function calls.
+>
+> This rather ruins our attempts to cast functions to defer them, and
+> leaves us with a few options:
+> 1. Stick our fingers in our ears an ignore the warning. (It's worked so
+>    far, but probably isn't the right thing to do.)
+> 2. Find some horrible way of casting which fools the compiler into
+>    letting us do the cast. (It'd still break CFI, though.)
+> 3. Disable the warning, and CFI for this function. This isn't optimal,
+>    but may make sense for test-only code. However, I think we'd have to
+>    do this for every function called, not just the caller, so maybe it's
+>    not practical.
+> 4. Manually write wrappers around any such functions. This is ugly (do
+>    we really want two copies of each function, one of which has no type
+>    info and just forwards to the other). It could get repetitive.
+> 5. Generate these wrappers with a macro. That's what this patch does.
+>
+> I'm broadly okay with any of the options above, though whatever we go
+> with will no doubt require some bikeshedding of details (should these
+> wrappers be public, do we dedupe them, etc).
+>
+> Thoughts?
 
-    fs/ntfs3: Validate resident attribute name
+Using a macro to generate a wrapper is a reasonable approach IMO, and
+we've used it before in the kernel to fix type mismatches in
+indirectly called functions (v4l2-ioctl and cfg80211 come to mind at
+least).
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12403c74680000
-start commit:   f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c163713cf9186fe7
-dashboard link: https://syzkaller.appspot.com/bug?extid=29dc75ed37be943c610e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1077def7880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10175baf880000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: fs/ntfs3: Validate resident attribute name
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Sami
