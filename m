@@ -1,20 +1,20 @@
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7171B275
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:47:14 +0000 (UTC)
-Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADB21B275
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:47:29 +0000 (UTC)
+Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
 	by cmsmtp with ESMTP
-	id hAJqqXcUpyYOwhFicq0uio; Fri, 15 Sep 2023 20:47:14 +0000
+	id hEvGqkK4ZbK1VhFirqlLVd; Fri, 15 Sep 2023 20:47:29 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id hFibqWtiil7rxhFibqtbUH; Fri, 15 Sep 2023 20:47:13 +0000
-X-Authority-Analysis: v=2.4 cv=QJB7+yHL c=1 sm=1 tr=0 ts=6504c2d1
+	id hFiqq2AyjOCehhFirqYFkN; Fri, 15 Sep 2023 20:47:29 +0000
+X-Authority-Analysis: v=2.4 cv=feK+dmcF c=1 sm=1 tr=0 ts=6504c2e1
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
  a=P-IC7800AAAA:8 a=sozttTNsAAAA:8 a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8
- a=VwQbUJbxAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=VwQbUJbxAAAA:8 a=7iih_Mw5sYxBUvFKUpMA:9 a=QEXdDO2ut3YA:10
  a=d3PnA9EDa4IxuAV0gXij:22 a=aeg5Gbbo78KNqacMgKqU:22 a=1CNFftbPRP8L7MoqJWF3:22
  a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,20 +23,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=OJCQwVBr4oMmx1OajRhUTQW8+WMKMrIsQ1SjzAZI0kw=; b=iLVLOqm/ucWxBdREakyaAZKEZW
-	VyWAV4xwP/gdKvpIXbyLjtyVtj5G0qiLMdtI4MpK0B5MXMoOWm7vPCfqLm+lIder34rh2kjBdSHKJ
-	0X/kumYodifIFYehekFVjfFKsu52UTk+0r6JCGI0KOOUTnVNtYrwrmfSosWHhp3t/KY85qxKHA8X7
-	zBmvAp3bJ7jD559M/SrLjKmDAPk6hTJMjSf0xIre7zJ95KVwm5O9yBMgK1DSpM0CNEUItK+PZoAbL
-	jY8Hjw6tc+GS39Ce0FFc2/+MXHg/EmtSAprs+nLPyG+P7TzzuRnzuse4EeJq6i2aYMgLAgF4HiEGJ
-	gXlqB6Jw==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:49856 helo=[192.168.15.8])
+	bh=sq+6+p57AmLbcxPtBEdqC/wNkATEpxAVKzlTJvsl6VE=; b=tmUMQ38WOswcSz2bnRSH1833Ic
+	TwxU3WoxQJ/IsEXHnWck8PSXYl6rl5jl/RkthCZ1P/Ftc17HT39XOayrGaYxs5qpoaBta3SstWrBi
+	wLVP0n0NreXc4ISJ92Q/tGSBShxwILyYdpvOiX2489j+j4w2dNoSD8DEuQb6S6J8TKnKEJJAv9pRd
+	OtQW3Tdi4Qs4Q7Eb8S6rrlBTqvrPItYBrHkAMjbD4BdgmR9IG9BtFqZl3gqoJ8/DZpXOzzEwh2VWQ
+	/QCk5nu0K9NCwJoAT4ZJvyV43+ToVA9UvnjRhpeRvgZ7K8t/eaQyCOgfCOKvwryKmYfiLj/4Qujve
+	BUTkOAFg==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:38810 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qhFiZ-002c5c-3D;
-	Fri, 15 Sep 2023 15:47:12 -0500
-Message-ID: <e0fba1f9-fc9d-81eb-4bd9-9f6db9d75df8@embeddedor.com>
-Date: Fri, 15 Sep 2023 14:48:07 -0600
+	id 1qhFip-002cMH-1v;
+	Fri, 15 Sep 2023 15:47:27 -0500
+Message-ID: <04aea2c0-8dae-8f45-211c-51304f3a88ca@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:48:23 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] mtd: Annotate struct lpddr_private with __counted_by
+Subject: Re: [PATCH] mtd: cfi: Annotate struct cfi_private with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>,
  Miquel Raynal <miquel.raynal@bootlin.com>
@@ -55,9 +55,9 @@ Cc: Richard Weinberger <richard@nod.at>, Vignesh Raghavendra
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230915201159.never.112-kees@kernel.org>
+References: <20230915201206.never.107-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230915201159.never.112-kees@kernel.org>
+In-Reply-To: <20230915201206.never.107-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -68,18 +68,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qhFiZ-002c5c-3D
+X-Exim-ID: 1qhFip-002cMH-1v
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:49856
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:38810
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 288
+X-Email-Count: 299
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfIZs/ENYw5SyMogl6RXqdwJ6M+gRvkrz3DRht5c3yGWUNu04UG8UdJk9i2lg8Y552UGfpIs+YDeG20mfH0sZ/w77/FoTpYb42KL6auF60k7xLvRsV+Xq
- F3gou09PCTe//HsIaGK24DGe1VYh48/5pPdhQNahs1EvwqGaU3rDvUHC3GwvwGJgoQMQXNOVLoTTmKqk1wTIMMQOBp0aNhUfkiQ=
+X-CMAE-Envelope: MS4xfGRcJCaHFcOep0HWJxXSTnub5ppZG/bQ6DZX5Jz42907efPc5qPtSwXh/4NVfkLEIsoNFeIi4Qz2L2UPKKJ8S5CVtpSSPufzycoX/rkOONdXooGLsAoq
+ 38TXd5s/vJuHpKLhceHP5bNv8FPTMS1+j5d29knmrVnXZLBh3x5DsLrh/NEKNC7ea3p25AK/RyOYSIf6YadY3/FhaBFsr5xbxAE=
 
 
 
@@ -90,7 +90,7 @@ On 9/15/23 14:12, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct lpddr_private.
+> As found with Coccinelle[1], add __counted_by for struct cfi_private.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
@@ -107,19 +107,19 @@ Thanks
 Gustavo
 
 > ---
->   include/linux/mtd/qinfo.h | 2 +-
+>   include/linux/mtd/cfi.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/mtd/qinfo.h b/include/linux/mtd/qinfo.h
-> index 2e3f43788d48..0421f12156b5 100644
-> --- a/include/linux/mtd/qinfo.h
-> +++ b/include/linux/mtd/qinfo.h
-> @@ -24,7 +24,7 @@ struct lpddr_private {
->   	struct qinfo_chip *qinfo;
->   	int numchips;
->   	unsigned long chipshift;
-> -	struct flchip chips[];
-> +	struct flchip chips[] __counted_by(numchips);
+> diff --git a/include/linux/mtd/cfi.h b/include/linux/mtd/cfi.h
+> index d88bb56c18e2..947410faf9e2 100644
+> --- a/include/linux/mtd/cfi.h
+> +++ b/include/linux/mtd/cfi.h
+> @@ -287,7 +287,7 @@ struct cfi_private {
+>   	unsigned long chipshift; /* Because they're of the same type */
+>   	const char *im_name;	 /* inter_module name for cmdset_setup */
+>   	unsigned long quirks;
+> -	struct flchip chips[];  /* per-chip data structure for each chip */
+> +	struct flchip chips[] __counted_by(numchips);  /* per-chip data structure for each chip */
 >   };
 >   
->   /* qinfo_query_info structure contains request information for
+>   uint32_t cfi_build_cmd_addr(uint32_t cmd_ofs,
