@@ -1,41 +1,42 @@
-Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B209F30CED
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:49:42 +0000 (UTC)
-Received: from eig-obgw-6007a.ext.cloudfilter.net ([10.0.30.247])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08CD30CFF
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:49:57 +0000 (UTC)
+Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
 	by cmsmtp with ESMTP
-	id hFCsqdFp9ez0ChFkdqBxiN; Fri, 15 Sep 2023 20:49:20 +0000
+	id hALyqKlt9EoVshFlFqHyoL; Fri, 15 Sep 2023 20:49:57 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id hFkzqfvw67DhyhFl0qPG3x; Fri, 15 Sep 2023 20:49:42 +0000
-X-Authority-Analysis: v=2.4 cv=fpfP2X0f c=1 sm=1 tr=0 ts=6504c366
+	id hFlEqWvhpl7rxhFlEqtd0v; Fri, 15 Sep 2023 20:49:57 +0000
+X-Authority-Analysis: v=2.4 cv=QJB7+yHL c=1 sm=1 tr=0 ts=6504c375
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=SEtKQCMJAAAA:8 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9
- a=QEXdDO2ut3YA:10 a=kyTSok1ft720jgMXX5-3:22 a=AjGcO6oz07-iQ99wixmX:22
- a=xmb-EsYY8bH0VWELuYED:22
+ a=20KFwNOVAAAA:8 a=BS-Bl4eDAAAA:8 a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8
+ a=VwQbUJbxAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=Mz5RY1mrK68yK6INR7tS:22 a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=AjGcO6oz07-iQ99wixmX:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WPXWF77vQI3mRyN0nqVJHqF477a6uTsaeYOM8/wRXhs=; b=DGpiEzz9moDN7MXFfJ+t+Stxid
-	CNygQrCWOzNMLuvdvxd9sCAdK/biMwSTztO9AgmKuDH6hnO3qb1m1sGAy7WBkES6ezICHbz6TD4aw
-	m0Piym4aMYV7ZYKWWc7WHnw0ZP7dlEjmPURw/RNwsClAVWa90jWoXQr9AcXq46gW4U6ueMYaabRM3
-	ES6TcINf4+GCir7e3KjDDCZurNlTeW5tqCH+l9dQ9cWSILRAQTO2Ajgh+uKm2CwgJAm+TD7YoFTfv
-	EA8+qVQexXANmhL/azXEc2ZmBz6ubD4QDTcL6qrTxp2teXPhHGZcisWFiJNmSkq8S4VvQEJvpAa5I
-	LZuXJ9dg==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:36918 helo=[192.168.15.8])
+	bh=WDzRH02xtZOdn1w3Mh08Uj0Kg1XXQkWl85TLPHbY12g=; b=EIxwvVaorObxr7NqbMU1wJcDoE
+	NPFsz2Y1DWsxWX4SI8bAsAyT9DCET++1EuNu5mqDWnMJ7pIDZrkAwb/yS81cne5/NBuGkEfQMrWga
+	FaPrjRUQd+Psnv9VfUNeIPFB7v759CWpg0L2YbbYC4eSEnaCwW4cqCynSultSXp20WF7qADhncX21
+	kY9uSy88hkjjqIQLHgjtbS7DGcUsj5ZtVdmCmwV4zsknKcZy4t7xhwSfCHvq4La5dL8oLsmaMWw1U
+	pponp75jC/r/M+4yWR1lqX0O8FpnavopKJz9JmX/e03HlUSs74m7OWpRHTRDGxqaMlSoxfiyrsx63
+	1JZjQ+ww==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:39494 helo=[192.168.15.8])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qhFky-002ewp-2W;
-	Fri, 15 Sep 2023 15:49:40 -0500
-Message-ID: <c36a8c7f-cb6a-cf32-3898-37159e363382@embeddedor.com>
-Date: Fri, 15 Sep 2023 14:50:36 -0600
+	id 1qhFlD-002fGS-1V;
+	Fri, 15 Sep 2023 15:49:55 -0500
+Message-ID: <e558c8be-985b-014a-a0ff-34e84a2cb24c@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:50:51 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,19 +45,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] NFS/flexfiles: Annotate struct nfs4_ff_layout_segment
- with __counted_by
+Subject: Re: [PATCH] afs: Annotate struct afs_addr_list with __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>,
- Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc: Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
+To: Kees Cook <keescook@chromium.org>, David Howells <dhowells@redhat.com>
+Cc: Marc Dionne <marc.dionne@auristor.com>, linux-afs@lists.infradead.org,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230915201434.never.346-kees@kernel.org>
+References: <20230915201449.never.649-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230915201434.never.346-kees@kernel.org>
+In-Reply-To: <20230915201449.never.649-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -67,18 +66,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.21.192
 X-Source-L: No
-X-Exim-ID: 1qhFky-002ewp-2W
+X-Exim-ID: 1qhFlD-002fGS-1V
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:36918
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:39494
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 435
+X-Email-Count: 445
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKBiPvPvZYm3pqUDCKG2kYMtEml2DRQ2WXXqIIjjA8Fzer7/n3NwKnZDuSaFPTSz7dMSe80kpvSJiFRf5in1Eu3NIA7bWTvhE8Zpt95Mv9yrGukvMO3u
- zESqXIMk0wr+XYt3fY3KAf2j44XdoRLO4YiCRYp/MPU4nkZe0lNHKWyXoh0aJfnxfPcx89JGpD76MKMAF+uScqpGaIFbKeK6u+0=
+X-CMAE-Envelope: MS4xfHRHgp0pcvk4b0wPPtfoBm3xwWO+XUt1S75nwOUt4UbIOSqSkeHyAM7GE+7SWvMIfMdEP/oy1vvNZXxblq067oYLsJqkHev8wZnTOaebaaOav+ptALcY
+ WBLs0rIqdP1Ia7NlLXg0/ZG1gCd8bBrNLiu6+pF5n25QlgLW/7nRLHGxr7yH+KkyDfiOglL9po/ficE1A2Eh0PU0TBTkvxE2L6w=
 
 
 
@@ -89,13 +88,13 @@ On 9/15/23 14:14, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct nfs4_ff_layout_segment.
+> As found with Coccinelle[1], add __counted_by for struct afs_addr_list.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-> Cc: Anna Schumaker <anna@kernel.org>
-> Cc: linux-nfs@vger.kernel.org
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Marc Dionne <marc.dionne@auristor.com>
+> Cc: linux-afs@lists.infradead.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -105,19 +104,19 @@ Thanks
 Gustavo
 
 > ---
->   fs/nfs/flexfilelayout/flexfilelayout.h | 2 +-
+>   fs/afs/internal.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/fs/nfs/flexfilelayout/flexfilelayout.h b/fs/nfs/flexfilelayout/flexfilelayout.h
-> index 354a031c69b1..f84b3fb0dddd 100644
-> --- a/fs/nfs/flexfilelayout/flexfilelayout.h
-> +++ b/fs/nfs/flexfilelayout/flexfilelayout.h
-> @@ -99,7 +99,7 @@ struct nfs4_ff_layout_segment {
->   	u64				stripe_unit;
->   	u32				flags;
->   	u32				mirror_array_cnt;
-> -	struct nfs4_ff_layout_mirror	*mirror_array[];
-> +	struct nfs4_ff_layout_mirror	*mirror_array[] __counted_by(mirror_array_cnt);
+> diff --git a/fs/afs/internal.h b/fs/afs/internal.h
+> index da73b97e19a9..07433a5349ca 100644
+> --- a/fs/afs/internal.h
+> +++ b/fs/afs/internal.h
+> @@ -87,7 +87,7 @@ struct afs_addr_list {
+>   	enum dns_lookup_status	status:8;
+>   	unsigned long		failed;		/* Mask of addrs that failed locally/ICMP */
+>   	unsigned long		responded;	/* Mask of addrs that responded */
+> -	struct sockaddr_rxrpc	addrs[];
+> +	struct sockaddr_rxrpc	addrs[] __counted_by(max_addrs);
+>   #define AFS_MAX_ADDRESSES ((unsigned int)(sizeof(unsigned long) * 8))
 >   };
 >   
->   struct nfs4_flexfile_layout {
