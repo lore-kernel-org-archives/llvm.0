@@ -1,39 +1,39 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557AB1A73C
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:04:03 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-68fc9a4ebe9so2310157b3a.2
-        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:04:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583D51B269
+	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 20:04:10 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-68fb2e9ebcdso2112186b3a.2
+        for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 13:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694808243; x=1695413043; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1694808249; x=1695413049; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WBuZz+BdckpJHOm1ZISAhTef4sCi4HSxGN+vf0MxAr8=;
-        b=c8z80qkbhOdp2UqPUxSyAlwoz9fPFiLbtR+fuvDMgH5oKJnqgXP7eMdtPX0PCyp7En
-         qwTq0hJQHToPzg8sa13TAkqF9b+GJDRtyO3dsBve90bl/4YuVKNp3u2bcW8l2Mr/yle1
-         Odm8Amu8rUDYJPiuAWVNq22w3eN8Rd2nQ/VMA=
+        bh=PsjobygTJTSQG68McAspsAEHf2Z4NWVTVTdDWk+Khno=;
+        b=Nj0QpWuCd6Vjyek4++6hbvXO2q5KbXZT298/nvLLuUBL7qUUJbNf8sQ0dyRy8gcBUa
+         87PUlDgsFpzXwZeVxx98pfHyoR5opdVCe8tP7V3T5lKK6Ge92iW0kSg6NVOFzfujLZf1
+         pouJUD9zPGoRJEwrDu2B9oATQvBovOUslJksQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694808243; x=1695413043;
+        d=1e100.net; s=20230601; t=1694808249; x=1695413049;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WBuZz+BdckpJHOm1ZISAhTef4sCi4HSxGN+vf0MxAr8=;
-        b=En1tSroamaGIfblrtG5wU7cwmPnmsWauVOfCxNcxkXt1GHtn7ncAaWHqgwexVlJ8Ju
-         I28cjtMwR+OeS5TK73HbjuuxWZ/6Dw408lx6TydRW0yf23/tgGT2BvyZMxYQF4Ez58D9
-         N3dpMIusA4RMAtTa5NfF/usdZRxVNdb/hg7ekU2dcQ/DNVYQOVToB0Y2T+rs/Gk+ZlSq
-         918gxS0F2gncEuyvqWDLS0AdL2R6ld0759RRAByaAzr02bY+FpyFMF7cq/rTAHzobq2g
-         woshAJ/LBj1AchsLf2KxFOAlbgTJQ0vWB3OHac1moUT3XbLbguHesUNHcDs8VBA5WwME
-         YbFw==
-X-Gm-Message-State: AOJu0YztVhTIuIi3/tNenRI4xI058BqBvcb8432CwzvvwnP0xK4xRmSO
-	3gbxqqEGtb4fqbrPOsOiLmL0S6EU+CTwmOMCIAo=
-X-Google-Smtp-Source: AGHT+IHRUYTJjIKllYHBewMbpKQsYsoD6C28ob0Nn4eDxpBQYKIGmGp4tJnxthVcYLQpU9tsohhP2w==
-X-Received: by 2002:aa7:88c8:0:b0:690:15c7:60d8 with SMTP id k8-20020aa788c8000000b0069015c760d8mr3508557pff.22.1694808242750;
-        Fri, 15 Sep 2023 13:04:02 -0700 (PDT)
+        bh=PsjobygTJTSQG68McAspsAEHf2Z4NWVTVTdDWk+Khno=;
+        b=aMODUq8/wrDUQbdcBpME59hGkaI1tUnBCVQ3hGFi5PPyWSdw6OEdy7I3Jcildw47bD
+         0aVx8+jsjjoafZLV1xTb+qQpHK4DW1wJUxup7RAIxs1z8mZur5Y8OEsOAwgDco2jhaqv
+         8QdsrLuNWt0G+s8fAwvpDWndcPrKBY01tkGKuAgC0nipVr42uwQxq/RbY6MRcWEzolvc
+         8THotDgefMTJiAIPDbxdEGQmFD1a1WA/i5YT+wwUbYt5g2RfiMTQEtuGmkHEBze+RAAT
+         XCr/djaET07o13QAzdsb+JJwLfyZO/o4QKtJmBGymnzDPYWH6NKmXdSM1+tLaV2rGdTk
+         7trQ==
+X-Gm-Message-State: AOJu0YzrgNcv69eM/fG4Ln+rP10J6IAscE1SYw8yvtVUKZ/6E0Fb2h8Z
+	W4EKipos9AlpydIoh0ryivIe/g==
+X-Google-Smtp-Source: AGHT+IH4sLF8pnQUwMmvWkR2rN5ygHn9iSUnz/1ZVPT8sYwTtd14gWeZ3e+qyvEyDiGNHRPzG6Rx1Q==
+X-Received: by 2002:a05:6a00:1882:b0:68b:f3a4:ff6b with SMTP id x2-20020a056a00188200b0068bf3a4ff6bmr3034695pfh.9.1694808249669;
+        Fri, 15 Sep 2023 13:04:09 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa792cf000000b0068a3f861b24sm3312716pfa.195.2023.09.15.13.04.02
+        by smtp.gmail.com with ESMTPSA id b5-20020aa78705000000b0067b643b814csm3342707pfo.6.2023.09.15.13.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 13:04:02 -0700 (PDT)
+        Fri, 15 Sep 2023 13:04:09 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Alasdair Kergon <agk@redhat.com>
 Cc: Kees Cook <keescook@chromium.org>,
@@ -45,9 +45,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] dm: Annotate struct dm_stat with __counted_by
-Date: Fri, 15 Sep 2023 13:04:01 -0700
-Message-Id: <20230915200400.never.585-kees@kernel.org>
+Subject: [PATCH] dm: Annotate struct dm_bio_prison with __counted_by
+Date: Fri, 15 Sep 2023 13:04:08 -0700
+Message-Id: <20230915200407.never.611-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -55,20 +55,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1178; i=keescook@chromium.org;
- h=from:subject:message-id; bh=hh6/l0ERrceykgj05rTGEqoGv9O3N3l11v+m7r5kK6w=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLiwjAee1aCYWRgESmBPvaP+ZPywLMQavQYy6
- K1opOJdk7yJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS4sAAKCRCJcvTf3G3A
- JmEyD/9Nw4qdkEPs0CMpZYH9PJm4rFd+PH9nRC+v78Gfq/aOca9MZMGgAsVTNZVVLy3P6KBjD2m
- mtmN77g1YZHJHCVzbdUI0UvlIfsuR086YpqaUWYp7+Q7hZfHkyCcKKrUFceRRDruDxkNaUOsNN2
- IzNy4s/CR4vogKkDt+GZ1M4KjWCNednV7pIbc7OTZ7oDfmLZSemK//MribH6UwbwstZZ/IbuMuy
- aeNZcS/1An4v4h1P+RuIKViYXbrMbIVTWpvGjOIbLasIYjcKoW9pSlewMy33Z139w9b2WMNcLGN
- 01cMC9t6y0j1p4xe4bkCrA0JEvmLH5zv+rMOGyLuvyeaG6u2Y41oqm+FNy5fEZOI3Neo6HIqjrW
- 8dQ4XaWrwKCWR6rc2vzr2N6EFCxh7FMrjtAvMQo4HoYMuzYpp+4owygZiP1XptuqamDfXDnhjTf
- d79h5FKJzmmzKtPa7y41OC7rFq2Hk7JciHa8JTHI3cw1D4J5VvcDE1ZlMq+Cxpi9QK4ImW7tWhS
- DrKAuYb0nA6Npm4thazac1wWwsCnAmJf6MLJqBrJfE1yYX4s3Tr2XuB22ABIm6T4hfpag6YFrbQ
- NiOsSHMZ6+N3PeHEo1lrusu22nve1JOWkpcUnxD7lJ3kW3pdEnfUXewlmUjhQFSa9tdp54xnhT6
- 5iS4QDJ ir8mttuw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1191; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=VvKOCdO6PY/NRn1of9dfjjBTN1ZCPOIIRKyzCXPi3Xs=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlBLi3mSrPQ2k1ngorCbl4cZDSbvlJ0xPRobTs8
+ GueuwSV7kWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQS4twAKCRCJcvTf3G3A
+ JtYGEACyVAHf3GVlw2Xkm6VuFB0xT82MYq4INcuJ+itoZaCrenWb3tCwhY+fkcq72HKGx/1b+Pv
+ OErce1wHcbokBfk0DlDKQjpwTDQ30Gf5+HVA0pmgtzw+RCZpIaLZJlOwEEQCpEPlny0qSUK0yaI
+ a1yOASH1d+H1/d9KHywGNJM163u97BQe/p66EQPbo3zI5lr9hfB3USLebN3whqkMloLEf/C/YKx
+ mQhVgPhBYsk4XQDWg2qaUl/tPWEreLsObc5Ph5PPVD6lGYBAthn5H4yEqa5aL1Oi1Dcd+k0lmPm
+ /otgAB97W1ZqTCSLxt53qsC/0r7xDwRZjAvSAkr9syY7RXz/3ALTkIhufMhLlhyrhWO/GyqE1QT
+ lb1UTLNeBeXKoaEkiUartdD4xgOObsF3xCEyX5gIvcSVORT+kGYdd7JcsReF/6zy6db+bj22DwY
+ 2BEEgGV673w8FiKlgNdKvDLTeSO7JXALYRZAXEA9acesISfNFIXsG0nVje0xKQddBijW1EvXBdG
+ H3BJrXpWLA6sppNr8YNdgcYczeF1AsmcHZbr1bjN/p4XGobHkFcsET0KbH1xxp2g2FQfJB0Bfvp
+ xT8heKvTGaxyjqe3dVxh3q0znd6p8eHowg2vMIMMimkErAmjMwbC/7t3mSopit/jjHuI7TiZG1g
+ iseMwLp rJU4WzBg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -78,7 +78,7 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct dm_stat.
+As found with Coccinelle[1], add __counted_by for struct dm_bio_prison.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
@@ -87,22 +87,22 @@ Cc: Mike Snitzer <snitzer@kernel.org>
 Cc: dm-devel@redhat.com
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/md/dm-stats.c | 2 +-
+ drivers/md/dm-bio-prison-v1.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm-stats.c b/drivers/md/dm-stats.c
-index db2d997a6c18..bdc14ec99814 100644
---- a/drivers/md/dm-stats.c
-+++ b/drivers/md/dm-stats.c
-@@ -56,7 +56,7 @@ struct dm_stat {
- 	size_t percpu_alloc_size;
- 	size_t histogram_alloc_size;
- 	struct dm_stat_percpu *stat_percpu[NR_CPUS];
--	struct dm_stat_shared stat_shared[];
-+	struct dm_stat_shared stat_shared[] __counted_by(n_entries);
+diff --git a/drivers/md/dm-bio-prison-v1.c b/drivers/md/dm-bio-prison-v1.c
+index 92afdca760ae..9ab32abe5ed4 100644
+--- a/drivers/md/dm-bio-prison-v1.c
++++ b/drivers/md/dm-bio-prison-v1.c
+@@ -26,7 +26,7 @@ struct prison_region {
+ struct dm_bio_prison {
+ 	mempool_t cell_pool;
+ 	unsigned int num_locks;
+-	struct prison_region regions[];
++	struct prison_region regions[] __counted_by(num_locks);
  };
  
- #define STAT_PRECISE_TIMESTAMPS		1
+ static struct kmem_cache *_cell_cache;
 -- 
 2.34.1
 
