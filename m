@@ -1,141 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8262573
-	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 06:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694846484;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rdRXDPw5LXwCtndyBQ+593fwsPMrgNziuJUobO9CFTM=;
-	b=f9plBHbt95RTwq4Y52x8YZWH0K9FTTWIatAinAvhDd4eOuU85CDP/D0HgFlgrO1BzdHz34
-	1Uwtu+WK00zgqcUMSCw/bkpoJASOOZEMR9hDlV46/C447N5FIkFx+Qu7H7yqqSGmxXXsgA
-	LBeAnbXbL9lOJrhgPPilwxLUPAft01g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-lFIIoJwoP_2LIAgYhG7gFg-1; Sat, 16 Sep 2023 02:41:22 -0400
-X-MC-Unique: lFIIoJwoP_2LIAgYhG7gFg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F8158039C8
-	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 06:41:22 +0000 (UTC)
-Received: from [172.64.4.92] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7370A1C650;
-	Sat, 16 Sep 2023 06:41:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 15 of 234): Test report for master
- (6.6.0-rc1, mainline.kernel.org-clang, 4eb2bd24)
-Date: Sat, 16 Sep 2023 06:41:22 -0000
-To: llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C3863D6;
+	Sat, 16 Sep 2023 07:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694848423; x=1726384423;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IfVUGRsiDjXqrTp/AO3llQvqyqYZF6cvh7r271j7dmQ=;
+  b=Iww4O49p0aHnpf8Si36cBEtU6w1WshJWq50meB/HTcG9ZFRWCJN2xG8h
+   WpqRXIqEAANkY8W7G1Xd8BtZh7VYDt2uA88kTVgbugzkPBrAlydKn1ylT
+   QpE+p5luf3SAfsQNSXsR4HPzyGn+KyvQpuEgUB75F3V/WyqIXPIGMctYy
+   mtLhk7NdM5ua6wH3KFAtgOpT7ogBj643c+I7WJzdCZO8Stg5QUvMhzv86
+   5K3SFrVTRbBJCLhgjfcOVm2sxdOWWB1LcEBwO5OXEUfdNOpyjGeX/+sR8
+   VsaBpMQprveeMKy+Zy9r6A2yldjkrwvsI3PrJ6tyfh/I2sVtSB+BTgZ9q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="379306016"
+X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
+   d="scan'208";a="379306016"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 00:13:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="810763184"
+X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
+   d="scan'208";a="810763184"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Sep 2023 00:13:38 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qhPUm-00040u-23;
+	Sat, 16 Sep 2023 07:13:36 +0000
+Date: Sat, 16 Sep 2023 15:12:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ma Ke <make_ruc2021@163.com>, jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Ma Ke <make_ruc2021@163.com>
+Subject: Re: [PATCH] net: sched: htb: dont intepret cls results when asked to
+ drop
+Message-ID: <202309161437.vLLafFXT-lkp@intel.com>
+References: <20230915142719.3411733-1-make_ruc2021@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <96766.123091602412200315@us-mta-433.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230915142719.3411733-1-make_ruc2021@163.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Ma,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main linus/master v6.6-rc1 next-20230915]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'pm-6.6-rc2' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/rafael/linux-pm
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/net-sched-htb-dont-intepret-cls-results-when-asked-to-drop/20230915-223020
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230915142719.3411733-1-make_ruc2021%40163.com
+patch subject: [PATCH] net: sched: htb: dont intepret cls results when asked to drop
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230916/202309161437.vLLafFXT-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230916/202309161437.vLLafFXT-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/104733
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309161437.vLLafFXT-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9545055
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1722
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 ppc64le - Storage - mdadm upstream test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> net/sched/sch_htb.c:254:4: error: fallthrough annotation does not directly precede switch label
+                           fallthrough;
+                           ^
+   include/linux/compiler_attributes.h:227:41: note: expanded from macro 'fallthrough'
+   # define fallthrough                    __attribute__((__fallthrough__))
+                                           ^
+   1 error generated.
 
 
+vim +254 net/sched/sch_htb.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+43d253781f6321 Randy Dunlap        2023-01-01  203  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  204  /**
+^1da177e4c3f41 Linus Torvalds      2005-04-16  205   * htb_classify - classify a packet into class
+43d253781f6321 Randy Dunlap        2023-01-01  206   * @skb: the socket buffer
+43d253781f6321 Randy Dunlap        2023-01-01  207   * @sch: the active queue discipline
+43d253781f6321 Randy Dunlap        2023-01-01  208   * @qerr: pointer for returned status code
+^1da177e4c3f41 Linus Torvalds      2005-04-16  209   *
+^1da177e4c3f41 Linus Torvalds      2005-04-16  210   * It returns NULL if the packet should be dropped or -1 if the packet
+^1da177e4c3f41 Linus Torvalds      2005-04-16  211   * should be passed directly thru. In all other cases leaf class is returned.
+^1da177e4c3f41 Linus Torvalds      2005-04-16  212   * We allow direct class selection by classid in priority. The we examine
+^1da177e4c3f41 Linus Torvalds      2005-04-16  213   * filters in qdisc and in inner nodes (if higher filter points to the inner
+^1da177e4c3f41 Linus Torvalds      2005-04-16  214   * node). If we end up with classid MAJOR:0 we enqueue the skb into special
+^1da177e4c3f41 Linus Torvalds      2005-04-16  215   * internal fifo (direct). These packets then go directly thru. If we still
+25985edcedea63 Lucas De Marchi     2011-03-30  216   * have no valid leaf we try to use MAJOR:default leaf. It still unsuccessful
+^1da177e4c3f41 Linus Torvalds      2005-04-16  217   * then finish and return direct queue.
+^1da177e4c3f41 Linus Torvalds      2005-04-16  218   */
+87990467d387f9 Stephen Hemminger   2006-08-10  219  static struct htb_class *htb_classify(struct sk_buff *skb, struct Qdisc *sch,
+87990467d387f9 Stephen Hemminger   2006-08-10  220  				      int *qerr)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  221  {
+^1da177e4c3f41 Linus Torvalds      2005-04-16  222  	struct htb_sched *q = qdisc_priv(sch);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  223  	struct htb_class *cl;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  224  	struct tcf_result res;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  225  	struct tcf_proto *tcf;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  226  	int result;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  227  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  228  	/* allow to select class by setting skb->priority to valid classid;
+cc7ec456f82da7 Eric Dumazet        2011-01-19  229  	 * note that nfmark can be used too by attaching filter fw with no
+cc7ec456f82da7 Eric Dumazet        2011-01-19  230  	 * rules in it
+cc7ec456f82da7 Eric Dumazet        2011-01-19  231  	 */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  232  	if (skb->priority == sch->handle)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  233  		return HTB_DIRECT;	/* X:0 (direct flow) selected */
+cc7ec456f82da7 Eric Dumazet        2011-01-19  234  	cl = htb_find(skb->priority, sch);
+29824310ce3e32 Harry Mason         2014-01-17  235  	if (cl) {
+29824310ce3e32 Harry Mason         2014-01-17  236  		if (cl->level == 0)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  237  			return cl;
+29824310ce3e32 Harry Mason         2014-01-17  238  		/* Start with inner filter chain if a non-leaf class is selected */
+25d8c0d55f241c John Fastabend      2014-09-12  239  		tcf = rcu_dereference_bh(cl->filter_list);
+29824310ce3e32 Harry Mason         2014-01-17  240  	} else {
+25d8c0d55f241c John Fastabend      2014-09-12  241  		tcf = rcu_dereference_bh(q->filter_list);
+29824310ce3e32 Harry Mason         2014-01-17  242  	}
+^1da177e4c3f41 Linus Torvalds      2005-04-16  243  
+c27f339af90bb8 Jarek Poplawski     2008-08-04  244  	*qerr = NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
+3aa2605594556c Davide Caratti      2021-07-28  245  	while (tcf && (result = tcf_classify(skb, NULL, tcf, &res, false)) >= 0) {
+4505a19ed317f1 Ma Ke               2023-09-15  246  		if (result == TC_ACT_SHOT)
+4505a19ed317f1 Ma Ke               2023-09-15  247  			return NULL;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  248  #ifdef CONFIG_NET_CLS_ACT
+^1da177e4c3f41 Linus Torvalds      2005-04-16  249  		switch (result) {
+^1da177e4c3f41 Linus Torvalds      2005-04-16  250  		case TC_ACT_QUEUED:
+^1da177e4c3f41 Linus Torvalds      2005-04-16  251  		case TC_ACT_STOLEN:
+e25ea21ffa66a0 Jiri Pirko          2017-06-06  252  		case TC_ACT_TRAP:
+378a2f090f7a47 Jarek Poplawski     2008-08-04  253  			*qerr = NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
+964201de695b8a Gustavo A. R. Silva 2020-07-07 @254  			fallthrough;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  255  		}
+^1da177e4c3f41 Linus Torvalds      2005-04-16  256  #endif
+cc7ec456f82da7 Eric Dumazet        2011-01-19  257  		cl = (void *)res.class;
+cc7ec456f82da7 Eric Dumazet        2011-01-19  258  		if (!cl) {
+^1da177e4c3f41 Linus Torvalds      2005-04-16  259  			if (res.classid == sch->handle)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  260  				return HTB_DIRECT;	/* X:0 (direct flow) */
+cc7ec456f82da7 Eric Dumazet        2011-01-19  261  			cl = htb_find(res.classid, sch);
+cc7ec456f82da7 Eric Dumazet        2011-01-19  262  			if (!cl)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  263  				break;	/* filter selected invalid classid */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  264  		}
+^1da177e4c3f41 Linus Torvalds      2005-04-16  265  		if (!cl->level)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  266  			return cl;	/* we hit leaf; return it */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  267  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  268  		/* we have got inner class; apply inner filter chain */
+25d8c0d55f241c John Fastabend      2014-09-12  269  		tcf = rcu_dereference_bh(cl->filter_list);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  270  	}
+^1da177e4c3f41 Linus Torvalds      2005-04-16  271  	/* classification failed; try to use default class */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  272  	cl = htb_find(TC_H_MAKE(TC_H_MAJ(sch->handle), q->defcls), sch);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  273  	if (!cl || cl->level)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  274  		return HTB_DIRECT;	/* bad default .. this is safe bet */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  275  	return cl;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  276  }
+^1da177e4c3f41 Linus Torvalds      2005-04-16  277  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
