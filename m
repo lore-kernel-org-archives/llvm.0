@@ -1,48 +1,40 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A2620E4;
-	Sat, 16 Sep 2023 12:03:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694865821; x=1726401821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O0LjvPrP3FZDihyJh1AF+1Q4z1B9ca4sUEFNGNOglSc=;
-  b=ObIByEpi8Kp6H98UYN6uoEjG5ACHPxRXLjQGvNtODn9iqT8gEJ2RiIm/
-   kAxdhlk7Fha8ThzqD32jCpwlAjlJ2iFQmEe4w3aWeFH+O09a1hDMj9J3E
-   vKL7/DYEXWEHufv+vkFcOWvB2EvdP5a8KDVy0N/Tj2K06C2cQx8yRDKZt
-   +YiF8ZpFcGlqsIxDcMj5TMjJ6noR4dH52kuuIJjudJBib07LGe2Mnb1lL
-   MqsfHxYcSJ5sINir20f4F7xG+r8AdT93lDxSdPKVyGu39iWCiL+jY6+al
-   bDmu8xRmNoInsmY4mVXkWvlx1kJBYej0usMP+IdMGwFXssWkMymqh1y5f
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="358821418"
-X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
-   d="scan'208";a="358821418"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 05:03:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="774630319"
-X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
-   d="scan'208";a="774630319"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2023 05:03:36 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qhU1O-0004Ga-0p;
-	Sat, 16 Sep 2023 12:03:34 +0000
-Date: Sat, 16 Sep 2023 20:03:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ma Ke <make_ruc2021@163.com>, jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ma Ke <make_ruc2021@163.com>
-Subject: Re: [PATCH] net: sched: hfsc: dont intepret cls results when asked
- to drop
-Message-ID: <202309161941.5lMYMKdM-lkp@intel.com>
-References: <20230915134408.3410595-1-make_ruc2021@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB8014A89;
+	Sat, 16 Sep 2023 18:00:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 076E2C433C9;
+	Sat, 16 Sep 2023 18:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694887257;
+	bh=ul1iN8HpVZcfnlmUiMzJEP8GTsDZxDc39Cq6k3T7vkc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pHz20afM1LmCRNkebPbf9s29aMmZW9a1MsveNhR4ElECGZYt4y2ot32wMfQ7DJmxP
+	 RyS6b7DTnRdVTRs9xunu9kmc8J73btGNDhqOxJWFJktx9OAZvUCB9FGs4gjbtgZrPx
+	 B3wphUdaYiVBRC6NQ8M+g12EzyZ5DO/keHftyoNAyhsPqFoHqGxQaXveEMPH0j2o75
+	 AAB1Gfb57lEPdMTXkZmsnIIJW0dr9+umSUntZiDeLqHRtBvHYtcaCGrtG+2ay5rRXI
+	 iU/aku6rsWuNM/eGXnQUAgjYC5cKKLg+LEI19vlpW7x0zZOOzJSSEoAFgySxbJqxui
+	 rC9PNTUnwBqyA==
+Date: Sat, 16 Sep 2023 20:00:51 +0200
+From: Simon Horman <horms@kernel.org>
+To: Daniel Golle <daniel@makrotopia.org>
+Cc: Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Mark Lee <Mark-MC.Lee@mediatek.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
+	ndesaulniers@google.com, nathan@kernel.org, trix@redhat.com
+Subject: Re: [PATCH net-next] net: ethernet: mtk_eth_soc: add paths and
+ SerDes modes for MT7988
+Message-ID: <20230916180051.GH1125562@kernel.org>
+References: <675b5abd8b40a71c177e9e4e4c92d2d6b1413b9b.1694527316.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,100 +43,150 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230915134408.3410595-1-make_ruc2021@163.com>
+In-Reply-To: <675b5abd8b40a71c177e9e4e4c92d2d6b1413b9b.1694527316.git.daniel@makrotopia.org>
 
-Hi Ma,
+On Tue, Sep 12, 2023 at 03:54:40PM +0100, Daniel Golle wrote:
+> MT7988 comes with a built-in 2.5G PHY as well as SerDes lanes to
+> connect external PHYs or transceivers in USXGMII, 10GBase-R, 5GBase-R,
+> 2500Base-X, 1000Base-X and Cisco SGMII interface modes.
+> 
+> Implement support for configuring for the new paths to SerDes interfaces
+> and the internal 2.5G PHY.
+> 
+> Add USXGMII PCS driver for 10GBase-R, 5GBase-R and USXGMII mode, and
+> setup the new PHYA on MT7988 to access the also still existing old
+> LynxI PCS for 1000Base-X, 2500Base-X and Cisco SGMII interface modes.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+> Changes since RFC v2:
+>  * read PCS_RX_STATUS0 register to avoid bogus link-up
+>    (recommended by mtk devs)
+>  * use parenthese to fix evaluation order
+>    (Simon Horman reported clang warning)
+>  * fix allocation size of usxgmii_pcs
+>    (Simon Horman reported Smatch warning)
+>  * always set USXGMII_AN_ENABLE bit in USXGMII mode
+>    (it's what the vendor driver does and USXGMII doesn't seem to work
+>     at all otherwise, we may need to manually set rate matching registers
+>     if we don't use AN, but this isn't implemented at this point)
+> 
+> Changes since initial RFC:
+>  * set missing neg_mode = true for usxgmii pcs
+>  * use phylink_decode_usxgmii_word instead of open coding
+> 
+>  drivers/net/ethernet/mediatek/Kconfig        |  16 +
+>  drivers/net/ethernet/mediatek/Makefile       |   1 +
+>  drivers/net/ethernet/mediatek/mtk_eth_path.c | 123 +++-
+>  drivers/net/ethernet/mediatek/mtk_eth_soc.c  | 182 ++++-
+>  drivers/net/ethernet/mediatek/mtk_eth_soc.h  | 232 +++++-
+>  drivers/net/ethernet/mediatek/mtk_usxgmii.c  | 702 +++++++++++++++++++
+>  6 files changed, 1225 insertions(+), 31 deletions(-)
+>  create mode 100644 drivers/net/ethernet/mediatek/mtk_usxgmii.c
+> 
+> diff --git a/drivers/net/ethernet/mediatek/Kconfig b/drivers/net/ethernet/mediatek/Kconfig
+> index da0db417ab690..b942b4622d146 100644
+> --- a/drivers/net/ethernet/mediatek/Kconfig
+> +++ b/drivers/net/ethernet/mediatek/Kconfig
+> @@ -25,6 +25,22 @@ config NET_MEDIATEK_SOC
+>  	  This driver supports the gigabit ethernet MACs in the
+>  	  MediaTek SoC family.
+>  
+> +config NET_MEDIATEK_SOC_USXGMII
+> +	bool "Support USXGMII SerDes on MT7988"
+> +	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
+> +	def_bool NET_MEDIATEK_SOC != n
+> +	help
+> +	  Include support for 10GE SerDes which can be found on MT7988.
+> +	  If this kernel should run on SoCs with 10 GBit/s Ethernet you
+> +	  will need to select this option to use GMAC2 and GMAC3 with
+> +	  external PHYs, SFP(+) cages in 10GBase-R, 5GBase-R or USXGMII
+> +	  interface modes.
+> +
+> +	  Note that as the 2500Base-X/1000Base-X/Cisco SGMII SerDes PCS
+> +	  unit (MediaTek LynxI) in MT7988 is connected via the new 10GE
+> +	  SerDes, you will also need to select this option in case you
+> +	  want to use any of those SerDes modes.
+> +
+>  config NET_MEDIATEK_STAR_EMAC
+>  	tristate "MediaTek STAR Ethernet MAC support"
+>  	select PHYLIB
 
-kernel test robot noticed the following build errors:
+...
 
-[auto build test ERROR on net-next/main]
-[also build test ERROR on net/main linus/master v6.6-rc1 next-20230915]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> diff --git a/drivers/net/ethernet/mediatek/mtk_usxgmii.c b/drivers/net/ethernet/mediatek/mtk_usxgmii.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/net-sched-hfsc-dont-intepret-cls-results-when-asked-to-drop/20230915-214635
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230915134408.3410595-1-make_ruc2021%40163.com
-patch subject: [PATCH] net: sched: hfsc: dont intepret cls results when asked to drop
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230916/202309161941.5lMYMKdM-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230916/202309161941.5lMYMKdM-lkp@intel.com/reproduce)
+...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309161941.5lMYMKdM-lkp@intel.com/
+> +static void mtk_usxgmii_pcs_get_state(struct phylink_pcs *pcs,
+> +				      struct phylink_link_state *state)
+> +{
+> +	struct mtk_usxgmii_pcs *mpcs = pcs_to_mtk_usxgmii_pcs(pcs);
+> +	struct mtk_eth *eth = mpcs->eth;
+> +	struct mtk_mac *mac = eth->mac[mtk_xgmii2mac_id(eth, mpcs->id)];
+> +	u32 val = 0;
+> +
+> +	regmap_read(mpcs->regmap, RG_PCS_AN_CTRL0, &val);
+> +	if (FIELD_GET(USXGMII_AN_ENABLE, val)) {
+> +		/* Refresh LPA by inverting LPA_LATCH */
+> +		regmap_read(mpcs->regmap, RG_PCS_AN_STS0, &val);
+> +		regmap_update_bits(mpcs->regmap, RG_PCS_AN_STS0,
+> +				   USXGMII_LPA_LATCH,
+> +				   !(val & USXGMII_LPA_LATCH));
+> +
+> +		regmap_read(mpcs->regmap, RG_PCS_AN_STS0, &val);
+> +
+> +		phylink_decode_usxgmii_word(state, FIELD_GET(USXGMII_PCS_AN_WORD,
+> +							     val));
+> +
+> +		state->interface = mpcs->interface;
+> +	} else {
+> +		val = mtk_r32(mac->hw, MTK_XGMAC_STS(mac->id));
+> +
+> +		if (mac->id == MTK_GMAC2_ID)
+> +			val >>= 16;
+> +
+> +		switch (FIELD_GET(MTK_USXGMII_PCS_MODE, val)) {
+> +		case 0:
+> +			state->speed = SPEED_10000;
+> +			break;
+> +		case 1:
+> +			state->speed = SPEED_5000;
+> +			break;
+> +		case 2:
+> +			state->speed = SPEED_2500;
+> +			break;
+> +		case 3:
+> +			state->speed = SPEED_1000;
+> +			break;
+> +		}
+> +
+> +		state->interface = mpcs->interface;
+> +		state->link = FIELD_GET(MTK_USXGMII_PCS_LINK, val);
+> +		state->duplex = DUPLEX_FULL;
+> +	}
+> +
+> +	/* Refresh USXGMII link status by toggling RG_PCS_RX_STATUS_UPDATE */
+> +	regmap_set_bits(mpcs->regmap, RG_PCS_RX_STATUS0, RG_PCS_RX_STATUS_UPDATE);
+> +	ndelay(1020);
+> +	regmap_clear_bits(mpcs->regmap, RG_PCS_RX_STATUS0, RG_PCS_RX_STATUS_UPDATE);
+> +	ndelay(1020);
+> +
+> +	/* Read USXGMII link status */
+> +	regmap_read(mpcs->regmap, RG_PCS_RX_STATUS0, &val);
+> +	state->link = state->link && FIELD_GET(RG_PCS_RX_LINK_STATUS, val);
+> +
+> +	/* Continuously repeat re-configuration sequence until link comes up */
+> +	if (!state->link)
+> +		mtk_usxgmii_pcs_config(pcs, mpcs->neg_mode,
+> +				       state->interface, NULL, false);
+> +}
 
-All errors (new ones prefixed by >>):
+Hi Daniel,
 
->> net/sched/sch_hfsc.c:1146:4: error: fallthrough annotation does not directly precede switch label
-                           fallthrough;
-                           ^
-   include/linux/compiler_attributes.h:227:41: note: expanded from macro 'fallthrough'
-   # define fallthrough                    __attribute__((__fallthrough__))
-                                           ^
-   1 error generated.
+I feel that I'm missing something obvious, but with this patch applied,
+when building with allmodconfig for both x86_64 and arm64 the build fails
+reporting that RG_PCS_RX_STATUS0, RG_PCS_RX_STATUS_UPDATE and
+RG_PCS_RX_LINK_STATUS are undefined.
 
-
-vim +1146 net/sched/sch_hfsc.c
-
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1119  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1120  static struct hfsc_class *
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1121  hfsc_classify(struct sk_buff *skb, struct Qdisc *sch, int *qerr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1122  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1123  	struct hfsc_sched *q = qdisc_priv(sch);
-a2f79227138c71 Patrick McHardy     2010-05-14  1124  	struct hfsc_class *head, *cl;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1125  	struct tcf_result res;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1126  	struct tcf_proto *tcf;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1127  	int result;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1128  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1129  	if (TC_H_MAJ(skb->priority ^ sch->handle) == 0 &&
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1130  	    (cl = hfsc_find_class(skb->priority, sch)) != NULL)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1131  		if (cl->level == 0)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1132  			return cl;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1133  
-c27f339af90bb8 Jarek Poplawski     2008-08-04  1134  	*qerr = NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
-a2f79227138c71 Patrick McHardy     2010-05-14  1135  	head = &q->root;
-25d8c0d55f241c John Fastabend      2014-09-12  1136  	tcf = rcu_dereference_bh(q->root.filter_list);
-3aa2605594556c Davide Caratti      2021-07-28  1137  	while (tcf && (result = tcf_classify(skb, NULL, tcf, &res, false)) >= 0) {
-b633b393d00632 Ma Ke               2023-09-15  1138  		if (result == TC_ACT_SHOT)
-b633b393d00632 Ma Ke               2023-09-15  1139  			return NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1140  #ifdef CONFIG_NET_CLS_ACT
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1141  		switch (result) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1142  		case TC_ACT_QUEUED:
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1143  		case TC_ACT_STOLEN:
-e25ea21ffa66a0 Jiri Pirko          2017-06-06  1144  		case TC_ACT_TRAP:
-378a2f090f7a47 Jarek Poplawski     2008-08-04  1145  			*qerr = NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
-964201de695b8a Gustavo A. R. Silva 2020-07-07 @1146  			fallthrough;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1147  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1148  #endif
-cc7ec456f82da7 Eric Dumazet        2011-01-19  1149  		cl = (struct hfsc_class *)res.class;
-cc7ec456f82da7 Eric Dumazet        2011-01-19  1150  		if (!cl) {
-cc7ec456f82da7 Eric Dumazet        2011-01-19  1151  			cl = hfsc_find_class(res.classid, sch);
-cc7ec456f82da7 Eric Dumazet        2011-01-19  1152  			if (!cl)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1153  				break; /* filter selected invalid classid */
-a2f79227138c71 Patrick McHardy     2010-05-14  1154  			if (cl->level >= head->level)
-a2f79227138c71 Patrick McHardy     2010-05-14  1155  				break; /* filter may only point downwards */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1156  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1157  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1158  		if (cl->level == 0)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1159  			return cl; /* hit leaf class */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1160  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1161  		/* apply inner filter chain */
-25d8c0d55f241c John Fastabend      2014-09-12  1162  		tcf = rcu_dereference_bh(cl->filter_list);
-a2f79227138c71 Patrick McHardy     2010-05-14  1163  		head = cl;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1164  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1165  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1166  	/* classification failed, try default class */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1167  	cl = hfsc_find_class(TC_H_MAKE(TC_H_MAJ(sch->handle), q->defcls), sch);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1168  	if (cl == NULL || cl->level > 0)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1169  		return NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1170  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1171  	return cl;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1172  }
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1173  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+...
