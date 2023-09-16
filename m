@@ -1,34 +1,34 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB843207
-	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEE433DC
+	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:31:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694840489;
+	s=mimecast20190719; t=1694842311;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=ueLQ4i966u+FHF7Fu2fhJQ3zmw3HUzCG9V2sAXDjHhk=;
-	b=i4aY8gwp2jRKoi584p09fMxs55r7AyHFYndx7+EEXDtHOF68VhbjRi3ngpalMXmL1smUsM
-	fnUnzX8vy3cUDIx+6pJ3bL1Ep6HoWtDMLNpf13qDUYkbrbhU2heci8MvreJ5CE6JnzUo92
-	ZrhfsORqen12cxu65pUM/KnVf+bRV20=
+	bh=cE8uR60erUTP5R6JK00T8pYd1yMckJyiRb8FgvxZgK0=;
+	b=d/jhdPyv9iZA4tSiAuv3EX2bpGdAncC3Nstjdwk+6+dfWolZp0KPeW50dxGeHo3n2YNeEM
+	5Q5YyDn0YBv1l/D0CNztT6DbhW/nhhUL+2Y80evUucmmGoKJVihdOGEiZHbZ37/+bqVbOj
+	P4mnQoE8Ug2RfcZzPCg+iWoWIe4NZY8=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-255-JDyywB50NL6BIpbdQzSZDw-1; Sat, 16 Sep 2023 01:01:25 -0400
-X-MC-Unique: JDyywB50NL6BIpbdQzSZDw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+ us-mta-297--4qOZduSN2aIt65Nql2uvA-1; Sat, 16 Sep 2023 01:31:50 -0400
+X-MC-Unique: -4qOZduSN2aIt65Nql2uvA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D075945922
-	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:01:25 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26E79811E7E
+	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:31:50 +0000 (UTC)
 Received: from [172.64.4.92] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3630B21B2413;
-	Sat, 16 Sep 2023 05:01:25 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 01E8940C2070;
+	Sat, 16 Sep 2023 05:31:49 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
- (6.6.0-rc1, mainline.kernel.org-clang, e42bebf6)
-Date: Sat, 16 Sep 2023 05:01:25 -0000
+ (6.6.0-rc1, mainline.kernel.org-clang, 9608c7b7)
+Date: Sat, 16 Sep 2023 05:31:49 -0000
 To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <26598.123091601012500751@us-mta-255.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <54438.123091601315000171@us-mta-297.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,17 +52,17 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'efi-fixes-for-v6.6-1' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/efi/efi
+    Commit message: Merge tag 'drm-fixes-2023-09-15' of git://anongit.freed=
+esktop.org/drm/drm
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/104710
+    https://datawarehouse.cki-project.org/kcidb/checkouts/104721
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - POSIX pjd-fstest suites
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9540970
+9542854
                    Non-passing subtests:
                        =E2=9D=8C FAIL /01_dmesg_check
 
@@ -84,6 +84,19 @@ t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
                  aarch64 - Reboot test
                  ppc64le - Reboot test
                   x86_64 - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
         Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
 d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
@@ -91,12 +104,13 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
             Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
         Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
 r
             URL: https://issues.redhat.com/browse/RHELPLAN-138156
@@ -113,13 +127,6 @@ p kernel
 l-tests/-/issues/1544
             Affected tests:
                  aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
 
