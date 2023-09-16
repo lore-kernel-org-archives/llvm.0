@@ -1,123 +1,143 @@
-Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F661B275
-	for <llvm@lists.linux.dev>; Fri, 15 Sep 2023 21:18:40 +0000 (UTC)
-Received: from eig-obgw-5006a.ext.cloudfilter.net ([10.0.29.179])
-	by cmsmtp with ESMTP
-	id h8dGqbD6cez0ChGCfqC8v4; Fri, 15 Sep 2023 21:18:17 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id hGD1qU1ooyBEYhGD1qkK99; Fri, 15 Sep 2023 21:18:39 +0000
-X-Authority-Analysis: v=2.4 cv=durItns4 c=1 sm=1 tr=0 ts=6504ca2f
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8
- a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=TjNXssC_j7lpFel5tvFf:22 a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CXlqlVJ2RnzYBwdo5oCwVhnF8JLWfHkjHPjJ0VvcV1w=; b=aLBYatBt5iYb4xj6Pn/c9wMvEZ
-	/HxBtzx6jwiRBqbGYYsX564tIlBz3kFBagXbWnwtSt0IMy0XyKmg6JCK7yy5JFg95QXK8lpYxN9kE
-	kKt7WNA7o017D0OxRYiHftQI4wuvKmZwiM1xAAu5RyA0Wn4S+Ylfe+PKdV8c4HCU8QOT9FfA03z5z
-	JloX3i4mtdWE9Uo6cS6ltEWPptP2YxEIn3eaizObNk8UhsXJGAVbXUfOF6xae85EQSf6tmByY8the
-	TO9ac7JDzVtioDfII4XGBo1vFx7oq+Xf3M0ztckuLxEsBEk0XijlzQO6D08Am8FXQeoG3MKboqV5t
-	Yg7IrYbg==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:55304 helo=[192.168.15.8])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qhGD0-0036gT-12;
-	Fri, 15 Sep 2023 16:18:38 -0500
-Message-ID: <8d28f285-1a92-2635-f0f3-8a46b8f0c8d0@embeddedor.com>
-Date: Fri, 15 Sep 2023 15:19:34 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB843207
+	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694840489;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ueLQ4i966u+FHF7Fu2fhJQ3zmw3HUzCG9V2sAXDjHhk=;
+	b=i4aY8gwp2jRKoi584p09fMxs55r7AyHFYndx7+EEXDtHOF68VhbjRi3ngpalMXmL1smUsM
+	fnUnzX8vy3cUDIx+6pJ3bL1Ep6HoWtDMLNpf13qDUYkbrbhU2heci8MvreJ5CE6JnzUo92
+	ZrhfsORqen12cxu65pUM/KnVf+bRV20=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-255-JDyywB50NL6BIpbdQzSZDw-1; Sat, 16 Sep 2023 01:01:25 -0400
+X-MC-Unique: JDyywB50NL6BIpbdQzSZDw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D075945922
+	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:01:25 +0000 (UTC)
+Received: from [172.64.4.92] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3630B21B2413;
+	Sat, 16 Sep 2023 05:01:25 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
+ (6.6.0-rc1, mainline.kernel.org-clang, e42bebf6)
+Date: Sat, 16 Sep 2023 05:01:25 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] wifi: ath10k: Annotate struct ath10k_ce_ring with
- __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>
-Cc: Jeff Johnson <quic_jjohnson@quicinc.com>, ath10k@lists.infradead.org,
- linux-wireless@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20230915200636.never.762-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230915200636.never.762-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qhGD0-0036gT-12
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:55304
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDZHyWhef4CG7OpEeubWeU7PAdXkU/R/UezpSxn2IQzRDp1UoZpzF+jDv38GDk/XiQG1/PSZWQ6WuzZHhixMAONxMBvstHX0BBK2PPeKNcjDTZDTl8Ec
- bgGXsziJNcI8bttRYnaZEun641Amkj/w1dlbmFBmzXaDT2k8WmQ4SeuY+QRQ/yV3EWphYDcv8DP0w2nNdbW5+aMwamTFuTvBnhc=
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <26598.123091601012500751@us-mta-255.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'efi-fixes-for-v6.6-1' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/efi/efi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/104710
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9540970
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
 
-On 9/15/23 14:06, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct ath10k_ce_ring.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Jeff Johnson <quic_jjohnson@quicinc.com>
-> Cc: ath10k@lists.infradead.org
-> Cc: linux-wireless@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Thanks
--- 
-Gustavo
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-> ---
->   drivers/net/wireless/ath/ath10k/ce.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath10k/ce.h b/drivers/net/wireless/ath/ath10k/ce.h
-> index 666ce384a1d8..27367bd64e95 100644
-> --- a/drivers/net/wireless/ath/ath10k/ce.h
-> +++ b/drivers/net/wireless/ath/ath10k/ce.h
-> @@ -110,7 +110,7 @@ struct ath10k_ce_ring {
->   	struct ce_desc_64 *shadow_base;
->   
->   	/* keep last */
-> -	void *per_transfer_context[];
-> +	void *per_transfer_context[] __counted_by(nentries);
->   };
->   
->   struct ath10k_ce_pipe {
