@@ -1,22 +1,31 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB8014A89;
-	Sat, 16 Sep 2023 18:00:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 076E2C433C9;
-	Sat, 16 Sep 2023 18:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694887257;
-	bh=ul1iN8HpVZcfnlmUiMzJEP8GTsDZxDc39Cq6k3T7vkc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pHz20afM1LmCRNkebPbf9s29aMmZW9a1MsveNhR4ElECGZYt4y2ot32wMfQ7DJmxP
-	 RyS6b7DTnRdVTRs9xunu9kmc8J73btGNDhqOxJWFJktx9OAZvUCB9FGs4gjbtgZrPx
-	 B3wphUdaYiVBRC6NQ8M+g12EzyZ5DO/keHftyoNAyhsPqFoHqGxQaXveEMPH0j2o75
-	 AAB1Gfb57lEPdMTXkZmsnIIJW0dr9+umSUntZiDeLqHRtBvHYtcaCGrtG+2ay5rRXI
-	 iU/aku6rsWuNM/eGXnQUAgjYC5cKKLg+LEI19vlpW7x0zZOOzJSSEoAFgySxbJqxui
-	 rC9PNTUnwBqyA==
-Date: Sat, 16 Sep 2023 20:00:51 +0200
-From: Simon Horman <horms@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5F01BDE8
+	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 18:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=xaTgqIRqEW118i1euHWPGl1GL4m7oLRslyef9vzxato=; b=cMTQ5S0H6ptadVHrLUVUPezYG0
+	M/m9SP+CLoFdyO2PpoZEf5Ld6DB59iCsLWDck05pQLQDBzS050zVFVFDppfLyXkFDpX2nA+G/x10F
+	nUyJ1hPFsUIrnBQ24CHqasjX/Mmqnqvy+Y41WlSNOFxP9Cuwx8cSG/nXTAtt95OQi03B8pkCatQpW
+	hDgHmHJj/FNxOxFAcXuHdkTaBlcSxOnSvsDzlYQrEhoNkl4jAPPBvPbW03oCBYytNzrIyLiLEtZ+E
+	hJLzXV137LRsaeX/ajGL72d+sO8izCz9F8L9Hl1Nmoq96ettQHwKEm3GOCVWkQHDKzYoVca2sdnQG
+	x9Lo2Jyg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38474)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1qhZyG-0006uM-23;
+	Sat, 16 Sep 2023 19:24:44 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1qhZyA-00072B-OD; Sat, 16 Sep 2023 19:24:38 +0100
+Date: Sat, 16 Sep 2023 19:24:38 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
 To: Daniel Golle <daniel@makrotopia.org>
 Cc: Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
 	Sean Wang <sean.wang@mediatek.com>,
@@ -27,13 +36,13 @@ Cc: Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
 	ndesaulniers@google.com, nathan@kernel.org, trix@redhat.com
 Subject: Re: [PATCH net-next] net: ethernet: mtk_eth_soc: add paths and
  SerDes modes for MT7988
-Message-ID: <20230916180051.GH1125562@kernel.org>
+Message-ID: <ZQXy5pxPRN1QXQkq@shell.armlinux.org.uk>
 References: <675b5abd8b40a71c177e9e4e4c92d2d6b1413b9b.1694527316.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,80 +53,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <675b5abd8b40a71c177e9e4e4c92d2d6b1413b9b.1694527316.git.daniel@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
 On Tue, Sep 12, 2023 at 03:54:40PM +0100, Daniel Golle wrote:
-> MT7988 comes with a built-in 2.5G PHY as well as SerDes lanes to
-> connect external PHYs or transceivers in USXGMII, 10GBase-R, 5GBase-R,
-> 2500Base-X, 1000Base-X and Cisco SGMII interface modes.
-> 
-> Implement support for configuring for the new paths to SerDes interfaces
-> and the internal 2.5G PHY.
-> 
-> Add USXGMII PCS driver for 10GBase-R, 5GBase-R and USXGMII mode, and
-> setup the new PHYA on MT7988 to access the also still existing old
-> LynxI PCS for 1000Base-X, 2500Base-X and Cisco SGMII interface modes.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
-> Changes since RFC v2:
->  * read PCS_RX_STATUS0 register to avoid bogus link-up
->    (recommended by mtk devs)
->  * use parenthese to fix evaluation order
->    (Simon Horman reported clang warning)
->  * fix allocation size of usxgmii_pcs
->    (Simon Horman reported Smatch warning)
->  * always set USXGMII_AN_ENABLE bit in USXGMII mode
->    (it's what the vendor driver does and USXGMII doesn't seem to work
->     at all otherwise, we may need to manually set rate matching registers
->     if we don't use AN, but this isn't implemented at this point)
-> 
-> Changes since initial RFC:
->  * set missing neg_mode = true for usxgmii pcs
->  * use phylink_decode_usxgmii_word instead of open coding
-> 
->  drivers/net/ethernet/mediatek/Kconfig        |  16 +
->  drivers/net/ethernet/mediatek/Makefile       |   1 +
->  drivers/net/ethernet/mediatek/mtk_eth_path.c | 123 +++-
->  drivers/net/ethernet/mediatek/mtk_eth_soc.c  | 182 ++++-
->  drivers/net/ethernet/mediatek/mtk_eth_soc.h  | 232 +++++-
->  drivers/net/ethernet/mediatek/mtk_usxgmii.c  | 702 +++++++++++++++++++
->  6 files changed, 1225 insertions(+), 31 deletions(-)
->  create mode 100644 drivers/net/ethernet/mediatek/mtk_usxgmii.c
-> 
-> diff --git a/drivers/net/ethernet/mediatek/Kconfig b/drivers/net/ethernet/mediatek/Kconfig
-> index da0db417ab690..b942b4622d146 100644
-> --- a/drivers/net/ethernet/mediatek/Kconfig
-> +++ b/drivers/net/ethernet/mediatek/Kconfig
-> @@ -25,6 +25,22 @@ config NET_MEDIATEK_SOC
->  	  This driver supports the gigabit ethernet MACs in the
->  	  MediaTek SoC family.
->  
-> +config NET_MEDIATEK_SOC_USXGMII
-> +	bool "Support USXGMII SerDes on MT7988"
-> +	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
-> +	def_bool NET_MEDIATEK_SOC != n
-> +	help
-> +	  Include support for 10GE SerDes which can be found on MT7988.
-> +	  If this kernel should run on SoCs with 10 GBit/s Ethernet you
-> +	  will need to select this option to use GMAC2 and GMAC3 with
-> +	  external PHYs, SFP(+) cages in 10GBase-R, 5GBase-R or USXGMII
-> +	  interface modes.
-> +
-> +	  Note that as the 2500Base-X/1000Base-X/Cisco SGMII SerDes PCS
-> +	  unit (MediaTek LynxI) in MT7988 is connected via the new 10GE
-> +	  SerDes, you will also need to select this option in case you
-> +	  want to use any of those SerDes modes.
-> +
->  config NET_MEDIATEK_STAR_EMAC
->  	tristate "MediaTek STAR Ethernet MAC support"
->  	select PHYLIB
-
-...
-
-> diff --git a/drivers/net/ethernet/mediatek/mtk_usxgmii.c b/drivers/net/ethernet/mediatek/mtk_usxgmii.c
-
-...
-
 > +static void mtk_usxgmii_pcs_get_state(struct phylink_pcs *pcs,
 > +				      struct phylink_link_state *state)
 > +{
@@ -140,6 +78,9 @@ On Tue, Sep 12, 2023 at 03:54:40PM +0100, Daniel Golle wrote:
 > +							     val));
 > +
 > +		state->interface = mpcs->interface;
+
+Why are you assigning state->interface?
+
 > +	} else {
 > +		val = mtk_r32(mac->hw, MTK_XGMAC_STS(mac->id));
 > +
@@ -175,18 +116,12 @@ On Tue, Sep 12, 2023 at 03:54:40PM +0100, Daniel Golle wrote:
 > +	/* Read USXGMII link status */
 > +	regmap_read(mpcs->regmap, RG_PCS_RX_STATUS0, &val);
 > +	state->link = state->link && FIELD_GET(RG_PCS_RX_LINK_STATUS, val);
-> +
-> +	/* Continuously repeat re-configuration sequence until link comes up */
-> +	if (!state->link)
-> +		mtk_usxgmii_pcs_config(pcs, mpcs->neg_mode,
-> +				       state->interface, NULL, false);
-> +}
 
-Hi Daniel,
+Doesn't this make the assignment to state->link above irrelevant?
 
-I feel that I'm missing something obvious, but with this patch applied,
-when building with allmodconfig for both x86_64 and arm64 the build fails
-reporting that RG_PCS_RX_STATUS0, RG_PCS_RX_STATUS_UPDATE and
-RG_PCS_RX_LINK_STATUS are undefined.
+I need to spend a bit longer looking through this - it looks like there
+are three levels of indirection in this now?
 
-...
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
