@@ -1,49 +1,43 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5F01BDE8
-	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 18:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=xaTgqIRqEW118i1euHWPGl1GL4m7oLRslyef9vzxato=; b=cMTQ5S0H6ptadVHrLUVUPezYG0
-	M/m9SP+CLoFdyO2PpoZEf5Ld6DB59iCsLWDck05pQLQDBzS050zVFVFDppfLyXkFDpX2nA+G/x10F
-	nUyJ1hPFsUIrnBQ24CHqasjX/Mmqnqvy+Y41WlSNOFxP9Cuwx8cSG/nXTAtt95OQi03B8pkCatQpW
-	hDgHmHJj/FNxOxFAcXuHdkTaBlcSxOnSvsDzlYQrEhoNkl4jAPPBvPbW03oCBYytNzrIyLiLEtZ+E
-	hJLzXV137LRsaeX/ajGL72d+sO8izCz9F8L9Hl1Nmoq96ettQHwKEm3GOCVWkQHDKzYoVca2sdnQG
-	x9Lo2Jyg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38474)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1qhZyG-0006uM-23;
-	Sat, 16 Sep 2023 19:24:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1qhZyA-00072B-OD; Sat, 16 Sep 2023 19:24:38 +0100
-Date: Sat, 16 Sep 2023 19:24:38 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Daniel Golle <daniel@makrotopia.org>
-Cc: Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Mark Lee <Mark-MC.Lee@mediatek.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
-	ndesaulniers@google.com, nathan@kernel.org, trix@redhat.com
-Subject: Re: [PATCH net-next] net: ethernet: mtk_eth_soc: add paths and
- SerDes modes for MT7988
-Message-ID: <ZQXy5pxPRN1QXQkq@shell.armlinux.org.uk>
-References: <675b5abd8b40a71c177e9e4e4c92d2d6b1413b9b.1694527316.git.daniel@makrotopia.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67DD12B9D;
+	Sat, 16 Sep 2023 21:28:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694899704; x=1726435704;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c0Mz9/2BfSn0LxD485ah6BpHzE8/4K6YhlSjO8gOTig=;
+  b=C8TuJu4Le26V1JjvjYFLSZybu6CKCmJNTeouFdgTlrlfXFJBWsCKmj09
+   OyF3PIZImlkIUVEGvFpoun3RKuweWd/9JyD+jerclG0oAly7mFUumvQ7e
+   efMLrfWjS4IhSwuleDDVVXuMk+AhKSKVf0Odp4vnrx0n+WPQJ4XWItAim
+   RoTRr5pYLiv9e9kjcVsMfuJRUWPqp0mduZvlzIGNcRiuNVNQ+0VY42VZn
+   ZRrWs9EqG8lW2LihyphyfTKBNS3lJ++piitiR2/9RvyfH0HnXkIsajWW3
+   lKhpd3sNwe3CWiAkqau0PhiURh1UUYxzkw2OIkF3zEo++T+6BXNpoGqOe
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="359700165"
+X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
+   d="scan'208";a="359700165"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 14:28:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="835606076"
+X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
+   d="scan'208";a="835606076"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Sep 2023 14:28:22 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qhcpw-0004f2-24;
+	Sat, 16 Sep 2023 21:28:20 +0000
+Date: Sun, 17 Sep 2023 05:27:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kmo@daterainc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 4677/5666] fs/bcachefs/io_misc.c:468:6: warning:
+ explicitly assigning value of variable of type 'int' to itself
+Message-ID: <202309170545.BvBaHv0r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,76 +46,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <675b5abd8b40a71c177e9e4e4c92d2d6b1413b9b.1694527316.git.daniel@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Tue, Sep 12, 2023 at 03:54:40PM +0100, Daniel Golle wrote:
-> +static void mtk_usxgmii_pcs_get_state(struct phylink_pcs *pcs,
-> +				      struct phylink_link_state *state)
-> +{
-> +	struct mtk_usxgmii_pcs *mpcs = pcs_to_mtk_usxgmii_pcs(pcs);
-> +	struct mtk_eth *eth = mpcs->eth;
-> +	struct mtk_mac *mac = eth->mac[mtk_xgmii2mac_id(eth, mpcs->id)];
-> +	u32 val = 0;
-> +
-> +	regmap_read(mpcs->regmap, RG_PCS_AN_CTRL0, &val);
-> +	if (FIELD_GET(USXGMII_AN_ENABLE, val)) {
-> +		/* Refresh LPA by inverting LPA_LATCH */
-> +		regmap_read(mpcs->regmap, RG_PCS_AN_STS0, &val);
-> +		regmap_update_bits(mpcs->regmap, RG_PCS_AN_STS0,
-> +				   USXGMII_LPA_LATCH,
-> +				   !(val & USXGMII_LPA_LATCH));
-> +
-> +		regmap_read(mpcs->regmap, RG_PCS_AN_STS0, &val);
-> +
-> +		phylink_decode_usxgmii_word(state, FIELD_GET(USXGMII_PCS_AN_WORD,
-> +							     val));
-> +
-> +		state->interface = mpcs->interface;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   dfa449a58323de195773cf928d99db4130702bf7
+commit: eeb8a9793efc9509a131220064eebd7d883278e9 [4677/5666] bcachefs: Log finsert/fcollapse operations
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230917/202309170545.BvBaHv0r-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230917/202309170545.BvBaHv0r-lkp@intel.com/reproduce)
 
-Why are you assigning state->interface?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309170545.BvBaHv0r-lkp@intel.com/
 
-> +	} else {
-> +		val = mtk_r32(mac->hw, MTK_XGMAC_STS(mac->id));
-> +
-> +		if (mac->id == MTK_GMAC2_ID)
-> +			val >>= 16;
-> +
-> +		switch (FIELD_GET(MTK_USXGMII_PCS_MODE, val)) {
-> +		case 0:
-> +			state->speed = SPEED_10000;
-> +			break;
-> +		case 1:
-> +			state->speed = SPEED_5000;
-> +			break;
-> +		case 2:
-> +			state->speed = SPEED_2500;
-> +			break;
-> +		case 3:
-> +			state->speed = SPEED_1000;
-> +			break;
-> +		}
-> +
-> +		state->interface = mpcs->interface;
-> +		state->link = FIELD_GET(MTK_USXGMII_PCS_LINK, val);
-> +		state->duplex = DUPLEX_FULL;
-> +	}
-> +
-> +	/* Refresh USXGMII link status by toggling RG_PCS_RX_STATUS_UPDATE */
-> +	regmap_set_bits(mpcs->regmap, RG_PCS_RX_STATUS0, RG_PCS_RX_STATUS_UPDATE);
-> +	ndelay(1020);
-> +	regmap_clear_bits(mpcs->regmap, RG_PCS_RX_STATUS0, RG_PCS_RX_STATUS_UPDATE);
-> +	ndelay(1020);
-> +
-> +	/* Read USXGMII link status */
-> +	regmap_read(mpcs->regmap, RG_PCS_RX_STATUS0, &val);
-> +	state->link = state->link && FIELD_GET(RG_PCS_RX_LINK_STATUS, val);
+All warnings (new ones prefixed by >>):
 
-Doesn't this make the assignment to state->link above irrelevant?
+>> fs/bcachefs/io_misc.c:468:6: warning: explicitly assigning value of variable of type 'int' to itself [-Wself-assign]
+           ret = ret;
+           ~~~ ^ ~~~
+   1 warning generated.
 
-I need to spend a bit longer looking through this - it looks like there
-are three levels of indirection in this now?
+
+vim +/int +468 fs/bcachefs/io_misc.c
+
+   341	
+   342	static int __bch2_resume_logged_op_finsert(struct btree_trans *trans,
+   343						   struct bkey_i *op_k,
+   344						   u64 *i_sectors_delta)
+   345	{
+   346		struct bch_fs *c = trans->c;
+   347		struct btree_iter iter;
+   348		struct bkey_i_logged_op_finsert *op = bkey_i_to_logged_op_finsert(op_k);
+   349		subvol_inum inum = { le32_to_cpu(op->v.subvol), le64_to_cpu(op->v.inum) };
+   350		u64 dst_offset = le64_to_cpu(op->v.dst_offset);
+   351		u64 src_offset = le64_to_cpu(op->v.src_offset);
+   352		s64 shift = dst_offset - src_offset;
+   353		u64 len = abs(shift);
+   354		u64 pos = le64_to_cpu(op->v.pos);
+   355		bool insert = shift > 0;
+   356		int ret = 0;
+   357	
+   358		bch2_trans_iter_init(trans, &iter, BTREE_ID_extents,
+   359				     POS(inum.inum, 0),
+   360				     BTREE_ITER_INTENT);
+   361	
+   362		switch (op->v.state) {
+   363	case LOGGED_OP_FINSERT_start:
+   364		op->v.state = LOGGED_OP_FINSERT_shift_extents;
+   365	
+   366		if (insert) {
+   367			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
+   368					adjust_i_size(trans, inum, src_offset, len) ?:
+   369					bch2_logged_op_update(trans, &op->k_i));
+   370			if (ret)
+   371				goto err;
+   372		} else {
+   373			bch2_btree_iter_set_pos(&iter, POS(inum.inum, src_offset));
+   374	
+   375			ret = bch2_fpunch_at(trans, &iter, inum, src_offset + len, i_sectors_delta);
+   376			if (ret && !bch2_err_matches(ret, BCH_ERR_transaction_restart))
+   377				goto err;
+   378	
+   379			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
+   380					bch2_logged_op_update(trans, &op->k_i));
+   381		}
+   382	
+   383		fallthrough;
+   384	case LOGGED_OP_FINSERT_shift_extents:
+   385		while (1) {
+   386			struct disk_reservation disk_res =
+   387				bch2_disk_reservation_init(c, 0);
+   388			struct bkey_i delete, *copy;
+   389			struct bkey_s_c k;
+   390			struct bpos src_pos = POS(inum.inum, src_offset);
+   391			u32 snapshot;
+   392	
+   393			bch2_trans_begin(trans);
+   394	
+   395			ret = bch2_subvolume_get_snapshot(trans, inum.subvol, &snapshot);
+   396			if (ret)
+   397				goto btree_err;
+   398	
+   399			bch2_btree_iter_set_snapshot(&iter, snapshot);
+   400			bch2_btree_iter_set_pos(&iter, SPOS(inum.inum, pos, snapshot));
+   401	
+   402			k = insert
+   403				? bch2_btree_iter_peek_prev(&iter)
+   404				: bch2_btree_iter_peek_upto(&iter, POS(inum.inum, U64_MAX));
+   405			if ((ret = bkey_err(k)))
+   406				goto btree_err;
+   407	
+   408			if (!k.k ||
+   409			    k.k->p.inode != inum.inum ||
+   410			    bkey_le(k.k->p, POS(inum.inum, src_offset)))
+   411				break;
+   412	
+   413			copy = bch2_bkey_make_mut_noupdate(trans, k);
+   414			if ((ret = PTR_ERR_OR_ZERO(copy)))
+   415				goto btree_err;
+   416	
+   417			if (insert &&
+   418			    bkey_lt(bkey_start_pos(k.k), src_pos)) {
+   419				bch2_cut_front(src_pos, copy);
+   420	
+   421				/* Splitting compressed extent? */
+   422				bch2_disk_reservation_add(c, &disk_res,
+   423						copy->k.size *
+   424						bch2_bkey_nr_ptrs_allocated(bkey_i_to_s_c(copy)),
+   425						BCH_DISK_RESERVATION_NOFAIL);
+   426			}
+   427	
+   428			bkey_init(&delete.k);
+   429			delete.k.p = copy->k.p;
+   430			delete.k.p.snapshot = snapshot;
+   431			delete.k.size = copy->k.size;
+   432	
+   433			copy->k.p.offset += shift;
+   434			copy->k.p.snapshot = snapshot;
+   435	
+   436			op->v.pos = cpu_to_le64(insert ? bkey_start_offset(&delete.k) : delete.k.p.offset);
+   437	
+   438			ret =   bch2_btree_insert_trans(trans, BTREE_ID_extents, &delete, 0) ?:
+   439				bch2_btree_insert_trans(trans, BTREE_ID_extents, copy, 0) ?:
+   440				bch2_logged_op_update(trans, &op->k_i) ?:
+   441				bch2_trans_commit(trans, &disk_res, NULL, BTREE_INSERT_NOFAIL);
+   442	btree_err:
+   443			bch2_disk_reservation_put(c, &disk_res);
+   444	
+   445			if (bch2_err_matches(ret, BCH_ERR_transaction_restart))
+   446				continue;
+   447			if (ret)
+   448				goto err;
+   449	
+   450			pos = le64_to_cpu(op->v.pos);
+   451		}
+   452	
+   453		op->v.state = LOGGED_OP_FINSERT_finish;
+   454	
+   455		if (!insert) {
+   456			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
+   457					adjust_i_size(trans, inum, src_offset, shift) ?:
+   458					bch2_logged_op_update(trans, &op->k_i));
+   459		} else {
+   460			/* We need an inode update to update bi_journal_seq for fsync: */
+   461			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
+   462					adjust_i_size(trans, inum, 0, 0) ?:
+   463					bch2_logged_op_update(trans, &op->k_i));
+   464		}
+   465	
+   466		fallthrough;
+   467	case LOGGED_OP_FINSERT_finish:
+ > 468		ret = ret;
+   469		}
+   470	err:
+   471		bch2_logged_op_finish(trans, op_k);
+   472		bch2_trans_iter_exit(trans, &iter);
+   473		return ret;
+   474	}
+   475	
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
