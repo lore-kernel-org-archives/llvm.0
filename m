@@ -1,150 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEE433DC
-	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694842311;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cE8uR60erUTP5R6JK00T8pYd1yMckJyiRb8FgvxZgK0=;
-	b=d/jhdPyv9iZA4tSiAuv3EX2bpGdAncC3Nstjdwk+6+dfWolZp0KPeW50dxGeHo3n2YNeEM
-	5Q5YyDn0YBv1l/D0CNztT6DbhW/nhhUL+2Y80evUucmmGoKJVihdOGEiZHbZ37/+bqVbOj
-	P4mnQoE8Ug2RfcZzPCg+iWoWIe4NZY8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297--4qOZduSN2aIt65Nql2uvA-1; Sat, 16 Sep 2023 01:31:50 -0400
-X-MC-Unique: -4qOZduSN2aIt65Nql2uvA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26E79811E7E
-	for <llvm@lists.linux.dev>; Sat, 16 Sep 2023 05:31:50 +0000 (UTC)
-Received: from [172.64.4.92] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 01E8940C2070;
-	Sat, 16 Sep 2023 05:31:49 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
- (6.6.0-rc1, mainline.kernel.org-clang, 9608c7b7)
-Date: Sat, 16 Sep 2023 05:31:49 -0000
-To: llvm@lists.linux.dev, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CD16AB8;
+	Sat, 16 Sep 2023 06:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694845164; x=1726381164;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z/4bikEkIU7qMbozJqqn90Ffha07LnMM+FA07DYflPw=;
+  b=UKwKMWL/X0o+yOfsa7MTTfBBF4GBXtm7SuVNRCuz4OdbLJeqN5wWGZOR
+   O5SqOOYww9BFuEgsf7qbaaOG17ZyPmViVX5MtI6SaMKhdsE/SIh17XeYi
+   S+wLFk4HJzyJd4qC5KcVvzc2Cr7SJ7Ud6dqnS434V1r0mjHsvMvmmxM0j
+   54+wsko39+LjKLUNNLB3omDjjXj8YNvcL6QBOdvH9EMTCFzSqXKydmnyv
+   +RaWvzgFBgSWoq0t1cj/wRyMbZgqrTz6m0jbwFYKW4qWl2pixD1EUBPnT
+   cxqrs1vwgQkdm2ZtGCmtuiwLL5Tg4OJQEKViGbOLGZalH7JKC79d08q0O
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="379303507"
+X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
+   d="scan'208";a="379303507"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 23:19:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="748424258"
+X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
+   d="scan'208";a="748424258"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Sep 2023 23:19:20 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qhOeE-0003xU-0i;
+	Sat, 16 Sep 2023 06:19:18 +0000
+Date: Sat, 16 Sep 2023 14:18:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ma Ke <make_ruc2021@163.com>, jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Ma Ke <make_ruc2021@163.com>
+Subject: Re: [PATCH] net: sched: drr: dont intepret cls results when asked to
+ drop
+Message-ID: <202309161334.0j3RBkmV-lkp@intel.com>
+References: <20230915142056.3411330-1-make_ruc2021@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <54438.123091601315000171@us-mta-297.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230915142056.3411330-1-make_ruc2021@163.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Ma,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main linus/master v6.6-rc1 next-20230915]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2023-09-15' of git://anongit.freed=
-esktop.org/drm/drm
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/net-sched-drr-dont-intepret-cls-results-when-asked-to-drop/20230915-223913
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230915142056.3411330-1-make_ruc2021%40163.com
+patch subject: [PATCH] net: sched: drr: dont intepret cls results when asked to drop
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230916/202309161334.0j3RBkmV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230916/202309161334.0j3RBkmV-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/104721
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309161334.0j3RBkmV-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9542854
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /01_dmesg_check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1722
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 ppc64le - Storage - mdadm upstream test
-                  x86_64 - Storage - mdadm upstream test
-        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
-exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
-no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
-t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                  x86_64 - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> net/sched/sch_drr.c:321:4: error: fallthrough annotation does not directly precede switch label
+                           fallthrough;
+                           ^
+   include/linux/compiler_attributes.h:227:41: note: expanded from macro 'fallthrough'
+   # define fallthrough                    __attribute__((__fallthrough__))
+                                           ^
+   1 error generated.
 
 
+vim +321 net/sched/sch_drr.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+13d2a1d2b032de Patrick McHardy     2008-11-20  293  
+13d2a1d2b032de Patrick McHardy     2008-11-20  294  static struct drr_class *drr_classify(struct sk_buff *skb, struct Qdisc *sch,
+13d2a1d2b032de Patrick McHardy     2008-11-20  295  				      int *qerr)
+13d2a1d2b032de Patrick McHardy     2008-11-20  296  {
+13d2a1d2b032de Patrick McHardy     2008-11-20  297  	struct drr_sched *q = qdisc_priv(sch);
+13d2a1d2b032de Patrick McHardy     2008-11-20  298  	struct drr_class *cl;
+13d2a1d2b032de Patrick McHardy     2008-11-20  299  	struct tcf_result res;
+25d8c0d55f241c John Fastabend      2014-09-12  300  	struct tcf_proto *fl;
+13d2a1d2b032de Patrick McHardy     2008-11-20  301  	int result;
+13d2a1d2b032de Patrick McHardy     2008-11-20  302  
+13d2a1d2b032de Patrick McHardy     2008-11-20  303  	if (TC_H_MAJ(skb->priority ^ sch->handle) == 0) {
+13d2a1d2b032de Patrick McHardy     2008-11-20  304  		cl = drr_find_class(sch, skb->priority);
+13d2a1d2b032de Patrick McHardy     2008-11-20  305  		if (cl != NULL)
+13d2a1d2b032de Patrick McHardy     2008-11-20  306  			return cl;
+13d2a1d2b032de Patrick McHardy     2008-11-20  307  	}
+13d2a1d2b032de Patrick McHardy     2008-11-20  308  
+13d2a1d2b032de Patrick McHardy     2008-11-20  309  	*qerr = NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
+25d8c0d55f241c John Fastabend      2014-09-12  310  	fl = rcu_dereference_bh(q->filter_list);
+3aa2605594556c Davide Caratti      2021-07-28  311  	result = tcf_classify(skb, NULL, fl, &res, false);
+13d2a1d2b032de Patrick McHardy     2008-11-20  312  	if (result >= 0) {
+13abeaf39ca823 Ma Ke               2023-09-15  313  		if (result == TC_ACT_SHOT)
+13abeaf39ca823 Ma Ke               2023-09-15  314  			return NULL;
+13d2a1d2b032de Patrick McHardy     2008-11-20  315  #ifdef CONFIG_NET_CLS_ACT
+13d2a1d2b032de Patrick McHardy     2008-11-20  316  		switch (result) {
+13d2a1d2b032de Patrick McHardy     2008-11-20  317  		case TC_ACT_QUEUED:
+13d2a1d2b032de Patrick McHardy     2008-11-20  318  		case TC_ACT_STOLEN:
+e25ea21ffa66a0 Jiri Pirko          2017-06-06  319  		case TC_ACT_TRAP:
+13d2a1d2b032de Patrick McHardy     2008-11-20  320  			*qerr = NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
+964201de695b8a Gustavo A. R. Silva 2020-07-07 @321  			fallthrough;
+13d2a1d2b032de Patrick McHardy     2008-11-20  322  		}
+13d2a1d2b032de Patrick McHardy     2008-11-20  323  #endif
+13d2a1d2b032de Patrick McHardy     2008-11-20  324  		cl = (struct drr_class *)res.class;
+13d2a1d2b032de Patrick McHardy     2008-11-20  325  		if (cl == NULL)
+13d2a1d2b032de Patrick McHardy     2008-11-20  326  			cl = drr_find_class(sch, res.classid);
+13d2a1d2b032de Patrick McHardy     2008-11-20  327  		return cl;
+13d2a1d2b032de Patrick McHardy     2008-11-20  328  	}
+13d2a1d2b032de Patrick McHardy     2008-11-20  329  	return NULL;
+13d2a1d2b032de Patrick McHardy     2008-11-20  330  }
+13d2a1d2b032de Patrick McHardy     2008-11-20  331  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
