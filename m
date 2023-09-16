@@ -1,37 +1,37 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C3863D6;
-	Sat, 16 Sep 2023 07:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72FAC5C89;
+	Sat, 16 Sep 2023 07:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694848423; x=1726384423;
+  t=1694849023; x=1726385023;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=IfVUGRsiDjXqrTp/AO3llQvqyqYZF6cvh7r271j7dmQ=;
-  b=Iww4O49p0aHnpf8Si36cBEtU6w1WshJWq50meB/HTcG9ZFRWCJN2xG8h
-   WpqRXIqEAANkY8W7G1Xd8BtZh7VYDt2uA88kTVgbugzkPBrAlydKn1ylT
-   QpE+p5luf3SAfsQNSXsR4HPzyGn+KyvQpuEgUB75F3V/WyqIXPIGMctYy
-   mtLhk7NdM5ua6wH3KFAtgOpT7ogBj643c+I7WJzdCZO8Stg5QUvMhzv86
-   5K3SFrVTRbBJCLhgjfcOVm2sxdOWWB1LcEBwO5OXEUfdNOpyjGeX/+sR8
-   VsaBpMQprveeMKy+Zy9r6A2yldjkrwvsI3PrJ6tyfh/I2sVtSB+BTgZ9q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="379306016"
+  bh=c8i88xw7kqkRtm+RFJUtTj4XqEyRCmEHSLpdILSbhQA=;
+  b=RX5tnMGKQddW5G19rJC/nRwVzVIX1HaDBGBU/H8qUa+rYoeN6T168NnA
+   d8EOxyIYihfQZS3zRGRyUS5Z/lRnJRJorm9R9ILL5iGgMxQ0lddiTfomj
+   H6uFzAtLu5cdTDRDAoBZKmkNbDT2PHKQ/M6dT0M7niet4rY1z2VA1uQ/a
+   CNymqA2LXNf02VRsbF0cbf/x+VgZkz7OERXbIdKwFqXLMEe+7I7G3tNJq
+   bshO5FtN9CZ6bIflOC3ZnqOPAwi4bZJbH1FMcuhlx99Q5e99nq4tBbIJv
+   BDX02wdvYG4WqgtN5RMNxFeBkUPaJp3wewi11lM8zJ2FaBc6UcESY32TU
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="359640190"
 X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
-   d="scan'208";a="379306016"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 00:13:41 -0700
+   d="scan'208";a="359640190"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 00:23:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="810763184"
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="745246136"
 X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
-   d="scan'208";a="810763184"
+   d="scan'208";a="745246136"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Sep 2023 00:13:38 -0700
+  by orsmga002.jf.intel.com with ESMTP; 16 Sep 2023 00:23:39 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qhPUm-00040u-23;
-	Sat, 16 Sep 2023 07:13:36 +0000
-Date: Sat, 16 Sep 2023 15:12:40 +0800
+	id 1qhPeS-00041Q-2x;
+	Sat, 16 Sep 2023 07:23:36 +0000
+Date: Sat, 16 Sep 2023 15:22:54 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ma Ke <make_ruc2021@163.com>, jhs@mojatatu.com,
 	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
@@ -39,10 +39,10 @@ To: Ma Ke <make_ruc2021@163.com>, jhs@mojatatu.com,
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Ma Ke <make_ruc2021@163.com>
-Subject: Re: [PATCH] net: sched: htb: dont intepret cls results when asked to
+Subject: Re: [PATCH] net: sched: qfq: dont intepret cls results when asked to
  drop
-Message-ID: <202309161437.vLLafFXT-lkp@intel.com>
-References: <20230915142719.3411733-1-make_ruc2021@163.com>
+Message-ID: <202309161521.08Hs5BL9-lkp@intel.com>
+References: <20230915142355.3411527-1-make_ruc2021@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,7 +51,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230915142719.3411733-1-make_ruc2021@163.com>
+In-Reply-To: <20230915142355.3411527-1-make_ruc2021@163.com>
 
 Hi Ma,
 
@@ -63,22 +63,22 @@ kernel test robot noticed the following build errors:
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/net-sched-htb-dont-intepret-cls-results-when-asked-to-drop/20230915-223020
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/net-sched-qfq-dont-intepret-cls-results-when-asked-to-drop/20230915-222648
 base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230915142719.3411733-1-make_ruc2021%40163.com
-patch subject: [PATCH] net: sched: htb: dont intepret cls results when asked to drop
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230916/202309161437.vLLafFXT-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20230915142355.3411527-1-make_ruc2021%40163.com
+patch subject: [PATCH] net: sched: qfq: dont intepret cls results when asked to drop
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230916/202309161521.08Hs5BL9-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230916/202309161437.vLLafFXT-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230916/202309161521.08Hs5BL9-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309161437.vLLafFXT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309161521.08Hs5BL9-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/sched/sch_htb.c:254:4: error: fallthrough annotation does not directly precede switch label
+>> net/sched/sch_qfq.c:707:4: error: fallthrough annotation does not directly precede switch label
                            fallthrough;
                            ^
    include/linux/compiler_attributes.h:227:41: note: expanded from macro 'fallthrough'
@@ -87,83 +87,49 @@ All errors (new ones prefixed by >>):
    1 error generated.
 
 
-vim +254 net/sched/sch_htb.c
+vim +707 net/sched/sch_qfq.c
 
-43d253781f6321 Randy Dunlap        2023-01-01  203  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  204  /**
-^1da177e4c3f41 Linus Torvalds      2005-04-16  205   * htb_classify - classify a packet into class
-43d253781f6321 Randy Dunlap        2023-01-01  206   * @skb: the socket buffer
-43d253781f6321 Randy Dunlap        2023-01-01  207   * @sch: the active queue discipline
-43d253781f6321 Randy Dunlap        2023-01-01  208   * @qerr: pointer for returned status code
-^1da177e4c3f41 Linus Torvalds      2005-04-16  209   *
-^1da177e4c3f41 Linus Torvalds      2005-04-16  210   * It returns NULL if the packet should be dropped or -1 if the packet
-^1da177e4c3f41 Linus Torvalds      2005-04-16  211   * should be passed directly thru. In all other cases leaf class is returned.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  212   * We allow direct class selection by classid in priority. The we examine
-^1da177e4c3f41 Linus Torvalds      2005-04-16  213   * filters in qdisc and in inner nodes (if higher filter points to the inner
-^1da177e4c3f41 Linus Torvalds      2005-04-16  214   * node). If we end up with classid MAJOR:0 we enqueue the skb into special
-^1da177e4c3f41 Linus Torvalds      2005-04-16  215   * internal fifo (direct). These packets then go directly thru. If we still
-25985edcedea63 Lucas De Marchi     2011-03-30  216   * have no valid leaf we try to use MAJOR:default leaf. It still unsuccessful
-^1da177e4c3f41 Linus Torvalds      2005-04-16  217   * then finish and return direct queue.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  218   */
-87990467d387f9 Stephen Hemminger   2006-08-10  219  static struct htb_class *htb_classify(struct sk_buff *skb, struct Qdisc *sch,
-87990467d387f9 Stephen Hemminger   2006-08-10  220  				      int *qerr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  221  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  222  	struct htb_sched *q = qdisc_priv(sch);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  223  	struct htb_class *cl;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  224  	struct tcf_result res;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  225  	struct tcf_proto *tcf;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  226  	int result;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  227  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  228  	/* allow to select class by setting skb->priority to valid classid;
-cc7ec456f82da7 Eric Dumazet        2011-01-19  229  	 * note that nfmark can be used too by attaching filter fw with no
-cc7ec456f82da7 Eric Dumazet        2011-01-19  230  	 * rules in it
-cc7ec456f82da7 Eric Dumazet        2011-01-19  231  	 */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  232  	if (skb->priority == sch->handle)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  233  		return HTB_DIRECT;	/* X:0 (direct flow) selected */
-cc7ec456f82da7 Eric Dumazet        2011-01-19  234  	cl = htb_find(skb->priority, sch);
-29824310ce3e32 Harry Mason         2014-01-17  235  	if (cl) {
-29824310ce3e32 Harry Mason         2014-01-17  236  		if (cl->level == 0)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  237  			return cl;
-29824310ce3e32 Harry Mason         2014-01-17  238  		/* Start with inner filter chain if a non-leaf class is selected */
-25d8c0d55f241c John Fastabend      2014-09-12  239  		tcf = rcu_dereference_bh(cl->filter_list);
-29824310ce3e32 Harry Mason         2014-01-17  240  	} else {
-25d8c0d55f241c John Fastabend      2014-09-12  241  		tcf = rcu_dereference_bh(q->filter_list);
-29824310ce3e32 Harry Mason         2014-01-17  242  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  243  
-c27f339af90bb8 Jarek Poplawski     2008-08-04  244  	*qerr = NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
-3aa2605594556c Davide Caratti      2021-07-28  245  	while (tcf && (result = tcf_classify(skb, NULL, tcf, &res, false)) >= 0) {
-4505a19ed317f1 Ma Ke               2023-09-15  246  		if (result == TC_ACT_SHOT)
-4505a19ed317f1 Ma Ke               2023-09-15  247  			return NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  248  #ifdef CONFIG_NET_CLS_ACT
-^1da177e4c3f41 Linus Torvalds      2005-04-16  249  		switch (result) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  250  		case TC_ACT_QUEUED:
-^1da177e4c3f41 Linus Torvalds      2005-04-16  251  		case TC_ACT_STOLEN:
-e25ea21ffa66a0 Jiri Pirko          2017-06-06  252  		case TC_ACT_TRAP:
-378a2f090f7a47 Jarek Poplawski     2008-08-04  253  			*qerr = NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
-964201de695b8a Gustavo A. R. Silva 2020-07-07 @254  			fallthrough;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  255  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  256  #endif
-cc7ec456f82da7 Eric Dumazet        2011-01-19  257  		cl = (void *)res.class;
-cc7ec456f82da7 Eric Dumazet        2011-01-19  258  		if (!cl) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  259  			if (res.classid == sch->handle)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  260  				return HTB_DIRECT;	/* X:0 (direct flow) */
-cc7ec456f82da7 Eric Dumazet        2011-01-19  261  			cl = htb_find(res.classid, sch);
-cc7ec456f82da7 Eric Dumazet        2011-01-19  262  			if (!cl)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  263  				break;	/* filter selected invalid classid */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  264  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  265  		if (!cl->level)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  266  			return cl;	/* we hit leaf; return it */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  267  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  268  		/* we have got inner class; apply inner filter chain */
-25d8c0d55f241c John Fastabend      2014-09-12  269  		tcf = rcu_dereference_bh(cl->filter_list);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  270  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  271  	/* classification failed; try to use default class */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  272  	cl = htb_find(TC_H_MAKE(TC_H_MAJ(sch->handle), q->defcls), sch);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  273  	if (!cl || cl->level)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  274  		return HTB_DIRECT;	/* bad default .. this is safe bet */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  275  	return cl;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  276  }
-^1da177e4c3f41 Linus Torvalds      2005-04-16  277  
+0545a303777351 stephen hemminger   2011-04-04  678  
+0545a303777351 stephen hemminger   2011-04-04  679  static struct qfq_class *qfq_classify(struct sk_buff *skb, struct Qdisc *sch,
+0545a303777351 stephen hemminger   2011-04-04  680  				      int *qerr)
+0545a303777351 stephen hemminger   2011-04-04  681  {
+0545a303777351 stephen hemminger   2011-04-04  682  	struct qfq_sched *q = qdisc_priv(sch);
+0545a303777351 stephen hemminger   2011-04-04  683  	struct qfq_class *cl;
+0545a303777351 stephen hemminger   2011-04-04  684  	struct tcf_result res;
+25d8c0d55f241c John Fastabend      2014-09-12  685  	struct tcf_proto *fl;
+0545a303777351 stephen hemminger   2011-04-04  686  	int result;
+0545a303777351 stephen hemminger   2011-04-04  687  
+0545a303777351 stephen hemminger   2011-04-04  688  	if (TC_H_MAJ(skb->priority ^ sch->handle) == 0) {
+0545a303777351 stephen hemminger   2011-04-04  689  		pr_debug("qfq_classify: found %d\n", skb->priority);
+0545a303777351 stephen hemminger   2011-04-04  690  		cl = qfq_find_class(sch, skb->priority);
+0545a303777351 stephen hemminger   2011-04-04  691  		if (cl != NULL)
+0545a303777351 stephen hemminger   2011-04-04  692  			return cl;
+0545a303777351 stephen hemminger   2011-04-04  693  	}
+0545a303777351 stephen hemminger   2011-04-04  694  
+0545a303777351 stephen hemminger   2011-04-04  695  	*qerr = NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
+25d8c0d55f241c John Fastabend      2014-09-12  696  	fl = rcu_dereference_bh(q->filter_list);
+3aa2605594556c Davide Caratti      2021-07-28  697  	result = tcf_classify(skb, NULL, fl, &res, false);
+0545a303777351 stephen hemminger   2011-04-04  698  	if (result >= 0) {
+0698b7004e7da6 Ma Ke               2023-09-15  699  		if (result == TC_ACT_SHOT)
+0698b7004e7da6 Ma Ke               2023-09-15  700  			return NULL;
+0545a303777351 stephen hemminger   2011-04-04  701  #ifdef CONFIG_NET_CLS_ACT
+0545a303777351 stephen hemminger   2011-04-04  702  		switch (result) {
+0545a303777351 stephen hemminger   2011-04-04  703  		case TC_ACT_QUEUED:
+0545a303777351 stephen hemminger   2011-04-04  704  		case TC_ACT_STOLEN:
+e25ea21ffa66a0 Jiri Pirko          2017-06-06  705  		case TC_ACT_TRAP:
+0545a303777351 stephen hemminger   2011-04-04  706  			*qerr = NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
+964201de695b8a Gustavo A. R. Silva 2020-07-07 @707  			fallthrough;
+0545a303777351 stephen hemminger   2011-04-04  708  		}
+0545a303777351 stephen hemminger   2011-04-04  709  #endif
+0545a303777351 stephen hemminger   2011-04-04  710  		cl = (struct qfq_class *)res.class;
+0545a303777351 stephen hemminger   2011-04-04  711  		if (cl == NULL)
+0545a303777351 stephen hemminger   2011-04-04  712  			cl = qfq_find_class(sch, res.classid);
+0545a303777351 stephen hemminger   2011-04-04  713  		return cl;
+0545a303777351 stephen hemminger   2011-04-04  714  	}
+0545a303777351 stephen hemminger   2011-04-04  715  
+0545a303777351 stephen hemminger   2011-04-04  716  	return NULL;
+0545a303777351 stephen hemminger   2011-04-04  717  }
+0545a303777351 stephen hemminger   2011-04-04  718  
 
 -- 
 0-DAY CI Kernel Test Service
