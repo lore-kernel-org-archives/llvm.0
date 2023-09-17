@@ -1,187 +1,142 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878E51859
-	for <llvm@lists.linux.dev>; Sun, 17 Sep 2023 14:09:36 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50079d148aeso6072191e87.3
-        for <llvm@lists.linux.dev>; Sun, 17 Sep 2023 07:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694959774; x=1695564574; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Kp6SnmZgIfKPny1qW6KLyl8FjhdyKwdjfWEdpXSSC/I=;
-        b=i4b2RRliIcR2yBEK/vLpDua/2f3W1QzjnXyARlGqMtLArNlE4lFjEx0h1R3YBZ0NgY
-         D4lQ2R3DQl/7GPb0jgBtmLPWIYAY7zP3LaVDRan+u/GsV5XEGv+s2NybdxQEYNh29Ajg
-         ghsZjdwZTKSmLtdFUdV5gULzhPhlwaojoEMSaaFPatM0++MUWOtlNt5QrQGynOlZOlQi
-         j0Cxl6bjaQByo9VvQOEGwQK7vO7qLqXeDwXiyvm0fZjbgvplgHQ5dt8V5HUKOEiBktdj
-         u85ixzjYfJGdUCirpnOwHehm7uz6PpxWwGB+JawMetMAA8+/m9DC1rk9/PmUKMOza8wA
-         wEdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694959774; x=1695564574;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kp6SnmZgIfKPny1qW6KLyl8FjhdyKwdjfWEdpXSSC/I=;
-        b=o8orFM6zT2noNXXRY90n4rYOnugSmj/I32bq7zkDSTx+bUQLc/zpVy2CYE76D6XtVw
-         NqFikYo3GobvNrIpSGryUh6rESGz7EB/DfU8C7THbqPc+z8WQsVQFB4/9eMEUo//3zJ0
-         ZKI3vLGk7bgJJZQpT8BWyWqtq7vwx0sAn13u4Nq0JZJy+uZuy4aphFpPOc5HFAfmsl8d
-         hcWZIiIfTjz2RbQV89ZHSed64Y4GcOjukAcgIFBbPVU79fNp1hARz88TPz2eMjDr2q4V
-         o9JzZXJVnbYL2n6vwMhR6DwDNo1Xoa8t7axisjOUlVxAAh0YEsAAutYcS1LPxLBjHT9c
-         +WFA==
-X-Gm-Message-State: AOJu0Yw+fQ5Tjldbg8IxtA3BRYEYRVvNmnlwJFl6zo84a2ax4LDk48OG
-	MK8lQX0r2XCRTLzcyeBn/aw=
-X-Google-Smtp-Source: AGHT+IEvy0xPaCxJWk7c9ZYYKlpxm5S6TzNC05vEZYj7lckJE6DLB6atp04K7mC0rCN7uQRs0YmCwQ==
-X-Received: by 2002:ac2:5976:0:b0:4fb:911b:4e19 with SMTP id h22-20020ac25976000000b004fb911b4e19mr5413741lfp.35.1694959774088;
-        Sun, 17 Sep 2023 07:09:34 -0700 (PDT)
-Received: from krava ([217.192.101.2])
-        by smtp.gmail.com with ESMTPSA id ee17-20020a056402291100b005308fa6ef7fsm3184858edb.16.2023.09.17.07.09.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Sep 2023 07:09:33 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 17 Sep 2023 16:09:31 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Marcus Seyfarth <m.seyfarth@gmail.com>, bpf <bpf@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Stanislav Fomichev <sdf@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>
-Subject: Re: duplicate BTF_IDs leading to symbol redefinition errors?
-Message-ID: <ZQcIm/TZH73IklIf@krava>
-References: <ZPozfCEF9SV2ADQ5@krava>
- <ZPsJ4AAqNMchvms/@krava>
- <CAKwvOd==X0exrhmsqX1j1WFX77xe8W7xPbfiCY+Rt6abgmkMCQ@mail.gmail.com>
- <ZPuA5+HmbcdBLbIq@krava>
- <ZQLBm8sC+V53CIzD@krava>
- <CAK7LNATiHvOXiWQi9gXJO9rZbT_MFm6NddaWqoY4ykNWf+OYsQ@mail.gmail.com>
- <ZQLX3oSCk95Qf4Ma@krava>
- <CAEf4Bzb5KQ2_LmhN769ifMeSJaWfebccUasQOfQKaOd0nQ51tw@mail.gmail.com>
- <ZQQVr35crUtN1quS@krava>
- <CAEf4BzZe_27FPzMwjaU3d5gPuyXX3iTQJGzT64CCTZLEfpQUvQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A764C69
+	for <llvm@lists.linux.dev>; Sun, 17 Sep 2023 16:31:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694968291;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LgHwSpIymogTTsqWdoBxiiWMQ73YqTY7fMJCuZwSqvs=;
+	b=UIvV/q05CXYB/7XvOkRcZn2A4v3GViADi7MH4aEjYmAEmBVfgSG3Fzu8VyLgGY6xmCNEzJ
+	f52eMaEH7J8cZVecWMsfQCsw0QA7hX+R1lDoQFK4vxCmUNP6nuNhJqdkG8LPXbkSwypsAZ
+	bkX247rGldWaUjciedg7QzH7oB5UgBg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-452-8L0bxp4-M5eHg1e80CxD1Q-1; Sun, 17 Sep 2023 12:31:29 -0400
+X-MC-Unique: 8L0bxp4-M5eHg1e80CxD1Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 473BB85A5BA
+	for <llvm@lists.linux.dev>; Sun, 17 Sep 2023 16:31:29 +0000 (UTC)
+Received: from [172.64.4.92] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 313A72027019;
+	Sun, 17 Sep 2023 16:31:29 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 26 of 234): Test report for master
+ (6.6.0-rc1, mainline.kernel.org-clang, 9fdfb15a)
+Date: Sun, 17 Sep 2023 16:31:29 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZe_27FPzMwjaU3d5gPuyXX3iTQJGzT64CCTZLEfpQUvQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <77611.123091712312902850@us-mta-452.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 15, 2023 at 01:41:25PM -0700, Andrii Nakryiko wrote:
-> On Fri, Sep 15, 2023 at 1:28 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Thu, Sep 14, 2023 at 11:14:19AM -0700, Andrii Nakryiko wrote:
-> > > On Thu, Sep 14, 2023 at 2:52 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > >
-> > > > On Thu, Sep 14, 2023 at 05:30:51PM +0900, Masahiro Yamada wrote:
-> > > >
-> > > > SNIP
-> > > >
-> > > > > > > so the change is about adding unique id that's basically path of
-> > > > > > > the object stored in base32 so it could be used as symbol, so we
-> > > > > > > don't really need to read the actual file
-> > > > > > >
-> > > > > > > the problem is when BTF_ID definition like:
-> > > > > > >
-> > > > > > > BTF_ID(struct, cgroup)
-> > > > > > >
-> > > > > > > translates in 2 separate objects into same symbol name because of
-> > > > > > > the matching __COUNTER__ macro values (like 380 below)
-> > > > > > >
-> > > > > > >   __BTF_ID__struct__cgroup__380
-> > > > > > >
-> > > > > > > this change just adds unique id of the path name at the end of the
-> > > > > > > symbol with:
-> > > > > > >
-> > > > > > >   echo -n 'kernel/bpf/helpers' | base32 -w0 --> NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
-> > > > > > >
-> > > > > > > so the symbol looks like:
-> > > > > > >
-> > > > > > >   __BTF_ID__struct__cgroup__380NNSXE3TFNQXWE4DGF5UGK3DQMVZHG
-> > > > > > >
-> > > > > > > and is unique over the sources
-> > > > > > >
-> > > > > > > but I still hope we could come up with some better solution ;-)
-> > > > > >
-> > > > > > so far the only better solution I could come up with is to use
-> > > > > > cksum (also from coreutils) instead of base32, which makes the
-> > > > > > BTF_ID_BASE value compact
-> > > > > >
-> > > > > > I'll run test to find out how much it hurts the build time
-> > > > > >
-> > > > > > jirka
-> > > > >
-> > > > >
-> > > > >
-> > > > > Seems a bad idea to me.
-> > > > >
-> > > > > It would fork a new shell and chsum for all files,
-> > > > > while only a few of them need it.
-> > > >
-> > > > right, I have a change to limit this on kernel and net directories,
-> > > > but it's still bad
-> > > >
-> > > > >
-> > > > > Better to consult BTF forks.
-> > > >
-> > > > perhaps there's better way within kbuild to get unique id/value
-> > > > for each object file?
-> > >
-> > > let's just use __LINE__ + __COUNTER__ for now and teach resolve_btfids
-> > > to fail and complain loudly about duplicate symbols?
-> >
-> > ok, will send that.. but it fails during link before resolve_btfids
-> > takes place
-> >
-> > >
-> > >
-> > > This will give us time and opportunity to implement a better approach
-> > > to .BTF_ids overall. Encoding the desired type name in the symbol name
-> > > always felt off. Maybe it's better to encode type + name as data,
-> > > which is discarded at the latest stage during vmlinux linking? Either
-> >
-> > hum, so maybe having a special section (.BTF_ids_desc below)
-> > that would have record for each ID placed in .BTF_ids section:
-> >
-> > asm(                                           \
-> > ".pushsection .BTF_ids,\"a\";        \n"       \
-> > "1:                                  \n"       \
-> > ".zero 4                             \n"       \
-> > ".popsection;                        \n"       \
-> > ".pushsection .BTF_ids_desc,\"a\";   \n"       \
-> > ".long 1b                            \n"       \
-> >
-> > and somehow get prefix and name pointers in here:
-> >
-> > ".long prefix
-> > ".long name
-> >
-> > ".popsection;                        \n");
-> >
-> > so resolve_btfids would iterate .BTF_ids_desc records and fix
-> > up .BTF_ids data..
-> >
-> 
-> Something like that. I don't think it's even a regression in terms of
-> vmlinux space usage, because right now we spend as much space on
-> storing symbol names. So just adding string pointers would be already
-> a win due to repeating "struct", "func", etc strings.
-> 
-> 
-> > we might need to do one extra link phase to get rid of the
-> > .BTF_ids_desc secion
-> 
-> Hopefully we can find a way to avoid this, we already do like 3 link
-> phases at least (for kallsyms), so doing all that on the first one and
-> then stripping it out using link script at subsequent one would be
-> best.
+Hi, we tested your kernel and here are the results:
 
-perhaps we could move that section under .init.data and
-get rid of it on startup
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-jirka
+
+Kernel information:
+    Commit message: Merge tag 'net-6.6-rc2' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/104503
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9520833
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
