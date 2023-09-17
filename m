@@ -1,210 +1,164 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67DD12B9D;
-	Sat, 16 Sep 2023 21:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694899704; x=1726435704;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c0Mz9/2BfSn0LxD485ah6BpHzE8/4K6YhlSjO8gOTig=;
-  b=C8TuJu4Le26V1JjvjYFLSZybu6CKCmJNTeouFdgTlrlfXFJBWsCKmj09
-   OyF3PIZImlkIUVEGvFpoun3RKuweWd/9JyD+jerclG0oAly7mFUumvQ7e
-   efMLrfWjS4IhSwuleDDVVXuMk+AhKSKVf0Odp4vnrx0n+WPQJ4XWItAim
-   RoTRr5pYLiv9e9kjcVsMfuJRUWPqp0mduZvlzIGNcRiuNVNQ+0VY42VZn
-   ZRrWs9EqG8lW2LihyphyfTKBNS3lJ++piitiR2/9RvyfH0HnXkIsajWW3
-   lKhpd3sNwe3CWiAkqau0PhiURh1UUYxzkw2OIkF3zEo++T+6BXNpoGqOe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="359700165"
-X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
-   d="scan'208";a="359700165"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 14:28:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="835606076"
-X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
-   d="scan'208";a="835606076"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Sep 2023 14:28:22 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qhcpw-0004f2-24;
-	Sat, 16 Sep 2023 21:28:20 +0000
-Date: Sun, 17 Sep 2023 05:27:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 4677/5666] fs/bcachefs/io_misc.c:468:6: warning:
- explicitly assigning value of variable of type 'int' to itself
-Message-ID: <202309170545.BvBaHv0r-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4145B1112
+	for <llvm@lists.linux.dev>; Sun, 17 Sep 2023 04:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694923288;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sZmGEKXa+Gla9yIrYgOBwbUxYYt5nmkI7qRSzC9WZAo=;
+	b=RFdUDpa4xSI6cy/q4iR41m0VtCUsZkr7gfC7sdNG0gF6YGPOkLCeFFhzPne8q0ZV/4Famj
+	uDsMhtf6zoSpSBOJnjcxpiRasdIImTh8teCx12xb9nHruRiiCfpkg/8+5OJbjIN2KkERWq
+	FUxBxYCJwfJuqZzQH8Om3tDTzBpgSQI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-295-1YhbLKueMzaINdaHr5FnjA-1; Sun, 17 Sep 2023 00:01:25 -0400
+X-MC-Unique: 1YhbLKueMzaINdaHr5FnjA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C502618811A5
+	for <llvm@lists.linux.dev>; Sun, 17 Sep 2023 04:01:24 +0000 (UTC)
+Received: from [172.64.4.92] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A928921B2413;
+	Sun, 17 Sep 2023 04:01:24 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
+ (6.6.0-rc1, mainline.kernel.org-clang, ad8a69f3)
+Date: Sun, 17 Sep 2023 04:01:24 -0000
+To: llvm@lists.linux.dev, zlang@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <77998.123091700012500265@us-mta-295.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   dfa449a58323de195773cf928d99db4130702bf7
-commit: eeb8a9793efc9509a131220064eebd7d883278e9 [4677/5666] bcachefs: Log finsert/fcollapse operations
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230917/202309170545.BvBaHv0r-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230917/202309170545.BvBaHv0r-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309170545.BvBaHv0r-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/bcachefs/io_misc.c:468:6: warning: explicitly assigning value of variable of type 'int' to itself [-Wself-assign]
-           ret = ret;
-           ~~~ ^ ~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/int +468 fs/bcachefs/io_misc.c
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-   341	
-   342	static int __bch2_resume_logged_op_finsert(struct btree_trans *trans,
-   343						   struct bkey_i *op_k,
-   344						   u64 *i_sectors_delta)
-   345	{
-   346		struct bch_fs *c = trans->c;
-   347		struct btree_iter iter;
-   348		struct bkey_i_logged_op_finsert *op = bkey_i_to_logged_op_finsert(op_k);
-   349		subvol_inum inum = { le32_to_cpu(op->v.subvol), le64_to_cpu(op->v.inum) };
-   350		u64 dst_offset = le64_to_cpu(op->v.dst_offset);
-   351		u64 src_offset = le64_to_cpu(op->v.src_offset);
-   352		s64 shift = dst_offset - src_offset;
-   353		u64 len = abs(shift);
-   354		u64 pos = le64_to_cpu(op->v.pos);
-   355		bool insert = shift > 0;
-   356		int ret = 0;
-   357	
-   358		bch2_trans_iter_init(trans, &iter, BTREE_ID_extents,
-   359				     POS(inum.inum, 0),
-   360				     BTREE_ITER_INTENT);
-   361	
-   362		switch (op->v.state) {
-   363	case LOGGED_OP_FINSERT_start:
-   364		op->v.state = LOGGED_OP_FINSERT_shift_extents;
-   365	
-   366		if (insert) {
-   367			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
-   368					adjust_i_size(trans, inum, src_offset, len) ?:
-   369					bch2_logged_op_update(trans, &op->k_i));
-   370			if (ret)
-   371				goto err;
-   372		} else {
-   373			bch2_btree_iter_set_pos(&iter, POS(inum.inum, src_offset));
-   374	
-   375			ret = bch2_fpunch_at(trans, &iter, inum, src_offset + len, i_sectors_delta);
-   376			if (ret && !bch2_err_matches(ret, BCH_ERR_transaction_restart))
-   377				goto err;
-   378	
-   379			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
-   380					bch2_logged_op_update(trans, &op->k_i));
-   381		}
-   382	
-   383		fallthrough;
-   384	case LOGGED_OP_FINSERT_shift_extents:
-   385		while (1) {
-   386			struct disk_reservation disk_res =
-   387				bch2_disk_reservation_init(c, 0);
-   388			struct bkey_i delete, *copy;
-   389			struct bkey_s_c k;
-   390			struct bpos src_pos = POS(inum.inum, src_offset);
-   391			u32 snapshot;
-   392	
-   393			bch2_trans_begin(trans);
-   394	
-   395			ret = bch2_subvolume_get_snapshot(trans, inum.subvol, &snapshot);
-   396			if (ret)
-   397				goto btree_err;
-   398	
-   399			bch2_btree_iter_set_snapshot(&iter, snapshot);
-   400			bch2_btree_iter_set_pos(&iter, SPOS(inum.inum, pos, snapshot));
-   401	
-   402			k = insert
-   403				? bch2_btree_iter_peek_prev(&iter)
-   404				: bch2_btree_iter_peek_upto(&iter, POS(inum.inum, U64_MAX));
-   405			if ((ret = bkey_err(k)))
-   406				goto btree_err;
-   407	
-   408			if (!k.k ||
-   409			    k.k->p.inode != inum.inum ||
-   410			    bkey_le(k.k->p, POS(inum.inum, src_offset)))
-   411				break;
-   412	
-   413			copy = bch2_bkey_make_mut_noupdate(trans, k);
-   414			if ((ret = PTR_ERR_OR_ZERO(copy)))
-   415				goto btree_err;
-   416	
-   417			if (insert &&
-   418			    bkey_lt(bkey_start_pos(k.k), src_pos)) {
-   419				bch2_cut_front(src_pos, copy);
-   420	
-   421				/* Splitting compressed extent? */
-   422				bch2_disk_reservation_add(c, &disk_res,
-   423						copy->k.size *
-   424						bch2_bkey_nr_ptrs_allocated(bkey_i_to_s_c(copy)),
-   425						BCH_DISK_RESERVATION_NOFAIL);
-   426			}
-   427	
-   428			bkey_init(&delete.k);
-   429			delete.k.p = copy->k.p;
-   430			delete.k.p.snapshot = snapshot;
-   431			delete.k.size = copy->k.size;
-   432	
-   433			copy->k.p.offset += shift;
-   434			copy->k.p.snapshot = snapshot;
-   435	
-   436			op->v.pos = cpu_to_le64(insert ? bkey_start_offset(&delete.k) : delete.k.p.offset);
-   437	
-   438			ret =   bch2_btree_insert_trans(trans, BTREE_ID_extents, &delete, 0) ?:
-   439				bch2_btree_insert_trans(trans, BTREE_ID_extents, copy, 0) ?:
-   440				bch2_logged_op_update(trans, &op->k_i) ?:
-   441				bch2_trans_commit(trans, &disk_res, NULL, BTREE_INSERT_NOFAIL);
-   442	btree_err:
-   443			bch2_disk_reservation_put(c, &disk_res);
-   444	
-   445			if (bch2_err_matches(ret, BCH_ERR_transaction_restart))
-   446				continue;
-   447			if (ret)
-   448				goto err;
-   449	
-   450			pos = le64_to_cpu(op->v.pos);
-   451		}
-   452	
-   453		op->v.state = LOGGED_OP_FINSERT_finish;
-   454	
-   455		if (!insert) {
-   456			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
-   457					adjust_i_size(trans, inum, src_offset, shift) ?:
-   458					bch2_logged_op_update(trans, &op->k_i));
-   459		} else {
-   460			/* We need an inode update to update bi_journal_seq for fsync: */
-   461			ret = commit_do(trans, NULL, NULL, BTREE_INSERT_NOFAIL,
-   462					adjust_i_size(trans, inum, 0, 0) ?:
-   463					bch2_logged_op_update(trans, &op->k_i));
-   464		}
-   465	
-   466		fallthrough;
-   467	case LOGGED_OP_FINSERT_finish:
- > 468		ret = ret;
-   469		}
-   470	err:
-   471		bch2_logged_op_finish(trans, op_k);
-   472		bch2_trans_iter_exit(trans, &iter);
-   473		return ret;
-   474	}
-   475	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/104768
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9550894
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL generic/245
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9550895
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL generic/245
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9550996
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+          x86_64 (debug) - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9551019
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL generic/245
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: [upstream] avc:  denied  { write } for  pid=3D1274 comm=3D"k=
+exec" path=3D2F6D656D66643A6B65726E656C202864656C6574656429 dev=3D"tmpfs" i=
+no=3D2048 scontext=3Dsystem_u:system_r:kdump_t:s0 tcontext=3Dsystem_u:objec=
+t_r:tmpfs_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://github.com/fedora-selinux/selinux-policy/pull/1860
+            Affected tests:
+                 aarch64 - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
