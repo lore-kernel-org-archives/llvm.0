@@ -1,76 +1,81 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A46F13FF7
-	for <llvm@lists.linux.dev>; Mon, 18 Sep 2023 08:27:57 +0000 (UTC)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id CD4F266072EE;
-	Mon, 18 Sep 2023 09:27:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1695025669;
-	bh=0xZU9+BT1Lhziqj2peG186RnTVEcjM4RamFlwc9caGc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MCpXWpONy0BtkabzIDxKDZdBpclb4KkEO/vjdiqSRSgOHkRqs5VNUf+0IHZZbqH0M
-	 /ThenAX6gk3cHjl8PWjJi5TIhQ079I4XgooYj4242puGEmZxRvwUmWhHZFE5AmJpXr
-	 ORZtBymDne4IYqhlQ1R/QdHE2t9Qit3dqRD439i4wlJBAaQlKb1zLcxp39+PckL9YB
-	 nu94/qKIEKzqSCn9Zm41J7txDh35e7GHSSVVn/g8k1VBoiJz/3ZGD2dUffJGlf9w51
-	 JLkn7z1KFZppAxaC/KIp9MGLZ1MjWHILB5YhduiOD1DFe1dAAdyqZUv8QLvf/+TRvy
-	 8Tlz+R9eNyBJQ==
-Message-ID: <c2664bc3-d932-8340-b0f6-8fb1f1604464@collabora.com>
-Date: Mon, 18 Sep 2023 10:27:45 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2AF13AFA
+	for <llvm@lists.linux.dev>; Mon, 18 Sep 2023 09:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695028560; x=1726564560;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HODBa9dvinX682mpZpv2Ai5XBCfJ9WWcaCt3+KCr9MA=;
+  b=IP/9MHh1rjBlQRZIaHpSyD/hlfzkk7ULJGQwmPiYj4M3beR1z78F0KqW
+   YqgAOTpSqqcFofsnwCC3/PLYaBjzJo486zaleoPcWZsSapDmJSWorelMQ
+   C5NXnZmeGUNgbR42yuZqxTj5ufroE7Y4wP37/nrBjQRhsq1mviFCv6CUH
+   5aNCViR4RtvFEKymtldl4Y2DOpKFdcO1tUIWvQMonDnsrcQc9HrnklfyX
+   /2QLioDZ58evPyxyNlfJhnzRGcLZLsinzd1hukJ7dF7kV44n7hGeJtqSz
+   YJC+d5BlIN2ICYKQjbwyoJ7s8x8pg4qWZcZSpZj+iP3jdpw+M8VxX6C6n
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="382350897"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="382350897"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 02:15:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="695455798"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="695455798"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 18 Sep 2023 02:15:56 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 584F118E; Mon, 18 Sep 2023 12:15:55 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] gpiolib: cdev: Annotate struct linereq with __counted_by()
+Date: Mon, 18 Sep 2023 12:15:53 +0300
+Message-Id: <20230918091553.1103567-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] leds: mt6360: Annotate struct mt6360_priv with
- __counted_by
-To: Kees Cook <keescook@chromium.org>, Pavel Machek <pavel@ucw.cz>
-Cc: Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Gene Chen <gene_chen@richtek.com>,
- Jacek Anaszewski <jacek.anaszewski@gmail.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20230915201020.never.433-kees@kernel.org>
-Content-Language: en-US
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230915201020.never.433-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 15/09/23 22:10, Kees Cook ha scritto:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct mt6360_priv.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Cc: Gene Chen <gene_chen@richtek.com>
-> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family                                         functions).
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/gpio/gpiolib-cdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index a5bbbd44531f..e23f06f58234 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -572,7 +572,7 @@ struct linereq {
+ 	DECLARE_KFIFO_PTR(events, struct gpio_v2_line_event);
+ 	atomic_t seqno;
+ 	struct mutex config_mutex;
+-	struct line lines[];
++	struct line lines[] __counted_by(num_lines);
+ };
+ 
+ #define GPIO_V2_LINE_BIAS_FLAGS \
+-- 
+2.40.0.1.gaa8946217a0b
 
