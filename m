@@ -1,70 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2483F6FD0;
-	Mon, 18 Sep 2023 09:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E1BCBC433CA;
-	Mon, 18 Sep 2023 09:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B87420B03
+	for <llvm@lists.linux.dev>; Mon, 18 Sep 2023 16:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70B6C433C7;
+	Mon, 18 Sep 2023 16:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695030022;
-	bh=uRfOQOB0II5sP8GPpDWkYX/vEwWZ4Q9wf7azPLUxnI8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=W+/CFp1VkUNvrkW4WOXwUNjeLGGda4LOtdSOhfnYStHDdLVlHuZgUtGJ6PmPrATSn
-	 s28+YAtvisNIxRfYRakr/TdDBQfPOITm9eY2KLuKlhFf7fRLLzxAzCpIU8BVq4gMlA
-	 2m5g/NqQxmPK2TaBf3uef6ajyji2hvUJpAgnrzw42gtp6JqVnPPfl/n6qfFIe1v+z/
-	 rOdSMU1EGbXcYtaU2Arp8vi41mRQEEuUBclAnxxeff6oAvSXhlA1PyrTDKyEWfLYBV
-	 IvBBO6M0C/3vulS+/41rNhmTpdXm3y0oi6nheA43JyCMotdTmfRmL0g+5Rzr/Mhuus
-	 +MIjX3Y5F4oiQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C78EBE11F41;
-	Mon, 18 Sep 2023 09:40:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1695055847;
+	bh=8JxeeNt0YIANYdkuILxO1QdRpilUqSWyV1gcj/PegTo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JlpAl0p0ot/ZdMds5/dzHxWvSvCvoB6UFz2DNFt8l8uvRG06FlLRX1IMnpZk5FAWt
+	 xp0hbr0IHEFQ8Fc9h3/iFakdDYOh+hd7LgzCYbXYqenvfRcEONW4VaxI42nvK2WIZZ
+	 0Qr1iqebzd7NopusIhwRMtqzJSmzNtRUve6/yNd/Fc3zlQ1DesWAeVlu/qQ0Cf7puc
+	 5/ZrtsowpVcbuRfia4JAsYX+W/BVhF9UFxa9SiAAx+NIbe3W5bA5S0KuHJ9fybFKPZ
+	 CPO1pzBAZTZXVwmZhaqHYiWkwPs6RrmFUErlYXc8RYn6MYkOpjlgGUWaqpHI9NmPkD
+	 x9hzbmwpPZKJg==
+Date: Mon, 18 Sep 2023 12:50:45 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, keescook@chromium.org,
+	Conor Dooley <conor.dooley@microchip.com>, nathan@kernel.org,
+	Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+	ndesaulniers@google.com, peterz@infradead.org,
+	ajones@ventanamicro.com, heiko@sntech.de,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, liaochang1@huawei.com,
+	namcaov@gmail.com, andy.chiu@sifive.com, guoren@kernel.org,
+	alexghiti@rivosinc.com, Bjorn Topel <bjorn@rivosinc.com>,
+	jeeheng.sia@starfivetech.com, jszhang@kernel.org,
+	greentime.hu@sifive.com, masahiroy@kernel.org,
+	apatel@ventanamicro.com, mnissler@rivosinc.com,
+	coelacanthushex@gmail.com, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH AUTOSEL 6.4 25/25] riscv: Add CFI error handling
+Message-ID: <ZQh/5ZnoI6dnTonS@sashalap>
+References: <20230909003715.3579761-25-sashal@kernel.org>
+ <mhng-e2cedb63-0933-4752-bfd8-592e4e1f6e2c@palmer-ri-x1c9>
+ <CABCJKucm3KjYKgjP9OT4GLe8KZ3QxpRk9GqPD5JgwMaoZumnQQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ceph: Annotate struct ceph_monmap with __counted_by
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169503002181.24344.5873701629214587241.git-patchwork-notify@kernel.org>
-Date: Mon, 18 Sep 2023 09:40:21 +0000
-References: <20230915201510.never.365-kees@kernel.org>
-In-Reply-To: <20230915201510.never.365-kees@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: idryomov@gmail.com, xiubli@redhat.com, jlayton@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- ceph-devel@vger.kernel.org, netdev@vger.kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, trix@redhat.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+In-Reply-To: <CABCJKucm3KjYKgjP9OT4GLe8KZ3QxpRk9GqPD5JgwMaoZumnQQ@mail.gmail.com>
 
-Hello:
+On Mon, Sep 11, 2023 at 08:03:38AM -0700, Sami Tolvanen wrote:
+>On Fri, Sep 8, 2023 at 8:33 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> Sami probably understands the dependencies better than I do, but I don't
+>> think this one is sane to just backport -- there's a whole series here,
+>> and IIRC we had to set up some clang bits for it to work correctly.
+>
+>Agreed, it doesn't really make sense to backport this patch.
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+Ack, it's gone :)
 
-On Fri, 15 Sep 2023 13:15:10 -0700 you wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct ceph_monmap.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> [...]
-
-Here is the summary with links:
-  - ceph: Annotate struct ceph_monmap with __counted_by
-    https://git.kernel.org/netdev/net-next/c/1cb6422ecac8
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Sasha
