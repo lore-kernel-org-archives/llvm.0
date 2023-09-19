@@ -1,93 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2430F37CB6;
-	Tue, 19 Sep 2023 13:16:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738B3C433C8;
-	Tue, 19 Sep 2023 13:16:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695129402;
-	bh=Tgx947AMX984xnlu4hGkPuGi+cgC/mGGmoaAgMZ9kF8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MoNVqpVQs/KdLWOrd11QjiNg3qHmz+zOP7mH9PZruHvJCBC65jY8f25Y8XdI7SB2j
-	 J33K++/dgnu/J+4jCKcqQz1Tbv9RTE0KdbXHaklBl3g/GydG3MjDlbgXp2IP80jyUe
-	 XAaybnL0twZ/IHlgZAXlruZJ6uXFrZtBstrYR1X4/uK39hFpbVRzh7ygJWqiEWgRW6
-	 CzO3PJuI0JfonjDC5pPaJ9v8a8jmhAYjn0KxuwVAtbyPDek3uSAhl3FRrSdOf7Rypn
-	 MdloMtXODd4nYcT6QAD+pb+TFqL42J6QYZEe+ZUJwiNuNCKYSo0GORdXQ0fPzsaknh
-	 02fhScU/Brbuw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 2AEC0406D9; Tue, 19 Sep 2023 15:16:40 +0200 (CEST)
-Date: Tue, 19 Sep 2023 15:16:40 +0200
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Nick Terrell <terrelln@fb.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	James Clark <james.clark@arm.com>, Kajol Jain <kjain@linux.ibm.com>,
-	Patrice Duroux <patrice.duroux@gmail.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 0/5] Enable BPF skeletons by default
-Message-ID: <ZQmfOO0tt9FuIkrj@kernel.org>
-References: <20230914211948.814999-1-irogers@google.com>
- <CAM9d7cgNbRs3LJh_AjqAnRkJzsTxrGr_yqVK-urtoS-B2k1S=w@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9990B328B1;
+	Tue, 19 Sep 2023 14:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695134574; x=1726670574;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iSPzEI6ai+IfQ92VJY4BsG+KgWguOThO7IO/TLYrv00=;
+  b=V1uf6BEW05GDF6xs6S9D1t9iVpfriUnxIAX948jaGZM3lydYOnG5tNVw
+   S7P+gTneSn8KCvUnLutOBPZ1SLb56IQX4a7g5rkRXa0ovI3Md/cpYaxiQ
+   T5fnhT4bzILi1ye1azZVUNdeiZ0oF0D15pv3mvILTZBUcGG0Woi0XH2f4
+   ChmIQwTRJiFjekdSc1NIOl91EEI8VazU/mKWpmsQsm8KXLphYCmzE9KSb
+   ORzB+kk2nlEzOOv050TPSHVL4qxPZ1cQd/ry89Q/ZHy0aanPY354r4KBB
+   HKN0TzZq0T21CUACt/gZkPXqFAnP2PnrdNeLiiEWS24rRqiEmfnmgxR2t
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="378850856"
+X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
+   d="scan'208";a="378850856"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 07:42:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="749508232"
+X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
+   d="scan'208";a="749508232"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 19 Sep 2023 07:42:35 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qibvL-0007TQ-1a;
+	Tue, 19 Sep 2023 14:42:03 +0000
+Date: Tue, 19 Sep 2023 22:40:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+Subject: warning: unknown warning option '-Wrestrict'
+Message-ID: <202309192257.IAbw1lnx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7cgNbRs3LJh_AjqAnRkJzsTxrGr_yqVK-urtoS-B2k1S=w@mail.gmail.com>
-X-Url: http://acmel.wordpress.com
 
-Em Mon, Sep 18, 2023 at 04:40:15PM -0700, Namhyung Kim escreveu:
-> On Thu, Sep 14, 2023 at 2:20 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Enable BPF skeletons by default but warn don't fail if they can't be
-> > supported. This was the intended behavior for Linux 6.4 but it caused
-> > an issue captured in this thread:
-> > https://lore.kernel.org/lkml/20230503211801.897735-1-acme@kernel.org/
-> >
-> > This issue isn't repeated here as the previous issue related to
-> > generating vmlinux.h, which is no longer performed by default as a
-> > checked-in vmlinux.h is used instead.
-> >
-> > Unlike with those changes, the BUILD_BPF_SKEL is kept and setting it
-> > to 0 disables BPF skeletons. Also, rather than fail the build due to a
-> > missed dependency, dependencies are checked and BPF skeletons disabled
-> > if they aren't present.
-> >
-> > Some related commits:
-> > b7a2d774c9c5 perf build: Add ability to build with a generated vmlinux.h
-> > a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use subset of used structs + CO-RE
-> > a2af0f6b8ef7 perf build: Add system include paths to BPF builds
-> > 5be6cecda080 perf bpf skels: Make vmlinux.h use bpf.h and perf_event.h in source directory
-> > 9a2d5178b9d5 Revert "perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL"
-> > a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use subset of used structs + CO-RE
-> > 1d7966547e11 perf build: Add warning for when vmlinux.h generation fails
-> > a980755beb5a perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
-> >
-> > Ian Rogers (5):
-> >   perf version: Add status of bpf skeletons
-> >   perf build: Default BUILD_BPF_SKEL, warn/disable for missing deps
-> >   perf test: Update build test for changed BPF skeleton defaults
-> >   perf test: Ensure EXTRA_TESTS is covered in build test
-> >   perf test: Detect off-cpu support from build options
-> 
-> Tested-by: Namhyung Kim <namhyung@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2cf0f715623872823a72e451243bbf555d10d032
+commit: feb843a469fb0ab00d2d23cfb9bcc379791011bb kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS
+date:   4 months ago
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230919/202309192257.IAbw1lnx-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230919/202309192257.IAbw1lnx-lkp@intel.com/reproduce)
 
-Is this verbose by default now? Maybe its something on my side, but I
-noticed a higher level of verbosity, can you check?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309192257.IAbw1lnx-lkp@intel.com/
 
-- Arnaldo
+All warnings (new ones prefixed by >>):
+
+>> warning: unknown warning option '-Wrestrict' [-Wunknown-warning-option]
+>> warning: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+>> warning: unknown warning option '-Wformat-truncation' [-Wunknown-warning-option]
+>> warning: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+   arch/x86/um/user-offsets.c:17:6: warning: no previous prototype for function 'foo' [-Wmissing-prototypes]
+      17 | void foo(void)
+         |      ^
+   arch/x86/um/user-offsets.c:17:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      17 | void foo(void)
+         | ^
+         | static 
+   5 warnings generated.
+   error: unknown warning option '-Wrestrict' [-Werror,-Wunknown-warning-option]
+   error: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+   error: unknown warning option '-Wformat-truncation' [-Werror,-Wunknown-warning-option]
+   error: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+   make[2]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
+   error: unknown warning option '-Wrestrict' [-Werror,-Wunknown-warning-option]
+   error: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+   error: unknown warning option '-Wformat-truncation' [-Werror,-Wunknown-warning-option]
+   error: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+   make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
+   make[2]: Target 'scripts/mod/' not remade because of errors.
+   make[1]: *** [Makefile:1286: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
