@@ -1,106 +1,172 @@
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6091528DA5
-	for <llvm@lists.linux.dev>; Mon, 18 Sep 2023 23:40:27 +0000 (UTC)
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-792726d3aeeso192063039f.0
-        for <llvm@lists.linux.dev>; Mon, 18 Sep 2023 16:40:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695080426; x=1695685226;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zQ/RPYyapJuuQ9GCqYoGVr20X0i1V2UFAqZEu2P6bY4=;
-        b=WRyL9wJqNA0TYO6Uhx4LYmpBMK4hKBIXQHUgbmDAMW9HOAdeVRc2sfeCb3Zkxq8jwf
-         ArwoJfZ4BVgFnVvI4v9ivHSBqH36QezlQT1tX3bV7jsGnBpL/wZsEpqTeAwrvuQ/Bmnr
-         eC0v+DAgn2Grv3aKgsxIt8KlABeb3kIWGrDfR4awVtux+gE39/Tdo5NQV6V5xKlMaPjm
-         2Dg8yftJbm0yH+kN0dUZ82+XeR7sqxiSSITAMIbSpu6XyvYBVPj6lkqAJjt3P+niinIf
-         dKmzbiwAPuSjtt6lZnng1VW/isydok9Ti7Zbzr/+q+4FymyRjbeYAzgwCd26qUvZvSxP
-         02eg==
-X-Gm-Message-State: AOJu0YyOKJ5N5BHZtpz8kJj/A4wdcVuuWsJGVe7mdr3uuqItTXlTIJ1a
-	iwmqjKo1G6glxXAd7N9ln5famBNp+N2WQxo5OW0=
-X-Google-Smtp-Source: AGHT+IGWclqCh9ZmDcU1GiQ442QtJu1ys6VVVPyRA/xjNjW/yMbel8ox/Zdv0SOIlOjbXMCnv8eyOawnEb7CLaMcQCE=
-X-Received: by 2002:a5e:cb43:0:b0:787:4f3c:730d with SMTP id
- h3-20020a5ecb43000000b007874f3c730dmr11508999iok.18.1695080426492; Mon, 18
- Sep 2023 16:40:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7DB180;
+	Tue, 19 Sep 2023 00:05:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695081909; x=1726617909;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OsfeTrB9rugivYZ/kHFdIa8zHxOR7UummpVvtk0Egu4=;
+  b=XEMOC/qe4c9lgDDjBuKVI1z7wDzp2UlUUB3aywXcqoSD24UFsoEqKBuz
+   HMywA4mIEPPYi/VhN4bXdjUay8fPIhgwuBg9ZsFa42T2ZTd8sYmO/x1ko
+   3utKEk6cNgfu6lX6aniTXCiqvFBFWlBMa8BV56W0KdT7tVAsYiFw2SZtY
+   byaiqifuYf361pA0Afg1k2hCfJV50s3QxKczYOTn/TlG+pjpyjoM3VQ66
+   GVfGA2BeG4F+mbqbV0Z05V+8PIP64EbSLyyjlNV9OeulQpBAATneK/qMI
+   H9DK0yzXMC2gj4GcOxausKYCkGIuovx7qmUKzAvlKbqOG+OhxaBHhOxfp
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="383635439"
+X-IronPort-AV: E=Sophos;i="6.02,157,1688454000"; 
+   d="scan'208";a="383635439"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 17:05:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="1076776448"
+X-IronPort-AV: E=Sophos;i="6.02,157,1688454000"; 
+   d="scan'208";a="1076776448"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Sep 2023 17:05:06 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qiOEf-0006ey-1z;
+	Tue, 19 Sep 2023 00:05:02 +0000
+Date: Tue, 19 Sep 2023 08:04:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tyrel Datwyler <tyreld@linux.ibm.com>, martin.petersen@oracle.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org, brking@linux.ibm.com,
+	james.bottomley@hansenpartnership.com,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Brian King <brking@linux.vnet.ibm.com>
+Subject: Re: [PATCH 01/11] ibmvfc: remove BUG_ON in the case of an empty
+ event pool
+Message-ID: <202309190735.oSIVJWbC-lkp@intel.com>
+References: <20230913230457.2575849-2-tyreld@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230914211948.814999-1-irogers@google.com>
-In-Reply-To: <20230914211948.814999-1-irogers@google.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Mon, 18 Sep 2023 16:40:15 -0700
-Message-ID: <CAM9d7cgNbRs3LJh_AjqAnRkJzsTxrGr_yqVK-urtoS-B2k1S=w@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] Enable BPF skeletons by default
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nick Terrell <terrelln@fb.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	James Clark <james.clark@arm.com>, Kajol Jain <kjain@linux.ibm.com>, 
-	Patrice Duroux <patrice.duroux@gmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230913230457.2575849-2-tyreld@linux.ibm.com>
 
-On Thu, Sep 14, 2023 at 2:20=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> Enable BPF skeletons by default but warn don't fail if they can't be
-> supported. This was the intended behavior for Linux 6.4 but it caused
-> an issue captured in this thread:
-> https://lore.kernel.org/lkml/20230503211801.897735-1-acme@kernel.org/
->
-> This issue isn't repeated here as the previous issue related to
-> generating vmlinux.h, which is no longer performed by default as a
-> checked-in vmlinux.h is used instead.
->
-> Unlike with those changes, the BUILD_BPF_SKEL is kept and setting it
-> to 0 disables BPF skeletons. Also, rather than fail the build due to a
-> missed dependency, dependencies are checked and BPF skeletons disabled
-> if they aren't present.
->
-> Some related commits:
-> b7a2d774c9c5 perf build: Add ability to build with a generated vmlinux.h
-> a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use=
- subset of used structs + CO-RE
-> a2af0f6b8ef7 perf build: Add system include paths to BPF builds
-> 5be6cecda080 perf bpf skels: Make vmlinux.h use bpf.h and perf_event.h in=
- source directory
-> 9a2d5178b9d5 Revert "perf build: Make BUILD_BPF_SKEL default, rename to N=
-O_BPF_SKEL"
-> a887466562b4 perf bpf skels: Stop using vmlinux.h generated from BTF, use=
- subset of used structs + CO-RE
-> 1d7966547e11 perf build: Add warning for when vmlinux.h generation fails
-> a980755beb5a perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SK=
-EL
->
-> Ian Rogers (5):
->   perf version: Add status of bpf skeletons
->   perf build: Default BUILD_BPF_SKEL, warn/disable for missing deps
->   perf test: Update build test for changed BPF skeleton defaults
->   perf test: Ensure EXTRA_TESTS is covered in build test
->   perf test: Detect off-cpu support from build options
+Hi Tyrel,
 
-Tested-by: Namhyung Kim <namhyung@kernel.org>
+kernel test robot noticed the following build warnings:
 
-Thanks,
-Namhyung
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.6-rc2 next-20230918]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
->  tools/perf/Makefile.config              | 78 ++++++++++++++++---------
->  tools/perf/Makefile.perf                |  8 +--
->  tools/perf/builtin-version.c            |  1 +
->  tools/perf/tests/make                   |  7 ++-
->  tools/perf/tests/shell/record_offcpu.sh |  2 +-
->  5 files changed, 59 insertions(+), 37 deletions(-)
->
-> --
-> 2.42.0.459.ge4e396fd5e-goog
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Tyrel-Datwyler/ibmvfc-remove-BUG_ON-in-the-case-of-an-empty-event-pool/20230914-085530
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230913230457.2575849-2-tyreld%40linux.ibm.com
+patch subject: [PATCH 01/11] ibmvfc: remove BUG_ON in the case of an empty event pool
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230919/202309190735.oSIVJWbC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230919/202309190735.oSIVJWbC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309190735.oSIVJWbC-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/ibmvscsi/ibmvfc.c:4618:66: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+    4618 |                 tgt_err(tgt, "Failed to send cancel event for ADISC. rc=%d\n", rc);
+         |                                                                                ^~
+   drivers/scsi/ibmvscsi/ibmvfc.h:910:57: note: expanded from macro 'tgt_err'
+     910 |         dev_err((t)->vhost->dev, "%llX: " fmt, (t)->scsi_id, ##__VA_ARGS__)
+         |                                                                ^~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/scsi/ibmvscsi/ibmvfc.c:4602:8: note: initialize the variable 'rc' to silence this warning
+    4602 |         int rc;
+         |               ^
+         |                = 0
+   1 warning generated.
+
+
+vim +/rc +4618 drivers/scsi/ibmvscsi/ibmvfc.c
+
+  4586	
+  4587	/**
+  4588	 * ibmvfc_adisc_timeout - Handle an ADISC timeout
+  4589	 * @t:		ibmvfc target struct
+  4590	 *
+  4591	 * If an ADISC times out, send a cancel. If the cancel times
+  4592	 * out, reset the CRQ. When the ADISC comes back as cancelled,
+  4593	 * log back into the target.
+  4594	 **/
+  4595	static void ibmvfc_adisc_timeout(struct timer_list *t)
+  4596	{
+  4597		struct ibmvfc_target *tgt = from_timer(tgt, t, timer);
+  4598		struct ibmvfc_host *vhost = tgt->vhost;
+  4599		struct ibmvfc_event *evt;
+  4600		struct ibmvfc_tmf *tmf;
+  4601		unsigned long flags;
+  4602		int rc;
+  4603	
+  4604		tgt_dbg(tgt, "ADISC timeout\n");
+  4605		spin_lock_irqsave(vhost->host->host_lock, flags);
+  4606		if (vhost->abort_threads >= disc_threads ||
+  4607		    tgt->action != IBMVFC_TGT_ACTION_INIT_WAIT ||
+  4608		    vhost->state != IBMVFC_INITIALIZING ||
+  4609		    vhost->action != IBMVFC_HOST_ACTION_QUERY_TGTS) {
+  4610			spin_unlock_irqrestore(vhost->host->host_lock, flags);
+  4611			return;
+  4612		}
+  4613	
+  4614		vhost->abort_threads++;
+  4615		kref_get(&tgt->kref);
+  4616		evt = ibmvfc_get_event(&vhost->crq);
+  4617		if (!evt) {
+> 4618			tgt_err(tgt, "Failed to send cancel event for ADISC. rc=%d\n", rc);
+  4619			vhost->abort_threads--;
+  4620			kref_put(&tgt->kref, ibmvfc_release_tgt);
+  4621			__ibmvfc_reset_host(vhost);
+  4622			spin_unlock_irqrestore(vhost->host->host_lock, flags);
+  4623			return;
+  4624		}
+  4625		ibmvfc_init_event(evt, ibmvfc_tgt_adisc_cancel_done, IBMVFC_MAD_FORMAT);
+  4626	
+  4627		evt->tgt = tgt;
+  4628		tmf = &evt->iu.tmf;
+  4629		memset(tmf, 0, sizeof(*tmf));
+  4630		if (ibmvfc_check_caps(vhost, IBMVFC_HANDLE_VF_WWPN)) {
+  4631			tmf->common.version = cpu_to_be32(2);
+  4632			tmf->target_wwpn = cpu_to_be64(tgt->wwpn);
+  4633		} else {
+  4634			tmf->common.version = cpu_to_be32(1);
+  4635		}
+  4636		tmf->common.opcode = cpu_to_be32(IBMVFC_TMF_MAD);
+  4637		tmf->common.length = cpu_to_be16(sizeof(*tmf));
+  4638		tmf->scsi_id = cpu_to_be64(tgt->scsi_id);
+  4639		tmf->cancel_key = cpu_to_be32(tgt->cancel_key);
+  4640	
+  4641		rc = ibmvfc_send_event(evt, vhost, default_timeout);
+  4642	
+  4643		if (rc) {
+  4644			tgt_err(tgt, "Failed to send cancel event for ADISC. rc=%d\n", rc);
+  4645			vhost->abort_threads--;
+  4646			kref_put(&tgt->kref, ibmvfc_release_tgt);
+  4647			__ibmvfc_reset_host(vhost);
+  4648		} else
+  4649			tgt_dbg(tgt, "Attempting to cancel ADISC\n");
+  4650		spin_unlock_irqrestore(vhost->host->host_lock, flags);
+  4651	}
+  4652	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
