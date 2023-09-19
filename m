@@ -1,143 +1,98 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADA51B267
-	for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 20:06:08 +0000 (UTC)
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6515d44b562so33876556d6.3
-        for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 13:06:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F45C1EA78
+	for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 20:38:38 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d81646fcf3eso6714133276.0
+        for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 13:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695153967; x=1695758767; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kQnPY0z4taKHApL77Ffx1d50jLqp8wyhR11FZPBq+qk=;
-        b=2E1HiAdlkLzElX+fm8bseLgmTXTHEIxLau9UhSwo0bMe21Plt5sgQehvYLZ4Jo4z91
-         1xtPdAR2vOOBrTlz94el83lSTaL1OFaHrhcAmig/HPX6NEjBFadK0aYD49wiVoR/JtlS
-         Jn6K2KoxFlELiuP4CoOhSC19b71Ya/aj/sWWrx/2EQr3jLZjPg9XBHkatcanJihAV5wA
-         CqiIq1Vw8e5ojNb/VDj27WTQJGzZbE23bpE07+/IqVkxDX6dqqTs9J5rm1101yI24JMx
-         6RDVnE7DezPoweu1Wplm5e/Kq5Vfz8X/vL975MihgpGHAhgkDSL30sYp2ye+6Z+PKQFp
-         GL9Q==
+        d=google.com; s=20230601; t=1695155918; x=1695760718; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tbuv3yAsMwGHjewKzCIjCL5MGM7AzGA9bemOVcUbEtw=;
+        b=gSou9U2+/4fQVcQd6Br/2pK94KtZ+MTFBi+4O2yrnvihcYysAm8TYEyci494gjhJc4
+         ytvS61PgeyVjQLLIqysWg+VggAb8cav74DPBUtp3SEKeizs1YICUzsY6HhFkUs7Mj1H3
+         FcajUDJ/Kao4nznDEJZjxXoGD/XkAPUdewddMItXfN8ElDFG/azqoqi/0P6cO6KekrfX
+         0Qpi9N7kQTdwQi7Vk+Y4B5jKHlUGkpQmezRGjltHb3zL2y/z2mpptNVbh3xgxP4kz0+v
+         aEs7dbKYfiiW3a7hD+hqJcfFgSDj4GDs/W//kRHoI62ujIksfo141Fr9+cRWRvKwrP7i
+         T2lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695153967; x=1695758767;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kQnPY0z4taKHApL77Ffx1d50jLqp8wyhR11FZPBq+qk=;
-        b=Lo2/C4/mQjydaOhS1lJinVFnaaJdVlZF6xEhCRzhvDK1P5uAPRltwJw6vCRM+hGCHh
-         nnIkDe9xMT9sKhDhV8If1a/kxETIOpYRoDow/SwMgmRnHpkLnW4eKZkL2ygQnFqP34u2
-         EZ5+pgILiqUtTkbvFBuKDprNbWKlUKbvMWPFKGkwXGecWJGgcMPR+BOH+KfR032D5l1v
-         uhUOalLOIkjSXB+gRW4VIG6l2cg4ZK7qpJqRzQfgf51GANUVuw+mhKZ5Sn00/ZckD0z8
-         SpGcWNabHd2mwpSvCTDg52gnJ5mpDTOYqbyewW0vGqLLC5zbDUFTWd+0seghid8PebWb
-         YeDg==
-X-Gm-Message-State: AOJu0Yz6laJ0oglxSobjhBVzjI1IUd5qvS779DiyUppq++ZUFBGUiq6m
-	oei7w7a+DzspSDrqG22ypZAq/U93cy+lFeBEs0AI5g==
-X-Google-Smtp-Source: AGHT+IGwcqVkGXd3Zf3N82ll6JyqL1rHSLbA5bxgmmbMggRlybY8gxv4W57FTpofp4S8SxPCW/NJEqRwqbRLF7XD53I=
-X-Received: by 2002:a0c:e304:0:b0:658:4cae:b43a with SMTP id
- s4-20020a0ce304000000b006584caeb43amr217436qvl.4.1695153967060; Tue, 19 Sep
- 2023 13:06:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695155918; x=1695760718;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tbuv3yAsMwGHjewKzCIjCL5MGM7AzGA9bemOVcUbEtw=;
+        b=LFg9CmpPzqDDjsksNVqU+eaBd1LfV0X9Q1HPksS2YZHr4+gg9vzOcwJQfOhtM42/4i
+         j17gkJgMSUMOBEzqpOS4Z/85wNH843JnhTVA2gHbu6AZwGhEv/Fs/I2e0uwW/KilWkS1
+         YyadcqUWz81WkeFlzWRxPTX7dUe18qdphK7O9AO5wh+KMVjxGmj4qoRi/F2hF5gIEBf4
+         lMJTvCxnZz7leYpdesGzYaRMU7NUdXvfC2OICbSfJMwSHaE5eIOIgqnsg8hxKsQd6G3P
+         i1FSZMjXsAoRKDGAO0KLthY2jdFPWhZYmHRyx5cYsjCikanJqsyoduBwOypQxDbeUwTT
+         Dt+Q==
+X-Gm-Message-State: AOJu0Yw/dmbDL3Q2DUBKet60ZnyBQNOeJefnxyXnADKIZS45UW+uOIUD
+	CYQngq6ZPbfy9bD86O/INO/fGgidsyK35UgqqmI=
+X-Google-Smtp-Source: AGHT+IH1qq6nUKqNZAK0YbjQJqKgVehqq9+7WX6fVL5KBywAr2lAwKAHSABqQpymxSSriK5MEDbTCsc7ZmInmh67k3U=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:118e:eaf2:1433:f9fe])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:4109:0:b0:d35:bf85:5aa0 with SMTP
+ id o9-20020a254109000000b00d35bf855aa0mr9310yba.4.1695155918049; Tue, 19 Sep
+ 2023 13:38:38 -0700 (PDT)
+Date: Tue, 19 Sep 2023 13:38:31 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202309192257.IAbw1lnx-lkp@intel.com> <ZQm2W9r2a+cgeaEM@rli9-mobl>
-In-Reply-To: <ZQm2W9r2a+cgeaEM@rli9-mobl>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAMYGCmUC/x3MMQqAMAxA0atIZgu2dVCvIiIxphqQKg2IULy7x
+ fEN/2dQTsIKQ5Uh8S0qZyywdQW0Y9zYyFoMrnG+6W1vFkLaOeisfIQZVWWLxiG13rYeOyIo6ZU 4yPNvx+l9P2dmiUVmAAAA
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1695155916; l=1046;
+ i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
+ bh=Co/d3mAUVcLoGAAxSpLDv73hB10uZG4S2eLmRtrW6TY=; b=55wTFO4UFDKkYg4VeCIdNLlPDaZUcDJbyBYyI/JJ4cuZJm02dpFVSLxRA8IvgcWjAN7a9rKfD
+ p9b/a62WkELB2UmQHLhRA+StthSwDn8/+l73C3FnJQvt2yXqZP7PRIC
+X-Mailer: b4 0.12.3
+Message-ID: <20230919-bcachefs_self_assign-v1-1-830936792fc9@google.com>
+Subject: [PATCH] bcachefs: Fix -Wself-assign
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 19 Sep 2023 13:05:52 -0700
-Message-ID: <CAKwvOdmUmLRMP0OUOJkPSKucn3NJTxz7uJGWfn83LX=gbZ-5Zw@mail.gmail.com>
-Subject: Re: warning: unknown warning option '-Wrestrict'
-To: Philip Li <philip.li@intel.com>
-Cc: kernel test robot <lkp@intel.com>, Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Kent Overstreet <kent.overstreet@linux.dev>, Brian Foster <bfoster@redhat.com>
+Cc: linux-bcachefs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, Sep 19, 2023 at 7:56=E2=80=AFAM Philip Li <philip.li@intel.com> wro=
-te:
->
-> On Tue, Sep 19, 2023 at 10:40:57PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   2cf0f715623872823a72e451243bbf555d10d032
-> > commit: feb843a469fb0ab00d2d23cfb9bcc379791011bb kbuild: add $(CLANG_FL=
-AGS) to KBUILD_CPPFLAGS
-> > date:   4 months ago
-> > config: um-allnoconfig (https://download.01.org/0day-ci/archive/2023091=
-9/202309192257.IAbw1lnx-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.gi=
-t 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20230919/202309192257.IAbw1lnx-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202309192257.IAbw1lnx-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
->
-> Sorry for the false report. Kindly ignore this.
+Fixes the following observed error reported by Nathan on IRC.
 
-No worries, I just checked `make LLVM=3D1 arch=3Dum -j128 allnoconfig all`
-and had no issue.
+  fs/bcachefs/io_misc.c:467:6: error: explicitly assigning value of
+  variable of type 'int' to itself [-Werror,-Wself-assign]
+    467 |         ret = ret;
+        |         ~~~ ^ ~~~
 
->
-> >
-> > >> warning: unknown warning option '-Wrestrict' [-Wunknown-warning-opti=
-on]
-> > >> warning: unknown warning option '-Wformat-overflow'; did you mean '-=
-Wshift-overflow'? [-Wunknown-warning-option]
-> > >> warning: unknown warning option '-Wformat-truncation' [-Wunknown-war=
-ning-option]
-> > >> warning: unknown warning option '-Wstringop-overflow'; did you mean =
-'-Wshift-overflow'? [-Wunknown-warning-option]
-> >    arch/x86/um/user-offsets.c:17:6: warning: no previous prototype for =
-function 'foo' [-Wmissing-prototypes]
-> >       17 | void foo(void)
-> >          |      ^
-> >    arch/x86/um/user-offsets.c:17:1: note: declare 'static' if the funct=
-ion is not intended to be used outside of this translation unit
-> >       17 | void foo(void)
-> >          | ^
-> >          | static
-> >    5 warnings generated.
-> >    error: unknown warning option '-Wrestrict' [-Werror,-Wunknown-warnin=
-g-option]
-> >    error: unknown warning option '-Wformat-overflow'; did you mean '-Ws=
-hift-overflow'? [-Werror,-Wunknown-warning-option]
-> >    error: unknown warning option '-Wformat-truncation' [-Werror,-Wunkno=
-wn-warning-option]
-> >    error: unknown warning option '-Wstringop-overflow'; did you mean '-=
-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
-> >    make[2]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error=
- 1
-> >    error: unknown warning option '-Wrestrict' [-Werror,-Wunknown-warnin=
-g-option]
-> >    error: unknown warning option '-Wformat-overflow'; did you mean '-Ws=
-hift-overflow'? [-Werror,-Wunknown-warning-option]
-> >    error: unknown warning option '-Wformat-truncation' [-Werror,-Wunkno=
-wn-warning-option]
-> >    error: unknown warning option '-Wstringop-overflow'; did you mean '-=
-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
-> >    make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-of=
-fsets.s] Error 1
-> >    make[2]: Target 'scripts/mod/' not remade because of errors.
-> >    make[1]: *** [Makefile:1286: prepare0] Error 2
-> >    make[1]: Target 'prepare' not remade because of errors.
-> >    make: *** [Makefile:226: __sub-make] Error 2
-> >    make: Target 'prepare' not remade because of errors.
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
-> >
->
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ fs/bcachefs/io_misc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/fs/bcachefs/io_misc.c b/fs/bcachefs/io_misc.c
+index 668493bcfe36..32432bdddac4 100644
+--- a/fs/bcachefs/io_misc.c
++++ b/fs/bcachefs/io_misc.c
+@@ -462,9 +462,9 @@ case LOGGED_OP_FINSERT_shift_extents:
+ 				bch2_logged_op_update(trans, &op->k_i));
+ 	}
+ 
+-	fallthrough;
++	break;
+ case LOGGED_OP_FINSERT_finish:
+-	ret = ret;
++	break;
+ 	}
+ err:
+ 	bch2_logged_op_finish(trans, op_k);
 
---=20
-Thanks,
-~Nick Desaulniers
+---
+base-commit: 29e400e3ea486bf942b214769fc9778098114113
+change-id: 20230919-bcachefs_self_assign-2ac43143a8cc
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
+
