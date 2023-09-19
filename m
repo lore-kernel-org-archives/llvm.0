@@ -1,538 +1,140 @@
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357831CF92
-	for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 19:40:25 +0000 (UTC)
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4962c3588a3so2282394e0c.1
-        for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 12:40:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADA51B267
+	for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 20:06:08 +0000 (UTC)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6515d44b562so33876556d6.3
+        for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 13:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695152425; x=1695757225; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695153967; x=1695758767; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b55LLDU+JPS5dVBBhaMn22hJgg2JySbWjWj3gYvRiO4=;
-        b=SYXvTJIzjsOvI5WRbWiDM1xk/Q4XKxuH8hSLC/2biperbM7Ea2qMIxwwofYN88moXs
-         JFBKo6+JbuCGbTy+S6VcXi2WaOcMDq9i2uZ7A286tj4hfy4fQxR1lQ4kaRo6/jfrKINe
-         skZowyG5HWWjft3KmvXg1Vui73FIcwz/b2pl1aV2IVKi537cMxm8mCAWOH2F6oDa3cR7
-         1bVmdCac1Lgo59pS58/DjRKUjNEIyfApGIFHSl0VGYxdLXqS1HOlCHU96Ov9kYtn4ZrY
-         EXRTGqOeJF4qJzxMN2wNj9kPhQdK2qyzCaODVJRsssKZWXPLDTNjH+w25GSK8wyNRRsP
-         Umxw==
+        bh=kQnPY0z4taKHApL77Ffx1d50jLqp8wyhR11FZPBq+qk=;
+        b=2E1HiAdlkLzElX+fm8bseLgmTXTHEIxLau9UhSwo0bMe21Plt5sgQehvYLZ4Jo4z91
+         1xtPdAR2vOOBrTlz94el83lSTaL1OFaHrhcAmig/HPX6NEjBFadK0aYD49wiVoR/JtlS
+         Jn6K2KoxFlELiuP4CoOhSC19b71Ya/aj/sWWrx/2EQr3jLZjPg9XBHkatcanJihAV5wA
+         CqiIq1Vw8e5ojNb/VDj27WTQJGzZbE23bpE07+/IqVkxDX6dqqTs9J5rm1101yI24JMx
+         6RDVnE7DezPoweu1Wplm5e/Kq5Vfz8X/vL975MihgpGHAhgkDSL30sYp2ye+6Z+PKQFp
+         GL9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695152425; x=1695757225;
+        d=1e100.net; s=20230601; t=1695153967; x=1695758767;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b55LLDU+JPS5dVBBhaMn22hJgg2JySbWjWj3gYvRiO4=;
-        b=TSnC8TtqUtV/hDUimJP+2EvHAFHrKEe/GMy50meVzTSCorrSMLKMsqzPSt6MBDL1j7
-         SfpmpUXEOnUN4VgRYZZO45jlWNp2sk7SueMU/ZWhzpyHin/gFuqRfnLrAmePhsxCRtw8
-         Xzrb69xNHMKjt7dDsAe8Y1SX+r6I34Tc+Af/LHHPH/7QwvCeTIQRpvxbq5Wfbv/ZosV5
-         6fPc+nU/W1UCyCpf5eyK1uCNIgZHjcROxYJgz1FCeonrx1AyzkZhNdNNcSNflBA+m9dX
-         b+PIy8Pz05EtqyyK4st1O7kUS6Y7/UZamZHiM54deH0ppkR4rddroFuT74u5DRw7N7FH
-         EP8A==
-X-Gm-Message-State: AOJu0Yww1O0dfEIsQsSVZtdFAk1JGk6SNJKs447hAEEQgwANj1qovm6T
-	1PBXippya+J2VInktshQCUWToFlUetR2FdTyPLQCKw==
-X-Google-Smtp-Source: AGHT+IFQd8u59vp+CaoBmYTXFraY3VNIeSrY1FkD5+TXqw3O3B9AGau9M0l1j7ihEX/0TTjaXCt8CZHUPVks+syzd0c=
-X-Received: by 2002:a1f:e2c3:0:b0:496:a303:a321 with SMTP id
- z186-20020a1fe2c3000000b00496a303a321mr858379vkg.8.1695152424769; Tue, 19 Sep
- 2023 12:40:24 -0700 (PDT)
+        bh=kQnPY0z4taKHApL77Ffx1d50jLqp8wyhR11FZPBq+qk=;
+        b=Lo2/C4/mQjydaOhS1lJinVFnaaJdVlZF6xEhCRzhvDK1P5uAPRltwJw6vCRM+hGCHh
+         nnIkDe9xMT9sKhDhV8If1a/kxETIOpYRoDow/SwMgmRnHpkLnW4eKZkL2ygQnFqP34u2
+         EZ5+pgILiqUtTkbvFBuKDprNbWKlUKbvMWPFKGkwXGecWJGgcMPR+BOH+KfR032D5l1v
+         uhUOalLOIkjSXB+gRW4VIG6l2cg4ZK7qpJqRzQfgf51GANUVuw+mhKZ5Sn00/ZckD0z8
+         SpGcWNabHd2mwpSvCTDg52gnJ5mpDTOYqbyewW0vGqLLC5zbDUFTWd+0seghid8PebWb
+         YeDg==
+X-Gm-Message-State: AOJu0Yz6laJ0oglxSobjhBVzjI1IUd5qvS779DiyUppq++ZUFBGUiq6m
+	oei7w7a+DzspSDrqG22ypZAq/U93cy+lFeBEs0AI5g==
+X-Google-Smtp-Source: AGHT+IGwcqVkGXd3Zf3N82ll6JyqL1rHSLbA5bxgmmbMggRlybY8gxv4W57FTpofp4S8SxPCW/NJEqRwqbRLF7XD53I=
+X-Received: by 2002:a0c:e304:0:b0:658:4cae:b43a with SMTP id
+ s4-20020a0ce304000000b006584caeb43amr217436qvl.4.1695153967060; Tue, 19 Sep
+ 2023 13:06:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230918210631.3882376-1-jbrennen@google.com>
-In-Reply-To: <20230918210631.3882376-1-jbrennen@google.com>
+References: <202309192257.IAbw1lnx-lkp@intel.com> <ZQm2W9r2a+cgeaEM@rli9-mobl>
+In-Reply-To: <ZQm2W9r2a+cgeaEM@rli9-mobl>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 19 Sep 2023 12:40:09 -0700
-Message-ID: <CAKwvOd=knPrBkk+QdAs_Wih8bUbsvCjWXWWuTmOUUOGGh7-f2w@mail.gmail.com>
-Subject: Re: [PATCH] modpost: Optimize symbol search from linear to binary search
-To: Jack Brennen <jbrennen@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Date: Tue, 19 Sep 2023 13:05:52 -0700
+Message-ID: <CAKwvOdmUmLRMP0OUOJkPSKucn3NJTxz7uJGWfn83LX=gbZ-5Zw@mail.gmail.com>
+Subject: Re: warning: unknown warning option '-Wrestrict'
+To: Philip Li <philip.li@intel.com>
+Cc: kernel test robot <lkp@intel.com>, Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 18, 2023 at 2:06=E2=80=AFPM Jack Brennen <jbrennen@google.com> =
-wrote:
+On Tue, Sep 19, 2023 at 7:56=E2=80=AFAM Philip Li <philip.li@intel.com> wro=
+te:
 >
-> Modify modpost to use binary search for converting addresses back
-> into symbol references.  Previously it used linear search.
+> On Tue, Sep 19, 2023 at 10:40:57PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git master
+> > head:   2cf0f715623872823a72e451243bbf555d10d032
+> > commit: feb843a469fb0ab00d2d23cfb9bcc379791011bb kbuild: add $(CLANG_FL=
+AGS) to KBUILD_CPPFLAGS
+> > date:   4 months ago
+> > config: um-allnoconfig (https://download.01.org/0day-ci/archive/2023091=
+9/202309192257.IAbw1lnx-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.gi=
+t 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20230919/202309192257.IAbw1lnx-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202309192257.IAbw1lnx-l=
+kp@intel.com/
+> >
+> > All warnings (new ones prefixed by >>):
 >
-> This change saves a few seconds of wall time for defconfig builds,
-> but can save several minutes on allyesconfigs.
->
-> Before:
-> $ make LLVM=3D1 -j128 allyesconfig vmlinux -s KCFLAGS=3D"-Wno-error"
->         Elapsed (wall clock) time (h:mm:ss or m:ss): 13:30.31
->
-> After:
-> $ make LLVM=3D1 -j128 allyesconfig vmlinux -s KCFLAGS=3D"-Wno-error"
->         Elapsed (wall clock) time (h:mm:ss or m:ss): 11:43.43
->
-> Signed-off-by: Jack Brennen <jbrennen@google.com>
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Sorry for the false report. Kindly ignore this.
 
-Jack, if this is your first kernel patch, it's a nice one! And
-welcome!  Thanks for your work on this.
+No worries, I just checked `make LLVM=3D1 arch=3Dum -j128 allnoconfig all`
+and had no issue.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Some ideas for future improvement.
-
-I noticed we make 2 trips through the symbol table checking
-is_sym_searchable twice.  We could probably skip one trip and just
-malloc the full size of the symbol table, even if this is technically
-larger than absolutely needed.  Guessing that might save us repeated
-strlen calls on every symbol in the table.
-
-Also, if qsort shows up in any profile, it's pretty well known why
-std::sort beats qsort; there's potential for more speed there, but I
-didn't profile so IDK.
-
-> ---
->  scripts/mod/Makefile    |   4 +-
->  scripts/mod/modpost.c   |  60 +----------
->  scripts/mod/modpost.h   |  25 +++++
->  scripts/mod/symsearch.c | 233 ++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 265 insertions(+), 57 deletions(-)
->  create mode 100644 scripts/mod/symsearch.c
 >
-> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
-> index c9e38ad937fd..3c54125eb373 100644
-> --- a/scripts/mod/Makefile
-> +++ b/scripts/mod/Makefile
-> @@ -5,7 +5,7 @@ CFLAGS_REMOVE_empty.o +=3D $(CC_FLAGS_LTO)
->  hostprogs-always-y     +=3D modpost mk_elfconfig
->  always-y               +=3D empty.o
->
-> -modpost-objs   :=3D modpost.o file2alias.o sumversion.o
-> +modpost-objs   :=3D modpost.o file2alias.o sumversion.o symsearch.o
->
->  devicetable-offsets-file :=3D devicetable-offsets.h
->
-> @@ -16,7 +16,7 @@ targets +=3D $(devicetable-offsets-file) devicetable-of=
-fsets.s
->
->  # dependencies on generated files need to be listed explicitly
->
-> -$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o: $(obj)/elfconf=
-ig.h
-> +$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o $(obj)/symsearc=
-h.o: $(obj)/elfconfig.h
->  $(obj)/file2alias.o: $(obj)/$(devicetable-offsets-file)
->
->  quiet_cmd_elfconfig =3D MKELF   $@
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index de499dce5265..975f235aca2c 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -22,7 +22,6 @@
->  #include <errno.h>
->  #include "modpost.h"
->  #include "../../include/linux/license.h"
-> -#include "../../include/linux/module_symbol.h"
->
->  static bool module_enabled;
->  /* Are we using CONFIG_MODVERSIONS? */
-> @@ -577,11 +576,14 @@ static int parse_elf(struct elf_info *info, const c=
-har *filename)
->                         *p =3D TO_NATIVE(*p);
->         }
->
-> +       symsearch_init(info);
-> +
->         return 1;
->  }
->
->  static void parse_elf_finish(struct elf_info *info)
->  {
-> +       symsearch_finish(info);
->         release_file(info->hdr, info->size);
->  }
->
-> @@ -1039,65 +1041,13 @@ static int secref_whitelist(const char *fromsec, =
-const char *fromsym,
->         return 1;
->  }
->
-> -/*
-> - * If there's no name there, ignore it; likewise, ignore it if it's
-> - * one of the magic symbols emitted used by current tools.
-> - *
-> - * Otherwise if find_symbols_between() returns those symbols, they'll
-> - * fail the whitelist tests and cause lots of false alarms ... fixable
-> - * only by merging __exit and __init sections into __text, bloating
-> - * the kernel (which is especially evil on embedded platforms).
-> - */
-> -static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
-> -{
-> -       const char *name =3D elf->strtab + sym->st_name;
-> -
-> -       if (!name || !strlen(name))
-> -               return 0;
-> -       return !is_mapping_symbol(name);
-> -}
-> -
->  /* Look up the nearest symbol based on the section and the address */
->  static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
->                                  unsigned int secndx, bool allow_negative=
-,
->                                  Elf_Addr min_distance)
->  {
-> -       Elf_Sym *sym;
-> -       Elf_Sym *near =3D NULL;
-> -       Elf_Addr sym_addr, distance;
-> -       bool is_arm =3D (elf->hdr->e_machine =3D=3D EM_ARM);
-> -
-> -       for (sym =3D elf->symtab_start; sym < elf->symtab_stop; sym++) {
-> -               if (get_secindex(elf, sym) !=3D secndx)
-> -                       continue;
-> -               if (!is_valid_name(elf, sym))
-> -                       continue;
-> -
-> -               sym_addr =3D sym->st_value;
-> -
-> -               /*
-> -                * For ARM Thumb instruction, the bit 0 of st_value is se=
-t
-> -                * if the symbol is STT_FUNC type. Mask it to get the add=
-ress.
-> -                */
-> -               if (is_arm && ELF_ST_TYPE(sym->st_info) =3D=3D STT_FUNC)
-> -                        sym_addr &=3D ~1;
-> -
-> -               if (addr >=3D sym_addr)
-> -                       distance =3D addr - sym_addr;
-> -               else if (allow_negative)
-> -                       distance =3D sym_addr - addr;
-> -               else
-> -                       continue;
-> -
-> -               if (distance <=3D min_distance) {
-> -                       min_distance =3D distance;
-> -                       near =3D sym;
-> -               }
-> -
-> -               if (min_distance =3D=3D 0)
-> -                       break;
-> -       }
-> -       return near;
-> +       return symsearch_find_nearest(elf, addr, secndx,
-> +                                     allow_negative, min_distance);
->  }
->
->  static Elf_Sym *find_fromsym(struct elf_info *elf, Elf_Addr addr,
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index 5f94c2c9f2d9..6413f26fcb6b 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -10,6 +10,7 @@
->  #include <fcntl.h>
->  #include <unistd.h>
->  #include <elf.h>
-> +#include "../../include/linux/module_symbol.h"
->
->  #include "list.h"
->  #include "elfconfig.h"
-> @@ -128,6 +129,8 @@ struct elf_info {
->          * take shndx from symtab_shndx_start[N] instead */
->         Elf32_Word   *symtab_shndx_start;
->         Elf32_Word   *symtab_shndx_stop;
-> +
-> +       struct symsearch *symsearch;
->  };
->
->  /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
-> @@ -154,6 +157,28 @@ static inline unsigned int get_secindex(const struct=
- elf_info *info,
->         return index;
->  }
->
-> +/*
-> + * If there's no name there, ignore it; likewise, ignore it if it's
-> + * one of the magic symbols emitted used by current tools.
-> + *
-> + * Internal symbols created by tools should be ignored by modpost.
-> + */
-> +static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
-> +{
-> +       const char *name =3D elf->strtab + sym->st_name;
-> +
-> +       if (!name || !strlen(name))
-> +               return 0;
-> +       return !is_mapping_symbol(name);
-> +}
-> +
-> +/* symsearch.c */
-> +void symsearch_init(struct elf_info *elf);
-> +void symsearch_finish(struct elf_info *elf);
-> +Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
-> +                               unsigned int secndx, bool allow_negative,
-> +                               Elf_Addr min_distance);
-> +
->  /* file2alias.c */
->  void handle_moddevtable(struct module *mod, struct elf_info *info,
->                         Elf_Sym *sym, const char *symname);
-> diff --git a/scripts/mod/symsearch.c b/scripts/mod/symsearch.c
-> new file mode 100644
-> index 000000000000..aab79262512b
-> --- /dev/null
-> +++ b/scripts/mod/symsearch.c
-> @@ -0,0 +1,233 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/* Helper functions for finding the symbol in an ELF which is "nearest"
-> + * to a given address.
-> + */
-> +
-> +#include "modpost.h"
-> +
-> +/* Struct used for binary search. */
-> +struct syminfo {
-> +       unsigned int symbol_index;
-> +       unsigned int section_index;
-> +       Elf_Addr addr;
-> +};
-> +
-> +/* Container used to hold an entire binary search table.
-> + * Entries in table are ascending, sorted first by section_index,
-> + * then by addr, and last by symbol_index.  The sorting by
-> + * symbol_index is used to duplicate the quirks of the prior
-> + * find_nearest_sym() function, where exact matches to an address
-> + * return the first symtab entry seen, but near misses return the
-> + * last symtab entry seen.
-> + * The first and last entries of the table are sentinels and their
-> + * values only matter in two places:  when we sort the table, and
-> + * on lookups, the end sentinel should not have an addr field which
-> + * matches its immediate predecessor.  To meet these requirements,
-> + * we initialize them to (0,0,0) and (max,max,max), and then after
-> + * sorting, we tweak the end sentinel's addr field accordingly.
-> + */
-> +struct symsearch {
-> +       size_t table_size;
-> +       struct syminfo table[];
-> +};
-> +
-> +static inline bool is_sym_searchable(struct elf_info *elf, Elf_Sym *sym)
-> +{
-> +       return is_valid_name(elf, sym) !=3D 0;
-> +}
-> +
-> +static int syminfo_compare(const void *s1, const void *s2)
-> +{
-> +       const struct syminfo *sym1 =3D s1;
-> +       const struct syminfo *sym2 =3D s2;
-> +
-> +       if (sym1->section_index > sym2->section_index)
-> +               return 1;
-> +       if (sym1->section_index < sym2->section_index)
-> +               return -1;
-> +       if (sym1->addr > sym2->addr)
-> +               return 1;
-> +       if (sym1->addr < sym2->addr)
-> +               return -1;
-> +       if (sym1->symbol_index > sym2->symbol_index)
-> +               return 1;
-> +       if (sym1->symbol_index < sym2->symbol_index)
-> +               return -1;
-> +       return 0;
-> +}
-> +
-> +static size_t symbol_count(struct elf_info *elf)
-> +{
-> +       size_t result =3D 0;
-> +
-> +       for (Elf_Sym *sym =3D elf->symtab_start; sym < elf->symtab_stop; =
-sym++) {
-> +               if (is_sym_searchable(elf, sym))
-> +                       result++;
-> +       }
-> +       return result;
-> +}
-> +
-> +/* Populate the search array that we just allocated.
-> + * Be slightly paranoid here.  If the ELF file changes during processing=
-,
-> + * or if the behavior of is_sym_searchable() changes during processing,
-> + * we want to catch it; neither of those is acceptable.
-> + */
-> +static void symsearch_populate(struct elf_info *elf,
-> +                              struct syminfo *table,
-> +                              size_t table_size)
-> +{
-> +       bool is_arm =3D (elf->hdr->e_machine =3D=3D EM_ARM);
-> +
-> +       /* Start sentinel */
-> +       if (table_size-- =3D=3D 0)
-> +               fatal("%s: size mismatch\n", __func__);
-> +       table->symbol_index =3D 0;
-> +       table->section_index =3D 0;
-> +       table->addr =3D 0;
-> +       table++;
-> +
-> +       for (Elf_Sym *sym =3D elf->symtab_start; sym < elf->symtab_stop; =
-sym++) {
-> +               if (is_sym_searchable(elf, sym)) {
-> +                       if (table_size-- =3D=3D 0)
-> +                               fatal("%s: size mismatch\n", __func__);
-> +                       table->symbol_index =3D sym - elf->symtab_start;
-> +                       table->section_index =3D get_secindex(elf, sym);
-> +                       table->addr =3D sym->st_value;
-> +
-> +                       /*
-> +                        * For ARM Thumb instruction, the bit 0 of st_val=
-ue is
-> +                        * set if the symbol is STT_FUNC type. Mask it to=
- get
-> +                        * the address.
-> +                        */
-> +                       if (is_arm && ELF_ST_TYPE(sym->st_info) =3D=3D ST=
-T_FUNC)
-> +                               table->addr &=3D ~1;
-> +
-> +                       table++;
-> +               }
-> +       }
-> +
-> +       /* End sentinel; all values are unsigned so -1 wraps to max */
-> +       if (table_size !=3D 1)
-> +               fatal("%s: size mismatch\n", __func__);
-> +       table->symbol_index =3D -1;
-> +       table->section_index =3D -1;
-> +       table->addr =3D -1;
-> +}
-> +
-> +void symsearch_init(struct elf_info *elf)
-> +{
-> +       /* +2 here to allocate space for the start and end sentinels */
-> +       size_t table_size =3D symbol_count(elf) + 2;
-> +
-> +       elf->symsearch =3D NOFAIL(malloc(
-> +                                       sizeof(struct symsearch) +
-> +                                       sizeof(struct syminfo) * table_si=
-ze));
-> +       elf->symsearch->table_size =3D table_size;
-> +
-> +       symsearch_populate(elf, elf->symsearch->table, table_size);
-> +       qsort(elf->symsearch->table, table_size,
-> +             sizeof(struct syminfo), syminfo_compare);
-> +
-> +       /* A bit of paranoia; make sure that the end sentinel's address i=
-s
-> +        * different than its predecessor.  Not doing this could cause
-> +        * possible undefined behavior if anybody ever inserts a symbol
-> +        * with section_index and addr both at their max values.
-> +        * Doing this little bit of defensive programming is more efficie=
-nt
-> +        * than checking for array overruns later.
-> +        */
-> +       elf->symsearch->table[table_size - 1].addr =3D
-> +               elf->symsearch->table[table_size - 2].addr + 1;
-> +}
-> +
-> +void symsearch_finish(struct elf_info *elf)
-> +{
-> +       free(elf->symsearch);
-> +       elf->symsearch =3D NULL;
-> +}
-> +
-> +/* Find the syminfo which is in secndx and "nearest" to addr.
-> + * allow_negative: allow returning a symbol whose address is > addr.
-> + * min_distance: ignore symbols which are further away than this.
-> + *
-> + * Returns a nonzero index into the symsearch table for success.
-> + * Returns NULL if no legal symbol is found within the requested range.
-> + */
-> +static size_t symsearch_find_impl(struct elf_info *elf, Elf_Addr addr,
-> +                                 unsigned int secndx, bool allow_negativ=
-e,
-> +                                 Elf_Addr min_distance)
-> +{
-> +       /* Find the target in the array; it will lie between two elements=
-.
-> +        * Invariant here: table[lo] < target <=3D table[hi]
-> +        * For the purposes of search, exact hits in the search array are
-> +        * considered greater than the target.  This means that if we do
-> +        * get an exact hit, then once the search terminates, table[hi]
-> +        * will be the exact match which has the lowest symbol index.
-> +        */
-> +       struct syminfo *table =3D elf->symsearch->table;
-> +       size_t hi =3D elf->symsearch->table_size - 1;
-> +       size_t lo =3D 0;
-> +       bool hi_is_usable =3D false;
-> +       bool lo_is_usable =3D false;
-> +       Elf_Addr hi_distance =3D -1;  // max Elf_Addr
-> +       Elf_Addr lo_distance =3D -1;  // max Elf_Addr
-> +       Elf_Addr min_distance_lo =3D min_distance;
-> +       Elf_Addr min_distance_hi =3D allow_negative ? min_distance : 0;
-> +
-> +       for (;;) {
-> +               size_t mid;
-> +
-> +               mid =3D lo + (hi - lo) / 2;
-> +               if (mid =3D=3D lo)
-> +                       break;
-> +               if (secndx > table[mid].section_index) {
-> +                       lo =3D mid;
-> +               } else if (secndx < table[mid].section_index) {
-> +                       hi =3D mid;
-> +               } else if (addr > table[mid].addr) {
-> +                       lo =3D mid;
-> +                       lo_distance =3D addr - table[mid].addr;
-> +                       lo_is_usable =3D (lo_distance <=3D min_distance_l=
-o);
-> +               } else {
-> +                       hi =3D mid;
-> +                       hi_distance =3D table[mid].addr - addr;
-> +                       hi_is_usable =3D (hi_distance <=3D min_distance_h=
-i);
-> +               }
-> +       }
-> +
-> +       if (hi_is_usable && lo_is_usable) {
-> +               lo_is_usable =3D (lo_distance <=3D hi_distance);
-> +               hi_is_usable =3D (hi_distance <=3D lo_distance);
-> +       }
-> +
-> +       if (!hi_is_usable)
-> +               return lo_is_usable ? lo : 0;
-> +
-> +       if (hi_distance =3D=3D 0)
-> +               return hi;
-> +
-> +       /* Match quirks of existing behavior.  Advance hi to the last
-> +        * matching entry in the search table.  We don't need to worry
-> +        * about running off the end of the array due to the sentinel.
-> +        */
-> +       while (table[hi+1].addr =3D=3D table[hi].addr &&
-> +              table[hi+1].section_index =3D=3D table[hi].section_index) =
-{
-> +               hi++;
-> +       }
-> +
-> +       return (lo_is_usable &&
-> +               table[lo].symbol_index > table[hi].symbol_index) ? lo : h=
-i;
-> +}
-> +
-> +Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
-> +                               unsigned int secndx, bool allow_negative,
-> +                               Elf_Addr min_distance)
-> +{
-> +       size_t result =3D symsearch_find_impl(elf, addr, secndx,
-> +                                           allow_negative, min_distance)=
-;
-> +
-> +       if (result =3D=3D 0)
-> +               return NULL;
-> +
-> +       return &elf->symtab_start[elf->symsearch->table[result].symbol_in=
-dex];
-> +}
-> --
-> 2.42.0.459.ge4e396fd5e-goog
+> >
+> > >> warning: unknown warning option '-Wrestrict' [-Wunknown-warning-opti=
+on]
+> > >> warning: unknown warning option '-Wformat-overflow'; did you mean '-=
+Wshift-overflow'? [-Wunknown-warning-option]
+> > >> warning: unknown warning option '-Wformat-truncation' [-Wunknown-war=
+ning-option]
+> > >> warning: unknown warning option '-Wstringop-overflow'; did you mean =
+'-Wshift-overflow'? [-Wunknown-warning-option]
+> >    arch/x86/um/user-offsets.c:17:6: warning: no previous prototype for =
+function 'foo' [-Wmissing-prototypes]
+> >       17 | void foo(void)
+> >          |      ^
+> >    arch/x86/um/user-offsets.c:17:1: note: declare 'static' if the funct=
+ion is not intended to be used outside of this translation unit
+> >       17 | void foo(void)
+> >          | ^
+> >          | static
+> >    5 warnings generated.
+> >    error: unknown warning option '-Wrestrict' [-Werror,-Wunknown-warnin=
+g-option]
+> >    error: unknown warning option '-Wformat-overflow'; did you mean '-Ws=
+hift-overflow'? [-Werror,-Wunknown-warning-option]
+> >    error: unknown warning option '-Wformat-truncation' [-Werror,-Wunkno=
+wn-warning-option]
+> >    error: unknown warning option '-Wstringop-overflow'; did you mean '-=
+Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+> >    make[2]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error=
+ 1
+> >    error: unknown warning option '-Wrestrict' [-Werror,-Wunknown-warnin=
+g-option]
+> >    error: unknown warning option '-Wformat-overflow'; did you mean '-Ws=
+hift-overflow'? [-Werror,-Wunknown-warning-option]
+> >    error: unknown warning option '-Wformat-truncation' [-Werror,-Wunkno=
+wn-warning-option]
+> >    error: unknown warning option '-Wstringop-overflow'; did you mean '-=
+Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+> >    make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-of=
+fsets.s] Error 1
+> >    make[2]: Target 'scripts/mod/' not remade because of errors.
+> >    make[1]: *** [Makefile:1286: prepare0] Error 2
+> >    make[1]: Target 'prepare' not remade because of errors.
+> >    make: *** [Makefile:226: __sub-make] Error 2
+> >    make: Target 'prepare' not remade because of errors.
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests/wiki
+> >
 >
 
 
