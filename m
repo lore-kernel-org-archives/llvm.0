@@ -1,142 +1,154 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484EF30F94
-	for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 03:30:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695094230;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HXy69j0pcLJrfGi/RGKJ4vE0ZiHc5gT09yS3ap6fLD0=;
-	b=fmWpbN7hEmLkOj0PPoam6KXJS1h6Pu9TwBxbxHwzUmMwhD5eIt9qV6OhP+etWIMR+mvE5E
-	Kzozpyi36xBS/8/CoMEvNwdjPSu7rE6husw3G0TufoeVU10JLCB4tN5IRUl2LUuN0wNCDs
-	PdYVAtXonzpND6+rudByeu77AbOk/dc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-704BPFzaNu2c-QiHByoG7g-1; Mon, 18 Sep 2023 23:30:28 -0400
-X-MC-Unique: 704BPFzaNu2c-QiHByoG7g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4791B801779
-	for <llvm@lists.linux.dev>; Tue, 19 Sep 2023 03:30:28 +0000 (UTC)
-Received: from [172.64.11.12] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1FEBC28FE;
-	Tue, 19 Sep 2023 03:30:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 234): Test report for master
- (6.6.0-rc2, mainline.kernel.org-clang, 2cf0f715)
-Date: Tue, 19 Sep 2023 03:30:28 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16825F509;
+	Tue, 19 Sep 2023 04:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695096823; x=1726632823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WZJ0m+dc8R+eXloEKls21l6T5masyhw2d6iFcNL6/2s=;
+  b=N4mu7T8Tlv4aPSIfiNNsANmDrg1IKF/8n2YDfePjnMh1aYB05h0noR2/
+   hkRQ+eQZj3n2/8RsiRcwpkN8ZMOxhJb7oFHxRhaaZWlzHNF5g/CUiLF8D
+   Kual3FOFzfzKqdyr0S7voIqZlCnwu0/BqLsFdekAxozriRnFhIokA4SoZ
+   6cnMxwFk4AQ07+uHLBtZ9b6oc1JzeHn3gnHfHw4Y21eaw3h7sVICsJSbi
+   t7iRDo1Dn360ytpNt2qsdtBoilJzM1fjQ/7gYTxT9DwExnyUPEoPf6y9/
+   PSy5MS7Z/vSrAgZdl0sYQxiia7GstiPvzt2piLnR2zLGF3QONsHOsR119
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="379750815"
+X-IronPort-AV: E=Sophos;i="6.02,158,1688454000"; 
+   d="scan'208";a="379750815"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 21:13:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="739505968"
+X-IronPort-AV: E=Sophos;i="6.02,158,1688454000"; 
+   d="scan'208";a="739505968"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 18 Sep 2023 21:13:39 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qiS7F-0006se-0z;
+	Tue, 19 Sep 2023 04:13:37 +0000
+Date: Tue, 19 Sep 2023 12:12:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tyrel Datwyler <tyreld@linux.ibm.com>, martin.petersen@oracle.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org, brking@linux.ibm.com,
+	james.bottomley@hansenpartnership.com,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Brian King <brking@linux.vnet.ibm.com>
+Subject: Re: [PATCH 02/11] ibmvfc: implement channel queue depth and event
+ buffer accounting
+Message-ID: <202309191225.q759yNtz-lkp@intel.com>
+References: <20230913230457.2575849-3-tyreld@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <95583.123091823302800532@us-mta-628.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230913230457.2575849-3-tyreld@linux.ibm.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Tyrel,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.6-rc2 next-20230918]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.6-2' of git://git.linux-nfs.org/pr=
-ojects/anna/linux-nfs
+url:    https://github.com/intel-lab-lkp/linux/commits/Tyrel-Datwyler/ibmvfc-remove-BUG_ON-in-the-case-of-an-empty-event-pool/20230914-085530
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230913230457.2575849-3-tyreld%40linux.ibm.com
+patch subject: [PATCH 02/11] ibmvfc: implement channel queue depth and event buffer accounting
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230919/202309191225.q759yNtz-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230919/202309191225.q759yNtz-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/104982
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309191225.q759yNtz-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9568079
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1722
-            Affected tests:
-                 aarch64 - Storage - mdadm upstream test
-                 ppc64le - Storage - mdadm upstream test
-                  x86_64 - Storage - mdadm upstream test
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/scsi/ibmvscsi/ibmvfc.c:789: warning: Excess function parameter 'size' description in 'ibmvfc_init_event_pool'
+>> drivers/scsi/ibmvscsi/ibmvfc.c:1534: warning: Function parameter or member 'reserved' not described in '__ibmvfc_get_event'
+>> drivers/scsi/ibmvscsi/ibmvfc.c:1534: warning: expecting prototype for ibmvfc_get_event(). Prototype was for __ibmvfc_get_event() instead
 
 
+vim +789 drivers/scsi/ibmvscsi/ibmvfc.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+072b91f9c6510d Brian King     2008-07-01  778  
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  779  /**
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  780   * ibmvfc_init_event_pool - Allocates and initializes the event pool for a host
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  781   * @vhost:	ibmvfc host who owns the event pool
+dd9c772971485d Lee Jones      2021-03-17  782   * @queue:      ibmvfc queue struct
+dd9c772971485d Lee Jones      2021-03-17  783   * @size:       pool size
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  784   *
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  785   * Returns zero on success.
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  786   **/
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  787  static int ibmvfc_init_event_pool(struct ibmvfc_host *vhost,
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  788  				  struct ibmvfc_queue *queue)
+225acf5f1aba3b Tyrel Datwyler 2021-01-14 @789  {
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  790  	int i;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  791  	struct ibmvfc_event_pool *pool = &queue->evt_pool;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  792  
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  793  	ENTER;
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  794  	if (!queue->total_depth)
+bb35ecb2a949d9 Tyrel Datwyler 2021-01-14  795  		return 0;
+bb35ecb2a949d9 Tyrel Datwyler 2021-01-14  796  
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  797  	pool->size = queue->total_depth;
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  798  	pool->events = kcalloc(pool->size, sizeof(*pool->events), GFP_KERNEL);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  799  	if (!pool->events)
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  800  		return -ENOMEM;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  801  
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  802  	pool->iu_storage = dma_alloc_coherent(vhost->dev,
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  803  					      pool->size * sizeof(*pool->iu_storage),
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  804  					      &pool->iu_token, 0);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  805  
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  806  	if (!pool->iu_storage) {
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  807  		kfree(pool->events);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  808  		return -ENOMEM;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  809  	}
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  810  
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  811  	INIT_LIST_HEAD(&queue->sent);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  812  	INIT_LIST_HEAD(&queue->free);
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  813  	queue->evt_free = queue->evt_depth;
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  814  	queue->reserved_free = queue->reserved_depth;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  815  	spin_lock_init(&queue->l_lock);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  816  
+a7ed558d0b9030 Tyrel Datwyler 2023-09-13  817  	for (i = 0; i < pool->size; ++i) {
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  818  		struct ibmvfc_event *evt = &pool->events[i];
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  819  
+a264cf5e81c78e Tyrel Datwyler 2021-07-16  820  		/*
+a264cf5e81c78e Tyrel Datwyler 2021-07-16  821  		 * evt->active states
+a264cf5e81c78e Tyrel Datwyler 2021-07-16  822  		 *  1 = in flight
+a264cf5e81c78e Tyrel Datwyler 2021-07-16  823  		 *  0 = being completed
+a264cf5e81c78e Tyrel Datwyler 2021-07-16  824  		 * -1 = free/freed
+a264cf5e81c78e Tyrel Datwyler 2021-07-16  825  		 */
+a264cf5e81c78e Tyrel Datwyler 2021-07-16  826  		atomic_set(&evt->active, -1);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  827  		atomic_set(&evt->free, 1);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  828  		evt->crq.valid = 0x80;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  829  		evt->crq.ioba = cpu_to_be64(pool->iu_token + (sizeof(*evt->xfer_iu) * i));
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  830  		evt->xfer_iu = pool->iu_storage + i;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  831  		evt->vhost = vhost;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  832  		evt->queue = queue;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  833  		evt->ext_list = NULL;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  834  		list_add_tail(&evt->queue_list, &queue->free);
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  835  	}
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  836  
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  837  	LEAVE;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  838  	return 0;
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  839  }
+225acf5f1aba3b Tyrel Datwyler 2021-01-14  840  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
