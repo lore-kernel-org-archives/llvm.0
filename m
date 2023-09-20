@@ -1,101 +1,146 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4753E488
-	for <llvm@lists.linux.dev>; Wed, 20 Sep 2023 16:57:32 +0000 (UTC)
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-773ac11de71so386760885a.2
-        for <llvm@lists.linux.dev>; Wed, 20 Sep 2023 09:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695229051; x=1695833851; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rE6msmUqmGcfVIIk5iKjgmbNuSZmm7Q5B7TAvprOzeg=;
-        b=pPgy8ndkWR05VRLUh+n/DYA3sBrKut8p+90swkDWsPIdv9bd+2Y6LjnlHFgZ9MR/l/
-         NTAGIJ6ELYI6ubJQa5CVu/fGIdNM/dteKn9mAo6EJbjiDNsg7KmgtrYKa1n/NTR/HJ1l
-         0G2MG8HheXtqmbb3lhrS1CPuhKqt5raV7oJ1VaXYLFn2GJUHbHJT3257XEqi4m5CYIFT
-         nmvgCqZ78i78Roq29+vYQY3xWbaaElwvn3SSZz3aoFhy5ALo5Ps7qEqhlpjMQXIvq3Sj
-         PWl8iunlAXceH3PHNQrVElA1RuhTmyp9vM+apFv9O2anMsLcNqMdrAo/WDamWm94znJR
-         Qjsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695229051; x=1695833851;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rE6msmUqmGcfVIIk5iKjgmbNuSZmm7Q5B7TAvprOzeg=;
-        b=MgROjchqTEb1btplKjM1S6hU0MOl8s1IpC7+IOarLrDDIG+GcSdOqXNF+VGNshzaKc
-         odj1tusBU4CItUfle52v+uGlUqtmqN9j7DaLYCCzhRLDOvsG92fDesGoKCO0zlFdwxOR
-         hpPCfQMSQYJVhyrX4SeIgI47Nrc2c8rZycmnuz8cW4wYhHUBHMOAZeFa0UAjIdoLiESZ
-         R2L/KS36oLT7p8dj0sV6Wqg3iLwBokqZTZ/p/5Nr7SmIorPMuoxD9NxFYoC8kyE1kNA5
-         u0kZ7KFFr3KE0yrOX2Nzc7uPeX5ZgeIujxilt964w4TnoXNNFahSlpbEIH0B0fSl+M/h
-         S+wQ==
-X-Gm-Message-State: AOJu0YzlkRZlz2zbuahKwxL4A0iHHinKUV8EB/3YGV69rwc2CLNZNXV8
-	PMs82yltD9ZtVHkuyohn1N+0EaX3Ud7nc3yqE+3bhg==
-X-Google-Smtp-Source: AGHT+IH1Mgmwmw/RXkmel6yA1q5k12TlxQn+FD3HEwMcGWZoHvHTjly0JMF75R4tNml/EEPhv3kAJr88IyhrJZFpptY=
-X-Received: by 2002:a05:6214:4185:b0:658:708c:4d56 with SMTP id
- ld5-20020a056214418500b00658708c4d56mr3087170qvb.17.1695229051379; Wed, 20
- Sep 2023 09:57:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67453CCED;
+	Wed, 20 Sep 2023 18:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695234307; x=1726770307;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9PhOSiuYuVCKZUST18M9mJT1hnZQKOIdZaAVIzPPgvU=;
+  b=JvxleZ7Hn5Arn28SzbMPdbFm9Dz5LFPyf095IUmwjZqzcRZrcMjaNMy8
+   woLyRRkzNlhMgFXdiY4d/qv4z6jaIh+bN3jbXNIZDvCtjXAszgiZ1+Gea
+   OxpfTpqO1OpJvbuMpVMWAQL8tYGV+xEGjTNZeFMP4VXGmn8ZppFdUCp+l
+   nbS2EgSfjWGTosD91qDhr6LfOaGUFwe64wNfG0lSHycxYsFFC7ZTmNb2Q
+   ms6r68GDoMUiFQsyJxJ8/hDuS+nTmYNa8KeOoTisNdOwHYLUwjluOr48/
+   rJfujrsry8PERp+dJRmbiP6uH1/zmey+Xa2t8DVWvLCnvbigiiPYrAvr3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359689177"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="359689177"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 11:25:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="993724832"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="993724832"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Sep 2023 11:25:04 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qj1sk-00091o-0u;
+	Wed, 20 Sep 2023 18:25:02 +0000
+Date: Thu, 21 Sep 2023 02:24:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Petr Mladek <pmladek@suse.com>, John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH] printk/nbcon: Add assert that CPU migration is disabled
+ when calling nbcon_context_try_acquire()
+Message-ID: <202309210239.GwxqY2v3-lkp@intel.com>
+References: <20230920125136.15504-1-pmladek@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHRSSEzrL6uPEvrhW692=+=17EJt+6_-p2z0K5esG4Ff57MSpw@mail.gmail.com>
- <a94cd4e0-7092-04fb-9b89-da236bfec57f@collabora.com> <CAHRSSEzMo=-eS8KRqHjSMcBqWCsK2mU4zWg=5KFYx2XyL29Z0w@mail.gmail.com>
- <CAHRSSEzasi7ZRSe3t_ij26cYCc_58eALNn_mMn6B5HFqEbU9EQ@mail.gmail.com>
- <ffab5719-e6f4-4e21-1095-c129928076af@collabora.com> <CAHRSSEzo0cSQCp_zk4h2BP2EGdqVHSbZOLC-3gf7c6+uOK9R4g@mail.gmail.com>
- <CAHRSSEw6Vv+3R0OOva8qY3pF-00TZdQku3MxN2OFSaZkN2di+Q@mail.gmail.com>
- <CAKwvOdmni7Vqo0W1qgGkVx8GH4+D7JXO5QTQgqGv8D=Go4oPAA@mail.gmail.com>
- <CAHRSSEz=S_c=KmgDNL_FenUJ25jLmwKe-QXo7-_nUC-7avD0Gg@mail.gmail.com>
- <CAKwvOdkHE7rXgOUyUSCKZ690bjV88E9yVfmG-7vLH6iqqr2G-Q@mail.gmail.com> <CAHRSSEzD=nMKjnmJxsGuPdMy2iqc-jxcppna_eKOb8PH0SQOXA@mail.gmail.com>
-In-Reply-To: <CAHRSSEzD=nMKjnmJxsGuPdMy2iqc-jxcppna_eKOb8PH0SQOXA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 20 Sep 2023 09:57:20 -0700
-Message-ID: <CAKwvOdk5qut5-EX9N2eJQ7KiaUNFv4CBo_Hh2BJOD+bnupKvQA@mail.gmail.com>
-Subject: Re: Please add new Android branches
-To: Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc: Viktor Martensson <vmartensson@google.com>, Betty Zhou <bettyzhou@google.com>, 
-	kernelci@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>, 
-	Todd Kjos <tkjos@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230920125136.15504-1-pmladek@suse.com>
 
-On Tue, Sep 19, 2023 at 5:12=E2=80=AFPM Todd Kjos <tkjos@google.com> wrote:
->
-> On Tue, Sep 19, 2023 at 4:19=E2=80=AFPM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > Half of the red exclamation marks on that link are are "0 warnings - 0
-> > errors".  What's up with that?
->
-> This more recent build has "0 warnings - 0 errors":
-> https://linux.kernelci.org/build/android/branch/android15-6.1/kernel/ASB-=
-2023-07-05_14-6.1-2620-gf2d0380464d3/
->
-> Here is the error (not sure why it bubbled up as 0/0):
->
->   AR      drivers/base/power/built-in.a
-> ../fs/namei.c:2172:13: error: use of bitwise '|' with boolean operands
-> [-Werror,-Wbitwise-instead-of-logical]
->         } while (!(has_zero(a, &adata, &constants) | has_zero(b,
-> &bdata, &constants)));
->
-> ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->                                                    ||
-> ../fs/namei.c:2172:13: note: cast one or both operands to int to
-> silence this warning
->   CC      drivers/base/firmware_loader/builtin/main.o
-> 1 error generated.
-> make[3]: *** [../scripts/Makefile.build:250: fs/namei.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> make[2]: *** [../scripts/Makefile.build:500: fs] Error 2
+Hi Petr,
 
-Guillaume,
-Any idea what's up with that? Seems like the existence of diagnostics
-is detected correctly; the number of warnings and errors is not.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20230920]
+[cannot apply to linus/master v6.6-rc2 v6.6-rc1 v6.5 v6.6-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Mladek/printk-nbcon-Add-assert-that-CPU-migration-is-disabled-when-calling-nbcon_context_try_acquire/20230920-205406
+base:   next-20230920
+patch link:    https://lore.kernel.org/r/20230920125136.15504-1-pmladek%40suse.com
+patch subject: [PATCH] printk/nbcon: Add assert that CPU migration is disabled when calling nbcon_context_try_acquire()
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230921/202309210239.GwxqY2v3-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309210239.GwxqY2v3-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309210239.GwxqY2v3-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/printk/nbcon.c:595:2: error: call to undeclared function 'nbcon_assert_cpu_migration_disabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     595 |         nbcon_assert_cpu_migration_disabled();
+         |         ^
+   1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/nbcon_assert_cpu_migration_disabled +595 kernel/printk/nbcon.c
+
+   575	
+   576	/**
+   577	 * nbcon_context_try_acquire - Try to acquire nbcon console
+   578	 * @ctxt:	The context of the caller
+   579	 *
+   580	 * Return:	True if the console was acquired. False otherwise.
+   581	 *
+   582	 * If the caller allowed an unsafe hostile takeover, on success the
+   583	 * caller should check the current console state to see if it is
+   584	 * in an unsafe state. Otherwise, on success the caller may assume
+   585	 * the console is not in an unsafe state.
+   586	 */
+   587	__maybe_unused
+   588	static bool nbcon_context_try_acquire(struct nbcon_context *ctxt)
+   589	{
+   590		unsigned int cpu = smp_processor_id();
+   591		struct console *con = ctxt->console;
+   592		struct nbcon_state cur;
+   593		int err;
+   594	
+ > 595		nbcon_assert_cpu_migration_disabled();
+   596	
+   597		nbcon_state_read(con, &cur);
+   598	try_again:
+   599		err = nbcon_context_try_acquire_direct(ctxt, &cur);
+   600		if (err != -EBUSY)
+   601			goto out;
+   602	
+   603		err = nbcon_context_try_acquire_handover(ctxt, &cur);
+   604		if (err == -EAGAIN)
+   605			goto try_again;
+   606		if (err != -EBUSY)
+   607			goto out;
+   608	
+   609		err = nbcon_context_try_acquire_hostile(ctxt, &cur);
+   610	out:
+   611		if (err)
+   612			return false;
+   613	
+   614		/* Acquire succeeded. */
+   615	
+   616		/* Assign the appropriate buffer for this context. */
+   617		if (atomic_read(&panic_cpu) == cpu)
+   618			ctxt->pbufs = &panic_nbcon_pbufs;
+   619		else
+   620			ctxt->pbufs = con->pbufs;
+   621	
+   622		/* Set the record sequence for this context to print. */
+   623		ctxt->seq = nbcon_seq_read(ctxt->console);
+   624	
+   625		return true;
+   626	}
+   627	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
