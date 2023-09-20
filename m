@@ -1,114 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04A93B2B0
-	for <llvm@lists.linux.dev>; Wed, 20 Sep 2023 15:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF3729A1
+	for <llvm@lists.linux.dev>; Wed, 20 Sep 2023 15:38:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695223206; x=1726759206;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EmXFqkTuFNEaiLGXrgBSisJ8kBCI85FLrWVY62a5974=;
-  b=jsPwY2utVaqSd28m/9h1V49RMrnNErp3kCrqKEfrkfnkxboDwmle/aLT
-   ufK5nVLMo8YfqitNwmbdduiJ4WLV1l3GgdlXewOPvmnRufGeBrkPLhYjm
-   gr5ZYZbmyUJkL61XBO5XhHJZv/jHAPhUDm4oHUxviuGJ3EUqSReqx/hpw
-   ZftJtkL6Avwd5nzZjZMuK6XFmzWchlQ14yj+cgWAwsDu2g+1gAh6Bxg/f
-   o6ALBzrf8yDiQz/l+RWGJqFZYe/T/U/qCGwc3BkSwNjtGm/0s7Mtp+Rh9
-   lmVZRdzkKtKhQ67wqWNi+fgjSax5I7MHZIWoDqUiOGVyOnfTP4BjFigG8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444349112"
+  t=1695224308; x=1726760308;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4gyXCBnrlqcGMYoIWPbjV5wf9sCClHXyno5V82uj9AQ=;
+  b=d/e41QOeshUtDUTVnIpyPvO3ZvqEWlYy5OQEzLMyJrL6sqp9OVMwpUak
+   9Qyw5A7BS6NDMBLwZAeZ88xd7NPdMisi9lT5snseA7+dFxVzFYA4SoePL
+   mCFY23JL1BUqYbGF98w6FnNUD8iC6WF57uqifaC04jxtQbmiq5H+dGWJ+
+   eb70LNIXSxXBsYsupqi4VmK4f9FECq3JrL9dMJtDFvq3Z60/cHXrMzddd
+   krddtktGhADRySmOG3WiFUvqTcC228nD+a0rcId9UZpr1cidk74F9oNDV
+   eMqLoHzFDQGKqlub0fIji+BpHQSoWi/rEle0hlWCqnTP29pUwAmD2je4q
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370569826"
 X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="444349112"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 08:19:59 -0700
+   d="scan'208";a="370569826"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 08:38:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862024014"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="1077485504"
 X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="862024014"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 08:19:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1qiyzY-0000000Gc8Z-1pGW;
-	Wed, 20 Sep 2023 18:19:52 +0300
-Date: Wed, 20 Sep 2023 18:19:51 +0300
+   d="scan'208";a="1077485504"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Sep 2023 08:38:23 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id ABFA671B; Wed, 20 Sep 2023 18:38:22 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
-	alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Scally <djrscally@gmail.com>,
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 2/2] ALSA: hda: cirrus_scodec: Add KUnit test
-Message-ID: <ZQsNl146RFAYdjSL@smile.fi.intel.com>
-References: <20230918095129.440-1-rf@opensource.cirrus.com>
- <20230918095129.440-3-rf@opensource.cirrus.com>
- <ZQoILN6QCjzosCOs@google.com>
- <874jjpwd4i.wl-tiwai@suse.de>
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	tiwai@suse.com,
+	llvm@lists.linux.dev,
+	alsa-devel@alsa-project.org,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v1 1/1] device property: Replace custom implementation of COUNT_ARGS()
+Date: Wed, 20 Sep 2023 18:38:19 +0300
+Message-Id: <20230920153819.2069869-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874jjpwd4i.wl-tiwai@suse.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 20, 2023 at 08:51:57AM +0200, Takashi Iwai wrote:
-> On Tue, 19 Sep 2023 22:44:28 +0200,
-> Nick Desaulniers wrote:
-> > 
-> > On Mon, Sep 18, 2023 at 10:51:29AM +0100, Richard Fitzgerald wrote:
-> (snip)
-> > > +static void cirrus_scodec_test_set_gpio_ref_arg(struct software_node_ref_args *arg,
-> > > +						int gpio_num)
-> > > +{
-> > > +	struct software_node_ref_args template =
-> > > +		SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
-> > 
-> > I'm observing the following error when building with:
-> > 
-> > $ make LLVM=1 -j128 allmodconfig sound/pci/hda/cirrus_scodec_test.o
-> > 
-> > sound/pci/hda/cirrus_scodec_test.c:151:60: error: initializer element is not a compile-time constant
-> >   151 |                 SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
-> >       |                                                                          ^~~~~~~~
-> > /builds/linux/include/linux/property.h:291:37: note: expanded from macro 'SOFTWARE_NODE_REFERENCE'
-> >   291 |         .nargs = ARRAY_SIZE(((u64[]){ 0, ##__VA_ARGS__ })) - 1, \
-> >       |                                            ^~~~~~~~~~~
-> > /builds/linux/include/linux/kernel.h:57:75: note: expanded from macro 'ARRAY_SIZE'
-> >    57 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-> >       |                                                                           ^~~
-> > /builds/linux/include/linux/compiler.h:228:59: note: expanded from macro '__must_be_array'
-> >   228 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-> >       |                                                                ^
-> > /builds/linux/include/linux/compiler_types.h:366:63: note: expanded from macro '__same_type'
-> >   366 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-> >       |                                                               ^
-> > /builds/linux/include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-> >    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> >       |                                                              ^
-> 
-> Hm, this looks like some inconsistent handling of the temporary array
-> passed to ARRAY_SIZE() in the SOFTWARE_NODE_REFERENCE macro.  LLVM
-> can't treat it if it contains a variable in the given array, while GCC
-> doesn't care.
-> 
-> A hackish workaround would be the patch like below, but it's really
-> ugly.  Ideally speaking, it should be fixed in linux/properties.h, but
-> I have no idea how to fix there for LLVM.
-> 
-> Adding more relevant people to Cc.
+Replace custom and non-portable implementation of COUNT_ARGS().
 
-Thank you, I think it's quite easy to fix. Lemme cook the patch...
+Fixes: e64b674bc9d7 ("software node: implement reference properties")
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Closes: https://lore.kernel.org/r/ZQoILN6QCjzosCOs@google.com
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/property.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/property.h b/include/linux/property.h
+index 1684fca930f7..55c2692ffa8c 100644
+--- a/include/linux/property.h
++++ b/include/linux/property.h
+@@ -10,6 +10,7 @@
+ #ifndef _LINUX_PROPERTY_H_
+ #define _LINUX_PROPERTY_H_
+ 
++#include <linux/args.h>
+ #include <linux/bits.h>
+ #include <linux/fwnode.h>
+ #include <linux/stddef.h>
+@@ -314,7 +315,7 @@ struct software_node_ref_args {
+ #define SOFTWARE_NODE_REFERENCE(_ref_, ...)			\
+ (const struct software_node_ref_args) {				\
+ 	.node = _ref_,						\
+-	.nargs = ARRAY_SIZE(((u64[]){ 0, ##__VA_ARGS__ })) - 1,	\
++	.nargs = COUNT_ARGS(__VA_ARGS__),			\
+ 	.args = { __VA_ARGS__ },				\
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.40.0.1.gaa8946217a0b
 
