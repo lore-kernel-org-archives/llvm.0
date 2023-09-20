@@ -1,49 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67453CCED;
-	Wed, 20 Sep 2023 18:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D12B3CCE7;
+	Wed, 20 Sep 2023 19:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695234307; x=1726770307;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9PhOSiuYuVCKZUST18M9mJT1hnZQKOIdZaAVIzPPgvU=;
-  b=JvxleZ7Hn5Arn28SzbMPdbFm9Dz5LFPyf095IUmwjZqzcRZrcMjaNMy8
-   woLyRRkzNlhMgFXdiY4d/qv4z6jaIh+bN3jbXNIZDvCtjXAszgiZ1+Gea
-   OxpfTpqO1OpJvbuMpVMWAQL8tYGV+xEGjTNZeFMP4VXGmn8ZppFdUCp+l
-   nbS2EgSfjWGTosD91qDhr6LfOaGUFwe64wNfG0lSHycxYsFFC7ZTmNb2Q
-   ms6r68GDoMUiFQsyJxJ8/hDuS+nTmYNa8KeOoTisNdOwHYLUwjluOr48/
-   rJfujrsry8PERp+dJRmbiP6uH1/zmey+Xa2t8DVWvLCnvbigiiPYrAvr3
+  t=1695238811; x=1726774811;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CGrbJVE947kLcNQvJHXv006YPxanfka9C/SJUX7Mv1E=;
+  b=ep1Jidtd9rDzRkEHf+MLpKJW0hnrWG6HIXATKFN0KUjd2ByEKNJE3t1P
+   0eSYL7L2Ys1DKsPTJSkIU5+kLvkiCvthEIv9yvQQaLto6u/p/IkR32fUT
+   b7vp1mxsS0D4AFeQshTeMMtIDecsAS/bB7QpGXhXHgIpVyuLwNz0JxMvF
+   PmIZWL4imrctvv0F7xeAO0KC1Y8eJ3VFfN0Wy8Py3pY5WTjFfONJqFnkQ
+   nnuoXh8wUudCi+uNrhUo+LcXNcdEMfKTKWzdAHAnvoce3TmI6QBugxrIy
+   8O7LHbVR7+wHs4BdFqoWho5WDUBJ+jjxkmYbkx5JafBl/ef5QyjlJtfLA
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359689177"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="377621381"
 X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="359689177"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 11:25:06 -0700
+   d="scan'208";a="377621381"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 12:40:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="993724832"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812291475"
 X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="993724832"
+   d="scan'208";a="812291475"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Sep 2023 11:25:04 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 20 Sep 2023 12:40:06 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qj1sk-00091o-0u;
-	Wed, 20 Sep 2023 18:25:02 +0000
-Date: Thu, 21 Sep 2023 02:24:32 +0800
+	id 1qj33M-00094S-0w;
+	Wed, 20 Sep 2023 19:40:04 +0000
+Date: Thu, 21 Sep 2023 03:39:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Petr Mladek <pmladek@suse.com>, John Ogness <john.ogness@linutronix.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Steven Rostedt <rostedt@goodmis.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH] printk/nbcon: Add assert that CPU migration is disabled
- when calling nbcon_context_try_acquire()
-Message-ID: <202309210239.GwxqY2v3-lkp@intel.com>
-References: <20230920125136.15504-1-pmladek@suse.com>
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: arch/powerpc/kernel/traps.c:1167:19: error: unused function
+ '__parse_fpscr'
+Message-ID: <202309210327.WkqSd5Bq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,94 +47,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230920125136.15504-1-pmladek@suse.com>
 
-Hi Petr,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20230920]
-[cannot apply to linus/master v6.6-rc2 v6.6-rc1 v6.5 v6.6-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Mladek/printk-nbcon-Add-assert-that-CPU-migration-is-disabled-when-calling-nbcon_context_try_acquire/20230920-205406
-base:   next-20230920
-patch link:    https://lore.kernel.org/r/20230920125136.15504-1-pmladek%40suse.com
-patch subject: [PATCH] printk/nbcon: Add assert that CPU migration is disabled when calling nbcon_context_try_acquire()
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230921/202309210239.GwxqY2v3-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a229cf67ab851a6e92395f37ed141d065176575a
+commit: ca13c130a43fe3ab625d22ada0a61e5c0b612229 powerpc/4xx: Remove WatchdogHandler() to fix no previous prototype error
+date:   5 weeks ago
+config: powerpc-kilauea_defconfig (https://download.01.org/0day-ci/archive/20230921/202309210327.WkqSd5Bq-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309210239.GwxqY2v3-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309210327.WkqSd5Bq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309210239.GwxqY2v3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309210327.WkqSd5Bq-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/printk/nbcon.c:595:2: error: call to undeclared function 'nbcon_assert_cpu_migration_disabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     595 |         nbcon_assert_cpu_migration_disabled();
-         |         ^
+>> arch/powerpc/kernel/traps.c:1167:19: error: unused function '__parse_fpscr' [-Werror,-Wunused-function]
+    1167 | static inline int __parse_fpscr(unsigned long fpscr)
+         |                   ^
    1 error generated.
 
 
-vim +/nbcon_assert_cpu_migration_disabled +595 kernel/printk/nbcon.c
+vim +/__parse_fpscr +1167 arch/powerpc/kernel/traps.c
 
-   575	
-   576	/**
-   577	 * nbcon_context_try_acquire - Try to acquire nbcon console
-   578	 * @ctxt:	The context of the caller
-   579	 *
-   580	 * Return:	True if the console was acquired. False otherwise.
-   581	 *
-   582	 * If the caller allowed an unsafe hostile takeover, on success the
-   583	 * caller should check the current console state to see if it is
-   584	 * in an unsafe state. Otherwise, on success the caller may assume
-   585	 * the console is not in an unsafe state.
-   586	 */
-   587	__maybe_unused
-   588	static bool nbcon_context_try_acquire(struct nbcon_context *ctxt)
-   589	{
-   590		unsigned int cpu = smp_processor_id();
-   591		struct console *con = ctxt->console;
-   592		struct nbcon_state cur;
-   593		int err;
-   594	
- > 595		nbcon_assert_cpu_migration_disabled();
-   596	
-   597		nbcon_state_read(con, &cur);
-   598	try_again:
-   599		err = nbcon_context_try_acquire_direct(ctxt, &cur);
-   600		if (err != -EBUSY)
-   601			goto out;
-   602	
-   603		err = nbcon_context_try_acquire_handover(ctxt, &cur);
-   604		if (err == -EAGAIN)
-   605			goto try_again;
-   606		if (err != -EBUSY)
-   607			goto out;
-   608	
-   609		err = nbcon_context_try_acquire_hostile(ctxt, &cur);
-   610	out:
-   611		if (err)
-   612			return false;
-   613	
-   614		/* Acquire succeeded. */
-   615	
-   616		/* Assign the appropriate buffer for this context. */
-   617		if (atomic_read(&panic_cpu) == cpu)
-   618			ctxt->pbufs = &panic_nbcon_pbufs;
-   619		else
-   620			ctxt->pbufs = con->pbufs;
-   621	
-   622		/* Set the record sequence for this context to print. */
-   623		ctxt->seq = nbcon_seq_read(ctxt->console);
-   624	
-   625		return true;
-   626	}
-   627	
+14cf11af6cf608 Paul Mackerras    2005-09-26  1166  
+5fad293bcbd48d Kumar Gala        2007-02-07 @1167  static inline int __parse_fpscr(unsigned long fpscr)
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1168  {
+aeb1c0f6ff18f5 Eric W. Biederman 2018-04-17  1169  	int ret = FPE_FLTUNK;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1170  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1171  	/* Invalid operation */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1172  	if ((fpscr & FPSCR_VE) && (fpscr & FPSCR_VX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1173  		ret = FPE_FLTINV;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1174  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1175  	/* Overflow */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1176  	else if ((fpscr & FPSCR_OE) && (fpscr & FPSCR_OX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1177  		ret = FPE_FLTOVF;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1178  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1179  	/* Underflow */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1180  	else if ((fpscr & FPSCR_UE) && (fpscr & FPSCR_UX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1181  		ret = FPE_FLTUND;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1182  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1183  	/* Divide by zero */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1184  	else if ((fpscr & FPSCR_ZE) && (fpscr & FPSCR_ZX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1185  		ret = FPE_FLTDIV;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1186  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1187  	/* Inexact result */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1188  	else if ((fpscr & FPSCR_XE) && (fpscr & FPSCR_XX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1189  		ret = FPE_FLTRES;
+5fad293bcbd48d Kumar Gala        2007-02-07  1190  
+5fad293bcbd48d Kumar Gala        2007-02-07  1191  	return ret;
+5fad293bcbd48d Kumar Gala        2007-02-07  1192  }
+5fad293bcbd48d Kumar Gala        2007-02-07  1193  
+
+:::::: The code at line 1167 was first introduced by commit
+:::::: 5fad293bcbd48d9a2370020cf60e4b4a42559b12 [POWERPC] Fixup error handling when emulating a floating point instruction
+
+:::::: TO: Kumar Gala <galak@kernel.crashing.org>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
 
 -- 
 0-DAY CI Kernel Test Service
