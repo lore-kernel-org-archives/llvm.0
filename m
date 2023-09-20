@@ -1,44 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D12B3CCE7;
-	Wed, 20 Sep 2023 19:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA3D3CCEF;
+	Wed, 20 Sep 2023 23:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695238811; x=1726774811;
+  t=1695253196; x=1726789196;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CGrbJVE947kLcNQvJHXv006YPxanfka9C/SJUX7Mv1E=;
-  b=ep1Jidtd9rDzRkEHf+MLpKJW0hnrWG6HIXATKFN0KUjd2ByEKNJE3t1P
-   0eSYL7L2Ys1DKsPTJSkIU5+kLvkiCvthEIv9yvQQaLto6u/p/IkR32fUT
-   b7vp1mxsS0D4AFeQshTeMMtIDecsAS/bB7QpGXhXHgIpVyuLwNz0JxMvF
-   PmIZWL4imrctvv0F7xeAO0KC1Y8eJ3VFfN0Wy8Py3pY5WTjFfONJqFnkQ
-   nnuoXh8wUudCi+uNrhUo+LcXNcdEMfKTKWzdAHAnvoce3TmI6QBugxrIy
-   8O7LHbVR7+wHs4BdFqoWho5WDUBJ+jjxkmYbkx5JafBl/ef5QyjlJtfLA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="377621381"
+  bh=UTR46IBrTkbQ0Ugvt+v5ysaDfs4jKCRtGqauY0gMI14=;
+  b=E0zNZx8ei5kCbsP7Rjmt503R8DeWPOA9MHdy5WMyEEVYh7hmfOWGqg9w
+   V/Zyd8JkJqzQxitol/Yz17KTQt4d3/I0bpvfx4cDzbRP9mW59xBtRxz3i
+   MbkMF8fEnVJRdaIqIaZTVVeq3PhQwMTI6m1pz5Bv0O+8/ZeRndPEPKkn2
+   93xAN+Dj77U3l3SDJWpnmdz0e9iepf+veZ/NYYy94PDM2Ulj0B5QVEuSj
+   5PmSlSxp3+z7svigv+EGK/CXAi8jd3kcK5eUqY6WfhO0YJndlANpk/sV6
+   wS5RqwxQfcJnDYGCYFM2Pcz5mp6rpKiQw85BEb1lA7sQZueqfC4atjRRB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="384209301"
 X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="377621381"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 12:40:09 -0700
+   d="scan'208";a="384209301"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 16:35:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812291475"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="750146566"
 X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="812291475"
+   d="scan'208";a="750146566"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Sep 2023 12:40:06 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 20 Sep 2023 16:35:27 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qj33M-00094S-0w;
-	Wed, 20 Sep 2023 19:40:04 +0000
-Date: Thu, 21 Sep 2023 03:39:54 +0800
+	id 1qj6j7-0009GU-04;
+	Wed, 20 Sep 2023 23:35:25 +0000
+Date: Thu, 21 Sep 2023 07:35:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: arch/powerpc/kernel/traps.c:1167:19: error: unused function
- '__parse_fpscr'
-Message-ID: <202309210327.WkqSd5Bq-lkp@intel.com>
+	alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>
+Subject: [tiwai-sound:for-next 36/38]
+ sound/pci/hda/cirrus_scodec_test.c:151:60: error: initializer element is not
+ a compile-time constant
+Message-ID: <202309210751.TXlnuEMF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,63 +48,95 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a229cf67ab851a6e92395f37ed141d065176575a
-commit: ca13c130a43fe3ab625d22ada0a61e5c0b612229 powerpc/4xx: Remove WatchdogHandler() to fix no previous prototype error
-date:   5 weeks ago
-config: powerpc-kilauea_defconfig (https://download.01.org/0day-ci/archive/20230921/202309210327.WkqSd5Bq-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309210327.WkqSd5Bq-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+head:   72f6a13022f3bf16df305b75c32f95ece263a5ce
+commit: 2144833e7b41459fa2d52bb0676f0ab4920cf32c [36/38] ALSA: hda: cirrus_scodec: Add KUnit test
+config: hexagon-randconfig-r041-20211219 (https://download.01.org/0day-ci/archive/20230921/202309210751.TXlnuEMF-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309210751.TXlnuEMF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309210327.WkqSd5Bq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309210751.TXlnuEMF-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/powerpc/kernel/traps.c:1167:19: error: unused function '__parse_fpscr' [-Werror,-Wunused-function]
-    1167 | static inline int __parse_fpscr(unsigned long fpscr)
-         |                   ^
-   1 error generated.
+   In file included from sound/pci/hda/cirrus_scodec_test.c:9:
+   In file included from include/linux/gpio/driver.h:6:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from sound/pci/hda/cirrus_scodec_test.c:9:
+   In file included from include/linux/gpio/driver.h:6:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from sound/pci/hda/cirrus_scodec_test.c:9:
+   In file included from include/linux/gpio/driver.h:6:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> sound/pci/hda/cirrus_scodec_test.c:151:60: error: initializer element is not a compile-time constant
+                   SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
+                                                                            ^~~~~~~~
+   include/linux/property.h:291:37: note: expanded from macro 'SOFTWARE_NODE_REFERENCE'
+           .nargs = ARRAY_SIZE(((u64[]){ 0, ##__VA_ARGS__ })) - 1, \
+                                              ^~~~~~~~~~~
+   include/linux/kernel.h:57:75: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                                                             ^~~
+   include/linux/compiler.h:231:59: note: expanded from macro '__must_be_array'
+   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+                                                                  ^
+   include/linux/compiler_types.h:366:63: note: expanded from macro '__same_type'
+   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+                                                                 ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+                                                                ^
+   6 warnings and 1 error generated.
 
 
-vim +/__parse_fpscr +1167 arch/powerpc/kernel/traps.c
+vim +151 sound/pci/hda/cirrus_scodec_test.c
 
-14cf11af6cf608 Paul Mackerras    2005-09-26  1166  
-5fad293bcbd48d Kumar Gala        2007-02-07 @1167  static inline int __parse_fpscr(unsigned long fpscr)
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1168  {
-aeb1c0f6ff18f5 Eric W. Biederman 2018-04-17  1169  	int ret = FPE_FLTUNK;
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1170  
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1171  	/* Invalid operation */
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1172  	if ((fpscr & FPSCR_VE) && (fpscr & FPSCR_VX))
-5fad293bcbd48d Kumar Gala        2007-02-07  1173  		ret = FPE_FLTINV;
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1174  
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1175  	/* Overflow */
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1176  	else if ((fpscr & FPSCR_OE) && (fpscr & FPSCR_OX))
-5fad293bcbd48d Kumar Gala        2007-02-07  1177  		ret = FPE_FLTOVF;
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1178  
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1179  	/* Underflow */
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1180  	else if ((fpscr & FPSCR_UE) && (fpscr & FPSCR_UX))
-5fad293bcbd48d Kumar Gala        2007-02-07  1181  		ret = FPE_FLTUND;
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1182  
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1183  	/* Divide by zero */
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1184  	else if ((fpscr & FPSCR_ZE) && (fpscr & FPSCR_ZX))
-5fad293bcbd48d Kumar Gala        2007-02-07  1185  		ret = FPE_FLTDIV;
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1186  
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1187  	/* Inexact result */
-dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1188  	else if ((fpscr & FPSCR_XE) && (fpscr & FPSCR_XX))
-5fad293bcbd48d Kumar Gala        2007-02-07  1189  		ret = FPE_FLTRES;
-5fad293bcbd48d Kumar Gala        2007-02-07  1190  
-5fad293bcbd48d Kumar Gala        2007-02-07  1191  	return ret;
-5fad293bcbd48d Kumar Gala        2007-02-07  1192  }
-5fad293bcbd48d Kumar Gala        2007-02-07  1193  
-
-:::::: The code at line 1167 was first introduced by commit
-:::::: 5fad293bcbd48d9a2370020cf60e4b4a42559b12 [POWERPC] Fixup error handling when emulating a floating point instruction
-
-:::::: TO: Kumar Gala <galak@kernel.crashing.org>
-:::::: CC: Kumar Gala <galak@kernel.crashing.org>
+   146	
+   147	static void cirrus_scodec_test_set_gpio_ref_arg(struct software_node_ref_args *arg,
+   148							int gpio_num)
+   149	{
+   150		struct software_node_ref_args template =
+ > 151			SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
+   152	
+   153		*arg = template;
+   154	}
+   155	
 
 -- 
 0-DAY CI Kernel Test Service
