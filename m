@@ -1,65 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C821B36AEE
-	for <llvm@lists.linux.dev>; Wed, 20 Sep 2023 13:50:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C9AAC433C7;
-	Wed, 20 Sep 2023 13:50:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695217853;
-	bh=ZYMgDvz7cLiEi48+fLoU5oYwxYC+RNXpuugTwerelA4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=WYgV42Q41zYcX7fcsQWLwwrxbrrEfVse9h5Cv+phqauR1/HCAert4KodJzA2HkWy3
-	 5wb0UyHx1o0VXHcCKUn0jNRzJu6mPirdPh0AkNjOfjEPMcqPrX6Ireg2yoYheIqCBy
-	 ldUg/NPOhKMcsQgNwz0zG0fd9GnxJnb/ulC14E2LjwHAL95gx65ZV8wVCMjDGBlPh9
-	 vv+8yLllFz9LnvyNzDaIvrT/CHK8cT2GuvVL2I8zN5MzJy5HdZJRhRpgW/JDNIaD7C
-	 UUHRvK8FRsxpNZa6IRv3BFf2JudeMvzr4gO5/I7NJindbB8LJ388l971g3oLd9K6NG
-	 RG/djIE3eg1eA==
-From: Lee Jones <lee@kernel.org>
-To: Pavel Machek <pavel@ucw.cz>, Kees Cook <keescook@chromium.org>
-Cc: Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Alice Chen <alice_chen@richtek.com>, 
- Jacek Anaszewski <jacek.anaszewski@gmail.com>, 
- ChiYuan Huang <cy_huang@richtek.com>, ChiaEn Wu <chiaen_wu@richtek.com>, 
- kernel test robot <lkp@intel.com>, linux-leds@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- linux-hardening@vger.kernel.org
-In-Reply-To: <20230915201051.never.429-kees@kernel.org>
-References: <20230915201051.never.429-kees@kernel.org>
-Subject: Re: (subset) [PATCH] leds: mt6370: Annotate struct mt6370_priv
- with __counted_by
-Message-Id: <169521784990.3449392.15396251707007241017.b4-ty@kernel.org>
-Date: Wed, 20 Sep 2023 14:50:49 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04A93B2B0
+	for <llvm@lists.linux.dev>; Wed, 20 Sep 2023 15:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695223206; x=1726759206;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EmXFqkTuFNEaiLGXrgBSisJ8kBCI85FLrWVY62a5974=;
+  b=jsPwY2utVaqSd28m/9h1V49RMrnNErp3kCrqKEfrkfnkxboDwmle/aLT
+   ufK5nVLMo8YfqitNwmbdduiJ4WLV1l3GgdlXewOPvmnRufGeBrkPLhYjm
+   gr5ZYZbmyUJkL61XBO5XhHJZv/jHAPhUDm4oHUxviuGJ3EUqSReqx/hpw
+   ZftJtkL6Avwd5nzZjZMuK6XFmzWchlQ14yj+cgWAwsDu2g+1gAh6Bxg/f
+   o6ALBzrf8yDiQz/l+RWGJqFZYe/T/U/qCGwc3BkSwNjtGm/0s7Mtp+Rh9
+   lmVZRdzkKtKhQ67wqWNi+fgjSax5I7MHZIWoDqUiOGVyOnfTP4BjFigG8
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444349112"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="444349112"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 08:19:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862024014"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="862024014"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 08:19:55 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1qiyzY-0000000Gc8Z-1pGW;
+	Wed, 20 Sep 2023 18:19:52 +0300
+Date: Wed, 20 Sep 2023 18:19:51 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
+	alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 2/2] ALSA: hda: cirrus_scodec: Add KUnit test
+Message-ID: <ZQsNl146RFAYdjSL@smile.fi.intel.com>
+References: <20230918095129.440-1-rf@opensource.cirrus.com>
+ <20230918095129.440-3-rf@opensource.cirrus.com>
+ <ZQoILN6QCjzosCOs@google.com>
+ <874jjpwd4i.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.12.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874jjpwd4i.wl-tiwai@suse.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, 15 Sep 2023 13:10:52 -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On Wed, Sep 20, 2023 at 08:51:57AM +0200, Takashi Iwai wrote:
+> On Tue, 19 Sep 2023 22:44:28 +0200,
+> Nick Desaulniers wrote:
+> > 
+> > On Mon, Sep 18, 2023 at 10:51:29AM +0100, Richard Fitzgerald wrote:
+> (snip)
+> > > +static void cirrus_scodec_test_set_gpio_ref_arg(struct software_node_ref_args *arg,
+> > > +						int gpio_num)
+> > > +{
+> > > +	struct software_node_ref_args template =
+> > > +		SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
+> > 
+> > I'm observing the following error when building with:
+> > 
+> > $ make LLVM=1 -j128 allmodconfig sound/pci/hda/cirrus_scodec_test.o
+> > 
+> > sound/pci/hda/cirrus_scodec_test.c:151:60: error: initializer element is not a compile-time constant
+> >   151 |                 SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
+> >       |                                                                          ^~~~~~~~
+> > /builds/linux/include/linux/property.h:291:37: note: expanded from macro 'SOFTWARE_NODE_REFERENCE'
+> >   291 |         .nargs = ARRAY_SIZE(((u64[]){ 0, ##__VA_ARGS__ })) - 1, \
+> >       |                                            ^~~~~~~~~~~
+> > /builds/linux/include/linux/kernel.h:57:75: note: expanded from macro 'ARRAY_SIZE'
+> >    57 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+> >       |                                                                           ^~~
+> > /builds/linux/include/linux/compiler.h:228:59: note: expanded from macro '__must_be_array'
+> >   228 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+> >       |                                                                ^
+> > /builds/linux/include/linux/compiler_types.h:366:63: note: expanded from macro '__same_type'
+> >   366 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+> >       |                                                               ^
+> > /builds/linux/include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+> >    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+> >       |                                                              ^
 > 
-> As found with Coccinelle[1], add __counted_by for struct mt6370_priv.
+> Hm, this looks like some inconsistent handling of the temporary array
+> passed to ARRAY_SIZE() in the SOFTWARE_NODE_REFERENCE macro.  LLVM
+> can't treat it if it contains a variable in the given array, while GCC
+> doesn't care.
 > 
-> [...]
+> A hackish workaround would be the patch like below, but it's really
+> ugly.  Ideally speaking, it should be fixed in linux/properties.h, but
+> I have no idea how to fix there for LLVM.
+> 
+> Adding more relevant people to Cc.
 
-Applied, thanks!
+Thank you, I think it's quite easy to fix. Lemme cook the patch...
 
-[1/1] leds: mt6370: Annotate struct mt6370_priv with __counted_by
-      commit: 799107c1bb9049f9b3f28b5d651e336d09856019
+-- 
+With Best Regards,
+Andy Shevchenko
 
---
-Lee Jones [李琼斯]
 
