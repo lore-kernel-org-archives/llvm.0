@@ -1,104 +1,200 @@
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B1A256A
+	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 10:33:09 +0000 (UTC)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+	by smtp-out1.suse.de (Postfix) with ESMTP id 3597E338AD;
+	Thu, 21 Sep 2023 10:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1695292382; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7Js1zpV1/5tyHr20INs8L7sC4PojIEf8avVZr3ovZtM=;
+	b=kmnRhCS9M0QXPtX1OhDAV3Y6l/pa1Pf+cx8XBXHzVcqRqVppnoYl8lDjYbqXemFVhBta93
+	g7wNEKMNHZ/6Jgh58uPFoVTjG5v0WeyzrOhE9KTPXO7ea114eMDNExMkTiCvW7kSgEnPYY
+	1HMq4IqDhyEtX7laXgnRERz03en9Jgw=
+Received: from suse.cz (pmladek.udp.ovpn2.prg.suse.de [10.100.201.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0183C8F55;
-	Thu, 21 Sep 2023 09:23:35 +0000 (UTC)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38L8q8d1026256;
-	Thu, 21 Sep 2023 04:23:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	PODMain02222019; bh=J2qZUJ1cFFZzjHH3/osBYzH3RiKVzD3UD+0CYZe2Z0w=; b=
-	K25k0jVXTmiC1djsdbSsw3+D847Wwreu5QA/zqwZjNDh/roLz3QUnhfMaPGtAhGC
-	k7jZ2xnHQA5e0HshCUgeskbptgi0oKbrCzaaY62wUNU5vuRy86vtRK3drhWDCtxd
-	aZ9TWLuwKg4inVXhkM59vlGc1WiJntNIjTu4euy9XCNeVxAq+pKbPKyEoI6ROVV1
-	aW9jWmHDbYC6gsDxHLtVAU6fFbFmhtfqyd/VTQlBzd9xVftEksK9NqHQQfC+S6/C
-	KZnX1OuWkQzWL2CxoGY5nOMvMidTunznSYbVtMtMYeZyF1/SiyHNp2Sd10Fd/oaj
-	8WFzUqsEhvKA5CiXjGVGdw==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3t58shwgnd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Sep 2023 04:23:23 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Thu, 21 Sep
- 2023 10:23:22 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.37 via Frontend Transport; Thu, 21 Sep 2023 10:23:22 +0100
-Received: from [198.90.238.129] (unknown [198.90.238.129])
-	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9749C2A1;
-	Thu, 21 Sep 2023 09:23:19 +0000 (UTC)
-Message-ID: <0a4644bc-d345-9988-2eb6-e95c8db06219@opensource.cirrus.com>
-Date: Thu, 21 Sep 2023 10:23:14 +0100
+	by relay2.suse.de (Postfix) with ESMTPS id 3405F2C14E;
+	Thu, 21 Sep 2023 10:33:00 +0000 (UTC)
+Date: Thu, 21 Sep 2023 12:33:00 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: "Leizhen (ThunderTown)" <thunder.leizhen@huaweicloud.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Kees Cook <keescook@chromium.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Fangrui Song <maskray@google.com>, kernel-team@fb.com,
+	Leizhen <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <oliver.sang@intel.com>,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH] kallsyms: Fix kallsyms_selftest failure
+Message-ID: <ZQwb3NiOEkqHtrnD@alley>
+References: <20230825034659.1037627-1-yonghong.song@linux.dev>
+ <95a7d98c-b227-7929-b833-f6adc3b7e3ca@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [tiwai-sound:for-next 36/38]
- sound/pci/hda/cirrus_scodec_test.c:151:60: error: initializer element is not
- a compile-time constant
-Content-Language: en-US
-To: <arnd@arndb.de>, <treding@nvidia.com>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-        <alsa-devel@alsa-project.org>, Takashi Iwai <tiwai@suse.de>
-References: <202309210751.TXlnuEMF-lkp@intel.com>
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <202309210751.TXlnuEMF-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 5UtX-_ESS5mGioR1LtJsS8Ft0QeIi43-
-X-Proofpoint-ORIG-GUID: 5UtX-_ESS5mGioR1LtJsS8Ft0QeIi43-
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95a7d98c-b227-7929-b833-f6adc3b7e3ca@huaweicloud.com>
 
-On 21/9/23 00:35, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-> head:   72f6a13022f3bf16df305b75c32f95ece263a5ce
-> commit: 2144833e7b41459fa2d52bb0676f0ab4920cf32c [36/38] ALSA: hda: cirrus_scodec: Add KUnit test
-> config: hexagon-randconfig-r041-20211219 (https://download.01.org/0day-ci/archive/20230921/202309210751.TXlnuEMF-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309210751.TXlnuEMF-lkp@intel.com/reproduce)
+Adding live-patching list into Cc.
+
+On Fri 2023-08-25 15:19:10, Leizhen (ThunderTown) wrote:
+> On 2023/8/25 11:46, Yonghong Song wrote:
+> > Kernel test robot reported a kallsyms_test failure when clang lto is
+> > enabled (thin or full) and CONFIG_KALLSYMS_SELFTEST is also enabled.
+> > I can reproduce in my local environment with the following error message
+> > with thin lto:
+> >   [    1.877897] kallsyms_selftest: Test for 1750th symbol failed: (tsc_cs_mark_unstable) addr=ffffffff81038090
+> >   [    1.877901] kallsyms_selftest: abort
+> > 
+> > It appears that commit 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes
+> > from promoted global functions") caused the failure. Commit 8cc32a9bbf29
+> > changed cleanup_symbol_name() based on ".llvm." instead of '.' where
+> > ".llvm." is appended to a before-lto-optimization local symbol name.
+> > We need to propagate such knowledge in kallsyms_selftest.c as well.
+> > 
+> > Further more, compare_symbol_name() in kallsyms.c needs change as well.
+> > In scripts/kallsyms.c, kallsyms_names and kallsyms_seqs_of_names are used
+> > to record symbol names themselves and index to symbol names respectively.
+> > For example:
+> >   kallsyms_names:
+> >     ...
+> >     __amd_smn_rw._entry       <== seq 1000
+> >     __amd_smn_rw._entry.5     <== seq 1001
+> >     __amd_smn_rw.llvm.<hash>  <== seq 1002
+> >     ...
+> > 
+> > kallsyms_seqs_of_names are sorted based on cleanup_symbol_name() through, so
+> > the order in kallsyms_seqs_of_names actually has
+> > 
+> >   index 1000:   seq 1002   <== __amd_smn_rw.llvm.<hash> (actual symbol comparison using '__amd_smn_rw')
+> >   index 1001:   seq 1000   <== __amd_smn_rw._entry
+> >   index 1002:   seq 1001   <== __amd_smn_rw._entry.5
+> > 
+> > Let us say at a particular point, at index 1000, symbol '__amd_smn_rw.llvm.<hash>'
+> > is comparing to '__amd_smn_rw._entry' where '__amd_smn_rw._entry' is the one to
+> > search e.g., with function kallsyms_on_each_match_symbol(). The current implementation
+> > will find out '__amd_smn_rw._entry' is less than '__amd_smn_rw.llvm.<hash>' and
+> > then continue to search e.g., index 999 and never found a match although the actual
+> > index 1001 is a match.
+> > 
+> > To fix this issue, let us do cleanup_symbol_name() first and then do comparison.
+> > In the above case, comparing '__amd_smn_rw' vs '__amd_smn_rw._entry' and
+> > '__amd_smn_rw._entry' being greater than '__amd_smn_rw', the next comparison will
+> > be > index 1000 and eventually index 1001 will be hit an a match is found.
+> > 
+> > For any symbols not having '.llvm.' substr, there is no functionality change
+> > for compare_symbol_name().
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202309210751.TXlnuEMF-lkp@intel.com/
+> Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
 > 
-> All errors (new ones prefixed by >>):
-> 
->     In file included from sound/pci/hda/cirrus_scodec_test.c:9:
->     In file included from include/linux/gpio/driver.h:6:
->     In file included from include/linux/irqchip/chained_irq.h:10:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/hexagon/include/asm/io.h:337:
->     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __raw_readb(PCI_IOBASE + addr);
->                               ~~~~~~~~~~ ^
->     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->                                                             ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->     #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->                                                       ^
+> > 
+> > Fixes: 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes from promoted global functions")
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > Closes: https://lore.kernel.org/oe-lkp/202308232200.1c932a90-oliver.sang@intel.com
+> > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> > ---
+> >  kernel/kallsyms.c          | 17 +++++++----------
+> >  kernel/kallsyms_selftest.c | 23 +----------------------
+> >  2 files changed, 8 insertions(+), 32 deletions(-)
+> > 
+> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> > index 016d997131d4..e12d26c10dba 100644
+> > --- a/kernel/kallsyms.c
+> > +++ b/kernel/kallsyms.c
+> > @@ -188,16 +188,13 @@ static bool cleanup_symbol_name(char *s)
+> >  
+> >  static int compare_symbol_name(const char *name, char *namebuf)
+> >  {
+> > -	int ret;
+> > -
+> > -	ret = strcmp(name, namebuf);
+> > -	if (!ret)
+> > -		return ret;
+> > -
+> > -	if (cleanup_symbol_name(namebuf) && !strcmp(name, namebuf))
+> > -		return 0;
+> > -
+> > -	return ret;
+> > +	/* The kallsyms_seqs_of_names is sorted based on names after
+> > +	 * cleanup_symbol_name() (see scripts/kallsyms.c) if clang lto is enabled.
+> > +	 * To ensure correct bisection in kallsyms_lookup_names(), do
+> > +	 * cleanup_symbol_name(namebuf) before comparing name and namebuf.
+> > +	 */
+> > +	cleanup_symbol_name(namebuf);
+> > +	return strcmp(name, namebuf);
+> >  }
 
-This looks like it has nothing to do with cirrus_scodec_test, it's just
-unfortunate that including gpio/driver.h results in also including io.h.
+Hmm, I think that this is not the right fix.
 
-I think the problem here is that the way io.h tries to implement some
-functions that might depend on PCI_IOBASE is not portable. If PCI_IOBASE
-is not defined it defines it as NULL so that the functions will use
-(0 + addr). But clang doesn't like this.
+The problem is that compare_symbol_name() does not longer allow
+to match the full name of the extra .llwm. symbols.
 
-Probably the address calculation should be factored out from all these
-functions so that it can be alternately defined as (PCI_IOBASE + addr)
-or just (addr) depending whether PCI_IOBASE is set.
+I think that the problem is that the problem is that the symbols
+are sorted using cleanup_symbol_name(). They should be sorted
+by using the full name.
 
-I've added the author and maintainer of the io.h code and the author of
-the PCI_IOBASE hack for comment.
+Note that the original compare_symbol_name() returned return value
+when comparing the non-stripped name. It will work correctly when
+the non-stripped names are sorted.
 
+I believe that the correct fix is:
+
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 653b92f6d4c8..da1f8ae68999 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -339,25 +339,6 @@ static int symbol_absolute(const struct sym_entry *s)
+ 	return s->percpu_absolute;
+ }
+ 
+-static void cleanup_symbol_name(char *s)
+-{
+-	char *p;
+-
+-	/*
+-	 * ASCII[.]   = 2e
+-	 * ASCII[0-9] = 30,39
+-	 * ASCII[A-Z] = 41,5a
+-	 * ASCII[_]   = 5f
+-	 * ASCII[a-z] = 61,7a
+-	 *
+-	 * As above, replacing the first '.' in ".llvm." with '\0' does not
+-	 * affect the main sorting, but it helps us with subsorting.
+-	 */
+-	p = strstr(s, ".llvm.");
+-	if (p)
+-		*p = '\0';
+-}
+-
+ static int compare_names(const void *a, const void *b)
+ {
+ 	int ret;
+@@ -533,10 +514,6 @@ static void write_src(void)
+ 		printf("\n");
+ 	}
+ 
+-	if (lto_clang)
+-		for (i = 0; i < table_cnt; i++)
+-			cleanup_symbol_name((char *)table[i]->sym);
+-
+ 	sort_symbols_by_name();
+ 	output_label("kallsyms_seqs_of_names");
+ 	for (i = 0; i < table_cnt; i++)
+
+
+Unfortunately, I could not check it easily because I do not have any
+experience with building kernel with C-lang.
+
+Anyway, what do you think, please?
+
+Best Regards,
+Petr
