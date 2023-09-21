@@ -1,143 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA3D3CCEF;
-	Wed, 20 Sep 2023 23:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695253196; x=1726789196;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UTR46IBrTkbQ0Ugvt+v5ysaDfs4jKCRtGqauY0gMI14=;
-  b=E0zNZx8ei5kCbsP7Rjmt503R8DeWPOA9MHdy5WMyEEVYh7hmfOWGqg9w
-   V/Zyd8JkJqzQxitol/Yz17KTQt4d3/I0bpvfx4cDzbRP9mW59xBtRxz3i
-   MbkMF8fEnVJRdaIqIaZTVVeq3PhQwMTI6m1pz5Bv0O+8/ZeRndPEPKkn2
-   93xAN+Dj77U3l3SDJWpnmdz0e9iepf+veZ/NYYy94PDM2Ulj0B5QVEuSj
-   5PmSlSxp3+z7svigv+EGK/CXAi8jd3kcK5eUqY6WfhO0YJndlANpk/sV6
-   wS5RqwxQfcJnDYGCYFM2Pcz5mp6rpKiQw85BEb1lA7sQZueqfC4atjRRB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="384209301"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="384209301"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 16:35:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="750146566"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="750146566"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Sep 2023 16:35:27 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qj6j7-0009GU-04;
-	Wed, 20 Sep 2023 23:35:25 +0000
-Date: Thu, 21 Sep 2023 07:35:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>
-Subject: [tiwai-sound:for-next 36/38]
- sound/pci/hda/cirrus_scodec_test.c:151:60: error: initializer element is not
- a compile-time constant
-Message-ID: <202309210751.TXlnuEMF-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BBC38E
+	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 00:41:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695256881;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UtqzMr0SMplxdqSIZFlOhPAV2iCdzYjWYNDxZz5y1AU=;
+	b=OvDtN6+Xtu1gpaBSPXoRFjk5jzNu0r7OxJJDOPjwkcBhVwzqHVkxraGk/LL/bOdZfEV4Sx
+	RLtFT7oIFcBXb7Xo7yfbY1q2sLXdoZafd88+StfLfZoOJaSt4UsQDbZIomSNzzgCHu3JPb
+	GiJmPaY5KQlujy0hV9dR0G5mtQv6Db8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-391-1u6hZ3ccMSCq3uE4exs0DQ-1; Wed, 20 Sep 2023 20:41:20 -0400
+X-MC-Unique: 1u6hZ3ccMSCq3uE4exs0DQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2297101A585
+	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 00:41:19 +0000 (UTC)
+Received: from [172.64.4.12] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D7A50140E950;
+	Thu, 21 Sep 2023 00:41:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 234): Test report for master
+ (6.6.0-rc2, mainline.kernel.org-clang, 5d2f5353)
+Date: Thu, 21 Sep 2023 00:41:19 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <29364.123092020412000272@us-mta-391.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-head:   72f6a13022f3bf16df305b75c32f95ece263a5ce
-commit: 2144833e7b41459fa2d52bb0676f0ab4920cf32c [36/38] ALSA: hda: cirrus_scodec: Add KUnit test
-config: hexagon-randconfig-r041-20211219 (https://download.01.org/0day-ci/archive/20230921/202309210751.TXlnuEMF-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309210751.TXlnuEMF-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309210751.TXlnuEMF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from sound/pci/hda/cirrus_scodec_test.c:9:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from sound/pci/hda/cirrus_scodec_test.c:9:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from sound/pci/hda/cirrus_scodec_test.c:9:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> sound/pci/hda/cirrus_scodec_test.c:151:60: error: initializer element is not a compile-time constant
-                   SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
-                                                                            ^~~~~~~~
-   include/linux/property.h:291:37: note: expanded from macro 'SOFTWARE_NODE_REFERENCE'
-           .nargs = ARRAY_SIZE(((u64[]){ 0, ##__VA_ARGS__ })) - 1, \
-                                              ^~~~~~~~~~~
-   include/linux/kernel.h:57:75: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                                                             ^~~
-   include/linux/compiler.h:231:59: note: expanded from macro '__must_be_array'
-   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-                                                                  ^
-   include/linux/compiler_types.h:366:63: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                 ^
-   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-                                                                ^
-   6 warnings and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +151 sound/pci/hda/cirrus_scodec_test.c
+Kernel information:
+    Commit message: Merge tag 'spi-fix-v6.6-rc2' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/broonie/spi
 
-   146	
-   147	static void cirrus_scodec_test_set_gpio_ref_arg(struct software_node_ref_args *arg,
-   148							int gpio_num)
-   149	{
-   150		struct software_node_ref_args template =
- > 151			SOFTWARE_NODE_REFERENCE(&cirrus_scodec_test_gpio_swnode, gpio_num, 0);
-   152	
-   153		*arg = template;
-   154	}
-   155	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/105317
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9593012
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: Storage - mdadm upstream test: wrong regex on 06name test.
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1722
+            Affected tests:
+                 aarch64 - Storage - mdadm upstream test
+                 ppc64le - Storage - mdadm upstream test
+                  x86_64 - Storage - mdadm upstream test
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
