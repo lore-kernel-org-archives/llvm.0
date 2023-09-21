@@ -1,530 +1,235 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018DBA956
-	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 12:07:41 +0000 (UTC)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-404724ec0dcso2051795e9.1
-        for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 05:07:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1695298060; x=1695902860; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j6Pwn3by93Z9GDq57MINmnt8aTafU+8q1HtF6GDtpyE=;
-        b=jo1waEDWlWYEoorldcd2lDKGZjEJwQ0EQdCAzI2OtlWGR9EApqUxAjRcjwL3kV/jZ8
-         EChfkPoQ/mrg3RhMRi5DdFlDJ7U8hhp4/LEWc9mFNvSFbazEFOlM9D4dTGvIs3nvzhMC
-         OhyCDp5ZJJFn/PJpnxPAOU/Dox2wCxJHwLez/nLSB46xoHH6J3AljaDJKRWVItobyMTw
-         aqidPybon5mLEhjk4Ov/SZg8ZOMx2iVcHRT2WrUoXOWx3PBqTGXdlUh1Ksy8FGovlNT9
-         fNVOXvHkIKhIukMcLZivJ0SOqRMvTJrhVx2SdC0rn5Hx9Uj+8Q1dAsRvGLSNycQItLNG
-         v3Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695298060; x=1695902860;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j6Pwn3by93Z9GDq57MINmnt8aTafU+8q1HtF6GDtpyE=;
-        b=v3SyoG/nZ/z76QwHqnb5Ae0seJPZkuaYpohm1GhVMT91F2HKcS8sdbm3SmCL/R59Cr
-         JUr2OXPq59pRg/SPQN4oTW8fTiML8f5UBZtA2diBumPZniw1BKsx6xGXDvkASOPmIcj1
-         CeE9dGy/096Hq0DzFvNJblcgWBsNi5G14/3WaweHTKD/Ty+r06EyXdXuHzYV0ONmR5eQ
-         Ctnq2HBdNkV0EzudaDEMHjc+w0EPkII3TQwNJ+tocI4QOTcDVa21LVpJvTdKPPBuLjne
-         WFKaKfpec+WbJLCxvvRzVJPRGADfmwmc50lk0gHKAZ+rAeCUdcJ9/xAJBMCJN8fb7u4z
-         YKkA==
-X-Gm-Message-State: AOJu0YyL1ZjlsNWQiKj3BnVUdNimoRlQwmpLKgQY1/68Yh1AAlAbH/Q0
-	lFgBBcJ29xRj3HTioV/7y1POFw==
-X-Google-Smtp-Source: AGHT+IEBIFRPkyDzHQ+D2KJkz18KzRNTaqV/8CZsW2pJNGAvO8T0fP0Rc50Y752EiUbJgZslkUV0uw==
-X-Received: by 2002:a05:600c:1c08:b0:3fe:d637:7b25 with SMTP id j8-20020a05600c1c0800b003fed6377b25mr5052674wms.0.1695298059836;
-        Thu, 21 Sep 2023 05:07:39 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:7398:c156:422c:6091? ([2a01:e0a:999:a3a0:7398:c156:422c:6091])
-        by smtp.gmail.com with ESMTPSA id 12-20020a05600c240c00b003fc02e8ea68sm4642695wmp.13.2023.09.21.05.07.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 05:07:39 -0700 (PDT)
-Message-ID: <4d1102d9-ebea-4cb2-a510-3a40be7a3cb6@rivosinc.com>
-Date: Thu, 21 Sep 2023 14:07:38 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBC018C1C
+	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 12:31:18 +0000 (UTC)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RrvVL5QH4z4f4Pk2
+	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 20:15:06 +0800 (CST)
+Received: from [10.174.178.55] (unknown [10.174.178.55])
+	by APP4 (Coremail) with SMTP id gCh0CgCHHt7IMwxl99sdBA--.15172S3;
+	Thu, 21 Sep 2023 20:15:06 +0800 (CST)
+Subject: Re: [PATCH] kallsyms: Fix kallsyms_selftest failure
+To: Petr Mladek <pmladek@suse.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Kees Cook
+ <keescook@chromium.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Fangrui Song <maskray@google.com>, kernel-team@fb.com,
+ Leizhen <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel test robot <oliver.sang@intel.com>,
+ live-patching@vger.kernel.org
+References: <20230825034659.1037627-1-yonghong.song@linux.dev>
+ <95a7d98c-b227-7929-b833-f6adc3b7e3ca@huaweicloud.com>
+ <ZQwb3NiOEkqHtrnD@alley>
+From: "Leizhen (ThunderTown)" <thunder.leizhen@huaweicloud.com>
+Message-ID: <174a8093-0739-a502-8cf7-f5996a740f5a@huaweicloud.com>
+Date: Thu, 21 Sep 2023 20:15:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] modpost: Optimize symbol search from linear to binary
- search
-To: Jack Brennen <jbrennen@google.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, Palmer Dabbelt <palmer@rivosinc.com>
-References: <20230918210631.3882376-1-jbrennen@google.com>
+In-Reply-To: <ZQwb3NiOEkqHtrnD@alley>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20230918210631.3882376-1-jbrennen@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgCHHt7IMwxl99sdBA--.15172S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jr47KF4xGw4ktr43AF4UCFg_yoWxGFW3pr
+	WrAFsFkF48AryF9a4qqay0qFy2krs7Xr18W3s0ka4kuFyDZFyktrn7Kw4fu34DZr409FW0
+	qanYyFy2qF18AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+	e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+	14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+	9x07UWE__UUUUU=
+X-CM-SenderInfo: hwkx0vthuozvpl2kv046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
 
-Hi Jack,
 
-On RISC-V builds, we noticed a recent slow down after commit
-ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by modpost") was
-introduced. We tracked it down to find_nearest_sym() being called a lot
-and more specifically since we have a lot of local symbols that are
-generated as part of PCREL accesses (even more when building in debug
-mode, measured a count of 12964362 symbols in one vmlinux.o).
 
-Without your changes, a typical riscv defconfig build + debug, modpost
-took the following amount of time:
-
-$ time scripts/mod/modpost -M -o Module.symvers -T modules.order vmlinux.o
-real    4m21,976s
-user    4m21,803s
-sys     0m0,100s
-
-With your changes:
-
-$ time scripts/mod/modpost -M -o Module.symvers -T modules.order vmlinux.o
-real    0m1,077s
-user    0m0,980s
-sys     0m0,095s
-
-I guess you could further optimize it by allocating a binary tree for
-each section since find_nearest_sym() searches for symbols in a specific
-section, that would save a few comparisons. Not sure it will be way
-faster nor simpler to implement though.
-
-FWIW: Tested-by: Clément Léger <cleger@rivosinc.com>
-
-Thanks,
-
-Clément
-
-On 18/09/2023 23:06, Jack Brennen wrote:
-> Modify modpost to use binary search for converting addresses back
-> into symbol references.  Previously it used linear search.
+On 2023/9/21 18:33, Petr Mladek wrote:
+> Adding live-patching list into Cc.
 > 
-> This change saves a few seconds of wall time for defconfig builds,
-> but can save several minutes on allyesconfigs.
+> On Fri 2023-08-25 15:19:10, Leizhen (ThunderTown) wrote:
+>> On 2023/8/25 11:46, Yonghong Song wrote:
+>>> Kernel test robot reported a kallsyms_test failure when clang lto is
+>>> enabled (thin or full) and CONFIG_KALLSYMS_SELFTEST is also enabled.
+>>> I can reproduce in my local environment with the following error message
+>>> with thin lto:
+>>>   [    1.877897] kallsyms_selftest: Test for 1750th symbol failed: (tsc_cs_mark_unstable) addr=ffffffff81038090
+>>>   [    1.877901] kallsyms_selftest: abort
+>>>
+>>> It appears that commit 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes
+>>> from promoted global functions") caused the failure. Commit 8cc32a9bbf29
+>>> changed cleanup_symbol_name() based on ".llvm." instead of '.' where
+>>> ".llvm." is appended to a before-lto-optimization local symbol name.
+>>> We need to propagate such knowledge in kallsyms_selftest.c as well.
+>>>
+>>> Further more, compare_symbol_name() in kallsyms.c needs change as well.
+>>> In scripts/kallsyms.c, kallsyms_names and kallsyms_seqs_of_names are used
+>>> to record symbol names themselves and index to symbol names respectively.
+>>> For example:
+>>>   kallsyms_names:
+>>>     ...
+>>>     __amd_smn_rw._entry       <== seq 1000
+>>>     __amd_smn_rw._entry.5     <== seq 1001
+>>>     __amd_smn_rw.llvm.<hash>  <== seq 1002
+>>>     ...
+>>>
+>>> kallsyms_seqs_of_names are sorted based on cleanup_symbol_name() through, so
+>>> the order in kallsyms_seqs_of_names actually has
+>>>
+>>>   index 1000:   seq 1002   <== __amd_smn_rw.llvm.<hash> (actual symbol comparison using '__amd_smn_rw')
+>>>   index 1001:   seq 1000   <== __amd_smn_rw._entry
+>>>   index 1002:   seq 1001   <== __amd_smn_rw._entry.5
+>>>
+>>> Let us say at a particular point, at index 1000, symbol '__amd_smn_rw.llvm.<hash>'
+>>> is comparing to '__amd_smn_rw._entry' where '__amd_smn_rw._entry' is the one to
+>>> search e.g., with function kallsyms_on_each_match_symbol(). The current implementation
+>>> will find out '__amd_smn_rw._entry' is less than '__amd_smn_rw.llvm.<hash>' and
+>>> then continue to search e.g., index 999 and never found a match although the actual
+>>> index 1001 is a match.
+>>>
+>>> To fix this issue, let us do cleanup_symbol_name() first and then do comparison.
+>>> In the above case, comparing '__amd_smn_rw' vs '__amd_smn_rw._entry' and
+>>> '__amd_smn_rw._entry' being greater than '__amd_smn_rw', the next comparison will
+>>> be > index 1000 and eventually index 1001 will be hit an a match is found.
+>>>
+>>> For any symbols not having '.llvm.' substr, there is no functionality change
+>>> for compare_symbol_name().
+>>
+>> Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>
+>>>
+>>> Fixes: 8cc32a9bbf29 ("kallsyms: strip LTO-only suffixes from promoted global functions")
+>>> Reported-by: kernel test robot <oliver.sang@intel.com>
+>>> Closes: https://lore.kernel.org/oe-lkp/202308232200.1c932a90-oliver.sang@intel.com
+>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>>> ---
+>>>  kernel/kallsyms.c          | 17 +++++++----------
+>>>  kernel/kallsyms_selftest.c | 23 +----------------------
+>>>  2 files changed, 8 insertions(+), 32 deletions(-)
+>>>
+>>> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+>>> index 016d997131d4..e12d26c10dba 100644
+>>> --- a/kernel/kallsyms.c
+>>> +++ b/kernel/kallsyms.c
+>>> @@ -188,16 +188,13 @@ static bool cleanup_symbol_name(char *s)
+>>>  
+>>>  static int compare_symbol_name(const char *name, char *namebuf)
+>>>  {
+>>> -	int ret;
+>>> -
+>>> -	ret = strcmp(name, namebuf);
+>>> -	if (!ret)
+>>> -		return ret;
+>>> -
+>>> -	if (cleanup_symbol_name(namebuf) && !strcmp(name, namebuf))
+>>> -		return 0;
+>>> -
+>>> -	return ret;
+>>> +	/* The kallsyms_seqs_of_names is sorted based on names after
+>>> +	 * cleanup_symbol_name() (see scripts/kallsyms.c) if clang lto is enabled.
+>>> +	 * To ensure correct bisection in kallsyms_lookup_names(), do
+>>> +	 * cleanup_symbol_name(namebuf) before comparing name and namebuf.
+>>> +	 */
+>>> +	cleanup_symbol_name(namebuf);
+>>> +	return strcmp(name, namebuf);
+>>>  }
 > 
-> Before:
-> $ make LLVM=1 -j128 allyesconfig vmlinux -s KCFLAGS="-Wno-error"
->         Elapsed (wall clock) time (h:mm:ss or m:ss): 13:30.31
+> Hmm, I think that this is not the right fix.
 > 
-> After:
-> $ make LLVM=1 -j128 allyesconfig vmlinux -s KCFLAGS="-Wno-error"
->         Elapsed (wall clock) time (h:mm:ss or m:ss): 11:43.43
+> The problem is that compare_symbol_name() does not longer allow
+> to match the full name of the extra .llwm. symbols.
 > 
-> Signed-off-by: Jack Brennen <jbrennen@google.com>
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  scripts/mod/Makefile    |   4 +-
->  scripts/mod/modpost.c   |  60 +----------
->  scripts/mod/modpost.h   |  25 +++++
->  scripts/mod/symsearch.c | 233 ++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 265 insertions(+), 57 deletions(-)
->  create mode 100644 scripts/mod/symsearch.c
+> I think that the problem is that the problem is that the symbols
+> are sorted using cleanup_symbol_name(). They should be sorted
+> by using the full name.
 > 
-> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
-> index c9e38ad937fd..3c54125eb373 100644
-> --- a/scripts/mod/Makefile
-> +++ b/scripts/mod/Makefile
-> @@ -5,7 +5,7 @@ CFLAGS_REMOVE_empty.o += $(CC_FLAGS_LTO)
->  hostprogs-always-y	+= modpost mk_elfconfig
->  always-y		+= empty.o
->  
-> -modpost-objs	:= modpost.o file2alias.o sumversion.o
-> +modpost-objs	:= modpost.o file2alias.o sumversion.o symsearch.o
->  
->  devicetable-offsets-file := devicetable-offsets.h
->  
-> @@ -16,7 +16,7 @@ targets += $(devicetable-offsets-file) devicetable-offsets.s
->  
->  # dependencies on generated files need to be listed explicitly
->  
-> -$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o: $(obj)/elfconfig.h
-> +$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o $(obj)/symsearch.o: $(obj)/elfconfig.h
->  $(obj)/file2alias.o: $(obj)/$(devicetable-offsets-file)
->  
->  quiet_cmd_elfconfig = MKELF   $@
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index de499dce5265..975f235aca2c 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -22,7 +22,6 @@
->  #include <errno.h>
->  #include "modpost.h"
->  #include "../../include/linux/license.h"
-> -#include "../../include/linux/module_symbol.h"
->  
->  static bool module_enabled;
->  /* Are we using CONFIG_MODVERSIONS? */
-> @@ -577,11 +576,14 @@ static int parse_elf(struct elf_info *info, const char *filename)
->  			*p = TO_NATIVE(*p);
->  	}
->  
-> +	symsearch_init(info);
-> +
->  	return 1;
+> Note that the original compare_symbol_name() returned return value
+> when comparing the non-stripped name. It will work correctly when
+> the non-stripped names are sorted.
+> 
+> I believe that the correct fix is:
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 653b92f6d4c8..da1f8ae68999 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -339,25 +339,6 @@ static int symbol_absolute(const struct sym_entry *s)
+>  	return s->percpu_absolute;
 >  }
 >  
->  static void parse_elf_finish(struct elf_info *info)
->  {
-> +	symsearch_finish(info);
->  	release_file(info->hdr, info->size);
->  }
->  
-> @@ -1039,65 +1041,13 @@ static int secref_whitelist(const char *fromsec, const char *fromsym,
->  	return 1;
->  }
->  
-> -/*
-> - * If there's no name there, ignore it; likewise, ignore it if it's
-> - * one of the magic symbols emitted used by current tools.
-> - *
-> - * Otherwise if find_symbols_between() returns those symbols, they'll
-> - * fail the whitelist tests and cause lots of false alarms ... fixable
-> - * only by merging __exit and __init sections into __text, bloating
-> - * the kernel (which is especially evil on embedded platforms).
-> - */
-> -static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
+> -static void cleanup_symbol_name(char *s)
 > -{
-> -	const char *name = elf->strtab + sym->st_name;
+> -	char *p;
 > -
-> -	if (!name || !strlen(name))
-> -		return 0;
-> -	return !is_mapping_symbol(name);
+> -	/*
+> -	 * ASCII[.]   = 2e
+> -	 * ASCII[0-9] = 30,39
+> -	 * ASCII[A-Z] = 41,5a
+> -	 * ASCII[_]   = 5f
+> -	 * ASCII[a-z] = 61,7a
+> -	 *
+> -	 * As above, replacing the first '.' in ".llvm." with '\0' does not
+> -	 * affect the main sorting, but it helps us with subsorting.
+> -	 */
+> -	p = strstr(s, ".llvm.");
+> -	if (p)
+> -		*p = '\0';
 > -}
 > -
->  /* Look up the nearest symbol based on the section and the address */
->  static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
->  				 unsigned int secndx, bool allow_negative,
->  				 Elf_Addr min_distance)
+>  static int compare_names(const void *a, const void *b)
 >  {
-> -	Elf_Sym *sym;
-> -	Elf_Sym *near = NULL;
-> -	Elf_Addr sym_addr, distance;
-> -	bool is_arm = (elf->hdr->e_machine == EM_ARM);
-> -
-> -	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
-> -		if (get_secindex(elf, sym) != secndx)
-> -			continue;
-> -		if (!is_valid_name(elf, sym))
-> -			continue;
-> -
-> -		sym_addr = sym->st_value;
-> -
-> -		/*
-> -		 * For ARM Thumb instruction, the bit 0 of st_value is set
-> -		 * if the symbol is STT_FUNC type. Mask it to get the address.
-> -		 */
-> -		if (is_arm && ELF_ST_TYPE(sym->st_info) == STT_FUNC)
-> -			 sym_addr &= ~1;
-> -
-> -		if (addr >= sym_addr)
-> -			distance = addr - sym_addr;
-> -		else if (allow_negative)
-> -			distance = sym_addr - addr;
-> -		else
-> -			continue;
-> -
-> -		if (distance <= min_distance) {
-> -			min_distance = distance;
-> -			near = sym;
-> -		}
-> -
-> -		if (min_distance == 0)
-> -			break;
-> -	}
-> -	return near;
-> +	return symsearch_find_nearest(elf, addr, secndx,
-> +				      allow_negative, min_distance);
->  }
+>  	int ret;
+> @@ -533,10 +514,6 @@ static void write_src(void)
+>  		printf("\n");
+>  	}
 >  
->  static Elf_Sym *find_fromsym(struct elf_info *elf, Elf_Addr addr,
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index 5f94c2c9f2d9..6413f26fcb6b 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -10,6 +10,7 @@
->  #include <fcntl.h>
->  #include <unistd.h>
->  #include <elf.h>
-> +#include "../../include/linux/module_symbol.h"
->  
->  #include "list.h"
->  #include "elfconfig.h"
-> @@ -128,6 +129,8 @@ struct elf_info {
->  	 * take shndx from symtab_shndx_start[N] instead */
->  	Elf32_Word   *symtab_shndx_start;
->  	Elf32_Word   *symtab_shndx_stop;
-> +
-> +	struct symsearch *symsearch;
->  };
->  
->  /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
-> @@ -154,6 +157,28 @@ static inline unsigned int get_secindex(const struct elf_info *info,
->  	return index;
->  }
->  
-> +/*
-> + * If there's no name there, ignore it; likewise, ignore it if it's
-> + * one of the magic symbols emitted used by current tools.
-> + *
-> + * Internal symbols created by tools should be ignored by modpost.
-> + */
-> +static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
-> +{
-> +	const char *name = elf->strtab + sym->st_name;
-> +
-> +	if (!name || !strlen(name))
-> +		return 0;
-> +	return !is_mapping_symbol(name);
-> +}
-> +
-> +/* symsearch.c */
-> +void symsearch_init(struct elf_info *elf);
-> +void symsearch_finish(struct elf_info *elf);
-> +Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
-> +				unsigned int secndx, bool allow_negative,
-> +				Elf_Addr min_distance);
-> +
->  /* file2alias.c */
->  void handle_moddevtable(struct module *mod, struct elf_info *info,
->  			Elf_Sym *sym, const char *symname);
-> diff --git a/scripts/mod/symsearch.c b/scripts/mod/symsearch.c
-> new file mode 100644
-> index 000000000000..aab79262512b
-> --- /dev/null
-> +++ b/scripts/mod/symsearch.c
-> @@ -0,0 +1,233 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/* Helper functions for finding the symbol in an ELF which is "nearest"
-> + * to a given address.
-> + */
-> +
-> +#include "modpost.h"
-> +
-> +/* Struct used for binary search. */
-> +struct syminfo {
-> +	unsigned int symbol_index;
-> +	unsigned int section_index;
-> +	Elf_Addr addr;
-> +};
-> +
-> +/* Container used to hold an entire binary search table.
-> + * Entries in table are ascending, sorted first by section_index,
-> + * then by addr, and last by symbol_index.  The sorting by
-> + * symbol_index is used to duplicate the quirks of the prior
-> + * find_nearest_sym() function, where exact matches to an address
-> + * return the first symtab entry seen, but near misses return the
-> + * last symtab entry seen.
-> + * The first and last entries of the table are sentinels and their
-> + * values only matter in two places:  when we sort the table, and
-> + * on lookups, the end sentinel should not have an addr field which
-> + * matches its immediate predecessor.  To meet these requirements,
-> + * we initialize them to (0,0,0) and (max,max,max), and then after
-> + * sorting, we tweak the end sentinel's addr field accordingly.
-> + */
-> +struct symsearch {
-> +	size_t table_size;
-> +	struct syminfo table[];
-> +};
-> +
-> +static inline bool is_sym_searchable(struct elf_info *elf, Elf_Sym *sym)
-> +{
-> +	return is_valid_name(elf, sym) != 0;
-> +}
-> +
-> +static int syminfo_compare(const void *s1, const void *s2)
-> +{
-> +	const struct syminfo *sym1 = s1;
-> +	const struct syminfo *sym2 = s2;
-> +
-> +	if (sym1->section_index > sym2->section_index)
-> +		return 1;
-> +	if (sym1->section_index < sym2->section_index)
-> +		return -1;
-> +	if (sym1->addr > sym2->addr)
-> +		return 1;
-> +	if (sym1->addr < sym2->addr)
-> +		return -1;
-> +	if (sym1->symbol_index > sym2->symbol_index)
-> +		return 1;
-> +	if (sym1->symbol_index < sym2->symbol_index)
-> +		return -1;
-> +	return 0;
-> +}
-> +
-> +static size_t symbol_count(struct elf_info *elf)
-> +{
-> +	size_t result = 0;
-> +
-> +	for (Elf_Sym *sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
-> +		if (is_sym_searchable(elf, sym))
-> +			result++;
-> +	}
-> +	return result;
-> +}
-> +
-> +/* Populate the search array that we just allocated.
-> + * Be slightly paranoid here.  If the ELF file changes during processing,
-> + * or if the behavior of is_sym_searchable() changes during processing,
-> + * we want to catch it; neither of those is acceptable.
-> + */
-> +static void symsearch_populate(struct elf_info *elf,
-> +			       struct syminfo *table,
-> +			       size_t table_size)
-> +{
-> +	bool is_arm = (elf->hdr->e_machine == EM_ARM);
-> +
-> +	/* Start sentinel */
-> +	if (table_size-- == 0)
-> +		fatal("%s: size mismatch\n", __func__);
-> +	table->symbol_index = 0;
-> +	table->section_index = 0;
-> +	table->addr = 0;
-> +	table++;
-> +
-> +	for (Elf_Sym *sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
-> +		if (is_sym_searchable(elf, sym)) {
-> +			if (table_size-- == 0)
-> +				fatal("%s: size mismatch\n", __func__);
-> +			table->symbol_index = sym - elf->symtab_start;
-> +			table->section_index = get_secindex(elf, sym);
-> +			table->addr = sym->st_value;
-> +
-> +			/*
-> +			 * For ARM Thumb instruction, the bit 0 of st_value is
-> +			 * set if the symbol is STT_FUNC type. Mask it to get
-> +			 * the address.
-> +			 */
-> +			if (is_arm && ELF_ST_TYPE(sym->st_info) == STT_FUNC)
-> +				table->addr &= ~1;
-> +
-> +			table++;
-> +		}
-> +	}
-> +
-> +	/* End sentinel; all values are unsigned so -1 wraps to max */
-> +	if (table_size != 1)
-> +		fatal("%s: size mismatch\n", __func__);
-> +	table->symbol_index = -1;
-> +	table->section_index = -1;
-> +	table->addr = -1;
-> +}
-> +
-> +void symsearch_init(struct elf_info *elf)
-> +{
-> +	/* +2 here to allocate space for the start and end sentinels */
-> +	size_t table_size = symbol_count(elf) + 2;
-> +
-> +	elf->symsearch = NOFAIL(malloc(
-> +					sizeof(struct symsearch) +
-> +					sizeof(struct syminfo) * table_size));
-> +	elf->symsearch->table_size = table_size;
-> +
-> +	symsearch_populate(elf, elf->symsearch->table, table_size);
-> +	qsort(elf->symsearch->table, table_size,
-> +	      sizeof(struct syminfo), syminfo_compare);
-> +
-> +	/* A bit of paranoia; make sure that the end sentinel's address is
-> +	 * different than its predecessor.  Not doing this could cause
-> +	 * possible undefined behavior if anybody ever inserts a symbol
-> +	 * with section_index and addr both at their max values.
-> +	 * Doing this little bit of defensive programming is more efficient
-> +	 * than checking for array overruns later.
-> +	 */
-> +	elf->symsearch->table[table_size - 1].addr =
-> +		elf->symsearch->table[table_size - 2].addr + 1;
-> +}
-> +
-> +void symsearch_finish(struct elf_info *elf)
-> +{
-> +	free(elf->symsearch);
-> +	elf->symsearch = NULL;
-> +}
-> +
-> +/* Find the syminfo which is in secndx and "nearest" to addr.
-> + * allow_negative: allow returning a symbol whose address is > addr.
-> + * min_distance: ignore symbols which are further away than this.
-> + *
-> + * Returns a nonzero index into the symsearch table for success.
-> + * Returns NULL if no legal symbol is found within the requested range.
-> + */
-> +static size_t symsearch_find_impl(struct elf_info *elf, Elf_Addr addr,
-> +				  unsigned int secndx, bool allow_negative,
-> +				  Elf_Addr min_distance)
-> +{
-> +	/* Find the target in the array; it will lie between two elements.
-> +	 * Invariant here: table[lo] < target <= table[hi]
-> +	 * For the purposes of search, exact hits in the search array are
-> +	 * considered greater than the target.	This means that if we do
-> +	 * get an exact hit, then once the search terminates, table[hi]
-> +	 * will be the exact match which has the lowest symbol index.
-> +	 */
-> +	struct syminfo *table = elf->symsearch->table;
-> +	size_t hi = elf->symsearch->table_size - 1;
-> +	size_t lo = 0;
-> +	bool hi_is_usable = false;
-> +	bool lo_is_usable = false;
-> +	Elf_Addr hi_distance = -1;  // max Elf_Addr
-> +	Elf_Addr lo_distance = -1;  // max Elf_Addr
-> +	Elf_Addr min_distance_lo = min_distance;
-> +	Elf_Addr min_distance_hi = allow_negative ? min_distance : 0;
-> +
-> +	for (;;) {
-> +		size_t mid;
-> +
-> +		mid = lo + (hi - lo) / 2;
-> +		if (mid == lo)
-> +			break;
-> +		if (secndx > table[mid].section_index) {
-> +			lo = mid;
-> +		} else if (secndx < table[mid].section_index) {
-> +			hi = mid;
-> +		} else if (addr > table[mid].addr) {
-> +			lo = mid;
-> +			lo_distance = addr - table[mid].addr;
-> +			lo_is_usable = (lo_distance <= min_distance_lo);
-> +		} else {
-> +			hi = mid;
-> +			hi_distance = table[mid].addr - addr;
-> +			hi_is_usable = (hi_distance <= min_distance_hi);
-> +		}
-> +	}
-> +
-> +	if (hi_is_usable && lo_is_usable) {
-> +		lo_is_usable = (lo_distance <= hi_distance);
-> +		hi_is_usable = (hi_distance <= lo_distance);
-> +	}
-> +
-> +	if (!hi_is_usable)
-> +		return lo_is_usable ? lo : 0;
-> +
-> +	if (hi_distance == 0)
-> +		return hi;
-> +
-> +	/* Match quirks of existing behavior.  Advance hi to the last
-> +	 * matching entry in the search table.	We don't need to worry
-> +	 * about running off the end of the array due to the sentinel.
-> +	 */
-> +	while (table[hi+1].addr == table[hi].addr &&
-> +	       table[hi+1].section_index == table[hi].section_index) {
-> +		hi++;
-> +	}
-> +
-> +	return (lo_is_usable &&
-> +		table[lo].symbol_index > table[hi].symbol_index) ? lo : hi;
-> +}
-> +
-> +Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
-> +				unsigned int secndx, bool allow_negative,
-> +				Elf_Addr min_distance)
-> +{
-> +	size_t result = symsearch_find_impl(elf, addr, secndx,
-> +					    allow_negative, min_distance);
-> +
-> +	if (result == 0)
-> +		return NULL;
-> +
-> +	return &elf->symtab_start[elf->symsearch->table[result].symbol_index];
-> +}
+> -	if (lto_clang)
+> -		for (i = 0; i < table_cnt; i++)
+> -			cleanup_symbol_name((char *)table[i]->sym);
+> -
+>  	sort_symbols_by_name();
+>  	output_label("kallsyms_seqs_of_names");
+>  	for (i = 0; i < table_cnt; i++)
+> 
+> 
+> Unfortunately, I could not check it easily because I do not have any
+> experience with building kernel with C-lang.
+
+make CC=clang distclean defconfig
+make CC=clang -j64 2>err.txt
+
+make LLVM=1 LLVM_IAS=1 distclean defconfig
+scripts/config -e LTO_CLANG_THIN
+scripts/config -e KALLSYMS_SELFTEST
+make LLVM=1 LLVM_IAS=1 -j64
+
+> 
+> Anyway, what do you think, please?
+
+I'm busy these days. There's a lot of things before the holiday.
+I'll think about it over the holidays.
+
+> 
+> Best Regards,
+> Petr
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
+
