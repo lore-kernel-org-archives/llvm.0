@@ -1,101 +1,155 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656A820E7;
-	Thu, 21 Sep 2023 16:22:11 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 5DCF45C00F5;
-	Thu, 21 Sep 2023 12:22:10 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 21 Sep 2023 12:22:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1695313330; x=1695399730; bh=Ak
-	TeiXuh1R0GwYgW9icwMNtyaC+fPAA3UuL0o7kHtXA=; b=W9y15g3EH9bJjempT8
-	+GXjIHTdeH+fnkwtU9PXakn42mnYK8z+ZMlKuE1CFY9ShkbOeKRK83GF+TgQ7vFs
-	keJDMoHxcpFbYKYBKcWJFmuypitoogZonoH1PVJ0iLcp0hmoCkBnJrWAU+R0fCsn
-	2RKYHax0XaNf1P5nUReAsS25zv3iCSY9Izp/gM8uILLcEyZ8OE9sP2DOo4zKY27H
-	lYuVnxoztz6udfUbsxbfPPFWutBlglayYpCEj4hPSGQuxMA+4Rqajk9vKPZPdEeP
-	XPhZc4KizcVml9Md5j+RLVKRwhfFA2SkmnuA4Y69p6ESEck1C/UxDsknfSq7UAJC
-	JjSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1695313330; x=1695399730; bh=AkTeiXuh1R0Gw
-	YgW9icwMNtyaC+fPAA3UuL0o7kHtXA=; b=TjA3qLPBTIEtXUxpSuCxiujcGSSSt
-	gYpHY3FMzLXHZpqT/lYBfIC11FEBr3hwqLB5TzhTUI7+B1ZUjKanZOUsXcQgL84N
-	3fUxZcD7SS0lSMCRnluRzKiE7mlPw7DVvUcz2tj/9n93Dq7LAA5ZL6bUEGRHQNg+
-	HegkzZPpqZlA0t61hS3fCNOoi25VLqcCoWralv5VPt+HShmvZLDkG2jSlp/jlUgT
-	vBsGHyaG8DY5mA9xN6gz5stTdrvHdmH//Oc3QAVHOBh5rTRD1aWnOtIb/XpksVsU
-	2oLjKPr824DnAAGK74YvPll0WKozQmNDp3sXJpWG67rRe1u53KI/vMdYw==
-X-ME-Sender: <xms:sW0MZZE93hMTjKk52LCn1vqyxzJ4F947U0fqL5tatel9XhVwwyl7uA>
-    <xme:sW0MZeWYkuidBxxE8NInlsTtLnnrrz3j_CXscCTdV4yRt6ioeun-B_jemQ7OFKpen
-    Lyb5LjRY8R1hv-devE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekiedgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:sW0MZbIvRTxOfiUICkvF_9mdqbMJY3-XyK473LOH-ealMElDXsm0tQ>
-    <xmx:sW0MZfGmSmuCAWxby9F501t-i1p9yT-EgXrHvfn1bCJgT9PpgAvKUA>
-    <xmx:sW0MZfVeNeG14nBQw--M0pcIrOxKDFMhHcUKN-bKzu7MyWZVXRiqiw>
-    <xmx:sm0MZaTfxSCuu0r6jGq3SUITIWXvzxeZrjQ-1YFpIoWtfdU0YF8TDQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6E6B5B6008D; Thu, 21 Sep 2023 12:22:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261E3199C1
+	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 16:26:55 +0000 (UTC)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-414ba610766so507021cf.0
+        for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 09:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695313615; x=1695918415; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b2rhuVc5nDe//8n4ZYcZiDm+U/AGb9s4mBHSicI1GSU=;
+        b=lAZe1l41bYcgpcMsKicOwGRxVd3dNWMQLfKQMnoGR+g5AQCnU8b+28kOlvkW87X0dT
+         HaH4K/1Ik9RzE3gLCuKzKZRiufYRckwqu8TGU7ovYihBl+YrErWuOyj0LklgyJ93NdVy
+         vj/bc5GeuSCrIDPSBgHt6YEKw6FBvX3MwQHPOIgn+JN/3CE/UHoQRGkzm5dRDdcHCwD4
+         yAcv+sh8rW35vqzkcEYv1CE3zDQjjIEjmEoV6hS0R6vbXB0tv+Q+luVxgJMDkFH6HSAt
+         WjbNGfEDmG0HI+bWjGKajDiZI3k/CW/Ran47QioHhDUdP/N519k2cx1NJ9f87bv/QmK+
+         MPOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695313615; x=1695918415;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b2rhuVc5nDe//8n4ZYcZiDm+U/AGb9s4mBHSicI1GSU=;
+        b=IwkwpfalQec2mLL4zVwUOmQRJNj0CHazCwsF5Xm2XnjrIq7nd+dd3T6WacbAamWikU
+         rHZikTRxqdsX5rhKsXIQYEs1g2cvy621CLoL+eZqKqWgdfdDEjDHwZxyhkRU+PDnJ/2b
+         f5luUng731KUdnDleuh2FnYMls6XkvPgXBy0QSMt3MRREouIw/O67W2rpmmDo0EXuy1i
+         6JqLJ6ahQfNBhvvqnycGoOaKfuc16EeKO7Vsc/9ZKOLMRmZc8tlXpavvHSwwlw5AnQXt
+         OLybP1Wf/SBJ38n6WZlZWDx2tod0Xsf5isGgaJYUShjwqnzFQoLN8V4wm73slqgLfPKn
+         hNiQ==
+X-Gm-Message-State: AOJu0Yyb6Aj14b42SPoEw+VcJlXM2uNKDaEzSb+9s98qWh1dsHn2ER23
+	/7O3Mn3VYCAlqGFuPq/owLn7A7Fb0uNmM+zzXXBjeA==
+X-Google-Smtp-Source: AGHT+IEZxStINr93IpohyJB9AbIwy1arHrw2m221GKh/X/f6s+z2YlLr2FxQ4xoq5T6PXi/9DfYfuXLWX6YuhYB6jXg=
+X-Received: by 2002:a05:622a:1341:b0:417:9045:50c9 with SMTP id
+ w1-20020a05622a134100b00417904550c9mr303608qtk.22.1695313614576; Thu, 21 Sep
+ 2023 09:26:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <e09527e8-ac2d-49e8-9e36-ea8e5f9ed8aa@app.fastmail.com>
-In-Reply-To: <87pm2bzov8.wl-tiwai@suse.de>
-References: <202309210751.TXlnuEMF-lkp@intel.com>
- <0a4644bc-d345-9988-2eb6-e95c8db06219@opensource.cirrus.com>
- <87pm2bzov8.wl-tiwai@suse.de>
-Date: Thu, 21 Sep 2023 12:21:49 -0400
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Takashi Iwai" <tiwai@suse.de>,
- "Richard Fitzgerald" <rf@opensource.cirrus.com>
-Cc: "Thierry Reding" <treding@nvidia.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, alsa-devel@alsa-project.org
-Subject: Re: [tiwai-sound:for-next 36/38] sound/pci/hda/cirrus_scodec_test.c:151:60:
- error: initializer element is not a compile-time constant
-Content-Type: text/plain
+References: <20230920001728.1439947-1-maskray@google.com> <20230921072655.GA14803@noisy.programming.kicks-ass.net>
+ <CAFP8O3+_8H+fetuoqwwcfqJLNtYmpsWZhY2arD7HMuPmcN+X_g@mail.gmail.com> <20230921153537.GG14803@noisy.programming.kicks-ass.net>
+In-Reply-To: <20230921153537.GG14803@noisy.programming.kicks-ass.net>
+From: Fangrui Song <maskray@google.com>
+Date: Thu, 21 Sep 2023 09:26:43 -0700
+Message-ID: <CAFP8O3K6Lgxe=Res9d2GKipRYdXqzv3wa_0PLtDcyn7g7H=z5w@mail.gmail.com>
+Subject: Re: [PATCH] x86/speculation, objtool: Use absolute relocations for annotations
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 21, 2023, at 08:34, Takashi Iwai wrote:
-> On Thu, 21 Sep 2023 11:23:14 +0200, Richard Fitzgerald wrote:
->> On 21/9/23 00:35, kernel test robot wrote:
-
->> >     In file included from arch/hexagon/include/asm/io.h:337:
->> >     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->> >             val = __raw_readb(PCI_IOBASE + addr);
->> >                               ~~~~~~~~~~ ^
->> >     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->> >             val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->> >                                                             ~~~~~~~~~~ ^
->> >     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->> >     #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->> >                                                       ^
->> 
->> This looks like it has nothing to do with cirrus_scodec_test, it's just
->> unfortunate that including gpio/driver.h results in also including io.h.
+On Thu, Sep 21, 2023 at 8:35=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> Yeah, I believe this part is irrelevant can be ignored.  It's included
-> as a part of (single) log.
+> On Thu, Sep 21, 2023 at 12:58:13AM -0700, Fangrui Song wrote:
+> > On Thu, Sep 21, 2023 at 12:26=E2=80=AFAM Peter Zijlstra <peterz@infrade=
+ad.org> wrote:
+> > >
+> > > On Tue, Sep 19, 2023 at 05:17:28PM -0700, Fangrui Song wrote:
+> > > > .discard.retpoline_safe sections do not have the SHF_ALLOC flag.  T=
+hese
+> > > > sections referencing text sections' STT_SECTION symbols with PC-rel=
+ative
+> > > > relocations like R_386_PC32 [0] is conceptually not suitable.  Newe=
+r
+> > > > LLD will report warnings for REL relocations even for relocatable l=
+inks
+> > > > [1].
+> > > >
+> > > >     ld.lld: warning: vmlinux.a(drivers/i2c/busses/i2c-i801.o):(.dis=
+card.retpoline_safe+0x120): has non-ABS relocation R_386_PC32 against symbo=
+l ''
+> > >
+> > > What, why ?!? Please explain more.
+> >
+> > This can be read as a pedantic warning from the linker.
+> >
+> > A location relocated by an R_386_PC32 relocation in
+> > .discard.retpoline_safe records an offset from the current location
+> > (non-allocable) to an text symbol.
+> > This offset is conceptually not suitable: in the ELF object file
+> > format's model, the non-SHF_ALLOC section is not part of the memory
+> > image, so
+> > we cannot say that the offset from the non-memory thing to a text
+> > symbol is a fixed value.
+>
+> Bah, so why has this worked at all then? Clearly the linkers aren't very
+> strict about things.
 
-Correct, it's a known bug that we've been working on for (literally) years,
-it should be fixed soon by enforcing CONFIG_HAS_IOPORT soon to blank out
-these functions on architectures that cannot support them. I hope we can
-land the last patch for this in 6.7.
+GNU ld isn't very strict, but LLD has had a warning for
+non-relocatable links for a long time
+(https://github.com/llvm/llvm-project/blob/main/lld/test/ELF/non-abs-reloc.=
+s).
+LLD just did not report warnings for relocatable links.
 
-       Arnd
+> Anyway, I think what we want is to just mark the section SHF_ALLOC. The
+> reason is that one of the plans we have is to collapse all the different
+> annotations into a single section and then have something like:
+>
+>         struct objtoo_annotation {
+>                 s32 location;
+>                 u32 type;
+>         }
+>
+> So that we can easily extend the annotations and don't need to add
+> yet-another-section-reader-function to objtool.
+>
+> This is just one of the things we've not gotten around to yet. But as
+> is, we have:
+>
+>         .discard.unreachable
+>         .discard.reachable
+>         .discard.func_stack_frame_non_standard
+>         .discard.ignore_alts
+>         .discard.unwind_hints
+>         .discard.noendbr
+>         .discard.retpoline_safe
+>         .discard.instr_end
+>         .discard.instr_begin
+>         .discard.validate_unret
+>         .discard.intra_function_calls
+>
+> And with the exception of unwind_hints, they're all just trivial
+> location things.
+>
+> The very last thing we need is yet more of that.
+
+If these sections are guaranteed to be discarded (*(.discard.*) in
+scripts/module.lds.S and include/asm-generic/vmlinux.lds.h),
+using non-SHF_ALLOC sections isn't a bad choice.
+The intention is actually clearer.
+
+> If we were to use absolute things, we get 12 byte entries and while that
+> probably wouldn't spell the end of the world, why make thing larger than
+> they have to be.
+>
+> After all, its not like any of this actually survives the final link.
+
+I do not see why absolute things need 12 byte entries.
+We can freely use `.long .text.foo` even in ELFCLASS64 object files.
+There is no risk of overflow (the ultimate link .text.foo may have an
+address of 0xffffffff........) since the section will be discarded.
+
+Referencing SHF_ALLOC sections with absolute relocations in
+non-SHF_ALLOC sections has well-defined semantics, as used by .debug_*
+sections.
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
