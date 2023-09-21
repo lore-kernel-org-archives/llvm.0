@@ -1,101 +1,70 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173B55CBD
-	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 07:58:25 +0000 (UTC)
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-415155b2796so202981cf.1
-        for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 00:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695283105; x=1695887905; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XVDAf4WvVJJ7OSvhi+Yfiyx2UN4HVXEh6f4xLTULUGM=;
-        b=GKAxBejpNRPS1W70uWmBXOf4A+hrsr23H5KgFjx/pkPSIhcT5S5oiR1WTihaiFmUAt
-         VCcE/izo6BqJOG73HAYV/jujcf15+aUAMH0yXJwRQWNs/ldNBsufN600pSgkwAM28rP4
-         KR41Tu4wxykTc60gqJ7+5f6jLiwyH/OjGEnMPXsTJrIaem8rThAwiExJEFDEkpOrVbwS
-         6sgGcTgJLkH+tqV+NyOvQJ0tsIefVgPs/R1rrZo1pE/glZ+a5/RYvFo4rn+v7XUgK8kQ
-         qk4YIJSq3o3Nn5nPq0I4DeqfI68hgv+2TLuDOlLm6vz356gUvF0OiLkaQQg/hK1xcInY
-         b+sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695283105; x=1695887905;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XVDAf4WvVJJ7OSvhi+Yfiyx2UN4HVXEh6f4xLTULUGM=;
-        b=o1FY+AvVnT5EqSXr3aPoFaQTI8qsMVa3UNpHYVVieBe5KSGU89Dly0f4RKPmvj4uos
-         ZbVfPOrSgI1n0iuD14eklOG6H7ciu7MQcZuBKGTM8fHuyIkTlKR2Igk5GjoVF6Y7d70Y
-         r+VnmcsxPQ15e5zNlp9ILjT7ceLo3S8auVn7I/Q1YFRRzu5mV+m0cInTOkG+t1nUVI9T
-         ibmQuxXne2RH/P9rTe3vVd+0kIZh4PPUHvQVu9RFis0B7S8WB0qEV7EPW6Y6LpP90jjZ
-         lym5S6fQNrLQecqgu9+t6oWZBuOA8eboB2yJTBbmINjeYJuiJxUXuj7ExRbExL3eSFZz
-         RhHA==
-X-Gm-Message-State: AOJu0YwgUadL/UOWnf7Y3t6gW+K6xHW0G6yMGMFwy5oHJgXSo3rHBH8R
-	6rmiR2FvqcXat38CTRgl2nJjtv1I+c16gSVphuCJfg==
-X-Google-Smtp-Source: AGHT+IHhB5IobmDnc5veIt6gFjFNMEhSdUigSI1xxqe8K/+P5OK7t3buKoUeeDTzHcWQMy7ISbP8znADFgHSZBnWzng=
-X-Received: by 2002:ac8:590d:0:b0:404:8218:83da with SMTP id
- 13-20020ac8590d000000b00404821883damr135481qty.1.1695283104920; Thu, 21 Sep
- 2023 00:58:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52BE8C1A;
+	Thu, 21 Sep 2023 08:09:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288E2C116AF;
+	Thu, 21 Sep 2023 08:09:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695283781;
+	bh=CRChqGGo4RR2euNwhsDyCD/AoeyKktzzjOKjh37j308=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=U6NPZ+8WyNsZOrY2Ac+ioT6/gPDw2ATD5O9tV01TxCmDZ6+hXu1KPDEIz3a3Gtwqx
+	 tKsvCJSSNEHimX8QPbVZQJ4UTZG4trO9kwulY4CGG1iwMP3qdSH0L3z5X/N9NfDFTs
+	 2lCfQEvwcgBc8JcV3rpcBvh779jTDhW9ZYVktRfLINCxVbeWSUqjqeqr1H7Y3KaCi9
+	 5FHGysRq9RRBkxkT+7NXxvkZBnHbVe7pX4kVgVqaQ4ADoRTodYgJTD/8oPWCJZVggu
+	 hFQIs+fghTAVHf54bge5tZrM34SrNJyWsXFComQWwYojGcRYn9khtN5vaM4m88eMX0
+	 /wYF0Fl26L6Og==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230920001728.1439947-1-maskray@google.com> <20230921072655.GA14803@noisy.programming.kicks-ass.net>
-In-Reply-To: <20230921072655.GA14803@noisy.programming.kicks-ass.net>
-From: Fangrui Song <maskray@google.com>
-Date: Thu, 21 Sep 2023 00:58:13 -0700
-Message-ID: <CAFP8O3+_8H+fetuoqwwcfqJLNtYmpsWZhY2arD7HMuPmcN+X_g@mail.gmail.com>
-Subject: Re: [PATCH] x86/speculation, objtool: Use absolute relocations for annotations
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: wcn36xx: Annotate struct wcn36xx_hal_ind_msg with
+ __counted_by
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230915200622.never.820-kees@kernel.org>
+References: <20230915200622.never.820-kees@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Loic Poulain <loic.poulain@linaro.org>, Kees Cook <keescook@chromium.org>,
+ wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
+Message-ID: <169528377712.1539628.6973937251769266180.kvalo@kernel.org>
+Date: Thu, 21 Sep 2023 08:09:38 +0000 (UTC)
 
-On Thu, Sep 21, 2023 at 12:26=E2=80=AFAM Peter Zijlstra <peterz@infradead.o=
-rg> wrote:
->
-> On Tue, Sep 19, 2023 at 05:17:28PM -0700, Fangrui Song wrote:
-> > .discard.retpoline_safe sections do not have the SHF_ALLOC flag.  These
-> > sections referencing text sections' STT_SECTION symbols with PC-relativ=
-e
-> > relocations like R_386_PC32 [0] is conceptually not suitable.  Newer
-> > LLD will report warnings for REL relocations even for relocatable links
-> > [1].
-> >
-> >     ld.lld: warning: vmlinux.a(drivers/i2c/busses/i2c-i801.o):(.discard=
-.retpoline_safe+0x120): has non-ABS relocation R_386_PC32 against symbol ''
->
-> What, why ?!? Please explain more.
+Kees Cook <keescook@chromium.org> wrote:
 
-This can be read as a pedantic warning from the linker.
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct wcn36xx_hal_ind_msg.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Loic Poulain <loic.poulain@linaro.org>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: wcn36xx@lists.infradead.org
+> Cc: linux-wireless@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-A location relocated by an R_386_PC32 relocation in
-.discard.retpoline_safe records an offset from the current location
-(non-allocable) to an text symbol.
-This offset is conceptually not suitable: in the ELF object file
-format's model, the non-SHF_ALLOC section is not part of the memory
-image, so
-we cannot say that the offset from the non-memory thing to a text
-symbol is a fixed value.
+Patch applied to ath-next branch of ath.git, thanks.
 
-> > Switch to absolute relocations instead, which indicate link-time
-> > addresses.  In a relocatable link, these addresses are also output
-> > section offsets, used by checks in tools/objtool/check.c.  When linking
-> > vmlinux, these .discard.* sections will be discarded, therefore it is
-> > not a problem that R_X86_64_32 cannot represent a kernel address.
-> >
-> > Alternatively, we could set the SHF_ALLOC flag for .discard.* sections,
-> > but I think non-SHF_ALLOC for sections to be discarded makes more sense=
-.
-> >
-> > Note: if we decide to never support REL architectures (e.g. arm, i386),
->
-> We have explicit support for REL (as opposed to RELA) architectures, so
-> I don't think we can do that.
->
+f8cbbb224b11 wifi: wcn36xx: Annotate struct wcn36xx_hal_ind_msg with __counted_by
 
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230915200622.never.820-kees@kernel.org/
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
