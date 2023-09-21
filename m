@@ -1,68 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC8A64F;
-	Thu, 21 Sep 2023 06:30:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B06C433D9;
-	Thu, 21 Sep 2023 06:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695277858;
-	bh=T+AarZU1OTWE4tfG5KCNEN7xu+9uCv63xpcrlLBPzs4=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=F8spp6f20lSgSPHJDALIiU808mf39UoqBTNdF7qImjbNCJwTFAC3eIT2dM1d9jnJx
-	 Hz7Ek/XGl4FJw8IyEj87AlnDMKzuVWv2Jyn50UdvQz54g8Pda4wteEZiOpW/e606MW
-	 aiQ+wR1I9Zzr5RI1fXHVsD6oki6FitbWIfn8AMbAIz0iwUpoQh+fREph4mexqnHQm+
-	 CDt8pTl83zrSp3k8q50qdg3OsV+ag3dJcCuF0cxmfBx6cbMdcYsav3J3rKJrbW62TD
-	 ucDYT+V8I9UpkPPQPbR3w1onrFv9hIr47UeFE3OL8c05hPDHSDmJ+be9gmwtjb4mH/
-	 0Tlelv86F33bQ==
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0153D90
+	for <llvm@lists.linux.dev>; Thu, 21 Sep 2023 07:27:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=MEwOrql2CJ8ARZnwIYvEKozhyGDGiEqWcdZBHjO1eK4=; b=BKnAtAgBdBYP6A5mxCfLXR4gjN
+	A/aRGwIT14O8GtCkN+n6oFDsI5YuuzJAEZXUyPhAce1YRKe2OfmOIg8nIesAIAr+hVeP5ytMS//1V
+	YU1UH5bk/cTQATcd5xDpOQ/n9QtUq9i8EL1UEYxPkQxb6ecekqAKtPI1F7++7uZioqUMQfuNxD+3v
+	dAoQAvi4iDz+A8fT+taz6vE8je1IO24zLrnJGmxk3B3j1iQ2i4ISvdSFdzX5QoIai2sFzvcpP1Itm
+	W8J1R2tR98dAkWwcBtVyUhK+YBiPPO5h8JcHxy71u5oB9yvkccrG9zQrjedNEAXDkhK4HWT2NYkbj
+	vkq333pw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1qjE5Q-00AXQj-Cs; Thu, 21 Sep 2023 07:26:56 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 915B23002E3; Thu, 21 Sep 2023 09:26:55 +0200 (CEST)
+Date: Thu, 21 Sep 2023 09:26:55 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Fangrui Song <maskray@google.com>
+Cc: x86@kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] x86/speculation, objtool: Use absolute relocations for
+ annotations
+Message-ID: <20230921072655.GA14803@noisy.programming.kicks-ass.net>
+References: <20230920001728.1439947-1-maskray@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: ipw2x00: Annotate struct libipw_txb with
- __counted_by
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230915200602.never.582-kees@kernel.org>
-References: <20230915200602.never.582-kees@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Stanislav Yakovlev <stas.yakovlev@gmail.com>,
- Kees Cook <keescook@chromium.org>, linux-wireless@vger.kernel.org,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
-Message-ID: <169527785383.1469888.6111719451945571724.kvalo@kernel.org>
-Date: Thu, 21 Sep 2023 06:30:55 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230920001728.1439947-1-maskray@google.com>
 
-Kees Cook <keescook@chromium.org> wrote:
-
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On Tue, Sep 19, 2023 at 05:17:28PM -0700, Fangrui Song wrote:
+> .discard.retpoline_safe sections do not have the SHF_ALLOC flag.  These
+> sections referencing text sections' STT_SECTION symbols with PC-relative
+> relocations like R_386_PC32 [0] is conceptually not suitable.  Newer
+> LLD will report warnings for REL relocations even for relocatable links
+> [1].
 > 
-> As found with Coccinelle[1], add __counted_by for struct libipw_txb.
+>     ld.lld: warning: vmlinux.a(drivers/i2c/busses/i2c-i801.o):(.discard.retpoline_safe+0x120): has non-ABS relocation R_386_PC32 against symbol ''
+
+What, why ?!? Please explain more.
+
+> Switch to absolute relocations instead, which indicate link-time
+> addresses.  In a relocatable link, these addresses are also output
+> section offsets, used by checks in tools/objtool/check.c.  When linking
+> vmlinux, these .discard.* sections will be discarded, therefore it is
+> not a problem that R_X86_64_32 cannot represent a kernel address.
 > 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> Alternatively, we could set the SHF_ALLOC flag for .discard.* sections,
+> but I think non-SHF_ALLOC for sections to be discarded makes more sense.
 > 
-> Cc: Stanislav Yakovlev <stas.yakovlev@gmail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: linux-wireless@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Note: if we decide to never support REL architectures (e.g. arm, i386),
 
-Patch applied to wireless-next.git, thanks.
-
-357be7ebba38 wifi: ipw2x00: Annotate struct libipw_txb with __counted_by
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230915200602.never.582-kees@kernel.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+We have explicit support for REL (as opposed to RELA) architectures, so
+I don't think we can do that.
 
