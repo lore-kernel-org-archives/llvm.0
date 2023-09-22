@@ -1,49 +1,47 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7E642C12
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:29:02 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1c3f97f2239so22090265ad.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:29:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C438242C15
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:29:03 +0000 (UTC)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-691c05bc5aaso1964755b3a.2
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695403742; x=1696008542; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8x7bQDxEJ+vAEVTZtm+5duUGDbyuhOyRqLHGlsgE3Ss=;
-        b=X6Sm5gy8aypCErWulyDyvWlh1S0VzpxG1LQw6//wlcjc1s9sMVGajOMJ36ylDsILLm
-         Wdo9z7Yzor0u44MgpCXtrZd0hK74IRdLfib4cIuXm6LpYe2Hox8wT5WMKx697p7O98ni
-         ZKX3u+q0jyEGxbC09Yp66xo64AqGVeUs+avbc=
+        d=chromium.org; s=google; t=1695403743; x=1696008543; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8+zsDKqPYa5khoeQ/X2KkaY8mmY8r9M3Aj1MNqbUX4=;
+        b=lO1jI7vf3Vqsw+T5upse+mcEw7tKVG6Ee2Rkl9u6XwtjgHK3LMgMqjs6twHnUlvLAd
+         VDjoD35r2uS3580Uw8JpWuSLVnkWgAIxUgtdYXENgsz/IEsA/YmllexoCudPqK0meWQr
+         qCdUzm1rPfnWUgbYQ3o2lepn9SdQ4i/swwhpY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695403742; x=1696008542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8x7bQDxEJ+vAEVTZtm+5duUGDbyuhOyRqLHGlsgE3Ss=;
-        b=Pqsdm1fUfQZOAxQAKk32z+JaYTntootjpSAQHdARAICX8sneJu6w3EWxQSCBYR5w/B
-         9K9eA31VR8Fcb37NRxdtOwH8nUP8D4dyhsz3lIAxjHTKph/bryrcaPI1SLORegZW3qo/
-         0PYv+nJb/Xcri9vB9giBoD7/FTWph9xRwq7iU0r+IRN9bNzzSuMjB6PezYWoovMxtFo5
-         36K63agjVrDxyp83kwqhAzK5RykyLf02qUK72TZLhMJuBnK4cOsN0HhJ3+yL4uR8bkBy
-         F8F/5Pr/GafD9iMeZ5sffTS4lpgU2s/kU4F6YDkdNbmM8IzijTX5qRY7jaVUNFGBKBI7
-         bRPA==
-X-Gm-Message-State: AOJu0YzyIR+QHNs2v73uXmXnXB11mAd5f5DOHQQsaQYvCc6N1+G6d7TE
-	TyOK/3COArgYwhOGSeIM8U0SCw==
-X-Google-Smtp-Source: AGHT+IFzSMnvDIESRN4yrkqhjLkFIKKbSE7NjQEASQLGImnZEz1ARsCxE5ryuRl4UpC2Wrwek2xicg==
-X-Received: by 2002:a17:902:eb53:b0:1c3:df77:3159 with SMTP id i19-20020a170902eb5300b001c3df773159mr114541pli.50.1695403741978;
-        Fri, 22 Sep 2023 10:29:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695403743; x=1696008543;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8+zsDKqPYa5khoeQ/X2KkaY8mmY8r9M3Aj1MNqbUX4=;
+        b=FDNkNNnyyFkvFC0JH/yyXCMovoyxsIPtPwrBygagdrizQfVbLp+7w7TFj5RITk+h/m
+         F0peAZAvp5zQUlji/T5rIJtkp0+3SCMLmdF5pWZ8RtlbxxZMRZnxbbdnkjRC92vloKlC
+         ESUTp4+wgyM2oRh4MpSunMB3bwMTgBlPsNT1sciwuf1d3fz1UJ3IU0XlvTuPI6At4ncU
+         KIvaEy4l6LO4zb+2QU/bTvRE9Wxer9ZPZWPGUNS0zRY02+DDthIvVi5jPTDmL4yi0gIf
+         UBlmEc6fJIhLsbDG8Vf+qe38Lc9XwhoHid6aPs7bewkpn2a5c+1T5brknPyTeUZINqHC
+         39UQ==
+X-Gm-Message-State: AOJu0YyBjeehFdGG4k6rMaPTV9lApvwtu8HqymT950ZwunIU0jin2ltx
+	pSjI5rv7DBRc6yL8MglGp6EU9g==
+X-Google-Smtp-Source: AGHT+IHy7einxOZJqzMeGrtUp41zCyAYhfTGbgIj6G7ktKqXoRq3UXI9VRRfBIaYo38BL3FmkYPa8A==
+X-Received: by 2002:a05:6a00:847:b0:68a:5e5b:e450 with SMTP id q7-20020a056a00084700b0068a5e5be450mr72319pfk.26.1695403743180;
+        Fri, 22 Sep 2023 10:29:03 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170902ee5300b001bc59cd718asm3748963plo.278.2023.09.22.10.28.59
+        by smtp.gmail.com with ESMTPSA id y10-20020a056a001c8a00b006926e3dc2besm2777741pfw.108.2023.09.22.10.28.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:28:59 -0700 (PDT)
+        Fri, 22 Sep 2023 10:29:00 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	David Ahern <dsahern@kernel.org>,
 	Eric Dumazet <edumazet@google.com>,
 	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -67,74 +65,92 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Tom Rix <trix@redhat.com>,
 	Simon Horman <horms@kernel.org>,
 	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-hyperv@vger.kernel.org,
 	linux-rdma@vger.kernel.org,
 	dev@openvswitch.org,
 	linux-parisc@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 01/14] ipv4: Annotate struct fib_info with __counted_by
-Date: Fri, 22 Sep 2023 10:28:43 -0700
-Message-Id: <20230922172858.3822653-1-keescook@chromium.org>
+Subject: [PATCH 00/14] Batch 1: Annotate structs with __counted_by
+Date: Fri, 22 Sep 2023 10:28:42 -0700
+Message-Id: <20230922172449.work.906-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230922172449.work.906-kees@kernel.org>
-References: <20230922172449.work.906-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1203; i=keescook@chromium.org;
- h=from:subject; bh=dITmoQTmuhgzCLWCT8goEHfc7A830wvh1pihCZiDgng=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7W581CiX0BzIe+nRF4lrrgJ1mImWjZxMUky
- lhl45FPgwCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1gAKCRCJcvTf3G3A
- JkxgD/9FJt5i+12b1FsimGOC4rvZuSOh0fD5qHoltugSaCw499cKIkWY4qGZeYvZrUk/VYa+HZI
- Y1E1zplO4VIUWFc80b9mGipW2Q54e6MVVeAovzcraatq2BSOVpOWRAbSUY281k44af6Gtf+2mBs
- WOWy65xHdw0hvyD8jqTd8MMpVfq9wUgJiUSRlTX2yvNlUL0CUR9xPOI9i9pvWG4C+OnvabSctpb
- ixyKCTDUXy3+CJoyEA5Sit5mwYWRoegNNcPDJNKvMhzUEKMeyEEhoOPDDaPF8pRrfeQVX5KV756
- E4KlQi7c9BlvkTwUI6fnYnOoxKi+4OS+60VRBt0svnxPupKqu0zr+DNDORx0bln3OZmq528yFTh
- 8ZontT0IXYdHSjmkO+UEJKCl/88D5e2LgwJRoj5gYxKcE9JqS9WQffGYcokW51pOUfGKBT12r4m
- dX2Hb24VXL3BJb5d3Gn1VmDidQgp50eEBiimYRKDfH4ItKrIyLysiwe6PcDNknkDIbAcjQF9Irc
- 35iHi4lgvDHPBz6mDA4C6ARaURw/bvc7EtRzuRePO38phoNlzDwep1XxUQiBgjfK12Pm9o80j79
- SNVi44GUOM1o9BuXUhT0KUHCOh+ALyuSPWw3T8gMYKvOu+OU341Y5Tjavk2KgvxyGjew6YnyYDs ylWk8JpcjP0A8zw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2504; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=tD+5se4WoWIAJwEPLvlJBN6wlUKoasq6Szn6nibv1zQ=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7Wu+d5o7777Jp53tWR0nER5gmlkAVoVjoqh
+ J5JIlgoeMOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1gAKCRCJcvTf3G3A
+ JrqqEACeFuiUMDgjhvtyqa9O/ntgqeTDML08nWyLGJ79aRe6YFXyHEddM/LbmREWkrtJUThTPL+
+ 5cqYB5ebSIzmAdm4jbres07kHLFvt+2wcfmJa92BLomL4uPyqTUFXgn1mSYnLrb14IzV3e88Sx0
+ dEDq9SHrXgKyFWkQfaC7RzupSY7nGw1X1Fv3+vLo/ofLr89BRjbc1wH0tOJMrBPr7asUo/F7eG2
+ 7lxjFPkC1mLDulQotR5dcnl637i1mztV/DHfJlCRJQwcUcE/rH65VJ6UPC1PCNvc+eqL/CMKwKM
+ T9iKyVQLU0gOVexJO+FPe5rDRoi/YrXfznJqI0MZx9L7MnZqanTpbTbIIWmdObv8ciWWZz3S8K/
+ yHSIfhDofc7jQmUJnSJywpwkeAUyF50SOAkYngCVfxzswzgtYznLShCCbrSr2PLyVIU3xwoNL1F
+ GJNRC4AJkef4eAA0hMVt6HF0UypVDq3Kvny+Q0xdl+MznPGBX1NQuKAvUri7Y8KGZ4yVf9N80Lt
+ 88tUHrZopBg7iXoM1qSKMZPHxRK5nqMN/qqfUi48CEB5SZ8IzvOnLAvs7qd5FBCO4P3/yH8OWBy
+ blZo4EB4+EAYhVbu8a/RM7O+YjAH2q2muPkUv7s/sP9KxF8m7FHQgFogan1njOplS3zYEN8SVhu
+ HgXxG8g LJHlR5Bg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
+Hi,
+
+This is the batch 1 of patches touching netdev for preparing for
+the coming implementation by GCC and Clang of the __counted_by
 attribute. Flexible array members annotated with __counted_by can have
 their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct fib_info.
+As found with Coccinelle[1], add __counted_by to structs that would
+benefit from the annotation.
+
+Since the element count member must be set before accessing the annotated
+flexible array member, some patches also move the member's initialization
+earlier. (These are noted in the individual patches.)
+
+-Kees
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/net/ip_fib.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
-index f0c13864180e..84b0a82c9df4 100644
---- a/include/net/ip_fib.h
-+++ b/include/net/ip_fib.h
-@@ -156,7 +156,7 @@ struct fib_info {
- 	bool			nh_updated;
- 	struct nexthop		*nh;
- 	struct rcu_head		rcu;
--	struct fib_nh		fib_nh[];
-+	struct fib_nh		fib_nh[] __counted_by(fib_nhs);
- };
- 
- 
+Kees Cook (14):
+  ipv4: Annotate struct fib_info with __counted_by
+  ipv4/igmp: Annotate struct ip_sf_socklist with __counted_by
+  ipv6: Annotate struct ip6_sf_socklist with __counted_by
+  net: hns: Annotate struct ppe_common_cb with __counted_by
+  net: enetc: Annotate struct enetc_int_vector with __counted_by
+  net: hisilicon: Annotate struct rcb_common_cb with __counted_by
+  net: mana: Annotate struct mana_rxq with __counted_by
+  net: ipa: Annotate struct ipa_power with __counted_by
+  net: mana: Annotate struct hwc_dma_buf with __counted_by
+  net: openvswitch: Annotate struct dp_meter_instance with __counted_by
+  net: enetc: Annotate struct enetc_psfp_gate with __counted_by
+  net: openvswitch: Annotate struct dp_meter with __counted_by
+  net: tulip: Annotate struct mediatable with __counted_by
+  net: sched: Annotate struct tc_pedit with __counted_by
+
+ drivers/net/ethernet/dec/tulip/tulip.h            | 2 +-
+ drivers/net/ethernet/freescale/enetc/enetc.h      | 2 +-
+ drivers/net/ethernet/freescale/enetc/enetc_qos.c  | 2 +-
+ drivers/net/ethernet/hisilicon/hns/hns_dsaf_ppe.h | 2 +-
+ drivers/net/ethernet/hisilicon/hns/hns_dsaf_rcb.h | 2 +-
+ drivers/net/ipa/ipa_power.c                       | 2 +-
+ include/linux/igmp.h                              | 2 +-
+ include/net/if_inet6.h                            | 2 +-
+ include/net/ip_fib.h                              | 2 +-
+ include/net/mana/hw_channel.h                     | 2 +-
+ include/net/mana/mana.h                           | 2 +-
+ net/openvswitch/meter.h                           | 4 ++--
+ net/sched/act_pedit.c                             | 2 +-
+ 13 files changed, 14 insertions(+), 14 deletions(-)
+
 -- 
 2.34.1
 
