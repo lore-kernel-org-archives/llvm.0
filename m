@@ -1,48 +1,54 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB98343680
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:29:06 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2745cd2ba68so1745686a91.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:29:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F134368F
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:29:07 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6910ea9cca1so2020568b3a.1
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695403746; x=1696008546; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695403747; x=1696008547; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jsPm5p8OVWWQhvwQRnJAR5En1I13+6E+l5lagSHHfoE=;
-        b=kl2HSy3GzH+iIHrfoi2W/wN6uuSBF9bF91cP0a5JPAxJ6rhtuGfsFvKUv/5QXena7s
-         hYn9I+pFWK9/yUC7mvjN8PulYRcrepLfz7yQ+DFhaz26Dgl+hStvTffUbsCJ1uO0Q7HA
-         gzabyafUIo+oow+fxlxQBWut/Fhccd8E2vzSc=
+        bh=cr7VMeXLJH8XwB+zD35GqBQrsMI4YcQcUPdvZ9TWxzo=;
+        b=DI52CCNEk2y0ejrcQsejz3BwhwSeChUQiGbyiAFi0yO8VgHLpyMsT3tMP2QR1USrN4
+         mJTg+Vxle2bri3DRDyELpe5pF4yo05OK5xrBOTbdRyn373VF2BGTd3NfoxkqBA8gW/He
+         oRVw9DCNCyb4EskKZsEtffUil/QZzLMQD/fds=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695403746; x=1696008546;
+        d=1e100.net; s=20230601; t=1695403747; x=1696008547;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jsPm5p8OVWWQhvwQRnJAR5En1I13+6E+l5lagSHHfoE=;
-        b=T9ekJsrYocK6UwlFXrwhOYaa3hn4IkFTlWAvkJ3mW9C34sad6h3e+KFrr+vShQ5bmm
-         EKaw7ZJ22uC0R5PoiEtXEOMGyNEqCcvxpqIUG0u9mgg9xzbhWIKGh01i0o8DY90unDb5
-         x1pBlH27MSILq71sxn8ffvJRbYD72CDfTcaVFZJuMOdQCEusd6WpXQ4r98rCdXjvzK+4
-         645k0xtr8OQ1Pz3PmZOfqXDMpLFLdIhzmKb6y2bHIy19oe1zV+yZ6t3ujlwkFjdWkzk7
-         RuC+E0TLDLA/UG1VDbgmiJh1y2k6nW7cFe8bdM66zYJqSREJHuBGaqNKb1dJcCaoVHfI
-         xKUg==
-X-Gm-Message-State: AOJu0YyxJ/HO6G+DwoSBZPuadmMGJ/ptBa62VgJuLdDEoqRK/jp+bP1D
-	GxV7Praf7AAGyOQnpQU6ijRWuw==
-X-Google-Smtp-Source: AGHT+IFhNOh9g/WXdqswrmGr0TKvoPB0737xQYMJJhDHZ7Y+VorzevCDjiJpuL21VUW6bsODv6GaNA==
-X-Received: by 2002:a17:90a:1197:b0:268:18e:9dfa with SMTP id e23-20020a17090a119700b00268018e9dfamr351769pja.5.1695403746060;
-        Fri, 22 Sep 2023 10:29:06 -0700 (PDT)
+        bh=cr7VMeXLJH8XwB+zD35GqBQrsMI4YcQcUPdvZ9TWxzo=;
+        b=XntN1z44TkQMn9enrV2Xhsw3wPMTdrFQbhH+YaLfXgFZytFSSKQgo+jnIvnB8BLxfE
+         b8wOLX+R6TeilnrWsFSViqZqqAMAME200amJEDhMwA+jzK8MU3yIA3Wm2L23Q3teY7Nk
+         azAY1ahs6L2iiDGyoKf9Qa5m+0ztxt0GKo0Hj7LBWZb/dw+m1XHuMq56flxBi9nyPklA
+         pXh4Zj+11nPf56+lcU0BZT7CdFIAyDeGG+4fRkFK9T3R91wvplu9rxPHTn4nK9T8lxKe
+         dHBVYvw2fc9RhA8rKUKwlf5gnb8KD/1EQccSMbCAapsh7fZWNEGizZ+3LA+FJkUYc34I
+         T9vw==
+X-Gm-Message-State: AOJu0Yz9OM6fVEidicuf9IBcFJc604nfchA2H0xbqcJw4qkQG2oBAK+q
+	/xJABzTkiKryJM3sLamqkdhicQ==
+X-Google-Smtp-Source: AGHT+IE0d9nBIyFO0yR0ORoUWZ7+c+aEOlGAafPRRZOxGS/XkTVczyefdXfk1dF4abqqKQnNPwhUbA==
+X-Received: by 2002:a05:6a20:1049:b0:155:1a5a:9e31 with SMTP id gt9-20020a056a20104900b001551a5a9e31mr230381pzc.16.1695403747014;
+        Fri, 22 Sep 2023 10:29:07 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090abc4600b00276bde3b8cesm5199670pjv.15.2023.09.22.10.29.00
+        by smtp.gmail.com with ESMTPSA id j5-20020aa78d05000000b0068fe7e07190sm3461673pfe.3.2023.09.22.10.29.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 22 Sep 2023 10:29:03 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Long Li <longli@microsoft.com>,
+	Ajay Sharma <sharmaajay@microsoft.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Paolo Abeni <pabeni@redhat.com>,
+	linux-rdma@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jamal Hadi Salim <jhs@mojatatu.com>,
 	David Ahern <dsahern@kernel.org>,
@@ -51,12 +57,8 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Yisen Zhuang <yisen.zhuang@huawei.com>,
 	Salil Mehta <salil.mehta@huawei.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>,
-	Ajay Sharma <sharmaajay@microsoft.com>,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
 	Alex Elder <elder@kernel.org>,
 	Pravin B Shelar <pshelar@ovn.org>,
 	Shaokun Zhang <zhangshaokun@hisilicon.com>,
@@ -67,15 +69,13 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Tom Rix <trix@redhat.com>,
 	Simon Horman <horms@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
 	dev@openvswitch.org,
 	linux-parisc@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 05/14] net: enetc: Annotate struct enetc_int_vector with __counted_by
-Date: Fri, 22 Sep 2023 10:28:47 -0700
-Message-Id: <20230922172858.3822653-5-keescook@chromium.org>
+Subject: [PATCH 09/14] net: mana: Annotate struct hwc_dma_buf with __counted_by
+Date: Fri, 22 Sep 2023 10:28:51 -0700
+Message-Id: <20230922172858.3822653-9-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230922172449.work.906-kees@kernel.org>
 References: <20230922172449.work.906-kees@kernel.org>
@@ -85,19 +85,19 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1453; i=keescook@chromium.org;
- h=from:subject; bh=NFekoCD1Jndm5KHIwVT2SInoZJX6zogZTm9dOrowHzQ=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7W8CYHJBq+iZChIknbZLiTR3vO/ABrVlFx0
- 5vu41SusMWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1gAKCRCJcvTf3G3A
- JmMYD/9COcX3uXskEKki372umoZXpS81TFgyqr1SaYIobu+5/nsnHubNj4XIFIxtkKLQ9x9iJNr
- IGdgXYn2Ne+XjjnR2+5XdpYSVYBhpwMps87h8MkXg3FgVtutsJSrhDEKlalntK4k8P9/tEqbe5V
- s6/2BskuqXGJHZntea0S9oGq10CGovJ5oyy4N1B2ipZQ14jv2qyZJ/lL/L7Q1aceJAE0WCEhhlO
- ewuaoB4Iaj1WVPn8GmFZWHflwlLoeFYnDxWVtW/H9p1oAJbaNHvU5uaKdOs4wZmZtVealaxZifp
- DQvaHczxdEA/tAnbrF6p4+WcJlKt3/9Icc0gj7E9oH5U6B+L15s9vqreUMO7oLmuL8aZvODffmt
- Ij1zFTVn4YdJS/plXhp20WXehVFBbKACLxaSMDoZzAKtEyPU6PXeaNxRbhcgJbShgddSkKTUYWP
- eokdZ178LoIMhSB2zIB02vsPNIewOqKwQ9sJb3K+8fgUVP1PNSUJtgPxYmcO/8Rgb69FwD+w/YW
- U4BvwhJZ4C/8DUXSM7dMugskhUaorg2i0VNx/i8UMKoL19+6vpEdmgzWJAmKG0fzPbZPtx0/pQh
- 6PJff6pa1RRmV9QDJQuRueIM2N4jPj2I500uPYvFks3+UgRgZI5TlteIopHrUU9XbzdtZlI1afV Qrj7qVw0gAScGlA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1566; i=keescook@chromium.org;
+ h=from:subject; bh=jNN2Wh5TqbkzFZoQFHMYTzfDn0UF7zrm9adldOZuxp8=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7XoLVZdYuePM97S+7MA9i5iH3sxyTfQSS08
+ LJB65B+ZZSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1wAKCRCJcvTf3G3A
+ JrxWEACNSgzg8Ycl9Qe1Mp2gIHHXFmJMIrT0z4cUhu6hZZXHD244HpZ8X+SYVMS9HS5syB/r5ZI
+ 2kNn5pZePHECZBA8CM4/TjgpQPlFRdgxHFFqBbfsYgAQnBkEMCTkFfCaKwzzmXVjLJfnpfOortM
+ FaMeXJbItFRrX0Jwcv9cj9UC0k0zGIxwDvhCTpWO0IfrCOoDrV1VzDNtTUJ+XVL78kI1f2l75Ay
+ 34ksMU9kJrH5ASYCmmlwAZNT7ObZi26q0SKJgrSLWhqtq9swbQKnxy3Ask714ZdqhUI+l79qL6z
+ eVDkoz7xmTG/GwFi1Gm0f3aQ4nmQiaJS/EKoN/Moy4R9Pj4PcoP9A6a9JAnbXFsCyfcURk+Xeiu
+ 7d8SiKimBQYQu1t6iC0rdtnDx9AUg+PH6cO3/7ARrrFcYoi21yLy5erMFvLZ/GdTEGrwiQFoiQ+
+ gGAv4IONo4YXXQlC/z8es5uxwPk+UXJ+bvwe+PL8WnXGdKs8QMRXslYTUSIaEP+9YNvPuIawQRM
+ erGitteR+N7KlsLaWaaq/z9LavLhnOua7sOCJQ7cDMa/pNWZDzckInyzoUg8Skf4gmjH2fNF9O7
+ 3+n1k69unddP2rtknBF6q49u18qdd9qXinwaYwqeXq9tyopeLUrF/KsAn9ZP752xrkkWBf6pYiW ZuZJGJuFzQpQdlQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -107,35 +107,41 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct enetc_int_vector.
+As found with Coccinelle[1], add __counted_by for struct hwc_dma_buf.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Claudiu Manoil <claudiu.manoil@nxp.com>
-Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Long Li <longli@microsoft.com>
+Cc: Ajay Sharma <sharmaajay@microsoft.com>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Dexuan Cui <decui@microsoft.com>
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Eric Dumazet <edumazet@google.com>
 Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-rdma@vger.kernel.org
+Cc: linux-hyperv@vger.kernel.org
 Cc: netdev@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/ethernet/freescale/enetc/enetc.h | 2 +-
+ include/net/mana/hw_channel.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.h b/drivers/net/ethernet/freescale/enetc/enetc.h
-index 7439739cd81a..a9c2ff22431c 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.h
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.h
-@@ -297,7 +297,7 @@ struct enetc_int_vector {
- 	char name[ENETC_INT_NAME_MAX];
+diff --git a/include/net/mana/hw_channel.h b/include/net/mana/hw_channel.h
+index 3d3b5c881bc1..158b125692c2 100644
+--- a/include/net/mana/hw_channel.h
++++ b/include/net/mana/hw_channel.h
+@@ -121,7 +121,7 @@ struct hwc_dma_buf {
+ 	u32 gpa_mkey;
  
- 	struct enetc_bdr rx_ring;
--	struct enetc_bdr tx_ring[];
-+	struct enetc_bdr tx_ring[] __counted_by(count_tx_rings);
- } ____cacheline_aligned_in_smp;
+ 	u32 num_reqs;
+-	struct hwc_work_request reqs[];
++	struct hwc_work_request reqs[] __counted_by(num_reqs);
+ };
  
- struct enetc_cls_rule {
+ typedef void hwc_rx_event_handler_t(void *ctx, u32 gdma_rxq_id,
 -- 
 2.34.1
 
