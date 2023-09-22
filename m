@@ -1,51 +1,39 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32573D984;
-	Fri, 22 Sep 2023 14:51:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6490BFF813;
-	Fri, 22 Sep 2023 14:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840B13D97A
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 14:51:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D2FD1BF20A;
+	Fri, 22 Sep 2023 14:51:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1695394289;
+	t=1695394302;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NgBDirPTqxgTDO2XAiry4qG7/bll/CNM60TrxqLCNGY=;
-	b=AIdCt9e2LNJpI87WwQM+5UJwotUsKKbst/wms/4/j09lqFQs9UPOCPd0do4QQYIT8NB+TS
-	rh4Fq5yH0OcSOc87UlGc6l+fN4UigUSZ9tGFPYeqgad3NG1V9Uysu9fpNvNulVFMa2zv9L
-	xCxuHqt3jNVQXTtpnhbeBHfdPhSKxbcyZB4h/K9dXC2mBjkRCvqmtmn4Dw7nByz8iEx8bW
-	pscEyJ8hUd3GIKwx2z8EtqNNfXADRd9Kzx2Bp63RY7v0zWQ0t3X1GWs8siOa9waN+r3G9s
-	Ab9h1WKoGv6osFbBr7TqNi+wm1bPRg5MEnkxJSrLVEBlhCy8rrmuyJGbkryg3w==
+	bh=05vcLB/XaKrSRu46bMeEmatamQa0kPcGH3AO6FNq7XM=;
+	b=XnveTOL/HoZgxP2lRI71EG81nobhmP24xEdoCa9p0YoIO0hvLUt5GZ/73vQIYICi2bnlgM
+	uz+w5YoaBhhB9A12i1rExFOm9L9EdJpWRqdAKe6qtKTAXASWSEJaG0OB6efK7/mUlq3HxV
+	hsggBI0gfqeU5vID14TXgKoBwLj376gx13yZ6BVLZZ+xdyHVTPreY7wCWjws1wyI5iMoi8
+	/UufR+Jm7mmSFf47XzVcV6h6RmDss4vsSkZJOFk8Mro0u7GLvVBr8R5IQnWGOft3FprXyF
+	BX/7sclFPi+r5Q8RNwNJcysEKcFJQXGFMaKbsbQF51r9Fq3j6XAIfO0Ix6k49A==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Kees Cook <keescook@chromium.org>,
 	Miquel Raynal <miquel.raynal@bootlin.com>
 Cc: Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Manuel Dipolt <mdipolt@robart.cc>,
 	linux-mtd@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Rob Herring <robh@kernel.org>,
-	=?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Yangtao Li <frank.li@vivo.com>,
-	Li Zetao <lizetao1@huawei.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: sunxi: Annotate struct sunxi_nand_chip with __counted_by
-Date: Fri, 22 Sep 2023 16:51:24 +0200
-Message-Id: <20230922145125.578362-1-miquel.raynal@bootlin.com>
+Subject: Re: [PATCH] mtd: rawnand: marvell: Annotate struct marvell_nand_chip with __counted_by
+Date: Fri, 22 Sep 2023 16:51:39 +0200
+Message-Id: <20230922145139.578446-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230915201300.never.057-kees@kernel.org>
+In-Reply-To: <20230915201243.never.235-kees@kernel.org>
 References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -54,31 +42,25 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'28a05da765c0cd21654ef5fed3b53af5cd278d63'
+X-linux-mtd-patch-commit: b'a8eaf3ef549980719c5fcca257d5b220ac0f3f1b'
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Fri, 2023-09-15 at 20:13:01 UTC, Kees Cook wrote:
+On Fri, 2023-09-15 at 20:12:43 UTC, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct sunxi_nand_chip.
+> As found with Coccinelle[1], add __counted_by for struct marvell_nand_chip.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
 > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
 > Cc: Richard Weinberger <richard@nod.at>
 > Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: Manuel Dipolt <mdipolt@robart.cc>
 > Cc: linux-mtd@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-sunxi@lists.linux.dev
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
