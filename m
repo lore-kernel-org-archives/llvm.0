@@ -1,59 +1,57 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1590344460
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:52:47 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1c465d59719so21047635ad.1
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:52:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BF744477
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:52:51 +0000 (UTC)
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-578d78ffdbcso1733113a12.2
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405167; x=1696009967; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405171; x=1696009971; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GQ6jwPkyyUPUihDFvg8XivaDrAIcNkn4eIr05k1aNqo=;
-        b=jFUs3rLD7sYEg/f+GZ28Q+oioHggK3bNbtyvdkxDY6UufqLPcBtrqhbx8XUSRoJTRF
-         0ZGBgJHlccTOugF9jzFC+k0MB/+hvguP6rZZMYftSTioYpoKBDR+3Z/RWtvLystksDD1
-         iFUfqWj2jl6aKu9XvDn0H1bxJBcU1SP6u0Tjc=
+        bh=eKO7HZA7note+xxP86iPyjMQTezIOPPmqe4sHJnTuiU=;
+        b=cjujZ8FmNBgmTU5FcK+ceUVcwuoLJVbNklQiKOi16p6dCenc2rBNyj6BRi27Pux8c7
+         JQsex9JxUNcwK9LGUGr/V2YgTJi42q4iHRyUWA3O8Tq+1Gj+GrQnISdfalUpAr/ORF+Z
+         39XHoBn7UGUBvL8iHfDXJYoLGtFb9Ulczbj/Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405167; x=1696009967;
+        d=1e100.net; s=20230601; t=1695405171; x=1696009971;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GQ6jwPkyyUPUihDFvg8XivaDrAIcNkn4eIr05k1aNqo=;
-        b=QmE2mfcFsIMhqLSeJhAFqoVAxCYtH4+KCHepNe7W7ziFI2FluNaD0XJe0oB3pbflGM
-         spePb0Vw4BefbXm0psZx2Nu/gXT12tlyi3srog/m05RwtSK6s9eYwrpUka23fEqOB3mM
-         o8sDw9ldMQkkwW8KRb7vg52kZMdgFYW1ZWuyXPG0/HQ40HYf/UfW4+k0E8L4K+bnF6YJ
-         y8SuAag92AqlYvi97xTDeTSROg6xTi6vnO+JdiGyZM6g0SPLRIyV+1VflzBV28KMsURa
-         i9mqyZwjoncLek2cS2DmAyFQEEttl24cW28nEtbMtfDBRCGL45t6RKqPlzJAb6guAUqp
-         WJcA==
-X-Gm-Message-State: AOJu0YzLcEMRHHgWXsY5abr5MEJOmxKJpd8Uullpr4EZc6cXcfOQQYbb
-	25LfhKmYLHbIC+gxgLN72Dus8Q==
-X-Google-Smtp-Source: AGHT+IHK3gRykvqfXJ9KPG1xk8JjWYE+L3KukDHCn22hNF6awNX8UG77Va89x7qeOpxognyckL1BPw==
-X-Received: by 2002:a17:903:2281:b0:1c3:bc2a:f6b4 with SMTP id b1-20020a170903228100b001c3bc2af6b4mr225525plh.42.1695405167472;
-        Fri, 22 Sep 2023 10:52:47 -0700 (PDT)
+        bh=eKO7HZA7note+xxP86iPyjMQTezIOPPmqe4sHJnTuiU=;
+        b=V9ofqMBFGuMjy8M6KBud7VdModVKvB/8SEc3hovKM7ok183RpNQlqxg8TtvUq6bX3Q
+         RsutTwIpl+CpiAwLKkHTrQniujUNYE8tgLkOl3l1R7TciY6K+MB5G4g+lGdQ/Gtas1wh
+         NHCRJ20zfDiONH9bbxircm8iAKHcOoS1eVOPP02izpGVKFuZCSchNWC3QTsR4HrR17Ov
+         sB38Sgv4TKtJr4B1gNLbobhoj20gO0mi/h9tSYQC9Vk7R9kP73qYJpaooL+pRclPDSGv
+         ZOEjKowqu2iMjjF6KNI4QlSxS+oM+Onft45/jLv8GAYOeASJ73lEzkFhxq0TmXTgv8lH
+         ZvTA==
+X-Gm-Message-State: AOJu0YxUoE7oabfLhSRNGguDCSPJmfmKZaFGpkqalKpV6YhZhTnzsAML
+	ZrgAlgnReqgvjS0hVvj48VFlog==
+X-Google-Smtp-Source: AGHT+IFaViTplprBwLRsyLm+3YZWtewV01aqBFowvprcsZQclymf5ubRmD+3j2W/qAbz4TplZJUwAg==
+X-Received: by 2002:a17:90b:b05:b0:268:352c:9d13 with SMTP id bf5-20020a17090b0b0500b00268352c9d13mr496040pjb.0.1695405171425;
+        Fri, 22 Sep 2023 10:52:51 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id iw11-20020a170903044b00b001c582de968dsm3780689plb.72.2023.09.22.10.52.46
+        by smtp.gmail.com with ESMTPSA id z2-20020a17090a1fc200b00263b9e75aecsm3834838pjz.41.2023.09.22.10.52.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:52:46 -0700 (PDT)
+        Fri, 22 Sep 2023 10:52:51 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Jiri Slaby <jirislaby@kernel.org>
+To: Maxim Levitsky <maximlevitsky@gmail.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-serial@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	Alex Dubov <oakad@yahoo.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Tom Rix <trix@redhat.com>,
+	Len Baker <len.baker@gmx.com>,
+	Dan Carpenter <error27@gmail.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-mmc@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] mxser: Annotate struct mxser_board with __counted_by
-Date: Fri, 22 Sep 2023 10:52:45 -0700
-Message-Id: <20230922175245.work.196-kees@kernel.org>
+Subject: [PATCH] memstick: jmb38x_ms: Annotate struct jmb38x_ms with __counted_by
+Date: Fri, 22 Sep 2023 10:52:50 -0700
+Message-Id: <20230922175249.work.593-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,20 +59,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1400; i=keescook@chromium.org;
- h=from:subject:message-id; bh=EF4J3adktVfobyY2g9VoH112mQT3HIJCM8AoszQv0eY=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdRtJNIux5LoCOcVzIv6wUz7ihnbHZEwbcqTg
- pn+/5MuR9mJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UbQAKCRCJcvTf3G3A
- JonqD/sGsiP5krTXtLdtu/hVDGnXK5tfys6LaoqTOjcqrYNSjPh/NIuv/rqHb+YzfzFOJIQRSZ0
- HZAnHwpvjK7E2pSIcUYN0JqqA4DzASGV/MHa6BwsIMeTdsKJuFRECHikDcLVx+bs34ca1C8mVVE
- kGTNZuXBQ5aaYQm2sfBxZeBkBCUeVOOIeoNJMpJe65rhDFGCsiyMfu6y+sLoMI3sx3R03MkpxfG
- ++mCJQEsSjZl+mWB2yZq5aIKwat6HBhE1RQcHfOStLO6M+/0+Q3J89z2MCgj5ds4ZfO3wdXARz5
- kd0TniAInQZRMzjvnFE22IJQk98TOdrKyQtGcKcorlVdFL/Dq+5KbSvICHOCy5L7jgZ/ZPML2B6
- ByKmLs7DzdruyUsPiTvLRK+N0dPZ2QKEYUD/f7HO0gxKU+Uk8ItuJSliYo2ELn5I0D0IrtyiUpS
- /3ie1n/5nWYxVLyqLUYX303LNZSlfOUfn7CMZ0JhOpwZGk1SSpnJnve5oUmjbecse5GZydC8wPG
- 5x3YoHeS4t9E6EP3AGmNMq5o2OdQlTdVHNnAHbH6G/9QnTwPvxrnhrKf2wnHO0mHnPsLJB5Wyoh
- qHR9Y99dUyU8+LW0meomOlfg6B6zRuWDbWedOl0gYjzaAI9s6SG9AhW3ZrAHIegVz3nFw/0wv/j
- GwhUkPI DqtPoZzQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1429; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=IYB/5z7VQPpaTtnk20ryAqWUCT0rzInyLePi0vxIKHI=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdRx1X2xU9/fAJc4ZPAebmwE5hH3qrgWsM1dw
+ vLMDlH/bXeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UcQAKCRCJcvTf3G3A
+ JmkPEACRHShf/0k3dIPbAkc3C7PfZIdI1FQTAFGzE/GaNVBsm8T3tTI5WyNX3UFKuEjxENQnu1i
+ cIYrj0Y3gqh34Y9l8ITYPOB/LSIlCaUWFZnvaTXa45XGrQbSO56fQGjzVUrUCTh/8CVTrNd7Tos
+ hNTn7XpmKZh9ZnJhKI88D5dF7sBRTLSe2ONhHcLmuBtsJ0EYUARWlMX7NprBWotDGgYR3p7JrzZ
+ 81CmSQ3dCxRW+Yf3wKwwsIKcFsH/7LnYoC3GflvxAh7ux8B7/1GWu7yiZC9tMdwIYeTpQE7jFKZ
+ dTcqeNNIH6RqJvX2Sn5Fy3/iHIZgETt5fYlYXbn0hLbBJV5JMu+sKBGjm8LaGIdtlq9W+CAOVEz
+ TVy0Z9o7xicwh/FMfEouStlbJBn+2kyVUy0ahd7OWlXKaS7ARVyD36XPJ2XYQaCSbhHhZC4kA8I
+ m5cI+RxKRK3fvFjkS3RoWpKXCH8gTrrp9Vl7LwUjXs0YouI3xIdbmi4JF2pg61MK6onmsXLIyKl
+ vQuZCZ8SADPi3mumw+zC78p62HxeGpgHUhyUC54yRGesI4P+D8b2jZd4yFmUxY0RU5hC/DDPE9B
+ EkMVoryyGfhne1hZmeF0BWN2XMnP6xpRHxsSOLzQCsLowor7oQ0hoqaj1Lasy4pG7CSZQyHwyGw
+ 0S0YD41 /KOE3bOA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -84,37 +82,36 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct mxser_board.
+As found with Coccinelle[1], add __counted_by for struct jmb38x_ms.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-serial@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Maxim Levitsky <maximlevitsky@gmail.com>
+Cc: Alex Dubov <oakad@yahoo.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Tom Rix <trix@redhat.com>
+Cc: Len Baker <len.baker@gmx.com>
+Cc: Dan Carpenter <error27@gmail.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-mmc@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/tty/mxser.c | 2 +-
+ drivers/memstick/host/jmb38x_ms.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 10aa4ed38793..6ce7f259968f 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -288,7 +288,7 @@ struct mxser_board {
- 	enum mxser_must_hwid must_hwid;
- 	speed_t max_baud;
- 
--	struct mxser_port ports[];
-+	struct mxser_port ports[] __counted_by(nports);
+diff --git a/drivers/memstick/host/jmb38x_ms.c b/drivers/memstick/host/jmb38x_ms.c
+index 21cb2a786058..e77eb8b0eb12 100644
+--- a/drivers/memstick/host/jmb38x_ms.c
++++ b/drivers/memstick/host/jmb38x_ms.c
+@@ -66,7 +66,7 @@ struct jmb38x_ms_host {
+ struct jmb38x_ms {
+ 	struct pci_dev        *pdev;
+ 	int                   host_cnt;
+-	struct memstick_host  *hosts[];
++	struct memstick_host  *hosts[] __counted_by(host_cnt);
  };
  
- static DECLARE_BITMAP(mxser_boards, MXSER_BOARDS);
+ #define BLOCK_COUNT_MASK       0xffff0000
 -- 
 2.34.1
 
