@@ -1,56 +1,53 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7912C43A9E
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:50:44 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-692ada71d79so755289b3a.1
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:50:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB7943A9E
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:50:49 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2746ab05409so1789589a91.0
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405044; x=1696009844; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405049; x=1696009849; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yIEluTePXKUgmZoz//4ptV8zeRXzjojVV5Zn13TdbAA=;
-        b=gnmgZ2+ESiM1Nh0onv9BPt4xFgvFClwgRVAKRdmSkS16bWDk7fScc5IhTeZOzhH0yz
-         vDOqboBD+ArfMYoqpvsP2e46remNS/EcypmX2W6RZvyvf06wWsiNfoRBZ45BXSPJkL+K
-         lh1zh3wrmOh5g3k1SpObtRCLmgWR7SlT9eR/U=
+        bh=p4NIQNCYJbnDD0lgKwFFor/ygcTIyNapGv2KUfTJ4d4=;
+        b=AnzIrWo5Jr8UVLAA2WVDKzMvIpchNLotA+tnE/X1JEvpSNoDFTkh2EKzdJrjTF57yh
+         bPqicMxhcEYv3ubIqDXOcsCz/5nbYgFTw8d1tgI+GnRWNQcRt1mcjpRxz0KEJtuizYmw
+         +jHGJOZ/fQcP9awUCc96fK8PtJpSiB/nT6HrA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405044; x=1696009844;
+        d=1e100.net; s=20230601; t=1695405049; x=1696009849;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yIEluTePXKUgmZoz//4ptV8zeRXzjojVV5Zn13TdbAA=;
-        b=O3WDrLNMoIJVJDaXw2PKE+t2e4YsNW3jiq2LfuveWqLwvyvjlOSMjPO0/ecGzQFEuP
-         gdKWwUZb+JC6JLMtyCpa5j44E2TVoBapE+MgK8+NRM8qxf9RJDB/uw5ZElZRCTn5qmdc
-         woDfptNeeieepnVvC9XnxtQugc7kNh2sf5Ajmos8yGI6ekgGAzCybbC7zv7AAT0NMkeT
-         JCM2yM+g8LwoEbRZqSLa6XrTq0bs1ochQ/qsmtjcJBIqw6+6u4gJJayM9E4kDKqsBZc+
-         ruR/NOkuxOFSpsseB66AY0MSMLgBJEqQ78R7My3i7VxSr2/iuFsmsPPBf9lBT/zwBS40
-         Vl8Q==
-X-Gm-Message-State: AOJu0Yz7dlmVVuKZFyUISnB56uiTOuPGST26D4fAH/r2GOpGVd9aTvNJ
-	6XeO3WPPK20up1Xv/RBwf2IVz1RUVd/PAyO88FE=
-X-Google-Smtp-Source: AGHT+IGlzZWrQahzIVY7sXtrvLZBK5+3kHZlDPRAqWBrggsxuzxxsLFOwwww26ZuTCH8VBPpWjNhmQ==
-X-Received: by 2002:a05:6a20:8409:b0:159:b45e:1c7d with SMTP id c9-20020a056a20840900b00159b45e1c7dmr331120pzd.15.1695405044050;
-        Fri, 22 Sep 2023 10:50:44 -0700 (PDT)
+        bh=p4NIQNCYJbnDD0lgKwFFor/ygcTIyNapGv2KUfTJ4d4=;
+        b=aoPd+pbBLY/v82BzkRQfGRjbEHV49ZGRz3usmfcNh0ZftufrXE8CkyBgBVlLYVbK/0
+         EYH8/yVk0hoc5EX4IetSTKEAd0GprGCHkonolw5aNBHhFWCJbwxFRN3MavMkfXn1SGF1
+         Hwb1IZOeEYxWd7I+ifsCY72L3c6THJmJnK5BurKkcAwdCbJMAAoYNjl5P4hhD9xbrKQM
+         T17FSGjTqo3VamgpdfZPHXDBK0vfS9jdrruYk25xBLoLzYD0CkwJ+/g/cT8z5d52gw1C
+         qiDDbsm5RwtCMtXuTiAta6EgyphFEEiQ+KMedhsjKCdoTXzhjkIOqb7ROsY/1w34PVx8
+         vT6Q==
+X-Gm-Message-State: AOJu0YwYkCNirazAdpjnY8BbEKpuCTGFMDqvg6klQyWTrHJr1W7R8L49
+	hBg5QJ9eav3DOjmrQzvWCQv26w==
+X-Google-Smtp-Source: AGHT+IEJ3CwBJxHBD2S/iRbuv7h3J2P2idJlpvbN/PHvMygWYxAkP3UQVJBARQ54CmTyH8OyoBgDuA==
+X-Received: by 2002:a17:90b:3a8d:b0:274:8ef2:b251 with SMTP id om13-20020a17090b3a8d00b002748ef2b251mr422960pjb.3.1695405048769;
+        Fri, 22 Sep 2023 10:50:48 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k17-20020aa78211000000b0068be4ce33easm3556666pfi.96.2023.09.22.10.50.43
+        by smtp.gmail.com with ESMTPSA id ji18-20020a170903325200b001bdbe6c86a9sm3776862plb.225.2023.09.22.10.50.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:50:43 -0700 (PDT)
+        Fri, 22 Sep 2023 10:50:48 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Jaroslav Kysela <perex@perex.cz>
 Cc: Kees Cook <keescook@chromium.org>,
 	Takashi Iwai <tiwai@suse.com>,
-	Cezary Rojewski <cezary.rojewski@intel.com>,
 	alsa-devel@alsa-project.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	Jason Montleon <jmontleo@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] ALSA: hda: Annotate struct hda_conn_list with __counted_by
-Date: Fri, 22 Sep 2023 10:50:42 -0700
-Message-Id: <20230922175042.work.547-kees@kernel.org>
+Subject: [PATCH] ALSA: usx2y: Annotate struct snd_usx2y_urb_seq with __counted_by
+Date: Fri, 22 Sep 2023 10:50:47 -0700
+Message-Id: <20230922175046.work.766-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,20 +55,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1166; i=keescook@chromium.org;
- h=from:subject:message-id; bh=2+WFGivuUVAKb1W+9E3ktp6XUMEEm32AWq2NC2ISBJg=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdPyOwKNuU3DBxwepcnIO9oHljCgGuE/kMNNW
- SIuGoQNj8SJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3T8gAKCRCJcvTf3G3A
- Jo+WD/9F+wyEdMZRixRxq25YvGH8mw+aR+YpOV3Jnt0ScoGqx0BVe0PCT0yiRIlirDR/leDv/w8
- f7dQOHwxs6N9HFxhaKWBn/5fS39ICNQHC6rGWyVsrtVhQomA7J2VerZJ3EHX1Py8vAQ45YeksaK
- 68AiMW/ZxVcB2VQVOV9JK2LLA8q1GDFaSzTX25NBCsilUpoA4Xg2zoxf99DJqx4M4DEcYMvA8dx
- P+iFCootNqc75w1qhByYrkec6Ypk9186+KIEpX23pJvVkkOnm+l4jFmeAc6fDGLx4GGyVGf7oBF
- bbuUPvR9ftPa8SdqnefuqXk6wUxPKdb94b6/PnBWLs8O87U+ug0Nkh5oYTMTOEp/cfyM7Aj3lT1
- HrZA5MhV2tsVVK2LMCLeFmqxZBfw/XJal0TYdzkGV7Y5HGrF3yDBqnAdJW4/uZeL9psk2L0ptaN
- L/SvDMIi0e7Jmwu580DQfxp4N23uZcYYDQNVFdCMuE+NSTggdbiilocOwMPL5ypkjb9X/boktW5
- tzYNjZsA3ZGXjSwzW61MmJOC52NSPC6Tk0bOHBbzVQfJGJUVVG8Q0uBN5PkgRtuVrc8oh4zUF5Z
- ILsCXDzpDzwULkvGXjOBJv5tUcenHcoyf4qbL5mC9nHz9RbDqdz0MnmL9tLf7L5LBNwVdJAyQpX
- sITrZ/3 7N36Rc8A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2063; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=HuMddFYgVndPh/PHwPakmOFy8JD6xsoP6JcApWcCcuU=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdP3P/EpFy9NJv+1rIpzaY3g8AIW3vya14cPa
+ ztrzZA921GJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3T9wAKCRCJcvTf3G3A
+ Ju4hEACjuUA3Cclq1k0WCnCTsZmN3Tm80FjCZ7ifVnctsIbqyFhFbiTbVnjnDmO7JtEkL1cvWTQ
+ xHEXi8laitjmNKaBHHfu2ypu1K8iYnShM0cMUgmgbbUfNsOda9o+3zd5I/P46MZ6UxBv61qGB/9
+ QF7uh5ORDm717e+wZRNy0W/tiCgFcuYgk7D5zf1PWjxxhPTeEgKnOsvR0Bb6GNg/kJwb8h8Gajd
+ Fd3qjAW+hhzATiOhKR6jy49tdtK+UjSKjQ/nWguI4CDUNxxuxPrwFKggQ70hYDq1OBGWxbB0JdV
+ 8HaDQ3DhV6K9s8ixCvSo7/fk4fgPmgDX/iOQDw1E3Hw2zqZEz/NPYD/krvJjEMW3u0Y67zA5skR
+ 6VfdwxqbB/JdcJzfHas/Ta7pnmVimqc33zCL3AfXYoaNfG/HEgkOh28LWC3s8Wbacw9xQJRiYZX
+ c82DKjSa75L6+UuneQdqQkQNS0AF7e1vXihoM07z3R9OUrhZ6qIjTxcHumTEqidVCpnZ+SMtZMs
+ 8N5biPzcYek87DYprIaESzg+vozpm/gY3yCTjY97bttJu1+6XyrgRKzd+HzPU7O5NguA6EbVURx
+ kJUyBIAAJ8wAnWE0FViQaWfHgUGxfxyWoKd3Cq/NE36UOD+hKW1YsNpaTPyxENYPX3oVB8DvWCl
+ MKaM/7M RUQvz/lQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -81,32 +78,54 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct hda_conn_list.
+As found with Coccinelle[1], add __counted_by for struct snd_usx2y_urb_seq.
+Additionally, since the element count member must be set before accessing
+the annotated flexible array member, move its initialization earlier.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
 Cc: Jaroslav Kysela <perex@perex.cz>
 Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Cezary Rojewski <cezary.rojewski@intel.com>
 Cc: alsa-devel@alsa-project.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- sound/pci/hda/hda_codec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/usb/usx2y/usbusx2y.h      | 2 +-
+ sound/usb/usx2y/usbusx2yaudio.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
-index 33af707a65ab..01718b1fc9a7 100644
---- a/sound/pci/hda/hda_codec.c
-+++ b/sound/pci/hda/hda_codec.c
-@@ -88,7 +88,7 @@ struct hda_conn_list {
- 	struct list_head list;
- 	int len;
- 	hda_nid_t nid;
--	hda_nid_t conns[];
-+	hda_nid_t conns[] __counted_by(len);
+diff --git a/sound/usb/usx2y/usbusx2y.h b/sound/usb/usx2y/usbusx2y.h
+index 8d82f5cc2fe1..391fd7b4ed5e 100644
+--- a/sound/usb/usx2y/usbusx2y.h
++++ b/sound/usb/usx2y/usbusx2y.h
+@@ -18,7 +18,7 @@ struct snd_usx2y_async_seq {
+ struct snd_usx2y_urb_seq {
+ 	int	submitted;
+ 	int	len;
+-	struct urb	*urb[];
++	struct urb	*urb[] __counted_by(len);
  };
  
- /* look up the cached results */
+ #include "usx2yhwdeppcm.h"
+diff --git a/sound/usb/usx2y/usbusx2yaudio.c b/sound/usb/usx2y/usbusx2yaudio.c
+index 5197599e7aa6..ca7888495a9f 100644
+--- a/sound/usb/usx2y/usbusx2yaudio.c
++++ b/sound/usb/usx2y/usbusx2yaudio.c
+@@ -681,6 +681,7 @@ static int usx2y_rate_set(struct usx2ydev *usx2y, int rate)
+ 			err = -ENOMEM;
+ 			goto cleanup;
+ 		}
++		us->len = NOOF_SETRATE_URBS;
+ 		usbdata = kmalloc_array(NOOF_SETRATE_URBS, sizeof(int),
+ 					GFP_KERNEL);
+ 		if (!usbdata) {
+@@ -702,7 +703,6 @@ static int usx2y_rate_set(struct usx2ydev *usx2y, int rate)
+ 		if (err < 0)
+ 			goto cleanup;
+ 		us->submitted =	0;
+-		us->len =	NOOF_SETRATE_URBS;
+ 		usx2y->us04 =	us;
+ 		wait_event_timeout(usx2y->in04_wait_queue, !us->len, HZ);
+ 		usx2y->us04 =	NULL;
 -- 
 2.34.1
 
