@@ -1,46 +1,44 @@
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CBD3D97B
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 14:51:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 73958E0003;
-	Fri, 22 Sep 2023 14:51:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356053D988
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 14:51:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BCF07E000B;
+	Fri, 22 Sep 2023 14:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1695394297;
+	t=1695394314;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=t0yOw7b2spKa5t9IrnrfzUFQlWX9MBmdcTg1hf3e1bA=;
-	b=isDTluHU66uTjCD65J6nGcS2Gt6DbMBWEOs3n+ce5itUuLfwktGf/xR1m8WkOZGXOohZV0
-	mdFyAUogl7zHnHb5r7aAPAifJ9+xFNlNQzokRFDKlVgmaI13U3SJM0CgR4Q1p/b2jZULmf
-	2hOEcb44vWh6J6E1dEP9Xo/lIBN53+bgbN4dMd7bBoe9TXG30HYd0KTkdOJXcAOok6YWuV
-	M+PRw4O6FRiU8FQQ0z7P29sXZCgeenrHcCSXPwbkRZqGzXO3U3GAlrKB4mycvreJs5w+nF
-	F5K2f6AWmzVjWY7SxLxNpnTUNxPakc+8L40iFM8SBhrM7I3RSiS3vD8UFJzHGA==
+	bh=iRZol5/VvwYlpDgrSdlyds6wTxBhrK+p7cKiS6UM8XU=;
+	b=mQs/WpWpCSMCPS1FG4IDMkzDZLm2STxLkfkrfg3Cnxxq1hz90zn8isvo5XaHWMYJiRY3+X
+	FkgSVblGPpfTBurYbpG55Qf9LpFgUNuXK6jt2a2FLcyastfxyZQw8oF7Z6GDg5tHwrk5GJ
+	hirwLDBbWW/wSnmnpKqGpkRrmrpV86HBsj8mK2MDIlZfYH3GGTpEZ9tBwiQQAPjsCeMz3u
+	LGKKQUUE+Ne9GdIh0VJ/aEDcUxap1aGZVNvHhJsGA5AVRasoOW1zyFRUdRcPoCiuAKQGWC
+	wIbxhDzIKnm6OKa7bPOV0aodrZCB25+E3vP+aupis1EPFJfTF+fCkBWw1joUUw==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Kees Cook <keescook@chromium.org>,
-	Liang Yang <liang.yang@amlogic.com>
+	Tudor Ambarus <tudor.ambarus@linaro.org>
 Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
 	Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
 	linux-mtd@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: meson: Annotate struct meson_nfc_nand_chip with __counted_by
-Date: Fri, 22 Sep 2023 16:51:35 +0200
-Message-Id: <20230922145135.578418-1-miquel.raynal@bootlin.com>
+Subject: Re: [PATCH] mtd: rawnand: atmel: Annotate struct atmel_nand with __counted_by
+Date: Fri, 22 Sep 2023 16:51:52 +0200
+Message-Id: <20230922145152.578557-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230915201249.never.509-kees@kernel.org>
+In-Reply-To: <20230915201219.never.352-kees@kernel.org>
 References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -49,34 +47,33 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'627e79b7cf1e1488ca772720026d9cbfa3f90730'
+X-linux-mtd-patch-commit: b'79c610ab40ec57de5d36acc2b72d28f7d46cdbf8'
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Fri, 2023-09-15 at 20:12:49 UTC, Kees Cook wrote:
+On Fri, 2023-09-15 at 20:12:20 UTC, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct meson_nfc_nand_chip.
+> As found with Coccinelle[1], add __counted_by for struct atmel_nand.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Liang Yang <liang.yang@amlogic.com>
+> Cc: Tudor Ambarus <tudor.ambarus@linaro.org>
 > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
 > Cc: Richard Weinberger <richard@nod.at>
 > Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 > Cc: linux-mtd@lists.infradead.org
 > Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-amlogic@lists.infradead.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
