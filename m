@@ -1,54 +1,53 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D49643A86
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:49:54 +0000 (UTC)
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-692a885f129so939492b3a.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:49:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B92243A87
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:50:02 +0000 (UTC)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-68fdd6011f2so2020610b3a.3
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:50:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695404994; x=1696009794; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405002; x=1696009802; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i346clq8OfBFzjIMANH+n2WNr6xQCzrAEDi+whp12qc=;
-        b=YCOeb5lOuLr5HeGH9HiwCHFB4UQz0zULwe2vtQyQnXnfZXJ7DrqBkjPZgOQ0eIkhBu
-         mloF73doye5hrOgn18oz5csccoA6+ExQCQxad3lqWlN4+lqPBTd64rCmRNBrbkdYlC/K
-         HduKkz0v9397Gwftl9gWsPpO/6i/J07RnPjHE=
+        bh=r/Zplt7bJOl4CFlcfp3YYRAe0azxom+WSOFTcPCPX8Y=;
+        b=d/1NzW079AV3QBwJ72IqP6Bqt1zewibCLpN4Fu2rQSc8FriW72iCE3uhoCeo2G/vlP
+         D8Mm6EP0+rD8WeofGPYVv5F+95MyCT0oc+2K84M0yzLLZlBWd2WY0xewnnojzP7QKYl8
+         CCMnD1Lhd6NmI7hlRUJqwZ8CoVprY29x48ODs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695404994; x=1696009794;
+        d=1e100.net; s=20230601; t=1695405002; x=1696009802;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i346clq8OfBFzjIMANH+n2WNr6xQCzrAEDi+whp12qc=;
-        b=LrKBHds+2PwtTCJapb7rwfsBi/IxUQCn87Jh1HoTAMLwNVs7IaZOgLU4xQfWBVh5Cc
-         SuruBdn2TDWu2XN4O9/xmZQ7YA/PNy4eeZL7+4jHtRKdayxTb9p5lHRV1VQhChP/HDL3
-         EqTSHVAOSem51Zq/45OsGbUDgFVuHbfnJ+6r7bJCKkaDcagNeLYJsuUm1n3Hz6bgCFg8
-         Q3H9o0EZnQZObNXQt4w1+7t3w9aDq4ogWzbwQFy8NNHJuOJHaXjMtldzNuQzebNl5php
-         A+K8Nt7d7vPnjw3UJVPqPuh8AFlRabKSnlnfyVjuDV4OJfwok76gSY+nifWgdhXVDSUI
-         mZrA==
-X-Gm-Message-State: AOJu0YztQYB9F+i6ohBiRkzNmvQHiwO0So05BqSfsOw/BiX261eeupfR
-	BP9ZBJQtXWBVtAPDHgJh1YVP6w==
-X-Google-Smtp-Source: AGHT+IHDCf6iaIOrd4e/2vfSV3BCOtdXxkSb5FuhJslb/6GFKoAPt32qtP+ZnC440mhFZShfIwaS8A==
-X-Received: by 2002:a05:6a00:2e93:b0:690:2ad9:1436 with SMTP id fd19-20020a056a002e9300b006902ad91436mr184891pfb.7.1695404994406;
-        Fri, 22 Sep 2023 10:49:54 -0700 (PDT)
+        bh=r/Zplt7bJOl4CFlcfp3YYRAe0azxom+WSOFTcPCPX8Y=;
+        b=FYt92VLhfdtwZ+7ohQC9vdO7Fmm4NCj7qsPTo15b0vgWBKvqZCiEM32SypVb28zpl3
+         70tWGiBTvHnz3XjICUBypLa3iOnopAKPPn6BVhfp2aZVsm9smrVwcxsCyzQyw72yzV0O
+         1drMo3+XWPzHg0FI8HU9f4vi+vpjkR7tWqowi46g4hyO8UI9L2vobgVkLbt3WyyuN8rw
+         +cjajp+tQnkWaCG60mk4GPbHPsKF5+NjwAGgpDGaul2MSAWdG1MZw70lgC0o2lOT+VRr
+         XDvgV32qbBUAjWZ/2XN+v+JopugUNNcupnpKtMGDcu2fTAcAUd2CGchldS9M2zaQh6rs
+         9Mew==
+X-Gm-Message-State: AOJu0YwKszuJW7p4AuclH4b9WtAbGGxGicF9gsc3tYLkXUnOIzsvi2ya
+	HvxZO2lXr6fzrMhEnSg5vKDKsw==
+X-Google-Smtp-Source: AGHT+IGRer91bTYN2Rt+KzEEMh2s2tn6KVHqAwMKSj3SAFOo2KuajUauyZQXDFrsQbJ3tkXF9FmX/Q==
+X-Received: by 2002:a05:6a20:9383:b0:149:44d9:bbb0 with SMTP id x3-20020a056a20938300b0014944d9bbb0mr244163pzh.43.1695405001898;
+        Fri, 22 Sep 2023 10:50:01 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id v13-20020a63b64d000000b0057783b0f102sm3053318pgt.40.2023.09.22.10.49.53
+        by smtp.gmail.com with ESMTPSA id e12-20020a63db0c000000b00553dcfc2179sm3420871pgg.52.2023.09.22.10.50.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:49:53 -0700 (PDT)
+        Fri, 22 Sep 2023 10:50:01 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	lijian <lijian@yulong.com>,
-	linux-media@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>,
+	linux-i2c@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] media: v4l2-event: Annotate struct v4l2_subscribed_event with __counted_by
-Date: Fri, 22 Sep 2023 10:49:52 -0700
-Message-Id: <20230922174951.work.160-kees@kernel.org>
+Subject: [PATCH] i2c: mux: demux-pinctrl: Annotate struct i2c_demux_pinctrl_priv with __counted_by
+Date: Fri, 22 Sep 2023 10:49:59 -0700
+Message-Id: <20230922174959.work.093-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -56,20 +55,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2092; i=keescook@chromium.org;
- h=from:subject:message-id; bh=C66/icBEq2MG+m/4ZluAAHZC3P5Kpbkm+mwqC112tHk=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdPAkSq5hJos3sXunT3ysggynSqRlnNPBwz8S
- uw47BLY+beJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3TwAAKCRCJcvTf3G3A
- JrwJD/9Ga6dhlY0NaypMA6bx76My1z2ArqeY+4D5HEL3TANx74Wr4Kc0p/+suRYVJWhO2AcnxeU
- 2hrfzl3pi0Vvw9c5dSxjhNykeazY/+6bWYyMMPEZs+nkNWTNsSaNGWSuQlwi/DWkvux/s2CAfma
- aNW56Oa/XhHaEk7LI2ZSJilEjfkWfZ7Yak8Ud4M2+BCIntq+ML2oE8ms1fCZqoYjtvZ+/UsHTmS
- g3SYTUAf7cjUXhU15YO3y8zQyNYyZsatTU3HGJNpJAJjL/QYtBELDxXf70bmNHzha8SDMSv1YS8
- MgDAkfMLfM7r+R4anEuiL/mXkrtSd6LB6jsKoXgK+VLjG1JP+UUKDIuvcmO7TM1l6VuHWj9WRld
- yTTwN4mMvPSm47Xx3PUaC6LuTijjcqhA3Ua6nFbW0zvaPg7IpV44SycHiEpioj88TrElu81AFrL
- kIGefhO0Hpe32pz7zFpcstbvnlZgAvxX88/pxkNiwIBzunAJ48TCSevzWX1fGf3Zt4iDpLr+bT5
- V4BjtZntEnOCExVsQWu5ZfbI41epwpEP3p6WJ6KEcVIEcAzKw4q3Hbb0xAxEj0AR75RIOyyofOf
- 5wYS6DC88fkx+lu3Yu29SH5YEGxqz8hysn6mgDV1W4BcnwHl9dkjhIvY13uFHiexjRTItbx3DEf
- DL1oEuc RlCqUUwQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2071; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=4Rvl/5wL+K6ZOeH1ROPGt2vMng9UfD2mTlgwhwq1jQY=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdPHYWMdyHq0jxtRP9ZmEsFazTpzFSBpF1GF4
+ 5CfsbLb84qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3TxwAKCRCJcvTf3G3A
+ Jrn0D/4ugY7BUA37RdDIydA7/mOWNmkmEKNS3VHSQIjnl9AmK7Nu6+gjsJBhg34oojB97r5nuZq
+ 27lhAKwwHmKEUrGCfAmRhXJLH4CDVxvZqXwd+xqrqNjpeG3yUAeoxso+/rgduvaq1YNA7WBHsc2
+ IO352NHTSy+oDzHW5/KH7d3wL7NuSKO0DBZxakE4e4DiloSvDN51A7iOOg5EVSRqc0526QSZm0B
+ s9FFKEqzkb9apkcltRxtfBR98w+1GMf6SUMivowvhdNdMGq6vSGxSBxPC65bfF99bKPgwY4F+t+
+ 1xptfzmEgCPRpCINY9ZNM3KgOkJW7H44axytK5qBWLZfi8xpxSP+WjQHmYunF/kCXmCLMQ16KHF
+ GrxMceQX5DFhczV0ozC3jvTx2xZx0Y5n9ERFS1iGE2a1ouJ5enOXpb8gqGSqGl3XW38Q7D2uBf7
+ cYNtly9HT5VX5NvqVkSVN6gV5+JdhROiC1Gyr2uRrLR3gnu6jDtM77OKbL1FAKBp+uu6KbvDgAd
+ 8jv+bUxpkifNcJ9mpuDxyYS8L2TRXL8ak+wxUGXHwRcC3mHWFBDNuy6J1qdfw7ScjxtDyjrtI1v
+ 3aj5010thsXGUIoUlN3u7UXb3zPa2Nxr2V3kUaEV4McZJd5mod4HSafaLrSR33EH3WR/HikPJ3r
+ Vek09K+ /QRhY4pw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -79,55 +78,51 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct v4l2_subscribed_event.
+As found with Coccinelle[1], add __counted_by for struct i2c_demux_pinctrl_priv.
 Additionally, since the element count member must be set before accessing
 the annotated flexible array member, move its initialization earlier.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: lijian <lijian@yulong.com>
-Cc: linux-media@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Peter Rosin <peda@axentia.se>
+Cc: linux-i2c@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/media/v4l2-core/v4l2-event.c | 2 +-
- include/media/v4l2-event.h           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/muxes/i2c-demux-pinctrl.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-event.c b/drivers/media/v4l2-core/v4l2-event.c
-index c5ce9f11ad7b..3898ff7edddb 100644
---- a/drivers/media/v4l2-core/v4l2-event.c
-+++ b/drivers/media/v4l2-core/v4l2-event.c
-@@ -238,6 +238,7 @@ int v4l2_event_subscribe(struct v4l2_fh *fh,
- 	sev = kvzalloc(struct_size(sev, events, elems), GFP_KERNEL);
- 	if (!sev)
- 		return -ENOMEM;
-+	sev->elems = elems;
- 	for (i = 0; i < elems; i++)
- 		sev->events[i].sev = sev;
- 	sev->type = sub->type;
-@@ -245,7 +246,6 @@ int v4l2_event_subscribe(struct v4l2_fh *fh,
- 	sev->flags = sub->flags;
- 	sev->fh = fh;
- 	sev->ops = ops;
--	sev->elems = elems;
- 
- 	mutex_lock(&fh->subscribe_lock);
- 
-diff --git a/include/media/v4l2-event.h b/include/media/v4l2-event.h
-index 4ffa914ade3a..3a0e2588361c 100644
---- a/include/media/v4l2-event.h
-+++ b/include/media/v4l2-event.h
-@@ -78,7 +78,7 @@ struct v4l2_subscribed_event {
- 	unsigned int		elems;
- 	unsigned int		first;
- 	unsigned int		in_use;
--	struct v4l2_kevent	events[];
-+	struct v4l2_kevent	events[] __counted_by(elems);
+diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+index a3a122fae71e..5e15d8777229 100644
+--- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
++++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+@@ -32,7 +32,7 @@ struct i2c_demux_pinctrl_priv {
+ 	const char *bus_name;
+ 	struct i2c_adapter cur_adap;
+ 	struct i2c_algorithm algo;
+-	struct i2c_demux_pinctrl_chan chan[];
++	struct i2c_demux_pinctrl_chan chan[] __counted_by(num_chan);
  };
  
- /**
+ static int i2c_demux_master_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+@@ -226,6 +226,8 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
+ 	if (!priv || !props)
+ 		return -ENOMEM;
+ 
++	priv->num_chan = num_chan;
++
+ 	err = of_property_read_string(np, "i2c-bus-name", &priv->bus_name);
+ 	if (err)
+ 		return err;
+@@ -248,8 +250,6 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
+ 		of_changeset_init(&priv->chan[i].chgset);
+ 		of_changeset_update_property(&priv->chan[i].chgset, adap_np, &props[i]);
+ 	}
+-
+-	priv->num_chan = num_chan;
+ 	priv->dev = &pdev->dev;
+ 
+ 	platform_set_drvdata(pdev, priv);
 -- 
 2.34.1
 
