@@ -1,53 +1,52 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7780944479
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:53:33 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-690bd59322dso2024857b3a.3
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:53:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4F944479
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:53:36 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1c44c0f9138so20988895ad.2
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:53:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405213; x=1696010013; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405216; x=1696010016; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j1DuAf/+ZW6v7oQmMqiRSnBOde6Jc28Je383H2K4ozI=;
-        b=VUIpwqNb6iOZaUdI2mcr3rzrAs/NbJLueQyIjBVE6sQjG+W4BRBlfKxgSgsIFRv1IS
-         7epGxHe8rLLJIsHATgr11slKIoFAaor7T+Qe57nOK73/H8UyoApuBbyfpaYGOjMYfyTC
-         DPhbNsQeINQwGMPI96tcxEV8jobMVC0aX90lA=
+        bh=0ESOLZsY8LzKb8U8Ne5A0p04ejS/jT09yNraZRlcFPA=;
+        b=MYTLZZ+54sHU+7+BDxcYkO5Zd9H8tOEpnREvYp3tyRmU3i4GvvYRqXov8bPsZDG9wq
+         xmhLI3V4k8VS1WVIUBEqm0zmtMMt1oi0/Bc81ihiIZ/1pRtBCCXayzfvlsXM+nQaHvF6
+         29refvWPq44ainv6yuzhE3DUPrbtRGgcymOHI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405213; x=1696010013;
+        d=1e100.net; s=20230601; t=1695405216; x=1696010016;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=j1DuAf/+ZW6v7oQmMqiRSnBOde6Jc28Je383H2K4ozI=;
-        b=qrSuBUzZTMcJPsPM8iQS99392OvB7uSAPupnZQXwUKe+A+bbv1lrp1YJ7DaYtEq/Xj
-         pF9EDKud4V4HsdVEvkYZ7QJY/l6F38GKjsB6rUiuvYqfraUBiU9LtYHvC/o+fCyQbpWV
-         SOq0blNoqhWTfaSHpi80ykZwb0eDPEtzVpvwq30Jb/fYWeY9FZ5ls5u0DFMnxbr80gpY
-         yO3661yvyHk1uE+dLKBEopALdqjaE7N1tRC/AiCjiZhz3YEx9bRagJIiKLqXFF19hMu+
-         SZm9ERdI9inKdi775gZ+8nDm7aHmWkOs7jHIrGCTM6HJgW5rPL2sDUOJvBpwvG6OK62V
-         Ue3g==
-X-Gm-Message-State: AOJu0YxC7Sq0ayriulF14Pg1CyqqaFyOQZgA2jnUdAiJfAhMB/Z0K6ov
-	4Lar3oELhKTxsNEETNXtAfVM0Q==
-X-Google-Smtp-Source: AGHT+IFXuq8R136xW5nVqkU1923m0VVoi8A+AfdyU6CNk0S0T0wMiLniXuESANSpe0yEyArZHXB0TQ==
-X-Received: by 2002:a05:6a00:1ac9:b0:690:c1e5:937e with SMTP id f9-20020a056a001ac900b00690c1e5937emr140303pfv.13.1695405212835;
-        Fri, 22 Sep 2023 10:53:32 -0700 (PDT)
+        bh=0ESOLZsY8LzKb8U8Ne5A0p04ejS/jT09yNraZRlcFPA=;
+        b=eNrIU05E5CYvQfrk080JQYHuxpIARqmos9EmzTojE13PeheVdRIksg2o1+OlYEzCE1
+         T25hTDvFSQ1U/7wFfo1tuFEfMYZFXHzeX2CypNB1nbX49hkfSVnvL5dhpX7dZjAO2p+Z
+         lkpUiZErOXJe1G+pjqLzoRFPyZ3kzsQCSa1zaIyXs6+ZKfTpQ4aP0H8rjjqgN/NGcWOd
+         XPIp1gw7Q5AvEwZzqLRrcXyTVHrWLsGb1YFOC043LPluMJzAP7iofiBJYsI/ww0hqZnK
+         TyQYmolifvARceqLtuhI8q+EMcIIGAdE2jFrbIwIm4cQojOm8JcgRxm8cR223Al0xe/l
+         ERGA==
+X-Gm-Message-State: AOJu0YykDaSpn4PJHAIzWpzXAoJF9x8QDuQRBZRiEMRQmUSubS8RouRC
+	745iDS+FCGsk1C+csJPPAhvODw==
+X-Google-Smtp-Source: AGHT+IGA6b1K40k8NOZBF7/MYO6Cl8Ivzqv96Q9v0Q5p74UYCloHq1IDltxXKSseH3rgQcC3dxPQiQ==
+X-Received: by 2002:a17:902:d502:b0:1c3:1c74:5d0a with SMTP id b2-20020a170902d50200b001c31c745d0amr257725plg.34.1695405216432;
+        Fri, 22 Sep 2023 10:53:36 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x25-20020a62fb19000000b006889081281bsm3434175pfm.138.2023.09.22.10.53.32
+        by smtp.gmail.com with ESMTPSA id a5-20020a1709027d8500b001bfd92ec592sm3753380plm.292.2023.09.22.10.53.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:53:32 -0700 (PDT)
+        Fri, 22 Sep 2023 10:53:36 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Support Opensource <support.opensource@diasemi.com>
+To: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 Cc: Kees Cook <keescook@chromium.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
+	linux1394-devel@lists.sourceforge.net,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] regulator: da9062: Annotate struct da9062_regulators with __counted_by
-Date: Fri, 22 Sep 2023 10:53:31 -0700
-Message-Id: <20230922175330.work.066-kees@kernel.org>
+Subject: [PATCH] firewire: Annotate struct fw_node with __counted_by
+Date: Fri, 22 Sep 2023 10:53:35 -0700
+Message-Id: <20230922175334.work.335-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -55,20 +54,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1309; i=keescook@chromium.org;
- h=from:subject:message-id; bh=jyjltd9IGcWvOg910fwXOz2T1bioU2VSJx7SDglJoh4=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdSbKq2clcu9Od4D1cu0Gb37wvavMtZYXO0ui
- +p2R9xoGOaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UmwAKCRCJcvTf3G3A
- Jhe6D/0T4QS0EkQ2zac2mAd9FiPbgfHmVh7ksYNRfnLOFwWHQ2OKYTrlpZ4DlKKed6BR/5EGsHM
- PLvNIlPwb6qlX5en77saxlwegJJdG6/Zu0Z28nQ9q2jQooHTLdjGFIAkohpGXx7M6TRqWWaJbKM
- LLYWoOv/xnvAih0XvHN3aSbp/Sw7x8P9GmDOpK1S33ArIsPL3qh6DiYppwS7PAOl54GHR1w6dJs
- 6LfowXTPErRdxa3jYFmyba0DB3T5C42AwH55S3NI14xWiRTT3gt4G43i3QV071LUgzWdSwIJlPB
- sH8pVJ2gQIenwfsxWs5lcjlxGYO+znS0K+DCQzFjJPBSLXkJXfBOc+FKRE2tb8FsubbGJGGlThc
- zEomQvNHUJtMW1MT5XNMF2+M9i1LE4ljJh8n/UKr01gCynJCW0wULsrCTc8xdq4wlVTUK0tYaos
- 7EyN4lSEzHG9OCqm2vZ6KCKPkBiUZv/WI0dWvn4GEZPwDhc8ZiERFJlfgiEyW+Pd2XVNmCFOGlS
- XbOqvWlu9gaL7C1niB1AZmyE2LU39p93sqhuCQrOYWEJRk86PluoJ7cmk1vpi4OPJJo1oQZ8Mik
- ZEoaKsT8ewvGg01yU7Cdf5vF4Z8Cfp3xS1JGFZc8UCpslNWVvCDqvpTajtGEuxA7B4wCJwz37Gb
- uAmi8qe frPhTiOA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1130; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=9IvQGv8Ld8cTigYPfagXmK/WvkbkZXS8rrCLNOUMCoE=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdSehVrabBM4sbb8Z4pDeRCLv7o6lEF00+KVr
+ vcvgJtKuoiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UngAKCRCJcvTf3G3A
+ JuXlEACFIcVdQ5RlHQbHTtQ9ay043utxenzIISiQP52aJ1w0fcS9QwkUjl+2VobSgaeZFhUOom6
+ lna7qmCRDRlUXlUYueUdesqU/mTityiOfmh98rYxQ9tMcwjxBv7IE8OC774oB5lrddTA+gRAxFe
+ C+SfcSmcI7TfXTifFKKrxJ+k55lPP8foiB7pEDF7PMdLYFwkNOHdFbQbkjcwnMDCDumGrChUN/y
+ +4arvqJVdo5mIiSAZsmTrTVbg1cK29YkvuftCM/ixlCqo3zUKR60DfJETE+hcTM7ltzTz+UOsmR
+ XuQnfP58J+tusioqlbfH0OZ4Kgfi5f27RQaH15DIxflDKR/n0OYMY3D3I1mWt0qIiV5TUT+EjWd
+ CO/Ek0FD2yBgyk64xjKr5zQjdPq8lxRGpfT70KVDXAVUk6/qhb56XBZbnPFvviBS6kiaJut3Ojk
+ yV2JvVclR+1hRNc9Czfd1Lx192tyn0TdkNSz7If/qhmuPoiPy0lo/lmrEk6icN5lYm2dSkM7ZBZ
+ OIry3h7lFA3Uj/Xvh0RwrKay5IOCfhcPsvCxCvtib0Yy7qg/R71NGva4LDmd8fTpOCsXpJbpYjU
+ ki4IL/FwzdYkGZvMWs7NZfbIwdP2uokgxuLxmpyDH/UJLF5BamS2Lc8JTKxs1r1vR8XOskV11qg
+ 9r/Fji7 4PHB7dRQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -78,31 +77,30 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct da9062_regulators.
+As found with Coccinelle[1], add __counted_by for struct fw_node.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Support Opensource <support.opensource@diasemi.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
+Cc: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc: linux1394-devel@lists.sourceforge.net
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/regulator/da9062-regulator.c | 2 +-
+ drivers/firewire/core.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/da9062-regulator.c b/drivers/regulator/da9062-regulator.c
-index 1d354db0c1bd..e0c96f10e570 100644
---- a/drivers/regulator/da9062-regulator.c
-+++ b/drivers/regulator/da9062-regulator.c
-@@ -73,7 +73,7 @@ struct da9062_regulators {
- 	int					irq_ldo_lim;
- 	unsigned				n_regulators;
- 	/* Array size to be defined during init. Keep at end. */
--	struct da9062_regulator			regulator[];
-+	struct da9062_regulator			regulator[] __counted_by(n_regulators);
+diff --git a/drivers/firewire/core.h b/drivers/firewire/core.h
+index 2a05f411328f..95c10f3d2282 100644
+--- a/drivers/firewire/core.h
++++ b/drivers/firewire/core.h
+@@ -191,7 +191,7 @@ struct fw_node {
+ 	/* Upper layer specific data. */
+ 	void *data;
+ 
+-	struct fw_node *ports[];
++	struct fw_node *ports[] __counted_by(port_count);
  };
  
- /* Regulator operations */
+ static inline struct fw_node *fw_node_get(struct fw_node *node)
 -- 
 2.34.1
 
