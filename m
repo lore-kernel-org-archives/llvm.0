@@ -1,65 +1,54 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCBD43AB3
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:51:53 +0000 (UTC)
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-274b9b3e0e1so1713935a91.1
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:51:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C6643AB8
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:51:57 +0000 (UTC)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-692b2bdfce9so686847b3a.3
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:51:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405113; x=1696009913; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405117; x=1696009917; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZILszX4MWtz7bh2TMVWfqmp53JcjPScOVS5QC17vqfk=;
-        b=ffsWkr8S0FXcHftdKgqpK6tqb6url0MS2DMNirp1/YgmODlu8ImOyaA7hhatrHrFS6
-         Sp1ipoxTlUPckvvSwzaxad/j2irZaVL2C82NKpmTswbDaAGw0PO8RBFzmZ/rSxazEZJ/
-         gzD0TSh50Wm+Ttz1SU4hnC1pGG99mi2E/U53s=
+        bh=LMP6Eo/vaMIazZNY5B2EIxzC5JUt58mRyjJ2WHITWvc=;
+        b=Mdl/IWRHF7bDeixoDvsWzYJ4mZjSda+xB+0H3ELOwFEVMs9UC54aWmhuTchLBVxQsT
+         X7apJ/AuNs3e5TuotENmbYrnZ28cpLy+Vd5gt2odxdh0rZ6rVSuWBh0yIQ/Y6KX68Y35
+         /Ugf8kpYK6N1JNThfmPTuJ2ysf9UKNsFyWCz4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405113; x=1696009913;
+        d=1e100.net; s=20230601; t=1695405117; x=1696009917;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZILszX4MWtz7bh2TMVWfqmp53JcjPScOVS5QC17vqfk=;
-        b=PkChGJtE18+dECwBvgtIINSnXKFhT6vN/C1SpbZlyeauJnpSiuOo23k3aZrwswVqgu
-         641P4oF8LMHH3TnC4WGclN9NRu4zuYMAU23Gn9GTttc9Js1fWAwrzAucnEV/4le7V67g
-         cd41lLzPn3p9uwO2vPmh/ebPygApstm4Ytxf1vkH/68KB7kg+UhThRFNxnfW5Yj7lepa
-         /SPxIESptb/HrXIO3yxIyOuER7R3+IEeTBhbp3M0I0lzJC3g60iq0I98Uj2cljJh9+wT
-         Y6HUGzDxAhGRcpDi24apSSmu3UilpY6Spozc/LjnNsUgo8WSkWjn7xOdCIt7MHlD6x5B
-         ddvg==
-X-Gm-Message-State: AOJu0Yxh5O1+su4T0AUKHXbN8NldjWw578MkTk1zk6ptED+/Xi+M9DgF
-	D4hpX4G3FrM7kFvaymVektWp5Q==
-X-Google-Smtp-Source: AGHT+IGJyRN4d5EfONgEzWohOYEXpV8ZyHwIQaIwZgUrXnlaWap5XtP+1N7abHIvI+8NFIgf78FE5w==
-X-Received: by 2002:a17:90a:1f07:b0:277:183e:185a with SMTP id u7-20020a17090a1f0700b00277183e185amr407052pja.3.1695405113456;
-        Fri, 22 Sep 2023 10:51:53 -0700 (PDT)
+        bh=LMP6Eo/vaMIazZNY5B2EIxzC5JUt58mRyjJ2WHITWvc=;
+        b=V6v0RyUWI+F/DALR1CeU/vTGL8nIhXubSIm3zAbhoK/TyGEfimNI/VKEl1bLLpdA/b
+         l76qHKV/D7oPokSX3alcy7nyFpKr7UudYfHIYdwMtJ2dSbVlv3DICQMH+IxPT9UOiOsb
+         FgUg4+tzschEwrn7vcPRMJCfERPT0NAwtBf2ZgAI4qoI87GlLrbER6G6Ijijt0NYxzVC
+         Jydf3AHBHLl1xMrhc4Ej8aH4wRVLWm1ZDIjNgsc4MMxND3wQAlBncb5DKUUnHSC0py8a
+         kG/+BijNTC1vM3GC8yaFg+IJGWWs0oB20+84/fY+OOZCJgL0LbqpKjtbJ8vV3roPJ9Aw
+         FcZQ==
+X-Gm-Message-State: AOJu0Yy1jdFPnhHQ9znPxFnA0VcHBUz6iOqzbx96jnKGVXtLZaUfgfV+
+	ArY6HEUS2uFBuXAAFrYnkwnnCw==
+X-Google-Smtp-Source: AGHT+IFPV6bCMgdrADQ4gtFCdwV9MgXVLuYaes6w0ZZJOH08TXJJuxiCpV6lhgi5HCH4XD7ka4TMrw==
+X-Received: by 2002:a05:6a21:a586:b0:159:fe1d:2f09 with SMTP id gd6-20020a056a21a58600b00159fe1d2f09mr307564pzc.6.1695405117494;
+        Fri, 22 Sep 2023 10:51:57 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id mv5-20020a17090b198500b0027722832498sm76944pjb.52.2023.09.22.10.51.52
+        by smtp.gmail.com with ESMTPSA id e5-20020a62ee05000000b0069069ca9814sm3463168pfi.219.2023.09.22.10.51.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:51:53 -0700 (PDT)
+        Fri, 22 Sep 2023 10:51:57 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Steve Wahl <steve.wahl@hpe.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
 Cc: Kees Cook <keescook@chromium.org>,
-	Mike Travis <mike.travis@hpe.com>,
-	Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-	Russ Anderson <russ.anderson@hpe.com>,
-	Darren Hart <dvhart@infradead.org>,
-	Andy Shevchenko <andy@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	platform-driver-x86@vger.kernel.org,
-	Justin Ernst <justin.ernst@hpe.com>,
-	Kyle Meyer <kyle.meyer@hpe.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-i2c@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] x86/platform/uv: Annotate struct uv_rtc_timer_head with __counted_by
-Date: Fri, 22 Sep 2023 10:51:51 -0700
-Message-Id: <20230922175151.work.118-kees@kernel.org>
+Subject: [PATCH] eeprom: at24: Annotate struct at24_data with __counted_by
+Date: Fri, 22 Sep 2023 10:51:55 -0700
+Message-Id: <20230922175155.work.872-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -67,20 +56,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1571; i=keescook@chromium.org;
- h=from:subject:message-id; bh=k+Nu3NX5QQ2aJpVbKl87jzPBT9AwnncU9NuJ+rJwak4=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdQ3/IWfXym/BBCdmz9yiUCx49Gifs9/mFbU1
- fQjtBKVTPaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UNwAKCRCJcvTf3G3A
- JqAKEACyJ4XXD0xFdoCxlx2T4B9GXHlkr0u0aIlUPFBN3pQD+P3BF5IzIJwgRcoVsqotPdlY/Rb
- wX8bNqO4HGy2JRIm67/oRWnZHaIhamlnh9HrkPLIWDE9xJOWQsvc6s/C2bSFPfQSlumNLC6yl9q
- 9yvvYdOuBn9QAX1xEWsHI+uIQ37ZUnFxvQTQ+dAnhXJRTm9T4CDNYs4Ka6Db57dB7DOOLHPiWM9
- 8/L84K0X+266nBtXX6Ux21Utcfzx7XbCCUwhJ6SypTPW/gqUiQdvyIw15WnhJoTYMwauzp+W/UT
- SHLxMwOrt8utH7z9acQen3/81bEmaxiofVy6F2ufC4O44RIwFEl7v/RsLxsfn2KSs290t7QaHBv
- WSniGI3Bl7uuhyCpRjCSYs2gppdfZKvcNu5Q0mGxEKay32lJKCjxnjr1tCV0oOBgFdPJ4RzSxqv
- l4Ssrx1TKwTYA8PavonNHCbyYrCqEeuM0wrCUbTW4vGPmRqEJDEWHln9va6TYtNMOstCSaOrIGC
- M+fyocdkfeTtnGViO++fqOgij3SKB4vu73/iBMRv7Kuzho9/d8vSqvIvaYud377MDl5h98k0tHh
- AmHt66ztgM3wW/s9CwFjN3ChnkNnds29tKewAdepJZO2OPp8hTVnD2V2l5d5YBvLTxOWsa06jET
- 52pSu6h sWAZ6zbQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1169; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=DIpsB/ou/Bn4dXxGISBN9wBhUC+HRqEPU3gJ+srAuCA=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdQ77Iev/RbO+fPKpsBUGVaL7crbXoZB/KWdF
+ Xqifi3aarSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UOwAKCRCJcvTf3G3A
+ Juo/EACZ6Od5Kn99qc5leb8EtaCoZDT1wKVq+FCHfwf1oDM9tMGvk0gt7nu+QQmrcgu/+nCNpy5
+ pGVC8+lAd7xQZlw+YzjGV/ogHKK/cKbtCpl2xoPrs4RUzNEqCbNm3VIjRII1D7Wr9wg5A+mg//0
+ 10ZhtU7LlSGXqp9TM97DojKy2hS7JFzb/WRCX6Ns6a/XahbuncnM9zNLz5fjqkg0d76a88Ys6Sj
+ reiGEku7RQWZQSp0sBw8CGdD/gJOcEaS5FXe4dJ+1pXWmH+0q0sfXCZWBBxItKOU8wZpNxlRVtB
+ HLlbLc1cz3FMEielQXectGA4SXvdNa4WObULLyPwpdiH8m18LkVNGjuGSGgsgJoWOdhy0BNs7Yy
+ Ptb9Xg1aLq6fzqnS6Be7NqOFofukMU6arKsgvWxJZOmL4atQ8ja//EHhssObOi9A3aUBXbihMrp
+ czGAc27Qc37LZP7iXq76h462Rv6uRlhIdUUusZUFRF0ooHmsnxXRcVUI8WFRAAsN3xEVxyAVFA0
+ OfXe9C6EV2sAmkapNTAc8VU7lzH2iqwTAklmAsqle3aYC7GbJZ5xcpixKadpgxbwlV4my4kJw5f
+ blbAi1WprMuKKNiUqZ3bg0MlZ8Yb5NBJxLJqwSwL3kvhUVTUSOrCXvmv8zDkJqxcgUQigoBq/U7
+ 8ekvNsl G0KklGmw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -90,38 +79,29 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct uv_rtc_timer_head.
+As found with Coccinelle[1], add __counted_by for struct at24_data.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Steve Wahl <steve.wahl@hpe.com>
-Cc: Mike Travis <mike.travis@hpe.com>
-Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
-Cc: Russ Anderson <russ.anderson@hpe.com>
-Cc: Darren Hart <dvhart@infradead.org>
-Cc: Andy Shevchenko <andy@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: platform-driver-x86@vger.kernel.org
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-i2c@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/platform/uv/uv_time.c | 2 +-
+ drivers/misc/eeprom/at24.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/platform/uv/uv_time.c b/arch/x86/platform/uv/uv_time.c
-index 54663f3e00cb..ff5afc8a5a41 100644
---- a/arch/x86/platform/uv/uv_time.c
-+++ b/arch/x86/platform/uv/uv_time.c
-@@ -53,7 +53,7 @@ struct uv_rtc_timer_head {
- 	struct {
- 		int	lcpu;		/* systemwide logical cpu number */
- 		u64	expires;	/* next timer expiration for this cpu */
--	} cpu[];
-+	} cpu[] __counted_by(ncpus);
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index af83aca452b7..7dfd7fdb423e 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -92,7 +92,7 @@ struct at24_data {
+ 	 * them for us.
+ 	 */
+ 	u8 bank_addr_shift;
+-	struct regmap *client_regmaps[];
++	struct regmap *client_regmaps[] __counted_by(num_addresses);
  };
  
  /*
