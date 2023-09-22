@@ -1,40 +1,40 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CFE42C06
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 18:18:08 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1c0c6d4d650so22675325ad.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 11:18:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981A242C11
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 18:23:31 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1bf6ea270b2so21946645ad.0
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 11:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695406688; x=1696011488; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695407011; x=1696011811; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4T/fTfBwkAD/muqS7Lm7m+/C+nhl1XGVqC9ttPy9eA=;
-        b=FrLZHI9M6j2w287metiuB9jOtkb1GdePi8hx0JBCyVPGwuHY8vceLJobaPosHvMoA9
-         CRRvPCgAxenBk4istvHhRI8ujrqzbRgdpiV7l61xiUox+FHQrmGlBd+mfPDOKFMJY6gQ
-         3toNlOLA4BCUNjFBwIfHOAKXPUizeG4+xrljI=
+        bh=yr61q+Y7qYRmoBTJuHgU+TYxnPKaIi9OdQT3qJe9OKQ=;
+        b=ZwHnLfEMyBGM37pgxSEpDVJ6oye1Mn1e34AfD6uV1PoYh7IYfrUlAD/8dgrFFT/mGq
+         cSWNNk5lL6REt3sSrMNxy8opzSdpMkr8dlLq1MhUllH9hoBwqo5P6Lf4Thq4svAJtWxq
+         vch+TQj3Ozbbr4GjCUq7NzNrRjIEHgGss0zPM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695406688; x=1696011488;
+        d=1e100.net; s=20230601; t=1695407011; x=1696011811;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l4T/fTfBwkAD/muqS7Lm7m+/C+nhl1XGVqC9ttPy9eA=;
-        b=rbER/2C5kZf5Dk4w3Mck8zzgUvClnaBgHbd0L57Dp2gmRDHZ68pO4Ir+M4fTMuHcmh
-         sw0frvPeH4Urn0h926rwxZf7P/yQNXI3Hg8D0MtFU8bt3tD3AKOcFF8IuxCrHHwNT2r/
-         8wLbjDGVeJkTPQ/9K97Go6wopdn8Oj+tKxTU3v0t+92LD4mXacBl1TOxC4TwzWIEEQia
-         hUZNgmGWSaQjRzEaNKw00yiJVVE7FW6iuc9iXoNAtUGIfPsjTovTkutDPXEnNg3dyxpO
-         iijBB1sD2d663b6psRf79feLs8Wk/DOuKqPEUTLVRjRW4NNJGOji+hFR78knXJGIM8Sr
-         5q/g==
-X-Gm-Message-State: AOJu0Yzg8OLgT1TURReonjNVzcnlPrhnU42+sZGvny3fKTi8rSd+dWWb
-	4t4Cs+HV6VloSqrKpdYZIKpHIg==
-X-Google-Smtp-Source: AGHT+IH5/bxePU0F2RoHuDHcwpnFv3qhRHMIDj1hzz6KjFthqubQPCi6uc81wCdHv55oKzyGphjbaA==
-X-Received: by 2002:a17:902:d48f:b0:1c3:6d97:e89e with SMTP id c15-20020a170902d48f00b001c36d97e89emr297047plg.58.1695406688329;
-        Fri, 22 Sep 2023 11:18:08 -0700 (PDT)
+        bh=yr61q+Y7qYRmoBTJuHgU+TYxnPKaIi9OdQT3qJe9OKQ=;
+        b=IIsO5KZXe1dC7KuhGgz4GYR7rDCTTpR067+aHOcsnRC3OM7AaA1RccBkiPxWqXSRMo
+         m/Gx+Yjt8AIAX+2LjWZdCqA925caneB1hitZHDPWHKpUCdq2jSzEvX9vQKP4TKYYEDBP
+         L06YqJg9HaS3pFzlwabxeuGrl81BRBQ8QVRhgwd1OcNh27nqpwBMT2v4nofUprbjeynf
+         863TSnmZb6KLI2ur6sid6UAcLHmJfs7QnKtv0DU5PBAhdp+CiQ41yo01eikZlZjOURiy
+         l68leRqFUxwOoNoA28seYC9UDPfMJoDqTaRs+lQR22f17Uts5WiNtGRGLlxUz/CJQmtO
+         ZL0Q==
+X-Gm-Message-State: AOJu0YzyaDaxJWpyzKszNjqVMyzglFOKo0sIoPtUSBLntYGNOlpEzU0x
+	ul0w6tVTRmEUXp9aNZGIn9pZrw==
+X-Google-Smtp-Source: AGHT+IEPfMe5MVG2BsIHv/EtqHgJb805J/3mFScd6v8b4SEGGTa1wBOOaNI8zST/3Yhw8KfpVcqPdA==
+X-Received: by 2002:a17:902:b7c9:b0:1c5:cbfb:c16f with SMTP id v9-20020a170902b7c900b001c5cbfbc16fmr265044plz.25.1695407010837;
+        Fri, 22 Sep 2023 11:23:30 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e3-20020a17090301c300b001b531e8a000sm3797390plh.157.2023.09.22.11.18.07
+        by smtp.gmail.com with ESMTPSA id f8-20020a17090274c800b001bdc9daadc9sm3775058plt.89.2023.09.22.11.23.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 11:18:07 -0700 (PDT)
-Date: Fri, 22 Sep 2023 11:18:07 -0700
+        Fri, 22 Sep 2023 11:23:30 -0700 (PDT)
+Date: Fri, 22 Sep 2023 11:23:29 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
@@ -65,7 +65,7 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	linux-hardening@vger.kernel.org
 Subject: Re: [PATCH 14/14] net: sched: Annotate struct tc_pedit with
  __counted_by
-Message-ID: <202309221117.160257BAB@keescook>
+Message-ID: <202309221122.74FA902A@keescook>
 References: <20230922172449.work.906-kees@kernel.org>
  <20230922172858.3822653-14-keescook@chromium.org>
 Precedence: bulk
@@ -123,10 +123,20 @@ On Fri, Sep 22, 2023 at 10:28:56AM -0700, Kees Cook wrote:
 >  	opt->refcnt = refcount_read(&p->tcf_refcnt) - ref;
 > -- 
 > 2.34.1
+> 
 
-Gustavo pointed out that the annotation half of this patch in missing.
-My mistake! I will figure out where it went. :P Ah, the joys of
-splitting up a treewide patch series...
+Coccinelle was not happy about the #define ...
+
+struct tc_pedit_sel {
+	tc_gen;
+	unsigned char           nkeys;
+	unsigned char           flags;
+	struct tc_pedit_key     keys[0];
+};
+
+#define tc_pedit tc_pedit_sel
+
+Also, it's not been converted to a proper flexible array...
 
 -- 
 Kees Cook
