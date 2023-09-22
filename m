@@ -1,52 +1,51 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6173743AA1
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:51:24 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1c4194f769fso20967145ad.3
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:51:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EA543AB3
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:51:29 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-690d2e13074so2263973b3a.1
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405084; x=1696009884; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405089; x=1696009889; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eXc3WVm2d9wXGVJuKAtiopcDcMVBwoquCz7AlsYwD+o=;
-        b=dZSCDVXqSmOx7AOTKAROEcESY+HoB11rf8sneiVwlxuJy9/1MEnXYScBYanpnYF/5z
-         R+YLkuEeTKfS+ipISkhq3yiwUVqJmSHptHRfBkr9nSGoaHdJDCVNEJawSxWQy9xLNjIs
-         cNPCY7tshKhsKAp7JKoPME6QyCEHv2Zmd3Q1Y=
+        bh=zWy2cKV4GFEr9xRf73jZAqGJISBwaUBznOL/cu2BqBw=;
+        b=RiDfrZ3Q4uJwTiCteZ7Tk7Ri9paFQGDvcZLl0gHQloDKC4TDQGMwr/ry1/L5NsYsZE
+         dc7pJqvNCncR/HatnloNZhfKMosyBE2RsknmqCioM/VmrN7dAuUhcKC1/cjbncLuM7b7
+         gLiScHSHjie6MM4/yO12O0y8A9+r5F6PHyC84=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405084; x=1696009884;
+        d=1e100.net; s=20230601; t=1695405089; x=1696009889;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eXc3WVm2d9wXGVJuKAtiopcDcMVBwoquCz7AlsYwD+o=;
-        b=gtcL/AwG7PxnuFHz0rtUPAOyBXvwP8sYOMT9AgxWC10xoYBNeeg9o8tVKsvfhP1iGU
-         +F0kxdCZBwsLTxIqj8mpGtl3sjyiOZRrtJdfvu0nLI9wof3HcpAp2WlQy2Zm/AnA2Zw/
-         Sc/tTbQ3yBMZm0HIMclQianVcavtGp4ujtwW6TtsSZHzltR7kZUMHCgkxHMu9h4S622O
-         JCkOLYfuKGjm5GtjG8xBkAtjiSAm/+/Jl/qqMXVXwxHBvWfWHVHbxPb1XzeUQasemASi
-         pOsZqYM0Wco/4IQi2/5OvFqIq2ozS7RUsD4gQKVx6MBSBmk1QZXeCWUs8wm/Ai27dLf4
-         ynoQ==
-X-Gm-Message-State: AOJu0YyZxk1u7hEKyLHQLvcnSgBwxI3Ldzh4IKjv4lUyLP1v5Wafv4BI
-	CvvM+wm04HP9s8Yugz5nlocljA==
-X-Google-Smtp-Source: AGHT+IH/Kn1OJkUrFMU9jg+TEckOUQCVzn3MG2/uzWrH8DEVzrtRq6GXOgkadVLCZAFxwqsvTYCVvQ==
-X-Received: by 2002:a17:902:7798:b0:1c0:aca0:8c44 with SMTP id o24-20020a170902779800b001c0aca08c44mr195510pll.19.1695405083834;
-        Fri, 22 Sep 2023 10:51:23 -0700 (PDT)
+        bh=zWy2cKV4GFEr9xRf73jZAqGJISBwaUBznOL/cu2BqBw=;
+        b=j7JX8XOoveh7q35cstknBCFLkDU+3XKymZaHHJtN834bxwf8S1FY0Zodf9ywclLciD
+         5JdvwM+ayIWtNrQx0bkr9LIZ8XdiqCkMq+qom5y1t2I8JWjMRk8Nt9APvIqTqRhJzIgy
+         EnUVVIj4j500jZEHXZOntoYdZaZeUmdX5c505xr7L0iKLRLqlqQOYwsPJovAErvs2XLa
+         IvRow4toYkdFSEZu88gr2PheBdmBim42fwWVO7NmTgIH+o5LtzmSa2A/RW4Qsij2csNR
+         LVq4Kcdyt8+tjQd5JG/LXxEVuoFpm5DhY+6POu3rE0nU1rQKR48iH15DRGO/BoD8yBH+
+         yo0A==
+X-Gm-Message-State: AOJu0YxyH8OZzgx2G25F6EnTvRQfDMbunuwFBefQ04fn30uI32dS+zRp
+	ItWYesVCTx4T0Zapzu1X/7hNLg==
+X-Google-Smtp-Source: AGHT+IFxuzaCV7r8DjCeSYSf/GN6tB4Ibj1JEyclXxd13O3+GZ+mnIbjiCq0jprg5ZLn/K1NZk6hBw==
+X-Received: by 2002:a05:6a00:10c6:b0:692:7527:c2d0 with SMTP id d6-20020a056a0010c600b006927527c2d0mr121528pfu.32.1695405089536;
+        Fri, 22 Sep 2023 10:51:29 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id b19-20020a170902ed1300b001bde12178b4sm3771970pld.33.2023.09.22.10.51.23
+        by smtp.gmail.com with ESMTPSA id c3-20020a637243000000b005742092c211sm3377312pgn.64.2023.09.22.10.51.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:51:23 -0700 (PDT)
+        Fri, 22 Sep 2023 10:51:29 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Paolo Bonzini <pbonzini@redhat.com>
+To: Marc Zyngier <maz@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	kvm@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] KVM: Annotate struct kvm_irq_routing_table with __counted_by
-Date: Fri, 22 Sep 2023 10:51:21 -0700
-Message-Id: <20230922175121.work.660-kees@kernel.org>
+Subject: [PATCH] irqdomain: Annotate struct irq_domain with __counted_by
+Date: Fri, 22 Sep 2023 10:51:27 -0700
+Message-Id: <20230922175127.work.214-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -54,20 +53,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1134; i=keescook@chromium.org;
- h=from:subject:message-id; bh=+kioWiTjqV6jdbFZylWekeUu834dva3bEE4RuM/bKRQ=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdQZLetVqJUV8ZSLYv/hoDK79//fc87OG48iZ
- kOU8Wrigv+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UGQAKCRCJcvTf3G3A
- JqBnD/wN4+TtgPpWSDb0l1F32tdGJLNbEHEnVEr8OVv6j14PQUeCh5nUABKY7BTC2yJIGP4VKbX
- ousJT6tKEKoNsuwfJp0Z/Pv2ssKKbABc1busJSGB1V081CNDuOKPy/MN3pCqlTLtxk7yrwMkTWl
- 1G+C2YKMD4fKZU1EII3XT6kYdk2j9t487W/CfBBGmWZKuOEeoR0x22SWdrW2QPufcHf9bQLTj/n
- 9nygC679juYza9RWkF3u1hGYey8QGjP3SR1pusnTKAHd3oJBBhoLRsbmG9F+PNC3OjXCc5PdK64
- xD+7Inl2rGuMnRumnfsWJ4kBQgBr+Q/EbflYNsf0Aj/e3LVac/HEheuy8BxWasrtWNZ7IF9UgUf
- 7IrIqRGQVzygQPskeMPE7NgBtlZdj5C/Mlev/Gh/cuTufDy6RE2lknosD3OI4zzOvD79MZHW8R0
- qV1/TmW7guNS5XqgK1XfYNZcEqCI8PbL8kaClfUCgLYe52QO85Han1E7cH1wZZJBV3/OVQej3RL
- sUUTxwb5vl6n8FNbO+mtp7p2khlg2yyNgo3aaAWsGVmU3pWHubzzRGuIFyQUy6z05n5UEEEXXe2
- kEisjaAvIWB0BwiuIctaz7/4aQuV2TCNVjylB02PM+c77Jzzec7B/M9A+QFaHowdXUCPyiFjaY3
- QET+wYw MOtez24g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1117; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=BQgw8EF2sQN7M4ibs+QlF6QlmGe5nOy0wKdHVYuPEVY=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdQfbeoxDR4zaH3uOGAmbHCAxmdV/x0Uu57ck
+ umTWwWqzXaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UHwAKCRCJcvTf3G3A
+ JghaD/4pcL2sXBv0TjsRrV0JegGCtCISLELqwjPXi9SkAxJNkulj3xTCySEPOwpLlQXHM7SxQwr
+ F0EPSgQBnwy8EAg3ioFdXQBOAxIhxVqp8jtgieOLcP8kj0/OVK/kCf3D2xOkvXpmSe/CGBQm27a
+ ozR6mTj7DTFHYXDQcYBBjX3lrYjX63xd9Sk/Yz6rMpYqL1GxW0LMeomXNII//d0rtJD15oDP+Fh
+ vQCWAqLroY1LYo3JHHzjp7caDPUb5KPqr0coODKFf2Uieux7YJSeeWD9bi97tqFYXE0DQ6+PqIT
+ LND+y+hEX6Psxf4oEOTEzekyAJb/DDGbImYoB92mpkNMzEsmwF1hwlO5Yhu4g17g0Rnsq5J4X74
+ r5mI20ib6cKbNVQjJJ0cBfrRIvwHCUpzWVmMNeNsKUweLfOOqcEOw9Rgar/ErLx6AqLspvWjwa3
+ dfbQt+uY4pKOVFOV0L/ylQiPyQFOKcEm1hBKEp3iQZM2qfJWHoIkOSs0WtRZkrA46yXj0rlpfRX
+ ImzSaV4bdrg6X6/DJKUDmCwKX0gJ4X2dd9NZAwnnGqqRL07VZmoHTSDDdfvdBEnK2UnFxcrrvH7
+ BQq1GTf7uFssvkCPkCSORG26ATobdZGprPkXeGlAsXhd0Szfa+nZ4EyVlUnVshv88fcCi79uZAW
+ mbuiuGn YoIj4oWw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -77,30 +76,29 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct kvm_irq_routing_table.
+As found with Coccinelle[1], add __counted_by for struct irq_domain.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org
+Cc: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/kvm_host.h | 2 +-
+ include/linux/irqdomain.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index fb6c6109fdca..4944136efaa2 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -664,7 +664,7 @@ struct kvm_irq_routing_table {
- 	 * Array indexed by gsi. Each entry contains list of irq chips
- 	 * the gsi is connected to.
- 	 */
--	struct hlist_head map[];
-+	struct hlist_head map[] __counted_by(nr_rt_entries);
+diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+index 51c254b7fec2..ee0a82c60508 100644
+--- a/include/linux/irqdomain.h
++++ b/include/linux/irqdomain.h
+@@ -174,7 +174,7 @@ struct irq_domain {
+ 	irq_hw_number_t			hwirq_max;
+ 	unsigned int			revmap_size;
+ 	struct radix_tree_root		revmap_tree;
+-	struct irq_data __rcu		*revmap[];
++	struct irq_data __rcu		*revmap[] __counted_by(revmap_size);
  };
- #endif
  
+ /* Irq domain flags */
 -- 
 2.34.1
 
