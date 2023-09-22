@@ -1,50 +1,50 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2932342C1D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24E9436B6
 	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:29:10 +0000 (UTC)
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-27489f78e52so1763341a91.1
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1c43b4b02c1so19965675ad.3
         for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:29:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695403749; x=1696008549; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695403750; x=1696008550; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gSa6oULDCwttnYj/UXkUGWzp9s7+1yQ+R9ugGfGb1B4=;
-        b=j4VoSwDc77p5JjAGnA2EQDMD+X/0xUvFJyCjHmWsa6urTB9TDdNz9/CbuP1oGSOHH5
-         P2yePqPPfkkO8vDQuSkPz3+5Ir1u5OwZl/6CQxFzn7PJgeSFf1cW+NJJXZaUjA2ezbzy
-         a7vlF/BSFE/6p6I4fUFqDCkuImetnLKyJ2fhg=
+        bh=4qbLpDWUwgzzYPCRaxCJqmb/nv0TKtcjFS6rBqkmcgY=;
+        b=KZHZ2pagxUBRUPmnwOzXwzBOGZw04+QCJyIKx4n/19K1tE8eCNfL9DXzF98wET4XIk
+         /ucb5NAIYnr9KKUcSKdsfd+o0Ts8csy1WC0kNxO9JWv/LIpBBeKWIlHon9WPtm3Jf16w
+         rPAI0K7GAdEc6st8u56E8Qgc8qCXxPf/foryg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695403749; x=1696008549;
+        d=1e100.net; s=20230601; t=1695403750; x=1696008550;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gSa6oULDCwttnYj/UXkUGWzp9s7+1yQ+R9ugGfGb1B4=;
-        b=mlRAVE+BvhkT3O1esoHDxO015lPirBfC5nj3K11YwX6Un1VDMN33qH/RJaHZr1yMf/
-         /BoTVa4zImcBnDz69ZP4cz5OdEAJzqUSFeOTzXp36zNzThlzBL58GPzPHc7z0+EwdDIl
-         dlnB5+9rKaYRx9wFoOtnEV/OwzlmA48nwZOil4PviGdkowZurRrlb5o+xWrTDFYB8vBO
-         ToVV41/xwmJPyIY+jlCwqHAr03Skb0UTa2bBsS0LVB0XgWFnN2YAeQ37I7d4pWrW8uIL
-         Pw2rqy/35ciguFDdhINuw/W5VkvMI8VHbtmwi7a3v8H/FiM16H14bbAZOTXXsijQFbXn
-         ikXA==
-X-Gm-Message-State: AOJu0YzOXgEWcxnKzzvWYQy3oGgcyvSfVyBUhZIisI6U+3oanMEao0k+
-	JoteB31eVEFo3E+yD3FbkV2T1w==
-X-Google-Smtp-Source: AGHT+IFMACdQpM2PQ0JNSQTykeftmkGGXvmE1SAn7R1rshOM558PtjRj77xUZoEQppX0U6JD12SJTQ==
-X-Received: by 2002:a17:90b:1bc5:b0:277:1bd8:abe1 with SMTP id oa5-20020a17090b1bc500b002771bd8abe1mr303008pjb.30.1695403749534;
-        Fri, 22 Sep 2023 10:29:09 -0700 (PDT)
+        bh=4qbLpDWUwgzzYPCRaxCJqmb/nv0TKtcjFS6rBqkmcgY=;
+        b=jvrJ/tGHTHBihVS6uhgmxPOZjM+CE8X08KAB0QV7OU0LC3xa9w9B1qz3PhMslMQ4VN
+         9e1f2Fwtcyl3NA4j9icNg7rXOlT3H63Bfvu6Il+5yQm+RPqCRdHB9tfLqbInXCWFFKQz
+         PgCF/aANJHIiNqsPC7KaaaUrSqbeRx5lpCK3SNztaseU9ks7HT0n69eLEZDlZGJOn/jD
+         k7XackqiILxjYjimG6Ae3phJDDQ74s2Ang1WgnOD3pNGILY2zJeBAxFbRCSFvim9llJo
+         0kLnp6uqnEWIQn7QFQxdWDcPdfKcMUhCarvJGofUXg0UvYie9jjM3XVJ89q5rdbJap/d
+         SvHw==
+X-Gm-Message-State: AOJu0YxHa1GEhs/m2Z3CrY9HwjNbN4oYKqwXH6C4pZTwO0DdNGXrfpw1
+	DGe0FVhuoaxzEV0+1q6FnCLQ2g==
+X-Google-Smtp-Source: AGHT+IFprIk4Oc3jWBV2j1a3pDx/Ze8ZIDNVrL59U3qfvbK8hQNgJ9g8aEnC5yMh7GVAVWbVI04fiw==
+X-Received: by 2002:a17:903:1109:b0:1bb:d59d:8c57 with SMTP id n9-20020a170903110900b001bbd59d8c57mr130556plh.18.1695403750017;
+        Fri, 22 Sep 2023 10:29:10 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 26-20020a17090a1a1a00b00276fc32c0dasm3068784pjk.4.2023.09.22.10.29.03
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902ee8200b001b66a71a4a0sm3749961pld.32.2023.09.22.10.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 22 Sep 2023 10:29:04 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Shaokun Zhang <zhangshaokun@hisilicon.com>,
 	netdev@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
 	David Ahern <dsahern@kernel.org>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
@@ -61,8 +61,7 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Ajay Sharma <sharmaajay@microsoft.com>,
 	Alex Elder <elder@kernel.org>,
 	Pravin B Shelar <pshelar@ovn.org>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>,
+	Shaokun Zhang <zhangshaokun@hisilicon.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
@@ -71,11 +70,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-hyperv@vger.kernel.org,
 	linux-rdma@vger.kernel.org,
 	dev@openvswitch.org,
+	linux-parisc@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 13/14] net: tulip: Annotate struct mediatable with __counted_by
-Date: Fri, 22 Sep 2023 10:28:55 -0700
-Message-Id: <20230922172858.3822653-13-keescook@chromium.org>
+Subject: [PATCH 14/14] net: sched: Annotate struct tc_pedit with __counted_by
+Date: Fri, 22 Sep 2023 10:28:56 -0700
+Message-Id: <20230922172858.3822653-14-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230922172449.work.906-kees@kernel.org>
 References: <20230922172449.work.906-kees@kernel.org>
@@ -85,19 +85,19 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1360; i=keescook@chromium.org;
- h=from:subject; bh=pEQ6m/Ojl8iZZMdU3eWLn6pX8bV9cI5eUZQsnPhAnjQ=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7XkbXKZplSh9lbnY+7Kzc2rn8+8PrOJtg7N
- VYk6XUim8qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1wAKCRCJcvTf3G3A
- JlK4D/0a5nvQxsfMMYe9Iz6FtaE4ytVsQDcsZFdGmgQChSwGLCdG1Sa3F9I/G5YpqxGxJ9MNkss
- +nBxQtIkxud0XXfvo7iopnxIgD4mvFFE82jWjI5l+YqV7TCu70N8lRiKrnPnHt7F4pX/YBRSzP4
- Z4CSFFVLw4aHwapWBtYrbzgkkkOcawEXJ9SwIe5uQjCSi5cTm3Fhxi1Y3b3gnLG2UE19n3AAvV1
- MELt6/MIMajh61Zk7bylLfR1U9tDOz34sjH3t6DRsGC34XAypF/4EZFJ3HpQHdnPPo0b1WJN+R9
- I4X59+l8NGkwQHFOzJZS/jHa/7YBQAkymun70pKFQv4oEGS5anucsYwBt8F9W+lQ6it5Z8PWv4g
- nlHRBeEueC6LuAI+hB7sF6dD3LB/xaawEDJKiHZaHoG9CwxgxtXI+s9GBsAhetoUmE2b5GNdoEW
- Ix5esRXBd3MxDY2qQKgBHpxzkJCjVcBkSIDPfB+6QbvXKiugSApEqCw52zAoL4vZ1DIYTX+eULT
- aFDnk/QcBxCFto/Y/DDesSQa/0VZ+AkYXsY2Wo+QpAFR7HYoGmEub0VuATWQu8NsBJEZDh1tQ5N
- 1uU8WV2UjWnZfw75hLVF3Biggl8OKiurzRsCNrHh5yDeGQp0hufJgv+TSoR9JC2NZtc69JniRcJ Urav/CBb855RzPA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1707; i=keescook@chromium.org;
+ h=from:subject; bh=2t/ZxOWEU2viROo1UvEVFxKv5vcCA9cvfvIY7AUZekI=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7XaxqapjSBY/SPBC/x04RSUHK/UIttRsNmQ
+ BtJyGkw5WiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1wAKCRCJcvTf3G3A
+ Jh2RD/0dUjACoTlVEZR/rUTfjAaXcRrjdWj/jRwZhzM+BFjVVrkW2WL4vF8f3OtpT1D37kVC6yt
+ 5krc2k1SgI9i4EIbbTCTHDKmLHFMdeNJj5yXkZqGe2kQocQH6O2t4MI9L3hpREI1/FZbqJdfIhP
+ O0VkQhiYhU7Nivmec62bTZvgzPCuVjj1QbCRx64McRRzIsCOrxiOJVxaLRn8MXUoag8JHHVtq8N
+ C0GRweTtJdTEnvySnkIRdOv1aQSe9bmyu3n6UfeVSb99zjCgoSq6MzdIJIykmvV+ipPWiTOAHXF
+ hgcx6Nj7vOyb/udVU8Sy2EyA+QKSJGjs4xelXxxAAt5eYBvynuKGDPq+5enCP676vNeK5lYIcdM
+ tjR9wL1D90SxMp0k31niGjQQfhd2hZX207yL3hWHrAmFhKgGM58T6wcW6TJM3kyVNhw0Rsgw57I
+ 3Qs/3XpeZD+0L6Yz/nZiIjHP5q0ZEHd8RaV5+RBsuMFOD4sSxoz2dpbIgFlMC5M6rSM3HYp9QRu
+ 8bWPWgo4YgaynOSa3gYtVwkMV4winLmyJPRJ1RnvUXpyMWvyDnfoH38MZwyqVEnPdIXXbXejgny
+ eDjoni1yyVaDXPOQYroF9Gf+NTE14pE11tfkIsS5+ql+igraxVPAXLcoQzTe5Q1j/7N7pAMKrKE ckNAllL+gDJgldQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -107,35 +107,42 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct mediatable.
+As found with Coccinelle[1], add __counted_by for struct tc_pedit.
+Additionally, since the element count member must be set before accessing
+the annotated flexible array member, move its initialization earlier.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Eric Dumazet <edumazet@google.com>
 Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Shaokun Zhang <zhangshaokun@hisilicon.com>
 Cc: netdev@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/ethernet/dec/tulip/tulip.h | 2 +-
+ net/sched/act_pedit.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/dec/tulip/tulip.h b/drivers/net/ethernet/dec/tulip/tulip.h
-index 0ed598dc7569..bd786dfbc066 100644
---- a/drivers/net/ethernet/dec/tulip/tulip.h
-+++ b/drivers/net/ethernet/dec/tulip/tulip.h
-@@ -381,7 +381,7 @@ struct mediatable {
- 	unsigned has_reset:6;
- 	u32 csr15dir;
- 	u32 csr15val;		/* 21143 NWay setting. */
--	struct medialeaf mleaf[];
-+	struct medialeaf mleaf[] __counted_by(leafcount);
- };
+diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
+index 1ef8fcfa9997..77c407eff3b0 100644
+--- a/net/sched/act_pedit.c
++++ b/net/sched/act_pedit.c
+@@ -515,11 +515,11 @@ static int tcf_pedit_dump(struct sk_buff *skb, struct tc_action *a,
+ 		spin_unlock_bh(&p->tcf_lock);
+ 		return -ENOBUFS;
+ 	}
++	opt->nkeys = parms->tcfp_nkeys;
  
- 
+ 	memcpy(opt->keys, parms->tcfp_keys,
+ 	       flex_array_size(opt, keys, parms->tcfp_nkeys));
+ 	opt->index = p->tcf_index;
+-	opt->nkeys = parms->tcfp_nkeys;
+ 	opt->flags = parms->tcfp_flags;
+ 	opt->action = p->tcf_action;
+ 	opt->refcnt = refcount_read(&p->tcf_refcnt) - ref;
 -- 
 2.34.1
 
