@@ -1,106 +1,69 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734834447F
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:54:39 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6910ea9cddbso2084300b3a.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405279; x=1696010079; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IjeaV73hiIttYIrl5ELxFpexeQoEM56r8iWVxqTuQ5U=;
-        b=a/gXlDV5qdbgOpgIa+3soflniYyg3rXX+xctJ/Twh8whcnoLLwxJTNnyAUaubNYQdh
-         3VQu6iToNkurSyQw8FYyH15UzzqOQ+hjxbTPf9uOrzKfoF76LXwlC9H4ZkZCEJt6o3WM
-         CyW8jYyoUh/ql4dGpxVpFOcykdQvlnJKFDnmw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405279; x=1696010079;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IjeaV73hiIttYIrl5ELxFpexeQoEM56r8iWVxqTuQ5U=;
-        b=VbrOCshJii2MyqanF4OPT+bAPBFtLwi/NtXqSH0VQps99VdMzB9/3EwgTsuOQa4lBy
-         NxOb3czIUwX2N/b5cp59zis5hbzvRH/B19h7MBnfNkzzjIMLbx90kSnPraTq1d3tLRYB
-         zoPnSaDIlj5cbQ8lnWU/zqVqNdYSdvVN/cWtoRYQn+GZG4LUXIIPfYJsOYlJOWL+lW/U
-         gWGYo+5AxJkt779iiRLUbv6+OeDZFs1QAbSN6bszgC7mDWgV+NxuW6nd3cDLu7nmFVkb
-         C7biLWQ2cqmhVYYhyb8/BvlidmupwY9KiOPU+qqxws8MmkXIVxLZLc/E0wB72ScSlYWI
-         6rjg==
-X-Gm-Message-State: AOJu0YxmJtKba3sYsjmKOcOfa8k+O/qBdzjcQ2XqQGFn+ms/CP6f+FoA
-	tDBrBupT+skunPcfOZE8OnftxfNhzaCQa7WY5DP7Yg==
-X-Google-Smtp-Source: AGHT+IHR5DLHlAeeoZk+sHs9Kb4LlO3DRZvk0xSprFEwkdqeU0Cx16wif7KblQwQ5V62iXm93hIcYw==
-X-Received: by 2002:a05:6a00:2e8b:b0:68f:f741:57a1 with SMTP id fd11-20020a056a002e8b00b0068ff74157a1mr213789pfb.7.1695405278835;
-        Fri, 22 Sep 2023 10:54:38 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f15-20020aa78b0f000000b0068fece2c190sm3458942pfd.70.2023.09.22.10.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:54:38 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Maximilian Luz <luzmaximilian@gmail.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	platform-driver-x86@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] platform/surface: aggregator: Annotate struct ssam_event with __counted_by
-Date: Fri, 22 Sep 2023 10:54:37 -0700
-Message-Id: <20230922175436.work.031-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3824F44495
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:55:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 76D0820008;
+	Fri, 22 Sep 2023 17:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1695405341;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oCGVOgvY4s16fxeT66XA9Eh5rDl/9HDtlmqeH6RjkoU=;
+	b=Y0LRVQDLcKtDrLDqeMHV0I1ZNxm+9zhyWjyvX375eWeEiVtm0HXDIM8ut4QJLyJLBpXfka
+	32b9my3qGADpbERF9o+hkOvhW/E3A/Yi3TseGMlOMBBa7EFGBJhpBlEiG1Bdy1YSLIuckJ
+	Tr5vva1tYdbcVQcTL/oGESCbOrKuY9wMptDbuKQh8MFB7L6XYYIhv5UlcuWabGjqMC2iEj
+	/33Oo/gA6G2cEFLDvrPofAfgT0hE04e4+2DnHjUAKhgQufQE7CklUQLaOzAgAlu+UnA23i
+	o1ONnbR2G4Be7ak2dHtQtHG/w37nsEQ2kb9f8KzL+shsZI515TDZvrp6gGljmA==
+Date: Fri, 22 Sep 2023 19:55:37 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Conor Culhane <conor.culhane@silvaco.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, linux-i3c@lists.infradead.org, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] i3c: svc: Annotate struct svc_i3c_xfer with
+ __counted_by
+Message-ID: <20230922195537.2ed8c479@xps-13>
+In-Reply-To: <20230922175023.work.239-kees@kernel.org>
+References: <20230922175023.work.239-kees@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1146; i=keescook@chromium.org;
- h=from:subject:message-id; bh=T+Zr3XTl8UeXAf4xTZbY2EHoO0SlibCfAP1NuiNTWSw=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdTdfq2Mz6uuhqmtzfnfg1vj97+JF1Hg/qqop
- +JwlT8D5B6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3U3QAKCRCJcvTf3G3A
- JpoyEACg+ayR4fFaWv6vAB3d2B+WBwdtg4B8DiP1WncRmwCPqBiztrC21miRe7lLEDE2UklgyOx
- PduUHkVhaYeFRLawXsRDLwgFqNXykv5uD28potGGRWp+CJI+jxz7cbwO9d9P4EKNkqZiyIVe1T7
- 0uBJI+D/u69nR22ukFy36hxV5tXpLQvE+fU1RL+aspMbseJ60vj/jcDZ0GSYxMWT0UUPgsSUTLw
- Z6q9BwnLJDgFOpu3iUjPIlfWebKYQSBgSu6UUiyxsqas20/R8nxbHf8eB3QWvLF1YU4AMb5wJX4
- P/1RH2ZzTqV/biVWdGCMqcosrw/dnGRiPL/2jkn7ilNfe4hS265oaBsBi7Ufgsia/5eMRkRILL5
- YClvrIczbBrRyVxhEVjGEyRvtU5tXctwHR4ttx33tlk757l0m5kWBwrffVRwXlJP47Vuj13Lfk2
- 3PCS9WmNPjvSPqd8u/91V+0+QJifuf+8KGd8zW40biiTd3HPHhcXL5ZBBmQqxs6aUq1HayKEu9j
- 52zVqoAm0XHA1s/2cB1xNQoUlF/d910cvrK9gZTAUclWMUdI2JQ6j7b0QlJWDPUhtHU/LaOhbda
- lEi6F8d1IWD/7NGwOStb2so96w7SstbIDfpJiBhm3VuI9qJuOrXoBpG3vKUxPXfSJ4bKZVdHgxX
- tW/IFkU LyR9VPRg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+Hi,
 
-As found with Coccinelle[1], add __counted_by for struct ssam_event.
+keescook@chromium.org wrote on Fri, 22 Sep 2023 10:50:23 -0700:
 
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>=20
+> As found with Coccinelle[1], add __counted_by for struct svc_i3c_xfer.
+>=20
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/c=
+ounted_by.cocci
+>=20
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Conor Culhane <conor.culhane@silvaco.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: linux-i3c@lists.infradead.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Cc: Maximilian Luz <luzmaximilian@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/surface_aggregator/controller.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-diff --git a/include/linux/surface_aggregator/controller.h b/include/linux/surface_aggregator/controller.h
-index cb7980805920..5b67f0f47d80 100644
---- a/include/linux/surface_aggregator/controller.h
-+++ b/include/linux/surface_aggregator/controller.h
-@@ -44,7 +44,7 @@ struct ssam_event {
- 	u8 command_id;
- 	u8 instance_id;
- 	u16 length;
--	u8 data[];
-+	u8 data[] __counted_by(length);
- };
- 
- /**
--- 
-2.34.1
-
+Thanks,
+Miqu=C3=A8l
