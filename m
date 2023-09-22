@@ -1,55 +1,54 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AAA44489
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:54:23 +0000 (UTC)
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-578a3069f1eso1888252a12.1
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:54:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D380E4448E
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:54:27 +0000 (UTC)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-274d3ff35e5so1734893a91.2
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405262; x=1696010062; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405267; x=1696010067; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ISP2L+rvg6dxZG1wcmYnXloNsZywrTUtixv49IhJ0I=;
-        b=hX/59WhGbxMEMC7cWfe4OJMoBu82qVjlOyF3Nv3B/YbZYt5OCTGGYW/dgU0eg9Ljpd
-         +VpnTvpe4DzH6ghXak9pUHsokjxcew15q/GumZsUtYG7YNt/s+T1KaRcAlkcNYEzy3ms
-         0WPC+5WwrBBFIGcXN9HCaI6/sSjoYwfo84q9s=
+        bh=j+EF4vJBkJk+ZVR9CblihV9KVKwpbDqXkhI36zKUO6c=;
+        b=CHZcr9mVAstMkSPdv8kKfaYs5zNmQ8QlwDty7gkNhCVRfnDx9YRQ3x+mvbY5jfDbO+
+         bmkPuq2H568GMTx6s0SkvBbNHaUHOEwq+KSwxFCwUe6SVv2VClLsHHy/IJXW/lqSIj14
+         D+nNv7DAK1+SV4Qtm+EhQy04TsW9JACIlX62A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405262; x=1696010062;
+        d=1e100.net; s=20230601; t=1695405267; x=1696010067;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1ISP2L+rvg6dxZG1wcmYnXloNsZywrTUtixv49IhJ0I=;
-        b=Rfzrxkn6I0/ZVLAFSMwjkugwTnzE2CtOGQgZSDAmm71DUWBc4LR/DNftDjstNd9scK
-         5qli4MpYcdTFSJiMM5DwuFovP+9sODQbXXhHm180sUQRne5OHWxBpvADVnrlNiWK+OPa
-         YZyroQgb2xQ6Zjk4/aJtu3nbaBYTOO6GhHzvn6ZWEVpf1ouh27qxQ6kw9c+rMxQfpaDb
-         zVrZqW1Lv+IdbgVIlYg0onhSYNp2xxVKc53QozOZdyaHNS9X2RWjJFz7GicI1aJi686M
-         qylSPbgnhZogNZnbrXJFChJynvLqcaLfzgQLBijCcfJdel91y7edixK97wsquMW5GQzh
-         v2Qw==
-X-Gm-Message-State: AOJu0Yw7/nO8MDVafZCC5UfpJfQfKOKUPGzPOKrx1Pom8+1YeO/FYMuO
-	vE7/XzVUpJ4j5aw5Wo+oDLKn3Q==
-X-Google-Smtp-Source: AGHT+IGxW0pO6A2XYuuil33uTylCAIbRaQSzobX5s7nUCpWCckLaGOgJJl/22O16HRisYCP+P0WYhg==
-X-Received: by 2002:a05:6a20:9499:b0:13b:a2c9:922e with SMTP id hs25-20020a056a20949900b0013ba2c9922emr268710pzb.27.1695405262686;
-        Fri, 22 Sep 2023 10:54:22 -0700 (PDT)
+        bh=j+EF4vJBkJk+ZVR9CblihV9KVKwpbDqXkhI36zKUO6c=;
+        b=bLTDQDKwA0VZXcagGi7WAVMYKlf+vK7NszGdyu3XN99ZoTyIbecUxn5doDmoLGpTvd
+         W087m4FOG9CtO/KIPLQRgjCxoljxdWygq0WH25aLurrGkRZ6z+Dxso2L2IYG69F9wI4k
+         5EMYuXxxRpiXmMwQgAS8UzHVbsC2aIgrRh0LtTEwGBCdqhvUn1/2CCWxu9KisE8UpAod
+         mrPnHBtAMX8CN9BMU+6E8uffmcNTGD9+TZc2qWQ7pYkkbMMoOT7MaDNZsEN3PdS/qi5t
+         VHEVwJwIm0P5H7W2dF2Vba6hC657XemMObRQcfKloEL1bWqoNKaFihXtKZpeKcQHNTrZ
+         0NTw==
+X-Gm-Message-State: AOJu0Yw+89ANYObb1YXeGanoxaA+7uR82b6xFl2j+dRt2t3qswumsYPw
+	YlJqr26dkGA6TTYhUPuTKlaCYA==
+X-Google-Smtp-Source: AGHT+IEHTrz6vwmxrsTFOxVvmSb41QWPkh3jvMMRyJ03luJqtTFxKRrwM8037x7mO0uOF1KONBCuJg==
+X-Received: by 2002:a17:90a:c7d2:b0:26b:4e40:7be8 with SMTP id gf18-20020a17090ac7d200b0026b4e407be8mr425881pjb.12.1695405267155;
+        Fri, 22 Sep 2023 10:54:27 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id c7-20020aa78c07000000b006878cc942f1sm3457800pfd.54.2023.09.22.10.54.22
+        by smtp.gmail.com with ESMTPSA id 4-20020a17090a098400b00274a9f8e82asm5621422pjo.51.2023.09.22.10.54.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:54:22 -0700 (PDT)
+        Fri, 22 Sep 2023 10:54:26 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Jorge Lopez <jorge.lopez2@hp.com>
+To: Wolfram Sang <wsa@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	platform-driver-x86@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
 	llvm@lists.linux.dev,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] platform/x86: hp-bioscfg: Annotate struct bios_args with __counted_by
-Date: Fri, 22 Sep 2023 10:54:21 -0700
-Message-Id: <20230922175420.work.701-kees@kernel.org>
+Subject: [PATCH] media: i2c: Annotate struct i2c_atr with __counted_by
+Date: Fri, 22 Sep 2023 10:54:25 -0700
+Message-Id: <20230922175424.work.863-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,20 +56,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1418; i=keescook@chromium.org;
- h=from:subject:message-id; bh=kt0VlUdlEwKUKwWP1rv6tofv8fjvexz2uhyfkXWj6p8=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdTMfB+LYH5eKEwcBoqoFlTtLOyMMpn1kR2Sa
- TizrkR/ooiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UzAAKCRCJcvTf3G3A
- JsfnD/wN2QM835WwG5VD399xvmpEfqV/waSzTryLMYZxcqIlyuTG4pL75mWspCtqsPuHkcPq/5+
- dS56aaMDY1kiOZILGtGY/o+GWgizQ0X87eI7vpaVFKNq5aVB81SWua/rKAzQ02ogL1ld6i21Bax
- iKS3RQ4mhGVuAyMeSzgYg6LVxU7VHCAX1MzNuZBEbxxYYc9ePrN+y0Hkr39IRDtkwVWcx2PaZr+
- ZPLbM7Gr1c73OWGB0bhxLfHaX1rgfqmB9gXC3lJW/WyMNt2wnbyTplB/202KUySHEVGpzzl7+TK
- 1cMerBWqiNFK3BmK1tZOZh3L/GUu6t+hXEG1zkNP3sFOGOsRItI8w2yDQEocODb2NVCQZr5t3B+
- HELziLz9sxbCa7uWd78WEaYlS+jm4KnMPuXwIOm49XG7eeyCEqDz1zHK07JijFrG3CMQkyWttQ/
- J92lXH7PGL8Jnme0WvdP5OUM1swG3A1kKndnO4G2vXJ464QIOn+OsvQC02MTg4EG2OF2cvXaXuz
- V7+ZvYpLopVQKGVbWWY5H2WfbsVTdPZQHrTdnHLHVkmL6vLAD8wnzqR4fR9rDCWgCGtAzfNnpDD
- MMUbIToTezIl9ipPdd7j5G99rxqHhdMNHOS6KM1DGgOhQzpxGIl2uXlE55Wb3yx3OZcsI/MIXov
- dMn7rbm UmQyK2GQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1312; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=xHqAexkdir++JtYVtYwcT7l23jrkf39UFVqFNHYvTUM=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdTROjZmn9PrBfPmIbpkMcg5sdNYLw8r0dJEE
+ dRDF6P38uuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3U0QAKCRCJcvTf3G3A
+ JmMlEACyXQMycy4pimGfzQlMXVi/e5YP4/RoKKXxI3rA+mIRz/OEaWUNy187GNrPLMuVRUEl6+m
+ 7HBRBE5xxKe03wBcUu0kmWdpDuLIN0efMNzsWH2PQY8YPDw1V7Gaeh5FHD+MTY9xp+88FCZq0dw
+ O5fNNwnBpaiJ8q+hwyak4O84zmGhnxy/Mo7yPZMWaq4nFn8IbqprfKnjorcedYUuWWHfJQ1wkzN
+ HoR3w0l8YapoHDkp1vCqhdfExasn72Qu0UgN/n4xVTJckAJ0+UYYw9s3DpLvqRzSi0PTgN67ypb
+ MtWf6E0kk2TN113KyScBCSU9h6D6uo0uRSZvt8PrTi2J50/IftiSoNkwY2w3DuBxqu28vd+lJJz
+ sWfGFrp0lfdEIb5YqkIWT1BUxW6nD1VcLLfUWD1zneBljOu5GXct0D3g342AYe0F3g8u2LpXzH0
+ uVG/7sBg/wHslmjgTJWx+VpOXkqbGue5ZH4PhIzc7kislQ3tkMj22IuxBpvqiWqVFZL+cvF3SdL
+ ur0bGhn7qFjouZrQNO0SP3eQP9E3dxRNyf3zyiuBzMvrejRFAt6V7oeIgKwjGns6fOBtQUonNQg
+ sZQ0aauL4gW0OOpE4M5dDcWJo8GNLi1tkdvWc5+p8IzCTba898Lo16aluMogKJDOy6MZDBvb2pN
+ 7SVgLij pk1wMheg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -80,36 +79,36 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct bios_args.
+As found with Coccinelle[1], add __counted_by for struct i2c_atr.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Jorge Lopez <jorge.lopez2@hp.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Mark Gross <markgross@kernel.org>
+Cc: Wolfram Sang <wsa@kernel.org>
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Cc: Nathan Chancellor <nathan@kernel.org>
 Cc: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Tom Rix <trix@redhat.com>
-Cc: platform-driver-x86@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
 Cc: llvm@lists.linux.dev
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c | 2 +-
+ drivers/i2c/i2c-atr.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c b/drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c
-index dea54f35b8b5..4da99cb7218d 100644
---- a/drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c
-+++ b/drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c
-@@ -19,7 +19,7 @@ struct bios_args {
- 	u32 command;
- 	u32 commandtype;
- 	u32 datasize;
--	u8 data[];
-+	u8 data[] __counted_by(datasize);
+diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+index 8ca1daadec93..f21475ae5921 100644
+--- a/drivers/i2c/i2c-atr.c
++++ b/drivers/i2c/i2c-atr.c
+@@ -94,7 +94,7 @@ struct i2c_atr {
+ 
+ 	struct notifier_block i2c_nb;
+ 
+-	struct i2c_adapter *adapter[];
++	struct i2c_adapter *adapter[] __counted_by(max_adapters);
  };
  
- /**
+ static struct i2c_atr_alias_pair *
 -- 
 2.34.1
 
