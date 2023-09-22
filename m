@@ -1,39 +1,39 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8394447F
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:53:57 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1c364fb8a4cso23247965ad.1
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:53:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF1D41AA4
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:54:01 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-276d611df9aso1759969a91.2
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405237; x=1696010037; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405241; x=1696010041; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WLImW1IzePGbN+/EKPq+ioMvgiAmC6mEu6v1g8YfVEg=;
-        b=WNQiaIRVqQ6ARzVFHbS0jtz1xmiLHMaahVp1ojjumrcNZP1pV3sNIowSMIzGGTZ8u6
-         IfM9tBwo1sR977piLFW/PbedVpWctEumpoMvaP31mVxt05U2f/XxJfmHFVbMUh+Dzb8q
-         z8ELrhv9YrsbXMSJ/kI4nmr3ljtxpEzb4GATw=
+        bh=blbaNQfE8VF8IyCe56PdApvTuknWltr7FlvuMXZ9aXQ=;
+        b=IOQFhHsc4I5PepcTly222p3Zw7dywDlZoJvftb5dhVx4XJiZzpKvhGgtTvpWIbDnCs
+         IjARRWFPiA4E4BKXGTK66B06NhP3+oGTzW2aFhn3E6o1VZNJl5etDyDtqHc4TEg8UFvS
+         nPz0U9QP54py8yut6kiRCIWOSWqsCovMnb49g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405237; x=1696010037;
+        d=1e100.net; s=20230601; t=1695405241; x=1696010041;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WLImW1IzePGbN+/EKPq+ioMvgiAmC6mEu6v1g8YfVEg=;
-        b=a0Hl8V/hlkN6imaLcMD3tc40hqQVAxzl32kzS4uA8iA7eNqQixgMQCdptuONJNcPpZ
-         ic/GMLkBCffrdSeGftCOuoKxXZ8p9xWyqE8eHiXpxsyvhrXdTK/NL41xIdUT8NeLwhbh
-         I/XkuTNjVnpU92aKjzXT7sDZ897/eUwb8DpUcTiuQqAS6D861OgqgX8900HYh6RM6pMf
-         QyZubUygQ2634hNaxNV9MiKVwX00i1si6gPUI/u0zMA3mTf6QlmxP/8u0P5HeB69yDZx
-         YPkeaOqAVe68DTasdFLNkq3i0pA5sBhztjGlTBtMMjoMVG4cHTjMCSgBj5nlKknYm8ii
-         IN8g==
-X-Gm-Message-State: AOJu0YyT8fYavtZxxCG1oYzlUN2pgi7O8HjVzXm+wFQsi2/rXuZAUc80
-	WHZ2wRlCJx9in3+MKtjRiN1WxQ==
-X-Google-Smtp-Source: AGHT+IGF3fNGmUjC4okiXR6Ev3mOPUrKRgaxVlLdi8Plb8MDgj/4DVzkWP898nuYl3TJbEm6TJyfFw==
-X-Received: by 2002:a17:902:f687:b0:1c5:f4c7:b4de with SMTP id l7-20020a170902f68700b001c5f4c7b4demr167642plg.2.1695405236901;
-        Fri, 22 Sep 2023 10:53:56 -0700 (PDT)
+        bh=blbaNQfE8VF8IyCe56PdApvTuknWltr7FlvuMXZ9aXQ=;
+        b=e3GPevsDiEk/Ekvl6NPcpFAqTXYW1R+R7+nEGILmNPqsJjiSdX8I1kfAA7tA5eD/fa
+         b7kpdlIm9u7+4uBHvnR0lrzI3hPNeFH5p2oLXuB0Xg4WwgpVefNl5V13hEUThiZ337gL
+         5bGyyuXPNeKZCbhP7cg1Bx1S6PWrBqcksdjBlVhfnsPYtYBUaFKZvHrENitroohVUafR
+         6p2QPLU0iXaKSlw8mIfMLplN/xxgUbPW1qEgRymHN9ieOe+EDIVsILroZxKaibzcweNU
+         peLcDek2AcUitEv0XvXxEHh8mXGwFTME5ufFfVwQNCjWFzmTbBg/wxry2Ap2XXCtkdV4
+         OW2A==
+X-Gm-Message-State: AOJu0YxxMTSu4qnW7M9Km7MSKpISFrUa2W2/rUxJs0dDWsjHmk6eKYPv
+	yxFVe//NJaAHf6uPgpOZu4PG1g==
+X-Google-Smtp-Source: AGHT+IFaO9KtLZCcUOV7EhIX5OjLxGdOM0WYzA+wc3k3wsNUoy0acGXxR7rJOrzS65Y/KaC9Mc1qiA==
+X-Received: by 2002:a17:90b:3ec5:b0:268:3d4:24bb with SMTP id rm5-20020a17090b3ec500b0026803d424bbmr416808pjb.1.1695405240748;
+        Fri, 22 Sep 2023 10:54:00 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s18-20020a17090330d200b001ba066c589dsm3759352plc.137.2023.09.22.10.53.56
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090a818300b00267ae12b80bsm5156478pjn.34.2023.09.22.10.54.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:53:56 -0700 (PDT)
+        Fri, 22 Sep 2023 10:54:00 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Sebastian Reichel <sre@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
@@ -45,9 +45,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] power: supply: axp20x_ac_power: Annotate struct axp20x_ac_power with __counted_by
-Date: Fri, 22 Sep 2023 10:53:55 -0700
-Message-Id: <20230922175355.work.006-kees@kernel.org>
+Subject: [PATCH] power: supply: axp20x_usb_power: Annotate struct axp20x_usb_power with __counted_by
+Date: Fri, 22 Sep 2023 10:53:58 -0700
+Message-Id: <20230922175358.work.774-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -55,20 +55,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1249; i=keescook@chromium.org;
- h=from:subject:message-id; bh=xHCdB+Bm90QD3l3umM0GSzvzHSQIr+R2KIoMY7RnKys=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdSze1eY/sp2o8MEriIqwEc63bQLWGuZ7Mxjn
- XsSXzjxXROJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UswAKCRCJcvTf3G3A
- JkmYD/0S5o/H/m1efZ3VLfgKqfWqJMlk1UnalQCznqLB523UsBWOyBFnCxJpx5xAQd2EAH91j5a
- gBDwJWO155sAMdKYBg421/d0lTM+zYXSDZpyICyA1G2Opkka9dhfzlrpNYhCFam98UFxOO9O49t
- djX5PdSHYcJ1C95HbfPuiC1JdN8pDwl7McJKCDJgDQCAqxcVdrRWht/CoTG5zNPGwko91JVvOxE
- K49WJK+FSKVOEG9SKA4ODQDXPrnsr/KXWm19/7Kwtt3/Jt8NOE1k9nY20k90czIRxVH6yn40dw9
- XwA32R13GtGujQRdKcKtYiXvrS3LX9CBP/QL7jK8WW4SSWLrf9AOKgrdpCMOiQybtrE5TFZKxUD
- c01ygdxfBJM+Z9T2vzaWMkVQhSmDloymBckp6Aw4+QxTX2XIpx7Mx6gByTBv/z29kKQTkhctofD
- RjuvWxEJXSBIVdGYVxHEVnejxUNCCPKXMAwYqN41lz81sUypVwcjk0xUl0lL8YdKf7IEP1XHsAq
- cDbRHp3BuasSrnfhdQc4jdnagoA0jZG7RV/C4cA3Lzkcgl4ewRvm5SZvBR5ZrphbGBWdROQqsBu
- cddUfhNcPlDhPH5xrMR4f0qDMI6HV3aebr04+HBX8WrelhuleyrQfVXsc8068m2IVu6OqB5CbUp
- xb8XFZi TX0C2BjQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1263; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=hUdVdLxiWpJoNa3S8zTxaKIJTMK1jo8G/vYOGoC9vzo=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdS2EABKtMu8RCKmdL8MpgPHDFTGxabuzsdMq
+ njl6//sbfeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UtgAKCRCJcvTf3G3A
+ JuDTD/4rO45l/UjCZvd4HNI2vUdfkJfoazSV8gz7Hvu9weac7Gr1IAEVf5JUdAVmNBR/y+2nf5r
+ DQxckTpjO+exDErFnK5YMPRQawm9wSNemZz1mf16g34Ri/WjJgE5vBbaIzHBauH7wii9TSPuJWd
+ 9mYKwClTjH7RDKgtSSfuXGG3PwBzL1T9lu1Raw1Pj722MlBK+Bn8cOJ5CjJcfOvpXe6hHCBV8xj
+ vb/IOw2R2vD2YQfeW/eYfYdhk3bddOMr5qKDk/+O4I8MybaWKRVyfeZk/xwPqH5rRe4hIzU0+uq
+ fjo/G69vAk2nlGFJTUBUDjO62+YwN6L2OZwkAvdmhjH8BM2++UU0z627piI+msOiaUUrNVfT3/W
+ c6Q4a/Wn0u0CC/M0j/gL0ZGrgr1jHtOKA+0Q67bOq3BeXKyQE6NgvdAA/vX4YCskkj/iRTLgZW5
+ Mr/yTJ5ts2lYw9XS9mzf4mjlvAIEmYTVwiYfHHSxi/sy+OF3G39hrfEMwSQIPJseKFEhWR3V0+y
+ yb4B1LpNYBzr4LFk5oD63XOTo8CmK+bM7zpspN+Zd3QOB5Zt3adIr6ZaHVcIqqlZA6ZlxevxglE
+ 8/KqnJI/NicJkcQxzCtvyFvN/cWyzhYND0DnlSgT2c/GsQ4+UJSVM8F8nNFVvxR57tIejz5fxrJ
+ wYT6csd pqwThkzQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -78,7 +78,7 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct axp20x_ac_power.
+As found with Coccinelle[1], add __counted_by for struct axp20x_usb_power.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
@@ -87,22 +87,22 @@ Cc: Chen-Yu Tsai <wens@csie.org>
 Cc: linux-pm@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/power/supply/axp20x_ac_power.c | 2 +-
+ drivers/power/supply/axp20x_usb_power.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
-index 19a118633115..e5733cb9e19e 100644
---- a/drivers/power/supply/axp20x_ac_power.c
-+++ b/drivers/power/supply/axp20x_ac_power.c
-@@ -45,7 +45,7 @@ struct axp20x_ac_power {
- 	struct iio_channel *acin_i;
- 	bool has_acin_path_sel;
+diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+index bde17406c130..e23308ad4cc7 100644
+--- a/drivers/power/supply/axp20x_usb_power.c
++++ b/drivers/power/supply/axp20x_usb_power.c
+@@ -73,7 +73,7 @@ struct axp20x_usb_power {
+ 	unsigned int old_status;
+ 	unsigned int online;
  	unsigned int num_irqs;
 -	unsigned int irqs[];
 +	unsigned int irqs[] __counted_by(num_irqs);
  };
  
- static irqreturn_t axp20x_ac_power_irq(int irq, void *devid)
+ static bool axp20x_usb_vbus_needs_polling(struct axp20x_usb_power *power)
 -- 
 2.34.1
 
