@@ -1,56 +1,55 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1131343ABD
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:52:36 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6910ea9cddbso2079200b3a.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:52:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314F744466
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:52:41 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1c46b30a1ceso21939735ad.3
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405156; x=1696009956; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1695405161; x=1696009961; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZJdLYVSWRxq3AIlS4Kyz9YBlE5nYYkWXarwNDO1ghNY=;
-        b=mnuTcgObBggdFE+IO94zHGex1fg+DMaImkEn1e0fIwjc5u8yDz42NA3XfBFl8MdYMU
-         yQais5siE0PbMcIqTCf+wHY9SjyLuZSQftULu81txXoGWZD6Lj4X3pctEcdMhzRhFUdZ
-         9GHUkVrD9pXQFqdtivb7sxDr1N1XlqKKQffbY=
+        bh=gSy8puFeXhx0444elPiTeRpnKr0zw+uEmx7ZUgtG/Dk=;
+        b=UPmFGNP6eeKBvAG9/DMujXMVdD6hyX/2Z3dEhQ8IN3+L5fh0sVWotrwDgQYc0NAhph
+         un6zZn0yN1fa/NVDrcz6I0Y7CFXrrdFzepukNydJ4B/rouWHVxCIpXbsxYV4Qbze3AB+
+         yaCVCZvfUtAQYiK9oXVQcWAPXsPSIOQKwB4+g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405156; x=1696009956;
+        d=1e100.net; s=20230601; t=1695405161; x=1696009961;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZJdLYVSWRxq3AIlS4Kyz9YBlE5nYYkWXarwNDO1ghNY=;
-        b=WNK6A3yK6WHZe0Utlo9WrI2k/jDF4AiOXrzyvXDq7QUTacyqh6HKGdxvfHuwQvJ27C
-         D27hAUXQrfW3GLUEDWEMlceq0HepkyaD8aNr5R8tka5KOXkuhWTxrLyN8BpRnB03PbHz
-         zgWAG7q9DMjwDbEmH5ImQpQL2fLHw1AtvKysann5ktDKKL2Q+pe/7of98Hk7Ypi6eNy8
-         cjoBPLwwtkjBlF1cbDt+mX80ADOWK5Y45Laeb7DX7Ac5Zj0Z2LItS2gF03MdfMUPw9Ha
-         HHdgfl0gjy9DWyV6dMQ2DR7vTbs0lGZtpC3GkfIc0QxTLGavGcopWGKKpgxS12bZAl4z
-         aP+A==
-X-Gm-Message-State: AOJu0YzlmJdu6AceaflzK+wbHXybCgRFeqFyf3/sMGo1w6uzTU3AbJAI
-	HNnuQHW+13NjukeAF21eErp1yg==
-X-Google-Smtp-Source: AGHT+IFoQrSp0SiFF6qLCBvHgOfTOrpApeeY7D6DEhe0wY4aS5rS++y/hvFvRE1hRHq+xbkNHBtrKg==
-X-Received: by 2002:a05:6a21:3392:b0:15d:6ea0:82da with SMTP id yy18-20020a056a21339200b0015d6ea082damr339756pzb.33.1695405156459;
-        Fri, 22 Sep 2023 10:52:36 -0700 (PDT)
+        bh=gSy8puFeXhx0444elPiTeRpnKr0zw+uEmx7ZUgtG/Dk=;
+        b=A5RjObCqPQ3IsQCIqLSjyCv1VDtcX6v/mMTiQVOIGpqv3JhzAofgvuuH+kKwX3LrIu
+         YsNny2VYfSwZIKTaPX6zoZSb5X7n+xEOpKpk/2eptNIivLC/QYPWHjPjSRdpAJRSmQ6u
+         KWcs4D88OMhBC6YsedhUxR0kE6K7cIXb3MzIt3wMrgclVn0JKV5Q8wnMdm8lHSxRWYt8
+         pR6MoAqnPa+tE9KX5YiqlWXTQj0K0N/tdRPTEt6wjeYDDqeMZcbX1yhnp87nE+RCQCXE
+         sna9QmU17WpwH252dtiD8hDnAcxfpInxfp2y4+zYlTLjws5owNIBOHDHYjgfffpBtzYw
+         DAwQ==
+X-Gm-Message-State: AOJu0Yx/erUdARsvjpvsgqaiA7UaGLSutyGP9RmIfIMVxNdXj1/KoGiO
+	VFuXqrqzRoCa/NEo7VHDW9aeKw==
+X-Google-Smtp-Source: AGHT+IGs9vWhlgTxV1Aqo0Ts/QnHggFMLwWvRbuUtTLBD1j/rEhcKu6yPTyXKYPaOAab6dPPu3rpqg==
+X-Received: by 2002:a17:90b:686:b0:268:13c4:b800 with SMTP id m6-20020a17090b068600b0026813c4b800mr417595pjz.21.1695405160722;
+        Fri, 22 Sep 2023 10:52:40 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b00687a4b70d1esm3453975pfm.218.2023.09.22.10.52.36
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090a4ec800b0026094c23d0asm3524738pjl.17.2023.09.22.10.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:52:36 -0700 (PDT)
+        Fri, 22 Sep 2023 10:52:40 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Liviu Dudau <liviu.dudau@arm.com>
+To: Dan Williams <dan.j.williams@intel.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Yangtao Li <frank.li@vivo.com>,
-	linux-arm-kernel@lists.infradead.org,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	nvdimm@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH] bus: vexpress-config: Annotate struct vexpress_syscfg_func with __counted_by
-Date: Fri, 22 Sep 2023 10:52:35 -0700
-Message-Id: <20230922175234.work.134-kees@kernel.org>
+Subject: [PATCH] libnvdimm: Annotate struct nd_region with __counted_by
+Date: Fri, 22 Sep 2023 10:52:39 -0700
+Message-Id: <20230922175238.work.116-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,20 +57,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1359; i=keescook@chromium.org;
- h=from:subject:message-id; bh=3PVI9STddT1UYeIAqa7UhvgteCrsOUq0jUn/ld5S1vw=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdRiLsX/0CwUbyt/VlYPcyGDAI+9ukcXqigL5
- VN0fQ0VpkqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UYgAKCRCJcvTf3G3A
- JkGEEACWR8ueSvd6K6fybEhvi0LAyEorYYtD45WON1Xxm4nFzcoie++vcc65U3s2vBo2Q+Ca6Hv
- 3ZlC4gOLONusN/ab1KT6HRYpnvJ3kav1cG92LF06cpQ1sJM6wmecTH9Z/tS/SycFLTUsIiR+fRx
- VYnTm5uuM8vTCvMMXoiJkxhwIWd5huI93hNq/4b/1hrZiKkAFxT9fQV1bTpNpzze1+0V6hrdHbX
- pZHHEP4xCGvwBY1r50vXi5jevgIbjCNQ9ZDO3HM2o4FOVVmsudLOzt0DO4EQZYPBeGfKzRA1dDm
- 46X09cXsawNxRUH9HeOn8+g+A1+QGMy4embVLeal2qjyAve/vCfwlr9PUlRYdcgVDsuPD1SLK8O
- YNO4CerpAmMXWOQqCxOnk98lIz6diCC7o25PAmFbqg9O/7GMYymae6IbxT92aTG9xxtmFs+NL0P
- 67f6B8yIoj4ViQNWe4c6XqTiMxlAsWuELYoSodTUiuA7yqXjwvFOtw1iOpyPogRQ7mAxjVMxYlN
- Wkmhjs3gY00bdzo7/b6dZ9vCmHH8xxnvDWNqtcr8TOt0bJUNv0ZtzRK2F0DrgUrtcfY1cv92fAe
- j28xJqCPhn9eeB0YArMpn7Z8rk6viQHx2tOeW59Cc8rUZc5r+NplUk4pxad20p/nYkd8v4n93u7
- rwdVR3q sgzoqcAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2382; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=F761VQHXmd2u4Wh2IEMoSgcuswWDj9IUbpQjwrV+U7U=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdRn7mm/yqnmTumY4FRBROvnp/IvAD87OmcL1
+ yK+d5kEY2GJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UZwAKCRCJcvTf3G3A
+ JhAZEACeucv92nBVoYitGAfmlofYg5eafD6vhQlME6vo7ELBJbtrs5nr/6inRq0/eA0kAT7moqL
+ KQNjP6gMWKDuvItgrJBObPbsP1TX8Gf5Q4h7aGpP6aoBVEMGlUstcXMFNo/Y0dAjMchHw/UEf3h
+ O+fzNwcrJMiRRqZHP/axClfYmDNc8Os3sZ8c+6h1PofZK+HM7c+qpeHena/yZ/Ii3ZOnJR2Cd0p
+ fSDNE4t4g6onf4oN7KjzkOSCQoQ3ouDpsoBPCMByzL13NB7URsh0NTZ1I+ufBZYHGsIbswWi0p2
+ COaH0/j8klNyrzEHGbX9oNOiNjoggxZyefLa3/4Ep5yK/y8Ujsp/WSvzVAtBx7vyuVTd5vcsUPc
+ 6GerUe+AOVWiQtjG5Zx2qplTjE1qN/38QFxI52lCjl6QdnZkfARiKyDu1Fby2oLvw2gc6ywBImU
+ EXszuxp09F7eDU5USjQQlkNRSMI7i3NBbBSOV0VGH/2jbDpXv6fage8NNNNY95kPBx+j0yUDllz
+ f9dBtF5+cyeapGtokkSwa+v9mwfoggMism33zlyua73+Q6FdqegMBQz0yCC3R7hAziUujAeGcCm
+ zTHG2oNr0j2/n1xnSV5DewoHZaDuQVpxkLlge7kd+1NKZ+pzIzbgOaq2ol75jtMnlrXQokeCGqY
+ n6M6Oyu v8uheuFA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -81,34 +80,56 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct vexpress_syscfg_func.
+As found with Coccinelle[1], add __counted_by for struct nd_region.
+Additionally, since the element count member must be set before accessing
+the annotated flexible array member, move its initialization earlier.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Liviu Dudau <liviu.dudau@arm.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Yangtao Li <frank.li@vivo.com>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: nvdimm@lists.linux.dev
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/bus/vexpress-config.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvdimm/nd.h          | 2 +-
+ drivers/nvdimm/region_devs.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bus/vexpress-config.c b/drivers/bus/vexpress-config.c
-index c4e1becbb2d2..d2c7ada90186 100644
---- a/drivers/bus/vexpress-config.c
-+++ b/drivers/bus/vexpress-config.c
-@@ -54,7 +54,7 @@ struct vexpress_syscfg_func {
- 	struct vexpress_syscfg *syscfg;
- 	struct regmap *regmap;
- 	int num_templates;
--	u32 template[]; /* Keep it last! */
-+	u32 template[] __counted_by(num_templates); /* Keep it last! */
+diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+index e8b9d27dbb3c..ae2078eb6a62 100644
+--- a/drivers/nvdimm/nd.h
++++ b/drivers/nvdimm/nd.h
+@@ -422,7 +422,7 @@ struct nd_region {
+ 	struct nd_interleave_set *nd_set;
+ 	struct nd_percpu_lane __percpu *lane;
+ 	int (*flush)(struct nd_region *nd_region, struct bio *bio);
+-	struct nd_mapping mapping[];
++	struct nd_mapping mapping[] __counted_by(ndr_mappings);
  };
  
- struct vexpress_config_bridge_ops {
+ static inline bool nsl_validate_nlabel(struct nd_region *nd_region,
+diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
+index 0a81f87f6f6c..5be65fce85cf 100644
+--- a/drivers/nvdimm/region_devs.c
++++ b/drivers/nvdimm/region_devs.c
+@@ -1028,6 +1028,7 @@ static struct nd_region *nd_region_create(struct nvdimm_bus *nvdimm_bus,
+ 
+ 	if (!nd_region)
+ 		return NULL;
++	nd_region->ndr_mappings = ndr_desc->num_mappings;
+ 	/* CXL pre-assigns memregion ids before creating nvdimm regions */
+ 	if (test_bit(ND_REGION_CXL, &ndr_desc->flags)) {
+ 		nd_region->id = ndr_desc->memregion;
+@@ -1062,7 +1063,6 @@ static struct nd_region *nd_region_create(struct nvdimm_bus *nvdimm_bus,
+ 
+ 		get_device(&nvdimm->dev);
+ 	}
+-	nd_region->ndr_mappings = ndr_desc->num_mappings;
+ 	nd_region->provider_data = ndr_desc->provider_data;
+ 	nd_region->nd_set = ndr_desc->nd_set;
+ 	nd_region->num_lanes = ndr_desc->num_lanes;
 -- 
 2.34.1
 
