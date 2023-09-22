@@ -1,47 +1,57 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C438242C15
-	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:29:03 +0000 (UTC)
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-691c05bc5aaso1964755b3a.2
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:29:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4294D171D5
+	for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 17:29:05 +0000 (UTC)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-274e392a5c1so1796410a91.0
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 10:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695403743; x=1696008543; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8+zsDKqPYa5khoeQ/X2KkaY8mmY8r9M3Aj1MNqbUX4=;
-        b=lO1jI7vf3Vqsw+T5upse+mcEw7tKVG6Ee2Rkl9u6XwtjgHK3LMgMqjs6twHnUlvLAd
-         VDjoD35r2uS3580Uw8JpWuSLVnkWgAIxUgtdYXENgsz/IEsA/YmllexoCudPqK0meWQr
-         qCdUzm1rPfnWUgbYQ3o2lepn9SdQ4i/swwhpY=
+        d=chromium.org; s=google; t=1695403744; x=1696008544; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C+fG/1IUZcjxNvMlyP56fbg8HR7JVnjt3riwCi0wfhY=;
+        b=gAWvOE+l0jGjuqFulMHeET17rWMpxk8HFboNDD9/Eb7Fq7D78L6TbXFtUnOi0pYKUK
+         PslmRW6tW2iFM7MHpTT1ZZ2/BapE+Ruf9Irxt7TaP5B5VnHP3SUh2S/7hRT28BTciqGn
+         ltS1OoEMPrtLvLnjwnh4+PDJ5UW7VE58D1WHs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695403743; x=1696008543;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8+zsDKqPYa5khoeQ/X2KkaY8mmY8r9M3Aj1MNqbUX4=;
-        b=FDNkNNnyyFkvFC0JH/yyXCMovoyxsIPtPwrBygagdrizQfVbLp+7w7TFj5RITk+h/m
-         F0peAZAvp5zQUlji/T5rIJtkp0+3SCMLmdF5pWZ8RtlbxxZMRZnxbbdnkjRC92vloKlC
-         ESUTp4+wgyM2oRh4MpSunMB3bwMTgBlPsNT1sciwuf1d3fz1UJ3IU0XlvTuPI6At4ncU
-         KIvaEy4l6LO4zb+2QU/bTvRE9Wxer9ZPZWPGUNS0zRY02+DDthIvVi5jPTDmL4yi0gIf
-         UBlmEc6fJIhLsbDG8Vf+qe38Lc9XwhoHid6aPs7bewkpn2a5c+1T5brknPyTeUZINqHC
-         39UQ==
-X-Gm-Message-State: AOJu0YyBjeehFdGG4k6rMaPTV9lApvwtu8HqymT950ZwunIU0jin2ltx
-	pSjI5rv7DBRc6yL8MglGp6EU9g==
-X-Google-Smtp-Source: AGHT+IHy7einxOZJqzMeGrtUp41zCyAYhfTGbgIj6G7ktKqXoRq3UXI9VRRfBIaYo38BL3FmkYPa8A==
-X-Received: by 2002:a05:6a00:847:b0:68a:5e5b:e450 with SMTP id q7-20020a056a00084700b0068a5e5be450mr72319pfk.26.1695403743180;
-        Fri, 22 Sep 2023 10:29:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695403744; x=1696008544;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C+fG/1IUZcjxNvMlyP56fbg8HR7JVnjt3riwCi0wfhY=;
+        b=F0DY4dUp89TprrWwb/yiyfks97tL4+i7auh4wPUAfvxsEBjmgmIpZQ+9MoiJswPVF+
+         ewastP4V+vWA+guxcevjcOCGkwLVR2Tndz6Md7bECnokNKY+7Ti452MYGTPfAccfMegX
+         c3EXhbcIjAedoWxG4FMFUhk/b5wereuJuvg8OzM7GrKTClYo0UTyzOXUlOhwRXCUaK1q
+         8HacpvTWiaCjVpZxRQahbIwROd7dvrqSn6EofKnQAHcCBG84MvZf2HxDgCV7IkjZ4xC+
+         x3sjSGXWpPq9JH40ynIPgrMaRbGQKap1DgzFQFMFTRJWwHvQcwFZd98KFrMy5LMHTwhb
+         M5Eg==
+X-Gm-Message-State: AOJu0Yy8mpBQCkkqCljgU0+SfpHyaHJeUgV08tQDYI96UlUUQCAgzDad
+	vK8crwZqHtNv1KR89mrXt9xdxg==
+X-Google-Smtp-Source: AGHT+IH6S8Qm5OPqgsDQKauIPObSxBk1dvTlx5l1M5gkLGsn8Dxuo+qpskJS1TC+0k22q1ogPLtjUA==
+X-Received: by 2002:a17:90a:fb8c:b0:274:4fb:360a with SMTP id cp12-20020a17090afb8c00b0027404fb360amr385633pjb.16.1695403744652;
+        Fri, 22 Sep 2023 10:29:04 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y10-20020a056a001c8a00b006926e3dc2besm2777741pfw.108.2023.09.22.10.28.59
+        by smtp.gmail.com with ESMTPSA id gq7-20020a17090b104700b0025bd4db25f0sm3544485pjb.53.2023.09.22.10.29.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:29:00 -0700 (PDT)
+        Fri, 22 Sep 2023 10:29:03 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	Ajay Sharma <sharmaajay@microsoft.com>,
 	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
 	Eric Dumazet <edumazet@google.com>,
 	Paolo Abeni <pabeni@redhat.com>,
+	linux-hyperv@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	David Ahern <dsahern@kernel.org>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -49,12 +59,6 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Salil Mehta <salil.mehta@huawei.com>,
 	Claudiu Manoil <claudiu.manoil@nxp.com>,
 	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>,
-	Ajay Sharma <sharmaajay@microsoft.com>,
 	Alex Elder <elder@kernel.org>,
 	Pravin B Shelar <pshelar@ovn.org>,
 	Shaokun Zhang <zhangshaokun@hisilicon.com>,
@@ -65,92 +69,79 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Tom Rix <trix@redhat.com>,
 	Simon Horman <horms@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
 	dev@openvswitch.org,
 	linux-parisc@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 00/14] Batch 1: Annotate structs with __counted_by
-Date: Fri, 22 Sep 2023 10:28:42 -0700
-Message-Id: <20230922172449.work.906-kees@kernel.org>
+Subject: [PATCH 07/14] net: mana: Annotate struct mana_rxq with __counted_by
+Date: Fri, 22 Sep 2023 10:28:49 -0700
+Message-Id: <20230922172858.3822653-7-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230922172449.work.906-kees@kernel.org>
+References: <20230922172449.work.906-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2504; i=keescook@chromium.org;
- h=from:subject:message-id; bh=tD+5se4WoWIAJwEPLvlJBN6wlUKoasq6Szn6nibv1zQ=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7Wu+d5o7777Jp53tWR0nER5gmlkAVoVjoqh
- J5JIlgoeMOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1gAKCRCJcvTf3G3A
- JrqqEACeFuiUMDgjhvtyqa9O/ntgqeTDML08nWyLGJ79aRe6YFXyHEddM/LbmREWkrtJUThTPL+
- 5cqYB5ebSIzmAdm4jbres07kHLFvt+2wcfmJa92BLomL4uPyqTUFXgn1mSYnLrb14IzV3e88Sx0
- dEDq9SHrXgKyFWkQfaC7RzupSY7nGw1X1Fv3+vLo/ofLr89BRjbc1wH0tOJMrBPr7asUo/F7eG2
- 7lxjFPkC1mLDulQotR5dcnl637i1mztV/DHfJlCRJQwcUcE/rH65VJ6UPC1PCNvc+eqL/CMKwKM
- T9iKyVQLU0gOVexJO+FPe5rDRoi/YrXfznJqI0MZx9L7MnZqanTpbTbIIWmdObv8ciWWZz3S8K/
- yHSIfhDofc7jQmUJnSJywpwkeAUyF50SOAkYngCVfxzswzgtYznLShCCbrSr2PLyVIU3xwoNL1F
- GJNRC4AJkef4eAA0hMVt6HF0UypVDq3Kvny+Q0xdl+MznPGBX1NQuKAvUri7Y8KGZ4yVf9N80Lt
- 88tUHrZopBg7iXoM1qSKMZPHxRK5nqMN/qqfUi48CEB5SZ8IzvOnLAvs7qd5FBCO4P3/yH8OWBy
- blZo4EB4+EAYhVbu8a/RM7O+YjAH2q2muPkUv7s/sP9KxF8m7FHQgFogan1njOplS3zYEN8SVhu
- HgXxG8g LJHlR5Bg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1560; i=keescook@chromium.org;
+ h=from:subject; bh=ZdDX1htO5g9RU0JVxl8E3nenoSp50ETWGlk5dSjb3Pk=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDc7XhV+304GTOyf/fNFFzA18xiqgiag6BHBkU
+ r6QL6lj+iGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3O1wAKCRCJcvTf3G3A
+ JttUD/4nw3GnIK/006QbQZGOylTpwCOUiis/9zO+cYuRhscdH8v/ABtugcRwPC6Cn46YyRhmelJ
+ I2EjfW+CUaswbO+4XodbsNw1MP3/9Rh2Z9hxWJp/ixVY+9Gr/Xso37A3Kx7yx/j9g7cJ5G8FsHR
+ BhADK3SY0PK+fm8vEQHbU47FLD+SDObsUZwCTiQppe3Qyj4rtHRPkpvlP8Xtnc3oktAK9NfjPO4
+ BYX4lmas+XoVTX/BFSYNV+dbtgn9PgTb5cIcrf+KYs1b21rtyLu7FAM/T0PHhS5lrEfGjiDqIXO
+ 0HnCVEXXW+bGsbCUW5vcgJX0NOpM8VO45dmzonA+kMLxzbeOr31HUL+vx9F41U6UFLiosKhC35X
+ QKeQKslSIwT9mFn9vcACY3wusuQlm2dm5Gb6CJ6xJhihRmK+yH+a6EZadQqvSoyBI1jX/P4o4cg
+ sNTuPs+4n3fXOjGWHI1inrX2o79utjzSj6NnfBHfWaSsJwBy5DLPBUA7QEk5YnSa0PpkGZXbZov
+ 542ytPJTcKvRQlZRIwvp7bbD6cF+jq/ZtXo/ut0guz7iB3rUVKztN8ninv86elhhA7yicM598rP
+ JLBjpJsix6aeD9dFf7JzIxn3ZYFhogdNT5fm/Nauo9VfLHWZCflPIDWW1LOXoXjv/A12uH/gUeb k+LcfI33E0wxohQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Hi,
-
-This is the batch 1 of patches touching netdev for preparing for
-the coming implementation by GCC and Clang of the __counted_by
+Prepare for the coming implementation by GCC and Clang of the __counted_by
 attribute. Flexible array members annotated with __counted_by can have
 their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by to structs that would
-benefit from the annotation.
-
-Since the element count member must be set before accessing the annotated
-flexible array member, some patches also move the member's initialization
-earlier. (These are noted in the individual patches.)
-
--Kees
+As found with Coccinelle[1], add __counted_by for struct mana_rxq.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: Long Li <longli@microsoft.com>
+Cc: Ajay Sharma <sharmaajay@microsoft.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-hyperv@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/net/mana/mana.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kees Cook (14):
-  ipv4: Annotate struct fib_info with __counted_by
-  ipv4/igmp: Annotate struct ip_sf_socklist with __counted_by
-  ipv6: Annotate struct ip6_sf_socklist with __counted_by
-  net: hns: Annotate struct ppe_common_cb with __counted_by
-  net: enetc: Annotate struct enetc_int_vector with __counted_by
-  net: hisilicon: Annotate struct rcb_common_cb with __counted_by
-  net: mana: Annotate struct mana_rxq with __counted_by
-  net: ipa: Annotate struct ipa_power with __counted_by
-  net: mana: Annotate struct hwc_dma_buf with __counted_by
-  net: openvswitch: Annotate struct dp_meter_instance with __counted_by
-  net: enetc: Annotate struct enetc_psfp_gate with __counted_by
-  net: openvswitch: Annotate struct dp_meter with __counted_by
-  net: tulip: Annotate struct mediatable with __counted_by
-  net: sched: Annotate struct tc_pedit with __counted_by
-
- drivers/net/ethernet/dec/tulip/tulip.h            | 2 +-
- drivers/net/ethernet/freescale/enetc/enetc.h      | 2 +-
- drivers/net/ethernet/freescale/enetc/enetc_qos.c  | 2 +-
- drivers/net/ethernet/hisilicon/hns/hns_dsaf_ppe.h | 2 +-
- drivers/net/ethernet/hisilicon/hns/hns_dsaf_rcb.h | 2 +-
- drivers/net/ipa/ipa_power.c                       | 2 +-
- include/linux/igmp.h                              | 2 +-
- include/net/if_inet6.h                            | 2 +-
- include/net/ip_fib.h                              | 2 +-
- include/net/mana/hw_channel.h                     | 2 +-
- include/net/mana/mana.h                           | 2 +-
- net/openvswitch/meter.h                           | 4 ++--
- net/sched/act_pedit.c                             | 2 +-
- 13 files changed, 14 insertions(+), 14 deletions(-)
-
+diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+index 9f70b4332238..38441be68592 100644
+--- a/include/net/mana/mana.h
++++ b/include/net/mana/mana.h
+@@ -338,7 +338,7 @@ struct mana_rxq {
+ 	/* MUST BE THE LAST MEMBER:
+ 	 * Each receive buffer has an associated mana_recv_buf_oob.
+ 	 */
+-	struct mana_recv_buf_oob rx_oobs[];
++	struct mana_recv_buf_oob rx_oobs[] __counted_by(num_rx_buf);
+ };
+ 
+ struct mana_tx_qp {
 -- 
 2.34.1
 
