@@ -1,41 +1,42 @@
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524A962F
-	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 01:41:45 +0000 (UTC)
-Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2490362D
+	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 01:41:46 +0000 (UTC)
+Received: from eig-obgw-6005a.ext.cloudfilter.net ([10.0.30.201])
 	by cmsmtp with ESMTP
-	id k0Hhqve2aEoVskE80qKPpP; Sun, 24 Sep 2023 01:41:44 +0000
+	id kDWTqJ7pZez0CkE7YqENPa; Sun, 24 Sep 2023 01:41:16 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id kE7zq8KMzHLNfkE80qqtu6; Sun, 24 Sep 2023 01:41:44 +0000
-X-Authority-Analysis: v=2.4 cv=Vp0wvs6n c=1 sm=1 tr=0 ts=650f93d8
+	id kE7vq3bPOgCcEkE7wqt7Fs; Sun, 24 Sep 2023 01:41:40 +0000
+X-Authority-Analysis: v=2.4 cv=G9gPrvo5 c=1 sm=1 tr=0 ts=650f93d4
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=yMhMjlubAAAA:8 a=VwQbUJbxAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8
- a=20KFwNOVAAAA:8 a=cm27Pg_UAAAA:8 a=YSKGN3ub9cUXa_79IdMA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=P8mRVJMrAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
+ a=20KFwNOVAAAA:8 a=SGADynmgAAAA:8 a=cm27Pg_UAAAA:8 a=YSKGN3ub9cUXa_79IdMA:9
+ a=QEXdDO2ut3YA:10 a=Vc1QvrjMcIoGonisw6Ob:22 a=y1Q9-5lHfBjTkpIzbSAN:22
+ a=AjGcO6oz07-iQ99wixmX:22 a=zIHXHKGEX091kyoLcxqF:22 a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=A0/hY0/0WUgoWWgO1UPgNl7qu1HM15zvYYqL7gNmG5k=; b=WY6ewvENE4PlvW5yixnBtaRIUI
-	jHvNCo8M0U/S6zyHGZF3TOu7TeTeOhfiPpOj4tmUqKc3UyGHBuieWEH1VGWoKLTMHs5bRp8/RwtxJ
-	oa4V804ycaEUfE+gSfTK0m9kWJYtRhvF66/uFzHfQj/mEPZ3H27HbBmVYAh0NMmF/naPiU917h0ge
-	+naTVhT7DWUp9EQiIsNOw0PmQsJ5swcQ+f1S5FKX4fU373fcXt4X/pggL40pc46E5jWsSPJ13bE/h
-	qUbCZmAiQxsDHhNW9IhnWvYhTkbHndasFtbaMvrOufaQudaGEHZvS84FR5MURjHe7HQYAEbiBJ7Fy
-	eE/Ct6Lw==;
-Received: from [94.239.20.48] (port=42746 helo=[192.168.1.98])
+	bh=BKbJw5ix0Sd8jKf/rA+CiCbPW6tBlkUEHkAMX6hqfoE=; b=kdB7JLpqwORfgexfcQRjpWx8c4
+	Iaul9ZcC03lbwwIiwwVPUl33XpPelZvW4tj83w2vSDwMYooFeLVkVTo+kXBiYOQJHfYWZa9Gsdain
+	RpJp7wSeaoKUvGnxINGzuHGysosMtzkgLJwuo6xy1+KYeSQJMYtG/dqrWaT4ka06WcHQKI1f67cMN
+	iW1rHVPSNKupyHpM2hCamtVpkUShs0mLG79wiYr+JP4K0TDdREbAxPB8SjRDHocEWwzTQ7JD8J/0U
+	Docwzhz9nqEXNBeZNpqsewANpdewq8BdUivOexcAxNEEDY/3ngskiG2YcskePSiYpjJb2iO19ZxqE
+	R1LKIgbg==;
+Received: from [94.239.20.48] (port=46004 helo=[192.168.1.98])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qjkMy-0004qf-2L;
-	Fri, 22 Sep 2023 12:55:12 -0500
-Message-ID: <fb8e6a2d-eabd-cd42-5a21-38e78bd38c3b@embeddedor.com>
-Date: Fri, 22 Sep 2023 19:56:10 -0600
+	id 1qjkNF-0005FL-2v;
+	Fri, 22 Sep 2023 12:55:30 -0500
+Message-ID: <b729889b-2988-5b94-de11-d393da39187e@embeddedor.com>
+Date: Fri, 22 Sep 2023 19:56:27 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,34 +45,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH 09/14] net: mana: Annotate struct hwc_dma_buf with
- __counted_by
+Subject: Re: [PATCH 10/14] net: openvswitch: Annotate struct dp_meter_instance
+ with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
-Cc: Long Li <longli@microsoft.com>, Ajay Sharma <sharmaajay@microsoft.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org,
- netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+Cc: Pravin B Shelar <pshelar@ovn.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ dev@openvswitch.org, Jamal Hadi Salim <jhs@mojatatu.com>,
  David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>,
  "Gustavo A. R. Silva" <gustavoars@kernel.org>,
  Alexei Starovoitov <ast@kernel.org>, Yisen Zhuang <yisen.zhuang@huawei.com>,
  Salil Mehta <salil.mehta@huawei.com>, Claudiu Manoil
  <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
- Alex Elder <elder@kernel.org>, Pravin B Shelar <pshelar@ovn.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Ajay Sharma <sharmaajay@microsoft.com>, Alex Elder <elder@kernel.org>,
  Shaokun Zhang <zhangshaokun@hisilicon.com>,
  Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- dev@openvswitch.org, linux-parisc@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-parisc@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
 References: <20230922172449.work.906-kees@kernel.org>
- <20230922172858.3822653-9-keescook@chromium.org>
+ <20230922172858.3822653-10-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230922172858.3822653-9-keescook@chromium.org>
+In-Reply-To: <20230922172858.3822653-10-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -82,18 +84,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 94.239.20.48
 X-Source-L: No
-X-Exim-ID: 1qjkMy-0004qf-2L
+X-Exim-ID: 1qjkNF-0005FL-2v
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:42746
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:46004
 X-Source-Auth: gustavo@embeddedor.com
 X-Email-Count: 0
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfD/Mb5irBn8Sj8FJoHd0qrzC8Ub9RFUJO6cYaaE9LByCPZhGDRVkdQXOytVfczB8Vg/uHJZZ1LLhVuhk01GvQqwyylMPu5kUjumm783qhTP2pTlio/Bp
- bLOFy8a1s9046HlkW+4A4i3VssBgnXPqQB4YJ8WULLNbcpCBdjVzrEZXar2TK1qQlaULVwlvLUFxZKT8Vp/Mn/hSPYtV/BZNwl8=
+X-CMAE-Envelope: MS4xfEsO5u0PbJ79M5MpTrTIIIa+rWiTG4Qh1ZXFhP1BAmyICGHR6903EoVODVXB0X4Eepve+1WYha9dRBiUBVCszP3EKkmyQ8RJ2+QmIOsOhFCHPE/Xs+xy
+ wOF5y9eV8gmpN4E3rm6Fs4DPm1st7Y+qS4+oXc04EGyOegPYk9sBBpnI+rqUPHTiZZTF4ZDzLK7nbM7vT9L6d7OLPcPmJESMdGw=
 
 
 
@@ -104,24 +106,19 @@ On 9/22/23 11:28, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct hwc_dma_buf.
+> As found with Coccinelle[1], add __counted_by for struct dp_meter_instance.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Long Li <longli@microsoft.com>
-> Cc: Ajay Sharma <sharmaajay@microsoft.com>
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
+> Cc: Pravin B Shelar <pshelar@ovn.org>
 > Cc: "David S. Miller" <davem@davemloft.net>
 > Cc: Eric Dumazet <edumazet@google.com>
 > Cc: Jakub Kicinski <kuba@kernel.org>
 > Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-rdma@vger.kernel.org
-> Cc: linux-hyperv@vger.kernel.org
 > Cc: netdev@vger.kernel.org
+> Cc: dev@openvswitch.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
+
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
 Thanks
@@ -129,19 +126,19 @@ Thanks
 Gustavo
 
 > ---
->   include/net/mana/hw_channel.h | 2 +-
+>   net/openvswitch/meter.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/net/mana/hw_channel.h b/include/net/mana/hw_channel.h
-> index 3d3b5c881bc1..158b125692c2 100644
-> --- a/include/net/mana/hw_channel.h
-> +++ b/include/net/mana/hw_channel.h
-> @@ -121,7 +121,7 @@ struct hwc_dma_buf {
->   	u32 gpa_mkey;
->   
->   	u32 num_reqs;
-> -	struct hwc_work_request reqs[];
-> +	struct hwc_work_request reqs[] __counted_by(num_reqs);
+> diff --git a/net/openvswitch/meter.h b/net/openvswitch/meter.h
+> index 0c33889a8515..013de694221f 100644
+> --- a/net/openvswitch/meter.h
+> +++ b/net/openvswitch/meter.h
+> @@ -45,7 +45,7 @@ struct dp_meter {
+>   struct dp_meter_instance {
+>   	struct rcu_head rcu;
+>   	u32 n_meters;
+> -	struct dp_meter __rcu *dp_meters[];
+> +	struct dp_meter __rcu *dp_meters[] __counted_by(n_meters);
 >   };
 >   
->   typedef void hwc_rx_event_handler_t(void *ctx, u32 gdma_rxq_id,
+>   struct dp_meter_table {
