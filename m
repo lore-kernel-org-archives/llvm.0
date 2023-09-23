@@ -1,118 +1,88 @@
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA57F101D6
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 09:41:52 +0000 (UTC)
-Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
-	by cmsmtp with ESMTP
-	id jx8RqJ7cSbK1Vjz95qkWNi; Sat, 23 Sep 2023 09:41:51 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id jz94qYoT0I7vxjz94qBoNu; Sat, 23 Sep 2023 09:41:50 +0000
-X-Authority-Analysis: v=2.4 cv=YKeMdDKx c=1 sm=1 tr=0 ts=650eb2de
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VnNF1IyMAAAA:8 a=cm27Pg_UAAAA:8 a=VwQbUJbxAAAA:8 a=HvF037n1xESchLcPDVoA:9
- a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=TgmeyvTv6/GFjXWezYgO1lYXlHOkD/szL9csZtjsEzo=; b=tVe9KZ+4QIkA7YDm03YPplIuLy
-	fcfm5fZMUCCG76tZ/dt97A1650fOQfXUzMtqZuucZOuL/TptgfGsrFhYT1BSR3F0LpJAXB3yKrHZZ
-	mpqDVM2ono0os4bDwHBTx+lpZQVZVhduLJ2Ce90W7iV+6ySy8gIMsqdVOOmjsD2TBgSLrx2iXGxA1
-	8Le7p94dmdBsApOTKv8ue2R1vcoEKRYros7RJE7KbMPO6WjUTQfYnPdKHAvCploC+SuLuUHy9p1Mo
-	tQRunJO8+BfQ5FsRdsMnMnqFKNh0YnIGhI6ebsyt5ZeF/QS0YG+Hxfq7/OU9DIPqr7/gClPPd3xgQ
-	AnhgWEmg==;
-Received: from [94.239.20.48] (port=60870 helo=[192.168.1.98])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qjy5n-003eED-0Y;
-	Sat, 23 Sep 2023 03:34:23 -0500
-Message-ID: <4d5e29e0-cd74-37e3-6305-d5c8daedf7c3@embeddedor.com>
-Date: Sat, 23 Sep 2023 10:35:28 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE51E10A12
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 10:37:35 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C4D8321B1D;
+	Sat, 23 Sep 2023 10:37:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1695465447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2W9BF97SqiNwR44UTKyJIL2C/qyxi5M9MCWRyPEaLmw=;
+	b=JuvpEpMqV9y6fLJbjdzMQwg0h+Lsx2O4wFgIem1jQy2SwHoPlS56wrP58UaOLsuEIbr795
+	ark93U4IZpw51JiDfUhS9fhTaT9MBKVM5fZNKyW2WfYZU9i86j6IXimOPF2Gd1acl8mZzy
+	AYBzIS199Kx/yveg+WnzkfkTguGYa4M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1695465447;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2W9BF97SqiNwR44UTKyJIL2C/qyxi5M9MCWRyPEaLmw=;
+	b=NSa4rUvK8i4/moouamWix2DGnqjmSWbUDYD33kKY4vanvTr5WtgjXl93Mu5I8XwlVh4iGh
+	EUYD6YXmGg66HXCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84B781390B;
+	Sat, 23 Sep 2023 10:37:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id i9IlH+e/DmUQZwAAMHmgww
+	(envelope-from <tiwai@suse.de>); Sat, 23 Sep 2023 10:37:27 +0000
+Date: Sat, 23 Sep 2023 12:37:26 +0200
+Message-ID: <87h6nlb2ft.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Kees Cook <keescook@chromium.org>
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Cezary Rojewski <cezary.rojewski@intel.com>,
+	alsa-devel@alsa-project.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Jason Montleon <jmontleo@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda: Annotate struct hda_conn_list with __counted_by
+In-Reply-To: <20230922175042.work.547-kees@kernel.org>
+References: <20230922175042.work.547-kees@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] gcov: Annotate struct gcov_iterator with __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>,
- Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20230922175220.work.327-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230922175220.work.327-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.239.20.48
-X-Source-L: No
-X-Exim-ID: 1qjy5n-003eED-0Y
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:60870
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfGoOPm2peTzUtrEOq7GoN1Gr7V7OEKnLyHaTpjCnCMkMtRkiyE8tbQlCjHVqKnoVeVJmaetDrypc7JEaym2qyXgMx7QJBFLwiI2W9KBJyF15YMUqafGE
- gESyWIKS21h2TP58fpWiHo7uVodd6LYDqAOdzwc3/0JnPXPywxyn82vznUcfjE8qamY1HL7ZvZmSAx7CZxhDcS8W6Rz0w0V/yG0=
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 
-
-
-On 9/22/23 11:52, Kees Cook wrote:
+On Fri, 22 Sep 2023 19:50:42 +0200,
+Kees Cook wrote:
+> 
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct gcov_iterator.
+> As found with Coccinelle[1], add __counted_by for struct hda_conn_list.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Cc: Jaroslav Kysela <perex@perex.cz>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> Cc: Cezary Rojewski <cezary.rojewski@intel.com>
+> Cc: alsa-devel@alsa-project.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Applied now.  Thanks.
 
-Thanks
--- 
-Gustavo
 
-> ---
->   kernel/gcov/fs.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/gcov/fs.c b/kernel/gcov/fs.c
-> index 5c3086cad8f9..01520689b57c 100644
-> --- a/kernel/gcov/fs.c
-> +++ b/kernel/gcov/fs.c
-> @@ -99,7 +99,7 @@ struct gcov_iterator {
->   	struct gcov_info *info;
->   	size_t size;
->   	loff_t pos;
-> -	char buffer[];
-> +	char buffer[] __counted_by(size);
->   };
->   
->   /**
+Takashi
