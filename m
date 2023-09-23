@@ -1,42 +1,44 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A4637A
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 00:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695430014;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lFq6zMaaGytyLVjCRlM3YGZB/pczKiOV+8u9ckMtHlE=;
-	b=QkjdnNSWWbT33SUbagx3QwL/oq9FrOOU4iBMeY8XsJ5o1xHwTgA9rF6Km77P/vgQT/Mjai
-	mZJx6Nw9QgHkoMMHlwK1nQ8NbvFLsYHE4xQnoms1nY3cDDFxu8VqY7ucmC6eoZhXi0Lb/S
-	ss1V6g5tHSwH3mQ9xNQ683qjZPDj22c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-82-UHzJRoO2NxSdEjhQPdTCeg-1; Fri, 22 Sep 2023 20:46:52 -0400
-X-MC-Unique: UHzJRoO2NxSdEjhQPdTCeg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9CC3185A5BA;
-	Sat, 23 Sep 2023 00:46:51 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.18])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id DB10928FB;
-	Sat, 23 Sep 2023 00:46:50 +0000 (UTC)
-Date: Sat, 23 Sep 2023 08:46:47 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-	Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kexec: Annotate struct crash_mem with __counted_by
-Message-ID: <ZQ41d5majBepW48Z@MiWiFi-R3L-srv>
-References: <20230922175224.work.712-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41B437A;
+	Sat, 23 Sep 2023 00:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695430203; x=1726966203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=arO5SOxrLYzeSSD/8djWtK8jhXdONIIS+QCZYXekP2Q=;
+  b=F4cbSgEqemm84na8kj+JOZ9liAyctbEr1wnL9+CUbrnivRvgIv7+/XzL
+   TXYe3u8qC8OiBJO+bW84IxWUlrzYymfvARFPrA1AfgQMUGnVb6t4ei9NK
+   xXi1MBNuXE+t9sFXmGLWzES8dsYZ6SUcfDy5ZkP5KOhkkz63dTZPp3jEe
+   oswvjLhyhSqhsCz1jXrtaGHJ7OLj1q0f5nQMAvAbOHqYmqDUb3ghVTA6A
+   mhK1S8dxSi4b+mMSGf5PeYnkHgcSrDZeWjiVwdk2ra6qKtjA3sTfvc7Ke
+   LRb2p4U83DU0WYtrV4RhZ9nlgsg3Hv9UFb2OiVjs4xB10BuamG76YEAbM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="380885134"
+X-IronPort-AV: E=Sophos;i="6.03,169,1694761200"; 
+   d="scan'208";a="380885134"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 17:49:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="817995342"
+X-IronPort-AV: E=Sophos;i="6.03,169,1694761200"; 
+   d="scan'208";a="817995342"
+Received: from lkp-server02.sh.intel.com (HELO 493f6c7fed5d) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2023 17:49:54 -0700
+Received: from kbuild by 493f6c7fed5d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qjqqF-0001X4-2n;
+	Sat, 23 Sep 2023 00:49:52 +0000
+Date: Sat, 23 Sep 2023 08:49:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wei Gong <gongwei833x@gmail.com>, tglx@linutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Wei Gong <gongwei833x@gmail.com>
+Subject: Re: [PATCH] genirq: avoid long loops in handle_edge_irq
+Message-ID: <202309230859.ygo4QTtO-lkp@intel.com>
+References: <20230921080146.37186-1-gongwei833x@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,47 +47,167 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230922175224.work.712-kees@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+In-Reply-To: <20230921080146.37186-1-gongwei833x@gmail.com>
 
-On 09/22/23 at 10:52am, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct crash_mem.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: kexec@lists.infradead.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/crash_core.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
-> index 3426f6eef60b..5126a4fecb44 100644
-> --- a/include/linux/crash_core.h
-> +++ b/include/linux/crash_core.h
-> @@ -131,7 +131,7 @@ static inline void __init reserve_crashkernel_generic(char *cmdline,
->  struct crash_mem {
->  	unsigned int max_nr_ranges;
->  	unsigned int nr_ranges;
-> -	struct range ranges[];
-> +	struct range ranges[] __counted_by(max_nr_ranges);
+Hi Wei,
 
-This __counted_by() only makes sense when there's a obvious upper
-boundary, max_nr_ranges in this case. This heavily depends and isn't
-much in kernel? E.g struct swap_info_struct->avail_lists[]. Just
-curious, not related to this patch though.
+kernel test robot noticed the following build errors:
 
->  };
->  
->  extern int crash_exclude_mem_range(struct crash_mem *mem,
-> -- 
-> 2.34.1
-> 
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on linus/master v6.6-rc2 next-20230921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Gong/genirq-avoid-long-loops-in-handle_edge_irq/20230922-025437
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20230921080146.37186-1-gongwei833x%40gmail.com
+patch subject: [PATCH] genirq: avoid long loops in handle_edge_irq
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230923/202309230859.ygo4QTtO-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230923/202309230859.ygo4QTtO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309230859.ygo4QTtO-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/irq/chip.c:11:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/irq/chip.c:11:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/irq/chip.c:11:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> kernel/irq/chip.c:835:63: error: no member named 'affinity' in 'struct irq_common_data'
+     835 |                  cpumask_test_cpu(smp_processor_id(), desc->irq_common_data.affinity));
+         |                                                       ~~~~~~~~~~~~~~~~~~~~~ ^
+   12 warnings and 1 error generated.
+
+
+vim +835 kernel/irq/chip.c
+
+   771	
+   772	/**
+   773	 *	handle_edge_irq - edge type IRQ handler
+   774	 *	@desc:	the interrupt description structure for this irq
+   775	 *
+   776	 *	Interrupt occurs on the falling and/or rising edge of a hardware
+   777	 *	signal. The occurrence is latched into the irq controller hardware
+   778	 *	and must be acked in order to be reenabled. After the ack another
+   779	 *	interrupt can happen on the same source even before the first one
+   780	 *	is handled by the associated event handler. If this happens it
+   781	 *	might be necessary to disable (mask) the interrupt depending on the
+   782	 *	controller hardware. This requires to reenable the interrupt inside
+   783	 *	of the loop which handles the interrupts which have arrived while
+   784	 *	the handler was running. If all pending interrupts are handled, the
+   785	 *	loop is left.
+   786	 */
+   787	void handle_edge_irq(struct irq_desc *desc)
+   788	{
+   789		raw_spin_lock(&desc->lock);
+   790	
+   791		desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
+   792	
+   793		if (!irq_may_run(desc)) {
+   794			desc->istate |= IRQS_PENDING;
+   795			mask_ack_irq(desc);
+   796			goto out_unlock;
+   797		}
+   798	
+   799		/*
+   800		 * If its disabled or no action available then mask it and get
+   801		 * out of here.
+   802		 */
+   803		if (irqd_irq_disabled(&desc->irq_data) || !desc->action) {
+   804			desc->istate |= IRQS_PENDING;
+   805			mask_ack_irq(desc);
+   806			goto out_unlock;
+   807		}
+   808	
+   809		kstat_incr_irqs_this_cpu(desc);
+   810	
+   811		/* Start handling the irq */
+   812		desc->irq_data.chip->irq_ack(&desc->irq_data);
+   813	
+   814		do {
+   815			if (unlikely(!desc->action)) {
+   816				mask_irq(desc);
+   817				goto out_unlock;
+   818			}
+   819	
+   820			/*
+   821			 * When another irq arrived while we were handling
+   822			 * one, we could have masked the irq.
+   823			 * Reenable it, if it was not disabled in meantime.
+   824			 */
+   825			if (unlikely(desc->istate & IRQS_PENDING)) {
+   826				if (!irqd_irq_disabled(&desc->irq_data) &&
+   827				    irqd_irq_masked(&desc->irq_data))
+   828					unmask_irq(desc);
+   829			}
+   830	
+   831			handle_irq_event(desc);
+   832	
+   833		} while ((desc->istate & IRQS_PENDING) &&
+   834			 !irqd_irq_disabled(&desc->irq_data) &&
+ > 835			 cpumask_test_cpu(smp_processor_id(), desc->irq_common_data.affinity));
+   836	
+   837	out_unlock:
+   838		raw_spin_unlock(&desc->lock);
+   839	}
+   840	EXPORT_SYMBOL(handle_edge_irq);
+   841	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
