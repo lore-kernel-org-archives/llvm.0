@@ -1,41 +1,42 @@
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F411818
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 07:01:38 +0000 (UTC)
-Received: from eig-obgw-5007a.ext.cloudfilter.net ([10.0.29.141])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC3920F5
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 07:01:43 +0000 (UTC)
+Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
 	by cmsmtp with ESMTP
-	id jjUcqHPXxQFHRjwe2qu73N; Sat, 23 Sep 2023 07:01:38 +0000
+	id jq43qZqY3DKaKjwe6qHFMs; Sat, 23 Sep 2023 07:01:42 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id jwe1qyMktAVs9jwe1qzDdF; Sat, 23 Sep 2023 07:01:38 +0000
-X-Authority-Analysis: v=2.4 cv=FfUkeby6 c=1 sm=1 tr=0 ts=650e8d52
+	id jwe5qc96TuHtrjwe6qUVDG; Sat, 23 Sep 2023 07:01:42 +0000
+X-Authority-Analysis: v=2.4 cv=B8eqbchM c=1 sm=1 tr=0 ts=650e8d56
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=zd2uoN0lAAAA:8 a=pGLkceISAAAA:8 a=e5mUnYsNAAAA:8 a=cm27Pg_UAAAA:8
- a=VwQbUJbxAAAA:8 a=x0o0KnqP09iesl-AZ7EA:9 a=QEXdDO2ut3YA:10
- a=Vxmtnl_E_bksehYqCbjh:22 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=P8mRVJMrAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
+ a=20KFwNOVAAAA:8 a=SGADynmgAAAA:8 a=cm27Pg_UAAAA:8 a=YSKGN3ub9cUXa_79IdMA:9
+ a=QEXdDO2ut3YA:10 a=Vc1QvrjMcIoGonisw6Ob:22 a=y1Q9-5lHfBjTkpIzbSAN:22
+ a=AjGcO6oz07-iQ99wixmX:22 a=zIHXHKGEX091kyoLcxqF:22 a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=+lNJ9QIpwn6NBb64Sbf9+GObVdf5ljfSsPNJbJ1XN40=; b=GH6MO+NPZFXKEgEjoKkuLB4qxt
-	C6U9dvWCm1vgpmkRG7ycJ7FVD2w1s8IQKc0zf7XOfLqqqF/R0tZLM8V8Z2I3B3zznjabwom7Pk3zK
-	o6NhGiDlY9uwwMlNvXyV935T8dOnlY/F7m5f3bPeMgu2opyFooYi5NHNwFP3enNswt1D8K3AxvOw2
-	T7C+P52PB6SsCr+Jre/Oknm8Wq+JFP1UpAs/jcaLGPLFHn5oK0BCMxyN+tEs1ip54GJQaiSJ1mTfL
-	ZOnXMawgAqlLBCHomReF0mW/iZkrBxRPTp6pCNZZ5vOzd1KI795Euy+8PBIYqkGe+gF1QQz0BRPDf
-	+eV/dRQw==;
-Received: from [94.239.20.48] (port=56836 helo=[192.168.1.98])
+	bh=LgYmmzfODs8y0XPv6zoIUmQUpkw1Ll6bzfBPHyYgdGs=; b=Dt+luo231UAv4RRAqbxdrzRyee
+	dU8/FIBvBI6EhTgYFX3/UdwgVkbKx7VrbEPKerDZagGmCKatNEu4qEDC6cNU8Lzq6iVKYiPE+vwcd
+	iobw+Rzr12mcn+p1AOY49b++XnYBFBF+HXQRiyFmctm8u0rwtiHVe4PCyPPbNNqcpN8dLS3cyqs6b
+	MOgZ1/E+yMMYJB5P9D9g1iUd7pzheavabNwkVfBbZsURYktiKpz+C3LPmF//iwWP/+UHHMQ3tzGu4
+	n5qMqZrWc5dQAFwq6z1Z+9OBeU/dKQRVVBFwL32kYiqlLe8DUYbCncJ3Tu3jFeqWLguStel+UA0AM
+	dnaML4LQ==;
+Received: from [94.239.20.48] (port=35188 helo=[192.168.1.98])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qjkdm-000M41-04;
-	Fri, 22 Sep 2023 13:12:34 -0500
-Message-ID: <a14f11c8-2355-a311-9a59-0c6e69a6e503@embeddedor.com>
-Date: Fri, 22 Sep 2023 20:13:25 -0600
+	id 1qjkNw-000673-1P;
+	Fri, 22 Sep 2023 12:56:12 -0500
+Message-ID: <c9865cdf-98aa-0b7f-d833-80bfa3d67614@embeddedor.com>
+Date: Fri, 22 Sep 2023 19:57:09 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,53 +45,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH 1/9] drm/amd/pm: Annotate struct
- smu10_voltage_dependency_table with __counted_by
+Subject: Re: [PATCH 12/14] net: openvswitch: Annotate struct dp_meter with
+ __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>
-Cc: Evan Quan <evan.quan@amd.com>, Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, Daniel Vetter <daniel@ffwll.ch>,
- Xiaojian Du <Xiaojian.Du@amd.com>, Huang Rui <ray.huang@amd.com>,
- Kevin Wang <kevin1.wang@amd.com>, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, Emma Anholt <emma@anholt.net>,
- Hawking Zhang <Hawking.Zhang@amd.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- Chris Wilson <chris@chris-wilson.co.uk>,
- John Harrison <john.c.harrison@Intel.com>,
- Andi Shyti <andi.shyti@linux.intel.com>,
- Matthew Brost <matthew.brost@intel.com>, Rob Clark <robdclark@gmail.com>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Bjorn Andersson <andersson@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
- Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@redhat.com>,
- Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Zack Rusin <zackr@vmware.com>,
- VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
- Melissa Wen <mwen@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+To: Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
+Cc: Pravin B Shelar <pshelar@ovn.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ dev@openvswitch.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+ David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Yisen Zhuang <yisen.zhuang@huawei.com>,
+ Salil Mehta <salil.mehta@huawei.com>, Claudiu Manoil
+ <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Ajay Sharma <sharmaajay@microsoft.com>, Alex Elder <elder@kernel.org>,
+ Shaokun Zhang <zhangshaokun@hisilicon.com>,
+ Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+ Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Le Ma <le.ma@amd.com>, Lijo Lazar <lijo.lazar@amd.com>,
- Yifan Zhang <yifan1.zhang@amd.com>, Prike Liang <Prike.Liang@amd.com>,
- Lang Yu <Lang.Yu@amd.com>, Tejas Upadhyay <tejas.upadhyay@intel.com>,
- Nirmoy Das <nirmoy.das@intel.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kuogee Hsieh <quic_khsieh@quicinc.com>, linux-kernel@vger.kernel.org,
- intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
- freedreno@lists.freedesktop.org, nouveau@lists.freedesktop.org,
- virtualization@lists.linux-foundation.org, llvm@lists.linux.dev,
+ Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-parisc@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230922173110.work.084-kees@kernel.org>
- <20230922173216.3823169-1-keescook@chromium.org>
+References: <20230922172449.work.906-kees@kernel.org>
+ <20230922172858.3822653-12-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230922173216.3823169-1-keescook@chromium.org>
+In-Reply-To: <20230922172858.3822653-12-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
 X-AntiAbuse: Original Domain - lists.linux.dev
@@ -99,43 +84,39 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 94.239.20.48
 X-Source-L: No
-X-Exim-ID: 1qjkdm-000M41-04
+X-Exim-ID: 1qjkNw-000673-1P
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:56836
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:35188
 X-Source-Auth: gustavo@embeddedor.com
 X-Email-Count: 0
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfIV8YmjaErnVRU5s5FvgXd6pWy4GofMAxwqBZze+Hud/tqMMP2aArEX9zZW8gOmMSyI3bCY4pzJhCI9H2K4RooY6vWjoW+sOHCRY4AfCFU3tr9q/r2qq
- xYrz+OEksJenLZWW3WfVgggqpYmWcGlMLrDj7jp40+dEPpir8hnnsuQ6s0BEv19Ckse8ldmAr5fUKMvpBJEkdO0ZkifHPGtl70Y=
+X-CMAE-Envelope: MS4xfOg6JUfq2xftD4vHyvyfo29qCMzlL96COUgpJPME5Jzqnf7Gjd1zdyjS1McT6n3jTzAhKQ89+MrsaZg0ZJwQ3gBeTWo/2OAPbxoIyC9XWsv5d0poAcMp
+ N51YJZR52I23x5hLJgIlkwrGRLuL4Qy5Lzc/rCsj7axl/txvrUsJIUq5CvhCM68f/8BGwIBU5F8TjaXFsQEFS6FOP1uMSrSsDDI=
 
 
 
-On 9/22/23 11:32, Kees Cook wrote:
+On 9/22/23 11:28, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct smu10_voltage_dependency_table.
+> As found with Coccinelle[1], add __counted_by for struct dp_meter.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Evan Quan <evan.quan@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Xiaojian Du <Xiaojian.Du@amd.com>
-> Cc: Huang Rui <ray.huang@amd.com>
-> Cc: Kevin Wang <kevin1.wang@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
+> Cc: Pravin B Shelar <pshelar@ovn.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
+> Cc: dev@openvswitch.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -144,21 +125,20 @@ Thanks
 -- 
 Gustavo
 
-
 > ---
->   drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h | 2 +-
+>   net/openvswitch/meter.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h
-> index 808e0ecbe1f0..42adc2a3dcbc 100644
-> --- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h
-> +++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h
-> @@ -192,7 +192,7 @@ struct smu10_clock_voltage_dependency_record {
->   
->   struct smu10_voltage_dependency_table {
->   	uint32_t count;
-> -	struct smu10_clock_voltage_dependency_record entries[];
-> +	struct smu10_clock_voltage_dependency_record entries[] __counted_by(count);
+> diff --git a/net/openvswitch/meter.h b/net/openvswitch/meter.h
+> index 013de694221f..ed11cd12b512 100644
+> --- a/net/openvswitch/meter.h
+> +++ b/net/openvswitch/meter.h
+> @@ -39,7 +39,7 @@ struct dp_meter {
+>   	u32 max_delta_t;
+>   	u64 used;
+>   	struct ovs_flow_stats stats;
+> -	struct dp_meter_band bands[];
+> +	struct dp_meter_band bands[] __counted_by(n_bands);
 >   };
 >   
->   struct smu10_clock_voltage_information {
+>   struct dp_meter_instance {
