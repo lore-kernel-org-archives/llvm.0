@@ -1,128 +1,131 @@
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD9F18C11
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 12:09:23 +0000 (UTC)
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-76c64da0e46so137954439f.0
-        for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1695470963; x=1696075763; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XAvg21g6nbbw1h+/pTYxIjGaQhk7mPIWAIow3O+el8w=;
-        b=NuSF1v3rZ+3K81w1j01AM+MtEXCBnKkAK2zjHSTSLRPQWC2+2w+L6bGthwpDJxjsjm
-         eFAgE+Jeuq+Vi7RIIQ5aWXGv4dA73HTPzub0j+DTOQbUXYLpbwKVb5L0CbAtDGuXRSKp
-         pCBoqiZ0OJCk9XkBuLxqP1gD9uVN/4HBFM1HM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695470963; x=1696075763;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XAvg21g6nbbw1h+/pTYxIjGaQhk7mPIWAIow3O+el8w=;
-        b=XSr3f74OJ73//jFuT0SiWtnOuR1Uk2h4pTSvs8WsGL3AitJJEg1rRz7XkdjySTW3jK
-         ToyR5UNigDNga2wEvE5kGiKE/0BPqqfm0F1+Q7PpKsexoy3Ob+Ujj1l3KyX6nuQ4I0A+
-         QVtvUfhk3xsbw8Peds47gxzHpvLbPxc7qesNDvbSGYOOuy85UtGNLWvyYMa/BmIyOGmX
-         YHTgJYBLiOAwlhTOpbJbec+Slv9WjC2cYqPBNtAUCWxKEUEnA/SK6lXqTm81s6J6XLC2
-         49tuN2NVEgQy5OUjfaB1DHgYqyaH8W/P3Yr+5f0pKOjtn6M19gmyRcPdRZ39eG9cUm+r
-         /YIQ==
-X-Gm-Message-State: AOJu0YxdZjz9AhDR36TnxnMbODM0Sh+9d5jqe1aK07e3kSiMI/GveRC+
-	6ppRVt3vQKmK5jh71NpOipaoUg==
-X-Google-Smtp-Source: AGHT+IFsU/+zIHTFsRo6MskEzPa2bwVmahshwKY2z15uRkbrNeJwUhIadfi6G6UMDY5d9luXaBJ4hQ==
-X-Received: by 2002:a5e:8d0c:0:b0:790:f866:d71b with SMTP id m12-20020a5e8d0c000000b00790f866d71bmr2106815ioj.13.1695470963122;
-        Sat, 23 Sep 2023 05:09:23 -0700 (PDT)
-Received: from [10.211.55.3] (c-98-61-227-136.hsd1.mn.comcast.net. [98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id ft16-20020a056638661000b0043a21abd491sm1610905jab.120.2023.09.23.05.09.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Sep 2023 05:09:21 -0700 (PDT)
-Message-ID: <6f52f36c-be16-2427-c19f-0e8b3dd2ff5f@ieee.org>
-Date: Sat, 23 Sep 2023 07:09:19 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334A418C34
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 12:21:34 +0000 (UTC)
+Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
+	by cmsmtp with ESMTP
+	id jx8VqaxVsDKaKk1deqIP1K; Sat, 23 Sep 2023 12:21:34 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id k1ddqfMIV5plfk1ddqQcJG; Sat, 23 Sep 2023 12:21:33 +0000
+X-Authority-Analysis: v=2.4 cv=eZguwpIH c=1 sm=1 tr=0 ts=650ed84d
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=20KFwNOVAAAA:8 a=JfrnYn6hAAAA:8 a=drOt6m5kAAAA:8 a=VwQbUJbxAAAA:8
+ a=07d9gI8wAAAA:8 a=cm27Pg_UAAAA:8 a=3OtJ-fU1epfT2BxG-t4A:9 a=QEXdDO2ut3YA:10
+ a=1CNFftbPRP8L7MoqJWF3:22 a=RMMjzBEyIzXRtoq5n5K6:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=e2CUPOnPG4QKp8I52DXD:22 a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=tknbAJbR0XiQqwpm/Xnoi1IoVHkEPm12JuyW0RHfomM=; b=llaO0aIx9SU2vfQ0N2IGjTWr/C
+	lliL6aOFTr27O9f+ElRE8e3gZOc5Aotu6z1SiJ6nY5sYDIG7IVsPiTTRuGjPHc+ssXb/xyOPrM5Hf
+	v8Alxeae8gYpE9muJBSd0VAvf9BFrpXOMdO7lm2aan4NdmoNhj42D7mjM3nMi4fK/fOEsaYJnSIjs
+	StAPfvl8z66zQszNeVQS6JHzXGN2iLqP/bJ+34KqX4tkNhCqs3H+p0mCtJa6JdP92DLF2bPkJTqyi
+	efWtrzmtB8GH4/sRjdODVG4gGQ02DX3aUaQEvCh7pIaZxTprv9GyLBkD06nyB/fAuI6McyQZVWObV
+	xdPIh7ww==;
+Received: from [94.239.20.48] (port=49354 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qjy8Q-003i3a-2g;
+	Sat, 23 Sep 2023 03:37:07 -0500
+Message-ID: <04d51691-4f58-f126-0f32-9ed398182b40@embeddedor.com>
+Date: Sat, 23 Sep 2023 10:38:11 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH 08/14] net: ipa: Annotate struct ipa_power with
+Subject: Re: [PATCH] watch_queue: Annotate struct watch_filter with
  __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
-Cc: Alex Elder <elder@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
- David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Yisen Zhuang <yisen.zhuang@huawei.com>,
- Salil Mehta <salil.mehta@huawei.com>, Claudiu Manoil
- <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Ajay Sharma <sharmaajay@microsoft.com>, Pravin B Shelar <pshelar@ovn.org>,
- Shaokun Zhang <zhangshaokun@hisilicon.com>,
- Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+To: Kees Cook <keescook@chromium.org>, David Howells <dhowells@redhat.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Al Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Siddh Raman Pant <code@siddh.me>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Qian Cai <cai@redhat.com>,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
- dev@openvswitch.org, linux-parisc@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230922172449.work.906-kees@kernel.org>
- <20230922172858.3822653-8-keescook@chromium.org>
-From: Alex Elder <elder@ieee.org>
-In-Reply-To: <20230922172858.3822653-8-keescook@chromium.org>
+References: <20230922175407.work.754-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230922175407.work.754-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qjy8Q-003i3a-2g
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:49354
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfITaoJdRZoKHhP2tyLZl/7lZ72VjiDW+xoChoc9ch2w9NJTm5AlSlJGiP7VE/atDH5N7/XJF6zcDG7+SuPlLPgK5LE8pHtl9TbKvSb1ACqQt8uXXJ+NI
+ oucX1Z7iVMwWMbbl8gLlOW0ilEDM4E15HQ8hYwZJK0O/RiCjkpNHQjhaqk+dhey94IrkGMkg33GxZWdJagIoXH0wNYB/6jVYcwU=
 
-On 9/22/23 12:28 PM, Kees Cook wrote:
+
+
+On 9/22/23 11:54, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct ipa_power.
-
-Looks good, thanks.
-
-Reviewed-by: Alex Elder <elder@linaro.org>
-
-Note that there is some interaction between struct ipa_power_data
-and struct ipa_power (the former is used to initialize the latter).
-Both of these contain flexible arrays counted by another field in
-the structure.  It seems possible that the way these are initialized
-might need slight modification to allow the compiler to do its
-enforcement; if that's the case, please reach out to me.
-
-					-Alex
-
-
+> As found with Coccinelle[1], add __counted_by for struct watch_filter.
+> 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Siddh Raman Pant <code@siddh.me>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Qian Cai <cai@redhat.com>
 > Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks
+-- 
+Gustavo
+
 > ---
->   drivers/net/ipa/ipa_power.c | 2 +-
+>   include/linux/watch_queue.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/ipa/ipa_power.c b/drivers/net/ipa/ipa_power.c
-> index 0eaa7a7f3343..e223886123ce 100644
-> --- a/drivers/net/ipa/ipa_power.c
-> +++ b/drivers/net/ipa/ipa_power.c
-> @@ -67,7 +67,7 @@ struct ipa_power {
->   	spinlock_t spinlock;	/* used with STOPPED/STARTED power flags */
->   	DECLARE_BITMAP(flags, IPA_POWER_FLAG_COUNT);
->   	u32 interconnect_count;
-> -	struct icc_bulk_data interconnect[];
-> +	struct icc_bulk_data interconnect[] __counted_by(interconnect_count);
+> diff --git a/include/linux/watch_queue.h b/include/linux/watch_queue.h
+> index 45cd42f55d49..429c7b6afead 100644
+> --- a/include/linux/watch_queue.h
+> +++ b/include/linux/watch_queue.h
+> @@ -32,7 +32,7 @@ struct watch_filter {
+>   		DECLARE_BITMAP(type_filter, WATCH_TYPE__NR);
+>   	};
+>   	u32			nr_filters;	/* Number of filters */
+> -	struct watch_type_filter filters[];
+> +	struct watch_type_filter filters[] __counted_by(nr_filters);
 >   };
 >   
->   /* Initialize interconnects required for IPA operation */
-
+>   struct watch_queue {
