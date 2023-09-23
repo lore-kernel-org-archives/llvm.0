@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15732117
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:35:53 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-59bdb9fe821so50462867b3.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:35:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F5581B
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:35:55 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d77fa2e7771so4350566276.1
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:35:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695447352; x=1696052152; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695447355; x=1696052155; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9JLMR1XL8zAjwZWVAlK6A4BDEZJsECGT2sz2xABlKYc=;
-        b=aPfOrsyoQuEml3hBDfA+8YNOyuEsIauzj89YD7RU8HXX7i20hpnnBMURKh1Mqx7bge
-         LWDX12wk+IgDluudQ9ESTxb1cOmKvXSj0/87fEQ6p0hATlDAIGuyzZsRnG58pCNQV8Z3
-         HOBQ09JrzntI4iXRrU1sNswPA7m4iOzihx27Kb9fy79oX92ODZ6zrBTynHkdXC0pWbti
-         HlJN42MFu8SiP2siyW4C9MGdhbupZ1hSb1LB9cN/91Km+P6Ws2JOxUsIJ6A79qEc1gx0
-         QUWYGxKzMTnFGy77YE4J1+a+P44pwOM/Cn/U78+UDtH3Y1vozdIHNaW8QYIXk3en2LaJ
-         CXDw==
+        bh=dlidEJ2kQokrDb8kn7wfdV/NkutdZ64KLuYSK3l+lfk=;
+        b=Yj5s3FOdbK0ifjIgpfPQ79Mc/xyqQsKVgpsNv31kPnO/10MfdTtmBK6V+Jk5UEqdp1
+         ELv4yJb8ADtNoV9HK6l1HReJVLeTNbWtWZPr2sSBoIOQ5CbSQUF+uKClM93AVWpjDG0g
+         OboamgRKbV/fdPQzx1vwF/NaILyJvjAKNBuuGwDM5uTPocmHmAlotjaFBQ3t7NnoRKNG
+         QfJJwwmUutltYI5/7a2ynpbYnNfDjP4F+hesluCX4MC1VQXGs5RQUYk9WDFJyymUoIeN
+         aDw9VaNrNhX2OtwXScYsJuyTxXdnu1zE4JrxupGNENVy5JT+KnIXQtebTzgQckcGdSWo
+         hx3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695447352; x=1696052152;
+        d=1e100.net; s=20230601; t=1695447355; x=1696052155;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9JLMR1XL8zAjwZWVAlK6A4BDEZJsECGT2sz2xABlKYc=;
-        b=bH9VSRzBXupGY1EbQoyZzd75wruhrTbHV46VNUeTlhpdJT8Ov3+mu1ReNXVQpPOetg
-         bJ7Akt1QOCtU6WMUrtzRCsxUaHNCX1TXhF1DcnOW0yP4SMNgwCculSr2DH606qCSobcR
-         P/82PTBz0Yr8XAEuxuHsmYgMBXlA45OG6LOaA3Wo1LUNQIB1xN2rmQYyLU/0HdE7J8r6
-         jwqroLyGBxJuH6Rhi1Baly1cu4kEMDohRSAABtwcwOlX+sxmzgKFPHu91ZpynTtJygoS
-         RZ3WKRwVrZu7iwGHduKJ/cMrRX8z5Zg6mj5SNkA+1gBBSe70gPG9eEi0LgEUEJJy61A2
-         9A8Q==
-X-Gm-Message-State: AOJu0Ywy6UEP1OPWAndCNTYnEstI3XS3CyZ9r0yHj8oXFEMU+nY7EzHR
-	BunfvXPsNtW4oIzsmv0RsoNBF2/AkTkZ
-X-Google-Smtp-Source: AGHT+IGwoVliXHNo2Ezm8GW+6WCcr1eN33xbWzqXWDeiL+JMjQWZaBaqiW/AxKNeH9OmHAU2FWAtbGPCLBod
+        bh=dlidEJ2kQokrDb8kn7wfdV/NkutdZ64KLuYSK3l+lfk=;
+        b=X1Kk6pWfRjGXIg5REws/X1cC+VHk43wA75UPVx2oqdT5iGfnonpQjB2lv5AZ9Uh5z6
+         j8+qD/56H3V0qoEnX7oeUzxuMzAxF6viVP4Pq6Oc/LOIRNhVG3CaRMHsc3R5Gu57i8oZ
+         rSyzK5MbZmmQB/8RPuahY/p4RsHydYRLXbfyO95A76eKArNlQF8iURa7NaXezIP1HBst
+         2J50N3QlQTw8ytvUKbnJJb2S7US0Kc9thO0SiMEZBdbRUELAy4Si6/TJxm2XZdHsBQhC
+         wPipopggbMyAyGLnjrzxxeg5wpAdcbFr+/RwwjC5napepHDTfV4/Sxp9V8Sjj44yNSQS
+         KfeQ==
+X-Gm-Message-State: AOJu0Yy3XxgSoDqLQc5txbybcbt4zduABEkDNaIcJ9puA2od71Ux+uXw
+	VepgtgATpe/qdWeZopizRss/D8vYSeg4
+X-Google-Smtp-Source: AGHT+IE5O/1uW/OzbQMR5RN6Xnw5h1anx/RzV4ErZJvmavBS84pg85VIDix3s20OM15IyOeG9FkrtyFxdmAF
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a376:2908:1c75:ff78])
- (user=irogers job=sendgmr) by 2002:a05:6902:1105:b0:d81:6637:b5b2 with SMTP
- id o5-20020a056902110500b00d816637b5b2mr14384ybu.0.1695447352596; Fri, 22 Sep
- 2023 22:35:52 -0700 (PDT)
-Date: Fri, 22 Sep 2023 22:35:04 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:161c:b0:d0e:e780:81b3 with SMTP
+ id bw28-20020a056902161c00b00d0ee78081b3mr12406ybb.2.1695447354781; Fri, 22
+ Sep 2023 22:35:54 -0700 (PDT)
+Date: Fri, 22 Sep 2023 22:35:05 -0700
 In-Reply-To: <20230923053515.535607-1-irogers@google.com>
-Message-Id: <20230923053515.535607-8-irogers@google.com>
+Message-Id: <20230923053515.535607-9-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230923053515.535607-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Subject: [PATCH v1 07/18] perf env: Remove unnecessary NULL tests
+Subject: [PATCH v1 08/18] perf jitdump: Avoid memory leak
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -63,52 +63,27 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-clang-tidy was warning:
-```
-util/env.c:334:23: warning: Access to field 'nr_pmu_mappings' results in a dereference of a null pointer (loaded from variable 'env') [clang-analyzer-core.NullDereference]
-        env->nr_pmu_mappings = pmu_num;
-```
-
-As functions are called potentially when !env was true. This condition
-could never be true as it would produce a segv, so remove the
-unnecessary NULL tests and silence clang-tidy.
+jit_repipe_unwinding_info is called in a loop by jit_process_dump,
+avoid leaking unwinding_data by free-ing before overwriting. Error
+detected by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/env.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/util/jitdump.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index a164164001fb..44140b7f596a 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -457,7 +457,7 @@ const char *perf_env__cpuid(struct perf_env *env)
- {
- 	int status;
+diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
+index 6b2b96c16ccd..1f657ef8975f 100644
+--- a/tools/perf/util/jitdump.c
++++ b/tools/perf/util/jitdump.c
+@@ -675,6 +675,7 @@ jit_repipe_unwinding_info(struct jit_buf_desc *jd, union jr_entry *jr)
+ 	jd->eh_frame_hdr_size = jr->unwinding.eh_frame_hdr_size;
+ 	jd->unwinding_size = jr->unwinding.unwinding_size;
+ 	jd->unwinding_mapped_size = jr->unwinding.mapped_size;
++	free(jd->unwinding_data);
+ 	jd->unwinding_data = unwinding_data;
  
--	if (!env || !env->cpuid) { /* Assume local operation */
-+	if (!env->cpuid) { /* Assume local operation */
- 		status = perf_env__read_cpuid(env);
- 		if (status)
- 			return NULL;
-@@ -470,7 +470,7 @@ int perf_env__nr_pmu_mappings(struct perf_env *env)
- {
- 	int status;
- 
--	if (!env || !env->nr_pmu_mappings) { /* Assume local operation */
-+	if (!env->nr_pmu_mappings) { /* Assume local operation */
- 		status = perf_env__read_pmu_mappings(env);
- 		if (status)
- 			return 0;
-@@ -483,7 +483,7 @@ const char *perf_env__pmu_mappings(struct perf_env *env)
- {
- 	int status;
- 
--	if (!env || !env->pmu_mappings) { /* Assume local operation */
-+	if (!env->pmu_mappings) { /* Assume local operation */
- 		status = perf_env__read_pmu_mappings(env);
- 		if (status)
- 			return NULL;
+ 	return 0;
 -- 
 2.42.0.515.g380fc7ccd1-goog
 
