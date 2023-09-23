@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FD7A5D
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:35:39 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-59beea5ce93so86506297b3.0
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:35:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA3281B
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:35:42 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59eea906b40so54359057b3.0
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695447339; x=1696052139; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695447341; x=1696052141; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BGf8PiM0IiriMve24vBUlDxd/ZI4TAjoSgcit1w5zEk=;
-        b=2KNo4HUkJODCnmuYKL74TQvYrJknJRBcBe7Zxci9WvWfknlvyTmukrj8eZeTIlmHI2
-         j3liFuKX60iML3hbujLTtPelbSEKLjcBPNuNLfS3IOpup0+NzLPFcJ/YVlbFlcN2HnfW
-         9RIOleKeSIWWjVwJ//+eg2igz4gp6XZE/ZwVMxlWWCb6MRcb3db5GDTbBKOu7Lt0Rq7E
-         7aD6ORyi02ZzdSnDbCC/FdHdtH1UH09T660df7wfSD06sQDJfJ6qrYfj0HXm/Jteh4Lj
-         cInvW2fRM0X/l6Rr1m+v1zUl9EU1nIAbfVrNYo7enNoMMeOH6rvI8aUN/q7ALky/CJqW
-         Dj3g==
+        bh=Sj6/NNUjZTKqDNZk1SrzqO39OG4waux/cevEfWDj9So=;
+        b=0dC+tH+MMOVbmS7zQCMHbRm88BGaAgDIpe4tE31pDUmff/A4mET+g4FPDl8hVV2qwS
+         geYt8bn7PULic6ExJ+XeCdaiL6J2mkej9fd0dESixv2GM/V1iuzHy4FmHwwoTqOeWqTZ
+         YhVA6o3fbGflYaaedckQn+VTRD1TfNCtwD7uurxL8JyyeApc9JOWW5amx5ahDwSOu7I7
+         kTEsJ2wv4tML6NUy6nN7tMXgrwoy+IRlw3fs/dKTKOK0ttCE1MlOFjscLSHidfw8eRm4
+         Iu38nCWjq1N1RIZ2P7ZCV/GwPcOnCKwjXriHkmf6C4yvs6ISx814m2kqCxMMVp7BsfKq
+         baow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695447339; x=1696052139;
+        d=1e100.net; s=20230601; t=1695447341; x=1696052141;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGf8PiM0IiriMve24vBUlDxd/ZI4TAjoSgcit1w5zEk=;
-        b=BR4JjLyqu8qNzjxLdWp0nPczAyPZhq+fSofj/IIWwNpON1bVNo1LwI32ZHXX4yefQY
-         W8br4jDTE19lmRMtqeOYcvbiwOSgnVWpRQw37l7AIFkXdg6T5TNbxNe7ttlc62WbeRAE
-         j95DLhaKQpUiCYsDdb/DAiGV5tx7UQeZ8LbRIuPfHmZAremUCLk6zCvzU5EksxQZ0Ue5
-         ojNwLg2rrctoJmjTKGBpBusFnzuSrw6rodd6FNUbpHkknzp5nlQHrns17E3ogsBg0RNi
-         aDYLK/oYU+UkCtkOQlNJrdsG9h+FRCh8z4I4obC2MWlQFzpb18mvuG5pMwNbLPlQuRqS
-         k7XA==
-X-Gm-Message-State: AOJu0YxLFoy9wCLfIrg2gTjD1RSZc9a9LlQC3e8vN9W3R5fPxiQFrpBW
-	7fGbYqeeNzxQo575/O5Mkg8LDSw64Lri
-X-Google-Smtp-Source: AGHT+IER3/Ekga4CWFfnCnjgBf21uB1xN+LlgPp7pbLhX4QChejR7/30xnfk3VwuhyKCQmfs43pumojGijGw
+        bh=Sj6/NNUjZTKqDNZk1SrzqO39OG4waux/cevEfWDj9So=;
+        b=nino5mlBRkyc66MigeG6yJJpx40FUrSxQvdLhRAaOStbbnjeVPYj+xmE7M+llkwjSR
+         o3tZLBgWXhqXtspH/fgUTmkbaSaLzBkRqvO7JTpZtHWaFUZlESDsWpCoC+bTJT0vK1T1
+         Nowd+pOk05v7ZZhLFI0PUwOWwYhhvSaUMRAXQ5o2mwl6k7oV3PXqz1LNsmEGEHX3RTvV
+         /qFeuf2uaV17cOiQC4WI63hLAJGOhA+Jr8gz54AOOCXLpqXTA48rlqfbnqRQaixuHrZb
+         eRb2c3dhTz6jhnxMBWctZh1/MI/nV9GSW31JOVjLemZ6V3qjIK2jVHoVFcTkc9TudDfk
+         s/4w==
+X-Gm-Message-State: AOJu0Yw0utQ5qdMi1qNL7kp3fK+I7ZdIRgGIn5xoSgLbKb4M+wvTc0nX
+	DKdyza5/7of7i/Vfp73RnhBihbTu/9Jd
+X-Google-Smtp-Source: AGHT+IHbSzioQSTamsrTSTL4Bee/g9Pe12Cn5Z+M9ExBNqmPozrvsrmeb06sIAWOJ+A4bl9QoEI2702248Yo
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a376:2908:1c75:ff78])
- (user=irogers job=sendgmr) by 2002:a05:690c:707:b0:59f:4c14:ac5e with SMTP id
- bs7-20020a05690c070700b0059f4c14ac5emr28292ywb.2.1695447338979; Fri, 22 Sep
- 2023 22:35:38 -0700 (PDT)
-Date: Fri, 22 Sep 2023 22:34:58 -0700
+ (user=irogers job=sendgmr) by 2002:a81:eb0d:0:b0:59b:ec33:ec6d with SMTP id
+ n13-20020a81eb0d000000b0059bec33ec6dmr21490ywm.5.1695447341257; Fri, 22 Sep
+ 2023 22:35:41 -0700 (PDT)
+Date: Fri, 22 Sep 2023 22:34:59 -0700
 In-Reply-To: <20230923053515.535607-1-irogers@google.com>
-Message-Id: <20230923053515.535607-2-irogers@google.com>
+Message-Id: <20230923053515.535607-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,8 +45,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230923053515.535607-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Subject: [PATCH v1 01/18] gen_compile_commands: Allow the line prefix to still
- be cmd_
+Subject: [PATCH v1 02/18] gen_compile_commands: Sort output compile commands
+ by file name
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -64,40 +64,26 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Builds in tools still use the cmd_ prefix in .cmd files, so don't
-require the saved part. Name the groups in the line pattern match so
-that changing the regular expression is more robust and works with the
-addition of a new match group.
+Make the output more stable and deterministic.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- scripts/clang-tools/gen_compile_commands.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ scripts/clang-tools/gen_compile_commands.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index a84cc5737c2c..b43f9149893c 100755
+index b43f9149893c..180952fb91c1 100755
 --- a/scripts/clang-tools/gen_compile_commands.py
 +++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -19,7 +19,7 @@ _DEFAULT_OUTPUT = 'compile_commands.json'
- _DEFAULT_LOG_LEVEL = 'WARNING'
+@@ -221,7 +221,7 @@ def main():
+                                      cmdfile, err)
  
- _FILENAME_PATTERN = r'^\..*\.cmd$'
--_LINE_PATTERN = r'^savedcmd_[^ ]*\.o := (.* )([^ ]*\.[cS]) *(;|$)'
-+_LINE_PATTERN = r'^(saved)?cmd_[^ ]*\.o := (?P<command_prefix>.* )(?P<file_path>[^ ]*\.[cS]) *(;|$)'
- _VALID_LOG_LEVELS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
- # The tools/ directory adopts a different build system, and produces .cmd
- # files in a different format. Do not support it.
-@@ -213,8 +213,8 @@ def main():
-                 result = line_matcher.match(f.readline())
-                 if result:
-                     try:
--                        entry = process_line(directory, result.group(1),
--                                             result.group(2))
-+                        entry = process_line(directory, result.group('command_prefix'),
-+                                             result.group('file_path'))
-                         compile_commands.append(entry)
-                     except ValueError as err:
-                         logging.info('Could not add line from %s: %s',
+     with open(output, 'wt') as f:
+-        json.dump(compile_commands, f, indent=2, sort_keys=True)
++        json.dump(sorted(compile_commands, key=lambda x: x["file"]), f, indent=2, sort_keys=True)
+ 
+ 
+ if __name__ == '__main__':
 -- 
 2.42.0.515.g380fc7ccd1-goog
 
