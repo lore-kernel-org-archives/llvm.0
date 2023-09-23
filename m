@@ -1,150 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4B4363
-	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 00:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695516783;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DTFrEa7vKTqj7wXo0iZDISbSz3Y6un7zOPt1IkyamfI=;
-	b=C6G2RxUdp5vp/wVHNg5Z0rPoDTlaT5oSn7mzm8Og1fDUy5BUX0jr2wN/pezFJKVKmQQx74
-	Oz+63z18ZZLaURVvMwJ3vlvy2oyGNMvU+pbz/Kq2WbLzGDV3Bm3y1VSdQavk32wI5al1us
-	MhXwi9TUsGYd0LEg88VCEzZPDAeUgTg=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-67-sP602GgzNLKaiZQK_BLycg-1; Sat, 23 Sep 2023 20:53:00 -0400
-X-MC-Unique: sP602GgzNLKaiZQK_BLycg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7FC43806712;
-	Sun, 24 Sep 2023 00:52:59 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.26])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id D4E512156701;
-	Sun, 24 Sep 2023 00:52:58 +0000 (UTC)
-Date: Sun, 24 Sep 2023 08:52:55 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-	Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	Shakeel Butt <shakeelb@google.com>
-Subject: Re: [PATCH] kexec: Annotate struct crash_mem with __counted_by
-Message-ID: <ZQ+IZxPy7qCT83OQ@MiWiFi-R3L-srv>
-References: <20230922175224.work.712-kees@kernel.org>
- <ZQ41d5majBepW48Z@MiWiFi-R3L-srv>
- <202309222012.49E3C0AA@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D0F36D
+	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 01:41:36 +0000 (UTC)
+Received: from eig-obgw-6005a.ext.cloudfilter.net ([10.0.30.201])
+	by cmsmtp with ESMTP
+	id kDWrqdKW1DKaKkE7rqL4ed; Sun, 24 Sep 2023 01:41:35 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id kE7qq3bJVgCcEkE7qqt7Dc; Sun, 24 Sep 2023 01:41:34 +0000
+X-Authority-Analysis: v=2.4 cv=G9gPrvo5 c=1 sm=1 tr=0 ts=650f93ce
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=u5/PPzzCx21+32s0aYlv06SUgr2FZ2QgBdbWkjoYS+I=; b=b3N8+G3iXbFmFhxj4q7r9muAw1
+	KvvzLR7CvUcWRrdR8QBo8wxAVUgKCFGxgzu4Is/AKbZqLOaS5vuPTI+Ca/E6ih3pD34ebHep9DtcG
+	m+ofHrytuiDCICg98GyPRCigslGsbt2n1xxZh0h2JqEHQ3F9hOr1fb1xGxTU5cCBPllZkrEdUkMN7
+	n9oPKNrqPQwTlitJh8HPOHjV9edYLxaT06HFNWdttdINU/coat8B2DFvwDWifaeMonxiQII3GaQp2
+	hHB3bZBng4BRUwcWbvGYETdlehXLAOr6trq+BI6vcPhpQpXR2N4JgQs7sYBQw5O6VkDJnputtnCYC
+	7izDHduw==;
+Received: from [94.239.20.48] (port=47808 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qjy7a-003gjN-1c;
+	Sat, 23 Sep 2023 03:36:14 -0500
+Message-ID: <d2287237-3137-bc11-c95b-e218b07ff9af@embeddedor.com>
+Date: Sat, 23 Sep 2023 10:37:20 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202309222012.49E3C0AA@keescook>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] mfd: iqs62x: Annotate struct iqs62x_fw_blk with
+ __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Lee Jones <lee@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20230922175337.work.150-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230922175337.work.150-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qjy7a-003gjN-1c
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:47808
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfBTd/oKfuNQE3zubzoA/6NzygzP+Rzc3sklTCdEja+3VWu663NlX4TLe+iCXq4hRgB1uQwg0DUkH93Ly2rsykcl8GWTCViI0/K4KJnfs5wyskEpY8V/n
+ omOtHsaED2hCCCMEpqNQeqGYkVnYCNBzaQSMYy8UPvg8wEaDD4PPBHOnxC2ZAp5xztRezXrYVDQFpZb3VY1GFrFxhocHitlegzM=
 
-On 09/22/23 at 08:25pm, Kees Cook wrote:
-> On Sat, Sep 23, 2023 at 08:46:47AM +0800, Baoquan He wrote:
-> > On 09/22/23 at 10:52am, Kees Cook wrote:
-> > > Prepare for the coming implementation by GCC and Clang of the __counted_by
-> > > attribute. Flexible array members annotated with __counted_by can have
-> > > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> > > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> > > functions).
-> > > 
-> > > As found with Coccinelle[1], add __counted_by for struct crash_mem.
-> > > 
-> > > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> > > 
-> > > Cc: Eric Biederman <ebiederm@xmission.com>
-> > > Cc: kexec@lists.infradead.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  include/linux/crash_core.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
-> > > index 3426f6eef60b..5126a4fecb44 100644
-> > > --- a/include/linux/crash_core.h
-> > > +++ b/include/linux/crash_core.h
-> > > @@ -131,7 +131,7 @@ static inline void __init reserve_crashkernel_generic(char *cmdline,
-> > >  struct crash_mem {
-> > >  	unsigned int max_nr_ranges;
-> > >  	unsigned int nr_ranges;
-> > > -	struct range ranges[];
-> > > +	struct range ranges[] __counted_by(max_nr_ranges);
-> > 
-> > This __counted_by() only makes sense when there's a obvious upper
-> > boundary, max_nr_ranges in this case.
-> 
-> Yes; it's designed to be the array element count used for the
-> allocation. For example with the above case:
-> 
->         nr_ranges += 2;
->         cmem = vzalloc(struct_size(cmem, ranges, nr_ranges));
->         if (!cmem)
->                 return NULL;
-> 
->         cmem->max_nr_ranges = nr_ranges;
->         cmem->nr_ranges = 0;
-> 
-> nr_ranges is the max count of the elements.
-> 
-> _However_, if a structure (like this one) has _two_ counters, one for
-> "in use" and another for "max available", __counted_by could specify the
-> "in use" case, as long as array indexing only happens when that "in use"
-> has been updated. So, if it were:
-> 
-> struct crash_mem {
->     unsigned int max_nr_ranges;
->     unsigned int nr_ranges;
->     struct range ranges[] __counted_by(nr_ranges);
-> };
-> 
-> then this would trigger the bounds checking:
-> 
-> 	cmem->ranges[0] = some_range;	/* "nr_ranges" is still 0 so index 0 isn't allowed */
-> 	cmem->nr_ranges ++;
-> 
-> but this would not:
-> 
-> 	cmem->nr_ranges ++;		/* index 0 is now available for use. */
-> 	cmem->ranges[0] = some_range;
-> 
-> > This heavily depends and isn't much in kernel?
-> 
-> Which "this" do you mean? The tracking of max allocation is common.
-> Tracking max and "in use" happens in some places (like here), but is
-> less common.
 
-I thought usually it may not have a max counter of the variable length
-array embeded in struct, seems I was wrong. Here 'this' means the
-__counted_by() adding for the variable length array.
 
+On 9/22/23 11:53, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
 > 
-> > E.g struct swap_info_struct->avail_lists[].
+> As found with Coccinelle[1], add __counted_by for struct iqs62x_fw_blk.
 > 
-> This is even less common: tracking the count externally from the struct,
-> as done there with nr_node_ids. Shakeel asked a very similar question
-> and also pointed out nr_node_ids:
-> https://lore.kernel.org/all/202309221128.6AC35E3@keescook/
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> > Just curious, not related to this patch though.
-> 
-> I'm happy to answer questions! Yeah, as I said in the above thread,
-> I expect to expand what __counted_by can use, and I suspect (hope)
-> a global would be easier to add than an arbitrary expression. :)
+> Cc: Lee Jones <lee@kernel.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Thanks a lot for these explanation, Kees.
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-LGTM,
-Acked-by: Baoquan He <bhe@redhat.com>
+Thanks
+-- 
+Gustavo
 
+> ---
+>   drivers/mfd/iqs62x.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mfd/iqs62x.c b/drivers/mfd/iqs62x.c
+> index e03b4d38fbb0..1b465590567c 100644
+> --- a/drivers/mfd/iqs62x.c
+> +++ b/drivers/mfd/iqs62x.c
+> @@ -96,7 +96,7 @@ struct iqs62x_fw_blk {
+>   	u8 addr;
+>   	u8 mask;
+>   	u8 len;
+> -	u8 data[];
+> +	u8 data[] __counted_by(len);
+>   };
+>   
+>   struct iqs62x_info {
