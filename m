@@ -1,49 +1,52 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8517F9
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:35:37 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59f4f2b6de8so16148017b3.1
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:35:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FD7A5D
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:35:39 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-59beea5ce93so86506297b3.0
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:35:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695447337; x=1696052137; darn=lists.linux.dev;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nz52NPo/ldRCO4SlmJCa/5s+fqete8nkApWr4O0tYXg=;
-        b=sw+osepLw3FG+3zNJu152NgNqHtD1Mjhfd8M+Z2ZDHh5CCQEkKCPvECCUqk1k6HndD
-         rnu/r2VLHM7Q0Mi4INxKV7Y2tutJWBuzqG7ElE4BJ0a9Dmbr3HwYdjrYmSr5DzJg7Dzd
-         ZQ9hM9x7YgO3ANi8L2d1NcQSNSNpj2KqE/vQTO0EtJmyo8n+D3JYeG4ekORNnpbeAx60
-         Ef5wBi9zVCZV0UrZpCO/0EjW7XUMvWIcF0kPF2aqbuSA5M2O65zVU+7YHX6GGsmSjFRR
-         b2hUY8Q56Oy8xwt7XcHHn4ZGVwiFcGbgsH7BXyrrzZvuFs7d6tflQAh/NqCD0aJtkNTF
-         wXHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695447337; x=1696052137;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20230601; t=1695447339; x=1696052139; darn=lists.linux.dev;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nz52NPo/ldRCO4SlmJCa/5s+fqete8nkApWr4O0tYXg=;
-        b=XeUa8rxh+N5IfNZfUFhYQP+UwqqpbribkTkBl4rbBF1ru+nB0jkbhYWY681CJYkoER
-         RzLrpF58VsSpSGLXKKCCSJoi7GapfZRk3yG1wPe1dZSQpLJLK5qmluREOpx28SdJmdWL
-         qbhsd/WS4yt5VecmIRUJ21qlF0oNVEIdqL2BHkQU1ZHzi2nNy7ZmjEHGeja5W7C17APR
-         /eXuTD5yPp4Qp53OeUqy/5Eyh8/WYiaRc9aqaxFDw+7ot3S9TFiqoTh9HBevtuGHCQu9
-         Ylcbl+Tv9pX8YlLUMRDiOnqOyKltOzOsIUWnnWrJKA5oRuWQ/5KWcDgDCg+vFhk0g6/N
-         refg==
-X-Gm-Message-State: AOJu0Yzug4iwZ5DrhyAmFwlDRW35OQ10VL55orvMsOpJfIMAnw55Y34J
-	utlARaZj6gtUptuz6/ncH4elfoQdP2hR
-X-Google-Smtp-Source: AGHT+IFCqnNJv73Q/yXR30wTlheSaQlr3r+LpivpJ1x8n3rk2tghT2eny4ehycX34rqpiIXzwwawLsihbDb2
+        bh=BGf8PiM0IiriMve24vBUlDxd/ZI4TAjoSgcit1w5zEk=;
+        b=2KNo4HUkJODCnmuYKL74TQvYrJknJRBcBe7Zxci9WvWfknlvyTmukrj8eZeTIlmHI2
+         j3liFuKX60iML3hbujLTtPelbSEKLjcBPNuNLfS3IOpup0+NzLPFcJ/YVlbFlcN2HnfW
+         9RIOleKeSIWWjVwJ//+eg2igz4gp6XZE/ZwVMxlWWCb6MRcb3db5GDTbBKOu7Lt0Rq7E
+         7aD6ORyi02ZzdSnDbCC/FdHdtH1UH09T660df7wfSD06sQDJfJ6qrYfj0HXm/Jteh4Lj
+         cInvW2fRM0X/l6Rr1m+v1zUl9EU1nIAbfVrNYo7enNoMMeOH6rvI8aUN/q7ALky/CJqW
+         Dj3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695447339; x=1696052139;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BGf8PiM0IiriMve24vBUlDxd/ZI4TAjoSgcit1w5zEk=;
+        b=BR4JjLyqu8qNzjxLdWp0nPczAyPZhq+fSofj/IIWwNpON1bVNo1LwI32ZHXX4yefQY
+         W8br4jDTE19lmRMtqeOYcvbiwOSgnVWpRQw37l7AIFkXdg6T5TNbxNe7ttlc62WbeRAE
+         j95DLhaKQpUiCYsDdb/DAiGV5tx7UQeZ8LbRIuPfHmZAremUCLk6zCvzU5EksxQZ0Ue5
+         ojNwLg2rrctoJmjTKGBpBusFnzuSrw6rodd6FNUbpHkknzp5nlQHrns17E3ogsBg0RNi
+         aDYLK/oYU+UkCtkOQlNJrdsG9h+FRCh8z4I4obC2MWlQFzpb18mvuG5pMwNbLPlQuRqS
+         k7XA==
+X-Gm-Message-State: AOJu0YxLFoy9wCLfIrg2gTjD1RSZc9a9LlQC3e8vN9W3R5fPxiQFrpBW
+	7fGbYqeeNzxQo575/O5Mkg8LDSw64Lri
+X-Google-Smtp-Source: AGHT+IER3/Ekga4CWFfnCnjgBf21uB1xN+LlgPp7pbLhX4QChejR7/30xnfk3VwuhyKCQmfs43pumojGijGw
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a376:2908:1c75:ff78])
- (user=irogers job=sendgmr) by 2002:a81:4417:0:b0:59b:db15:a088 with SMTP id
- r23-20020a814417000000b0059bdb15a088mr21169ywa.3.1695447336863; Fri, 22 Sep
- 2023 22:35:36 -0700 (PDT)
-Date: Fri, 22 Sep 2023 22:34:57 -0700
-Message-Id: <20230923053515.535607-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a05:690c:707:b0:59f:4c14:ac5e with SMTP id
+ bs7-20020a05690c070700b0059f4c14ac5emr28292ywb.2.1695447338979; Fri, 22 Sep
+ 2023 22:35:38 -0700 (PDT)
+Date: Fri, 22 Sep 2023 22:34:58 -0700
+In-Reply-To: <20230923053515.535607-1-irogers@google.com>
+Message-Id: <20230923053515.535607-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20230923053515.535607-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Subject: [PATCH v1 00/18] clang-tools support in tools
+Subject: [PATCH v1 01/18] gen_compile_commands: Allow the line prefix to still
+ be cmd_
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -61,83 +64,40 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Allow the clang-tools scripts to work with builds in tools such as
-tools/perf and tools/lib/perf. An example use looks like:
+Builds in tools still use the cmd_ prefix in .cmd files, so don't
+require the saved part. Name the groups in the line pattern match so
+that changing the regular expression is more robust and works with the
+addition of a new match group.
 
-```
-$ cd tools/perf
-$ make CC=clang CXX=clang++
-$ ../../scripts/clang-tools/gen_compile_commands.py
-$ ../../scripts/clang-tools/run-clang-tools.py clang-tidy compile_commands.json -checks=-*,readability-named-parameter
-Skipping non-C file: 'tools/perf/bench/mem-memcpy-x86-64-asm.S'
-Skipping non-C file: 'tools/perf/bench/mem-memset-x86-64-asm.S'
-Skipping non-C file: 'tools/perf/arch/x86/tests/regs_load.S'
-8 warnings generated.
-Suppressed 8 warnings (8 in non-user code).
-Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-2 warnings generated.
-4 warnings generated.
-Suppressed 4 warnings (4 in non-user code).
-Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-2 warnings generated.
-4 warnings generated.
-Suppressed 4 warnings (4 in non-user code).
-Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-3 warnings generated.
-tools/perf/util/parse-events-flex.c:546:27: warning: all parameters should be named in a function [readability-named-parameter]
-void *yyalloc ( yy_size_t , yyscan_t yyscanner );
-                          ^
-                           /*size*/
-...
-```
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ scripts/clang-tools/gen_compile_commands.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Fix a number of the more serious low-hanging issues in perf found by
-clang-tidy.
-
-This support isn't complete, in particular it doesn't support output
-directories properly and so fails for tools/lib/bpf, tools/bpf/bpftool
-and if an output directory is used.
-
-Ian Rogers (18):
-  gen_compile_commands: Allow the line prefix to still be cmd_
-  gen_compile_commands: Sort output compile commands by file name
-  run-clang-tools: Add pass through checks and and header-filter
-    arguments
-  perf hisi-ptt: Fix potential memory leak
-  perf bench uprobe: Fix potential use of memory after free
-  perf buildid-cache: Fix use of uninitialized value
-  perf env: Remove unnecessary NULL tests
-  perf jitdump: Avoid memory leak
-  perf mem-events: Avoid uninitialized read
-  perf dlfilter: Be defensive against potential NULL dereference
-  perf hists browser: Reorder variables to reduce padding
-  perf hists browser: Avoid potential NULL dereference
-  perf svghelper: Avoid memory leak
-  perf parse-events: Fix unlikely memory leak when cloning terms
-  tools api: Avoid potential double free
-  perf trace-event-info: Avoid passing NULL value to closedir
-  perf header: Fix various error path memory leaks
-  perf bpf_counter: Fix a few memory leaks
-
- scripts/clang-tools/gen_compile_commands.py |  8 +--
- scripts/clang-tools/run-clang-tools.py      | 34 ++++++++---
- tools/lib/api/io.h                          |  1 +
- tools/perf/bench/uprobe.c                   |  1 +
- tools/perf/builtin-buildid-cache.c          |  6 +-
- tools/perf/builtin-lock.c                   |  1 +
- tools/perf/ui/browsers/hists.c              |  6 +-
- tools/perf/util/bpf_counter.c               |  5 +-
- tools/perf/util/dlfilter.c                  |  4 +-
- tools/perf/util/env.c                       |  6 +-
- tools/perf/util/header.c                    | 63 +++++++++++++--------
- tools/perf/util/hisi-ptt.c                  | 12 ++--
- tools/perf/util/jitdump.c                   |  1 +
- tools/perf/util/mem-events.c                |  3 +-
- tools/perf/util/parse-events.c              |  4 +-
- tools/perf/util/svghelper.c                 |  5 +-
- tools/perf/util/trace-event-info.c          |  3 +-
- 17 files changed, 106 insertions(+), 57 deletions(-)
-
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index a84cc5737c2c..b43f9149893c 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -19,7 +19,7 @@ _DEFAULT_OUTPUT = 'compile_commands.json'
+ _DEFAULT_LOG_LEVEL = 'WARNING'
+ 
+ _FILENAME_PATTERN = r'^\..*\.cmd$'
+-_LINE_PATTERN = r'^savedcmd_[^ ]*\.o := (.* )([^ ]*\.[cS]) *(;|$)'
++_LINE_PATTERN = r'^(saved)?cmd_[^ ]*\.o := (?P<command_prefix>.* )(?P<file_path>[^ ]*\.[cS]) *(;|$)'
+ _VALID_LOG_LEVELS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+ # The tools/ directory adopts a different build system, and produces .cmd
+ # files in a different format. Do not support it.
+@@ -213,8 +213,8 @@ def main():
+                 result = line_matcher.match(f.readline())
+                 if result:
+                     try:
+-                        entry = process_line(directory, result.group(1),
+-                                             result.group(2))
++                        entry = process_line(directory, result.group('command_prefix'),
++                                             result.group('file_path'))
+                         compile_commands.append(entry)
+                     except ValueError as err:
+                         logging.info('Could not add line from %s: %s',
 -- 
 2.42.0.515.g380fc7ccd1-goog
 
