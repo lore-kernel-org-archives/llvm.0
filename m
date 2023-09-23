@@ -1,93 +1,86 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609861E506
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 18:37:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
- t=1695494237; x=1696099037; i=deller@gmx.de;
- bh=6ODb61JZKAyoefAj0bLEfwWKHG7W2MnMV+6ga2PGkLo=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=el/ZYIcCuQHsxYgCfA30NsBJ/8n1wNnERA/R3g3ZoDDCcxIloMgtH9hao72xXbu4c4g92kpijpv
- VtBDYO3drcnNdv6X/AA/1dN3KaxaelfY4xouhW8Nz1dfkruSHTJXgBmNiPEy7rRbRHUHsz4FfJfYC
- Wo+UF8a5Iet0sSWOSBV0FeCp0X9K6qeWd0KQkR2ktbHtganYtz7suqRs7A/YvmQRiKkdM7Rw0Fr8g
- AbQPjPmMuKvWCS/icrJ20DEu27drA00OaH6DhYKhL2GJR+7JVSPvIW3T3FezA3gM3OJsOxvnOIk5n
- KyxudvdIWOcgSChaSACE5mE9hTcSi8WI3CuQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.158.25]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MOiHl-1r23r02Rvr-00Q8cc; Sat, 23
- Sep 2023 20:37:17 +0200
-Message-ID: <4eccc506-4ff1-6890-8f1a-a5f267dfa5ea@gmx.de>
-Date: Sat, 23 Sep 2023 20:37:16 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A952633CE;
+	Sat, 23 Sep 2023 18:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695495180; x=1727031180;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=NA+ayn/5eJqnxwC7NXRTwdlmsT1nB+IdIDCvBeeKRGg=;
+  b=mpD2zSlxH29+Owf4Bv0RYaE0oPMJId6MIyDsS/Gvj3+wNAe7UummmI9Q
+   WqSbfaKDEmogbvE0W+OOVuVDlwFvB3yDDKJCQh1x5UG9BjotfXrWgbSqT
+   VRJ3zUkqWNISDRme+kbMI6aForgnTxPlbC+MSjp4OxYfIwbOB5RJT94fJ
+   AQRFhLf3HlEPJKEV60uiWb3bmCmRjsdlYXKP4IHufr2XeDF+tLup6ntIm
+   ZFlRcVmts+w14CtuUyEQBHKvsIER4lV3cHeiqo3fr2DgvUTGuD6ILG/It
+   0aYT7APU9JunKmh0Vv3aGRuQjE5M5z65tKMNRMUtlOwr40t7SAJaiP5a9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="366106151"
+X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
+   d="scan'208";a="366106151"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2023 11:52:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="751210889"
+X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
+   d="scan'208";a="751210889"
+Received: from lkp-server02.sh.intel.com (HELO 493f6c7fed5d) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Sep 2023 11:52:58 -0700
+Received: from kbuild by 493f6c7fed5d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qk7kO-0002k9-1n;
+	Sat, 23 Sep 2023 18:52:56 +0000
+Date: Sun, 24 Sep 2023 02:52:54 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: clang: error: unknown argument: '-mr10k-cache-barrier=store'
+Message-ID: <202309240210.VjlATMSN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] video: fbdev: mmp: Annotate struct mmphw_ctrl with
- __counted_by
-Content-Language: en-US
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
- Kees Cook <keescook@chromium.org>
-Cc: linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20230922175137.work.062-kees@kernel.org>
- <6dae12b4-125c-a7be-4129-75065f7a5128@embeddedor.com>
-From: Helge Deller <deller@gmx.de>
-In-Reply-To: <6dae12b4-125c-a7be-4129-75065f7a5128@embeddedor.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:yedBhjjM8NxVuspZ3zErQHUL9LZ3Vf0+5s1SQjPq3DIPw6TJhiC
- osQATF9/F+uYJv+BHg/bbTPVAG1LGxO+d6yPczJjUr5oxU5nSng8K7yvKR5de14V1RsdcVY
- 2qV/2MyouEWEvWrawP/5/UbIUKVt/oATUsHVUR4CrPS6rIcvrHgeoG8FJqtlhv2tVB4cyTW
- jI0doyh2nzH0wqe0VwFog==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:TRvVQzlGCos=;7gzqbw5vb4X85Go95YFUxHL4cLC
- f40zMWnupAvDHowlAlwfKtSVbKXMw37F/Db0xIiuFWYSaQVLNyCOUyO/SIVLYMDRXUx73wesn
- wjDlum2ZkJKUW1RMGjpkwi76akgZ3066ZVUFU31KLfCDOoTDI/bPqXSVhHhTuzy9feNQ457lJ
- r9E5haNbsLolJ3istYWVpB8QHWoIKctEuAMtZPvAU76b3SboIleAItIgw1GmVpnLtcqe5AmUL
- gLbVjoh5to16HedGADpgcooFKX9usURVzIqaksCBCb77pl3AkkKTKvWgaEnNQNybGNRxZWyDl
- vNI+b7VyWKHdC3rqz6qYumOIWtsY7EU5JtXDqykLXyKqSFGgB57O8tY4JaSRELFvoYNaKbxGF
- 0Qdx/HngSyboOfGQF5bJTG45MlR3kOHaNlRHL51G3HaubKnCgnhH1AiP2c8IBh9H3QdIJVji8
- xXzHWsWsiyJY37tuZrgLHv4mjcxl5SZcgLwEHtorIzZVPJI+KJEckpNfkBOwlhOXA9LVwChcI
- 4xzFvlEOHGAL4DRkVgdNS5mo2EJYBNuTTvdL9mofHnV0RinTLucZPQ7KlLgrTmc1YFAVv5LCT
- 2Y2nmgHfb71zrQUu8uFb5cj6RuHoMSd/zeiGOOsCur0UWE/dHaMqnrs9sQg9ktpwA79FxDaXO
- YtBgxPPEA5jarLsXD7TGKQ9AASzkpYpTf0PacPdXRM4UbJ8IVI2x1dj9u6jVh7ON83atK7dXr
- fh+WnFiod5rnwdjGs6sHENWod0SQW3YLKzmXx4sRU5M28LSWFXptykzRobxUARh04UH7KFbcW
- OCAzQo47g7aSIZMcniErJbiRVjQmGW/jSr/Yds5gl5tW0tgFL+ak55nfQ9oHsyRkwEwBUcrIZ
- 3WBNXzFYGMNR/p78liQwldZsbjFiTwMJsjad4ecD+OLhTmSoz8qAlARmDLfRs46zSmFtgXcb8
- KtvhQQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 9/23/23 18:33, Gustavo A. R. Silva wrote:
-> On 9/22/23 11:51, Kees Cook wrote:
->> Prepare for the coming implementation by GCC and Clang of the __counted=
-_by
->> attribute. Flexible array members annotated with __counted_by can have
->> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOU=
-NDS
->> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-famil=
-y
->> functions).
->>
->> As found with Coccinelle[1], add __counted_by for struct mmphw_ctrl.
->>
->> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples=
-/counted_by.cocci
->>
->> Cc: Helge Deller <deller@gmx.de>
->> Cc: linux-fbdev@vger.kernel.org
->> Cc: dri-devel@lists.freedesktop.org
->> Signed-off-by: Kees Cook <keescook@chromium.org>
->
-> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+CC: linux-kernel@vger.kernel.org
+TO: Tiezhu Yang <yangtiezhu@loongson.cn>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC: Nathan Chancellor <nathan@kernel.org>
+CC: Masahiro Yamada <masahiroy@kernel.org>
 
-Both fbdev patches applied to fbdev git tree.
+Hi Tiezhu,
 
-Thank you Kees!
+FYI, the error/warning still remains.
 
-Helge
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d90b0276af8f25a0b8ae081a30d1b2a61263393b
+commit: 048cc2378c2494519d940597629465b3ea44a96f MIPS: SGI-IP22: Remove unnecessary check of GCC option
+date:   1 year, 9 months ago
+config: mips-ip28_defconfig (https://download.01.org/0day-ci/archive/20230924/202309240210.VjlATMSN-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230924/202309240210.VjlATMSN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309240210.VjlATMSN-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> clang: error: unknown argument: '-mr10k-cache-barrier=store'
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> clang: error: unknown argument: '-mr10k-cache-barrier=store'
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target 'missing-syscalls' not remade because of errors.
+   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
