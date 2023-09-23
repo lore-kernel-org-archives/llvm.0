@@ -1,42 +1,42 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD77B1FDA
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:36:16 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59c240e637aso52502677b3.3
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:36:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A8A1C38
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:36:18 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d817775453dso4183819276.2
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:36:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695447376; x=1696052176; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695447378; x=1696052178; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BQyzyxD68ePpbOWMRqgJmncvVxKbUt7ya9UE8v2z5vg=;
-        b=b12QqtBml9x4tFVyRZSegQXZwp4+E4iM6yLZ0aP3UWF0kpOoG539zy04Lu/r5LIaLn
-         z815GSOc0ktEAqNnZHoD3sATkgZ4tWa/eKE3F6FPJccYFpEo4qVWWfJBUdgrRGY1RaB1
-         3pJSJPhBlsxjTvFxmRhEbbM3akDEbHwnZ0ruIsXbznLHgW2NKFi95fezEhteG9Wqb7TB
-         HMm6xjEHwUS/QEOl3EkLc0Ib2eC8lWgTNvgjtDvMzqJaRdRR/BSEQQeLpCM3uWXfxV46
-         GqfGbgM5NP/P3ZgEbvoEz+nrdKyG1TvtqRkBB9gX0xjzLynZr+jKAzxjKarPPZ2UZkug
-         B5Vg==
+        bh=ywZDu0emPkmJVQQeOexJ/0NU/+t2nDPbGZwUB+L0bX8=;
+        b=CG02W7b/mLkkimdZCgi6e637gJCqPxaFGbhflJtK18j+JH0mly10eky7aUDPvDZ/52
+         /MPZp3ueBa+RWTTfacT+SjHER1GXE0zwXH9MdRZ5au56hHBs4Z5ZezYe1L28JRxzr+b6
+         6yljph0Nxa5MxhhH9s8R7c4Mv57CKTQz/Oej3YWxARYSKZVP4hPX7gm0RuYnqvhHK0Ld
+         I1w/cNu549W37qH88+7MmoUh48xg1ETSDDE0ckmmNUoDJVMLsSGMGhoo66zkNlxj2Q4A
+         2Br43+eg0hYygnkEsNyViWJcK/RLmdg3MgKc4/mrXrdgSYOJPHOcFo7wycRkbp1gLRq8
+         uTAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695447376; x=1696052176;
+        d=1e100.net; s=20230601; t=1695447378; x=1696052178;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQyzyxD68ePpbOWMRqgJmncvVxKbUt7ya9UE8v2z5vg=;
-        b=FT/gpCHnAviHveIBcX4+lc8kPRvUjXJ1cv6mRc1xW4enqWEpe2YN9iUzw+2VLQJ2Pt
-         hdiI9sdoUsw05NXu66eEHAOQ0cTu5qAfaPXO2YM/oXkJXQ+/b1GB7i7v4sBOdq8/N+at
-         d2Vsmj5Cj3Zpg8aGPnAUZEnS9R8Fpaxk7Wao8uLZ9OcakWsJOoQGOhCHimuQm68WmM5X
-         7Ieb92UVb8e7tQYCORc0RN+z843EZVzCoeiWZqKKZjjU7xtOWCuiBpH15ARN0A3B485U
-         60HErqHeeDoWd7TxuocOh4C81F71VHuhX2i0zTZtl9CVSJoe27WdviLyRpDh7+Y9f2ww
-         K5QA==
-X-Gm-Message-State: AOJu0YyNbEU+Won1xqPqN/bopQiFmlUk4fskXfor1zFBvUjE4zbIvWbY
-	fnM/4FR977RWnQEB/aF0RlbWQSr5SD2Z
-X-Google-Smtp-Source: AGHT+IH1/8N6KXKbsq0cgMy7XxhDM7wiUKaAcfle1eqtAKeK0B+VxM29iufwiC2RBjgnCg6nNUi1fgZXeX2a
+        bh=ywZDu0emPkmJVQQeOexJ/0NU/+t2nDPbGZwUB+L0bX8=;
+        b=OtwzDrKaqJqtwwo20plFu2kW2XLhaGyUzTB9SepUY3Tiwf03DoRnazh3y5URgkrLq6
+         Wy158rv61uSTZwx/ejpCspekiaeUpmXfS+Lr4l/dMTAKwwCXA8eysOEclt9GqXivLkgi
+         lsQ0I9WY3rK9RseLMkIKYfDjMEC9DMQxHk0uOXIBmaIpJ233bZZLlNyy/mSsF8Y1NLY+
+         ognW9vi2u0ub5RNL9b94lotQablWQP2FkaxjIshoIerlTdMbMInw8o6Nekm5LTXZVmCH
+         DdCISe75BXahwoibE+s1LEli3tJeOLeQR5rEQopCpiwjMYPzzUyggYeNoIjehpSddAFY
+         urhw==
+X-Gm-Message-State: AOJu0YyFw2HwPFT4hlbqFETV228oF9fyKvXGjMK8lfTQb0FWofsUPGw5
+	BsiaW4Oqwy0emnbFVuocgX0dGAq/1kRc
+X-Google-Smtp-Source: AGHT+IGTu58JilIBfDpSy7tMqNuBcfjoioDdjm+UokXTsJGVIl9AVdtE2VsgkJoMSD2sydC3Nw35sn/h8sOx
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a376:2908:1c75:ff78])
- (user=irogers job=sendgmr) by 2002:a81:e344:0:b0:59b:e684:3c7a with SMTP id
- w4-20020a81e344000000b0059be6843c7amr20581ywl.4.1695447375211; Fri, 22 Sep
- 2023 22:36:15 -0700 (PDT)
-Date: Fri, 22 Sep 2023 22:35:14 -0700
+ (user=irogers job=sendgmr) by 2002:a25:6942:0:b0:d81:68ac:e046 with SMTP id
+ e63-20020a256942000000b00d8168ace046mr11989ybc.12.1695447377882; Fri, 22 Sep
+ 2023 22:36:17 -0700 (PDT)
+Date: Fri, 22 Sep 2023 22:35:15 -0700
 In-Reply-To: <20230923053515.535607-1-irogers@google.com>
-Message-Id: <20230923053515.535607-18-irogers@google.com>
+Message-Id: <20230923053515.535607-19-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230923053515.535607-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Subject: [PATCH v1 17/18] perf header: Fix various error path memory leaks
+Subject: [PATCH v1 18/18] perf bpf_counter: Fix a few memory leaks
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -67,211 +67,43 @@ Memory leaks were detected by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/header.c | 63 ++++++++++++++++++++++++----------------
- 1 file changed, 38 insertions(+), 25 deletions(-)
+ tools/perf/util/bpf_counter.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index d812e1e371a7..41b78e40b22b 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -2598,8 +2598,10 @@ static int process_cpu_topology(struct feat_fd *ff, void *data __maybe_unused)
- 			goto error;
+diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+index 6732cbbcf9b3..7f9b0e46e008 100644
+--- a/tools/perf/util/bpf_counter.c
++++ b/tools/perf/util/bpf_counter.c
+@@ -104,7 +104,7 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
+ 	struct bpf_prog_profiler_bpf *skel;
+ 	struct bpf_counter *counter;
+ 	struct bpf_program *prog;
+-	char *prog_name;
++	char *prog_name = NULL;
+ 	int prog_fd;
+ 	int err;
  
- 		/* include a NULL character at the end */
--		if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
-+		if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
-+			free(str);
- 			goto error;
-+		}
- 		size += string_size(str);
- 		free(str);
- 	}
-@@ -2617,8 +2619,10 @@ static int process_cpu_topology(struct feat_fd *ff, void *data __maybe_unused)
- 			goto error;
- 
- 		/* include a NULL character at the end */
--		if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
-+		if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
-+			free(str);
- 			goto error;
-+		}
- 		size += string_size(str);
- 		free(str);
- 	}
-@@ -2681,8 +2685,10 @@ static int process_cpu_topology(struct feat_fd *ff, void *data __maybe_unused)
- 			goto error;
- 
- 		/* include a NULL character at the end */
--		if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
-+		if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
-+			free(str);
- 			goto error;
-+		}
- 		size += string_size(str);
- 		free(str);
- 	}
-@@ -2736,10 +2742,9 @@ static int process_numa_topology(struct feat_fd *ff, void *data __maybe_unused)
- 			goto error;
- 
- 		n->map = perf_cpu_map__new(str);
-+		free(str);
- 		if (!n->map)
- 			goto error;
--
--		free(str);
- 	}
- 	ff->ph->env.nr_numa_nodes = nr;
- 	ff->ph->env.numa_nodes = nodes;
-@@ -2913,10 +2918,10 @@ static int process_cache(struct feat_fd *ff, void *data __maybe_unused)
- 		return -1;
- 
- 	for (i = 0; i < cnt; i++) {
--		struct cpu_cache_level c;
-+		struct cpu_cache_level *c = &caches[i];
- 
- 		#define _R(v)						\
--			if (do_read_u32(ff, &c.v))\
-+			if (do_read_u32(ff, &c->v))			\
- 				goto out_free_caches;			\
- 
- 		_R(level)
-@@ -2926,22 +2931,25 @@ static int process_cache(struct feat_fd *ff, void *data __maybe_unused)
- 		#undef _R
- 
- 		#define _R(v)					\
--			c.v = do_read_string(ff);		\
--			if (!c.v)				\
--				goto out_free_caches;
-+			c->v = do_read_string(ff);		\
-+			if (!c->v)				\
-+				goto out_free_caches;		\
- 
- 		_R(type)
- 		_R(size)
- 		_R(map)
- 		#undef _R
--
--		caches[i] = c;
- 	}
- 
- 	ff->ph->env.caches = caches;
- 	ff->ph->env.caches_cnt = cnt;
+@@ -155,10 +155,12 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
+ 	assert(skel != NULL);
+ 	counter->skel = skel;
+ 	list_add(&counter->list, &evsel->bpf_counter_list);
++	free(prog_name);
+ 	close(prog_fd);
  	return 0;
- out_free_caches:
-+	for (i = 0; i < cnt; i++) {
-+		free(caches[i].type);
-+		free(caches[i].size);
-+		free(caches[i].map);
-+	}
- 	free(caches);
+ err_out:
+ 	bpf_prog_profiler_bpf__destroy(skel);
++	free(prog_name);
+ 	free(counter);
+ 	close(prog_fd);
  	return -1;
- }
-@@ -3585,18 +3593,16 @@ static int perf_header__adds_write(struct perf_header *header,
- 				   struct feat_copier *fc)
- {
- 	int nr_sections;
--	struct feat_fd ff;
-+	struct feat_fd ff = {
-+		.fd  = fd,
-+		.ph = header,
-+	};
- 	struct perf_file_section *feat_sec, *p;
- 	int sec_size;
- 	u64 sec_start;
- 	int feat;
- 	int err;
- 
--	ff = (struct feat_fd){
--		.fd  = fd,
--		.ph = header,
--	};
--
- 	nr_sections = bitmap_weight(header->adds_features, HEADER_FEAT_BITS);
- 	if (!nr_sections)
- 		return 0;
-@@ -3623,6 +3629,7 @@ static int perf_header__adds_write(struct perf_header *header,
- 	err = do_write(&ff, feat_sec, sec_size);
- 	if (err < 0)
- 		pr_debug("failed to write feature section\n");
-+	free(ff.buf);
- 	free(feat_sec);
- 	return err;
- }
-@@ -3630,11 +3637,11 @@ static int perf_header__adds_write(struct perf_header *header,
- int perf_header__write_pipe(int fd)
- {
- 	struct perf_pipe_file_header f_header;
--	struct feat_fd ff;
-+	struct feat_fd ff = {
-+		.fd = fd,
-+	};
- 	int err;
- 
--	ff = (struct feat_fd){ .fd = fd };
--
- 	f_header = (struct perf_pipe_file_header){
- 		.magic	   = PERF_MAGIC,
- 		.size	   = sizeof(f_header),
-@@ -3645,7 +3652,7 @@ int perf_header__write_pipe(int fd)
- 		pr_debug("failed to write perf pipe header\n");
- 		return err;
- 	}
--
-+	free(ff.buf);
- 	return 0;
- }
- 
-@@ -3658,11 +3665,12 @@ static int perf_session__do_write_header(struct perf_session *session,
- 	struct perf_file_attr   f_attr;
- 	struct perf_header *header = &session->header;
- 	struct evsel *evsel;
--	struct feat_fd ff;
-+	struct feat_fd ff = {
-+		.fd = fd,
-+	};
- 	u64 attr_offset;
- 	int err;
- 
--	ff = (struct feat_fd){ .fd = fd};
- 	lseek(fd, sizeof(f_header), SEEK_SET);
- 
- 	evlist__for_each_entry(session->evlist, evsel) {
-@@ -3670,6 +3678,7 @@ static int perf_session__do_write_header(struct perf_session *session,
- 		err = do_write(&ff, evsel->core.id, evsel->core.ids * sizeof(u64));
- 		if (err < 0) {
- 			pr_debug("failed to write perf header\n");
-+			free(ff.buf);
- 			return err;
+@@ -180,6 +182,7 @@ static int bpf_program_profiler__load(struct evsel *evsel, struct target *target
+ 		    (*p != '\0' && *p != ',')) {
+ 			pr_err("Failed to parse bpf prog ids %s\n",
+ 			       target->bpf_str);
++			free(bpf_str_);
+ 			return -1;
  		}
- 	}
-@@ -3695,6 +3704,7 @@ static int perf_session__do_write_header(struct perf_session *session,
- 		err = do_write(&ff, &f_attr, sizeof(f_attr));
- 		if (err < 0) {
- 			pr_debug("failed to write perf header attribute\n");
-+			free(ff.buf);
- 			return err;
- 		}
- 	}
-@@ -3705,8 +3715,10 @@ static int perf_session__do_write_header(struct perf_session *session,
  
- 	if (at_exit) {
- 		err = perf_header__adds_write(header, evlist, fd, fc);
--		if (err < 0)
-+		if (err < 0) {
-+			free(ff.buf);
- 			return err;
-+		}
- 	}
- 
- 	f_header = (struct perf_file_header){
-@@ -3728,6 +3740,7 @@ static int perf_session__do_write_header(struct perf_session *session,
- 
- 	lseek(fd, 0, SEEK_SET);
- 	err = do_write(&ff, &f_header, sizeof(f_header));
-+	free(ff.buf);
- 	if (err < 0) {
- 		pr_debug("failed to write perf header\n");
- 		return err;
 -- 
 2.42.0.515.g380fc7ccd1-goog
 
