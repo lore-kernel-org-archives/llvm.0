@@ -1,86 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A952633CE;
-	Sat, 23 Sep 2023 18:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695495180; x=1727031180;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=NA+ayn/5eJqnxwC7NXRTwdlmsT1nB+IdIDCvBeeKRGg=;
-  b=mpD2zSlxH29+Owf4Bv0RYaE0oPMJId6MIyDsS/Gvj3+wNAe7UummmI9Q
-   WqSbfaKDEmogbvE0W+OOVuVDlwFvB3yDDKJCQh1x5UG9BjotfXrWgbSqT
-   VRJ3zUkqWNISDRme+kbMI6aForgnTxPlbC+MSjp4OxYfIwbOB5RJT94fJ
-   AQRFhLf3HlEPJKEV60uiWb3bmCmRjsdlYXKP4IHufr2XeDF+tLup6ntIm
-   ZFlRcVmts+w14CtuUyEQBHKvsIER4lV3cHeiqo3fr2DgvUTGuD6ILG/It
-   0aYT7APU9JunKmh0Vv3aGRuQjE5M5z65tKMNRMUtlOwr40t7SAJaiP5a9
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="366106151"
-X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
-   d="scan'208";a="366106151"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2023 11:52:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="751210889"
-X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
-   d="scan'208";a="751210889"
-Received: from lkp-server02.sh.intel.com (HELO 493f6c7fed5d) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Sep 2023 11:52:58 -0700
-Received: from kbuild by 493f6c7fed5d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qk7kO-0002k9-1n;
-	Sat, 23 Sep 2023 18:52:56 +0000
-Date: Sun, 24 Sep 2023 02:52:54 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: clang: error: unknown argument: '-mr10k-cache-barrier=store'
-Message-ID: <202309240210.VjlATMSN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA4121348
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 20:21:39 +0000 (UTC)
+Received: from eig-obgw-5006a.ext.cloudfilter.net ([10.0.29.179])
+	by cmsmtp with ESMTP
+	id jx8AqGhQvez0Ck97rqDWmK; Sat, 23 Sep 2023 20:21:15 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id k98Eq7cloHmohk98EqOAu9; Sat, 23 Sep 2023 20:21:38 +0000
+X-Authority-Analysis: v=2.4 cv=Avz9YcxP c=1 sm=1 tr=0 ts=650f48d2
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=ag1SF4gXAAAA:8 a=cm27Pg_UAAAA:8 a=VwQbUJbxAAAA:8 a=HvF037n1xESchLcPDVoA:9
+ a=QEXdDO2ut3YA:10 a=Yupwre4RP9_Eg_Bd0iYG:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=S2WSjWRX2U8kFe3kVy2vGKw8Vn0k9n25pi7ggjJqCCc=; b=ep8bS5N6P6KuQHZ/t+tq3U3F6t
+	x5GhoRIJhBkVI/V3WWXbvszGay0VvdT/hsRUkmPYeJfi6D2oFp2JvEproOtl3aJ9I17/StAZdb3hW
+	uCfLyNoCHx5NxUJVtl/W7ZlLKBOo/oG6BdZTBm3qSnNF0MdD1iuniL9Awde7tXUrNJf2KNHbnqdwN
+	lyWUvNw8jZ5uR5+2RWwMQaEL8ly7hPPTl2Ik9EVMLJpDc4xHdxjqLJ3DWkvsSvcbNMvyGuPmBef41
+	59x46kFePfbVUTVtrJ1F+hwkRsxM8NWwUG/psKtuqz/QKvHxUvl6LUs6X+WoEuCMWUOrFybMZY2cz
+	60jl6Skw==;
+Received: from [94.239.20.48] (port=41048 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qjy85-003hXa-13;
+	Sat, 23 Sep 2023 03:36:45 -0500
+Message-ID: <36c99ef5-148a-b23a-a456-75617b8fe5c7@embeddedor.com>
+Date: Sat, 23 Sep 2023 10:37:50 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] hpet: Annotate struct hpets with __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Clemens Ladisch <clemens@ladisch.de>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20230922175348.work.056-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230922175348.work.056-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qjy85-003hXa-13
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:41048
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfDIv4QoQgLbEAut7KEAVQB8EzTuJnerCRXjL9D3NmhAWahphTDwUbwOXN6iE6DuUZmQ3mhZTcaHwIf5mW9hjz6sSQr2lMY4Y0B31CkT5g5eDOkuhrGYd
+ yM5OPyfxH8QOQXviTknO26E3v136mZ8AnwdEGlca/u+Kl9OiiHXd19XQzgjGGUpZYKyIFb5tRYFnOwUZVTOBTzHTWnfAPCrJOnE=
 
-CC: linux-kernel@vger.kernel.org
-TO: Tiezhu Yang <yangtiezhu@loongson.cn>
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC: Nathan Chancellor <nathan@kernel.org>
-CC: Masahiro Yamada <masahiroy@kernel.org>
 
-Hi Tiezhu,
 
-FYI, the error/warning still remains.
+On 9/22/23 11:53, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct hpets.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Clemens Ladisch <clemens@ladisch.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d90b0276af8f25a0b8ae081a30d1b2a61263393b
-commit: 048cc2378c2494519d940597629465b3ea44a96f MIPS: SGI-IP22: Remove unnecessary check of GCC option
-date:   1 year, 9 months ago
-config: mips-ip28_defconfig (https://download.01.org/0day-ci/archive/20230924/202309240210.VjlATMSN-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230924/202309240210.VjlATMSN-lkp@intel.com/reproduce)
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309240210.VjlATMSN-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> clang: error: unknown argument: '-mr10k-cache-barrier=store'
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->> clang: error: unknown argument: '-mr10k-cache-barrier=store'
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target 'missing-syscalls' not remade because of errors.
-   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
+Thanks
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Gustavo
+
+> ---
+>   drivers/char/hpet.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/hpet.c b/drivers/char/hpet.c
+> index 3b2159416e62..807c389510de 100644
+> --- a/drivers/char/hpet.c
+> +++ b/drivers/char/hpet.c
+> @@ -92,7 +92,7 @@ struct hpets {
+>   	unsigned long hp_delta;
+>   	unsigned int hp_ntimer;
+>   	unsigned int hp_which;
+> -	struct hpet_dev hp_dev[];
+> +	struct hpet_dev hp_dev[] __counted_by(hp_ntimer);
+>   };
+>   
+>   static struct hpets *hpets;
