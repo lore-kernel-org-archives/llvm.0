@@ -1,40 +1,23 @@
-Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C84920B3C
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 17:42:11 +0000 (UTC)
-Received: from eig-obgw-5007a.ext.cloudfilter.net ([10.0.29.141])
-	by cmsmtp with ESMTP
-	id jx8cqaxZDDKaKk6duqJfih; Sat, 23 Sep 2023 17:42:10 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id k6duq7TSOJUhvk6duq4HhM; Sat, 23 Sep 2023 17:42:10 +0000
-X-Authority-Analysis: v=2.4 cv=Re6Dtnhv c=1 sm=1 tr=0 ts=650f2372
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=QyXUC8HyAAAA:8 a=cm27Pg_UAAAA:8 a=VwQbUJbxAAAA:8 a=qjWHau5h7Oqj65Zv8QkA:9
- a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=l/Fa2g6PgtI/l80Yludonwd/RnBWl59lIxgeKs29bP4=; b=im+3DqFCWX2/Oi88WqFAOx2B0S
-	AO+dk1KB0IMZ9RxhtSqGHgHIxe0LTwhGKSKxdLspoX7P1WmsfyE9Qy4mFwQKapgBcdMOdXpEvR/qo
-	pfuBLeKnsaW60CLDi1pOlbhrkviaLDVRusBVU/eySxnVnTZoXc32HpnEGNyMY0q0Fz+1VhnZPfEvg
-	AVUPdYOe7pmSe8EC4mmoMrzC7bJZb5vpw+E+oypqdEYjEKDsfO9G+/fTvhmYDibtVycjAo3S9HmKm
-	p+T7QI9OXM0ALpGx6hKf5Oc2mpJqV3dgg5VxZrsZLVmbcG/nuqo8uoMRYYG+SAn2xpFc8lv3RfQ3g
-	Gtq2dBxQ==;
-Received: from [94.239.20.48] (port=36114 helo=[192.168.1.98])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qjy2g-003aI4-2i;
-	Sat, 23 Sep 2023 03:31:11 -0500
-Message-ID: <665343e3-d2d0-82bf-350c-20f935510ce7@embeddedor.com>
-Date: Sat, 23 Sep 2023 10:32:16 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609861E506
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 18:37:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+ t=1695494237; x=1696099037; i=deller@gmx.de;
+ bh=6ODb61JZKAyoefAj0bLEfwWKHG7W2MnMV+6ga2PGkLo=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=el/ZYIcCuQHsxYgCfA30NsBJ/8n1wNnERA/R3g3ZoDDCcxIloMgtH9hao72xXbu4c4g92kpijpv
+ VtBDYO3drcnNdv6X/AA/1dN3KaxaelfY4xouhW8Nz1dfkruSHTJXgBmNiPEy7rRbRHUHsz4FfJfYC
+ Wo+UF8a5Iet0sSWOSBV0FeCp0X9K6qeWd0KQkR2ktbHtganYtz7suqRs7A/YvmQRiKkdM7Rw0Fr8g
+ AbQPjPmMuKvWCS/icrJ20DEu27drA00OaH6DhYKhL2GJR+7JVSPvIW3T3FezA3gM3OJsOxvnOIk5n
+ KyxudvdIWOcgSChaSACE5mE9hTcSi8WI3CuQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.158.25]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MOiHl-1r23r02Rvr-00Q8cc; Sat, 23
+ Sep 2023 20:37:17 +0200
+Message-ID: <4eccc506-4ff1-6890-8f1a-a5f267dfa5ea@gmx.de>
+Date: Sat, 23 Sep 2023 20:37:16 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,97 +25,69 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] virt: acrn: Annotate struct vm_memory_region_batch with
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] video: fbdev: mmp: Annotate struct mmphw_ctrl with
  __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Fei Li <fei1.li@intel.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+ Kees Cook <keescook@chromium.org>
+Cc: linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230922175102.work.020-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230922175102.work.020-kees@kernel.org>
+References: <20230922175137.work.062-kees@kernel.org>
+ <6dae12b4-125c-a7be-4129-75065f7a5128@embeddedor.com>
+From: Helge Deller <deller@gmx.de>
+In-Reply-To: <6dae12b4-125c-a7be-4129-75065f7a5128@embeddedor.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.239.20.48
-X-Source-L: No
-X-Exim-ID: 1qjy2g-003aI4-2i
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:36114
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFrDDJ6ef8Y3WBiC3z/qUkH7R9M6K78WlQGiQutkzqBJ2Aa27KfaHD0QLwrclGFwI8zYAsJDMtES29u8Q0prWDRs8PXKJ/5NSaJ92OeekGggMnWjVHtH
- GVnm5SmU1qfQrc15gYwIa5p4mtJnhrZhYigEzXKSHi7TeDqMZrYI2VsyVUz31GBf1Sm/KauBRhhbf3NskmecAjh2xCF704KkTSA=
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yedBhjjM8NxVuspZ3zErQHUL9LZ3Vf0+5s1SQjPq3DIPw6TJhiC
+ osQATF9/F+uYJv+BHg/bbTPVAG1LGxO+d6yPczJjUr5oxU5nSng8K7yvKR5de14V1RsdcVY
+ 2qV/2MyouEWEvWrawP/5/UbIUKVt/oATUsHVUR4CrPS6rIcvrHgeoG8FJqtlhv2tVB4cyTW
+ jI0doyh2nzH0wqe0VwFog==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:TRvVQzlGCos=;7gzqbw5vb4X85Go95YFUxHL4cLC
+ f40zMWnupAvDHowlAlwfKtSVbKXMw37F/Db0xIiuFWYSaQVLNyCOUyO/SIVLYMDRXUx73wesn
+ wjDlum2ZkJKUW1RMGjpkwi76akgZ3066ZVUFU31KLfCDOoTDI/bPqXSVhHhTuzy9feNQ457lJ
+ r9E5haNbsLolJ3istYWVpB8QHWoIKctEuAMtZPvAU76b3SboIleAItIgw1GmVpnLtcqe5AmUL
+ gLbVjoh5to16HedGADpgcooFKX9usURVzIqaksCBCb77pl3AkkKTKvWgaEnNQNybGNRxZWyDl
+ vNI+b7VyWKHdC3rqz6qYumOIWtsY7EU5JtXDqykLXyKqSFGgB57O8tY4JaSRELFvoYNaKbxGF
+ 0Qdx/HngSyboOfGQF5bJTG45MlR3kOHaNlRHL51G3HaubKnCgnhH1AiP2c8IBh9H3QdIJVji8
+ xXzHWsWsiyJY37tuZrgLHv4mjcxl5SZcgLwEHtorIzZVPJI+KJEckpNfkBOwlhOXA9LVwChcI
+ 4xzFvlEOHGAL4DRkVgdNS5mo2EJYBNuTTvdL9mofHnV0RinTLucZPQ7KlLgrTmc1YFAVv5LCT
+ 2Y2nmgHfb71zrQUu8uFb5cj6RuHoMSd/zeiGOOsCur0UWE/dHaMqnrs9sQg9ktpwA79FxDaXO
+ YtBgxPPEA5jarLsXD7TGKQ9AASzkpYpTf0PacPdXRM4UbJ8IVI2x1dj9u6jVh7ON83atK7dXr
+ fh+WnFiod5rnwdjGs6sHENWod0SQW3YLKzmXx4sRU5M28LSWFXptykzRobxUARh04UH7KFbcW
+ OCAzQo47g7aSIZMcniErJbiRVjQmGW/jSr/Yds5gl5tW0tgFL+ak55nfQ9oHsyRkwEwBUcrIZ
+ 3WBNXzFYGMNR/p78liQwldZsbjFiTwMJsjad4ecD+OLhTmSoz8qAlARmDLfRs46zSmFtgXcb8
+ KtvhQQ==
 
+On 9/23/23 18:33, Gustavo A. R. Silva wrote:
+> On 9/22/23 11:51, Kees Cook wrote:
+>> Prepare for the coming implementation by GCC and Clang of the __counted=
+_by
+>> attribute. Flexible array members annotated with __counted_by can have
+>> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOU=
+NDS
+>> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-famil=
+y
+>> functions).
+>>
+>> As found with Coccinelle[1], add __counted_by for struct mmphw_ctrl.
+>>
+>> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples=
+/counted_by.cocci
+>>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: linux-fbdev@vger.kernel.org
+>> Cc: dri-devel@lists.freedesktop.org
+>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>
+> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
+Both fbdev patches applied to fbdev git tree.
 
-On 9/22/23 11:51, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct vm_memory_region_batch.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Fei Li <fei1.li@intel.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Thank you Kees!
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks
--- 
-Gustavo
-
-> ---
->   drivers/virt/acrn/acrn_drv.h | 2 +-
->   drivers/virt/acrn/mm.c       | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/virt/acrn/acrn_drv.h b/drivers/virt/acrn/acrn_drv.h
-> index 5663c17ad37c..fb8438094f6f 100644
-> --- a/drivers/virt/acrn/acrn_drv.h
-> +++ b/drivers/virt/acrn/acrn_drv.h
-> @@ -60,7 +60,7 @@ struct vm_memory_region_batch {
->   	u16			   reserved[3];
->   	u32			   regions_num;
->   	u64			   regions_gpa;
-> -	struct vm_memory_region_op regions_op[];
-> +	struct vm_memory_region_op regions_op[] __counted_by(regions_num);
->   };
->   
->   /**
-> diff --git a/drivers/virt/acrn/mm.c b/drivers/virt/acrn/mm.c
-> index b4ad8d452e9a..fa5d9ca6be57 100644
-> --- a/drivers/virt/acrn/mm.c
-> +++ b/drivers/virt/acrn/mm.c
-> @@ -250,11 +250,11 @@ int acrn_vm_ram_map(struct acrn_vm *vm, struct acrn_vm_memmap *memmap)
->   		ret = -ENOMEM;
->   		goto unmap_kernel_map;
->   	}
-> +	regions_info->regions_num = nr_regions;
->   
->   	/* Fill each vm_memory_region_op */
->   	vm_region = regions_info->regions_op;
->   	regions_info->vmid = vm->vmid;
-> -	regions_info->regions_num = nr_regions;
->   	regions_info->regions_gpa = virt_to_phys(vm_region);
->   	user_vm_pa = memmap->user_vm_pa;
->   	i = 0;
+Helge
