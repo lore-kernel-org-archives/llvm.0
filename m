@@ -1,213 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41B437A;
-	Sat, 23 Sep 2023 00:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695430203; x=1726966203;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=arO5SOxrLYzeSSD/8djWtK8jhXdONIIS+QCZYXekP2Q=;
-  b=F4cbSgEqemm84na8kj+JOZ9liAyctbEr1wnL9+CUbrnivRvgIv7+/XzL
-   TXYe3u8qC8OiBJO+bW84IxWUlrzYymfvARFPrA1AfgQMUGnVb6t4ei9NK
-   xXi1MBNuXE+t9sFXmGLWzES8dsYZ6SUcfDy5ZkP5KOhkkz63dTZPp3jEe
-   oswvjLhyhSqhsCz1jXrtaGHJ7OLj1q0f5nQMAvAbOHqYmqDUb3ghVTA6A
-   mhK1S8dxSi4b+mMSGf5PeYnkHgcSrDZeWjiVwdk2ra6qKtjA3sTfvc7Ke
-   LRb2p4U83DU0WYtrV4RhZ9nlgsg3Hv9UFb2OiVjs4xB10BuamG76YEAbM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="380885134"
-X-IronPort-AV: E=Sophos;i="6.03,169,1694761200"; 
-   d="scan'208";a="380885134"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 17:49:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="817995342"
-X-IronPort-AV: E=Sophos;i="6.03,169,1694761200"; 
-   d="scan'208";a="817995342"
-Received: from lkp-server02.sh.intel.com (HELO 493f6c7fed5d) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2023 17:49:54 -0700
-Received: from kbuild by 493f6c7fed5d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qjqqF-0001X4-2n;
-	Sat, 23 Sep 2023 00:49:52 +0000
-Date: Sat, 23 Sep 2023 08:49:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wei Gong <gongwei833x@gmail.com>, tglx@linutronix.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Wei Gong <gongwei833x@gmail.com>
-Subject: Re: [PATCH] genirq: avoid long loops in handle_edge_irq
-Message-ID: <202309230859.ygo4QTtO-lkp@intel.com>
-References: <20230921080146.37186-1-gongwei833x@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B428937A
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 01:41:46 +0000 (UTC)
+Received: from eig-obgw-5005a.ext.cloudfilter.net ([10.0.29.234])
+	by cmsmtp with ESMTP
+	id jq44q9ExCyYOwjreOqyWXl; Sat, 23 Sep 2023 01:41:40 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id jreOqkJMKU8KrjreOqnITL; Sat, 23 Sep 2023 01:41:40 +0000
+X-Authority-Analysis: v=2.4 cv=Qt9NYH+d c=1 sm=1 tr=0 ts=650e4254
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=-VAfIpHNAAAA:8 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=e5mUnYsNAAAA:8
+ a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=srlwD-8ojaedGGhPAyx8:22 a=AjGcO6oz07-iQ99wixmX:22 a=Vxmtnl_E_bksehYqCbjh:22
+ a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=26mug2OgFJgVqTLezDBhTB27nouTOVCr4w9qfN76dRA=; b=gWUmwGML3LS+6SgXzjEE2Nv0zY
+	6WvEyyE/D9r5aCj97Qk0hU44T53pcFDfJ0WyOiS/y/dodQv4zYLJWZVtBZg6aROkxEqiqHxWMAJ61
+	+bd/LUHoDPJN5875L0nhhFj064A/XItWKFZvpwztqirYg9Wo8HlyZHMRGa2FXndjO5z3QOeEehb5x
+	9pWKegwGcf6NwBGOyvfvUpoFR09ZCPES7oKwjP54v2sT2Oga4jwYCdhMiQe75/Xvu5af1uayGh/Zi
+	LcKlz1Qa7HgfYM4nH9rvd6EoSM6xQwXtEMS+kzdzm26iBfpWyzv/7s9+4bmv2+xTf8q41SvM9G7GE
+	L+885mkQ==;
+Received: from [94.239.20.48] (port=50846 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qjkgW-000Qi0-2c;
+	Fri, 22 Sep 2023 13:15:24 -0500
+Message-ID: <75f4a4fa-a177-db4a-4653-f121a1e54141@embeddedor.com>
+Date: Fri, 22 Sep 2023 20:16:16 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230921080146.37186-1-gongwei833x@gmail.com>
-
-Hi Wei,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/irq/core]
-[also build test ERROR on linus/master v6.6-rc2 next-20230921]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Gong/genirq-avoid-long-loops-in-handle_edge_irq/20230922-025437
-base:   tip/irq/core
-patch link:    https://lore.kernel.org/r/20230921080146.37186-1-gongwei833x%40gmail.com
-patch subject: [PATCH] genirq: avoid long loops in handle_edge_irq
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230923/202309230859.ygo4QTtO-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230923/202309230859.ygo4QTtO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309230859.ygo4QTtO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/irq/chip.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/irq/chip.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/irq/chip.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> kernel/irq/chip.c:835:63: error: no member named 'affinity' in 'struct irq_common_data'
-     835 |                  cpumask_test_cpu(smp_processor_id(), desc->irq_common_data.affinity));
-         |                                                       ~~~~~~~~~~~~~~~~~~~~~ ^
-   12 warnings and 1 error generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 6/9] drm/vc4: Annotate struct vc4_perfmon with
+ __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>
+Cc: Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+ Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+ Evan Quan <evan.quan@amd.com>, Alex Deucher <alexander.deucher@amd.com>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ "Pan, Xinhui" <Xinhui.Pan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
+ Huang Rui <ray.huang@amd.com>, Kevin Wang <kevin1.wang@amd.com>,
+ Hawking Zhang <Hawking.Zhang@amd.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Chris Wilson <chris@chris-wilson.co.uk>,
+ John Harrison <john.c.harrison@Intel.com>,
+ Andi Shyti <andi.shyti@linux.intel.com>,
+ Matthew Brost <matthew.brost@intel.com>, Rob Clark <robdclark@gmail.com>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Bjorn Andersson <andersson@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
+ Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+ David Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
+ <olvaffe@gmail.com>, Zack Rusin <zackr@vmware.com>,
+ VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
+ Melissa Wen <mwen@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Le Ma <le.ma@amd.com>, Lijo Lazar <lijo.lazar@amd.com>,
+ Yifan Zhang <yifan1.zhang@amd.com>, Prike Liang <Prike.Liang@amd.com>,
+ Lang Yu <Lang.Yu@amd.com>, Tejas Upadhyay <tejas.upadhyay@intel.com>,
+ Nirmoy Das <nirmoy.das@intel.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kuogee Hsieh <quic_khsieh@quicinc.com>, linux-kernel@vger.kernel.org,
+ amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+ nouveau@lists.freedesktop.org, virtualization@lists.linux-foundation.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230922173110.work.084-kees@kernel.org>
+ <20230922173216.3823169-6-keescook@chromium.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230922173216.3823169-6-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qjkgW-000Qi0-2c
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:50846
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfFdA4tE2mhJxgONDSUuqEQzInr6MLtY897f1uxdpooW7/ESioRJ9ewuONPYU84aw5ePh5dvMXVeAplvDyfLRCREc1Y2vRAAbO6EYHK/fJB4ARv5c7meK
+ 4GwI+A9zkjghyLMSIMuwtccxBq43TBm1ZQjjpdOKPrkfNjiIgPEUnnADy3WJn3xjDu4EDumBOlsh5gIqxIDTWzSicRuKukHA508=
 
 
-vim +835 kernel/irq/chip.c
 
-   771	
-   772	/**
-   773	 *	handle_edge_irq - edge type IRQ handler
-   774	 *	@desc:	the interrupt description structure for this irq
-   775	 *
-   776	 *	Interrupt occurs on the falling and/or rising edge of a hardware
-   777	 *	signal. The occurrence is latched into the irq controller hardware
-   778	 *	and must be acked in order to be reenabled. After the ack another
-   779	 *	interrupt can happen on the same source even before the first one
-   780	 *	is handled by the associated event handler. If this happens it
-   781	 *	might be necessary to disable (mask) the interrupt depending on the
-   782	 *	controller hardware. This requires to reenable the interrupt inside
-   783	 *	of the loop which handles the interrupts which have arrived while
-   784	 *	the handler was running. If all pending interrupts are handled, the
-   785	 *	loop is left.
-   786	 */
-   787	void handle_edge_irq(struct irq_desc *desc)
-   788	{
-   789		raw_spin_lock(&desc->lock);
-   790	
-   791		desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
-   792	
-   793		if (!irq_may_run(desc)) {
-   794			desc->istate |= IRQS_PENDING;
-   795			mask_ack_irq(desc);
-   796			goto out_unlock;
-   797		}
-   798	
-   799		/*
-   800		 * If its disabled or no action available then mask it and get
-   801		 * out of here.
-   802		 */
-   803		if (irqd_irq_disabled(&desc->irq_data) || !desc->action) {
-   804			desc->istate |= IRQS_PENDING;
-   805			mask_ack_irq(desc);
-   806			goto out_unlock;
-   807		}
-   808	
-   809		kstat_incr_irqs_this_cpu(desc);
-   810	
-   811		/* Start handling the irq */
-   812		desc->irq_data.chip->irq_ack(&desc->irq_data);
-   813	
-   814		do {
-   815			if (unlikely(!desc->action)) {
-   816				mask_irq(desc);
-   817				goto out_unlock;
-   818			}
-   819	
-   820			/*
-   821			 * When another irq arrived while we were handling
-   822			 * one, we could have masked the irq.
-   823			 * Reenable it, if it was not disabled in meantime.
-   824			 */
-   825			if (unlikely(desc->istate & IRQS_PENDING)) {
-   826				if (!irqd_irq_disabled(&desc->irq_data) &&
-   827				    irqd_irq_masked(&desc->irq_data))
-   828					unmask_irq(desc);
-   829			}
-   830	
-   831			handle_irq_event(desc);
-   832	
-   833		} while ((desc->istate & IRQS_PENDING) &&
-   834			 !irqd_irq_disabled(&desc->irq_data) &&
- > 835			 cpumask_test_cpu(smp_processor_id(), desc->irq_common_data.affinity));
-   836	
-   837	out_unlock:
-   838		raw_spin_unlock(&desc->lock);
-   839	}
-   840	EXPORT_SYMBOL(handle_edge_irq);
-   841	
+On 9/22/23 11:32, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct vc4_perfmon.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Emma Anholt <emma@anholt.net>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Gustavo
+
+> ---
+>   drivers/gpu/drm/vc4/vc4_drv.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
+> index bf66499765fb..ab61e96e7e14 100644
+> --- a/drivers/gpu/drm/vc4/vc4_drv.h
+> +++ b/drivers/gpu/drm/vc4/vc4_drv.h
+> @@ -76,7 +76,7 @@ struct vc4_perfmon {
+>   	 * Note that counter values can't be reset, but you can fake a reset by
+>   	 * destroying the perfmon and creating a new one.
+>   	 */
+> -	u64 counters[];
+> +	u64 counters[] __counted_by(ncounters);
+>   };
+>   
+>   struct vc4_dev {
