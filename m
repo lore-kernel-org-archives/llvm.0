@@ -1,41 +1,42 @@
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69B31D680
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 15:01:46 +0000 (UTC)
-Received: from eig-obgw-6010a.ext.cloudfilter.net ([10.0.30.248])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525091D685
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 15:01:48 +0000 (UTC)
+Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
 	by cmsmtp with ESMTP
-	id jjIGqyFeHWU1ck48gqU5YD; Sat, 23 Sep 2023 15:01:46 +0000
+	id jx8RqJ7cSbK1Vk48hqllSk; Sat, 23 Sep 2023 15:01:47 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id k48fqRlPNySCuk48fqbhso; Sat, 23 Sep 2023 15:01:45 +0000
-X-Authority-Analysis: v=2.4 cv=ea8uwpIH c=1 sm=1 tr=0 ts=650efdd9
+	id k48gqeU7FI7vxk48hqEb6j; Sat, 23 Sep 2023 15:01:47 +0000
+X-Authority-Analysis: v=2.4 cv=YKeMdDKx c=1 sm=1 tr=0 ts=650efddb
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=eh1Yez-EAAAA:8 a=pGLkceISAAAA:8 a=e5mUnYsNAAAA:8 a=cm27Pg_UAAAA:8
- a=VwQbUJbxAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
- a=Vxmtnl_E_bksehYqCbjh:22 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=8AirrxEcAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
+ a=20KFwNOVAAAA:8 a=cm27Pg_UAAAA:8 a=wH_VP6JpHQxiM5NuicYA:9 a=QEXdDO2ut3YA:10
+ a=ST-jHhOKWsTCqRlWije3:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=o8E/r0wuMmRjHcbDYiPdXr88j22h/Q9UdmpVBTr3fBw=; b=BLe+r9AA41QKGz9wo55FNBte6i
-	H72+radBOWNzTAB6YiP7NELCaOSUh0zphAmfZIqfiso9KD0nTzsR68abI0R7dpkp8YLmdo9rH9W1M
-	y/x7o2CfwQI49wqo9+6Arj3JEoAcl6KpVfpycFLpDKudkIwexQ30QLJmtHnMVeeApcR7HtyzJSLzd
-	N1Qw5maGcqTTQvoP1cKBzAaqU0SwOha6paZj9rt4HM+HiWmFfsl7/PgdBWS5Y1NWyXIc29RHLGBel
-	ssGmkoESQQLyM5+lfD8ksLaw8QMPB6hySoTXQwz5w943dZ/ZjstewVsj/SjhEK2Lq1iGO6RoxYqaB
-	oZTNnKkQ==;
-Received: from [94.239.20.48] (port=59176 helo=[192.168.1.98])
+	bh=MzVmwOfKB5MwMYw1j9M03a/MmO+PWTyuUR8xCl+K+/s=; b=qbuwD3+uHDTnn4bXL6W2KVl9Wl
+	Qi8GHz6cRRQEgeJLXFmpKyQGtH9xrNDv6IdLN4A8lUROSx63oc+UgIPXNn7ODLavpTylUm5oytsVz
+	7qiHE6UkkxYR7riDWB3I1a7blFwCqxfKKHJZ4U8ijgholpaPULo9sRcRYm9rNXAywPwMB/6dkn58k
+	8+VxF5Pa0AaqRHyRYBrW7iAqMXhrVs8I/q0+biL/Qlvca1+Gt4LOToNHChe1gICvXtcbMrEF3g/KQ
+	ea+hEpkSFGm5fq8pX4mehXnHKd89T/UgHuvU+ay4zZRaGIx8/WqRfAjom93zcvgtGLGLofqZyiHcN
+	jIQE407Q==;
+Received: from [94.239.20.48] (port=58636 helo=[192.168.1.98])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qjl0l-000khc-1m;
-	Fri, 22 Sep 2023 13:36:19 -0500
-Message-ID: <9aa42b20-4388-4954-012f-65e3bc99b7f0@embeddedor.com>
-Date: Fri, 22 Sep 2023 20:37:09 -0600
+	id 1qjkNc-0005fN-11;
+	Fri, 22 Sep 2023 12:55:52 -0500
+Message-ID: <9bc8cfed-4577-f303-5186-0369f96cf8a7@embeddedor.com>
+Date: Fri, 22 Sep 2023 19:56:49 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,52 +45,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH 8/9] drm/vmwgfx: Annotate struct vmw_surface_dirty with
+Subject: Re: [PATCH 11/14] net: enetc: Annotate struct enetc_psfp_gate with
  __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>
-Cc: Zack Rusin <zackr@vmware.com>,
- VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
- Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
- Emma Anholt <emma@anholt.net>, Evan Quan <evan.quan@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
- Huang Rui <ray.huang@amd.com>, Kevin Wang <kevin1.wang@amd.com>,
- Hawking Zhang <Hawking.Zhang@amd.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- Chris Wilson <chris@chris-wilson.co.uk>,
- John Harrison <john.c.harrison@Intel.com>,
- Andi Shyti <andi.shyti@linux.intel.com>,
- Matthew Brost <matthew.brost@intel.com>, Rob Clark <robdclark@gmail.com>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Bjorn Andersson <andersson@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
- Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@redhat.com>,
- Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Melissa Wen <mwen@igalia.com>,
+To: Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
+Cc: Claudiu Manoil <claudiu.manoil@nxp.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ Jamal Hadi Salim <jhs@mojatatu.com>, David Ahern <dsahern@kernel.org>,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Yisen Zhuang <yisen.zhuang@huawei.com>,
+ Salil Mehta <salil.mehta@huawei.com>, "K. Y. Srinivasan"
+ <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
+ Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+ Long Li <longli@microsoft.com>, Ajay Sharma <sharmaajay@microsoft.com>,
+ Alex Elder <elder@kernel.org>, Pravin B Shelar <pshelar@ovn.org>,
+ Shaokun Zhang <zhangshaokun@hisilicon.com>,
+ Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Le Ma <le.ma@amd.com>, Lijo Lazar <lijo.lazar@amd.com>,
- Yifan Zhang <yifan1.zhang@amd.com>, Prike Liang <Prike.Liang@amd.com>,
- Lang Yu <Lang.Yu@amd.com>, Tejas Upadhyay <tejas.upadhyay@intel.com>,
- Nirmoy Das <nirmoy.das@intel.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kuogee Hsieh <quic_khsieh@quicinc.com>, linux-kernel@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
- nouveau@lists.freedesktop.org, virtualization@lists.linux-foundation.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230922173110.work.084-kees@kernel.org>
- <20230922173216.3823169-8-keescook@chromium.org>
+ Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
+ dev@openvswitch.org, linux-parisc@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20230922172449.work.906-kees@kernel.org>
+ <20230922172858.3822653-11-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230922173216.3823169-8-keescook@chromium.org>
+In-Reply-To: <20230922172858.3822653-11-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -100,37 +84,39 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 94.239.20.48
 X-Source-L: No
-X-Exim-ID: 1qjl0l-000khc-1m
+X-Exim-ID: 1qjkNc-0005fN-11
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:59176
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:58636
 X-Source-Auth: gustavo@embeddedor.com
 X-Email-Count: 0
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfMkPoEq2lvtymMbCnh3Ohtlot8J4m/QkFmiayKbnI4NAe/28MAwJ6p5zrZubSWw79oXtoRDLSy9JtkrPmJxFjhnMnv1R9bh9YHnOczwyLqj8CDzznGHf
- jGsKJcsa2GYgdQOWZm7w5OI0/1RiTsuyQXTaX4V2Qy5l0/ZYSRGL4wAVeYSmXc5hme5jhJ32XOZ/MFaprfpLl9t1QFG9kqPsFqA=
+X-CMAE-Envelope: MS4xfBENxnoNqOPn6mP3UvxESVcT8WXDr9g7pGAUJtpYjVLrrU9pyA3VhVB1kxKITfKqXoZqXBUzL283ebhbayXTQvSMgbkZEcWVjtMzrlSRHNGc8pnhVqbm
+ zP85R8E9x8chphPzu0cpuEDNyGxXRjUqWrnq6Rh0Gz+OmtpQme0dld0Q/3xdDf8EGzsINjZ+vGj8hQ1/K7aYreNiq47gAyp6JmM=
 
 
 
-On 9/22/23 11:32, Kees Cook wrote:
+On 9/22/23 11:28, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct vmw_surface_dirty.
+> As found with Coccinelle[1], add __counted_by for struct enetc_psfp_gate.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Zack Rusin <zackr@vmware.com>
-> Cc: VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
+> Cc: Claudiu Manoil <claudiu.manoil@nxp.com>
+> Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -139,21 +125,20 @@ Thanks
 -- 
 Gustavo
 
-
 > ---
->   drivers/gpu/drm/vmwgfx/vmwgfx_surface.c | 2 +-
+>   drivers/net/ethernet/freescale/enetc/enetc_qos.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_surface.c b/drivers/gpu/drm/vmwgfx/vmwgfx_surface.c
-> index 5db403ee8261..2d1d857f99ae 100644
-> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_surface.c
-> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_surface.c
-> @@ -77,7 +77,7 @@ struct vmw_surface_offset {
->   struct vmw_surface_dirty {
->   	struct vmw_surface_cache cache;
->   	u32 num_subres;
-> -	SVGA3dBox boxes[];
-> +	SVGA3dBox boxes[] __counted_by(num_subres);
+> diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+> index 2513b44056c1..b65da49dd926 100644
+> --- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+> +++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+> @@ -443,7 +443,7 @@ struct enetc_psfp_gate {
+>   	u32 num_entries;
+>   	refcount_t refcount;
+>   	struct hlist_node node;
+> -	struct action_gate_entry entries[];
+> +	struct action_gate_entry entries[] __counted_by(num_entries);
 >   };
 >   
->   static void vmw_user_surface_free(struct vmw_resource *res);
+>   /* Only enable the green color frame now
