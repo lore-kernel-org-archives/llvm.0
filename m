@@ -1,77 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC881D682;
-	Sat, 23 Sep 2023 14:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695479892; x=1727015892;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=m0LbyftualtJNSMv+9w+F5ke/dxsnjl8/rKq+vXQFGQ=;
-  b=GMgAsEHZksop4fgn1iEi2XObSwx4uX9kGzeHW6s/dNpskUUcVYlLG5aO
-   J7pRhvLLBOR1CpsfZSrckgzn3eg/jesQg5OwOraaIXr/u8hLXfr1jvxSQ
-   QZQ96KWTwvzvK/kvfpf8Eo4vla8OZdNkDjVTYVlDmPb+jQ8j/0jDfU8Wv
-   wds6K9WZjM/FcweYQnQUC1M7r3/PQKuu1o54awY7Bv9uFquUaSqH/NFE7
-   MOG8w6jBkirKkzXODyahR+tpl8858tIgDiQXGaLgSWmNjzA/qORAAeBWQ
-   HMIz4QXegnLLouASos0OSOuNdCVoIe4XEoo8mcHCJU48IUneZLSAdcHJC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="371340226"
-X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
-   d="scan'208";a="371340226"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2023 07:38:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="777181746"
-X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
-   d="scan'208";a="777181746"
-Received: from lkp-server02.sh.intel.com (HELO 493f6c7fed5d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2023 07:38:11 -0700
-Received: from kbuild by 493f6c7fed5d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qk3li-0002Ty-2R;
-	Sat, 23 Sep 2023 14:38:03 +0000
-Date: Sat, 23 Sep 2023 22:37:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/030-misc 22/24] error: Found argument
- '--blocklist-type' which wasn't expected, or isn't valid in this context
-Message-ID: <202309232238.VCcGgqlA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEB71D680
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 15:01:37 +0000 (UTC)
+Received: from eig-obgw-6005a.ext.cloudfilter.net ([10.0.30.201])
+	by cmsmtp with ESMTP
+	id k2ukqHeo3ez0Ck487qCMWI; Sat, 23 Sep 2023 15:01:11 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id k48UqlVEj8unvk48Vqk69k; Sat, 23 Sep 2023 15:01:35 +0000
+X-Authority-Analysis: v=2.4 cv=NpDCzuRJ c=1 sm=1 tr=0 ts=650efdcf
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=pGLkceISAAAA:8 a=zd2uoN0lAAAA:8 a=JfrnYn6hAAAA:8 a=cm27Pg_UAAAA:8
+ a=VwQbUJbxAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=saoGgFJRW6eoqqvGVB6N6sncSASVw7j1ZUzVjFSJ6Ks=; b=yyW/V+RSJ5BXaXl7J5sQOPdcGR
+	YeCBMzNWxCKfuRwd6rFuHfn8mN4WihSSTyOsBYC3GDsD0NXrpNm/mIOTnZS51mensVmVxmbmscDzR
+	1RccXdO8rKcRgB8U2CJrB5/8g2qxJb8SH3EbXKbHF3YCx9sspklaXUWbF9+XZ+WTBrpbq+lxNAK21
+	QgdN8dJaR47V2+cs17BZcbrnjXaBCoKXbRgGJVQJzR1J5XwFHML+vdMxlfnoa+EvaexXW1mA5qdEd
+	YZd9oj/eOlJjgDIG+qCvMrIiXLd0pRrdchRHPenwtHFikdr7jesaeRGx7OS6UjGsBjTnRd7OAWn8r
+	VzEPyKRw==;
+Received: from [94.239.20.48] (port=54308 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qjy8E-003ho9-2h;
+	Sat, 23 Sep 2023 03:36:54 -0500
+Message-ID: <d1b540f2-c909-7c43-6b5b-aabe2607f532@embeddedor.com>
+Date: Sat, 23 Sep 2023 10:38:00 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] mailbox: zynqmp: Annotate struct zynqmp_ipi_pdata with
+ __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Jassi Brar <jassisinghbrar@gmail.com>
+Cc: Michal Simek <michal.simek@amd.com>,
+ linux-arm-kernel@lists.infradead.org, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20230922175351.work.018-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230922175351.work.018-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qjy8E-003ho9-2h
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:54308
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfAPPaalh2T/thLp/8xuVyq2JnBYQAOLxwDf3TkOciL9/4QeMlMdwCSL64PXBS7GignH3U+k5pgU4L0iMRtEpjd1fQS6RVqPOrN/FghxlYGKRZMjpH2C1
+ z5ZGbhiHfj9ba7fZU7g3unZcwa8bMJ4GOKFEm0FaY0cz7kJwheTENdwqE0PxjBiDXpE2elWhkpUqMWKHm4IkbHLX2COa+WUfebo=
 
-tree:   https://github.com/AsahiLinux/linux bits/030-misc
-head:   d919825a8bd8b095f84447c913739f39b4f4c8b5
-commit: 2dc7e1e94502d46de601eee15011c47b19883df8 [22/24] rust: Fix for new =
-bindgen
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230=
-923/202309232238.VCcGgqlA-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8d=
-fdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20230923/202309232238.VCcGgqlA-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309232238.VCcGgqlA-lkp@i=
-ntel.com/
 
-All errors (new ones prefixed by >>):
+On 9/22/23 11:53, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct zynqmp_ipi_pdata.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> Cc: Michal Simek <michal.simek@amd.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
->> error: Found argument '--blocklist-type' which wasn't expected, or isn't=
- valid in this context
-   Did you mean =1B[32m--=1B[0m=1B[32mblacklist-type=1B[0m?
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
---=20
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+-- 
+Gustavo
+
+> ---
+>   drivers/mailbox/zynqmp-ipi-mailbox.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqmp-ipi-mailbox.c
+> index e4fcac97dbfa..7fa533e80dd9 100644
+> --- a/drivers/mailbox/zynqmp-ipi-mailbox.c
+> +++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
+> @@ -108,7 +108,7 @@ struct zynqmp_ipi_pdata {
+>   	unsigned int method;
+>   	u32 local_id;
+>   	int num_mboxes;
+> -	struct zynqmp_ipi_mbox ipi_mboxes[];
+> +	struct zynqmp_ipi_mbox ipi_mboxes[] __counted_by(num_mboxes);
+>   };
+>   
+>   static struct device_driver zynqmp_ipi_mbox_driver = {
