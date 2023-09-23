@@ -1,109 +1,164 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A8A1C38
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:36:18 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d817775453dso4183819276.2
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695447378; x=1696052178; darn=lists.linux.dev;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ywZDu0emPkmJVQQeOexJ/0NU/+t2nDPbGZwUB+L0bX8=;
-        b=CG02W7b/mLkkimdZCgi6e637gJCqPxaFGbhflJtK18j+JH0mly10eky7aUDPvDZ/52
-         /MPZp3ueBa+RWTTfacT+SjHER1GXE0zwXH9MdRZ5au56hHBs4Z5ZezYe1L28JRxzr+b6
-         6yljph0Nxa5MxhhH9s8R7c4Mv57CKTQz/Oej3YWxARYSKZVP4hPX7gm0RuYnqvhHK0Ld
-         I1w/cNu549W37qH88+7MmoUh48xg1ETSDDE0ckmmNUoDJVMLsSGMGhoo66zkNlxj2Q4A
-         2Br43+eg0hYygnkEsNyViWJcK/RLmdg3MgKc4/mrXrdgSYOJPHOcFo7wycRkbp1gLRq8
-         uTAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695447378; x=1696052178;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ywZDu0emPkmJVQQeOexJ/0NU/+t2nDPbGZwUB+L0bX8=;
-        b=OtwzDrKaqJqtwwo20plFu2kW2XLhaGyUzTB9SepUY3Tiwf03DoRnazh3y5URgkrLq6
-         Wy158rv61uSTZwx/ejpCspekiaeUpmXfS+Lr4l/dMTAKwwCXA8eysOEclt9GqXivLkgi
-         lsQ0I9WY3rK9RseLMkIKYfDjMEC9DMQxHk0uOXIBmaIpJ233bZZLlNyy/mSsF8Y1NLY+
-         ognW9vi2u0ub5RNL9b94lotQablWQP2FkaxjIshoIerlTdMbMInw8o6Nekm5LTXZVmCH
-         DdCISe75BXahwoibE+s1LEli3tJeOLeQR5rEQopCpiwjMYPzzUyggYeNoIjehpSddAFY
-         urhw==
-X-Gm-Message-State: AOJu0YyFw2HwPFT4hlbqFETV228oF9fyKvXGjMK8lfTQb0FWofsUPGw5
-	BsiaW4Oqwy0emnbFVuocgX0dGAq/1kRc
-X-Google-Smtp-Source: AGHT+IGTu58JilIBfDpSy7tMqNuBcfjoioDdjm+UokXTsJGVIl9AVdtE2VsgkJoMSD2sydC3Nw35sn/h8sOx
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a376:2908:1c75:ff78])
- (user=irogers job=sendgmr) by 2002:a25:6942:0:b0:d81:68ac:e046 with SMTP id
- e63-20020a256942000000b00d8168ace046mr11989ybc.12.1695447377882; Fri, 22 Sep
- 2023 22:36:17 -0700 (PDT)
-Date: Fri, 22 Sep 2023 22:35:15 -0700
-In-Reply-To: <20230923053515.535607-1-irogers@google.com>
-Message-Id: <20230923053515.535607-19-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F411818
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 07:01:38 +0000 (UTC)
+Received: from eig-obgw-5007a.ext.cloudfilter.net ([10.0.29.141])
+	by cmsmtp with ESMTP
+	id jjUcqHPXxQFHRjwe2qu73N; Sat, 23 Sep 2023 07:01:38 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id jwe1qyMktAVs9jwe1qzDdF; Sat, 23 Sep 2023 07:01:38 +0000
+X-Authority-Analysis: v=2.4 cv=FfUkeby6 c=1 sm=1 tr=0 ts=650e8d52
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=zd2uoN0lAAAA:8 a=pGLkceISAAAA:8 a=e5mUnYsNAAAA:8 a=cm27Pg_UAAAA:8
+ a=VwQbUJbxAAAA:8 a=x0o0KnqP09iesl-AZ7EA:9 a=QEXdDO2ut3YA:10
+ a=Vxmtnl_E_bksehYqCbjh:22 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=+lNJ9QIpwn6NBb64Sbf9+GObVdf5ljfSsPNJbJ1XN40=; b=GH6MO+NPZFXKEgEjoKkuLB4qxt
+	C6U9dvWCm1vgpmkRG7ycJ7FVD2w1s8IQKc0zf7XOfLqqqF/R0tZLM8V8Z2I3B3zznjabwom7Pk3zK
+	o6NhGiDlY9uwwMlNvXyV935T8dOnlY/F7m5f3bPeMgu2opyFooYi5NHNwFP3enNswt1D8K3AxvOw2
+	T7C+P52PB6SsCr+Jre/Oknm8Wq+JFP1UpAs/jcaLGPLFHn5oK0BCMxyN+tEs1ip54GJQaiSJ1mTfL
+	ZOnXMawgAqlLBCHomReF0mW/iZkrBxRPTp6pCNZZ5vOzd1KI795Euy+8PBIYqkGe+gF1QQz0BRPDf
+	+eV/dRQw==;
+Received: from [94.239.20.48] (port=56836 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qjkdm-000M41-04;
+	Fri, 22 Sep 2023 13:12:34 -0500
+Message-ID: <a14f11c8-2355-a311-9a59-0c6e69a6e503@embeddedor.com>
+Date: Fri, 22 Sep 2023 20:13:25 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230923053515.535607-1-irogers@google.com>
-X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Subject: [PATCH v1 18/18] perf bpf_counter: Fix a few memory leaks
-From: Ian Rogers <irogers@google.com>
-To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
-	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	James Clark <james.clark@arm.com>, Paolo Bonzini <pbonzini@redhat.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 1/9] drm/amd/pm: Annotate struct
+ smu10_voltage_dependency_table with __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>
+Cc: Evan Quan <evan.quan@amd.com>, Alex Deucher <alexander.deucher@amd.com>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ "Pan, Xinhui" <Xinhui.Pan@amd.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Xiaojian Du <Xiaojian.Du@amd.com>, Huang Rui <ray.huang@amd.com>,
+ Kevin Wang <kevin1.wang@amd.com>, amd-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, Emma Anholt <emma@anholt.net>,
+ Hawking Zhang <Hawking.Zhang@amd.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Chris Wilson <chris@chris-wilson.co.uk>,
+ John Harrison <john.c.harrison@Intel.com>,
+ Andi Shyti <andi.shyti@linux.intel.com>,
+ Matthew Brost <matthew.brost@intel.com>, Rob Clark <robdclark@gmail.com>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Bjorn Andersson <andersson@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
+ Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@redhat.com>,
+ Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
+ <olvaffe@gmail.com>, Zack Rusin <zackr@vmware.com>,
+ VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
+ Melissa Wen <mwen@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Le Ma <le.ma@amd.com>, Lijo Lazar <lijo.lazar@amd.com>,
+ Yifan Zhang <yifan1.zhang@amd.com>, Prike Liang <Prike.Liang@amd.com>,
+ Lang Yu <Lang.Yu@amd.com>, Tejas Upadhyay <tejas.upadhyay@intel.com>,
+ Nirmoy Das <nirmoy.das@intel.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kuogee Hsieh <quic_khsieh@quicinc.com>, linux-kernel@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+ freedreno@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+ virtualization@lists.linux-foundation.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20230922173110.work.084-kees@kernel.org>
+ <20230922173216.3823169-1-keescook@chromium.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230922173216.3823169-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qjkdm-000M41-04
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:56836
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfIV8YmjaErnVRU5s5FvgXd6pWy4GofMAxwqBZze+Hud/tqMMP2aArEX9zZW8gOmMSyI3bCY4pzJhCI9H2K4RooY6vWjoW+sOHCRY4AfCFU3tr9q/r2qq
+ xYrz+OEksJenLZWW3WfVgggqpYmWcGlMLrDj7jp40+dEPpir8hnnsuQ6s0BEv19Ckse8ldmAr5fUKMvpBJEkdO0ZkifHPGtl70Y=
 
-Memory leaks were detected by clang-tidy.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/bpf_counter.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index 6732cbbcf9b3..7f9b0e46e008 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -104,7 +104,7 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
- 	struct bpf_prog_profiler_bpf *skel;
- 	struct bpf_counter *counter;
- 	struct bpf_program *prog;
--	char *prog_name;
-+	char *prog_name = NULL;
- 	int prog_fd;
- 	int err;
- 
-@@ -155,10 +155,12 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
- 	assert(skel != NULL);
- 	counter->skel = skel;
- 	list_add(&counter->list, &evsel->bpf_counter_list);
-+	free(prog_name);
- 	close(prog_fd);
- 	return 0;
- err_out:
- 	bpf_prog_profiler_bpf__destroy(skel);
-+	free(prog_name);
- 	free(counter);
- 	close(prog_fd);
- 	return -1;
-@@ -180,6 +182,7 @@ static int bpf_program_profiler__load(struct evsel *evsel, struct target *target
- 		    (*p != '\0' && *p != ',')) {
- 			pr_err("Failed to parse bpf prog ids %s\n",
- 			       target->bpf_str);
-+			free(bpf_str_);
- 			return -1;
- 		}
- 
+On 9/22/23 11:32, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct smu10_voltage_dependency_table.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Evan Quan <evan.quan@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: "Christian König" <christian.koenig@amd.com>
+> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Xiaojian Du <Xiaojian.Du@amd.com>
+> Cc: Huang Rui <ray.huang@amd.com>
+> Cc: Kevin Wang <kevin1.wang@amd.com>
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks
 -- 
-2.42.0.515.g380fc7ccd1-goog
+Gustavo
 
+
+> ---
+>   drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h
+> index 808e0ecbe1f0..42adc2a3dcbc 100644
+> --- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h
+> +++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.h
+> @@ -192,7 +192,7 @@ struct smu10_clock_voltage_dependency_record {
+>   
+>   struct smu10_voltage_dependency_table {
+>   	uint32_t count;
+> -	struct smu10_clock_voltage_dependency_record entries[];
+> +	struct smu10_clock_voltage_dependency_record entries[] __counted_by(count);
+>   };
+>   
+>   struct smu10_clock_voltage_information {
