@@ -1,42 +1,42 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8315F469E
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:36:02 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59f4bd6905aso17798347b3.3
-        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:36:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E857CA5D
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 05:36:04 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-59c2ca3bcf9so52539517b3.3
+        for <llvm@lists.linux.dev>; Fri, 22 Sep 2023 22:36:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695447361; x=1696052161; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695447364; x=1696052164; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KS6/0u50No3rQJjH5fZIjyCOWL67f6naMZwh43hSjoQ=;
-        b=G+/qjp1dbpo6YEiBZ/i9nIbQ2dVMxamsU8VY7A6fgTZg0Mi9LHwShlvUiA//a7bhp1
-         YOm0JsOwXaD+u3cEmc/vakEwAlIUsL6ZjnmQmhzfXegwdMIoIZCmSepd1Q456T6ow+rB
-         Iiv3/PD0QF0PXWaZukw+fbnVFHcFPtBBykELaBCKJ8bViP0DcCcK/O8z/nkD8j5Mw0Vg
-         QaQ8vGDZoCMFBdUG1J8PWHcPkKwFTJ5c2dfxJA0g0ykZ/VmOvXfm4rao1SUfHQF18s10
-         SiZArHJ+7Bctyg/k5LzTf3w59yNEF35XE619gwfQoAC+lxKL8tgl1Eo0jw5ep/K/27/r
-         S+aA==
+        bh=a5vqIfXNWliDocU8tzStcp+r+OU5EjvAXvx9gVnGgcs=;
+        b=ot8IY3I/znxRkxpFg8IGqaEQepiILSuAbuH1SuXDUMTnKryNpz0eJZJvaPeWrw3IxQ
+         ay4QUYkCvYB/lUeU4BN3FL3slXKf0iCY3jO6pexX4kYsqnY9GIjFJz9HB0kR26nGQyOd
+         hBCMoh2s3NTJ/RAwueourzx5mDw99/+lAplnwze0H6pQd/3iWEQFHo2p+bLYQydCwzYc
+         BClPzOKbpGP5m4b/UfJ9Fo6mvPl4AbjCaqhZ37Fx9TDgav+zOy09AwFhbzvgF6QaP7e6
+         W8cPwXg99TDvs7C3oCfy85U3oZt/WBhsuuDHRiYDMq2tOauC7PdaiIvv+QI6odBMUzBo
+         hhkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695447361; x=1696052161;
+        d=1e100.net; s=20230601; t=1695447364; x=1696052164;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KS6/0u50No3rQJjH5fZIjyCOWL67f6naMZwh43hSjoQ=;
-        b=iDNwQsyKBA7zgRsEqWSdpA4KPJ/CJGyVsyQ7VwPMMfV5+hbX4r8iDULMVGy5PA4d/y
-         1XOZFtgFEYdZESaiXJjDtpQBtOx+1BIk5B5N+1SR8BZcGMa7CLo3MOLZAQR1lyuimTw6
-         2QX91ZTniCbXek+kYNu5tHWHHniWtz6KWuoxqEJw8NuHeEGKab5CkZA4AtXuXoi8ewOG
-         Ye3+e3krGPowMqPWd6EsxSsYua3iqoa69losZ1opNQUSHcqzRcB7vzoxJOtMujN6utl7
-         EQJh+WalJVbQnfU8Zi1/s4B0LhrpmVDoGQ4zbk2rIe2DjZsBwiq1eVw27RdN2TK7cb/E
-         CZhg==
-X-Gm-Message-State: AOJu0YygUceaVB4gi6QCS06s8LhS0fyi2UI08VeytgOz21TRT0koudxV
-	Xlb7iCzFTUCHZvQBf8ChVggcoiR8FAFU
-X-Google-Smtp-Source: AGHT+IECwTxHbmPoI1K04GORCbxem+8maRhSeJmf/Mja5259t/O6+9DbPUULMmgIJZReDHjnxiFQ+xTHxGuS
+        bh=a5vqIfXNWliDocU8tzStcp+r+OU5EjvAXvx9gVnGgcs=;
+        b=tRUpQok0JtzNt8AAUBzR4neJ+K215fTcVutjc9KBtqDoVRy37kFVK2bon4hyQuT5As
+         f7KUa2957AE4XNHR3YscVrQz3ajC2Ty2EAYhUH5pB/ZnKhKK449mqs3DC4kKmPe9veKQ
+         AIHIcT3lMfLe7wQzlkwxl+C9Qp3NnTAkBGCe4lWRG2YiUvs9EyTFgyYcpCRaNQUiLfDP
+         6Kw+A0Nz4A10vDqfjJiCPiSNiEgwQyKcLphmdKVuh7yBCG65UbvzoJ7CH4VdEC6vPxIg
+         +M8ZLPl2hTt5Mg5lE5EsbaUhZFHwR9viPPD+2qtzkcwVq8FVWcny3JC0ifXxtiPiMHTv
+         9UUA==
+X-Gm-Message-State: AOJu0YwS/Y6u3fbIDBycUvMpmdFmARJMPHf9TPo6PZr+AQDss8f0okXu
+	7D8ajMvCcoz4UJOh35fPQx+8RdbcU77k
+X-Google-Smtp-Source: AGHT+IEsgOcl2A0UL8zGlp3FXRaWIZMQmNaQRl2Uoy/Z9jK5/KtmB2FVYeGP9zN3vSGo3xTtN8wODP+0jzxj
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a376:2908:1c75:ff78])
- (user=irogers job=sendgmr) by 2002:a05:6902:1105:b0:d81:6637:b5b2 with SMTP
- id o5-20020a056902110500b00d816637b5b2mr14388ybu.0.1695447361524; Fri, 22 Sep
- 2023 22:36:01 -0700 (PDT)
-Date: Fri, 22 Sep 2023 22:35:08 -0700
+ (user=irogers job=sendgmr) by 2002:a25:264b:0:b0:d7f:8e0a:4b3f with SMTP id
+ m72-20020a25264b000000b00d7f8e0a4b3fmr12822ybm.3.1695447363914; Fri, 22 Sep
+ 2023 22:36:03 -0700 (PDT)
+Date: Fri, 22 Sep 2023 22:35:09 -0700
 In-Reply-To: <20230923053515.535607-1-irogers@google.com>
-Message-Id: <20230923053515.535607-12-irogers@google.com>
+Message-Id: <20230923053515.535607-13-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230923053515.535607-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Subject: [PATCH v1 11/18] perf hists browser: Reorder variables to reduce padding
+Subject: [PATCH v1 12/18] perf hists browser: Avoid potential NULL dereference
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -63,43 +63,27 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Address clang-tidy warning:
-```
-tools/perf/ui/browsers/hists.c:2416:8: warning: Excessive padding in 'struct popup_action' (8 padding bytes, where 0 is optimal).
-Optimal fields order:
-time,
-thread,
-evsel,
-fn,
-ms,
-socket,
-rstype,
-```
+On other code paths browser->he_selection is NULL checked, add a
+missing case reported by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/ui/browsers/hists.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/ui/browsers/hists.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/perf/ui/browsers/hists.c b/tools/perf/ui/browsers/hists.c
-index 70db5a717905..f02ee605bbce 100644
+index f02ee605bbce..f4812b226818 100644
 --- a/tools/perf/ui/browsers/hists.c
 +++ b/tools/perf/ui/browsers/hists.c
-@@ -2416,12 +2416,12 @@ static int switch_data_file(void)
- struct popup_action {
- 	unsigned long		time;
- 	struct thread 		*thread;
-+	struct evsel	*evsel;
-+	int (*fn)(struct hist_browser *browser, struct popup_action *act);
- 	struct map_symbol 	ms;
- 	int			socket;
--	struct evsel	*evsel;
- 	enum rstype		rstype;
- 
--	int (*fn)(struct hist_browser *browser, struct popup_action *act);
- };
- 
- static int
+@@ -3302,7 +3302,7 @@ static int evsel__hists_browse(struct evsel *evsel, int nr_events, const char *h
+ 							&options[nr_options],
+ 							&bi->to.ms,
+ 							bi->to.al_addr);
+-		} else {
++		} else if (browser->he_selection) {
+ 			nr_options += add_annotate_opt(browser,
+ 						       &actions[nr_options],
+ 						       &options[nr_options],
 -- 
 2.42.0.515.g380fc7ccd1-goog
 
