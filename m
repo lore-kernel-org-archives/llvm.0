@@ -1,20 +1,20 @@
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BB821363
-	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 20:21:41 +0000 (UTC)
-Received: from eig-obgw-6007a.ext.cloudfilter.net ([10.0.30.247])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC1F2135E
+	for <llvm@lists.linux.dev>; Sat, 23 Sep 2023 20:21:45 +0000 (UTC)
+Received: from eig-obgw-5010a.ext.cloudfilter.net ([10.0.29.199])
 	by cmsmtp with ESMTP
-	id k2vCq28rwWU1ck98GqVFXA; Sat, 23 Sep 2023 20:21:41 +0000
+	id jm1KqHCCIbK1Vk98KqmvqT; Sat, 23 Sep 2023 20:21:44 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id k98GqE3d9lFgfk98Gq1pKr; Sat, 23 Sep 2023 20:21:40 +0000
-X-Authority-Analysis: v=2.4 cv=dpLItns4 c=1 sm=1 tr=0 ts=650f48d4
+	id k98JqJ6ZvIDdmk98KqFzjP; Sat, 23 Sep 2023 20:21:44 +0000
+X-Authority-Analysis: v=2.4 cv=HcYH8wI8 c=1 sm=1 tr=0 ts=650f48d8
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=KKAkSRfTAAAA:8 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=qjWHau5h7Oqj65Zv8QkA:9
- a=QEXdDO2ut3YA:10 a=cvBusfyB2V15izCimMoJ:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=ag1SF4gXAAAA:8 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9
+ a=QEXdDO2ut3YA:10 a=Yupwre4RP9_Eg_Bd0iYG:22 a=AjGcO6oz07-iQ99wixmX:22
  a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -22,20 +22,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=95dquq9h2fN9ttOm7akqcNo5sL0dJDCKRHu0Vev7ugY=; b=yULlmJmgkB+IxpSPQpy3qXxdhz
-	dyiFkumbRtx2AUY/ANfZXCOI5MWyrQEPKMdJNSIATkhcknr0EaGLPGaL+EloWXqE0h+xY6KP9roRK
-	CF3tYyyTudvGcSL30NPHWD6QRW0SaMzMDrMD7nHNPaSXT9eg6MznAJN8A93MPXbbtCDAEpPHBkDk1
-	cUdiNOqbiGVttZfV41cgPNBMvA7GoOT4VfnsOHMGzCB08sYTQ0WIwxfeYfP5jzP4iTVkjq1o3rKG5
-	rvdUXGRRFdTZtqAIvBVK32dXTisrbYLbrJ7uoNR2A80eACWCjT45nJHMEY+UuZ+mqwZ8kwhRhn5Yt
-	WvW+jXUA==;
-Received: from [94.239.20.48] (port=52998 helo=[192.168.1.98])
+	bh=I2ltjod7aXaUeOURJ5wuFEtQX4EBJXiWMmi62dv317E=; b=OzEwA9LPPduYzyaRrUSZQVT0V7
+	GnnCrFjjGAGgsRQqsDJiHmxsw4QPtpXvMa6ncK183Ubvkxbitg65NkG8rfbzWQVt19d3aHibH12vh
+	k9TzfBux+3De2PpS2HmGj++z8wcvKDqSwaZskTvoQIesxSvqfGqTf6eFldOINpduAAb1zpzCKVXnt
+	IOTLB1y2Qc0K4KLX7cx3UdgFZlnJHMeUqMMS6y9DH77fEEBLF8OZodJ43C/fOM6WpkdTXC/AwOdDJ
+	2enU/mzUz2S0Tg3FT4yet4F2ZzmPEwesAcddnAxYgDnuUdAns/KBozDpVl/ENwritrosM2jywF8Uk
+	/WKT0cag==;
+Received: from [94.239.20.48] (port=58774 helo=[192.168.1.98])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qjy55-003czm-1R;
-	Sat, 23 Sep 2023 03:33:39 -0500
-Message-ID: <e5d6228d-e868-dc94-c49b-7cdc6a86286d@embeddedor.com>
-Date: Sat, 23 Sep 2023 10:34:44 -0600
+	id 1qjy4X-003cL6-1U;
+	Sat, 23 Sep 2023 03:33:05 -0500
+Message-ID: <24ffa914-a829-812f-cc6a-a3bf4f887c76@embeddedor.com>
+Date: Sat, 23 Sep 2023 10:34:10 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,18 +44,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH] gpiolib: cdev: Annotate struct linereq with __counted_by
+Subject: Re: [PATCH] eeprom: at24: Annotate struct at24_data with __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>,
- Linus Walleij <linus.walleij@linaro.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
- linux-gpio@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+To: Kees Cook <keescook@chromium.org>, Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-i2c@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  linux-hardening@vger.kernel.org
-References: <20230922175203.work.760-kees@kernel.org>
+References: <20230922175155.work.872-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230922175203.work.760-kees@kernel.org>
+In-Reply-To: <20230922175155.work.872-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -66,38 +66,36 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 94.239.20.48
 X-Source-L: No
-X-Exim-ID: 1qjy55-003czm-1R
+X-Exim-ID: 1qjy4X-003cL6-1U
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:52998
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:58774
 X-Source-Auth: gustavo@embeddedor.com
 X-Email-Count: 0
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfPDwYYewkMhWE/bMoZn5HOYraOvzj0GrWhcfqe8+1WpXom2t2CBq264qTgTK/GFEXsTnfK2ERL8KNp8D8t1GmAG8+kzE8AU/zYknb8QvP3xN58daH+QL
- 6i9vDM9r4zJf/e4rGg2P+HGiQNBKR1KAVv1cLy/cY18jQmFJ2t2ZllwpDTG6AiwbZsfAYwBfZlZKMLlweZSbj2+5P62iM+N/OHg=
+X-CMAE-Envelope: MS4xfJGEnilORrMraZWGZUyWKY3B+Nwe6ci8w5uM2eTRNCofq09JjPqsYsroWc1v15cJ6P83wyFYGMdAM6HAQS/lIUC5ln/A6aWizgILuPwmHKv0Dg+ZyQk+
+ M6irKUPkA2aYh7tzXADWn/dcwXdGZZYQpF4ux839q4THS92DNN5Eh47JkA5B0BYM8s3bLAQn/VGNmONr9fKvBVsjlqPpknIdnSM=
 
 
 
-On 9/22/23 11:52, Kees Cook wrote:
+On 9/22/23 11:51, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct linereq.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
+> As found with Coccinelle[1], add __counted_by for struct at24_data.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Linus Walleij <linus.walleij@linaro.org>
 > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Andy Shevchenko <andy@kernel.org>
-> Cc: linux-gpio@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-i2c@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -107,35 +105,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/gpio/gpiolib-cdev.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/misc/eeprom/at24.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> index e39d344feb28..31fc71a612c2 100644
-> --- a/drivers/gpio/gpiolib-cdev.c
-> +++ b/drivers/gpio/gpiolib-cdev.c
-> @@ -572,7 +572,7 @@ struct linereq {
->   	DECLARE_KFIFO_PTR(events, struct gpio_v2_line_event);
->   	atomic_t seqno;
->   	struct mutex config_mutex;
-> -	struct line lines[];
-> +	struct line lines[] __counted_by(num_lines);
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index af83aca452b7..7dfd7fdb423e 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -92,7 +92,7 @@ struct at24_data {
+>   	 * them for us.
+>   	 */
+>   	u8 bank_addr_shift;
+> -	struct regmap *client_regmaps[];
+> +	struct regmap *client_regmaps[] __counted_by(num_addresses);
 >   };
 >   
->   #define GPIO_V2_LINE_BIAS_FLAGS \
-> @@ -1656,6 +1656,7 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
->   	lr = kzalloc(struct_size(lr, lines, ulr.num_lines), GFP_KERNEL);
->   	if (!lr)
->   		return -ENOMEM;
-> +	lr->num_lines = ulr.num_lines;
->   
->   	lr->gdev = gpio_device_get(gdev);
->   
-> @@ -1684,7 +1685,6 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
->   		lr->event_buffer_size = GPIO_V2_LINES_MAX * 16;
->   
->   	atomic_set(&lr->seqno, 0);
-> -	lr->num_lines = ulr.num_lines;
->   
->   	/* Request each GPIO */
->   	for (i = 0; i < ulr.num_lines; i++) {
+>   /*
