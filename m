@@ -1,98 +1,88 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675921375
-	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 11:48:30 +0000 (UTC)
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3214cdb4b27so4431764f8f.1
-        for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 04:48:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0851368
+	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 12:10:02 +0000 (UTC)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-9ae7383b7ecso815873266b.0
+        for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 05:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695556108; x=1696160908; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WxrXzUZdFoEnyidf/9NrxADttmtIpVLpZeUKjXRx3Xc=;
-        b=JqDleGzDMnS85qzp/2rm9PJRQ/ZZNLQJGGtW7i1MCEvVcQ6BK5RJmrPXcBOgKfeZzd
-         fUXCWIB/Uuo12tPbrX3Oi9lpT04acvGF7Z/ZqnZ2Pldgm5IhUOcltBK4Ww4mDfxYSkWZ
-         xjh/EblIsDkDaBp2thz7uud/Y7ytYe8QH3exlngHd1Prox06CAO5NipMN5NUfHKAVm46
-         JMP7COCFIiIvymnpLCErWqcx74W31ZiRleYzXtDI7NIztNpf/ijrtvEukldXy/oIOXnZ
-         LJXNMOMF2sWGgp2wZQskBwUYFrNuBTYo3yS63Mh2EZ9u1rEpqC8giPaUtNQTNYLoN9cc
-         txmg==
+        d=linaro.org; s=google; t=1695557400; x=1696162200; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OSaR+L6f1m7u+tcvmJlO+a3NVKKfrp8TzdBW1XZxETg=;
+        b=KD+KPjVGaOcb1ZEr9cMFHpazsXo8/3WFOCdBXklSjqKLpM7bZRb1pKETpo8alRGW+I
+         k+PfXRU1xJWkJjuuM23K7CFcqbedEcz3QAQh3owrXQtTcqn2eR4vKZlfWHuDpu8WXUsZ
+         J3kft8p4kICfM567qgUNGi6QH1aQxfK/4pDacXokRPVdAsM91qZo+hFxkejoRIXtkCej
+         ux1vpMd7PpYF/sp8MUNTTxrgA4eZ8sGl4b07EJDLWV/bXcgfigsnEfh40RiZD5l441wZ
+         cZG/lC9uhhSaAO7jmRdGChybjUw+AjWUuSXiN7FKS0nJ5Y2jVh7ZkOCgN20lai1xA4KM
+         HQeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695556108; x=1696160908;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WxrXzUZdFoEnyidf/9NrxADttmtIpVLpZeUKjXRx3Xc=;
-        b=InYsFmHcYy9mL8eQCpz5wa/aruL03iKiYf+RHcLlJ/FHZIbJPJVY1oAe6p745Ec8aS
-         3Uxb9S+KRTPx16it+c4FK/rJQRazCKZrfKnEKJHJ5szgk6krPkEMX/czkhrhhPIzgKL5
-         VmMcrlLwnlVFsC2iXNqoy0Xko4dFUm+hV/twQfAEgnVphiKvTEtgFZj7ZT2mAr6k5YuO
-         W1lLI3X4VaqvPvHnGCxC2JAQaBH1zspfmVPfu5ihOOyqKo59XQ3nwHj31T5vC+ztcSe8
-         +xZkFPFBp+5zVJEo56vH+NHM5VCgc23gjoGGnjqsuQNJipEnO/xukgkbN/YOLtPbp7G7
-         ztkg==
-X-Gm-Message-State: AOJu0Yyc/eGU+0sY/RuRwOyazM1yzI9JDvZD0YBMne1dUmvX0QQ/4eH9
-	ZVrLTeQyIH9Dmnll+aJwhE0=
-X-Google-Smtp-Source: AGHT+IHOtjQZIIOHnfbKyFj8xwTuyrfcKwU5lMGoiETzsAtEMOnLHasDQnbASJEUUyKn9mLJuNGH1A==
-X-Received: by 2002:a05:6000:1819:b0:317:f70b:3156 with SMTP id m25-20020a056000181900b00317f70b3156mr3423806wrh.28.1695556108404;
-        Sun, 24 Sep 2023 04:48:28 -0700 (PDT)
-Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
-        by smtp.gmail.com with ESMTPSA id k10-20020adfd22a000000b0032320a9b010sm1262983wrh.28.2023.09.24.04.48.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Sep 2023 04:48:27 -0700 (PDT)
-Message-ID: <e326ed06-3f72-4552-a26d-5deae0678409@gmail.com>
-Date: Sun, 24 Sep 2023 13:48:26 +0200
+        d=1e100.net; s=20230601; t=1695557400; x=1696162200;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OSaR+L6f1m7u+tcvmJlO+a3NVKKfrp8TzdBW1XZxETg=;
+        b=tzdpzbtqsvkjYbefSSv2SYCoxnlpqFj/uNHdSh7OGHOawuVAh0dpjFIqFJeilJieUq
+         7wewOMkVqAUpfDrLGGKNNoZqS5i/hde1SPJUHuK1JlOX3yMH5F819MEZt2LAdd8jqPHX
+         YTGf9ZhYizimG4MaM1vYce3FGZi8mUvJIfSvAVF/f31PAgBX5DBycTF3HoI5R7R6JPnk
+         ut1EvMj7qCrhtbinAy8cPchOj2qVW+HqrcHOZS8gPX56LGnOe3tbCVGRVc/n57RuLUwk
+         38HxN/64epTJfaJbWM4faL1puJc0CiWNMQDaNNP7GnwGCd40WVOwE27Tyg9H/xAPelV5
+         TXkA==
+X-Gm-Message-State: AOJu0YwF2paCyKwIGhH4wflEGmHYABSfzMuBx5n28DYXDhwMfJMpo2U7
+	Rtph+CB74DUXkxYiDfbXvoW8Nw==
+X-Google-Smtp-Source: AGHT+IESYrCzZQvTB73XFlkulKwL+gvntMR0RunpUbasR1i4r6vxyq92UsW0nCePWlX+r7XuUyXHwA==
+X-Received: by 2002:a17:907:6e8a:b0:9ae:3768:f0ce with SMTP id sh10-20020a1709076e8a00b009ae3768f0cemr11340922ejc.0.1695557400559;
+        Sun, 24 Sep 2023 05:10:00 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.100])
+        by smtp.gmail.com with ESMTPSA id fy20-20020a170906b7d400b0099bccb03eadsm4908664ejb.205.2023.09.24.05.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Sep 2023 05:09:59 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] memory: atmel-ebi: Annotate struct atmel_ebi_dev with __counted_by
+Date: Sun, 24 Sep 2023 14:09:56 +0200
+Message-Id: <169555739436.7093.14241184537444848139.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230922175215.work.122-kees@kernel.org>
+References: <20230922175215.work.122-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] platform/surface: aggregator: Annotate struct ssam_event
- with __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: platform-driver-x86@vger.kernel.org, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230922175436.work.031-kees@kernel.org>
-From: Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20230922175436.work.031-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 9/22/23 19:54, Kees Cook wrote:
+
+On Fri, 22 Sep 2023 10:52:15 -0700, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct ssam_event.
+> As found with Coccinelle[1], add __counted_by for struct atmel_ebi_dev.
 > 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Maximilian Luz <luzmaximilian@gmail.com>
-> Cc: platform-driver-x86@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   include/linux/surface_aggregator/controller.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/surface_aggregator/controller.h b/include/linux/surface_aggregator/controller.h
-> index cb7980805920..5b67f0f47d80 100644
-> --- a/include/linux/surface_aggregator/controller.h
-> +++ b/include/linux/surface_aggregator/controller.h
-> @@ -44,7 +44,7 @@ struct ssam_event {
->   	u8 command_id;
->   	u8 instance_id;
->   	u16 length;
-> -	u8 data[];
-> +	u8 data[] __counted_by(length);
->   };
->   
->   /**
+> [...]
 
-Thanks!
+Applied, thanks!
 
-Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+[1/1] memory: atmel-ebi: Annotate struct atmel_ebi_dev with __counted_by
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/c1f2c81631df7654c249a457b7a54bbc36042248
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
