@@ -1,78 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC3E7F;
-	Sun, 24 Sep 2023 09:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 833ADC433C8;
-	Sun, 24 Sep 2023 09:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695548714;
-	bh=LzXtXNSrED4dMzen6Q/uURvpZAZL8E9Bv/zlsiifUII=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZlyGDYOLKcdOI7ErZN7x3cEp1epP1Z/Z3Ba7up5RSWSUq0KLw2R+0+1ANgitmvj4P
-	 QZ74tclE1yJ4rfJgn1l0QZnYAZ3lCFGLzexHP47RxgiuDjZDM1tRXRbq8fWdqtCSvi
-	 soo+5Q8vY70nDyo3NvUSfwRev0vbcS6gfpzjQM0fVn9BnoO9wO0dI9YsghbetekJr/
-	 UZFR4oKcU6XNQDnvMktSngOQU63SUCgB/tlYHXWWdNZxowRRxquMcT98surVnDqBrD
-	 nbkZ58dGvz5F7xM50ntR76IU71sheGal5jC6xHMo5vKMB6I+oXcTe+CTQ2FPFPXO6Q
-	 hdqEJOCzhREyQ==
-From: Christian Brauner <brauner@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Siddh Raman Pant <code@siddh.me>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Qian Cai <cai@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org,
-	David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH] watch_queue: Annotate struct watch_filter with __counted_by
-Date: Sun, 24 Sep 2023 11:45:06 +0200
-Message-Id: <20230924-fass-bass-7b1f7aa70dd3@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230922175407.work.754-kees@kernel.org>
-References: <20230922175407.work.754-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675921375
+	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 11:48:30 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3214cdb4b27so4431764f8f.1
+        for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 04:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695556108; x=1696160908; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WxrXzUZdFoEnyidf/9NrxADttmtIpVLpZeUKjXRx3Xc=;
+        b=JqDleGzDMnS85qzp/2rm9PJRQ/ZZNLQJGGtW7i1MCEvVcQ6BK5RJmrPXcBOgKfeZzd
+         fUXCWIB/Uuo12tPbrX3Oi9lpT04acvGF7Z/ZqnZ2Pldgm5IhUOcltBK4Ww4mDfxYSkWZ
+         xjh/EblIsDkDaBp2thz7uud/Y7ytYe8QH3exlngHd1Prox06CAO5NipMN5NUfHKAVm46
+         JMP7COCFIiIvymnpLCErWqcx74W31ZiRleYzXtDI7NIztNpf/ijrtvEukldXy/oIOXnZ
+         LJXNMOMF2sWGgp2wZQskBwUYFrNuBTYo3yS63Mh2EZ9u1rEpqC8giPaUtNQTNYLoN9cc
+         txmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695556108; x=1696160908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WxrXzUZdFoEnyidf/9NrxADttmtIpVLpZeUKjXRx3Xc=;
+        b=InYsFmHcYy9mL8eQCpz5wa/aruL03iKiYf+RHcLlJ/FHZIbJPJVY1oAe6p745Ec8aS
+         3Uxb9S+KRTPx16it+c4FK/rJQRazCKZrfKnEKJHJ5szgk6krPkEMX/czkhrhhPIzgKL5
+         VmMcrlLwnlVFsC2iXNqoy0Xko4dFUm+hV/twQfAEgnVphiKvTEtgFZj7ZT2mAr6k5YuO
+         W1lLI3X4VaqvPvHnGCxC2JAQaBH1zspfmVPfu5ihOOyqKo59XQ3nwHj31T5vC+ztcSe8
+         +xZkFPFBp+5zVJEo56vH+NHM5VCgc23gjoGGnjqsuQNJipEnO/xukgkbN/YOLtPbp7G7
+         ztkg==
+X-Gm-Message-State: AOJu0Yyc/eGU+0sY/RuRwOyazM1yzI9JDvZD0YBMne1dUmvX0QQ/4eH9
+	ZVrLTeQyIH9Dmnll+aJwhE0=
+X-Google-Smtp-Source: AGHT+IHOtjQZIIOHnfbKyFj8xwTuyrfcKwU5lMGoiETzsAtEMOnLHasDQnbASJEUUyKn9mLJuNGH1A==
+X-Received: by 2002:a05:6000:1819:b0:317:f70b:3156 with SMTP id m25-20020a056000181900b00317f70b3156mr3423806wrh.28.1695556108404;
+        Sun, 24 Sep 2023 04:48:28 -0700 (PDT)
+Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
+        by smtp.gmail.com with ESMTPSA id k10-20020adfd22a000000b0032320a9b010sm1262983wrh.28.2023.09.24.04.48.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Sep 2023 04:48:27 -0700 (PDT)
+Message-ID: <e326ed06-3f72-4552-a26d-5deae0678409@gmail.com>
+Date: Sun, 24 Sep 2023 13:48:26 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1237; i=brauner@kernel.org; h=from:subject:message-id; bh=LzXtXNSrED4dMzen6Q/uURvpZAZL8E9Bv/zlsiifUII=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQKsLJ+VWk8O3WrfU6JsPL0Sq3cRXuX5S86vlXvZtll8T/P HExaOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACaSJsLwP/T830PVzxO/SBaxnjv9u1 xP9FfmkxNJlpX3jWsdfdZ+AanQUu6oPc5ndTmwZnf2kd/fvlWKxC5Zcu3aYk/Ho117KpkB
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] platform/surface: aggregator: Annotate struct ssam_event
+ with __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>
+Cc: platform-driver-x86@vger.kernel.org, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230922175436.work.031-kees@kernel.org>
+From: Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20230922175436.work.031-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, 22 Sep 2023 10:54:08 -0700, Kees Cook wrote:
+On 9/22/23 19:54, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct watch_filter.
+> As found with Coccinelle[1], add __counted_by for struct ssam_event.
 > 
-> [...]
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Maximilian Luz <luzmaximilian@gmail.com>
+> Cc: platform-driver-x86@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   include/linux/surface_aggregator/controller.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/surface_aggregator/controller.h b/include/linux/surface_aggregator/controller.h
+> index cb7980805920..5b67f0f47d80 100644
+> --- a/include/linux/surface_aggregator/controller.h
+> +++ b/include/linux/surface_aggregator/controller.h
+> @@ -44,7 +44,7 @@ struct ssam_event {
+>   	u8 command_id;
+>   	u8 instance_id;
+>   	u16 length;
+> -	u8 data[];
+> +	u8 data[] __counted_by(length);
+>   };
+>   
+>   /**
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+Thanks!
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
-
-[1/1] watch_queue: Annotate struct watch_filter with __counted_by
-      https://git.kernel.org/vfs/vfs/c/6b601adb5e79
+Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
