@@ -1,105 +1,473 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66893DF61;
-	Sun, 24 Sep 2023 21:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695589486; x=1727125486;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FptmBJzF6honTQ52WxJt0+zg8Qjk0+fbVR0S3Xxohcw=;
-  b=QlSIAV9ZegB2JRtRQEL5owGa8jK5CWAw2DxHD3yu8l3KRfRxD9xyfnRj
-   /kAsWVY+LZY30syMLiNziyBo+tJia2sbTTCeJgvaXN7NswIcB/mB+6MCw
-   v4gOaPoTuFZIMX4Cd7IHjdhSflTkSRbgBJRK8jB01uLrYzYRo2jjaWFzZ
-   Eb6RuTsI2fPxomfpHRtCdoCrstA6+/H7wSbjpyD82xfxwaDGvFIOovUqI
-   X5WsfOKvmHXt7TldEy/G8EPowTlxETlQr7yETwd4LMiRribqIGGxodmWW
-   k95goHD9zp10jW0f7V7oEnHB8D52+xRqVP1YD/jpRSp1Tzw+NwM57DnwG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="361377314"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="361377314"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2023 14:04:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="813710374"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="813710374"
-Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Sep 2023 14:04:43 -0700
-Received: from kbuild by 32c80313467c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qkWHR-0000Si-0t;
-	Sun, 24 Sep 2023 21:04:41 +0000
-Date: Mon, 25 Sep 2023 05:04:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:master 966/1123] drivers/spi/spi-zynq-qspi.c:167:6:
- warning: no previous prototype for function 'zynq_qspi_update_stripe'
-Message-ID: <202309250408.n5Vd94Ii-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1901DF6E
+	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 22:20:25 +0000 (UTC)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-35137ab766dso87155ab.0
+        for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 15:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695594025; x=1696198825; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FtajYu0QcSwr5TLL107KfjFB5NdN5A4TVIBLzbOzHAo=;
+        b=Eb1LBfEfgE5IuIoPrmKgbDwEzzAOP7sKIcrO8CBqw+EzV0UnVXoGxGYG6ouOTsBUrq
+         3AW21yAK0lbPtL7Si+G4juS5QpernAP8YFxnD+2bpSzlDhU3rDFnLh5+9WqtgicPAgsf
+         j1XvGugZJ4pHiEb+I70VkNZdqpO6e2z3je5ABeddVXmatFFAA+mxtaAVUMd4uXGfCgdF
+         +dg9UmYq7d2QV0Gtl6ePtqUHDYMfaOTBv1+ScEQkpr6zMliPSh0/R6YbjecquNJ4I7HA
+         Jx2BRCuTQqMrD0Et3EaMVWHzgBMkE7/MC1MD+Vrx55gLInM6J1dRVJ707lWiPBYPpvbS
+         xldA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695594025; x=1696198825;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FtajYu0QcSwr5TLL107KfjFB5NdN5A4TVIBLzbOzHAo=;
+        b=taRhf+3RN1dlLtaDzDEzE4PS6zVfB/7XZ2fni2Ij6qYCsZfCor7iJDD4vFqpO3fF1f
+         oiOfDLO3Rr2a+diX+ZFTfmLxZWPWD8r06+V52786dQhI+lgZouGtcg/IARJDY8B6D8dI
+         zAdYv1Uc/VDDmGM/lxcm3VZ+lI2c3uWgKSB1D1+ghQbxYGMgqnW/bTo9aF2PT/NxxG+E
+         z9G7gN0MQdbDMAJH4z2v6vi7Isg5IeSGb9+KIkdn6o/zrt4V5XTpQnmYlaBQj3Twj1xS
+         peh7qytdM1bqz75Ll0WYWdLz8FAjYkC6OBcVw0wsRMl8vNHbrUEhR7Uo4TOEdoJQ269o
+         ZAMw==
+X-Gm-Message-State: AOJu0YzJ/0e9oqwPZa5k5AYwaA1yk+jVtCKeBCoL59ikidS05OMbay2i
+	+GNEvjZqUCQQEmxgz4LghrCnVQ==
+X-Google-Smtp-Source: AGHT+IGLf53RDLgRjFbrmrfUiXjsToOCQ7VJ2K6mWLfN3wnfdUtVszHybWV0wDxF6e33hfggAIXp5w==
+X-Received: by 2002:a05:6e02:2199:b0:34d:f90f:d42a with SMTP id j25-20020a056e02219900b0034df90fd42amr322242ila.1.1695594024785;
+        Sun, 24 Sep 2023 15:20:24 -0700 (PDT)
+Received: from google.com ([2620:15c:2d3:205:f843:c1bc:4b42:fda0])
+        by smtp.gmail.com with ESMTPSA id u16-20020a170902e81000b001bf6ea340a9sm7274343plg.159.2023.09.24.15.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Sep 2023 15:20:24 -0700 (PDT)
+Date: Sun, 24 Sep 2023 15:20:19 -0700
+From: Fangrui Song <maskray@google.com>
+To: Jack Brennen <jbrennen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] modpost: Optimize symbol search from linear to binary
+ search
+Message-ID: <20230924222019.dipusbpgntepnq2y@google.com>
+References: <20230918210631.3882376-1-jbrennen@google.com>
+ <CAK7LNASSgCFYequw+0zQpUC-9yLHvJLHZ97Ko1ejUYZVTkM81w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNASSgCFYequw+0zQpUC-9yLHvJLHZ97Ko1ejUYZVTkM81w@mail.gmail.com>
 
-tree:   https://github.com/Xilinx/linux-xlnx master
-head:   cb1f2dbc7e487361688257fccf78bf3f3ce0e9ed
-commit: 7fe5d3fbd9be0cef89fbe9db59796698379345ea [966/1123] spi: spi-zynq-qspi: Add multi-cs support in Zynq QSPI driver
-config: x86_64-buildonly-randconfig-003-20230905 (https://download.01.org/0day-ci/archive/20230925/202309250408.n5Vd94Ii-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230925/202309250408.n5Vd94Ii-lkp@intel.com/reproduce)
+On 2023-09-23, Masahiro Yamada wrote:
+>On Tue, Sep 19, 2023 at 6:06 AM Jack Brennen <jbrennen@google.com> wrote:
+>>
+>> Modify modpost to use binary search for converting addresses back
+>> into symbol references.  Previously it used linear search.
+>>
+>> This change saves a few seconds of wall time for defconfig builds,
+>> but can save several minutes on allyesconfigs.
+>
+>Thanks.
+>Binary search is a good idea.
+>
+>
+>> Before:
+>> $ make LLVM=1 -j128 allyesconfig vmlinux -s KCFLAGS="-Wno-error"
+>>         Elapsed (wall clock) time (h:mm:ss or m:ss): 13:30.31
+>
+>Instead of the time for the entire build,
+>can you put the time for the modpost command?
+>
+>If you allyesconfig case,
+>
+> $ time scripts/mod/modpost -M -m -a -N -o vmlinux.symvers vmlinux.o
+>
+>
+>
+>
+>
+>> diff --git a/scripts/mod/symsearch.c b/scripts/mod/symsearch.c
+>> new file mode 100644
+>> index 000000000000..aab79262512b
+>> --- /dev/null
+>> +++ b/scripts/mod/symsearch.c
+>> @@ -0,0 +1,233 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +/* Helper functions for finding the symbol in an ELF which is "nearest"
+>> + * to a given address.
+>> + */
+>>
+>
+>Can you use the following block comment style?
+>
+>/*
+> * Helper functions for finding the symbol in an ELF which is "nearest"
+> * to a given address.
+> */
+>
+>
+>
+>> +#include "modpost.h"
+>> +
+>> +/* Struct used for binary search. */
+>
+>I think this obvious comment is unneeded.
+>
+>
+>
+>> +struct syminfo {
+>> +       unsigned int symbol_index;
+>> +       unsigned int section_index;
+>> +       Elf_Addr addr;
+>> +};
+>> +
+>> +/* Container used to hold an entire binary search table.
+>> + * Entries in table are ascending, sorted first by section_index,
+>> + * then by addr, and last by symbol_index.  The sorting by
+>> + * symbol_index is used to duplicate the quirks of the prior
+>> + * find_nearest_sym() function, where exact matches to an address
+>> + * return the first symtab entry seen, but near misses return the
+>> + * last symtab entry seen.
+>
+>Preserving this quirk makes the code complicated.
+>
+>I do not mind changing the behavior of the corner case.
+>
+>
+>
+>
+>
+>> + * The first and last entries of the table are sentinels and their
+>> + * values only matter in two places:  when we sort the table, and
+>> + * on lookups, the end sentinel should not have an addr field which
+>> + * matches its immediate predecessor.  To meet these requirements,
+>> + * we initialize them to (0,0,0) and (max,max,max), and then after
+>> + * sorting, we tweak the end sentinel's addr field accordingly.
+>> + */
+>> +struct symsearch {
+>> +       size_t table_size;
+>> +       struct syminfo table[];
+>> +};
+>
+>
+>
+>syminfo::symbol_index is unsigned int.
+>symsearch::table_size is size_t.
+>
+>
+>symbol_index of the last element is always larger than
+>elf->symsearch->table_size.
+>
+>So, the code works only within 32-bit width anyway.
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>> +
+>> +static inline bool is_sym_searchable(struct elf_info *elf, Elf_Sym *sym)
+>> +{
+>> +       return is_valid_name(elf, sym) != 0;
+>> +}
+>
+>If you call is_valid_name() directly, this function was unneeded?
+>
+>
+>
+>
+>
+>
+>> +
+>> +static int syminfo_compare(const void *s1, const void *s2)
+>> +{
+>> +       const struct syminfo *sym1 = s1;
+>> +       const struct syminfo *sym2 = s2;
+>> +
+>> +       if (sym1->section_index > sym2->section_index)
+>> +               return 1;
+>> +       if (sym1->section_index < sym2->section_index)
+>> +               return -1;
+>> +       if (sym1->addr > sym2->addr)
+>> +               return 1;
+>> +       if (sym1->addr < sym2->addr)
+>> +               return -1;
+>> +       if (sym1->symbol_index > sym2->symbol_index)
+>> +               return 1;
+>> +       if (sym1->symbol_index < sym2->symbol_index)
+>> +               return -1;
+>> +       return 0;
+>> +}
+>> +
+>> +static size_t symbol_count(struct elf_info *elf)
+>> +{
+>> +       size_t result = 0;
+>> +
+>> +       for (Elf_Sym *sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
+>> +               if (is_sym_searchable(elf, sym))
+>> +                       result++;
+>> +       }
+>> +       return result;
+>> +}
+>> +
+>> +/* Populate the search array that we just allocated.
+>> + * Be slightly paranoid here.  If the ELF file changes during processing,
+>
+>I could not understand. In which case, the ELF file changes?
+>
+>modpost loads the entire file to memory first..
+>
+>In which scenario, the memory content changes?
+>
+>
+>
+>
+>
+>
+>> + * or if the behavior of is_sym_searchable() changes during processing,
+>> + * we want to catch it; neither of those is acceptable.
+>> + */
+>> +static void symsearch_populate(struct elf_info *elf,
+>> +                              struct syminfo *table,
+>> +                              size_t table_size)
+>> +{
+>> +       bool is_arm = (elf->hdr->e_machine == EM_ARM);
+>> +
+>> +       /* Start sentinel */
+>> +       if (table_size-- == 0)
+>> +               fatal("%s: size mismatch\n", __func__);
+>> +       table->symbol_index = 0;
+>> +       table->section_index = 0;
+>> +       table->addr = 0;
+>> +       table++;
+>> +
+>> +       for (Elf_Sym *sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
+>> +               if (is_sym_searchable(elf, sym)) {
+>> +                       if (table_size-- == 0)
+>> +                               fatal("%s: size mismatch\n", __func__);
+>> +                       table->symbol_index = sym - elf->symtab_start;
+>> +                       table->section_index = get_secindex(elf, sym);
+>> +                       table->addr = sym->st_value;
+>> +
+>> +                       /*
+>> +                        * For ARM Thumb instruction, the bit 0 of st_value is
+>> +                        * set if the symbol is STT_FUNC type. Mask it to get
+>> +                        * the address.
+>> +                        */
+>> +                       if (is_arm && ELF_ST_TYPE(sym->st_info) == STT_FUNC)
+>> +                               table->addr &= ~1;
+>> +
+>> +                       table++;
+>> +               }
+>> +       }
+>> +
+>> +       /* End sentinel; all values are unsigned so -1 wraps to max */
+>> +       if (table_size != 1)
+>> +               fatal("%s: size mismatch\n", __func__);
+>> +       table->symbol_index = -1;
+>> +       table->section_index = -1;
+>> +       table->addr = -1;
+>> +}
+>> +
+>> +void symsearch_init(struct elf_info *elf)
+>> +{
+>> +       /* +2 here to allocate space for the start and end sentinels */
+>> +       size_t table_size = symbol_count(elf) + 2;
+>> +
+>> +       elf->symsearch = NOFAIL(malloc(
+>> +                                       sizeof(struct symsearch) +
+>> +                                       sizeof(struct syminfo) * table_size));
+>> +       elf->symsearch->table_size = table_size;
+>> +
+>> +       symsearch_populate(elf, elf->symsearch->table, table_size);
+>> +       qsort(elf->symsearch->table, table_size,
+>> +             sizeof(struct syminfo), syminfo_compare);
+>> +
+>> +       /* A bit of paranoia; make sure that the end sentinel's address is
+>> +        * different than its predecessor.  Not doing this could cause
+>> +        * possible undefined behavior if anybody ever inserts a symbol
+>> +        * with section_index and addr both at their max values.
+>
+>I could not understand this comment.
+>
+>If section_index and addr both at their max values at [table_size - 2],
+>->table[table_size - 2].addr + 1 wraps to zero.
+>
+>The table is not sorted any longer?
+>
+>
+>
+>
+>> +        * Doing this little bit of defensive programming is more efficient
+>> +        * than checking for array overruns later.
+>> +        */
+>> +       elf->symsearch->table[table_size - 1].addr =
+>> +               elf->symsearch->table[table_size - 2].addr + 1;
+>> +}
+>> +
+>> +void symsearch_finish(struct elf_info *elf)
+>> +{
+>> +       free(elf->symsearch);
+>> +       elf->symsearch = NULL;
+>> +}
+>> +
+>> +/* Find the syminfo which is in secndx and "nearest" to addr.
+>> + * allow_negative: allow returning a symbol whose address is > addr.
+>> + * min_distance: ignore symbols which are further away than this.
+>> + *
+>> + * Returns a nonzero index into the symsearch table for success.
+>> + * Returns NULL if no legal symbol is found within the requested range.
+>> + */
+>> +static size_t symsearch_find_impl(struct elf_info *elf, Elf_Addr addr,
+>> +                                 unsigned int secndx, bool allow_negative,
+>> +                                 Elf_Addr min_distance)
+>> +{
+>> +       /* Find the target in the array; it will lie between two elements.
+>> +        * Invariant here: table[lo] < target <= table[hi]
+>> +        * For the purposes of search, exact hits in the search array are
+>> +        * considered greater than the target.  This means that if we do
+>> +        * get an exact hit, then once the search terminates, table[hi]
+>> +        * will be the exact match which has the lowest symbol index.
+>> +        */
+>> +       struct syminfo *table = elf->symsearch->table;
+>> +       size_t hi = elf->symsearch->table_size - 1;
+>> +       size_t lo = 0;
+>
+>
+>
+>
+>The binary search code was implemented in a too complex way
+>to preserve the previous quirks.
+>
+>
+>I want to use the same comparison function for
+>qsort() and bsearch() to avoid paranoia.
+>
+>
+>
+>
+>How about this implementation?
+>
+>
+>
+>static struct syminfo *symsearch_find_impl(struct elf_info *elf, Elf_Addr addr,
+>                                           unsigned int secndx, bool
+>allow_negative,
+>                                           Elf_Addr min_distance)
+>{
+>        struct syminfo target = { .symbol_index = -1, .section_index =
+>secndx, .addr = addr };
+>        struct syminfo *table = elf->symsearch->table;
+>        unsigned int hi = elf->symsearch->table_size - 1;
+>        unsigned int lo = 0;
+>        struct syminfo *result = NULL;
+>        Elf_Addr distance;
+>
+>        while (lo < hi) {
+>                unsigned int mid = (lo + hi + 1) / 2;
+>
+>                if (syminfo_compare(&table[mid], &target) > 0)
+>                        hi = mid - 1;
+>                else
+>                        lo = mid;
+>        }
+>
+>        /*
+>         * The target resides between lo and (lo + 1).
+>         * If allow_negative is true, check both of them.
+>         */
+>
+>        if (allow_negative && lo + 1 < elf->symsearch->table_size &&
+>            table[lo + 1].section_index == secndx) {
+>                distance = table[lo + 1].addr - addr;
+>                if (distance <= min_distance) {
+>                        min_distance = distance;
+>                        result = &table[lo + 1];
+>                }
+>        }
+>
+>        if (table[lo].section_index == secndx) {
+>                distance = addr - table[lo].addr;
+>                if (distance <= min_distance)
+>                  result = &table[lo];
+>        }
+>
+>        return result;
+>}
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309250408.n5Vd94Ii-lkp@intel.com/
+I think this implementation (shrinking [lo,hi] to [lo,mid-1] or
+[mid,hi]) is better than the original one (shrinking [lo,hi] to [lo,mid]
+or [mid,hi], a bit wasteful).
 
-All warnings (new ones prefixed by >>):
+The original patch uses `if (mid == lo) break;`, which I consider not so
+elegant.
 
->> drivers/spi/spi-zynq-qspi.c:167:6: warning: no previous prototype for function 'zynq_qspi_update_stripe' [-Wmissing-prototypes]
-   bool zynq_qspi_update_stripe(const struct spi_mem_op *op)
-        ^
-   drivers/spi/spi-zynq-qspi.c:167:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool zynq_qspi_update_stripe(const struct spi_mem_op *op)
-   ^
-   static 
-   1 warning generated.
+However, the `- 1` part in `unsigned int hi = elf->symsearch->table_size - 1;` can be improved.
+I'd prefer an implementation similar to typical C++ https://en.cppreference.com/w/cpp/algorithm/upper_bound implementation.
 
+lo = 0;
+hi = n;  // or replace hi with count
+while (lo < hi) {
+   mid = (lo + hi) / 2;  // we don't care about (lo+hi) overflow
+   if (less_or_eq(&table[mid], &target))
+     lo = mid+1;
+   else
+     hi = mid;
+}
 
-vim +/zynq_qspi_update_stripe +167 drivers/spi/spi-zynq-qspi.c
+// lo == hi: the index of the first element that is > target
+// if elements equal to target are present, they are on the left of lo
 
-   159	
-   160	/**
-   161	 * zynq_qspi_update_stripe - For Zynq QSPI controller data stripe capabilities
-   162	 * @op: Pointer to mem ops
-   163	 * Return:      Status of the data stripe
-   164	 *
-   165	 * Returns true if data stripe need to be enabled, else returns false
-   166	 */
- > 167	bool zynq_qspi_update_stripe(const struct spi_mem_op *op)
-   168	{
-   169		if (op->cmd.opcode ==  SPINOR_OP_BE_4K ||
-   170		    op->cmd.opcode ==  SPINOR_OP_BE_32K ||
-   171		    op->cmd.opcode ==  SPINOR_OP_CHIP_ERASE ||
-   172		    op->cmd.opcode ==  SPINOR_OP_SE ||
-   173		    op->cmd.opcode ==  SPINOR_OP_BE_32K_4B ||
-   174		    op->cmd.opcode ==  SPINOR_OP_SE_4B ||
-   175		    op->cmd.opcode == SPINOR_OP_BE_4K_4B ||
-   176		    op->cmd.opcode ==  SPINOR_OP_WRSR ||
-   177		    op->cmd.opcode ==  SPINOR_OP_WREAR ||
-   178		    op->cmd.opcode ==  SPINOR_OP_BRWR ||
-   179		    (op->cmd.opcode ==  SPINOR_OP_WRSR2 && !op->addr.nbytes))
-   180			return false;
-   181	
-   182		return true;
-   183	}
-   184	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
+>                                unsigned int secndx, bool allow_negative,
+>                                Elf_Addr min_distance)
+>{
+>        struct syminfo *result;
+>
+>        result = symsearch_find_impl(elf, addr, secndx,
+>                                     allow_negative, min_distance);
+>        if (!result)
+>                return NULL;
+>
+>        return &elf->symtab_start[result->symbol_index];
+>}
+>
+>
+>
+>This does not preserve the previous quirks.
+>
+>If there are multiple entries with the same address,
+>it always returns the last element.
+>
+>I did not expect sentinels.
+>
+>I did not do thorough tests, but it seems to be working for me.
+>
+>
+>
+>
+>Also, please call symsearch_find_nearest() directly
+>and remove symfind_nearest_sym().
+>
+>
+>
+>
+>
+>
+>--
+>Best Regards
+>
+>Masahiro Yamada
+>
