@@ -1,104 +1,108 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256B4D52B
-	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 17:06:28 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5043a01ee20so5583306e87.0
-        for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 10:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695575187; x=1696179987; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gG8vnWQHvQhRnrvCqdEqT6JTTQ016xPNLohZ4GJlrMs=;
-        b=Yiih18Pc7bHwK50af8p9KkoWiKqJWcG76Ar04athCvD0g4DrSaEihG6w3toFamwzl1
-         HRHCS2Jj4waMS1sp3ULlOfmb9uvZtZHZkCia7aLOLlG9ly+why0j1ILFIxGjkVWX6HuR
-         /x79Y5SPOBwgXogUCgMOTPpXW/a4OriyY1BB+Kiinn3BFW8zGzpBjrv6g8Iwn0QYpcID
-         wIAIFip/TXZI9jVUWHasn+Us7eL9EVfFDKz+YOkf9TszViBWnV43NbBymIoIUY0FiZrp
-         Zd0PCm7I+uM4zIH1bueLYd79zifZwQhEKx8k1YPXOZqxkqAT2/iV7BMWn1+SAlV8Q8rE
-         14RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695575187; x=1696179987;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gG8vnWQHvQhRnrvCqdEqT6JTTQ016xPNLohZ4GJlrMs=;
-        b=Mnh+Nk7mFuCSdNsB88WH0LaFk5SiZP+XNj01CkXDPkxj0/dn76AsNZv7fYAK2xa7hW
-         AJMynqSBoSGTvZ9svu9Sp7+zetn4tz4YJT64i8SDcWLLs6aVmfn0eOdW4Kk0lUOiEsH+
-         2Kh0ybqGhQlblY1aJ4iLhQ3t9HS0m7YThWQKjQMNhE31ehZG8yUGZBdNTHpWbTJZpIcO
-         vHsfSW0ezXADZxbwIiMKnvuFyTKa075xFIiiDSN+Ymwvv5YtD671aA699hW5ttMlZms8
-         5/8iMTnVxM+gTZ+Vunveu1NAmYRgLb+LYXHa6ImHxEkWXXkJvqc3Fpv/Ep9fTtncaYmg
-         8Sxw==
-X-Gm-Message-State: AOJu0Yym5W4YGDEWflc+XORryeZ5GN7brsmEki7uhQa9Iam7HQ1ne/4W
-	KzDaOPFa7IiXxVNtb4Riu10=
-X-Google-Smtp-Source: AGHT+IEtoFr2Pbg8fZweBJMsD1JXTiezgzBgcOIx0X/hI7Iqh7usEJ41J/mea3D1UezDz38TmVOXRg==
-X-Received: by 2002:a19:2d01:0:b0:503:36cb:5438 with SMTP id k1-20020a192d01000000b0050336cb5438mr4050615lfj.21.1695575186869;
-        Sun, 24 Sep 2023 10:06:26 -0700 (PDT)
-Received: from [192.168.178.40] ([146.52.231.36])
-        by smtp.gmail.com with ESMTPSA id y19-20020a056402135300b0052fdfd8870bsm4476566edw.89.2023.09.24.10.06.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Sep 2023 10:06:26 -0700 (PDT)
-Message-ID: <bc42418d-117e-8d69-2630-0f072b9e196b@gmail.com>
-Date: Sun, 24 Sep 2023 19:06:25 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5F0D29E;
+	Sun, 24 Sep 2023 19:07:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695582444; x=1727118444;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=H4QSvOP+U6bvZSrcIHxrcB0EEtqIotVmdjxuDPLs4MY=;
+  b=SRM1rQRgyrWcn62AihoNtSJId31B2mPzEVkVzcu4acVE0FCOIPrjspcC
+   Ocwmlz/DTX0Xxi33r1z0fZgYoSMfP7gfafnF0ZsKtt6rC6vplPYYYqC7M
+   wHk9F92XArLdApwnerbYBQbkLUtnYiIjOf14iVTv/OY/nUCmjU3VBx85G
+   sZ5YXg9GjmRKhomodQhtdw3JI+tqejjfUOZg6W8vUhqd/l6n+EnaQ/LeP
+   CBbirkZLp/o6BNQaJDNrgM43mudmr6Oe8xmmJqX3ZloTTPd6Nd8ViLvJc
+   KbOAZAPWmIiAsvK44ahDtx8fXzP9HCivcXKwiyzoHMYMguOMYPHnYS44J
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="445224272"
+X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
+   d="scan'208";a="445224272"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2023 12:07:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="748129238"
+X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
+   d="scan'208";a="748129238"
+Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 24 Sep 2023 12:07:21 -0700
+Received: from kbuild by 32c80313467c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qkURo-0000Kx-0G;
+	Sun, 24 Sep 2023 19:07:16 +0000
+Date: Mon, 25 Sep 2023 03:06:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:master 935/1123] drivers/spi/spi-sh-msiof.c:590:22:
+ error: passing 'const struct spi_device *' to parameter of type 'struct
+ spi_device *' discards qualifiers
+Message-ID: <202309250335.HbQxldm5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] scsi: target: tcmu: Annotate struct tcmu_tmr with
- __counted_by
-To: Kees Cook <keescook@chromium.org>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
- linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20230922175300.work.148-kees@kernel.org>
-Content-Language: en-US
-From: Bodo Stroesser <bostroesser@gmail.com>
-In-Reply-To: <20230922175300.work.148-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 22.09.23 19:53, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct tcmu_tmr.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Bodo Stroesser <bostroesser@gmail.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: linux-scsi@vger.kernel.org
-> Cc: target-devel@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/target/target_core_user.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-> index 22cc6cac0ba2..7eb94894bd68 100644
-> --- a/drivers/target/target_core_user.c
-> +++ b/drivers/target/target_core_user.c
-> @@ -201,7 +201,7 @@ struct tcmu_tmr {
->   
->   	uint8_t tmr_type;
->   	uint32_t tmr_cmd_cnt;
-> -	int16_t tmr_cmd_ids[];
-> +	int16_t tmr_cmd_ids[] __counted_by(tmr_cmd_cnt);
->   };
->   
->   /*
+tree:   https://github.com/Xilinx/linux-xlnx master
+head:   cb1f2dbc7e487361688257fccf78bf3f3ce0e9ed
+commit: ae655c59997b0da487fa28ef79046f3a129a61cf [935/1123] spi: Replace all spi->chip_select and spi->cs_gpiod references with function call
+config: x86_64-buildonly-randconfig-003-20230905 (https://download.01.org/0day-ci/archive/20230925/202309250335.HbQxldm5-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230925/202309250335.HbQxldm5-lkp@intel.com/reproduce)
 
-Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309250335.HbQxldm5-lkp@intel.com/
 
-Thank you,
-Bodo
+All errors (new ones prefixed by >>):
+
+>> drivers/spi/spi-sh-msiof.c:590:22: error: passing 'const struct spi_device *' to parameter of type 'struct spi_device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           if (spi_get_csgpiod(spi, 0)) {
+                               ^~~
+   include/linux/spi/spi.h:276:68: note: passing argument to parameter 'spi' here
+   static inline struct gpio_desc *spi_get_csgpiod(struct spi_device *spi, u8 idx)
+                                                                      ^
+   drivers/spi/spi-sh-msiof.c:594:27: error: passing 'const struct spi_device *' to parameter of type 'struct spi_device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   ss = spi_get_chipselect(spi, 0);
+                                           ^~~
+   include/linux/spi/spi.h:266:56: note: passing argument to parameter 'spi' here
+   static inline u8 spi_get_chipselect(struct spi_device *spi, u8 idx)
+                                                          ^
+   2 errors generated.
+
+
+vim +590 drivers/spi/spi-sh-msiof.c
+
+   581	
+   582	static int sh_msiof_prepare_message(struct spi_controller *ctlr,
+   583					    struct spi_message *msg)
+   584	{
+   585		struct sh_msiof_spi_priv *p = spi_controller_get_devdata(ctlr);
+   586		const struct spi_device *spi = msg->spi;
+   587		u32 ss, cs_high;
+   588	
+   589		/* Configure pins before asserting CS */
+ > 590		if (spi_get_csgpiod(spi, 0)) {
+   591			ss = ctlr->unused_native_cs;
+   592			cs_high = p->native_cs_high;
+   593		} else {
+   594			ss = spi_get_chipselect(spi, 0);
+   595			cs_high = !!(spi->mode & SPI_CS_HIGH);
+   596		}
+   597		sh_msiof_spi_set_pin_regs(p, ss, !!(spi->mode & SPI_CPOL),
+   598					  !!(spi->mode & SPI_CPHA),
+   599					  !!(spi->mode & SPI_3WIRE),
+   600					  !!(spi->mode & SPI_LSB_FIRST), cs_high);
+   601		return 0;
+   602	}
+   603	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
