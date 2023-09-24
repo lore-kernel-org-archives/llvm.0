@@ -1,106 +1,97 @@
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E7F1C13
-	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 12:54:58 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 9BB575C00B4;
-	Sun, 24 Sep 2023 08:54:57 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 24 Sep 2023 08:54:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm2; t=1695560097; x=
-	1695646497; bh=upcTOUv0s1EAQvf7LZF+X61mhFBEOsrezBxhi1tuN1E=; b=D
-	Vj+DrDCuSDVaNNM2OxSmHfA4eQYRCtpwV8kzSHeTXErr+x19tfKbKqB1cIKFVjIC
-	Suzy7TdPNazUvrrtiUKATWgPojNFZIHN3dEuL/GzP/nbaXRHS2CgkIiGZEfTLx3r
-	GByWCKHd5As9VKKcJn+oHaZysZpZZWFYtMFH9bmdu+0iB4dqouPkuTneE7KchjZP
-	UlWfgkxhUgcu0C14l2TF3X0OTkqYy1rUGIYoKV5F5Q4gxjPHqer3LHQnsHUx0BNn
-	olK6q2GHj9KqBigfNEpS5QsKFZBJGRpZRvgHrFXHqHo/a8Eu1twOkh8n0u6uHekS
-	AasGVJIwI1qz7emzPorhw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1695560097; x=1695646497; bh=upcTOUv0s1EAQ
-	vf7LZF+X61mhFBEOsrezBxhi1tuN1E=; b=ozor45gGnPdBTUlpI9Gn3UIpBn1/7
-	Cdy6Jb+e2IRZV2Z7yaiSU76MLWc4ZrVGl45WgRrYi0Tw0T9GZ+wpI8rVvpzWsRqD
-	03AOL7NSiiCVo62DjSqYi2im/MRh3Als1S1KbAMLzur+7vukt3w3nLfP07byRFPw
-	AJqBqh11x/4YQCk5WqwbGofrAmYtP7ZNEEPX+NGkqsa26mcVEyQkV5s72IZsAzzC
-	giKqoeu1VxCwGECAEcdGdTO6nwMLyGfFVJJHJ6tz8A9SGCFFwtX6DuCLDbG0kqNK
-	KmhJC215IemEYcQHpfZwHQ63XrMFywzvKLX5VQ7upxmfDNjKZ1Pl3eNJQ==
-X-ME-Sender: <xms:oTEQZcRa6dWdP15_7XLqsKX9QtiePGFI_-HUq4_JNpLOUjbQ64iYPw>
-    <xme:oTEQZZzZjaj5dpJ0FC066zlVmgKmo4m3WM2zWlVJ4Cns-DRIHIZQ8XqmibflxxwH1
-    rn1spcTSJ5Hrvlr_U8>
-X-ME-Received: <xmr:oTEQZZ0nGBGZ5eo0XNvqQ2V8uxpagKxztrH35GWzyuXyM_kYvzff6Uk3QrcDK3JyW7NOPNXsNhb2INgKP8aFD4q_SvgnuOyeXCY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelvddgheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
-    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
-    hjpheqnecuggftrfgrthhtvghrnhepudehgeeuveetuedvkeekvdfgffelieeivdelhfet
-    tedtveettefgffegjeefleeknecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghs
-    hhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:oTEQZQBYf-qKo_bj25wnk7uzD0U2kOBN9JkeI2rXv9o-BJvsI7Qj4w>
-    <xmx:oTEQZVg8jJ3NvMN6R6AgcAhozpUrwFi3bD-u6bk1fintqhYwcBt4uw>
-    <xmx:oTEQZcpd84R5h0reAkVDd5RGwHr_THcak0TMjZ4n3lOIZsoL11qPPQ>
-    <xmx:oTEQZQX5Mm-JshwYDF5L_yy083R2F0ilOIcV9x3jheqLbtFvOwA3EQ>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 24 Sep 2023 08:54:55 -0400 (EDT)
-Date: Sun, 24 Sep 2023 21:54:51 +0900
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To: Kees Cook <keescook@chromium.org>
-Cc: linux1394-devel@lists.sourceforge.net,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] firewire: Annotate struct fw_node with __counted_by
-Message-ID: <20230924125451.GA329414@workstation.local>
-Mail-Followup-To: Kees Cook <keescook@chromium.org>,
-	linux1394-devel@lists.sourceforge.net,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230922175334.work.335-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FFD1FA4
+	for <llvm@lists.linux.dev>; Sun, 24 Sep 2023 13:17:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C630BC433BB;
+	Sun, 24 Sep 2023 13:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695561450;
+	bh=t9Xk/x5uTc12jjguLUmrTd//G1EkDbcQ5Y+KI6nZyno=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YxeduMDPM0iTXt3JQgHpc+/Whg+8MoUU+QQQ1Jlhw+Wj3snFMBfpiwG6XJrUGL2dn
+	 TK0pEmOjb38j6AvOgRVYG4nSLa4A58ybB6pqphx+V2TXGMlSD2KGIsjul630pyOROn
+	 cfcWCKtIZ6G2sBhWs81xSUVaqlq+ZFgNrI51vYLCbw3W3jX2w96iK5QnvylAChWsET
+	 yFL+rAAr/QwTw9Rl/Sm/Z3++23fwukmriN4tm7zEkDOkM/NFbX08pCSHTc9eSaMmXP
+	 XlbruURe+up8XEv4nZPh/i/6vk6UVON75DLtUioFJbCHbJZbAl6ELG1ytvxp8lzyGr
+	 coYZcHch/ktMA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	peterz@infradead.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.5 34/41] objtool: Fix _THIS_IP_ detection for cold functions
+Date: Sun, 24 Sep 2023 09:15:22 -0400
+Message-Id: <20230924131529.1275335-34-sashal@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230924131529.1275335-1-sashal@kernel.org>
+References: <20230924131529.1275335-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230922175334.work.335-kees@kernel.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.5.5
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-On Fri, Sep 22, 2023 at 10:53:35AM -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct fw_node.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-> Cc: linux1394-devel@lists.sourceforge.net
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/firewire/core.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+[ Upstream commit 72178d5d1a38dd185d1db15f177f2d122ef10d9b ]
 
-Applied to for-next branch, thanks.
+Cold functions and their non-cold counterparts can use _THIS_IP_ to
+reference each other.  Don't warn about !ENDBR in that case.
 
+Note that for GCC this is currently irrelevant in light of the following
+commit
 
-Regards
+  c27cd083cfb9 ("Compiler attributes: GCC cold function alignment workarounds")
 
-Takashi Sakamoto
+which disabled cold functions in the kernel.  However this may still be
+possible with Clang.
+
+Fixes several warnings like the following:
+
+  drivers/scsi/bnx2i/bnx2i.prelink.o: warning: objtool: bnx2i_hw_ep_disconnect+0x19d: relocation to !ENDBR: bnx2i_hw_ep_disconnect.cold+0x0
+  drivers/net/ipvlan/ipvlan.prelink.o: warning: objtool: ipvlan_addr4_event.cold+0x28: relocation to !ENDBR: ipvlan_addr4_event+0xda
+  drivers/net/ipvlan/ipvlan.prelink.o: warning: objtool: ipvlan_addr6_event.cold+0x26: relocation to !ENDBR: ipvlan_addr6_event+0xb7
+  drivers/net/ethernet/broadcom/tg3.prelink.o: warning: objtool: tg3_set_ringparam.cold+0x17: relocation to !ENDBR: tg3_set_ringparam+0x115
+  drivers/net/ethernet/broadcom/tg3.prelink.o: warning: objtool: tg3_self_test.cold+0x17: relocation to !ENDBR: tg3_self_test+0x2e1
+  drivers/target/iscsi/cxgbit/cxgbit.prelink.o: warning: objtool: __cxgbit_free_conn.cold+0x24: relocation to !ENDBR: __cxgbit_free_conn+0xfb
+  net/can/can.prelink.o: warning: objtool: can_rx_unregister.cold+0x2c: relocation to !ENDBR: can_rx_unregister+0x11b
+  drivers/net/ethernet/qlogic/qed/qed.prelink.o: warning: objtool: qed_spq_post+0xc0: relocation to !ENDBR: qed_spq_post.cold+0x9a
+  drivers/net/ethernet/qlogic/qed/qed.prelink.o: warning: objtool: qed_iwarp_ll2_comp_syn_pkt.cold+0x12f: relocation to !ENDBR: qed_iwarp_ll2_comp_syn_pkt+0x34b
+  net/tipc/tipc.prelink.o: warning: objtool: tipc_nametbl_publish.cold+0x21: relocation to !ENDBR: tipc_nametbl_publish+0xa6
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/d8f1ab6a23a6105bc023c132b105f245c7976be6.1694476559.git.jpoimboe@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/objtool/check.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 1384090530dbe..e308d1ba664ef 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -4333,7 +4333,8 @@ static int validate_ibt_insn(struct objtool_file *file, struct instruction *insn
+ 			continue;
+ 		}
+ 
+-		if (insn_func(dest) && insn_func(dest) == insn_func(insn)) {
++		if (insn_func(dest) && insn_func(insn) &&
++		    insn_func(dest)->pfunc == insn_func(insn)->pfunc) {
+ 			/*
+ 			 * Anything from->to self is either _THIS_IP_ or
+ 			 * IRET-to-self.
+-- 
+2.40.1
+
