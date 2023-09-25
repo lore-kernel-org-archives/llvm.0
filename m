@@ -1,103 +1,190 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2D98477
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 07:09:59 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1725E1F38D;
-	Mon, 25 Sep 2023 07:09:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1695625792; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C0eOHy9J8tI0vJNwEUSpg51HLaOtlpzHMu3rel1MtGE=;
-	b=dfrA12Qk77EK4VOjtFBeRlPf/2/rO0dIzJRbTm53kCKiKkjrhOAXyYwngWRjkdlWCKBy8L
-	4AlVHiKsDtPu7BeIozfsj7njYHSEkD3ibMDK3h4t71wMs5A28f/+Jysbs7EEhdTZ0h6DGy
-	Kea5T6Zci15TAOzOFfZOntd5PKGozr0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E57C61358F;
-	Mon, 25 Sep 2023 07:09:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id Hyz/ND8yEWWbMQAAMHmgww
-	(envelope-from <mhocko@suse.com>); Mon, 25 Sep 2023 07:09:51 +0000
-Date: Mon, 25 Sep 2023 09:09:51 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeelb@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Yosry Ahmed <yosryahmed@google.com>,
-	Yu Zhao <yuzhao@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Qi Zheng <zhengqi.arch@bytedance.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mm/memcg: Annotate struct mem_cgroup_threshold_ary with
- __counted_by
-Message-ID: <ZREyPxSXgjmikITj@dhcp22.suse.cz>
-References: <20230922175327.work.985-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669E310E4
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 07:11:53 +0000 (UTC)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-99c1c66876aso696856866b.2
+        for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 00:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695625911; x=1696230711; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qbxfcRFg7sfBdUligJEEVnlDiFs/P9G+Yi1P7+ItKXA=;
+        b=UTct9lO6ygomFm5Y9kmUb1uTfnjuPeIen67pmqhK2xpQA/Ed4bpay9SnUeZ1Bzks9B
+         XRmCGPZIPDId1o8IU/nC8MWSZ4/L0/eNr4NqtrehbLAXTSFdIif/z69FiB8KW68SRBoI
+         +7vT68IfUQVipkLYkbNAMLGyuMD5lPoiO3mxPhCGvD16bAlUre1EQREANC/69Qg8Zvf6
+         gyh0H0IPkTZZQG/ZKcWb4w7Dpmr+W9Br8LP7OKKDOgUFqTVb+zwM+pbfBj/Kq2eYXRd/
+         9gNdPSKh0dx0r/SEy7EPKl7EXewKoti3ZSak5fkMKSB1T+3ejUbrXfvH9ifs8D2uGiPK
+         S/Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695625911; x=1696230711;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qbxfcRFg7sfBdUligJEEVnlDiFs/P9G+Yi1P7+ItKXA=;
+        b=wy9wlUoviJickNcs6UpEvfN+iFVtMT8vPsHCwqn345tWALLj9jPvWqLQCwhiAXpEcp
+         39d0oyusUn1oPSKaHfejo8yLMEq2hjltVn/NQtwr1U5xhx2PmNvyFcmXndk9XvRy8rml
+         VM0hWPkc1VONWdjn78v5nO3fgtrbtgm/9MfVqGxwI839gvryISqcO7JzJn4J3JuHkuHe
+         MZaOyWzhyHRpnNTpPa7WlTtPhTRNumjNB6yMmQ9wYE3n1QBFMIrbEpHI+fihYJ3W9a9d
+         hG65oiBt5HioL8iWCaVdBphipuXMQoHTmm/dBSqFD7Dl698t+u9Vv7rvfHs20DiB+fZx
+         RPvg==
+X-Gm-Message-State: AOJu0YwlgoHCWC1rNt/3IGdkmC03zXmySEHexVVBKXWrxjummR7JeRVM
+	//dmSsswvLJoDQ/y6h1bZghAww==
+X-Google-Smtp-Source: AGHT+IGQckapbaVGl7TBr+SCsYqMAqKTXz8kkjPeKFYSfsp85MDIe5I8HWyjnJj0gafpoN+IviHAdg==
+X-Received: by 2002:a17:906:209:b0:9a9:d5f4:1a0d with SMTP id 9-20020a170906020900b009a9d5f41a0dmr4977678ejd.45.1695625911604;
+        Mon, 25 Sep 2023 00:11:51 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.100])
+        by smtp.gmail.com with ESMTPSA id i13-20020a170906090d00b0099cbfee34e3sm5906887ejd.196.2023.09.25.00.11.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Sep 2023 00:11:51 -0700 (PDT)
+Message-ID: <42338d41-1b90-4f77-958e-479d32e0ce1d@linaro.org>
+Date: Mon, 25 Sep 2023 09:11:48 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230922175327.work.985-kees@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V12 2/3] dt-bindings: pwm: add IPQ6018 binding
+Content-Language: en-US
+To: Devi Priya <quic_devipriy@quicinc.com>, thierry.reding@gmail.com,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+ ndesaulniers@google.com, trix@redhat.com, baruch@tkos.co.il,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev
+Cc: linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+ nathan@kernel.org
+References: <20230925065915.3467964-1-quic_devipriy@quicinc.com>
+ <20230925065915.3467964-3-quic_devipriy@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20230925065915.3467964-3-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri 22-09-23 10:53:28, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On 25/09/2023 08:59, Devi Priya wrote:
+> DT binding for the PWM block in Qualcomm IPQ6018 SoC.
 > 
-> As found with Coccinelle[1], add __counted_by for struct mem_cgroup_threshold_ary.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
+> Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+...
 
-> ---
->  include/linux/memcontrol.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index 45d0c10e86cc..e0cfab58ab71 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -143,7 +143,7 @@ struct mem_cgroup_threshold_ary {
->  	/* Size of entries[] */
->  	unsigned int size;
->  	/* Array of thresholds */
-> -	struct mem_cgroup_threshold entries[];
-> +	struct mem_cgroup_threshold entries[] __counted_by(size);
->  };
->  
->  struct mem_cgroup_thresholds {
-> -- 
-> 2.34.1
+> diff --git a/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml b/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
+> new file mode 100644
+> index 000000000000..857086ad539e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
 
--- 
-Michal Hocko
-SUSE Labs
+Filename matching compatible, so qcom,ipq6018-pwm.yaml
+
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/ipq-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm IPQ6018 PWM controller
+> +
+> +maintainers:
+> +  - Baruch Siach <baruch@tkos.co.il>
+> +
+> +properties:
+> +  "#pwm-cells":
+> +    const: 2
+> +
+> +  compatible:
+> +    const: qcom,ipq6018-pwm
+
+compatible is always the first property.
+
+> +
+> +  reg:
+> +    description: Offset of PWM register in the TCSR block.
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - "#pwm-cells"
+
+And this order must be the same as in properties.
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-ipq6018.h>
+> +
+> +    syscon@1937000 {
+> +        compatible = "qcom,tcsr-ipq6018", "syscon", "simple-mfd";
+> +        reg = <0x01937000 0x21000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges = <0 0x1937000 0x21000>;
+
+Drop this node, not related. The parent binding could have full example,
+on the other hand. Additionally, I have doubts that you really tested
+the parent binding.
+
+> +
+> +        pwm: pwm@a010 {
+> +            compatible = "qcom,ipq6018-pwm";
+
+Best regards,
+Krzysztof
+
