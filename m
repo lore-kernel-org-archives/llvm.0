@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06BFC18E13
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:02:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8472E18E13
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695654136;
+	s=mimecast20190719; t=1695654155;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=LPHP3NZJm1gEReTEsuJW9cHCvzNanfufp7M8c9+3iQw=;
-	b=iBpn+3a4+TA3c5JNrQwhCD7F/10OsPOkn7VBURVHxgRm8BDaSqmzQGmyR2LcOXSzAxl4QC
-	p3FQT3nzJERgX98oFxme9GKuiv/IBKJ0R47YlZEsgJQHWUWgA+shlzl0Ta+abMl8kps87C
-	t2GCLYmRBznBvZmX037SAVacc+quY5A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-4G9Xw1NnPr-MJka-1tr1pQ-1; Mon, 25 Sep 2023 11:02:12 -0400
-X-MC-Unique: 4G9Xw1NnPr-MJka-1tr1pQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	bh=IO9ZgpCX1YgYUIQR3E/fdYlEmle9dijDTMEXix8vKSQ=;
+	b=i5R8GSDEMXnH3dlumlxhM+kI1A9cCtPytKvbWZAfhxSUHla4qYkGm9kTkgquZKZN21wMao
+	UhKGIP+IYa3Hu41XgCpmwQv9HIR3l/F08cKGKE5vkbfwizrlbBRifOgk1Qfdltmy48R9ur
+	SMZXKd9vD3kp92nnbwYCF20akTRZmEM=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-387-s2Yd_w8EPHmWye3TPdWzgw-1; Mon, 25 Sep 2023 11:02:33 -0400
+X-MC-Unique: s2Yd_w8EPHmWye3TPdWzgw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE5FF858F1C
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:02:11 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 949C83800BA6
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:02:33 +0000 (UTC)
 Received: from [172.64.4.12] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9727A14171B6;
-	Mon, 25 Sep 2023 15:02:11 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7A07E1005B96;
+	Mon, 25 Sep 2023 15:02:33 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 230): Test report for master
- (6.6.0-rc2, mainline.kernel.org-clang, 5a4de7dc)
-Date: Mon, 25 Sep 2023 15:02:11 -0000
+ (6.6.0-rc2, mainline.kernel.org-clang, dc912ba9)
+Date: Mon, 25 Sep 2023 15:02:33 -0000
 To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <29733.123092511021202255@us-mta-446.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <15626.123092511023301578@us-mta-387.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,20 +52,52 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'i2c-for-6.6-rc3' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/wsa/linux
+    Commit message: Merge tag 'efi-fixes-for-v6.6-2' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/efi/efi
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/105819
+    https://datawarehouse.cki-project.org/kcidb/checkouts/105738
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9632253
+9623495
 
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: blktests block/024 failed
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
 robe of ARMHC500:20 failed with error -17
             URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
@@ -89,37 +121,6 @@ p kernel
 l-tests/-/issues/1544
             Affected tests:
                  aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: blktests block/024 failed
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
-            Affected tests:
-                   s390x - Storage - blktests - blk
 
 
 
