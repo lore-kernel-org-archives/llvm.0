@@ -1,128 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA1F10964;
-	Mon, 25 Sep 2023 07:26:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CB83C433C9;
-	Mon, 25 Sep 2023 07:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695626801;
-	bh=I4CNi9Q/JBftF6qP99taJllMHcyGXlOe1VzUdcgnrWs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=j+Zfq8JXfDD5lGXmuBZtgQo6VKdWDgPUMBpj0dWZTupcXLhcRTmXkeMs0Aaq5G26L
-	 V11jhZjeoSR/2Ug+4fLlfnYLPrwtA+Ut8zH5BsrVHn2sPozS3nVjGObrxPDRZCH2nj
-	 ZJvDqOTOgG4Cj75dOue7ZRUwHO8JKVsYtlVQwcgXkkmsMMUgX9P1B1owgk3fb398so
-	 4Gqq6PYbts8Qk1xJbO33NbU/jGpLMHs2Q2SbeFaaj9WJoUJk6oHYg7//E9mWLtYYqJ
-	 dFL3W9Iz2L1ruJQHkyd/1V8r6MOoPuFbwmMNlh/mMJcfDkZOH+h7BTZoCNvHrwLig5
-	 L/MAWdDlIjFug==
-Received: (nullmailer pid 286711 invoked by uid 1000);
-	Mon, 25 Sep 2023 07:26:38 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D996FBB
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 07:41:08 +0000 (UTC)
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-7a50a1d1246so2083830241.3
+        for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 00:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1695627667; x=1696232467; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tiYZdX9DU54hlyCL6A/xG5cg0RmJhcg6NNDUibAVUyM=;
+        b=aCwktSD1WTy/vLbqiMRscl3OKtqpzcGx9S6HMImhXvBhUSdtYA9YKpPygH4h7i5LV/
+         FBxm4/2z1HnJiml1te4cjdocKb7erQZT3vebACZ5fIkhgg19jXlnZMDFmoYVQK82q4wo
+         xnr5yafSHgUwiL2liR0BGr2vOmuIIzL3g3FgjoDxznbBvDL/5IAYx1pQqjO9Xef+0NNz
+         Nt3GnY1wLg7MjxBqL80N7kNQzie1GfJJLq4EdCpWCafD0T9ZnHsV7cTwPNbvUVX63vuY
+         a4iTCgFM2cmPSmV08d5hdF7cSVSu/yRiGCQcSG6OxkzPofKSIL+HCSFO7xgQOu0SHXVS
+         PPBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695627667; x=1696232467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tiYZdX9DU54hlyCL6A/xG5cg0RmJhcg6NNDUibAVUyM=;
+        b=Mq2YykkMUDgNAtUZkZRTLPp2brQ7rA1QTuTbwi8da/HFWj4lVbnIOkdqD20mtONlvD
+         7zp7GvzPED8OAxK4LqYubAB0dYKWASUI6P8DD1IOvu12C75tGvmCNeVeeRs50oEJRwJW
+         p/64+ktRRgJJna3iPv9oB9ikza+2QR8blMYBRPe2WyaIYqbN1UMr9z3A7dctzVhjqZTy
+         ypsLkoft0D5PhXDajOy1vyei9V/68zrbdLIuCtaJRfh58B/VB+8eRh8zOa4uWj2C1yep
+         8ackE68rhDJkE04Eut0VUOBIVZbTx1UPpFKqyqQyTDZd0MtGEaezEw/GAhg3eiSFi3sc
+         yjMA==
+X-Gm-Message-State: AOJu0YxbjnRk1PnBHPnJLXf371ovaJvpKA9LdZr0mrnXHmcZXRCwWbRR
+	d2AwvabywDyrQ3KGFX9oVCce69FFwOEQmAHVDSYddA==
+X-Google-Smtp-Source: AGHT+IFx82zmsxjoLuNTPGGd8GrhippPyNF9FQn3hKIpX7aWK+Ny/ek0o4jNsCfrxS8J3MiCNYA4klx50t41kyL94KQ=
+X-Received: by 2002:a67:fb89:0:b0:44e:e7d7:6847 with SMTP id
+ n9-20020a67fb89000000b0044ee7d76847mr2800971vsr.7.1695627667358; Mon, 25 Sep
+ 2023 00:41:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Devi Priya <quic_devipriy@quicinc.com>
-Cc: devicetree@vger.kernel.org, agross@kernel.org, linux-arm-msm@vger.kernel.org, linux-pwm@vger.kernel.org, andersson@kernel.org, thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de, ndesaulniers@google.com, nathan@kernel.org, konrad.dybcio@linaro.org, conor+dt@kernel.org, baruch@tkos.co.il, robh+dt@kernel.org, linux-kernel@vger.kernel.org, trix@redhat.com, krzysztof.kozlowski+dt@linaro.org, llvm@lists.linux.dev
-In-Reply-To: <20230925065915.3467964-3-quic_devipriy@quicinc.com>
-References: <20230925065915.3467964-1-quic_devipriy@quicinc.com>
- <20230925065915.3467964-3-quic_devipriy@quicinc.com>
-Message-Id: <169562679800.286677.6236841313565579111.robh@kernel.org>
-Subject: Re: [PATCH V12 2/3] dt-bindings: pwm: add IPQ6018 binding
-Date: Mon, 25 Sep 2023 02:26:38 -0500
+References: <20230922175155.work.872-kees@kernel.org>
+In-Reply-To: <20230922175155.work.872-kees@kernel.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 25 Sep 2023 09:40:56 +0200
+Message-ID: <CAMRc=Md+BM0fGoO9SrnmKOKAmXmMBNJ9aBvuOCfKpT94rhv+zQ@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at24: Annotate struct at24_data with __counted_by
+To: Kees Cook <keescook@chromium.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-i2c@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On Mon, 25 Sep 2023 12:29:14 +0530, Devi Priya wrote:
-> DT binding for the PWM block in Qualcomm IPQ6018 SoC.
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
-> Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+On Fri, Sep 22, 2023 at 7:51=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> Prepare for the coming implementation by GCC and Clang of the __counted_b=
+y
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUND=
+S
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>
+> As found with Coccinelle[1], add __counted_by for struct at24_data.
+>
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/c=
+ounted_by.cocci
+>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-i2c@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
-> v12:
-> 
->   Picked up the R-b tag
-> 
-> v11:
-> 
->   No change
-> 
-> v10:
-> 
->   No change
-> 
-> v9:
-> 
->   Add 'ranges' property to example (Rob)
-> 
->   Drop label in example (Rob)
-> 
-> v8:
-> 
->   Add size cell to 'reg' (Rob)
-> 
-> v7:
-> 
->   Use 'reg' instead of 'offset' (Rob)
-> 
->   Drop 'clock-names' and 'assigned-clock*' (Bjorn)
-> 
->   Use single cell address/size in example node (Bjorn)
-> 
->   Move '#pwm-cells' lower in example node (Bjorn)
-> 
->   List 'reg' as required
-> 
-> v6:
-> 
->   Device node is child of TCSR; remove phandle (Rob Herring)
-> 
->   Add assigned-clocks/assigned-clock-rates (Uwe Kleine-König)
-> 
-> v5: Use qcom,pwm-regs for phandle instead of direct regs (Bjorn
->     Andersson, Kathiravan T)
-> 
-> v4: Update the binding example node as well (Rob Herring's bot)
-> 
-> v3: s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
-> 
-> v2: Make #pwm-cells const (Rob Herring)
-> 
->  .../devicetree/bindings/pwm/ipq-pwm.yaml      | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
-> 
+>  drivers/misc/eeprom/at24.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index af83aca452b7..7dfd7fdb423e 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -92,7 +92,7 @@ struct at24_data {
+>          * them for us.
+>          */
+>         u8 bank_addr_shift;
+> -       struct regmap *client_regmaps[];
+> +       struct regmap *client_regmaps[] __counted_by(num_addresses);
+>  };
+>
+>  /*
+> --
+> 2.34.1
+>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Applied, thanks!
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pwm/ipq-pwm.example.dtb: syscon@1937000: compatible: ['qcom,tcsr-ipq6018', 'syscon', 'simple-mfd'] is too long
-	from schema $id: http://devicetree.org/schemas/mfd/qcom,tcsr.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pwm/ipq-pwm.example.dtb: syscon@1937000: '#address-cells', '#size-cells', 'pwm@a010', 'ranges' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/mfd/qcom,tcsr.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230925065915.3467964-3-quic_devipriy@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Bart
