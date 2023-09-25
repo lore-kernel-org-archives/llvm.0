@@ -1,104 +1,140 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9001A10787;
-	Mon, 25 Sep 2023 08:16:25 +0000 (UTC)
-Received: from [IPV6:2001:861:4a40:8620:fcef:69b2:fccd:bd45] (unknown [IPv6:2001:861:4a40:8620:fcef:69b2:fccd:bd45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: gtucker)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AB6966072FA;
-	Mon, 25 Sep 2023 09:16:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1695629783;
-	bh=amPKdjtMA8QAOFF9EQ8eyDnbvaTauDnWFNA/dhbWnBA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TINknH8mVjWGtQGi0pB4YGGGgI5ZwhI4Z2GvafLl/3UwNRqjMo1ypx3Hs6xZbYbJE
-	 2TTu0E/EP73N3rgguY9/XTXkXIja9xgQ9q7J6iFTteDZbQVfhzNLjNTzNy1Zh95oJu
-	 yfkQXa7+Pc0WYuBx/jsDCVYA/SIPkuNnjijaCSEmayxnR99UetPsPQu+Z0/BhC5YAf
-	 0voi/rrXrmo47GVuceUFMkrg9PWOkqixDARmJRP0NgnOryUf5qSrHsXXj0doGG95RA
-	 KZtrMEmHbXgKEILDGKhc92NxAY3BCIedR1mqCdQeAK5tadXiTBfgBcPyGOauK+aW2A
-	 cjFJ3/eadoP0Q==
-Message-ID: <e6e5f76b-9303-82a6-f414-5753d80a0ad2@collabora.com>
-Date: Mon, 25 Sep 2023 10:17:41 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C9713AEA
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 10:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695636533; x=1727172533;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9SzzmhaLPWx2xAIJWkDOyEqBDTZ2PvwdNCWiw1GRUAs=;
+  b=aUtCH1SPxLrSzpRlMSC+CI/5cgQ9MR8Fn8CCf9UmmS16+w2aggFPpdws
+   omgH/+1TqYioXg6F7e2Z0m79UomMNOad/4hCBXZzB06k7CL1rMtW9giqw
+   Nyyqn6HBkcQDFaMJOPdzJhLBF3vt2QornJaZvkL/n4Xa5HPSF9YKB7wfu
+   LPZ6zKpzrgBzgMHb3FUx8GNxSR8Ve8sCERd4yDkOVkDgEioCsIg9Tz8HQ
+   d49ZQd+fvaZ/5fYWdMxQQibmPoXCX7+PeuWUDxjuUJADiaOwoD9/a6Nrg
+   sfUN8FTKXQSNZuaaIjJtbhLWEXWQLtHqzAtC2u9MHh1wTJoRUnsqtcA4y
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="467501558"
+X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
+   d="scan'208";a="467501558"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 03:08:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="777606983"
+X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
+   d="scan'208";a="777606983"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.8.144]) ([10.213.8.144])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 03:08:37 -0700
+Message-ID: <b668d521-c8fd-1207-0a65-e1200e7ebb2c@intel.com>
+Date: Mon, 25 Sep 2023 12:08:36 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: Please add new Android branches
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.15.1
+Subject: Re: [PATCH 3/9] drm/i915/selftests: Annotate struct perf_series with
+ __counted_by
 Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Viktor Martensson <vmartensson@google.com>,
- Betty Zhou <bettyzhou@google.com>, kernelci@lists.linux.dev,
- clang-built-linux <llvm@lists.linux.dev>, Todd Kjos <tkjos@google.com>
-References: <CAHRSSEzrL6uPEvrhW692=+=17EJt+6_-p2z0K5esG4Ff57MSpw@mail.gmail.com>
- <a94cd4e0-7092-04fb-9b89-da236bfec57f@collabora.com>
- <CAHRSSEzMo=-eS8KRqHjSMcBqWCsK2mU4zWg=5KFYx2XyL29Z0w@mail.gmail.com>
- <CAHRSSEzasi7ZRSe3t_ij26cYCc_58eALNn_mMn6B5HFqEbU9EQ@mail.gmail.com>
- <ffab5719-e6f4-4e21-1095-c129928076af@collabora.com>
- <CAHRSSEzo0cSQCp_zk4h2BP2EGdqVHSbZOLC-3gf7c6+uOK9R4g@mail.gmail.com>
- <CAHRSSEw6Vv+3R0OOva8qY3pF-00TZdQku3MxN2OFSaZkN2di+Q@mail.gmail.com>
- <CAKwvOdmni7Vqo0W1qgGkVx8GH4+D7JXO5QTQgqGv8D=Go4oPAA@mail.gmail.com>
- <CAHRSSEz=S_c=KmgDNL_FenUJ25jLmwKe-QXo7-_nUC-7avD0Gg@mail.gmail.com>
- <CAKwvOdkHE7rXgOUyUSCKZ690bjV88E9yVfmG-7vLH6iqqr2G-Q@mail.gmail.com>
- <CAHRSSEzD=nMKjnmJxsGuPdMy2iqc-jxcppna_eKOb8PH0SQOXA@mail.gmail.com>
- <CAKwvOdk5qut5-EX9N2eJQ7KiaUNFv4CBo_Hh2BJOD+bnupKvQA@mail.gmail.com>
-From: Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <CAKwvOdk5qut5-EX9N2eJQ7KiaUNFv4CBo_Hh2BJOD+bnupKvQA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Chris Wilson <chris@chris-wilson.co.uk>,
+ John Harrison <john.c.harrison@Intel.com>,
+ Andi Shyti <andi.shyti@linux.intel.com>,
+ Matthew Brost <matthew.brost@intel.com>, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, Emma Anholt <emma@anholt.net>,
+ Evan Quan <evan.quan@amd.com>, Alex Deucher <alexander.deucher@amd.com>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ "Pan, Xinhui" <Xinhui.Pan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
+ Huang Rui <ray.huang@amd.com>, Kevin Wang <kevin1.wang@amd.com>,
+ Hawking Zhang <Hawking.Zhang@amd.com>, Rob Clark <robdclark@gmail.com>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Bjorn Andersson <andersson@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
+ Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@redhat.com>,
+ Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
+ <olvaffe@gmail.com>, Zack Rusin <zackr@vmware.com>,
+ VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
+ Melissa Wen <mwen@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Le Ma <le.ma@amd.com>, Lijo Lazar <lijo.lazar@amd.com>,
+ Yifan Zhang <yifan1.zhang@amd.com>, Prike Liang <Prike.Liang@amd.com>,
+ Lang Yu <Lang.Yu@amd.com>, Tejas Upadhyay <tejas.upadhyay@intel.com>,
+ Nirmoy Das <nirmoy.das@intel.com>, Neil Armstrong
+ <neil.armstrong@linaro.org>, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+ linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+ linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+ nouveau@lists.freedesktop.org, virtualization@lists.linux-foundation.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230922173110.work.084-kees@kernel.org>
+ <20230922173216.3823169-3-keescook@chromium.org>
+From: Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20230922173216.3823169-3-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 20/09/2023 18:57, Nick Desaulniers wrote:
-> On Tue, Sep 19, 2023 at 5:12 PM Todd Kjos <tkjos@google.com> wrote:
->>
->> On Tue, Sep 19, 2023 at 4:19 PM Nick Desaulniers
->> <ndesaulniers@google.com> wrote:
->>>
->>> Half of the red exclamation marks on that link are are "0 warnings - 0
->>> errors".  What's up with that?
->>
->> This more recent build has "0 warnings - 0 errors":
->> https://linux.kernelci.org/build/android/branch/android15-6.1/kernel/ASB-2023-07-05_14-6.1-2620-gf2d0380464d3/
->>
->> Here is the error (not sure why it bubbled up as 0/0):
->>
->>   AR      drivers/base/power/built-in.a
->> ../fs/namei.c:2172:13: error: use of bitwise '|' with boolean operands
->> [-Werror,-Wbitwise-instead-of-logical]
->>         } while (!(has_zero(a, &adata, &constants) | has_zero(b,
->> &bdata, &constants)));
->>
->> ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>                                                    ||
->> ../fs/namei.c:2172:13: note: cast one or both operands to int to
->> silence this warning
->>   CC      drivers/base/firmware_loader/builtin/main.o
->> 1 error generated.
->> make[3]: *** [../scripts/Makefile.build:250: fs/namei.o] Error 1
->> make[3]: *** Waiting for unfinished jobs....
->> make[2]: *** [../scripts/Makefile.build:500: fs] Error 2
-> 
-> Guillaume,
-> Any idea what's up with that? Seems like the existence of diagnostics
-> is detected correctly; the number of warnings and errors is not.
 
-Yes I think there's some heuristics in the legacy log parsing
-tool to count the number of compiler warnings and errors.  This
-probably is outdated with Clang now, so the build exit status is
-used to detect a failure but then the stats are off.
 
-It's better to avoid fixing this code as it's going to be retired
-in a few months' time to be replaced with a fresh implementation
-based on the new API.  I believe some tweaks could be done to fix
-critical issues, but if the detail of warnings and errors can be
-found even though the stats are off then maybe we can save the
-effort of fixing it?
+On 22.09.2023 19:32, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>
+> As found with Coccinelle[1], add __counted_by for struct perf_series.
+>
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Chris Wilson <chris@chris-wilson.co.uk>
+> Cc: John Harrison <john.c.harrison@Intel.com>
+> Cc: Andi Shyti <andi.shyti@linux.intel.com>
+> Cc: Matthew Brost <matthew.brost@intel.com>
+> Cc: intel-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Cheers,
-Guillaume
+I am surprised this is the only finding in i915, I would expected more. 
+Anyway:
+
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+
+Regards
+Andrzej
+
+> ---
+>   drivers/gpu/drm/i915/selftests/i915_request.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/i915/selftests/i915_request.c b/drivers/gpu/drm/i915/selftests/i915_request.c
+> index a9b79888c193..acae30a04a94 100644
+> --- a/drivers/gpu/drm/i915/selftests/i915_request.c
+> +++ b/drivers/gpu/drm/i915/selftests/i915_request.c
+> @@ -1924,7 +1924,7 @@ struct perf_stats {
+>   struct perf_series {
+>   	struct drm_i915_private *i915;
+>   	unsigned int nengines;
+> -	struct intel_context *ce[];
+> +	struct intel_context *ce[] __counted_by(nengines);
+>   };
+>   
+>   static int cmp_u32(const void *A, const void *B)
 
