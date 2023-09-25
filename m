@@ -1,87 +1,42 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9568215EB3
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 12:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B44479E3;
+	Mon, 25 Sep 2023 12:49:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695644454; x=1727180454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DuowFPWx8WzqGKtlSQ1LLSC/9eNAA11N0z3LCFyNJPw=;
-  b=ff+IftKAhdGpIZBjye12W7HsazMjN6ZE/3buBQWYO5jQxeTvk3Iy6cr0
-   wAK4IFydmdybFdzSbZ0t9BJNqnL2+xTE+WsDnKrAmtrkDHd3pqc90JqOM
-   kCJPZHcaUy07RSEQvzUj7pOekdfdMcZk67ceczGmpkaS4X0XA8WHL2eUU
-   qDcyISSgBwAeGXf9329VpNbM9VzbgicITJ3efoQZOji2BOqNJjb2KLRTN
-   7MVCsdJeyv8iQrNM/tfpba72A8qwDUUZDDE5iXXAGchiAh1xFk/9RIaC5
-   kusFKfhog2H7DwqWJ+KHAe3bHIohQyMnPT6ycTZqZ2J+nSZH/y+b379Cj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="383996635"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="383996635"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 05:20:53 -0700
+  t=1695646150; x=1727182150;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aP6+oi2AUKO9/FFszEUgqP9Gkh1lk5KyVO++tQLihbc=;
+  b=FBadyVPUfb70h50+yobHm8bMbB/TLFv100a4SxfGtNyYv0+BRMTTJv4d
+   n6DUf86w1ur20WS4Mgz/eLj/ddv6AC7CEzechPr8TUjJJgSt3APFnIe9c
+   bTlmQrYvoeVFCF5lNaeI5jgex74yAGvOWvBarmJ/HHygh1L0FM77wAD4T
+   j1Ss94cCI1GCem+dY5AQACVIEccoUPq80hYA49EL1ofJsiV8Wzdao8a2F
+   czZAOeaRsm4bFP+AitKQGnQ+KaLIAQe2vYfOW12O6cSrOuvZXN5zek3I2
+   OKT9EJsywqsaZNICx4Hf654/9NgqgVyUBSTzXehXeiuYyWFHcPMaeJRcj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="384001757"
+X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
+   d="scan'208";a="384001757"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 05:49:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="748329775"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="748329775"
-Received: from nurqayrx-mobl2.gar.corp.intel.com (HELO intel.com) ([10.213.34.118])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 05:20:19 -0700
-Date: Mon, 25 Sep 2023 14:20:13 +0200
-From: Andi Shyti <andi.shyti@linux.intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: David Airlie <airlied@gmail.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Chris Wilson <chris@chris-wilson.co.uk>,
-	John Harrison <john.c.harrison@intel.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	Emma Anholt <emma@anholt.net>, Evan Quan <evan.quan@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-15?Q?K=F6nig?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
-	Xiaojian Du <Xiaojian.Du@amd.com>, Huang Rui <ray.huang@amd.com>,
-	Kevin Wang <kevin1.wang@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-	Lyude Paul <lyude@redhat.com>, Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@redhat.com>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Gurchetan Singh <gurchetansingh@chromium.org>,
-	Chia-I Wu <olvaffe@gmail.com>, Zack Rusin <zackr@vmware.com>,
-	VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
-	Melissa Wen <mwen@igalia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Le Ma <le.ma@amd.com>,
-	Lijo Lazar <lijo.lazar@amd.com>, Yifan Zhang <yifan1.zhang@amd.com>,
-	Prike Liang <Prike.Liang@amd.com>, Lang Yu <Lang.Yu@amd.com>,
-	Tejas Upadhyay <tejas.upadhyay@intel.com>,
-	Nirmoy Das <nirmoy.das@intel.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kuogee Hsieh <quic_khsieh@quicinc.com>,
-	linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org,
-	virtualization@lists.linux-foundation.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 3/9] drm/i915/selftests: Annotate struct perf_series with
- __counted_by
-Message-ID: <ZRF6/VBgVvgl6lpn@ashyti-mobl2.lan>
-References: <20230922173110.work.084-kees@kernel.org>
- <20230922173216.3823169-3-keescook@chromium.org>
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="777641887"
+X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
+   d="scan'208";a="777641887"
+Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 25 Sep 2023 05:48:54 -0700
+Received: from kbuild by 32c80313467c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qkl1A-0001WP-11;
+	Mon, 25 Sep 2023 12:48:52 +0000
+Date: Mon, 25 Sep 2023 20:48:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ulf-hansson-pm:scmi_perf_v4_opp 22/28] drivers/opp/of.c:1081:28:
+ warning: multiple unsequenced modifications to 'val'
+Message-ID: <202309252030.nyCLRVuB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -90,36 +45,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230922173216.3823169-3-keescook@chromium.org>
 
-Hi Kees,
+tree:   git://git.linaro.org/people/ulf.hansson/linux-pm.git scmi_perf_v4_opp
+head:   f9f7850176aef3f594af96ba9286bd1e93460b6f
+commit: fcce70ca2008bb9b1786f957f5e64c8ffef7534b [22/28] OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
+config: arm-bcm2835_defconfig (https://download.01.org/0day-ci/archive/20230925/202309252030.nyCLRVuB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230925/202309252030.nyCLRVuB-lkp@intel.com/reproduce)
 
-On Fri, Sep 22, 2023 at 10:32:08AM -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct perf_series.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: John Harrison <john.c.harrison@Intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Cc: Matthew Brost <matthew.brost@intel.com>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309252030.nyCLRVuB-lkp@intel.com/
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Andi
+>> drivers/opp/of.c:1081:28: warning: multiple unsequenced modifications to 'val' [-Wunsequenced]
+    1081 |                         .freq = be32_to_cpup(val++) * 1000,
+         |                                                 ^
+    1082 |                         .u_volt = be32_to_cpup(val++),
+         |                                                   ~~
+   1 warning generated.
+
+
+vim +/val +1081 drivers/opp/of.c
+
+  1039	
+  1040	/* Initializes OPP tables based on old-deprecated bindings */
+  1041	static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+  1042	{
+  1043		const struct property *prop;
+  1044		const __be32 *val;
+  1045		int nr, ret = 0;
+  1046	
+  1047		mutex_lock(&opp_table->lock);
+  1048		if (opp_table->parsed_static_opps) {
+  1049			opp_table->parsed_static_opps++;
+  1050			mutex_unlock(&opp_table->lock);
+  1051			return 0;
+  1052		}
+  1053	
+  1054		opp_table->parsed_static_opps = 1;
+  1055		mutex_unlock(&opp_table->lock);
+  1056	
+  1057		prop = of_find_property(dev->of_node, "operating-points", NULL);
+  1058		if (!prop) {
+  1059			ret = -ENODEV;
+  1060			goto remove_static_opp;
+  1061		}
+  1062		if (!prop->value) {
+  1063			ret = -ENODATA;
+  1064			goto remove_static_opp;
+  1065		}
+  1066	
+  1067		/*
+  1068		 * Each OPP is a set of tuples consisting of frequency and
+  1069		 * voltage like <freq-kHz vol-uV>.
+  1070		 */
+  1071		nr = prop->length / sizeof(u32);
+  1072		if (nr % 2) {
+  1073			dev_err(dev, "%s: Invalid OPP table\n", __func__);
+  1074			ret = -EINVAL;
+  1075			goto remove_static_opp;
+  1076		}
+  1077	
+  1078		val = prop->value;
+  1079		while (nr) {
+  1080			struct dev_pm_opp_data data = {
+> 1081				.freq = be32_to_cpup(val++) * 1000,
+  1082				.u_volt = be32_to_cpup(val++),
+  1083			};
+  1084	
+  1085			ret = _opp_add_v1(opp_table, dev, &data, false);
+  1086			if (ret) {
+  1087				dev_err(dev, "%s: Failed to add OPP %ld (%d)\n",
+  1088					__func__, data.freq, ret);
+  1089				goto remove_static_opp;
+  1090			}
+  1091			nr -= 2;
+  1092		}
+  1093	
+  1094		return 0;
+  1095	
+  1096	remove_static_opp:
+  1097		_opp_remove_all_static(opp_table);
+  1098	
+  1099		return ret;
+  1100	}
+  1101	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
