@@ -1,144 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8472E18E13
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:02:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695654155;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IO9ZgpCX1YgYUIQR3E/fdYlEmle9dijDTMEXix8vKSQ=;
-	b=i5R8GSDEMXnH3dlumlxhM+kI1A9cCtPytKvbWZAfhxSUHla4qYkGm9kTkgquZKZN21wMao
-	UhKGIP+IYa3Hu41XgCpmwQv9HIR3l/F08cKGKE5vkbfwizrlbBRifOgk1Qfdltmy48R9ur
-	SMZXKd9vD3kp92nnbwYCF20akTRZmEM=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-387-s2Yd_w8EPHmWye3TPdWzgw-1; Mon, 25 Sep 2023 11:02:33 -0400
-X-MC-Unique: s2Yd_w8EPHmWye3TPdWzgw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 949C83800BA6
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:02:33 +0000 (UTC)
-Received: from [172.64.4.12] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7A07E1005B96;
-	Mon, 25 Sep 2023 15:02:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 230): Test report for master
- (6.6.0-rc2, mainline.kernel.org-clang, dc912ba9)
-Date: Mon, 25 Sep 2023 15:02:33 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738AB1F165
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:28:58 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-317c3ac7339so6443647f8f.0
+        for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 08:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695655736; x=1696260536; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LlVgh8EnQKoomI327WbStof7/h21QJuD1LkDI6BFm1M=;
+        b=3F7tIuFZTNdE8BPZdGR2G2L/HPmsnavPdJkK8qILLsyJTb0Nb/Lv7uhN/KboStk0hR
+         fsjxqCY0JSezTPy1c5bvlLz4u25GEou9sYIZWq73wMFEVmHZM/+bPBMUp4xYbgmKVGhT
+         MA4DxJ+nT0Wq/pnrp724If1NBiSQKaXWracIpnGfih5tGNaTKrKeoqFA53tHNo6jPZDX
+         aQnYa3U7mMFVU33DzYN3QVlMo7lHyz5VlJZECKza0R9sjpza11oO4vAa/TJexlIm4MAi
+         Hz6HncGTRu5OSlvOTQeJS9WtjgGDOXapyNOm0vPWRL9FFeDdVu5MR9EdtFl63pZNg15w
+         fxQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695655736; x=1696260536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LlVgh8EnQKoomI327WbStof7/h21QJuD1LkDI6BFm1M=;
+        b=Hm6EJdlzoKt0QhSF6XBhKXaGjlmd+XDKom7anKiCaa57VpSqP+V5gTI4Qh3n6hynhU
+         pX4MD0xwSdDP02sGvmr/R2Vll+TUlVEIJtTPmGiDm9kVcTGZtNvvzS0RJJAGo2sPlDoI
+         F932/xHw6L3oNbShgLyDsNv/6g/oMD7U88362OumZ8kwBjEn/h0eDqV84UsXcALJX5fZ
+         CvVFCQ8xyw0GcVWOxrWq08HkVMIwAC6Wa1Lmu6vS5FdPt2ppn5l5fHCARzcyAjUw5djo
+         XtVFEVfNc0jcfCVaKJwl6kwY94y8EDQe4GPu1xyVMvU+YsievTsLV3Z55luhGmTj7Q0y
+         bIDQ==
+X-Gm-Message-State: AOJu0YySqeYjlbcGogJxQb8pZ4Av4PvuQTnQuYnpAY17TE5X9VeLVePE
+	bDVhHHChcyvVDftiDdXAUeq546jZlv5naRTaj8wwUw==
+X-Google-Smtp-Source: AGHT+IFryUcP5aAWfFUDYotj0onLpApQM/7k0ngL42Fn2eMECkc1E0s2G6R5IKpC0CDY8q/vaUUxOQN0rCzNO7AiKPs=
+X-Received: by 2002:a5d:5389:0:b0:31f:6524:2de1 with SMTP id
+ d9-20020a5d5389000000b0031f65242de1mr6477947wrv.32.1695655736299; Mon, 25 Sep
+ 2023 08:28:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <15626.123092511023301578@us-mta-387.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <CAHRSSEzrL6uPEvrhW692=+=17EJt+6_-p2z0K5esG4Ff57MSpw@mail.gmail.com>
+ <a94cd4e0-7092-04fb-9b89-da236bfec57f@collabora.com> <CAHRSSEzMo=-eS8KRqHjSMcBqWCsK2mU4zWg=5KFYx2XyL29Z0w@mail.gmail.com>
+ <CAHRSSEzasi7ZRSe3t_ij26cYCc_58eALNn_mMn6B5HFqEbU9EQ@mail.gmail.com>
+ <ffab5719-e6f4-4e21-1095-c129928076af@collabora.com> <CAHRSSEzo0cSQCp_zk4h2BP2EGdqVHSbZOLC-3gf7c6+uOK9R4g@mail.gmail.com>
+ <CAHRSSEw6Vv+3R0OOva8qY3pF-00TZdQku3MxN2OFSaZkN2di+Q@mail.gmail.com>
+ <CAKwvOdmni7Vqo0W1qgGkVx8GH4+D7JXO5QTQgqGv8D=Go4oPAA@mail.gmail.com>
+ <CAHRSSEz=S_c=KmgDNL_FenUJ25jLmwKe-QXo7-_nUC-7avD0Gg@mail.gmail.com>
+ <CAKwvOdkHE7rXgOUyUSCKZ690bjV88E9yVfmG-7vLH6iqqr2G-Q@mail.gmail.com>
+ <CAHRSSEzD=nMKjnmJxsGuPdMy2iqc-jxcppna_eKOb8PH0SQOXA@mail.gmail.com>
+ <CAKwvOdk5qut5-EX9N2eJQ7KiaUNFv4CBo_Hh2BJOD+bnupKvQA@mail.gmail.com> <e6e5f76b-9303-82a6-f414-5753d80a0ad2@collabora.com>
+In-Reply-To: <e6e5f76b-9303-82a6-f414-5753d80a0ad2@collabora.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 25 Sep 2023 08:28:45 -0700
+Message-ID: <CAKwvOd=1q9hDHCvi1wwB+pr_UMNdVD3rjmuBWsHgm5+M4Mshyg@mail.gmail.com>
+Subject: Re: Please add new Android branches
+To: Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc: Viktor Martensson <vmartensson@google.com>, Betty Zhou <bettyzhou@google.com>, 
+	kernelci@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>, 
+	Todd Kjos <tkjos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Sep 25, 2023 at 1:16=E2=80=AFAM Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
+>
+> On 20/09/2023 18:57, Nick Desaulniers wrote:
+> > On Tue, Sep 19, 2023 at 5:12=E2=80=AFPM Todd Kjos <tkjos@google.com> wr=
+ote:
+> >>
+> >> On Tue, Sep 19, 2023 at 4:19=E2=80=AFPM Nick Desaulniers
+> >> <ndesaulniers@google.com> wrote:
+> >>>
+> >>> Half of the red exclamation marks on that link are are "0 warnings - =
+0
+> >>> errors".  What's up with that?
+> >>
+> >> This more recent build has "0 warnings - 0 errors":
+> >> https://linux.kernelci.org/build/android/branch/android15-6.1/kernel/A=
+SB-2023-07-05_14-6.1-2620-gf2d0380464d3/
+> >>
+> >> Here is the error (not sure why it bubbled up as 0/0):
+> >>
+> >>   AR      drivers/base/power/built-in.a
+> >> ../fs/namei.c:2172:13: error: use of bitwise '|' with boolean operands
+> >> [-Werror,-Wbitwise-instead-of-logical]
+> >>         } while (!(has_zero(a, &adata, &constants) | has_zero(b,
+> >> &bdata, &constants)));
+> >>
+> >> ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>                                                    ||
+> >> ../fs/namei.c:2172:13: note: cast one or both operands to int to
+> >> silence this warning
+> >>   CC      drivers/base/firmware_loader/builtin/main.o
+> >> 1 error generated.
+> >> make[3]: *** [../scripts/Makefile.build:250: fs/namei.o] Error 1
+> >> make[3]: *** Waiting for unfinished jobs....
+> >> make[2]: *** [../scripts/Makefile.build:500: fs] Error 2
+> >
+> > Guillaume,
+> > Any idea what's up with that? Seems like the existence of diagnostics
+> > is detected correctly; the number of warnings and errors is not.
+>
+> Yes I think there's some heuristics in the legacy log parsing
+> tool to count the number of compiler warnings and errors.  This
+> probably is outdated with Clang now, so the build exit status is
+> used to detect a failure but then the stats are off.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Right, I think clang-17 changed the structure of its output to use
+pipes `|` similar to GCC.
 
+I've been keeping my eye on something called SARIF, which is some kind
+of structured interchange format for diagnostics produced by compilers
+and consumed by IDEs. (Pretty sure it's just JSON).  That might be
+interesting to pursue in KernelCI so that the diagnostics don't need
+hand rolled parsers (that can break).
 
-Kernel information:
-    Commit message: Merge tag 'efi-fixes-for-v6.6-2' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/efi/efi
+>
+> It's better to avoid fixing this code as it's going to be retired
+> in a few months' time to be replaced with a fresh implementation
+> based on the new API.  I believe some tweaks could be done to fix
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/105738
+Oh? Is there a ticket I can sub to to track that?
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9623495
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: blktests block/024 failed
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+> critical issues, but if the detail of warnings and errors can be
+> found even though the stats are off then maybe we can save the
+> effort of fixing it?
+>
+> Cheers,
+> Guillaume
+>
 
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+Thanks,
+~Nick Desaulniers
