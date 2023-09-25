@@ -1,53 +1,53 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6ED21376
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:44:02 +0000 (UTC)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40572aeb73cso32554375e9.3
-        for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 08:44:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442CA21378
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 15:46:04 +0000 (UTC)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4053cb57f02so54899945e9.1
+        for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 08:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695656641; x=1696261441; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695656762; x=1696261562; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LtNJTeTn8zCFpnwQ2yAv3q9ZzhPnaUxajrS7IyL2tyk=;
-        b=PG2F972tELc2bs3X9K04BgcTYrJ9CWKsPS6Fb/H4A+njDLdsa4lf7p9bzhlbJtJJdc
-         h9s55OWvY61gZ6G70MlOn6901P5Cqwf4TkojbX1Uz2mTUaU0QLjUHeC17F6IkUjQ4KTW
-         sTGhFhpiODyLBC4HO348PVA4AsufvnHCZpgm5Kpdypzo9MvT2pni7rjnn496YCgLNuKl
-         1dPPc/GaSV/WMZPgxo9dicwNLHOUx1oK5TzD+Emp7TpIMNihOjQqWKgDYlHcIQJXDd2l
-         /xMwEgzl3samrQ8ScD/FbEJWEei1nefzoon6bQEWLpZlhy3Pf4jc/6vtlthJ6U1hCD4v
-         4QMg==
+        bh=S6w9cjIBkaiBE4V+3VmCBqXcsiPNS3mk1iew76grX0s=;
+        b=IUip8hOSKxLQTiQlcRChIQKa7P8MaWHSJCM7kCPQ3F1VadgFoO54Vl7VCSw1js0gB0
+         ghEf73Or3pUZgCNmhN08K/Yu4VSoS5VC1MU9gdOArrsh8tZVW9ZXTcyWLEHxyHPjJeDA
+         Kyi1h3y9XsurQVx1zzv7FY5jiLpdShZI4twOFcKMQjlYR4fhjPKvRO2X0zjRKk7zlxNU
+         NfoAri27kjocXeDw+kDZdeYpW7FDAYC7Sh9T1lhUaLY2adnI2iSKxeaFIwKA8x3Nu+Qk
+         +gnMUjHo21sr4/s6t/KhSVovrVedH1x1TDoQ5e6tgbLn/4ax9TiywzKHcZmL/QZB+tNr
+         xWKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695656641; x=1696261441;
+        d=1e100.net; s=20230601; t=1695656762; x=1696261562;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LtNJTeTn8zCFpnwQ2yAv3q9ZzhPnaUxajrS7IyL2tyk=;
-        b=TiPVWGYT/El7Vrd74tvr1ci1qwxJZ9Q0CkX6yBZSYailtSGs4zPVSrI8yy5it4yhxZ
-         G0cX/J6rCC20lsPPK+mYEDxbeMl8jvY3CrqyQfZ3IptgPtTJI5rwpdPBeGQ3md5c0AQo
-         5gmsuoU46yyjJmuHGw9bhEUxz0kLf7NWaajaybOJ1ZGYcEb7CIdqhcfV32TvFntTM2mJ
-         wUPf9vUaXevbAZDBOihYrGs0WaBLpFmW4ZYDOsAizLK4yegktuY9Jnmbmy2Uuy1ZHlgS
-         6J0GFXYMRFeoIuY05QQKW2xnm3oL/7QwZQgs3hMT1IOAbFS2GFBY5kxYXvfLu7frk/rU
-         qu5g==
-X-Gm-Message-State: AOJu0Yy0FW8V2vl4mmtyy+7i4OaxV3+xXEeK3Fib0ESYVXdeV7US2U89
-	FmPOoYnl/B913gsogsaYnt9jjGt2HcPo/iPQ9pEYYw==
-X-Google-Smtp-Source: AGHT+IGqnItEdifav9vybTr0GkP0gvqcEVAaGKC0hh68JGilQJUcfm9ace+LAwaLXavBJl7e/rVQ+ZoV44Z88NpDnQg=
-X-Received: by 2002:a1c:4c1a:0:b0:401:bdf9:c336 with SMTP id
- z26-20020a1c4c1a000000b00401bdf9c336mr6175474wmf.27.1695656640529; Mon, 25
- Sep 2023 08:44:00 -0700 (PDT)
+        bh=S6w9cjIBkaiBE4V+3VmCBqXcsiPNS3mk1iew76grX0s=;
+        b=UP5ISa+M6LYqajN2ruc8dQiK3Co+p0qCBC7no7LMYU5eLZFFu0oyJs83+LgR3jcXDo
+         yp8HhzX9qInPVXl2+Xfloy5yJW7uISC3sfkViKhjl8SD5L+cf7leE+FlsyEw5SIoEvK6
+         QCui7FMZVLG4TQ2jgpkaX5oq39jnYiCJz0BpFMmnunwTnTtW3o8dcTlnR6CT5rnM9uSi
+         3QYxXRULYGPPWAGvtQ3EPsUy5FJNWCJEkAexk3vpSNC6n0TBMkrBfj+PDGZVhiXfwQik
+         TEIHrfhpcfYVrjKGGfLjL9GZPx81oH3nD7WviB4YbAyOCnQjCrDIK+UyEISwtE73RtZK
+         ilLQ==
+X-Gm-Message-State: AOJu0YyBiU3Slub0diAng3HmLi9Ama0tfsX3hexjFHl+xxNZRO83JVtM
+	Xj0ExtX5VKSc7o/xq5iFaClbsfIh4rKEobBz7sFdbw==
+X-Google-Smtp-Source: AGHT+IGu/9yAvMgyQo0GKRSxLjrvYvnLqQG1R7XDHQF//7461nbvcXHf0k5K8bPzmjA5KENtcUlC23HtIehGPhsqqnw=
+X-Received: by 2002:a5d:424b:0:b0:31f:ea3d:f93 with SMTP id
+ s11-20020a5d424b000000b0031fea3d0f93mr5883911wrr.40.1695656762384; Mon, 25
+ Sep 2023 08:46:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230923053515.535607-1-irogers@google.com> <20230923053515.535607-4-irogers@google.com>
-In-Reply-To: <20230923053515.535607-4-irogers@google.com>
+References: <20230923053515.535607-1-irogers@google.com> <20230923053515.535607-3-irogers@google.com>
+In-Reply-To: <20230923053515.535607-3-irogers@google.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 25 Sep 2023 08:43:45 -0700
-Message-ID: <CAKwvOdngy8a0n7TapeMPvANvp1uQuJAJk9i3kDNWx+czFL0=cQ@mail.gmail.com>
-Subject: Re: [PATCH v1 03/18] run-clang-tools: Add pass through checks and and
- header-filter arguments
+Date: Mon, 25 Sep 2023 08:45:51 -0700
+Message-ID: <CAKwvOd=WbZfFnen8e_k_TgocQumfdM2sUiO1doh4gS_G_+=h6g@mail.gmail.com>
+Subject: Re: [PATCH v1 02/18] gen_compile_commands: Sort output compile
+ commands by file name
 To: Ian Rogers <irogers@google.com>
 Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -68,79 +68,32 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Sep 22, 2023 at 10:35=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
 ote:
 >
-> Add a -checks argument to allow the checks passed to the clang-tool to
-> be set on the command line.
->
-> Add a pass through -header-filter option.
+> Make the output more stable and deterministic.
 >
 > Signed-off-by: Ian Rogers <irogers@google.com>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
->  scripts/clang-tools/run-clang-tools.py | 34 ++++++++++++++++++++------
->  1 file changed, 27 insertions(+), 7 deletions(-)
+>  scripts/clang-tools/gen_compile_commands.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools=
-/run-clang-tools.py
-> index 3266708a8658..5dfe03852cb4 100755
-> --- a/scripts/clang-tools/run-clang-tools.py
-> +++ b/scripts/clang-tools/run-clang-tools.py
-> @@ -33,6 +33,11 @@ def parse_arguments():
->      path_help =3D "Path to the compilation database to parse"
->      parser.add_argument("path", type=3Dstr, help=3Dpath_help)
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
+tools/gen_compile_commands.py
+> index b43f9149893c..180952fb91c1 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -221,7 +221,7 @@ def main():
+>                                       cmdfile, err)
 >
-> +    checks_help =3D "Checks to pass to the analysis"
-> +    parser.add_argument("-checks", type=3Dstr, default=3DNone, help=3Dch=
-ecks_help)
-> +    header_filter_help =3D "Pass the -header-filter value to the tool"
-> +    parser.add_argument("-header-filter", type=3Dstr, default=3DNone, he=
-lp=3Dheader_filter_help)
-> +
->      return parser.parse_args()
+>      with open(output, 'wt') as f:
+> -        json.dump(compile_commands, f, indent=3D2, sort_keys=3DTrue)
+> +        json.dump(sorted(compile_commands, key=3Dlambda x: x["file"]), f=
+, indent=3D2, sort_keys=3DTrue)
 >
 >
-> @@ -45,14 +50,29 @@ def init(l, a):
->
->  def run_analysis(entry):
->      # Disable all checks, then re-enable the ones we want
-> -    checks =3D []
-> -    checks.append("-checks=3D-*")
-> -    if args.type =3D=3D "clang-tidy":
-> -        checks.append("linuxkernel-*")
-> +    global args
-> +    checks =3D None
-> +    if args.checks:
-> +        checks =3D args.checks.split(',')
->      else:
-> -        checks.append("clang-analyzer-*")
-> -        checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOr=
-UnsafeBufferHandling")
-> -    p =3D subprocess.run(["clang-tidy", "-p", args.path, ",".join(checks=
-), entry["file"]],
-> +        checks =3D ["-*"]
-> +        if args.type =3D=3D "clang-tidy":
-> +            checks.append("linuxkernel-*")
-> +        else:
-> +            checks.append("clang-analyzer-*")
-> +            checks.append("-clang-analyzer-security.insecureAPI.Deprecat=
-edOrUnsafeBufferHandling")
-> +    file =3D entry["file"]
-> +    if not file.endswith(".c") and not file.endswith(".cpp"):
-> +        with lock:
-> +            print(f"Skipping non-C file: '{file}'", file=3Dsys.stderr)
-> +        return
-> +    pargs =3D ["clang-tidy", "-p", args.path]
-> +    if checks:
-
-^ can `checks` ever be falsy here?  I don't think we need this
-conditional check?
-
-> +        pargs.append("-checks=3D" + ",".join(checks))
-> +    if args.header_filter:
-> +        pargs.append("-header-filter=3D" + args.header_filter)
-> +    pargs.append(file)
-> +    p =3D subprocess.run(pargs,
->                         stdout=3Dsubprocess.PIPE,
->                         stderr=3Dsubprocess.STDOUT,
->                         cwd=3Dentry["directory"])
+>  if __name__ =3D=3D '__main__':
 > --
 > 2.42.0.515.g380fc7ccd1-goog
 >
