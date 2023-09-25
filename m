@@ -1,139 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B44479E3;
-	Mon, 25 Sep 2023 12:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695646150; x=1727182150;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aP6+oi2AUKO9/FFszEUgqP9Gkh1lk5KyVO++tQLihbc=;
-  b=FBadyVPUfb70h50+yobHm8bMbB/TLFv100a4SxfGtNyYv0+BRMTTJv4d
-   n6DUf86w1ur20WS4Mgz/eLj/ddv6AC7CEzechPr8TUjJJgSt3APFnIe9c
-   bTlmQrYvoeVFCF5lNaeI5jgex74yAGvOWvBarmJ/HHygh1L0FM77wAD4T
-   j1Ss94cCI1GCem+dY5AQACVIEccoUPq80hYA49EL1ofJsiV8Wzdao8a2F
-   czZAOeaRsm4bFP+AitKQGnQ+KaLIAQe2vYfOW12O6cSrOuvZXN5zek3I2
-   OKT9EJsywqsaZNICx4Hf654/9NgqgVyUBSTzXehXeiuYyWFHcPMaeJRcj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="384001757"
-X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="384001757"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 05:49:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="777641887"
-X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="777641887"
-Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 25 Sep 2023 05:48:54 -0700
-Received: from kbuild by 32c80313467c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qkl1A-0001WP-11;
-	Mon, 25 Sep 2023 12:48:52 +0000
-Date: Mon, 25 Sep 2023 20:48:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ulf-hansson-pm:scmi_perf_v4_opp 22/28] drivers/opp/of.c:1081:28:
- warning: multiple unsequenced modifications to 'val'
-Message-ID: <202309252030.nyCLRVuB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A5A11CA8
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 14:01:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695650514;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wSGOALMSxMd09TR4cf8cYgRd1UraXZD5mMtRUOKZJwU=;
+	b=DUdVph2gaGdYWBFvUMa+EniPWaA8BDlxbiRMOLNWIGyDOVclp/xbi5gZsyfdZklQIry2T+
+	q800kYSep5Afz19fB/YHnL5EQJtZAyiaaMSBtjnj8zkx8oFJzVrBzinINUIqjnp7vRxpJG
+	XENc0rtHCEVhli3eZqdWeAKBXIfgBmw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-424-U2I0Rt-2O6G1wqoJSNRsZg-1; Mon, 25 Sep 2023 10:01:53 -0400
+X-MC-Unique: U2I0Rt-2O6G1wqoJSNRsZg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA7571C294BA
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 14:01:52 +0000 (UTC)
+Received: from [172.64.4.12] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AE6CB492C37;
+	Mon, 25 Sep 2023 14:01:52 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, 6465e260)
+Date: Mon, 25 Sep 2023 14:01:52 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <94959.123092510015300527@us-mta-424.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.linaro.org/people/ulf.hansson/linux-pm.git scmi_perf_v4_opp
-head:   f9f7850176aef3f594af96ba9286bd1e93460b6f
-commit: fcce70ca2008bb9b1786f957f5e64c8ffef7534b [22/28] OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
-config: arm-bcm2835_defconfig (https://download.01.org/0day-ci/archive/20230925/202309252030.nyCLRVuB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230925/202309252030.nyCLRVuB-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309252030.nyCLRVuB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/opp/of.c:1081:28: warning: multiple unsequenced modifications to 'val' [-Wunsequenced]
-    1081 |                         .freq = be32_to_cpup(val++) * 1000,
-         |                                                 ^
-    1082 |                         .u_volt = be32_to_cpup(val++),
-         |                                                   ~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/val +1081 drivers/opp/of.c
+Kernel information:
+    Commit message: Linux 6.6-rc3
 
-  1039	
-  1040	/* Initializes OPP tables based on old-deprecated bindings */
-  1041	static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
-  1042	{
-  1043		const struct property *prop;
-  1044		const __be32 *val;
-  1045		int nr, ret = 0;
-  1046	
-  1047		mutex_lock(&opp_table->lock);
-  1048		if (opp_table->parsed_static_opps) {
-  1049			opp_table->parsed_static_opps++;
-  1050			mutex_unlock(&opp_table->lock);
-  1051			return 0;
-  1052		}
-  1053	
-  1054		opp_table->parsed_static_opps = 1;
-  1055		mutex_unlock(&opp_table->lock);
-  1056	
-  1057		prop = of_find_property(dev->of_node, "operating-points", NULL);
-  1058		if (!prop) {
-  1059			ret = -ENODEV;
-  1060			goto remove_static_opp;
-  1061		}
-  1062		if (!prop->value) {
-  1063			ret = -ENODATA;
-  1064			goto remove_static_opp;
-  1065		}
-  1066	
-  1067		/*
-  1068		 * Each OPP is a set of tuples consisting of frequency and
-  1069		 * voltage like <freq-kHz vol-uV>.
-  1070		 */
-  1071		nr = prop->length / sizeof(u32);
-  1072		if (nr % 2) {
-  1073			dev_err(dev, "%s: Invalid OPP table\n", __func__);
-  1074			ret = -EINVAL;
-  1075			goto remove_static_opp;
-  1076		}
-  1077	
-  1078		val = prop->value;
-  1079		while (nr) {
-  1080			struct dev_pm_opp_data data = {
-> 1081				.freq = be32_to_cpup(val++) * 1000,
-  1082				.u_volt = be32_to_cpup(val++),
-  1083			};
-  1084	
-  1085			ret = _opp_add_v1(opp_table, dev, &data, false);
-  1086			if (ret) {
-  1087				dev_err(dev, "%s: Failed to add OPP %ld (%d)\n",
-  1088					__func__, data.freq, ret);
-  1089				goto remove_static_opp;
-  1090			}
-  1091			nr -= 2;
-  1092		}
-  1093	
-  1094		return 0;
-  1095	
-  1096	remove_static_opp:
-  1097		_opp_remove_all_static(opp_table);
-  1098	
-  1099		return ret;
-  1100	}
-  1101	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/105847
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9634667
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: blktests block/024 failed
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
