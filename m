@@ -1,58 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62FE101FE
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 06:55:04 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="383943284"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="383943284"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2023 23:54:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="697883720"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="697883720"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2023 23:54:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qkfUI-00000000GwT-1ikF;
-	Mon, 25 Sep 2023 09:54:34 +0300
-Date: Mon, 25 Sep 2023 09:54:34 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: cdev: Annotate struct linereq with
- __counted_by()
-Message-ID: <ZREuqs2LkkF3jqD8@smile.fi.intel.com>
-References: <20230918091553.1103567-1-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F035686
+	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 06:59:42 +0000 (UTC)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38P5DdZ4028258;
+	Mon, 25 Sep 2023 06:59:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=Ui/rR6BUBsfiSpLCNBIjp14VY6rQXxkTQ8UdtHdSN3M=;
+ b=ODaAXr3GwntTHubRmK8FEmuFqOTIUh6Kj0cJYMJcwIaxywzasbvQtUHedNS88wpPMobi
+ AHmhKfBAz57MMEOf9vGKr7pV85uwmqTKixhZ2eEmAF7AlbEhWndB/sGrSKM7YIyEFz2d
+ e9kAD7pemSR1B4YBaPz6UwTK4+L7QtNCn4A/eSrBW30FcMm+NmirtfwB1qXq4Mcf/pAQ
+ u9oSF98jl2R9z2dq/s2miMjqu3t4L9dAOXrHJKPoqXk9Hteb7OoEACzdf3hTES+TgRix
+ yOkLVtra8gTdNPc+ysBxvvI7kl0tgiIZEGu7bXp3qIgXZ4IpvqXVqztJvjCTbgNO3+IB kg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t9qbpu3x8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Sep 2023 06:59:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38P6xXPB025886
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Sep 2023 06:59:33 GMT
+Received: from hu-devipriy-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Sun, 24 Sep 2023 23:59:28 -0700
+From: Devi Priya <quic_devipriy@quicinc.com>
+To: <thierry.reding@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <ndesaulniers@google.com>,
+        <trix@redhat.com>, <baruch@tkos.co.il>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
+        <nathan@kernel.org>
+Subject: [PATCH V12 0/3] Add PWM support for IPQ chipsets
+Date: Mon, 25 Sep 2023 12:29:12 +0530
+Message-ID: <20230925065915.3467964-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230918091553.1103567-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MbP2NKkmWh8SzeQhJqXqaY68dKJC1xfz
+X-Proofpoint-ORIG-GUID: MbP2NKkmWh8SzeQhJqXqaY68dKJC1xfz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-25_04,2023-09-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=755 spamscore=0 malwarescore=0
+ impostorscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
+ clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309250047
 
-On Mon, Sep 18, 2023 at 12:15:53PM +0300, Andy Shevchenko wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family                                         functions).
+Add PWM driver and binding support for IPQ chipsets.
+Also, add support for pwm in ipq6018.
 
-Kees' patch is better, please ignore this one.
+Devi Priya (3):
+  pwm: driver for qualcomm ipq6018 pwm block
+  dt-bindings: pwm: add IPQ6018 binding
+  arm64: dts: ipq6018: add pwm node
 
+ .../devicetree/bindings/pwm/ipq-pwm.yaml      |  53 ++++
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  15 +-
+ drivers/pwm/Kconfig                           |  12 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-ipq.c                         | 282 ++++++++++++++++++
+ 5 files changed, 362 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
+ create mode 100644 drivers/pwm/pwm-ipq.c
+
+
+base-commit: 940fcc189c51032dd0282cbee4497542c982ac59
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
