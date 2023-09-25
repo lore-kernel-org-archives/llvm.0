@@ -1,153 +1,134 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4E1D297
-	for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 17:56:27 +0000 (UTC)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1dce0f9e222so2464765fac.0
-        for <llvm@lists.linux.dev>; Mon, 25 Sep 2023 10:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695664587; x=1696269387; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a1F9rg4X23ujFzzgF5l8L8aKk/znEnb8MB1jEXGz6ng=;
-        b=gzkTYfW9eRqhFYIKAVkpxkB592yspFBpWpH2pcpX06PdaT3IaFvNeRIdNDMWNW/yaD
-         xjW2bTVRmUGgO0xZ1DR5TdZd4Q/piHfxTmua3Doey8rdp9hA8gQ8wE5WapiXG6Fo2ihY
-         0z5ouSVKf9zuhYABQi+ncGzTNvsB9Dz/P3A71Ldx4cTDgJvyZIDcbsFpEa/oNgiZkVGe
-         mHTk8AWji6nOI7R7xBUt9kLaVCQ70YzS7n4hsdDyN6iogopc1W69Lv7WxKZfqxQbBXhM
-         X9jtegFE0sYV2wDOpnKSjpzgRJp+juIrJUqPjL+EfkpToUjwFwA/qpcKzKDon6zFE3bH
-         JDqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695664587; x=1696269387;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a1F9rg4X23ujFzzgF5l8L8aKk/znEnb8MB1jEXGz6ng=;
-        b=fQ8QIFPkGWJbwcy+aUk7eswYl5YfnkHXJZsDFoMs7oWDlow4iq7xrF37uLykcNB2gX
-         ez+xjVRWxnYGChiOhflpIkYB6JUyC6H5vjvQpCuBFtYG2CVFfJJehjEkkaMARZ0EaiGs
-         2yl9qY8i5BKjEW44rdHb8/aT3V5IlN/dAe9KLivd+a4sj1OkW8CgaOduSw1qssBHTpkK
-         LVy0gNbrDV8MrGart5mUhJhgL1DVFkud9gKie5a53fhD5jomiRSd8ans/LnZ6SgPptG6
-         RB+TsIshrcPhN1rw8j6OXJpIOe1bPqIOo9wPXe9czc5KKR4KtMOz41jfwN9DVJEggeET
-         2sJw==
-X-Gm-Message-State: AOJu0YxBB/TupDJngVqZKdnMbNrEIMhvMq42buXQ9jwtTSA6XKUuSVen
-	wrwhNIIc4/XYwIK2yo9qVCb8Kfawa10V6DN6KZk=
-X-Google-Smtp-Source: AGHT+IHKGmpSNoLKRlPKgMz3PfLu9l0asTJ/KJeRR4YlCqKx/0xgmJzaJCWHK+NWln0berAZsxELHx2SNeMkUMNHpCU=
-X-Received: by 2002:a05:6870:c227:b0:1db:3679:198a with SMTP id
- z39-20020a056870c22700b001db3679198amr8758871oae.24.1695664587047; Mon, 25
- Sep 2023 10:56:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CE915494;
+	Mon, 25 Sep 2023 20:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695674459; x=1727210459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VlUjdyltOZyETgHH9ITiS2d/gAV4ljty/uBGboprFLU=;
+  b=SQTJeyQuL/xnXyGnbK58UPnrjDIvfTNJS+Q7WGrNwdp/XQxhgu1mNI8j
+   qpftvBOCCsMdjwc+N7AAzClAS2e+a02+vMk7pNEp2dsJnzYNF/xBvBmzZ
+   ElpOShYwpv5IPMKbLtIgrLoZ6bWKawa41B6kY6moLhwHc+tPL51xU+iCs
+   zp4o0EY4OdQj3hXYsz97eNVhK9Tw6yK6ljYjY78N2X5Khwq5z1jK6V3TH
+   Z+uSm3S8v1s2l9IdSlDw8is4yUnzRS4oKB0JqJ25N1CbAXZBpEvnisGKE
+   YaVQYo8+OfMfo5eyA+bljnMEjObD+oOWU1MuvnL2IYL9BozeCmSFe+4en
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="360761986"
+X-IronPort-AV: E=Sophos;i="6.03,176,1694761200"; 
+   d="scan'208";a="360761986"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 13:40:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="742046325"
+X-IronPort-AV: E=Sophos;i="6.03,176,1694761200"; 
+   d="scan'208";a="742046325"
+Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 25 Sep 2023 13:40:52 -0700
+Received: from kbuild by 32c80313467c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qksNt-00020R-2m;
+	Mon, 25 Sep 2023 20:40:49 +0000
+Date: Tue, 26 Sep 2023 04:39:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Gomez <da.gomez@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 6/6] shmem: add large folios support to the write path
+Message-ID: <202309260433.1Ai6wzDe-lkp@intel.com>
+References: <20230919135536.2165715-7-da.gomez@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230922173110.work.084-kees@kernel.org> <20230922173216.3823169-1-keescook@chromium.org>
- <CADnq5_P2p3bmczci=pU+pG6f9+hqn=-xp1EynP2345CJZRW08w@mail.gmail.com>
- <2635922e-f52a-4e91-40c6-4f1358972786@amd.com> <202309251051.EE3ECE7B@keescook>
-In-Reply-To: <202309251051.EE3ECE7B@keescook>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 25 Sep 2023 13:56:16 -0400
-Message-ID: <CADnq5_PaXmFa6N_2-NRp7_2+m3TYt8s--4aYm1UTnQKXDUhwYw@mail.gmail.com>
-Subject: Re: [PATCH 1/9] drm/amd/pm: Annotate struct smu10_voltage_dependency_table
- with __counted_by
-To: Kees Cook <keescook@chromium.org>
-Cc: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Airlie <airlied@gmail.com>, Tejas Upadhyay <tejas.upadhyay@intel.com>, 
-	Emma Anholt <emma@anholt.net>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev, 
-	dri-devel@lists.freedesktop.org, Chris Wilson <chris@chris-wilson.co.uk>, 
-	Prike Liang <Prike.Liang@amd.com>, Huang Rui <ray.huang@amd.com>, 
-	Gerd Hoffmann <kraxel@redhat.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Karol Herbst <kherbst@redhat.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	amd-gfx@lists.freedesktop.org, Kuogee Hsieh <quic_khsieh@quicinc.com>, 
-	Nathan Chancellor <nathan@kernel.org>, 
-	VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>, Ben Skeggs <bskeggs@redhat.com>, 
-	Andi Shyti <andi.shyti@linux.intel.com>, nouveau@lists.freedesktop.org, 
-	David Airlie <airlied@redhat.com>, virtualization@lists.linux-foundation.org, 
-	linux-hardening@vger.kernel.org, Lijo Lazar <lijo.lazar@amd.com>, 
-	Yifan Zhang <yifan1.zhang@amd.com>, linux-arm-msm@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, Kevin Wang <kevin1.wang@amd.com>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, Melissa Wen <mwen@igalia.com>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Gurchetan Singh <gurchetansingh@chromium.org>, 
-	Maxime Ripard <mripard@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Evan Quan <evan.quan@amd.com>, Sean Paul <sean@poorly.run>, 
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Xiaojian Du <Xiaojian.Du@amd.com>, 
-	Le Ma <le.ma@amd.com>, freedreno@lists.freedesktop.org, 
-	Bjorn Andersson <andersson@kernel.org>, "Pan, Xinhui" <Xinhui.Pan@amd.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
-	Alex Deucher <alexander.deucher@amd.com>, Nirmoy Das <nirmoy.das@intel.com>, 
-	Lang Yu <Lang.Yu@amd.com>, John Harrison <john.c.harrison@intel.com>, 
-	Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230919135536.2165715-7-da.gomez@samsung.com>
 
-On Mon, Sep 25, 2023 at 1:52=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Mon, Sep 25, 2023 at 08:30:30AM +0200, Christian K=C3=B6nig wrote:
-> > Am 22.09.23 um 19:41 schrieb Alex Deucher:
-> > > On Fri, Sep 22, 2023 at 1:32=E2=80=AFPM Kees Cook <keescook@chromium.=
-org> wrote:
-> > > > Prepare for the coming implementation by GCC and Clang of the __cou=
-nted_by
-> > > > attribute. Flexible array members annotated with __counted_by can h=
-ave
-> > > > their accesses bounds-checked at run-time checking via CONFIG_UBSAN=
-_BOUNDS
-> > > > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-f=
-amily
-> > > > functions).
-> > > >
-> > > > As found with Coccinelle[1], add __counted_by for struct smu10_volt=
-age_dependency_table.
-> > > >
-> > > > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/exam=
-ples/counted_by.cocci
-> > > >
-> > > > Cc: Evan Quan <evan.quan@amd.com>
-> > > > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > > > Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> > > > Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> > > > Cc: David Airlie <airlied@gmail.com>
-> > > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > > Cc: Xiaojian Du <Xiaojian.Du@amd.com>
-> > > > Cc: Huang Rui <ray.huang@amd.com>
-> > > > Cc: Kevin Wang <kevin1.wang@amd.com>
-> > > > Cc: amd-gfx@lists.freedesktop.org
-> > > > Cc: dri-devel@lists.freedesktop.org
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > Acked-by: Alex Deucher <alexander.deucher@amd.com>
-> >
-> > Mhm, I'm not sure if this is a good idea. That is a structure filled in=
- by
-> > the firmware, isn't it?
-> >
-> > That would imply that we might need to byte swap count before it is
-> > checkable.
->
-> The script found this instance because of this:
->
-> static int smu10_get_clock_voltage_dependency_table(struct pp_hwmgr *hwmg=
-r,
->                         struct smu10_voltage_dependency_table **pptable,
->                         uint32_t num_entry, const DpmClock_t *pclk_depend=
-ency_table)
-> {
->         uint32_t i;
->         struct smu10_voltage_dependency_table *ptable;
->
->         ptable =3D kzalloc(struct_size(ptable, entries, num_entry), GFP_K=
-ERNEL);
->         if (NULL =3D=3D ptable)
->                 return -ENOMEM;
->
->         ptable->count =3D num_entry;
->
-> So the implication is that it's native byte order... but you tell me! I
-> certainly don't want this annotation if it's going to break stuff. :)
+Hi Daniel,
 
-In this case, the code is for an integrated GPU in an x86 CPU so the
-firmware and driver endianness match.  You wouldn't find a stand alone
-dGPU that uses this structure.  In this case it's ok.  False alarm.
+kernel test robot noticed the following build errors:
 
-Alex
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.6-rc3 next-20230925]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Gomez/shmem-drop-BLOCKS_PER_PAGE-macro/20230920-005146
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230919135536.2165715-7-da.gomez%40samsung.com
+patch subject: [PATCH v2 6/6] shmem: add large folios support to the write path
+config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20230926/202309260433.1Ai6wzDe-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230926/202309260433.1Ai6wzDe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309260433.1Ai6wzDe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/shmem.c:1734:15: error: call to '__compiletime_assert_307' declared with 'error' attribute: BUILD_BUG failed
+           if (order == HPAGE_PMD_ORDER)
+                        ^
+   include/linux/huge_mm.h:67:26: note: expanded from macro 'HPAGE_PMD_ORDER'
+   #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
+                            ^
+   include/linux/huge_mm.h:257:28: note: expanded from macro 'HPAGE_PMD_SHIFT'
+   #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
+                              ^
+   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
+   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+                       ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:413:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:406:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:52:1: note: expanded from here
+   __compiletime_assert_307
+   ^
+   1 error generated.
+
+
+vim +1734 mm/shmem.c
+
+  1722	
+  1723	static struct folio *shmem_alloc_and_acct_folio(gfp_t gfp, struct inode *inode,
+  1724			pgoff_t index, unsigned int order)
+  1725	{
+  1726		struct shmem_inode_info *info = SHMEM_I(inode);
+  1727		struct folio *folio;
+  1728		int nr = 1U << order;
+  1729		int err = shmem_inode_acct_block(inode, nr);
+  1730	
+  1731		if (err)
+  1732			goto failed;
+  1733	
+> 1734		if (order == HPAGE_PMD_ORDER)
+  1735			folio = shmem_alloc_hugefolio(gfp, info, index);
+  1736		else
+  1737			folio = shmem_alloc_folio(gfp, info, index, order);
+  1738		if (folio) {
+  1739			__folio_set_locked(folio);
+  1740			__folio_set_swapbacked(folio);
+  1741			return folio;
+  1742		}
+  1743	
+  1744		err = -ENOMEM;
+  1745		shmem_inode_unacct_blocks(inode, nr);
+  1746	failed:
+  1747		return ERR_PTR(err);
+  1748	}
+  1749	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
