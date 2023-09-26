@@ -1,125 +1,472 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A7E63AD
-	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 11:22:50 +0000 (UTC)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-59f6441215dso59546567b3.2
-        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 04:22:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5FD6FD2
+	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 12:40:48 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d81c02bf2beso13059468276.2
+        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 05:40:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695727369; x=1696332169; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qSgW4LX4JUbEA5D+qEqJf6N354eXZcLyKCwAX5DR+2c=;
-        b=NBbZaVk9yNOBzdacntXptgmph824f07muf+L3mG/gxvX9zH6CpZ3Pc2sCpR8xI7xcv
-         ad+4g3quOzw1Y0YGMuubNe//hi4FhlWkCSUIAIIielhLCujUsDP7RVGRb2SxiVY0v04O
-         6gEhL/Nw/vxXrniEpkM4yYq6fXHd5N4s+7MJ0wt5LokfaLjibU5lCL12zcL1Ew5kRadC
-         k8EVggtEi8czMlLYjZO1iVG+yWgURjIv1Qvf1YuKsA9adBtXEucD0EiOHAlj4FGbdIZo
-         /PI3Eu8rFcShPxiM9o6cvtiU57KYys0+lyqNYL3YOAgX3iYJ2rXCkOVdQ/lGYj1Pxz8Y
-         NQ4w==
+        d=google.com; s=20230601; t=1695732047; x=1696336847; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rVl0oq16CBfzsmVkACt6/ktTS6N3LsV1S73eEvwxpiI=;
+        b=OcvCp6wiT1G9sQJQjkJah/lPVJ1zLMpvlcUllv7So7m34MtC8IYa9lbaPG6bBcl/p8
+         GRWptIcZmyyl3VapVtoTEeHZ+qHPpq3V35pVD+F9nFT9lnh6G/kYdoykXkhFL1hdpp82
+         HQNScP+NrHSkkdkUomt7KCRLS+b/nyVhkdWfm6w5Hv9PlcYKjo47VjWndtGEIjaZ9mM5
+         NJ1N8OLv9KpJLswbaPW1a2PvyPXwmAvWRGAKRzrVQCxIkDkeECzFzxy1HYPneMmRa/cs
+         6lmnFwCL8WGBmS3ZYysRtcI4I2tkrkCpAyPmeyuNVTs7QSacZ3gpC5GJSTJz8nzNrq1e
+         7KMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695727369; x=1696332169;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qSgW4LX4JUbEA5D+qEqJf6N354eXZcLyKCwAX5DR+2c=;
-        b=VCOIgSVwy0A/lLz0222RX4zO18WI6J2rJWsSN8eJ/7NGS+F/4t50J1c/8QY8W7uilt
-         iUdCc2zwoH41lDJ7IfemLvhaIs16AECNYMfD4y1biS5okQLqqeup4iLUC5JSoxTLZT7+
-         teUNWNWpH44VD2Bu81iAN3r19bCVAOOhINA3KXkxt3GMqUB/5QBznlZOb6ipR8buuzbK
-         dmU45yIWZbj8ls1hi415OvrjyX356WjJU2Wgg0rVnGauzDBWihwtlOkahbBhWBp3O/yu
-         N8SeCs5g/KEgKw+WzNjwI2N9jYIaGOJGJTKGkAIKPl6I5tC402pdk903QV6EQ5fWzr28
-         ZjhQ==
-X-Gm-Message-State: AOJu0Yx03ywJZSWThWPWw7mF9qeQ4aQg95QPSe9bqnRb4gN8IN4YB5n+
-	GdHdyb9lGbO1+F0dA4UijhHX8PaXfRdkdoG1oBDCCQ==
-X-Google-Smtp-Source: AGHT+IF8+EP3qKO3+6vQiu7ilfzf8MAEdMbrx81nCcCeCherlXFPx5hr18Is6Hj+3VgIvZcu1mBSNS/hy/9TBb4Lssc=
-X-Received: by 2002:a25:943:0:b0:d78:30b2:78f3 with SMTP id
- u3-20020a250943000000b00d7830b278f3mr8940351ybm.45.1695727369620; Tue, 26 Sep
- 2023 04:22:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695732047; x=1696336847;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rVl0oq16CBfzsmVkACt6/ktTS6N3LsV1S73eEvwxpiI=;
+        b=XYTl1qpobzLUOpB8qkpl046LM/9b91D3ezjVeSahl8py3uz1LqdhOobn5J3QQ957xP
+         NAwUn/UicJxh/zarK35EQacmpu9Us8HU7cfHUEsdvfqBfQmPrFGvdL71iOIVMoAqRy57
+         nOhNMZtIRvBsCs6zz0/7e64zuN1OGNEJJVH/4vqrqv8wyzRnkv/MpJwlkmx2SmNKdxyk
+         sJ+pi9UwK/DsKHyTrxfa6BuxLwAhl0d1xdkINgeXOs+CrIqwZsVqhZHWo/8w5Ndxml1C
+         xeuMCM7t+6iziDIUzbtIbC7ZPlCoXMR81h8fNZnhcAsiMW/6SZSGrmmCcDJz1JnoVV0r
+         OqnA==
+X-Gm-Message-State: AOJu0Yxi1M3o6yE7cRC6jppY3rwFMQQgzU85JPqby1j0EIfS39ePiXce
+	ROT1+h1GKtymcyGMoIq+oxJAsa/Jt9ToBQ==
+X-Google-Smtp-Source: AGHT+IHNCBwhoxZyhWGIY6p088zObWo7zjrn1LBXz9jJ+5fqF2aTHi3J3g47/fByaYVcB9iZ/tc4+2y9B3N9QQ==
+X-Received: from jbrennen.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:3c2a])
+ (user=jbrennen job=sendgmr) by 2002:a25:374b:0:b0:d89:3ed5:6042 with SMTP id
+ e72-20020a25374b000000b00d893ed56042mr46099yba.11.1695732047371; Tue, 26 Sep
+ 2023 05:40:47 -0700 (PDT)
+Date: Tue, 26 Sep 2023 08:40:44 -0400
+In-Reply-To: <CAK7LNARd_pRWWso49C4MoahFAM9idyOFC+9ZFYdpS87CA4UTqQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
- <CAMuHMdWiC4v9fctp18bRrEH-m_-0VjMg9+XpON8vdRYwniTU3g@mail.gmail.com> <CAMuHMdWk_jcZ1V7J68bw11YZ+EjEqAWOKHzanVyxo2zktbMteg@mail.gmail.com>
-In-Reply-To: <CAMuHMdWk_jcZ1V7J68bw11YZ+EjEqAWOKHzanVyxo2zktbMteg@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 26 Sep 2023 13:22:13 +0200
-Message-ID: <CAPDyKFqgsHYz1hfOQ=KniNJj+u7ZSMoxS03Rixj1n2AOUdSVaQ@mail.gmail.com>
-Subject: Re: [PATCH] soc: renesas: rmobile-sysc: fix -Wvoid-pointer-to-enum-cast
- warning
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Justin Stitt <justinstitt@google.com>, Magnus Damm <magnus.damm@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Linux PM list <linux-pm@vger.kernel.org>
+Mime-Version: 1.0
+References: <CAK7LNARd_pRWWso49C4MoahFAM9idyOFC+9ZFYdpS87CA4UTqQ@mail.gmail.com>
+X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
+Message-ID: <20230926124044.3522663-1-jbrennen@google.com>
+Subject: [PATCH] modpost: Optimize symbol search from linear to binary search
+From: Jack Brennen <jbrennen@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, maskray@google.com, cleger@rivosinc.com, 
+	kernel-team@android.com, joe@perches.com, Jack Brennen <jbrennen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, 18 Sept 2023 at 11:21, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
->
-> Hi Ulf,
->
-> On Wed, Aug 30, 2023 at 10:24=E2=80=AFAM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Tue, Aug 15, 2023 at 12:11=E2=80=AFAM Justin Stitt <justinstitt@goog=
-le.com> wrote:
-> > > When building with clang 18 I see the following warning:
-> > > |      drivers/soc/renesas/rmobile-sysc.c:193:22: warning: cast to sm=
-aller integer
-> > > |               type 'enum pd_types' from 'const void *' [-Wvoid-poin=
-ter-to-enum-cast]
-> > > |        193 |                 add_special_pd(np, (enum pd_types)id->=
-data);
-> > >
-> > > This is due to the fact that `id->data` is a void* and `enum pd_types=
-`
-> > > has the size of an integer. This cast from pointer-width to int-width
-> > > causes truncation and possible data loss. Instead, cast to `uintptr_t=
-`
-> > > which has the same width as void*.
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1910
-> > > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > scripts/checkpatch.pl:
-> >
-> >     WARNING: Reported-by: should be immediately followed by Closes:
-> > with a URL to the report
-> >
-> > Hence changing the Link: tag to a Closes: tag.
-> >
-> > > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > > ---
-> > > Note: It should be noted that there is likely no data loss occurring =
-in
-> > > this case since the enum only has a few fields. The narrowing cast fr=
-om
-> > > pointer to int will not lose any data.
-> >
-> > Indeed, the theoretical narrowing could only happen on a 64-bit
-> > platform, while this driver is only used on arm32.
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > i.e. will queue in renesas-devel for v6.7.
->
-> As the Generic PM Domain providers were moved to drivers/pmdomain/
-> in v6.6-rc2, and now have their own maintainer, I have moved this
-> commit from renesas-drivers-for-v6.7 to renesas-pmdomain-for-v6.7[1],
-> with s/soc/pmdomain/ in the oneline-summary.
->
-> Ulf: if you prefer, you can still take this patch directly.
-> Else I will send a PR after rc3 and/or rc5, like I do with my other
-> renesas-<foo>-for-<version> branches.
-> Thanks!
+Modify modpost to use binary search for converting addresses back
+into symbol references.  Previously it used linear search.
 
-Apologize for the delay, been traveling lately. Anyway, I can
-certainly pick up the patch and carry it for v6.7. Just let me know,
-if/when you have dropped the patch from your tree.
+This change saves a few seconds of wall time for defconfig builds,
+but can save several minutes on allyesconfigs.
 
-[...]
+Before:
+$ make LLVM=1 -j128 allyesconfig vmlinux -s KCFLAGS="-Wno-error"
+$ time scripts/mod/modpost -M -m -a -N -o vmlinux.symvers vmlinux.o
+198.38user 1.27system 3:19.71elapsed
 
-Kind regards
-Uffe
+After:
+$ make LLVM=1 -j128 allyesconfig vmlinux -s KCFLAGS="-Wno-error"
+$ time scripts/mod/modpost -M -m -a -N -o vmlinux.symvers vmlinux.o
+11.91user 0.85system 0:12.78elapsed
+
+Signed-off-by: Jack Brennen <jbrennen@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ scripts/mod/Makefile    |   4 +-
+ scripts/mod/modpost.c   |  70 ++------------
+ scripts/mod/modpost.h   |  25 +++++
+ scripts/mod/symsearch.c | 199 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 232 insertions(+), 66 deletions(-)
+ create mode 100644 scripts/mod/symsearch.c
+
+diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
+index c9e38ad937fd..3c54125eb373 100644
+--- a/scripts/mod/Makefile
++++ b/scripts/mod/Makefile
+@@ -5,7 +5,7 @@ CFLAGS_REMOVE_empty.o += $(CC_FLAGS_LTO)
+ hostprogs-always-y	+= modpost mk_elfconfig
+ always-y		+= empty.o
+ 
+-modpost-objs	:= modpost.o file2alias.o sumversion.o
++modpost-objs	:= modpost.o file2alias.o sumversion.o symsearch.o
+ 
+ devicetable-offsets-file := devicetable-offsets.h
+ 
+@@ -16,7 +16,7 @@ targets += $(devicetable-offsets-file) devicetable-offsets.s
+ 
+ # dependencies on generated files need to be listed explicitly
+ 
+-$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o: $(obj)/elfconfig.h
++$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o $(obj)/symsearch.o: $(obj)/elfconfig.h
+ $(obj)/file2alias.o: $(obj)/$(devicetable-offsets-file)
+ 
+ quiet_cmd_elfconfig = MKELF   $@
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index de499dce5265..71ddce212538 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -22,7 +22,6 @@
+ #include <errno.h>
+ #include "modpost.h"
+ #include "../../include/linux/license.h"
+-#include "../../include/linux/module_symbol.h"
+ 
+ static bool module_enabled;
+ /* Are we using CONFIG_MODVERSIONS? */
+@@ -577,11 +576,14 @@ static int parse_elf(struct elf_info *info, const char *filename)
+ 			*p = TO_NATIVE(*p);
+ 	}
+ 
++	symsearch_init(info);
++
+ 	return 1;
+ }
+ 
+ static void parse_elf_finish(struct elf_info *info)
+ {
++	symsearch_finish(info);
+ 	release_file(info->hdr, info->size);
+ }
+ 
+@@ -1039,71 +1041,10 @@ static int secref_whitelist(const char *fromsec, const char *fromsym,
+ 	return 1;
+ }
+ 
+-/*
+- * If there's no name there, ignore it; likewise, ignore it if it's
+- * one of the magic symbols emitted used by current tools.
+- *
+- * Otherwise if find_symbols_between() returns those symbols, they'll
+- * fail the whitelist tests and cause lots of false alarms ... fixable
+- * only by merging __exit and __init sections into __text, bloating
+- * the kernel (which is especially evil on embedded platforms).
+- */
+-static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
+-{
+-	const char *name = elf->strtab + sym->st_name;
+-
+-	if (!name || !strlen(name))
+-		return 0;
+-	return !is_mapping_symbol(name);
+-}
+-
+-/* Look up the nearest symbol based on the section and the address */
+-static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
+-				 unsigned int secndx, bool allow_negative,
+-				 Elf_Addr min_distance)
+-{
+-	Elf_Sym *sym;
+-	Elf_Sym *near = NULL;
+-	Elf_Addr sym_addr, distance;
+-	bool is_arm = (elf->hdr->e_machine == EM_ARM);
+-
+-	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
+-		if (get_secindex(elf, sym) != secndx)
+-			continue;
+-		if (!is_valid_name(elf, sym))
+-			continue;
+-
+-		sym_addr = sym->st_value;
+-
+-		/*
+-		 * For ARM Thumb instruction, the bit 0 of st_value is set
+-		 * if the symbol is STT_FUNC type. Mask it to get the address.
+-		 */
+-		if (is_arm && ELF_ST_TYPE(sym->st_info) == STT_FUNC)
+-			 sym_addr &= ~1;
+-
+-		if (addr >= sym_addr)
+-			distance = addr - sym_addr;
+-		else if (allow_negative)
+-			distance = sym_addr - addr;
+-		else
+-			continue;
+-
+-		if (distance <= min_distance) {
+-			min_distance = distance;
+-			near = sym;
+-		}
+-
+-		if (min_distance == 0)
+-			break;
+-	}
+-	return near;
+-}
+-
+ static Elf_Sym *find_fromsym(struct elf_info *elf, Elf_Addr addr,
+ 			     unsigned int secndx)
+ {
+-	return find_nearest_sym(elf, addr, secndx, false, ~0);
++	return symsearch_find_nearest(elf, addr, secndx, false, ~0);
+ }
+ 
+ static Elf_Sym *find_tosym(struct elf_info *elf, Elf_Addr addr, Elf_Sym *sym)
+@@ -1116,7 +1057,8 @@ static Elf_Sym *find_tosym(struct elf_info *elf, Elf_Addr addr, Elf_Sym *sym)
+ 	 * Strive to find a better symbol name, but the resulting name may not
+ 	 * match the symbol referenced in the original code.
+ 	 */
+-	return find_nearest_sym(elf, addr, get_secindex(elf, sym), true, 20);
++	return symsearch_find_nearest(elf, addr, get_secindex(elf, sym),
++				      true, 20);
+ }
+ 
+ static bool is_executable_section(struct elf_info *elf, unsigned int secndx)
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 5f94c2c9f2d9..6413f26fcb6b 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -10,6 +10,7 @@
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <elf.h>
++#include "../../include/linux/module_symbol.h"
+ 
+ #include "list.h"
+ #include "elfconfig.h"
+@@ -128,6 +129,8 @@ struct elf_info {
+ 	 * take shndx from symtab_shndx_start[N] instead */
+ 	Elf32_Word   *symtab_shndx_start;
+ 	Elf32_Word   *symtab_shndx_stop;
++
++	struct symsearch *symsearch;
+ };
+ 
+ /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
+@@ -154,6 +157,28 @@ static inline unsigned int get_secindex(const struct elf_info *info,
+ 	return index;
+ }
+ 
++/*
++ * If there's no name there, ignore it; likewise, ignore it if it's
++ * one of the magic symbols emitted used by current tools.
++ *
++ * Internal symbols created by tools should be ignored by modpost.
++ */
++static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
++{
++	const char *name = elf->strtab + sym->st_name;
++
++	if (!name || !strlen(name))
++		return 0;
++	return !is_mapping_symbol(name);
++}
++
++/* symsearch.c */
++void symsearch_init(struct elf_info *elf);
++void symsearch_finish(struct elf_info *elf);
++Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
++				unsigned int secndx, bool allow_negative,
++				Elf_Addr min_distance);
++
+ /* file2alias.c */
+ void handle_moddevtable(struct module *mod, struct elf_info *info,
+ 			Elf_Sym *sym, const char *symname);
+diff --git a/scripts/mod/symsearch.c b/scripts/mod/symsearch.c
+new file mode 100644
+index 000000000000..aa4ed51f9960
+--- /dev/null
++++ b/scripts/mod/symsearch.c
+@@ -0,0 +1,199 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Helper functions for finding the symbol in an ELF which is "nearest"
++ * to a given address.
++ */
++
++#include "modpost.h"
++
++struct syminfo {
++	unsigned int symbol_index;
++	unsigned int section_index;
++	Elf_Addr addr;
++};
++
++/*
++ * Container used to hold an entire binary search table.
++ * Entries in table are ascending, sorted first by section_index,
++ * then by addr, and last by symbol_index.  The sorting by
++ * symbol_index is used to ensure predictable behavior when
++ * multiple symbols are present with the same address; all
++ * symbols past the first are effectively ignored, by eliding
++ * them in symsearch_fixup().
++ */
++struct symsearch {
++	unsigned int table_size;
++	struct syminfo table[];
++};
++
++static int syminfo_compare(const void *s1, const void *s2)
++{
++	const struct syminfo *sym1 = s1;
++	const struct syminfo *sym2 = s2;
++
++	if (sym1->section_index > sym2->section_index)
++		return 1;
++	if (sym1->section_index < sym2->section_index)
++		return -1;
++	if (sym1->addr > sym2->addr)
++		return 1;
++	if (sym1->addr < sym2->addr)
++		return -1;
++	if (sym1->symbol_index > sym2->symbol_index)
++		return 1;
++	if (sym1->symbol_index < sym2->symbol_index)
++		return -1;
++	return 0;
++}
++
++static unsigned int symbol_count(struct elf_info *elf)
++{
++	unsigned int result = 0;
++
++	for (Elf_Sym *sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
++		if (is_valid_name(elf, sym))
++			result++;
++	}
++	return result;
++}
++
++/*
++ * Populate the search array that we just allocated.
++ * Be slightly paranoid here.  The ELF file is mmap'd and could
++ * conceivably change between symbol_count() and symsearch_populate().
++ * If we notice any difference, bail out rather than potentially
++ * propagating errors or crashing.
++ */
++static void symsearch_populate(struct elf_info *elf,
++			       struct syminfo *table,
++			       unsigned int table_size)
++{
++	bool is_arm = (elf->hdr->e_machine == EM_ARM);
++
++	for (Elf_Sym *sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
++		if (is_valid_name(elf, sym)) {
++			if (table_size-- == 0)
++				fatal("%s: size mismatch\n", __func__);
++			table->symbol_index = sym - elf->symtab_start;
++			table->section_index = get_secindex(elf, sym);
++			table->addr = sym->st_value;
++
++			/*
++			 * For ARM Thumb instruction, the bit 0 of st_value is
++			 * set if the symbol is STT_FUNC type. Mask it to get
++			 * the address.
++			 */
++			if (is_arm && ELF_ST_TYPE(sym->st_info) == STT_FUNC)
++				table->addr &= ~1;
++
++			table++;
++		}
++	}
++
++	if (table_size != 0)
++		fatal("%s: size mismatch\n", __func__);
++}
++
++/*
++ * Do any fixups on the table after sorting.
++ * For now, this just finds adjacent entries which have
++ * the same section_index and addr, and it propagates
++ * the first symbol_index over the subsequent entries,
++ * so that only one symbol_index is seen for any given
++ * section_index and addr.  This ensures that whether
++ * we're looking at an address from "above" or "below"
++ * that we see the same symbol_index.
++ * This does leave some duplicate entries in the table;
++ * in practice, these are a small fraction of the
++ * total number of entries, and they are harmless to
++ * the binary search algorithm other than a few occasional
++ * unnecessary comparisons.
++ */
++static void symsearch_fixup(struct syminfo *table, unsigned int table_size)
++{
++	/* Don't look at index 0, it will never change. */
++	for (unsigned int i = 1; i < table_size; i++) {
++		if (table[i].addr == table[i - 1].addr &&
++		    table[i].section_index == table[i - 1].section_index) {
++			table[i].symbol_index = table[i - 1].symbol_index;
++		}
++	}
++}
++
++void symsearch_init(struct elf_info *elf)
++{
++	unsigned int table_size = symbol_count(elf);
++
++	elf->symsearch = NOFAIL(malloc(sizeof(struct symsearch) +
++				       sizeof(struct syminfo) * table_size));
++	elf->symsearch->table_size = table_size;
++
++	symsearch_populate(elf, elf->symsearch->table, table_size);
++	qsort(elf->symsearch->table, table_size,
++	      sizeof(struct syminfo), syminfo_compare);
++
++	symsearch_fixup(elf->symsearch->table, table_size);
++}
++
++void symsearch_finish(struct elf_info *elf)
++{
++	free(elf->symsearch);
++	elf->symsearch = NULL;
++}
++
++/*
++ * Find the syminfo which is in secndx and "nearest" to addr.
++ * allow_negative: allow returning a symbol whose address is > addr.
++ * min_distance: ignore symbols which are further away than this.
++ *
++ * Returns a pointer into the symbol table for success.
++ * Returns NULL if no legal symbol is found within the requested range.
++ */
++Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
++				unsigned int secndx, bool allow_negative,
++				Elf_Addr min_distance)
++{
++	unsigned int hi = elf->symsearch->table_size;
++	unsigned int lo = 0;
++	struct syminfo *table = elf->symsearch->table;
++	struct syminfo target;
++
++	target.addr = addr;
++	target.section_index = secndx;
++	target.symbol_index = ~0;  /* compares greater than any actual index */
++	while (hi > lo) {
++		unsigned int mid = lo + (hi - lo) / 2;  /* Avoids overflow */
++
++		if (syminfo_compare(&table[mid], &target) > 0)
++			hi = mid;
++		else
++			lo = mid + 1;
++	}
++
++	/*
++	 * table[hi], if it exists, is the first entry in the array which
++	 * lies beyond target.  table[hi - 1], if it exists, is the last
++	 * entry in the array which comes before target, including the
++	 * case where it perfectly matches the section and the address.
++	 *
++	 * Note -- if the address we're looking up falls perfectly
++	 * in the middle of two symbols, this is written to always
++	 * prefer the symbol with the lower address.
++	 */
++	Elf_Sym *result = NULL;
++
++	if (allow_negative &&
++	    hi < elf->symsearch->table_size &&
++	    table[hi].section_index == secndx &&
++	    table[hi].addr - addr <= min_distance) {
++		min_distance = table[hi].addr - addr;
++		result = &elf->symtab_start[table[hi].symbol_index];
++	}
++	if (hi > 0 &&
++	    table[hi - 1].section_index == secndx &&
++	    addr - table[hi - 1].addr <= min_distance) {
++		result = &elf->symtab_start[table[hi - 1].symbol_index];
++	}
++	return result;
++}
+-- 
+2.42.0.515.g380fc7ccd1-goog
+
