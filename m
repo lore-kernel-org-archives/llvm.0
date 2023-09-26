@@ -1,107 +1,111 @@
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3FD125C3
-	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 20:39:29 +0000 (UTC)
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-77dcff76e35so91627839f.1
-        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 13:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1695760769; x=1696365569; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4itLyJE7Z8JfcB/+4kI9MY4phkDcuyoRTUlwxY85lCs=;
-        b=b5iJWoYdzXz5oq7KCcGIqy/fLgwWNSkRkq2tTg0rL2Qh7zI3YfCDfnnGyesGNT1bif
-         ug8yCESOb5AYuMsDIQHf8rkvxF8GaWCH657mNOlHY1jrLPBtZ2aZWrq0N+moHCfjfDBE
-         us0sSwHN/VS3xvB86ITtZaL+lAthj+B7ixDcw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695760769; x=1696365569;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4itLyJE7Z8JfcB/+4kI9MY4phkDcuyoRTUlwxY85lCs=;
-        b=YqOMGDXyO2ZNIDSI17k1ElvURflbDEOVKyZb6suhZouALE3e5ran130irXsxO7pPHz
-         56wSuTKaDPjbOuJlUh167rI8+MCdCycQhH6LUnC2x5StivG4jcf7WQNqzS8J0sOV9EWJ
-         X/aIuqkK7lyU8ThCpefKGMVm89Hu0MPJcRJywpOBW5ighKIT7x/oDGeZc4SmX/EsdKtY
-         PP3TLMICWaggKBTOQoO9LhgXwtBoYB7i4DQRfBUMwaxXbtq9ovpJRGuvTTXbrGwvPZ0D
-         bXD9qKcaWwRb+aRdcXq3HAhpydbgR2EWKSx+iCL0LYX3akW6rxWq7cZ+J1b3rSJK5qtM
-         X0uA==
-X-Gm-Message-State: AOJu0YyinHEnxdRa6V2H4DfiihmMmZ7NFOWDMPqBhE6+HAASRauK0RDw
-	kfAHbjsihftn7s85bktOvtUfuQ==
-X-Google-Smtp-Source: AGHT+IEqzEqSw0ZWhyREwjYY6mijjnwRBFBsNEXNhhBHdykUk4Sz+a6d3vEhXqu6krETVTustZ6gGg==
-X-Received: by 2002:a6b:5d1d:0:b0:790:958e:a667 with SMTP id r29-20020a6b5d1d000000b00790958ea667mr10265245iob.2.1695760768958;
-        Tue, 26 Sep 2023 13:39:28 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g17-20020a0566380bd100b00437a3c128dfsm3671118jad.108.2023.09.26.13.39.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 13:39:28 -0700 (PDT)
-Message-ID: <63dd7222-99dc-8e11-3a51-b132e4115ac5@linuxfoundation.org>
-Date: Tue, 26 Sep 2023 14:39:27 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6FA28E22;
+	Tue, 26 Sep 2023 21:15:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695762955; x=1727298955;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5VP33ZENS7KttVEYiLWj5dLs3mzRBPjPSPkup9tRjus=;
+  b=PAw5QJkLn4szgFOh1Xqq+8Bnh7IrqIYWBm+q6/Hj/1V/SV2YVsSHQgJ4
+   pPugEvWPgUQVsck92ap/rtGblaO4odOLbuLjU94Rf2LLlC2OqTleKBgwV
+   6hcBoUWPKz7AGN46qS89MT3sRhNDXlK1Eo7O4bBjeME2RElSCK34IGGdR
+   lq2IJpd+QLgr/FwhXwLFME7XheTKhBpk0icbAj4gI0fb3tyaBw3ZY7/aO
+   dP1a+rqYMK9BYoIWvlMgYDpt1F+yFi5BhbWbRtZXQ67ILV7UYxq3S5XlZ
+   CPwI5bOpvLOQpJrCGyHiCVGYEYC1j5AEfjJyBWCesnsXqtLqn095rlJiw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="380538852"
+X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
+   d="scan'208";a="380538852"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 14:15:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="1079860933"
+X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
+   d="scan'208";a="1079860933"
+Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Sep 2023 14:15:34 -0700
+Received: from kbuild by 32c80313467c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qlFP2-0003N1-0r;
+	Tue, 26 Sep 2023 21:15:32 +0000
+Date: Wed, 27 Sep 2023 05:14:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jinjie Ruan <ruanjinjie@huawei.com>, brendan.higgins@linux.dev,
+	davidgow@google.com, skhan@linuxfoundation.org, dlatypov@google.com,
+	rmoar@google.com, janusz.krzysztofik@linux.intel.com,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ruanjinjie@huawei.com
+Subject: Re: [PATCH v3 4/4] kunit: test: Fix the possible memory leak in
+ executor_test
+Message-ID: <202309270433.wGmFRGjd-lkp@intel.com>
+References: <20230922071020.2554677-5-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] selftests/rseq: fix kselftest Clang build warnings
-Content-Language: en-US
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Justin Stitt <justinstitt@google.com>, Peter Zijlstra
- <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230912-kselftest-param_test-c-v1-1-80a6cffc7374@google.com>
- <CAFhGd8on9_DJUZqT5uKgPzOtJNn99sY3TprcPzD5pm3GmYx8oQ@mail.gmail.com>
- <eabe9db0-c934-af2d-e5a9-9d644593851c@efficios.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <eabe9db0-c934-af2d-e5a9-9d644593851c@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230922071020.2554677-5-ruanjinjie@huawei.com>
 
-On 9/26/23 13:02, Mathieu Desnoyers wrote:
-> On 9/26/23 08:20, Justin Stitt wrote:
->> Ping.
->>
->> Looking to get this patch and [1] slated for 6.7 which fixes some
->> kselftest builds on older kernels.
->>
->> On Wed, Sep 13, 2023 at 6:03 AM Justin Stitt <justinstitt@google.com> wrote:
->>>
->>> When building with Clang, I am getting many warnings from the selftests/rseq tree.
->>>
->>> Here's one such example from rseq tree:
->>> |  param_test.c:1234:10: error: address argument to atomic operation must be a pointer to _Atomic type ('intptr_t *' (aka 'long *') invalid)
->>> |   1234 |         while (!atomic_load(&args->percpu_list_ptr)) {}
->>> |        |                 ^           ~~~~~~~~~~~~~~~~~~~~~~
->>> |  /usr/local/google/home/justinstitt/repos/tc-build/build/llvm/final/lib/clang/18/include/stdatomic.h:140:29: note: expanded from macro 'atomic_load'
->>> |    140 | #define atomic_load(object) __c11_atomic_load(object, __ATOMIC_SEQ_CST)
->>> |        |                             ^                 ~~~~~~
->>>
->>> Use compiler builtins `__atomic_load_n()` and `__atomic_store_n()` with
->>> accompanying __ATOMIC_ACQUIRE and __ATOMIC_RELEASE, respectively. This
->>> will fix the warnings because the compiler builtins do not expect their
->>> arguments to have _Atomic type. This should also make TSAN happier.
->>>
->>> Link: https://github.com/ClangBuiltLinux/linux/issues/1698
->>> Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues/61
->>> Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> 
-> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> Peter, should this go through tip ?
-> 
-> Shuah, should to go through selftests ?
-> 
+Hi Jinjie,
 
-I can take this through selftests and apply it - hoping there
-are no conflicts with what's in Peter's tree.
+kernel test robot noticed the following build warnings:
 
-thanks,
--- Shuah
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.6-rc3 next-20230926]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/kunit-Fix-missed-memory-release-in-kunit_free_suite_set/20230922-151243
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230922071020.2554677-5-ruanjinjie%40huawei.com
+patch subject: [PATCH v3 4/4] kunit: test: Fix the possible memory leak in executor_test
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230927/202309270433.wGmFRGjd-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230927/202309270433.wGmFRGjd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309270433.wGmFRGjd-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from lib/kunit/executor.c:353:
+>> lib/kunit/executor_test.c:278:4: warning: cast from 'void (*)(struct kunit_suite_set *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     278 |                         (kunit_action_t *)free_suite_set,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +278 lib/kunit/executor_test.c
+
+   264	
+   265	/* Use the resource API to register a call to free_suite_set.
+   266	 * Since we never actually use the resource, it's safe to use on const data.
+   267	 */
+   268	static void free_suite_set_at_end(struct kunit *test, const void *to_free)
+   269	{
+   270		if (!((struct kunit_suite_set *)to_free)->start)
+   271			return;
+   272	
+   273		struct kunit_suite_set *free = kzalloc(sizeof(struct kunit_suite_set),
+   274						       GFP_KERNEL);
+   275		*free = *(struct kunit_suite_set *)to_free;
+   276	
+   277		kunit_add_action(test,
+ > 278				(kunit_action_t *)free_suite_set,
+   279				(void *)free);
+   280	}
+   281	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
