@@ -1,1827 +1,232 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-oa1-f80.google.com (mail-oa1-f80.google.com [209.85.160.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857AA6FAB
-	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 08:22:02 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1c60f1a2652so29405135ad.0
-        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 01:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695716521; x=1696321321; darn=lists.linux.dev;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=2PSwfRxOY56VkJVaMbdmAEvh2D+9l5biQzhoaigkn5I=;
-        b=sTgabl5UDsu6DBa6G36YkHI9+ZrwzrI++hHW/54QuSAeZoNUPkGu0F97Zh9S1+j/wb
-         Faj679XGTEKIXJJWBEk9lQodDQfEJDpx6WoGKePJtxlgy+TqzzeISV08wfwFo63+PDPp
-         N0Ew8824uN059HvZpsIVpLg6+FuBFdEaTMdWSBWajm0dDzURn2mwcpaFtEsof4cICcKB
-         NMJ+pEpf31YX6D1Oad5Qy973R0i9lZYUQwuceRPOn2XnHfuuNTbAdr584mh229bgbE5P
-         +FB74kffT1QPGQO19Aan/d08Y/u0D+lT2g+jGKBGafx1NhrsowZhhas4F3frCNjSRJ8l
-         BwmQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677BE125D0
+	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 08:27:38 +0000 (UTC)
+Received: by mail-oa1-f80.google.com with SMTP id 586e51a60fabf-1d6fdbe39c8so18263322fac.2
+        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 01:27:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695716521; x=1696321321;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2PSwfRxOY56VkJVaMbdmAEvh2D+9l5biQzhoaigkn5I=;
-        b=vjIXRDJ14uKX7Jhg3oq8l/5EZubweKkQhZHlYLmSCIwH+oTwQieHH2FNOMLJYF9qnl
-         Jd1mz2b70b8hQrzx3vfmJUvWw4ysl83kk7CXHMGL0zVELKCZfM79fw/Wu0jGPBWJ1XJ7
-         KGCxCxw1NapM2BYYTLXKM1Ps/y2JLWoIP+HgChi72Ijc8t+w+6TFk4UqjcWEacXMR65c
-         cjRqidVMxLhhApkA8UUItsWZlTtheOHeubCA5wbliLQirgxQFx/SzKc7XK8R9iP45Ozd
-         D9Hk0nkg6d/mgTKRLBVVOlOQmn3DGIy6XInN3zUt4bFr8rOMEaAAZz4piVYXPItRVtdp
-         UIyQ==
-X-Gm-Message-State: AOJu0YxqFoKGdZ1Uq5TaVAy4ihITJ+OTWCiHfbgxdzLoRld/DbCFm+aL
-	WLZnWnh5/QxeiOjZTMET8kGyDT3kocRYGATUEJaMQg==
-X-Google-Smtp-Source: AGHT+IHPL2vthYnAmryn7yoc2s+Z1CrNF+msouWaRTRD8zdnoJaklMk/s/JI0ajg3qNZSjAtWoIyHw==
-X-Received: by 2002:a17:902:d488:b0:1c5:d8a3:8783 with SMTP id c8-20020a170902d48800b001c5d8a38783mr2783039plg.11.1695716520480;
-        Tue, 26 Sep 2023 01:22:00 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id y18-20020a1709029b9200b001b8a897cd26sm10258836plp.195.2023.09.26.01.21.59
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Sep 2023 01:21:59 -0700 (PDT)
-Message-ID: <651294a7.170a0220.c17ec.ac70@mx.google.com>
-Date: Tue, 26 Sep 2023 01:21:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1695716857; x=1696321657;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=55XKxYhpepqWXUdY7SuK9vUe13bL5ShqPzIX2cS2KNs=;
+        b=fAAycNqXvxBxh8C4p6Ja3tzXYfEcHn5Nrkk76bvFPobOMRR2G1GERtWY3dtEMMfWZs
+         srfXbNRPFT03ok0KSKImT5QcXpPBLE/i/tMAxd7F5IrJzS/o9FU9aXfS2hsTmqMlEbsn
+         AU5U5ReymaKF11bGrjhLrP3/1D6HZ0L71lGWbIkQVsU5ID/2LsPmE12wJuvLB8pfIKd1
+         tvZ7G8dCywcpDTIxlxradS3o663UP2VK7mAil8HYAIUwCoGdG/M/pFRw4ZrT2JkwB0zu
+         nOQ+Km2pSZbrcjemqe5VptnT3sVOkFQyA7xxh15Ug4Q7ySC3jkSKq9uEuFOKXH3awi24
+         1ZPA==
+X-Gm-Message-State: AOJu0YzflImBKbYXVlCkKoJsSvZbBTD/WA1KdxTT4PtXoHfETWEZD1AS
+	XSKziN6AWxKvZJJ1a3q2EMgczVxAr9HlROBDMfHeRj3U70IZ
+X-Google-Smtp-Source: AGHT+IHn/Dc/iL1JhzuZy+gkTzxi+2Gj1EIRYbTwKpYUVoI17DDiTdctf9ir0JVL7V+W6jSBeYgPBPEFyMn6IybRoiAg8pBmepr1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230926
-X-Kernelci-Report-Type: build
-Subject: next/master build: 184 builds: 15 failed, 169 passed, 28 errors,
- 144 warnings (next-20230926)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+X-Received: by 2002:a05:6870:a88f:b0:1d6:92f5:c1d2 with SMTP id
+ eb15-20020a056870a88f00b001d692f5c1d2mr4416177oab.11.1695716857558; Tue, 26
+ Sep 2023 01:27:37 -0700 (PDT)
+Date: Tue, 26 Sep 2023 01:27:37 -0700
+In-Reply-To: <0000000000006777d506051db4fd@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ef3b8a06063ed805@google.com>
+Subject: Re: [syzbot] [ntfs3?] KASAN: slab-use-after-free Read in ntfs_write_bh
+From: syzbot <syzbot+bc79f8d1898960d41073@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    6465e260f487 Linux 6.6-rc3
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13d78ffe680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bb54ecdfa197f132
+dashboard link: https://syzkaller.appspot.com/bug?extid=bc79f8d1898960d41073
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14aa4e32680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=171787b6680000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3b1a49bae59d/disk-6465e260.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f3226aa54969/vmlinux-6465e260.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/225ee050173e/bzImage-6465e260.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/c217b59cb3bd/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/11dc567a19b3/mount_2.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bc79f8d1898960d41073@syzkaller.appspotmail.com
+
+ntfs3: loop0: ino=0, attr_set_size
+ntfs3: loop0: Mark volume as dirty due to NTFS errors
+==================================================================
+BUG: KASAN: slab-use-after-free in ntfs_write_bh+0x6b9/0x6e0 fs/ntfs3/fsntfs.c:1401
+Read of size 8 at addr ffff888016aaa000 by task syz-executor201/5400
+
+CPU: 1 PID: 5400 Comm: syz-executor201 Not tainted 6.6.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/04/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:364 [inline]
+ print_report+0xc4/0x620 mm/kasan/report.c:475
+ kasan_report+0xda/0x110 mm/kasan/report.c:588
+ ntfs_write_bh+0x6b9/0x6e0 fs/ntfs3/fsntfs.c:1401
+ mi_write+0xc0/0x1e0 fs/ntfs3/record.c:346
+ ni_write_inode+0x1025/0x2810 fs/ntfs3/frecord.c:3360
+ write_inode fs/fs-writeback.c:1456 [inline]
+ __writeback_single_inode+0xa81/0xe70 fs/fs-writeback.c:1668
+ writeback_single_inode+0x2af/0x590 fs/fs-writeback.c:1724
+ sync_inode_metadata+0xa5/0xe0 fs/fs-writeback.c:2786
+ ntfs_set_state+0x3f0/0x6e0 fs/ntfs3/fsntfs.c:995
+ attr_set_size+0x139c/0x2ca0 fs/ntfs3/attrib.c:866
+ ntfs_extend_mft+0x29f/0x430 fs/ntfs3/fsntfs.c:527
+ ntfs_look_free_mft+0x777/0xdd0 fs/ntfs3/fsntfs.c:590
+ ni_create_attr_list+0x937/0x1520 fs/ntfs3/frecord.c:876
+ ni_ins_attr_ext+0x23f/0xaf0 fs/ntfs3/frecord.c:974
+ ni_insert_attr+0x310/0x870 fs/ntfs3/frecord.c:1141
+ ni_insert_resident+0xd2/0x3a0 fs/ntfs3/frecord.c:1525
+ ntfs_set_ea+0xf46/0x13d0 fs/ntfs3/xattr.c:437
+ ntfs_save_wsl_perm+0x134/0x3d0 fs/ntfs3/xattr.c:946
+ ntfs3_setattr+0x92e/0xb20 fs/ntfs3/file.c:708
+ notify_change+0x742/0x11c0 fs/attr.c:499
+ chown_common+0x596/0x660 fs/open.c:783
+ do_fchownat+0x140/0x1f0 fs/open.c:814
+ __do_sys_lchown fs/open.c:839 [inline]
+ __se_sys_lchown fs/open.c:837 [inline]
+ __x64_sys_lchown+0x7e/0xc0 fs/open.c:837
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0958017a59
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0957fd4218 EFLAGS: 00000246 ORIG_RAX: 000000000000005e
+RAX: ffffffffffffffda RBX: 00007f09580be6a8 RCX: 00007f0958017a59
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000080
+RBP: 00007f09580be6a0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f09580be6ac
+R13: 00007f095808b4ac R14: 0032656c69662f2e R15: 00007f095806c0c0
+ </TASK>
+
+Allocated by task 5038:
+ kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:198 [inline]
+ __do_kmalloc_node mm/slab_common.c:1023 [inline]
+ __kmalloc+0x60/0x100 mm/slab_common.c:1036
+ kmalloc include/linux/slab.h:603 [inline]
+ tomoyo_realpath_from_path+0xb9/0x710 security/tomoyo/realpath.c:251
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_check_open_permission+0x2a3/0x3b0 security/tomoyo/file.c:771
+ tomoyo_file_open security/tomoyo/tomoyo.c:332 [inline]
+ tomoyo_file_open+0xa8/0xd0 security/tomoyo/tomoyo.c:327
+ security_file_open+0x6a/0xe0 security/security.c:2836
+ do_dentry_open+0x538/0x1730 fs/open.c:916
+ do_open fs/namei.c:3639 [inline]
+ path_openat+0x19af/0x29c0 fs/namei.c:3796
+ do_filp_open+0x1de/0x430 fs/namei.c:3823
+ do_sys_openat2+0x176/0x1e0 fs/open.c:1422
+ do_sys_open fs/open.c:1437 [inline]
+ __do_sys_openat fs/open.c:1453 [inline]
+ __se_sys_openat fs/open.c:1448 [inline]
+ __x64_sys_openat+0x175/0x210 fs/open.c:1448
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 5038:
+ kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:522
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x15b/0x1b0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:164 [inline]
+ slab_free_hook mm/slub.c:1800 [inline]
+ slab_free_freelist_hook+0x114/0x1e0 mm/slub.c:1826
+ slab_free mm/slub.c:3809 [inline]
+ __kmem_cache_free+0xb8/0x2f0 mm/slub.c:3822
+ tomoyo_realpath_from_path+0x1a6/0x710 security/tomoyo/realpath.c:286
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_check_open_permission+0x2a3/0x3b0 security/tomoyo/file.c:771
+ tomoyo_file_open security/tomoyo/tomoyo.c:332 [inline]
+ tomoyo_file_open+0xa8/0xd0 security/tomoyo/tomoyo.c:327
+ security_file_open+0x6a/0xe0 security/security.c:2836
+ do_dentry_open+0x538/0x1730 fs/open.c:916
+ do_open fs/namei.c:3639 [inline]
+ path_openat+0x19af/0x29c0 fs/namei.c:3796
+ do_filp_open+0x1de/0x430 fs/namei.c:3823
+ do_sys_openat2+0x176/0x1e0 fs/open.c:1422
+ do_sys_open fs/open.c:1437 [inline]
+ __do_sys_openat fs/open.c:1453 [inline]
+ __se_sys_openat fs/open.c:1448 [inline]
+ __x64_sys_openat+0x175/0x210 fs/open.c:1448
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff888016aaa000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 0 bytes inside of
+ freed 4096-byte region [ffff888016aaa000, ffff888016aab000)
+
+The buggy address belongs to the physical page:
+page:ffffea00005aaa00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x16aa8
+head:ffffea00005aaa00 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000000840(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000000840 ffff888012c42140 dead000000000100 dead000000000122
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 3094771911, free_ts 0
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x2cf/0x340 mm/page_alloc.c:1536
+ prep_new_page mm/page_alloc.c:1543 [inline]
+ get_page_from_freelist+0xee0/0x2f20 mm/page_alloc.c:3170
+ __alloc_pages+0x1d0/0x4a0 mm/page_alloc.c:4426
+ alloc_page_interleave+0x1e/0x250 mm/mempolicy.c:2131
+ alloc_pages+0x22a/0x270 mm/mempolicy.c:2293
+ alloc_slab_page mm/slub.c:1870 [inline]
+ allocate_slab+0x251/0x380 mm/slub.c:2017
+ new_slab mm/slub.c:2070 [inline]
+ ___slab_alloc+0x8c7/0x1580 mm/slub.c:3223
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3322
+ __slab_alloc_node mm/slub.c:3375 [inline]
+ slab_alloc_node mm/slub.c:3468 [inline]
+ __kmem_cache_alloc_node+0x131/0x340 mm/slub.c:3517
+ kmalloc_trace+0x25/0xe0 mm/slab_common.c:1114
+ kmalloc include/linux/slab.h:599 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ kobject_uevent_env+0x24c/0x1800 lib/kobject_uevent.c:524
+ kset_register+0x1b6/0x2a0 lib/kobject.c:873
+ class_register+0x1cb/0x330 drivers/base/class.c:205
+ ib_core_init+0xb9/0x300 drivers/infiniband/core/device.c:2780
+ do_one_initcall+0x117/0x630 init/main.c:1232
+ do_initcall_level init/main.c:1294 [inline]
+ do_initcalls init/main.c:1310 [inline]
+ do_basic_setup init/main.c:1329 [inline]
+ kernel_init_freeable+0x5c2/0x900 init/main.c:1547
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff888016aa9f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888016aa9f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff888016aaa000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff888016aaa080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888016aaa100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-next/master build: 184 builds: 15 failed, 169 passed, 28 errors, 144 warnin=
-gs (next-20230926)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230926/
-
-Tree: next
-Branch: master
-Git Describe: next-20230926
-Git Commit: 4ae73bba62a367f2314f6ce69e3085a941983d8b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arc:
-    axs103_defconfig: (gcc-10) FAIL
-    axs103_smp_defconfig: (gcc-10) FAIL
-    haps_hs_defconfig: (gcc-10) FAIL
-    haps_hs_smp_defconfig: (gcc-10) FAIL
-    haps_hs_smp_defconfig+debug: (gcc-10) FAIL
-    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
-    nsimosci_hs_defconfig: (gcc-10) FAIL
-    nsimosci_hs_smp_defconfig: (gcc-10) FAIL
-    vdk_hs38_defconfig: (gcc-10) FAIL
-    vdk_hs38_smp_defconfig: (gcc-10) FAIL
-
-arm:
-    ep93xx_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-    socfpga_defconfig: (gcc-10) FAIL
-
-mips:
-    cavium_octeon_defconfig: (gcc-10) FAIL
-    cobalt_defconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    allnoconfig (gcc-10): 1 warning
-    axs103_defconfig (gcc-10): 2 errors, 1 warning
-    axs103_smp_defconfig (gcc-10): 2 errors, 1 warning
-    haps_hs_defconfig (gcc-10): 2 errors, 1 warning
-    haps_hs_smp_defconfig (gcc-10): 2 errors, 1 warning
-    haps_hs_smp_defconfig+debug (gcc-10): 2 errors, 1 warning
-    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
-    hsdk_defconfig (gcc-10): 1 warning
-    nsimosci_hs_defconfig (gcc-10): 2 errors, 1 warning
-    nsimosci_hs_smp_defconfig (gcc-10): 2 errors, 1 warning
-    vdk_hs38_defconfig (gcc-10): 2 errors, 1 warning
-    vdk_hs38_smp_defconfig (gcc-10): 2 errors, 1 warning
-
-arm64:
-
-arm:
-    am200epdkit_defconfig (gcc-10): 1 warning
-    aspeed_g4_defconfig (gcc-10): 1 warning
-    aspeed_g5_defconfig (gcc-10): 1 warning
-    aspeed_g5_defconfig (clang-17): 2 warnings
-    assabet_defconfig (gcc-10): 1 warning
-    at91_dt_defconfig (gcc-10): 1 warning
-    axm55xx_defconfig (gcc-10): 1 warning
-    bcm2835_defconfig (gcc-10): 1 warning
-    collie_defconfig (gcc-10): 1 warning
-    davinci_all_defconfig (gcc-10): 1 warning
-    ep93xx_defconfig (gcc-10): 1 error, 1 warning
-    exynos_defconfig (gcc-10): 1 warning
-    footbridge_defconfig (gcc-10): 1 warning
-    gemini_defconfig (gcc-10): 1 warning
-    h3600_defconfig (gcc-10): 1 warning
-    hisi_defconfig (gcc-10): 1 warning
-    imx_v6_v7_defconfig (gcc-10): 1 warning
-    integrator_defconfig (gcc-10): 1 warning
-    ixp4xx_defconfig (gcc-10): 1 warning
-    jornada720_defconfig (gcc-10): 1 warning
-    keystone_defconfig (gcc-10): 1 warning
-    lpc32xx_defconfig (gcc-10): 1 warning
-    milbeaut_m10v_defconfig (gcc-10): 1 warning
-    mmp2_defconfig (gcc-10): 1 warning
-    moxart_defconfig (gcc-10): 1 warning
-    multi_v4t_defconfig (gcc-10): 1 warning
-    multi_v5_defconfig (clang-17): 2 warnings
-    multi_v5_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (clang-17): 2 warnings
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
-ng
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+debug (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-    mvebu_v5_defconfig (gcc-10): 1 warning
-    mvebu_v7_defconfig (gcc-10): 1 warning
-    mxs_defconfig (gcc-10): 1 warning
-    neponset_defconfig (gcc-10): 1 warning
-    netwinder_defconfig (gcc-10): 1 warning
-    nhk8815_defconfig (gcc-10): 1 warning
-    omap2plus_defconfig (gcc-10): 1 warning
-    orion5x_defconfig (gcc-10): 1 warning
-    pxa168_defconfig (gcc-10): 1 warning
-    pxa3xx_defconfig (gcc-10): 1 warning
-    pxa910_defconfig (gcc-10): 1 warning
-    pxa_defconfig (gcc-10): 1 warning
-    qcom_defconfig (gcc-10): 1 warning
-    realview_defconfig (gcc-10): 1 warning
-    rpc_defconfig (gcc-10): 2 errors
-    s3c6400_defconfig (gcc-10): 1 warning
-    s5pv210_defconfig (gcc-10): 1 warning
-    sama5_defconfig (gcc-10): 1 warning
-    sama7_defconfig (gcc-10): 1 warning
-    shmobile_defconfig (gcc-10): 1 warning
-    socfpga_defconfig (gcc-10): 1 error, 1 warning
-    sp7021_defconfig (gcc-10): 1 warning
-    spear13xx_defconfig (gcc-10): 1 warning
-    spear3xx_defconfig (gcc-10): 1 warning
-    spear6xx_defconfig (gcc-10): 1 warning
-    spitz_defconfig (gcc-10): 1 warning
-    sunxi_defconfig (gcc-10): 1 warning
-    tegra_defconfig (gcc-10): 1 warning
-    u8500_defconfig (gcc-10): 1 warning
-    versatile_defconfig (gcc-10): 1 warning
-    vexpress_defconfig (gcc-10): 1 warning
-    vt8500_v6_v7_defconfig (gcc-10): 1 warning
-    wpcm450_defconfig (gcc-10): 1 warning
-
-i386:
-    allnoconfig (clang-17): 2 warnings
-    allnoconfig (gcc-10): 1 warning
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    bcm47xx_defconfig (gcc-10): 1 warning
-    bcm63xx_defconfig (gcc-10): 1 warning
-    bigsur_defconfig (gcc-10): 1 warning
-    bmips_be_defconfig (gcc-10): 1 warning
-    bmips_stb_defconfig (gcc-10): 1 warning
-    cavium_octeon_defconfig (gcc-10): 4 errors, 3 warnings
-    cobalt_defconfig (gcc-10): 1 error, 1 warning
-    db1xxx_defconfig (gcc-10): 1 warning
-    decstation_defconfig (gcc-10): 1 warning
-    decstation_r4k_defconfig (gcc-10): 1 warning
-    fuloong2e_defconfig (gcc-10): 1 warning
-    gcw0_defconfig (gcc-10): 1 warning
-    gpr_defconfig (gcc-10): 1 warning
-    ip22_defconfig (gcc-10): 1 warning
-    ip27_defconfig (gcc-10): 1 warning
-    ip32_defconfig (gcc-10): 1 warning
-    jazz_defconfig (gcc-10): 1 warning
-    lemote2f_defconfig (gcc-10): 1 warning
-    loongson1b_defconfig (gcc-10): 1 warning
-    loongson1c_defconfig (gcc-10): 1 warning
-    loongson2k_defconfig (gcc-10): 1 warning
-    malta_defconfig (gcc-10): 1 warning
-    malta_kvm_defconfig (gcc-10): 1 warning
-    malta_qemu_32r6_defconfig (gcc-10): 1 warning
-    maltaaprp_defconfig (gcc-10): 1 warning
-    maltasmvp_defconfig (gcc-10): 1 warning
-    maltasmvp_eva_defconfig (gcc-10): 1 warning
-    maltaup_defconfig (gcc-10): 1 warning
-    maltaup_xpa_defconfig (gcc-10): 1 warning
-    mtx1_defconfig (gcc-10): 1 warning
-    pic32mzda_defconfig (gcc-10): 1 warning
-    rb532_defconfig (gcc-10): 1 warning
-    rbtx49xx_defconfig (gcc-10): 1 warning
-    rm200_defconfig (gcc-10): 1 warning
-    rs90_defconfig (gcc-10): 1 warning
-    sb1250_swarm_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    allnoconfig (gcc-10): 2 warnings
-    sparc32_defconfig (gcc-10): 3 warnings
-    sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-    allnoconfig (gcc-10): 1 warning
-    allnoconfig (clang-17): 2 warnings
-    x86_64_defconfig+kselftest (rustc-1.71): 1 warning
-
-Errors summary:
-
-    8    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    8    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `c=
-rypto_has_aead'
-    2    /tmp/kci/linux/build/../net/xfrm/xfrm_algo.c:695: undefined refere=
-nce to `crypto_has_aead'
-    1    xfrm_algo.c:(.text+0x800): undefined reference to `crypto_has_aead'
-    1    xfrm_algo.c:(.text+0x634): undefined reference to `crypto_has_aead'
-    1    fs/proc/task_mmu.c:2102:21: error: 'HPAGE_SIZE' undeclared (first =
-use in this function); did you mean 'PAGE_SIZE'?
-    1    drivers/staging/octeon/ethernet.c:801:8: error: variable =E2=80=98=
-imode=E2=80=99 has initializer but incomplete type
-    1    drivers/staging/octeon/ethernet.c:801:35: error: storage size of =
-=E2=80=98imode=E2=80=99 isn=E2=80=99t known
-    1    drivers/staging/octeon/ethernet.c:205:30: error: storage size of =
-=E2=80=98tx_status=E2=80=99 isn=E2=80=99t known
-    1    drivers/staging/octeon/ethernet.c:204:30: error: storage size of =
-=E2=80=98rx_status=E2=80=99 isn=E2=80=99t known
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    arc-elf32-ld: /tmp/kci/linux/build/../net/xfrm/xfrm_algo.c:695: un=
-defined reference to `crypto_has_aead'
-
-Warnings summary:
-
-    107  fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout=
-_range=E2=80=99 defined but not used [-Wunused-function]
-    11   fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' =
-defined but not used [-Wunused-function]
-    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    5    fs/proc/task_mmu.c:2022:13: warning: unused function 'pagemap_scan=
-_backout_range' [-Wunused-function]
-    5    1 warning generated.
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x14b57b
-    1    drivers/staging/octeon/ethernet.c:801:35: warning: unused variable=
- =E2=80=98imode=E2=80=99 [-Wunused-variable]
-    1    drivers/staging/octeon/ethernet.c:205:30: warning: unused variable=
- =E2=80=98tx_status=E2=80=99 [-Wunused-variable]
-    1    drivers/staging/octeon/ethernet.c:204:30: warning: unused variable=
- =E2=80=98rx_status=E2=80=99 [-Wunused-variable]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: unused function 'pagemap_scan_back=
-out_range' [-Wunused-function]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: unused function 'pagemap_scan_back=
-out_range' [-Wunused-function]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: unused function 'pagemap_scan_back=
-out_range' [-Wunused-function]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 secti=
-on mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 s=
-ection mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 FAIL, 4 errors, 3 warnings=
-, 0 section mismatches
-
-Errors:
-    drivers/staging/octeon/ethernet.c:204:30: error: storage size of =E2=80=
-=98rx_status=E2=80=99 isn=E2=80=99t known
-    drivers/staging/octeon/ethernet.c:205:30: error: storage size of =E2=80=
-=98tx_status=E2=80=99 isn=E2=80=99t known
-    drivers/staging/octeon/ethernet.c:801:8: error: variable =E2=80=98imode=
-=E2=80=99 has initializer but incomplete type
-    drivers/staging/octeon/ethernet.c:801:35: error: storage size of =E2=80=
-=98imode=E2=80=99 isn=E2=80=99t known
-
-Warnings:
-    drivers/staging/octeon/ethernet.c:205:30: warning: unused variable =E2=
-=80=98tx_status=E2=80=99 [-Wunused-variable]
-    drivers/staging/octeon/ethernet.c:204:30: warning: unused variable =E2=
-=80=98rx_status=E2=80=99 [-Wunused-variable]
-    drivers/staging/octeon/ethernet.c:801:35: warning: unused variable =E2=
-=80=98imode=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
-on mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x800): undefined reference to `crypto_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning=
-, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
-n mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x634): undefined reference to `crypto_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 sect=
-ion mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 =
-section mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warni=
-ng, 0 section mismatches
-
-Errors:
-    /tmp/kci/linux/build/../net/xfrm/xfrm_algo.c:695: undefined reference t=
-o `crypto_has_aead'
-    arc-elf32-ld: /tmp/kci/linux/build/../net/xfrm/xfrm_algo.c:695: undefin=
-ed reference to `crypto_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
-rnings, 0 section mismatches
-
-Errors:
-    fs/proc/task_mmu.c:2102:21: error: 'HPAGE_SIZE' undeclared (first use i=
-n this function); did you mean 'PAGE_SIZE'?
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warnin=
-g, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
- 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: unused function 'pagemap_scan_back=
-out_range' [-Wunused-function]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: unused function 'pagemap_scan_back=
-out_range' [-Wunused-function]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
- 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 =
-section mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning=
-, 0 section mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
-on mismatches
-
-Errors:
-    /tmp/kci/linux/build/../net/xfrm/xfrm_algo.c:695: undefined reference t=
-o `crypto_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0=
- section mismatches
-
-Errors:
-    xfrm_algo.c:(.text+0x460): undefined reference to `crypto_has_aead'
-    arc-elf32-ld: xfrm_algo.c:(.text+0x460): undefined reference to `crypto=
-_has_aead'
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: 'pagemap_scan_backout_range' defin=
-ed but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:2022:13: warning: =E2=80=98pagemap_scan_backout_rang=
-e=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x14b57b
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust-samples (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
 
 ---
-For more info write to <info@kernelci.org>
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
