@@ -1,125 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C33812B70
-	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 09:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126ADC433C7
-	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 09:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695722224;
-	bh=ND4eydiA2e0LFBvGXWZsms4LsFbgkGxmN+cAduhrn5k=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gIOlAu6QdCQxIlBbOYMe2uAHaTfQ37XXkLBBlFKfbIUoqHn60TN0gSD/1ypJeAmun
-	 oaJailwI4g/dzhGY0D9dv22VMafDkZGfgzPx7hJW4N2vs89KUKEBmWtn9cbhdcFkHv
-	 8kgVu1a511cnIcnTr76a+eJaPquisjf8VUn4q4JTmOi5KH+GqnGzcTZCcJP0nHwizB
-	 7IEDiF7aI8F6bMyWIrvEWhW6ewIcRqo8htwK7mV3728295HpsbGFvrH3GaWib8KqLZ
-	 sZ0c90xhtPyJrEa09SHXkEBuBi8b4BU+J2bQPOFH0pwUB3VSFYSauRulNChSWvbalI
-	 iCFicy2Zia2Zw==
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3ae5ce5beffso34374b6e.0
-        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 02:57:04 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yxt4h56Y5aXrxfKNieF1iHT2JNeP5CbDPiWTl4/GHj6hYTWHoZD
-	hj3qZtFdvA2bBv1L2rIHa/CHMbiHRsRTbu9snFY=
-X-Google-Smtp-Source: AGHT+IF+Jy0LcJwW8uyTv5qmllzwYUpyr49pb0v0dxQxNm6LoRVJhN006IC5Kt8fPO8LcvdJVekN03Ffz+q/LYzqXGs=
-X-Received: by 2002:a05:6870:d1c9:b0:1d1:425b:8026 with SMTP id
- b9-20020a056870d1c900b001d1425b8026mr9347586oac.26.1695722223382; Tue, 26 Sep
- 2023 02:57:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A7E63AD
+	for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 11:22:50 +0000 (UTC)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-59f6441215dso59546567b3.2
+        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 04:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695727369; x=1696332169; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qSgW4LX4JUbEA5D+qEqJf6N354eXZcLyKCwAX5DR+2c=;
+        b=NBbZaVk9yNOBzdacntXptgmph824f07muf+L3mG/gxvX9zH6CpZ3Pc2sCpR8xI7xcv
+         ad+4g3quOzw1Y0YGMuubNe//hi4FhlWkCSUIAIIielhLCujUsDP7RVGRb2SxiVY0v04O
+         6gEhL/Nw/vxXrniEpkM4yYq6fXHd5N4s+7MJ0wt5LokfaLjibU5lCL12zcL1Ew5kRadC
+         k8EVggtEi8czMlLYjZO1iVG+yWgURjIv1Qvf1YuKsA9adBtXEucD0EiOHAlj4FGbdIZo
+         /PI3Eu8rFcShPxiM9o6cvtiU57KYys0+lyqNYL3YOAgX3iYJ2rXCkOVdQ/lGYj1Pxz8Y
+         NQ4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695727369; x=1696332169;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qSgW4LX4JUbEA5D+qEqJf6N354eXZcLyKCwAX5DR+2c=;
+        b=VCOIgSVwy0A/lLz0222RX4zO18WI6J2rJWsSN8eJ/7NGS+F/4t50J1c/8QY8W7uilt
+         iUdCc2zwoH41lDJ7IfemLvhaIs16AECNYMfD4y1biS5okQLqqeup4iLUC5JSoxTLZT7+
+         teUNWNWpH44VD2Bu81iAN3r19bCVAOOhINA3KXkxt3GMqUB/5QBznlZOb6ipR8buuzbK
+         dmU45yIWZbj8ls1hi415OvrjyX356WjJU2Wgg0rVnGauzDBWihwtlOkahbBhWBp3O/yu
+         N8SeCs5g/KEgKw+WzNjwI2N9jYIaGOJGJTKGkAIKPl6I5tC402pdk903QV6EQ5fWzr28
+         ZjhQ==
+X-Gm-Message-State: AOJu0Yx03ywJZSWThWPWw7mF9qeQ4aQg95QPSe9bqnRb4gN8IN4YB5n+
+	GdHdyb9lGbO1+F0dA4UijhHX8PaXfRdkdoG1oBDCCQ==
+X-Google-Smtp-Source: AGHT+IF8+EP3qKO3+6vQiu7ilfzf8MAEdMbrx81nCcCeCherlXFPx5hr18Is6Hj+3VgIvZcu1mBSNS/hy/9TBb4Lssc=
+X-Received: by 2002:a25:943:0:b0:d78:30b2:78f3 with SMTP id
+ u3-20020a250943000000b00d7830b278f3mr8940351ybm.45.1695727369620; Tue, 26 Sep
+ 2023 04:22:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230918210631.3882376-1-jbrennen@google.com> <20230925205933.2869049-1-jbrennen@google.com>
- <CAK7LNARd_pRWWso49C4MoahFAM9idyOFC+9ZFYdpS87CA4UTqQ@mail.gmail.com> <f0de36d5f8f3687c873616ac3bae698f2aa61020.camel@perches.com>
-In-Reply-To: <f0de36d5f8f3687c873616ac3bae698f2aa61020.camel@perches.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 26 Sep 2023 18:56:26 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASwcMf4utu238T6xtJwbnFHSvWntLenve4_KXShOJva6A@mail.gmail.com>
-Message-ID: <CAK7LNASwcMf4utu238T6xtJwbnFHSvWntLenve4_KXShOJva6A@mail.gmail.com>
-Subject: Re: [PATCH] modpost: Optimize symbol search from linear to binary search
-To: Joe Perches <joe@perches.com>
-Cc: Jack Brennen <jbrennen@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, maskray@google.com, cleger@rivosinc.com, 
-	kernel-team@android.com
+References: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
+ <CAMuHMdWiC4v9fctp18bRrEH-m_-0VjMg9+XpON8vdRYwniTU3g@mail.gmail.com> <CAMuHMdWk_jcZ1V7J68bw11YZ+EjEqAWOKHzanVyxo2zktbMteg@mail.gmail.com>
+In-Reply-To: <CAMuHMdWk_jcZ1V7J68bw11YZ+EjEqAWOKHzanVyxo2zktbMteg@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 26 Sep 2023 13:22:13 +0200
+Message-ID: <CAPDyKFqgsHYz1hfOQ=KniNJj+u7ZSMoxS03Rixj1n2AOUdSVaQ@mail.gmail.com>
+Subject: Re: [PATCH] soc: renesas: rmobile-sysc: fix -Wvoid-pointer-to-enum-cast
+ warning
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Justin Stitt <justinstitt@google.com>, Magnus Damm <magnus.damm@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 26, 2023 at 4:24=E2=80=AFPM Joe Perches <joe@perches.com> wrote=
-:
+On Mon, 18 Sept 2023 at 11:21, Geert Uytterhoeven <geert@linux-m68k.org> wr=
+ote:
 >
-> On Tue, 2023-09-26 at 15:46 +0900, Masahiro Yamada wrote:
-> > On Tue, Sep 26, 2023 at 5:59=E2=80=AFAM Jack Brennen <jbrennen@google.c=
-om> wrote:
-> >
-> > > +Elf_Sym *symsearch_find_nearest(struct elf_info *elf, Elf_Addr addr,
-> > > +                               unsigned int secndx, bool allow_negat=
-ive,
-> > > +                               Elf_Addr min_distance)
-> > > +{
-> > > +       size_t hi =3D elf->symsearch->table_size;
-> > > +       size_t lo =3D 0;
-> > > +       struct syminfo *table =3D elf->symsearch->table;
-> > > +       struct syminfo target;
-> > > +
-> > > +       target.addr =3D addr;
-> > > +       target.section_index =3D secndx;
-> > > +       target.symbol_index =3D ~0;  /* compares greater than any act=
-ual index */
-> > > +       while (hi > lo) {
-> > > +               size_t mid =3D lo + (hi-lo)/2;   /* Avoids potential =
-overflow */
-> > > +
-> > > +               if (syminfo_compare(&table[mid], &target) > 0)
-> > > +                       hi =3D mid;
-> > > +               else
-> > > +                       lo =3D mid+1;
-> >
-> > My preference is "low =3D mid + 1" over "low =3D mid+1"
-> >
-> > Documentation/process/coding-style.rst suggests spaces
-> > around binary operators.
-> >
-> > "
-> > Use one space around (on each side of) most binary and ternary operator=
-s,
-> > such as any of these::
-> >
-> >         =3D  +  -  <  >  *  /  %  |  &  ^  <=3D  >=3D  =3D=3D  !=3D  ? =
- :
-> > "
-> >
-> > I can see the corresponding line in the checkpatch tool:
-> >
-> > https://github.com/torvalds/linux/blob/v6.5/scripts/checkpatch.pl#L5330
-> >
-> >
-> > I wonder why the checkpatch did not detect it.
-> >
-> > Maybe, Joe Perches may know the reason.
+> Hi Ulf,
 >
-> checkpatch requires --strict to emit that message.
+> On Wed, Aug 30, 2023 at 10:24=E2=80=AFAM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Tue, Aug 15, 2023 at 12:11=E2=80=AFAM Justin Stitt <justinstitt@goog=
+le.com> wrote:
+> > > When building with clang 18 I see the following warning:
+> > > |      drivers/soc/renesas/rmobile-sysc.c:193:22: warning: cast to sm=
+aller integer
+> > > |               type 'enum pd_types' from 'const void *' [-Wvoid-poin=
+ter-to-enum-cast]
+> > > |        193 |                 add_special_pd(np, (enum pd_types)id->=
+data);
+> > >
+> > > This is due to the fact that `id->data` is a void* and `enum pd_types=
+`
+> > > has the size of an integer. This cast from pointer-width to int-width
+> > > causes truncation and possible data loss. Instead, cast to `uintptr_t=
+`
+> > > which has the same width as void*.
+> > >
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> > > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > scripts/checkpatch.pl:
+> >
+> >     WARNING: Reported-by: should be immediately followed by Closes:
+> > with a URL to the report
+> >
+> > Hence changing the Link: tag to a Closes: tag.
+> >
+> > > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > > ---
+> > > Note: It should be noted that there is likely no data loss occurring =
+in
+> > > this case since the enum only has a few fields. The narrowing cast fr=
+om
+> > > pointer to int will not lose any data.
+> >
+> > Indeed, the theoretical narrowing could only happen on a 64-bit
+> > platform, while this driver is only used on arm32.
+> >
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > i.e. will queue in renesas-devel for v6.7.
 >
+> As the Generic PM Domain providers were moved to drivers/pmdomain/
+> in v6.6-rc2, and now have their own maintainer, I have moved this
+> commit from renesas-drivers-for-v6.7 to renesas-pmdomain-for-v6.7[1],
+> with s/soc/pmdomain/ in the oneline-summary.
+>
+> Ulf: if you prefer, you can still take this patch directly.
+> Else I will send a PR after rc3 and/or rc5, like I do with my other
+> renesas-<foo>-for-<version> branches.
+> Thanks!
 
+Apologize for the delay, been traveling lately. Anyway, I can
+certainly pick up the patch and carry it for v6.7. Just let me know,
+if/when you have dropped the patch from your tree.
 
+[...]
 
-
-Ah, now I see it.  I learned a new thing today.
-
-
-
-CHECK: spaces preferred around that '+' (ctx:VxV)
-#466: FILE: scripts/mod/symsearch.c:172:
-+ lo =3D mid+1;
-          ^
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+Kind regards
+Uffe
