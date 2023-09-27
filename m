@@ -1,199 +1,163 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E344CFA1
-	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 20:31:04 +0000 (UTC)
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3247d69ed2cso1538662f8f.0
-        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 13:31:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBFD1C6B3
+	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 22:48:02 +0000 (UTC)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-565ece76be4so15274814a12.2
+        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 15:48:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695846662; x=1696451462; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1bPQ4W+m4k6grk2QsqsO+u/OMm6oUavQe8VAaeMpNSM=;
-        b=pjhL9B0ieOLilototxgZQrmfOc1jrvxdBDx6lOhVd8zG/poAccyVb9zdyk5V0rAm6Q
-         49hEMpbFLvSLOzysnqny7Adbn/hG/wsqkVsitIbPwBBfukCjX4IDnn2OsiKFcdxxqXwf
-         BnUSXYK2RCis7hQzY5cSw188IY/YDB1ppIug6IRHfTPtY1pRTpSANVEJp/9B0lUEM4lJ
-         iJtdJifMcWSlm269fx4QwiSRF8riCwU8UM50egqLmw7/v5idDIW+mzoSrBJwMUNZ7qxi
-         NVE48Vbi4xZtLjTULMEmemp2tvX9W7O1JaeWDRwiWYZgypcqmyaSdsGvJ/3GomWqiEfp
-         4lMA==
+        d=google.com; s=20230601; t=1695854882; x=1696459682; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WgWh/gTAC4d5wcFhfvGxWr9mtitpn8knrAdbajEBfhU=;
+        b=YYu2HtO/6Ebpj+Ne7HQy0u+0kxoWF1mh1PLUt62VtKUH5xnKzDaVxz3B3CmufEYKYF
+         YfxSc58mPiD4p/WdR2CEQbvWfC4rCSlxaTLzj+tmI0JV7Z4kQOoEVqZDxUIL1M4z7d4s
+         6Lea//ccMj0xIuYT1ZgLoJE9yrtfXqwR8VBKq32lWdsfzEKwtYkSR3XnAe+My6jX5XdE
+         aDJIUBC4wj9UTfw2F2efjtCQMR0MaOce9aQqdbkugUjC1eC2xVADl+OQg7TTryNeCLDX
+         7eR0f8vEcjngERAZdzP8uu4pTu8YZXBiADqFv7qH7C31iDVcuJNvANpkwSKIaaxNdDob
+         bopA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695846662; x=1696451462;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1bPQ4W+m4k6grk2QsqsO+u/OMm6oUavQe8VAaeMpNSM=;
-        b=xSfz369BGUR8JplvpDbLTrIiLkWOiU6uAtapvFtOXa9ENFQsMjGhD67GJtrZFpJI7T
-         NH9swMAAUKYgofVBy7WYxmks4IlQyIoxIrNs2nRx43Z1oBWK7jbkEoMrbvHSGKfbeRbo
-         QIcNsxD29JKUVviEOgJl2Gs9lJTKViZFoe3oufrDuG8rn8/eBvu5Wy22U0N7QvvleSSf
-         MvRXMdsD2gg114JTcGkwtK4fJgD1RZz6q3G+Arv1uVa2N9NzPrUjzlTFnykzhAC6nqQJ
-         ADzBpasf0wmdSLMiu2zq464qY9vqLvI3cb/Ax38pB/QSGlY4lCkUVJ4eaU5LfHryyyvf
-         axgg==
-X-Gm-Message-State: AOJu0Yy0Dfo5yfPw+PZ5yCEGp3sNemDen4gTCTUhXsAJQ4OsUGMlhdnb
-	nbUbRMmNNJQX4qSL+pvOcduoQJE6e9zAu8sanVOQvQ==
-X-Google-Smtp-Source: AGHT+IGHhim/72mDyUSht5r5coAg+DnoIeszZ0PMJICln5voUh7kOaTJ+BemafS1Ina7CW/UDOHZ0LdSqDwwnM/oVG8=
-X-Received: by 2002:adf:ee4b:0:b0:31a:e972:3601 with SMTP id
- w11-20020adfee4b000000b0031ae9723601mr2637429wro.54.1695846662401; Wed, 27
- Sep 2023 13:31:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695854882; x=1696459682;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WgWh/gTAC4d5wcFhfvGxWr9mtitpn8knrAdbajEBfhU=;
+        b=EKEXcjViFBSQTwuhtyrA6JGk6seHbNmOyzVNvQh5Sc88lku4BNQ9WP5uG+09AtAUW6
+         i5SWYa1CBCGMILdUuEILeX5f29GtK9uWz5tIxTogToPhOvUuehTpg2rpYx3elntQdrmB
+         qh/cLLZhOh8nNupaT2WMLwxfK7/EbthQRFyPaXYtiqoUjQW9vBG5gno9QMC5uVgGg1UN
+         +WxaSw1Ir4mYe5rmpbGhStKCCVQ0KTHRKzL5DQuxZl4Ohp+gYy0tdxPLissmT1GsfUe7
+         WhRWMIwf3j9wFWANPhl+VpAcmKXBaHff3Jbp+bvGzGKN5Bt9L8eFUwLHuIolMWBdj/He
+         SVXA==
+X-Gm-Message-State: AOJu0YylxS7mTi6RCZdtzjtz+3AfYw/n1EMDW6fYgRzxL/PWjd0f2Ms3
+	S/hjI0vF0C7zG06AhgMqAgmdqvF+rBkpjQHLyx4=
+X-Google-Smtp-Source: AGHT+IGk7G47CUj9RF4pKzDPxTmtIoJ1wCsb9Pr7q3C8UWIAzHgCr3LMujULViUFT/Y4wYbyqLGeqN8JHqUBvqNtx3A=
+X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
+ (user=samitolvanen job=sendgmr) by 2002:a17:903:32c8:b0:1c3:4d70:6ed9 with
+ SMTP id i8-20020a17090332c800b001c34d706ed9mr43384plr.3.1695854881902; Wed,
+ 27 Sep 2023 15:48:01 -0700 (PDT)
+Date: Wed, 27 Sep 2023 22:47:58 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230908153056.3503975-1-gjoyce@linux.vnet.ibm.com>
- <20230908153056.3503975-2-gjoyce@linux.vnet.ibm.com> <20230913165612.GA2213586@dev-arch.thelio-3990X>
- <CAKwvOdnbKA-DiWRorWMR93JPFX-OjUjO=SQXSRf4=DpwzvZ=pQ@mail.gmail.com> <d07b66c55e957c78aff8ab9a6170747832cbc8c5.camel@linux.vnet.ibm.com>
-In-Reply-To: <d07b66c55e957c78aff8ab9a6170747832cbc8c5.camel@linux.vnet.ibm.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 27 Sep 2023 13:30:47 -0700
-Message-ID: <CAKwvOd=K_xNK71DpivVsyKOKWPo1XG78zGsAdZTWvj=tHmh2ZQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3 RESEND] block:sed-opal: SED Opal keystore
-To: gjoyce@linux.vnet.ibm.com
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-block@vger.kernel.org, axboe@kernel.dk, 
-	jarkko@kernel.org, linuxppc-dev@lists.ozlabs.org, jonathan.derrick@linux.dev, 
-	brking@linux.vnet.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au, 
-	nayna@linux.ibm.com, akpm@linux-foundation.org, keyrings@vger.kernel.org, 
-	llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3761; i=samitolvanen@google.com;
+ h=from:subject; bh=f76u/UaoOPWAzvVIRbNmavYgFKWbwPzMxrH4Tc8hYhQ=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBlFLEdhYoTc+kz3ZoLrFhYKOOymIFWJZVZRQni9
+ KhyoZ1LHfaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZRSxHQAKCRBMtfaEi7xW
+ 7rnpC/0fjS9A3U3PayoFxJDC7BIBn2TZclbDccTnDGN8dmOZRr0q32iccvz1rwMtx5qn8nLSZy2
+ HTDLopQWMRD97unLAk17J7+oywB1UqD9qjuCnhmwY10hlZvYQs+jeFjKtaJDjldiXjVVR7g//bZ
+ ZSbBsc5fj1bc39TUa1lCyKHTSTMQo6n1nzdKY19gEwdvmt9XaomfUDlCyACj7U1PZLQ1oZ/MGVt
+ JOnItns+7CtNGbq28/mjQkuoZ8w04WsGDOAaAecbjIY9dk4BPaEgKT0/4ez+Q4Q8M/qnciOrVOf
+ KNfcrOMSo1EtJcYzW3TR2pMeJ5m2fmNkiGgC/qGC/1mbXe/kwbF7t0BSYNILf+H8h/Ljaevmm8b
+ JkiBgac+k3XCuZMRK59/xOpTrYl22a7HAwYW6hPdm3Ca2W6Y3O3EvAXXzT5gId7vYGo05iGLyYK wFDUIb2j886cBr0U7uZQ37b/x3wCTwF1iUcPlbNwodFIZuibDcFtx03CUsYAm5Tqvfiys=
+X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
+Message-ID: <20230927224757.1154247-8-samitolvanen@google.com>
+Subject: [PATCH v4 0/6] riscv: SCS support
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>
+Cc: Clement Leger <cleger@rivosinc.com>, Guo Ren <guoren@kernel.org>, 
+	Deepak Gupta <debug@rivosinc.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Fangrui Song <maskray@google.com>, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 27, 2023 at 1:26=E2=80=AFPM Greg Joyce <gjoyce@linux.vnet.ibm.c=
-om> wrote:
->
-> On Wed, 2023-09-13 at 13:49 -0700, Nick Desaulniers wrote:
-> > On Wed, Sep 13, 2023 at 9:56=E2=80=AFAM Nathan Chancellor <nathan@kerne=
-l.org>
-> > wrote:
-> > > Hi Greg,
-> > >
-> > > On Fri, Sep 08, 2023 at 10:30:54AM -0500, gjoyce@linux.vnet.ibm.com
-> > >  wrote:
-> > > > From: Greg Joyce <gjoyce@linux.vnet.ibm.com>
-> > > >
-> > > > Add read and write functions that allow SED Opal keys to stored
-> > > > in a permanent keystore.
-> > > >
-> > > > Signed-off-by: Greg Joyce <gjoyce@linux.vnet.ibm.com>
-> > > > Reviewed-by: Jonathan Derrick <jonathan.derrick@linux.dev>
-> > > > ---
-> > > >  block/Makefile               |  2 +-
-> > > >  block/sed-opal-key.c         | 24 ++++++++++++++++++++++++
-> > > >  include/linux/sed-opal-key.h | 15 +++++++++++++++
-> > > >  3 files changed, 40 insertions(+), 1 deletion(-)
-> > > >  create mode 100644 block/sed-opal-key.c
-> > > >  create mode 100644 include/linux/sed-opal-key.h
-> > > >
-> > > > diff --git a/block/Makefile b/block/Makefile
-> > > > index 46ada9dc8bbf..ea07d80402a6 100644
-> > > > --- a/block/Makefile
-> > > > +++ b/block/Makefile
-> > > > @@ -34,7 +34,7 @@ obj-$(CONFIG_BLK_DEV_ZONED) +=3D blk-zoned.o
-> > > >  obj-$(CONFIG_BLK_WBT)                +=3D blk-wbt.o
-> > > >  obj-$(CONFIG_BLK_DEBUG_FS)   +=3D blk-mq-debugfs.o
-> > > >  obj-$(CONFIG_BLK_DEBUG_FS_ZONED)+=3D blk-mq-debugfs-zoned.o
-> > > > -obj-$(CONFIG_BLK_SED_OPAL)   +=3D sed-opal.o
-> > > > +obj-$(CONFIG_BLK_SED_OPAL)   +=3D sed-opal.o sed-opal-key.o
-> > > >  obj-$(CONFIG_BLK_PM)         +=3D blk-pm.o
-> > > >  obj-$(CONFIG_BLK_INLINE_ENCRYPTION)  +=3D blk-crypto.o blk-crypto-
-> > > > profile.o \
-> > > >                                          blk-crypto-sysfs.o
-> > > > diff --git a/block/sed-opal-key.c b/block/sed-opal-key.c
-> > > > new file mode 100644
-> > > > index 000000000000..16f380164c44
-> > > > --- /dev/null
-> > > > +++ b/block/sed-opal-key.c
-> > > > @@ -0,0 +1,24 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +/*
-> > > > + * SED key operations.
-> > > > + *
-> > > > + * Copyright (C) 2022 IBM Corporation
-> > > > + *
-> > > > + * These are the accessor functions (read/write) for SED Opal
-> > > > + * keys. Specific keystores can provide overrides.
-> > > > + *
-> > > > + */
-> > > > +
-> > > > +#include <linux/kernel.h>
-> > > > +#include <linux/errno.h>
-> > > > +#include <linux/sed-opal-key.h>
-> > > > +
-> > > > +int __weak sed_read_key(char *keyname, char *key, u_int *keylen)
-> > > > +{
-> > > > +     return -EOPNOTSUPP;
-> > > > +}
-> > > > +
-> > > > +int __weak sed_write_key(char *keyname, char *key, u_int keylen)
-> > > > +{
-> > > > +     return -EOPNOTSUPP;
-> > > > +}
-> > >
-> > > This change causes a build failure for certain clang configurations
-> > > due
-> > > to an unfortunate issue [1] with recordmcount, clang's integrated
-> > > assembler, and object files that contain a section with only weak
-> > > functions/symbols (in this case, the .text section in sed-opal-
-> > > key.c),
-> > > resulting in
-> > >
-> > >   Cannot find symbol for section 2: .text.
-> > >   block/sed-opal-key.o: failed
-> > >
-> > > when building this file.
-> >
-> > The definitions in
-> > block/sed-opal-key.c
-> > should be deleted. Instead, in
-> > include/linux/sed-opal-key.h
-> > CONFIG_PSERIES_PLPKS_SED should be used to define static inline
-> > versions when CONFIG_PSERIES_PLPKS_SED is not defined.
-> >
-> > #ifdef CONFIG_PSERIES_PLPKS_SED
-> > int sed_read_key(char *keyname, char *key, u_int *keylen);
-> > int sed_write_key(char *keyname, char *key, u_int keylen);
-> > #else
-> > static inline
-> > int sed_read_key(char *keyname, char *key, u_int *keylen) {
-> >   return -EOPNOTSUPP;
-> > }
-> > static inline
-> > int sed_write_key(char *keyname, char *key, u_int keylen);
-> >   return -EOPNOTSUPP;
-> > }
-> > #endif
->
-> This change will certainly work for pseries. The intent of the weak
-> functions was to allow a different unknown permanent keystore to be the
-> source for seeding SED Opal keys. It also kept platform specific code
-> out of the block directory.
->
-> I'm happy to switch to the approach above, if losing those two goals
-> isn't a concern.
+Hi folks,
 
-Assuming those would have mutually exclusive KConfigs, then the
-pattern I describe would be preferred.
+This series adds Shadow Call Stack (SCS) support for RISC-V. SCS
+uses compiler instrumentation to store return addresses in a
+separate shadow stack to protect them against accidental or
+malicious overwrites. More information about SCS can be found
+here:
 
->
-> >
-> > > Is there any real reason to have a separate translation unit for
-> > > these
-> > > two functions versus just having them living in sed-opal.c? Those
-> > > two
-> > > object files share the same Kconfig dependency. I am happy to send
-> > > a
-> > > patch if that is an acceptable approach.
-> > >
-> > > [1]: https://github.com/ClangBuiltLinux/linux/issues/981
-> > >
-> > > Cheers,
-> > > Nathan
-> > >
-> >
-> >
->
+  https://clang.llvm.org/docs/ShadowCallStack.html
+
+Patch 1 is from Deepak, and it simplifies VMAP_STACK overflow
+handling by adding support for accessing per-CPU variables
+directly in assembly. The patch is included in this series to
+make IRQ stack switching cleaner with SCS, and I've simply
+rebased it and fixed a couple of minor issues. Patch 2 uses this
+functionality to clean up the stack switching by moving duplicate
+code into a single function. On RISC-V, the compiler uses the
+gp register for storing the current shadow call stack pointer,
+which is incompatible with global pointer relaxation. Patch 3
+moves global pointer loading into a macro that can be easily
+disabled with SCS. Patch 4 implements SCS register loading and
+switching, and allows the feature to be enabled, and patch 5 adds
+separate per-CPU IRQ shadow call stacks when CONFIG_IRQ_STACKS is
+enabled. Patch 6 fixes the backward-edge CFI test in lkdtm for
+RISC-V.
+
+Note that this series requires Clang 17. Earlier Clang versions
+support SCS on RISC-V, but use the x18 register instead of gp,
+which isn't ideal. gcc has SCS support for arm64, but I'm not
+aware of plans to support RISC-V. Once the Zicfiss extension is
+ratified, it's probably preferable to use hardware-backed shadow
+stacks instead of SCS on hardware that supports the extension,
+and we may want to consider implementing CONFIG_DYNAMIC_SCS to
+patch between the implementation at runtime (similarly to the
+arm64 implementation, which switches to SCS when hardware PAC
+support isn't available).
+
+Sami
 
 
+---
+
+Changes in v4:
+  - Fixed the C environment setup in head.S to use
+    scs_load_current (patch 4).
+  - Rebased to -rc3 to fix merge conflicts.
+
+Changes in v3:
+  - Dropped a now unneeded function declaration (patch 1).
+  - Refactored call_on_irq_stack to use stack frame offsets
+    based on Cl=C3=A9ment's suggestion (patch 2).
+  - Rebased on top of v6.5.
+
+Changes in v2:
+  - Fixed asm_per_cpu with !CONFIG_SMP (patch 1).
+  - Added a fix to the CFI_BACKWARD lkdtm test (patch 6).
+  - Rebased on top of -rc6.
+
+---
+
+Deepak Gupta (1):
+  riscv: VMAP_STACK overflow detection thread-safe
+
+Sami Tolvanen (5):
+  riscv: Deduplicate IRQ stack switching
+  riscv: Move global pointer loading to a macro
+  riscv: Implement Shadow Call Stack
+  riscv: Use separate IRQ shadow call stacks
+  lkdtm: Fix CFI_BACKWARD on RISC-V
+
+ arch/riscv/Kconfig                      |   6 ++
+ arch/riscv/Makefile                     |   4 +
+ arch/riscv/include/asm/asm-prototypes.h |   1 -
+ arch/riscv/include/asm/asm.h            |  41 ++++++++
+ arch/riscv/include/asm/irq_stack.h      |   3 +
+ arch/riscv/include/asm/scs.h            |  54 +++++++++++
+ arch/riscv/include/asm/thread_info.h    |  16 ++-
+ arch/riscv/kernel/asm-offsets.c         |   9 ++
+ arch/riscv/kernel/entry.S               | 124 ++++++++++++------------
+ arch/riscv/kernel/head.S                |  19 ++--
+ arch/riscv/kernel/irq.c                 |  56 +++++------
+ arch/riscv/kernel/suspend_entry.S       |   5 +-
+ arch/riscv/kernel/traps.c               |  68 +------------
+ arch/riscv/kernel/vdso/Makefile         |   2 +-
+ arch/riscv/purgatory/Makefile           |   4 +
+ drivers/misc/lkdtm/cfi.c                |  13 ++-
+ 16 files changed, 248 insertions(+), 177 deletions(-)
+ create mode 100644 arch/riscv/include/asm/scs.h
+
+
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
 --=20
-Thanks,
-~Nick Desaulniers
+2.42.0.515.g380fc7ccd1-goog
+
