@@ -1,66 +1,146 @@
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BEC763DB
-	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 02:49:27 +0000 (UTC)
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3ae4eaca6a9so10701571b6e.2
-        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 19:49:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695782966; x=1696387766;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eni7pjGsCnR02TmbIEYy5GXxjpcD0RnfDvpYlq3rhaM=;
-        b=BAe60trjHvM0vYUNkIqP6+LvM+DqT8kd+HAjY2Yh1rmw+rtxkahvQ8YPr94ErL2DAD
-         mQV0zsmckA4Lok8GLOd/zYU8ecPGe8CGOMc/rmtqMnBWPgTQOuNmNeTc4ose0bbVAEyh
-         pFdCdHN+AEk7JtJttytmfU8Ie3axRQee7hmDGGaPDqkdfL0PEy39wqoiHTwG6u1rcyfC
-         8FIbpTOEsamW9tyBlA0W5C5odzqmmllc0Xv+bwUqJQHpPwCZcyB5aESrq4KlP8O76rjp
-         zasOlG3LgEg4dNugN/t480TdGt6Qbcs1M5tmBseHkcYMp7IRfg1aXOw/EigwozTKaQCZ
-         Xfow==
-X-Gm-Message-State: AOJu0YwU6hcI/8XbHA1qtUIm0Ym/Daz/eoZ4aXS6ACwDVf2tDr3qSwOA
-	pqcWEHb+cGMkVdXvT/XrLHNjBW5vf/g1jY8C6HSpew7mbx7U
-X-Google-Smtp-Source: AGHT+IFdbdFxnvYAoAwEmTvSKD9vV+LpoXdQyVZwGa9sq+8SBaVDHo7TFv5DlnRNou+NS6gE4mptqHru3h/s2UnlArnbPjr31pdR
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A367713AFC
+	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 04:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695789078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ugoIP3HibJmLtdGiL4EaJc+MaJFiVIZwla6kdfOmoAk=;
+	b=AxdtqsFvaTUa78BBiZb6VmyOSnB4umes0lbzHuwyAs+yz+z8ZT4HXyXgyJukDp01R8AU6/
+	FEyJF/d0T8GVTckxeqrvAkad4Udjs7k6GC5Emj4ULG2rFLki7xmwVfr/Zy50JNTh7kcc+U
+	d81w+43oiTjM6c47Nz8OXMVfB1KxfXk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-14-45u8vUwdP1qvsJnlL4pSeQ-1; Wed, 27 Sep 2023 00:31:16 -0400
+X-MC-Unique: 45u8vUwdP1qvsJnlL4pSeQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 798BE800962
+	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 04:31:16 +0000 (UTC)
+Received: from [172.64.4.12] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6624B2026D4B;
+	Wed, 27 Sep 2023 04:31:16 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, cac405a3)
+Date: Wed, 27 Sep 2023 04:31:16 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1b11:b0:3ae:1e08:41e9 with SMTP id
- bx17-20020a0568081b1100b003ae1e0841e9mr404808oib.3.1695782966473; Tue, 26 Sep
- 2023 19:49:26 -0700 (PDT)
-Date: Tue, 26 Sep 2023 19:49:26 -0700
-In-Reply-To: <0000000000006777d506051db4fd@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000553a2106064e3d86@google.com>
-Subject: Re: [syzbot] [ntfs3?] KASAN: slab-use-after-free Read in ntfs_write_bh
-From: syzbot <syzbot+bc79f8d1898960d41073@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, brauner@kernel.org, hch@lst.de, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <49453.123092700311600647@us-mta-14.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has bisected this issue to:
+Hi, we tested your kernel and here are the results:
 
-commit 5f0fb2210bb34ecd3f7bfde0d8f0068b79b2e094
-Author: Christoph Hellwig <hch@lst.de>
-Date:   Wed Aug 9 22:05:44 2023 +0000
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-    ntfs3: don't call sync_blockdev in ntfs_put_super
+Tested-by: CKI Project <cki-project@redhat.com>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1671b51e680000
-start commit:   6465e260f487 Linux 6.6-rc3
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1571b51e680000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1171b51e680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bb54ecdfa197f132
-dashboard link: https://syzkaller.appspot.com/bug?extid=bc79f8d1898960d41073
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14aa4e32680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=171787b6680000
+Kernel information:
+    Commit message: Merge tag 'for-6.6-rc3-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
 
-Reported-by: syzbot+bc79f8d1898960d41073@syzkaller.appspotmail.com
-Fixes: 5f0fb2210bb3 ("ntfs3: don't call sync_blockdev in ntfs_put_super")
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106245
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: readpage_elf: Attempt to read non-existent page at 0x4000000=
+000000000
+            URL: https://gitlab.com/cki-project/kernel-ark/-/issues/132
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
