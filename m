@@ -1,145 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20141195
-	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 00:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695773422;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CPXuICjYYuS7gm6z7AHL4XSjikiye9b/wugr3WjVqmM=;
-	b=Ig0l2Gc+UlTDNfulxJG4BTGvCvryByiFUxzPqKxpiFqI0oBGM0EbJ0hetD9USRA3Jx6jwo
-	534BmUmAamxxpW6a8otfhr2H3DXwMTV0tFNrsfNsPZ4tshYroWhDAYU+fv6Oy5p5q275JX
-	ghxV9fvNdSr1xz6+K2HKodulttgAabc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-EcCMBneVNeKQCvvgn5hA6A-1; Tue, 26 Sep 2023 20:10:20 -0400
-X-MC-Unique: EcCMBneVNeKQCvvgn5hA6A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79CB7101A529
-	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 00:10:20 +0000 (UTC)
-Received: from [172.64.4.12] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 643E31054FC1;
-	Wed, 27 Sep 2023 00:10:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
- (6.6.0-rc3, mainline.kernel.org-clang, 50768a42)
-Date: Wed, 27 Sep 2023 00:10:20 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B17815CA
+	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 01:26:37 +0000 (UTC)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-79fb8f60374so45090239f.1
+        for <llvm@lists.linux.dev>; Tue, 26 Sep 2023 18:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1695777996; x=1696382796; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k0LsinjnQ0psiRqDV4BJbkShjH1QSE7MgPkz+IEjFHc=;
+        b=hHkVyV9FaQNgxMIa7PAz3BmQZw+/IYjf2yLyaqsLccMDstMoMQ9tJRSVr3O6DVCef0
+         UeclPwAtq5ibzRsyhorm6G3SXp6GAnuMEqUjwV4RwKazl5XebB54Gr7DG7Dbqwl7Bo0b
+         I6a4p0MkrlQ/V4WnX0dVSAJObeoVLzW3Ifx94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695777996; x=1696382796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k0LsinjnQ0psiRqDV4BJbkShjH1QSE7MgPkz+IEjFHc=;
+        b=hzQhAmR159D2VamdWVN0J+r68+WQNEIuzWcr+6LhfI1ZH9bw5tzW4rivVCRFDesj86
+         oXJ+o2AcL2J78Z44BjbYKbPagcJa3dR8a8fFXKc4SUINGxKRSQfFKerea77pBEloVjLC
+         jsD/arXXVzZw558e2ke6KzzD3uWrKhDNb7xX4/7jACm3kItWeU2tHPUjqJlmLMQfKUGJ
+         7RrMuYTanM0sMbCOJDh3IP4Uesq2cMRGnzKfqGex0s7p9s4+ayyMZEljZW0phInQ0v7H
+         0h1ZcDTHXolOWnIXMKMd/HscGIyjUxyxANwmf2hMWLk3kiyEp5m7YtE5dtoJp4eCbWjN
+         oNTA==
+X-Gm-Message-State: AOJu0YzHBgcfc/g+NNHwDt9s4jclocaHEoPjMRBJWH7dVmX2c1KQw1iN
+	RdVtV06eKSROzFZ8Ukpa90ilEg==
+X-Google-Smtp-Source: AGHT+IFCOJWMcvH/PMk6PXaOABE9naegOE1OjxmKKpTl8Tq0vbJU2EbQZCuBXNzabPcsOTBAqRoEHA==
+X-Received: by 2002:a92:cac7:0:b0:351:54db:c1c9 with SMTP id m7-20020a92cac7000000b0035154dbc1c9mr594374ilq.1.1695777996416;
+        Tue, 26 Sep 2023 18:26:36 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id y3-20020a92d203000000b0034f3220c086sm2393099ily.12.2023.09.26.18.26.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Sep 2023 18:26:35 -0700 (PDT)
+Message-ID: <cd11111a-321e-3b29-3d7b-8844189f791e@linuxfoundation.org>
+Date: Tue, 26 Sep 2023 19:26:34 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <20817.123092620102000314@us-mta-604.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] selftests/rseq: fix kselftest Clang build warnings
+Content-Language: en-US
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Justin Stitt <justinstitt@google.com>, Peter Zijlstra
+ <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230912-kselftest-param_test-c-v1-1-80a6cffc7374@google.com>
+ <CAFhGd8on9_DJUZqT5uKgPzOtJNn99sY3TprcPzD5pm3GmYx8oQ@mail.gmail.com>
+ <eabe9db0-c934-af2d-e5a9-9d644593851c@efficios.com>
+ <63dd7222-99dc-8e11-3a51-b132e4115ac5@linuxfoundation.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <63dd7222-99dc-8e11-3a51-b132e4115ac5@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On 9/26/23 14:39, Shuah Khan wrote:
+> On 9/26/23 13:02, Mathieu Desnoyers wrote:
+>> On 9/26/23 08:20, Justin Stitt wrote:
+>>> Ping.
+>>>
+>>> Looking to get this patch and [1] slated for 6.7 which fixes some
+>>> kselftest builds on older kernels.
+>>>
+>>> On Wed, Sep 13, 2023 at 6:03 AM Justin Stitt <justinstitt@google.com> wrote:
+>>>>
+>>>> When building with Clang, I am getting many warnings from the selftests/rseq tree.
+>>>>
+>>>> Here's one such example from rseq tree:
+>>>> |  param_test.c:1234:10: error: address argument to atomic operation must be a pointer to _Atomic type ('intptr_t *' (aka 'long *') invalid)
+>>>> |   1234 |         while (!atomic_load(&args->percpu_list_ptr)) {}
+>>>> |        |                 ^           ~~~~~~~~~~~~~~~~~~~~~~
+>>>> |  /usr/local/google/home/justinstitt/repos/tc-build/build/llvm/final/lib/clang/18/include/stdatomic.h:140:29: note: expanded from macro 'atomic_load'
+>>>> |    140 | #define atomic_load(object) __c11_atomic_load(object, __ATOMIC_SEQ_CST)
+>>>> |        |                             ^                 ~~~~~~
+>>>>
+>>>> Use compiler builtins `__atomic_load_n()` and `__atomic_store_n()` with
+>>>> accompanying __ATOMIC_ACQUIRE and __ATOMIC_RELEASE, respectively. This
+>>>> will fix the warnings because the compiler builtins do not expect their
+>>>> arguments to have _Atomic type. This should also make TSAN happier.
+>>>>
+>>>> Link: https://github.com/ClangBuiltLinux/linux/issues/1698
+>>>> Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues/61
+>>>> Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>>> Signed-off-by: Justin Stitt <justinstitt@google.com>
+>>
+>> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>
+>> Peter, should this go through tip ?
+>>
+>> Shuah, should to go through selftests ?
+>>
+> 
+> I can take this through selftests and apply it - hoping there
+> are no conflicts with what's in Peter's tree.
+> 
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Applied to linux-kselftest next for Linux 6.7-rc1
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'linux-kselftest-fixes-6.6-rc4' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/106221
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: blktests block/024 failed
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+thanks,
+-- Shuah
 
