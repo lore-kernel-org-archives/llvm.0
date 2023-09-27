@@ -1,173 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11A51C684;
-	Wed, 27 Sep 2023 09:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695805300; x=1727341300;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cr5MCYb9m/L70OxZzhQMj2W1fq59DqJYRBk+aXlzeS4=;
-  b=fSTZFuX9/k8xwQ3tWCoCWqCo8jBYAbgdTd4f3NYedFF6bqY1cW6qkzJ/
-   ijvJLuFQJijonXQlfKR6qqhkKe+Cgi54jgUb60VPVQimU9kTcwTcjBcB1
-   6BXwc440yr8Tbuc5UM44iJtBQJx2CtyPjJ9bkApEug3qz5Z7GuV0RDC0m
-   4Kcq1LWGZXYTLaR1+a2/ZNBtwi3skzAnotcjMcJkd7jp3E5E9AX7NeZ1f
-   ynP3ut8qlwAg7EHjj8BtzWzTFKQlfSnltvKG3ojKw+ETdFjCjNi9JJRlu
-   6ilP/Be1kdhr+LpTHmp2yMvpmrLZe7Kbi5NRUACkNOAM4Xj0uRM3EjGD4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="366834172"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="366834172"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 02:01:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="752490258"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="752490258"
-Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Sep 2023 02:01:38 -0700
-Received: from kbuild by 32c80313467c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qlQQ4-0003wI-1W;
-	Wed, 27 Sep 2023 09:01:23 +0000
-Date: Wed, 27 Sep 2023 17:00:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [riteshharjani:ext2_dir_buffer_cache_rfc_wip1 15/15]
- fs/ext2/dir.c:440:26: warning: no previous prototype for function
- 'ext2_find_entry_old'
-Message-ID: <202309271615.haGzZ2k6-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F394224FB
+	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 09:28:40 +0000 (UTC)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5a200028437so7787357b3.1
+        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 02:28:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695806919; x=1696411719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EbZCD6ltUso31jdZjCWvFNyLqtiYopd8rfOZZMwIaq8=;
+        b=vuX01HiAMInYpE+W7I6ZSy4gr5Uxw9aHsxYQN5fkWlHnJDCGz0rm8+wfiav+Wgoyxp
+         Oo+YEwoMpyuIMpvyp2e2IOgOFzvLAgHT1BlJbR31I4GaTW6WhMXgJx99JiGmmDIFgTqp
+         KQjyiQXv6DzCP7D929vnYte08PyC2O6Ut5OWuAy/1sttZnc1fIb7qmCKGNa8+SqQbg8N
+         iv8k/kpk6jQ84ZPjbWeANiDRWkE++DCthPGJADh+L6r3Zq7jV+0cFUuwpULPCaS/mh+b
+         F7B0iJf8I7Zk4u966u/o6Jq9xoLF2sVkNMhKYQif6ivqyzzPkbkfu4d74n09nrIEpzp2
+         E8zw==
+X-Gm-Message-State: AOJu0YxBOwG9SYbdF6R/jyq3iJo5FF4EMS30nPWeyg7JOrmqumHS4/xw
+	2yVWDOjtgLFlL3UqJ+E0dDdHTVVso/LPGg==
+X-Google-Smtp-Source: AGHT+IE8koYno+MuBgIyCxfp77aWzVlBNtnvXGhEZpCiqUvv1psCOeQYCUPgrHRImfGUeyj/AK6eeA==
+X-Received: by 2002:a81:7c02:0:b0:5a0:ae01:803c with SMTP id x2-20020a817c02000000b005a0ae01803cmr1710259ywc.38.1695806919447;
+        Wed, 27 Sep 2023 02:28:39 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id cp12-20020a05690c0e0c00b00582fae92aa7sm2118592ywb.93.2023.09.27.02.28.38
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Sep 2023 02:28:38 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-59c26aa19b7so131878477b3.2
+        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 02:28:38 -0700 (PDT)
+X-Received: by 2002:a81:4f0b:0:b0:59b:fb30:9862 with SMTP id
+ d11-20020a814f0b000000b0059bfb309862mr1716025ywb.3.1695806917927; Wed, 27 Sep
+ 2023 02:28:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
+ <CAMuHMdWiC4v9fctp18bRrEH-m_-0VjMg9+XpON8vdRYwniTU3g@mail.gmail.com>
+ <CAMuHMdWk_jcZ1V7J68bw11YZ+EjEqAWOKHzanVyxo2zktbMteg@mail.gmail.com> <CAPDyKFqgsHYz1hfOQ=KniNJj+u7ZSMoxS03Rixj1n2AOUdSVaQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFqgsHYz1hfOQ=KniNJj+u7ZSMoxS03Rixj1n2AOUdSVaQ@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 27 Sep 2023 11:28:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW+ovx_Vbp1FQbvHESYrv3kHx5FvkjSb0V8dq857x5e9w@mail.gmail.com>
+Message-ID: <CAMuHMdW+ovx_Vbp1FQbvHESYrv3kHx5FvkjSb0V8dq857x5e9w@mail.gmail.com>
+Subject: Re: [PATCH] soc: renesas: rmobile-sysc: fix -Wvoid-pointer-to-enum-cast
+ warning
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Justin Stitt <justinstitt@google.com>, Magnus Damm <magnus.damm@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/riteshharjani/linux ext2_dir_buffer_cache_rfc_wip1
-head:   3b878bc4805dd97f67ee17c6450059a4a7f2b261
-commit: 3b878bc4805dd97f67ee17c6450059a4a7f2b261 [15/15] ext2: everything else to make it work
-config: powerpc-g5_defconfig (https://download.01.org/0day-ci/archive/20230927/202309271615.haGzZ2k6-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230927/202309271615.haGzZ2k6-lkp@intel.com/reproduce)
+Hi Ulf,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309271615.haGzZ2k6-lkp@intel.com/
+On Tue, Sep 26, 2023 at 1:22=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+> On Mon, 18 Sept 2023 at 11:21, Geert Uytterhoeven <geert@linux-m68k.org> =
+wrote:
+> > On Wed, Aug 30, 2023 at 10:24=E2=80=AFAM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > > On Tue, Aug 15, 2023 at 12:11=E2=80=AFAM Justin Stitt <justinstitt@go=
+ogle.com> wrote:
+> > > > When building with clang 18 I see the following warning:
+> > > > |      drivers/soc/renesas/rmobile-sysc.c:193:22: warning: cast to =
+smaller integer
+> > > > |               type 'enum pd_types' from 'const void *' [-Wvoid-po=
+inter-to-enum-cast]
+> > > > |        193 |                 add_special_pd(np, (enum pd_types)id=
+->data);
+> > > >
+> > > > This is due to the fact that `id->data` is a void* and `enum pd_typ=
+es`
+> > > > has the size of an integer. This cast from pointer-width to int-wid=
+th
+> > > > causes truncation and possible data loss. Instead, cast to `uintptr=
+_t`
+> > > > which has the same width as void*.
+> > > >
+> > > > Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> > > > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > >
+> > > scripts/checkpatch.pl:
+> > >
+> > >     WARNING: Reported-by: should be immediately followed by Closes:
+> > > with a URL to the report
+> > >
+> > > Hence changing the Link: tag to a Closes: tag.
+> > >
+> > > > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > > > ---
+> > > > Note: It should be noted that there is likely no data loss occurrin=
+g in
+> > > > this case since the enum only has a few fields. The narrowing cast =
+from
+> > > > pointer to int will not lose any data.
+> > >
+> > > Indeed, the theoretical narrowing could only happen on a 64-bit
+> > > platform, while this driver is only used on arm32.
+> > >
+> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > i.e. will queue in renesas-devel for v6.7.
+> >
+> > As the Generic PM Domain providers were moved to drivers/pmdomain/
+> > in v6.6-rc2, and now have their own maintainer, I have moved this
+> > commit from renesas-drivers-for-v6.7 to renesas-pmdomain-for-v6.7[1],
+> > with s/soc/pmdomain/ in the oneline-summary.
+> >
+> > Ulf: if you prefer, you can still take this patch directly.
+> > Else I will send a PR after rc3 and/or rc5, like I do with my other
+> > renesas-<foo>-for-<version> branches.
+> > Thanks!
+>
+> Apologize for the delay, been traveling lately. Anyway, I can
+> certainly pick up the patch and carry it for v6.7. Just let me know,
+> if/when you have dropped the patch from your tree.
 
-All warnings (new ones prefixed by >>):
+Thanks, dropped.
 
->> fs/ext2/dir.c:440:26: warning: no previous prototype for function 'ext2_find_entry_old' [-Wmissing-prototypes]
-   struct ext2_dir_entry_2 *ext2_find_entry_old (struct inode *dir,
-                            ^
-   fs/ext2/dir.c:440:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct ext2_dir_entry_2 *ext2_find_entry_old (struct inode *dir,
-   ^
-   static 
-   fs/ext2/dir.c:818:15: warning: unused variable 'chunksize' [-Wunused-variable]
-           unsigned int chunksize = ext2_chunk_size(dir);
-                        ^
-   fs/ext2/dir.c:84:13: warning: unused function 'ext2_commit_chunk' [-Wunused-function]
-   static void ext2_commit_chunk(struct page *page, loff_t pos, unsigned len)
-               ^
-   fs/ext2/dir.c:236:1: warning: unused function 'ext2_validate_entry' [-Wunused-function]
-   ext2_validate_entry(char *base, unsigned offset, unsigned mask)
-   ^
-   fs/ext2/dir.c:549:12: warning: unused function 'ext2_prepare_chunk' [-Wunused-function]
-   static int ext2_prepare_chunk(struct page *page, loff_t pos, unsigned len)
-              ^
-   fs/ext2/dir.c:555:12: warning: unused function 'ext2_handle_dirsync' [-Wunused-function]
-   static int ext2_handle_dirsync(struct inode *dir)
-              ^
-   6 warnings generated.
+P.S. And now I notice it was never part of linux-next, due to an
+     oversight in my scripting. Fixed that, too ;-)
 
+Gr{oetje,eeting}s,
 
-vim +/ext2_find_entry_old +440 fs/ext2/dir.c
+                        Geert
 
-   423	
-   424	/*
-   425	 *	ext2_find_entry()
-   426	 *
-   427	 * finds an entry in the specified directory with the wanted name. It
-   428	 * returns the page in which the entry was found (as a parameter - res_page),
-   429	 * and the entry itself. Page is returned mapped and unlocked.
-   430	 * Entry is guaranteed to be valid.
-   431	 *
-   432	 * On Success ext2_put_page() should be called on *res_page.
-   433	 *
-   434	 * NOTE: Calls to ext2_get_page()/ext2_put_page() must be nested according to
-   435	 * the rules documented in kmap_local_page()/kunmap_local().
-   436	 *
-   437	 * ext2_find_entry() and ext2_dotdot() act as a call to ext2_get_page() and
-   438	 * should be treated as a call to ext2_get_page() for nesting purposes.
-   439	 */
- > 440	struct ext2_dir_entry_2 *ext2_find_entry_old (struct inode *dir,
-   441				const struct qstr *child, struct page **res_page)
-   442	{
-   443		const char *name = child->name;
-   444		int namelen = child->len;
-   445		unsigned reclen = EXT2_DIR_REC_LEN(namelen);
-   446		unsigned long start, n;
-   447		unsigned long npages = dir_pages(dir);
-   448		struct page *page = NULL;
-   449		struct ext2_inode_info *ei = EXT2_I(dir);
-   450		ext2_dirent * de;
-   451	
-   452		if (npages == 0)
-   453			goto out;
-   454	
-   455		/* OFFSET_CACHE */
-   456		*res_page = NULL;
-   457	
-   458		start = ei->i_dir_start_lookup;
-   459		if (start >= npages)
-   460			start = 0;
-   461		n = start;
-   462		do {
-   463			char *kaddr = ext2_get_page(dir, n, 0, &page);
-   464			if (IS_ERR(kaddr))
-   465				return ERR_CAST(kaddr);
-   466	
-   467			de = (ext2_dirent *) kaddr;
-   468			kaddr += ext2_last_byte(dir, n) - reclen;
-   469			while ((char *) de <= kaddr) {
-   470				if (de->rec_len == 0) {
-   471					ext2_error(dir->i_sb, __func__,
-   472						"zero-length directory entry");
-   473					ext2_put_page(page, de);
-   474					goto out;
-   475				}
-   476				if (ext2_match(namelen, name, de))
-   477					goto found;
-   478				de = ext2_next_entry(de);
-   479			}
-   480			ext2_put_page(page, kaddr);
-   481	
-   482			if (++n >= npages)
-   483				n = 0;
-   484			/* next page is past the blocks we've got */
-   485			if (unlikely(n > (dir->i_blocks >> (PAGE_SHIFT - 9)))) {
-   486				ext2_error(dir->i_sb, __func__,
-   487					"dir %lu size %lld exceeds block count %llu",
-   488					dir->i_ino, dir->i_size,
-   489					(unsigned long long)dir->i_blocks);
-   490				goto out;
-   491			}
-   492		} while (n != start);
-   493	out:
-   494		return ERR_PTR(-ENOENT);
-   495	
-   496	found:
-   497		*res_page = page;
-   498		ei->i_dir_start_lookup = n;
-   499		return de;
-   500	}
-   501	
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
