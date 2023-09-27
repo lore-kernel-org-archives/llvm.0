@@ -1,40 +1,40 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685E11C6B3
-	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 22:48:11 +0000 (UTC)
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1c6147ea811so86283115ad.2
-        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 15:48:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4AB1D53A
+	for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 22:48:12 +0000 (UTC)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1c6181dacf6so108236305ad.1
+        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 15:48:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695854891; x=1696459691; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695854892; x=1696459692; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3UA3PzXciXcLUc7CxJsx04dBK4in+Q1qERJTsVZ4p+I=;
-        b=JXjGce2bzJH1IV9w0pTEF1gVHNWkEggP5XekFMD34TE/053FrhlViarYF06+cyTK3I
-         p/9HgCRtRfQBr+c0keQyPKPBAyXo7ADWca8KdTylGbNKMJcCPGVazSctrxXU6OTplV5r
-         Y0ZgeGzHUCnjIoMMDEZKbShiI7lqUX1Mo3IhlMM/KiPaJ2bR+728gFQ8GSj+8GNlWnxp
-         QrmHo9ct/fypxnnvBSIWxuO4MAU3iL3jX9+IoOpvApKFS9bgY6KKerVavtjmUUPu2b1a
-         WOVTzyEmRQZMegcHYIxclUy8UmAtJoJkJqd/zk+B5fiuVMPBFQouEOZmsF/V1onFlseJ
-         pFfg==
+        bh=6h9NlhRD8hF3JGpC0yj7VRjIJqQSgsUALXY/NiPb6h0=;
+        b=Qm2PhOBuEgIgxa1aSIUxzoY8y0h14wwHgdYKgzFb/MJCpyhoT/ncBsWyZ8nMTTAznr
+         lIFFT69IVPpfhWLkrlTlwjSGvlihLD/LYCxlg6HlABnucCt5B00FqkanzCj/GEMKox2S
+         b78sr7vo83tKoLRxzFHD9Rg9YfNhMqweQmBsTOFFmw1qIY58M+M89vBx0UZ5xEIR34Qv
+         yTfLIA/I+TI2UCBwLBhbn4sVXO/ObGHPca7meubAVJr/YZJkzYxlHF9AYANrpCtjt3Zl
+         ACbk29BfewkVg1/z+y+x/Ro581jwsPkrykpYlN4FD6t3ZXgyeKmc1t2Z9O5Iun2Oi8w3
+         8Cew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695854891; x=1696459691;
+        d=1e100.net; s=20230601; t=1695854892; x=1696459692;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3UA3PzXciXcLUc7CxJsx04dBK4in+Q1qERJTsVZ4p+I=;
-        b=XuMdhymtlYppIrETLRCzQ5DcKvd2e2xhgPYq6OY0QPTdAdwnHlbGM6E4leemc2z5Xm
-         F2AqqKdJCMcwwVbgkYaYi5WCVO6BtygYutyOJv3KrHNLIh3+7uwEXfYwBrF3QX0cT6Um
-         l2JvuCC/0dCsJ+Oprnz7jExhRkvLlqyURAfcoB96WDMrhEBhGeLqk69bQ83kD9aM+yz2
-         55GrdgwWnIkkn7tywlZWsDQA+lCLB08ZXNBnzRJdUqko+CuEe8r+6D5LkboCLTOU24kt
-         hfC4Iv1KaZALOzJ1DNIebl3R6Z4WfcmmWQFDvsW44Q3XCNpkdOTShrfRGkntjQLo0FmZ
-         74vA==
-X-Gm-Message-State: AOJu0Yy/iXkL2F9n0dZf77EdU+gEvQoroXk3TnKlG/FBaMC3+Odw/IuO
-	WXgZDYO9Vl9ixw/BBVqKy+swDGGnajg5wrbcOwA=
-X-Google-Smtp-Source: AGHT+IGnHh7mzMqcUnQLuZVLiDPicZpub6WK4SE1LILyGIfzVy1iJYFLVk2P+ycVcj9fl1t/gaT0ECVaBFtwa8dcsJ4=
+        bh=6h9NlhRD8hF3JGpC0yj7VRjIJqQSgsUALXY/NiPb6h0=;
+        b=TR4fowrVgs3ydE/l0X8HjeZ1a+NGon2s+fgNT6mPIBxlV3tJcDV0Cd4nzvpnHBKKou
+         bPC2Ua+IQs9DxBP8z1UV4AJbdU2eiqj9/ahVf9EyhUwg+Rhbvt74SClwCBgj0BmLvhuj
+         Y/yRKfrFik551Q0X2zCklZRDdAnrzqHzipASg3Qe/LMN8qAtJhXZnqM5787RQ4cjFV6V
+         DTCClDASL2/mwFtoz6b9lDK3RLQiMbESQrx8k+YhhiVtVskPjfVsqdpRrIWItkMjY07t
+         a4moQlYrInckFyVmOJ/AcXZlorLvls1oaGQSXcwXYpIUxf/mGQF6UciK0Ao+zG5/SrGF
+         zAbw==
+X-Gm-Message-State: AOJu0YwEzMUkiz7zKoVyc2O0Pu3kML1S6JbDH0fjb/PTZaTAO3Wz6Gma
+	9f7rVVmKpCaT2Qh6m4NkVgdL+A7eu12M3+7GqCc=
+X-Google-Smtp-Source: AGHT+IHK+0biBPVWxcHovzaXWOtINj3uMRtfg9f7R8EmqXuweOi238eHtIUJiD/eg0+vD4plv8qwETomHuFNs3pZDjQ=
 X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a17:902:d4ce:b0:1c0:ac09:4032 with
- SMTP id o14-20020a170902d4ce00b001c0ac094032mr40690plg.9.1695854890733; Wed,
- 27 Sep 2023 15:48:10 -0700 (PDT)
-Date: Wed, 27 Sep 2023 22:48:03 +0000
+ (user=samitolvanen job=sendgmr) by 2002:a17:903:2350:b0:1c6:d25:8750 with
+ SMTP id c16-20020a170903235000b001c60d258750mr47383plh.10.1695854892186; Wed,
+ 27 Sep 2023 15:48:12 -0700 (PDT)
+Date: Wed, 27 Sep 2023 22:48:04 +0000
 In-Reply-To: <20230927224757.1154247-8-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,19 +44,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230927224757.1154247-8-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3222; i=samitolvanen@google.com;
- h=from:subject; bh=4iP9jD07sRLKZy9z4wycr0gGeMqN4nW8GVhSWT+pt0c=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBlFLEdc0ndW+W8xAwxA/Cqwr/zGM8KrW/4U7Qvn
- D6/24dFgZmJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZRSxHQAKCRBMtfaEi7xW
- 7j/TC/9QYIFVRwBHilpMvJsGF5ZuLLmHXC+6PyGWcKJr1nfV4YChcnH2AyhrR3Jtsn0GDJrOc8N
- 35cE87DH6HMvHXoAdjwYFdSZfEOQUulLMiyIZ37pg2TWFbhI4B0s95x/8KXGpIgMnApDq8FRKkr
- dkX4ZyFmhTYLNIpmNAleOednmNBtzsKapufJKcTpmhCq8SwzCTpkINVE7MsKmugeis556J8Sq9n
- py+Q6LsRmlhB7THYIcqHSiye89YKOv7oCvgahLR8miSX2x9iG7s8Mla1J5GqT274t3WrXdNPy6l
- B1nug8SBfJtw7s7N8My+43WNYyLLeJEzZwbPjTn9WGY1jqgcPbMigApDdUKe8Fdxb/oCiX/DVXC
- Tky38rffJrp5N9fn0HexYQXlNxa1ATOdk1/RRB9kKz6Er1hZRieQWrM4xBxWZMV5cd3WF1d0HmP PtTL6WVk+2I7pBm+006Qa1nQBDboCBjiHxppqh3VuXLq2JGFPc5C2ycM/tKhII8IFb28E=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2082; i=samitolvanen@google.com;
+ h=from:subject; bh=4N5TA1RYsqEG6l9M0xplln+cBa1Qt0iz0MCbO5csiTU=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBlFLEdbuqhUGRkvHlpnRFoLVngxWUbGDzCKHZjB
+ gXmrezGpZuJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZRSxHQAKCRBMtfaEi7xW
+ 7uL3C/9V/COsf71wMsf8LAD8PbXFSUssu/Ulme80Bc+IvZbku+VH0yCAi+0as+ACJEpRsTnNbIQ
+ pScn4vacTqNH+5w4IriZtrxed/+JlJlJ3oFsv2kgI5IxJP44McljBfgT1GRyGCHurDabqPsJYX5
+ TaGUz9a7+gFF6iVgMLHb9uNWunfwjDU0mlECp6rp+occD5rm4k0XsmhUdYYDNB2N7vwL4ar7t7Y
+ bRUrWcDXIDTzByGd1qZFeUPJ4XRuZmExIhm3XrLYrmbZvkYIH6oKzVv5knn9MHzzjsjfdiVDoME
+ e2Bibk2Mj6F9ABYdpfXOcVNTMcGMZtsjvwmAv9Qx3j7PwTa5naJ0np9PriPDIM2jsshK4hOOa65
+ Z+fMEcQII52/5PTX5HX9sXBqn/ly0o9tU3LTzbR4GGVs6W1Rzk4Yoden9lVz+2Ti9QdMMMmqjSM hvdcZcYO8OTXRXZtW4dNPx1A4wMY6pfJadi3BaYatIPrJyHzova74Yk95MQNhaBqyh0DU=
 X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Message-ID: <20230927224757.1154247-13-samitolvanen@google.com>
-Subject: [PATCH v4 5/6] riscv: Use separate IRQ shadow call stacks
+Message-ID: <20230927224757.1154247-14-samitolvanen@google.com>
+Subject: [PATCH v4 6/6] lkdtm: Fix CFI_BACKWARD on RISC-V
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>
@@ -67,119 +67,53 @@ Cc: Clement Leger <cleger@rivosinc.com>, Guo Ren <guoren@kernel.org>,
 	linux-kernel@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When both CONFIG_IRQ_STACKS and SCS are enabled, also use a separate
-per-CPU shadow call stack.
+On RISC-V, the return address is before the current frame pointer,
+unlike on most other architectures. Use the correct offset on RISC-V
+to fix the CFI_BACKWARD test.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Acked-by: Kees Cook <keescook@chromium.org>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/riscv/include/asm/scs.h |  7 +++++++
- arch/riscv/kernel/entry.S    |  7 +++++++
- arch/riscv/kernel/irq.c      | 21 +++++++++++++++++++++
- 3 files changed, 35 insertions(+)
+ drivers/misc/lkdtm/cfi.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/scs.h b/arch/riscv/include/asm/scs.h
-index 94726ea773e3..0e45db78b24b 100644
---- a/arch/riscv/include/asm/scs.h
-+++ b/arch/riscv/include/asm/scs.h
-@@ -13,6 +13,11 @@
- 	XIP_FIXUP_OFFSET gp
- .endm
+diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+index fc28714ae3a6..6a33889d0902 100644
+--- a/drivers/misc/lkdtm/cfi.c
++++ b/drivers/misc/lkdtm/cfi.c
+@@ -68,12 +68,20 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+ #define no_pac_addr(addr)      \
+ 	((__force __typeof__(addr))((uintptr_t)(addr) | PAGE_OFFSET))
  
-+/* Load the per-CPU IRQ shadow call stack to gp. */
-+.macro scs_load_irq_stack tmp
-+	load_per_cpu gp, irq_shadow_call_stack_ptr, \tmp
-+.endm
-+
- /* Load task_scs_sp(current) to gp. */
- .macro scs_load_current
- 	REG_L	gp, TASK_TI_SCS_SP(tp)
-@@ -34,6 +39,8 @@
- 
- .macro scs_load_init_stack
- .endm
-+.macro scs_load_irq_stack tmp
-+.endm
- .macro scs_load_current
- .endm
- .macro scs_load_current_if_task_changed prev
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index 52793193a763..3a0db310325a 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -237,12 +237,19 @@ SYM_FUNC_START(call_on_irq_stack)
- 	REG_S	s0, STACKFRAME_FP(sp)
- 	addi	s0, sp, STACKFRAME_SIZE_ON_STACK
- 
-+	/* Switch to the per-CPU shadow call stack */
-+	scs_save_current
-+	scs_load_irq_stack t0
-+
- 	/* Switch to the per-CPU IRQ stack and call the handler */
- 	load_per_cpu t0, irq_stack_ptr, t1
- 	li	t1, IRQ_STACK_SIZE
- 	add	sp, t0, t1
- 	jalr	a1
- 
-+	/* Switch back to the thread shadow call stack */
-+	scs_load_current
-+
- 	/* Switch back to the thread stack and restore ra and s0 */
- 	addi	sp, s0, -STACKFRAME_SIZE_ON_STACK
- 	REG_L	ra, STACKFRAME_RA(sp)
-diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-index 95dafdcbd135..7bfea97ee7e7 100644
---- a/arch/riscv/kernel/irq.c
-+++ b/arch/riscv/kernel/irq.c
-@@ -9,6 +9,7 @@
- #include <linux/irqchip.h>
- #include <linux/irqdomain.h>
- #include <linux/module.h>
-+#include <linux/scs.h>
- #include <linux/seq_file.h>
- #include <asm/sbi.h>
- #include <asm/smp.h>
-@@ -34,6 +35,24 @@ EXPORT_SYMBOL_GPL(riscv_get_intc_hwnode);
- #ifdef CONFIG_IRQ_STACKS
- #include <asm/irq_stack.h>
- 
-+DECLARE_PER_CPU(ulong *, irq_shadow_call_stack_ptr);
-+
-+#ifdef CONFIG_SHADOW_CALL_STACK
-+DEFINE_PER_CPU(ulong *, irq_shadow_call_stack_ptr);
++#ifdef CONFIG_RISCV
++/* https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-cc.adoc#frame-pointer-convention */
++#define FRAME_RA_OFFSET		(-1)
++#else
++#define FRAME_RA_OFFSET		1
 +#endif
 +
-+static void init_irq_scs(void)
-+{
-+	int cpu;
-+
-+	if (!scs_is_enabled())
-+		return;
-+
-+	for_each_possible_cpu(cpu)
-+		per_cpu(irq_shadow_call_stack_ptr, cpu) =
-+			scs_alloc(cpu_to_node(cpu));
-+}
-+
- DEFINE_PER_CPU(ulong *, irq_stack_ptr);
- 
- #ifdef CONFIG_VMAP_STACK
-@@ -76,6 +95,7 @@ void do_softirq_own_stack(void)
- #endif /* CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK */
- 
- #else
-+static void init_irq_scs(void) {}
- static void init_irq_stacks(void) {}
- #endif /* CONFIG_IRQ_STACKS */
- 
-@@ -87,6 +107,7 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 
- void __init init_IRQ(void)
+ /* The ultimate ROP gadget. */
+ static noinline __no_ret_protection
+ void set_return_addr_unchecked(unsigned long *expected, unsigned long *addr)
  {
-+	init_irq_scs();
- 	init_irq_stacks();
- 	irqchip_init();
- 	if (!handle_arch_irq)
+ 	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+-	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
++	unsigned long * volatile *ret_addr =
++		(unsigned long **)__builtin_frame_address(0) + FRAME_RA_OFFSET;
+ 
+ 	/* Make sure we've found the right place on the stack before writing it. */
+ 	if (no_pac_addr(*ret_addr) == expected)
+@@ -88,7 +96,8 @@ static noinline
+ void set_return_addr(unsigned long *expected, unsigned long *addr)
+ {
+ 	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+-	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
++	unsigned long * volatile *ret_addr =
++		(unsigned long **)__builtin_frame_address(0) + FRAME_RA_OFFSET;
+ 
+ 	/* Make sure we've found the right place on the stack before writing it. */
+ 	if (no_pac_addr(*ret_addr) == expected)
 -- 
 2.42.0.515.g380fc7ccd1-goog
 
