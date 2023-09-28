@@ -1,129 +1,228 @@
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFF6513C8
-	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 18:00:10 +0000 (UTC)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38SHWKLo005511;
-	Thu, 28 Sep 2023 17:32:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pps0720; bh=zMGjwo4JgaFeiq+zEmjwtYYKC8M3XQ2E3zEbRSN8O1A=;
- b=KNYbvVMYBYjGSnlNifo2nFf8YNsS4JPNxgEkskOiMg3EvAH0ikxJ/UDp/wwBJUePVIqQ
- Vd1KpY0uVjveavekAyO1zNJw6YiLXBrW4Vl/0bYmBMhEMR0P5HiwbhEyDaJE0Z6knz5k
- HpK9GPVUslRVlNqZUD9h6HLSGmVj66wBFeimSX2o7dSrLJizghOFMSsg+q/Bm79Vvkqj
- ZZ+UVLNoWGtThHSL/wuiySxCcEMKlM3Hmf6KV35VkM4YmRyjHw03CT0FpzItHX4DUi0H
- bB2oL9NrUmLybUcz5xeNZR4Cnqu0w1JNKdHuiNqA3EZ7pIlteJ1AQfatcaimq0ukDsm7 iQ== 
-Received: from p1lg14881.it.hpe.com ([16.230.97.202])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3tdbgg1hag-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Sep 2023 17:32:23 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 99832805E57;
-	Thu, 28 Sep 2023 17:32:21 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id 0667A813810;
-	Thu, 28 Sep 2023 17:32:18 +0000 (UTC)
-Date: Thu, 28 Sep 2023 12:32:17 -0500
-From: Steve Wahl <steve.wahl@hpe.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Steve Wahl <steve.wahl@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, platform-driver-x86@vger.kernel.org,
-        Justin Ernst <justin.ernst@hpe.com>, Kyle Meyer <kyle.meyer@hpe.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] x86/platform/uv: Annotate struct uv_rtc_timer_head with
- __counted_by
-Message-ID: <ZRW4lVMBvyrxhTKq@swahl-home.5wahls.com>
-References: <20230922175151.work.118-kees@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230922175151.work.118-kees@kernel.org>
-X-Proofpoint-ORIG-GUID: I9OyhDCJxtf1u8SrtUrYsGnhjBLOHgpZ
-X-Proofpoint-GUID: I9OyhDCJxtf1u8SrtUrYsGnhjBLOHgpZ
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC5363CA;
+	Thu, 28 Sep 2023 18:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695926464; x=1727462464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tfyAzaZSq8tgwhOOpjIAmDGl01NjbJE805eUQRbi27Y=;
+  b=Vm+rUbgnOQ1nE2h8W7NrrCB7jDVREkuftA8yJRlC3vbs3cOPr39sbh73
+   L7ftyNBrCY0J27m7Lr1GA1mQQ4aboATvl7Gtv1LccAbyqb8NG+Oe6dHGA
+   nFkJzgVxPtQjZII+HDWcztTXcJdaO0SLHyqm3tRUwsZQgp7cThmnfM9Sr
+   ZDnaRkxDdLnonFq/FJVO2VtW7N4WoZgF3Cx6TTKqo2+4rB6H2pLZtoKNY
+   ePJOTuya6HxFX9ziKMqqAkIC4Pn/2JLemsaI3/Qg/IyIJR27jNnmE0kpE
+   6WL0y78QhPIoqdYncq673mpl4R8Y9ZGn6nbWy1LjEhxYHk+n3b133akDJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="446296422"
+X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
+   d="scan'208";a="446296422"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 11:34:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="996659598"
+X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
+   d="scan'208";a="996659598"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Sep 2023 11:34:21 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qlvq6-0001nz-2x;
+	Thu, 28 Sep 2023 18:34:18 +0000
+Date: Fri, 29 Sep 2023 02:33:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaobing Li <xiaobing.li@samsung.com>, mingo@redhat.com,
+	peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, axboe@kernel.dk,
+	asml.silence@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org, kun.dou@samsung.com,
+	peiwei.li@samsung.com, joshi.k@samsung.com,
+	kundan.kumar@samsung.com, wenwen.chen@samsung.com,
+	ruyi.zhang@samsung.com, Xiaobing Li <xiaobing.li@samsung.com>
+Subject: Re: [PATCH 3/3] IO_URING: Statistics of the true utilization of sq
+ threads.
+Message-ID: <202309290242.FeOyvZYI-lkp@intel.com>
+References: <20230928022228.15770-4-xiaobing.li@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-28_16,2023-09-28_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
- malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309280152
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230928022228.15770-4-xiaobing.li@samsung.com>
 
-On Fri, Sep 22, 2023 at 10:51:51AM -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct uv_rtc_timer_head.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Steve Wahl <steve.wahl@hpe.com>
-> Cc: Mike Travis <mike.travis@hpe.com>
-> Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
-> Cc: Russ Anderson <russ.anderson@hpe.com>
-> Cc: Darren Hart <dvhart@infradead.org>
-> Cc: Andy Shevchenko <andy@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: platform-driver-x86@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> ---
->  arch/x86/platform/uv/uv_time.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/platform/uv/uv_time.c b/arch/x86/platform/uv/uv_time.c
-> index 54663f3e00cb..ff5afc8a5a41 100644
-> --- a/arch/x86/platform/uv/uv_time.c
-> +++ b/arch/x86/platform/uv/uv_time.c
-> @@ -53,7 +53,7 @@ struct uv_rtc_timer_head {
->  	struct {
->  		int	lcpu;		/* systemwide logical cpu number */
->  		u64	expires;	/* next timer expiration for this cpu */
-> -	} cpu[];
-> +	} cpu[] __counted_by(ncpus);
->  };
->  
->  /*
-> -- 
-> 2.34.1
+Hi Xiaobing,
 
-Looks good, thanks.
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on linus/master v6.6-rc3 next-20230928]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaobing-Li/SCHEDULER-Add-an-interface-for-counting-real-utilization/20230928-103219
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20230928022228.15770-4-xiaobing.li%40samsung.com
+patch subject: [PATCH 3/3] IO_URING: Statistics of the true utilization of sq threads.
+config: arm-mmp2_defconfig (https://download.01.org/0day-ci/archive/20230929/202309290242.FeOyvZYI-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230929/202309290242.FeOyvZYI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309290242.FeOyvZYI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   io_uring/sqpoll.c:254:7: error: no member named 'sq_avg' in 'struct sched_entity'
+                   se->sq_avg.last_update_time;
+                   ~~  ^
+>> io_uring/sqpoll.c:260:3: error: call to undeclared function '__update_sq_avg_block'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   __update_sq_avg_block(now, se);
+                   ^
+   io_uring/sqpoll.c:272:7: error: no member named 'sq_avg' in 'struct sched_entity'
+                   se->sq_avg.last_update_time;
+                   ~~  ^
+>> io_uring/sqpoll.c:275:4: error: call to undeclared function '__update_sq_avg'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           __update_sq_avg(now, se);
+                           ^
+   4 errors generated.
 
 
+vim +/__update_sq_avg_block +260 io_uring/sqpoll.c
+
+   221	
+   222	static int io_sq_thread(void *data)
+   223	{
+   224		struct io_sq_data *sqd = data;
+   225		struct io_ring_ctx *ctx;
+   226		unsigned long timeout = 0;
+   227		char buf[TASK_COMM_LEN];
+   228		DEFINE_WAIT(wait);
+   229	
+   230		snprintf(buf, sizeof(buf), "iou-sqp-%d", sqd->task_pid);
+   231		set_task_comm(current, buf);
+   232	
+   233		if (sqd->sq_cpu != -1)
+   234			set_cpus_allowed_ptr(current, cpumask_of(sqd->sq_cpu));
+   235		else
+   236			set_cpus_allowed_ptr(current, cpu_online_mask);
+   237	
+   238		mutex_lock(&sqd->lock);
+   239		bool first = true;
+   240		struct timespec64 ts_start, ts_end;
+   241		struct timespec64 ts_delta;
+   242		struct sched_entity *se = &sqd->thread->se;
+   243		while (1) {
+   244			bool cap_entries, sqt_spin = false;
+   245	
+   246			if (io_sqd_events_pending(sqd) || signal_pending(current)) {
+   247				if (io_sqd_handle_event(sqd))
+   248					break;
+   249				timeout = jiffies + sqd->sq_thread_idle;
+   250			}
+   251			ktime_get_boottime_ts64(&ts_start);
+   252			ts_delta = timespec64_sub(ts_start, ts_end);
+   253			unsigned long long now = ts_delta.tv_sec * NSEC_PER_SEC + ts_delta.tv_nsec +
+   254			se->sq_avg.last_update_time;
+   255	
+   256			if (first) {
+   257				now = 0;
+   258				first = false;
+   259			}
+ > 260			__update_sq_avg_block(now, se);
+   261			cap_entries = !list_is_singular(&sqd->ctx_list);
+   262			list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
+   263				int ret = __io_sq_thread(ctx, cap_entries);
+   264	
+   265				if (!sqt_spin && (ret > 0 || !wq_list_empty(&ctx->iopoll_list)))
+   266					sqt_spin = true;
+   267			}
+   268	
+   269			ktime_get_boottime_ts64(&ts_end);
+   270			ts_delta = timespec64_sub(ts_end, ts_start);
+   271			now = ts_delta.tv_sec * NSEC_PER_SEC + ts_delta.tv_nsec +
+   272			se->sq_avg.last_update_time;
+   273	
+   274			if (sqt_spin)
+ > 275				__update_sq_avg(now, se);
+   276			else
+   277				__update_sq_avg_block(now, se);
+   278			if (io_run_task_work())
+   279				sqt_spin = true;
+   280	
+   281			if (sqt_spin || !time_after(jiffies, timeout)) {
+   282				if (sqt_spin)
+   283					timeout = jiffies + sqd->sq_thread_idle;
+   284				if (unlikely(need_resched())) {
+   285					mutex_unlock(&sqd->lock);
+   286					cond_resched();
+   287					mutex_lock(&sqd->lock);
+   288				}
+   289				continue;
+   290			}
+   291	
+   292			prepare_to_wait(&sqd->wait, &wait, TASK_INTERRUPTIBLE);
+   293			if (!io_sqd_events_pending(sqd) && !task_work_pending(current)) {
+   294				bool needs_sched = true;
+   295	
+   296				list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
+   297					atomic_or(IORING_SQ_NEED_WAKEUP,
+   298							&ctx->rings->sq_flags);
+   299					if ((ctx->flags & IORING_SETUP_IOPOLL) &&
+   300					    !wq_list_empty(&ctx->iopoll_list)) {
+   301						needs_sched = false;
+   302						break;
+   303					}
+   304	
+   305					/*
+   306					 * Ensure the store of the wakeup flag is not
+   307					 * reordered with the load of the SQ tail
+   308					 */
+   309					smp_mb__after_atomic();
+   310	
+   311					if (io_sqring_entries(ctx)) {
+   312						needs_sched = false;
+   313						break;
+   314					}
+   315				}
+   316	
+   317				if (needs_sched) {
+   318					mutex_unlock(&sqd->lock);
+   319					schedule();
+   320					mutex_lock(&sqd->lock);
+   321				}
+   322				list_for_each_entry(ctx, &sqd->ctx_list, sqd_list)
+   323					atomic_andnot(IORING_SQ_NEED_WAKEUP,
+   324							&ctx->rings->sq_flags);
+   325			}
+   326	
+   327			finish_wait(&sqd->wait, &wait);
+   328			timeout = jiffies + sqd->sq_thread_idle;
+   329		}
+   330	
+   331		io_uring_cancel_generic(true, sqd);
+   332		sqd->thread = NULL;
+   333		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list)
+   334			atomic_or(IORING_SQ_NEED_WAKEUP, &ctx->rings->sq_flags);
+   335		io_run_task_work();
+   336		mutex_unlock(&sqd->lock);
+   337	
+   338		complete(&sqd->exited);
+   339		do_exit(0);
+   340	}
+   341	
 
 -- 
-Steve Wahl, Hewlett Packard Enterprise
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
