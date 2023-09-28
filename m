@@ -1,50 +1,54 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35137370
-	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 00:19:59 +0000 (UTC)
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1c73637061eso2583195ad.3
-        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 17:19:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F097E1
+	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 00:20:01 +0000 (UTC)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-27903b68503so1903821a91.0
+        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 17:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695860399; x=1696465199; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JIhlczPTAFSXJtuz0kr4uNehhoedtrBaBEaYSQ3/D3w=;
-        b=IJzDO8hcwVc0iLTxwx8XQWSUIZnupgY3gexP58Sdw0/IzMxlOR5i3WkA2SAfgdVrO2
-         T9PgtycalAb8uzXko3nb6cWwpd72Ts4gvzjpu4V9do/S7yvMbCp+Rm6pA7TpqD2hkc2o
-         S0qQ8yJNjhVWnh80wp3P95Rtn8PC7X+1CeLPxd8A5T4vnkewTKp+9Y/QWnZow+w0Y1Vw
-         THXolfPGjyXLonLvTaqoHLxVMy6+K5Auv1aGSYV+P3Sjnr7L8B7S2CHYQ49V90fCONIw
-         atXns3UMAowg39rOTucfbBcKjAUwKVPiIbl5sYLgwlGBPqVyys3cnR6UY74xxttPtfVA
-         z6CA==
+        d=google.com; s=20230601; t=1695860401; x=1696465201; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=7k/cxJ1J05mXofpy+yLrAPKcq05pdFZcXDQm+nHvOh0=;
+        b=mPmtq++5LP5ql37+TlkJ4Zv/mty6i0+J/VPBXtljqz4E77wUdFBNYxvB5xUSfp2cjW
+         +euvgJ4VjT+551kgE+NUcMaju5a7jvfx4iiWgcqZE6eEFV9OpREkSgROCFeYPxHgJ5U5
+         PX+Y/A36EOMaiVQRH0nAKJLheq7tp4AZ9eEmzZMWWhx00dwelAImVx6JHuuYwJwkFSFr
+         h2nsqJGhKcCHgYEmvba+EuEuXqXRCMKEesTS+hcnBnzF9yNfFsEo0KTTy3UsjTzzFszQ
+         V5Mo1gFNKguCdLEzWOuqqCV1KrbooDZ0kfZ9LoEyGq2p0tpGOgryTwpQboNv2hm1ta31
+         TtOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695860399; x=1696465199;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JIhlczPTAFSXJtuz0kr4uNehhoedtrBaBEaYSQ3/D3w=;
-        b=d0rE/XvKy8+i2W4dAGBq4NuysyO6k8MR88x0ry2unAVkWs32j5SkzkuWOFQ7BfJ735
-         DVAWUANMnLFSHJsr+8QraYfw/0amNz7qXNGQDV9plu33rwqmldhuO+anKyWbIkMe/Rq5
-         +TzaG+7JgM0a7ocFdKlVnnD4GYqP8Eas40Bd6J+z9p/EZYwCBo2+EJzJZlV/M5nsbJJ5
-         zzft/wCEev6wwBfbBgCl2KOc6ZfoJSQPpL7nGLIgarh/e59FfRcan0P3kDCpiamcIWRp
-         qBOrpVHWVMOirX/sg/+2VKh3EujUB07N9WbW5gR7ok3LlZi4YaxWkIDPk39KMHkp9g2t
-         /TKA==
-X-Gm-Message-State: AOJu0YxM/HbVjieLIBFVcQAjg9rOp0ZvPSZyB8NtYwvWoel9CXBcUOFg
-	w9KB2X4daRvXpznA8Qfi7KiICH1amYc=
-X-Google-Smtp-Source: AGHT+IGCbuN35ynl7FnkIb26JwfUSQivcI5ht12Lhq63ANf0P98cgnGB/yAMFxzlpCJU6VRv0zB+soGU8eE=
+        d=1e100.net; s=20230601; t=1695860401; x=1696465201;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7k/cxJ1J05mXofpy+yLrAPKcq05pdFZcXDQm+nHvOh0=;
+        b=Jw/waJBqryUt0XBAXnrEOEz3LPIe+FAq2adZRFoC9CsGKTUxXpdp0PC20UFYo7A5SX
+         +QUsxqI2YacMLTTulbzIzg7fha1Ht/xrxBM1ZjY5Al3FdBVDcea/wx7JtWniLEfUATkO
+         Ucr6hIOOOlMyNQJvR2e1OZz4Tj8AF9irAttBTYv6ac479WuxEhUpP+eb33Q9nqFwsHln
+         EVJM0+Tuc1qtKObiOWy7lZtI4xr2FBSRtZUWMAv5UhGp0guB7xOhdsVtsHY4xZfXBIwD
+         Qhdwlq4QD1YKt+wyG9sCgQTkiShWyL3Z7Dc31kuHoGnTYHcr+9Z0d+oCv0kkr5f8mB8T
+         OTyQ==
+X-Gm-Message-State: AOJu0Yyoo3/XYnsaqLub7tOzvjsd5C+AZ/YAVDSF0GP6FnfQ98UViRTZ
+	//qShaaZhNsDRoeCkxyvYzPZQHpSEuo=
+X-Google-Smtp-Source: AGHT+IHUHbIQ6PPrXr871nzGKn8uvOKQadMijarjccPvoUFTuvaHfSFH6uboJDbvWzUn4a9M0jJjxQFQUF8=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:604:b0:1c0:d418:8806 with SMTP id
- kg4-20020a170903060400b001c0d4188806mr44172plb.12.1695860399477; Wed, 27 Sep
- 2023 17:19:59 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:903:230f:b0:1bf:559a:7bd6 with SMTP id
+ d15-20020a170903230f00b001bf559a7bd6mr47609plh.3.1695860401273; Wed, 27 Sep
+ 2023 17:20:01 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Wed, 27 Sep 2023 17:19:51 -0700
+Date: Wed, 27 Sep 2023 17:19:52 -0700
+In-Reply-To: <20230928001956.924301-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20230928001956.924301-1-seanjc@google.com>
 X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
-Message-ID: <20230928001956.924301-1-seanjc@google.com>
-Subject: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
+Message-ID: <20230928001956.924301-2-seanjc@google.com>
+Subject: [PATCH 1/5] x86/fpu: Allow caller to constrain xfeatures when copying
+ to uabi buffer
 From: Sean Christopherson <seanjc@google.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
@@ -55,65 +59,161 @@ Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
 	Tyler Stachecki <stachecki.tyler@gmail.com>, Leonardo Bras <leobras@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Rework how KVM limits guest-unsupported xfeatures to effectively hide
-only when saving state for userspace (KVM_GET_XSAVE), i.e. to let userspace
-load all host-supported xfeatures (via KVM_SET_XSAVE) irrespective of
-what features have been exposed to the guest.
+Plumb an xfeatures mask into __copy_xstate_to_uabi_buf() so that KVM can
+constrain which xfeatures are saved into the userspace buffer without
+having to modify the user_xfeatures field in KVM's guest_fpu state.
 
-The effect on KVM_SET_XSAVE was knowingly done by commit ad856280ddea
-("x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0"):
+KVM's ABI for KVM_GET_XSAVE{2} is that features that are not exposed to
+guest must not show up in the effective xstate_bv field of the buffer.
+Saving only the guest-supported xfeatures allows userspace to load the
+saved state on a different host with a fewer xfeatures, so long as the
+target host supports the xfeatures that are exposed to the guest.
 
-    As a bonus, it will also fail if userspace tries to set fpu features
-    (with the KVM_SET_XSAVE ioctl) that are not compatible to the guest
-    configuration.  Such features will never be returned by KVM_GET_XSAVE
-    or KVM_GET_XSAVE2.
+KVM currently sets user_xfeatures directly to restrict KVM_GET_XSAVE{2} to
+the set of guest-supported xfeatures, but doing so broke KVM's historical
+ABI for KVM_SET_XSAVE, which allows userspace to load any xfeatures that
+are supported by the *host*.
 
-Peventing userspace from doing stupid things is usually a good idea, but in
-this case restricting KVM_SET_XSAVE actually exacerbated the problem that
-commit ad856280ddea was fixing.  As reported by Tyler, rejecting KVM_SET_XSAVE
-for guest-unsupported xfeatures breaks live migration from a kernel without
-commit ad856280ddea, to a kernel with ad856280ddea.  I.e. from a kernel that
-saves guest-unsupported xfeatures to a kernel that doesn't allow loading
-guest-unuspported xfeatures.
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/fpu/api.h |  3 ++-
+ arch/x86/kernel/fpu/core.c     |  5 +++--
+ arch/x86/kernel/fpu/xstate.c   |  7 +++++--
+ arch/x86/kernel/fpu/xstate.h   |  3 ++-
+ arch/x86/kvm/x86.c             | 23 ++++++++++-------------
+ 5 files changed, 22 insertions(+), 19 deletions(-)
 
-To make matters even worse, QEMU doesn't terminate if KVM_SET_XSAVE fails,
-and so the end result is that the live migration results (possibly silent)
-guest data corruption instead of a failed migration.
-
-Patch 1 refactors the FPU code to let KVM pass in a mask of which xfeatures
-to save, patch 2 fixes KVM by passing in guest_supported_xcr0 instead of
-modifying user_xfeatures directly.
-
-Patches 3-5 are regression tests.
-
-I have no objection if anyone wants patches 1 and 2 squashed together, I
-split them purely to make review easier.
-
-Note, this doesn't fix the scenario where a guest is migrated from a "bad"
-to a "good" kernel and the target host doesn't support the over-saved set
-of xfeatures.  I don't see a way to safely handle that in the kernel without
-an opt-in, which more or less defeats the purpose of handling it in KVM.
-
-Sean Christopherson (5):
-  x86/fpu: Allow caller to constrain xfeatures when copying to uabi
-    buffer
-  KVM: x86: Constrain guest-supported xfeatures only at KVM_GET_XSAVE{2}
-  KVM: selftests: Touch relevant XSAVE state in guest for state test
-  KVM: selftests: Load XSAVE state into untouched vCPU during state test
-  KVM: selftests: Force load all supported XSAVE state in state test
-
- arch/x86/include/asm/fpu/api.h                |   3 +-
- arch/x86/kernel/fpu/core.c                    |   5 +-
- arch/x86/kernel/fpu/xstate.c                  |  12 +-
- arch/x86/kernel/fpu/xstate.h                  |   3 +-
- arch/x86/kvm/cpuid.c                          |   8 --
- arch/x86/kvm/x86.c                            |  37 +++---
- .../selftests/kvm/include/x86_64/processor.h  |  23 ++++
- .../testing/selftests/kvm/x86_64/state_test.c | 110 +++++++++++++++++-
- 8 files changed, 168 insertions(+), 33 deletions(-)
-
-
-base-commit: 5804c19b80bf625c6a9925317f845e497434d6d3
+diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
+index 31089b851c4f..a2be3aefff9f 100644
+--- a/arch/x86/include/asm/fpu/api.h
++++ b/arch/x86/include/asm/fpu/api.h
+@@ -157,7 +157,8 @@ static inline void fpu_update_guest_xfd(struct fpu_guest *guest_fpu, u64 xfd) {
+ static inline void fpu_sync_guest_vmexit_xfd_state(void) { }
+ #endif
+ 
+-extern void fpu_copy_guest_fpstate_to_uabi(struct fpu_guest *gfpu, void *buf, unsigned int size, u32 pkru);
++extern void fpu_copy_guest_fpstate_to_uabi(struct fpu_guest *gfpu, void *buf,
++					   unsigned int size, u64 xfeatures, u32 pkru);
+ extern int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf, u64 xcr0, u32 *vpkru);
+ 
+ static inline void fpstate_set_confidential(struct fpu_guest *gfpu)
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index a86d37052a64..a21a4d0ecc34 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -369,14 +369,15 @@ int fpu_swap_kvm_fpstate(struct fpu_guest *guest_fpu, bool enter_guest)
+ EXPORT_SYMBOL_GPL(fpu_swap_kvm_fpstate);
+ 
+ void fpu_copy_guest_fpstate_to_uabi(struct fpu_guest *gfpu, void *buf,
+-				    unsigned int size, u32 pkru)
++				    unsigned int size, u64 xfeatures, u32 pkru)
+ {
+ 	struct fpstate *kstate = gfpu->fpstate;
+ 	union fpregs_state *ustate = buf;
+ 	struct membuf mb = { .p = buf, .left = size };
+ 
+ 	if (cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+-		__copy_xstate_to_uabi_buf(mb, kstate, pkru, XSTATE_COPY_XSAVE);
++		__copy_xstate_to_uabi_buf(mb, kstate, xfeatures, pkru,
++					  XSTATE_COPY_XSAVE);
+ 	} else {
+ 		memcpy(&ustate->fxsave, &kstate->regs.fxsave,
+ 		       sizeof(ustate->fxsave));
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index cadf68737e6b..76408313ed7f 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1049,6 +1049,7 @@ static void copy_feature(bool from_xstate, struct membuf *to, void *xstate,
+  * __copy_xstate_to_uabi_buf - Copy kernel saved xstate to a UABI buffer
+  * @to:		membuf descriptor
+  * @fpstate:	The fpstate buffer from which to copy
++ * @xfeatures:	The mask of xfeatures to save (XSAVE mode only)
+  * @pkru_val:	The PKRU value to store in the PKRU component
+  * @copy_mode:	The requested copy mode
+  *
+@@ -1059,7 +1060,8 @@ static void copy_feature(bool from_xstate, struct membuf *to, void *xstate,
+  * It supports partial copy but @to.pos always starts from zero.
+  */
+ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+-			       u32 pkru_val, enum xstate_copy_mode copy_mode)
++			       u64 xfeatures, u32 pkru_val,
++			       enum xstate_copy_mode copy_mode)
+ {
+ 	const unsigned int off_mxcsr = offsetof(struct fxregs_state, mxcsr);
+ 	struct xregs_state *xinit = &init_fpstate.regs.xsave;
+@@ -1083,7 +1085,7 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+ 		break;
+ 
+ 	case XSTATE_COPY_XSAVE:
+-		header.xfeatures &= fpstate->user_xfeatures;
++		header.xfeatures &= fpstate->user_xfeatures & xfeatures;
+ 		break;
+ 	}
+ 
+@@ -1185,6 +1187,7 @@ void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
+ 			     enum xstate_copy_mode copy_mode)
+ {
+ 	__copy_xstate_to_uabi_buf(to, tsk->thread.fpu.fpstate,
++				  tsk->thread.fpu.fpstate->user_xfeatures,
+ 				  tsk->thread.pkru, copy_mode);
+ }
+ 
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index a4ecb04d8d64..3518fb26d06b 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -43,7 +43,8 @@ enum xstate_copy_mode {
+ 
+ struct membuf;
+ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+-				      u32 pkru_val, enum xstate_copy_mode copy_mode);
++				      u64 xfeatures, u32 pkru_val,
++				      enum xstate_copy_mode copy_mode);
+ extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
+ 				    enum xstate_copy_mode mode);
+ extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 9f18b06bbda6..41d8e6c8570c 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -5382,17 +5382,6 @@ static int kvm_vcpu_ioctl_x86_set_debugregs(struct kvm_vcpu *vcpu,
+ 	return 0;
+ }
+ 
+-static void kvm_vcpu_ioctl_x86_get_xsave(struct kvm_vcpu *vcpu,
+-					 struct kvm_xsave *guest_xsave)
+-{
+-	if (fpstate_is_confidential(&vcpu->arch.guest_fpu))
+-		return;
+-
+-	fpu_copy_guest_fpstate_to_uabi(&vcpu->arch.guest_fpu,
+-				       guest_xsave->region,
+-				       sizeof(guest_xsave->region),
+-				       vcpu->arch.pkru);
+-}
+ 
+ static void kvm_vcpu_ioctl_x86_get_xsave2(struct kvm_vcpu *vcpu,
+ 					  u8 *state, unsigned int size)
+@@ -5400,8 +5389,16 @@ static void kvm_vcpu_ioctl_x86_get_xsave2(struct kvm_vcpu *vcpu,
+ 	if (fpstate_is_confidential(&vcpu->arch.guest_fpu))
+ 		return;
+ 
+-	fpu_copy_guest_fpstate_to_uabi(&vcpu->arch.guest_fpu,
+-				       state, size, vcpu->arch.pkru);
++	fpu_copy_guest_fpstate_to_uabi(&vcpu->arch.guest_fpu, state, size,
++				       vcpu->arch.guest_fpu.fpstate->user_xfeatures,
++				       vcpu->arch.pkru);
++}
++
++static void kvm_vcpu_ioctl_x86_get_xsave(struct kvm_vcpu *vcpu,
++					 struct kvm_xsave *guest_xsave)
++{
++	return kvm_vcpu_ioctl_x86_get_xsave2(vcpu, (void *)guest_xsave->region,
++					     sizeof(guest_xsave->region));
+ }
+ 
+ static int kvm_vcpu_ioctl_x86_set_xsave(struct kvm_vcpu *vcpu,
 -- 
 2.42.0.582.g8ccd20d70d-goog
 
