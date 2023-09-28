@@ -1,91 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046F18BFF
-	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 14:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695910195; x=1727446195;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rWPUuNNdKXgrAPoDqjutOvUZaBIRMfIRRc8S+g1NzQo=;
-  b=VW7yIA0EkO9nup8C8MdxmdTcFGWmbEmbB15nF9IJSCnkqAgFshlK0YLY
-   YCA4kY0+TdhcW8lPYEmbflaCZXir4EH971LeVTBOcT1tKU8wR2ar+JXTT
-   lPr+yPjK29KUZaYPG5uMvJwvG9eGTfnEosqOYGUUqXI2rwy5us5HtArBn
-   AHGcG9VdIMY118uyZeKsjsxkHlFiKxrqOlIaVcR5QrRwwwIDSjJ4tp+/j
-   7ygQJDj8xML3WzBE3nlxcqvWaZ+AMGJAVreaJEyCeVBZTB5u1DiHoixoW
-   g0c0ih2jclec9SutIfpm1pSv4do/aTmxF/rX0F0orn81igEyR4TEzJNmb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="468356755"
-X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
-   d="scan'208";a="468356755"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 07:09:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="815243277"
-X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
-   d="scan'208";a="815243277"
-Received: from jveerasa-mobl.amr.corp.intel.com (HELO [10.255.231.134]) ([10.255.231.134])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 07:09:52 -0700
-Message-ID: <b22a3863-cf11-14b7-23f3-4b8971f44580@intel.com>
-Date: Thu, 28 Sep 2023 07:09:52 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1116D18
+	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 14:26:08 +0000 (UTC)
+Received: from leknes.fjasle.eu ([46.142.97.250]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MCsLo-1quhcT2cAi-008oqz; Thu, 28 Sep 2023 16:23:57 +0200
+Received: from localhost.fjasle.eu (kirkenes.fjasle.eu [10.10.0.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by leknes.fjasle.eu (Postfix) with ESMTPS id 3B84A3F714;
+	Thu, 28 Sep 2023 16:23:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+	t=1695911032; bh=rrG6e3agpf2u+xdW5EebxCgAIgDQqDDDehdHU4UpuSM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I9VyJAHr+r6y2EtJaCNO6HBblZVQgzaUGhMwVZ6O8WP+KHQgN2FjXoRADIfysq8pF
+	 kJGLQ7huV6RT+PiTX1v6vTmKUB4n/gTFbtEy7TNQRVZegIIveW812XKAd9oFPz49Zh
+	 qFCYktXaWarLodorMHCNFp6c3VBgzUAjnYLjIA7I=
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+	id 8CBC03B5; Thu, 28 Sep 2023 16:23:21 +0200 (CEST)
+Date: Thu, 28 Sep 2023 16:23:21 +0200
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Ian Rogers <irogers@google.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Ming Wang <wangming01@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Yanteng Si <siyanteng@loongson.cn>, Yuan Can <yuancan@huawei.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	James Clark <james.clark@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v1 01/18] gen_compile_commands: Allow the line prefix to
+ still be cmd_
+Message-ID: <ZRWMWcNKvZMgiAMR@bergen.fjasle.eu>
+References: <20230923053515.535607-1-irogers@google.com>
+ <20230923053515.535607-2-irogers@google.com>
+ <CAKwvOdmHg_43z_dTZrOLGubuBBvmHdPxSFjOWa3oWkbOp2qWWg@mail.gmail.com>
+ <CAP-5=fV6c1tWAd2GjMwn4PQN=3BXNQGz=vbonHSjRjQ3fbEL+g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 2/5] KVM: x86: Constrain guest-supported xfeatures only at
- KVM_GET_XSAVE{2}
-Content-Language: en-US
-To: Sean Christopherson <seanjc@google.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- Tyler Stachecki <stachecki.tyler@gmail.com>,
- Leonardo Bras <leobras@redhat.com>
-References: <20230928001956.924301-1-seanjc@google.com>
- <20230928001956.924301-3-seanjc@google.com>
-From: Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230928001956.924301-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fV6c1tWAd2GjMwn4PQN=3BXNQGz=vbonHSjRjQ3fbEL+g@mail.gmail.com>
+X-Operating-System: Debian GNU/Linux trixie/sid
+Jabber-ID: nicolas@jabber.no
+X-Provags-ID: V03:K1:WNIhYuQMIKkE8jRY9K+NatBF6dWQ4oI0AVrEW1Ph+1/B/OQCMOe
+ UYvFzVf/gYNyD6apt1zxPnOEgXzDOp9rgmnrzkCk/swgt7YBVUGMKuIlKd5Y7q2eeaVsy3G
+ UFMUULZIEOZtgVKKG1vHszO/HQPrY0TZy33PsLUS/IGIcPSHB/wyyhhSJK00ACowyMnhW4R
+ gzpdERsa8atFSBEFq+ebQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4R+biovEgMA=;hfIWEyeEhHbqLwgwu4d9A7dt+KK
+ uQmFLaxNc+Yas6L3Z2FLCg7yAdrFaRx25KnWVptIZe04DmeZIOy6jjmen684zHKejx44XYdo0
+ HodLUlkM5DyAbULDcPCjjINGWldRQK6g2Qbd1KBXjnGu5HeDMEPpHvd4sph70pQ5qDlR0U3qs
+ 0NmlIklBkeVmIIUbK11B2Q7Tz+mcfFhjzyLgwlGjKLDDtyXSr8GuSFh6IsFj7N5oj6ZiUJTwU
+ VcCZi2Ab+RBnYassYPZSg2J4nGpsCI8REoiVrJeuq3OGZsOoC1FtQU7z/xwCuX700U6VTA9/D
+ +cVF93nNpgluNSa5J1vC5BHLFvKj+lv1qJpavuss+WRu3BPQSoazWrl5R1hy0xsmb45EEqHuk
+ T7vSRBZJqsqPF6XjLvQzZjgXkEojQhGJQKO/vDJi3N1xH3Ayn4I5eATyIa1G7DaiOC4Q6MIyY
+ EYsQnuhO7nKvDFO0sFhqpI8F86+cOhF2lziwmFCZ8qZ0CcNg4H3QjOPik3BH9ChkV2LPZPGSI
+ J9R1k/tGFQAZzu6UMkKIF4Ari1XrW5sQ5YnKd4JSF9Q+7riPFof30JDU0N0J1h42oPfSDjgUh
+ eUG72YnkgWusIZKzVqvazglh+E5eQYVw+kRj+N8iNxpHNSSlrzev4TaF1/fkWNHCO1LoBr7AL
+ 5OE3us3x7yWPd1uYwPu0341E13rw7JPrygCkIpkKPREiFd7c7nSTOjraWkBrqaH17lKK5AUBG
+ 2CyH98eigEEWX9TdUVhubiKC6qAM5q5QioH0B1hFIlUaXyjuUNvfFqg3wzSEF+FwlfO88uGh8
+ TGlCznkqj0yOJhcRExmGul8+cbqUXA8nRI1sBHQe2QP0f5OI+QA0OI3gAqfXSpNjev08umbao
+ mIS1hqFWKKpXaXw==
 
-On 9/27/23 17:19, Sean Christopherson wrote:
-> Mask off xfeatures that aren't exposed to the guest only when saving guest
-> state via KVM_GET_XSAVE{2} instead of modifying user_xfeatures directly.
-> Preserving the maximal set of xfeatures in user_xfeatures restores KVM's
-> ABI for KVM_SET_XSAVE, which prior to commit ad856280ddea ("x86/kvm/fpu:
-> Limit guest user_xfeatures to supported bits of XCR0") allowed userspace
-> to load xfeatures that are supported by the host, irrespective of what
-> xfeatures are exposed to the guest.
+On Mon, 25 Sep 2023 09:06:11 -0700, Ian Rogers wrote:
+> On Mon, Sep 25, 2023 at 8:49 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Fri, Sep 22, 2023 at 10:35 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > Builds in tools still use the cmd_ prefix in .cmd files, so don't
+> > > require the saved part. Name the groups in the line pattern match so
+> >
+> > Is that something that can be changed in the tools/ Makefiles?
+> >
+> > I'm fine with this change, just curious where the difference comes
+> > from precisely.
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > 
-> There is no known use case where userspace *intentionally* loads xfeatures
-> that aren't exposed to the guest, but the bug fixed by commit ad856280ddea
-> was specifically that KVM_GET_SAVE{2} would save xfeatures that weren't
-> exposed to the guest, e.g. would lead to userspace unintentionally loading
-> guest-unsupported xfeatures when live migrating a VM.
-> 
-> Restricting KVM_SET_XSAVE to guest-supported xfeatures is especially
-> problematic for QEMU-based setups, as QEMU has a bug where instead of
-> terminating the VM if KVM_SET_XSAVE fails, QEMU instead simply stops
-> loading guest state, i.e. resumes the guest after live migration with
-> incomplete guest state, and ultimately results in guest data corruption.
-> 
-> Note, letting userspace restore all host-supported xfeatures does not fix
-> setups where a VM is migrated from a host *without* commit ad856280ddea,
-> to a target with a subset of host-supported xfeatures.  However there is
-> no way to safely address that scenario, e.g. KVM could silently drop the
-> unsupported features, but that would be a clear violation of KVM's ABI and
-> so would require userspace to opt-in, at which point userspace could
-> simply be updated to sanitize the to-be-loaded XSAVE state.
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+> I agree. The savedcmd_ change came from Masahiro in:
+> https://lore.kernel.org/lkml/20221229091501.916296-1-masahiroy@kernel.org/
+> I was reluctant to change the build logic in tools/ because of the
+> potential to break things. Maybe Masahiro/Nicolas know of issues?
 
-It's surprising (and nice) that this takes eliminates the !guest check
-in fpstate_realloc().
+I haven't seen any issues related to the introduction of savedcmd_; and 
+roughly searching through tools/ I cannot find a rule that matches the 
+pattern Masahiro described in commit 92215e7a801d ("kbuild: rename 
+cmd_$@ to savedcmd_$@ in *.cmd files", 2022-12-29).  For consistency, 
+I'd like to see the build rules in tools/ re-use the ones from scripts/ 
+but as of now I don't see any necessity to introduce savedcmd in 
+tools/, yet.
+
+Kind regards,
+Nicolas
