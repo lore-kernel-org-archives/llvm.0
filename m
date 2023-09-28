@@ -1,91 +1,109 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AA25C98
-	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 21:07:34 +0000 (UTC)
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3af603da0d1so1436341b6e.1
-        for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 14:07:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAAC18B02
+	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 23:42:12 +0000 (UTC)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-57bce354d94so3728742eaf.2
+        for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 16:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695935253; x=1696540053; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qIlKEJnw0fFoB8aDGwN3C/vOYWFmYPRhpPxSRX2qmyg=;
-        b=Axxy9u2RJlfRKAmH/0WdPHZKyYHxElReABnsJp3iG0ny6NapzvX5u2AekN8RJ7Iy/0
-         lFY7bAcbWhIkUjSkXfTc/PKd28IsGqXauQ4trkUQQOAUgXcKn6Vnok7+JLhSBWP+atYZ
-         UH2q7LF3hDZKUtFy7agagrpd2oRvpJQ1vY6sRO9G+G7M6b94CJX13g5Nqd0nHY0AcSow
-         txg5et4J2ie0tiMJUpWTuoXBVje/kZEpW197V/woHfATt2pa0ZkIUtaKfEeCULmTb8qQ
-         ny5CFvWcTJse7be4goTycRcjTlLg1/Tw3Y+FP7WFq3lUkK5AL8e/PvokqYMaewnF2jR9
-         wZQQ==
+        d=chromium.org; s=google; t=1695944532; x=1696549332; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3RV2WVrYFvmUIy/kF4sgLaI/igSwAmnqnqr5+CNVDt8=;
+        b=X5L4+UU7OM8IrgoYKAnzYlL3NgeevaZEwuCkwTTDBMHq0Cge1TYW+Y1nlGqwWcrq0j
+         X1JcGQt7Pt3qc189ithwCUL5Qm0TADW6aRdh578rBQJQ7KTwtRj78B1HggFmx8cdO6N0
+         ufk/IyNx60JY5ngZjYLnQWIrwXlr99fDBWOBY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695935253; x=1696540053;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIlKEJnw0fFoB8aDGwN3C/vOYWFmYPRhpPxSRX2qmyg=;
-        b=LHj95zy5567U3WbZG7l5uXCOIzCQIXApN7Cv75p+TXq51K4Xc39oTJ3ywzgTYAVSDC
-         9CXBDGxJgfgQ8vn49GJtYExCra92Wr0JX8q5sRroxwF+wxkLVNg8XYySr3MOFvpjdL6W
-         bfNUglyPuUFx39w8LFJ4uszbB4PPYRVqA03gNIarjR2Z97lUrU16fvlcSL6lXtyKwAwz
-         xFB05WtzqJW5ypoFobjG+Y53NtAVLlpM1TdigbIqj6LWhgkPIZ1m50WJL/5PYjB0ga3Y
-         VY8KTcAuDFDSXE4XsRUe9ud7vKtH0KzWMhTdTzjLZ6J4u/H9HzU4xLP294ZdMTJaPEL+
-         +IeQ==
-X-Gm-Message-State: AOJu0YwHF21WmZ6ROJhtywE+dQRpWFcYLsIGlodIFVQyoZKXBzq5pWfZ
-	lQaE9ZMIiDVx3Q1oo6oLIHI=
-X-Google-Smtp-Source: AGHT+IG/wdC9TA1MZk6fSBU2RRw1BACeiIsuv/wTqo+LvBSGWzHVlF55AtGJGT7QdWxF+oHCueXdoQ==
-X-Received: by 2002:a05:6808:1450:b0:3a7:5309:f1f with SMTP id x16-20020a056808145000b003a753090f1fmr2846373oiv.45.1695935253446;
-        Thu, 28 Sep 2023 14:07:33 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id k12-20020aa7820c000000b0068fda1db80bsm13766692pfi.75.2023.09.28.14.07.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Sep 2023 14:07:32 -0700 (PDT)
-Message-ID: <91c25e18-ff97-46a2-a50a-493c00bbc156@gmail.com>
-Date: Thu, 28 Sep 2023 18:02:59 -0300
+        d=1e100.net; s=20230601; t=1695944532; x=1696549332;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3RV2WVrYFvmUIy/kF4sgLaI/igSwAmnqnqr5+CNVDt8=;
+        b=iUDQHLCpTlb6c/hBJxZ9L7dyJ/JFXrOaOpkyIGW3Q+aC1Dgimdfx0ZX95Cafcultxk
+         un6I0NqiruBylE/sFPDs5+LkDCmAX0t9xA4b5R/Ht8p0cpv7ZFoIeH8W0BHYk3WSt2r1
+         J4s3NuMuxVAzU45Qe39mpfOQCdR2D/ZL5PkStMmeGABwlrngp8maGlLdd9mgStP4TkD6
+         9OkT3kktZonv5rZm+f6ruwNjwfEnnCBK1Su7D2ik0cVYzChlqBbFXGHCYjU1iZ95WY0R
+         DDQ5I/ZDjmgbhSGEU/1SEaLW0OTOMG+hjYTUWbDrppItQ5FMLjQAXXeJ1LeZJzoh4JuR
+         CgxQ==
+X-Gm-Message-State: AOJu0Yy9ua0ETSJSF8ct9lPyqM+s7F2ACDn1AedL4G1EpARjXGYUjUZ4
+	PKSRHLpGYvDOUTzIix491hXVHg==
+X-Google-Smtp-Source: AGHT+IHBsCldxysDZTajanQY+g4dIkq4a5ohe3XveIhxwgWt0zJyzNyJaoBdNbO8ZXRuiDiGJefhMw==
+X-Received: by 2002:a05:6358:2808:b0:13e:ea2a:40aa with SMTP id k8-20020a056358280800b0013eea2a40aamr1895209rwb.8.1695944531707;
+        Thu, 28 Sep 2023 16:42:11 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t6-20020a639546000000b0057a868900a9sm13316234pgn.67.2023.09.28.16.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Sep 2023 16:42:10 -0700 (PDT)
+Date: Thu, 28 Sep 2023 16:42:09 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Vinod Koul <vkoul@kernel.org>
+Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Zhou Wang <wangzhou1@hisilicon.com>, Jie Hai <haijie1@huawei.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Green Wan <green.wan@sifive.com>, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Yu Kuai <yukuai3@huawei.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jordy Zomer <jordy@pwning.systems>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	dmaengine@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-tegra@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 00/21] dmaengine: Annotate with __counted_by
+Message-ID: <202309281641.47911CC@keescook>
+References: <20230817235428.never.111-kees@kernel.org>
+ <169590216841.152265.1942803099201042070.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] rust: Respect HOSTCC when linking for host
-To: Matthew Maurer <mmaurer@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
- <aliceryhl@google.com>, Nicolas Schier <nicolas@fjasle.eu>,
- Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230928194801.2278999-1-mmaurer@google.com>
-Content-Language: en-US
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230928194801.2278999-1-mmaurer@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <169590216841.152265.1942803099201042070.b4-ty@kernel.org>
 
-On 9/28/23 16:48, Matthew Maurer wrote:
-> Currently, rustc defaults to invoking `cc`, even if `HOSTCC` is defined,
-> resulting in build failures in hermetic environments where `cc` does not
-> exist. This includes both hostprogs and proc-macros.
+On Thu, Sep 28, 2023 at 05:26:08PM +0530, Vinod Koul wrote:
 > 
-> Since we are setting the linker to `HOSTCC`, we set the linker flavor to
-> `gcc` explicitly. The linker-flavor selects both which linker to search
-> for if the linker is unset, and which kind of linker flags to pass.
-> Without this flag, `rustc` would attempt to determine which flags to
-> pass based on the name of the binary passed as `HOSTCC`. `gcc` is the
-> name of the linker-flavor used by `rustc` for all C compilers, including
-> both `gcc` and `clang`.
+> On Thu, 17 Aug 2023 16:58:37 -0700, Kees Cook wrote:
+> > This annotates several structures with the coming __counted_by attribute
+> > for bounds checking of flexible arrays at run-time. For more details, see
+> > commit dd06e72e68bc ("Compiler Attributes: Add __counted_by macro").
+> > 
+> > Thanks!
+> > 
+> > -Kees
+> > 
+> > [...]
 > 
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> ---
+> Applied, thanks!
 
-Psst, next time I'd recommend putting patch version to version changes
-here. Still, LGTM.
+Thanks! I've dropped them from my tree. :)
 
-> [...]
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Also, I found 1 more, which I'll send separately.
+
+-Kees
+
+-- 
+Kees Cook
