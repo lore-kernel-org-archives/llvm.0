@@ -1,114 +1,129 @@
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D6A8480
-	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 15:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=trot3+TGWG2OOMY4ChPeFe3zf2LJzFBVfmF3pbXC7Xo=; b=higqqnDmzxmr+X3cfpKInvzj3o
-	BqvWpQGHvH67nWnfc0XAoOqx9PXGwtMHNh9pxk0oebmPzjEX7R+4f1blAH9+4S5qw796Lv7aWaopn
-	OPEn6RhhEua/OPFIH6MXBzs3xY7lHtUt4TfCx9LWA934JiaFnKl0qFh0Ub9wyXDq+MkAtH+KdS4Fs
-	iT7lhSmKl2qB1wdOkkBOoUayyFaiRkkAAvxfl1txVMTS8BQaJQ6dwujlhoA/q8pHzkc5mItIlOlSp
-	DNC4wfQi03pP2QScb9qLX4GTmyrx8Ej+PdIPFaND/La/DZ03zb1Y7aNBQFiRh8eLvGG0z1FOzaW4j
-	Y90I6VGQ==;
-Received: from [177.34.168.16] (helo=[192.168.0.8])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1qlskm-009K4n-35; Thu, 28 Sep 2023 17:16:36 +0200
-Message-ID: <708d9fa0-0957-796a-ecc1-9ad4fdae6339@igalia.com>
-Date: Thu, 28 Sep 2023 12:16:16 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFF6513C8
+	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 18:00:10 +0000 (UTC)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38SHWKLo005511;
+	Thu, 28 Sep 2023 17:32:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pps0720; bh=zMGjwo4JgaFeiq+zEmjwtYYKC8M3XQ2E3zEbRSN8O1A=;
+ b=KNYbvVMYBYjGSnlNifo2nFf8YNsS4JPNxgEkskOiMg3EvAH0ikxJ/UDp/wwBJUePVIqQ
+ Vd1KpY0uVjveavekAyO1zNJw6YiLXBrW4Vl/0bYmBMhEMR0P5HiwbhEyDaJE0Z6knz5k
+ HpK9GPVUslRVlNqZUD9h6HLSGmVj66wBFeimSX2o7dSrLJizghOFMSsg+q/Bm79Vvkqj
+ ZZ+UVLNoWGtThHSL/wuiySxCcEMKlM3Hmf6KV35VkM4YmRyjHw03CT0FpzItHX4DUi0H
+ bB2oL9NrUmLybUcz5xeNZR4Cnqu0w1JNKdHuiNqA3EZ7pIlteJ1AQfatcaimq0ukDsm7 iQ== 
+Received: from p1lg14881.it.hpe.com ([16.230.97.202])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3tdbgg1hag-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Sep 2023 17:32:23 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 99832805E57;
+	Thu, 28 Sep 2023 17:32:21 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id 0667A813810;
+	Thu, 28 Sep 2023 17:32:18 +0000 (UTC)
+Date: Thu, 28 Sep 2023 12:32:17 -0500
+From: Steve Wahl <steve.wahl@hpe.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Steve Wahl <steve.wahl@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, platform-driver-x86@vger.kernel.org,
+        Justin Ernst <justin.ernst@hpe.com>, Kyle Meyer <kyle.meyer@hpe.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] x86/platform/uv: Annotate struct uv_rtc_timer_head with
+ __counted_by
+Message-ID: <ZRW4lVMBvyrxhTKq@swahl-home.5wahls.com>
+References: <20230922175151.work.118-kees@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230922175151.work.118-kees@kernel.org>
+X-Proofpoint-ORIG-GUID: I9OyhDCJxtf1u8SrtUrYsGnhjBLOHgpZ
+X-Proofpoint-GUID: I9OyhDCJxtf1u8SrtUrYsGnhjBLOHgpZ
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 9/9] drm/v3d: Annotate struct v3d_perfmon with
- __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>
-Cc: Tejas Upadhyay <tejas.upadhyay@intel.com>, Emma Anholt <emma@anholt.net>,
- Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
- dri-devel@lists.freedesktop.org, Chris Wilson <chris@chris-wilson.co.uk>,
- Prike Liang <Prike.Liang@amd.com>, Huang Rui <ray.huang@amd.com>,
- Gerd Hoffmann <kraxel@redhat.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Matthew Brost <matthew.brost@intel.com>, Karol Herbst <kherbst@redhat.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, amd-gfx@lists.freedesktop.org,
- Kuogee Hsieh <quic_khsieh@quicinc.com>, Nathan Chancellor
- <nathan@kernel.org>,
- VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
- Ben Skeggs <bskeggs@redhat.com>, Andi Shyti <andi.shyti@linux.intel.com>,
- nouveau@lists.freedesktop.org, David Airlie <airlied@redhat.com>,
- virtualization@lists.linux-foundation.org, linux-hardening@vger.kernel.org,
- Lijo Lazar <lijo.lazar@amd.com>, Yifan Zhang <yifan1.zhang@amd.com>,
- linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- Kevin Wang <kevin1.wang@amd.com>, Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Melissa Wen <mwen@igalia.com>, Dmitry Baryshkov
- <dmitry.baryshkov@linaro.org>, Gurchetan Singh
- <gurchetansingh@chromium.org>, Maxime Ripard <mripard@kernel.org>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Evan Quan <evan.quan@amd.com>,
- Sean Paul <sean@poorly.run>, Tvrtko Ursulin
- <tvrtko.ursulin@linux.intel.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
- Le Ma <le.ma@amd.com>, freedreno@lists.freedesktop.org,
- Bjorn Andersson <andersson@kernel.org>, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
- Alex Deucher <alexander.deucher@amd.com>, Nirmoy Das <nirmoy.das@intel.com>,
- Lang Yu <Lang.Yu@amd.com>, =?UTF-8?Q?Christian_K=c3=b6nig?=
- <christian.koenig@amd.com>, John Harrison <john.c.harrison@Intel.com>,
- Hawking Zhang <Hawking.Zhang@amd.com>
-References: <20230922173110.work.084-kees@kernel.org>
- <20230922173216.3823169-9-keescook@chromium.org>
-From: Maira Canal <mcanal@igalia.com>
-In-Reply-To: <20230922173216.3823169-9-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-28_16,2023-09-28_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309280152
 
-Hi Kees,
-
-On 9/22/23 14:32, Kees Cook wrote:
+On Fri, Sep 22, 2023 at 10:51:51AM -0700, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct v3d_perfmon.
+> As found with Coccinelle[1], add __counted_by for struct uv_rtc_timer_head.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Emma Anholt <emma@anholt.net>
-> Cc: Melissa Wen <mwen@igalia.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
+> Cc: Steve Wahl <steve.wahl@hpe.com>
+> Cc: Mike Travis <mike.travis@hpe.com>
+> Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+> Cc: Russ Anderson <russ.anderson@hpe.com>
+> Cc: Darren Hart <dvhart@infradead.org>
+> Cc: Andy Shevchenko <andy@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: platform-driver-x86@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
-
-Best Regards,
-- Maíra
-
-> ---
->   drivers/gpu/drm/v3d/v3d_drv.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/v3d/v3d_drv.h b/drivers/gpu/drm/v3d/v3d_drv.h
-> index 7f664a4b2a75..106454f28956 100644
-> --- a/drivers/gpu/drm/v3d/v3d_drv.h
-> +++ b/drivers/gpu/drm/v3d/v3d_drv.h
-> @@ -59,7 +59,7 @@ struct v3d_perfmon {
->   	 * values can't be reset, but you can fake a reset by
->   	 * destroying the perfmon and creating a new one.
->   	 */
-> -	u64 values[];
-> +	u64 values[] __counted_by(ncounters);
->   };
->   
->   struct v3d_dev {
+> ---
+>  arch/x86/platform/uv/uv_time.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/platform/uv/uv_time.c b/arch/x86/platform/uv/uv_time.c
+> index 54663f3e00cb..ff5afc8a5a41 100644
+> --- a/arch/x86/platform/uv/uv_time.c
+> +++ b/arch/x86/platform/uv/uv_time.c
+> @@ -53,7 +53,7 @@ struct uv_rtc_timer_head {
+>  	struct {
+>  		int	lcpu;		/* systemwide logical cpu number */
+>  		u64	expires;	/* next timer expiration for this cpu */
+> -	} cpu[];
+> +	} cpu[] __counted_by(ncpus);
+>  };
+>  
+>  /*
+> -- 
+> 2.34.1
+
+Looks good, thanks.
+
+Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+
+
+
+-- 
+Steve Wahl, Hewlett Packard Enterprise
