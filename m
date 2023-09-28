@@ -1,42 +1,42 @@
 Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799DF7E2
-	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 00:20:06 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d815354ea7fso18189235276.1
-        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 17:20:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96ECCEBE
+	for <llvm@lists.linux.dev>; Thu, 28 Sep 2023 00:20:08 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d868842eda1so15140260276.0
+        for <llvm@lists.linux.dev>; Wed, 27 Sep 2023 17:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695860405; x=1696465205; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1695860407; x=1696465207; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=4QGGNsUnXbHlm2535h1KbmRwKOI34J8NkE8WwWAmRM0=;
-        b=C4xRfegvQjM3UchwG+Ue/gmW9AQ0WnpWIzEnmmB3vK8y9HG7Wz6eUgjJvGAu5QDVZo
-         ZoUQzNeQXOaTVKHsNdzlzOE864E5LrFWvSKz6LBvWkokwINitBPNnYzZ8n13nFoou/lH
-         vgf/JzWI99hYTHY8kYprHjFi/v3qlJMPrzlHkWgCix3/Jgo2iiFsCgb3fx918QSYI2KA
-         ySFe3w1gaOiy7ZDn5kpRJIuq2fPdBQWTWgfAy0cfxhj9AV87Fdgc8CuYii4MRcjOsa0P
-         RthYE10ECoucxgJ67cN1m19dwHM9XmMmF3WEkz2DtK6rqWTUaWBEFH58q5q2iwElfJw1
-         9U2w==
+        bh=TVfUpdVb4H8djihj2XvGyhzWBuel7qP+7Sh6W+PqBNQ=;
+        b=o2leccT3souhRvSeQGwvCx2Lu6p/FQCQj6dQU5Pyvd2Krr2xae5V5RI4r1ZK6/tbKJ
+         3yDkWmbMSWmSX+8QR8GUXQcgXPqYIgT6fYGaimrpGNzNB56kMIJeeTOOIAL4S5uCtSmn
+         IiyGaGcI/ec9omgPo/yRveOsJpYVW5vJNTaUSHnl6gp6X6K3IWzGkfhS4gJiECewyjUB
+         Uc9XdIr3VCXV15E38KRgqkZA0gl/O24foV4NB7l5eJxwJasPtPDaG0ABwXfiGWEl8o5c
+         EQtfky0ziCYJOcHDSj9ml9eRPUMXK9wzpobsBIv5t7Z3axK8musEP0MnDHOIjQ48Ps1+
+         aZoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695860405; x=1696465205;
+        d=1e100.net; s=20230601; t=1695860407; x=1696465207;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4QGGNsUnXbHlm2535h1KbmRwKOI34J8NkE8WwWAmRM0=;
-        b=Op38TphjfIa/eumd4ywThr4xpRDCr0aaByOlZCZqkwtffV9MU59Kgh5UXpS8Vx8CS1
-         Kyl89A/AjnHsxXYp1WMFjMnbfHwD7LuaZDTw+4IXywDwu5+8m7b2gyGujhFRBfSmQSO5
-         l1erCzWeJypcjWxUJeRZC6DnKR0iM/95OwKxVDalcWFCUgowEVMHCX3kMmoPQxqZWnSI
-         1S5pM652jGDGYeBc3Qm/iddOxgfNlA77gJf6CFsHDrLeqjZr8HbFSiTagCbexMKYVEGt
-         3wDzu5mVc+yIWiLglunsKXX9anQNiOKdjTHYpyaCJXaZM+GYXF6KlEDezQR5M+jZ0WaY
-         wlrQ==
-X-Gm-Message-State: AOJu0Yy9FqW7PAmbvjtLXanTryeJcj+NFvGV+kHxID4Ucv5fDbNLrvl5
-	6MvV287usU+nyIv2EZmsNzAFijNQKoI=
-X-Google-Smtp-Source: AGHT+IEBfyu8iwbl726nGZ0r1f2jWkIfXapTcl/HjZ1vtmHkcySW81vMihJO8Ki3Dn5u2RZ7E2kBPhAtGdk=
+        bh=TVfUpdVb4H8djihj2XvGyhzWBuel7qP+7Sh6W+PqBNQ=;
+        b=NbLatV0eytA1DglUSfGBsYflTUI6fhj5xRqB0h5s4MF1uMehu2RsthyAWT2mMR++P/
+         6mmfo+esp3w/giH/eP1/W9KBJ3zYMSnYkZMK8RrNfMoHwDSWnZNt5XdCkJDwWegqxv7G
+         arZmocJu5t2SiRaoiMVLCrs4Kx2b0PYrP1//Cjj9pfDQUHuHaH6vOki6uY51KwQwxn6h
+         au7K4jq/BQyuKgOATBW9yBUh8DmZD+nwAFi7OdeIOsWdEFPCsD/FUD2axS7WZ0eOiUUe
+         fIeCxpXA5XFLc7ybbo10xKuw/SFzmUfcnH+qM28ennIOwYuo7hafYQZqnQRwcUiNGQtV
+         UNfQ==
+X-Gm-Message-State: AOJu0YwtVZi3cZe8aLNYcPO+kwHFPLuwuvyzthQmRuYuFKkXI5zFl4Dr
+	7XEnwf7Y2rm++lQOzJq74JeF0+uE+RE=
+X-Google-Smtp-Source: AGHT+IFhAUt+8/byCgo6N2PCf+dvWKMyFGUjD1tcqW/1QA0MnF0S/CYub5vkgi5QAlFkH9KMWwwIy4ogT3A=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1613:b0:d80:ff9:d19e with SMTP id
- bw19-20020a056902161300b00d800ff9d19emr55418ybb.9.1695860405485; Wed, 27 Sep
- 2023 17:20:05 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6902:541:b0:d0c:c83b:94ed with SMTP id
+ z1-20020a056902054100b00d0cc83b94edmr49229ybs.10.1695860407456; Wed, 27 Sep
+ 2023 17:20:07 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Wed, 27 Sep 2023 17:19:54 -0700
+Date: Wed, 27 Sep 2023 17:19:55 -0700
 In-Reply-To: <20230928001956.924301-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -46,9 +46,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230928001956.924301-1-seanjc@google.com>
 X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
-Message-ID: <20230928001956.924301-4-seanjc@google.com>
-Subject: [PATCH 3/5] KVM: selftests: Touch relevant XSAVE state in guest for
- state test
+Message-ID: <20230928001956.924301-5-seanjc@google.com>
+Subject: [PATCH 4/5] KVM: selftests: Load XSAVE state into untouched vCPU
+ during state test
 From: Sean Christopherson <seanjc@google.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
@@ -59,146 +59,57 @@ Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
 	Tyler Stachecki <stachecki.tyler@gmail.com>, Leonardo Bras <leobras@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Modify support XSAVE state in the "state test's" guest code so that saving
-and loading state via KVM_{G,S}ET_XSAVE actually does something useful,
-i.e. so that xstate_bv in XSAVE state isn't empty.
-
-Punt on BNDCSR for now, it's easier to just stuff that xfeature from the
-host side.
+Expand x86's state test to load XSAVE state into a "dummy" vCPU prior to
+KVM_SET_CPUID2, and again with an empty guest CPUID model.  Except for
+off-by-default features, i.e. AMX, KVM's ABI for KVM_SET_XSAVE is that
+userspace is allowed to load xfeatures so long as they are supported by
+the host.  This is a regression test for a combination of KVM bugs where
+the state saved by KVM_GET_XSAVE{2} could not be loaded via KVM_SET_XSAVE
+if the saved xstate_bv would load guest-unsupported xfeatures.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  | 14 ++++
- .../testing/selftests/kvm/x86_64/state_test.c | 77 +++++++++++++++++++
- 2 files changed, 91 insertions(+)
+ .../testing/selftests/kvm/x86_64/state_test.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 4fd042112526..6f66861175ad 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -68,6 +68,12 @@ struct xstate {
- #define XFEATURE_MASK_OPMASK		BIT_ULL(5)
- #define XFEATURE_MASK_ZMM_Hi256		BIT_ULL(6)
- #define XFEATURE_MASK_Hi16_ZMM		BIT_ULL(7)
-+#define XFEATURE_MASK_PT		BIT_ULL(8)
-+#define XFEATURE_MASK_PKRU		BIT_ULL(9)
-+#define XFEATURE_MASK_PASID		BIT_ULL(10)
-+#define XFEATURE_MASK_CET_USER		BIT_ULL(11)
-+#define XFEATURE_MASK_CET_KERNEL	BIT_ULL(12)
-+#define XFEATURE_MASK_LBR		BIT_ULL(15)
- #define XFEATURE_MASK_XTILE_CFG		BIT_ULL(17)
- #define XFEATURE_MASK_XTILE_DATA	BIT_ULL(18)
- 
-@@ -147,6 +153,7 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_CLWB		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 24)
- #define	X86_FEATURE_UMIP		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 2)
- #define	X86_FEATURE_PKU			KVM_X86_CPU_FEATURE(0x7, 0, ECX, 3)
-+#define	X86_FEATURE_OSPKE		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 4)
- #define	X86_FEATURE_LA57		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 16)
- #define	X86_FEATURE_RDPID		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 22)
- #define	X86_FEATURE_SGX_LC		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 30)
-@@ -553,6 +560,13 @@ static inline void xsetbv(u32 index, u64 value)
- 	__asm__ __volatile__("xsetbv" :: "a" (eax), "d" (edx), "c" (index));
- }
- 
-+static inline void wrpkru(u32 pkru)
-+{
-+	/* Note, ECX and EDX are architecturally required to be '0'. */
-+	asm volatile(".byte 0x0f,0x01,0xef\n\t"
-+		     : : "a" (pkru), "c"(0), "d"(0));
-+}
-+
- static inline struct desc_ptr get_gdt(void)
- {
- 	struct desc_ptr gdt;
 diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
-index 4c4925a8ab45..df3e93df4343 100644
+index df3e93df4343..115b2cdf9279 100644
 --- a/tools/testing/selftests/kvm/x86_64/state_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/state_test.c
-@@ -139,6 +139,83 @@ static void vmx_l1_guest_code(struct vmx_pages *vmx_pages)
- static void __attribute__((__flatten__)) guest_code(void *arg)
+@@ -231,9 +231,9 @@ static void __attribute__((__flatten__)) guest_code(void *arg)
+ int main(int argc, char *argv[])
  {
- 	GUEST_SYNC(1);
-+
-+	if (this_cpu_has(X86_FEATURE_XSAVE)) {
-+		uint64_t supported_xcr0 = this_cpu_supported_xcr0();
-+		uint8_t buffer[4096];
-+
-+		memset(buffer, 0xcc, sizeof(buffer));
-+
-+		set_cr4(get_cr4() | X86_CR4_OSXSAVE);
-+		GUEST_ASSERT(this_cpu_has(X86_FEATURE_OSXSAVE));
-+
-+		xsetbv(0, xgetbv(0) | supported_xcr0);
+ 	vm_vaddr_t nested_gva = 0;
+-
++	struct kvm_cpuid2 empty_cpuid = {};
+ 	struct kvm_regs regs1, regs2;
+-	struct kvm_vcpu *vcpu;
++	struct kvm_vcpu *vcpu, *vcpuN;
+ 	struct kvm_vm *vm;
+ 	struct kvm_x86_state *state;
+ 	struct ucall uc;
+@@ -286,6 +286,21 @@ int main(int argc, char *argv[])
+ 		/* Restore state in a new VM.  */
+ 		vcpu = vm_recreate_with_one_vcpu(vm);
+ 		vcpu_load_state(vcpu, state);
 +
 +		/*
-+		 * Modify state for all supported xfeatures to take them out of
-+		 * their "init" state, i.e. to make them show up in XSTATE_BV.
-+		 *
-+		 * Note off-by-default features, e.g. AMX, are out of scope for
-+		 * this particular testcase as they have a different ABI.
++		 * Restore XSAVE state in a dummy vCPU, first without doing
++		 * KVM_SET_CPUID2, and then with an empty guest CPUID.  Except
++		 * for off-by-default xfeatures, e.g. AMX, KVM is supposed to
++		 * allow KVM_SET_XSAVE regardless of guest CPUID.  Manually
++		 * load only XSAVE state, MSRs in particular have a much more
++		 * convoluted ABI.
 +		 */
-+		GUEST_ASSERT(supported_xcr0 & XFEATURE_MASK_FP);
-+		asm volatile ("fincstp");
++		vcpuN = __vm_vcpu_add(vm, vcpu->id + 1);
++		vcpu_xsave_set(vcpuN, state->xsave);
 +
-+		GUEST_ASSERT(supported_xcr0 & XFEATURE_MASK_SSE);
-+		asm volatile ("vmovdqu %0, %%xmm0" :: "m" (buffer));
++		vcpu_init_cpuid(vcpuN, &empty_cpuid);
++		vcpu_xsave_set(vcpuN, state->xsave);
 +
-+		if (supported_xcr0 & XFEATURE_MASK_YMM)
-+			asm volatile ("vmovdqu %0, %%ymm0" :: "m" (buffer));
-+
-+		if (supported_xcr0 & XFEATURE_MASK_AVX512) {
-+			asm volatile ("kmovq %0, %%k1" :: "r" (-1ull));
-+			asm volatile ("vmovupd %0, %%zmm0" :: "m" (buffer));
-+			asm volatile ("vmovupd %0, %%zmm16" :: "m" (buffer));
-+		}
-+
-+		if (this_cpu_has(X86_FEATURE_MPX)) {
-+			uint64_t bounds[2] = { 10, 0xffffffffull };
-+			uint64_t output[2] = { };
-+
-+			GUEST_ASSERT(supported_xcr0 & XFEATURE_MASK_BNDREGS);
-+			GUEST_ASSERT(supported_xcr0 & XFEATURE_MASK_BNDCSR);
-+
-+			/*
-+			 * Don't bother trying to get BNDCSR into the INUSE
-+			 * state.  MSR_IA32_BNDCFGS doesn't count as it isn't
-+			 * managed via XSAVE/XRSTOR, and BNDCFGU can only be
-+			 * modified by XRSTOR.  Stuffing XSTATE_BV in the host
-+			 * is simpler than doing XRSTOR here in the guest.
-+			 *
-+			 * However, temporarily enable MPX in BNDCFGS so that
-+			 * BNDMOV actually loads BND1.  If MPX isn't *fully*
-+			 * enabled, all MPX instructions are treated as NOPs.
-+			 *
-+			 * Hand encode "bndmov (%rax),%bnd1" as support for MPX
-+			 * mnemonics/registers has been removed from gcc and
-+			 * clang (and was never fully supported by clang).
-+			 */
-+			wrmsr(MSR_IA32_BNDCFGS, BIT_ULL(0));
-+			asm volatile (".byte 0x66,0x0f,0x1a,0x08" :: "a" (bounds));
-+			/*
-+			 * Hand encode "bndmov %bnd1, (%rax)" to sanity check
-+			 * that BND1 actually got loaded.
-+			 */
-+			asm volatile (".byte 0x66,0x0f,0x1b,0x08" :: "a" (output));
-+			wrmsr(MSR_IA32_BNDCFGS, 0);
-+
-+			GUEST_ASSERT_EQ(bounds[0], output[0]);
-+			GUEST_ASSERT_EQ(bounds[1], output[1]);
-+		}
-+		if (this_cpu_has(X86_FEATURE_PKU)) {
-+			GUEST_ASSERT(supported_xcr0 & XFEATURE_MASK_PKRU);
-+			set_cr4(get_cr4() | X86_CR4_PKE);
-+			GUEST_ASSERT(this_cpu_has(X86_FEATURE_OSPKE));
-+
-+			wrpkru(-1u);
-+		}
-+	}
-+
- 	GUEST_SYNC(2);
+ 		kvm_x86_state_cleanup(state);
  
- 	if (arg) {
+ 		memset(&regs2, 0, sizeof(regs2));
 -- 
 2.42.0.582.g8ccd20d70d-goog
 
