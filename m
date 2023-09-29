@@ -1,175 +1,173 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213A1441B
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 08:57:22 +0000 (UTC)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38T7iiO4028762;
-	Fri, 29 Sep 2023 08:57:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=KQ3u7Qmhp7iKbIJY4O4pne6xiBdvsIY4Nchj4nodMHg=;
- b=RKroOJxuZznhDQmZKPFtqoKTdxpzS7soxOXFMtUi36wTyWMtOks37pGLqxOeUNXQXxu2
- Hd2HCCVFFfNnioGs6Yg7yFLZW0fKU00lrrxwKf3P3XxB/a+VLZDk3Gb2xpbIHe6969Y7
- HvipsGgX76CyUYBbOyVU2UEitn4pdF14w9uRcCMGZpipPb0lYCebi4OVZHcAPjegHv8T
- LZ6LAM0pr6L7I4eYBpvcjNEhmB5vUaraPkNDM2Cgu8YI4dRzq5cI6elvAaCICdv1t2aq
- YDMAOpvpDfIaabvwIdrFwaRe0qx/GasY/ILH/c15Bop/XDz/iyehyBxvcmu/nQMWPekN 4g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3td8wdt9k1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 08:57:05 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38T8v46U007495
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 08:57:04 GMT
-Received: from [10.216.56.186] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 29 Sep
- 2023 01:56:57 -0700
-Message-ID: <4636a990-1044-1f67-dae5-8583f96021be@quicinc.com>
-Date: Fri, 29 Sep 2023 14:26:53 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B5611730;
+	Fri, 29 Sep 2023 09:26:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695979560; x=1727515560;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hoFtFYr8nVjfiP00lJ+CM55JUKIUy7NFIEdFCPoS/2w=;
+  b=PoQcFFMJfUDjFwrG/UtfTX05zLQLK1G/rNjMEu6x4dNHLpO+uvNvYQ2g
+   o+CJkjb4knB2Qh5alp9+k37r3OZWOAKmVLjtUmb36OmZa/fvwtf9fOkxL
+   RhpgykktLNIepDDwdxcOkELxAqbtvR7G482zYRr0JxpSBnOP08GdO0k/x
+   BB6+EQbmkvwXFSsM6HhJTIEt2krbaoU5pipIC0q0wK8OnVhG9f+vcfFNs
+   4Gr4Sq0Y5CWJHhj6aZAjeXCMW2SLPcgoUp1nxDH6TMhtoJvuv+ZPrtC4W
+   9UfbJA3hKltRWVQaOZPLQSHQu7TB7p/wCK9ZgnPMIWe72ZScQaPhKBNGk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="386128638"
+X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
+   d="scan'208";a="386128638"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 02:25:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="743404471"
+X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
+   d="scan'208";a="743404471"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 29 Sep 2023 02:25:50 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qm9kp-0002hh-17;
+	Fri, 29 Sep 2023 09:25:47 +0000
+Date: Fri, 29 Sep 2023 17:25:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:x86/microcode 26/30]
+ arch/x86/kernel/cpu/microcode/core.c:389:7: error: call to undeclared
+ function 'ucode_load_secondary_wait'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202309291747.IZt2BkKi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH V12 2/3] dt-bindings: pwm: add IPQ6018 binding
-Content-Language: en-US
-From: Devi Priya <quic_devipriy@quicinc.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <thierry.reding@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <ndesaulniers@google.com>,
-        <trix@redhat.com>, <baruch@tkos.co.il>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
-        <nathan@kernel.org>
-References: <20230925065915.3467964-1-quic_devipriy@quicinc.com>
- <20230925065915.3467964-3-quic_devipriy@quicinc.com>
- <42338d41-1b90-4f77-958e-479d32e0ce1d@linaro.org>
- <59c9dbdb-8673-8dc7-ecca-32ff120ccf80@quicinc.com>
-In-Reply-To: <59c9dbdb-8673-8dc7-ecca-32ff120ccf80@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: w7IM-BZdzVl7rNO8FWfDSO_IEViaS47x
-X-Proofpoint-GUID: w7IM-BZdzVl7rNO8FWfDSO_IEViaS47x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-29_07,2023-09-28_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 malwarescore=0 lowpriorityscore=0 impostorscore=0
- phishscore=0 mlxscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309290076
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/microcode
+head:   0168d5c24d9566114647bf6377e65c52c2325e3c
+commit: 798516f5cbaf888e972679feab8f19653603d44a [26/30] x86/microcode: Protect against instrumentation
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230929/202309291747.IZt2BkKi-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230929/202309291747.IZt2BkKi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309291747.IZt2BkKi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/microcode/core.c:389:7: error: call to undeclared function 'ucode_load_secondary_wait'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!ucode_load_secondary_wait(ctrl_cpu)) {
+                ^
+   arch/x86/kernel/cpu/microcode/core.c:389:7: note: did you mean 'ucode_load_secondary'?
+   arch/x86/kernel/cpu/microcode/core.c:384:21: note: 'ucode_load_secondary' declared here
+   static noinstr void ucode_load_secondary(unsigned int cpu)
+                       ^
+>> arch/x86/kernel/cpu/microcode/core.c:457:3: error: call to undeclared function 'load_secondary'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   load_secondary(cpu);
+                   ^
+   arch/x86/kernel/cpu/microcode/core.c:521:26: error: use of undeclared identifier 'load_cpus_stopped'
+           stop_machine_cpuslocked(load_cpus_stopped, NULL, cpu_online_mask);
+                                   ^
+   3 errors generated.
 
 
+vim +/ucode_load_secondary_wait +389 arch/x86/kernel/cpu/microcode/core.c
 
-On 9/29/2023 1:25 PM, Devi Priya wrote:
-> 
-> 
-> On 9/25/2023 12:41 PM, Krzysztof Kozlowski wrote:
->> On 25/09/2023 08:59, Devi Priya wrote:
->>> DT binding for the PWM block in Qualcomm IPQ6018 SoC.
->>>
->>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
->>> Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
->>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>
->> ...
->>
->>> diff --git a/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml 
->>> b/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
->>> new file mode 100644
->>> index 000000000000..857086ad539e
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
->>
->> Filename matching compatible, so qcom,ipq6018-pwm.yaml
-> okay
-We would have other ipq compatibles (ipq9574 & ipq5332) being added to
-the binding in the upcoming series.
-So, shall we rename the binding to qcom,ipq-pwm.yaml
+   379	
+   380	/*
+   381	 * Protected against instrumentation up to the point where the primary
+   382	 * thread completed the update. See microcode_nmi_handler() for details.
+   383	 */
+   384	static noinstr void ucode_load_secondary(unsigned int cpu)
+   385	{
+   386		unsigned int ctrl_cpu = raw_cpu_read(ucode_ctrl.ctrl_cpu);
+   387		enum ucode_state ret;
+   388	
+ > 389		if (!ucode_load_secondary_wait(ctrl_cpu)) {
+   390			instrumentation_begin();
+   391			pr_err_once("Microcode load: %d CPUs timed out\n",
+   392				    atomic_read(&late_cpus_in) - 1);
+   393			instrumentation_end();
+   394			return;
+   395		}
+   396	
+   397		/* Primary thread completed. Allow to invoke instrumentable code */
+   398		instrumentation_begin();
+   399		/*
+   400		 * If the primary succeeded then invoke the apply() callback,
+   401		 * otherwise copy the state from the primary thread.
+   402		 */
+   403		if (this_cpu_read(ucode_ctrl.ctrl) == SCTRL_APPLY)
+   404			ret = microcode_ops->apply_microcode(cpu);
+   405		else
+   406			ret = per_cpu(ucode_ctrl.result, ctrl_cpu);
+   407	
+   408		this_cpu_write(ucode_ctrl.result, ret);
+   409		this_cpu_write(ucode_ctrl.ctrl, SCTRL_DONE);
+   410		instrumentation_end();
+   411	}
+   412	
+   413	static void load_primary(unsigned int cpu)
+   414	{
+   415		struct cpumask *secondaries = topology_sibling_cpumask(cpu);
+   416		enum sibling_ctrl ctrl;
+   417		enum ucode_state ret;
+   418		unsigned int sibling;
+   419	
+   420		/* Initial rendezvouz to ensure that all CPUs have arrived */
+   421		if (!wait_for_cpus(&late_cpus_in)) {
+   422			this_cpu_write(ucode_ctrl.result, UCODE_TIMEOUT);
+   423			pr_err_once("load: %d CPUs timed out\n", atomic_read(&late_cpus_in) - 1);
+   424			return;
+   425		}
+   426	
+   427		ret = microcode_ops->apply_microcode(cpu);
+   428		this_cpu_write(ucode_ctrl.result, ret);
+   429		this_cpu_write(ucode_ctrl.ctrl, SCTRL_DONE);
+   430	
+   431		/*
+   432		 * If the update was successful, let the siblings run the apply()
+   433		 * callback. If not, tell them it's done. This also covers the
+   434		 * case where the CPU has uniform loading at package or system
+   435		 * scope implemented but does not advertise it.
+   436		 */
+   437		if (ret == UCODE_UPDATED || ret == UCODE_OK)
+   438			ctrl = SCTRL_APPLY;
+   439		else
+   440			ctrl = SCTRL_DONE;
+   441	
+   442		for_each_cpu(sibling, secondaries) {
+   443			if (sibling != cpu)
+   444				per_cpu(ucode_ctrl.ctrl, sibling) = ctrl;
+   445		}
+   446	}
+   447	
+   448	static noinstr bool microcode_update_handler(void)
+   449	{
+   450		unsigned int cpu = raw_smp_processor_id();
+   451	
+   452		if (raw_cpu_read(ucode_ctrl.ctrl_cpu) == cpu) {
+   453			instrumentation_begin();
+   454			load_primary(cpu);
+   455			instrumentation_end();
+   456		} else {
+ > 457			load_secondary(cpu);
+   458		}
+   459	
+   460		instrumentation_begin();
+   461		touch_nmi_watchdog();
+   462		instrumentation_end();
+   463		return true;
+   464	}
+   465	
 
-Thanks,
-Devi Priya
->>
->>> @@ -0,0 +1,53 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/pwm/ipq-pwm.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm IPQ6018 PWM controller
->>> +
->>> +maintainers:
->>> +  - Baruch Siach <baruch@tkos.co.il>
->>> +
->>> +properties:
->>> +  "#pwm-cells":
->>> +    const: 2
->>> +
->>> +  compatible:
->>> +    const: qcom,ipq6018-pwm
->>
->> compatible is always the first property.
-> okay
->>
->>> +
->>> +  reg:
->>> +    description: Offset of PWM register in the TCSR block.
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - clocks
->>> +  - "#pwm-cells"
->>
->> And this order must be the same as in properties.
-> okay
->>
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/clock/qcom,gcc-ipq6018.h>
->>> +
->>> +    syscon@1937000 {
->>> +        compatible = "qcom,tcsr-ipq6018", "syscon", "simple-mfd";
->>> +        reg = <0x01937000 0x21000>;
->>> +        #address-cells = <1>;
->>> +        #size-cells = <1>;
->>> +        ranges = <0 0x1937000 0x21000>;
->>
->> Drop this node, not related. The parent binding could have full example,
->> on the other hand. Additionally, I have doubts that you really tested
->> the parent binding.
-> Sure, will drop the syscon node
-> 
-> Thanks,
-> Devi Priya
->>
->>> +
->>> +        pwm: pwm@a010 {
->>> +            compatible = "qcom,ipq6018-pwm";
->>
->> Best regards,
->> Krzysztof
->>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
