@@ -1,163 +1,152 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97106109
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 11:48:15 +0000 (UTC)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38TBlwpb026316;
-	Fri, 29 Sep 2023 11:47:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pYbprmru96TQgVBscH484yU7pq/NVL8IwvEoncpQ9s8=;
- b=MjrFf5KkmvjtVJ2KVaseFiHMAfYW27hfrll1+MCwKi5xqSiupPlWBIYLDpI+kce1X6Rx
- Un88Mqehp7g2yuFctBvOKGngIZfQQ2hVPPra6/Xtfk9mjhGDNqsDtaOGEg1qzPS6m9GT
- IMGI0j/NeRy8KBcflJ4vR+u6rhKmDo0rh3KXXCWKZ1Rnqv7fQw3aMwdhAt+pMvvFapLI
- oqCGG/GF+hQLiDBE8WmKPWCGD7k6aZh6KKfFWa4qNnjq1V7jwELcw7gxpsFNZrcGDdHM
- HtRgol+SZ1WbGLZ5ZAHzquEcntH2832XDyYwd8DNjNrvwy0S84dOCX2MMC+ujk6luffI NA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tdx17g00d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 11:47:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38TBlvtJ032015
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 11:47:57 GMT
-Received: from [10.216.56.186] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 29 Sep
- 2023 04:47:51 -0700
-Message-ID: <9155c1e3-d163-b2ad-8a7b-57ffeca2b122@quicinc.com>
-Date: Fri, 29 Sep 2023 17:17:48 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737F51864;
+	Fri, 29 Sep 2023 12:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695989107; x=1727525107;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=42GyzSR8W+aADKwaSxy3QS1f4ulSkvdTJ9ModGlGfZU=;
+  b=UsSSntCgX/D22i4tJpcy8vEqgL+n+KjEqFhfJtrRK2SKUmqmmXqriyDG
+   yYvl7slXfDTBuYfsH4Zzn3Nsu61FCP/nwlvaaT9Wlp0fV/fnvjAq/X2M5
+   x+vm3RCf1O945x4nHmgMwb9+cbxVTwIbrWyCZLBSBEJSdSf1ZnyfHsqmU
+   5TIZh8zeT1Ck+W670tng+SSMu5GDdEN1Q2BeSd+narpBkbCiPPW40tho2
+   e1M0bgiDi2Ex7ySem6ONmjmsr/akf+EkLw8dnXHKRO+q9y+VwqS448O2F
+   qMy6MlWqZypzNKOJxFoDJ4b8pei5Y7EGKKPBGjMULgCtnA1U8IbEjSjip
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="385099103"
+X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
+   d="scan'208";a="385099103"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 05:05:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="820192782"
+X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
+   d="scan'208";a="820192782"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Sep 2023 05:05:05 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qmCEx-0002pz-0g;
+	Fri, 29 Sep 2023 12:05:03 +0000
+Date: Fri, 29 Sep 2023 20:04:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:x86/microcode 28/30]
+ arch/x86/kernel/cpu/microcode/core.c:488:3: error: call to undeclared
+ function '__ucode_load_primary'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202309291918.X2pHUkHJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH V12 3/3] arm64: dts: ipq6018: add pwm node
-Content-Language: en-US
-From: Devi Priya <quic_devipriy@quicinc.com>
-To: <thierry.reding@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <ndesaulniers@google.com>,
-        <trix@redhat.com>, <baruch@tkos.co.il>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
-        <nathan@kernel.org>
-References: <20230925065915.3467964-1-quic_devipriy@quicinc.com>
- <20230925065915.3467964-4-quic_devipriy@quicinc.com>
-In-Reply-To: <20230925065915.3467964-4-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: x_oUf14Ecfzf7WDlzoVza8JV0VTKXZwi
-X-Proofpoint-ORIG-GUID: x_oUf14Ecfzf7WDlzoVza8JV0VTKXZwi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-29_10,2023-09-28_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 phishscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309290100
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/microcode
+head:   0168d5c24d9566114647bf6377e65c52c2325e3c
+commit: 66cf86b60b5de0045433ed664dbe887486285b76 [28/30] x86/microcode: Handle "offline" CPUs correctly
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230929/202309291918.X2pHUkHJ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230929/202309291918.X2pHUkHJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309291918.X2pHUkHJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/x86/kernel/cpu/microcode/core.c:390:7: error: call to undeclared function 'ucode_load_secondary_wait'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!ucode_load_secondary_wait(ctrl_cpu)) {
+                ^
+   arch/x86/kernel/cpu/microcode/core.c:390:7: note: did you mean 'ucode_load_secondary'?
+   arch/x86/kernel/cpu/microcode/core.c:385:21: note: 'ucode_load_secondary' declared here
+   static noinstr void ucode_load_secondary(unsigned int cpu)
+                       ^
+>> arch/x86/kernel/cpu/microcode/core.c:488:3: error: call to undeclared function '__ucode_load_primary'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   __ucode_load_primary(cpu);
+                   ^
+   arch/x86/kernel/cpu/microcode/core.c:488:3: note: did you mean 'ucode_load_primary'?
+   arch/x86/kernel/cpu/microcode/core.c:477:13: note: 'ucode_load_primary' declared here
+   static void ucode_load_primary(unsigned int cpu)
+               ^
+>> arch/x86/kernel/cpu/microcode/core.c:516:3: error: call to undeclared function 'load_primary'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   load_primary(cpu);
+                   ^
+   arch/x86/kernel/cpu/microcode/core.c:516:3: note: did you mean '__load_primary'?
+   arch/x86/kernel/cpu/microcode/core.c:414:13: note: '__load_primary' declared here
+   static void __load_primary(unsigned int cpu)
+               ^
+   arch/x86/kernel/cpu/microcode/core.c:519:3: error: call to undeclared function 'load_secondary'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   load_secondary(cpu);
+                   ^
+   arch/x86/kernel/cpu/microcode/core.c:585:26: error: use of undeclared identifier 'load_cpus_stopped'
+           stop_machine_cpuslocked(load_cpus_stopped, NULL, cpu_online_mask);
+                                   ^
+   5 errors generated.
 
 
+vim +/__ucode_load_primary +488 arch/x86/kernel/cpu/microcode/core.c
 
-On 9/25/2023 12:29 PM, Devi Priya wrote:
-> Describe the PWM block on IPQ6018.
-> 
-> The PWM is in the TCSR area. Make &tcsr "simple-mfd" compatible, and add
-> &pwm as child of &tcsr.
-> 
-> Add also ipq6018 specific compatible string.
-> 
-> Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
-> Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
-> v12:
-> 
->    No change
-> 
-> v11:
-> 
->    No change
-> 
-> v10:
-> 
->    No change
-> 
-> v9:
-> 
->    Add 'ranges' property (Rob)
-> 
-> v8:
-> 
->    Add size cell to 'reg' (Rob)
-> 
-> v7:
-> 
->    Use 'reg' instead of 'offset' (Rob)
-> 
->    Add qcom,tcsr-ipq6018 (Rob)
-> 
->    Drop clock-names (Bjorn)
-> 
-> v6:
-> 
->    Make the PWM node child of TCSR (Rob Herring)
-> 
->    Add assigned-clocks/assigned-clock-rates (Uwe Kleine-König)
-> 
-> v5: Use qcom,pwm-regs for TCSR phandle instead of direct regs
-> 
-> v3: s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
-> 
->   arch/arm64/boot/dts/qcom/ipq6018.dtsi | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> index 47b8b1d6730a..cadd2c583526 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> @@ -398,8 +398,21 @@ tcsr_mutex: hwlock@1905000 {
->   		};
->   
->   		tcsr: syscon@1937000 {
-> -			compatible = "qcom,tcsr-ipq6018", "syscon";
-> +			compatible = "qcom,tcsr-ipq6018", "syscon", "simple-mfd";
->   			reg = <0x0 0x01937000 0x0 0x21000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0x0 0x01937000 0x21000>;
-> +
-Hi Krzysztof,
-Referring to 
-https://lore.kernel.org/all/20220909091056.128949-1-krzysztof.kozlowski@linaro.org/, 
-it seems that the TCSR block should
-not have any child nodes. Could you pls provide your suggestions on pwm
-being added as the child node?
+   476	
+   477	static void ucode_load_primary(unsigned int cpu)
+   478	{
+   479		unsigned int nr_offl = cpumask_weight(&cpu_offline_mask);
+   480		bool proceed = true;
+   481	
+   482		/* Kick soft-offlined SMT siblings if required */
+   483		if (!cpu && nr_offl)
+   484			proceed = ucode_kick_offline_cpus(nr_offl);
+   485	
+   486		/* If the soft-offlined CPUs did not respond, abort */
+   487		if (proceed)
+ > 488			__ucode_load_primary(cpu);
+   489	
+   490		/* Unconditionally release soft-offlined SMT siblings if required */
+   491		if (!cpu && nr_offl)
+   492			ucode_release_offline_cpus();
+   493	}
+   494	
+   495	/*
+   496	 * Minimal stub rendevouz handler for soft-offlined CPUs which participate
+   497	 * in the NMI rendevouz to protect against a concurrent NMI on affected
+   498	 * CPUs.
+   499	 */
+   500	void noinstr microcode_offline_nmi_handler(void)
+   501	{
+   502		if (!raw_cpu_read(ucode_ctrl.nmi_enabled))
+   503			return;
+   504		raw_cpu_write(ucode_ctrl.nmi_enabled, false);
+   505		raw_cpu_write(ucode_ctrl.result, UCODE_OFFLINE);
+   506		raw_atomic_inc(&offline_in_nmi);
+   507		wait_for_ctrl();
+   508	}
+   509	
+   510	static noinstr bool microcode_update_handler(void)
+   511	{
+   512		unsigned int cpu = raw_smp_processor_id();
+   513	
+   514		if (raw_cpu_read(ucode_ctrl.ctrl_cpu) == cpu) {
+   515			instrumentation_begin();
+ > 516			load_primary(cpu);
+   517			instrumentation_end();
+   518		} else {
+   519			load_secondary(cpu);
+   520		}
+   521	
+   522		instrumentation_begin();
+   523		touch_nmi_watchdog();
+   524		instrumentation_end();
+   525		return true;
+   526	}
+   527	
 
-Thanks,
-Devi Priya
-> +			 pwm: pwm@a010 {
-> +				compatible = "qcom,ipq6018-pwm";
-> +				reg = <0xa010 0x20>;
-> +				clocks = <&gcc GCC_ADSS_PWM_CLK>;
-> +				assigned-clocks = <&gcc GCC_ADSS_PWM_CLK>;
-> +				assigned-clock-rates = <100000000>;
-> +				#pwm-cells = <2>;
-> +				status = "disabled";
-> +			};
->   		};
->   
->   		usb2: usb@70f8800 {
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
