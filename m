@@ -1,37 +1,38 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3230566684
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 18:11:52 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1bd9b4f8e0eso111785045ad.1
-        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 11:11:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7273266683
+	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 18:11:53 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1c1ff5b741cso130318675ad.2
+        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 11:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696011111; x=1696615911; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gRDHdIW5nw7N6euQ18/oNZUo9zrsO3GFIVaYI09JZgc=;
-        b=A3zt5C8hXjKKkJNWoFITXS+E78ofRSfx+sdeDFEYSOtNnQ/td43Licj3PueSdVvbV1
-         0bSBO6k/G8z8JTfNh4u975t1rosCqiOOfNcYSiF8XYM4/msek51XIezDq+x84uuUEEXP
-         3glMWCyoGHrP3CjHGBAFyb2f4hhx5IBEPHas4=
+        d=chromium.org; s=google; t=1696011113; x=1696615913; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oDRQEh16G/ipKRezI+KzovNtgIHUYl51I1aN5U61Mmg=;
+        b=UOoQ5gpp46jSKqn4IX7mkcx7l+Y/j7DVKVFljQ/O0pFIKYDVjussR7r2e9NucWBIiD
+         TD82sFBklOakhY7yOVHi0ljIBjEOxxmVSlvPERz7RvpNFPy7C7IsU7ArpYWIq8qrZ2KC
+         FiKBD7nKrFC+qzc4fs4orK2/ttngE9b1eWyZY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696011111; x=1696615911;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gRDHdIW5nw7N6euQ18/oNZUo9zrsO3GFIVaYI09JZgc=;
-        b=dTwDOT8HLxfHSOnOrArN4QIO8vwfeD5K33TjabNbUrDMV/TwY4UIuRIR+LQCF4vyP0
-         e+taKNz8p00SWJSLoB12LjQFnkzGOdstQrKPVIg9+QXYjtQ0xZfw0mKQHbh1FdUL0GmK
-         NRIdyZSo9V9tmRSxPPzyqT2jUS7LjDVFME/FN93Xab83azZLzjzqzM7vcjpyWK/XL6Qp
-         gkNjzfkFycKvjn3DuTAgfU53s/sJJaVmR6pGwdSXXSF70PYOUClc/XWR+hgH1wcqTThN
-         D/7Hw3w+FFkGuksfrfqcqrJxAuJpZNiAwGCCaQSEjkYs+9QWZgx+caJvKUK2qSZa2OJY
-         LsQg==
-X-Gm-Message-State: AOJu0YzArNGRtvGe+f6wx6XvEOE29uege8MPqqlKAdLog5dFA4FJRXN7
-	MXCxSY+UdQMZF1IlK7I8udZCFw==
-X-Google-Smtp-Source: AGHT+IFiJyR1YutI7z9kl3HMwVpOMbQDE1YOxWXmuYGounHs5et49gVV+TVDs64OglQsOZhw3BDjew==
-X-Received: by 2002:a17:902:ef96:b0:1c4:6ca6:35b3 with SMTP id iz22-20020a170902ef9600b001c46ca635b3mr4090640plb.44.1696011111522;
-        Fri, 29 Sep 2023 11:11:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696011113; x=1696615913;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oDRQEh16G/ipKRezI+KzovNtgIHUYl51I1aN5U61Mmg=;
+        b=Nk1UrwnMsN2jGGWg7Z9c5HU0EvSU4rW2Q1raAl2FbEHYO0j+Lsr1JcgIGs+4sByYmE
+         uAkluDAiWUJ5dtwVQPVGBLvjWSH/iOcgIH2weMC6DnnsBn97ACZ1hOdQB6n4kdpW6Wrg
+         wUC/6zyOG119mzW8pU3MRTbnXi+KyrVi4UmNC11l1XdiiEZ4UkaJ7lB4Ftox76DT5vk8
+         88u5Al0+P96ZMGTSmidzwv4W49hZaooAZNFXuU9ZPje+5i9t9EYeTzwie5AFZAU38rgd
+         AA0MLEj0wRIwe5myKoXTByw/0HbsxyPS0onaKfumGIl6fpfC8S5y2q+UX9hHy0e0OLa2
+         lVkQ==
+X-Gm-Message-State: AOJu0YzGnL/uyuD4w3I7cMp2XKjUAkaDH425xxqGgvLR5BP8wjWeV4Jv
+	F6Dnvi6j2VmZibJjM/7SN5F8gw==
+X-Google-Smtp-Source: AGHT+IGFwlJWyVkm3A0mUQlX8g9/99iOnnwZlUWPyYk2xMspY3q7K0JlfsqBEcTTaZjRplBDOBuiwg==
+X-Received: by 2002:a17:902:bc4b:b0:1c5:b1a6:8118 with SMTP id t11-20020a170902bc4b00b001c5b1a68118mr4839960plz.42.1696011112843;
+        Fri, 29 Sep 2023 11:11:52 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090282cb00b001c3267ae317sm11820272plz.165.2023.09.29.11.11.50
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c15500b001c5fc291ef9sm13312784plj.209.2023.09.29.11.11.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 29 Sep 2023 11:11:50 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
@@ -41,66 +42,76 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 0/5] chelsio: Annotate structs with __counted_by
-Date: Fri, 29 Sep 2023 11:11:44 -0700
-Message-Id: <20230929181042.work.990-kees@kernel.org>
+Subject: [PATCH 4/5] cxgb4: Annotate struct sched_table with __counted_by
+Date: Fri, 29 Sep 2023 11:11:48 -0700
+Message-Id: <20230929181149.3006432-4-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230929181042.work.990-kees@kernel.org>
+References: <20230929181042.work.990-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1014; i=keescook@chromium.org;
- h=from:subject:message-id; bh=3BZuEw+lDTMcDOBdSeo10PeNdfF017VDbBDbHm/Aw7E=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlFxNkPbApQM0PRdw5XGzeD4wn9M2Q4hhHg+EUI
- +pu8Y62/lCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRcTZAAKCRCJcvTf3G3A
- JlIdD/9vS8s1svUJVLgcGlTGpttcmgIm8uPBrJhQo4HWinroPvO700Ft2x5otrpS53fYgd4ez/+
- WPqFs9/JAdy/isZcoif+wp3zPItQJL1mbd6XBZ7AqE08BIIHe0soj5AwkZddsRu1stIvvqutyt8
- U7TP72+WR0Ok3zDICbfQO9uCyP+BjBoHuSH6ucZJzoW3OVKYbV6p/M+TtXWTObKU/DwwJSd/SCk
- JFjTMD+fB8l7T0B4WaHKQfCS/G4k2TTzLUcyGE5hx8e4LbFoOePuhvRanBZaTrGhEO2A0o6mb49
- vky/90bG4LKQt7iH7qNg+2Tykp/lOCMEt+zukwV9h1OnEdizMGBACZ4YJmXs6ZYyzwlrr3lhwhr
- ZvdUFvTWhQieEVmwvmD6rMWGMeYuCIqzLhY/pV37OfULuVwFXrBv0yE+2wViXgZM4C7GVsLln/a
- Jmlfw4K6CR9jYPkBS5pqvlRe1bBIKIKmuajBDShyNb9S3oHaYLRtNfgsRayhrQxlqOBFxWf4UdH
- dEurVIiiI9K4ewqxSbjXG6BSggiyU2A2Nz5lW/DKUw3kqlxfoX12Jw5oa3uz3i6gUL5ww4ty4aF
- +BF/1xZdkmOevxftk80KwlQ3qA5n+Y7kq1jn5q9du5shipXVjNFoABZFtpj5aMAXE2Rh1v3Ry54
- SKDEscG T2ujIL2A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1384; i=keescook@chromium.org;
+ h=from:subject; bh=kcIodOTCVIvY76AS2Uf+/xwdtFjYx7zCzGpQXcox5NQ=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlFxNkxHK+/1uBSnROiVBnNQXzF7bg+qpdlTfz8
+ ywFHOxF76eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRcTZAAKCRCJcvTf3G3A
+ JvRwD/4vZRzCzyJ7qZ5e0LaFPcNTQJBX3MNd8d1CbPHzcNnsTiUzvwr2QTMa+SJNHbJz1OW0YkF
+ F8oDEfY8iB86DNWrxXtU8Mh3SxWPpOWhGm5D1NYhVVOxsc3lD9nY+CMXj/H1ll8yIc9ZOPDTlXl
+ sbpzhQSqKnzMh0pruH9XXBjZdMOcPY541+f1VcAWUR15XNGVYztINFkCllOwGK7/TfFUkGa67xK
+ /OFPRD/X5XA40emcOai1thpLYunfLuJT65xmN9IiPI/43TO8t9O+990Gk2tsSLFSxh54Jym8nXj
+ WjDX6F4t5K5a80F8HuSOL7xkxbslxqmV1QoPUCLSWpTOhyX6ysRsd3YDRxNomMJAjaz0QIWUuM2
+ BEwG12H7dp8Uq/JgicSWz3qgEi+NnCp0T8n7PsDod43AaAQOg0hY5f+PjAS+kcj2N5EL6f2YXxG
+ rQVl/O12pw7A5Uz5FQkUklt7d2uYQ3ZUQuhx+S7bfzC6tGPBK+c5tGq1gN19O03rnPjOmcpoTG9
+ Yn6B340GmCnWDHH2xaAZn5Vi1qAY9krgGCjtRMTM0T4JJRDT43jON6staRXoccxa1ReFpqv0TW+
+ qpSBF1Xzr7UAXSbT56sXO7mAN64CubXJtY8Y28rYrWzq68zey/FU4c2JFbmLKUGO47FVhZ6kXoC k6U28UbshZcl60g==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-This annotates several chelsio structures with the coming __counted_by
-attribute for bounds checking of flexible arrays at run-time. For more details,
-see commit dd06e72e68bc ("Compiler Attributes: Add __counted_by macro").
+As found with Coccinelle[1], add __counted_by for struct sched_table.
 
-Thanks!
+[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
--Kees
+Cc: Raju Rangoju <rajur@chelsio.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/ethernet/chelsio/cxgb4/sched.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kees Cook (5):
-  chelsio/l2t: Annotate struct l2t_data with __counted_by
-  cxgb4: Annotate struct clip_tbl with __counted_by
-  cxgb4: Annotate struct cxgb4_tc_u32_table with __counted_by
-  cxgb4: Annotate struct sched_table with __counted_by
-  cxgb4: Annotate struct smt_data with __counted_by
-
- drivers/net/ethernet/chelsio/cxgb3/l2t.h                | 2 +-
- drivers/net/ethernet/chelsio/cxgb4/clip_tbl.h           | 2 +-
- drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_u32_parse.h | 2 +-
- drivers/net/ethernet/chelsio/cxgb4/l2t.c                | 2 +-
- drivers/net/ethernet/chelsio/cxgb4/sched.h              | 2 +-
- drivers/net/ethernet/chelsio/cxgb4/smt.h                | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/sched.h b/drivers/net/ethernet/chelsio/cxgb4/sched.h
+index 5f8b871d79af..6b3c778815f0 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/sched.h
++++ b/drivers/net/ethernet/chelsio/cxgb4/sched.h
+@@ -82,7 +82,7 @@ struct sched_class {
+ 
+ struct sched_table {      /* per port scheduling table */
+ 	u8 sched_size;
+-	struct sched_class tab[];
++	struct sched_class tab[] __counted_by(sched_size);
+ };
+ 
+ static inline bool can_sched(struct net_device *dev)
 -- 
 2.34.1
 
