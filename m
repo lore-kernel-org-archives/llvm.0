@@ -1,40 +1,40 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FB96669B
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 21:12:01 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59f8134eb83so186994817b3.2
-        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 14:12:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60586727F
+	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 21:12:02 +0000 (UTC)
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1c604a5a53eso120130525ad.0
+        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 14:12:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696021920; x=1696626720; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696021922; x=1696626722; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FR1ZKwT/o63KmLhMDo8tUZzc0vKzUsUCbtQdapDGJGA=;
-        b=GmUBtooL1aJ2UskWHLlQecDNILaChISjbDIAE/gqEt8DGE3XAsjVbY3021dWluzLDe
-         h4jnA4MTLKCjobIN1hI30Chfa1RqGatLoltAjxA69XC9jsc73sDyTsxyE3Y7h5D+ADhM
-         +2NMjYAEdCPFgwhctHSCTklciTVdC+BkauxPkm0/h3vB1r0GiafreEGDx+wAxYX5inFp
-         ECl5kU4dlW3w0qpZkm9SrrR682RP86BqIMaI9amFblOyZEoXQ8lTORakdOGMGg9OF1ES
-         VQPYYm6RM4abFRUIKCIMyg6oh2mGPlUJNEx96xPYRQ5XdyURThvPKZxbbXbsMYt/delT
-         B6bQ==
+        bh=19scQT+vZguMbMPGvwbswmmwWeMyYkP13y1R8IKgsdo=;
+        b=hEe6DZnK6zs1ZLeb2zlM6r3+Hk/jIjo1+iArpVHaWs1mSoNt0nBmno834VOscNDFiv
+         pvbhmEaCZegkHMVOFYpnS3qyptOuFHpU1oU0MODSTuT9hOsTE0JgjYJOpvVb4JHdjlhz
+         EUs+tvteL6BrH5Utj7zrv0UzMWN2PXOGt9tR2038GBiMRlgxtf8UsgU3DM/iCbds3enT
+         YEzE139Bc/sjxNrlNpwoMwgsibk87D8Omv/ZAgnzc/rvgdA0VkreuQ81LQKFglyw8xQo
+         /46rlDgEslXqW2VHHjtOSUQ4pxc1LEiRCBQtAOOtiZLr/iWKdgFZf+wTF6g6L9VYhuwY
+         7ZQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696021920; x=1696626720;
+        d=1e100.net; s=20230601; t=1696021922; x=1696626722;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FR1ZKwT/o63KmLhMDo8tUZzc0vKzUsUCbtQdapDGJGA=;
-        b=h8K6OA0I+P0cDIlxQNzrnB5MgmRnGpyX9ZYamB1WxR8uCzPr1rEMRa1mR/HEcTUULb
-         qiOLEiskx1TCsZQSE1q+NBwnqlkQ2sXgHe0L7WP4AN1AmLBU8Lf67rcl+8ZWPcimhxsY
-         3etcuMnveRVw+hg355BV+8wOyXR1s9iAkfepR9eFbdnssPiuhcle2IOsLI/t3PqkYvn+
-         /qQdwXaKNqc4HA74tbGZqdjoL75lCKEViMzorLtXVZcwCd9/v9bVcpVB0Bzao1R5A97p
-         owvQ70LaCb5Euzg1PNaT5JDRIEpOSqfAdwCqP1A290iomxQFwHt+Zf5JzkvyDSPUHVje
-         2OIA==
-X-Gm-Message-State: AOJu0YypKay0cb4GFKLpJneT6EYYuNNtq/bp44rqS9/DZIeWcYDyHE0D
-	SIrD59djSqG3J0JqGUOs+A0jtj+TjbJaZziqTXY=
-X-Google-Smtp-Source: AGHT+IHnDIypgcCWBxPESiB/yrBCpKXqORME3PWFhWMxCeyFk9cmGmraRzLwQcSrcYatS2Uvi9kN6m0eWCmXEF8Vfz0=
+        bh=19scQT+vZguMbMPGvwbswmmwWeMyYkP13y1R8IKgsdo=;
+        b=eZUof3+3Rugm7VffFQ6ENp+qb5dhekphZSejKU19wkREmWi+/bWcbjk3NOaHUx2rvt
+         FRvE8WDAf+1hcw/U1IQuHd0B068TtDSGb+tabsjspQ3pANfyPm5Xn3mJqIwQdoEVMz5J
+         1cDgxN6t6NQflb6XMK9QeurgxOJAsbimvlRyZfhtROBF+Z+zlojJWB0Z1DEt10pN8y/Y
+         SkzpTXWF2ek3qMSxSxW8GcQUTWB77NPQXs6qC0Oh8jHrpvDJ74FDkvs2sq0a/+CNdE2G
+         WLP1/MsT5VH31JSa12nRQXyFDPc3r9/obcUD60tlUNGVVmhsbFi773AzINJw5k9nGVhr
+         HP2g==
+X-Gm-Message-State: AOJu0YyeP9+iuUO2QrEOK63ib5V77JqO/X5ROytv9xw4GTcgg0Hajujx
+	lAgGXfAeKUz3Kan30oB1GkSSeMI1YLYRxiSfiko=
+X-Google-Smtp-Source: AGHT+IEu8pWqkhn949EN2w2MEEmF4sIQU2CD0ztiPLeuQl+OuKcbvmbHD9LpYfISQSvkmvSO3SxPVHDUipdN2Hi1oC8=
 X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a25:6812:0:b0:d13:856b:c10a with SMTP
- id d18-20020a256812000000b00d13856bc10amr77200ybc.3.1696021920090; Fri, 29
- Sep 2023 14:12:00 -0700 (PDT)
-Date: Fri, 29 Sep 2023 21:11:57 +0000
+ (user=samitolvanen job=sendgmr) by 2002:a17:903:1c8:b0:1c6:d25:8730 with SMTP
+ id e8-20020a17090301c800b001c60d258730mr75155plh.0.1696021921796; Fri, 29 Sep
+ 2023 14:12:01 -0700 (PDT)
+Date: Fri, 29 Sep 2023 21:11:58 +0000
 In-Reply-To: <20230929211155.3910949-4-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,19 +44,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230929211155.3910949-4-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1359; i=samitolvanen@google.com;
- h=from:subject; bh=ARqQmg1Q7FqF1vgF9dpD7yhcKdtd1MfRgn2maiynoVQ=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBlFz2bINQRa9JuNqXpxYBQVzDJb/c0+7N1HB+sp
- 2/Sm1UUS7iJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZRc9mwAKCRBMtfaEi7xW
- 7vOOC/9tO/6MqlDPfjsiexFNXOEfW7Ar2H9OEVyVIE92EgZgm/mYuBlQqBRKkWvnSCUPZ+ktWxw
- /8gD9WFejtTnKMje8tf/4wwgxbVQuClXmgi7zZQJvbJ2+SG6cp6B7JcXsMhPsJsbuh3NhTEQj/o
- pgpvv9Uyv2mK/vRlud+N82dGqhUfLNAWNPfHmZmQ/tMcij5bpFL8VvhWPFF6Akufb6mjaM9D8vG
- +cR914ZzFo93wp2YlrOemHXK7uUcqH8HHjkYtoFn7o8xhU+VQ7oy1yajipTLM7ewaa0tOrdIWqa
- 08cpT5V8GX3uAGGuFOzPlMxeF7o/GIDLXMxDfovUqIRoGLzciTjGMCqRmRapZU6oY3GqWEqPSnx
- GnCaN0xzRvU31sMOUQQkusxUC/3qLR05lv7v/sDAlG5Yah5czQB5w1+2ClKsbQ3sCX6HmpcfWsx r/VvM19V0Dekn+5QLhuwnCOlt6Hs+HBdn3kG1truvPJvtRa+QxsCoiBcfxXnVWnQrVOuI=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1191; i=samitolvanen@google.com;
+ h=from:subject; bh=MSLQAq+u1Gq1vqQPv1L24OvfGxs9lQjVrKINsuZaDko=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBlFz2bXFheIUWsMCgpXroYNEMEHJSzh7lHXZPhb
+ Ah07CUmBI2JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZRc9mwAKCRBMtfaEi7xW
+ 7oPqC/9r2/xEbO/XFpLcUfW8kI4zwGyW+1Bc7PLy9I1XUD02QER16SuVa1TjN8rJQPDmOMsvTB5
+ T5jEE8zHkuv5iPAUTq/yfdsqgq7Z9o7WUqulun2nOY9Z455ZDOwLvbCIfEXhOthriqRBjm08Kd8
+ 068lN/FADXcZatUB50UlQahfJo08fLC7oUQ5xDGv0aXR6pnqONVNs/F1FhlysA15ZmM0HVhJePX
+ 6NcJ3HNNPyvbDbeafLIysEsEirdqqDLbxHXo6W0v7OFcevxKffQom+ZUD8w0SlBJsnrgLSQYfrL
+ 4SDgYPIT3RgVrVY58SpSU/IrpswNMkcW1oGV+VpuE8vh5HfISvX0Y/jFIK76jIL1xM9gdG/5oKD
+ xSBdaJPOnpK9Gcze/0uC08IM5oubP3raIy1qzWvrbWFce1KlRfKgkHLVVNp7KcJmqHe0lhZqoI4 gKx2VGQd8AOM+C9TUeca+0u6bNkxxIvvO6e8Zupt2MkaleKzO1xxv6N14XGwr2/VkIpsg=
 X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
-Message-ID: <20230929211155.3910949-5-samitolvanen@google.com>
-Subject: [PATCH 1/2] mm: Change mmap_rnd_bits_max to __ro_after_init
+Message-ID: <20230929211155.3910949-6-samitolvanen@google.com>
+Subject: [PATCH 2/2] riscv: mm: Update mmap_rnd_bits_max
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Andrew Morton <akpm@linux-foundation.org>, 
@@ -65,42 +65,41 @@ Cc: linux-mm@kvack.org, linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Allow mmap_rnd_bits_max to be updated on architectures that
-determine virtual address space size at runtime instead of relying
-on Kconfig options by changing it from const to __ro_after_init.
+ARCH_MMAP_RND_BITS_MAX is based on Sv39, which leaves a few
+potential bits of mmap randomness on the table if we end up enabling
+4/5-level paging. Update mmap_rnd_bits_max to take the final address
+space size into account. This increases mmap_rnd_bits_max from 24 to
+33 with Sv48/57.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- include/linux/mm.h | 2 +-
- mm/mmap.c          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/riscv/mm/init.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bf5d0b1b16f4..72a98b2afaf9 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -86,7 +86,7 @@ extern int sysctl_legacy_va_layout;
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 0798bd861dcb..ff8d21a6cb2d 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -762,6 +762,11 @@ static int __init print_no5lvl(char *p)
+ }
+ early_param("no5lvl", print_no5lvl);
  
- #ifdef CONFIG_HAVE_ARCH_MMAP_RND_BITS
- extern const int mmap_rnd_bits_min;
--extern const int mmap_rnd_bits_max;
-+extern int mmap_rnd_bits_max __ro_after_init;
- extern int mmap_rnd_bits __read_mostly;
- #endif
- #ifdef CONFIG_HAVE_ARCH_MMAP_RND_COMPAT_BITS
-diff --git a/mm/mmap.c b/mm/mmap.c
-index b56a7f0c9f85..ed1b178b223a 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -64,7 +64,7 @@
++static void __init set_mmap_rnd_bits_max(void)
++{
++	mmap_rnd_bits_max = MMAP_VA_BITS - PAGE_SHIFT - 3;
++}
++
+ /*
+  * There is a simple way to determine if 4-level is supported by the
+  * underlying hardware: establish 1:1 mapping in 4-level page table mode
+@@ -1071,6 +1076,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
  
- #ifdef CONFIG_HAVE_ARCH_MMAP_RND_BITS
- const int mmap_rnd_bits_min = CONFIG_ARCH_MMAP_RND_BITS_MIN;
--const int mmap_rnd_bits_max = CONFIG_ARCH_MMAP_RND_BITS_MAX;
-+int mmap_rnd_bits_max __ro_after_init = CONFIG_ARCH_MMAP_RND_BITS_MAX;
- int mmap_rnd_bits __read_mostly = CONFIG_ARCH_MMAP_RND_BITS;
+ #if defined(CONFIG_64BIT) && !defined(CONFIG_XIP_KERNEL)
+ 	set_satp_mode(dtb_pa);
++	set_mmap_rnd_bits_max();
  #endif
- #ifdef CONFIG_HAVE_ARCH_MMAP_RND_COMPAT_BITS
+ 
+ 	/*
 -- 
 2.42.0.582.g8ccd20d70d-goog
 
