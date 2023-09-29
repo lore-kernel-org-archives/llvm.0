@@ -1,154 +1,120 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9375542C0B
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 19:34:02 +0000 (UTC)
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1c60a514f3aso98486425ad.3
-        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 12:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696016042; x=1696620842; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ym+ucW6MHQZimVVr4/aWJAbaMhbjuFeNaLImS0cTOp0=;
-        b=UflmKeSkrd8tnRSF8EaEGYnxhGjSnKXSn+UxVi+HT1/+qOAscT5WcBFkIZbsnUGzgo
-         7GuQ5k0YumaA4woMqfDY8N0RmFo1UB7+YyFgKMqhYGBW1+G7bB8ylu1Ks6DsJcZf9HWv
-         w8WLxTQor6yTi/nYHl4hKqfc6sEv3yRJS69Qs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696016042; x=1696620842;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ym+ucW6MHQZimVVr4/aWJAbaMhbjuFeNaLImS0cTOp0=;
-        b=pYLJ6x+KjpijKEpw4mjTQcgv0bx0R+Xu3ROgJC6a0t9FUlSK7iSt8Vc+BW1r30hrBC
-         Zetqu51TZEVWf4Hi36WDgzLjKg+SfvGXVyh0hLDENKq5ulvwdcUuRp75jMSNZySRWOLT
-         aNo6yRjaWVXlU+3IsyzEaoXgeWTP13RX/167AdgKse5O5pVzRuUbNCoovG6HQCUsrnnx
-         RHEAXM6n1EU9UR8YZl5oDfbK+KxKtIzCdzhUUI415SNfsw+Iua/ugTX4LRd7jYzHJxeB
-         bV+YSAMWv2kaKtfv+/R7GhVM48o3WiO7Z8hsCCgzzCCMLfOZeodlQxwRhRDvlQIo8qig
-         XSHw==
-X-Gm-Message-State: AOJu0YwWBoZ+kNbJOjL6ujr1NlyA3UApNFnBXwtpSkipt9P7cRRgyUSq
-	FLnu5UQ7OQnXJpBOwJkJnX4fhQ==
-X-Google-Smtp-Source: AGHT+IGQWTdEpdWeBEvd5foAb6HBvD/EqemA8SP9BycZ81OPm2PcYAndv1e0P5bQalrHP7ERsAZdBw==
-X-Received: by 2002:a17:902:720a:b0:1c1:dbd6:9bf6 with SMTP id ba10-20020a170902720a00b001c1dbd69bf6mr4494391plb.41.1696016042045;
-        Fri, 29 Sep 2023 12:34:02 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id jg6-20020a17090326c600b001c61df93afdsm10225856plb.59.2023.09.29.12.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 12:34:01 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: David Airlie <airlied@gmail.com>,
-	Kees Cook <keescook@chromium.org>
-Cc: Emma Anholt <emma@anholt.net>,
-	Evan Quan <evan.quan@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Xiaojian Du <Xiaojian.Du@amd.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Kevin Wang <kevin1.wang@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	Chris Wilson <chris@chris-wilson.co.uk>,
-	John Harrison <john.c.harrison@Intel.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Ben Skeggs <bskeggs@redhat.com>,
-	Karol Herbst <kherbst@redhat.com>,
-	Lyude Paul <lyude@redhat.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@redhat.com>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Gurchetan Singh <gurchetansingh@chromium.org>,
-	Chia-I Wu <olvaffe@gmail.com>,
-	Zack Rusin <zackr@vmware.com>,
-	VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
-	Melissa Wen <mwen@igalia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Le Ma <le.ma@amd.com>,
-	Lijo Lazar <lijo.lazar@amd.com>,
-	Yifan Zhang <yifan1.zhang@amd.com>,
-	Prike Liang <Prike.Liang@amd.com>,
-	Lang Yu <Lang.Yu@amd.com>,
-	Tejas Upadhyay <tejas.upadhyay@intel.com>,
-	Nirmoy Das <nirmoy.das@intel.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kuogee Hsieh <quic_khsieh@quicinc.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E296C8E1;
+	Fri, 29 Sep 2023 20:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696020114; x=1727556114;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dR7SUYn2jYKCo8MxOXStEXnxyfIRE39PjK8d61aXcDs=;
+  b=Im4U3i+83+gscI9qtxLbkcVUABdRIiJ6gQIcKCoX2v8T7IdQ4cid3ucZ
+   PZWX2wDNepU3Ni3DOn7QCUdJ4b+DDAqgQG8He5QZaX4Z6xmF6PucQVGGD
+   LbhnKz8IpXJUL/HQ71otcTt1WNRrlEjgh+LC4xpbsXWgS/Q4WxMcR+IJG
+   hr7n5EoaLz3bwY4w5/uxogJ730nNOB6q0v+s6O1uIAYrYF2EqqyPzWIqZ
+   mxHspjQsNhc7BxU/bUUsax+wV7uGyFA1/C4Prlzz827SQkS/NB0tBAqUB
+   9SLBDaxDTI+GFtYnCFeBJN4Ck7n0ldZMiIaFXIrbgv+j0bP6zQ4D5hvsZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="382280479"
+X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
+   d="scan'208";a="382280479"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 13:08:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="785186197"
+X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
+   d="scan'208";a="785186197"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 29 Sep 2023 13:08:31 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qmJmm-0003Cr-1s;
+	Fri, 29 Sep 2023 20:08:28 +0000
+Date: Sat, 30 Sep 2023 04:07:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org,
-	virtualization@lists.linux-foundation.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 0/9] drm: Annotate structs with __counted_by
-Date: Fri, 29 Sep 2023 12:33:24 -0700
-Message-Id: <169601600138.3014939.8511343741428844249.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230922173110.work.084-kees@kernel.org>
-References: <20230922173110.work.084-kees@kernel.org>
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for
+ function 'sa11x0_pm_init'
+Message-ID: <202309300341.lmOXFhDS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 22 Sep 2023 10:32:05 -0700, Kees Cook wrote:
-> This is a batch of patches touching drm for preparing for the coming
-> implementation by GCC and Clang of the __counted_by attribute. Flexible
-> array members annotated with __counted_by can have their accesses
-> bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS (for array
-> indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family functions).
-> 
-> As found with Coccinelle[1], add __counted_by to structs that would
-> benefit from the annotation.
-> 
-> [...]
+Hi Nathan,
 
-Since this got Acks, I figure I should carry it in my tree. Let me know
-if this should go via drm instead.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Applied to for-next/hardening, thanks!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1c84724ccb1a9f6eaf727ded49dd7e22ac62cc5b
+commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
+date:   8 months ago
+config: arm-collie_defconfig (https://download.01.org/0day-ci/archive/20230930/202309300341.lmOXFhDS-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230930/202309300341.lmOXFhDS-lkp@intel.com/reproduce)
 
-[1/9] drm/amd/pm: Annotate struct smu10_voltage_dependency_table with __counted_by
-      https://git.kernel.org/kees/c/a6046ac659d6
-[2/9] drm/amdgpu/discovery: Annotate struct ip_hw_instance with __counted_by
-      https://git.kernel.org/kees/c/4df33089b46f
-[3/9] drm/i915/selftests: Annotate struct perf_series with __counted_by
-      https://git.kernel.org/kees/c/ffd3f823bdf6
-[4/9] drm/msm/dpu: Annotate struct dpu_hw_intr with __counted_by
-      https://git.kernel.org/kees/c/2de35a989b76
-[5/9] drm/nouveau/pm: Annotate struct nvkm_perfdom with __counted_by
-      https://git.kernel.org/kees/c/188aeb08bfaa
-[6/9] drm/vc4: Annotate struct vc4_perfmon with __counted_by
-      https://git.kernel.org/kees/c/59a54dc896c3
-[7/9] drm/virtio: Annotate struct virtio_gpu_object_array with __counted_by
-      https://git.kernel.org/kees/c/5cd476de33af
-[8/9] drm/vmwgfx: Annotate struct vmw_surface_dirty with __counted_by
-      https://git.kernel.org/kees/c/b426f2e5356a
-[9/9] drm/v3d: Annotate struct v3d_perfmon with __counted_by
-      https://git.kernel.org/kees/c/dc662fa1b0e4
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309300341.lmOXFhDS-lkp@intel.com/
 
-Take care,
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
+     122 | int __init sa11x0_pm_init(void)
+         |            ^
+   arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     122 | int __init sa11x0_pm_init(void)
+         | ^
+         | static 
+   1 warning generated.
+--
+>> drivers/gpio/gpio-sa1100.c:309:13: warning: no previous prototype for function 'sa1100_init_gpio' [-Wmissing-prototypes]
+     309 | void __init sa1100_init_gpio(void)
+         |             ^
+   drivers/gpio/gpio-sa1100.c:309:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     309 | void __init sa1100_init_gpio(void)
+         | ^
+         | static 
+   1 warning generated.
+--
+>> drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype for function 'pcmcia_collie_init' [-Wmissing-prototypes]
+     206 | int pcmcia_collie_init(struct device *dev)
+         |     ^
+   drivers/pcmcia/pxa2xx_sharpsl.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     206 | int pcmcia_collie_init(struct device *dev)
+         | ^
+         | static 
+   1 warning generated.
+--
+>> drivers/video/fbdev/sa1100fb.c:1219:12: warning: no previous prototype for function 'sa1100fb_init' [-Wmissing-prototypes]
+    1219 | int __init sa1100fb_init(void)
+         |            ^
+   drivers/video/fbdev/sa1100fb.c:1219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1219 | int __init sa1100fb_init(void)
+         | ^
+         | static 
+   1 warning generated.
+
+
+vim +/sa11x0_pm_init +122 arch/arm/mach-sa1100/pm.c
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  121  
+7fea1ba58e61c1 Shawn Guo      2012-04-26 @122  int __init sa11x0_pm_init(void)
+
+:::::: The code at line 122 was first introduced by commit
+:::::: 7fea1ba58e61c17fb59dfc50c408945f307addc6 ARM: sa1100: use machine specific hook for late init
+
+:::::: TO: Shawn Guo <shawn.guo@linaro.org>
+:::::: CC: Shawn Guo <shawn.guo@linaro.org>
 
 -- 
-Kees Cook
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
