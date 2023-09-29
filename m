@@ -1,100 +1,84 @@
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A178405F3
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 19:04:56 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id A683732000E5;
-	Fri, 29 Sep 2023 15:04:54 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 29 Sep 2023 15:04:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jcline.org; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1696014294; x=1696100694; bh=tl2+4CsKy4
-	eJf2x1H0MEhr2ez9lBgVPpFI/7ocetrG0=; b=HMksuo6NSjlz9VKe+j/jrBS021
-	w2C1jWc70y7WdOb/3yx9xx6hrh/GnqOjY+QzvTzndGVKt3xSsT1LAqKKYbTlb1YY
-	S/x8OQqTeZEpqLxhMkBUR3sseOYiH6y3qzXM9171dNuAK2Mqp6XTzxG2Z5yLHpVw
-	r14732TA4KbEFigbadTjHspvJlcTcGkuqPD/ofS80OQ+A/0HfMBvFLLNdNHAowul
-	3vivu2ISAiPCWj1+EATy/zPZ7F42P5jHnmZlBnVFQBky7Pm3opzCG28xJLCfLrwi
-	aU0EoCLTq8v/9ShiTsiYFTZnmbzNZ8vgkhyyZhwZBljaVHYmkI4GCaElmrSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1696014294; x=1696100694; bh=tl2+4CsKy4eJf
-	2x1H0MEhr2ez9lBgVPpFI/7ocetrG0=; b=VDygIHyyb5jMFO+nwnAHprxexGgr9
-	Di6QuWfUL30TRRlVTdozC1A7v3EJjNF8BTuVEfFkjlQue1sxYRS3ZcYqU4p4l05+
-	HYTOxL7rQ5/mbTIDRZA1tqVB2PDEakAru6jQTb5BS64IeZ4JxNWw4AUjKJcd4Iur
-	ftrKAuL2rezceQIusqsuXy0z1DluJJ4pt2ez7V+LlJo9hFSqXoaOCvhka+oBGyNY
-	nQA9ytMoasR9WUBvZD2DQRUMHY0Y8pfqOT9hpbxIsrgcc9c79dx4DfZ95wqz1hw0
-	MQhazzSk5N5zN2zrv6Cf+QjSxaFg9+OfHs0Sh7li0FMPuEaxgUY1slxMA==
-X-ME-Sender: <xms:1R8XZWSQ18J46CvW0SMuEhFGQd-R1FqGZNOC1rILWBCCt0BWxVt-dw>
-    <xme:1R8XZbxuqL3zGwFyv8PyXkKQTGi1XknhT1VOjz5AbHtpyseDMB9Tych5Q05hKm4g_
-    _moVQigwwY5_bmRne0>
-X-ME-Received: <xmr:1R8XZT1m5ChYcVfe0rltVEoxYgjI9jb2p95AMbuQEe8rFTQB2TiJ7Szshj0n1xXz526ONLa-sgI4bLRcyYOfqxjkneUZSsKnWTiV>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrtddvgddufedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfgvrhgvmhih
-    ucevlhhinhgvuceojhgvrhgvmhihsehjtghlihhnvgdrohhrgheqnecuggftrfgrthhtvg
-    hrnheptddufeeugeefheehvedufeduvddtgfdvtdfgudfftdelkeelfffhjeevhefhhfeg
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhgvrh
-    gvmhihsehjtghlihhnvgdrohhrgh
-X-ME-Proxy: <xmx:1R8XZSDCOQjCHz3Hedua8UdaS92B5v0viDy5YjO1bDD_Wg5FVV95Sg>
-    <xmx:1R8XZfgrxFY6titHWCkDp3oD6WCLN0RPmNwiB4mffvILlxPAZShhaQ>
-    <xmx:1R8XZeokjkp3wWILLSF9YFRFBQ8Q2byTjIObkC1e9cfeDAbg7X6Hww>
-    <xmx:1h8XZfeQI_SfB69q-YhszQ-iZqXUNZZokR80vl7oUhy9PVbWeJHXMQ>
-Feedback-ID: i7a7146c5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 29 Sep 2023 15:04:53 -0400 (EDT)
-From: Jeremy Cline <jeremy@jcline.org>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FDC405F3
+	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 19:17:48 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1bf55a81eeaso110749195ad.0
+        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 12:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696015068; x=1696619868; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UU71GMe2vZPJu4PeEOldUHOc3AVayj7fL9fLtQI30lc=;
+        b=fTsotq2TNHhzXvsD2RRqPcl5n/0SiIgXqRn4N/YC7GKgCGjskheDbRMDnf25PyYYhi
+         QWDHntHsSNBwF56+S741IgKWR9RD8vBlrrfdhd1FVFRnrrDQ0tKWplLFlu9pxdainHtn
+         RFChQwxwV9HcZq3nWJkEdrn4nejUEvrZSMdBw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696015068; x=1696619868;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UU71GMe2vZPJu4PeEOldUHOc3AVayj7fL9fLtQI30lc=;
+        b=K5WKQGvGTI8HC2QJywNvwVsUXoBB38bILc0bJxHQZjMZGKcJoAUS4hLQmJMMWKew3S
+         4qtY87dm3D4fQuJzHstgEG9pIHfczWZc/oCC99PC0j7kG3D5txthaib7bCSe0r4MEQ92
+         cIjtxk3I4cDoOoHuSE9K34llqRFFcN+EMuWVr2IRZHtc4s8Xe5NHv/D6uxqV5QbZkJ0d
+         UIimX7OvOeIbBUrN2nF/z8s9wZs0/eqPMvt1/2wZfA3u3IDMfL8ay3Mrky9ZrcoWv3gt
+         fg9tPsPFux9IbK7Pc1r13gW9cGCTzWitFLwmH5vD0II6ClHhwQYIFAk4nJKQ9BNXlG+R
+         gDaA==
+X-Gm-Message-State: AOJu0Yzz3KZBOc23N4TozD1lEhSxFuMeqrXl+Fa6m1JegSHYWN+Dck47
+	0bvWxAWZNNV9gOb/v7MI0MgfiA==
+X-Google-Smtp-Source: AGHT+IG4PO/UY6icxXQtAI1BF64pWJqsBIhFzbwH6stuq3A2hGeiJFIxIvRsmPQ4QUBkfnWiuR6KTA==
+X-Received: by 2002:a17:903:48f:b0:1c1:fe97:bf34 with SMTP id jj15-20020a170903048f00b001c1fe97bf34mr4043368plb.24.1696015068184;
+        Fri, 29 Sep 2023 12:17:48 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170903228200b001bb97e51ab4sm5269684plh.98.2023.09.29.12.17.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 12:17:47 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: David Howells <dhowells@redhat.com>,
+	Kees Cook <keescook@chromium.org>
+Cc: Marc Dionne <marc.dionne@auristor.com>,
+	linux-afs@lists.infradead.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
-	Jeremy Cline <jeremy@jcline.org>
-Subject: [PATCH] gen_compile_commands: use raw string when replacing \#
-Date: Fri, 29 Sep 2023 15:04:46 -0400
-Message-ID: <20230929190446.113168-1-jeremy@jcline.org>
-X-Mailer: git-send-email 2.41.0
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] afs: Annotate struct afs_addr_list with __counted_by
+Date: Fri, 29 Sep 2023 12:17:43 -0700
+Message-Id: <169601506496.3012633.16053623568371724578.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230915201449.never.649-kees@kernel.org>
+References: <20230915201449.never.649-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-I noticed this since I'm running Python 3.12-rc3, which emits
-"SyntaxWarning: invalid escape sequence '\#'" when running this script.
-According to the Python 3.12 release notes this will eventually become a
-SyntaxError.
+On Fri, 15 Sep 2023 13:14:49 -0700, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct afs_addr_list.
+> 
+> [...]
 
-Based on the comment in the code, I believe the intention was to match
-the literal string "\#". Marking it as a raw string will stop Python
-from trying to treat it as an escape sequence and behave as intended.
+Applied to for-next/hardening, thanks!
 
-Signed-off-by: Jeremy Cline <jeremy@jcline.org>
----
- scripts/clang-tools/gen_compile_commands.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1/1] afs: Annotate struct afs_addr_list with __counted_by
+      https://git.kernel.org/kees/c/7a709daf5d40
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index a84cc5737c2c..bc005cac1944 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file_path):
-     # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
-     # kernel version). The compile_commands.json file is not interepreted
-     # by Make, so this code replaces the escaped version with '#'.
--    prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
-+    prefix = command_prefix.replace(r'\#', '#').replace('$(pound)', '#')
- 
-     # Use os.path.abspath() to normalize the path resolving '.' and '..' .
-     abs_path = os.path.abspath(os.path.join(root_directory, file_path))
+Take care,
+
 -- 
-2.41.0
+Kees Cook
 
