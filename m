@@ -1,56 +1,57 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BEA66DD2
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 19:21:20 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1c63164a2b6so7685625ad.0
-        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 12:21:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F81051226
+	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 19:23:16 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1c60cec8041so78001065ad.3
+        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 12:23:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696015280; x=1696620080; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696015396; x=1696620196; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1aEgZXilDM7YqBibwIo+3j857Ar2xHuwGZYUU0Ocu+c=;
-        b=Loq9eXV+W8o9cM8zw09YZ6jTcomZRl6NPJNvnN9qidw8NiNRSZgXcvZXgiDxrlEdM5
-         ccKIU1N1tnLzk22PtcwqHeSCvx0uYUU/5fb4aA6Zmbyd44pOP2soBDf0FS3jPeiUZECx
-         GEQJ92dILv9/OvgBX2lBm+yl8XewNOUWJSRqQ=
+        bh=sj4gKoTPER+a3Rg0p9JfyBeQ5oS9hCDvDWoKv93wILE=;
+        b=cSwX2Xp924pI/n/INtrvxhGKrt9Rl+JSMKNlj9yLZJI3PVs4YpLjNY86ys+ReAETRq
+         kpJQ5nrAIjlXhTtuRRfXgJnr6Tzny8gDZZ7L57JYHnzBo8jeDcDV9K+0iS/VIEz7Yp6h
+         VToT/ZM227dh9BbtFRemmIeBhSykHAcB4LUZU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696015280; x=1696620080;
+        d=1e100.net; s=20230601; t=1696015396; x=1696620196;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1aEgZXilDM7YqBibwIo+3j857Ar2xHuwGZYUU0Ocu+c=;
-        b=PUriPu4M5UeFmdJtb1lJ08pUplTSjG5C5YD1HPSSoeFKsHtZr7Cne4KXxJLmG82EkY
-         52X6O2IOdoD0Vu2cP1N1JdUNU01dQgT0jFE+YamWXIsgQp36a/znQ2NxthV5xuJHCWtw
-         uwmXb3sEwbYeA/p+c6WzjIxo6EWKfNrUgUl8cGgAqQqXTrsXVozAHpBhHgQVxV+lHpAU
-         se3uy2BgFxAI/+Y+9/8Vo+/enxwxz/GaCHIzQGusBmpu01g+jg3cHew8wOHX9lQvnyFG
-         YbaQOtkuhc6s6J9TwQhMDLjXWfe/GBC7+lnqL7knAzcnFLXswIV7vYs2/Ne+jRLBNrTj
-         e7Kg==
-X-Gm-Message-State: AOJu0Yxv8ifjtt/lzgm6MEB6LYYdu3AvzVOvPh+gva2mm5EJy0kVK9EJ
-	aUpNARsRiBBmU3om6+unNX1c7g==
-X-Google-Smtp-Source: AGHT+IG2g06b1pAU8D9HLnGJFm+KvBiJ8WwyJ5eZb/HgchXrkfd9LQ+8XwPTFdERaFnnLTfsp/xOhg==
-X-Received: by 2002:a17:902:a416:b0:1c6:362:3553 with SMTP id p22-20020a170902a41600b001c603623553mr6067189plq.31.1696015279776;
-        Fri, 29 Sep 2023 12:21:19 -0700 (PDT)
+        bh=sj4gKoTPER+a3Rg0p9JfyBeQ5oS9hCDvDWoKv93wILE=;
+        b=vA3gDyXWN1FC87HHF+PsZ9sb/WSZTVekKwvqdNLlaqLlQhiUH3SoBu5BrSfBpKs+Al
+         mwGuiSmhDnVrwuzMocLyk3ZFni/YyGlzR+taQFedNu9r8W8hdaQ0Jb/IXJ2aLPDoERiz
+         LJAR1N6VPoX1rxNYh2qGkJs/2oYdmWSNitK9vUa1/zyhV0WRuZ1myHsPGEGOKb5xhkyr
+         rKzq1eOEMiqMAlIIYwfYoKoftQyGbU53xKr0iAIQ7pLFS/I4Le647PzI0lAMJ4xDkZ5W
+         4YRH7JAtBcCyj7OrS/tabOIu/VzeqMZGKn0inv9kGwPWwjfdtNGR5kTofuY6WfBJJFgQ
+         MKYQ==
+X-Gm-Message-State: AOJu0Yw+TfN784BNi7VIKaTS7m3H/f5GbOJKteggLo6iSi926vOIedHd
+	L//r1NbDVs0vFU99K4HLtpDxZA==
+X-Google-Smtp-Source: AGHT+IHeAzZLWR/XUQ0/HfggCdQEIA48Tga8bx8nr8Ck+3J+Jkxeupd6kXb/kPWfsX+RHQbRBmpodg==
+X-Received: by 2002:a17:903:1207:b0:1bd:f7d7:3bcd with SMTP id l7-20020a170903120700b001bdf7d73bcdmr5832816plh.50.1696015395852;
+        Fri, 29 Sep 2023 12:23:15 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902cec200b001c5fc11c085sm13354610plg.264.2023.09.29.12.21.14
+        by smtp.gmail.com with ESMTPSA id c2-20020a170902d48200b001adf6b21c77sm1692175plg.107.2023.09.29.12.23.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 12:21:16 -0700 (PDT)
+        Fri, 29 Sep 2023 12:23:15 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Song Liu <song@kernel.org>,
+To: Trond Myklebust <trond.myklebust@hammerspace.com>,
 	Kees Cook <keescook@chromium.org>
-Cc: linux-raid@vger.kernel.org,
+Cc: Anna Schumaker <anna@kernel.org>,
+	linux-nfs@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] md/md-linear: Annotate struct linear_conf with __counted_by
-Date: Fri, 29 Sep 2023 12:21:09 -0700
-Message-Id: <169601526973.3013632.16756928162777602693.b4-ty@chromium.org>
+Subject: Re: [PATCH] NFS/flexfiles: Annotate struct nfs4_ff_layout_segment with __counted_by
+Date: Fri, 29 Sep 2023 12:23:14 -0700
+Message-Id: <169601539364.3014051.4375069928549336780.b4-ty@chromium.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230915200328.never.064-kees@kernel.org>
-References: <20230915200328.never.064-kees@kernel.org>
+In-Reply-To: <20230915201434.never.346-kees@kernel.org>
+References: <20230915201434.never.346-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,23 +61,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Fri, 15 Sep 2023 13:03:28 -0700, Kees Cook wrote:
+On Fri, 15 Sep 2023 13:14:39 -0700, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct linear_conf.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
+> As found with Coccinelle[1], add __counted_by for struct nfs4_ff_layout_segment.
 > 
 > [...]
 
 Applied to for-next/hardening, thanks!
 
-[1/1] md/md-linear: Annotate struct linear_conf with __counted_by
-      https://git.kernel.org/kees/c/9add7681e09b
+[1/1] NFS/flexfiles: Annotate struct nfs4_ff_layout_segment with __counted_by
+      https://git.kernel.org/kees/c/f8ead26ffdee
 
 Take care,
 
