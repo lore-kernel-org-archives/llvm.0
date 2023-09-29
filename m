@@ -1,63 +1,58 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1610066DCD
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 19:21:19 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-565334377d0so11120343a12.2
-        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 12:21:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609F66669B
+	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 19:21:21 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1c1e3a4a06fso110576245ad.3
+        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 12:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696015279; x=1696620079; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696015281; x=1696620081; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tCv+kMrx/0UVGQCBQ46tqfp9gvNT/0LM2qgPxtgaA9o=;
-        b=AbGrwaOhVMiMwjSjGGiPYplHFPpoz0JFw6VOCNow3jH1XfHcbaW9EKg/iwqbqVPTH4
-         8JbFlZndrlgI6zs00f1ELKxGvg2jhFNP5+UpkzygbwA+x3lyrP6AUdXwIjHS/sNQ24M/
-         cggRVA5CS+kN5BAc8s6mm2q+/lVmlxIcteGvs=
+        bh=wNsDO1TdEpCGLaLxGAq/gTTVsrbL7yU9yl9SCIkPcCY=;
+        b=S11CvAWJ/6JL2xF2HibYU+6NyImCBy8e+2JgUQuXuRWwFmN7Wwaby+ajfZgkyX6+lD
+         j1zaDGsQFmNs0//Ghp3MIKnpjDT62Xx32OdFRA8rrc7+IjJkjL88NmZ/aoGQLUKohedA
+         fsOsOywJ6KnhIuLcT3M6SvvixfmQoLsqDFYB4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696015279; x=1696620079;
+        d=1e100.net; s=20230601; t=1696015281; x=1696620081;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tCv+kMrx/0UVGQCBQ46tqfp9gvNT/0LM2qgPxtgaA9o=;
-        b=aiSijoWTg5ryzu2oX/E8jJEJ1gHl2JWhytVy9QDJcr6bAV8ZmOiRSsFOkgMau4Xryu
-         lDy2Sjqyj1ir5niZqHr7RH+qurpzMnMzdWlcTAvgqe7Co3znsGwIdjV6hsfJkYgLSt1J
-         V+cFBGpL419anG8L/4vb/rmcj7Eh97uXfMI8qMCb4pW+/1jwFvvWixFicQxrRpimTWwP
-         GwF34YS0Pz6A2ENiwlB8FrWz30lb5Xz/MBjC+QrCZ/BKU67qTH6d8JgArht1AhPoH5Pw
-         gLZArhBFH44JSetleaGiK0odEGBsK3fFF1PVOoRTula5SYMGC/getFr4ZkN2Nof3HqsJ
-         4rNw==
-X-Gm-Message-State: AOJu0Yx4dMYqb/siJg3PC9INIeLsU/VDXOffsgK8dML8ippyGqmBWWcC
-	pWt56MHWSDNWcXT7KUNCQzXXVw==
-X-Google-Smtp-Source: AGHT+IGiBwStaHPR44R6ANK1/tkrYWC/2DFh5Z+5BULeXdWKDr6O8WVqqWNlE6Fy+1azpzu06/HF2A==
-X-Received: by 2002:a05:6a20:3d22:b0:160:a752:59e with SMTP id y34-20020a056a203d2200b00160a752059emr5701827pzi.40.1696015279415;
-        Fri, 29 Sep 2023 12:21:19 -0700 (PDT)
+        bh=wNsDO1TdEpCGLaLxGAq/gTTVsrbL7yU9yl9SCIkPcCY=;
+        b=OFzbRltYLbc+uxfFA58StvYZqHGUgvhl4sXZ9KUJ+3d70mYijzBF8FoFuMoHBi4miR
+         UAldyAfAPYKG9aM433WmM0dBUlpBxaNTVSz5HQS9g8QvJbyj/phiYWAvbqp+panBBkz1
+         jh2Q4JFw86ny8Z6D5IFImExQ7mL1ZAwK3GnBoHGT9ku2pEUsQMr0QtYqu0E92A4USzl0
+         PbodQr5thYXR4X8LCFn52YbnbsgMIudDLqvgTQNy+1b29fFCPvWB3j1tSHZuUx63RlzI
+         /i/6r0IMBZCgY/orDvJHF8i+rslnwcN4G1gVXQ+Q7WIpKcNoquonp4L0lMXy2S76UFfO
+         igww==
+X-Gm-Message-State: AOJu0YwGCOMg/h4NZJmzH+urybM1Nnpah+hgC/5y947IaBXNJgZixS2O
+	fkJVqphQT4PHVTrd83n2w8+6eQ==
+X-Google-Smtp-Source: AGHT+IFjyLlRRTeaeUecf9XWMNrkK0uGGpsZzK0vctMS8QPYI0ipJfXP8O++f7NHEfdRJEQBswkXCg==
+X-Received: by 2002:a17:902:c409:b0:1c5:ea60:85c1 with SMTP id k9-20020a170902c40900b001c5ea6085c1mr6240720plk.12.1696015280740;
+        Fri, 29 Sep 2023 12:21:20 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y7-20020a637d07000000b0054fa8539681sm14767022pgc.34.2023.09.29.12.21.15
+        by smtp.gmail.com with ESMTPSA id l16-20020a170903245000b001b89b1b99fasm17247784pls.243.2023.09.29.12.21.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 29 Sep 2023 12:21:16 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To: Alan Stern <stern@rowland.harvard.edu>,
 	Kees Cook <keescook@chromium.org>
-Cc: John Keeping <john@keeping.me.uk>,
-	Udipto Goswami <quic_ugoswami@quicinc.com>,
-	Linyu Yuan <quic_linyyuan@quicinc.com>,
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
 	linux-usb@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>,
-	Yuta Hayama <hayama@lineo.co.jp>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_fs: Annotate struct ffs_buffer with __counted_by
-Date: Fri, 29 Sep 2023 12:21:11 -0700
-Message-Id: <169601526969.3013632.10440475414357366621.b4-ty@chromium.org>
+Subject: Re: [PATCH] usb: Annotate struct urb_priv with __counted_by
+Date: Fri, 29 Sep 2023 12:21:10 -0700
+Message-Id: <169601526966.3013632.8979451725349830093.b4-ty@chromium.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230915195849.never.275-kees@kernel.org>
-References: <20230915195849.never.275-kees@kernel.org>
+In-Reply-To: <20230915195812.never.371-kees@kernel.org>
+References: <20230915195812.never.371-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,21 +62,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Fri, 15 Sep 2023 12:58:49 -0700, Kees Cook wrote:
+On Fri, 15 Sep 2023 12:58:16 -0700, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct ffs_buffer.
+> As found with Coccinelle[1], add __counted_by for struct urb_priv.
 > 
 > [...]
 
 Applied to for-next/hardening, thanks!
 
-[1/1] usb: gadget: f_fs: Annotate struct ffs_buffer with __counted_by
-      https://git.kernel.org/kees/c/84657a30a0c9
+[1/1] usb: Annotate struct urb_priv with __counted_by
+      https://git.kernel.org/kees/c/a5683963b3f5
 
 Take care,
 
