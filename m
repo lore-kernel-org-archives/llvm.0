@@ -1,125 +1,120 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF9A516E0
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 16:10:27 +0000 (UTC)
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-313e742a787so557167f8f.1
-        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 09:10:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D2551B82
+	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 16:11:13 +0000 (UTC)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4064876e8b8so41414605e9.0
+        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 09:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696003826; x=1696608626; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696003872; x=1696608672; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rsosfGEshqIoKCDorpEdcceOnoGA7Z3Gi/jf7+l6H3o=;
-        b=2h8YgY/89knFVkfN4JuoSZ7l4NMsWo5SbFsjrcgA6hbZOwhYSBSFh2DiFlQDRAEZIO
-         hJKLs1oYMtnYRJWr/T8pyI2JU47roWcxGtIbfyyChJmiQGsjqXxrdnYfYreNVkr3Gqyt
-         b5hmg5xBWZevZhR4d0/QFFErnjZtPf7FWJSJsQHUDkoZASAtQXelTdkYNcla/G3k8snx
-         OhxcvkaTbcJwvN/PDvblX0u5X6xb+8rrrHzJK4Rw5xtTsdflPG7Q/O3eAQuj73nl5uOm
-         uFeGeG/umSkAfUVQ836jfDkrANzIncgsU9vBOMJLJubF7+QImEMzYJI93HjWga49wWTB
-         qVfg==
+        bh=WIPQ+mq4ibCqI5jqpIgOMLXR3PB1xuDdnJNEgz17YYw=;
+        b=qKDSynbgi+p2qViCiA66wd4Ogw3h7XvmG+RkRqtquS4Im09ZsR6vaWV7BTernXEwkF
+         1P167OWOLmGz0ZpwtUxYF5a+p1tKWrS4Of1NLRCq1LkOjImbYCrLSFpAZzl9Qfj2gTLF
+         jSryehsBIoCLSENH23d3/aP4nAqk9WmZB7DjPAAUHziOue+rXh9D0JtUMaYwRg6l0y7G
+         5lP7RLuOBHdej8Dr/hm6gYg60MVTyDC2iV8QA9LYmyA7ZOiWBuxaAb7ANqNEbvhnLTrL
+         HZkXUB5UKYOROUCbZn0Ey/Uss2nmnNcRw0yF0Y82wpea2uhnYS1+AyGm2ZBc/Hsvm2W0
+         CHBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696003826; x=1696608626;
+        d=1e100.net; s=20230601; t=1696003872; x=1696608672;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rsosfGEshqIoKCDorpEdcceOnoGA7Z3Gi/jf7+l6H3o=;
-        b=dl+fHcRaZ78YJ061xjxlChUgBd4W/rTxVhGUlt4J3bbLhei2qzokdL5KC9NAj3nHcj
-         NQ/NlgrHNwcAIQrIhrTJdaMhCaOjkIEwVvP3zjSMRsIdHAXLaIHE+etOq3GKN1jEJBsu
-         jjFbbQ8TYp98g/fEirieJ+ahb9tw6lbmIC8QfEiQg9ypgGhM3nIK2DHOzhTOM8wOs5di
-         okm3rqhiQBe9xKPwu+HKdQf1NQ5rcUnigk1KrSFRm4ijqfQMdJgD1FUdW0yDV2S4wK2n
-         XUKqRl410w7AVkVBx27vPvT7M5g6kEKHS3Es0nchyo817qqXyFa+51yWK35a1UIj9uIv
-         bJ6w==
-X-Gm-Message-State: AOJu0Ywj3BSa/fIfibJskV4szNsxoNDaGK3I4R2L+Qy4508J9FlPKncJ
-	7P5oqfSO9QAkevw+KP2eXUGaJOHDJV0yEwIveqqrhg==
-X-Google-Smtp-Source: AGHT+IGJVy4cn6wsfYJyybJLTpVzhBoLAsGq/mtGnVfwMtDc27EoHCRTJrLpDNvmF4nasPQGeqo5XBwkuq750bEZ3zY=
-X-Received: by 2002:a05:6000:1090:b0:31f:f8a7:a26c with SMTP id
- y16-20020a056000109000b0031ff8a7a26cmr4058353wrw.25.1696003825641; Fri, 29
- Sep 2023 09:10:25 -0700 (PDT)
+        bh=WIPQ+mq4ibCqI5jqpIgOMLXR3PB1xuDdnJNEgz17YYw=;
+        b=lA6CVHvVvTnf4l5WrySVqfvKgU7njgjfVj3LpSBTbJFKVPpLGdwMP0qdU8y3X9Lzm2
+         HLqlUrLB6W4MpK3pWtkenpEmU94/n4kKAc9QMtVEdIMuKXH2DJA0Ix3bLRAGrlpxjn/9
+         moAFic4PmzpWtQvKSMcRcK86W8M9aq3x1TzZtPc4W3+2YyW4UhTrmueXJHizsUbhM0s9
+         d7buiNf1y668Hhr9+mcoNWwiX6eZ2wl/zFRoF18rHYlFPkHZuQ8bMx8dFaxyXlX9peze
+         JTAnCgIJG1GfBn58au0gYP1RqtOKfTBbttwRi1IA0dFyNg59gL5jYwCQ4bPpzvL8wodc
+         kptQ==
+X-Gm-Message-State: AOJu0YwSUZ8Zh2PvyCel/okRiOkLdIWiJu5OJC1Sx20qRuycZZAaEYVC
+	Z3qwCZdT+JIm16R9KhSe20tKdk4HW+S35asWKRQ/Jw==
+X-Google-Smtp-Source: AGHT+IHTkXbH1QknEI9Ysx3L+jH5s7p8b7Rc2XdNP9tA/fdwT11V/0psMIJDE4SeahHKIE8IAqZpA9dtji9ugui/hZw=
+X-Received: by 2002:a5d:58cd:0:b0:314:152d:f8db with SMTP id
+ o13-20020a5d58cd000000b00314152df8dbmr3503480wrf.58.1696003872116; Fri, 29
+ Sep 2023 09:11:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230920153819.2069869-1-andriy.shevchenko@linux.intel.com> <CAKwvOd=7vk2HKOpgVrRd2RtKSF9tXPqbVmN+5teLTNoBy4BWVg@mail.gmail.com>
-In-Reply-To: <CAKwvOd=7vk2HKOpgVrRd2RtKSF9tXPqbVmN+5teLTNoBy4BWVg@mail.gmail.com>
+References: <20230922-5-10-fix-drm-mediatek-backport-v1-1-912d76cd4a96@kernel.org>
+In-Reply-To: <20230922-5-10-fix-drm-mediatek-backport-v1-1-912d76cd4a96@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 29 Sep 2023 09:10:11 -0700
-Message-ID: <CAKwvOdkbcUh+tmsNcT4nCzFY37WbAUdjHJ62qNe=p8SetaQNTQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] device property: Replace custom implementation of COUNT_ARGS()
-To: "Rafael J. Wysocki" <rafael@kernel.org>, tiwai@suse.com
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Daniel Scally <djrscally@gmail.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, llvm@lists.linux.dev, 
-	alsa-devel@alsa-project.org, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Fri, 29 Sep 2023 09:11:00 -0700
+Message-ID: <CAKwvOdkvJgrstZdVCMRMy+QC4VqHYq0+n5fRGbH7iYDxgAov1Q@mail.gmail.com>
+Subject: Re: [PATCH 5.10] drm/mediatek: Fix backport issue in mtk_drm_gem_prime_vmap()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
+Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-mediatek@lists.infradead.org, stable@vger.kernel.org, 
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 20, 2023 at 9:50=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Fri, Sep 22, 2023 at 8:51=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> On Wed, Sep 20, 2023 at 8:38=E2=80=AFAM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > Replace custom and non-portable implementation of COUNT_ARGS().
-> >
-> > Fixes: e64b674bc9d7 ("software node: implement reference properties")
-> > Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Closes: https://lore.kernel.org/r/ZQoILN6QCjzosCOs@google.com
+> When building with clang:
 >
-> Thanks for the patch!
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1935
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>   drivers/gpu/drm/mediatek/mtk_drm_gem.c:255:10: error: incompatible inte=
+ger to pointer conversion returning 'int' from a function with result type =
+'void *' [-Wint-conversion]
+>     255 |                 return -ENOMEM;
+>         |                        ^~~~~~~
+>   1 error generated.
 >
-> Of course Linux would have a macro for this!  I should have known.
-> Trying to wrap my head around it. Awesome
+> GCC reports the same issue as a warning, rather than an error.
+>
+> Prior to commit 7e542ff8b463 ("drm/mediatek: Use struct dma_buf_map in
+> GEM vmap ops"), this function returned a pointer rather than an integer.
+> This function is indirectly called in drm_gem_vmap(), which treats NULL
+> as -ENOMEM through an error pointer. Return NULL in this block to
+> resolve the warning but keep the same end result.
+>
+> Fixes: 43f561e809aa ("drm/mediatek: Fix potential memory leak if vmap() f=
+ail")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
 (resending as text/plain)
+Did this get picked up? Our CI has been red for a few days on
+linux-5.10.y over this.
 
-Can someone pick this up for linux-next?
-
-CI for linux-next has been red for days over this.
-
+> ---
+> This is a fix for a 5.10 backport, so it has no upstream relevance but
+> I've still cc'd the relevant maintainers in case they have any comments
+> or want to double check my work.
+> ---
+>  drivers/gpu/drm/mediatek/mtk_drm_gem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  include/linux/property.h | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/property.h b/include/linux/property.h
-> > index 1684fca930f7..55c2692ffa8c 100644
-> > --- a/include/linux/property.h
-> > +++ b/include/linux/property.h
-> > @@ -10,6 +10,7 @@
-> >  #ifndef _LINUX_PROPERTY_H_
-> >  #define _LINUX_PROPERTY_H_
-> >
-> > +#include <linux/args.h>
-> >  #include <linux/bits.h>
-> >  #include <linux/fwnode.h>
-> >  #include <linux/stddef.h>
-> > @@ -314,7 +315,7 @@ struct software_node_ref_args {
-> >  #define SOFTWARE_NODE_REFERENCE(_ref_, ...)                    \
-> >  (const struct software_node_ref_args) {                               =
- \
-> >         .node =3D _ref_,                                          \
-> > -       .nargs =3D ARRAY_SIZE(((u64[]){ 0, ##__VA_ARGS__ })) - 1, \
-> > +       .nargs =3D COUNT_ARGS(__VA_ARGS__),                       \
-> >         .args =3D { __VA_ARGS__ },                                \
-> >  }
-> >
-> > --
-> > 2.40.0.1.gaa8946217a0b
-> >
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.c b/drivers/gpu/drm/med=
+iatek/mtk_drm_gem.c
+> index fe64bf2176f3..b20ea58907c2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+> @@ -252,7 +252,7 @@ void *mtk_drm_gem_prime_vmap(struct drm_gem_object *o=
+bj)
+>         if (!mtk_gem->kvaddr) {
+>                 kfree(sgt);
+>                 kfree(mtk_gem->pages);
+> -               return -ENOMEM;
+> +               return NULL;
+>         }
+>  out:
+>         kfree(sgt);
 >
+> ---
+> base-commit: ff0bfa8f23eb4c5a65ee6b0d0b7dc2e3439f1063
+> change-id: 20230922-5-10-fix-drm-mediatek-backport-0ee69329fef0
 >
+> Best regards,
 > --
-> Thanks,
-> ~Nick Desaulniers
-
+> Nathan Chancellor <nathan@kernel.org>
+>
+>
 
 
 --=20
