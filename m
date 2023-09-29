@@ -1,90 +1,81 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEB06667C
-	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 18:04:38 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-68c576d35feso12742092b3a.2
-        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 11:04:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD076666A
+	for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 18:07:47 +0000 (UTC)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1c5ff5f858dso84185655ad.2
+        for <llvm@lists.linux.dev>; Fri, 29 Sep 2023 11:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696010678; x=1696615478; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696010867; x=1696615667; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G6dSgw/viVX1hF9GiVxg31bNXS5ti9jq2oLyQe/SrHc=;
-        b=CTDE2ivOVbwujlrzMwT2R/2QMJ8ICmtbJkXcuzMPauQTtA8PkToLZsP6YOf5/OTFLt
-         PGRYoIAgIWHLWPZUP2z+9+vjmRIsq20uDml9GyuCQzLzGjrufunRiiXENmfVZcGcM27s
-         n60gC7k7TtFhXAViB4DbVi0+Wmx2ZVUQdWj/k=
+        bh=3cXa0cO8yt2b6e+VGi8zgr6GOxIgX0GS3Nbuo7CXwec=;
+        b=Q6FgiOh77p98RiTM0npFxXh8z3XEXowtgJfzguCr45j8p+AEi7WVKTM5/sqBYrvQEj
+         DsuMRsh3Khe7ltMG+sa8GwFWCysxv27IVGk54JmSaPfrrvoIZgFBj1YSBPeUVvmGenkZ
+         gD/j8Sw3iIJ5Got3qvoNoXtBnJ5gwtZRiWWbw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696010678; x=1696615478;
+        d=1e100.net; s=20230601; t=1696010867; x=1696615667;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G6dSgw/viVX1hF9GiVxg31bNXS5ti9jq2oLyQe/SrHc=;
-        b=YfA1sGW8L0oV9xgyHcV0+mAmKzQohcfEF/CFaio1rWGRjjVLowJj0z7GOZcRpWYOQY
-         DsAXdZwQqWh7rNGaONji/0jsgkSZO2+36bM7NXaSm1bMi8b7zhPfKdZAx2e+ZdzPqxhD
-         W6bGPGLn6Jf1a+0yQmcv1wpceCI/tsFNt7zvaBezN2ejiXklo6ZZsjzznLEtF4KWXVc8
-         F3EHmnCJLkckSq3HiC8dW5hDMjGJFV5+iKqT25M1JRzZP6hvYnYcpqANSrMEWlW1+eVW
-         JJIHrgimshAN1ZmMvQ/gEhDbNP11FRD1/HVBKcsq8nBhVVRwy5FVSTa6BpsOVAgBDrOj
-         PKbQ==
-X-Gm-Message-State: AOJu0Yw+HrDyYT7PyxwZ40By16RkiXjevZCjwihyI77YN48Rxs6WuCsF
-	cIlfHNpeJ7tkY1uvZo0dcT4VDQ==
-X-Google-Smtp-Source: AGHT+IE20otJ4RSneK87xPc+d9C9PCpIJ8g8LIGpqUyyhEz7f1L4BvfQ+bBNZm9ZhHkhttGWrv8vlQ==
-X-Received: by 2002:a05:6a20:549a:b0:14b:8023:33cb with SMTP id i26-20020a056a20549a00b0014b802333cbmr5761090pzk.11.1696010677683;
-        Fri, 29 Sep 2023 11:04:37 -0700 (PDT)
+        bh=3cXa0cO8yt2b6e+VGi8zgr6GOxIgX0GS3Nbuo7CXwec=;
+        b=cEJGHAvAFq04YdgG+V7S9JIrhDdU1s2633o8UlpEKwkCAo4Kz63glrobHaPD4v2jU9
+         s1bPaqgzcKZl/43z/ScANgbbB+zww7IHJmi/YjZxXFoXyLNDglbSoMs30nc7bQDmykN7
+         vWrdXLg1GBaT7ulPShPOabbNtG994MPUPcPshW/Rhs7PdV8WGexbqh6nMP+O/vn0P+Yl
+         qGSbSwr3pA5348GmtZj/EJyf24awT1PMBvbwhidaobufTZhNi0lVtvlqFN6gcQpL932c
+         kAmTNoQb1OxmZs/EGKpsTql3UzAViVER+uHCIYxSz1Vm7vlyWeqfn2huFIYNx5Ct7URm
+         2clw==
+X-Gm-Message-State: AOJu0Yw8yedYOq8S5a5GInjFVYIlw4810L5I1LR48Jap3jr6Mahjay1j
+	9LuQPWDXEuaKa7+Mo27HJPmHCw==
+X-Google-Smtp-Source: AGHT+IFtu4c4ZFASN8YJ8+i8qsvc58IIkosaQq3qEI0WmbaBdN20jLQIPQZc62BpHb3+w0fTnXx5Tg==
+X-Received: by 2002:a17:903:24f:b0:1bd:bba1:be78 with SMTP id j15-20020a170903024f00b001bdbba1be78mr5817296plh.23.1696010867484;
+        Fri, 29 Sep 2023 11:07:47 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d18-20020aa78692000000b00690fb385ea9sm15316956pfo.47.2023.09.29.11.04.33
+        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b001c446dea2c5sm17144513plf.143.2023.09.29.11.07.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 11:04:34 -0700 (PDT)
+        Fri, 29 Sep 2023 11:07:46 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
+To: Ido Schimmel <idosch@nvidia.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	=?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
-	Avihai Horon <avihaih@nvidia.com>,
-	Anand Khoje <anand.a.khoje@oracle.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	Christian Benvenuti <benve@cisco.com>,
-	Nelson Escobar <neescoba@cisco.com>,
-	Bernard Metzler <bmt@zurich.ibm.com>,
-	Bart Van Assche <bvanassche@acm.org>,
+	Petr Machata <petrm@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Patrisious Haddad <phaddad@nvidia.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	wangjianli <wangjianli@cdjrlc.com>,
 	linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 6/7] IB/mthca: Annotate struct mthca_icm_table with __counted_by
-Date: Fri, 29 Sep 2023 11:04:29 -0700
-Message-Id: <20230929180431.3005464-6-keescook@chromium.org>
+Subject: [PATCH 1/5] mlxsw: Annotate struct mlxsw_linecards with __counted_by
+Date: Fri, 29 Sep 2023 11:07:40 -0700
+Message-Id: <20230929180746.3005922-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230929180305.work.590-kees@kernel.org>
-References: <20230929180305.work.590-kees@kernel.org>
+In-Reply-To: <20230929180611.work.870-kees@kernel.org>
+References: <20230929180611.work.870-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1251; i=keescook@chromium.org;
- h=from:subject; bh=KnzErPDnGsoACiNJdVcsN/BX+MW+GH0rlXVaL/E2pIg=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlFxGudlYNxBZwxaAdfN5vXxcaqFfVqmj7dgAXy
- KxCK6A4NgOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRcRrgAKCRCJcvTf3G3A
- Jq2fD/wOjmJ/GTNcAOHMWxIkPbGB6y5ReI6NRHk1MISbwnUZHxFPl3cbxT4uBJ/tSFMWvYBIaZd
- CHF5KasHHeSkYcZgmCwOmDN1uWLSey/4j8PDvrpfKYLZ6trEcfgkT79P1w8JSgXNi/O8mBA7P3b
- 7skNWfNzTtAOq3D9GCfGkKoa7SOuU+Zs+g2so6pg3TInolHbr36AlerV403JYrGfIAQROPlltvf
- 6HbSLVByZEh4E3MlUrYKQhxmGo350//eAiVrjrpgj8zp6ASrjFLr5MSG5EZ1K1SOUhb1z1M710M
- KCxJhPfcH804qdRPlcPegKvBN3JwbexhAiuJUv81lEL8aIud2X5tFi8lJZfHbAtREW3ZALi+1XC
- qsi6RyjGH/EaSX65t5UCRLFRRnLK1Fu1L0ad+ny7oCoS+zPSFELwsvSsgeO1Ay3V9M3VM/t6xi9
- nPKdHSmc8EFPNM4xPJRu584TvMccInO4cFOq4JyjHaWZ9NX3EalXvkRQA6TUx4zo+AD2xJeYXb2
- lQWAJnl0LZCQ42huxY9W+Jj0X6J9hT32sjj6XnQGW65WPWCcGRBrEUoubExTgbb5eFqErnOwKcA
- R/RCcDiXvP+N2bi7MXqQ+DBgsFWZ4P1MaCRmEolelIiFmKGq3vm8m7RdjYnD9qmODro0EDfFQCR iOTFHqonxskMATQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1509; i=keescook@chromium.org;
+ h=from:subject; bh=Ww0CdLXqXc4lNTAvPkI5tpHASRFsk/+Dd/7elsfsEVo=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlFxJvZ0ctS3Apt7u/ZPa2oHBqvLK7sDWQzgvto
+ ev8sStvUCOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRcSbwAKCRCJcvTf3G3A
+ JtPID/9lzDk8uueD1NLYXfN5nJTT1N04aIYmTyDtXOx9Q2ze4G6KfG72FccvuQD7QCYudQIhMti
+ UN9kFRwzHB7UjP9+D3r86ENK4dpKPvnIeIFJpd+Hvg4vvG+DHtLDZGJIeTi4dnyw4z2ayv/4Lgy
+ OoSQKKswKBI5hkv1uMxbxIljvEhJDhbbWhEme2fxZvzV4c8mInhVzj90PhhsRET4a5lxGwe+Al3
+ JMx4CP859l1P2gwm9vaxIazkD1E3IKgESNenzlG9zjXyuFTkazOjQfdFDUBiEesU4WrkZCzJeKA
+ UuQZW27ZR8vwOh9N2cu1ONtfxOC3XRQPmnu0IDt0yyM0Vp3fEVJkAQn8Ti5J58VNHTGj9/INkms
+ 33nE+9B37Lpmr0v5oEhgLhVfUOzIeXEoOHjnvoed9Pmw0+QqjEMq636LMMuxTp/O45pqisaLrGM
+ nQcAqGkoQiYUXpyAzmKfzC4AGHALfiI8/0EZGSqr+5hPIGdiDEWxQiL61EQ4kgUuubp16GUcRdQ
+ MvmN1Nz1hHJzFP1lA9sBSTnAcyDLZDYUSFP555nDHRyjzoDPbiQtCWbMEaKn6rQYBA9t1LasSzS
+ RMn1fKyLWauhfAYUUXnimfKBeQDtWvFwT4nVKcDVN9mtuu7N0+VNU0r8/O+oSgsdzzpFTbA2Kqz XW74PgNoDQaokuQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -94,31 +85,35 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct mthca_icm_table.
+As found with Coccinelle[1], add __counted_by for struct mlxsw_linecards.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: linux-rdma@vger.kernel.org
+Cc: Ido Schimmel <idosch@nvidia.com>
+Cc: Petr Machata <petrm@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/infiniband/hw/mthca/mthca_memfree.h | 2 +-
+ drivers/net/ethernet/mellanox/mlxsw/core.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/mthca/mthca_memfree.h b/drivers/infiniband/hw/mthca/mthca_memfree.h
-index f9a2e65e2ff5..61d5bbba293a 100644
---- a/drivers/infiniband/hw/mthca/mthca_memfree.h
-+++ b/drivers/infiniband/hw/mthca/mthca_memfree.h
-@@ -68,7 +68,7 @@ struct mthca_icm_table {
- 	int               lowmem;
- 	int               coherent;
- 	struct mutex      mutex;
--	struct mthca_icm *icm[];
-+	struct mthca_icm *icm[] __counted_by(num_icm);
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/core.h b/drivers/net/ethernet/mellanox/mlxsw/core.h
+index e5474d3e34db..c6bc5819ce43 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/core.h
++++ b/drivers/net/ethernet/mellanox/mlxsw/core.h
+@@ -624,7 +624,7 @@ struct mlxsw_linecards {
+ 	struct mlxsw_linecard_types_info *types_info;
+ 	struct list_head event_ops_list;
+ 	struct mutex event_ops_list_lock; /* Locks accesses to event ops list */
+-	struct mlxsw_linecard linecards[];
++	struct mlxsw_linecard linecards[] __counted_by(count);
  };
  
- struct mthca_icm_iter {
+ static inline struct mlxsw_linecard *
 -- 
 2.34.1
 
