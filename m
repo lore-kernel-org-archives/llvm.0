@@ -1,84 +1,71 @@
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D34817ED
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 09:24:32 +0000 (UTC)
-Received: from pop-os.home ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id mW5lqciwUlLhemW5mqgUyK; Sat, 30 Sep 2023 11:16:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1696065415;
-	bh=HqO0OJ0xpYTouMij+n4RJh5b8XJeCUxxVmU/L5T7xtU=;
-	h=From:To:Cc:Subject:Date;
-	b=EpHIjI+HuMMZ8HK0f8SwmZJ28a0d+04wdYHD9bRONTstCAVZiuB6avxQIos6ZEItc
-	 nVbK0FhaDctKX08sYwo+8tmAJEnv6ltQgDnG9fYwZpZoBVUgsKFrz+BMHupi59MPeM
-	 lgimnXmj+nnzQTAeRwa0bWoRLIp/jaeZ1pwjp3cFsxAdixy+FaKMD6mojz70CMqFDW
-	 MqyCIxpgCkZeOjHqiuGZYZcPItC1BeAai4TnekU0s1DSIfshfJMrRT8p3JZGtV0XHt
-	 MrFDwIJTX7PV+l0ZqFNDsYVj+zmnJRpnzwhfzLuVIWS231jkCTFUOwZBBvYjegsqtY
-	 7l1TLWdCU9YMw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 30 Sep 2023 11:16:55 +0200
-X-ME-IP: 86.243.2.178
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] comedi: Annotate struct comedi_lrange with __counted_by
-Date: Sat, 30 Sep 2023 11:14:47 +0200
-Message-Id: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A3023AA;
+	Sat, 30 Sep 2023 09:38:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27E9C433C7;
+	Sat, 30 Sep 2023 09:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1696066728;
+	bh=IvpiOG/bGE3T67kaLiqC3a217xhno8NefOjxFtDtAkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WaJVTLBeni9ABYwJGH6p5NdtU/RU11lfOkq4o8gQbfieAj6Xnu0oPttIzCz/pyfLD
+	 zfTdBg1nNBQgV/qTj+JiGRQfkYtvcqEH6wKhSQRy3qHNAswsL8/wJRZIiqy/KwH3qN
+	 XJnhdlMtd5WJtvr9+PF0pxAhe4SXcD3e669r7MFw=
+Date: Sat, 30 Sep 2023 11:38:44 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, tiwai@suse.com,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>, llvm@lists.linux.dev,
+	alsa-devel@alsa-project.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] device property: Replace custom implementation of
+ COUNT_ARGS()
+Message-ID: <2023093029-balmy-shrewdly-3e3d@gregkh>
+References: <20230920153819.2069869-1-andriy.shevchenko@linux.intel.com>
+ <CAKwvOd=7vk2HKOpgVrRd2RtKSF9tXPqbVmN+5teLTNoBy4BWVg@mail.gmail.com>
+ <CAKwvOdkbcUh+tmsNcT4nCzFY37WbAUdjHJ62qNe=p8SetaQNTQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdkbcUh+tmsNcT4nCzFY37WbAUdjHJ62qNe=p8SetaQNTQ@mail.gmail.com>
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+On Fri, Sep 29, 2023 at 09:10:11AM -0700, Nick Desaulniers wrote:
+> On Wed, Sep 20, 2023 at 9:50 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Wed, Sep 20, 2023 at 8:38 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > Replace custom and non-portable implementation of COUNT_ARGS().
+> > >
+> > > Fixes: e64b674bc9d7 ("software node: implement reference properties")
+> > > Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > Closes: https://lore.kernel.org/r/ZQoILN6QCjzosCOs@google.com
+> >
+> > Thanks for the patch!
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1935
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> > Of course Linux would have a macro for this!  I should have known.
+> > Trying to wrap my head around it. Awesome
+> 
+> (resending as text/plain)
+> 
+> Can someone pick this up for linux-next?
+> 
+> CI for linux-next has been red for days over this.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is part of a work done in parallel of what is currently worked
-on by Kees Cook.
+Will do, give me a chance to catch up...
 
-My patches are only related to corner cases that do NOT match the
-semantic of his Coccinelle script[1].
-
-In this case, it is been spotted because of comedi_alloc_spriv().
-All other usages of struct comedi_lrange seem to be static definition of
-the structure that explicitly set the .length field.
-
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
----
- include/linux/comedi/comedidev.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/comedi/comedidev.h b/include/linux/comedi/comedidev.h
-index 0a1150900ef3..c08416a7364b 100644
---- a/include/linux/comedi/comedidev.h
-+++ b/include/linux/comedi/comedidev.h
-@@ -633,7 +633,7 @@ extern const struct comedi_lrange range_unknown;
-  */
- struct comedi_lrange {
- 	int length;
--	struct comedi_krange range[];
-+	struct comedi_krange range[] __counted_by(length);
- };
- 
- /**
--- 
-2.34.1
-
+greg k-h
