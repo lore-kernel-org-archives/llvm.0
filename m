@@ -1,78 +1,133 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920671C14
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 16:38:15 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1c724577e1fso51248245ad.0
-        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 09:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696091895; x=1696696695; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ll5RgjPd4WERjGYzQzNFee7tOPsdSELqkfPGuXCqmQY=;
-        b=ChyJa3MLfn/2lzECCSdW7KBZwvcXK0E3yQN74x3PSlXbOKek7MLjg+aJXFsxPIDZaB
-         XS5EtLO20m7ATX16fg1LZm+knDLTwpKkeQfgsaumFcB1y8Nc2J71/wyrwVvU4C4FVdEo
-         GIoLlBiUmE6Qq/Qg+QB84JqbE1Y/SVHvns4KxdcC9J8QjNDUBlUqlaG6LFcbMEpk6b9P
-         TkxwEkK4ah4OW1DGj7zZlYJ7zCH1onGRVb7rEbUwoYRFhUTbt8TMoLwQQPUoLKuL9LRj
-         EXchi+lEGDM7UQm8thDIXu7N7NMiYv2vOJCDDI1atgeQnpNZLvV2OfeDYnwivrc0BOkx
-         Ad8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696091895; x=1696696695;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ll5RgjPd4WERjGYzQzNFee7tOPsdSELqkfPGuXCqmQY=;
-        b=khNsNo0EqYAdka417iRAVhnBPmLcB+yQcf0lJ7wbGPN37rc4LMyiV7UHMw3NWaQ+ly
-         ohDaLr/chjeOonIxUuj45JykUO3b9TFpwiG3PObfpM4SH4KUs2XeWlzA8zM7Q9ZOBiY+
-         UyhYSl2c7PcdTSfxaUxIDUM6sFd0TmVZOhZrKIqYgWVSI6XiB4phf+/Aj7HG9NDYgbb8
-         IgSVY/rQshKni7wLQdyl+Oe0qB28yvvF3zlODCPHMpZCHHzySpjuYPKWP0Urr6uciUTq
-         dcWPYaFBG+FE6FulqCNQ7SsRA6+xbgxdUy33GTuWKxJS7bmL3/uvmwYa947NiVH4kNzc
-         uuoA==
-X-Gm-Message-State: AOJu0YzkRfj5UVbVxF4oQSMQFc/mN8u7HosQ+qbeeG/5P9V5x9QWXpjf
-	L/T3QBfedxthBvqapTJNnn0=
-X-Google-Smtp-Source: AGHT+IEokMxdLDwnG72GNo8md4NLX8fZro4ky2KeOokEesCSFdQ1+vI/RtlGtfvbM1IityteBfIaUw==
-X-Received: by 2002:a17:902:d34b:b0:1bb:9b29:20d9 with SMTP id l11-20020a170902d34b00b001bb9b2920d9mr8060404plk.20.1696091894718;
-        Sat, 30 Sep 2023 09:38:14 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:a90f:2dad:30c1:d923])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170902c3c100b001bc18e579aesm12841649plj.101.2023.09.30.09.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Sep 2023 09:38:14 -0700 (PDT)
-Date: Sat, 30 Sep 2023 09:38:11 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: linux-input@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] input: mt: Annotate struct input_mt with __counted_by
-Message-ID: <ZRhO828Ml4qpoS60@google.com>
-References: <20230922175036.work.762-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA931FC5
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 16:41:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696092081;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XfzynOiqmDqwBabbeZX8w7UB1gPRFcvC+YJnevvTAF4=;
+	b=Zg19pzHrTxnv3D4mbB17nP5H5rNk7n18OxbXcudESuaP22tZjcQqxwyeGP7g65TcV58tzn
+	Bm3Mffk5hZD3YtAFdCb+Th1l/kADF3KWXGx6OT+4V93Bcn7pmE6g6FEmPv75CVHssqlwQI
+	JJC9/ecG6b1AtpnhX7GcPFbw5b6DWk8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-BEBUGWEzP3W3zRfPDyAhQw-1; Sat, 30 Sep 2023 12:41:19 -0400
+X-MC-Unique: BEBUGWEzP3W3zRfPDyAhQw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4EE85101A53B
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 16:41:19 +0000 (UTC)
+Received: from [172.64.4.25] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 391182026D4B;
+	Sat, 30 Sep 2023 16:41:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 8 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, 9f3ebbef)
+Date: Sat, 30 Sep 2023 16:41:19 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230922175036.work.762-kees@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <22148.123093012411900220@us-mta-396.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 22, 2023 at 10:50:37AM -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct input_mt.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: linux-input@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Hi, we tested your kernel and here are the results:
 
-Applied, thank you.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
--- 
-Dmitry
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag '6.6-rc3-ksmbd-server-fixes' of git://git.sam=
+ba.org/ksmbd
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106930
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
