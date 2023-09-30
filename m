@@ -1,43 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26538F57;
-	Sat, 30 Sep 2023 11:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD89011727;
+	Sat, 30 Sep 2023 13:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696072604; x=1727608604;
+  t=1696081259; x=1727617259;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l7PjfMJoYJzE+D/bXejo4URZzrLVUgC+MVlPs8ITxPE=;
-  b=T+4QVBaAx+AZimuoyW0o6Tq+RwcgapHBKW8gRECC8u/YQgDdtzgQ6im+
-   xRQm/cNMUvlokbeNTRXO6jPepLSBdJwFnQc9fctapIiDQ2Nxr2iDnewL8
-   eeNxlenjClC7YMMWjKOZJ6qd9GlwWfdfU+DZ1Oz88YUAJMTK6KP022jPp
-   IxYQLxxPikhfP0tk+STIUGcIs567kDNY8Kf2f4zF2LYTNcJN6her4+EEI
-   3VeEo+XnKtcchmkKVePkONXzxx7Ym+l3bjDR76fHS+ER07u3fZIyzQfL6
-   m41ccEQmWi7xVJh8o+RRASSVTqUX+Vq8cN01+TZNR+Wrhrx1hvBxwGyvn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="446598220"
+  bh=+YW7QREcswaXbcYD3cS3q5e9xIzFH5ykJ5V/BWCj1qg=;
+  b=DsvmmWKhxp0uypD7EzCShjVf5EaoilAY/AUMP2l3+NzBoic60qngF4Ib
+   MAjekjVsbC954ptkYxcKrsJUx1kcFb0/K+vJzGfeTis7aM5l89jvhclrQ
+   uQS7fEdBB6KfFBkPGYO7NGekkRGpwuEAkJntMNhGHmr1GBSiIfcZ8xL1S
+   mX8mP8MIJEF9atbj9wiH2boLbEfMDDWyIR/YSAl6AD5+ApzoAc2pmlNPG
+   roib0bd/ggOC2MSlPDcDPZk9nYLWoW3nSr4eFnCkzZMpMpxV+ZrvuYKUi
+   lPUbGMd2EyZTAwOCt/ezSe2LHN13HEfjI/I08tmk1jOVWfNrSQpxXOlSE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10849"; a="381325986"
 X-IronPort-AV: E=Sophos;i="6.03,190,1694761200"; 
-   d="scan'208";a="446598220"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2023 04:16:44 -0700
+   d="scan'208";a="381325986"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2023 06:40:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="815834169"
+X-IronPort-AV: E=McAfee;i="6600,9927,10849"; a="743695318"
 X-IronPort-AV: E=Sophos;i="6.03,190,1694761200"; 
-   d="scan'208";a="815834169"
+   d="scan'208";a="743695318"
 Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2023 04:16:42 -0700
+  by orsmga007.jf.intel.com with ESMTP; 30 Sep 2023 06:40:56 -0700
 Received: from kbuild by c3b01524d57c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qmXxg-00044T-1r;
-	Sat, 30 Sep 2023 11:16:40 +0000
-Date: Sat, 30 Sep 2023 19:16:01 +0800
+	id 1qmaDG-0004B7-0h;
+	Sat, 30 Sep 2023 13:40:54 +0000
+Date: Sat, 30 Sep 2023 21:40:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Felix Fietkau <nbd@nbd.name>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"jingyang.wang" <wjy7717@126.com>
-Subject: [nbd168-wireless:pr/4 1/1] include/linux/pci_ids.h:3134:9: error:
- 'PCI_VENDOR_ID_ITTIM' macro redefined
-Message-ID: <202309301923.5VWZCfxQ-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: arch/powerpc/kernel/traps.c:1167:19: error: unused function
+ '__parse_fpscr'
+Message-ID: <202309302131.bsuutuxs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,42 +48,67 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/nbd168/wireless pr/4
-head:   ca4db2945103cfd433731260f3d6fbf582913e68
-commit: ca4db2945103cfd433731260f3d6fbf582913e68 [1/1] Merge branch 'mt76' into mt76
-config: powerpc-mpc8315_rdb_defconfig (https://download.01.org/0day-ci/archive/20230930/202309301923.5VWZCfxQ-lkp@intel.com/config)
+Hi Christophe,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9f3ebbef746f89f860a90ced99a359202ea86fde
+commit: ca13c130a43fe3ab625d22ada0a61e5c0b612229 powerpc/4xx: Remove WatchdogHandler() to fix no previous prototype error
+date:   6 weeks ago
+config: powerpc-kilauea_defconfig (https://download.01.org/0day-ci/archive/20230930/202309302131.bsuutuxs-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230930/202309301923.5VWZCfxQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230930/202309302131.bsuutuxs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309301923.5VWZCfxQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309302131.bsuutuxs-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/powerpc/kernel/prom_init.c:24:
-   In file included from include/linux/pci.h:44:
->> include/linux/pci_ids.h:3134:9: error: 'PCI_VENDOR_ID_ITTIM' macro redefined [-Werror,-Wmacro-redefined]
-    3134 | #define PCI_VENDOR_ID_ITTIM             0x0B48
-         |         ^
-   include/linux/pci_ids.h:183:9: note: previous definition is here
-     183 | #define PCI_VENDOR_ID_ITTIM             0x0b48
-         |         ^
+>> arch/powerpc/kernel/traps.c:1167:19: error: unused function '__parse_fpscr' [-Werror,-Wunused-function]
+    1167 | static inline int __parse_fpscr(unsigned long fpscr)
+         |                   ^
    1 error generated.
 
 
-vim +/PCI_VENDOR_ID_ITTIM +3134 include/linux/pci_ids.h
+vim +/__parse_fpscr +1167 arch/powerpc/kernel/traps.c
 
-9fd0e09a4e8649 Anthony Wong  2018-08-31  3133  
-db0b72509eef7f Jingyang Wang 2023-09-06 @3134  #define PCI_VENDOR_ID_ITTIM		0x0B48
-db0b72509eef7f Jingyang Wang 2023-09-06  3135  
+14cf11af6cf608 Paul Mackerras    2005-09-26  1166  
+5fad293bcbd48d Kumar Gala        2007-02-07 @1167  static inline int __parse_fpscr(unsigned long fpscr)
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1168  {
+aeb1c0f6ff18f5 Eric W. Biederman 2018-04-17  1169  	int ret = FPE_FLTUNK;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1170  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1171  	/* Invalid operation */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1172  	if ((fpscr & FPSCR_VE) && (fpscr & FPSCR_VX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1173  		ret = FPE_FLTINV;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1174  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1175  	/* Overflow */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1176  	else if ((fpscr & FPSCR_OE) && (fpscr & FPSCR_OX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1177  		ret = FPE_FLTOVF;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1178  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1179  	/* Underflow */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1180  	else if ((fpscr & FPSCR_UE) && (fpscr & FPSCR_UX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1181  		ret = FPE_FLTUND;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1182  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1183  	/* Divide by zero */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1184  	else if ((fpscr & FPSCR_ZE) && (fpscr & FPSCR_ZX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1185  		ret = FPE_FLTDIV;
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1186  
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1187  	/* Inexact result */
+dc1c1ca3dcd94c Stephen Rothwell  2005-10-01  1188  	else if ((fpscr & FPSCR_XE) && (fpscr & FPSCR_XX))
+5fad293bcbd48d Kumar Gala        2007-02-07  1189  		ret = FPE_FLTRES;
+5fad293bcbd48d Kumar Gala        2007-02-07  1190  
+5fad293bcbd48d Kumar Gala        2007-02-07  1191  	return ret;
+5fad293bcbd48d Kumar Gala        2007-02-07  1192  }
+5fad293bcbd48d Kumar Gala        2007-02-07  1193  
 
-:::::: The code at line 3134 was first introduced by commit
-:::::: db0b72509eef7fdb59313890e42c225279247770 wifi: mt76: mt7922: Add support ITTIM PE50-M75C
+:::::: The code at line 1167 was first introduced by commit
+:::::: 5fad293bcbd48d9a2370020cf60e4b4a42559b12 [POWERPC] Fixup error handling when emulating a floating point instruction
 
-:::::: TO: Jingyang Wang <wjy7717@126.com>
-:::::: CC: Jingyang Wang <wjy7717@126.com>
+:::::: TO: Kumar Gala <galak@kernel.crashing.org>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
 
 -- 
 0-DAY CI Kernel Test Service
