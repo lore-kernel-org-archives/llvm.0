@@ -1,168 +1,134 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A8417993
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 17:13:42 +0000 (UTC)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38UHAj6m029256;
-	Sat, 30 Sep 2023 17:13:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=tPZUYHwk6HWhrWsa+W5RI018Wu2qZXEBdXlhaDCQaiE=;
- b=cWRmqIzWL0VvxDZfn2pfABHrbn0jb7zZjUlPB2DPoSSIOgC/qiS2Mrh9QhgqHK/3drVD
- oaL6v2gK20JAtb+QjT/+rXcC5IVSMmlrJmWzEnwRiEFbA5EZAVGfLnQMhb+WWufQT5sG
- HOl3ikQpLtO1b7LM2ulBGjOhZJzAq+HDbyscFEFkAPrZcT7MgsTWfQyzzXyKuAGQ5+Yz
- LZ9zsm38ffBVFKIxlmEilPuoYNqb7+JVlRWcI4CIn5TubCCzC/x8aXaFSxBpF2A0djIu
- eovx1pkekAFT5z6LbFg1JoE4lxey0N760A1R2kO017v/LwiY1vvo79kArTJMih6ynDbe FQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tebw98uas-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 30 Sep 2023 17:13:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38UHDCiR015465
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 30 Sep 2023 17:13:12 GMT
-Received: from [10.216.56.186] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sat, 30 Sep
- 2023 10:13:05 -0700
-Message-ID: <446f4c92-ca04-d325-4a5f-140b9bcdbd19@quicinc.com>
-Date: Sat, 30 Sep 2023 22:43:02 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB85F1775B
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 17:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696095081;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hnHG1yvEbK+NSGk/FKEmWgj4dWFxEiUEz0r8M3QPx2M=;
+	b=IzWhCKPRUMt+PFpAZCsOhNeVZXMMsjdJdbtDzocTdnAsENf084lEfynbMAb2qbf5QSK8Ve
+	0mIajBNftukXtUzwaX6yVe1wfDzGbaKIj37qf9MBzVwpgEtH5qzXEIP7S2DBAAYZuQaXZo
+	OBeBJcXuuCLFdSQGg7pxTIzNhObgTl8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-457-NAxXtO4wPQCbGlT69VNZLA-1; Sat, 30 Sep 2023 13:31:19 -0400
+X-MC-Unique: NAxXtO4wPQCbGlT69VNZLA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2ECE7800B35
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 17:31:19 +0000 (UTC)
+Received: from [172.64.4.25] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 191C54A9B12;
+	Sat, 30 Sep 2023 17:31:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, 95289e49)
+Date: Sat, 30 Sep 2023 17:31:19 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH V12 3/3] arm64: dts: ipq6018: add pwm node
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <thierry.reding@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <ndesaulniers@google.com>,
-        <trix@redhat.com>, <baruch@tkos.co.il>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
-        <nathan@kernel.org>
-References: <20230925065915.3467964-1-quic_devipriy@quicinc.com>
- <20230925065915.3467964-4-quic_devipriy@quicinc.com>
- <9155c1e3-d163-b2ad-8a7b-57ffeca2b122@quicinc.com>
- <c673ba8e-76e5-4a23-b395-f61ec59d9bc7@linaro.org>
-From: Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <c673ba8e-76e5-4a23-b395-f61ec59d9bc7@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: c7g7Yw7VwwREmNhpUoa7PRnNfdJa6d9f
-X-Proofpoint-GUID: c7g7Yw7VwwREmNhpUoa7PRnNfdJa6d9f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-30_16,2023-09-28_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=982 impostorscore=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 spamscore=0 adultscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309300142
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <08438.123093013311900114@us-mta-457.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'ata-6.6-rc4' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/dlemoal/libata
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106897
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
 
 
-On 9/30/2023 9:05 PM, Krzysztof Kozlowski wrote:
-> On 29/09/2023 13:47, Devi Priya wrote:
->>
->>
->> On 9/25/2023 12:29 PM, Devi Priya wrote:
->>> Describe the PWM block on IPQ6018.
->>>
->>> The PWM is in the TCSR area. Make &tcsr "simple-mfd" compatible, and add
->>> &pwm as child of &tcsr.
->>>
->>> Add also ipq6018 specific compatible string.
->>>
->>> Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
->>> Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
->>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>> ---
->>> v12:
->>>
->>>     No change
->>>
->>> v11:
->>>
->>>     No change
->>>
->>> v10:
->>>
->>>     No change
->>>
->>> v9:
->>>
->>>     Add 'ranges' property (Rob)
->>>
->>> v8:
->>>
->>>     Add size cell to 'reg' (Rob)
->>>
->>> v7:
->>>
->>>     Use 'reg' instead of 'offset' (Rob)
->>>
->>>     Add qcom,tcsr-ipq6018 (Rob)
->>>
->>>     Drop clock-names (Bjorn)
->>>
->>> v6:
->>>
->>>     Make the PWM node child of TCSR (Rob Herring)
->>>
->>>     Add assigned-clocks/assigned-clock-rates (Uwe Kleine-König)
->>>
->>> v5: Use qcom,pwm-regs for TCSR phandle instead of direct regs
->>>
->>> v3: s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
->>>
->>>    arch/arm64/boot/dts/qcom/ipq6018.dtsi | 15 ++++++++++++++-
->>>    1 file changed, 14 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->>> index 47b8b1d6730a..cadd2c583526 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->>> @@ -398,8 +398,21 @@ tcsr_mutex: hwlock@1905000 {
->>>    		};
->>>    
->>>    		tcsr: syscon@1937000 {
->>> -			compatible = "qcom,tcsr-ipq6018", "syscon";
->>> +			compatible = "qcom,tcsr-ipq6018", "syscon", "simple-mfd";
->>>    			reg = <0x0 0x01937000 0x0 0x21000>;
->>> +			#address-cells = <1>;
->>> +			#size-cells = <1>;
->>> +			ranges = <0x0 0x0 0x01937000 0x21000>;
->>> +
->> Hi Krzysztof,
->> Referring to
->> https://lore.kernel.org/all/20220909091056.128949-1-krzysztof.kozlowski@linaro.org/,
->> it seems that the TCSR block should
->> not have any child nodes. Could you pls provide your suggestions on pwm
->> being added as the child node?
-> 
-> If you are sure that TCSR contains PWM and all registers are there, then
-> feel free to add proper binding. Sending untested patch is not the way
-> to go.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Sure, okay
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Thanks,
-Devi Priya
-> 
-> Best regards,
-> Krzysztof
-> 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
