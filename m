@@ -1,135 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E942F5F;
-	Sat, 30 Sep 2023 10:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83005C433C9;
-	Sat, 30 Sep 2023 10:24:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696069488;
-	bh=ywUyJEuvnD0Kgh/Zdaq0tfehPoYx9KX55IzcG8hICEE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=MxFwfYaOxaybirbDqia4s9Jeg1tkYSJOUnqURDXYpjT74rStmD3hwGIRwzZDzUYwq
-	 WjBReF2NVj5yvBHquqzritT7CX/QYVE/0gMrnkFy+jvc8FYWTH/8nFkEvZc1jLpWYF
-	 7d3yKt/4FpG8k2ceCgYnyDfx6z5uquwQcABLjNq3OqEu7gdavt3/zEqD3BVDlAnH4f
-	 5YafvbpcNTY3DWmp7DtOQp4j9HprnZMPV4DbkUTKO79MfSz+WGmlNU7ucgl/87BmQr
-	 I1Scgy1wCk9yXxia1B4dEp4/6TaucijUIeY1/cZC7ToUYpiaMWSD60THVjnnVceut+
-	 S5iuyGbycaEDw==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1dcdfeb7e44so6775610fac.0;
-        Sat, 30 Sep 2023 03:24:48 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwjJ6i41oI5u2sKU6X5wKk5k0dUAZXo0ca9vQZ0K4C3B4ceuiCI
-	1PawV00sklkcNLUiV9OMnftC30Xq0xiFpvxd7xI=
-X-Google-Smtp-Source: AGHT+IFQY627N4XOGyg1zrHOyarFome//M5MMfUPvElHfYga63GM8cBT9gzNQaseQuRx+LxO0LDTMzT33lUgZv6xYM4=
-X-Received: by 2002:a05:6870:b4a1:b0:1d5:5660:3ae0 with SMTP id
- y33-20020a056870b4a100b001d556603ae0mr7274199oap.20.1696069487933; Sat, 30
- Sep 2023 03:24:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26538F57;
+	Sat, 30 Sep 2023 11:16:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696072604; x=1727608604;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l7PjfMJoYJzE+D/bXejo4URZzrLVUgC+MVlPs8ITxPE=;
+  b=T+4QVBaAx+AZimuoyW0o6Tq+RwcgapHBKW8gRECC8u/YQgDdtzgQ6im+
+   xRQm/cNMUvlokbeNTRXO6jPepLSBdJwFnQc9fctapIiDQ2Nxr2iDnewL8
+   eeNxlenjClC7YMMWjKOZJ6qd9GlwWfdfU+DZ1Oz88YUAJMTK6KP022jPp
+   IxYQLxxPikhfP0tk+STIUGcIs567kDNY8Kf2f4zF2LYTNcJN6her4+EEI
+   3VeEo+XnKtcchmkKVePkONXzxx7Ym+l3bjDR76fHS+ER07u3fZIyzQfL6
+   m41ccEQmWi7xVJh8o+RRASSVTqUX+Vq8cN01+TZNR+Wrhrx1hvBxwGyvn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="446598220"
+X-IronPort-AV: E=Sophos;i="6.03,190,1694761200"; 
+   d="scan'208";a="446598220"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2023 04:16:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="815834169"
+X-IronPort-AV: E=Sophos;i="6.03,190,1694761200"; 
+   d="scan'208";a="815834169"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2023 04:16:42 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qmXxg-00044T-1r;
+	Sat, 30 Sep 2023 11:16:40 +0000
+Date: Sat, 30 Sep 2023 19:16:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Felix Fietkau <nbd@nbd.name>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"jingyang.wang" <wjy7717@126.com>
+Subject: [nbd168-wireless:pr/4 1/1] include/linux/pci_ids.h:3134:9: error:
+ 'PCI_VENDOR_ID_ITTIM' macro redefined
+Message-ID: <202309301923.5VWZCfxQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh> <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
- <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com> <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
- <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com> <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
- <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info> <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
- <26aa6f92-2376-51a4-bbdc-abbbd62c23d2@leemhuis.info> <859c6dde-37ad-492e-baa0-4ea100d8381f@leemhuis.info>
- <b31cae57-89ab-eb8b-1085-1d7476735d58@collabora.com>
-In-Reply-To: <b31cae57-89ab-eb8b-1085-1d7476735d58@collabora.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 30 Sep 2023 19:24:11 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQCNVHg=brV-iPL__HAhoNtAKzCiiG2M3Q9jkMvTnrbog@mail.gmail.com>
-Message-ID: <CAK7LNAQCNVHg=brV-iPL__HAhoNtAKzCiiG2M3Q9jkMvTnrbog@mail.gmail.com>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To: Shreeya Patel <shreeya.patel@collabora.com>
-Cc: Linux regressions mailing list <regressions@lists.linux.dev>, Greg KH <gregkh@linuxfoundation.org>, 
-	Maksim Panchenko <maks@meta.com>, =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>, 
-	Michal Marek <michal.lkml@markovi.net>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	"gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>, 
-	Guillaume Charles Tucker <guillaume.tucker@collabora.com>, denys.f@collabora.com, 
-	Nick Desaulniers <ndesaulniers@google.com>, kernelci@lists.linux.dev, 
-	Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Sep 15, 2023 at 6:33=E2=80=AFPM Shreeya Patel
-<shreeya.patel@collabora.com> wrote:
->
-> On 11/09/23 15:35, Thorsten Leemhuis wrote:
->
-> Hi Thorsten,
->
-> > On 29.08.23 13:28, Linux regression tracking (Thorsten Leemhuis) wrote:
-> >> On 11.07.23 13:16, Shreeya Patel wrote:
-> >>> On 10/07/23 17:39, Linux regression tracking (Thorsten Leemhuis) wrot=
-e:
-> >>>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-postin=
-g
-> >>>> for once, to make this easily accessible to everyone.
-> >>>>
-> >>>> Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
-> >>>> progress made to address this? Or is this maybe (accidentally?) fixe=
-d
-> >>>> with 6.5-rc1?
-> >>> I still see the regression happening so it doesn't seem to be fixed.
-> >>> https://linux.kernelci.org/test/case/id/64ac675a8aebf63753bb2a8c/
-> >>>
-> >>> Masahiro had submitted a fix for this issue here.
-> >>>
-> >>> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/=
-#t
-> >>>
-> >>> But I don't see any movement there. Masahiro, are you planning to sen=
-d a
-> >>> v2 for it?
-> >> That was weeks ago and we didn't get a answer. :-/ Was this fixed in
-> >> between? Doesn't look like it from here, but I might be missing someth=
-ing.
-> > Still no reply. :-/
-> >
-> > Shreeya Patel, does the problem still happen with 6.6-rc1 and do you
-> > still want to see it fixed? In that case our only option to get things
-> > rolling again might be to involve Linus, unless someone in the CC list
-> > has a idea to resolve this. Might also be good to know if reverting the
-> > culprit fixes the problem.
->
->
-> I don't see this issue happening on 6.6-rc1 kernel and it was only last
-> seen in 6.5 kernel.
-> But there was no fix added to Kbuild in the meantime so not sure which
-> commit really fixed this issue.
->
-> For now we can mark this as resolved and I'll keep an eye on the future
-> test results to see if this pops up again.
->
->
-> Thanks,
-> Shreeya Patel
->
-> #regzbot resolve: Fixed in 6.6-rc1 kernel, fix commit is unknown.
+tree:   https://github.com/nbd168/wireless pr/4
+head:   ca4db2945103cfd433731260f3d6fbf582913e68
+commit: ca4db2945103cfd433731260f3d6fbf582913e68 [1/1] Merge branch 'mt76' into mt76
+config: powerpc-mpc8315_rdb_defconfig (https://download.01.org/0day-ci/archive/20230930/202309301923.5VWZCfxQ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230930/202309301923.5VWZCfxQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309301923.5VWZCfxQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/powerpc/kernel/prom_init.c:24:
+   In file included from include/linux/pci.h:44:
+>> include/linux/pci_ids.h:3134:9: error: 'PCI_VENDOR_ID_ITTIM' macro redefined [-Werror,-Wmacro-redefined]
+    3134 | #define PCI_VENDOR_ID_ITTIM             0x0B48
+         |         ^
+   include/linux/pci_ids.h:183:9: note: previous definition is here
+     183 | #define PCI_VENDOR_ID_ITTIM             0x0b48
+         |         ^
+   1 error generated.
 
 
+vim +/PCI_VENDOR_ID_ITTIM +3134 include/linux/pci_ids.h
 
-Not fixed in 6.6-rc1.
+9fd0e09a4e8649 Anthony Wong  2018-08-31  3133  
+db0b72509eef7f Jingyang Wang 2023-09-06 @3134  #define PCI_VENDOR_ID_ITTIM		0x0B48
+db0b72509eef7f Jingyang Wang 2023-09-06  3135  
 
-I submitted a patch to shoot the root cause.
+:::::: The code at line 3134 was first introduced by commit
+:::::: db0b72509eef7fdb59313890e42c225279247770 wifi: mt76: mt7922: Add support ITTIM PE50-M75C
 
-https://lore.kernel.org/all/20230925110023.1796789-1-masahiroy@kernel.org/
+:::::: TO: Jingyang Wang <wjy7717@126.com>
+:::::: CC: Jingyang Wang <wjy7717@126.com>
 
-
-Now it is in Russell's patch tracker.
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
