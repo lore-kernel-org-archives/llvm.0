@@ -1,100 +1,141 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57799B668
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 21:01:15 +0000 (UTC)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6c4d625da40so7640112a34.1
-        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 14:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696107674; x=1696712474; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=27IFQu1p2zMt99rhR1KNh/9hYoodXsLNJNCuaLad3CU=;
-        b=AS8bAnrue4wSoQwN969VR6MKD8ha1G/9X5ZIRluyz7B8SgPE2gbfZme9zpZpDZ6Aw1
-         /2MKXqvXFCXk/2igH24OZIRXGvGBvHvyRjkryNBn0Rp7FPp2NwBW28qEyry8I9y1CTNW
-         EWtkkiqdwmbhfwRjOHe4tL2/vyZXjS0fwsuqA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696107674; x=1696712474;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=27IFQu1p2zMt99rhR1KNh/9hYoodXsLNJNCuaLad3CU=;
-        b=G4Q9Xjkegrv/eW6yHVyVGeqOaNjWFanmQuQqWQfBLeIJE2Jf1cOw1KSIHWsRph7iUe
-         FyXQNEoZZfA4MQnAiiH5ZQOjapgzXwTyOV9eZCQiB548wx7QvpNbsUr7zXpe1E2chCNM
-         3Xs4Ri9SK1slnGmu7dJ2jLI9SPyM52yGrHZnmhMuGXq2PHu1WL/wnUuotUMCqSdHSGz1
-         9zaqEyRLIZSDKrVS8QdTAkjFLrzPgoHClyzFpBbFzs0XcPfr5NssqYWqdqClFfxXH6Z3
-         +fG0wvrLz/LptNcAHxBvCs0G8pcymK5tjb5oqrO4uj+8sZyoXzh0R+idAqsK/mqc73R6
-         1uhQ==
-X-Gm-Message-State: AOJu0YzVmalhnIQVI8vdOgVO+qZLh8iVy70UJo45AnzEAmYPXuPnt6Cs
-	5G0OnTPeFz9MDWepKUyybC4FpQ==
-X-Google-Smtp-Source: AGHT+IFeOcxaHIbtr3OOPjBvPc8vpAIKWTbtjxf4uBFCfxJieFURN+yasje/os/U6MRlxkFgpLgoBg==
-X-Received: by 2002:a05:6830:2091:b0:6c4:c607:7346 with SMTP id y17-20020a056830209100b006c4c6077346mr8189210otq.23.1696107674143;
-        Sat, 30 Sep 2023 14:01:14 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ey1-20020a056a0038c100b0068a13b0b300sm17483758pfb.11.2023.09.30.14.01.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Sep 2023 14:01:13 -0700 (PDT)
-Date: Sat, 30 Sep 2023 14:01:11 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] riscv: mm: Update mmap_rnd_bits_max
-Message-ID: <202309301400.4E1AD87@keescook>
-References: <20230929211155.3910949-4-samitolvanen@google.com>
- <20230929211155.3910949-6-samitolvanen@google.com>
- <202309291452.66ED9B4D83@keescook>
- <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
- <20230930-emporium-share-2bbdf7074e54@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129BB3C17
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 23:51:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696117880;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=W5y24HZs8WVTXaT5ryX0D5i/XOI4n8FUi/dpEe2eF2I=;
+	b=WAxQEVxRShmkYwAdqhRP7DDmOK7KmN3yvghRh74XGRoR9pbdwQzhni7O/g7klRF55RROZX
+	/kxQzLgMumyAA3GVSzL80V1GjtKeIXKRQLnI+DIzcPhNWByaRzxPMYwEQ5kURRl0q6+r7C
+	A5hUE8ME4m1qT7T4qEnG2qo7zKNbRyQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-691-oBH_8cJwN6qeO1wmvHf0IA-1; Sat, 30 Sep 2023 19:51:18 -0400
+X-MC-Unique: oBH_8cJwN6qeO1wmvHf0IA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 560068007A4
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 23:51:18 +0000 (UTC)
+Received: from [172.64.4.25] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3D179400F53;
+	Sat, 30 Sep 2023 23:51:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 8 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, 830380e3)
+Date: Sat, 30 Sep 2023 23:51:18 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230930-emporium-share-2bbdf7074e54@spud>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <14222.123093019511800334@us-mta-691.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 30, 2023 at 10:02:35AM +0100, Conor Dooley wrote:
-> On Fri, Sep 29, 2023 at 03:52:22PM -0700, Sami Tolvanen wrote:
-> > On Fri, Sep 29, 2023 at 2:54 PM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Fri, Sep 29, 2023 at 09:11:58PM +0000, Sami Tolvanen wrote:
-> > > > ARCH_MMAP_RND_BITS_MAX is based on Sv39, which leaves a few
-> > > > potential bits of mmap randomness on the table if we end up enabling
-> > > > 4/5-level paging. Update mmap_rnd_bits_max to take the final address
-> > > > space size into account. This increases mmap_rnd_bits_max from 24 to
-> > > > 33 with Sv48/57.
-> > > >
-> > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > >
-> > > I like this. Is RISCV the only arch where the paging level can be chosen
-> > > at boot time?
-> > 
-> > I haven't seen this elsewhere, but I also haven't looked at all the
-> > other architectures that closely. arm64 does something interesting
-> > with ARM64_VA_BITS_52, but I think we can still handle that in
-> > Kconfig.
-> 
-> AFAIU, x86-64 can do this also:
-> 
-> 	no4lvl		[RISCV] Disable 4-level and 5-level paging modes. Forces
-> 			kernel to use 3-level paging instead.
-> 
-> 	no5lvl		[X86-64,RISCV] Disable 5-level paging mode. Forces
-> 			kernel to use 4-level paging instead.
+Hi, we tested your kernel and here are the results:
 
-Ah-ha! Okay, well, then let's track this idea:
-https://github.com/KSPP/linux/issues/346
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'acpi-6.6-rc4' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/rafael/linux-pm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106951
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
--- 
-Kees Cook
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
