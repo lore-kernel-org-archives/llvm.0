@@ -1,91 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BC0138C
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 09:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B1EC433C8;
-	Sat, 30 Sep 2023 09:02:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696064559;
-	bh=qq5LGrB9piI/ALapVoHarnO97Km28K9Nxg5/t/eX3io=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LKxqJIH2gitAORyRjRTVUOwJedMlXeBfjfYhSaPvC9muinRajK8LMTESWiHvpKguv
-	 2himUzCHPxi9e2BUWe6lTa1DAV/gPbrHcHGPHIv0BxugJyQ9h+XavqGxZ0EB5n9CLD
-	 bEFrYwuDLu8c7wt+are2vfq1QwixbaLk8k6ZqYz9+5TJArSwW3T/0ACshg+pZOUdx1
-	 ZHZx0U5AXWGiOIEI1zJJ3gHp1GOTymhXXuwaBYcu2AiUXf6LQvtKG5kGOltn+XG7+f
-	 iJvzhQxhYf+2WAbH/lA6aicPsVoJB27UPTb53VWd2w9FqchqEJNqj4wu49rX1QcvUs
-	 WZNjI10qgI5Fw==
-Date: Sat, 30 Sep 2023 10:02:35 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] riscv: mm: Update mmap_rnd_bits_max
-Message-ID: <20230930-emporium-share-2bbdf7074e54@spud>
-References: <20230929211155.3910949-4-samitolvanen@google.com>
- <20230929211155.3910949-6-samitolvanen@google.com>
- <202309291452.66ED9B4D83@keescook>
- <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D34817ED
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 09:24:32 +0000 (UTC)
+Received: from pop-os.home ([86.243.2.178])
+	by smtp.orange.fr with ESMTPA
+	id mW5lqciwUlLhemW5mqgUyK; Sat, 30 Sep 2023 11:16:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1696065415;
+	bh=HqO0OJ0xpYTouMij+n4RJh5b8XJeCUxxVmU/L5T7xtU=;
+	h=From:To:Cc:Subject:Date;
+	b=EpHIjI+HuMMZ8HK0f8SwmZJ28a0d+04wdYHD9bRONTstCAVZiuB6avxQIos6ZEItc
+	 nVbK0FhaDctKX08sYwo+8tmAJEnv6ltQgDnG9fYwZpZoBVUgsKFrz+BMHupi59MPeM
+	 lgimnXmj+nnzQTAeRwa0bWoRLIp/jaeZ1pwjp3cFsxAdixy+FaKMD6mojz70CMqFDW
+	 MqyCIxpgCkZeOjHqiuGZYZcPItC1BeAai4TnekU0s1DSIfshfJMrRT8p3JZGtV0XHt
+	 MrFDwIJTX7PV+l0ZqFNDsYVj+zmnJRpnzwhfzLuVIWS231jkCTFUOwZBBvYjegsqtY
+	 7l1TLWdCU9YMw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 30 Sep 2023 11:16:55 +0200
+X-ME-IP: 86.243.2.178
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] comedi: Annotate struct comedi_lrange with __counted_by
+Date: Sat, 30 Sep 2023 11:14:47 +0200
+Message-Id: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ZyDAWSEjMDJNp7Wh"
-Content-Disposition: inline
-In-Reply-To: <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
---ZyDAWSEjMDJNp7Wh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is part of a work done in parallel of what is currently worked
+on by Kees Cook.
 
-On Fri, Sep 29, 2023 at 03:52:22PM -0700, Sami Tolvanen wrote:
-> On Fri, Sep 29, 2023 at 2:54=E2=80=AFPM Kees Cook <keescook@chromium.org>=
- wrote:
-> >
-> > On Fri, Sep 29, 2023 at 09:11:58PM +0000, Sami Tolvanen wrote:
-> > > ARCH_MMAP_RND_BITS_MAX is based on Sv39, which leaves a few
-> > > potential bits of mmap randomness on the table if we end up enabling
-> > > 4/5-level paging. Update mmap_rnd_bits_max to take the final address
-> > > space size into account. This increases mmap_rnd_bits_max from 24 to
-> > > 33 with Sv48/57.
-> > >
-> > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> >
-> > I like this. Is RISCV the only arch where the paging level can be chosen
-> > at boot time?
->=20
-> I haven't seen this elsewhere, but I also haven't looked at all the
-> other architectures that closely. arm64 does something interesting
-> with ARM64_VA_BITS_52, but I think we can still handle that in
-> Kconfig.
+My patches are only related to corner cases that do NOT match the
+semantic of his Coccinelle script[1].
 
-AFAIU, x86-64 can do this also:
+In this case, it is been spotted because of comedi_alloc_spriv().
+All other usages of struct comedi_lrange seem to be static definition of
+the structure that explicitly set the .length field.
 
-	no4lvl		[RISCV] Disable 4-level and 5-level paging modes. Forces
-			kernel to use 3-level paging instead.
+[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+---
+ include/linux/comedi/comedidev.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	no5lvl		[X86-64,RISCV] Disable 5-level paging mode. Forces
-			kernel to use 4-level paging instead.
+diff --git a/include/linux/comedi/comedidev.h b/include/linux/comedi/comedidev.h
+index 0a1150900ef3..c08416a7364b 100644
+--- a/include/linux/comedi/comedidev.h
++++ b/include/linux/comedi/comedidev.h
+@@ -633,7 +633,7 @@ extern const struct comedi_lrange range_unknown;
+  */
+ struct comedi_lrange {
+ 	int length;
+-	struct comedi_krange range[];
++	struct comedi_krange range[] __counted_by(length);
+ };
+ 
+ /**
+-- 
+2.34.1
 
---ZyDAWSEjMDJNp7Wh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRfkKwAKCRB4tDGHoIJi
-0sckAP96xMeKJdlGIablTffmHoXBsU3nIZz+lu2Vm/HAnLMEKAD+Nxq+WTdOPyHE
-Tx+O88xAJtz6dMJb3se92VlCB2vHCQA=
-=/vk6
------END PGP SIGNATURE-----
-
---ZyDAWSEjMDJNp7Wh--
