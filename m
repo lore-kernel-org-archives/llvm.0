@@ -1,142 +1,100 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7FAB668
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 20:57:14 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1c5cd27b1acso137730645ad.2
-        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 13:57:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57799B668
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 21:01:15 +0000 (UTC)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6c4d625da40so7640112a34.1
+        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 14:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696107434; x=1696712234; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F8ShV6E/8QsJOCzMhx8IRO8TVLv4FnaEtvtGItg5wE4=;
-        b=IIdnCECaFanneAcDCsBjlmfwPaY1wUBUiEveioywgCKf5WQUAPV4pI/0F1HgpsaZPN
-         INCzi3LWyu1GqqtE+0sFqDZAdokZG9y1aAIdsCZ8Pr4eLhrw/4BSQT4w1Lu5N2rtepNB
-         YR68f4BABtFPSLaF5q7gx+SxuezCOVZgqwfF4=
+        d=chromium.org; s=google; t=1696107674; x=1696712474; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=27IFQu1p2zMt99rhR1KNh/9hYoodXsLNJNCuaLad3CU=;
+        b=AS8bAnrue4wSoQwN969VR6MKD8ha1G/9X5ZIRluyz7B8SgPE2gbfZme9zpZpDZ6Aw1
+         /2MKXqvXFCXk/2igH24OZIRXGvGBvHvyRjkryNBn0Rp7FPp2NwBW28qEyry8I9y1CTNW
+         EWtkkiqdwmbhfwRjOHe4tL2/vyZXjS0fwsuqA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696107434; x=1696712234;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F8ShV6E/8QsJOCzMhx8IRO8TVLv4FnaEtvtGItg5wE4=;
-        b=vSNTw4UqdPBw4+Cuu5LUmz44za8D3loJd3ng//tAu9JXoeyP/biZToxw5aklzcmPjd
-         j69SGR0URFvEX41FR4shVjna6Kz9GQzSnsL1l6C8oMabOY4bDDfWj2VnEu0woEQGHv92
-         duDJ9PUNY1nu2gnrCBPVv+HNS+pQ8jZe/tTnN9AZInrBnw0Qi1f88P6cmxYi8yAAuQS4
-         suQVI4g9r1XkybfpuXwWa3xV4+Yma+MgslyE7qcJgIgnoxvLTPW8/bQBnxnHoPRYTTWj
-         vnsaZQhZFYeLxdyO5fGTmMMmn66vwssumgsd3sZ1ljSu5M7PypaeAksokF0bBXNdFXyG
-         OU3w==
-X-Gm-Message-State: AOJu0YwVAE+8IltqgYtHAEZdB/50VNFIS8UNOb5oDfDLOuEeeKqlXUZr
-	0I2+m3Q/xdQkJeR+qaSvxUFKTg==
-X-Google-Smtp-Source: AGHT+IF0qsPtMg/V1LWALu0KMhdTxitqAJp89szdV7WijDpDZ83pa5U+dzDtHVCD8w4avxADg/CUcw==
-X-Received: by 2002:a17:903:1247:b0:1bf:8779:e045 with SMTP id u7-20020a170903124700b001bf8779e045mr9024419plh.50.1696107434169;
-        Sat, 30 Sep 2023 13:57:14 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696107674; x=1696712474;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=27IFQu1p2zMt99rhR1KNh/9hYoodXsLNJNCuaLad3CU=;
+        b=G4Q9Xjkegrv/eW6yHVyVGeqOaNjWFanmQuQqWQfBLeIJE2Jf1cOw1KSIHWsRph7iUe
+         FyXQNEoZZfA4MQnAiiH5ZQOjapgzXwTyOV9eZCQiB548wx7QvpNbsUr7zXpe1E2chCNM
+         3Xs4Ri9SK1slnGmu7dJ2jLI9SPyM52yGrHZnmhMuGXq2PHu1WL/wnUuotUMCqSdHSGz1
+         9zaqEyRLIZSDKrVS8QdTAkjFLrzPgoHClyzFpBbFzs0XcPfr5NssqYWqdqClFfxXH6Z3
+         +fG0wvrLz/LptNcAHxBvCs0G8pcymK5tjb5oqrO4uj+8sZyoXzh0R+idAqsK/mqc73R6
+         1uhQ==
+X-Gm-Message-State: AOJu0YzVmalhnIQVI8vdOgVO+qZLh8iVy70UJo45AnzEAmYPXuPnt6Cs
+	5G0OnTPeFz9MDWepKUyybC4FpQ==
+X-Google-Smtp-Source: AGHT+IFeOcxaHIbtr3OOPjBvPc8vpAIKWTbtjxf4uBFCfxJieFURN+yasje/os/U6MRlxkFgpLgoBg==
+X-Received: by 2002:a05:6830:2091:b0:6c4:c607:7346 with SMTP id y17-20020a056830209100b006c4c6077346mr8189210otq.23.1696107674143;
+        Sat, 30 Sep 2023 14:01:14 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170903228c00b001bbb7af4963sm19102341plh.68.2023.09.30.13.57.12
+        by smtp.gmail.com with ESMTPSA id ey1-20020a056a0038c100b0068a13b0b300sm17483758pfb.11.2023.09.30.14.01.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Sep 2023 13:57:13 -0700 (PDT)
-Date: Sat, 30 Sep 2023 13:57:09 -0700
+        Sat, 30 Sep 2023 14:01:13 -0700 (PDT)
+Date: Sat, 30 Sep 2023 14:01:11 -0700
 From: Kees Cook <keescook@chromium.org>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] comedi: Annotate struct comedi_lrange with __counted_by
-Message-ID: <202309301342.5B5BED40A1@keescook>
-References: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr>
+To: Conor Dooley <conor@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] riscv: mm: Update mmap_rnd_bits_max
+Message-ID: <202309301400.4E1AD87@keescook>
+References: <20230929211155.3910949-4-samitolvanen@google.com>
+ <20230929211155.3910949-6-samitolvanen@google.com>
+ <202309291452.66ED9B4D83@keescook>
+ <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
+ <20230930-emporium-share-2bbdf7074e54@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230930-emporium-share-2bbdf7074e54@spud>
 
-On Sat, Sep 30, 2023 at 11:14:47AM +0200, Christophe JAILLET wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On Sat, Sep 30, 2023 at 10:02:35AM +0100, Conor Dooley wrote:
+> On Fri, Sep 29, 2023 at 03:52:22PM -0700, Sami Tolvanen wrote:
+> > On Fri, Sep 29, 2023 at 2:54 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Fri, Sep 29, 2023 at 09:11:58PM +0000, Sami Tolvanen wrote:
+> > > > ARCH_MMAP_RND_BITS_MAX is based on Sv39, which leaves a few
+> > > > potential bits of mmap randomness on the table if we end up enabling
+> > > > 4/5-level paging. Update mmap_rnd_bits_max to take the final address
+> > > > space size into account. This increases mmap_rnd_bits_max from 24 to
+> > > > 33 with Sv48/57.
+> > > >
+> > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > >
+> > > I like this. Is RISCV the only arch where the paging level can be chosen
+> > > at boot time?
+> > 
+> > I haven't seen this elsewhere, but I also haven't looked at all the
+> > other architectures that closely. arm64 does something interesting
+> > with ARM64_VA_BITS_52, but I think we can still handle that in
+> > Kconfig.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is part of a work done in parallel of what is currently worked
-> on by Kees Cook.
+> AFAIU, x86-64 can do this also:
 > 
-> My patches are only related to corner cases that do NOT match the
-> semantic of his Coccinelle script[1].
-
-Nice!
-
-struct comedi_lrange {
-        int length;
-        struct comedi_krange range[];
-};
-...
-static const struct comedi_lrange range_rti800_ai_10_bipolar = {
-        4, {
-                BIP_RANGE(10),
-                BIP_RANGE(1),
-                BIP_RANGE(0.1),
-                BIP_RANGE(0.02)
-        }
-};
-
-I'm struggling to come up with a way for Coccinelle to find this kind of
-thing in other places...
-
-> In this case, it is been spotted because of comedi_alloc_spriv().
-> All other usages of struct comedi_lrange seem to be static definition of
-> the structure that explicitly set the .length field.
-
-Ah-ha, I found it in drivers/comedi/drivers/das16.c das16_ai_range():
-
-                lrange = comedi_alloc_spriv(s,
-                                            struct_size(lrange, range, 1));
-
-I was also able to find this:
-
-union jr3_pci_single_range {
-        struct comedi_lrange l;
-        char _reserved[offsetof(struct comedi_lrange, range[1])];
-};
-
-Which looks a lot like DEFINE_FLEX:
-https://lore.kernel.org/linux-hardening/20230912115937.1645707-2-przemyslaw.kitszel@intel.com/
-But that above for stack varaibles rather than globals. But I'm way off
-topic now. ;)
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
+> 	no4lvl		[RISCV] Disable 4-level and 5-level paging modes. Forces
+> 			kernel to use 3-level paging instead.
 > 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> ---
->  include/linux/comedi/comedidev.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/comedi/comedidev.h b/include/linux/comedi/comedidev.h
-> index 0a1150900ef3..c08416a7364b 100644
-> --- a/include/linux/comedi/comedidev.h
-> +++ b/include/linux/comedi/comedidev.h
-> @@ -633,7 +633,7 @@ extern const struct comedi_lrange range_unknown;
->   */
->  struct comedi_lrange {
->  	int length;
-> -	struct comedi_krange range[];
-> +	struct comedi_krange range[] __counted_by(length);
->  };
->  
->  /**
-> -- 
-> 2.34.1
-> 
+> 	no5lvl		[X86-64,RISCV] Disable 5-level paging mode. Forces
+> 			kernel to use 4-level paging instead.
+
+Ah-ha! Okay, well, then let's track this idea:
+https://github.com/KSPP/linux/issues/346
+
 
 -- 
 Kees Cook
