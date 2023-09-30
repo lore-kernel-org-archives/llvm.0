@@ -1,102 +1,91 @@
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 225371385
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 06:47:22 +0000 (UTC)
-Received: from [192.168.1.18] ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id mTdfqzIAmNwJhmTdfqg9fR; Sat, 30 Sep 2023 08:39:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1696055985;
-	bh=PuFtE8Nzqce9GbOstUVaI0iC3LvA8WVVT5UfiC0x0N8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=B8ElbXXvOXWetZw3fI9NSyo1YhshaygFu+vth0MHhOvzg3ysKfsBlWRQpf0dzTSsv
-	 ON1DpCMkrAVP9pZsorOE7xJjN+WxBNnen29CakYPhf4cwjmCeVKS7ZFQhiGzexltvv
-	 5gLR5PM0fBWQBkP3ugRsFgsaq4arZftG6QWLwgrQOsnFEisWlYTzjODYjLAnvNGlAy
-	 MB3JZSgfIWkdOCS0HkBlRe/o7SpEyTrjxU/lUF5n1UwPYLdoA7tKJ4pWtfTPhEppd5
-	 kcFJHGZy8iV+eAhgOGlo7fS3LFD/foHBP2k2dpzZHvTkIBACjSu2mI4vcbrtcYW6Si
-	 ISnU8FR4vMGYw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 30 Sep 2023 08:39:45 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <10341d7c-2903-9aba-9e33-c60bab32df5d@wanadoo.fr>
-Date: Sat, 30 Sep 2023 08:39:42 +0200
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BC0138C
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 09:02:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B1EC433C8;
+	Sat, 30 Sep 2023 09:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696064559;
+	bh=qq5LGrB9piI/ALapVoHarnO97Km28K9Nxg5/t/eX3io=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LKxqJIH2gitAORyRjRTVUOwJedMlXeBfjfYhSaPvC9muinRajK8LMTESWiHvpKguv
+	 2himUzCHPxi9e2BUWe6lTa1DAV/gPbrHcHGPHIv0BxugJyQ9h+XavqGxZ0EB5n9CLD
+	 bEFrYwuDLu8c7wt+are2vfq1QwixbaLk8k6ZqYz9+5TJArSwW3T/0ACshg+pZOUdx1
+	 ZHZx0U5AXWGiOIEI1zJJ3gHp1GOTymhXXuwaBYcu2AiUXf6LQvtKG5kGOltn+XG7+f
+	 iJvzhQxhYf+2WAbH/lA6aicPsVoJB27UPTb53VWd2w9FqchqEJNqj4wu49rX1QcvUs
+	 WZNjI10qgI5Fw==
+Date: Sat, 30 Sep 2023 10:02:35 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] riscv: mm: Update mmap_rnd_bits_max
+Message-ID: <20230930-emporium-share-2bbdf7074e54@spud>
+References: <20230929211155.3910949-4-samitolvanen@google.com>
+ <20230929211155.3910949-6-samitolvanen@google.com>
+ <202309291452.66ED9B4D83@keescook>
+ <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 1/5] chelsio/l2t: Annotate struct l2t_data with
- __counted_by
-To: Kees Cook <keescook@chromium.org>, Raju Rangoju <rajur@chelsio.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230929181042.work.990-kees@kernel.org>
- <20230929181149.3006432-1-keescook@chromium.org>
-Content-Language: fr, en-GB
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230929181149.3006432-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ZyDAWSEjMDJNp7Wh"
+Content-Disposition: inline
+In-Reply-To: <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
 
-Le 29/09/2023 à 20:11, Kees Cook a écrit :
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct l2t_data.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Raju Rangoju <rajur@chelsio.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/net/ethernet/chelsio/cxgb3/l2t.h | 2 +-
->   drivers/net/ethernet/chelsio/cxgb4/l2t.c | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/chelsio/cxgb3/l2t.h b/drivers/net/ethernet/chelsio/cxgb3/l2t.h
-> index ea75f275023f..646ca0bc25bd 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb3/l2t.h
-> +++ b/drivers/net/ethernet/chelsio/cxgb3/l2t.h
-> @@ -76,7 +76,7 @@ struct l2t_data {
->   	atomic_t nfree;		/* number of free entries */
->   	rwlock_t lock;
->   	struct rcu_head rcu_head;	/* to handle rcu cleanup */
-> -	struct l2t_entry l2tab[];
-> +	struct l2t_entry l2tab[] __counted_by(nentries);
->   };
->   
->   typedef void (*arp_failure_handler_func)(struct t3cdev * dev,
-> diff --git a/drivers/net/ethernet/chelsio/cxgb4/l2t.c b/drivers/net/ethernet/chelsio/cxgb4/l2t.c
-> index a10a6862a9a4..1e5f5b1a22a6 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb4/l2t.c
-> +++ b/drivers/net/ethernet/chelsio/cxgb4/l2t.c
-> @@ -59,7 +59,7 @@ struct l2t_data {
->   	rwlock_t lock;
->   	atomic_t nfree;             /* number of free entries */
->   	struct l2t_entry *rover;    /* starting point for next allocation */
-> -	struct l2t_entry l2tab[];  /* MUST BE LAST */
-> +	struct l2t_entry l2tab[] __counted_by(l2t_size);  /* MUST BE LAST */
 
-Nit: the comment is maybe unneeded.
+--ZyDAWSEjMDJNp7Wh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->   };
->   
->   static inline unsigned int vlan_prio(const struct l2t_entry *e)
+On Fri, Sep 29, 2023 at 03:52:22PM -0700, Sami Tolvanen wrote:
+> On Fri, Sep 29, 2023 at 2:54=E2=80=AFPM Kees Cook <keescook@chromium.org>=
+ wrote:
+> >
+> > On Fri, Sep 29, 2023 at 09:11:58PM +0000, Sami Tolvanen wrote:
+> > > ARCH_MMAP_RND_BITS_MAX is based on Sv39, which leaves a few
+> > > potential bits of mmap randomness on the table if we end up enabling
+> > > 4/5-level paging. Update mmap_rnd_bits_max to take the final address
+> > > space size into account. This increases mmap_rnd_bits_max from 24 to
+> > > 33 with Sv48/57.
+> > >
+> > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> >
+> > I like this. Is RISCV the only arch where the paging level can be chosen
+> > at boot time?
+>=20
+> I haven't seen this elsewhere, but I also haven't looked at all the
+> other architectures that closely. arm64 does something interesting
+> with ARM64_VA_BITS_52, but I think we can still handle that in
+> Kconfig.
 
+AFAIU, x86-64 can do this also:
+
+	no4lvl		[RISCV] Disable 4-level and 5-level paging modes. Forces
+			kernel to use 3-level paging instead.
+
+	no5lvl		[X86-64,RISCV] Disable 5-level paging mode. Forces
+			kernel to use 4-level paging instead.
+
+--ZyDAWSEjMDJNp7Wh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRfkKwAKCRB4tDGHoIJi
+0sckAP96xMeKJdlGIablTffmHoXBsU3nIZz+lu2Vm/HAnLMEKAD+Nxq+WTdOPyHE
+Tx+O88xAJtz6dMJb3se92VlCB2vHCQA=
+=/vk6
+-----END PGP SIGNATURE-----
+
+--ZyDAWSEjMDJNp7Wh--
