@@ -1,133 +1,104 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA931FC5
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 16:41:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696092081;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XfzynOiqmDqwBabbeZX8w7UB1gPRFcvC+YJnevvTAF4=;
-	b=Zg19pzHrTxnv3D4mbB17nP5H5rNk7n18OxbXcudESuaP22tZjcQqxwyeGP7g65TcV58tzn
-	Bm3Mffk5hZD3YtAFdCb+Th1l/kADF3KWXGx6OT+4V93Bcn7pmE6g6FEmPv75CVHssqlwQI
-	JJC9/ecG6b1AtpnhX7GcPFbw5b6DWk8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-396-BEBUGWEzP3W3zRfPDyAhQw-1; Sat, 30 Sep 2023 12:41:19 -0400
-X-MC-Unique: BEBUGWEzP3W3zRfPDyAhQw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4EE85101A53B
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 16:41:19 +0000 (UTC)
-Received: from [172.64.4.25] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 391182026D4B;
-	Sat, 30 Sep 2023 16:41:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 8 of 230): Test report for master
- (6.6.0-rc3, mainline.kernel.org-clang, 9f3ebbef)
-Date: Sat, 30 Sep 2023 16:41:19 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB30817993
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 17:12:46 +0000 (UTC)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38UGauPZ009468;
+	Sat, 30 Sep 2023 17:12:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=QpsScOf9/QJkhluz9qVoVCK0j/moMriR7Sl3NGMbTqE=;
+ b=EhlmSxeFEYjU7A8Zy0jlaGqyqX/JpRsDz8gHGC/tv/pIfv+s8Nuc0QXCvRdHvh77r5Rh
+ iksq5zeUPOkSQKShZ0Jj3Lzrota4OAcjbAXxBj4q+uUfg1O9oV1bZIW6XttlKnnyso0E
+ xGquum6hHQEaFc+PjhRNeHdczXjlXJE8T46Xv54V/G4HLKeV+37Ij5vj9Phmv/UqOz6O
+ m1yTIAvZHdw4k5shKwLp6ro4HYot3i2aUoZTp7i7DyOROmHqXt7lv4oqLmMjlPSlUJev
+ swHiGV4fcDoPiv85FCES3blnpK0h4RBW3jhv7QSDlbkKCXxfPVBwBwaeOBzSXuUUPe+F ZQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3teaperuh6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 30 Sep 2023 17:12:27 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38UHCQKG011720
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 30 Sep 2023 17:12:26 GMT
+Received: from [10.216.56.186] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sat, 30 Sep
+ 2023 10:12:20 -0700
+Message-ID: <012936e8-48dd-4f10-735a-9dcfafb49915@quicinc.com>
+Date: Sat, 30 Sep 2023 22:42:16 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <22148.123093012411900220@us-mta-396.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag '6.6-rc3-ksmbd-server-fixes' of git://git.sam=
-ba.org/ksmbd
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/106930
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH V12 2/3] dt-bindings: pwm: add IPQ6018 binding
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <thierry.reding@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <ndesaulniers@google.com>,
+        <trix@redhat.com>, <baruch@tkos.co.il>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
+        <nathan@kernel.org>
+References: <20230925065915.3467964-1-quic_devipriy@quicinc.com>
+ <20230925065915.3467964-3-quic_devipriy@quicinc.com>
+ <42338d41-1b90-4f77-958e-479d32e0ce1d@linaro.org>
+ <59c9dbdb-8673-8dc7-ecca-32ff120ccf80@quicinc.com>
+ <4636a990-1044-1f67-dae5-8583f96021be@quicinc.com>
+ <175d9803-8ad7-4c70-ad8c-b2d661828b61@linaro.org>
+From: Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <175d9803-8ad7-4c70-ad8c-b2d661828b61@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: I3rGPngaB39L4wh4X_n3QP85oXCDkKE_
+X-Proofpoint-GUID: I3rGPngaB39L4wh4X_n3QP85oXCDkKE_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-30_15,2023-09-28_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ adultscore=0 clxscore=1015 mlxlogscore=797 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309300141
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+On 9/30/2023 9:02 PM, Krzysztof Kozlowski wrote:
+> On 29/09/2023 10:56, Devi Priya wrote:
+> 
+>>>>> diff --git a/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
+>>>>> b/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..857086ad539e
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/pwm/ipq-pwm.yaml
+>>>>
+>>>> Filename matching compatible, so qcom,ipq6018-pwm.yaml
+>>> okay
+>> We would have other ipq compatibles (ipq9574 & ipq5332) being added to
+>> the binding in the upcoming series.
+>> So, shall we rename the binding to qcom,ipq-pwm.yaml
+> 
+> I prefer not.
+> 
+Sure, okay
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+Devi Priya
+> Best regards,
+> Krzysztof
+> 
