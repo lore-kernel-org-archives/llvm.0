@@ -1,52 +1,52 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF571FA0
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 16:37:54 +0000 (UTC)
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-690d2e13074so12323121b3a.1
-        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 09:37:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920671C14
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 16:38:15 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1c724577e1fso51248245ad.0
+        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 09:38:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696091873; x=1696696673; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1696091895; x=1696696695; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l5AGtOCX2YLyW25B4ipM/PsTXAr3eNAm1BeKQ+N08Gk=;
-        b=gyfxU9P3+q1VzZGBqh2o6jguDKNhxznU1LIePbD0+5e9cZt20VQ7blmFkXoYGSZH1m
-         w2Z6f6UE518jSH1/fJPOinTh0qrnssXMga3jQBrHjnXfHa/mvvMfAIfaSVnGxntyq358
-         eRu/y/H7yscL+IbFKf9IqbIMTCNn/tMURrAUKKDHX908j/Isd0U1nVecZOtaZyT344GX
-         Cz1Ire0gZ2HA/24rS6Uvw236h5aId0w1AfdNXWmfsZC8byFSDGoGfHsf2nKMr+s1qu2o
-         FMMtjJkKLIcgbyT5EyA7bzdsGc487Vde6Zaqw8wzvBetx4dFmBWfqQmgMZMYho1OqmeC
-         whhA==
+        bh=ll5RgjPd4WERjGYzQzNFee7tOPsdSELqkfPGuXCqmQY=;
+        b=ChyJa3MLfn/2lzECCSdW7KBZwvcXK0E3yQN74x3PSlXbOKek7MLjg+aJXFsxPIDZaB
+         XS5EtLO20m7ATX16fg1LZm+knDLTwpKkeQfgsaumFcB1y8Nc2J71/wyrwVvU4C4FVdEo
+         GIoLlBiUmE6Qq/Qg+QB84JqbE1Y/SVHvns4KxdcC9J8QjNDUBlUqlaG6LFcbMEpk6b9P
+         TkxwEkK4ah4OW1DGj7zZlYJ7zCH1onGRVb7rEbUwoYRFhUTbt8TMoLwQQPUoLKuL9LRj
+         EXchi+lEGDM7UQm8thDIXu7N7NMiYv2vOJCDDI1atgeQnpNZLvV2OfeDYnwivrc0BOkx
+         Ad8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696091873; x=1696696673;
+        d=1e100.net; s=20230601; t=1696091895; x=1696696695;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l5AGtOCX2YLyW25B4ipM/PsTXAr3eNAm1BeKQ+N08Gk=;
-        b=asn8C2u7nyAyF5vzTwYbt/iV846KJfY1P5pIE7nAacitg4zcSg5Zn53SWOayDCruKC
-         X2V4lE9AlV/T2ldEuz75GYxVCVXzf4u0RzWH2Dnezxlr3a1h5m8oHOQc34gabye533BV
-         60lANyw0XcsxXBXgaOgLxzS6+LH0WFxCkkKx8z9bejyo7Pzj1oQst9cur7H9aVr1pkrI
-         TPl02s//ghi9UGOKfiA2RDwTa/FQe7AeIrM2UkrylM8E1Hyk3j0Anr3bxZi9ewHur4vR
-         ny3OjoeHR4ic77k9d5evfJBanxpEp7FOArbstes7nh37x7xFaVmz2lNRFOUIpkiA0feI
-         jQDw==
-X-Gm-Message-State: AOJu0Yysw/aJsa0o/+9UsC2blhchrr1nHiXBx2pRmetXYtZ5nd4TbG1d
-	ess4/n97BwdXfPZHQ/N6+n8=
-X-Google-Smtp-Source: AGHT+IFcD+InxoquI1bZbEdFpDChHT0/gks65lBOkpRCEDjQVecmAWULy2M4IU4Dy2nT3oiXSXv11w==
-X-Received: by 2002:a05:6a20:158e:b0:159:b4ba:a5bf with SMTP id h14-20020a056a20158e00b00159b4baa5bfmr7623302pzj.13.1696091873452;
-        Sat, 30 Sep 2023 09:37:53 -0700 (PDT)
+        bh=ll5RgjPd4WERjGYzQzNFee7tOPsdSELqkfPGuXCqmQY=;
+        b=khNsNo0EqYAdka417iRAVhnBPmLcB+yQcf0lJ7wbGPN37rc4LMyiV7UHMw3NWaQ+ly
+         ohDaLr/chjeOonIxUuj45JykUO3b9TFpwiG3PObfpM4SH4KUs2XeWlzA8zM7Q9ZOBiY+
+         UyhYSl2c7PcdTSfxaUxIDUM6sFd0TmVZOhZrKIqYgWVSI6XiB4phf+/Aj7HG9NDYgbb8
+         IgSVY/rQshKni7wLQdyl+Oe0qB28yvvF3zlODCPHMpZCHHzySpjuYPKWP0Urr6uciUTq
+         dcWPYaFBG+FE6FulqCNQ7SsRA6+xbgxdUy33GTuWKxJS7bmL3/uvmwYa947NiVH4kNzc
+         uuoA==
+X-Gm-Message-State: AOJu0YzkRfj5UVbVxF4oQSMQFc/mN8u7HosQ+qbeeG/5P9V5x9QWXpjf
+	L/T3QBfedxthBvqapTJNnn0=
+X-Google-Smtp-Source: AGHT+IEokMxdLDwnG72GNo8md4NLX8fZro4ky2KeOokEesCSFdQ1+vI/RtlGtfvbM1IityteBfIaUw==
+X-Received: by 2002:a17:902:d34b:b0:1bb:9b29:20d9 with SMTP id l11-20020a170902d34b00b001bb9b2920d9mr8060404plk.20.1696091894718;
+        Sat, 30 Sep 2023 09:38:14 -0700 (PDT)
 Received: from google.com ([2620:15c:9d:2:a90f:2dad:30c1:d923])
-        by smtp.gmail.com with ESMTPSA id ml24-20020a17090b361800b00262e485156esm3334372pjb.57.2023.09.30.09.37.52
+        by smtp.gmail.com with ESMTPSA id j1-20020a170902c3c100b001bc18e579aesm12841649plj.101.2023.09.30.09.38.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Sep 2023 09:37:53 -0700 (PDT)
-Date: Sat, 30 Sep 2023 09:37:50 -0700
+        Sat, 30 Sep 2023 09:38:14 -0700 (PDT)
+Date: Sat, 30 Sep 2023 09:38:11 -0700
 From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To: Kees Cook <keescook@chromium.org>
 Cc: linux-input@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] Input: Annotate struct input_leds with __counted_by
-Message-ID: <ZRhO3noTd/bDWjFy@google.com>
-References: <20230922175031.work.467-kees@kernel.org>
+Subject: Re: [PATCH] input: mt: Annotate struct input_mt with __counted_by
+Message-ID: <ZRhO828Ml4qpoS60@google.com>
+References: <20230922175036.work.762-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,16 +55,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230922175031.work.467-kees@kernel.org>
+In-Reply-To: <20230922175036.work.762-kees@kernel.org>
 
-On Fri, Sep 22, 2023 at 10:50:32AM -0700, Kees Cook wrote:
+On Fri, Sep 22, 2023 at 10:50:37AM -0700, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct input_leds.
+> As found with Coccinelle[1], add __counted_by for struct input_mt.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
