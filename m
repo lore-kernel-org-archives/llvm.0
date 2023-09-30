@@ -1,34 +1,34 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55AE14279
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 14:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6830016400
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 15:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696085481;
+	s=mimecast20190719; t=1696087307;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=0Sdzb8sWIsZrTR5fmNyW5MWE82VuNUIxbj2WLrv7oIw=;
-	b=A+OPRChxRQd8SXE8AX7tFCkdOoEPWcUnc/EkcznXP9nw8AspPF/a4bnDa5ooUjvsShYx7s
-	ZmwfwzP2x8LnYdh6k7njqTYvC4gQLua1dlf+m791Wv2qHqzIgd9CODgbFVNDtPAVXzXbUE
-	sW0/aLfjJAcBB7MIMbLpz1f6l7NPjDY=
+	bh=aCCmHq2fcikmay2WtU4dy6WupObdzSvZjpqFQNf0TpU=;
+	b=JZnks0AIsNPt7I34nFeW8en7Uhyh+XVs0FqWDTs2/tjj0twGqhqEZj6r8PbEB0KI5GPg9R
+	pe12q0xXtinhp7ZISb0pkdMImRYbJ3xNClsxBv5FMm+oXdQXgJ6WBGaK8YcE9GZMYgA0kb
+	aXHE+fiQVlDyBE+tEtMs6eagIqgYvdw=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623--gSl1r2GMYihMTsmOoaeyg-1; Sat, 30 Sep 2023 10:51:19 -0400
-X-MC-Unique: -gSl1r2GMYihMTsmOoaeyg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-141-y0AUzXWOOem2o1q4JR_jPg-1; Sat, 30 Sep 2023 11:21:45 -0400
+X-MC-Unique: y0AUzXWOOem2o1q4JR_jPg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4CF3E8015AB
-	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 14:51:19 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 62BC48015AB
+	for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 15:21:45 +0000 (UTC)
 Received: from [172.64.4.25] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 34E76176EA;
-	Sat, 30 Sep 2023 14:51:19 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 484B240C2064;
+	Sat, 30 Sep 2023 15:21:45 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 10 of 230): Test report for master
- (6.6.0-rc3, mainline.kernel.org-clang, 1c84724c)
-Date: Sat, 30 Sep 2023 14:51:19 -0000
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, 71e58659)
+Date: Sat, 30 Sep 2023 15:21:45 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <30970.123093010511900575@us-mta-623.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <55848.123093011214500255@us-mta-141.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,11 +53,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'slab-fixes-for-6.6-rc4' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/vbabka/slab
+    Commit message: Merge tag 'gpio-fixes-for-v6.6-rc4' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/brgl/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/106867
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106831
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -70,13 +70,6 @@ l-tests/-/issues/1654
                   x86_64 - xfstests - cifsv3.11
                   x86_64 (debug) - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
 e of undeclared identifier 'NF_NAT_MANIP_SRC'
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -84,6 +77,24 @@ l-tests/-/issues/1418
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
         Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
 robe of ARMHC500:20 failed with error -17
             URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
@@ -112,12 +123,6 @@ p kernel
 l-tests/-/issues/1544
             Affected tests:
                  aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
 
 
 
