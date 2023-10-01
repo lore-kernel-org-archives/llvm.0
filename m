@@ -1,125 +1,154 @@
-Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B103C28F6
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 06:46:09 +0000 (UTC)
-Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
-	by cmsmtp with ESMTP
-	id mdlkqEHDiIBlVmqD0qisZF; Sun, 01 Oct 2023 06:45:42 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id mqDPqLYueRPlHmqDQqLR3F; Sun, 01 Oct 2023 06:46:08 +0000
-X-Authority-Analysis: v=2.4 cv=ILARtyjG c=1 sm=1 tr=0 ts=651915b0
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8 a=20KFwNOVAAAA:8 a=cm27Pg_UAAAA:8
- a=0yL73Cyy68KADmUz8mEA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=D+KDSp0rnEI8tJ5BHsZfNQN2UopqEOST//9+ZQu1af8=; b=o7SZuscvfL2sr94uoquVxZ8K9g
-	DQrXk3nUTEWgrGwYg1UKulAhTSSP+cvoRamvTiDCODlU0dUeHsAJTRXlWn70QKWJYiPvOI2pKJ7Wx
-	p+MpAt92V/Ik4n2FiEwlrABAREi0eSqRzQC+FUvyFN12NH2TjeRrsTdyuHhff2LoS8pScoHmeYLh6
-	aORhOZ4fvlAAqkHKX50e1vzo0JpraT19jzPW9hgdq5xUbOxXm85IBJ0jMkRLrsi5NQQUT5kyZCaZI
-	4a2HQLFjEOv4NnwJS84ynAlttawQb+HDDuqNJ8kOkcDLnUBlzvH1GiLs6YjzRUwFcrPh8cagkWddR
-	//thnBIA==;
-Received: from [94.239.20.48] (port=55984 helo=[192.168.1.98])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qmqDO-001QWo-37;
-	Sun, 01 Oct 2023 01:46:07 -0500
-Message-ID: <6e09d483-810c-dcae-36f9-b0ac8ae04fc4@embeddedor.com>
-Date: Sun, 1 Oct 2023 08:46:03 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3977C28FC
+	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 07:25:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ojMGvfX4EQDBSjYC40hfQgCdDjoAMF7YsfOIfh6s8Lo=;
+  b=uHY2qLaZzbaNayyA7pb/uFAQ6qNO5z1SEJna0zofg4j98bZOCu9vtqD5
+   PMHTQAQkGKCrMNBCDSx45A5wgw6UrNQQCaQ4tJEqH5DBk7iExxGqDkFN4
+   8/QFdqwXsC0o8mHsskDDRfOJQhweB/n6LpsyZl9dXFUaw28hhjI+eyKeV
+   Q=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="6.03,191,1694728800"; 
+   d="scan'208";a="67430614"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2023 09:25:09 +0200
+Date: Sun, 1 Oct 2023 09:25:07 +0200 (CEST)
+From: Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To: Kees Cook <keescook@chromium.org>
+cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+    Ian Abbott <abbotti@mev.co.uk>, 
+    H Hartley Sweeten <hsweeten@visionengravers.com>, 
+    "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+    linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
+    linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] comedi: Annotate struct comedi_lrange with
+ __counted_by
+In-Reply-To: <202309301342.5B5BED40A1@keescook>
+Message-ID: <alpine.DEB.2.22.394.2310010922250.3166@hadrien>
+References: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr> <202309301342.5B5BED40A1@keescook>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] dmaengine: ep93xx_dma: Annotate struct ep93xx_dma_engine
- with __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Vinod Koul <vkoul@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- dmaengine@vger.kernel.org, llvm@lists.linux.dev,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20230928234334.work.391-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230928234334.work.391-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.239.20.48
-X-Source-L: No
-X-Exim-ID: 1qmqDO-001QWo-37
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:55984
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 86
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfBlfmuDDttygdrm33aVuZfVbL2KprAo/5o94cLdnDEpJ39gcwBIYG18+hMA45/yU2bbGgtghJpNuJU1nLsuGtbG5NG1bUunJBRhQu5lQx6964SN6feWU
- j7zjTd+NCHZLMSoAj9HA3Y3JehfHE/KJPPXDPyatPF+tqf/htaPnSb4JmGtR7LsxDJbHZtkn2/QZTX25sOrJoNfqbbHQKOPgdPA=
+Content-Type: text/plain; charset=US-ASCII
 
 
 
-On 9/29/23 01:43, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct ep93xx_dma_engine.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Tom Rix <trix@redhat.com>
-> Cc: dmaengine@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Sat, 30 Sep 2023, Kees Cook wrote:
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> On Sat, Sep 30, 2023 at 11:14:47AM +0200, Christophe JAILLET wrote:
+> > Prepare for the coming implementation by GCC and Clang of the __counted_by
+> > attribute. Flexible array members annotated with __counted_by can have
+> > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> > functions).
+> >
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > ---
+> > This patch is part of a work done in parallel of what is currently worked
+> > on by Kees Cook.
+> >
+> > My patches are only related to corner cases that do NOT match the
+> > semantic of his Coccinelle script[1].
+>
+> Nice!
+>
+> struct comedi_lrange {
+>         int length;
+>         struct comedi_krange range[];
+> };
+> ...
+> static const struct comedi_lrange range_rti800_ai_10_bipolar = {
+>         4, {
+>                 BIP_RANGE(10),
+>                 BIP_RANGE(1),
+>                 BIP_RANGE(0.1),
+>                 BIP_RANGE(0.02)
+>         }
+> };
+>
+> I'm struggling to come up with a way for Coccinelle to find this kind of
+> thing in other places...
+>
+> > In this case, it is been spotted because of comedi_alloc_spriv().
+> > All other usages of struct comedi_lrange seem to be static definition of
+> > the structure that explicitly set the .length field.
+>
+> Ah-ha, I found it in drivers/comedi/drivers/das16.c das16_ai_range():
+>
+>                 lrange = comedi_alloc_spriv(s,
+>                                             struct_size(lrange, range, 1));
 
-Thanks
--- 
-Gustavo
+This is not found due to the regular expression used for the name of the
+alloc function.  Maybe you could drop it entirely?  Maybe you could just
+check for alloc somewhere in the string?
 
-> ---
->   drivers/dma/ep93xx_dma.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/ep93xx_dma.c b/drivers/dma/ep93xx_dma.c
-> index 5c4a448a1254..d6c60635e90d 100644
-> --- a/drivers/dma/ep93xx_dma.c
-> +++ b/drivers/dma/ep93xx_dma.c
-> @@ -213,7 +213,7 @@ struct ep93xx_dma_engine {
->   #define INTERRUPT_NEXT_BUFFER	2
->   
->   	size_t			num_channels;
-> -	struct ep93xx_dma_chan	channels[];
-> +	struct ep93xx_dma_chan	channels[] __counted_by(num_channels);
->   };
->   
->   static inline struct device *chan2dev(struct ep93xx_dma_chan *edmac)
+identifier ALLOC =~ "alloc";
+
+works in this case.
+
+Also, I see in the link that you have:
+
+// Options: --all-includes
+
+You can actually force this by putting
+
+#spatch --all-includes
+
+and any other options you want.
+
+julia
+
+
+>
+> I was also able to find this:
+>
+> union jr3_pci_single_range {
+>         struct comedi_lrange l;
+>         char _reserved[offsetof(struct comedi_lrange, range[1])];
+> };
+>
+> Which looks a lot like DEFINE_FLEX:
+> https://lore.kernel.org/linux-hardening/20230912115937.1645707-2-przemyslaw.kitszel@intel.com/
+> But that above for stack varaibles rather than globals. But I'm way off
+> topic now. ;)
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> >
+> > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> > ---
+> >  include/linux/comedi/comedidev.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/comedi/comedidev.h b/include/linux/comedi/comedidev.h
+> > index 0a1150900ef3..c08416a7364b 100644
+> > --- a/include/linux/comedi/comedidev.h
+> > +++ b/include/linux/comedi/comedidev.h
+> > @@ -633,7 +633,7 @@ extern const struct comedi_lrange range_unknown;
+> >   */
+> >  struct comedi_lrange {
+> >  	int length;
+> > -	struct comedi_krange range[];
+> > +	struct comedi_krange range[] __counted_by(length);
+> >  };
+> >
+> >  /**
+> > --
+> > 2.34.1
+> >
+>
+> --
+> Kees Cook
+>
