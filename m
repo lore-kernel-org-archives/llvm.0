@@ -1,117 +1,103 @@
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064B9182B5
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 15:19:59 +0000 (UTC)
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-499e2dd41ccso5564104e0c.1
-        for <llvm@lists.linux.dev>; Sun, 01 Oct 2023 08:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696173599; x=1696778399; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AlqqAdUK9+XiZ3vr9zfHOEKY61BQKj01sr184YRw5U0=;
-        b=B9rD6aMubpPCbxIHulcql8uXvYQmSyg1uLtprC67aVQZgWoLqU32fBPCA3Qjt/EKpf
-         NkV6gNlM8E27a1NSOFaV4u4yKQEzoyZ+E+LhSugf8t8nqyFUbgPS9Bg1i8yT2NbUzTxH
-         AH34HgNFKGzYbxpw3+5/m4SDtDYfLu3GUuMFza4yNttd3DsRs6NQWxhk5zr3QwOoFv0u
-         SbSITlgpdAoXw3p74HQNqNbez5oL9U4RGMwpXwE0Fd7PORW3nUV+arpQft9hApcR8WQA
-         zdTDbmTPK7AIK3/tIR6N35pd9FnPDshCq7JnuhC87pyOV+qPrQSnMWTFImoqTxA6xyfu
-         qfKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696173599; x=1696778399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AlqqAdUK9+XiZ3vr9zfHOEKY61BQKj01sr184YRw5U0=;
-        b=rgYfDloW6nQJWbZnJSspO09PaK/PmF3uMK8seBw9kFZeK1WmKyDP4E4s/HDlW6Z/xl
-         ZClwg6VRubA/1ulEfpY34yho1egrFxaFodHKgltZUaxLp34VYYEfYjdLenNUynE9R0Gm
-         sz4zm24vODIfEdT2fe33d2aJ1qB3HVb/XMj60bp/AvmI04ZgWSTwpHZu0mqoMM6jo5rk
-         U9lFgErDRsBgpMhg8UXA9vDW6OX7s/DtxbvJ49vnCStD4kfqrq643/5S2lpNzmz8ANs1
-         XsfwHU9ejf5GRPq1xvRchxtqoeaPCAQdbakJ50bBpIxCHhtFU2x+HtHfuNQQs3pJjsFq
-         nEDQ==
-X-Gm-Message-State: AOJu0YzHVKZZ3w27ZEqw4Ay0tJe+1F52l6bDzDymZ6ccT9edvzi5Q9mv
-	iKzNv81c3Jc8uUP5W5/A+0Ol3Whz8XlqdAb/xh4=
-X-Google-Smtp-Source: AGHT+IE4j3gWxMSOq6OvgLxoyzhdOUwDwvHxGddLU/JkAl6FbHrfp+/DN0/951hZIUWzbtcBLYlLKbL/bWmW7iCfKG8=
-X-Received: by 2002:a1f:c5c7:0:b0:49a:6dc0:5a89 with SMTP id
- v190-20020a1fc5c7000000b0049a6dc05a89mr6121125vkf.5.1696173598711; Sun, 01
- Oct 2023 08:19:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5D5171CE;
+	Sun,  1 Oct 2023 15:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A124EC433C7;
+	Sun,  1 Oct 2023 15:27:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696174021;
+	bh=OP680lsN8lk0ineFcZVgu79J8KnTHUp5BT9RfTao+vk=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=aUZj+oZx53xM+0Adszz/WePNjpsIy9M65UpjURU/NxSen1aEW+VD0g4cNi4O582tX
+	 UdrVpyJrd0PnH8FSU4/PEfoCjVJLUwFMm83B7Ua7uaewX4UNOsO5EngyqnK8FLGyuk
+	 Y+RdmiJPNpfVEh0V4Mg4EzU6j+5te3R8+zzqWLXFrswKW0yEntKN2nzWYc2vwW+88x
+	 GDzfgx4kadbk+mgqoFA4GsZnG7h1JZdeHKVFv74F1iodxlTaCv1Y1p/P4vIpb4jNGN
+	 mSJsW0vdj3syiTjlkdFdIHXGHSYrFPEnkXRLFQteTbYwaaettWQvWoAYA+q4gHrOXc
+	 HibQudUhLOPHA==
+Date: Sun, 01 Oct 2023 08:26:56 -0700
+From: Kees Cook <kees@kernel.org>
+To: Julia Lawall <julia.lawall@inria.fr>, Kees Cook <keescook@chromium.org>
+CC: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Ian Abbott <abbotti@mev.co.uk>,
+ H Hartley Sweeten <hsweeten@visionengravers.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] comedi: Annotate struct comedi_lrange with __counted_by
+User-Agent: K-9 Mail for Android
+In-Reply-To: <alpine.DEB.2.22.394.2310010945130.3166@hadrien>
+References: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr> <202309301342.5B5BED40A1@keescook> <alpine.DEB.2.22.394.2310010945130.3166@hadrien>
+Message-ID: <90E2BBA5-8A2D-42DE-B36A-CD37BABBB433@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230929211155.3910949-4-samitolvanen@google.com>
- <20230929211155.3910949-6-samitolvanen@google.com> <202309291452.66ED9B4D83@keescook>
- <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
- <20230930-emporium-share-2bbdf7074e54@spud> <202309301400.4E1AD87@keescook>
-In-Reply-To: <202309301400.4E1AD87@keescook>
-From: Pedro Falcato <pedro.falcato@gmail.com>
-Date: Sun, 1 Oct 2023 16:19:47 +0100
-Message-ID: <CAKbZUD08W9_HB9F7tQqwreYvVapgVMOkS3QokzwHPcBnFnVMig@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: mm: Update mmap_rnd_bits_max
-To: Kees Cook <keescook@chromium.org>
-Cc: Conor Dooley <conor@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 1, 2023 at 2:51=E2=80=AFAM Kees Cook <keescook@chromium.org> wr=
-ote:
+On October 1, 2023 12:45:41 AM PDT, Julia Lawall <julia=2Elawall@inria=2Efr=
+> wrote:
 >
-> On Sat, Sep 30, 2023 at 10:02:35AM +0100, Conor Dooley wrote:
-> > On Fri, Sep 29, 2023 at 03:52:22PM -0700, Sami Tolvanen wrote:
-> > > On Fri, Sep 29, 2023 at 2:54=E2=80=AFPM Kees Cook <keescook@chromium.=
-org> wrote:
-> > > >
-> > > > On Fri, Sep 29, 2023 at 09:11:58PM +0000, Sami Tolvanen wrote:
-> > > > > ARCH_MMAP_RND_BITS_MAX is based on Sv39, which leaves a few
-> > > > > potential bits of mmap randomness on the table if we end up enabl=
-ing
-> > > > > 4/5-level paging. Update mmap_rnd_bits_max to take the final addr=
-ess
-> > > > > space size into account. This increases mmap_rnd_bits_max from 24=
- to
-> > > > > 33 with Sv48/57.
-> > > > >
-> > > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > > >
-> > > > I like this. Is RISCV the only arch where the paging level can be c=
-hosen
-> > > > at boot time?
-> > >
-> > > I haven't seen this elsewhere, but I also haven't looked at all the
-> > > other architectures that closely. arm64 does something interesting
-> > > with ARM64_VA_BITS_52, but I think we can still handle that in
-> > > Kconfig.
-> >
-> > AFAIU, x86-64 can do this also:
-> >
-> >       no4lvl          [RISCV] Disable 4-level and 5-level paging modes.=
- Forces
-> >                       kernel to use 3-level paging instead.
-> >
-> >       no5lvl          [X86-64,RISCV] Disable 5-level paging mode. Force=
-s
-> >                       kernel to use 4-level paging instead.
 >
-> Ah-ha! Okay, well, then let's track this idea:
-> https://github.com/KSPP/linux/issues/346
+>On Sat, 30 Sep 2023, Kees Cook wrote:
+>
+>> On Sat, Sep 30, 2023 at 11:14:47AM +0200, Christophe JAILLET wrote:
+>> > Prepare for the coming implementation by GCC and Clang of the __count=
+ed_by
+>> > attribute=2E Flexible array members annotated with __counted_by can h=
+ave
+>> > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_B=
+OUNDS
+>> > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-fam=
+ily
+>> > functions)=2E
+>> >
+>> > Signed-off-by: Christophe JAILLET <christophe=2Ejaillet@wanadoo=2Efr>
+>> > ---
+>> > This patch is part of a work done in parallel of what is currently wo=
+rked
+>> > on by Kees Cook=2E
+>> >
+>> > My patches are only related to corner cases that do NOT match the
+>> > semantic of his Coccinelle script[1]=2E
+>>
+>> Nice!
+>>
+>> struct comedi_lrange {
+>>         int length;
+>>         struct comedi_krange range[];
+>> };
+>> =2E=2E=2E
+>> static const struct comedi_lrange range_rti800_ai_10_bipolar =3D {
+>>         4, {
+>>                 BIP_RANGE(10),
+>>                 BIP_RANGE(1),
+>>                 BIP_RANGE(0=2E1),
+>>                 BIP_RANGE(0=2E02)
+>>         }
+>> };
+>>
+>> I'm struggling to come up with a way for Coccinelle to find this kind o=
+f
+>> thing in other places=2E=2E=2E
+>
+>Kees, what exactly are you trying to match?  Static allocations?
 
-(Replying here for visibility, tell me if you want to move this
-discussion to github)
+I need to count the number of initialized elements in the flexible array t=
+hat is the last member and see if it matches a value set in another member=
+=2E
 
-AIUI, x86 cannot do this for compat reasons. Even if you enable LA57,
-mmap only gives you < 48-bit addresses, for compatibility with things
-like JITs, etc that stash information in the upper 16 bits. You need
-to pass a > 48-bit mmap hint to get 57-bit addresses.
+E=2Eg=2E the above sets 4 values for the last array member and then sets a=
+nother member to 4=2E
 
-I imagine riscv does not have this issue yet, due to little
-accumulated cruft, but it may be wise to check against popular JITters
-for these problems on riscv code.
+-Kees
+
 
 --=20
-Pedro
+Kees Cook
