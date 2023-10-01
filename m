@@ -1,92 +1,104 @@
-Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD61A5C
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 07:58:00 +0000 (UTC)
-Received: from [192.168.1.18] ([86.243.2.178])
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3D6441A
+	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 08:14:24 +0000 (UTC)
+Received: from pop-os.home ([86.243.2.178])
 	by smtp.orange.fr with ESMTPA
-	id mrDYq8ghSBIhHmrDYqqmz3; Sun, 01 Oct 2023 09:50:22 +0200
+	id mr7WqrKgVBuYSmr7WqgwKV; Sun, 01 Oct 2023 09:44:09 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1696146622;
-	bh=wPXWPuO+l7Bt1DCLNCWcyq73NlME+4QNpzuzBGS7eHY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=NPRXBdo5D1S5ArsR8ea32mKYx0qkxgU11wt5LG7vWRr2BegBhpi8xxisH80G6FwiP
-	 LSOi5vaTw4/sF1DpEE/Y7l8G12M/Pkg9cRV/4H7ix6DTvJTCRXJkNXVik3np+mLAF6
-	 218e6UINweQw3G76HHzz0RtfmYaIWXALkUfDBuAeYxqIN61lOtTuDG3jyLY7oHCTJP
-	 27CPGqN5iFQ81YORV70cbmXV+/ykyiRoydbeWLiKJRTNyrYnL8BwH5wOgLYVNI2LRH
-	 7uQVoqOnwTMBqRFWlK9PNzi0qTP6VJ/NFkjIsCEFop4lAMLHAgH8YMqQrBIjYVED1Y
-	 1ug+sKWxczs9A==
-X-ME-Helo: [192.168.1.18]
+	s=t20230301; t=1696146249;
+	bh=Lh4Gb5zv5Lb8ZWaUBSVtVqXkD3aAwWj7aSRzIFudknA=;
+	h=From:To:Cc:Subject:Date;
+	b=tARfd9pL5l6goRYfpkXD4TKuCYNR9qfYDZclZw2NvhvzAI+6L1i/4samAyFBMaPqA
+	 keFShjXpLMdUxQJLMBQE9F0nMNs8RC+WNlUr4mhQ3RCNAtmmjGRFMhembtafGCGiwN
+	 IzUX2Xav5NVCBinR1CnJxRnvNoivk6mwZP9xCIRORrRXCiw62bIPTYwn9sV7/F1VWl
+	 uWiknbsaq/hJbJ9U2dV5iufGtW1YI6XsfsaXEzrOrBB+sDkpa8zCh4uXtmS/kuJ6Lf
+	 QPjOrtfjXWuYsTC1xHnwSC15nQZBrmP0Xwc8fDzvKhuA3h0OAti6wtH5cjNLen9CrV
+	 rx8jRh5pe69xQ==
+X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 01 Oct 2023 09:50:22 +0200
+X-ME-Date: Sun, 01 Oct 2023 09:44:09 +0200
 X-ME-IP: 86.243.2.178
-Message-ID: <7e234efd-413c-ef6b-857b-d364db21141e@wanadoo.fr>
-Date: Sun, 1 Oct 2023 09:50:20 +0200
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-mtd@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] mtd: rawnand: rockchip: Use struct_size()
+Date: Sun,  1 Oct 2023 09:44:04 +0200
+Message-Id: <481721c2c7fe570b4027dbe231d523961c953d5a.1696146232.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] comedi: Annotate struct comedi_lrange with __counted_by
-To: Julia Lawall <julia.lawall@inria.fr>, Kees Cook <keescook@chromium.org>
-Cc: Ian Abbott <abbotti@mev.co.uk>,
- H Hartley Sweeten <hsweeten@visionengravers.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-References: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr>
- <202309301342.5B5BED40A1@keescook>
- <alpine.DEB.2.22.394.2310010922250.3166@hadrien>
-Content-Language: fr, en-GB, en-US
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <alpine.DEB.2.22.394.2310010922250.3166@hadrien>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 01/10/2023 à 09:25, Julia Lawall a écrit :
-> 
-> This is not found due to the regular expression used for the name of the
-> alloc function.  Maybe you could drop it entirely?  Maybe you could just
-> check for alloc somewhere in the string?
+Use struct_size() instead of hand writing it.
+This is less verbose and more robust.
 
-That's how I found it.
-I simplified a lot Kees's script and looked for function names that did 
-*not* match his regex.
+While at it, prepare for the coming implementation by GCC and Clang of the
+__counted_by attribute. Flexible array members annotated with __counted_by
+can have their accesses bounds-checked at run-time checking via
+CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
+strcpy/memcpy-family functions).
 
-Functions that:
-    - return a pointer to a struct
-    - are used with struct_size()
-    - store the value used to compite the size in another field of the 
-struct
+Also remove a useless comment about the position of a flex-array in a
+structure.
 
-are good enough candidates.
-I think that removing the regex all together would be just good enough.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is part of a work done in parallel of what is currently worked
+on by Kees Cook.
 
-CJ
+My patches are only related to corner cases that do NOT match the
+semantic of his Coccinelle script[1].
 
-> 
-> identifier ALLOC =~ "alloc";
-> 
-> works in this case.
-> 
-> Also, I see in the link that you have:
-> 
-> // Options: --all-includes
-> 
-> You can actually force this by putting
-> 
-> #spatch --all-includes
+In this case, struct_size() was not used to compute the size needed for the
+structure and its flex array.
 
-Nice, thanks for the tip.
+[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+---
+ drivers/mtd/nand/raw/rockchip-nand-controller.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> 
-> and any other options you want.
-> 
-> julia
-> 
-> 
-
+diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+index 5bc90ffa721f..596cf9a78274 100644
+--- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
++++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+@@ -158,8 +158,7 @@ struct rk_nfc_nand_chip {
+ 	u32 timing;
+ 
+ 	u8 nsels;
+-	u8 sels[];
+-	/* Nothing after this field. */
++	u8 sels[] __counted_by(nsels);
+ };
+ 
+ struct rk_nfc {
+@@ -1119,7 +1118,7 @@ static int rk_nfc_nand_chip_init(struct device *dev, struct rk_nfc *nfc,
+ 		return -EINVAL;
+ 	}
+ 
+-	rknand = devm_kzalloc(dev, sizeof(*rknand) + nsels * sizeof(u8),
++	rknand = devm_kzalloc(dev, struct_size(rknand, sels, nsels),
+ 			      GFP_KERNEL);
+ 	if (!rknand)
+ 		return -ENOMEM;
+-- 
+2.34.1
 
