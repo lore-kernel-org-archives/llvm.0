@@ -1,133 +1,144 @@
-Received: from mail-ot1-f79.google.com (mail-ot1-f79.google.com [209.85.210.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4B010EA
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 05:42:43 +0000 (UTC)
-Received: by mail-ot1-f79.google.com with SMTP id 46e09a7af769-6c4fa7d0da0so13775554a34.3
-        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 22:42:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696138963; x=1696743763;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v/M5+LwXqyyAX85mKMsy9gTo6yWmfbyn31L5z/UyU+8=;
-        b=FHooQUqYJlqz2Kk8ZKmO2WmLpc6bDo+Smhxlo2YJExuu7stVDjIbtwL+/fWPkL/K4S
-         42pHLP82gI2HEg2Mg6XrGhc7tQIzk2R8PLnEegV+CSitvUMLxx4Tsgxqay5i4+1IBIob
-         vOYZgvHW96PK8IowVIuf6hJXcNDGx4/h72cMoCjh0LJs+BZyz5EG3JJggXlwVuVhuODu
-         VS/85ESwX58FfAVWq5uCCVzFfihzS71UeqP3O3d7ZAn8tiLC1hz19fwi/lfsZABhirok
-         yknYp9tvUJLyJ5zU0bz84YJPoeONUNXoo6IRdf5SH2koep9/0qiZjTrwb3XY+VlI3PtU
-         C7SA==
-X-Gm-Message-State: AOJu0Yw2tVAcuwr1/2GUkMhKKcbci2vkzcjbDZ2d18VAYjVlTfuX4jAe
-	NTITj/St5PS3j0OtrQoZ4yua2ilAUg8zbrFGZO0NF3DuGF6K
-X-Google-Smtp-Source: AGHT+IHm+KBlOCtpKqOgZm9yLGYWKgGx8vWflzCoD9NqXosPpFC9w5h+ha+goLbyQdOuYYlWDKhoXfnZozCQnvPZVzsCi1+2OLTg
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42549CA75
+	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 06:35:16 +0000 (UTC)
+Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
+	by cmsmtp with ESMTP
+	id mIHNq1z94qBU3mq1MqfTgH; Sun, 01 Oct 2023 06:33:40 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id mq1Lq2lwkfFmQmq1LqWGhe; Sun, 01 Oct 2023 06:33:39 +0000
+X-Authority-Analysis: v=2.4 cv=K+AxogaI c=1 sm=1 tr=0 ts=651912c3
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=AGRr4plBAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
+ a=20KFwNOVAAAA:8 a=cm27Pg_UAAAA:8 a=1wfVGpDdhcGxkbiBJp0A:9 a=QEXdDO2ut3YA:10
+ a=bOnWt3ThIoLzEnqt84vq:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=DrXa2rG6dSCIyhFViMvKaxN9ZljtEbXXYtJDNmxhFcI=; b=rA0c4/TQzJTvID0G+vnwo8cTWP
+	247fmP7DGX+RGqHLGzelXVmgqGgwO/N74BuoNGXyKQlXf53/pll05f9d05i4Rae0WbxnMY9oNZglZ
+	jZXRz4mWqZhFwrQVCYqjNpTwmcZ9/eYJRfIJnPCE3G5scqoGWV80KDNjorrS4OcTPVfAGsvIBnaMN
+	u31d6w4tiTLyknlBsshptooe+/TFDF0H3uc7rgpKSKyDKFJCyTODlNFoXgPWbud/ldzO2awUB4jzs
+	E6lMvCcFZzfpUAohT9Frt6M7mwRmqRz8hq22Ht3zDCDIDlSknfd9Yn+R5rsbWQ2Tro8bV9fFPOoJY
+	/M6lQPpQ==;
+Received: from [94.239.20.48] (port=58074 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qmq1J-001HC8-0v;
+	Sun, 01 Oct 2023 01:33:37 -0500
+Message-ID: <2a8c5d4f-8404-3198-da8a-ba341609aeb1@embeddedor.com>
+Date: Sun, 1 Oct 2023 08:33:28 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a9d:6950:0:b0:6c4:77eb:7130 with SMTP id
- p16-20020a9d6950000000b006c477eb7130mr2509824oto.0.1696138963208; Sat, 30 Sep
- 2023 22:42:43 -0700 (PDT)
-Date: Sat, 30 Sep 2023 22:42:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000644f160606a120b3@google.com>
-Subject: [syzbot] [mm?] WARNING in huge_pmd_unshare
-From: syzbot <syzbot+ff00584717dadcbd2e67@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    df964ce9ef9f Add linux-next specific files for 20230929
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=134e2921680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=880c828d75e38e1b
-dashboard link: https://syzkaller.appspot.com/bug?extid=ff00584717dadcbd2e67
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fe7244c6057d/disk-df964ce9.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/48cdc7f3b2c0/vmlinux-df964ce9.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ce7c93a66da9/bzImage-df964ce9.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ff00584717dadcbd2e67@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 7121 at mm/hugetlb.c:298 hugetlb_vma_assert_locked mm/hugetlb.c:298 [inline]
-WARNING: CPU: 1 PID: 7121 at mm/hugetlb.c:298 huge_pmd_unshare+0x6be/0x940 mm/hugetlb.c:6904
-Modules linked in:
-CPU: 1 PID: 7121 Comm: syz-executor.1 Not tainted 6.6.0-rc3-next-20230929-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
-RIP: 0010:hugetlb_vma_assert_locked mm/hugetlb.c:298 [inline]
-RIP: 0010:huge_pmd_unshare+0x6be/0x940 mm/hugetlb.c:6904
-Code: ff ff ff ff 48 81 c7 c8 00 00 00 e8 dc 89 6c 08 31 ff 41 89 c5 89 c6 e8 20 ce ae ff 45 85 ed 0f 85 67 fa ff ff e8 a2 d2 ae ff <0f> 0b e9 5b fa ff ff 31 db e9 5d fd ff ff e8 8f d2 ae ff 48 89 da
-RSP: 0018:ffffc90016177678 EFLAGS: 00010283
-RAX: 0000000000003492 RBX: 0000000020000000 RCX: ffffc9000aee4000
-RDX: 0000000000040000 RSI: ffffffff81d9831e RDI: 0000000000000005
-RBP: ffff88802a226880 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 000000000000003c R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000001 R15: ffff88807e489e88
-FS:  00007fde004546c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30d2a000 CR3: 000000007f0d7000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __unmap_hugepage_range+0x4e3/0x1940 mm/hugetlb.c:5222
- unmap_hugepage_range+0x1fa/0x330 mm/hugetlb.c:5347
- hugetlb_vmdelete_list+0x11d/0x170 fs/hugetlbfs/inode.c:534
- hugetlbfs_punch_hole fs/hugetlbfs/inode.c:734 [inline]
- hugetlbfs_fallocate+0xc75/0x1050 fs/hugetlbfs/inode.c:774
- shm_fallocate+0xca/0x110 ipc/shm.c:646
- vfs_fallocate+0x46c/0xe80 fs/open.c:324
- madvise_remove mm/madvise.c:1019 [inline]
- madvise_vma_behavior+0x1c00/0x1d00 mm/madvise.c:1043
- madvise_walk_vmas+0x1cf/0x2c0 mm/madvise.c:1278
- do_madvise+0x333/0x660 mm/madvise.c:1458
- __do_sys_madvise mm/madvise.c:1471 [inline]
- __se_sys_madvise mm/madvise.c:1469 [inline]
- __x64_sys_madvise+0xaa/0x110 mm/madvise.c:1469
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:81
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fddff67cae9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fde004540c8 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 00007fddff79c050 RCX: 00007fddff67cae9
-RDX: 0000000000000009 RSI: 000000000060000b RDI: 0000000020000000
-RBP: 00007fddff6c847a R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 000000000000006e R14: 00007fddff79c050 R15: 00007ffce99d7b18
- </TASK>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 1/5] chelsio/l2t: Annotate struct l2t_data with
+ __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Raju Rangoju <rajur@chelsio.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230929181042.work.990-kees@kernel.org>
+ <20230929181149.3006432-1-keescook@chromium.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230929181149.3006432-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qmq1J-001HC8-0v
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:58074
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfIh8BCGOhymVVtMfyM+V63453W9seD74GvNO+ettbtwBVnep/IM1xHxf7eDYHL6vy/IbuRNvnd2nlxbR20IwOvFecOr4Frn16Hn0n6RE130F+GMF+KIb
+ qrI+/uu4cLIR4Qp8N75x659GjySmMp9Rrw4iIx9NFTyFKmXXRQcreNZJ+0IM2hJIFeR8Kj2TJmTQwJAUMxXtniiO5DcgilX9YUA=
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On 9/29/23 20:11, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct l2t_data.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Raju Rangoju <rajur@chelsio.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Thanks
+--
+Gustavo
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> ---
+>   drivers/net/ethernet/chelsio/cxgb3/l2t.h | 2 +-
+>   drivers/net/ethernet/chelsio/cxgb4/l2t.c | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/chelsio/cxgb3/l2t.h b/drivers/net/ethernet/chelsio/cxgb3/l2t.h
+> index ea75f275023f..646ca0bc25bd 100644
+> --- a/drivers/net/ethernet/chelsio/cxgb3/l2t.h
+> +++ b/drivers/net/ethernet/chelsio/cxgb3/l2t.h
+> @@ -76,7 +76,7 @@ struct l2t_data {
+>   	atomic_t nfree;		/* number of free entries */
+>   	rwlock_t lock;
+>   	struct rcu_head rcu_head;	/* to handle rcu cleanup */
+> -	struct l2t_entry l2tab[];
+> +	struct l2t_entry l2tab[] __counted_by(nentries);
+>   };
+>   
+>   typedef void (*arp_failure_handler_func)(struct t3cdev * dev,
+> diff --git a/drivers/net/ethernet/chelsio/cxgb4/l2t.c b/drivers/net/ethernet/chelsio/cxgb4/l2t.c
+> index a10a6862a9a4..1e5f5b1a22a6 100644
+> --- a/drivers/net/ethernet/chelsio/cxgb4/l2t.c
+> +++ b/drivers/net/ethernet/chelsio/cxgb4/l2t.c
+> @@ -59,7 +59,7 @@ struct l2t_data {
+>   	rwlock_t lock;
+>   	atomic_t nfree;             /* number of free entries */
+>   	struct l2t_entry *rover;    /* starting point for next allocation */
+> -	struct l2t_entry l2tab[];  /* MUST BE LAST */
+> +	struct l2t_entry l2tab[] __counted_by(l2t_size);  /* MUST BE LAST */
+>   };
+>   
+>   static inline unsigned int vlan_prio(const struct l2t_entry *e)
