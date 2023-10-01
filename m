@@ -1,39 +1,39 @@
-Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
+Received: from mail-ot1-f79.google.com (mail-ot1-f79.google.com [209.85.210.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6564391
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 04:58:49 +0000 (UTC)
-Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-3ae4af890f8so23440238b6e.2
-        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 21:58:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4B010EA
+	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 05:42:43 +0000 (UTC)
+Received: by mail-ot1-f79.google.com with SMTP id 46e09a7af769-6c4fa7d0da0so13775554a34.3
+        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 22:42:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696136329; x=1696741129;
+        d=1e100.net; s=20230601; t=1696138963; x=1696743763;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YSXLw/2P4TcYGoWH6ynzUMbdZXrdu9zISKczKzcyQrw=;
-        b=ZAV4DJaqnzvSpgWSPv5RX8+53fN4d+Byr4Lh26y4Gpp+5h+m8aJNC+Y1rgmLpEMLTh
-         VENam8tN/ygEJiZ360Y6X1NP+1aZ56G/tTjvcWzQ8nwvLTbZIEcq/hpZvBmQ7SCapwBU
-         8S8gws3heNc80Ir5T6CGpCrEc0lfMgR0uBuXdoU7gT8bGcbY6L+6aZIhMZ5nCOE6UExy
-         G3/PwDssfDTxntCXTd8z7opSso3S99Jn8XkOWi1LrR3ykQvERvRcVIHT4RjPFRIFiIlQ
-         v0e1iZSlYalJ6qEMqnESJsWai5Q0eUZOXvX7ztgTor2Tb2FB1ViTpiVUcxFDkIz2MU1b
-         rG6g==
-X-Gm-Message-State: AOJu0Yx8zY3V2sFdBza6KaJmXdCOy+sOjDAj16F9UOWHCANqXdEgLXU+
-	aH4i2Ud00r2NG/Oe11rjulcj0TG7OcF9B/EP1jJ7e2bQPko5
-X-Google-Smtp-Source: AGHT+IEZQ+sLkFr6P2H6byzG+97VGtFdZx4CAw4V3787yadeAPjk9o+9aS8tZHqV3vG08Gmj3OraE8BdASWoeZusUaJAoBW8qwdl
+        bh=v/M5+LwXqyyAX85mKMsy9gTo6yWmfbyn31L5z/UyU+8=;
+        b=FHooQUqYJlqz2Kk8ZKmO2WmLpc6bDo+Smhxlo2YJExuu7stVDjIbtwL+/fWPkL/K4S
+         42pHLP82gI2HEg2Mg6XrGhc7tQIzk2R8PLnEegV+CSitvUMLxx4Tsgxqay5i4+1IBIob
+         vOYZgvHW96PK8IowVIuf6hJXcNDGx4/h72cMoCjh0LJs+BZyz5EG3JJggXlwVuVhuODu
+         VS/85ESwX58FfAVWq5uCCVzFfihzS71UeqP3O3d7ZAn8tiLC1hz19fwi/lfsZABhirok
+         yknYp9tvUJLyJ5zU0bz84YJPoeONUNXoo6IRdf5SH2koep9/0qiZjTrwb3XY+VlI3PtU
+         C7SA==
+X-Gm-Message-State: AOJu0Yw2tVAcuwr1/2GUkMhKKcbci2vkzcjbDZ2d18VAYjVlTfuX4jAe
+	NTITj/St5PS3j0OtrQoZ4yua2ilAUg8zbrFGZO0NF3DuGF6K
+X-Google-Smtp-Source: AGHT+IHm+KBlOCtpKqOgZm9yLGYWKgGx8vWflzCoD9NqXosPpFC9w5h+ha+goLbyQdOuYYlWDKhoXfnZozCQnvPZVzsCi1+2OLTg
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1288:b0:3ae:1e08:41ee with SMTP id
- a8-20020a056808128800b003ae1e0841eemr4339822oiw.5.1696136328839; Sat, 30 Sep
- 2023 21:58:48 -0700 (PDT)
-Date: Sat, 30 Sep 2023 21:58:48 -0700
+X-Received: by 2002:a9d:6950:0:b0:6c4:77eb:7130 with SMTP id
+ p16-20020a9d6950000000b006c477eb7130mr2509824oto.0.1696138963208; Sat, 30 Sep
+ 2023 22:42:43 -0700 (PDT)
+Date: Sat, 30 Sep 2023 22:42:43 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005f05820606a0838a@google.com>
-Subject: [syzbot] [mm?] WARNING in copy_hugetlb_page_range
-From: syzbot <syzbot+ec78016e3d67860eec28@syzkaller.appspotmail.com>
+Message-ID: <000000000000644f160606a120b3@google.com>
+Subject: [syzbot] [mm?] WARNING in huge_pmd_unshare
+From: syzbot <syzbot+ff00584717dadcbd2e67@syzkaller.appspotmail.com>
 To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
 	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
 	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
@@ -46,9 +46,9 @@ syzbot found the following issue on:
 
 HEAD commit:    df964ce9ef9f Add linux-next specific files for 20230929
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12d60d01680000
+console output: https://syzkaller.appspot.com/x/log.txt?x=134e2921680000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=880c828d75e38e1b
-dashboard link: https://syzkaller.appspot.com/bug?extid=ec78016e3d67860eec28
+dashboard link: https://syzkaller.appspot.com/bug?extid=ff00584717dadcbd2e67
 compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
 Unfortunately, I don't have any reproducer for this issue yet.
@@ -59,48 +59,55 @@ vmlinux: https://storage.googleapis.com/syzbot-assets/48cdc7f3b2c0/vmlinux-df964
 kernel image: https://storage.googleapis.com/syzbot-assets/ce7c93a66da9/bzImage-df964ce9.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ec78016e3d67860eec28@syzkaller.appspotmail.com
+Reported-by: syzbot+ff00584717dadcbd2e67@syzkaller.appspotmail.com
 
 ------------[ cut here ]------------
-WARNING: CPU: 0 PID: 6510 at include/linux/hugetlb.h:1289 hugetlb_walk include/linux/hugetlb.h:1289 [inline]
-WARNING: CPU: 0 PID: 6510 at include/linux/hugetlb.h:1289 copy_hugetlb_page_range+0x675/0x3520 mm/hugetlb.c:4940
+WARNING: CPU: 1 PID: 7121 at mm/hugetlb.c:298 hugetlb_vma_assert_locked mm/hugetlb.c:298 [inline]
+WARNING: CPU: 1 PID: 7121 at mm/hugetlb.c:298 huge_pmd_unshare+0x6be/0x940 mm/hugetlb.c:6904
 Modules linked in:
-CPU: 0 PID: 6510 Comm: syz-executor.5 Not tainted 6.6.0-rc3-next-20230929-syzkaller #0
+CPU: 1 PID: 7121 Comm: syz-executor.1 Not tainted 6.6.0-rc3-next-20230929-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
-RIP: 0010:hugetlb_walk include/linux/hugetlb.h:1289 [inline]
-RIP: 0010:copy_hugetlb_page_range+0x675/0x3520 mm/hugetlb.c:4940
-Code: 00 be ff ff ff ff 48 81 c7 a0 01 00 00 e8 63 46 6c 08 31 ff 89 c5 89 c6 e8 a8 8a ae ff 85 ed 0f 85 dd fd ff ff e8 2b 8f ae ff <0f> 0b e9 d1 fd ff ff e8 1f 8f ae ff 49 89 ec 31 ff 41 81 e4 ff 0f
-RSP: 0000:ffffc900059574a0 EFLAGS: 00010287
-RAX: 000000000000c9e1 RBX: 0000000020000000 RCX: ffffc9000bdec000
-RDX: 0000000000040000 RSI: ffffffff81d9c695 RDI: 0000000000000005
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: ffffffff910db240 R12: ffff888027212f80
-R13: ffff8880177d0e00 R14: 0000000020000000 R15: dffffc0000000000
-FS:  00007f2f1edb46c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+RIP: 0010:hugetlb_vma_assert_locked mm/hugetlb.c:298 [inline]
+RIP: 0010:huge_pmd_unshare+0x6be/0x940 mm/hugetlb.c:6904
+Code: ff ff ff ff 48 81 c7 c8 00 00 00 e8 dc 89 6c 08 31 ff 41 89 c5 89 c6 e8 20 ce ae ff 45 85 ed 0f 85 67 fa ff ff e8 a2 d2 ae ff <0f> 0b e9 5b fa ff ff 31 db e9 5d fd ff ff e8 8f d2 ae ff 48 89 da
+RSP: 0018:ffffc90016177678 EFLAGS: 00010283
+RAX: 0000000000003492 RBX: 0000000020000000 RCX: ffffc9000aee4000
+RDX: 0000000000040000 RSI: ffffffff81d9831e RDI: 0000000000000005
+RBP: ffff88802a226880 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 000000000000003c R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000001 R15: ffff88807e489e88
+FS:  00007fde004546c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b3152b000 CR3: 000000001d027000 CR4: 00000000003506f0
+CR2: 0000001b30d2a000 CR3: 000000007f0d7000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- copy_page_range+0x1dc2/0x3c40 mm/memory.c:1293
- dup_mmap+0x13f3/0x1d80 kernel/fork.c:758
- dup_mm kernel/fork.c:1686 [inline]
- copy_mm kernel/fork.c:1735 [inline]
- copy_process+0x6cc9/0x74b0 kernel/fork.c:2497
- kernel_clone+0xfd/0x920 kernel/fork.c:2902
- __do_sys_clone3+0x1f1/0x260 kernel/fork.c:3203
+ __unmap_hugepage_range+0x4e3/0x1940 mm/hugetlb.c:5222
+ unmap_hugepage_range+0x1fa/0x330 mm/hugetlb.c:5347
+ hugetlb_vmdelete_list+0x11d/0x170 fs/hugetlbfs/inode.c:534
+ hugetlbfs_punch_hole fs/hugetlbfs/inode.c:734 [inline]
+ hugetlbfs_fallocate+0xc75/0x1050 fs/hugetlbfs/inode.c:774
+ shm_fallocate+0xca/0x110 ipc/shm.c:646
+ vfs_fallocate+0x46c/0xe80 fs/open.c:324
+ madvise_remove mm/madvise.c:1019 [inline]
+ madvise_vma_behavior+0x1c00/0x1d00 mm/madvise.c:1043
+ madvise_walk_vmas+0x1cf/0x2c0 mm/madvise.c:1278
+ do_madvise+0x333/0x660 mm/madvise.c:1458
+ __do_sys_madvise mm/madvise.c:1471 [inline]
+ __se_sys_madvise mm/madvise.c:1469 [inline]
+ __x64_sys_madvise+0xaa/0x110 mm/madvise.c:1469
  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
  do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:81
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2f1e07cae9
+RIP: 0033:0x7fddff67cae9
 Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2f1edb3f98 EFLAGS: 00000246 ORIG_RAX: 00000000000001b3
-RAX: ffffffffffffffda RBX: 0000000000000058 RCX: 00007f2f1e07cae9
-RDX: 00007f2f1edb3fb0 RSI: 0000000000000058 RDI: 00007f2f1edb3fb0
-RBP: 00007f2f1e0c847a R08: 0000000000000000 R09: 0000000000000058
+RSP: 002b:00007fde004540c8 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+RAX: ffffffffffffffda RBX: 00007fddff79c050 RCX: 00007fddff67cae9
+RDX: 0000000000000009 RSI: 000000000060000b RDI: 0000000020000000
+RBP: 00007fddff6c847a R08: 0000000000000000 R09: 0000000000000000
 R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 000000000000006e R14: 00007f2f1e19c050 R15: 00007ffe03b1a6e8
+R13: 000000000000006e R14: 00007fddff79c050 R15: 00007ffce99d7b18
  </TASK>
 
 
