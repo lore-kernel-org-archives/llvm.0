@@ -1,135 +1,82 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0FC64C
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 03:15:52 +0000 (UTC)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-690fe1d9ba1so3426829b3a.0
-        for <llvm@lists.linux.dev>; Sat, 30 Sep 2023 20:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1696130152; x=1696734952; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Z+g/FhlsBEqj0ssrxrGUZoJT4P358LfexzMwY5PQkk=;
-        b=YS8ctlusE2ZFHFRZYA8lgXBr5LBm4Dkwi87VeLZw5sWJjaEKPZcPGcLh3ATlShzt+2
-         Y54twaOpqYdBU6Jx3Z5YWTUEA45meyqVbBhW7Us/ND1JfnkezxKfpaYSFMNCuw/yU3ob
-         EFzQlsyA/Zr+16sk+ApRHuKIls2yjiVoqLLfsD9soQOXWbO5uFsat8RVOdcLaEGpQ8Z9
-         COgRbsGo970tdS6FLE9mBF0mIRjyX0iVT9S2Jn67BI0eGlNxyfqRA22bBYRnzfXFWOR+
-         fN6SOKCSs1xWqaYrho5Pst7usEnnl6eSB+TLYMhXD2JMyh1hsGTNou2xOXwYmGgwdBo8
-         MyEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696130152; x=1696734952;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Z+g/FhlsBEqj0ssrxrGUZoJT4P358LfexzMwY5PQkk=;
-        b=Vb4npO9IaHS5oQ4HubGqrC0MOgaKuC+1lLz+im4LriLI+OyHeW8MTFKOWj2txzYBuB
-         JfR0OK+OgtEcGMQrBoR+M8BamSPTSAXsY9f/I3YHOP9aTSZDFXDrWrASmUlcGteY6CjQ
-         AsjE92oRRHJ5jZDFoZSIdgYLfiSKRyQDvNjY8TsxXrLI0oM8lMNoOW4PXoX67a/TwEGH
-         IM4p0jW8c2rLD8PXvwyX/uS6/ygLsZ13z3yMAn6QeHVIW6pX0F6uG+sNtSruf1WnDoZ7
-         d4Y9wrYUtnev13SMkwdke5os30tKwqBpTfgb69usQ21i+PMpWe4dPsap1Pe/Kg8LT1k3
-         FpcQ==
-X-Gm-Message-State: AOJu0YzIvbSePXKhgem1Z7mUt7724oplqbNtQjDrYyD6qT0kSmRaCaUC
-	SSIi1ELLCErrJmiwCt5yxed/fQ==
-X-Google-Smtp-Source: AGHT+IGurqhbCIPjsxXeILgMQH1jgLBUPTNbX2v4+oj78vQxmGTcAw0c/QFAKPtIPrt2YhUot7Nm1A==
-X-Received: by 2002:a05:6a00:4682:b0:68f:c8b3:3077 with SMTP id de2-20020a056a00468200b0068fc8b33077mr7939703pfb.1.1696130152436;
-        Sat, 30 Sep 2023 20:15:52 -0700 (PDT)
-Received: from [10.4.72.5] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id x26-20020aa784da000000b0068c0fcb40d3sm17287322pfn.211.2023.09.30.20.15.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Sep 2023 20:15:52 -0700 (PDT)
-Message-ID: <07261663-9082-4ce2-b326-a23a94974a33@bytedance.com>
-Date: Sun, 1 Oct 2023 11:15:47 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22E6361;
+	Sun,  1 Oct 2023 03:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696131693; x=1727667693;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LI+6UM5Tv0w36fWduzQn0s5tcys35ZDR2qir42AEbJE=;
+  b=T9k3ET1VoEXfGKK9xasf2GJxYtWy7rNFwiFO3iFANbi4OHGs1R0i8VTi
+   7uBsIEuzayyBbAv30YH2Q1K+8L6r0UXyU1Z6oOa5OvIMGDproDlfXZBc+
+   UqAYMyg5xCn8fyJbGtZiMZIdlbP/FtpBOT/xpFnQsG0tjKAZTDjGta83R
+   qTmD6CClJYLILRTnfE51fvpeluPcThIpbSa0tcgUVG1VrlWv9xUiEHJ9l
+   kbTfYcEFnMBwqV93IwLcnGFAp+eDkg5jBiumPitXFctRJW3FLP3gZ9f0S
+   UHcn0XPbAIv/Ou2JYcyk4GPZg2oAvqYNjkn9W79TZzm1FS6kWK9Du1O7R
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10849"; a="446645790"
+X-IronPort-AV: E=Sophos;i="6.03,191,1694761200"; 
+   d="scan'208";a="446645790"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2023 20:41:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10849"; a="753744301"
+X-IronPort-AV: E=Sophos;i="6.03,191,1694761200"; 
+   d="scan'208";a="753744301"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Sep 2023 20:41:31 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qmnKj-0004iz-0T;
+	Sun, 01 Oct 2023 03:41:29 +0000
+Date: Sun, 1 Oct 2023 11:41:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sebastian Reichel <sre@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sre-misc:uti260b 4/24] drivers/media/i2c/gc0308.c:1261:27: warning:
+ unused variable 'gc0308_effects_menu'
+Message-ID: <202310011156.ycairb2f-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH] fixup: mm: shrinker: add a secondary array for
- shrinker_info::{map, nr_deferred}
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <20230928141517.12164-1-zhengqi.arch@bytedance.com>
- <202310011038.Q1iDUi0v-lkp@intel.com>
-From: Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <202310011038.Q1iDUi0v-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git uti260b
+head:   4e145d94d9d20e457f5aa3d51e765f7b1dd78a22
+commit: 6c27014c45ea572d49dd42bb79b0ecb1fca39c33 [4/24] media: i2c: gc0308: new driver
+config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20231001/202310011156.ycairb2f-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231001/202310011156.ycairb2f-lkp@intel.com/reproduce)
 
-This patch will be folded into one patch with 
-https://lore.kernel.org/lkml/20230911094444.68966-41-zhengqi.arch@bytedance.com/, 
-not a separate patch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310011156.ycairb2f-lkp@intel.com/
 
-Thanks,
-Qi
+All warnings (new ones prefixed by >>):
 
-On 2023/10/1 10:58, kernel test robot wrote:
-> Hi Qi,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on next-20230929]
-> [cannot apply to linus/master v6.6-rc3]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/fixup-mm-shrinker-add-a-secondary-array-for-shrinker_info-map-nr_deferred/20230928-221637
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230928141517.12164-1-zhengqi.arch%40bytedance.com
-> patch subject: [PATCH] fixup: mm: shrinker: add a secondary array for shrinker_info::{map, nr_deferred}
-> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231001/202310011038.Q1iDUi0v-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231001/202310011038.Q1iDUi0v-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202310011038.Q1iDUi0v-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> mm/shrinker.c:99:12: error: use of undeclared identifier 'shrinker_rwsem'
->             up_write(&shrinker_rwsem);
->                       ^
->     1 error generated.
-> 
-> 
-> vim +/shrinker_rwsem +99 mm/shrinker.c
-> 
->      76	
->      77	int alloc_shrinker_info(struct mem_cgroup *memcg)
->      78	{
->      79		struct shrinker_info *info;
->      80		int nid, ret = 0;
->      81		int array_size = 0;
->      82	
->      83		mutex_lock(&shrinker_mutex);
->      84		array_size = shrinker_unit_size(shrinker_nr_max);
->      85		for_each_node(nid) {
->      86			info = kvzalloc_node(sizeof(*info) + array_size, GFP_KERNEL, nid);
->      87			if (!info)
->      88				goto err;
->      89			info->map_nr_max = shrinker_nr_max;
->      90			if (shrinker_unit_alloc(info, NULL, nid))
->      91				goto err;
->      92			rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
->      93		}
->      94		mutex_unlock(&shrinker_mutex);
->      95	
->      96		return ret;
->      97	
->      98	err:
->    > 99		up_write(&shrinker_rwsem);
->     100		free_shrinker_info(memcg);
->     101		return -ENOMEM;
->     102	}
->     103	
-> 
+>> drivers/media/i2c/gc0308.c:1261:27: warning: unused variable 'gc0308_effects_menu' [-Wunused-const-variable]
+    1261 | static const char * const gc0308_effects_menu[] = {
+         |                           ^
+   1 warning generated.
+
+
+vim +/gc0308_effects_menu +1261 drivers/media/i2c/gc0308.c
+
+  1260	
+> 1261	static const char * const gc0308_effects_menu[] = {
+  1262		"Normal", // V4L2_COLORFX_NONE = 0
+  1263		"Grayscale", // V4L2_COLORFX_BW = 1
+  1264		"Sepia", // V4L2_COLORFX_SEPIA = 2
+  1265		"Color Invert", // V4L2_COLORFX_NEGATIVE = 3
+  1266	};
+  1267	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
