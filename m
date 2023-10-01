@@ -1,15 +1,15 @@
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A26A1367
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 06:38:08 +0000 (UTC)
-Received: from eig-obgw-5003a.ext.cloudfilter.net ([10.0.29.159])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE9A1367
+	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 06:38:29 +0000 (UTC)
+Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
 	by cmsmtp with ESMTP
-	id mekuq0rHUQUgRmq47qbtkf; Sun, 01 Oct 2023 06:36:32 +0000
+	id mpvjq4xCCnGhUmq4TqYqUb; Sun, 01 Oct 2023 06:36:53 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id mq46qJf3jBsZEmq47qDWGR; Sun, 01 Oct 2023 06:36:31 +0000
-X-Authority-Analysis: v=2.4 cv=bax47cDB c=1 sm=1 tr=0 ts=6519136f
+	id mq4Sq2oz5fFmQmq4TqWJ7b; Sun, 01 Oct 2023 06:36:53 +0000
+X-Authority-Analysis: v=2.4 cv=K+AxogaI c=1 sm=1 tr=0 ts=65191385
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
  a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
@@ -23,20 +23,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=l94u8xNBfZNlbl7wM7/4FCAq7L1psobhc0IxdIbvqVQ=; b=frElGOPdBImCXcHhDIL8JLVwQJ
-	WDscQnv2YPzFgNcYCPNJ9d43igZpHI+X2e+6yK3bCWcWi24JvvS3hCh9kgQC6FaoOqvNtBo7bseZ8
-	qh2pl7dCB/ObEeylTFHLVRGRxKNkYuy8uCkJ4MNojrtAxAtgP4n2wNMDZzu+5hNpuYwymCpLus3aq
-	KIqP194JcWzWAVq6G4yuaQ0TpLpxe4JbESWrTgccJnqZU2RDR60FuTMUIRHART4WJku4yplAwZFXP
-	v3t9MMechRilCqjF3RLFpTmMjBQKem7onWJDFnqf+EEZF4XhgcEMsRPUdrvc0IdTCB8krPOFCmMjk
-	nJ/C2yUg==;
-Received: from [94.239.20.48] (port=33478 helo=[192.168.1.98])
+	bh=YW4LnEq/eBLDUviFpnXJ6qtKfen1E/plxXVxSih4JEM=; b=bsDCHjTJh4jyfLGIOdd4ITxnUQ
+	GOWCqpr1c7oQ8vZuXFQHPBt3eemH/1DQRxz9UqneUkoUu97nqWG+Ofw3JqALssKkJWmfn7r26axKe
+	ApVhcDQVz2U9cZrqlmNq/Oz1Yyw4K6GP5wf7nLF/CpitDYmXnVsTyQIMMA1iv5zsNDvHiLQ+3LAOX
+	/bFYvYg6I1zFZq3d1wOWdGXZ4H5D45rbcNumhNF0ZyAErQugxCCCQlTafqLVA1gq7yeObWlZaxzxk
+	15u/wUEjnaIDqESwnQX4y+/Y9A0U4k+UYy1Hz7sFbifoFL7aGTl913ct2yxeWfYybsQDKAnFSnzdg
+	nEccV3sg==;
+Received: from [94.239.20.48] (port=51586 helo=[192.168.1.98])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qmq44-001Ju3-26;
-	Sun, 01 Oct 2023 01:36:28 -0500
-Message-ID: <a3c9a0f8-7634-fe30-95b0-fb18adaf443e@embeddedor.com>
-Date: Sun, 1 Oct 2023 08:36:23 +0200
+	id 1qmq4Q-001KEL-2q;
+	Sun, 01 Oct 2023 01:36:51 -0500
+Message-ID: <7f0b1ca5-c0e9-0415-58ab-6fb6bcf9d73f@embeddedor.com>
+Date: Sun, 1 Oct 2023 08:36:46 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,8 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH 3/5] cxgb4: Annotate struct cxgb4_tc_u32_table with
- __counted_by
+Subject: Re: [PATCH 4/5] cxgb4: Annotate struct sched_table with __counted_by
 Content-Language: en-US
 To: Kees Cook <keescook@chromium.org>, Raju Rangoju <rajur@chelsio.com>
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -58,9 +57,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
  llvm@lists.linux.dev
 References: <20230929181042.work.990-kees@kernel.org>
- <20230929181149.3006432-3-keescook@chromium.org>
+ <20230929181149.3006432-4-keescook@chromium.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230929181149.3006432-3-keescook@chromium.org>
+In-Reply-To: <20230929181149.3006432-4-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -71,18 +70,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 94.239.20.48
 X-Source-L: No
-X-Exim-ID: 1qmq44-001Ju3-26
+X-Exim-ID: 1qmq4Q-001KEL-2q
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:33478
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:51586
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 29
+X-Email-Count: 43
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfBN8qT/d1ww13d/qGQ2eFXOb5cfdamZBrVsDI550eGoVtMU3ne8zBXbBW0CtbDlMAnStJMbn+fI9CZDAjqzHgiWGSfGF5rJcrZq0j6YA4mVYqV46RFVs
- x2JZvnvppi3HUMTwClG7cgaQePlmjgzUO/gSxgVKCbPN0+jvAB3z1hgOWDZoSpyBy3/tzyGtyY9vdzDlrfSH3G1p9YU/qSDvunQ=
+X-CMAE-Envelope: MS4xfCLzLYxIX+3rdOYs7OzdsPL/dapRMqTIb5EjyWihmqsya/V0BWIsXciGIKjnNZ4R9LgBWpjPiZD0ZXQoiyUBRDlmM9fPodBxdNKUX8Iko0Qus2JvyXhk
+ za7Z/F+35zD2+ZXdzqfTLVBkrzd/oC4tqNrEkA0AuY+bwPj0iiuc/FahKSwz8WQbelRL2LLQxeS21r1brbklps9cb6QcKnz3Wjo=
 
 
 
@@ -93,7 +92,7 @@ On 9/29/23 20:11, Kees Cook wrote:
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct cxgb4_tc_u32_table.
+> As found with Coccinelle[1], add __counted_by for struct sched_table.
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
@@ -112,18 +111,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_u32_parse.h | 2 +-
+>   drivers/net/ethernet/chelsio/cxgb4/sched.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_u32_parse.h b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_u32_parse.h
-> index f59dd4b2ae6f..9050568a034c 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_u32_parse.h
-> +++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_u32_parse.h
-> @@ -331,6 +331,6 @@ struct cxgb4_link {
+> diff --git a/drivers/net/ethernet/chelsio/cxgb4/sched.h b/drivers/net/ethernet/chelsio/cxgb4/sched.h
+> index 5f8b871d79af..6b3c778815f0 100644
+> --- a/drivers/net/ethernet/chelsio/cxgb4/sched.h
+> +++ b/drivers/net/ethernet/chelsio/cxgb4/sched.h
+> @@ -82,7 +82,7 @@ struct sched_class {
 >   
->   struct cxgb4_tc_u32_table {
->   	unsigned int size;          /* number of entries in table */
-> -	struct cxgb4_link table[]; /* Jump table */
-> +	struct cxgb4_link table[] __counted_by(size); /* Jump table */
+>   struct sched_table {      /* per port scheduling table */
+>   	u8 sched_size;
+> -	struct sched_class tab[];
+> +	struct sched_class tab[] __counted_by(sched_size);
 >   };
->   #endif /* __CXGB4_TC_U32_PARSE_H */
+>   
+>   static inline bool can_sched(struct net_device *dev)
