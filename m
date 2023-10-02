@@ -1,92 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B6F20329;
-	Mon,  2 Oct 2023 20:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3243BC43395;
-	Mon,  2 Oct 2023 20:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696280149;
-	bh=Y2Lt8qx7KyiKOUPa2We5gWo6fuqgHoG5oG5OZdYy0+M=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BMcitU6QE707Nv7g6gJ1R/jLsUitQvIalA9QIwaiVjMwAnU8Ia41eo+QMD8akWEAl
-	 /rQliFgY6/UxLd/8l33gzkvrrq8rVoed5MdIoFQmtQJYMIuunpjR91i0cDP842C+QE
-	 jNgE77xRgP4hH6UetsxuZZ8Dqc1wLhUR/tDIgyCn1rVpJOQYudBa+nboicw1ROVuse
-	 8w11v4zCWxtI1xSVl20iV/FBtlRmdodUFTw+0iqrVaRy1xbIsPAPNbIBDo53OLAqM1
-	 dou8zuehhoay/uNea7dGF3y/Fz+oGusWpD0uEcsoWkYhkzhZIXzMS79PH8wTN2ucxX
-	 xgWSZPIE14E0A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 02 Oct 2023 13:55:21 -0700
-Subject: [PATCH 2/2] mlx5: Fix type of mode parameter in
- mlx5_dpll_device_mode_get()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE17F200D4
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 21:41:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696282872; x=1727818872;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to;
+  bh=Aqw5m6gatMKMCy8cj+FlMMsq3bPOpbrtqavs7kKDGYw=;
+  b=ZXxZA43KYIiWYS2Pov/q2nypRHqatua8W0dDr1K+VIf3FlEZflfLXnE+
+   hF3bR1UdKVNLsBi9HpnVMkVZLgSRRvjjEMNxu0LuB0Xn9u1Z1aEMNbCwv
+   YVNnhWIfYlE7HdMUPtIsC+fPFV1sIeA10sJSHZ4ycRgte+ne74GkdOVUw
+   ZeF+H+ydhPKgA9nSGM8Vp+EWJK4WcCmIljhV+x/zdv9sAGBXkvmVoLOgN
+   Nf/f7xLp+IdygrmkACdw6RMsyCsy7n4FspFUEp+vihUP2a/iZFAwq8/EE
+   xog3FtcQS4zddSEtJIzXLaB7DzyeKKid8VXcZZ2FC5TI4Wb/5c6xZNO9v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="381626094"
+X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
+   d="scan'208";a="381626094"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 14:41:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="997763284"
+X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
+   d="scan'208";a="997763284"
+Received: from dbhattac-mobl.amr.corp.intel.com (HELO [10.212.142.100]) ([10.212.142.100])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 14:41:10 -0700
+Content-Type: multipart/mixed; boundary="------------DCmy7uiG3ousBC4lvqGHpGr2"
+Message-ID: <8c99f8d2-247d-ccee-3a0b-e95e547f8b9b@intel.com>
+Date: Mon, 2 Oct 2023 14:41:09 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2 2/2] x86/sev-es: Only set x86_virt_bits to correct
+ value
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Adam Dunlap <acdunlap@google.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Sean Christopherson <seanjc@google.com>, Kim Phillips
+ <kim.phillips@amd.com>, Juergen Gross <jgross@suse.com>,
+ Ashok Raj <ashok.raj@intel.com>, Joerg Roedel <jroedel@suse.de>,
+ Tom Lendacky <thomas.lendacky@amd.com>, David Hildenbrand
+ <david@redhat.com>, Mike Rapoport <rppt@kernel.org>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ Nikunj A Dadhania <nikunj@amd.com>, Dionna Glaze <dionnaglaze@google.com>,
+ Peter Gonda <pgonda@google.com>, David Rientjes <rientjes@google.com>,
+ Khalid ElMously <khalid.elmously@canonical.com>,
+ Jacob Xu <jacobhxu@google.com>, llvm@lists.linux.dev
+References: <20230912002703.3924521-1-acdunlap@google.com>
+ <20230912002703.3924521-3-acdunlap@google.com>
+ <20231002200426.GA4127272@dev-arch.thelio-3990X>
+From: Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20231002200426.GA4127272@dev-arch.thelio-3990X>
+
+This is a multi-part message in MIME format.
+--------------DCmy7uiG3ousBC4lvqGHpGr2
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231002-net-wifpts-dpll_mode_get-v1-2-a356a16413cf@kernel.org>
-References: <20231002-net-wifpts-dpll_mode_get-v1-0-a356a16413cf@kernel.org>
-In-Reply-To: <20231002-net-wifpts-dpll_mode_get-v1-0-a356a16413cf@kernel.org>
-To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
- pabeni@redhat.com, vadfed@fb.com
-Cc: arkadiusz.kubalewski@intel.com, jiri@resnulli.us, 
- netdev@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>, saeedm@nvidia.com, leon@kernel.org, 
- linux-rdma@vger.kernel.org
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2119; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Y2Lt8qx7KyiKOUPa2We5gWo6fuqgHoG5oG5OZdYy0+M=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDKnSesEfzOqbj2kfeNXzsH5q96utkjcLLAMNrU23Pf0++
- fiG0E/fOkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEZDMZ/set3+G6yeio7AwL
- m1uCJx+pLzxe/KRJ+/dVSfbY/cxuxwoZ/tkfelJ1K+/oz/9zFlaqLF/VU3vpT25Pic2rvmcv4xr
- OcXIAAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-When building with -Wincompatible-function-pointer-types-strict, a
-warning designed to catch potential kCFI failures at build time rather
-than run time due to incorrect function pointer types, there is a
-warning due to a mismatch between the type of the mode parameter in
-mlx5_dpll_device_mode_get() vs. what the function pointer prototype for
-->mode_get() in 'struct dpll_device_ops' expects.
+On 10/2/23 13:04, Nathan Chancellor wrote:
+> On Mon, Sep 11, 2023 at 05:27:03PM -0700, Adam Dunlap wrote:
+>> Instead of setting x86_virt_bits to a possibly-correct value and then
+>> correcting it later, do all the necessary checks before setting it.
+>>
+>> At this point, the #VC handler references boot_cpu_data.x86_virt_bits,
+>> and in the previous version, it would be triggered by the cpuids between
+>> the point at which it is set to 48 and when it is set to the correct
+>> value.
+>>
+>> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+>> Signed-off-by: Adam Dunlap <acdunlap@google.com>
+> Our continuous integration started seeing panics when booting ARCH=i386
+> without KVM after this change landed in -tip as commit fbf6449f84bf
+> ("x86/sev-es: Set x86_virt_bits to the correct value straight away,
+> instead of a two-phase approach"):
 
-  drivers/net/ethernet/mellanox/mlx5/core/dpll.c:141:14: error: incompatible function pointer types initializing 'int (*)(const struct dpll_device *, void *, enum dpll_mode *, struct netlink_ext_ack *)' with an expression of type 'int (const struct dpll_device *, void *, u32 *, struct netlink_ext_ack *)' (aka 'int (const struct dpll_device *, void *, unsigned int *, struct netlink_ext_ack *)') [-Werror,-Wincompatible-function-pointer-types-strict]
-    141 |         .mode_get = mlx5_dpll_device_mode_get,
-        |                     ^~~~~~~~~~~~~~~~~~~~~~~~~
-  1 error generated.
+I can't reproduce this, but I'm running a gcc-built kernel and I haven't
+tried very hard to replicate your qemu setup.
 
-Change the type of the mode parameter in mlx5_dpll_device_mode_get() to
-clear up the warning and avoid kCFI failures at run time.
+I did notice, though, that the patch in question forgot to move one
+assignment.  Could you see if the attached patch fixes things for you?
+--------------DCmy7uiG3ousBC4lvqGHpGr2
+Content-Type: text/x-patch; charset=UTF-8; name="cache-bits-debug.patch"
+Content-Disposition: attachment; filename="cache-bits-debug.patch"
+Content-Transfer-Encoding: base64
 
-Fixes: 496fd0a26bbf ("mlx5: Implement SyncE support using DPLL infrastructure")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-To: saeedm@nvidia.com
-To: leon@kernel.org
-Cc: linux-rdma@vger.kernel.org
----
- drivers/net/ethernet/mellanox/mlx5/core/dpll.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ZGlmZiAtcHVOIGFyY2gveDg2L2tlcm5lbC9jcHUvY29tbW9uLmN+Y2FjaGUtYml0cy1kZWJ1
+ZyBhcmNoL3g4Ni9rZXJuZWwvY3B1L2NvbW1vbi5jCi0tLSBhL2FyY2gveDg2L2tlcm5lbC9j
+cHUvY29tbW9uLmN+Y2FjaGUtYml0cy1kZWJ1ZwkyMDIzLTEwLTAyIDE0OjIwOjQ4LjI3MzQx
+NTQyMyAtMDcwMAorKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L2NvbW1vbi5jCTIwMjMtMTAt
+MDIgMTQ6MjQ6NTIuNzEwMTI5MDUxIC0wNzAwCkBAIC0xMTQyLDYgKzExNDIsNyBAQCB2b2lk
+IGdldF9jcHVfYWRkcmVzc19zaXplcyhzdHJ1Y3QgY3B1aW5mCiAJCX0KIAl9CiAJYy0+eDg2
+X2NhY2hlX2JpdHMgPSBjLT54ODZfcGh5c19iaXRzOworCWMtPng4Nl9jYWNoZV9hbGlnbm1l
+bnQgPSBjLT54ODZfY2xmbHVzaF9zaXplOwogfQogCiBzdGF0aWMgdm9pZCBpZGVudGlmeV9j
+cHVfd2l0aG91dF9jcHVpZChzdHJ1Y3QgY3B1aW5mb194ODYgKmMpCkBAIC0xNTk1LDggKzE1
+OTYsNiBAQCBzdGF0aWMgdm9pZCBfX2luaXQgY3B1X3BhcnNlX2Vhcmx5X3BhcmFtCiAgKi8K
+IHN0YXRpYyB2b2lkIF9faW5pdCBlYXJseV9pZGVudGlmeV9jcHUoc3RydWN0IGNwdWluZm9f
+eDg2ICpjKQogewotCWMtPng4Nl9jYWNoZV9hbGlnbm1lbnQgPSBjLT54ODZfY2xmbHVzaF9z
+aXplOwotCiAJbWVtc2V0KCZjLT54ODZfY2FwYWJpbGl0eSwgMCwgc2l6ZW9mKGMtPng4Nl9j
+YXBhYmlsaXR5KSk7CiAJYy0+ZXh0ZW5kZWRfY3B1aWRfbGV2ZWwgPSAwOwogCl8K
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/dpll.c b/drivers/net/ethernet/mellanox/mlx5/core/dpll.c
-index 74f0c7867120..2cd81bb32c66 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/dpll.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/dpll.c
-@@ -121,8 +121,8 @@ static int mlx5_dpll_device_lock_status_get(const struct dpll_device *dpll,
- }
- 
- static int mlx5_dpll_device_mode_get(const struct dpll_device *dpll,
--				     void *priv,
--				     u32 *mode, struct netlink_ext_ack *extack)
-+				     void *priv, enum dpll_mode *mode,
-+				     struct netlink_ext_ack *extack)
- {
- 	*mode = DPLL_MODE_MANUAL;
- 	return 0;
-
--- 
-2.42.0
-
+--------------DCmy7uiG3ousBC4lvqGHpGr2--
