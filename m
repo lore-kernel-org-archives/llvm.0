@@ -1,36 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F711F170;
-	Mon,  2 Oct 2023 22:50:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04535C433C8;
-	Mon,  2 Oct 2023 22:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CDE208B1
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 23:07:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820AAC433C7;
+	Mon,  2 Oct 2023 23:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696287051;
-	bh=EcTJa+PR680qpcWHsiMUeaqOdORB94EtacTE7leHuW4=;
+	s=k20201202; t=1696288032;
+	bh=pqvohkmy+2m5Tqt1sTRxlBrIprA83sMhWjYw54JI05M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a6XxXmRA0+dUcG7H509G8/9uBhjEXxmfyV2Dk4iQaPWMO7ZWyW8eLOTzD2kT+Okr/
-	 sGWS+kPe7FQCpR5zpIez6GqPPKtenghyybtzHt78rPpQt0e6+r0e0JUJO7AyezLfAK
-	 s23w5ZDnE49M5I23U0GVG4WXs2xNexBzh1aV0qtsuqriBtS0KCCvl2AB93bozUVPwZ
-	 Fy3zwa3qHro4ggbtFAC8lqkyZ0sMl3n2Y/GL4FPzTTRsHMS0JAAbjzq+YgyD5ACCgj
-	 SuEz1MLvphmPavk2qiir6nAwuagBo6+44PI92PkCBUoGuNxY2Zj8Pu2/2JMSJZzdvo
-	 pYbvpkenZoHdA==
-Date: Mon, 2 Oct 2023 15:50:48 -0700
+	b=Jjdz6eixvqAz08YRMbWSuL4jQlaSOX95kn5uuK4Mkq6zj1pdxcmCPphMyrBYhuByE
+	 9n+mae1GFj78m6OwJyEKUcC5/wYYIK7LsF9xWbNpWvZaXyMyeVbJQuH9W8vLjh5RLA
+	 y/0H7xXbdRS98XpnP2zQDhGKT1lhZ+t8OvGHkfJeLkqNAW03dfnsUpSUaMtqN+7e9r
+	 /57qKywpv3q0rZndFV8DU8v7d85ynQ0UC/4zm/+SQ11mKiY1UzaDWKHgnq0oiQXzh/
+	 L8aERvYjHrcY5hqyGdNdR9dbP1X+VszD2VL3U90PlTYSA6D87BeBHSWNSfmkGHvzB6
+	 g52qkjS/mwXwA==
+Date: Mon, 2 Oct 2023 16:07:09 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
-	kbusch@kernel.org, hch@lst.de, sagi@grimberg.me, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, djwong@kernel.org,
-	viro@zeniv.linux.org.uk, brauner@kernel.org,
-	chandan.babu@oracle.com, dchinner@redhat.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	tytso@mit.edu, jbongio@google.com, linux-api@vger.kernel.org
-Subject: Re: [PATCH 09/21] block: Add checks to merging of atomic writes
-Message-ID: <20231002225048.GA558147@dev-arch.thelio-3990X>
-References: <20230929102726.2985188-10-john.g.garry@oracle.com>
- <202309302100.L6ynQWub-lkp@intel.com>
+To: Jeremy Cline <jeremy@jcline.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] gen_compile_commands: use raw string when replacing \#
+Message-ID: <20231002230709.GA1029006@dev-arch.thelio-3990X>
+References: <20230929190446.113168-1-jeremy@jcline.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,45 +33,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202309302100.L6ynQWub-lkp@intel.com>
+In-Reply-To: <20230929190446.113168-1-jeremy@jcline.org>
 
-On Sat, Sep 30, 2023 at 09:40:30PM +0800, kernel test robot wrote:
-> Hi John,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on xfs-linux/for-next]
-> [also build test ERROR on axboe-block/for-next mkp-scsi/for-next jejb-scsi/for-next linus/master v6.6-rc3 next-20230929]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/John-Garry/block-Add-atomic-write-operations-to-request_queue-limits/20230929-184542
-> base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-> patch link:    https://lore.kernel.org/r/20230929102726.2985188-10-john.g.garry%40oracle.com
-> patch subject: [PATCH 09/21] block: Add checks to merging of atomic writes
-> config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20230930/202309302100.L6ynQWub-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230930/202309302100.L6ynQWub-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202309302100.L6ynQWub-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: undefined symbol: __moddi3
->    >>> referenced by blk-merge.c
->    >>>               block/blk-merge.o:(ll_back_merge_fn) in archive vmlinux.a
->    >>> referenced by blk-merge.c
->    >>>               block/blk-merge.o:(ll_back_merge_fn) in archive vmlinux.a
->    >>> referenced by blk-merge.c
->    >>>               block/blk-merge.o:(bio_attempt_front_merge) in archive vmlinux.a
->    >>> referenced 3 more times
+Hi Jeremy,
 
-This does not appear to be clang specific, I can reproduce it with GCC
-12.3.0 and the same configuration target.
+On Fri, Sep 29, 2023 at 03:04:46PM -0400, Jeremy Cline wrote:
+> I noticed this since I'm running Python 3.12-rc3, which emits
+> "SyntaxWarning: invalid escape sequence '\#'" when running this script.
+> According to the Python 3.12 release notes this will eventually become a
+> SyntaxError.
+> 
+> Based on the comment in the code, I believe the intention was to match
+> the literal string "\#". Marking it as a raw string will stop Python
+> from trying to treat it as an escape sequence and behave as intended.
+> 
+> Signed-off-by: Jeremy Cline <jeremy@jcline.org>
 
-Cheers,
-Nathan
+Thanks for the patch, it looks good to me.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+Just a heads up, you are not the first person to see this and send a
+patch:
+
+https://lore.kernel.org/20230912060801.95533-5-bgray@linux.ibm.com/
+
+But as far as I can tell, there is no movement on that changeset, so if
+Masahiro is able to pick this up, that would still be good. Masahiro,
+the original change is available at
+https://lore.kernel.org/all/20230929190446.113168-1-jeremy@jcline.org/,
+if you are able to apply it that way.
+
+> ---
+>  scripts/clang-tools/gen_compile_commands.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+> index a84cc5737c2c..bc005cac1944 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file_path):
+>      # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
+>      # kernel version). The compile_commands.json file is not interepreted
+>      # by Make, so this code replaces the escaped version with '#'.
+> -    prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
+> +    prefix = command_prefix.replace(r'\#', '#').replace('$(pound)', '#')
+>  
+>      # Use os.path.abspath() to normalize the path resolving '.' and '..' .
+>      abs_path = os.path.abspath(os.path.join(root_directory, file_path))
+> -- 
+> 2.41.0
+> 
