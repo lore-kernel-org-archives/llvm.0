@@ -1,128 +1,95 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45A1200CE
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 20:10:49 +0000 (UTC)
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-32167a4adaaso189280f8f.1
-        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 13:10:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B8F200D9
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 20:29:46 +0000 (UTC)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-690bd8f89baso142475b3a.2
+        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 13:29:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696277448; x=1696882248; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vFOstXEQlXhjDb+N/dzpV+yhV1gDE+Z2FA2nVC44tYo=;
-        b=IdVAPIaHZWCBvnzi51wM3kCkr7mzKeIzW84/0usbc1BCN7O35SJjd7lS2Va6PRUo4/
-         SAOAxiojSyaN/Vo1tcvH0DT+Jzz2cX8JW8lpKjJ7+PlRDMlhz7UNE7wLCuJnvF/Igkjw
-         vb1/0OwA+e6lbOFbjQApwOphRis/U2NzG37qy9v3nNSnsbCUMfKMFFZOgWFaCwTI2JaT
-         Cx0TYQcyeUz7NzgH4xPgPogCG+D9pZyAL3h6touMLm/we+oP2aGXhxfTs18RWvdNG+14
-         sRG8lKUt5/BFY7WRcLQILEnwJvqxuoVmY2VZAQKJn4dGE831fOPphgGnPeMmVFdPutZk
-         3wSg==
+        d=chromium.org; s=google; t=1696278586; x=1696883386; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l0WqvxjZPFgnTMVefi0EvUmMzg28kKmDEueowRCLoP8=;
+        b=jzP5cfUNJqCoVGU7wMcwQ4lFNmq11pjH6jtdPVNuceNOf+IwU9SVyfZBA7Q/iZAAW9
+         TPA8/fBm+ocMLH5j8GtWNIj8cWtNYRkJBUmjFwhriVnn3cCOHS9Ck2G9i+yZcaJHodHR
+         4fa4E6fm73zoTuUWXU24VCzvUiUbZfW2tLtW8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696277448; x=1696882248;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vFOstXEQlXhjDb+N/dzpV+yhV1gDE+Z2FA2nVC44tYo=;
-        b=eiaYDZaXsYQqBTgdJ48TFxbvHXZBJdK092A9I/XF9xPbAqCjD7v0s4hLZ7es40jSM8
-         nmUilEzhzoUiZB2/GzZZbcxyvKHhoBSSwCmsMXv+D08IpdPXdx9HMEc1KHjhVgnx5GjI
-         UM8cW9oo/Fr6IXBzp/LPgrT8gsPL904EejsIQPMxezXdPLHytWfaXMDaNWlLCWc5TCto
-         ucj03m3w/iGNlV0/m0GwlHPDR9DR8vm3McvzZEXKzsyy5SaNINFyIoHgehrp0hneFNEg
-         iN2TOtuovVEwxC2u7TMEzKl7s2+Y6xH72msM4+T22G2Jx6Q3LcQCcH0k9Zctp/oWBUP/
-         0Teg==
-X-Gm-Message-State: AOJu0YzKNj8nvMy7W9RWxwyImoULlnry95xECCTUk/wvovIkoieaXp7J
-	zC6RxJEYBwVl1ZSPimS7BQmB1zT7Th9BG+IC6kXINA==
-X-Google-Smtp-Source: AGHT+IElqfgkTtUO0/BuQ+5/kFgQWb+8Ch4D3J+irZT5GSi7IJL+nl7tY7mlEpmV9MFXsVujdKNzO0SI8enMSxwms7k=
-X-Received: by 2002:a5d:58e1:0:b0:31f:6524:2de1 with SMTP id
- f1-20020a5d58e1000000b0031f65242de1mr10259399wrd.32.1696277447607; Mon, 02
- Oct 2023 13:10:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696278586; x=1696883386;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l0WqvxjZPFgnTMVefi0EvUmMzg28kKmDEueowRCLoP8=;
+        b=vRmJV9hyjZoPa7LrCGiRBve6wE4eYm1opa2UjBuHwTtJVUjM+shNXhK7gF4SNrpplM
+         hLXK/2OQbKPv2ZkpVjz7oiP1igk+et6jtA5gJq85Y61zJ1uKjGMXDHFpzAuAI/1/iIYX
+         j4+QL8p5VAN0ptlvl8o8aPiafj1j144itfbFofGV213qwpa0WqejPWp6CMHcCJbR5WX1
+         lTIH/u16VFXImVhKt+03A2sBoFH4KgkDWVdqFr3FjXVfqxyqlBgkmMSdHicVQKM0ozm+
+         U3ZXIF5P8C1/PofAJcJvFb7uSuysYO8F08alGlvg60YxQiN6qAKywzFTw0oukrVaCGEA
+         MDpg==
+X-Gm-Message-State: AOJu0YxosjXjSRZ7uB/XfIOjdDESYwJycWgVOz2hcfRW9+O8qqmzAJu1
+	FMu7+bbVWfCN1zRoFOC3Lq7llQ==
+X-Google-Smtp-Source: AGHT+IH7EJAFcR/dE+fR2pl8ERxWFWJidFnQyrbZorlL1KyxD/iU349CYKdzcSGq8EAl/ms6FiBQWQ==
+X-Received: by 2002:a05:6a21:35c4:b0:165:a34a:ce20 with SMTP id ba4-20020a056a2135c400b00165a34ace20mr1436405pzc.29.1696278585958;
+        Mon, 02 Oct 2023 13:29:45 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p23-20020a170902a41700b001c32fd9e412sm10598281plq.58.2023.10.02.13.29.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 13:29:45 -0700 (PDT)
+Date: Mon, 2 Oct 2023 13:29:40 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	Ajay Sharma <sharmaajay@microsoft.com>,
+	Alex Elder <elder@kernel.org>, Pravin B Shelar <pshelar@ovn.org>,
+	Shaokun Zhang <zhangshaokun@hisilicon.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
+	dev@openvswitch.org, linux-parisc@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 00/14] Batch 1: Annotate structs with __counted_by
+Message-ID: <202310021329.56BE32B19@keescook>
+References: <20230922172449.work.906-kees@kernel.org>
+ <202309270854.67756EAC2@keescook>
+ <20231002112635.7daf13ef@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org>
-In-Reply-To: <20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 2 Oct 2023 13:10:34 -0700
-Message-ID: <CAKwvOdn-NqEjfteby_9hKBcrC-24P7tRnmGiTpa4fL66eJOZ8w@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Disable clang's -Wformat-{overflow,truncation}-non-kprintf
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, nicolas@fjasle.eu, trix@redhat.com, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231002112635.7daf13ef@kernel.org>
 
-On Mon, Oct 2, 2023 at 12:52=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Recently, clang added support for -Wformat-overflow and
-> -Wformat-truncation. When building the kernel, it was discovered that
-> clang's implementation of these warnings handles the '%p' specifier,
-> which differs from GCC's implementation. This results in false positive
-> warnings due to the kernel's various '%p' extensions. Fortunately, the
-> clang developers placed this warning difference into a separate flag,
-> allowing the kernel to turn off the warning for '%p' unconditionally.
->
-> This is not currently an issue for a normal build, as -Wformat-overflow
-> and -Wformat-truncation are unconditionally disabled, which includes
-> this sub-warning. However, ever since commit 6d4ab2e97dcf ("extrawarn:
-> enable format and stringop overflow warnings in W=3D1"), these warnings
-> are in W=3D1 and the goal is to enable them in the normal build once they
-> are all eliminated. Disable the warnings for W=3D1 to avoid false
-> positives. This block should move with -Wformat-overflow and
-> -Wformat-truncation when they are enabled for a normal build.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1923
-> Link: https://github.com/llvm/llvm-project/issues/64871
-> Link: https://github.com/llvm/llvm-project/pull/65969
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D111219
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D78512
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Mon, Oct 02, 2023 at 11:26:35AM -0700, Jakub Kicinski wrote:
+> On Wed, 27 Sep 2023 08:57:36 -0700 Kees Cook wrote:
+> > > Since the element count member must be set before accessing the annotated
+> > > flexible array member, some patches also move the member's initialization
+> > > earlier. (These are noted in the individual patches.)  
+> > 
+> > Hi, just checking on this batch of changes. Is it possible to take the
+> > 1-13 subset:
+> 
+> On it, sorry for the delay.
 
-This should be the final piece of the puzzle...a long arduous puzzle.
-Thanks Nathan!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+No worries; thanks for grabbing them!
 
-> ---
->  scripts/Makefile.extrawarn | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 2fe6f2828d37..bad1baa2cfb4 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -106,6 +106,13 @@ KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-const-=
-variable)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wpacked-not-aligned)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-overflow)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-truncation)
-> +# Clang checks for overflow/truncation with '%p', while GCC does not:
-> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D111219
-> +# The kernel has many extensions to '%p' that clang does not understand,=
- so
-> +# always disable these warnings when '-Wformat-truncation' and
-> +# '-Wformat-overflow' are enabled.
-> +KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-overflow-non-kprint=
-f)
-> +KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-truncation-non-kpri=
-ntf)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-overflow)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-truncation)
->
->
-> ---
-> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-> change-id: 20231002-disable-wformat-truncation-overflow-non-kprintf-033e8=
-d8b4de8
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+Kees Cook
