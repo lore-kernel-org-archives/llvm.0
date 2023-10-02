@@ -1,111 +1,134 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538D014F73
-	for <llvm@lists.linux.dev>; Sun,  1 Oct 2023 22:21:31 +0000 (UTC)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-690f7d73a3aso14375862b3a.0
-        for <llvm@lists.linux.dev>; Sun, 01 Oct 2023 15:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696198890; x=1696803690; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0pqyiI3+7drkqtZIOt/nPWQvKqd+z/yppiMX4edx8e0=;
-        b=RXyRLxJZkv4ZgYWrQL6SArc+/woG326+EdLS5YAB2X3/rszr7dHY4Dx2KtGRBida+j
-         8TL6qR3adk4vB4fS+/jCfBCK++rEOgKqMEpVgQqnZZ630P5r4+gswIJZu7PlcctPM7IC
-         bDj4n/zJATIL60Iju7eHsZNX8yR9B4s2jKWM4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696198890; x=1696803690;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0pqyiI3+7drkqtZIOt/nPWQvKqd+z/yppiMX4edx8e0=;
-        b=vWE98J+olSTuqWpTMUef0GqklGN3oLl5oUwEatPYbqchVQqUjOouC3BPW8Td3I54Ol
-         VDN7Ouoe6QNq+Sk7cn5Lp+DWg0GagC/K3FvC19NMIxUWXpkrqj7hiwqaVre/1Qf+fiGx
-         QSuXqxmcNhr/Brcr+gCzfO9uFMwVNg41lQW80glpzJ7CosGH2ixpSEC6h4Cgxe1Rii20
-         BSwb1Snzym6FpnAKSeo6AnMHZRt5HRKOj808c7qH09ToOfioELKd1nVVXkgl1rPCAqqD
-         S+ZHf2fbEKXPokzWO3pesIjvye5+JxPvZ3s7dz7umhZ9taa2DYyfl5igZmj4FZZ5x7jL
-         jJFw==
-X-Gm-Message-State: AOJu0YxHBSvorTKq+69SljV0VXIqFGiZAYVMv1x7cyu0xKOCAQf5QD8F
-	73YW0Q161lL+xiX3Y5AndIsrLw==
-X-Google-Smtp-Source: AGHT+IEygYiXe/d0uPbrlFytK8CFzeVNQ2yBgFbzEaFRC83+K+JWqX4wlfI8uaxMMEcnvrQFQnEagw==
-X-Received: by 2002:a05:6a00:852:b0:691:da6:47a with SMTP id q18-20020a056a00085200b006910da6047amr12630310pfk.31.1696198890639;
-        Sun, 01 Oct 2023 15:21:30 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q26-20020a62ae1a000000b0068ffd4eb66dsm18313851pff.35.2023.10.01.15.21.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Oct 2023 15:21:29 -0700 (PDT)
-Date: Sun, 1 Oct 2023 15:21:27 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Julia Lawall <julia.lawall@inria.fr>
-Cc: Kees Cook <kees@kernel.org>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] comedi: Annotate struct comedi_lrange with __counted_by
-Message-ID: <202310011515.D4C9184@keescook>
-References: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr>
- <202309301342.5B5BED40A1@keescook>
- <alpine.DEB.2.22.394.2310010945130.3166@hadrien>
- <90E2BBA5-8A2D-42DE-B36A-CD37BABBB433@kernel.org>
- <alpine.DEB.2.22.394.2310012112560.3166@hadrien>
- <202310011405.7599BA9@keescook>
- <202310011421.C4F19D45@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1EF369
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 00:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696206078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jQFxaP+/A5f6Atgz0hv9DYJuGueb0IfLrj8V9+xjseI=;
+	b=PhLMwexdUiWEeGBrwde3XU9xl4p+lJy1i5JBIUYwpF8UzMdb54kp45Ep1qIQSAAHlnZTRT
+	6ymaUrMbk9Sil+VpaKZLdyRUEK8kXwV2MFnpko9x3+05vXMeXpDMUQ5X/vIW0y00comSGK
+	BIHfFUVCon+3hrE4LpWWEdGN+wBqHXA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-dVgjke6iOi61a-tAOhhwrA-1; Sun, 01 Oct 2023 20:21:16 -0400
+X-MC-Unique: dVgjke6iOi61a-tAOhhwrA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F30D585A5A8
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 00:21:15 +0000 (UTC)
+Received: from [172.64.4.25] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DF1C240C6EBF;
+	Mon,  2 Oct 2023 00:21:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, ec8c2981)
+Date: Mon, 02 Oct 2023 00:21:15 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202310011421.C4F19D45@keescook>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <41565.123100120211600267@us-mta-283.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 01, 2023 at 02:22:17PM -0700, Kees Cook wrote:
-> On Sun, Oct 01, 2023 at 02:05:46PM -0700, Kees Cook wrote:
-> > On Sun, Oct 01, 2023 at 09:14:02PM +0200, Julia Lawall wrote:
-> > > Kees,
-> > > 
-> > > You can try the following.
-> > 
-> > Cool! Yeah, this finds the example:
-> > 
-> > drivers/comedi/drivers/rti800.c:74: struct comedi_lrange: field at offset 0 is the counter for the flex array
-> > drivers/comedi/drivers/rti800.c:83: struct comedi_lrange: field at offset 0 is the counter for the flex array
-> > drivers/comedi/drivers/rti800.c:92: struct comedi_lrange: field at offset 0 is the counter for the flex array
-> > 
-> > I'll run it on the whole codebase...
-> 
-> It found only the struct comedi_lrange instances, but that's good to
-> know. :)
+Hi, we tested your kernel and here are the results:
 
-On a related note, why doesn't this work?
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-@allocated@
-identifier STRUCT, ARRAY;
-expression COUNT;
-struct STRUCT *PTR;
-identifier ALLOC;
-type ELEMENT_TYPE;
-@@
+Tested-by: CKI Project <cki-project@redhat.com>
 
-        PTR = ALLOC(..., sizeof(\(*PTR\|struct STRUCT\)) +
-                         COUNT * sizeof(\(*PTR->ARRAY\|PTR->ARRAY[0]\|ELEMENT_TYPE\)), ...);
+Kernel information:
+    Commit message: Merge tag 'x86-urgent-2023-10-01' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106972
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
-minus: parse error: 
-  File "alloc.cocci", line 15, column 34, charpos = 485
-  around = 'struct',
-  whole content =       PTR = ALLOC(..., sizeof(\(*PTR\|struct STRUCT\)) +
 
-if I drop "struct", then it complains about ELEMENT_TYPE...
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--Kees
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-Kees Cook
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
