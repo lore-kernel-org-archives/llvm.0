@@ -1,152 +1,128 @@
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEFA23CE
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 15:06:31 +0000 (UTC)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1dd830ed844so4557758fac.2
-        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 08:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696259191; x=1696863991; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c0wIcnLi0eW3KIpAYRJEn1N+1DF/SZtUbN/0mO//zy4=;
-        b=ALb+22ydLd/hUygWGgrdmWSrmGV+RLSAi8IVGrDBVntzWnIy2T48mJle02OtxvuszT
-         +D18R0OS1IpIPOMAKNS7Isi9yjGq6WWy+x3Q8nxNNVs8bwaIrWhxKpdCs2T7AtMiO/Ue
-         JtWyXtAeBXtmsHhzT1uia1gl2FVN0DJhspCotXklviJbq6gnXTpKTolq+/cYoskyWolA
-         MmXP7tc1O5rNPUMCgIfLwd6p14fShT2jafkQbW/PPB9JdBXpTlLeGtM8ZLr1igphScxQ
-         zVd0r0J3SQTb9mADWB+52yaHlKPqap99v6YY4mTw8RuDbThynoq/l8hC5pKsSVCJp1fJ
-         6/yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696259191; x=1696863991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c0wIcnLi0eW3KIpAYRJEn1N+1DF/SZtUbN/0mO//zy4=;
-        b=cM8ySSKPzhUTEgSbbrp9r22/SumLo8fAhYFKvRSjLRN4Gqy978CVvA2vIS7yeoorT1
-         umDQH2D1s70kqF2Ki2b38BsuBwlL3lQQY6Rpf1cE3Gms83K+lX03wYJLCN4EveKp4/xz
-         fluF6ipZw8oTP7usS11BrClBJnrQPYIpG7AqJBQPhjxCfJMS/Uw9ve5MHyS7ErGFL1fT
-         nsgnUbkb9nh+G5tBVMr0UIVR6wxArGk3LSSWfrwlh74i8KIUUDZQpx/1H7mofZ/3ZWrL
-         fcCn5nW7NxSd71PRp/TM/3Crj1DgpCtV1u0hzkdFKNMgMOVjh2IA4WX1+PpXynxITn7K
-         TrLA==
-X-Gm-Message-State: AOJu0YyEryTHs6yMl/VC1+uX0MjEJFZGmyj9nI4JTey2ybtlvc5WA78V
-	sw7U6/K+7hTFODwvvpsw7yw2M6rrqOZOh6t/hJ0=
-X-Google-Smtp-Source: AGHT+IEX1je+61h+JUKWDKJZA+eu4NOUlivFnUEzoxSozC/G9+CulawvWCmD9DLQxtVZD1wdvqrdGNPyL3ZP6lrp6ME=
-X-Received: by 2002:a05:6870:a115:b0:1dd:7fa9:ed52 with SMTP id
- m21-20020a056870a11500b001dd7fa9ed52mr15044564oae.17.1696259190738; Mon, 02
- Oct 2023 08:06:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D751BDDC;
+	Mon,  2 Oct 2023 15:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696260027; x=1727796027;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KlsCi2P6EbATloKuzNprfWLLxWroXZS57++I5ObNBHc=;
+  b=ZNs/MJ0SfwFflWPkwmTDLWpqXyXlliq8ZhmPm4INtiiJiyQQfrokVI3m
+   r7hZaCaA0rmwuQB5FGjFXFif7T5Ra2IHQR0BidP5QO4snixf+ypp/ucrb
+   F0hHq7uHcU89B9NYFqkwwSQVfwqi3iuxL46pVhqFmfRLM7IT6z/u6Td8C
+   m6/0zwgANtVsKRu5tPFya4haWVysefnSkumfKYTRWRc+IcSolWittTthO
+   FPwT233RpM6FVf9Vm57iiPFa4vhRKAsjvaTUGfFkat+1nZmSjJZIsZqWQ
+   vBWmH6qxwGFoE1i/RLtPr6Si7Dnua4sj7rGJQBhEkjMLFEMcswtTU1Md9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="362037519"
+X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
+   d="scan'208";a="362037519"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 08:20:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="785806162"
+X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
+   d="scan'208";a="785806162"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 02 Oct 2023 08:20:01 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qnKiG-00069J-0V;
+	Mon, 02 Oct 2023 15:20:00 +0000
+Date: Mon, 2 Oct 2023 23:19:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-lib 25/34] fs/netfs/io.c:871:6: warning: variable
+ 'ret' is used uninitialized whenever 'if' condition is true
+Message-ID: <202310022348.lsNkvm7R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230922173110.work.084-kees@kernel.org> <169601600138.3014939.8511343741428844249.b4-ty@chromium.org>
- <83cd056c-52ae-01dd-7576-42d41da64c26@gmail.com>
-In-Reply-To: <83cd056c-52ae-01dd-7576-42d41da64c26@gmail.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 2 Oct 2023 11:06:19 -0400
-Message-ID: <CADnq5_Ma2CrLYggJHKFEObsNmUoqJwb2p1xai5DfL=m43U6zEA@mail.gmail.com>
-Subject: Re: [PATCH 0/9] drm: Annotate structs with __counted_by
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, Karol Herbst <kherbst@redhat.com>, Tom Rix <trix@redhat.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, dri-devel@lists.freedesktop.org, 
-	Chris Wilson <chris@chris-wilson.co.uk>, Prike Liang <Prike.Liang@amd.com>, 
-	Huang Rui <ray.huang@amd.com>, Gerd Hoffmann <kraxel@redhat.com>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	Matthew Brost <matthew.brost@intel.com>, Evan Quan <evan.quan@amd.com>, 
-	Emma Anholt <emma@anholt.net>, amd-gfx@lists.freedesktop.org, 
-	Kuogee Hsieh <quic_khsieh@quicinc.com>, Lijo Lazar <lijo.lazar@amd.com>, 
-	VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>, Ben Skeggs <bskeggs@redhat.com>, 
-	Andi Shyti <andi.shyti@linux.intel.com>, nouveau@lists.freedesktop.org, 
-	David Airlie <airlied@redhat.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Chia-I Wu <olvaffe@gmail.com>, llvm@lists.linux.dev, 
-	Yifan Zhang <yifan1.zhang@amd.com>, linux-arm-msm@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, Kevin Wang <kevin1.wang@amd.com>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Le Ma <le.ma@amd.com>, Gurchetan Singh <gurchetansingh@chromium.org>, 
-	Maxime Ripard <mripard@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	virtualization@lists.linux-foundation.org, Sean Paul <sean@poorly.run>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Xiaojian Du <Xiaojian.Du@amd.com>, 
-	Lang Yu <Lang.Yu@amd.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Tejas Upadhyay <tejas.upadhyay@intel.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	linux-kernel@vger.kernel.org, Hawking Zhang <Hawking.Zhang@amd.com>, 
-	Rob Clark <robdclark@gmail.com>, Melissa Wen <mwen@igalia.com>, 
-	John Harrison <john.c.harrison@intel.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Alex Deucher <alexander.deucher@amd.com>, Nirmoy Das <nirmoy.das@intel.com>, 
-	freedreno@lists.freedesktop.org, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Zack Rusin <zackr@vmware.com>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Oct 2, 2023 at 5:20=E2=80=AFAM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Am 29.09.23 um 21:33 schrieb Kees Cook:
-> > On Fri, 22 Sep 2023 10:32:05 -0700, Kees Cook wrote:
-> >> This is a batch of patches touching drm for preparing for the coming
-> >> implementation by GCC and Clang of the __counted_by attribute. Flexibl=
-e
-> >> array members annotated with __counted_by can have their accesses
-> >> bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS (for array
-> >> indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family function=
-s).
-> >>
-> >> As found with Coccinelle[1], add __counted_by to structs that would
-> >> benefit from the annotation.
-> >>
-> >> [...]
-> > Since this got Acks, I figure I should carry it in my tree. Let me know
-> > if this should go via drm instead.
-> >
-> > Applied to for-next/hardening, thanks!
-> >
-> > [1/9] drm/amd/pm: Annotate struct smu10_voltage_dependency_table with _=
-_counted_by
-> >        https://git.kernel.org/kees/c/a6046ac659d6
->
-> STOP! In a follow up discussion Alex and I figured out that this won't wo=
-rk.
->
-> The value in the structure is byte swapped based on some firmware
-> endianness which not necessary matches the CPU endianness.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-lib
+head:   8b08a7e2d3217f7054808246fc559c867f54a524
+commit: 051a41b875d04f931d3416d7b15e4cd3f6ba4edb [25/34] netfs: Implement DIO write support
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231002/202310022348.lsNkvm7R-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231002/202310022348.lsNkvm7R-lkp@intel.com/reproduce)
 
-SMU10 is APU only so the endianess of the SMU firmware and the CPU
-will always match.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310022348.lsNkvm7R-lkp@intel.com/
 
-Alex
+All warnings (new ones prefixed by >>):
 
->
-> Please revert that one from going upstream if it's already on it's way.
->
-> And because of those reasons I strongly think that patches like this
-> should go through the DRM tree :)
->
-> Regards,
-> Christian.
->
-> > [2/9] drm/amdgpu/discovery: Annotate struct ip_hw_instance with __count=
-ed_by
-> >        https://git.kernel.org/kees/c/4df33089b46f
-> > [3/9] drm/i915/selftests: Annotate struct perf_series with __counted_by
-> >        https://git.kernel.org/kees/c/ffd3f823bdf6
-> > [4/9] drm/msm/dpu: Annotate struct dpu_hw_intr with __counted_by
-> >        https://git.kernel.org/kees/c/2de35a989b76
-> > [5/9] drm/nouveau/pm: Annotate struct nvkm_perfdom with __counted_by
-> >        https://git.kernel.org/kees/c/188aeb08bfaa
-> > [6/9] drm/vc4: Annotate struct vc4_perfmon with __counted_by
-> >        https://git.kernel.org/kees/c/59a54dc896c3
-> > [7/9] drm/virtio: Annotate struct virtio_gpu_object_array with __counte=
-d_by
-> >        https://git.kernel.org/kees/c/5cd476de33af
-> > [8/9] drm/vmwgfx: Annotate struct vmw_surface_dirty with __counted_by
-> >        https://git.kernel.org/kees/c/b426f2e5356a
-> > [9/9] drm/v3d: Annotate struct v3d_perfmon with __counted_by
-> >        https://git.kernel.org/kees/c/dc662fa1b0e4
-> >
-> > Take care,
-> >
->
+>> fs/netfs/io.c:871:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (len2 && !netfs_rmw_read_one(rreq, start2, len2))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/io.c:898:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/netfs/io.c:871:2: note: remove the 'if' if its condition is always false
+           if (len2 && !netfs_rmw_read_one(rreq, start2, len2))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/io.c:869:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (len1 && !netfs_rmw_read_one(rreq, start1, len1))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/io.c:898:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/netfs/io.c:869:2: note: remove the 'if' if its condition is always false
+           if (len1 && !netfs_rmw_read_one(rreq, start1, len1))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/io.c:849:13: note: initialize the variable 'ret' to silence this warning
+           ssize_t ret;
+                      ^
+                       = 0
+   2 warnings generated.
+
+
+vim +871 fs/netfs/io.c
+
+   837	
+   838	/*
+   839	 * Begin the process of reading in one or two chunks of data for use by
+   840	 * unbuffered write to perform an RMW cycle.  We don't read directly into the
+   841	 * write buffer as this may get called to redo the read in the case that a
+   842	 * conditional write fails due to conflicting 3rd-party modifications.
+   843	 */
+   844	ssize_t netfs_rmw_read(struct netfs_io_request *wreq, struct file *file,
+   845			       unsigned long long start1, size_t len1,
+   846			       unsigned long long start2, size_t len2)
+   847	{
+   848		struct netfs_io_request *rreq;
+   849		ssize_t ret;
+   850	
+   851		_enter("RMW:R=%x %llx-%llx %llx-%llx",
+   852		       rreq->debug_id, start1, start1 + len1 - 1, start2, start2 + len2 - 1);
+   853	
+   854		rreq = netfs_alloc_request(wreq->mapping, file,
+   855					   start1, start2 - start1 + len2, NETFS_RMW_READ);
+   856		if (IS_ERR(rreq))
+   857			return PTR_ERR(rreq);
+   858	
+   859		INIT_WORK(&rreq->work, netfs_rreq_work);
+   860	
+   861		rreq->iter = wreq->io_iter;
+   862		__set_bit(NETFS_RREQ_CRYPT_IN_PLACE, &rreq->flags);
+   863		__set_bit(NETFS_RREQ_USE_BOUNCE_BUFFER, &rreq->flags);
+   864	
+   865		/* Chop the reads into slices according to what the netfs wants and
+   866		 * submit each one.
+   867		 */
+   868		atomic_set(&rreq->nr_outstanding, 1);
+   869		if (len1 && !netfs_rmw_read_one(rreq, start1, len1))
+   870			goto out;
+ > 871		if (len2 && !netfs_rmw_read_one(rreq, start2, len2))
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
