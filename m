@@ -1,83 +1,95 @@
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A97F17C3
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 07:02:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3318B20009;
-	Mon,  2 Oct 2023 07:02:42 +0000 (UTC)
-Message-ID: <8d305ae1-4235-6ae8-7dfb-9f432fdfcd41@ghiti.fr>
-Date: Mon, 2 Oct 2023 09:02:42 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A4617C9
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 07:06:59 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50336768615so26183017e87.0
+        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 00:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696230417; x=1696835217; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WGSmVU6eV61MEm0eDF1LjmBvte+gjgPeqhrseQVFPWQ=;
+        b=zDLwwckMerNOvcTvtoCOXNa6yLpXBaxRhm9D7IB0t+BgQjZrB1Xk25Yc1Ma+Hsfa+f
+         09tCJFA1b9n2Vt32VD1D0jQKiNw4qdzpfR2u10xMJNvTm+874p22OCOxYPunc/wbOdPa
+         k6ga/gHXJTJMXmavmdovHMoDo0qbmAIjsCnDfpKN446jdGpILxx6fIYKiXBmcU6UBNml
+         9Miny/o8ka5XAqU2HSSYi1L9l519/ZcHTg1WkrPnK8/DMvZbcpoelzftsMVPrVQr3xPf
+         myjndkYjEmEWf8mQANt0SygpS6owYZsSshPUAjbWi0PUe8hDovmWzwOMamLlA1eEMd9c
+         Gy8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696230417; x=1696835217;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WGSmVU6eV61MEm0eDF1LjmBvte+gjgPeqhrseQVFPWQ=;
+        b=gYQdF2Uyute+emHT7x6TUUUrzp8ObUHT9hUeVThZ1tSuxDxv/iCeTXdGTrJfBLof96
+         SDta3akEn+Np95JKf4BfxTgSZTkxj4M5ZHGFyKBZPdPNRftyg8KFdDKZOh+NdrSWaRvB
+         WUG1riSLISN5Zr/+vXWyP5hfrSYaHIwHE20m56YGRQDxEtdsdAilNZ6IhtVrz9nptobq
+         0ymd4cJk7PTfLReacM634mUaP8EsQ0mD3l/uuhU+/+0/OsT2p+PQH9Ll7gYCEBIq+gIw
+         ggrWWQnPf4hdBS1OLEXONBWp7BPjCKm33X/61AaRdn0rUUH2Llqa+IIhnLXNcI7R5Vvr
+         KRHQ==
+X-Gm-Message-State: AOJu0Yz0htppwweLwfzUZ50WVW+VGHWVVE+fSC9hafAx3vBDXWXF6Jsk
+	COuAZPMTEXbJjCjf0hsogWuZCQ==
+X-Google-Smtp-Source: AGHT+IFqNxtPg80t50ZYFfWxUt2W5y2FEtd43xRb6YCWO1WM7DYE1bqvmoOMC0T13JN44j87ql34Rw==
+X-Received: by 2002:a05:6512:1598:b0:500:78ee:4cd7 with SMTP id bp24-20020a056512159800b0050078ee4cd7mr10804857lfb.23.1696230417514;
+        Mon, 02 Oct 2023 00:06:57 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id z17-20020a05600c221100b0040642a1df1csm6565662wml.25.2023.10.02.00.06.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 00:06:57 -0700 (PDT)
+Date: Mon, 2 Oct 2023 10:06:54 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Brian Foster <bfoster@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] bcachefs: Use struct_size()
+Message-ID: <fdc46489-4266-48e3-99cc-ddb23b64f02e@kadam.mountain>
+References: <120b638f99b088f91d5a4491c800463c554e70b8.1696144401.git.christophe.jaillet@wanadoo.fr>
+ <7ae7737e-e32c-e9e7-880c-cafc240e7c33@embeddedor.com>
+ <ff682afb-a914-4cd7-8d19-202a6cb778de@kadam.mountain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 2/2] riscv: mm: Update mmap_rnd_bits_max
-Content-Language: en-US
-To: Pedro Falcato <pedro.falcato@gmail.com>, Kees Cook <keescook@chromium.org>
-Cc: Conor Dooley <conor@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20230929211155.3910949-4-samitolvanen@google.com>
- <20230929211155.3910949-6-samitolvanen@google.com>
- <202309291452.66ED9B4D83@keescook>
- <CABCJKufxUVoO+yJ+513W5FOFu6u45N=6wZe6a69u+8LU6A_N2Q@mail.gmail.com>
- <20230930-emporium-share-2bbdf7074e54@spud> <202309301400.4E1AD87@keescook>
- <CAKbZUD08W9_HB9F7tQqwreYvVapgVMOkS3QokzwHPcBnFnVMig@mail.gmail.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <CAKbZUD08W9_HB9F7tQqwreYvVapgVMOkS3QokzwHPcBnFnVMig@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff682afb-a914-4cd7-8d19-202a6cb778de@kadam.mountain>
 
-On 01/10/2023 17:19, Pedro Falcato wrote:
-> On Sun, Oct 1, 2023 at 2:51 AM Kees Cook <keescook@chromium.org> wrote:
->> On Sat, Sep 30, 2023 at 10:02:35AM +0100, Conor Dooley wrote:
->>> On Fri, Sep 29, 2023 at 03:52:22PM -0700, Sami Tolvanen wrote:
->>>> On Fri, Sep 29, 2023 at 2:54 PM Kees Cook <keescook@chromium.org> wrote:
->>>>> On Fri, Sep 29, 2023 at 09:11:58PM +0000, Sami Tolvanen wrote:
->>>>>> ARCH_MMAP_RND_BITS_MAX is based on Sv39, which leaves a few
->>>>>> potential bits of mmap randomness on the table if we end up enabling
->>>>>> 4/5-level paging. Update mmap_rnd_bits_max to take the final address
->>>>>> space size into account. This increases mmap_rnd_bits_max from 24 to
->>>>>> 33 with Sv48/57.
->>>>>>
->>>>>> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
->>>>> I like this. Is RISCV the only arch where the paging level can be chosen
->>>>> at boot time?
->>>> I haven't seen this elsewhere, but I also haven't looked at all the
->>>> other architectures that closely. arm64 does something interesting
->>>> with ARM64_VA_BITS_52, but I think we can still handle that in
->>>> Kconfig.
->>> AFAIU, x86-64 can do this also:
->>>
->>>        no4lvl          [RISCV] Disable 4-level and 5-level paging modes. Forces
->>>                        kernel to use 3-level paging instead.
->>>
->>>        no5lvl          [X86-64,RISCV] Disable 5-level paging mode. Forces
->>>                        kernel to use 4-level paging instead.
->> Ah-ha! Okay, well, then let's track this idea:
->> https://github.com/KSPP/linux/issues/346
-> (Replying here for visibility, tell me if you want to move this
-> discussion to github)
->
-> AIUI, x86 cannot do this for compat reasons. Even if you enable LA57,
-> mmap only gives you < 48-bit addresses, for compatibility with things
-> like JITs, etc that stash information in the upper 16 bits. You need
-> to pass a > 48-bit mmap hint to get 57-bit addresses.
->
-> I imagine riscv does not have this issue yet, due to little
-> accumulated cruft, but it may be wise to check against popular JITters
-> for these problems on riscv code.
->
+On Mon, Oct 02, 2023 at 09:42:06AM +0300, Dan Carpenter wrote:
+> On Sun, Oct 01, 2023 at 09:23:17AM +0200, Gustavo A. R. Silva wrote:
+> > 
+> > 
+> > On 10/1/23 09:13, Christophe JAILLET wrote:
+> > > Use struct_size() instead of hand writing it.
+> > > This is less verbose and more robust.
+> > > 
+> > > While at it, prepare for the coming implementation by GCC and Clang of the
+> > > __counted_by attribute. Flexible array members annotated with __counted_by
+> > > can have their accesses bounds-checked at run-time checking via
+> > > CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
+> > > strcpy/memcpy-family functions).
+> > 
+> > I would prefer this as two separate patches.
+> > 
+> 
+> I kind of feel like it's all part of one thing.  It's easier to review
+> as one patch.
 
-We already encountered those issues and the same solution was recently 
-merged (restrict to sv48 unless otherwise specified): 
-https://lore.kernel.org/all/20230809232218.849726-1-charlie@rivosinc.com/
+Also I think there is static analysis which sees struct_size()
+allocations and pushes people to use __counted_by() so doing it in two
+steps is sort of like introducing a static checker bug and then
+silencing it in the next patch.
+
+regards,
+dan carpenter
 
