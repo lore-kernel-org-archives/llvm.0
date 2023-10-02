@@ -1,126 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3A71F92E
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 19:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696276225;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MLAXrZYG8ZSgN6wj4D8ASg3hK1uBtf5SHlVcaR+cpLA=;
-	b=RsUvg4H+kixOLbKa1a2I8ZBuoB7eES9QaVRkRVFkASY6ykjdvLSvhuIZq51JmjGzpI2WFN
-	++fl2DBIN+iMp720MaRjVdMY3vND/cxz+5ToScOkSBP794X23ZADpDcCIoHThw4ce9cVSf
-	ZnnjH6W4BCr/eNM/Hd2c1tYEWq5rjMo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-vrl4pEnNM2WfSElHbE0haA-1; Mon, 02 Oct 2023 15:50:23 -0400
-X-MC-Unique: vrl4pEnNM2WfSElHbE0haA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D13A78015AB
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 19:50:22 +0000 (UTC)
-Received: from [172.64.10.35] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BD5E32156701;
-	Mon,  2 Oct 2023 19:50:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 18 of 230): Test report for master
- (6.6.0-rc4, mainline.kernel.org-clang, 8a749fd1)
-Date: Mon, 02 Oct 2023 19:50:22 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465BE1F19A;
+	Mon,  2 Oct 2023 19:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F9EC433C8;
+	Mon,  2 Oct 2023 19:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696276354;
+	bh=+548pRRoJGnyq+La0+LmV2WoZSprlMO8hwf3zOhMwFk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=EqWiZsTStPaTnLlG9Ln2clf5JhEUOwWSlMzPCtk4SJrcNKfaOPuRDpDojq0zQwdan
+	 nfi4nA+wX8mlV0tc6uwgc4BZB+Xv0terRZxA+2HJF/TUrRkE9tqoWTG2Y71U1x8nNc
+	 QRXdav27RnFhVkZVxyuT3LEutXi6JCYLnV3uo7l03ExaEyihCppDzoD12aDSBbPeTL
+	 wRtGScA8HkXP6Ie9r0rgntcaf5Swu2pgQzzwkaZ7DbQkkjYjPh+Cq9vmEaLZO/b5yN
+	 bo1xyjfX3FkR+SupPk6GkP/51ns2GbgSNebtR/FHYCmIpR7vyEVZ07TZThNxu26BDc
+	 Wo2nHLe24lAfA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 02 Oct 2023 12:52:28 -0700
+Subject: [PATCH] kbuild: Disable clang's
+ -Wformat-{overflow,truncation}-non-kprintf
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <35600.123100215502300711@us-mta-10.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHsfG2UC/x3NMQ6DMAyF4asgz7UUEoaoV6k6BOJQqzRBToBKi
+ LvX6vgN/3snVBKmCvfuBKGdK5es6G8dTK+QZ0KOarDGut4Yi5FrGBfCIxX5hIZNtjyFphmWnSQ
+ t5cCseK/CuSU0zpGPfhwiedDVVSjx9//4eF7XD8W1K/mBAAAA
+To: masahiroy@kernel.org, ndesaulniers@google.com
+Cc: nicolas@fjasle.eu, trix@redhat.com, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2683; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=+548pRRoJGnyq+La0+LmV2WoZSprlMO8hwf3zOhMwFk=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKnS8k3mUdGPhA8usu6/ktx2yOy/1VRpSy/H73UvrP4Fs
+ PrOyPraUcrCIMbBICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbCy8/IsGnJ821tzOET4noy
+ 45wCVkjkODCXvV/M+C6GY/nyJl8DQYb/rteaSzWrOVLs1MrPsgc4cbTvdll3fIXm7Ed7pFdyK+h
+ xAwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Recently, clang added support for -Wformat-overflow and
+-Wformat-truncation. When building the kernel, it was discovered that
+clang's implementation of these warnings handles the '%p' specifier,
+which differs from GCC's implementation. This results in false positive
+warnings due to the kernel's various '%p' extensions. Fortunately, the
+clang developers placed this warning difference into a separate flag,
+allowing the kernel to turn off the warning for '%p' unconditionally.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+This is not currently an issue for a normal build, as -Wformat-overflow
+and -Wformat-truncation are unconditionally disabled, which includes
+this sub-warning. However, ever since commit 6d4ab2e97dcf ("extrawarn:
+enable format and stringop overflow warnings in W=1"), these warnings
+are in W=1 and the goal is to enable them in the normal build once they
+are all eliminated. Disable the warnings for W=1 to avoid false
+positives. This block should move with -Wformat-overflow and
+-Wformat-truncation when they are enabled for a normal build.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1923
+Link: https://github.com/llvm/llvm-project/issues/64871
+Link: https://github.com/llvm/llvm-project/pull/65969
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78512
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/Makefile.extrawarn | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Kernel information:
-    Commit message: Linux 6.6-rc4
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index 2fe6f2828d37..bad1baa2cfb4 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -106,6 +106,13 @@ KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
+ KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
+ KBUILD_CFLAGS += $(call cc-option, -Wformat-overflow)
+ KBUILD_CFLAGS += $(call cc-option, -Wformat-truncation)
++# Clang checks for overflow/truncation with '%p', while GCC does not:
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
++# The kernel has many extensions to '%p' that clang does not understand, so
++# always disable these warnings when '-Wformat-truncation' and
++# '-Wformat-overflow' are enabled.
++KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
++KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
+ KBUILD_CFLAGS += $(call cc-option, -Wstringop-overflow)
+ KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
+ 
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/106979
+---
+base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+change-id: 20231002-disable-wformat-truncation-overflow-non-kprintf-033e8d8b4de8
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
