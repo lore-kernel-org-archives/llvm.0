@@ -1,38 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8BD1F18C
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 22:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2975CC433C8;
-	Mon,  2 Oct 2023 22:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F711F170;
+	Mon,  2 Oct 2023 22:50:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04535C433C8;
+	Mon,  2 Oct 2023 22:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696285445;
-	bh=6qGFQixEXCDQMv2uE867U8nPAhyA6HAp0HAbQvXyowI=;
+	s=k20201202; t=1696287051;
+	bh=EcTJa+PR680qpcWHsiMUeaqOdORB94EtacTE7leHuW4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y2TRtaufDtXKOBdW9HsEg/4Cmcj6gp1POmp49UuRFnR2kVNi6LhQ/dk+zg58rc3+8
-	 +6FVlz++Oaz7IchukZ9Z4RW4H2zeOpQQ+f1DfZVwZD0wMV3ljNFYNDNy3ELFQXvazN
-	 QZVDlrBL0cUsmlPqSH4y9emJ0b+xuoIaNXFFGvBcKNdPT4ZmE+pavRhKLe80n/yG/s
-	 R7v2Djgr5y/m6t+4wH+ghlMXbZ5MRkpvDYoIKuFetKi0ovvbuLfOi53Dcf/omzVeID
-	 QNWRjCHzKQs06ecWZbgC6iO2UnYTdX6ImkTfuxL40T7EhC4Cwdq/oWbMB3pxe8KM5f
-	 +fEvxSSZ2GEoQ==
-Date: Mon, 2 Oct 2023 15:24:02 -0700
+	b=a6XxXmRA0+dUcG7H509G8/9uBhjEXxmfyV2Dk4iQaPWMO7ZWyW8eLOTzD2kT+Okr/
+	 sGWS+kPe7FQCpR5zpIez6GqPPKtenghyybtzHt78rPpQt0e6+r0e0JUJO7AyezLfAK
+	 s23w5ZDnE49M5I23U0GVG4WXs2xNexBzh1aV0qtsuqriBtS0KCCvl2AB93bozUVPwZ
+	 Fy3zwa3qHro4ggbtFAC8lqkyZ0sMl3n2Y/GL4FPzTTRsHMS0JAAbjzq+YgyD5ACCgj
+	 SuEz1MLvphmPavk2qiir6nAwuagBo6+44PI92PkCBUoGuNxY2Zj8Pu2/2JMSJZzdvo
+	 pYbvpkenZoHdA==
+Date: Mon, 2 Oct 2023 15:50:48 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, acdunlap@google.com,
-	ashok.raj@intel.com, bp@alien8.de, david@redhat.com,
-	dionnaglaze@google.com, hpa@zytor.com, jacobhxu@google.com,
-	jgross@suse.com, jroedel@suse.de, khalid.elmously@canonical.com,
-	kim.phillips@amd.com, kirill.shutemov@linux.intel.com,
-	llvm@lists.linux.dev, luto@kernel.org, mingo@redhat.com,
-	nikunj@amd.com, peterz@infradead.org, pgonda@google.com,
-	rientjes@google.com, rppt@kernel.org, seanjc@google.com,
-	tglx@linutronix.de, thomas.lendacky@amd.com,
-	Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH] x86/boot: Move x86_cache_alignment initialization to
- correct spot
-Message-ID: <20231002222402.GA486933@dev-arch.thelio-3990X>
-References: <20231002200426.GA4127272@dev-arch.thelio-3990X>
- <20231002220045.1014760-1-dave.hansen@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
+	kbusch@kernel.org, hch@lst.de, sagi@grimberg.me, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, djwong@kernel.org,
+	viro@zeniv.linux.org.uk, brauner@kernel.org,
+	chandan.babu@oracle.com, dchinner@redhat.com, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+	linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	tytso@mit.edu, jbongio@google.com, linux-api@vger.kernel.org
+Subject: Re: [PATCH 09/21] block: Add checks to merging of atomic writes
+Message-ID: <20231002225048.GA558147@dev-arch.thelio-3990X>
+References: <20230929102726.2985188-10-john.g.garry@oracle.com>
+ <202309302100.L6ynQWub-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,60 +39,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231002220045.1014760-1-dave.hansen@linux.intel.com>
+In-Reply-To: <202309302100.L6ynQWub-lkp@intel.com>
 
-On Mon, Oct 02, 2023 at 03:00:45PM -0700, Dave Hansen wrote:
-> c->x86_cache_alignment is initialized from c->x86_clflush_size.
-> However, commit fbf6449f84bf moved c->x86_clflush_size initialization
-> to later in boot without moving the c->x86_cache_alignment assignment.
+On Sat, Sep 30, 2023 at 09:40:30PM +0800, kernel test robot wrote:
+> Hi John,
 > 
-> This presumably left c->x86_cache_alignment set to zero for longer
-> than it should be.
+> kernel test robot noticed the following build errors:
 > 
-> The result was an oops on 32-bit kernels while accessing a pointer
-> at 0x20.  The 0x20 came from accessing a structure member at offset
-> 0x10 (buffer->cpumask) from a ZERO_SIZE_PTR=0x10.  kmalloc() can
-> evidently return ZERO_SIZE_PTR when it's given 0 as its alignment
-> requirement.
+> [auto build test ERROR on xfs-linux/for-next]
+> [also build test ERROR on axboe-block/for-next mkp-scsi/for-next jejb-scsi/for-next linus/master v6.6-rc3 next-20230929]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> Move the c->x86_cache_alignment initialization to be after
-> c->x86_clflush_size has an actual value.
+> url:    https://github.com/intel-lab-lkp/linux/commits/John-Garry/block-Add-atomic-write-operations-to-request_queue-limits/20230929-184542
+> base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+> patch link:    https://lore.kernel.org/r/20230929102726.2985188-10-john.g.garry%40oracle.com
+> patch subject: [PATCH 09/21] block: Add checks to merging of atomic writes
+> config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20230930/202309302100.L6ynQWub-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230930/202309302100.L6ynQWub-lkp@intel.com/reproduce)
 > 
-> Fixes: fbf6449f84bf ("x86/sev-es: Set x86_virt_bits to the correct value straight away, instead of a two-phase approach")
-> Cc: Adam Dunlap <acdunlap@google.com>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Jacob Xu <jacobhxu@google.com>
-> Link: https://lore.kernel.org/all/20231002200426.GA4127272@dev-arch.thelio-3990X/
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202309302100.L6ynQWub-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: __moddi3
+>    >>> referenced by blk-merge.c
+>    >>>               block/blk-merge.o:(ll_back_merge_fn) in archive vmlinux.a
+>    >>> referenced by blk-merge.c
+>    >>>               block/blk-merge.o:(ll_back_merge_fn) in archive vmlinux.a
+>    >>> referenced by blk-merge.c
+>    >>>               block/blk-merge.o:(bio_attempt_front_merge) in archive vmlinux.a
+>    >>> referenced 3 more times
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+This does not appear to be clang specific, I can reproduce it with GCC
+12.3.0 and the same configuration target.
 
-Thanks for the quick fix!
-
-> ---
->  arch/x86/kernel/cpu/common.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 8d7063e4f63c9..9c51ad5bbf319 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -1141,6 +1141,7 @@ void get_cpu_address_sizes(struct cpuinfo_x86 *c)
->  		}
->  	}
->  	c->x86_cache_bits = c->x86_phys_bits;
-> +	c->x86_cache_alignment = c->x86_clflush_size;
->  }
->  
->  static void identify_cpu_without_cpuid(struct cpuinfo_x86 *c)
-> @@ -1594,8 +1595,6 @@ static void __init cpu_parse_early_param(void)
->   */
->  static void __init early_identify_cpu(struct cpuinfo_x86 *c)
->  {
-> -	c->x86_cache_alignment = c->x86_clflush_size;
-> -
->  	memset(&c->x86_capability, 0, sizeof(c->x86_capability));
->  	c->extended_cpuid_level = 0;
->  
-> -- 
-> 2.34.1
-> 
+Cheers,
+Nathan
