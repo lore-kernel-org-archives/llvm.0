@@ -1,62 +1,127 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5281DA53
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 06:25:18 +0000 (UTC)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-533d31a8523so18451014a12.1
-        for <llvm@lists.linux.dev>; Sun, 01 Oct 2023 23:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696227916; x=1696832716; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2YcTDEderIpntFpryzrhPKAAizvOt9pYBBFwAoTJCX8=;
-        b=AFBaSp90gTcvlC4MN33RfTOfbtNSvmiV+/yqA64je2XLioD+HX7ApoIgv7XkS4rDpU
-         Nf9Vp67yaYYyCwIzWo3oBg9u+XPWN5IBRS4ib0ccAvqoPSPWTJsIqIcDCxEPiWnXm7K7
-         frVxLzgajKysp0GQ02gooaZQsM9muvh/Rr3XUsCc0SpyXTyE+u758lnT2C5brJ3+rEHQ
-         A92I1CFLws2uZ/lpNo+UZRQPS7sANAt5Y6mv394pnCR6HLNbZYf5kKFvqM0pQnBZ1tAK
-         JMuENjq/2jDgs3fv6syhATFnCl2+9CDI8OTROpbmgvHye7H8/kN5ClequH+NYnbLqgel
-         j9qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696227916; x=1696832716;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2YcTDEderIpntFpryzrhPKAAizvOt9pYBBFwAoTJCX8=;
-        b=wbDCQw6p7q98t5i5oMBNxyPAs6fUc6DLj+t3BLzXTlOzQTp57PTMhfLcSj49SQT98S
-         eKTDnbkS6LWED0mZiAGCdyB8bia9Pmbxxo9+oVRxX8e8P7/7C8sMijKudk1mcMFCKFz/
-         2+Zk7VYQuiBMmQ4L2sa4SVWCl95e7g6ARaLf8KX+SVvgryCNKP7g2/qm1GVdQ4fM75zD
-         HOpLQhtmtvUZBjaJ+pjOH4HR0Q0gsWAEK6a08NU+5G22hlnHy/+FS0run2c5pMgsV2rl
-         Fsctqm7uHCQPDi85L5+OHfFJ5/lPv7RxC7MIoSPBg04kuaS4AwSSjOP0XTKQWjDKcLIU
-         mi3w==
-X-Gm-Message-State: AOJu0YylVjNjZVnuirnxmuvXFFoCJPRY+ViDbrvOWoQlgn7eTlt07/aO
-	gkF9HmF3OeeiFi5ZE4CJEIOriUzPsFEHFSXUlQ8=
-X-Google-Smtp-Source: AGHT+IFpTjGH6qen2IV4QM1xW6WnN+JLnlHWop8RcZYM7IzkDdK22YogY8JuMXUDC8f8zWEJww+PXxWSvSyaqsMpyy0=
-X-Received: by 2002:a05:6402:4516:b0:536:e03f:62b6 with SMTP id
- ez22-20020a056402451600b00536e03f62b6mr8385696edb.30.1696227916167; Sun, 01
- Oct 2023 23:25:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356877E3
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 06:41:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696228881;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zfbuSArF8sEcF6U1Mlq23M0P4DnmsbiCvlm9H2GFED4=;
+	b=ivf67h48nITzCXmR0REYJ1B6CoZGyTLnexXLNiCc+mcX12QjhIjxvubPVuGwbewDW0GQ6+
+	2Emvm8tUFSiBWgC/a5PJMoJrtheAgQ8xmrBDOZShAqb3QxOC2IYGqHRwrDgMjGH1gd+n2m
+	E5ftQ++RbEViv3fZjmr0D8NL1upEq48=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-445-Hwzt4tMdNvqZ3VAk27Q5jA-1; Mon, 02 Oct 2023 02:41:18 -0400
+X-MC-Unique: Hwzt4tMdNvqZ3VAk27Q5jA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2426829AB3F7
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 06:41:18 +0000 (UTC)
+Received: from [172.64.4.25] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 01DB72156701;
+	Mon,  2 Oct 2023 06:41:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
+ (6.6.0-rc3, mainline.kernel.org-clang, e81a2dab)
+Date: Mon, 02 Oct 2023 06:41:17 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Mon, 2 Oct 2023 08:25:05 +0200
-Message-ID: <CAFULd4bEy9XTsdHuQMukjiTtWbrej63GThqUhbXKBgtF3Tm-GQ@mail.gmail.com>
-Subject: Issues with named address spaces
-To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>
-Cc: llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <47566.123100202411801496@us-mta-445.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dear clang/LLVM maintainers,
+Hi, we tested your kernel and here are the results:
 
-I would like to point out an issue with named address spaces. In the
-thread where segment qualifiers would be introduced to linux kernel
-x86 percpu functionality [1], it was pointed out that clang crashes on
-a simple memory copy with structure assignment [2]. Perhaps you would
-be interested in the attached testcase.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[1] https://lore.kernel.org/lkml/20231001131620.112484-1-ubizjak@gmail.com/
-[2] https://lore.kernel.org/lkml/CAHk-=wh+cfn58XxMLnG6dH+Eb9-2dYfABXJF2FtSZ+vfqVvWzA@mail.gmail.com/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Uros.
+Kernel information:
+    Commit message: Merge tag 'kbuild-fixes-v6.6-2' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106976
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
