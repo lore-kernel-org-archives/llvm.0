@@ -1,103 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59B41DA4D;
-	Mon,  2 Oct 2023 18:40:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3C9CC433C9;
-	Mon,  2 Oct 2023 18:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696272030;
-	bh=6KsLZI9g7UhiN89nAcewKJ5x/HxWt4mFru++XEczoDg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kl1bxsepo+ybIiREqjgx6wx0ShnxoUpHhOb8jw0rJC74J5TAO1gXryRFhSr8JahB/
-	 /U1aL71EW62ZKhgkUaTwq9dYMPVnXluHHp8RfWlW/Fnl9xoRLQo05UmgxLgYOHDSnY
-	 3HaLBufuykE0Ga8nAS2DRgiVfBkDp9jrO99Of5B2PPzAw8vdWyaWr9hPGW/q2rGQbz
-	 2zEGRxCOI8Wa53iD7jmbL0foJ3xzr489GnEki+zvjJQnvfGcx8xlSfUq4yB20KHE6r
-	 jcnLoUwUjTGvxMf1j53okC4H8YotaXjn6zPVplQyypMYcNxtstzlnfG07Fx9eGxmVM
-	 UmYqlnBxHMSsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85DCAE632CE;
-	Mon,  2 Oct 2023 18:40:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3A71F92E
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 19:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696276225;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MLAXrZYG8ZSgN6wj4D8ASg3hK1uBtf5SHlVcaR+cpLA=;
+	b=RsUvg4H+kixOLbKa1a2I8ZBuoB7eES9QaVRkRVFkASY6ykjdvLSvhuIZq51JmjGzpI2WFN
+	++fl2DBIN+iMp720MaRjVdMY3vND/cxz+5ToScOkSBP794X23ZADpDcCIoHThw4ce9cVSf
+	ZnnjH6W4BCr/eNM/Hd2c1tYEWq5rjMo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-10-vrl4pEnNM2WfSElHbE0haA-1; Mon, 02 Oct 2023 15:50:23 -0400
+X-MC-Unique: vrl4pEnNM2WfSElHbE0haA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D13A78015AB
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 19:50:22 +0000 (UTC)
+Received: from [172.64.10.35] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BD5E32156701;
+	Mon,  2 Oct 2023 19:50:22 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 18 of 230): Test report for master
+ (6.6.0-rc4, mainline.kernel.org-clang, 8a749fd1)
+Date: Mon, 02 Oct 2023 19:50:22 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/14] Batch 1: Annotate structs with __counted_by
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169627203054.11990.6492371681347182041.git-patchwork-notify@kernel.org>
-Date: Mon, 02 Oct 2023 18:40:30 +0000
-References: <20230922172449.work.906-kees@kernel.org>
-In-Reply-To: <20230922172449.work.906-kees@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: kuba@kernel.org, jhs@mojatatu.com, davem@davemloft.net,
- dsahern@kernel.org, edumazet@google.com, pabeni@redhat.com,
- martin.lau@kernel.org, gustavoars@kernel.org, ast@kernel.org,
- yisen.zhuang@huawei.com, salil.mehta@huawei.com, claudiu.manoil@nxp.com,
- vladimir.oltean@nxp.com, kys@microsoft.com, haiyangz@microsoft.com,
- wei.liu@kernel.org, decui@microsoft.com, longli@microsoft.com,
- sharmaajay@microsoft.com, elder@kernel.org, pshelar@ovn.org,
- zhangshaokun@hisilicon.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- horms@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
- dev@openvswitch.org, linux-parisc@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <35600.123100215502300711@us-mta-10.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi, we tested your kernel and here are the results:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-On Fri, 22 Sep 2023 10:28:42 -0700 you wrote:
-> Hi,
-> 
-> This is the batch 1 of patches touching netdev for preparing for
-> the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> [...]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Here is the summary with links:
-  - [01/14] ipv4: Annotate struct fib_info with __counted_by
-    https://git.kernel.org/netdev/net-next/c/5b98fd5dc1e3
-  - [02/14] ipv4/igmp: Annotate struct ip_sf_socklist with __counted_by
-    https://git.kernel.org/netdev/net-next/c/210d4e9c732f
-  - [03/14] ipv6: Annotate struct ip6_sf_socklist with __counted_by
-    https://git.kernel.org/netdev/net-next/c/5d22b6528073
-  - [04/14] net: hns: Annotate struct ppe_common_cb with __counted_by
-    https://git.kernel.org/netdev/net-next/c/5b829c8460ae
-  - [05/14] net: enetc: Annotate struct enetc_int_vector with __counted_by
-    https://git.kernel.org/netdev/net-next/c/dd8e215ea9a8
-  - [06/14] net: hisilicon: Annotate struct rcb_common_cb with __counted_by
-    https://git.kernel.org/netdev/net-next/c/2290999d278e
-  - [07/14] net: mana: Annotate struct mana_rxq with __counted_by
-    https://git.kernel.org/netdev/net-next/c/a3d7a1209bbb
-  - [08/14] net: ipa: Annotate struct ipa_power with __counted_by
-    https://git.kernel.org/netdev/net-next/c/20551ee45d7d
-  - [09/14] net: mana: Annotate struct hwc_dma_buf with __counted_by
-    https://git.kernel.org/netdev/net-next/c/59656519763d
-  - [10/14] net: openvswitch: Annotate struct dp_meter_instance with __counted_by
-    https://git.kernel.org/netdev/net-next/c/e7b34822fa4d
-  - [11/14] net: enetc: Annotate struct enetc_psfp_gate with __counted_by
-    https://git.kernel.org/netdev/net-next/c/93bc6ab6b19d
-  - [12/14] net: openvswitch: Annotate struct dp_meter with __counted_by
-    https://git.kernel.org/netdev/net-next/c/16ae53d80c00
-  - [13/14] net: tulip: Annotate struct mediatable with __counted_by
-    https://git.kernel.org/netdev/net-next/c/0d01cfe5aaaf
-  - [14/14] net: sched: Annotate struct tc_pedit with __counted_by
-    (no matching commit)
+Kernel information:
+    Commit message: Linux 6.6-rc4
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/106979
 
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
