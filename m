@@ -1,60 +1,63 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A4617C9
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 07:06:59 +0000 (UTC)
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50336768615so26183017e87.0
-        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 00:06:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737DB1C2F
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 07:36:34 +0000 (UTC)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso12645417a12.1
+        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 00:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696230417; x=1696835217; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696232193; x=1696836993; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WGSmVU6eV61MEm0eDF1LjmBvte+gjgPeqhrseQVFPWQ=;
-        b=zDLwwckMerNOvcTvtoCOXNa6yLpXBaxRhm9D7IB0t+BgQjZrB1Xk25Yc1Ma+Hsfa+f
-         09tCJFA1b9n2Vt32VD1D0jQKiNw4qdzpfR2u10xMJNvTm+874p22OCOxYPunc/wbOdPa
-         k6ga/gHXJTJMXmavmdovHMoDo0qbmAIjsCnDfpKN446jdGpILxx6fIYKiXBmcU6UBNml
-         9Miny/o8ka5XAqU2HSSYi1L9l519/ZcHTg1WkrPnK8/DMvZbcpoelzftsMVPrVQr3xPf
-         myjndkYjEmEWf8mQANt0SygpS6owYZsSshPUAjbWi0PUe8hDovmWzwOMamLlA1eEMd9c
-         Gy8A==
+        bh=o8TgiYq+wn9fPs2sstUM34/3tbN8lpchGjTxpN3osFc=;
+        b=lL8NhLM+FBdUjGNYmI/dKLSI/lSHmDPbH38CRuJfqN56MxA3Cgdpz2EOk6RaRXYxdq
+         w1VUl0f8FJhWBB1nYgwlzQWN39/cJh7ktjPHmUUc+WiIRffZhVwMUe1K+ZUTEiCZIShI
+         apeQqRoyU+PIxNkEmIxxMrkNA9Kq5Zx50vRqI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696230417; x=1696835217;
+        d=1e100.net; s=20230601; t=1696232193; x=1696836993;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WGSmVU6eV61MEm0eDF1LjmBvte+gjgPeqhrseQVFPWQ=;
-        b=gYQdF2Uyute+emHT7x6TUUUrzp8ObUHT9hUeVThZ1tSuxDxv/iCeTXdGTrJfBLof96
-         SDta3akEn+Np95JKf4BfxTgSZTkxj4M5ZHGFyKBZPdPNRftyg8KFdDKZOh+NdrSWaRvB
-         WUG1riSLISN5Zr/+vXWyP5hfrSYaHIwHE20m56YGRQDxEtdsdAilNZ6IhtVrz9nptobq
-         0ymd4cJk7PTfLReacM634mUaP8EsQ0mD3l/uuhU+/+0/OsT2p+PQH9Ll7gYCEBIq+gIw
-         ggrWWQnPf4hdBS1OLEXONBWp7BPjCKm33X/61AaRdn0rUUH2Llqa+IIhnLXNcI7R5Vvr
-         KRHQ==
-X-Gm-Message-State: AOJu0Yz0htppwweLwfzUZ50WVW+VGHWVVE+fSC9hafAx3vBDXWXF6Jsk
-	COuAZPMTEXbJjCjf0hsogWuZCQ==
-X-Google-Smtp-Source: AGHT+IFqNxtPg80t50ZYFfWxUt2W5y2FEtd43xRb6YCWO1WM7DYE1bqvmoOMC0T13JN44j87ql34Rw==
-X-Received: by 2002:a05:6512:1598:b0:500:78ee:4cd7 with SMTP id bp24-20020a056512159800b0050078ee4cd7mr10804857lfb.23.1696230417514;
-        Mon, 02 Oct 2023 00:06:57 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id z17-20020a05600c221100b0040642a1df1csm6565662wml.25.2023.10.02.00.06.56
+        bh=o8TgiYq+wn9fPs2sstUM34/3tbN8lpchGjTxpN3osFc=;
+        b=wXmo2pN8IfiJn3Mo85jN0uSq7VHZZPho2c9oVOT7ilL0MmB5jhGRfOcTyJxES4ln/1
+         7ZK2Hlnr63sAvBjGgw9VGl/znE3N9nYW/hbYvT+SVvsRGIQq7+eFpqx9R8sDbr3zj2K6
+         Wed4OfvnALs7FntFlQJOUrlvkJXz+owT3EiROglV+VH2SSj8Tb9wTfHUs09nGdu6rGxU
+         68cZdVBExl7hDiQ391dqZ2icxaKUohOFpFfgub/d1VL4SGcd6aLEcEaAGMa9cPPXV5gJ
+         GW9HZ9LMc+GRKDBQdw+4gT0yffWHCEmk9CxCUUIsrcB+mxcScjRs+I3PzUtULoQA53kN
+         g2+w==
+X-Gm-Message-State: AOJu0YzuLCeo/CZK20dJVfkXtM9uzUEQBbY2cUrrvKKSRAInNKcZqwaE
+	XgSaVAgPE9K6hM4CZth7S+kDRQ==
+X-Google-Smtp-Source: AGHT+IE/4RrZBVTAWpHkJyOr41YZ89aixqnrkCQ1kdzSx+Qmep1XqZBJfajMYApMeMqYNsEHfwK1sQ==
+X-Received: by 2002:a17:90b:3644:b0:277:1bd8:abe8 with SMTP id nh4-20020a17090b364400b002771bd8abe8mr9560405pjb.18.1696232193693;
+        Mon, 02 Oct 2023 00:36:33 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 6-20020a17090a194600b00278eb908f78sm6274500pjh.19.2023.10.02.00.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 00:06:57 -0700 (PDT)
-Date: Mon, 2 Oct 2023 10:06:54 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Brian Foster <bfoster@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
+        Mon, 02 Oct 2023 00:36:33 -0700 (PDT)
+Date: Mon, 2 Oct 2023 00:36:28 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Julia Lawall <julia.lawall@inria.fr>
+Cc: Kees Cook <kees@kernel.org>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] bcachefs: Use struct_size()
-Message-ID: <fdc46489-4266-48e3-99cc-ddb23b64f02e@kadam.mountain>
-References: <120b638f99b088f91d5a4491c800463c554e70b8.1696144401.git.christophe.jaillet@wanadoo.fr>
- <7ae7737e-e32c-e9e7-880c-cafc240e7c33@embeddedor.com>
- <ff682afb-a914-4cd7-8d19-202a6cb778de@kadam.mountain>
+	kernel-janitors@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] comedi: Annotate struct comedi_lrange with __counted_by
+Message-ID: <202310020036.864B735D60@keescook>
+References: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr>
+ <202309301342.5B5BED40A1@keescook>
+ <alpine.DEB.2.22.394.2310010945130.3166@hadrien>
+ <90E2BBA5-8A2D-42DE-B36A-CD37BABBB433@kernel.org>
+ <alpine.DEB.2.22.394.2310012112560.3166@hadrien>
+ <202310011405.7599BA9@keescook>
+ <202310011421.C4F19D45@keescook>
+ <202310011515.D4C9184@keescook>
+ <alpine.DEB.2.22.394.2310020737570.3166@hadrien>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,33 +66,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ff682afb-a914-4cd7-8d19-202a6cb778de@kadam.mountain>
+In-Reply-To: <alpine.DEB.2.22.394.2310020737570.3166@hadrien>
 
-On Mon, Oct 02, 2023 at 09:42:06AM +0300, Dan Carpenter wrote:
-> On Sun, Oct 01, 2023 at 09:23:17AM +0200, Gustavo A. R. Silva wrote:
-> > 
-> > 
-> > On 10/1/23 09:13, Christophe JAILLET wrote:
-> > > Use struct_size() instead of hand writing it.
-> > > This is less verbose and more robust.
-> > > 
-> > > While at it, prepare for the coming implementation by GCC and Clang of the
-> > > __counted_by attribute. Flexible array members annotated with __counted_by
-> > > can have their accesses bounds-checked at run-time checking via
-> > > CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
-> > > strcpy/memcpy-family functions).
-> > 
-> > I would prefer this as two separate patches.
-> > 
+On Mon, Oct 02, 2023 at 07:38:42AM +0200, Julia Lawall wrote:
+> The sizeof with an expression argument is treated differently than the
+> sizeof with a type argument.  So you need to write:
 > 
-> I kind of feel like it's all part of one thing.  It's easier to review
-> as one patch.
+> @allocated@
+> identifier STRUCT, ARRAY;
+> expression COUNT;
+> struct STRUCT *PTR;
+> identifier ALLOC;
+> type ELEMENT_TYPE;
+> @@
+> 
+>         PTR = ALLOC(..., \(sizeof(*PTR)\|sizeof(struct STRUCT)\) +
+>                          COUNT * \(sizeof(*PTR->ARRAY)\|sizeof(PTR->ARRAY[0])\|sizeof(ELEMENT_TYPE)\), ...);
 
-Also I think there is static analysis which sees struct_size()
-allocations and pushes people to use __counted_by() so doing it in two
-steps is sort of like introducing a static checker bug and then
-silencing it in the next patch.
+Ah! Thank you thank you! Yes, this works great now. :)
 
-regards,
-dan carpenter
-
+-- 
+Kees Cook
