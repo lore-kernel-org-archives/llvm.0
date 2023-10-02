@@ -1,70 +1,152 @@
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16707171A7
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 13:08:29 +0000 (UTC)
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1dc580ed1e4so33828551fac.1
-        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 06:08:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEFA23CE
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 15:06:31 +0000 (UTC)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1dd830ed844so4557758fac.2
+        for <llvm@lists.linux.dev>; Mon, 02 Oct 2023 08:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696259191; x=1696863991; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c0wIcnLi0eW3KIpAYRJEn1N+1DF/SZtUbN/0mO//zy4=;
+        b=ALb+22ydLd/hUygWGgrdmWSrmGV+RLSAi8IVGrDBVntzWnIy2T48mJle02OtxvuszT
+         +D18R0OS1IpIPOMAKNS7Isi9yjGq6WWy+x3Q8nxNNVs8bwaIrWhxKpdCs2T7AtMiO/Ue
+         JtWyXtAeBXtmsHhzT1uia1gl2FVN0DJhspCotXklviJbq6gnXTpKTolq+/cYoskyWolA
+         MmXP7tc1O5rNPUMCgIfLwd6p14fShT2jafkQbW/PPB9JdBXpTlLeGtM8ZLr1igphScxQ
+         zVd0r0J3SQTb9mADWB+52yaHlKPqap99v6YY4mTw8RuDbThynoq/l8hC5pKsSVCJp1fJ
+         6/yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696252109; x=1696856909;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rorPIP5j5NnvLe/VG3SBvJuviukORjr0ptic0PGw4zI=;
-        b=BZpiw9bOiFMMRO9if0j6pQK8yv+GD0JBmaSaxfh0gCzqHO53B7R+h0yDIpIC3nz9Im
-         Zfxn55mfIg821ur7ExtfG67FaDJqjGU7sMclKu6ePTGYAXNq1/4txNTqFzlV8o1iLdiq
-         P6BkjzxFC19ncUsJoXs6Yxqh6irUcasLVbeupC9yQHZ8TmHUupoujKjWksD3Ba0tDkiQ
-         A9D7Tdh21EFbBhjSljevlqqF8XqkBoavnnfkZdKgTC26maY3Odz1RTJWxvWMKllW1l2M
-         mn6myYjSfFmtifQ5Jm+Kjp7XkcMA3SO8CQsoiqxNxiTjAYmlLb6Zfw8CokkxJZg1Qtxd
-         Q1TA==
-X-Gm-Message-State: AOJu0YxYiNt9nRE7qsDhlzXLL1HvV0AEqigNcTaOOX42NPmlOpb9lrfS
-	36HhOPNkzLJfxxVrqNmVwgMMDtWdF3WESl6arwZKgGhPkVqw
-X-Google-Smtp-Source: AGHT+IH15olfXP89zOaUgPnZ+A3LWHTnmJnCU4ut1cZEZzpYg/G4sHkoNl3GWJ2A8/7WTnzttgIAQ3N4O8oSXKkeG9zcRAHK4fyE
+        d=1e100.net; s=20230601; t=1696259191; x=1696863991;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c0wIcnLi0eW3KIpAYRJEn1N+1DF/SZtUbN/0mO//zy4=;
+        b=cM8ySSKPzhUTEgSbbrp9r22/SumLo8fAhYFKvRSjLRN4Gqy978CVvA2vIS7yeoorT1
+         umDQH2D1s70kqF2Ki2b38BsuBwlL3lQQY6Rpf1cE3Gms83K+lX03wYJLCN4EveKp4/xz
+         fluF6ipZw8oTP7usS11BrClBJnrQPYIpG7AqJBQPhjxCfJMS/Uw9ve5MHyS7ErGFL1fT
+         nsgnUbkb9nh+G5tBVMr0UIVR6wxArGk3LSSWfrwlh74i8KIUUDZQpx/1H7mofZ/3ZWrL
+         fcCn5nW7NxSd71PRp/TM/3Crj1DgpCtV1u0hzkdFKNMgMOVjh2IA4WX1+PpXynxITn7K
+         TrLA==
+X-Gm-Message-State: AOJu0YyEryTHs6yMl/VC1+uX0MjEJFZGmyj9nI4JTey2ybtlvc5WA78V
+	sw7U6/K+7hTFODwvvpsw7yw2M6rrqOZOh6t/hJ0=
+X-Google-Smtp-Source: AGHT+IEX1je+61h+JUKWDKJZA+eu4NOUlivFnUEzoxSozC/G9+CulawvWCmD9DLQxtVZD1wdvqrdGNPyL3ZP6lrp6ME=
+X-Received: by 2002:a05:6870:a115:b0:1dd:7fa9:ed52 with SMTP id
+ m21-20020a056870a11500b001dd7fa9ed52mr15044564oae.17.1696259190738; Mon, 02
+ Oct 2023 08:06:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6870:5aad:b0:1c0:e7d3:3b2d with SMTP id
- dt45-20020a0568705aad00b001c0e7d33b2dmr4872328oab.7.1696252109232; Mon, 02
- Oct 2023 06:08:29 -0700 (PDT)
-Date: Mon, 02 Oct 2023 06:08:29 -0700
-In-Reply-To: <000000000000c4c9d405f2643e01@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006ba21a0606bb78f9@google.com>
-Subject: Re: [syzbot] [bridge?] possible deadlock in br_multicast_rcv (3)
-From: syzbot <syzbot+d7b7f1412c02134efa6d@syzkaller.appspotmail.com>
-To: amcohen@nvidia.com, axboe@fb.com, bridge@lists.linux-foundation.org, 
-	davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, hch@lst.de, 
-	hdanton@sina.com, idosch@nvidia.com, ivecera@redhat.com, jiri@resnulli.us, 
-	kbusch@kernel.org, kuba@kernel.org, lengchao@huawei.com, 
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, pabeni@redhat.com, razor@blackwall.org, 
-	roopa@nvidia.com, sagi@grimberg.me, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
+References: <20230922173110.work.084-kees@kernel.org> <169601600138.3014939.8511343741428844249.b4-ty@chromium.org>
+ <83cd056c-52ae-01dd-7576-42d41da64c26@gmail.com>
+In-Reply-To: <83cd056c-52ae-01dd-7576-42d41da64c26@gmail.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 2 Oct 2023 11:06:19 -0400
+Message-ID: <CADnq5_Ma2CrLYggJHKFEObsNmUoqJwb2p1xai5DfL=m43U6zEA@mail.gmail.com>
+Subject: Re: [PATCH 0/9] drm: Annotate structs with __counted_by
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc: Kees Cook <keescook@chromium.org>, David Airlie <airlied@gmail.com>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, Karol Herbst <kherbst@redhat.com>, Tom Rix <trix@redhat.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, dri-devel@lists.freedesktop.org, 
+	Chris Wilson <chris@chris-wilson.co.uk>, Prike Liang <Prike.Liang@amd.com>, 
+	Huang Rui <ray.huang@amd.com>, Gerd Hoffmann <kraxel@redhat.com>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	Matthew Brost <matthew.brost@intel.com>, Evan Quan <evan.quan@amd.com>, 
+	Emma Anholt <emma@anholt.net>, amd-gfx@lists.freedesktop.org, 
+	Kuogee Hsieh <quic_khsieh@quicinc.com>, Lijo Lazar <lijo.lazar@amd.com>, 
+	VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>, Ben Skeggs <bskeggs@redhat.com>, 
+	Andi Shyti <andi.shyti@linux.intel.com>, nouveau@lists.freedesktop.org, 
+	David Airlie <airlied@redhat.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Chia-I Wu <olvaffe@gmail.com>, llvm@lists.linux.dev, 
+	Yifan Zhang <yifan1.zhang@amd.com>, linux-arm-msm@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, Kevin Wang <kevin1.wang@amd.com>, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Le Ma <le.ma@amd.com>, Gurchetan Singh <gurchetansingh@chromium.org>, 
+	Maxime Ripard <mripard@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	virtualization@lists.linux-foundation.org, Sean Paul <sean@poorly.run>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Xiaojian Du <Xiaojian.Du@amd.com>, 
+	Lang Yu <Lang.Yu@amd.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Tejas Upadhyay <tejas.upadhyay@intel.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	linux-kernel@vger.kernel.org, Hawking Zhang <Hawking.Zhang@amd.com>, 
+	Rob Clark <robdclark@gmail.com>, Melissa Wen <mwen@igalia.com>, 
+	John Harrison <john.c.harrison@intel.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Alex Deucher <alexander.deucher@amd.com>, Nirmoy Das <nirmoy.das@intel.com>, 
+	freedreno@lists.freedesktop.org, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Zack Rusin <zackr@vmware.com>, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has bisected this issue to:
+On Mon, Oct 2, 2023 at 5:20=E2=80=AFAM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Am 29.09.23 um 21:33 schrieb Kees Cook:
+> > On Fri, 22 Sep 2023 10:32:05 -0700, Kees Cook wrote:
+> >> This is a batch of patches touching drm for preparing for the coming
+> >> implementation by GCC and Clang of the __counted_by attribute. Flexibl=
+e
+> >> array members annotated with __counted_by can have their accesses
+> >> bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS (for array
+> >> indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family function=
+s).
+> >>
+> >> As found with Coccinelle[1], add __counted_by to structs that would
+> >> benefit from the annotation.
+> >>
+> >> [...]
+> > Since this got Acks, I figure I should carry it in my tree. Let me know
+> > if this should go via drm instead.
+> >
+> > Applied to for-next/hardening, thanks!
+> >
+> > [1/9] drm/amd/pm: Annotate struct smu10_voltage_dependency_table with _=
+_counted_by
+> >        https://git.kernel.org/kees/c/a6046ac659d6
+>
+> STOP! In a follow up discussion Alex and I figured out that this won't wo=
+rk.
+>
+> The value in the structure is byte swapped based on some firmware
+> endianness which not necessary matches the CPU endianness.
 
-commit 0ae3eb7b4611207e140e9772398b9f88b72d6839
-Author: Amit Cohen <amcohen@nvidia.com>
-Date:   Mon Feb 1 19:47:49 2021 +0000
+SMU10 is APU only so the endianess of the SMU firmware and the CPU
+will always match.
 
-    netdevsim: fib: Perform the route programming in a non-atomic context
+Alex
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13afdae6680000
-start commit:   2faac9a98f01 Merge tag 'keys-fixes-20230321' of git://git...
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=106fdae6680000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17afdae6680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aaa4b45720ca0519
-dashboard link: https://syzkaller.appspot.com/bug?extid=d7b7f1412c02134efa6d
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14aea34ec80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13001e91c80000
-
-Reported-by: syzbot+d7b7f1412c02134efa6d@syzkaller.appspotmail.com
-Fixes: 0ae3eb7b4611 ("netdevsim: fib: Perform the route programming in a non-atomic context")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>
+> Please revert that one from going upstream if it's already on it's way.
+>
+> And because of those reasons I strongly think that patches like this
+> should go through the DRM tree :)
+>
+> Regards,
+> Christian.
+>
+> > [2/9] drm/amdgpu/discovery: Annotate struct ip_hw_instance with __count=
+ed_by
+> >        https://git.kernel.org/kees/c/4df33089b46f
+> > [3/9] drm/i915/selftests: Annotate struct perf_series with __counted_by
+> >        https://git.kernel.org/kees/c/ffd3f823bdf6
+> > [4/9] drm/msm/dpu: Annotate struct dpu_hw_intr with __counted_by
+> >        https://git.kernel.org/kees/c/2de35a989b76
+> > [5/9] drm/nouveau/pm: Annotate struct nvkm_perfdom with __counted_by
+> >        https://git.kernel.org/kees/c/188aeb08bfaa
+> > [6/9] drm/vc4: Annotate struct vc4_perfmon with __counted_by
+> >        https://git.kernel.org/kees/c/59a54dc896c3
+> > [7/9] drm/virtio: Annotate struct virtio_gpu_object_array with __counte=
+d_by
+> >        https://git.kernel.org/kees/c/5cd476de33af
+> > [8/9] drm/vmwgfx: Annotate struct vmw_surface_dirty with __counted_by
+> >        https://git.kernel.org/kees/c/b426f2e5356a
+> > [9/9] drm/v3d: Annotate struct v3d_perfmon with __counted_by
+> >        https://git.kernel.org/kees/c/dc662fa1b0e4
+> >
+> > Take care,
+> >
+>
