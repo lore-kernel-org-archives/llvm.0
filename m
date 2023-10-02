@@ -1,105 +1,62 @@
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2B4A53
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 05:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5281DA53
+	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 06:25:18 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-533d31a8523so18451014a12.1
+        for <llvm@lists.linux.dev>; Sun, 01 Oct 2023 23:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=uOUzmb8ftzbOyFeK0edTqft1MheQUfEIQXgPtEe/8BM=;
-  b=Hd8NbBKsVd0zs1p7J5JnV+4cB+382/OjJB/78nDnuyqCucAQsl6Nk0H2
-   fy6HM5EWGeeK2/gAFUSUB1wpfOsGxEFpu2tBRjL4k02Bgv5uEi/dH+oo7
-   ozD+ml33TF3cf43UZFaTWgXzclPYV+SccLRPMrVqkzn/GbSCp7Dc7yqLI
-   I=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="6.03,193,1694728800"; 
-   d="scan'208";a="67469029"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 07:38:42 +0200
-Date: Mon, 2 Oct 2023 07:38:42 +0200 (CEST)
-From: Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To: Kees Cook <keescook@chromium.org>
-cc: Julia Lawall <julia.lawall@inria.fr>, Kees Cook <kees@kernel.org>, 
-    Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-    Ian Abbott <abbotti@mev.co.uk>, 
-    H Hartley Sweeten <hsweeten@visionengravers.com>, 
-    "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-    linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-    linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] comedi: Annotate struct comedi_lrange with
- __counted_by
-In-Reply-To: <202310011515.D4C9184@keescook>
-Message-ID: <alpine.DEB.2.22.394.2310020737570.3166@hadrien>
-References: <5c3b7459b820e22e2ac6ce892d4aadcc119cc919.1696065263.git.christophe.jaillet@wanadoo.fr> <202309301342.5B5BED40A1@keescook> <alpine.DEB.2.22.394.2310010945130.3166@hadrien> <90E2BBA5-8A2D-42DE-B36A-CD37BABBB433@kernel.org>
- <alpine.DEB.2.22.394.2310012112560.3166@hadrien> <202310011405.7599BA9@keescook> <202310011421.C4F19D45@keescook> <202310011515.D4C9184@keescook>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20230601; t=1696227916; x=1696832716; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2YcTDEderIpntFpryzrhPKAAizvOt9pYBBFwAoTJCX8=;
+        b=AFBaSp90gTcvlC4MN33RfTOfbtNSvmiV+/yqA64je2XLioD+HX7ApoIgv7XkS4rDpU
+         Nf9Vp67yaYYyCwIzWo3oBg9u+XPWN5IBRS4ib0ccAvqoPSPWTJsIqIcDCxEPiWnXm7K7
+         frVxLzgajKysp0GQ02gooaZQsM9muvh/Rr3XUsCc0SpyXTyE+u758lnT2C5brJ3+rEHQ
+         A92I1CFLws2uZ/lpNo+UZRQPS7sANAt5Y6mv394pnCR6HLNbZYf5kKFvqM0pQnBZ1tAK
+         JMuENjq/2jDgs3fv6syhATFnCl2+9CDI8OTROpbmgvHye7H8/kN5ClequH+NYnbLqgel
+         j9qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696227916; x=1696832716;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2YcTDEderIpntFpryzrhPKAAizvOt9pYBBFwAoTJCX8=;
+        b=wbDCQw6p7q98t5i5oMBNxyPAs6fUc6DLj+t3BLzXTlOzQTp57PTMhfLcSj49SQT98S
+         eKTDnbkS6LWED0mZiAGCdyB8bia9Pmbxxo9+oVRxX8e8P7/7C8sMijKudk1mcMFCKFz/
+         2+Zk7VYQuiBMmQ4L2sa4SVWCl95e7g6ARaLf8KX+SVvgryCNKP7g2/qm1GVdQ4fM75zD
+         HOpLQhtmtvUZBjaJ+pjOH4HR0Q0gsWAEK6a08NU+5G22hlnHy/+FS0run2c5pMgsV2rl
+         Fsctqm7uHCQPDi85L5+OHfFJ5/lPv7RxC7MIoSPBg04kuaS4AwSSjOP0XTKQWjDKcLIU
+         mi3w==
+X-Gm-Message-State: AOJu0YylVjNjZVnuirnxmuvXFFoCJPRY+ViDbrvOWoQlgn7eTlt07/aO
+	gkF9HmF3OeeiFi5ZE4CJEIOriUzPsFEHFSXUlQ8=
+X-Google-Smtp-Source: AGHT+IFpTjGH6qen2IV4QM1xW6WnN+JLnlHWop8RcZYM7IzkDdK22YogY8JuMXUDC8f8zWEJww+PXxWSvSyaqsMpyy0=
+X-Received: by 2002:a05:6402:4516:b0:536:e03f:62b6 with SMTP id
+ ez22-20020a056402451600b00536e03f62b6mr8385696edb.30.1696227916167; Sun, 01
+ Oct 2023 23:25:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Mon, 2 Oct 2023 08:25:05 +0200
+Message-ID: <CAFULd4bEy9XTsdHuQMukjiTtWbrej63GThqUhbXKBgtF3Tm-GQ@mail.gmail.com>
+Subject: Issues with named address spaces
+To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>
+Cc: llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+Dear clang/LLVM maintainers,
 
+I would like to point out an issue with named address spaces. In the
+thread where segment qualifiers would be introduced to linux kernel
+x86 percpu functionality [1], it was pointed out that clang crashes on
+a simple memory copy with structure assignment [2]. Perhaps you would
+be interested in the attached testcase.
 
-On Sun, 1 Oct 2023, Kees Cook wrote:
+[1] https://lore.kernel.org/lkml/20231001131620.112484-1-ubizjak@gmail.com/
+[2] https://lore.kernel.org/lkml/CAHk-=wh+cfn58XxMLnG6dH+Eb9-2dYfABXJF2FtSZ+vfqVvWzA@mail.gmail.com/
 
-> On Sun, Oct 01, 2023 at 02:22:17PM -0700, Kees Cook wrote:
-> > On Sun, Oct 01, 2023 at 02:05:46PM -0700, Kees Cook wrote:
-> > > On Sun, Oct 01, 2023 at 09:14:02PM +0200, Julia Lawall wrote:
-> > > > Kees,
-> > > >
-> > > > You can try the following.
-> > >
-> > > Cool! Yeah, this finds the example:
-> > >
-> > > drivers/comedi/drivers/rti800.c:74: struct comedi_lrange: field at offset 0 is the counter for the flex array
-> > > drivers/comedi/drivers/rti800.c:83: struct comedi_lrange: field at offset 0 is the counter for the flex array
-> > > drivers/comedi/drivers/rti800.c:92: struct comedi_lrange: field at offset 0 is the counter for the flex array
-> > >
-> > > I'll run it on the whole codebase...
-> >
-> > It found only the struct comedi_lrange instances, but that's good to
-> > know. :)
->
-> On a related note, why doesn't this work?
->
-> @allocated@
-> identifier STRUCT, ARRAY;
-> expression COUNT;
-> struct STRUCT *PTR;
-> identifier ALLOC;
-> type ELEMENT_TYPE;
-> @@
->
->         PTR = ALLOC(..., sizeof(\(*PTR\|struct STRUCT\)) +
->                          COUNT * sizeof(\(*PTR->ARRAY\|PTR->ARRAY[0]\|ELEMENT_TYPE\)), ...);
->
->
-> minus: parse error:
->   File "alloc.cocci", line 15, column 34, charpos = 485
->   around = 'struct',
->   whole content =       PTR = ALLOC(..., sizeof(\(*PTR\|struct STRUCT\)) +
->
-> if I drop "struct", then it complains about ELEMENT_TYPE...
-
-The sizeof with an expression argument is treated differently than the
-sizeof with a type argument.  So you need to write:
-
-@allocated@
-identifier STRUCT, ARRAY;
-expression COUNT;
-struct STRUCT *PTR;
-identifier ALLOC;
-type ELEMENT_TYPE;
-@@
-
-        PTR = ALLOC(..., \(sizeof(*PTR)\|sizeof(struct STRUCT)\) +
-                         COUNT * \(sizeof(*PTR->ARRAY)\|sizeof(PTR->ARRAY[0])\|sizeof(ELEMENT_TYPE)\), ...);
-
-julia
+Uros.
