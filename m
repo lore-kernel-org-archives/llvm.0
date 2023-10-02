@@ -1,59 +1,43 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246107E3
-	for <llvm@lists.linux.dev>; Mon,  2 Oct 2023 06:42:22 +0000 (UTC)
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-307d20548adso14627517f8f.0
-        for <llvm@lists.linux.dev>; Sun, 01 Oct 2023 23:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696228941; x=1696833741; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iFLmBMbTAf5mYpVSeF0tgLxlIm+hQtraBWqw0SVaZ1s=;
-        b=e6ZQOqU/J8WnK0yyMPnXmdQUgfTpSF+JmYvnkKfLd+UIstosDnUx19Lyf7XKqiZPtl
-         ZJ6cpO1PbkglIFVtzE1MAzjqtRH5hBlrIWLDWLyMfVq0Uvtd+jB67Bk0HjFgLSF+gW+2
-         3abga/2k0tJIDo3QgonB4m17D3zPi2OiPCJo1wui/kM/HLVa9V2I31miD1Z1DyibLtOd
-         BDQ7sf8gygaAyDfAvbcPzsRu1WlUi49gna0jyqsW18eukKh7YFMulqzV2QEBQ5ImMcnN
-         037JDr4Vq0a9GP0RDK+DH0+jiyzttKYuQk9277+t+eV7DT/EVT7+E95ZoLmDrcCiOhno
-         9fPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696228941; x=1696833741;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iFLmBMbTAf5mYpVSeF0tgLxlIm+hQtraBWqw0SVaZ1s=;
-        b=m2Io1p1ygS6ZRCE3Oy/Yzmc9UaLOKVUP2wXqPiGQtH8ZDOkYsUm5TCNxwqV5r0p5Rf
-         RfBDYhFxPvooHNH2uq7w+30ZQEn022k+TPaOOHQ9p6aMeGWzDnQJQoorCPPFQan+2hT8
-         r+8hGqqq8iq7uYhvNQpXTKVAtTLVmaTNPNkP0B/FtRREUYk3yXTGdQ8+7KN9UoNGwCoA
-         fg4hU4crBNKS0fH+4K/Zr6ouv632pQtWNoqK627HBi39tsoX+uDzjYl+nSzuXCxJz1oo
-         I9jyV9PL3jYBgFr38NOUCxoiULZRgqIvsDzG9NBYTcR6pQxbvb0wZ+px+M4h7DMqOz97
-         piCw==
-X-Gm-Message-State: AOJu0Yy1+7kqCE3SVj4hQkeVAcuxBjLHbWb0NCI2eDo2CyegSX/2JmTf
-	JA2yAM/t6POamJpYqRhpztTQzQ==
-X-Google-Smtp-Source: AGHT+IG5F6WCA+givsf9KFa40Uq2QQ0EtyZVPcp2/kezx1bCSCz837j2NkrcYNJnzvEwO3xWwac9nA==
-X-Received: by 2002:adf:f085:0:b0:320:77f:a97c with SMTP id n5-20020adff085000000b00320077fa97cmr9346986wro.63.1696228941280;
-        Sun, 01 Oct 2023 23:42:21 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d594b000000b003140f47224csm9346368wri.15.2023.10.01.23.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Oct 2023 23:42:20 -0700 (PDT)
-Date: Mon, 2 Oct 2023 09:42:06 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Brian Foster <bfoster@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] bcachefs: Use struct_size()
-Message-ID: <ff682afb-a914-4cd7-8d19-202a6cb778de@kadam.mountain>
-References: <120b638f99b088f91d5a4491c800463c554e70b8.1696144401.git.christophe.jaillet@wanadoo.fr>
- <7ae7737e-e32c-e9e7-880c-cafc240e7c33@embeddedor.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF4F383;
+	Mon,  2 Oct 2023 06:45:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696229134; x=1727765134;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v1u0anrRvVEPJUnapEKNRocb+wtE31egSqxRrvBixJU=;
+  b=I1ehGLi6L0ZvMiKSpI7xw+ao86MdwvSvUPhNH3G6CTr/wTifYhB0+Tni
+   arWzjU+h4mqcSzuL/iFKUlT+0OBdo2LT+0mxWQNoZJNW9d0DwMN8zzrpN
+   4ddG2I9DDdtbYMMQKayfmQxtD+F4EUybI9i+awm4GXdxKFQxoldGSL3o3
+   YmmLHjuzUNOWh6qIg/CPLSc7rs/Qj0wJP33UMCV5Mwz4I44GHqS8vokYL
+   pze0fsatc1SlkOdZnh4lU5aRoat0tua/wPnBnzf6DHKJgenPtofvF+yFb
+   ZdT/dGlr9Q1am6gUmsXFpjMDpEGJJteQzXib6IPnyFAnu55CV2V2LppTu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10850"; a="4168022"
+X-IronPort-AV: E=Sophos;i="6.03,193,1694761200"; 
+   d="scan'208";a="4168022"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2023 23:45:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10850"; a="866411293"
+X-IronPort-AV: E=Sophos;i="6.03,193,1694761200"; 
+   d="scan'208";a="866411293"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 01 Oct 2023 23:45:30 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qnCgK-0005pV-2i;
+	Mon, 02 Oct 2023 06:45:28 +0000
+Date: Mon, 2 Oct 2023 14:44:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: AKASHI Takahiro <takahiro.akashi@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 2/4] pinctrl: add pinctrl_gpio_get_config()
+Message-ID: <202310021413.po8zef5g-lkp@intel.com>
+References: <20231002021602.260100-3-takahiro.akashi@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,27 +46,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7ae7737e-e32c-e9e7-880c-cafc240e7c33@embeddedor.com>
+In-Reply-To: <20231002021602.260100-3-takahiro.akashi@linaro.org>
 
-On Sun, Oct 01, 2023 at 09:23:17AM +0200, Gustavo A. R. Silva wrote:
-> 
-> 
-> On 10/1/23 09:13, Christophe JAILLET wrote:
-> > Use struct_size() instead of hand writing it.
-> > This is less verbose and more robust.
-> > 
-> > While at it, prepare for the coming implementation by GCC and Clang of the
-> > __counted_by attribute. Flexible array members annotated with __counted_by
-> > can have their accesses bounds-checked at run-time checking via
-> > CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
-> > strcpy/memcpy-family functions).
-> 
-> I would prefer this as two separate patches.
-> 
+Hi AKASHI,
 
-I kind of feel like it's all part of one thing.  It's easier to review
-as one patch.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-regards,
-dan carpenter
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on linusw-pinctrl/for-next brgl/gpio/for-next robh/for-next linus/master v6.6-rc4 next-20230929]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/AKASHI-Takahiro/pinctrl-define-PIN_CONFIG_INPUT/20231002-101835
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20231002021602.260100-3-takahiro.akashi%40linaro.org
+patch subject: [RFC 2/4] pinctrl: add pinctrl_gpio_get_config()
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231002/202310021413.po8zef5g-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231002/202310021413.po8zef5g-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310021413.po8zef5g-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pinctrl/core.c:941:8: error: call to undeclared function 'pin_config_get_for_pin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = pin_config_get_for_pin(pctldev, pin, config);
+                 ^
+   1 error generated.
+
+
+vim +/pin_config_get_for_pin +941 drivers/pinctrl/core.c
+
+   928	
+   929	int pinctrl_gpio_get_config(unsigned int gpio, unsigned long *config)
+   930	{
+   931		struct pinctrl_gpio_range *range;
+   932		struct pinctrl_dev *pctldev;
+   933		int ret, pin;
+   934	
+   935		ret = pinctrl_get_device_gpio_range(gpio, &pctldev, &range);
+   936		if (ret)
+   937			return ret;
+   938	
+   939		mutex_lock(&pctldev->mutex);
+   940		pin = gpio_to_pin(range, gpio);
+ > 941		ret = pin_config_get_for_pin(pctldev, pin, config);
+   942		mutex_unlock(&pctldev->mutex);
+   943	
+   944		return ret;
+   945	}
+   946	EXPORT_SYMBOL_GPL(pinctrl_gpio_get_config);
+   947	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
