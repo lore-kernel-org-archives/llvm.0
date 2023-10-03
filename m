@@ -1,105 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27DB328C4
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 14:31:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2542EC433A9
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 14:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D83347A2;
+	Tue,  3 Oct 2023 15:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4321CC433C7;
+	Tue,  3 Oct 2023 15:27:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696343515;
-	bh=lXhzkTduNuZuLROT+iBijIF0A95RJ4ufla0K1M+opJU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XWN4Rh+E9PDsO4VJBGGuVKpVRJYentIfOH5cUNSV4YsQXcxcfh+5TOv+KDW4/F2lX
-	 GqyZ3M9cwIlXcaVvfnRmSsVr1jE95FEf4gmxD+5T3wMNlXxm7lGn0vXfOO7BA9OWai
-	 nzhIKizki4ZClwnaUR9mWn983p4DbniY5CBrYQ9unOLpCcBF5vqTIBMHBsRqi5srM6
-	 I73TD0/hZ75Elw4NNXIWRx5bOCQEJN5Nu7dhqLdqeuWjnVPgrLICR3WE+Bm/FJW+F0
-	 CgM4x4BcujSNtF8YPbAq56KVmRw69vvzH9PiNnUWOxSA5Bp2n191ZC5Vf7/J2UpW03
-	 dBShZRWhHputA==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1dd2e65ed59so578990fac.1
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 07:31:55 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yxykvg7u9V/1L8micjjCZoTjS6BEoKNFL2lSREoMcz/uWXd3izF
-	zW44xGx/5Ld+je9cR3iyJ1m5U2pqHrqQDn5oINU=
-X-Google-Smtp-Source: AGHT+IHvgi3RUwAtU8o2TSnqWVl6ZIGHcXUxqTE98xQ5+4sN2wMbW6gAQ7JaGuG4c0k+cTUDcFcXo0d6wlrEHUEuV4A=
-X-Received: by 2002:a05:6870:2314:b0:1c8:bfd1:ecc0 with SMTP id
- w20-20020a056870231400b001c8bfd1ecc0mr14691547oao.0.1696343514186; Tue, 03
- Oct 2023 07:31:54 -0700 (PDT)
+	s=k20201202; t=1696346861;
+	bh=zvhtwQEt0J0fH9rgJYn3rsSiY1LehpRMhyqhElHbbWc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rx+9OxKVexfBBb8YEEW7EA07U73mZapsv/VwQYYwOxOEs2jBcPqa7SryHOOlG04oQ
+	 eWEIBSz53L8s8cEBlxncmLBEaOjBcdl4VJTSHvaSV4CnF5iczi25T8Z4XNfXzg9ZNh
+	 Z/VYNO0Uip9mRJD6YqUmpNB1zGeUNV2EeV8fX2uplr3RfQbs82UHqb/Gx5gz1h4oah
+	 LB2yD4f5ETrgqVWA8eJTurOqLl4vfMV+i1HGXjnJnjpR7IbEBuwP3q6OjyDNfatzej
+	 FKSxcDIHYjavcI75zmHCKUxP/pQeiILdFRkGkBeEtdSHen8QhEOU7+kznLx7G5YHyV
+	 P0/im2ArVYgOw==
+Date: Tue, 3 Oct 2023 08:27:39 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Cc: nipun.gupta@amd.com, nikhil.agarwal@amd.com, alex.williamson@redhat.com,
+	ndesaulniers@google.com, trix@redhat.com, shubham.rohila@amd.com,
+	kvm@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] vfio/cdx: Add parentheses between bitwise AND expression
+ and logical NOT
+Message-ID: <20231003152739.GB63187@dev-arch.thelio-3990X>
+References: <20231002-vfio-cdx-logical-not-parentheses-v1-1-a8846c7adfb6@kernel.org>
+ <1fbe8877-aaa5-1b6f-e18c-1d231a31d2e7@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230923053515.535607-1-irogers@google.com> <20230923053515.535607-2-irogers@google.com>
- <CAKwvOdmHg_43z_dTZrOLGubuBBvmHdPxSFjOWa3oWkbOp2qWWg@mail.gmail.com>
- <CAP-5=fV6c1tWAd2GjMwn4PQN=3BXNQGz=vbonHSjRjQ3fbEL+g@mail.gmail.com> <ZRWMWcNKvZMgiAMR@bergen.fjasle.eu>
-In-Reply-To: <ZRWMWcNKvZMgiAMR@bergen.fjasle.eu>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 3 Oct 2023 23:31:17 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASuOWtd-iv2C3HLWr1oq9gD8BiP4B=8wRUo81CSK=g5Yw@mail.gmail.com>
-Message-ID: <CAK7LNASuOWtd-iv2C3HLWr1oq9gD8BiP4B=8wRUo81CSK=g5Yw@mail.gmail.com>
-Subject: Re: [PATCH v1 01/18] gen_compile_commands: Allow the line prefix to
- still be cmd_
-To: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Ian Rogers <irogers@google.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Yicong Yang <yangyicong@hisilicon.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Ming Wang <wangming01@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Yanteng Si <siyanteng@loongson.cn>, Yuan Can <yuancan@huawei.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1fbe8877-aaa5-1b6f-e18c-1d231a31d2e7@linaro.org>
 
-On Thu, Sep 28, 2023 at 11:26=E2=80=AFPM Nicolas Schier <nicolas@fjasle.eu>=
- wrote:
->
-> On Mon, 25 Sep 2023 09:06:11 -0700, Ian Rogers wrote:
-> > On Mon, Sep 25, 2023 at 8:49=E2=80=AFAM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > On Fri, Sep 22, 2023 at 10:35=E2=80=AFPM Ian Rogers <irogers@google.c=
-om> wrote:
-> > > >
-> > > > Builds in tools still use the cmd_ prefix in .cmd files, so don't
-> > > > require the saved part. Name the groups in the line pattern match s=
-o
-> > >
-> > > Is that something that can be changed in the tools/ Makefiles?
-> > >
-> > > I'm fine with this change, just curious where the difference comes
-> > > from precisely.
-> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > I agree. The savedcmd_ change came from Masahiro in:
-> > https://lore.kernel.org/lkml/20221229091501.916296-1-masahiroy@kernel.o=
-rg/
-> > I was reluctant to change the build logic in tools/ because of the
-> > potential to break things. Maybe Masahiro/Nicolas know of issues?
->
-> I haven't seen any issues related to the introduction of savedcmd_; and
-> roughly searching through tools/ I cannot find a rule that matches the
-> pattern Masahiro described in commit 92215e7a801d ("kbuild: rename
-> cmd_$@ to savedcmd_$@ in *.cmd files", 2022-12-29).  For consistency,
-> I'd like to see the build rules in tools/ re-use the ones from scripts/
-> but as of now I don't see any necessity to introduce savedcmd in
-> tools/, yet.
->
-> Kind regards,
-> Nicolas
+On Tue, Oct 03, 2023 at 09:40:02AM +0200, Philippe Mathieu-Daudé wrote:
+> Hi Nathan,
+> 
+> On 2/10/23 19:53, Nathan Chancellor wrote:
+> > When building with clang, there is a warning (or error with
+> > CONFIG_WERROR=y) due to a bitwise AND and logical NOT in
+> > vfio_cdx_bm_ctrl():
+> > 
+> >    drivers/vfio/cdx/main.c:77:6: error: logical not is only applied to the left hand side of this bitwise operator [-Werror,-Wlogical-not-parentheses]
+> >       77 |         if (!vdev->flags & BME_SUPPORT)
+> >          |             ^            ~
+> >    drivers/vfio/cdx/main.c:77:6: note: add parentheses after the '!' to evaluate the bitwise operator first
+> >       77 |         if (!vdev->flags & BME_SUPPORT)
+> >          |             ^
+> >          |              (                        )
+> >    drivers/vfio/cdx/main.c:77:6: note: add parentheses around left hand side expression to silence this warning
+> >       77 |         if (!vdev->flags & BME_SUPPORT)
+> >          |             ^
+> >          |             (           )
+> >    1 error generated.
+> > 
+> > Add the parentheses as suggested in the first note, which is clearly
+> > what was intended here.
+> > 
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1939
+> > Fixes: 8a97ab9b8b31 ("vfio-cdx: add bus mastering device feature support")
+> 
+> My current /master points to commit ce36c8b14987 which doesn't include
+> 8a97ab9b8b31, so maybe this can be squashed / reordered in the VFIO tree
+> (where I assume this commit is). That said, the fix is correct, so:
 
+Yes, this is a -next only issue at the moment and I don't mind this
+change being squashed into the original if Alex rebases his tree (some
+maintainers don't).
 
-tools/build/Build.include mimics scripts/Kbuild.include
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-That should be changed in the same way.
+Thanks a lot for taking a look!
 
+Cheers,
+Nathan
 
---=20
-Best Regards
-Masahiro Yamada
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >   drivers/vfio/cdx/main.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/vfio/cdx/main.c b/drivers/vfio/cdx/main.c
+> > index a437630be354..a63744302b5e 100644
+> > --- a/drivers/vfio/cdx/main.c
+> > +++ b/drivers/vfio/cdx/main.c
+> > @@ -74,7 +74,7 @@ static int vfio_cdx_bm_ctrl(struct vfio_device *core_vdev, u32 flags,
+> >   	struct vfio_device_feature_bus_master ops;
+> >   	int ret;
+> > -	if (!vdev->flags & BME_SUPPORT)
+> > +	if (!(vdev->flags & BME_SUPPORT))
+> >   		return -ENOTTY;
+> >   	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_SET,
+> > 
+> > ---
+> > base-commit: fcb2f2ed4a80cfe383d87da75caba958516507e9
+> > change-id: 20231002-vfio-cdx-logical-not-parentheses-aca8fbd6b278
+> > 
+> > Best regards,
+> 
