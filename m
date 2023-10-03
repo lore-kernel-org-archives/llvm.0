@@ -1,79 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566D9208DD
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 11:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A7CC433D9
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 11:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1154F505;
+	Tue,  3 Oct 2023 13:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0AEC433C7;
+	Tue,  3 Oct 2023 13:37:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696332965;
-	bh=vVhh3lazos4QYD8OzBfvDW/vTxlOEhK1alN6r8Iu4og=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NYf7GAJjcUTUSOB2IJvUQtgk5LXcKerAafqHsuLvdtNPmib6dr+mEeBF+S6Ah3okt
-	 G3ow6F/4X6q7jU2iTj8KFOeWjkJDevaokihQ/6Bbcv70jF3RmgH5Wz1PFWDCbZCD0X
-	 zbKSb4FWk0fEG8KyOYy2k6duGgiVM1WTQXDmymczXcf+ycOI0vLGGlNbT6C0AEokFY
-	 06cca1d09oMrlSIITHFCHuQ65JuZ5+A3qkLxgr8nYaEeB74OpCQdWpePvqjnB++Tp6
-	 6vh4r7pV7nKQv4Q40QOrMQNp3W1A/nOZIMIu3xAunjwQA6J7yi5Fr3dIZ1tH+GmzKK
-	 582IWche71omQ==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1dd0526b5easo531116fac.2
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 04:36:05 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxsTCL47+bBrt+xQO+BnBBDTlsHALH9hxBlKQ+BTGb+QqMs/nYS
-	Y2tT0PL0sKvZU15TPQ0kpNBRck3i8DQzn8x7a2o=
-X-Google-Smtp-Source: AGHT+IEyBjh7n7rNz1XH86vxqaWNI5MD9ZJVLAEl+X5mnqiV1GcBTUEXSudGPTiIBKiWWskpHdvTFWbK3wh8sKJbWXg=
-X-Received: by 2002:a05:6870:d10d:b0:1c7:ebf5:b6cb with SMTP id
- e13-20020a056870d10d00b001c7ebf5b6cbmr16807308oac.25.1696332964877; Tue, 03
- Oct 2023 04:36:04 -0700 (PDT)
+	s=k20201202; t=1696340262;
+	bh=wlhdhZn1xBJ8gxC+v/rGLHxhYUc11yTLxM1h+HBXGhw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AqvDHUQzpsHAxcB/bWiLH51eHg2YS+4rOc2oXQbpYMRgbl3wZREE0e0B1VxuMf81e
+	 KYvDqa2pHJu1w24fvLwg/PzcXeLT1GsYZVNDV64DNnh3DVcpo2nq8cdDQ7ZwwxLmUC
+	 i+l4eOYymaNe67EceomwyqkFJrlG5+zGBYVFJJdLJaLFxNZY6+2vT/RKc7tgIUtumR
+	 cY9JWvLun6qR5jFKgyyzP53jl2v9Dv3Lwt32q4IFpI48iTZwmDMpr1ZOZ9Oy3i3XLv
+	 lVVTM060WcFPXnYI1AkKFcKJFB+2pHU6YRDpAdmZM/7+zcGfDEPmb7WiAZadB8HU6j
+	 CBfo9dYsctKwA==
+Date: Tue, 3 Oct 2023 15:37:37 +0200
+From: Simon Horman <horms@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, vadfed@fb.com, arkadiusz.kubalewski@intel.com,
+	jiri@resnulli.us, netdev@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, richardcochran@gmail.com,
+	jonathan.lemon@gmail.com, saeedm@nvidia.com, leon@kernel.org,
+	linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fix a couple recent instances of
+ -Wincompatible-function-pointer-types-strict from ->mode_get()
+ implementations
+Message-ID: <ZRwZIXaVS4yxGSQF@kernel.org>
+References: <20231002-net-wifpts-dpll_mode_get-v1-0-a356a16413cf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAK7LNARd_pRWWso49C4MoahFAM9idyOFC+9ZFYdpS87CA4UTqQ@mail.gmail.com>
- <20230926124044.3522663-1-jbrennen@google.com>
-In-Reply-To: <20230926124044.3522663-1-jbrennen@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 3 Oct 2023 20:35:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARbPoTVG83kuHzD1mkwWn5Rqth1iYhfXbnsrk2LOvyHYg@mail.gmail.com>
-Message-ID: <CAK7LNARbPoTVG83kuHzD1mkwWn5Rqth1iYhfXbnsrk2LOvyHYg@mail.gmail.com>
-Subject: Re: [PATCH] modpost: Optimize symbol search from linear to binary search
-To: Jack Brennen <jbrennen@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, maskray@google.com, 
-	cleger@rivosinc.com, kernel-team@android.com, joe@perches.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231002-net-wifpts-dpll_mode_get-v1-0-a356a16413cf@kernel.org>
 
-On Tue, Sep 26, 2023 at 9:40=E2=80=AFPM Jack Brennen <jbrennen@google.com> =
-wrote:
->
-> Modify modpost to use binary search for converting addresses back
-> into symbol references.  Previously it used linear search.
->
-> This change saves a few seconds of wall time for defconfig builds,
-> but can save several minutes on allyesconfigs.
->
-> Before:
-> $ make LLVM=3D1 -j128 allyesconfig vmlinux -s KCFLAGS=3D"-Wno-error"
-> $ time scripts/mod/modpost -M -m -a -N -o vmlinux.symvers vmlinux.o
-> 198.38user 1.27system 3:19.71elapsed
->
-> After:
-> $ make LLVM=3D1 -j128 allyesconfig vmlinux -s KCFLAGS=3D"-Wno-error"
-> $ time scripts/mod/modpost -M -m -a -N -o vmlinux.symvers vmlinux.o
-> 11.91user 0.85system 0:12.78elapsed
->
-> Signed-off-by: Jack Brennen <jbrennen@google.com>
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+On Mon, Oct 02, 2023 at 01:55:19PM -0700, Nathan Chancellor wrote:
+> Hi all,
+> 
+> This series fixes a couple of instances of
+> -Wincompatible-function-pointer-types-strict that were introduced by a
+> recent series that added a new type of ops, struct dpll_device_ops,
+> along with implementations of the callback ->mode_get() that had a
+> mismatched mode type.
+> 
+> This warning is not currently enabled for any build but I am planning on
+> submitting a patch to add it to W=1 to prevent new instances of the
+> warning from popping up while we try and fix the existing instances in
+> other drivers.
+> 
+> This series is based on current net-next but if they need to go into
+> individual maintainer trees, please feel free to take the patches
+> individually.
+> 
+> Cheers,
+> Nathan
+> 
+> ---
+> Nathan Chancellor (2):
+>       ptp: Fix type of mode parameter in ptp_ocp_dpll_mode_get()
+>       mlx5: Fix type of mode parameter in mlx5_dpll_device_mode_get()
 
+For series,
 
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-Applied to linux-kbuild.
-Thanks.
-
-
-
---=20
-Best Regards
-Masahiro Yamada
