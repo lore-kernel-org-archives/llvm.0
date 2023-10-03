@@ -1,39 +1,39 @@
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DE93F4B6
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:18:18 +0000 (UTC)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1d544a4a2f2so963987fac.3
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 16:18:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A953F4C6
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:18:23 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-690d8fb3b7eso1163366b3a.1
+        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 16:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696375098; x=1696979898; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696375103; x=1696979903; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2rOVzN2PCRgnrHqP+jBm3ldFT981CkAJwsAUdzgdjEk=;
-        b=mhB7nNYFqC+Qza+2B/Nr0mQlJPTmMTSBrltQtRutz7r8+HXy9Z0sbnRuaPMmVBoAnP
-         4nFByokLbfbNU0VC6zXTB1NfxsNI1eUyypOeFeK1207ei2OQkA6yj2ZzlA1B5i2eOn4/
-         2jKK22F5uOehuwpfqcb8FNFZfk/XANN8g3DLc=
+        bh=+XM09kEc8Kp8BRYEzLwAFk6cBdvMXUL/+IkaIgbusPU=;
+        b=ddoh//sjbNXD/c8nEb7bLxqaRb4cgqedgzhvvEniUdzzdYeJvf6879Bpo6U4E9q4Ed
+         V4F4y6fK5W+CnY6p4Uq9gsVDMzLME9NvWMyb59p1fQTb9i8O001DkoTyLD9D/Q7SUotA
+         7ab711Wux8h9T6ZKrGCxPUm4dXk4p1L+b0pTY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696375098; x=1696979898;
+        d=1e100.net; s=20230601; t=1696375103; x=1696979903;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2rOVzN2PCRgnrHqP+jBm3ldFT981CkAJwsAUdzgdjEk=;
-        b=DEHe/eg73qvk1uwnwNhDqF6EZO1rI0X7DhE5isWrAZCQWLpFxqTwBvADfBO5GEPeHm
-         WL6b5cArbQyxtOwS8rxgleKePxGuSE8pCQjR7Bq68/2+hmLa5G0zZSI9jpo0JDnQX0ay
-         fJM8nAK7VxOitpf5qCbW7GSMh0/S4vo2RM1Oc2mlckUDEhil2PNxr6lygJ7OJkD2FN3b
-         YFwg9/t3UxJ0MXUpruFlBGUDesJWX5AHUQWcZpN/xmYZtfGJH4el2kNNAj8EfzncfDmA
-         Dwkzt3Y10K73vfG4qRcbWbhvhHobBfHvHFId22vDF+Nxrs0R/JG8KcmBn3DQQmT5yMO1
-         WAMQ==
-X-Gm-Message-State: AOJu0YwvBYYIJlf/X/6p2NS16oI6SaePRiCV7XCALrhBZxeaQrsJCqY5
-	WpQhiu9dDP+1sBsRMV9IRLdsbk7AuuI8mVECsc4=
-X-Google-Smtp-Source: AGHT+IEYnl3bkJ/TRCC4P/s1uj+lcaOxooGOx0efGkFJ7ASXla9V+F85ONcda+3xmNzFJH9WpNfABw==
-X-Received: by 2002:a05:6870:ac09:b0:1d4:dce5:332e with SMTP id kw9-20020a056870ac0900b001d4dce5332emr1045463oab.51.1696375098244;
-        Tue, 03 Oct 2023 16:18:18 -0700 (PDT)
+        bh=+XM09kEc8Kp8BRYEzLwAFk6cBdvMXUL/+IkaIgbusPU=;
+        b=nkomaagi+gd+UlqBO+YRmCuUOLQ2JWCsqRCsZJ1T35kejgY8ACf+J4sJ1HOtnAi47z
+         FSyrpktM8UhQEJY5ILRPzNq+nJNIo1mAoHJRCF+C8Va/5ije1e/vYsL6L6TGR//+c39A
+         oXmTjgGPq90Z3GJ3dqkQDapVwEd8Jxf/wzyYeAjsPRRIqUhP+39tCk5sGRjvm/2/nR8g
+         pfiAiYz8ZXybIVPiHPk0TjF0BirPu6p0VHUpUzC+pDZ+v4qXXxeAUuemvEjDpcSBIcNr
+         5C5BF74M2V9dbpI6bVGXgVw7QC3/JBs8tLuUt03grWm6lO3M4TJdqAiKaOFNkni6D2fb
+         086w==
+X-Gm-Message-State: AOJu0YwcRhBJI8JiL+ceRx2uvh8KT7VC2k94VGfHPcYfNn2C6EZdZYOq
+	aJS3DfwIG0jvCwcHEPy8gofL7Q==
+X-Google-Smtp-Source: AGHT+IEwKOi2g91/6+3PVOksMMOBXjtZ6RUc8kcIOjZ3+jcu3YOHO3VrVuRhXQygmft0K82aoguc4g==
+X-Received: by 2002:a05:6300:8001:b0:153:5832:b31b with SMTP id an1-20020a056300800100b001535832b31bmr692118pzc.53.1696375102984;
+        Tue, 03 Oct 2023 16:18:22 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id fn25-20020a056a002fd900b00692b6fe1c7asm1958637pfb.179.2023.10.03.16.18.16
+        by smtp.gmail.com with ESMTPSA id c23-20020a62e817000000b006933c582ed8sm1897059pfi.20.2023.10.03.16.18.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 16:18:17 -0700 (PDT)
+        Tue, 03 Oct 2023 16:18:22 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: David Ahern <dsahern@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
@@ -41,17 +41,17 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
+	netdev@vger.kernel.org,
+	llvm@lists.linux.dev,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] nexthop: Annotate struct nh_res_table with __counted_by
-Date: Tue,  3 Oct 2023 16:18:13 -0700
-Message-Id: <20231003231813.work.042-kees@kernel.org>
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] nexthop: Annotate struct nh_notifier_res_table_info with __counted_by
+Date: Tue,  3 Oct 2023 16:18:18 -0700
+Message-Id: <20231003231818.work.883-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,20 +59,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1241; i=keescook@chromium.org;
- h=from:subject:message-id; bh=04VwMUdoOUg0Q3PoomQoaiWpcLJL9oFj2Z3pRVMvhsY=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlHKE18bbozIjEbjkEMDqDSUfdgSjKZnp/dO6MO
- 2v7rF/PyfeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRyhNQAKCRCJcvTf3G3A
- Jg3qEAC1Sa7rKcvXjSXNo4pPqi0dpvCQhPdi9HONfIHpOYimtWWDUFCjlzs1uiDQYgcHT8gHEFZ
- qr49f0ZGX20wSggsRfREApX0NF4U+UuvvQSU4OdL3j9zluRhSPg8EDCjIei1H+vHxISjlUnLFFF
- 8z+yzyG3Z3C8zN8xs+q01IGw1x8xjoxLnPLv6RxW2cRak5xGNB1PnC6/on+s/KAz1bbYDC5r5vo
- a+CPr5TkGN5EmehIO+nT4vf6FRxBcpjrDwB2172DbK0+IxtDzkK2ME7wwTeqLwuzGse72E3Jf60
- +dZfhQiepJmXetshJ20V4HLzB1d8OBa3LcC9JNCP3eRrygjLIBMNe15+ZLt9DM1vtH7yg5Gmase
- NNq9fcGB+K3MwHVuM2c5YREEAW/gE7w6FrNhfVU9+bfe0pdH/YNuH00hDj+WA3oYO4jOKKyKBL2
- hP9+doqrfkrof7SXN4ZQlo2ojUHjGFNMO0KzZ2XfL4jgu1JCm9H3ZWUXrgvGgGmZ3Mx0ZsSOGiI
- vCo120kCO3BlscD2j8RA59I83C//X7mfSC+22vhr/Bnofg70JKUd0eWl2IWlQFKzSVjAz3rTWU7
- rVXf3nvwLJVwD08ak7+0tDsKCvZO0bB8amlrr1vf0TGP/ZKdXS+m6tjms4YJsxa2SNdITm9BPre
- aUFjyv9 gJ0MqnWw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1440; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=AjwLE9p8WGopinEsMtaz3ddOS1mI0qnJXpq5C0mCIUo=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlHKE6FRvS+TBAwxc+K9caUt8f5xq1QuruutNKl
+ 6rvdNKdQguJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRyhOgAKCRCJcvTf3G3A
+ Jo+FEACDuxBwqD2j1hWN5SQMxl3AwTJawunug8XKcPvJfIFp/RTGo5A8ClW1vELUc4+BpLeROLv
+ H119H972/sNz7cDkp2Nlo60Yk9V4jEhyU5mUpqiXjhUR8nnTZPJijFiH/wkyilrzoR+laOjaIX+
+ y5iEpgcZYGU04GWtAJDfObUCyEqkPhKfXtQQNri4Lm5pwvaKoAxprAufBtOY+xfselLRdr3M9K2
+ 8rJ+IBolsSlAXKH1DftdiFSBjG9EmwKydkha47kSrOeMG4EMTWOfNlOj+YdBWoOvgg6r6B6hobI
+ II7hEMTRvU5zBkb9jMAiE1MUR41bJFcMSSWInv3uIPQGQImd+PM2F+16cpUGdVWqMi/zY4MWl4d
+ ZkNf3hGG2jsfcjW260crWJ3B3c/f7ik61m2RqIvv9gTXKwwzriycjijPvJ56VWzAkBjzHYz1Equ
+ 4BzfYYzNpowHL2EVmsFWkwOLFOkg6f0OvU671kIkH7nJollSOeArKap+mtlpo2ZtSiR6nKgq2MM
+ KCXt4zv+CZYnTmDaL6RXHJwY6D+HQRHjxXm/4W7pJviek1bH2cFpF90D3HVYkkFbds1nHi0mTyX
+ 8f4hhCx3uO86L40eqe8XCihbEkXxUIKOk4u136dDDUmMByv6kH2SP/Ns/K9u/bhM7VW0tdp5jvj
+ UIdLPZZ 1WOpGYgQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -82,14 +82,19 @@ their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
 array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct nh_res_table.
+As found with Coccinelle[1], add __counted_by for struct
+nh_notifier_res_table_info.
 
 Cc: David Ahern <dsahern@kernel.org>
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Eric Dumazet <edumazet@google.com>
 Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Tom Rix <trix@redhat.com>
 Cc: netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev
 Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
@@ -97,18 +102,18 @@ Signed-off-by: Kees Cook <keescook@chromium.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/net/nexthop.h b/include/net/nexthop.h
-index 5dc4b4bba8a5..09f9a732e640 100644
+index 09f9a732e640..8f5a2ab45920 100644
 --- a/include/net/nexthop.h
 +++ b/include/net/nexthop.h
-@@ -92,7 +92,7 @@ struct nh_res_table {
- 	u32			unbalanced_timer;
+@@ -200,7 +200,7 @@ struct nh_notifier_res_bucket_info {
  
- 	u16			num_nh_buckets;
--	struct nh_res_bucket	nh_buckets[];
-+	struct nh_res_bucket	nh_buckets[] __counted_by(num_nh_buckets);
+ struct nh_notifier_res_table_info {
+ 	u16 num_nh_buckets;
+-	struct nh_notifier_single_info nhs[];
++	struct nh_notifier_single_info nhs[] __counted_by(num_nh_buckets);
  };
  
- struct nh_grp_entry {
+ struct nh_notifier_info {
 -- 
 2.34.1
 
