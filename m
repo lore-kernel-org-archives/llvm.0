@@ -1,61 +1,64 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813FE3E489
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 22:57:11 +0000 (UTC)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-99de884ad25so264463366b.3
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 15:57:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B683E48B
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:06:42 +0000 (UTC)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-99bf3f59905so266463366b.3
+        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 16:06:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696373829; x=1696978629; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696374401; x=1696979201; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HNJ4V21M91PAJnutJlU6BdqwkvAfNI28YR+w3lb7qz0=;
-        b=aweweAAjsBXMumR9Fpxn26g1cngH/0RpxXhHuWJlboU9qSxf4+GVkzEghEENuInVt+
-         wDhm4l6WqeVuzYKm/b8PTQqMdn3cvVlniyaPZNb189ws76JjnEyzTAv0BceCBb2yaHpx
-         vK2SlGVTp7HMVUEIll0WaZiahk72/AMmA75AxfROIsFsAdPaOh8u4W55r4e4y1U6ubW1
-         /c/3Zd5KsBHyKKhQloUtofsAvG4ijAU+JJF+JmaqMgqODHOpccrFxry8Bfelp31N2b0H
-         76YhYQp7pdS3yVvfySenMHrL3x9VSx3mYVfkpqcz/1wQbtI3mbtZOvpLtgaGPG275OlK
-         lYKg==
+        bh=BED3t2aRrxtx0D0q4ZEBs+ApkSmWh8HJDsZNXZO2H1E=;
+        b=1AjR5jaHjjYFZzFMu77I+iOdgjaPJN+oSc3VW4fRUFW6/pY93Z2bcfLa0QXpk0ggwm
+         FZuIi2u3ivb9fqSiWi7thdL4Hk961oBRSQMEjekmc0Gbc/tc/qx6LNRAcJRYX/6NeV6q
+         0fI9ebT1yL7oT7/QS5xHdjuOCxnoD/guQkVTUnpeDi1i7578IGYqUUTd0YGBL1W0RVzg
+         Noka5zwvPrnQQxRsuKY6nPNM4Lq9FoQ9dLZj4n6edQn9pfrjM0cXYxumk31mO6nmgB0Q
+         /DB+u5AYqH7HvtHXoKTxxiqsxCjbvskZDhOrN7N6FSXth7vyByTQhGa70setxgspaVm2
+         uowg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696373829; x=1696978629;
+        d=1e100.net; s=20230601; t=1696374401; x=1696979201;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HNJ4V21M91PAJnutJlU6BdqwkvAfNI28YR+w3lb7qz0=;
-        b=mFjagCyQc3MaqTVwh9rmb5vKmO7sR8Xzl18d3abh4XRKJHsQ16XhCc4vZ5atIfHd8z
-         T3aZclDYpDZ/H883gUaNGpMncQ9v9tZBZtuuvpXmNFLX3eTn8qX33Y2rsH4hDo1Y4vpL
-         vhSZSn4JKYtCYIdhqm5x3I+PrpjTsG2//Tav0c/rn5UAMH38CzGAsESSnR2KToA1cu26
-         uSw3QYOioNWSe6VBhpcudjXYX1IKOmnuKOKafcWd+BdOEGml7mD6eqCl0mzuHu4Pg8lX
-         Y1QXCEVtYvlj2BV5subovCY96lz5yMzIV1l+KAgA438iA/32QOGY5E/5v0u9TsxwMmjj
-         JPEA==
-X-Gm-Message-State: AOJu0YwUxYkYnA6XwKx0LM3HFSmU5do82LePsbAUi3srTe/n6oTn0g4v
-	10WNMCYvMi0boFhMUSbGZN1um8r3vLXpbbEPYdZjfw==
-X-Google-Smtp-Source: AGHT+IGU3gyaT977jvt9iRD1Ew9XlWTiuArkryKIRq2HRhld6gv/M4qSWfTxLUS5n5K9yVhjHJogubJlzCAW0Ey3Gyk=
-X-Received: by 2002:a17:906:210a:b0:9ae:56da:6068 with SMTP id
- 10-20020a170906210a00b009ae56da6068mr563304ejt.57.1696373829597; Tue, 03 Oct
- 2023 15:57:09 -0700 (PDT)
+        bh=BED3t2aRrxtx0D0q4ZEBs+ApkSmWh8HJDsZNXZO2H1E=;
+        b=kueryCktrOyQVycNykXcwz5/hqNmolqnbW0jF+bW5r18gUyPJlFcEX9gRzfFOTmAKx
+         V7bh93R3rcDmpKZN3Oy7VjHY32yobpssbLHAPb/49CZ0j0PJjDD1+xl6hUgv80/5DlOu
+         cKSvZWRfaOX+dbedTqWgOe9ZzCeE+UsaPhrJ69gfgzxWn7DIDUkZbur4CgB16GSkhxFc
+         TG/PubTa86y9CTjGaL+NEPfv0zlrhhkXFKInRMdLOYSK4NYAFXW/xjOYjqAp803hpZs8
+         hYPblrfdkvW7dHy/oNe8sHL6CwaMaE4cF66qRQJN0no38kUcjbyNHvqlX8QQAxoNQhpx
+         J+qg==
+X-Gm-Message-State: AOJu0Yw5Wq9lEOk5wgqVuQ7EoyibsJ0cqZF53flm6ihMPZZZfWgqIp8b
+	eVOp28dNIJDVLGGX7SLFfeeU2ka0513cCf9HCsRAjg==
+X-Google-Smtp-Source: AGHT+IHB2pzA3bg1Fesj416efcT1N1xTYVtbEVVGRJW14+RdrX8v8VDBTH1EuOSCUOzjyMf3H2XQMrs2+N3Lkip4XW8=
+X-Received: by 2002:a17:906:74cc:b0:99b:ead0:2733 with SMTP id
+ z12-20020a17090674cc00b0099bead02733mr593265ejl.72.1696374400964; Tue, 03 Oct
+ 2023 16:06:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230922175351.work.018-kees@kernel.org>
-In-Reply-To: <20230922175351.work.018-kees@kernel.org>
+References: <20230929180611.work.870-kees@kernel.org> <20230929180746.3005922-5-keescook@chromium.org>
+In-Reply-To: <20230929180746.3005922-5-keescook@chromium.org>
 From: Justin Stitt <justinstitt@google.com>
-Date: Tue, 3 Oct 2023 15:56:57 -0700
-Message-ID: <CAFhGd8pHzbdcSaxjJHVHTAVrsxVPptn+OfwNjQ0RMEsOS3xRiw@mail.gmail.com>
-Subject: Re: [PATCH] mailbox: zynqmp: Annotate struct zynqmp_ipi_pdata with __counted_by
+Date: Tue, 3 Oct 2023 16:06:28 -0700
+Message-ID: <CAFhGd8pCJa=qevxwhtQDvXMwdhF-33fV87m90GGaUFkOa6eRuA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] mlxsw: spectrum_span: Annotate struct mlxsw_sp_span
+ with __counted_by
 To: Kees Cook <keescook@chromium.org>
-Cc: Jassi Brar <jassisinghbrar@gmail.com>, Michal Simek <michal.simek@amd.com>, 
-	linux-arm-kernel@lists.infradead.org, Nathan Chancellor <nathan@kernel.org>, 
+Cc: Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 22, 2023 at 10:54=E2=80=AFAM Kees Cook <keescook@chromium.org> =
+On Fri, Sep 29, 2023 at 11:08=E2=80=AFAM Kees Cook <keescook@chromium.org> =
 wrote:
 >
 > Prepare for the coming implementation by GCC and Clang of the __counted_b=
@@ -66,40 +69,51 @@ S
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 >
-> As found with Coccinelle[1], add __counted_by for struct zynqmp_ipi_pdata=
-.
+> As found with Coccinelle[1], add __counted_by for struct mlxsw_sp_span.
 >
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/c=
 ounted_by.cocci
 >
-> Cc: Jassi Brar <jassisinghbrar@gmail.com>
-> Cc: Michal Simek <michal.simek@amd.com>
-> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: Ido Schimmel <idosch@nvidia.com>
+> Cc: Petr Machata <petrm@nvidia.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
 
-Great patch! Crucially, the count is _correctly_ assigned
-to before the flexible array member is accessed.
+Great patch!
+
+Crucially, span->entries_count is assigned before any flexible array
+accesses.
+
+        span->entries_count =3D entries_count;
+        ...
+        for (i =3D 0; i < mlxsw_sp->span->entries_count; i++)
+                mlxsw_sp->span->entries[i].id =3D i;
+
 
 Reviewed-by: Justin Stitt <justinstitt@google.com>
 
->  drivers/mailbox/zynqmp-ipi-mailbox.c | 2 +-
+>  drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqm=
-p-ipi-mailbox.c
-> index e4fcac97dbfa..7fa533e80dd9 100644
-> --- a/drivers/mailbox/zynqmp-ipi-mailbox.c
-> +++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
-> @@ -108,7 +108,7 @@ struct zynqmp_ipi_pdata {
->         unsigned int method;
->         u32 local_id;
->         int num_mboxes;
-> -       struct zynqmp_ipi_mbox ipi_mboxes[];
-> +       struct zynqmp_ipi_mbox ipi_mboxes[] __counted_by(num_mboxes);
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c b/driver=
+s/net/ethernet/mellanox/mlxsw/spectrum_span.c
+> index b3472fb94617..af50ff9e5f26 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c
+> @@ -31,7 +31,7 @@ struct mlxsw_sp_span {
+>         refcount_t policer_id_base_ref_count;
+>         atomic_t active_entries_count;
+>         int entries_count;
+> -       struct mlxsw_sp_span_entry entries[];
+> +       struct mlxsw_sp_span_entry entries[] __counted_by(entries_count);
 >  };
 >
->  static struct device_driver zynqmp_ipi_mbox_driver =3D {
+>  struct mlxsw_sp_span_analyzed_port {
 > --
 > 2.34.1
 >
