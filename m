@@ -1,123 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59903B2AC
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 18:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696356113;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1O1P5RRCZO3I2Cb3ZB5a7k3rWZWIpd5L49t63w6uEck=;
-	b=apH5xuaeficYrkouKf+CE2uNGB6y7s6qQRyrVdQupOqreI2aYtvLCM2NjLlpr5f3ccxRkv
-	vx/jtJt8tqeZ6Wn+/X9pvIciGxMiRZ3MU9QgCcnY1CWnnAqBgr/Vwx1O/G+8PNGsUFQSzf
-	U1FkpYV6uXYKjUa8IWMupBqdP/481eU=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-543-0yNZPZ-BO2GKlsgZSiG--A-1; Tue, 03 Oct 2023 14:01:52 -0400
-X-MC-Unique: 0yNZPZ-BO2GKlsgZSiG--A-1
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7913a5d6546so76036039f.1
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 11:01:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696356111; x=1696960911;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1O1P5RRCZO3I2Cb3ZB5a7k3rWZWIpd5L49t63w6uEck=;
-        b=VrW1ldGLqrdVq3eJ6sHt2UYhrTWyg4l0Gml398v34vdgKugKOgFgxKzUm9n7P9BTN0
-         xnF+eGjJkv6Q/qtyY0RFSUW7ZfJfkdEI4yQZc2ThJFAb2DbJhqICCahFzHVXcl+AwBIp
-         GfkEVkBi0fl3KgmaQrBxCUbVsdyhmpO0iH+nanQFEU88A33Qc0M3KruozRKCnrF5XgEU
-         UUerUQ/IMaanuIqA69e21Kv6pafjsSvMV6vGZSNzDH2B0w4xsmw2e3nooOOY8r99K1rY
-         EweS49NhK+avlIbblM+Y+plwSgdMNe5dTlEvnaRcWmrnIJ3FChP3TdeH3Z+yUICw16CF
-         rpig==
-X-Gm-Message-State: AOJu0Yynj6ggdP8XKUumqLNkX/X7uaWIw5W8bQpaGJmwN6Pji7RtMhXZ
-	lW7dmI3Ce0g4yeP1u7cwOy2KEztuZ3fcRpPtt73Pg7MoOjnlX2i/K1biXCf5MsK7WTcaFp4wqw0
-	r7DrGoWE5lEn6eg==
-X-Received: by 2002:a5e:a915:0:b0:794:eddf:daae with SMTP id c21-20020a5ea915000000b00794eddfdaaemr178016iod.12.1696356111554;
-        Tue, 03 Oct 2023 11:01:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH4yTp9WE3Q/12Yk/wXuK2OODFz+pJdNL9fInAXp4IHhkyJn89d6aKAzKcOPfaMvL+GsZni7A==
-X-Received: by 2002:a5e:a915:0:b0:794:eddf:daae with SMTP id c21-20020a5ea915000000b00794eddfdaaemr177988iod.12.1696356111291;
-        Tue, 03 Oct 2023 11:01:51 -0700 (PDT)
-Received: from redhat.com ([38.15.60.12])
-        by smtp.gmail.com with ESMTPSA id fn12-20020a056638640c00b00439e3c9f958sm480243jab.129.2023.10.03.11.01.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 11:01:50 -0700 (PDT)
-Date: Tue, 3 Oct 2023 12:01:49 -0600
-From: Alex Williamson <alex.williamson@redhat.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: nipun.gupta@amd.com, nikhil.agarwal@amd.com, ndesaulniers@google.com,
- trix@redhat.com, shubham.rohila@amd.com, kvm@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] vfio/cdx: Add parentheses between bitwise AND
- expression and logical NOT
-Message-ID: <20231003120149.11c89206.alex.williamson@redhat.com>
-In-Reply-To: <20231002-vfio-cdx-logical-not-parentheses-v1-1-a8846c7adfb6@kernel.org>
-References: <20231002-vfio-cdx-logical-not-parentheses-v1-1-a8846c7adfb6@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA87F3B2B7
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 18:03:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295A0C433C8;
+	Tue,  3 Oct 2023 18:03:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696356205;
+	bh=tdp1GQLnOzhP5N7sgd2m46EkMMOgLP/jZDUmpIqE9lQ=;
+	h=Date:From:To:Subject:From;
+	b=MuLH8vYRqHnUtn/2KYBMAyLizj37JzEA4/EU+xaVXFN2DJBKGAM/e8wgzNxF62WpW
+	 aES6wVtuEG6pMWeauClY+vi5g2UcxcnyL8B3KkBOsZVkVZey1aDBoAX6ZZfMRs1/4M
+	 +qPN32Ahud1BX1T3TaQ1OpJcfvR2pjiTnrI6WNDLTB8YrQKXEUJqx1mqCxItLw8NC/
+	 7tlC9W+NEA+hhTpEimkpBEPq17I/I61NW9u737yvCwi1dONGn6IYrNA/nUthqILIuf
+	 LzjoKC6WYyeNWonFIsHtRD9+0sEAm9ulCArL6xxY2lbfuFfKmrGxv8UToSeeOCLXA+
+	 pthNVr7JdOfww==
+Date: Tue, 3 Oct 2023 11:03:23 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Prebuilt LLVM 17.0.2 uploaded
+Message-ID: <20231003180323.GA419007@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 02 Oct 2023 10:53:13 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+Hi all,
 
-> When building with clang, there is a warning (or error with
-> CONFIG_WERROR=y) due to a bitwise AND and logical NOT in
-> vfio_cdx_bm_ctrl():
-> 
->   drivers/vfio/cdx/main.c:77:6: error: logical not is only applied to the left hand side of this bitwise operator [-Werror,-Wlogical-not-parentheses]
->      77 |         if (!vdev->flags & BME_SUPPORT)
->         |             ^            ~
->   drivers/vfio/cdx/main.c:77:6: note: add parentheses after the '!' to evaluate the bitwise operator first
->      77 |         if (!vdev->flags & BME_SUPPORT)
->         |             ^
->         |              (                        )
->   drivers/vfio/cdx/main.c:77:6: note: add parentheses around left hand side expression to silence this warning
->      77 |         if (!vdev->flags & BME_SUPPORT)
->         |             ^
->         |             (           )
->   1 error generated.
-> 
-> Add the parentheses as suggested in the first note, which is clearly
-> what was intended here.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1939
-> Fixes: 8a97ab9b8b31 ("vfio-cdx: add bus mastering device feature support")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/vfio/cdx/main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vfio/cdx/main.c b/drivers/vfio/cdx/main.c
-> index a437630be354..a63744302b5e 100644
-> --- a/drivers/vfio/cdx/main.c
-> +++ b/drivers/vfio/cdx/main.c
-> @@ -74,7 +74,7 @@ static int vfio_cdx_bm_ctrl(struct vfio_device *core_vdev, u32 flags,
->  	struct vfio_device_feature_bus_master ops;
->  	int ret;
->  
-> -	if (!vdev->flags & BME_SUPPORT)
-> +	if (!(vdev->flags & BME_SUPPORT))
->  		return -ENOTTY;
->  
->  	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_SET,
-> 
-> ---
-> base-commit: fcb2f2ed4a80cfe383d87da75caba958516507e9
-> change-id: 20231002-vfio-cdx-logical-not-parentheses-aca8fbd6b278
-> 
-> Best regards,
+I have built and uploaded LLVM 17.0.2 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-Applied to vfio next branch for v6.7.  Thanks!
+If there are any issues found, please let us know via
+email or https://github.com/ClangBuiltLinux/linux/issues/new, so that we
+have an opportunity to get them fixed in main and backported before the
+17.x series is no longer supported.
 
-Alex
-
+Cheers,
+Nathan
