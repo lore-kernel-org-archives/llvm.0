@@ -1,141 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E543B7BC;
-	Tue,  3 Oct 2023 19:17:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C88C433C8;
-	Tue,  3 Oct 2023 19:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696360620;
-	bh=qa6S4IWoXm/M6zG107OAxmdy2bBpcu3QjF1UzJO3TfM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=K1kZ9KwVvLbX6iUl9Pm88APTVviEmwvor1aP4cFtSp5imd1kRTl6WWxdvTRNc/OMu
-	 B8wKbEYtWU67/s2NivJp/s3+1LGF5bpOLjGtbOfLBR39j3LhlwAsIOZLUR4Zjrtu6y
-	 ed5gpobcH1/pSRaGaMZJpCbI17EMed36+ib1z3w++MIpESpDkaxx8ewomwz4bR2/Zm
-	 u2JTcE5CXU83iXYJQGxWezVmlsJjiAbr6BXv77lvEgiNRffdlvBqQuw6wKST/Zmoxr
-	 vSe7DsKo7NraRJEe7xE+1jOEblbhtZlMQ27UW3Vw/YB7Rgf3TO8zXxJYlmIdZw+exc
-	 XokA/IGNAUeOQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 03 Oct 2023 12:16:24 -0700
-Subject: [PATCH v3] RISC-V: build: Allow LTO to be selected
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE063C696
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 19:26:40 +0000 (UTC)
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3ae473c0bd6so209637b6e.0
+        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 12:26:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696361199; x=1696965999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4cJJaH8b1u/qRRvI+ZMuh5sNNJkEekWhJ7wzLow6kXk=;
+        b=im8WEq4jF/rvikMPi6lH6gp3T87st/T1Cbk91H4m7OjtjXik10I2roJesdvVodt0aK
+         N4ntpS0guiFh58dDKehNuGbft7wTsBcDccElW6WD945VkFKTX5Qhe7co49JvQ0MzEbEx
+         12c2cIKi2EnwW5evEjxReXOK6cdAk8h2by+dfcgIzFfcKveVvCWhUNiOnqOt2t0631T3
+         FvB7jds3gw3NXgXYdAMHMlKy05oIXZlDMOQoZJPUtdvY2mpvblbbLcQbXCfOUF1sq42S
+         MgAOEH5jXImDmh39E1ECJVlVRu0LiPiMGGO6PQGiSjQRNZn0/EE07jlvlUS2oIK5iwlF
+         8R6g==
+X-Gm-Message-State: AOJu0Yx6bP71DUbFzKYYwZq8P2dgC+BhVJnAZ1Od9qENgqc0oFvwmZ6a
+	kbCnf6F1Dcf2KBAg+M7GW0Pq6bAtbdUZgm1ctrI=
+X-Google-Smtp-Source: AGHT+IFjyx71PMx2N+wDN30hM/HJ7/ySds49msMYXwi2gb67HIgd8KqAVePwVPPg5Hs9izeUDwaaWPBxodNT4q5lk78=
+X-Received: by 2002:a05:6808:3008:b0:3ad:af12:2fe0 with SMTP id
+ ay8-20020a056808300800b003adaf122fe0mr491609oib.3.1696361199765; Tue, 03 Oct
+ 2023 12:26:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAIdoHGUC/zXMywrCMBCF4Vcps3ZCLgZTV76HuKjNtB1ompKEK
- pS+u1Fwc+CDw79DpsSU4drskGjjzHGpMKcG+qlbRkL21aClNkpKg4lzv+FcIg5SmSeRd9ZdoP7
- XRAO/f637o3pIMWCZEnX/gpZWfceerWhbrZ1DheXltQh0G0PHs+hjgOP4APlK3d6XAAAA
-To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
- conor@kernel.org
-Cc: ndesaulniers@google.com, trix@redhat.com, samitolvanen@google.com, 
- twd2.me@gmail.com, linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3850; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Ptn92JHDlhTUxkNcTxoXQ6MrMP7Rhv1JALJb/w2MO1g=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDKkyGautLNz4vu2fuJmjO/O544RdE095r/v1MHf1J06r5
- NLpn3U5OkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBE9pYwMjT1/DUr0Jl2vMJ8
- yo7lJ9hbDmp8KDL6/XHXDaalW9uy16czMmz60jSrM2jSafloLvGsmWZ/tEoP3tFeWHDVYtZlth2
- nnzACAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20230922175315.work.877-kees@kernel.org> <728fc315-4761-f56c-cd06-9c907a53b46c@embeddedor.com>
+In-Reply-To: <728fc315-4761-f56c-cd06-9c907a53b46c@embeddedor.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 3 Oct 2023 21:26:28 +0200
+Message-ID: <CAJZ5v0haZmhJ6OLNiJHuxLaYRrBschL4Cm7H6acFmGb0Et5_MQ@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: PRM: Annotate struct prm_module_info with __counted_by
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>, Kees Cook <keescook@chromium.org>
+Cc: linux-acpi@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Wende Tan <twd2.me@gmail.com>
+On Sat, Sep 23, 2023 at 11:41=E2=80=AFAM Gustavo A. R. Silva
+<gustavo@embeddedor.com> wrote:
+>
+>
+>
+> On 9/22/23 11:53, Kees Cook wrote:
+> > Prepare for the coming implementation by GCC and Clang of the __counted=
+_by
+> > attribute. Flexible array members annotated with __counted_by can have
+> > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOU=
+NDS
+> > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-famil=
+y
+> > functions).
+> >
+> > As found with Coccinelle[1], add __counted_by for struct prm_module_inf=
+o.
+> >
+> > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples=
+/counted_by.cocci
+> >
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Len Brown <lenb@kernel.org>
+> > Cc: linux-acpi@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+>
+> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is an
-issue [1] in prior LLD versions that prevents LLD to generate proper
-machine code for RISC-V when writing `nop`s.
+Applied as 6.7 material, thanks!
 
-I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
-on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
-can boot to shell using an archriscv rootfs on QEMU.
-
-I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
-KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
-successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
-image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
-`BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
-separate patch further.
-
-Disable LTO for arch/riscv/kernel/pi, as llvm-objcopy expects an ELF
-object file when manipulating the files in that subfolder, rather than
-LLVM bitcode.
-
-[1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
-    commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
-
-Tested-by: Wende Tan <twd2.me@gmail.com>
-Signed-off-by: Wende Tan <twd2.me@gmail.com>
-Co-developed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-NOTE: I tested LLVM 14 through 18 with defconfig + full/thin LTO and
-allmodconfig + thin LTO. allmodconfig + thin LTO with LLVM 15 and 16
-shows
-
-  ld.lld: error: section size decrease is too large
-
-when linking vmlinux. This appears to be resolved in LLVM 17 with
-https://github.com/llvm/llvm-project/commit/9d37ea95df1b84cca9b5e954d8964c976a5e303e
-(I did not bisect but the commit message lines up with the issue). I
-kept the existing version check because defconfig worked fine but we may
-want to bump it to 17.0.0 if randconfigs trip over this.
-
-Changes in v3:
-- Disable LTO in arch/riscv/kernel/pi/Makefile, which was added to the
-  kernel after the submission of v2. This change matches arm64.
-- Link to v2: https://lore.kernel.org/r/20220512205545.992288-1-twd2.me@gmail.com/
-
-Changes in v2:
-- Some textual changes suggested by Nick.
-- Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is
-  filed and resolved.
-- Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
-- Link to v1: https://lore.kernel.org/r/20210719205208.1023221-1-twd2.me@gmail.com/
----
- arch/riscv/Kconfig            | 3 +++
- arch/riscv/kernel/pi/Makefile | 3 +++
- 2 files changed, 6 insertions(+)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index d607ab0f7c6d..523640f7441e 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -46,6 +46,9 @@ config RISCV
- 	select ARCH_SUPPORTS_CFI_CLANG
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
- 	select ARCH_SUPPORTS_HUGETLBFS if MMU
-+	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
-+	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
-+	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
- 	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
- 	select ARCH_USE_MEMTEST
-diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
-index 07915dc9279e..b75f150b923d 100644
---- a/arch/riscv/kernel/pi/Makefile
-+++ b/arch/riscv/kernel/pi/Makefile
-@@ -9,6 +9,9 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
- 		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
- 		   $(call cc-option,-fno-addrsig)
- 
-+# Disable LTO
-+KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
-+
- KBUILD_CFLAGS	+= -mcmodel=medany
- 
- CFLAGS_cmdline_early.o += -D__NO_FORTIFY
-
----
-base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-change-id: 20231003-riscv-lto-f013beed8587
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+> > ---
+> >   drivers/acpi/prmt.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/acpi/prmt.c b/drivers/acpi/prmt.c
+> > index 7020584096bf..c78453c74ef5 100644
+> > --- a/drivers/acpi/prmt.c
+> > +++ b/drivers/acpi/prmt.c
+> > @@ -69,7 +69,7 @@ struct prm_module_info {
+> >       bool updatable;
+> >
+> >       struct list_head module_list;
+> > -     struct prm_handler_info handlers[];
+> > +     struct prm_handler_info handlers[] __counted_by(handler_count);
+> >   };
+> >
+> >   static u64 efi_pa_va_lookup(u64 pa)
