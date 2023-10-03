@@ -1,46 +1,50 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E51C3FB1C
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:18:43 +0000 (UTC)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57e3c2adbf0so864959eaf.2
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 16:18:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FC03F4B8
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:18:47 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1c7373cff01so2636045ad.1
+        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 16:18:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696375122; x=1696979922; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696375127; x=1696979927; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WdsHXAOoB55+JJQE0KPED0/ojG5uLpG2jYoS9vwlMXA=;
-        b=KoH7SAwRmR/UXHPStWoLhkdQ78CFID59cTUBVEwXHg/biYk5hSBcnlIqdNhCf+lPcD
-         DIKtKwC2+sQvJQz8rfZaQjVWdEjuCWqN+jrujuMKsOYE44o6fkZE6Lc+Ug2xhoQAXTr7
-         3x3yQHhdow7uneJkpY3UsmEsDME2OxT/sai3o=
+        bh=BfDQBScYxSUnSyfi4Uo6dvpGeAqp/VpjWLErGf4V/4Y=;
+        b=YTLxM+SnlQ0Fz/LgENcILuIIXDhiM4esusUu0Tscv57rSewd7JwMMUEhbJJAruJ9Nv
+         VJZpujPFw0wGtIuOvABgz2IKfspT7RYIjvRdteKU2dhNLZYN3hCvG/mZtM9XHJEh6aoT
+         ABfks4caUoF2eLiAD1+vn2SZlfGRgBWqDSzxI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696375122; x=1696979922;
+        d=1e100.net; s=20230601; t=1696375127; x=1696979927;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WdsHXAOoB55+JJQE0KPED0/ojG5uLpG2jYoS9vwlMXA=;
-        b=YDZec5NlAOEteUTBSNvmRAmJH0Ing8ztEuQHyWVX7bb7+bi2JZQkqVo0Bw+GJSRhMS
-         BO2lwKEa7gIK/8Ud5pnqblxb/s2blSaad7rMgjo1hRUtYN2Xa25k7ZYjaBvTQoFJkDIl
-         eZvk+z1jvhNGyJo4I64wPQLRTNWG0GFKlAicxwdeWf7o7d1kH/AKH9hOsFbPPunVGWIb
-         w8jQAn2qthzia5K/OGMDjf1jJaXCb5GlZ2x2nzQy+iAxnMg6/9Yh/R06wxON70JMm0tB
-         ScUqB2XDIwNYp+HXP6ZaYiubu6X7q/a5KBrZAJ68xCqpLxX3LOdtHkqXEvrc8hf2dmVP
-         EuVQ==
-X-Gm-Message-State: AOJu0YyIvvZwyO2ISS0er3GtuF9ITwLMwCY4bGPu9ultDeSmwf8H0RVj
-	I8NEOoAe+QwpkOP05PozvJ1X9g==
-X-Google-Smtp-Source: AGHT+IGwY7x1Jd3Xo8SdOthYWU+oTJqfkFc49D9CbuUgNubDqiQrc4IQtxbXynCMrh3eZWfVkLJL3A==
-X-Received: by 2002:a05:6358:292a:b0:14d:6f1e:cfd7 with SMTP id y42-20020a056358292a00b0014d6f1ecfd7mr1094715rwb.12.1696375122373;
-        Tue, 03 Oct 2023 16:18:42 -0700 (PDT)
+        bh=BfDQBScYxSUnSyfi4Uo6dvpGeAqp/VpjWLErGf4V/4Y=;
+        b=P7ZfCdcv3cZJKSfRXmVt7xBi6OTuez3Y8wt9lP89UtI8m7VgpKa4dl5V0JaoMCM6yn
+         tWstdBKvy23tEy6DdmTkmzHF4jlpFwgx1vgIMJ5X0QuLOV6Apz8ttSmzbzINjJcquN7J
+         Te81fZvpAWQY/Rbtc/0eV3VAcAay8/Jl1DWEngRhqgqlzi9MrvssdX7dbh1lgEhOHVbt
+         nYEcZs/tVYJmSqZh+/E8tbmzTi5pP+VMJAYNdB0fwpHtrfbmLLGmtaebPfX3DZqcace8
+         /m98m1bKFWSo7MTs9jN+K8fupvcRbf9KTmkpmr/ZU04NRiZam9wdXKtHZO76WgXL0YsJ
+         dpDA==
+X-Gm-Message-State: AOJu0YwP57aZQjvPmsY944x+D8dU9Kd5TbCNHL2Rur5SYsfaf0KrPBeo
+	PrA9X7My914GThl4JTJrz4VsCA==
+X-Google-Smtp-Source: AGHT+IEQQoskUukjcV6UR3tDbZMEU82tUa1GjjWkAWraorZYJdgm/37PjJsSVWQuLq54fcBY2UxXAw==
+X-Received: by 2002:a17:902:d4cb:b0:1c5:d8a3:8783 with SMTP id o11-20020a170902d4cb00b001c5d8a38783mr1089962plg.11.1696375126989;
+        Tue, 03 Oct 2023 16:18:46 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b0026d214a2b33sm131393pjb.7.2023.10.03.16.18.41
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902868200b001bde65894c8sm2155966plo.268.2023.10.03.16.18.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 16:18:41 -0700 (PDT)
+        Tue, 03 Oct 2023 16:18:46 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Tony Nguyen <anthony.l.nguyen@intel.com>
+To: Simon Horman <horms@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Shiraz Saleem <shiraz.saleem@intel.com>,
+	Simon Horman <simon.horman@corigine.com>,
 	Jakub Kicinski <kuba@kernel.org>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Gurucharan G <gurucharanx.g@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	oss-drivers@corigine.com,
+	netdev@vger.kernel.org,
+	Louis Peens <louis.peens@corigine.com>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
@@ -48,9 +52,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] i40e: Annotate struct i40e_qvlist_info with __counted_by
-Date: Tue,  3 Oct 2023 16:18:38 -0700
-Message-Id: <20231003231838.work.510-kees@kernel.org>
+Subject: [PATCH] nfp: Annotate struct nfp_reprs with __counted_by
+Date: Tue,  3 Oct 2023 16:18:43 -0700
+Message-Id: <20231003231843.work.811-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,20 +62,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1338; i=keescook@chromium.org;
- h=from:subject:message-id; bh=XJmzLNCWCq9YJs2cHWDwGPsTN/+2AuiJN1wF3YGzDV0=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlHKFOp5cWExP0FGb1XOfa88nHjK8wg6ypG15KM
- sMyDpMQtHCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRyhTgAKCRCJcvTf3G3A
- Jk2cD/0X92kJJBn7TO38jm2i1YhnSulInssq7vfXn13tXcHB299D7h/dNsj2MS45px/FmCwSHbL
- O8Gt4OGxRF6xt8udrKExaljjXh9erDJMgs/pvTdQZakYtRpZqizAN34S0sXXjEYaGHR74sAziqf
- LeMGpPzsQoC8RjpdiJGpClQSAjkk2ms/ZkQW8ClLsCmgRcpslZmZifY3UhW7KBKsYZMLCVRp07k
- 7/dWHhYhNT0i5GSnU1eCTTjvPk8tCY7suSKbBw40JmMsZ6W34OdUhAKUUBPvCHt+RoY7olPaPvT
- cXtC8x8tjREOv/pP7lMLDdXxsD9y2qIdimDNoaVRispFjidmNbqgybVPS2ksQtpMxQ3bQR1uy4p
- ZqZ792mGi2W+YH6Hxkf2/Sh9XmFSwMwPmYfcI3z8SyqN3tJJGoZKTebTK+R9tKkgzkrJtT1FrPB
- Yz7ggeiZ1v3Vod+Y1aYyEpHvHJBpRkGKHOT1pbKihy1e14srFxJ+2u/sSx43Tha58iNTERjaIwh
- Hn44PyNLQDfiSS3P155/ty3NdovaUsvTC6pPGBqAk0OU8AUSoaha+EcIJnU4yxLsWNxt171z082
- CgdMMNgYFnZ6eBo7ETY54sYXh1/rzDPF1CqFF8sc6Fb5uN4jYQPSUdNZQGc3d3mW6vuwRMtTFcZ
- DdbEI8a HM7vhe5A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1385; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=GBdZ/bN+5XfvUCtrP1SCYpOVG1FCyQF4BGZ+0KiNObU=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlHKFT3XcaVjq8M5JxizadLIhdl5wOFCRk4jHmt
+ IqwNVjEepmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRyhUwAKCRCJcvTf3G3A
+ JjtdD/9D9R+8v9dgd3XY2WHug3rJjyK4+8aPw1mMYmILmQAYJrviLmccxjiM3F8I8PdZetcj6SX
+ RbH4C+nQWdw5ItnpPFkHGDihNWS9JWqOKv+oGkwUa3Whsf7iRHBvZf7uB/OgbdEO293mVpH28xd
+ KbDCTzrjImpUo55jjiQpypeXtqmMx9ETglaTTFwQcsy0AFJijWbvSS8agYnozYrZRQ/PImZqVtX
+ SFpz7g3JLBAoGdtYE9fQ7jjJ03qrd+ZQrvXLw9SIaO9HFyflrYGihTFC1VCzd7kPAwollvn4m97
+ HH7yUiaKoVQDlXMiCxjF1SJJJ5QIFF+rmU+yQNBLg/yzGofvOSNIHLJHsBoI1WCt1cuuf0mnJaC
+ +99noNzwMdxYbz2ty0nd3nkKAgq9GWcgxUmxwAnh6DyTzhCdCyXTQFbQdFIwQPWMkk3XZzW/MBM
+ oi4Nl8a1A7APm4f2ShQWBNUF+X5+K4WiwWDDm02GDNhGbhd8g4SqOBl0/u8VfysAI6ItMlF6Bmr
+ hypptMkfiJr5Kgaw9lCUFKeoF4buVYEhf6KaQp/5D+vPYIEYbR/LYJZQC4OIlgi8AOgnMELTjFx
+ ToEkiMcod9orNCiC8N2Sp0fIEREqeIVvOYH/MV1ScmN7S/nb6gSwPSSvo5KhnEOicTn5xHj2QxY
+ Xabvqd3 WXqLy3lg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -81,33 +85,34 @@ their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
 array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct i40e_qvlist_info.
+As found with Coccinelle[1], add __counted_by for struct nfp_reprs.
 
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: Shiraz Saleem <shiraz.saleem@intel.com>
+Cc: Simon Horman <simon.horman@corigine.com>
 Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc: Gurucharan G <gurucharanx.g@intel.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: oss-drivers@corigine.com
+Cc: netdev@vger.kernel.org
 Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/net/intel/i40e_client.h | 2 +-
+ drivers/net/ethernet/netronome/nfp/nfp_net_repr.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/net/intel/i40e_client.h b/include/linux/net/intel/i40e_client.h
-index ed42bd5f639f..0aa4411528fc 100644
---- a/include/linux/net/intel/i40e_client.h
-+++ b/include/linux/net/intel/i40e_client.h
-@@ -45,7 +45,7 @@ struct i40e_qv_info {
- 
- struct i40e_qvlist_info {
- 	u32 num_vectors;
--	struct i40e_qv_info qv_info[];
-+	struct i40e_qv_info qv_info[] __counted_by(num_vectors);
+diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h b/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h
+index 48a74accbbd3..77bf4198dbde 100644
+--- a/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h
++++ b/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h
+@@ -18,7 +18,7 @@ struct nfp_port;
+  */
+ struct nfp_reprs {
+ 	unsigned int num_reprs;
+-	struct net_device __rcu *reprs[];
++	struct net_device __rcu *reprs[] __counted_by(num_reprs);
  };
  
- 
+ /**
 -- 
 2.34.1
 
