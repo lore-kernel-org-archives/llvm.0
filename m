@@ -1,146 +1,121 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4281FF517
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:21:07 +0000 (UTC)
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3ae2896974bso870680b6e.0
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 16:21:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2D2F517
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:21:19 +0000 (UTC)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-99357737980so268789166b.2
+        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 16:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696375266; x=1696980066; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBFKpyW9pXC/chljQ3RVPO1a7/I5zD11PHOJtNgxGKI=;
-        b=idBtDMs8WuKuPGoLJrDOph2sNjuvFqdNhCI3CW6y1myPZlx3ShiCai4h+HZEo07GJ+
-         GsXZYTc+LqKukCRC2QS2BX0D0upH7VbMloBD8NsXACgmkq/oNjNXw7Qv3HjPfcokx1+u
-         jS8qgv0j8+60Xpqmyod3hlwxzlM8fxQ8D0mFs=
+        d=google.com; s=20230601; t=1696375278; x=1696980078; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+NEDkCvEYEdfp18YGZL4PXY8c/uK5lT9K+U1l2rQw9o=;
+        b=wtQ+l4gFv1dbO6zyELPmd0wPVJRKjX08qwgER0bF/ZsC/ZUrxyL2O0agDgLFwWZHk9
+         KainRmBn8TYiQ5EinOPQMlnYZWIDs13j9M58kAqCctP+1ZMspJ8wUztiZfo+p8tc5pKL
+         RMT6j90dl7QzRAdlVj0ofjQ6g11sl1+UYAXjYn/sDz6jWyqYUKv7wNp+bsC60qBFESB5
+         0MEhO7jdXmjVs06xurqnuy29sPWvQutfjfmdGarMoUj8wk1WigmVrlSP6xZ3m4bFjpJ/
+         /QWdIBpQ0nD62EE+k8gDgocmupVASXQSj1E6VRoc0NPKlK0cNnGEVntMQmTyluPYbziN
+         87Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696375266; x=1696980066;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zBFKpyW9pXC/chljQ3RVPO1a7/I5zD11PHOJtNgxGKI=;
-        b=HB/zJKfrSR8AAARK2yocgndAy65pMO2q7EEXzpoYMuKnu1+9HIjDwuhEs8+1xx5EuT
-         tcShlhiDNs4OSBlgOsZlJAl/cz1vH+qsKkZrrR95/YVjn5LK7dqnAcgp496ekjkFFPAP
-         tpxvwrZTJwTQ2Jt6ERlzCAxcgDiTg3nYLqKMWdOHL5ZYRvfHBZwufUsIpCnQlU24WHDa
-         kxohVCUGFgA1+47KWI5xnD2pQUbOvDuyl4CcgoxNNogLMWoF47u5Y6/+A9krijKY+8aI
-         qWGk/TKbgAcaslspRRi8Qay3jAJiYZuZ7cIl6liOebogmbAZ1oS341IaMgcdMcmm1Z/O
-         joJw==
-X-Gm-Message-State: AOJu0Yxl4Q5Pn9o3cVwRI73a2SFynsYWAuky2PaXQgBue9YJKMIzFGjm
-	9KKEBmV95BYtFCWZRGiQS3aFWQ==
-X-Google-Smtp-Source: AGHT+IGCof0Hqb3mPKc+AYcTgobw28lFfFAO65kr8ZCTc70Pbr/5ajX6F+9Wku/B1p579KNguN0XjA==
-X-Received: by 2002:a05:6358:279c:b0:143:2f7e:aa with SMTP id l28-20020a056358279c00b001432f7e00aamr833720rwb.28.1696375266337;
-        Tue, 03 Oct 2023 16:21:06 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090a65c700b00268b9862343sm129724pjs.24.2023.10.03.16.21.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 16:21:05 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: "David S. Miller" <davem@davemloft.net>
-Cc: Kees Cook <keescook@chromium.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	netdev@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] netlink: Annotate struct netlink_policy_dump_state with __counted_by
-Date: Tue,  3 Oct 2023 16:21:02 -0700
-Message-Id: <20231003232102.work.430-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1696375278; x=1696980078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+NEDkCvEYEdfp18YGZL4PXY8c/uK5lT9K+U1l2rQw9o=;
+        b=UoMPHlzbUvpPj5JzbC/hcknlr4SOnthR7mrisxB3m8ENvHftICg0/JXfeo+WEiIfud
+         KCZfjgcanDHcGFSFHisrRdqmoWJiTHjocqyH5TLw0rSo2bepJO7jp/E9iAlR6LbEluCJ
+         ZRr6usMZeep50NixZbV2likMZnyt5z6YjRUToo2mY4hGMqUFvQKEZ2+F2qprnjzjxen0
+         kjGckz6XrKuxvT10vwH4ZT1gvaZL9K1HRXC99LHQYdp/+YebFcSGnov1zEFyFfPFvNt1
+         tN3ep2xTGLG0s1wi+ruyozfc9oWuAezi9AS2bxv4d/jEMjY8QtLK8lnsh0jPangx3sto
+         MQgw==
+X-Gm-Message-State: AOJu0YyhCOnhh39ZktmpRIsK/ahcGV+j2mwUCcIo0/8d6n9LZnT9p7mS
+	0I5XE/0+avclW2FlmM0uTjEB15OOfLZSiFbALSIXrQ==
+X-Google-Smtp-Source: AGHT+IG0gPECXGw9A/gIAqloUi1ngSn5XzFSHXVfzJRfB8/udSmpuXSq+v3fUnb1mtCR9QBgn9maksQ6/PKW4YpLkUs=
+X-Received: by 2002:a17:906:3ca1:b0:9ae:55f5:180a with SMTP id
+ b1-20020a1709063ca100b009ae55f5180amr594658ejh.9.1696375277697; Tue, 03 Oct
+ 2023 16:21:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2411; i=keescook@chromium.org;
- h=from:subject:message-id; bh=AOFOpjhFJ4cNtC6OCXwo5LXfLCQZ4I9UO9j+h4yyfUs=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlHKHeX2lvqJ/DWVLVsK0XgYQdAiBj6vxjhY/Yt
- h5lBPgBr8iJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRyh3gAKCRCJcvTf3G3A
- JpbFD/90/nKxGOgPkTr6m5FPWz2QDZiqlWSseFGtlBSmRfwd74/AKir/9n+h2SPdpiYHhSm/ODj
- 51C82bHdtlFqYyi2OBiblShtD+quu3qiiSrWWZIT+5K96uTq3AcXZZbi/ovSimsx8/2Obpax6fz
- 80F/rONc9qVKXV9W/EEnYuNJF3sr79igF094ZYZYM7O69/7xHKfzFnK4pkbwOtVkSPvL2uHfELN
- 3bcaSwyUuRownQ2+/2nhM5BRhxDIWkQkqyWDmxCCx7mijOa8r6Wd3QjtjoJY/MuQaPrAPz1AHJy
- 3twQgCD5PnlE5UC4SQs78etQpqHTWwAUp1y4BhbVSA8jIkEBzJZF6DXcnqI52Fk2AYi1thlj1qt
- tPKeT4/aWr88J8MRfMSCZActXpIt8Yz4Cy8My6kyFZxlRrupFk42VxFZ01yS6td9FrQWj53VKdv
- qd5MkDrRBBpvDugLxBPLBWoIchJzKvGu0/zMvRBvD3HhqLUL0C6wC4/Iw5z7r6CW5ueDQeOB7/w
- W4ymWTWy124oUuEo4VWi9MJeZhyNkKN2BW3ryIoxvfaD4XOgt7yNfxbloUafYLZYY+GOLAppurQ
- UHjRxahSEzRMOZUYDp19l9tcD+ZRz8Gar+GHZUqnjHYm+yQLqroHP49nsGckTdqEpSEOp84biMe
- B/3psD5 QDKIWtDw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20231003231718.work.679-kees@kernel.org>
+In-Reply-To: <20231003231718.work.679-kees@kernel.org>
+From: Justin Stitt <justinstitt@google.com>
+Date: Tue, 3 Oct 2023 16:21:05 -0700
+Message-ID: <CAFhGd8p_o5xtmrV+Vm0JUR5VQmMenqtm3xbJuE0TSj-_4Bthfw@mail.gmail.com>
+Subject: Re: [PATCH] net/mlx5: Annotate struct mlx5_fc_bulk with __counted_by
+To: Kees Cook <keescook@chromium.org>
+Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+On Tue, Oct 3, 2023 at 4:17=E2=80=AFPM Kees Cook <keescook@chromium.org> wr=
+ote:
+>
+> Prepare for the coming implementation by GCC and Clang of the __counted_b=
+y
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>
+> As found with Coccinelle[1], add __counted_by for struct mlx5_fc_bulk.
+>
+> Cc: Saeed Mahameed <saeedm@nvidia.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rdma@vger.kernel.org
+> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples=
+/counted_by.cocci [1]
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/fs_counters.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_counters.c b/driv=
+ers/net/ethernet/mellanox/mlx5/core/fs_counters.c
+> index 17fe30a4c06c..0c26d707eed2 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/fs_counters.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_counters.c
+> @@ -539,7 +539,7 @@ struct mlx5_fc_bulk {
+>         u32 base_id;
+>         int bulk_len;
+>         unsigned long *bitmask;
+> -       struct mlx5_fc fcs[];
+> +       struct mlx5_fc fcs[] __counted_by(bulk_len);
+>  };
 
-As found with Coccinelle[1], add __counted_by for struct netlink_policy_dump_state.
+This looks good.
 
-Additionally update the size of the usage array length before accessing
-it. This requires remembering the old size for the memset() and later
-assignments.
+`bulk->bulk_len` is assigned before flexible array member `fcs` is accessed=
+.
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: netdev@vger.kernel.org
-Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- net/netlink/policy.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+        bulk->bulk_len =3D bulk_len;
+        for (i =3D 0; i < bulk_len; i++) {
+                mlx5_fc_init(&bulk->fcs[i], bulk, base_id + i);
+                set_bit(i, bulk->bitmask);
+        }
 
-diff --git a/net/netlink/policy.c b/net/netlink/policy.c
-index 87e3de0fde89..e2f111edf66c 100644
---- a/net/netlink/policy.c
-+++ b/net/netlink/policy.c
-@@ -21,7 +21,7 @@ struct netlink_policy_dump_state {
- 	struct {
- 		const struct nla_policy *policy;
- 		unsigned int maxtype;
--	} policies[];
-+	} policies[] __counted_by(n_alloc);
- };
- 
- static int add_policy(struct netlink_policy_dump_state **statep,
-@@ -29,7 +29,7 @@ static int add_policy(struct netlink_policy_dump_state **statep,
- 		      unsigned int maxtype)
- {
- 	struct netlink_policy_dump_state *state = *statep;
--	unsigned int n_alloc, i;
-+	unsigned int old_n_alloc, n_alloc, i;
- 
- 	if (!policy || !maxtype)
- 		return 0;
-@@ -52,12 +52,13 @@ static int add_policy(struct netlink_policy_dump_state **statep,
- 	if (!state)
- 		return -ENOMEM;
- 
--	memset(&state->policies[state->n_alloc], 0,
--	       flex_array_size(state, policies, n_alloc - state->n_alloc));
--
--	state->policies[state->n_alloc].policy = policy;
--	state->policies[state->n_alloc].maxtype = maxtype;
-+	old_n_alloc = state->n_alloc;
- 	state->n_alloc = n_alloc;
-+	memset(&state->policies[old_n_alloc], 0,
-+	       flex_array_size(state, policies, n_alloc - old_n_alloc));
-+
-+	state->policies[old_n_alloc].policy = policy;
-+	state->policies[old_n_alloc].maxtype = maxtype;
- 	*statep = state;
- 
- 	return 0;
--- 
-2.34.1
-
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+>
+>  static void mlx5_fc_init(struct mlx5_fc *counter, struct mlx5_fc_bulk *b=
+ulk,
+> --
+> 2.34.1
+>
+>
+Thanks
+Justin
