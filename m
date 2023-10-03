@@ -1,42 +1,40 @@
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768C7807
-	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 01:45:17 +0000 (UTC)
-Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE9FA28
+	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 01:45:23 +0000 (UTC)
+Received: from eig-obgw-6003a.ext.cloudfilter.net ([10.0.30.151])
 	by cmsmtp with ESMTP
-	id npJ6qHCYZnGhUnqwpqx3N2; Wed, 04 Oct 2023 01:45:11 +0000
+	id npJ5qpBftytxcnqwvqK2Z9; Wed, 04 Oct 2023 01:45:17 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id nqwoqN3hZ7MctnqwpqbOWt; Wed, 04 Oct 2023 01:45:11 +0000
-X-Authority-Analysis: v=2.4 cv=BZjLb5h2 c=1 sm=1 tr=0 ts=651cc3a7
+	id nqwuq64vL97qZnqwuq9XRZ; Wed, 04 Oct 2023 01:45:16 +0000
+X-Authority-Analysis: v=2.4 cv=aIrjFJxm c=1 sm=1 tr=0 ts=651cc3ac
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=Dx1Zrv+1i3YEdDUMOX3koA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=Q-fNiiVtAAAA:8
- a=Ikd4Dj_1AAAA:8 a=JfrnYn6hAAAA:8 a=NEAV23lmAAAA:8 a=cm27Pg_UAAAA:8
- a=VwQbUJbxAAAA:8 a=0yL73Cyy68KADmUz8mEA:9 a=QEXdDO2ut3YA:10
- a=Fp8MccfUoT0GBdDC_Lng:22 a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22
- a=AjGcO6oz07-iQ99wixmX:22
+ a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=QyXUC8HyAAAA:8
+ a=VwQbUJbxAAAA:8 a=NEAV23lmAAAA:8 a=cm27Pg_UAAAA:8 a=Ya94Id-Vmw91v3G0P5EA:9
+ a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ImoiuXHkkzYBkG9LKuEgSe16wxZXend4hMS2gVLnqeU=; b=Ub75atfzUGXufNj+3tjZebWBx8
-	Crenc6HJ6Yl/4YCNWrD0qflFAMM0WdKD2DxyvfKpjk6idLxTSpJrZ13D7INnqMbF7FxnMsM68mmz5
-	dVb6fJ4snbVd6ANUBT+Ouwek6qAgeNcYAk5fwkyhSI2AtttDKbezk3RvUbxeJSTYbO3DryQMI/YH6
-	d9PL+p6V6cCcMI0lQ+EpnSvVnxKnaGE091zU7nookkT9KArJwZARY4H6BaU+VIsPm7CGQ2FlrRhEP
-	YCFxAF19FBXDPDAv740N9cxlo9gZEz+/DWvFSOc14o79yum/wICE772FHji9KnyFE94fgkguBxqzW
-	Brsn+lTA==;
-Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:58730 helo=[192.168.1.98])
+	bh=oUTcrB8y0U/ZeJDKrciZRPYgeYAFIfr5RUqYNxtqMgI=; b=SS3mVSfxR5i7AXjWHDiZ0XaEwo
+	rk0kvAPo565hAxsj9PytvyqKROMyi0+sdiAUZPz1WP0M7U8bKvp39b/VkK91d7bXZp5K2RkiVD1xg
+	LgJL096IbKDEpFuxfv7AmN1oN9u3Gxuj2GTBUumPs0oza15c0ztomFouUx4sUbzMm1ejb1QMA+S1S
+	WxQO0/ZaZcdUVBLZmS++LqMv43obHFl5LHbl53omxyP+mOHjETHDpzcy+7WloqbY2L8E5nnHA1RZh
+	aDykUoIPgwwX0f8dKxiEpWsPhJueICZrTvUrrDNxZhJHE+YQybOZcHjhjo6Ifpcjqoch88yhjkuUw
+	fwYmvrfA==;
+Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:35240 helo=[192.168.1.98])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qnp1W-001Wx8-2Y;
-	Tue, 03 Oct 2023 18:41:54 -0500
-Message-ID: <e2bf83bf-7832-aa1c-bf7a-bbc0d311b25f@embeddedor.com>
-Date: Wed, 4 Oct 2023 01:41:49 +0200
+	id 1qnoz3-001Tcu-2P;
+	Tue, 03 Oct 2023 18:39:21 -0500
+Message-ID: <87a74ca5-13fc-f8ec-5e54-66836532ada7@embeddedor.com>
+Date: Wed, 4 Oct 2023 01:39:16 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,20 +43,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH] nvmet-fc: Annotate struct nvmet_fc_tgt_queue with
- __counted_by
+Subject: Re: [PATCH] i40e: Annotate struct i40e_qvlist_info with __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, James Smart <james.smart@broadcom.com>
-Cc: Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- Chaitanya Kulkarni <kch@nvidia.com>, linux-nvme@lists.infradead.org,
+To: Kees Cook <keescook@chromium.org>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: Shiraz Saleem <shiraz.saleem@intel.com>, Jakub Kicinski
+ <kuba@kernel.org>, Jesse Brandeburg <jesse.brandeburg@intel.com>,
+ Gurucharan G <gurucharanx.g@intel.com>,
  "Gustavo A. R. Silva" <gustavoars@kernel.org>,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
  llvm@lists.linux.dev
-References: <20231003232511.work.459-kees@kernel.org>
+References: <20231003231838.work.510-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20231003232511.work.459-kees@kernel.org>
+In-Reply-To: <20231003231838.work.510-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -69,35 +68,36 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 94.238.9.39
 X-Source-L: No
-X-Exim-ID: 1qnp1W-001Wx8-2Y
+X-Exim-ID: 1qnoz3-001Tcu-2P
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:58730
+X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:35240
 X-Source-Auth: gustavo@embeddedor.com
 X-Email-Count: 0
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKvNvl6jMJRi6oxdDtc4pDx3WoJXTBUS68ChvlHqjZClxUOmFACmRTQ2a28mzZxN012Cs68+BZeF0Q+VtVDkqKNNuLugfOo0AOALhbKBeQvuLTR1080b
- n3ALqkWHcgTCGbBOsGrE/9W5vRR+Q45peuP6qOy9Y25xCF3IuZ90Zy1huTFPIkD3n4/eufSXaCRb5wbISJLtCJb/wwmlJDm3ZmM=
+X-CMAE-Envelope: MS4xfG93En4kPkowlNSfJsN5+Y7xM7fw6lLVDHf+DAbqL9u18eqOrp6axgq5/KYFDR0xp6e6KitPP0EQMR4nM+D4dwR0zUtVy+N5P4AKIDW5hgTt3qDHnpRm
+ KMRtEFJ6MUu+CwaN8a6k3udrqrhRy8KLUEqnv46+nviCBUVqSkRrvgpV1kXmz8qMXcDHj5dL0jT16peYW/3MW72R7kj4a+JlscY=
 
 
 
-On 10/4/23 01:25, Kees Cook wrote:
+On 10/4/23 01:18, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
 > array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct nvmet_fc_tgt_queue.
+> As found with Coccinelle[1], add __counted_by for struct i40e_qvlist_info.
 > 
-> Cc: James Smart <james.smart@broadcom.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Sagi Grimberg <sagi@grimberg.me>
-> Cc: Chaitanya Kulkarni <kch@nvidia.com>
-> Cc: linux-nvme@lists.infradead.org
+> Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
+> Cc: Shiraz Saleem <shiraz.saleem@intel.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
+> Cc: Gurucharan G <gurucharanx.g@intel.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 > Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
@@ -108,19 +108,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/nvme/target/fc.c | 2 +-
+>   include/linux/net/intel/i40e_client.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/nvme/target/fc.c b/drivers/nvme/target/fc.c
-> index 1ab6601fdd5c..0fa2d658cdeb 100644
-> --- a/drivers/nvme/target/fc.c
-> +++ b/drivers/nvme/target/fc.c
-> @@ -146,7 +146,7 @@ struct nvmet_fc_tgt_queue {
->   	struct workqueue_struct		*work_q;
->   	struct kref			ref;
->   	struct rcu_head			rcu;
-> -	struct nvmet_fc_fcp_iod		fod[];		/* array of fcp_iods */
-> +	struct nvmet_fc_fcp_iod		fod[] __counted_by(sqsize); /* array of fcp_iods */
->   } __aligned(sizeof(unsigned long long));
+> diff --git a/include/linux/net/intel/i40e_client.h b/include/linux/net/intel/i40e_client.h
+> index ed42bd5f639f..0aa4411528fc 100644
+> --- a/include/linux/net/intel/i40e_client.h
+> +++ b/include/linux/net/intel/i40e_client.h
+> @@ -45,7 +45,7 @@ struct i40e_qv_info {
 >   
->   struct nvmet_fc_hostport {
+>   struct i40e_qvlist_info {
+>   	u32 num_vectors;
+> -	struct i40e_qv_info qv_info[];
+> +	struct i40e_qv_info qv_info[] __counted_by(num_vectors);
+>   };
+>   
+>   
