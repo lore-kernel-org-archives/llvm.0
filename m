@@ -1,41 +1,42 @@
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA01405CF
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:34:02 +0000 (UTC)
-Received: from eig-obgw-5008a.ext.cloudfilter.net ([10.0.29.246])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051E4405CF
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:34:53 +0000 (UTC)
+Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
 	by cmsmtp with ESMTP
-	id nlgjqDwTZQUgRnotnqzUyy; Tue, 03 Oct 2023 23:33:55 +0000
+	id nlgAqSgxOIBlVnouCq6Sju; Tue, 03 Oct 2023 23:34:21 +0000
 Received: from gator4166.hostgator.com ([108.167.133.22])
 	by cmsmtp with ESMTPS
-	id notmq4kWq2F81notmqgAuN; Tue, 03 Oct 2023 23:33:55 +0000
-X-Authority-Analysis: v=2.4 cv=a7wjSGeF c=1 sm=1 tr=0 ts=651ca4e3
+	id noucqiq8MP16Snoucq35yy; Tue, 03 Oct 2023 23:34:46 +0000
+X-Authority-Analysis: v=2.4 cv=H7PIfsUi c=1 sm=1 tr=0 ts=651ca516
  a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=Dx1Zrv+1i3YEdDUMOX3koA==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=Ikd4Dj_1AAAA:8
- a=VwQbUJbxAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=20KFwNOVAAAA:8
+ a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=J1Y8HTJGAAAA:8
+ a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=UdgJPzOXAAAA:8
  a=NEAV23lmAAAA:8 a=cm27Pg_UAAAA:8 a=YSKGN3ub9cUXa_79IdMA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=y1Q9-5lHfBjTkpIzbSAN:22 a=AjGcO6oz07-iQ99wixmX:22 a=KnbsgnSzWpVRoYk4pcrV:22
+ a=xmb-EsYY8bH0VWELuYED:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=YH/AzHDtLtkSEGt7f3Aw5RIuOoFUwUUQWzrJUM+SNVg=; b=FJwdy7+XrdhVMaIBv+J5fhB78l
-	V8yT1VCXDuhn0PacsFLb2Q91XIFt1AS6ShKoVNS7wn3fyMT8FBAkLDvnwjL1YcYcDaO+IX2pjhO5L
-	h7ovVuHJ+m9KiWfooJbQr2PuzxqoFJvWzJxvPbk9d0q/rVzoZAuN0sfm2YBjrxl6HUXvUNZTmhBNY
-	jBBwkuf2vEAWjhUoKjEe2Sr919q5kjzzH8snes0a/VBTfMpmI/VFaV0Q4oFlzJaQJB+S65CEZy14g
-	jquaqYm6ddGHx2EZQ+iZD59gkYcvIUjt1yXeUTQiK8K6UP4Cp0udpddc98Yukv2jgB2wyyEtoI6NL
-	NGu2VvaA==;
-Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:44052 helo=[192.168.1.98])
+	bh=i/hUv4+ytD1P43rCL9hPeq8agMfH6PMicmCbzbXo1wA=; b=vo1uR57egHfNwa+FvtjzdrmAsD
+	3hGhojJYgGG2F7BQbv7kIzziK+L5TzTlSwxqbXw34YzKO7Fgqkb50sVYH3tHR8wc+7lyRF22+gQj2
+	2wjWxlWoGsDAqZz3EwNDUALB3YzFAak0UW4EUiBLq+AsSn4yqBVrRpJwsKp3MNNTsxU4uIVQx6rXw
+	ALc+MpHMuEGSo5XyCw/AiRBuS0LVp4mAL0ApXRRw2h8mKpnHEa6KwwZZCnRRKWVK+IXIEp09vlWe4
+	j5T6cwOQyy3eVjXCTIOxanimiwzt4yP0EQJe0oeJ6UC45WH2GVPbDiptI5nafoTg9niCViBfFCCdl
+	ALcaJx3g==;
+Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:46644 helo=[192.168.1.98])
 	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.96)
 	(envelope-from <gustavo@embeddedor.com>)
-	id 1qnotk-001PAI-0m;
-	Tue, 03 Oct 2023 18:33:52 -0500
-Message-ID: <dc9bfbe3-ada2-0549-e56e-975aecfd22b8@embeddedor.com>
-Date: Wed, 4 Oct 2023 01:33:46 +0200
+	id 1qnoua-001Pwx-0V;
+	Tue, 03 Oct 2023 18:34:44 -0500
+Message-ID: <44a4a0fa-0e26-f485-d3fc-54c892b2de3c@embeddedor.com>
+Date: Wed, 4 Oct 2023 01:34:37 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,22 +45,22 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH] net/mlx5: Annotate struct mlx5_flow_handle with
+Subject: Re: [PATCH] net/packet: Annotate struct packet_fanout with
  __counted_by
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Saeed Mahameed <saeedm@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+To: Kees Cook <keescook@chromium.org>, "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ Anqi Shen <amy.saq@antgroup.com>, netdev@vger.kernel.org,
  "Gustavo A. R. Silva" <gustavoars@kernel.org>,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ syzbot <syzkaller@googlegroups.com>, Jianfeng Tan <henry.tjf@antgroup.com>,
  linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
  llvm@lists.linux.dev
-References: <20231003231730.work.166-kees@kernel.org>
+References: <20231003231740.work.413-kees@kernel.org>
 From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20231003231730.work.166-kees@kernel.org>
+In-Reply-To: <20231003231740.work.413-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -70,18 +71,18 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 94.238.9.39
 X-Source-L: No
-X-Exim-ID: 1qnotk-001PAI-0m
+X-Exim-ID: 1qnoua-001Pwx-0V
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:44052
+X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:46644
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 17
+X-Email-Count: 33
 X-Org: HG=hgshared;ORG=hostgator;
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAQ8GwsvdS8yBdbVtfnFURq4Lxm0AAA2S7vmGOvaW6NZs9Fi2xid2iVQl5CoxMkJnPtri/lg80ATEuvIZw/auEXRU/qM7mHQaKTHtwDS8qtqLDYSE6mq
- 6PGnx4ukv7CEaXYVrgdBY03/ukKPbc5EbhsEFUs73OMmpe57PI87KUAydtnd9IjemJjxA8fxA19JHfstM+JUXe//sbLYz6yH8do=
+X-CMAE-Envelope: MS4xfBBoZmkFKLdFSssnyNa9EZXOW+stgJ8YZh61kpRHIlgfUQ8IFVmkEA/YGurWFyabbVog8PDPHFErk6G7SmyPu98CRB7G+mxXVzhjhSKyPgqKskXAuLCQ
+ l6rGV4LOiRWHPA8TiNCY9WGaCpkeMECddFUFb6gU3skT/k+C05jbRax3ktAcHWyPkv0vtQiyeEKb9GKypCnbEdNiXb1KKBi9KjY=
 
 
 
@@ -92,16 +93,15 @@ On 10/4/23 01:17, Kees Cook wrote:
 > array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct mlx5_flow_handle.
+> As found with Coccinelle[1], add __counted_by for struct packet_fanout.
 > 
-> Cc: Saeed Mahameed <saeedm@nvidia.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
 > Cc: "David S. Miller" <davem@davemloft.net>
 > Cc: Eric Dumazet <edumazet@google.com>
 > Cc: Jakub Kicinski <kuba@kernel.org>
 > Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Willem de Bruijn <willemb@google.com>
+> Cc: Anqi Shen <amy.saq@antgroup.com>
 > Cc: netdev@vger.kernel.org
-> Cc: linux-rdma@vger.kernel.org
 > Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
@@ -112,19 +112,19 @@ Thanks
 Gustavo
 
 > ---
->   drivers/net/ethernet/mellanox/mlx5/core/fs_core.h | 2 +-
+>   net/packet/internal.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.h b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.h
-> index 4aed1768b85f..78eb6b7097e1 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.h
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.h
-> @@ -181,7 +181,7 @@ struct mlx5_flow_rule {
->   
->   struct mlx5_flow_handle {
->   	int num_rules;
-> -	struct mlx5_flow_rule *rule[];
-> +	struct mlx5_flow_rule *rule[] __counted_by(num_rules);
+> diff --git a/net/packet/internal.h b/net/packet/internal.h
+> index 63f4865202c1..d29c94c45159 100644
+> --- a/net/packet/internal.h
+> +++ b/net/packet/internal.h
+> @@ -94,7 +94,7 @@ struct packet_fanout {
+>   	spinlock_t		lock;
+>   	refcount_t		sk_ref;
+>   	struct packet_type	prot_hook ____cacheline_aligned_in_smp;
+> -	struct sock	__rcu	*arr[];
+> +	struct sock	__rcu	*arr[] __counted_by(max_num_members);
 >   };
 >   
->   /* Type of children is mlx5_flow_group */
+>   struct packet_rollover {
