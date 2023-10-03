@@ -1,110 +1,124 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914AD3FC2
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 07:28:38 +0000 (UTC)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-9ad8a822508so95085366b.0
-        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 00:28:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A173ED27D
+	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 07:40:07 +0000 (UTC)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-313e742a787so295884f8f.1
+        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 00:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696318117; x=1696922917; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ucqw6X61coCqcSfzC4WcVSLrJYNxmNxx1TxpbToBncM=;
-        b=bRt+9y6KIttkAm9qyPiFi3SZ/r3+vvZeLsRga8I2mSdfISeTEKGl0PBrZajd4oCSML
-         pPNdd0jJG5H+lTprKrdsOV/XkjgNaa5vnORBqRLl0VPe5FMtdH0lSVZukQVRJr/812KK
-         xCskOE83oM0E8wU5sVOI8BMdWgfWulB9RdzslgZKVSc25ZCQW5Czfp2NaRX6G/pwj6Iz
-         j/nvdZc4/N2KL5uoJcOrZc5D9iMUKeVQGuJvZB4yD037wGqncAKYpebgkZtG5Vfck+gk
-         0vHYv4ckNx/syyFH2xVRpaaBlZNQLmzWyyD6CuQv4sbg7o3uBunZwHBmIUhi7DKMQcXM
-         AIQQ==
+        d=linaro.org; s=google; t=1696318805; x=1696923605; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WfwaRtkJhgz1kzbARp9S8/ZcPDCtTZfWdoKPp3HywLc=;
+        b=mXcdTirZjT2vp8xAme856MKmDFocGVA/uKcW/pHs0KjS6GdikCIJgUtj4CUOB003Gf
+         Q8LJ83AWXuFzOcjp33Xwes/XLYuE6/vv9P7DgBIaGALSJaXXWCO2CWlm9TqeotoyywKH
+         Fw5AWCgc1wyUkbyt/vYiaK0E7OJMAoQu0Hy3HG/eGbNPmBaU/XCckKZXp2iwB/cS2Z2/
+         uHCQflEgfTTBCW0xqOWswj6LEhQ/Wwu99FTKVEwdQX5/SduzDmL/9Kq8p1C8R0YTSs9X
+         lRkndtQ1urrGAASvpIvAfK8ewmnTwTHBOQPbo9sPaddSqGcq9cRf3R24zrKc/a+7A9yM
+         cd+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696318117; x=1696922917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ucqw6X61coCqcSfzC4WcVSLrJYNxmNxx1TxpbToBncM=;
-        b=vU5CeDWShNsmQ9Xz25uvmaLkUuZ3r67a9rV/WuM1ifgRXyvTwtEElgKz/q2MAUSJJP
-         IjPgR+s3TVPusesK5Uo3GrgqXpi/bxneThYjhJeIty21FfH3I/EnHEfvV69qmSMjJTss
-         dsa5mba5qI8WBdS7lrRVOna5GBXbcOOZ30qJemzShbwVmcGkY23kfIE5/s8PpV6vmrSH
-         jPLQNrqn8fOhaxybIRtfb/bgD7P1KRVFPaYZMNpzWP3ZF/Q8OvXpFbtyt5d2dDtAIpox
-         xWjmc216+MbxBY7V3yQdRUXpeGSWNN3xIfP1cSeKpi8zfdhjLnAhbc2Eq7w8ikKWYkuR
-         TOrQ==
-X-Gm-Message-State: AOJu0YwA8ONETKp0u1Vj9DydbOXNgy8OAc1Wo+tvj0m0hm0wS4mTV0Px
-	aDXZeUuwo1FzbNlVb4tKtr0=
-X-Google-Smtp-Source: AGHT+IHZ1kAC1A1CZY/3XYlSuV9n6RlS+Vy/Q121wiJg0bkW6CqSl5x3L0h4EbFAyb+Kk5WhUPf4vg==
-X-Received: by 2002:a17:906:20ce:b0:9a1:e233:e627 with SMTP id c14-20020a17090620ce00b009a1e233e627mr13839558ejc.42.1696318116414;
-        Tue, 03 Oct 2023 00:28:36 -0700 (PDT)
-Received: from gmail.com (1F2EF530.nat.pool.telekom.hu. [31.46.245.48])
-        by smtp.gmail.com with ESMTPSA id r27-20020a17090638db00b0099cf9bf4c98sm567225ejd.8.2023.10.03.00.28.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 00:28:35 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Tue, 3 Oct 2023 09:28:33 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org,
-	x86@kernel.org, acdunlap@google.com, ashok.raj@intel.com,
-	bp@alien8.de, david@redhat.com, dionnaglaze@google.com,
-	hpa@zytor.com, jacobhxu@google.com, jgross@suse.com,
-	jroedel@suse.de, khalid.elmously@canonical.com,
-	kim.phillips@amd.com, kirill.shutemov@linux.intel.com,
-	llvm@lists.linux.dev, luto@kernel.org, mingo@redhat.com,
-	nikunj@amd.com, peterz@infradead.org, pgonda@google.com,
-	rientjes@google.com, rppt@kernel.org, seanjc@google.com,
-	tglx@linutronix.de, thomas.lendacky@amd.com
-Subject: Re: [PATCH] x86/boot: Move x86_cache_alignment initialization to
- correct spot
-Message-ID: <ZRvCoc8miXAjSenM@gmail.com>
-References: <20231002200426.GA4127272@dev-arch.thelio-3990X>
- <20231002220045.1014760-1-dave.hansen@linux.intel.com>
- <20231002222402.GA486933@dev-arch.thelio-3990X>
+        d=1e100.net; s=20230601; t=1696318805; x=1696923605;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WfwaRtkJhgz1kzbARp9S8/ZcPDCtTZfWdoKPp3HywLc=;
+        b=Yn+vDCNzmU/ilKkxW2hkpseD8EbFHIq3MBml8l/quhAw5wSzwdfoOqV/XQFnjvvEKS
+         Wdck8E6wLT0/B8G+7qKdtbDxRe3LBwbdtfVKIAjHn/lsBBdPs/4e+gwOHhI1ZZE24K8r
+         +iMTweWKO7lkho9EbY4yNYXifkoNds55OHEjjkujKIShueDw8doTOfnSoSBI3Le2wxoM
+         hoMloCAsqJD6pgYpXGYxecjBGfqkNDspJYs0tidq2VF9rNP/SXRwZMdUfT6bYZZU+Mma
+         LpsTd+PhvvX7XPt1KWl6q788rN/GWQBBHvhHTvzc1qhCJxKNqtd3D8/qQVYVvvKQzIhj
+         fkgQ==
+X-Gm-Message-State: AOJu0YwuYgy8YNVS87K6W/mYwXEXadEDYh4duJIf5RMUCNw9xeJz+fa7
+	ZnmrfQsETSyIDVbECa0VLPTcxg==
+X-Google-Smtp-Source: AGHT+IFQumuMjOTW1uKZQSkiTBfGJlr5/807UTqWQzzYkCW1RNhEqi/kZVZ3yktWLc1ySpsCpLVbYw==
+X-Received: by 2002:adf:e806:0:b0:31f:fa48:2056 with SMTP id o6-20020adfe806000000b0031ffa482056mr1239081wrm.27.1696318805632;
+        Tue, 03 Oct 2023 00:40:05 -0700 (PDT)
+Received: from [192.168.69.115] (176-131-222-246.abo.bbox.fr. [176.131.222.246])
+        by smtp.gmail.com with ESMTPSA id x15-20020a5d444f000000b0031c5e9c2ed7sm896779wrr.92.2023.10.03.00.40.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Oct 2023 00:40:05 -0700 (PDT)
+Message-ID: <1fbe8877-aaa5-1b6f-e18c-1d231a31d2e7@linaro.org>
+Date: Tue, 3 Oct 2023 09:40:02 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231002222402.GA486933@dev-arch.thelio-3990X>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.1
+Subject: Re: [PATCH] vfio/cdx: Add parentheses between bitwise AND expression
+ and logical NOT
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, nipun.gupta@amd.com,
+ nikhil.agarwal@amd.com, alex.williamson@redhat.com
+Cc: ndesaulniers@google.com, trix@redhat.com, shubham.rohila@amd.com,
+ kvm@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20231002-vfio-cdx-logical-not-parentheses-v1-1-a8846c7adfb6@kernel.org>
+From: =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20231002-vfio-cdx-logical-not-parentheses-v1-1-a8846c7adfb6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+Hi Nathan,
 
-* Nathan Chancellor <nathan@kernel.org> wrote:
-
-> On Mon, Oct 02, 2023 at 03:00:45PM -0700, Dave Hansen wrote:
-> > c->x86_cache_alignment is initialized from c->x86_clflush_size.
-> > However, commit fbf6449f84bf moved c->x86_clflush_size initialization
-> > to later in boot without moving the c->x86_cache_alignment assignment.
-> > 
-> > This presumably left c->x86_cache_alignment set to zero for longer
-> > than it should be.
-> > 
-> > The result was an oops on 32-bit kernels while accessing a pointer
-> > at 0x20.  The 0x20 came from accessing a structure member at offset
-> > 0x10 (buffer->cpumask) from a ZERO_SIZE_PTR=0x10.  kmalloc() can
-> > evidently return ZERO_SIZE_PTR when it's given 0 as its alignment
-> > requirement.
-> > 
-> > Move the c->x86_cache_alignment initialization to be after
-> > c->x86_clflush_size has an actual value.
-> > 
-> > Fixes: fbf6449f84bf ("x86/sev-es: Set x86_virt_bits to the correct value straight away, instead of a two-phase approach")
-> > Cc: Adam Dunlap <acdunlap@google.com>
-> > Cc: Ingo Molnar <mingo@kernel.org>
-> > Cc: Jacob Xu <jacobhxu@google.com>
-> > Link: https://lore.kernel.org/all/20231002200426.GA4127272@dev-arch.thelio-3990X/
+On 2/10/23 19:53, Nathan Chancellor wrote:
+> When building with clang, there is a warning (or error with
+> CONFIG_WERROR=y) due to a bitwise AND and logical NOT in
+> vfio_cdx_bm_ctrl():
 > 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+>    drivers/vfio/cdx/main.c:77:6: error: logical not is only applied to the left hand side of this bitwise operator [-Werror,-Wlogical-not-parentheses]
+>       77 |         if (!vdev->flags & BME_SUPPORT)
+>          |             ^            ~
+>    drivers/vfio/cdx/main.c:77:6: note: add parentheses after the '!' to evaluate the bitwise operator first
+>       77 |         if (!vdev->flags & BME_SUPPORT)
+>          |             ^
+>          |              (                        )
+>    drivers/vfio/cdx/main.c:77:6: note: add parentheses around left hand side expression to silence this warning
+>       77 |         if (!vdev->flags & BME_SUPPORT)
+>          |             ^
+>          |             (           )
+>    1 error generated.
 > 
-> Thanks for the quick fix!
+> Add the parentheses as suggested in the first note, which is clearly
+> what was intended here.
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1939
+> Fixes: 8a97ab9b8b31 ("vfio-cdx: add bus mastering device feature support")
 
-Thanks for the quick testing - I've applied this fix on top
-of fbf6449f84bf in tip:x86/mm.
+My current /master points to commit ce36c8b14987 which doesn't include
+8a97ab9b8b31, so maybe this can be squashed / reordered in the VFIO tree
+(where I assume this commit is). That said, the fix is correct, so:
 
-Dave, I've added your SOB - let me know if that's not OK:
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-  Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Regards,
 
-Thanks,
+Phil.
 
-	Ingo
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   drivers/vfio/cdx/main.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/vfio/cdx/main.c b/drivers/vfio/cdx/main.c
+> index a437630be354..a63744302b5e 100644
+> --- a/drivers/vfio/cdx/main.c
+> +++ b/drivers/vfio/cdx/main.c
+> @@ -74,7 +74,7 @@ static int vfio_cdx_bm_ctrl(struct vfio_device *core_vdev, u32 flags,
+>   	struct vfio_device_feature_bus_master ops;
+>   	int ret;
+>   
+> -	if (!vdev->flags & BME_SUPPORT)
+> +	if (!(vdev->flags & BME_SUPPORT))
+>   		return -ENOTTY;
+>   
+>   	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_SET,
+> 
+> ---
+> base-commit: fcb2f2ed4a80cfe383d87da75caba958516507e9
+> change-id: 20231002-vfio-cdx-logical-not-parentheses-aca8fbd6b278
+> 
+> Best regards,
+
