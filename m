@@ -1,42 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783A938DE6;
-	Tue,  3 Oct 2023 16:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F23F3AC1C;
+	Tue,  3 Oct 2023 16:29:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696349947; x=1727885947;
+  t=1696350565; x=1727886565;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3ikgXrOzo8Y/MGb3oTaGhh++Y0tW7btqJE45rVxvvxI=;
-  b=ZoV5veDff1TPc6k0NSm5ltLhhZQTIikWhLFFqtAtyMNz3hfWo30MHLRr
-   pEvFYZvEITqhBHfXKoIL6dVQkEeggZEOQ7FsyfPQo8TcemO3dM+h7J3Fi
-   ivyDeoVwu5maxRtyzub1Gkcq4iVtuCB8fk1jlpHlNt9UlNg1NQUe02soZ
-   4zAMzXy1Th9ekoxmTq4VeZ+2QzF4YQSn21UvqmAjmD49f1ke5KMDAKTHl
-   PUfGVnzKS7fQccTS1BMFQ4/V5g8GSfh8/us80irH+HZQk7y2y0ybNnPMn
-   ++a8lNA4naARoMrhj+rLbz6nLx3GJYS56/kB6oGVmxS6Ni2Qe00f8m28r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="367973732"
+  bh=tOiRGzikq6AjMrSOKT2pu9qctPRqG77ATQc2snODIBo=;
+  b=HL5nu4uovY8aomOBfu7kIMCTAfF0JbKLi0r76+1dKF0PrBal8XM9wXgZ
+   aghEKLxnglPdFsAa4F4INZ00nvH3z3Zci/ULfuohHZCrYHneA2MuFwWFc
+   XySxjWoFOsERQahrCj+pkI9aV3G0z6Ef9uo+j1R0YGmHFYObsZ4GxH6TZ
+   sDjuo4WaZ7fHqtwR5xikpi7p96cqiwFqYBWvsUld/Gp2LX6OsS3FidPOC
+   MwdPxkCc0eoMy+PvBVF2TjcsUTzS+XMb9RDsunrGDCjRqiQpz4qn3f0Sr
+   D3CjA+bJncG0+DEnXfZR6UN2mtpKU9rgmhc5ZQTsWlEq/yGI2G7wkIM1X
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="386788084"
 X-IronPort-AV: E=Sophos;i="6.03,197,1694761200"; 
-   d="scan'208";a="367973732"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 09:18:08 -0700
+   d="scan'208";a="386788084"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 09:29:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="874752777"
+X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="700768970"
 X-IronPort-AV: E=Sophos;i="6.03,197,1694761200"; 
-   d="scan'208";a="874752777"
+   d="scan'208";a="700768970"
 Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 03 Oct 2023 09:18:07 -0700
+  by orsmga003.jf.intel.com with ESMTP; 03 Oct 2023 09:29:09 -0700
 Received: from kbuild by c3b01524d57c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qni61-0007OR-06;
-	Tue, 03 Oct 2023 16:18:05 +0000
-Date: Wed, 4 Oct 2023 00:17:04 +0800
+	id 1qniGh-0007RM-04;
+	Tue, 03 Oct 2023 16:29:07 +0000
+Date: Wed, 4 Oct 2023 00:28:44 +0800
 From: kernel test robot <lkp@intel.com>
 To: Hengqi Chen <hengqi.chen@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [RFC PATCH 1/2] seccomp: Introduce SECCOMP_LOAD_FILTER operation
-Message-ID: <202310040027.1dNPiBPq-lkp@intel.com>
+Message-ID: <202310040012.kV4xilAy-lkp@intel.com>
 References: <20231003083836.100706-2-hengqi.chen@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,14 +63,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Hengqi-Chen/seccomp-Intro
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/seccomp
 patch link:    https://lore.kernel.org/r/20231003083836.100706-2-hengqi.chen%40gmail.com
 patch subject: [RFC PATCH 1/2] seccomp: Introduce SECCOMP_LOAD_FILTER operation
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20231004/202310040027.1dNPiBPq-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231004/202310040027.1dNPiBPq-lkp@intel.com/reproduce)
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231004/202310040012.kV4xilAy-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231004/202310040012.kV4xilAy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310040027.1dNPiBPq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310040012.kV4xilAy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
@@ -85,14 +85,14 @@ All errors (new ones prefixed by >>):
    In file included from include/linux/io.h:13:
    In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
    In file included from kernel/seccomp.c:29:
    In file included from include/linux/syscalls.h:90:
    In file included from include/trace/syscall.h:7:
@@ -104,11 +104,11 @@ All errors (new ones prefixed by >>):
    In file included from include/linux/io.h:13:
    In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
    In file included from kernel/seccomp.c:29:
    In file included from include/linux/syscalls.h:90:
    In file included from include/trace/syscall.h:7:
@@ -120,42 +120,42 @@ All errors (new ones prefixed by >>):
    In file included from include/linux/io.h:13:
    In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
    include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
    include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
    include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
    include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
    include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/seccomp.c:2034:8: error: implicit declaration of function 'security_bpf_prog_alloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           ret = security_bpf_prog_alloc(prog->aux);
-                 ^
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> kernel/seccomp.c:2034:8: error: call to undeclared function 'security_bpf_prog_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2034 |         ret = security_bpf_prog_alloc(prog->aux);
+         |               ^
    kernel/seccomp.c:2034:8: note: did you mean 'security_msg_msg_alloc'?
    include/linux/security.h:1245:19: note: 'security_msg_msg_alloc' declared here
-   static inline int security_msg_msg_alloc(struct msg_msg *msg)
-                     ^
->> kernel/seccomp.c:2043:8: error: implicit declaration of function 'bpf_prog_new_fd' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           ret = bpf_prog_new_fd(prog);
-                 ^
+    1245 | static inline int security_msg_msg_alloc(struct msg_msg *msg)
+         |                   ^
+>> kernel/seccomp.c:2043:8: error: call to undeclared function 'bpf_prog_new_fd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2043 |         ret = bpf_prog_new_fd(prog);
+         |               ^
    12 warnings and 2 errors generated.
 
 
