@@ -1,32 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C323018E21;
-	Wed,  4 Oct 2023 15:21:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDD3C433C7;
-	Wed,  4 Oct 2023 15:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696432879;
-	bh=E7cZ/FlLXrub42neFGaJKxogpVkDZQoCdql2oG03Dhs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MK9P99jugfqTT2rLKg5PKvwR+LsClUy/rZn7V3D7wcvxx2LGbRO/hcO7GGdi7358G
-	 qJSAVGul9GQMP89EIogrSM3x5w87pGv9vNfib+zvLmMZWb1Y55iN2Ex8DesdLHEonA
-	 LFLbzu65qk9y+6Mr8n6RoKpMYcssjEJpP4RcFlS57t7bxax+/CLuTcZZl1OmhBBcxx
-	 FjyG7YtZ0LaVLyuQUZOPiriSWWmD/GqDR44CJAIFgJ1Ke4WNPDCMcM8xwCkG5V30yy
-	 QstugLNfTtMUZhafP8J7jb/z1Fv5Ri3K8nO6tZUaosbbOuDCE3RFTf5kEhF+Z7v3DE
-	 /jFzs8J+6N22Q==
-Date: Wed, 4 Oct 2023 08:21:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alexandre Ghiti <alex@ghiti.fr>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	conor@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-	samitolvanen@google.com, twd2.me@gmail.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v3] RISC-V: build: Allow LTO to be selected
-Message-ID: <20231004152116.GB2580510@dev-arch.thelio-3990X>
-References: <20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org>
- <f3e904ff-3ae1-b8ad-c400-7961f97b2b40@ghiti.fr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0DC18E39
+	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 15:29:18 +0000 (UTC)
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-65d01a847b3so14268756d6.2
+        for <llvm@lists.linux.dev>; Wed, 04 Oct 2023 08:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696433357; x=1697038157; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1pp3fcQ7FJOqborLPqxKyTwdh4X5c9UMKg0BftM+5OM=;
+        b=DsQA5ba8uzL5eUT2QZLzfbE7pYx5nxJyaSev5pmy9XNYS/xKXjFWmkyjf0BOt3VjYZ
+         MLpIn2wQxczKH5AlieC1+yuU8m/f30liOi8ldNyfXoKZksqWK4Z+fVN/j/VRL2LzFKkC
+         9b64dMG6K+Y4jukfX8x4aPlxk3pp4ry+/EGBWbI0kWwKsOewrMhJP6qfnYDQkTsM+GdA
+         Yv9p+0V4bgxA4EcQI/SoFG/L+7MsNK1SKfhWU95z4GWv6Xn5sNdJA4XKgWXN1PqeFcvZ
+         5lpEu98DO1l5F6qZgCj1QQGo1FQcO4acaFpwPPLgtV3F8FtkBdx9NtQAyLqCOsQjOkM+
+         9DYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696433357; x=1697038157;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1pp3fcQ7FJOqborLPqxKyTwdh4X5c9UMKg0BftM+5OM=;
+        b=szBgPz3XCpmH6Ho7iNrOWKwJw2P7ounv0jYdsKFibT/7+8hme0KE1LuwakbjAtNplA
+         tMVbVHLTaRp14W4AjJc9ump3W2ww8vQ28rEZHf2T3c/pmHEkTmA/2YuE4sfoMtL9TCnu
+         P6u/7QuW/h0/G1yiDOEtmS8IGg2JDKYLWg2+F5mracpbpix9ebmD1aZlAqNhSdme5k5q
+         sF/2nbOntzv3LcFyzoOe3GTQPLIztFm6SBp0jTZdQS3pEgS1kPSyovbNYLV7nW6sTcZv
+         CNfVNbpIBjUAn0iVjmI6y6WDZspo8If5OvEHkErcSJmycTKzP2+KaTYZP6o4UFMs4bzR
+         +avg==
+X-Gm-Message-State: AOJu0Yxz68r2keSZ0eO50MHNj23z4iTbdRlt+7Uj6EXsHK5V51m0OTGb
+	iQ6f+HfLS6C/gbKehi20h9Q=
+X-Google-Smtp-Source: AGHT+IErN77YwXwvT/7yy4wgBAH4cMWdYh0XlJUsosZnTUdal8Ue3ccamEsrM08lCtZNGjyn4NScDw==
+X-Received: by 2002:a05:6214:3019:b0:65b:150e:604b with SMTP id ke25-20020a056214301900b0065b150e604bmr2806646qvb.49.1696433357301;
+        Wed, 04 Oct 2023 08:29:17 -0700 (PDT)
+Received: from luigi.stachecki.net ([65.115.226.163])
+        by smtp.gmail.com with ESMTPSA id c12-20020a0cca0c000000b0065b21b232bfsm1389520qvk.138.2023.10.04.08.29.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Oct 2023 08:29:16 -0700 (PDT)
+Date: Wed, 4 Oct 2023 11:29:13 -0400
+From: Tyler Stachecki <stachecki.tyler@gmail.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Leonardo Bras <leobras@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
+Message-ID: <ZR2EyUULbRpXW8wK@luigi.stachecki.net>
+References: <20230928001956.924301-1-seanjc@google.com>
+ <ZR0QOGo5DftkRWsr@redhat.com>
+ <ZR1Yt6Z+dhMbn/FJ@luigi.stachecki.net>
+ <ZR175enUCh3KkAU6@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,137 +63,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f3e904ff-3ae1-b8ad-c400-7961f97b2b40@ghiti.fr>
+In-Reply-To: <ZR175enUCh3KkAU6@google.com>
 
-Hi Alex,
+On Wed, Oct 04, 2023 at 07:51:17AM -0700, Sean Christopherson wrote:
+> KVM's ABI has no formal notion of guest boot=>shutdown or live migration.  The
+> myriad KVM_GET_* APIs allow taking a snapshot of guest state, and the KVM_SET_*
+> APIs allow loading a snapshot of guest state.  Live migration is probably the most
+> common use of those APIs, but there are other use cases.
 
-On Wed, Oct 04, 2023 at 11:51:26AM +0200, Alexandre Ghiti wrote:
-> Hi Nathan,
-> 
-> On 03/10/2023 21:16, Nathan Chancellor wrote:
-> > From: Wende Tan <twd2.me@gmail.com>
-> > 
-> > Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is an
-> > issue [1] in prior LLD versions that prevents LLD to generate proper
-> > machine code for RISC-V when writing `nop`s.
-> > 
-> > I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
-> > on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
-> > can boot to shell using an archriscv rootfs on QEMU.
-> > 
-> > I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
-> > KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
-> > successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
-> > image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
-> > `BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
-> > separate patch further.
-> 
-> 
-> Yes, I see 2 solutions:
-> 
-> - either use PUD mappings, which is not that easy because we'd need the
-> physical and virtual addresses to both be aligned on 1GB, which is very
-> unlikely (the kernel is generally loaded at 0x8020_0000). We could use a
-> relocatable kernel to offset the virtual kernel address though.
-> 
-> - or use a second early_pmd, which would make sense as we reserve 2GB for
-> the kernel mapping anyway, but I'm not sure it would work without a bunch of
-> modifications.
-> 
-> Let me know if that would help and I'll give it a try (unless you want to
-> take care of that of course!).
+I think the lightbulb just clicked, it is really this:
 
-Wende was the one who made that comment in the commit message, not me,
-so I won't be looking into this further, as I have little skin in this
-game :)
+> No, the VM will not have less features, because KVM_SET_XSAVE loads *data*, not
+> features [...]
 
-In my humble opinion, allyesconfig is not indicative of any real world
-scenario when it comes to kernel configuration or size, so when things
-don't work with it, I tend to think more along the lines of "don't do
-that then". A distributor is generally either going to distribute a
-kernel for one device (in which case, they may build every driver that
-they need for that platform into the kernel and turn every other driver
-off, which won't result in a large kernel size) or for multiple devices
-(in which case, they would want to want to build with modules as much as
-possible, which also won't result in a large kernel size). Neither of
-those scenarios is really represented by allyesconfig.
+I think I'm conflating the data vs. features aspect here and will have to
+revisit my understanding of the code...
 
-Furthermore, I am not sure that is really an LTO specific problem, it
-sounds like a generic "kernel is larger than 1GB" problem to me, which
-LTO could potentially show easier due to more inlining and such.
+> > Ultimately, this problem is not really fixable if said features cannot be
+> > removed.
 
-Cheers,
-Nathan
+> It's not about removing features.  The change you're asking for is to have KVM
+> *silently* drop data.  Aside from the fact that such a change would break KVM's
+> ABI, silently ignoring data that userspace has explicitly requested be loaded for
+> a vCPU is incredibly dangerous.
 
-> > Disable LTO for arch/riscv/kernel/pi, as llvm-objcopy expects an ELF
-> > object file when manipulating the files in that subfolder, rather than
-> > LLVM bitcode.
-> > 
-> > [1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
-> >      commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
-> > 
-> > Tested-by: Wende Tan <twd2.me@gmail.com>
-> > Signed-off-by: Wende Tan <twd2.me@gmail.com>
-> > Co-developed-by: Nathan Chancellor <nathan@kernel.org>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > NOTE: I tested LLVM 14 through 18 with defconfig + full/thin LTO and
-> > allmodconfig + thin LTO. allmodconfig + thin LTO with LLVM 15 and 16
-> > shows
-> > 
-> >    ld.lld: error: section size decrease is too large
-> > 
-> > when linking vmlinux. This appears to be resolved in LLVM 17 with
-> > https://github.com/llvm/llvm-project/commit/9d37ea95df1b84cca9b5e954d8964c976a5e303e
-> > (I did not bisect but the commit message lines up with the issue). I
-> > kept the existing version check because defconfig worked fine but we may
-> > want to bump it to 17.0.0 if randconfigs trip over this.
-> > 
-> > Changes in v3:
-> > - Disable LTO in arch/riscv/kernel/pi/Makefile, which was added to the
-> >    kernel after the submission of v2. This change matches arm64.
-> > - Link to v2: https://lore.kernel.org/r/20220512205545.992288-1-twd2.me@gmail.com/
-> > 
-> > Changes in v2:
-> > - Some textual changes suggested by Nick.
-> > - Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is
-> >    filed and resolved.
-> > - Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
-> > - Link to v1: https://lore.kernel.org/r/20210719205208.1023221-1-twd2.me@gmail.com/
-> > ---
-> >   arch/riscv/Kconfig            | 3 +++
-> >   arch/riscv/kernel/pi/Makefile | 3 +++
-> >   2 files changed, 6 insertions(+)
-> > 
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index d607ab0f7c6d..523640f7441e 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -46,6 +46,9 @@ config RISCV
-> >   	select ARCH_SUPPORTS_CFI_CLANG
-> >   	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
-> >   	select ARCH_SUPPORTS_HUGETLBFS if MMU
-> > +	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
-> > +	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
-> > +	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
-> >   	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
-> >   	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
-> >   	select ARCH_USE_MEMTEST
-> > diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
-> > index 07915dc9279e..b75f150b923d 100644
-> > --- a/arch/riscv/kernel/pi/Makefile
-> > +++ b/arch/riscv/kernel/pi/Makefile
-> > @@ -9,6 +9,9 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
-> >   		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
-> >   		   $(call cc-option,-fno-addrsig)
-> > +# Disable LTO
-> > +KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
-> > +
-> >   KBUILD_CFLAGS	+= -mcmodel=medany
-> >   CFLAGS_cmdline_early.o += -D__NO_FORTIFY
-> > 
-> > ---
-> > base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-> > change-id: 20231003-riscv-lto-f013beed8587
-> > 
-> > Best regards,
+Sorry if it came off that way - I fully understand and am resigned to the "you
+break it, you keep both halves" nature of what I had initially proposed and
+that it is not a generally tractable solution.
+
+That being said, I genuinely appreciate your jump to action on this problem!
+
+Thanks,
+Tyler
