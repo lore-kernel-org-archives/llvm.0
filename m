@@ -1,140 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38752805
-	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 01:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696382486;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KdPFsN91s1M1TKFtI4l4oNGxHjiGZXkAi/LcqiA6bS8=;
-	b=Jk/MuqBdcY886XTkmgDwapEjc96mds3KmKk1dM5KzsTKlPWTCNnWeKmscIAFiBc1MDKLIy
-	onbVdKDaA3bxLInc2ANoBL6KGbCp/rThl2HPfQe17zqTRKcJkU53nNUqWTBhaL5J32BYl1
-	8XafX8Zx6D/CIx/V9/Nbh8t+MYmc9s0=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-APyQUcGSNuypjuQNLMlGOQ-1; Tue, 03 Oct 2023 21:21:25 -0400
-X-MC-Unique: APyQUcGSNuypjuQNLMlGOQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 253DF3816C95
-	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 01:21:25 +0000 (UTC)
-Received: from [172.64.10.35] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0E26A2026D4B;
-	Wed,  4 Oct 2023 01:21:25 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
- (6.6.0-rc4, mainline.kernel.org-clang, 5e62ed3b)
-Date: Wed, 04 Oct 2023 01:21:24 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973F5807
+	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 01:44:53 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2773f2e599cso1150868a91.1
+        for <llvm@lists.linux.dev>; Tue, 03 Oct 2023 18:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696383893; x=1696988693; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6m+ltiUxBgyP6O6NGVJRhv6n+IMmSQtxpfXHOcBL8MI=;
+        b=ZXtpNaz+X248MEzSVzBNNs6L8z918GjHiJB/1FiIcK+tE+e/XTdzlnyHOH214JdO0F
+         VPRG9RkAP5eTmRlOnnbGvcwq3EKdvWQZUvlLiakVI9Ra5+2msdy2PAPUIlqfGLFOdZno
+         7aHaxh4wpGzLjEBHUGtSBOasi91VNHFFvtFwQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696383893; x=1696988693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6m+ltiUxBgyP6O6NGVJRhv6n+IMmSQtxpfXHOcBL8MI=;
+        b=kJX26D7MHFNHwugPebqCiQKZiC8GDwtALIZMBQBxUsr8dsN+koMves8ZeED7FyWKDW
+         /3TLCWOWaDjLZk7cKiCIF8TODwRn8IB5it6j2eXFLsjjdQhbSkUxsim4Wlyaf3XqIjP8
+         d7JZ3bWOCKdJaWkDZo/zuSkSV2x0I7djGt3p0SpcrdOLe8bMA1LeslQv64iNX9f8iJJb
+         4h0NxC+91icpmcN8nl1gXYrfp0DEkumC+A+IiDAMnwPXJltRchOkYR0mlfaQddAzw5Fb
+         8IntijAZZjyAvi3JkO6Z4Jgo/BsDM4aW8Q20Te5gv351Au9DzzoPogINty9M46RZnJF6
+         m6Bw==
+X-Gm-Message-State: AOJu0Yy2zX69WHsPJ3RaR3LDveJD88glTrPIkAbcMTereZqeI1f/0H/B
+	QBe7Wuxg3XrSSC1sbYJH0pOZxA==
+X-Google-Smtp-Source: AGHT+IHoFcFaJCYuiM/XpPveaXoTnc32bdzwR7t511qo6mo1UVxZdSWNTi7fDNbl77FYtG6vuNalPQ==
+X-Received: by 2002:a17:90b:164f:b0:274:735c:e2d3 with SMTP id il15-20020a17090b164f00b00274735ce2d3mr999366pjb.8.1696383892759;
+        Tue, 03 Oct 2023 18:44:52 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 13-20020a17090a030d00b0026971450601sm287996pje.7.2023.10.03.18.44.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 18:44:52 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: David Ahern <dsahern@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] nexthop: Annotate struct nh_group with __counted_by
+Date: Tue,  3 Oct 2023 18:44:49 -0700
+Message-Id: <20231004014445.work.587-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <42773.123100321212500333@us-mta-649.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1227; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=cMswho+iyVCS84W5fjbN8jRy801YZPgydXwTL+hQ8kc=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlHMOR/Qnr9xsjz+RFrB//RUqkmhmuWuLMRFIHY
+ H/zRm5APC2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZRzDkQAKCRCJcvTf3G3A
+ JuubD/4pBLzIK8LRipBfuGiuOfRseLiRbFNh1J5EeR0aFUlyz21VWo/ONGuXtGXOxgktDliVWxQ
+ pv0tg3RLvxJNCOGY0pFJOG7j7tgN8w7Tn1Eomvh7IHQ5UyysY1/txn95G/iwzma9N0e7cspWjOk
+ i71eVTwBrYMFx/XI4JIGT/Y9Zt1Z7uXKyqTlkZXE6kTi3ZsMUE37k9g0yX58iiGmmdLols1ocL0
+ rqjyPdN/KncryQkGHLsjMD3SXftQJUoKrZK61q7t0of7ZLGX8o4I0yTevYIk1imAMduLhWTqEYR
+ n5BRvPG5JvAE5d8L3VsggU36WF5pidU5c5RPVzoOeztl69WWEB9ecpndC9ok0Z2xCh48x36HD/G
+ G8235S8ONP14DbGP/eVc/1yqdWpS4vrLruFiJ1HySU5pHPtGQ2rcuJbbPDQx35xXPl6D7okwBw5
+ 6MMdORrwX7unzOIOhGIWeKBICZes22QAxOctpG8/+dcQkEIty1JY7KSivhZUA1pxzAp73DIoOtr
+ hNj60Fetls5Hcp93vQjT0Ls91cpLL/i80y2sZmrX6m/CIEexZMYuGUrLdBMlDJrEb/v487rDH+P
+ CEGyWn17nSifdO3/K+Cm1GoILthQET2DXe6j2wjQk5tbiB+Rs+XVL9eXb9mtQUGsB5NdyB+aJU3
+ MmGRBkZ wCCDJXzA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+As found with Coccinelle[1], add __counted_by for struct nh_group.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/net/nexthop.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/107222
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: readpage_elf: Attempt to read non-existent page at 0x4000000=
-000000000
-            URL: https://gitlab.com/cki-project/kernel-ark/-/issues/132
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/include/net/nexthop.h b/include/net/nexthop.h
+index 8f5a2ab45920..d92046a4a078 100644
+--- a/include/net/nexthop.h
++++ b/include/net/nexthop.h
+@@ -126,7 +126,7 @@ struct nh_group {
+ 	bool			has_v4;
+ 
+ 	struct nh_res_table __rcu *res_table;
+-	struct nh_grp_entry	nh_entries[];
++	struct nh_grp_entry	nh_entries[] __counted_by(num_nh);
+ };
+ 
+ struct nexthop {
+-- 
+2.34.1
 
