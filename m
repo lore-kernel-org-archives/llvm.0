@@ -1,130 +1,151 @@
-Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2102.outbound.protection.outlook.com [40.107.100.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4139610EC
-	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 04:29:11 +0000 (UTC)
-Received: from eig-obgw-5009a.ext.cloudfilter.net ([10.0.29.176])
-	by cmsmtp with ESMTP
-	id npJ5qTbb2IBlVntV6q7h9n; Wed, 04 Oct 2023 04:28:44 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id ntVWqp3nVmWDSntVWqDbDa; Wed, 04 Oct 2023 04:29:10 +0000
-X-Authority-Analysis: v=2.4 cv=HY0H8wI8 c=1 sm=1 tr=0 ts=651cea16
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=Dx1Zrv+1i3YEdDUMOX3koA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
- a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=20KFwNOVAAAA:8 a=NEAV23lmAAAA:8
- a=cm27Pg_UAAAA:8 a=YSKGN3ub9cUXa_79IdMA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Np9nBiTxn0Rc+Jk0CzgnPnVSZDyeBFquSntzh3G3+Ts=; b=phpkRVPgP5Chj1PUdqe/oOqQex
-	2s03lrJ+a32GyoaU36/fuprX+I5vC5wsm8AFyteRRelc2HJfElWVSekpcO63A6waG8Xr9H6cAqYN2
-	9ThRttvrJL5aqTyYrnSHKTMWuZYZRrD1yTcZKz552NeTY88B+Tz9qCbWZ36Z911VznCTmVch3i6Yk
-	fjIIaYpsESeROmjF01yfeqZF1KRT6qkE4qCN7jHVUeklDHQk6xd0LZY9ToI59ZDD7r8XIcuN+DPkc
-	ZQ1OAkjwvi1i8v041eM3sBKu++qOFxPrPV41krooz/2P3VCX/P6YFXfrh0rXNLQFVaWTa6LpiLsiP
-	5WTaEvpA==;
-Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:48072 helo=[192.168.1.98])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qnp0p-001VnQ-1H;
-	Tue, 03 Oct 2023 18:41:12 -0500
-Message-ID: <2ce176e8-4e5a-762d-d615-544a7b0d2b42@embeddedor.com>
-Date: Wed, 4 Oct 2023 01:41:01 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFD81C2E
+	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 05:13:22 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mHNiXOXxtNhouLTq6PRRLPHK7W4WFKXBUY4kANiBQkqJLLrFx8o2WxQ+DKQWjP66sFuTw4zpsqvveuoZxpJO5kdWavvbM94RQDkqWgTc1ac6Si89/CeIc7u9ARuQfZ1ScpkY3iCX+GTAWLrLuAyPLe2yaG8ZvimMGR3oo1XxReO0Vi6xa4fPVAZvbPqAGwZvFfAnzDkpfpCRwNIIL3uKguqL+2m5mmetOQa3RboN4mhUlmw+6JRLnhNL2cerEkfQeY+qFT2nHEfM92ZYuWYhOmOVY8aysEu4QlLHQGPTJuCaH4MzJ8Sj6NZqr/ST8ZwVG5KKijk8FA0V5D6OGOal0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ujsIH6B7MX90cG1QIfl9mLuTEjCvd0hKAsf0RJbCiAQ=;
+ b=JHKfPYDxAUo5nh+121BIU2jSWDhdUz+RJbo3T1/x4E/p76cTKzt3mAjiGhiCSgjIMsmFRhyhRuY80JrnaoT1CBdZVrHwdOO/mzRL+fsUnRGN5BJbUaSmet6QL+HPH3odKBhmG5sBJw7dMjdkx2Jqccnx5XIwN593TKqHmflGuZzvUO0hsy5RdWYEompBIIkyFqp7UUmeX6XRNMAdWNnC7T8Nzu+h+zPO488g7762ppQPPMIJNY0T0+Srhm3KfQM6rO4e00jgPTxTmxL4xmhOm00E0PVyGSfRhAlMh8RtwzInGbQytKlNTp5ISxtFw5ukDvIWLYCo7bdOKMaTYIKZ8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ujsIH6B7MX90cG1QIfl9mLuTEjCvd0hKAsf0RJbCiAQ=;
+ b=sLBWjykx8/IEyDNCS8c7KueqlAsv9b5jWurNWP1zd0CpAjLpdtFtTqoRxbD0kRv+cKbtXQmk/q6goC3sVovRd/Q1fTrGk4RL4GCG9GsPCfyqJoRH5sdBnHVkBO8FOHh5NjgnvOz9AF6KnvMeHTx/VFZDAYOh489A8G9E14i35O8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from DM6PR13MB4249.namprd13.prod.outlook.com (2603:10b6:5:7b::25) by
+ DM6PR13MB3721.namprd13.prod.outlook.com (2603:10b6:5:24a::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.33; Wed, 4 Oct 2023 05:13:19 +0000
+Received: from DM6PR13MB4249.namprd13.prod.outlook.com
+ ([fe80::6287:b0d7:3d05:a8b3]) by DM6PR13MB4249.namprd13.prod.outlook.com
+ ([fe80::6287:b0d7:3d05:a8b3%6]) with mapi id 15.20.6838.033; Wed, 4 Oct 2023
+ 05:13:19 +0000
+Date: Wed, 4 Oct 2023 07:13:00 +0200
+From: Louis Peens <louis.peens@corigine.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Simon Horman <horms@kernel.org>,
+	Simon Horman <simon.horman@corigine.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	oss-drivers@corigine.com, netdev@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] nfp: Annotate struct nfp_reprs with __counted_by
+Message-ID: <ZRz0XNOJaFUDJ8yN@LouisNoVo>
+References: <20231003231843.work.811-kees@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231003231843.work.811-kees@kernel.org>
+X-ClientProxiedBy: JN2P275CA0009.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::21)
+ To DM6PR13MB4249.namprd13.prod.outlook.com (2603:10b6:5:7b::25)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] nexthop: Annotate struct nh_notifier_grp_info with
- __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, David Ahern <dsahern@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- netdev@vger.kernel.org, llvm@lists.linux.dev,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20231003232146.work.248-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20231003232146.work.248-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.238.9.39
-X-Source-L: No
-X-Exim-ID: 1qnp0p-001VnQ-1H
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:48072
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfIm2k72d+tiStzcpGWqJefnidBz+RaIwELn2CywjMQboMx+vvSnaWXohYOsugB5TDv/Y9mSjcOvaiOWLhPEurS/9b0CqoTq3tAFFtS5sLLTXIuBvSyG1
- NafEO7bu2xOZ6mOm5ggLAu0yKMnDfIFZS2JgU02VYCY8UdXl3KOm79VZu8bKMEiJH7njqBXvMvhUBrIDomHc//GVi+s5CHpml3U=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR13MB4249:EE_|DM6PR13MB3721:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1048419e-4a2a-4fd6-f913-08dbc4989f3c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	BcLqzu248NgPizpvNHgSRl/wmBAAMZ1/fUFih7lFf7e8++bdL9uurp6uNmPVesDIBkkO/oss5fWoyHfFix+9wxq3L50qL4Kjlj+ezEaZsEQjThY55Dw5twXoE+NN5Xg6zjt+vNqIUoRkHs9ZijlX/TEjTNoZI+Zb+UlkHtqE5bnAJr3Mpqoe0uTIgN8LPqTgqAMLXBtGJtGkHSPuB+D9ZsTHWCBzJsYyTXlW3fypOKNruptB6a/dIeVZlx98Ta7HDZAkZIGHvhu65NT1gp8+A+Fq5r1LZn85XSnoLjjRBTpEUQLUUWiUPGzBnD24TOqoiYtZYqzharieN797/kaQMa1wq+gzuboz4THC7XVpZ+dwxxttTXyic2VvVacBS22bxgIJm8CdCVP52l9gnnleMVZZIQRurWVPvHnAXBClzQIOfwex8tVjLtjRPOxhqHAmJGNtOMCZFzbVXeR6ga9bLN9eMSq3U7GtDn4JsxD6eDNDFEED2vQyDrxHrsoETwcxteJkgLV7Tb4ytD6NHirXten5ELUebe0PnWwbaMl3HPi4gFGK8Nkh9j+jbCCBznNYPokbmIVxTtWPBPn3Xpis5j5puSWRasUCYI0akyeviXQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR13MB4249.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(39830400003)(136003)(396003)(366004)(346002)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(41300700001)(6486002)(966005)(316002)(6506007)(66556008)(6916009)(6512007)(9686003)(66476007)(54906003)(66946007)(44832011)(8676002)(26005)(4326008)(5660300002)(8936002)(6666004)(478600001)(7416002)(2906002)(83380400001)(33716001)(38100700002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?bfrIEYcD6jtZfd+YAhJ3m9svti2cklTBVsIxGBPuVsgvb7JeN8MUd6dqVGdL?=
+ =?us-ascii?Q?M2iARxMI1pSx3YJg9r32cAYKB1MpRv4q7jfvWETQ9nl5whbRFUQwXEJE7oiQ?=
+ =?us-ascii?Q?rXEM2FGLMHc1x2QVMH5UyCQFwIUtrEgzs+cf7iJIjF0mOWJDcJUAB8GvL6c1?=
+ =?us-ascii?Q?ZMdzDfeQ6Xix8ZDQbSl/AWSJhYGZ4rZhdcGU0YalH9WiHNMMYxrjv/c4XhBe?=
+ =?us-ascii?Q?gw8JK8ep11F19TRb8zsluPekcAZC/JpBSPO82s4gDejGpanf1OPwgK1QUXYq?=
+ =?us-ascii?Q?qBPS0H2niemcNmeIBmcYMplTkcsH1igod8db+v4zoPIyir4a3lE6cJ8NXXET?=
+ =?us-ascii?Q?kQYCiWty8hWw/QbkDvCilgPY1FSCb4wTI7w1yhv9FEUax+LPBp7HoiYvYvBU?=
+ =?us-ascii?Q?nePDUwFhTVtpuK70g096s2JPJZw+pkr0vmVtrDPceuQ56n7wUPbAUgUvbn7F?=
+ =?us-ascii?Q?DltC4nKavkifgcLXCzzjvKEfE1xts/KebEBv2DN8tGxxlW/gfTTXYoUoyTw4?=
+ =?us-ascii?Q?SosLHMpIDicIywPGXy6hXcZEvcX6gwWu6uJHCSoYLdOfLg8YIVpU8Xxazlfy?=
+ =?us-ascii?Q?vECejO2ZURO/EglWqfNav9vuuVwvEhY4Ost8UgnDFTjAhr1XyqrAULz/6oFZ?=
+ =?us-ascii?Q?iFa4g4e5zOWU9Lk9E2HUkt5B11WVtmLYeORaK+cWGQRpQAi93lqoMHni7EID?=
+ =?us-ascii?Q?zP3NE73Fbn7+1DheMH4MB0RWALvNGaKKMUTRarH5XlOuJpydBZOUNxpf9pTS?=
+ =?us-ascii?Q?zqPN2xrpMghGQnv4/JN+DG895Jl27qsy9vL05cR8c2Z1ej07FcL9XWlxyrzs?=
+ =?us-ascii?Q?iLvUyWss9ko2xkKQADlrIwoC6w2ZFsjrmVMExYySnI7oDK4BCDVpaJGk6nxV?=
+ =?us-ascii?Q?xEKST4+Df+7YnV05M31+DzeiQTYUXNyBHaQbsIBggmjB2+rWBZlf+WXihz6H?=
+ =?us-ascii?Q?OXJZTW/etLAgHS3idfUcjav2Apfqm8C+LoT1nbS2QIHjVUeGhgG8ufTycQoA?=
+ =?us-ascii?Q?t5tTG2UtzZGS173FbWZxnZWQcTVAiBEzxnu4F7YbARdqf+vAWDxr1TT5p2zU?=
+ =?us-ascii?Q?+WK7Njf6rZOjgUau8BlG3p8Xq4NKwuUZimPJ2Z19KOr6Cv4EAqfDr/HG99tr?=
+ =?us-ascii?Q?GsWyuWujoSYgEPHI+y8yA4GwlDkjoRwpG6x91tWqLcigd486poLpFAK6F7Jl?=
+ =?us-ascii?Q?BRhbVHOGZ8hYlengByoGdmz7w9hp8Tj4haTEzdqF9imIEO1Yo9bDC3+yXN6S?=
+ =?us-ascii?Q?4DUGZMna7hsR3+V+QNHwabaN+765VlXQpg8THYXzhrurW8R1Vlx2jVFnVkMg?=
+ =?us-ascii?Q?0R1nO7VpJWmflMykdz5eEjgA7RRJGLaVrakPbxLScJEaTcwqPnIVyByPxQOy?=
+ =?us-ascii?Q?nhmDiZNMczkv9yfKU23/Rf9ODm4ghGmqYpKU7xCYaAyWMTbENucBcltDgQNF?=
+ =?us-ascii?Q?rti6sKBi4D7ITq0MByGjUYwo8LwmjCZsUB5TTdfiWCG8F2BypVo6PIf16YWw?=
+ =?us-ascii?Q?PdRDrHQEWc0yn06vgqn0YgJavMzT2MOHSpWa+gtTnsvjNCkjlNizbVRpTB5C?=
+ =?us-ascii?Q?9fe2h69kaPcuqNJyX9uzGZVJO9REbhILPlIQfb0b1cDV27ZtbG20tGDkLFME?=
+ =?us-ascii?Q?HA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1048419e-4a2a-4fd6-f913-08dbc4989f3c
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR13MB4249.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2023 05:13:19.2546
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sNYsdON2dCSmfAf6mTh1suoSslhFiETM0EtLlGXH4ZRThkcuGef2PeHG2JsiezOsJmEbZM0hDoVut6lZC0FRJnv57ErnfJUWZJDLoSI2t/I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3721
 
-
-
-On 10/4/23 01:21, Kees Cook wrote:
+On Tue, Oct 03, 2023 at 04:18:43PM -0700, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
 > array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct nh_notifier_grp_info.
+> As found with Coccinelle[1], add __counted_by for struct nfp_reprs.
 > 
-> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Simon Horman <simon.horman@corigine.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
 > Cc: "David S. Miller" <davem@davemloft.net>
 > Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
 > Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Tom Rix <trix@redhat.com>
+> Cc: oss-drivers@corigine.com
 > Cc: netdev@vger.kernel.org
-> Cc: llvm@lists.linux.dev
 > Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
 > Signed-off-by: Kees Cook <keescook@chromium.org>
+Thanks Kees
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks
---
-Gustavo
-
+Acked-by: Louis Peens <louis.peens@corigine.com>
 > ---
->   include/net/nexthop.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/net/ethernet/netronome/nfp/nfp_net_repr.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/net/nexthop.h b/include/net/nexthop.h
-> index 2b12725de9c0..5dc4b4bba8a5 100644
-> --- a/include/net/nexthop.h
-> +++ b/include/net/nexthop.h
-> @@ -187,7 +187,7 @@ struct nh_notifier_grp_entry_info {
->   struct nh_notifier_grp_info {
->   	u16 num_nh;
->   	bool is_fdb;
-> -	struct nh_notifier_grp_entry_info nh_entries[];
-> +	struct nh_notifier_grp_entry_info nh_entries[] __counted_by(num_nh);
->   };
->   
->   struct nh_notifier_res_bucket_info {
+> diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h b/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h
+> index 48a74accbbd3..77bf4198dbde 100644
+> --- a/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h
+> +++ b/drivers/net/ethernet/netronome/nfp/nfp_net_repr.h
+> @@ -18,7 +18,7 @@ struct nfp_port;
+>   */
+>  struct nfp_reprs {
+>  	unsigned int num_reprs;
+> -	struct net_device __rcu *reprs[];
+> +	struct net_device __rcu *reprs[] __counted_by(num_reprs);
+>  };
+>  
+>  /**
+> -- 
+> 2.34.1
+> 
