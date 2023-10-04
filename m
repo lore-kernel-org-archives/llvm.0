@@ -1,186 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE116FAE
-	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 07:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696403530;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ogdl0KSnIs9uHB330mT8IMZQGmhaWVWoV431L0BUr2w=;
-	b=OgGIMvxYexVXz46KxszoPFJHQNEHFTCIC1Mes5qXZfJQU8pL20oOFHd1E+9u3qrZfuw7YX
-	gjnrwMcd3Krx6Jervdx0fGwHyVlLe0suoP15SX8tRdMCWKMB4Z4bINAU/pKjFHE2exfKS1
-	BsGNTeOllkLwS+j3KMZw/A/pWNV394k=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-iMuEvMy1OB2SlI9cRjmTkw-1; Wed, 04 Oct 2023 03:11:59 -0400
-X-MC-Unique: iMuEvMy1OB2SlI9cRjmTkw-1
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1c60d85fa2eso16850805ad.1
-        for <llvm@lists.linux.dev>; Wed, 04 Oct 2023 00:11:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696403518; x=1697008318;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E61E748A;
+	Wed,  4 Oct 2023 07:33:23 +0000 (UTC)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-68fb85afef4so1490504b3a.1;
+        Wed, 04 Oct 2023 00:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696404803; x=1697009603; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ogdl0KSnIs9uHB330mT8IMZQGmhaWVWoV431L0BUr2w=;
-        b=OBpcgcETv5I/CarcS6RApbweKw6xcY/5mGnxerA7l1IbQAyHSHAlLMyx7QiOpyhiUE
-         2l8FTH+uYe8c1drlvMRNDSUuCQLSHjcPfy0jkvOczoZLlk3y0O1sCyZW0lQoKtbiRVng
-         LC/6a02HZHpWr8Da7+Ow3tqFHusF0yL//R1mcl8N9sTIxwWGqwyJs0vMAsv4g0hVz5GW
-         fptTg6RE8ftYCuVxn3B4nlFPDqxxvSJUSZigDfjJ15pccOcsHJnhQxyGVUjOYaXj57FC
-         B63GlcDkkH4/YHsHfpX5E+9pgnq03zrlYQWaIWGmaRv6mV76SLINzOAUNwlNivnkOa0i
-         +F1g==
-X-Gm-Message-State: AOJu0Yy/3HRGWk0CCaJkVAxzXQPcUscJmcSzvUnDOcnVZQrXTSxpF7rX
-	0pYPkGvFzkUo7diBFcYFlX0YKHHEInrTW0T4iJT/T3hXT6DGGDhTCszbzQn/9SsbpW0GkRuXUWb
-	6NOPKMwrBBFdAOw==
-X-Received: by 2002:a17:902:ba8c:b0:1c6:28f6:954a with SMTP id k12-20020a170902ba8c00b001c628f6954amr1694538pls.64.1696403518408;
-        Wed, 04 Oct 2023 00:11:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG0/KWKMRn6u9ael6llbc5GIEtNFeP3dBPrSMq6zdIRSNSEh3iAJa6shAO4kYbSwC0nWEb1YQ==
-X-Received: by 2002:a17:902:ba8c:b0:1c6:28f6:954a with SMTP id k12-20020a170902ba8c00b001c628f6954amr1694518pls.64.1696403518099;
-        Wed, 04 Oct 2023 00:11:58 -0700 (PDT)
-Received: from redhat.com ([2804:1b3:a803:bd00:96e0:9a9b:ef6c:8085])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170903234100b001c728609574sm2864745plh.6.2023.10.04.00.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 00:11:57 -0700 (PDT)
-Date: Wed, 4 Oct 2023 04:11:52 -0300
-From: Leonardo Bras <leobras@redhat.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Tyler Stachecki <stachecki.tyler@gmail.com>
-Subject: Re: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
-Message-ID: <ZR0QOGo5DftkRWsr@redhat.com>
-References: <20230928001956.924301-1-seanjc@google.com>
+        bh=VkowXdKDAV9ozSJhzTKuFpAPuWb2aX6v74W5qb0n/iQ=;
+        b=bl96DO99PLYE6tb/PydkYjhSUYCHm8wIW4x+PTTlOqWujUwWIiz3piwl/tOfr77PFc
+         y7ex21dRKlCdtiObKE5sQte3iakrmcrmY9C62aLn/dBVJl0qsVnn7HwbMvOIm1U6HcHf
+         MNfzdSBM501PxZnt5fnmbxU5YPV5EhGhe82O9DlPXa6nkk+9uknsKaUdOByYFdEVBzRV
+         YuWgi0SbbXEw9xx0azZ1sTF/q4578VKiQlnOz3JI3aF9+R7HZsJ8Aif6k169+bbi+zrN
+         NG1b9fXd4VE60s/Zt/233KFrRrK6b86hKdTySbXM07dcnz740kdKsLm3MpmVuKErC5dd
+         fOLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696404803; x=1697009603;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VkowXdKDAV9ozSJhzTKuFpAPuWb2aX6v74W5qb0n/iQ=;
+        b=MOhZEs3wosiGG/Rv26Bzh7smzaGqff9yA+vb8JYXfco/18fpA6urlFGYOCFjJb2BNb
+         ZudJpF/dYF8LKu8kFyqQQKNpsMqZWYJEoq4h1rZXjoItVqHojwpBVYfXRCPYzKx7UKlg
+         sZ2i3y5wbMNr8J1QkP+YbAE5+GVY/A9UHVKK4wkpcVAqXnKMXB8Bju3OuaUiZ+MmHIjP
+         8wJSLMpGLhyV8EMEnQfxsfWM6oX/hMcAmREy123sc9xGK7gkLRFz9OPXzuMZoPEcLuHe
+         OT1IWBcxP7cmNp62oZp2EswHWBCRV5cj9tczgMHMfXJiDpGqC1ayoW7h/pCC5FKvc1SJ
+         lq1w==
+X-Gm-Message-State: AOJu0YyuOF/IGmVuMvMKdwng1EfTzQcECR9/47dKGW6ASyno0zbn7e/C
+	7cNt4VkuoA6IhWb9OcbRT/qBCzzQxC+0uiSJ
+X-Google-Smtp-Source: AGHT+IGFzGzCltUfrIGUGcXUyq5vEJqw+HItJlIOKOpSPzrlh/tt33vv6HuiosGbPT75UF1nyaQUkQ==
+X-Received: by 2002:a05:6a00:1911:b0:68f:f650:3035 with SMTP id y17-20020a056a00191100b0068ff6503035mr1823127pfi.12.1696404802783;
+        Wed, 04 Oct 2023 00:33:22 -0700 (PDT)
+Received: from [0.0.0.0] (jp.bgp.twd2.net. [2a0c:b641:571::1])
+        by smtp.gmail.com with ESMTPSA id z17-20020aa785d1000000b00690c7552098sm2546024pfn.44.2023.10.04.00.33.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Oct 2023 00:33:22 -0700 (PDT)
+Message-ID: <a337bd2b-34f1-4316-a0d5-18ba295badb3@gmail.com>
+Date: Wed, 4 Oct 2023 15:33:15 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20230928001956.924301-1-seanjc@google.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] RISC-V: build: Allow LTO to be selected
+To: Nathan Chancellor <nathan@kernel.org>, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org
+Cc: ndesaulniers@google.com, trix@redhat.com, samitolvanen@google.com,
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev, =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?=
+ <maskray@google.com>
+References: <20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org>
+From: twd2 <twd2.me@gmail.com>
+In-Reply-To: <20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 27, 2023 at 05:19:51PM -0700, Sean Christopherson wrote:
-> Rework how KVM limits guest-unsupported xfeatures to effectively hide
-> only when saving state for userspace (KVM_GET_XSAVE), i.e. to let userspace
-> load all host-supported xfeatures (via KVM_SET_XSAVE) irrespective of
-> what features have been exposed to the guest.
-
-Ok, IIUC your changes provide:
-- KVM_GET_XSAVE will return only guest-supported xfeatures
-- KVM_SET_XSAVE will allow user to set any xfeatures supported by host
-Is that correct?
-
-> 
-> The effect on KVM_SET_XSAVE was knowingly done by commit ad856280ddea
-> ("x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0"):
-> 
->     As a bonus, it will also fail if userspace tries to set fpu features
->     (with the KVM_SET_XSAVE ioctl) that are not compatible to the guest
->     configuration.  Such features will never be returned by KVM_GET_XSAVE
->     or KVM_GET_XSAVE2.
-> 
-> Peventing userspace from doing stupid things is usually a good idea, but in
-> this case restricting KVM_SET_XSAVE actually exacerbated the problem that
-> commit ad856280ddea was fixing.  As reported by Tyler, rejecting KVM_SET_XSAVE
-> for guest-unsupported xfeatures breaks live migration from a kernel without
-> commit ad856280ddea, to a kernel with ad856280ddea.  I.e. from a kernel that
-> saves guest-unsupported xfeatures to a kernel that doesn't allow loading
-> guest-unuspported xfeatures.
-
-So this patch is supposed to fix migration of VM from a host with
-pre-ad856280ddea (OLD) kernel to a host with ad856280ddea + your set(NEW).
-Right?
-
-Let's get the scenario here, where all machines are the same:
-1 - VM created on OLD kernel with a host-supported xfeature F, which is not
-    guest supported.
-2 - VM is migrated to a NEW kernel/host, and KVM_SET_XSAVE xfeature F.
-3 - VM will be migrated to another host, qemu requests KVM_GET_XSAVE, which
-    returns only guest-supported xfeatures, and this is passed to next host
-4 - VM will be started on 3rd host with guest-supported xfeatures, meaning
-    xfeature F is filtered-out, which is not good, because the VM will have
-    less features compared to boot.
-
-In fact, I notice something would possibly happen between 2 and 3, since
-qemu will run KVM_GET_XSAVE at kvm_cpu_synchronize_state() and
-KVM_SET_XSAVE at kvm_cpu_exec(), which happens quite often (when vcpu stops
-/ resumes for some reason).
-
-
-Also, even if I got something wrong, and for some reason qemu will be able
-to store the original VM xfeatures between migrations, we have the original
-issue ad856280ddea was dealing with: newer machines -> older machines
-migration:
-
-1 - User gets a VM from an OLD kernel, with a newer host (more xfeatures).
-2 - User migrates VM to NEW kernel, and we suppose qemu stores  original
-    xfeatures (it works). Migration can occur to newer or same gen hosts.
-3 - At some point, if migration is attempted to an older host (less
-    xfeatures), qemu will abort the VM.
-
-> 
-> To make matters even worse, QEMU doesn't terminate if KVM_SET_XSAVE fails,
-> and so the end result is that the live migration results (possibly silent)
-> guest data corruption instead of a failed migration.
-
-And this is something that really needs to be fixed in QEMU side.
-
-> 
-> Patch 1 refactors the FPU code to let KVM pass in a mask of which xfeatures
-> to save, patch 2 fixes KVM by passing in guest_supported_xcr0 instead of
-> modifying user_xfeatures directly.
-
-At my current understanding of this patchset, I would not recomment merging
-it, as it would introduce a lot of undesired behaviors.
-
-Please let me know if I got something wrong, so I can review it again.
++CC MaskRay
 
 Thanks!
-Leo
+Wende
 
-> 
-> Patches 3-5 are regression tests.
-> 
-> I have no objection if anyone wants patches 1 and 2 squashed together, I
-> split them purely to make review easier.
-> 
-> Note, this doesn't fix the scenario where a guest is migrated from a "bad"
-> to a "good" kernel and the target host doesn't support the over-saved set
-> of xfeatures.  I don't see a way to safely handle that in the kernel without
-> an opt-in, which more or less defeats the purpose of handling it in KVM.
-> 
-> Sean Christopherson (5):
->   x86/fpu: Allow caller to constrain xfeatures when copying to uabi
->     buffer
->   KVM: x86: Constrain guest-supported xfeatures only at KVM_GET_XSAVE{2}
->   KVM: selftests: Touch relevant XSAVE state in guest for state test
->   KVM: selftests: Load XSAVE state into untouched vCPU during state test
->   KVM: selftests: Force load all supported XSAVE state in state test
-> 
->  arch/x86/include/asm/fpu/api.h                |   3 +-
->  arch/x86/kernel/fpu/core.c                    |   5 +-
->  arch/x86/kernel/fpu/xstate.c                  |  12 +-
->  arch/x86/kernel/fpu/xstate.h                  |   3 +-
->  arch/x86/kvm/cpuid.c                          |   8 --
->  arch/x86/kvm/x86.c                            |  37 +++---
->  .../selftests/kvm/include/x86_64/processor.h  |  23 ++++
->  .../testing/selftests/kvm/x86_64/state_test.c | 110 +++++++++++++++++-
->  8 files changed, 168 insertions(+), 33 deletions(-)
-> 
-> 
-> base-commit: 5804c19b80bf625c6a9925317f845e497434d6d3
-> -- 
-> 2.42.0.582.g8ccd20d70d-goog
-> 
+On 2023/10/4 3:16, Nathan Chancellor wrote:
+> From: Wende Tan <twd2.me@gmail.com>
+>
+> Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is an
+> issue [1] in prior LLD versions that prevents LLD to generate proper
+> machine code for RISC-V when writing `nop`s.
+>
+> I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
+> on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
+> can boot to shell using an archriscv rootfs on QEMU.
+>
+> I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
+> KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
+> successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
+> image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
+> `BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
+> separate patch further.
+>
+> Disable LTO for arch/riscv/kernel/pi, as llvm-objcopy expects an ELF
+> object file when manipulating the files in that subfolder, rather than
+> LLVM bitcode.
+>
+> [1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
+>     commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
+>
+> Tested-by: Wende Tan <twd2.me@gmail.com>
+> Signed-off-by: Wende Tan <twd2.me@gmail.com>
+> Co-developed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> NOTE: I tested LLVM 14 through 18 with defconfig + full/thin LTO and
+> allmodconfig + thin LTO. allmodconfig + thin LTO with LLVM 15 and 16
+> shows
+>
+>   ld.lld: error: section size decrease is too large
+>
+> when linking vmlinux. This appears to be resolved in LLVM 17 with
+> https://github.com/llvm/llvm-project/commit/9d37ea95df1b84cca9b5e954d8964c976a5e303e
+> (I did not bisect but the commit message lines up with the issue). I
+> kept the existing version check because defconfig worked fine but we may
+> want to bump it to 17.0.0 if randconfigs trip over this.
+>
+> Changes in v3:
+> - Disable LTO in arch/riscv/kernel/pi/Makefile, which was added to the
+>   kernel after the submission of v2. This change matches arm64.
+> - Link to v2: https://lore.kernel.org/r/20220512205545.992288-1-twd2.me@gmail.com/
+>
+> Changes in v2:
+> - Some textual changes suggested by Nick.
+> - Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is
+>   filed and resolved.
+> - Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
+> - Link to v1: https://lore.kernel.org/r/20210719205208.1023221-1-twd2.me@gmail.com/
+> ---
+>  arch/riscv/Kconfig            | 3 +++
+>  arch/riscv/kernel/pi/Makefile | 3 +++
+>  2 files changed, 6 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index d607ab0f7c6d..523640f7441e 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -46,6 +46,9 @@ config RISCV
+>  	select ARCH_SUPPORTS_CFI_CLANG
+>  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+>  	select ARCH_SUPPORTS_HUGETLBFS if MMU
+> +	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
+> +	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
+> +	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
+>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+>  	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
+>  	select ARCH_USE_MEMTEST
+> diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
+> index 07915dc9279e..b75f150b923d 100644
+> --- a/arch/riscv/kernel/pi/Makefile
+> +++ b/arch/riscv/kernel/pi/Makefile
+> @@ -9,6 +9,9 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
+>  		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+>  		   $(call cc-option,-fno-addrsig)
+>  
+> +# Disable LTO
+> +KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+> +
+>  KBUILD_CFLAGS	+= -mcmodel=medany
+>  
+>  CFLAGS_cmdline_early.o += -D__NO_FORTIFY
+>
+> ---
+> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+> change-id: 20231003-riscv-lto-f013beed8587
+>
+> Best regards,
+
+-- 
+Best wishes!
+Sincerely,
+twd2
+https://twd2.me
 
