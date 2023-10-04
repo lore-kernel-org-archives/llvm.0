@@ -1,147 +1,127 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5681097E;
-	Wed,  4 Oct 2023 10:01:26 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id C78C9CFBC3;
-	Wed,  4 Oct 2023 09:51:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EF6906000B;
-	Wed,  4 Oct 2023 09:51:26 +0000 (UTC)
-Message-ID: <f3e904ff-3ae1-b8ad-c400-7961f97b2b40@ghiti.fr>
-Date: Wed, 4 Oct 2023 11:51:26 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1A311720;
+	Wed,  4 Oct 2023 11:10:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696417803; x=1727953803;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Lxjb5CmhFqoDj7WOHqPuW1nIvM+2t7fBcK2UxyN8viw=;
+  b=gDJZc5iqDBWyXR2LWLnZgdoSR38wLiPjbs8LDIHYDbRMrYviN17/escO
+   VmNtL9ffguUtponV0EQZj4YIi9v7shNxxiDq/Phm4UFvFeXxzLgvZL85u
+   FCL6GSdq/+bzxQjbLcY+AKiyqE1hTZa8LsqjGTL+4Fnr/C/YN7GYjMUTg
+   nbu2bt1qswVt12pwF5lG/Ky1N/eopBhRRZeVqQUm6/NQRJ5gmr7vTdHZ8
+   aHhphVCBSlijPgxFSEjn0vpOMXfjMfdJ4bhl9P/tDhwyjRJBBF5/M8TwW
+   YWwEhWzsSHdN/h2/XA/7XDdIpbRCtaN6YpzRQTu/OROgGFH5g1BYGJiS6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="385957045"
+X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
+   d="scan'208";a="385957045"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 04:10:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="867299197"
+X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
+   d="scan'208";a="867299197"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 04 Oct 2023 04:09:59 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qnzlN-000Hh4-1N;
+	Wed, 04 Oct 2023 11:09:57 +0000
+Date: Wed, 4 Oct 2023 19:08:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org
+Subject: [vbabka:slab-remove-slab-v1r0 19/22] mm/memcontrol.c:2888:5:
+ warning: no previous prototype for function 'memcg_alloc_slab_cgroups'
+Message-ID: <202310041934.vgOzHUvw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3] RISC-V: build: Allow LTO to be selected
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org
-Cc: ndesaulniers@google.com, trix@redhat.com, samitolvanen@google.com,
- twd2.me@gmail.com, linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
- patches@lists.linux.dev
-References: <20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nathan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slab-remove-slab-v1r0
+head:   7a5cf1bc55d1877eb85656dd530301fd55599feb
+commit: 69d9aaa43fff253c195b3f53537855bcfa14939a [19/22] mm/slab: move memcg related functions from slab.h to slub.c
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231004/202310041934.vgOzHUvw-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231004/202310041934.vgOzHUvw-lkp@intel.com/reproduce)
 
-On 03/10/2023 21:16, Nathan Chancellor wrote:
-> From: Wende Tan <twd2.me@gmail.com>
->
-> Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is an
-> issue [1] in prior LLD versions that prevents LLD to generate proper
-> machine code for RISC-V when writing `nop`s.
->
-> I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
-> on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
-> can boot to shell using an archriscv rootfs on QEMU.
->
-> I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
-> KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
-> successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
-> image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
-> `BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
-> separate patch further.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310041934.vgOzHUvw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/memcontrol.c:2888:5: warning: no previous prototype for function 'memcg_alloc_slab_cgroups' [-Wmissing-prototypes]
+   int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
+       ^
+   mm/memcontrol.c:2888:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
+   ^
+   static 
+>> mm/memcontrol.c:3163:6: warning: no previous prototype for function 'mod_objcg_state' [-Wmissing-prototypes]
+   void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
+        ^
+   mm/memcontrol.c:3163:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
+   ^
+   static 
+   2 warnings generated.
 
 
-Yes, I see 2 solutions:
+vim +/memcg_alloc_slab_cgroups +2888 mm/memcontrol.c
 
-- either use PUD mappings, which is not that easy because we'd need the 
-physical and virtual addresses to both be aligned on 1GB, which is very 
-unlikely (the kernel is generally loaded at 0x8020_0000). We could use a 
-relocatable kernel to offset the virtual kernel address though.
+a7ebf564de325e Waiman Long     2021-12-10  2887  
+4b5f8d9a895ada Vlastimil Babka 2021-11-02 @2888  int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2889  				 gfp_t gfp, bool new_slab)
+10befea91b61c4 Roman Gushchin  2020-08-06  2890  {
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2891  	unsigned int objects = objs_per_slab(s, slab);
+2e9bd483159939 Roman Gushchin  2021-02-24  2892  	unsigned long memcg_data;
+10befea91b61c4 Roman Gushchin  2020-08-06  2893  	void *vec;
+10befea91b61c4 Roman Gushchin  2020-08-06  2894  
+41eb5df1cbc9b3 Waiman Long     2021-06-28  2895  	gfp &= ~OBJCGS_CLEAR_MASK;
+10befea91b61c4 Roman Gushchin  2020-08-06  2896  	vec = kcalloc_node(objects, sizeof(struct obj_cgroup *), gfp,
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2897  			   slab_nid(slab));
+10befea91b61c4 Roman Gushchin  2020-08-06  2898  	if (!vec)
+10befea91b61c4 Roman Gushchin  2020-08-06  2899  		return -ENOMEM;
+10befea91b61c4 Roman Gushchin  2020-08-06  2900  
+2e9bd483159939 Roman Gushchin  2021-02-24  2901  	memcg_data = (unsigned long) vec | MEMCG_DATA_OBJCGS;
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2902  	if (new_slab) {
+2e9bd483159939 Roman Gushchin  2021-02-24  2903  		/*
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2904  		 * If the slab is brand new and nobody can yet access its
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2905  		 * memcg_data, no synchronization is required and memcg_data can
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2906  		 * be simply assigned.
+2e9bd483159939 Roman Gushchin  2021-02-24  2907  		 */
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2908  		slab->memcg_data = memcg_data;
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2909  	} else if (cmpxchg(&slab->memcg_data, 0, memcg_data)) {
+2e9bd483159939 Roman Gushchin  2021-02-24  2910  		/*
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2911  		 * If the slab is already in use, somebody can allocate and
+4b5f8d9a895ada Vlastimil Babka 2021-11-02  2912  		 * assign obj_cgroups in parallel. In this case the existing
+2e9bd483159939 Roman Gushchin  2021-02-24  2913  		 * objcg vector should be reused.
+2e9bd483159939 Roman Gushchin  2021-02-24  2914  		 */
+10befea91b61c4 Roman Gushchin  2020-08-06  2915  		kfree(vec);
+2e9bd483159939 Roman Gushchin  2021-02-24  2916  		return 0;
+2e9bd483159939 Roman Gushchin  2021-02-24  2917  	}
+10befea91b61c4 Roman Gushchin  2020-08-06  2918  
+2e9bd483159939 Roman Gushchin  2021-02-24  2919  	kmemleak_not_leak(vec);
+10befea91b61c4 Roman Gushchin  2020-08-06  2920  	return 0;
+10befea91b61c4 Roman Gushchin  2020-08-06  2921  }
+10befea91b61c4 Roman Gushchin  2020-08-06  2922  
 
-- or use a second early_pmd, which would make sense as we reserve 2GB 
-for the kernel mapping anyway, but I'm not sure it would work without a 
-bunch of modifications.
+:::::: The code at line 2888 was first introduced by commit
+:::::: 4b5f8d9a895ada8e0abb58ccd35d9fe229e3a595 mm/memcg: Convert slab objcgs from struct page to struct slab
 
-Let me know if that would help and I'll give it a try (unless you want 
-to take care of that of course!).
+:::::: TO: Vlastimil Babka <vbabka@suse.cz>
+:::::: CC: Vlastimil Babka <vbabka@suse.cz>
 
-Alex
-
-
->
-> Disable LTO for arch/riscv/kernel/pi, as llvm-objcopy expects an ELF
-> object file when manipulating the files in that subfolder, rather than
-> LLVM bitcode.
->
-> [1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
->      commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
->
-> Tested-by: Wende Tan <twd2.me@gmail.com>
-> Signed-off-by: Wende Tan <twd2.me@gmail.com>
-> Co-developed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> NOTE: I tested LLVM 14 through 18 with defconfig + full/thin LTO and
-> allmodconfig + thin LTO. allmodconfig + thin LTO with LLVM 15 and 16
-> shows
->
->    ld.lld: error: section size decrease is too large
->
-> when linking vmlinux. This appears to be resolved in LLVM 17 with
-> https://github.com/llvm/llvm-project/commit/9d37ea95df1b84cca9b5e954d8964c976a5e303e
-> (I did not bisect but the commit message lines up with the issue). I
-> kept the existing version check because defconfig worked fine but we may
-> want to bump it to 17.0.0 if randconfigs trip over this.
->
-> Changes in v3:
-> - Disable LTO in arch/riscv/kernel/pi/Makefile, which was added to the
->    kernel after the submission of v2. This change matches arm64.
-> - Link to v2: https://lore.kernel.org/r/20220512205545.992288-1-twd2.me@gmail.com/
->
-> Changes in v2:
-> - Some textual changes suggested by Nick.
-> - Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is
->    filed and resolved.
-> - Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
-> - Link to v1: https://lore.kernel.org/r/20210719205208.1023221-1-twd2.me@gmail.com/
-> ---
->   arch/riscv/Kconfig            | 3 +++
->   arch/riscv/kernel/pi/Makefile | 3 +++
->   2 files changed, 6 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index d607ab0f7c6d..523640f7441e 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -46,6 +46,9 @@ config RISCV
->   	select ARCH_SUPPORTS_CFI_CLANG
->   	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
->   	select ARCH_SUPPORTS_HUGETLBFS if MMU
-> +	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
-> +	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
-> +	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
->   	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
->   	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
->   	select ARCH_USE_MEMTEST
-> diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
-> index 07915dc9279e..b75f150b923d 100644
-> --- a/arch/riscv/kernel/pi/Makefile
-> +++ b/arch/riscv/kernel/pi/Makefile
-> @@ -9,6 +9,9 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
->   		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
->   		   $(call cc-option,-fno-addrsig)
->   
-> +# Disable LTO
-> +KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
-> +
->   KBUILD_CFLAGS	+= -mcmodel=medany
->   
->   CFLAGS_cmdline_early.o += -D__NO_FORTIFY
->
-> ---
-> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-> change-id: 20231003-riscv-lto-f013beed8587
->
-> Best regards,
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
