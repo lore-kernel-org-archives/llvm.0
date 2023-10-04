@@ -1,153 +1,126 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF13107B8
-	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 09:05:55 +0000 (UTC)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3945qAth006685;
-	Wed, 4 Oct 2023 09:05:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LE1mw2wrySfr2KkGPiDhsMXN1IAlxEDYkKKwsoRa44A=;
- b=aF8ixtrPEhscOn3wBh728lf0qecvBkXUAIPTxex32TUdVc5KOwWQ5+gQJHBJQiiGg4NW
- 1s2zF1OV7NWr/a5sacWn+j3vyUCPZcHg1ryBQF4J8uVrLfI0lsfE1tMjVR6oout5ShrU
- 64GPRu3rSQUJ4WVSUqwZC14EqIhRSviFyczhnSSkBSp1YnnRWTmGNYJcqmde3nIZiAKl
- CaqAndRa1sIn0pph8UgYcp12g/iiKES0BvOQVov5MB9yMb0FoCJ0oULCaQ7TL6PPbp35
- oJj267aXkzozEPSYqjR8djEQ+ZfQKC/8ZWdOO8o9b5hNzuxQhUyCFPL5Dvqy5hQ/kX7F LA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgxrjrrdm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Oct 2023 09:05:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39495Vcd031256
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Oct 2023 09:05:31 GMT
-Received: from hu-devipriy-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Wed, 4 Oct 2023 02:05:25 -0700
-From: Devi Priya <quic_devipriy@quicinc.com>
-To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <thierry.reding@gmail.com>, <ndesaulniers@google.com>,
-        <trix@redhat.com>, <baruch@tkos.co.il>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [PATCH V13 4/4] arm64: dts: ipq6018: add pwm node
-Date: Wed, 4 Oct 2023 14:34:49 +0530
-Message-ID: <20231004090449.256229-5-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231004090449.256229-1-quic_devipriy@quicinc.com>
-References: <20231004090449.256229-1-quic_devipriy@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BCB10945
+	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 09:14:01 +0000 (UTC)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-99c3c8adb27so353999366b.1
+        for <llvm@lists.linux.dev>; Wed, 04 Oct 2023 02:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696410840; x=1697015640; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vPa+lbffoUXNnc8jh5vJbxqB5Khhmntmi+tlYpNI8aE=;
+        b=D/w3oyo/L78H8eK0ySvOyECfrP30FtVU9xvVKpoICwLgBdfP4tkw+maAxdUBtvGiGR
+         az9fBW5jOXmOabZN95JPQ9ZsvBrYgsiJJ+Mv0kmP4QjHx9KNKZdQtGg+gVuxJSiauu61
+         OWQPZDbeQpW6QwEs87CxW6/yn9443vRTFnMvsJJ6odVQ/RdxsJZ6jgaKiG/XI0+dAaM9
+         vM8hNAMeU889Sf/3uRbUl2AUQPvObahs7+hQJfZroWWei/IbjQhcwfV1XNDjTTbkO+k2
+         a3EbOUcI17zuq4wYOoULoxF1O6yoxlGqy7gA3yX5Kmiuiexx9Zgzx/IzR3060Q5e7TOY
+         8XVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696410840; x=1697015640;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vPa+lbffoUXNnc8jh5vJbxqB5Khhmntmi+tlYpNI8aE=;
+        b=gYDgRKDctqOb4VJK9zUp/71FcDetPGIiXlBfSiKqd3LDK3/2p1oBQhbzH847fDaRXR
+         qu/GkoYBaBonKXPQacTK45fQye9qhBVEP5HVbIigIZcv9RzukLOe08nk01/AzHLFGbc1
+         zkBry5uYWC6AsnCOGz3EogGWj26BT3+qzH/38NlKmeKOFaD+uhwcQhXsj8OcZzbFPC5q
+         P/xkBtbPr769gkQLlBqAANhx24I91sj5bhRqjFparumtMBd0Tepf/d7LrfU3fb0IjVRD
+         cU+AxRp14ktVuVDGtFm2ISaeVBC1U3c4FVMdk3Mg8PK9IYl8jmqbf9mY+q1OHVyTdtxg
+         nVDA==
+X-Gm-Message-State: AOJu0YwvHoipO8dwPuMU4nAzbDgHWXvB5lV5UWpLkEpE+Dvkfnd1bh8a
+	CJpnfaILLrxz6I/SJ5x1z+VWJg==
+X-Google-Smtp-Source: AGHT+IGfov53whH4ljfxIcn/lmMVSSbY/VQQQ9pmAvzChOul4XDACFrQ5QaM4Ld6tqgDZZ265cJ0dw==
+X-Received: by 2002:a17:907:7897:b0:9b2:bcd5:8d2b with SMTP id ku23-20020a170907789700b009b2bcd58d2bmr1490315ejc.29.1696410840373;
+        Wed, 04 Oct 2023 02:14:00 -0700 (PDT)
+Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
+        by smtp.gmail.com with ESMTPSA id sa18-20020a170906edb200b009adc77330ebsm2486069ejb.199.2023.10.04.02.13.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Oct 2023 02:13:59 -0700 (PDT)
+Message-ID: <449ebc20-9436-411e-b727-15a186c502bd@linaro.org>
+Date: Wed, 4 Oct 2023 11:13:57 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: iFldn8bTg8iYj8RvjPbQyocNFN6o00Md
-X-Proofpoint-ORIG-GUID: iFldn8bTg8iYj8RvjPbQyocNFN6o00Md
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-04_01,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- clxscore=1015 suspectscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310040064
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V13 2/4] dt-bindings: pwm: add IPQ6018 binding
+To: Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
+ baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20231004090449.256229-1-quic_devipriy@quicinc.com>
+ <20231004090449.256229-3-quic_devipriy@quicinc.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231004090449.256229-3-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Describe the PWM block on IPQ6018.
+On 04/10/2023 11:04, Devi Priya wrote:
+> DT binding for the PWM block in Qualcomm IPQ6018 SoC.
+> 
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
+> Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 
-The PWM is in the TCSR area. Make &tcsr "simple-mfd" compatible, and add
-&pwm as child of &tcsr.
 
-Add also ipq6018 specific compatible string.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
-Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
-v13:
+(Although please wait with applying a few hours for Rob's bot to check it)
 
-  No change
-
-v12: 
-
-  No change
-
-v11:
-
-  No change
-
-v10:
-
-  No change
-
-v9:
-
-  Add 'ranges' property (Rob)
-
-v8:
-
-  Add size cell to 'reg' (Rob)
-
-v7:
-
-  Use 'reg' instead of 'offset' (Rob)
-
-  Add qcom,tcsr-ipq6018 (Rob)
-
-  Drop clock-names (Bjorn)
-
-v6:
-
-  Make the PWM node child of TCSR (Rob Herring)
-
-  Add assigned-clocks/assigned-clock-rates (Uwe Kleine-König)
-
-v5: Use qcom,pwm-regs for TCSR phandle instead of direct regs
-
-v3: s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
-
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index e59b9df96c7e..429ad7cb681c 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -390,8 +390,21 @@ tcsr_mutex: hwlock@1905000 {
- 		};
- 
- 		tcsr: syscon@1937000 {
--			compatible = "qcom,tcsr-ipq6018", "syscon";
-+			compatible = "qcom,tcsr-ipq6018", "syscon", "simple-mfd";
- 			reg = <0x0 0x01937000 0x0 0x21000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0x0 0x01937000 0x21000>;
-+
-+			 pwm: pwm@a010 {
-+				compatible = "qcom,ipq6018-pwm";
-+				reg = <0xa010 0x20>;
-+				clocks = <&gcc GCC_ADSS_PWM_CLK>;
-+				assigned-clocks = <&gcc GCC_ADSS_PWM_CLK>;
-+				assigned-clock-rates = <100000000>;
-+				#pwm-cells = <2>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		usb2: usb@70f8800 {
--- 
-2.34.1
+Best regards,
+Krzysztof
 
