@@ -1,133 +1,140 @@
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC2C405CF
-	for <llvm@lists.linux.dev>; Tue,  3 Oct 2023 23:38:30 +0000 (UTC)
-Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
-	by cmsmtp with ESMTP
-	id njd0qDKK4QUgRnoyEqzWH3; Tue, 03 Oct 2023 23:38:30 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id noyEqKmqe7MctnoyEqZaoi; Tue, 03 Oct 2023 23:38:30 +0000
-X-Authority-Analysis: v=2.4 cv=BZjLb5h2 c=1 sm=1 tr=0 ts=651ca5f6
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=Dx1Zrv+1i3YEdDUMOX3koA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=jZVsG21pAAAA:8
- a=A7XncKjpAAAA:8 a=pGLkceISAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8
- a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=NEAV23lmAAAA:8 a=cm27Pg_UAAAA:8
- a=YSKGN3ub9cUXa_79IdMA:9 a=QEXdDO2ut3YA:10 a=3Sh2lD0sZASs_lUdrUhf:22
- a=R9rPLQDAdC6-Ub70kJmZ:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=AjGcO6oz07-iQ99wixmX:22
- a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4k6s6HPefL8zQEK7ac5EIag+vEYxjPOoY24oUSgOdLQ=; b=hIwkmocJAVHD5i9cchOxA/WmoG
-	+u6ZNQD7xpdwl2CYON3DfqhkAwvur7SOoh31KWI7NngusWQ+laEuQ06UtM6Si1aa94tARb2NaCYuB
-	nnHRBnYztTdqJJKMunkQcX/9rxRmOm6n6R2s5IVRUPC9XJ+Ulk8J2ahdO9xM288aPOUMaUMTA477j
-	AUOQ1xp/l6g7MJdi+bKbsBoel+tvoysSPXuRjdAZH+jZssUNPB9HMrE7lrF4gYY+5IPH7s+hlS3zC
-	WwNc90Oq26bz1DfmmAZ7ZSL8VPfFGfLdMjARetHakxa+6+twtrMp+lvP7YBMYbyVypDedZT2lYf4K
-	qna13b5g==;
-Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:42398 helo=[192.168.1.98])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qnoyC-001SqE-0Y;
-	Tue, 03 Oct 2023 18:38:28 -0500
-Message-ID: <839118ce-ff16-a743-d660-dd030a7e2d90@embeddedor.com>
-Date: Wed, 4 Oct 2023 01:38:22 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38752805
+	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 01:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696382486;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KdPFsN91s1M1TKFtI4l4oNGxHjiGZXkAi/LcqiA6bS8=;
+	b=Jk/MuqBdcY886XTkmgDwapEjc96mds3KmKk1dM5KzsTKlPWTCNnWeKmscIAFiBc1MDKLIy
+	onbVdKDaA3bxLInc2ANoBL6KGbCp/rThl2HPfQe17zqTRKcJkU53nNUqWTBhaL5J32BYl1
+	8XafX8Zx6D/CIx/V9/Nbh8t+MYmc9s0=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-APyQUcGSNuypjuQNLMlGOQ-1; Tue, 03 Oct 2023 21:21:25 -0400
+X-MC-Unique: APyQUcGSNuypjuQNLMlGOQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 253DF3816C95
+	for <llvm@lists.linux.dev>; Wed,  4 Oct 2023 01:21:25 +0000 (UTC)
+Received: from [172.64.10.35] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0E26A2026D4B;
+	Wed,  4 Oct 2023 01:21:25 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 230): Test report for master
+ (6.6.0-rc4, mainline.kernel.org-clang, 5e62ed3b)
+Date: Wed, 04 Oct 2023 01:21:24 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] netem: Annotate struct disttable with __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>,
- Stephen Hemminger <stephen@networkplumber.org>
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang
- <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- netdev@vger.kernel.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20231003231823.work.684-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20231003231823.work.684-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.238.9.39
-X-Source-L: No
-X-Exim-ID: 1qnoyC-001SqE-0Y
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:42398
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 82
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfIy4gocO9GMsKgKnSWzHYSHC8y+iMQl/rXlP1y91ENfKovQaGg94Nkfwvp1LV7b/Cd8UGgReMfBrRQw/yg+k34TmqHYjIIg7PhdhiQhoBb2zV0BQ1kRQ
- 4VcrPs/TV1CrT9ASrq8CLPEWMEcUPGARzKujj55SXXUd3oL5E5w+BXJe53Y7yRIGCNiZnnNIdjol4fAESqKFWJ7/sQxGrfHX5l4=
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <42773.123100321212500333@us-mta-649.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/107222
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: readpage_elf: Attempt to read non-existent page at 0x4000000=
+000000000
+            URL: https://gitlab.com/cki-project/kernel-ark/-/issues/132
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
 
-On 10/4/23 01:18, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct disttable.
-> 
-> Cc: Stephen Hemminger <stephen@networkplumber.org>
-> Cc: Jamal Hadi Salim <jhs@mojatatu.com>
-> Cc: Cong Wang <xiyou.wangcong@gmail.com>
-> Cc: Jiri Pirko <jiri@resnulli.us>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Thanks
---
-Gustavo
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-> ---
->   net/sched/sch_netem.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/sched/sch_netem.c b/net/sched/sch_netem.c
-> index 4ad39a4a3cf5..6ba2dc191ed9 100644
-> --- a/net/sched/sch_netem.c
-> +++ b/net/sched/sch_netem.c
-> @@ -67,7 +67,7 @@
->   
->   struct disttable {
->   	u32  size;
-> -	s16 table[];
-> +	s16 table[] __counted_by(size);
->   };
->   
->   struct netem_sched_data {
