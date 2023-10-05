@@ -1,105 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444937F;
-	Thu,  5 Oct 2023 09:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B1720E3
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 09:11:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ap7cot3x"
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696496854; x=1728032854;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BURfMz7oDbbWaN1SO7w7ia/v46pQMbj/y1aw0QOHoBg=;
-  b=Ap7cot3x2b+hzytZSVTP0vF+nVJZS/LfCWoE17I9+AU3HUaVutOja4pq
-   OZctUKAOtlF+KnaM1G2NXbwMbdE0MKeBQQjXYAqUNp7PcYytoxHgpHYWP
-   Btu84+K3grlNuXxexTXhwP8EX7KD1zebJoKiv12y4L/zJ0N5b3ACLWbFI
-   ass1Wlc2UMjYhEhs0rkXSTruSinVdwjIXSwIrmXVK2Qk+6Kkgn3xH2CJU
-   ei2XhcFDT1E0mDxUB6eUA18uXMOo6blRcDeoDHbtii/v1rnhDYMCFGcQY
-   HULrScxUJoOoUiHUDuJoNYvunadaZLyUFzfeLimPMNY0BC5kNwEIwgeCC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="362813368"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="362813368"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:07:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="842309817"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="842309817"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Oct 2023 02:07:21 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qoKKF-000LEO-05;
-	Thu, 05 Oct 2023 09:07:19 +0000
-Date: Thu, 5 Oct 2023 17:06:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [trace:trace/core 6/7] fs/tracefs/event_inode.c:909:6: warning: no
- previous prototype for function 'eventfs_remove_events_dir'
-Message-ID: <202310051743.y9EobbUr-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EbE6dDrP"
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696497092;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=47YlQJswD2ZHMxt5MMY28CyNafQdgNErUcUJtgXMNr0=;
+	b=EbE6dDrPbLrlqI9YAb/RvIieIkS/y9qwcSGBpD400dnDgvwwl2IgmerDtMu66CkKC0zB7O
+	8/CwtzDRu6vCI8N92JaCmrQWOifSnboSHMXYl9qQZeJjHEgGjQ+WoaqqOPA/Sai9DArV03
+	ogVwPQ0kwHvp5gOW781zWqsxv4v+PgY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-533-YgTtdCwDMLygoVuOsYHM5Q-1; Thu, 05 Oct 2023 05:11:28 -0400
+X-MC-Unique: YgTtdCwDMLygoVuOsYHM5Q-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82CBE81D785
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 09:11:28 +0000 (UTC)
+Received: from [172.64.10.35] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 512FE493113;
+	Thu,  5 Oct 2023 09:11:28 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 230): Test report for master
+ (6.6.0-rc4, mainline.kernel.org-clang, 3006adf3)
+Date: Thu, 05 Oct 2023 09:11:28 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev, yizhan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <76682.123100505112801979@us-mta-533.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/core
-head:   f5d9e8e08f81c9e7c723de7abcce106808f0770c
-commit: 5790b1fb3d672d9a1fe3881a7181dfdbe741568f [6/7] eventfs: Remove eventfs_file and just use eventfs_inode
-config: arm-bcm2835_defconfig (https://download.01.org/0day-ci/archive/20231005/202310051743.y9EobbUr-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231005/202310051743.y9EobbUr-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310051743.y9EobbUr-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/tracefs/event_inode.c:909:6: warning: no previous prototype for function 'eventfs_remove_events_dir' [-Wmissing-prototypes]
-     909 | void eventfs_remove_events_dir(struct dentry *dentry)
-         |      ^
-   fs/tracefs/event_inode.c:909:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     909 | void eventfs_remove_events_dir(struct dentry *dentry)
-         | ^
-         | static 
-   1 warning generated.
---
->> kernel/trace/trace_events.c:2285:5: warning: no previous prototype for function 'system_callback' [-Wmissing-prototypes]
-    2285 | int system_callback(const char *name, umode_t *mode, void **data,
-         |     ^
-   kernel/trace/trace_events.c:2285:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2285 | int system_callback(const char *name, umode_t *mode, void **data,
-         | ^
-         | static 
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/eventfs_remove_events_dir +909 fs/tracefs/event_inode.c
+Kernel information:
+    Commit message: Merge tag 'rtla-v6.6-fixes' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/bristot/linux
 
-5bdcd5f5331a27 Ajay Kaher 2023-07-28  902  
-5bdcd5f5331a27 Ajay Kaher 2023-07-28  903  /**
-5bdcd5f5331a27 Ajay Kaher 2023-07-28  904   * eventfs_remove_events_dir - remove eventfs dir or file from list
-5bdcd5f5331a27 Ajay Kaher 2023-07-28  905   * @dentry: events's dentry to be removed.
-5bdcd5f5331a27 Ajay Kaher 2023-07-28  906   *
-5bdcd5f5331a27 Ajay Kaher 2023-07-28  907   * This function remove events main directory
-5bdcd5f5331a27 Ajay Kaher 2023-07-28  908   */
-5bdcd5f5331a27 Ajay Kaher 2023-07-28 @909  void eventfs_remove_events_dir(struct dentry *dentry)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/107501
 
-:::::: The code at line 909 was first introduced by commit
-:::::: 5bdcd5f5331a276a3ddf1fba8605986d0d15298a eventfs: Implement removal of meta data from eventfs
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9771662
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9771793
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Panic
 
-:::::: TO: Ajay Kaher <akaher@vmware.com>
-:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
