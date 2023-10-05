@@ -1,125 +1,147 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560C4273C3
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 18:38:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A355634CE9
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 21:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="11Qix851"
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-79df12ff0f0so542386241.3
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 11:38:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GOpRB8Gr"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-536ef8a7dcdso4679a12.0
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 14:36:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696531134; x=1697135934; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696541791; x=1697146591; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bW/UNmvenx38n72xyxTklCxWrHzjkVxYi7U2YpzzmQY=;
-        b=11Qix851akKUUWwMs/pp/u55TdPC1n09QgywgA6080wxbqFX5qDImRrgwmAR9uHBAK
-         O0QoHXygZ9REAdNv+ENzCYjE+QSQdD+4sTHjA4FScfFOWqsOlAZkE28jnx0SvYzXpDzc
-         7aw3y70HRWBUmWH0F54WpkZSwNdUj0hw/cJX1v3fp4QH0mAaRL/hxiSC7U7LvxzqJ1eu
-         X68Mim2ejWiSWIUrT2+XXHK5v506Hcb6W630ojEavpOfM+Z5KXCXwj2oLOvaM86oIqLg
-         e65JW+xyE9sba7Z97ZT9HVp1TmPuXJ6KxqyngSYTjgd9AbheSVr7JSD1SdAhhDoQm6DY
-         IA+g==
+        bh=VWddOZrmmasiWu5O0KWGa9lmgFQoWcrVlIGB6YyWgVs=;
+        b=GOpRB8Grb7Gzm1D9f1E2gyDFLm1dfFJhOXUHrYjhI+BhLvjIw1jF4ihvjunXnS4a0T
+         lRdwDBpTIjOEvHJ69go3bszEMp1jA1dXP6mBNaa4+JZW6m/x0h07P6ZmyFcINXMZ8pQ8
+         gtxgYkDxNZYhIxj1U7NmQoef5QKrxadlQXFfq1Rwt94rrQEUEyJt1zhXW0WAtMOZ4/UX
+         TqRo2vO62efsNa/jtns16FUQZ3CO6w8B9afE9OUjT9EghFNbkZstfOk0vRvNJhrf0Mf2
+         nqnOsHFlp837ZUNCvLQAxP9MHUIfG7NYsHIRBWfm+BQoIniJUXCelCmPK8ce+o+0P8qr
+         kWOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696531134; x=1697135934;
+        d=1e100.net; s=20230601; t=1696541791; x=1697146591;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bW/UNmvenx38n72xyxTklCxWrHzjkVxYi7U2YpzzmQY=;
-        b=M23+5zYtbMauqW1zIryjsK3TZ1grl9N8b6q7JEFxxecb2HNOOKxQGJEC3PDrjRWA38
-         5yoCwxLDSi15BgrLLAIzAqOI/APD9v7gWdAIvaDxv3LW8jVj9CKf3nZf3EwGVspX66IO
-         rjx/J8FsmRSMIOtaGK/o/oFGtYkr4HYASfDvUKMlcidfQp9rZOrxDpRAiM36j9b734rq
-         NDPMgwB/jZccoUCL8+Fpa7mX3Foso3XNLDqzCmZ06TuTPLgid4BRf2ROLoMN3+Y0Q8kL
-         T6geKEUuuxLIEZ1fdrCuKdGw7a0UL6CsdTkhMz8sUjA8Ezx0PkxgWCdMT0XFo93f/10j
-         OXig==
-X-Gm-Message-State: AOJu0YyyBeDiXT5NaGiWY3mv5mAxuhSwby7oC2QGEPVzscOoGL6XJyng
-	1CyzAslJsFgdUHf8WTrcOohxIh4HbmKoQ1GBJpWx8g==
-X-Google-Smtp-Source: AGHT+IGbtsrcT2R0dV38C5J3+TVlCDTcINV+rHWPusOlKA8A6u1+y5KQlTfRnDHABYpAO2ulZxXdaWCMpFibP/AByIc=
-X-Received: by 2002:a67:b107:0:b0:452:6465:4a35 with SMTP id
- w7-20020a67b107000000b0045264654a35mr5658104vsl.11.1696531133911; Thu, 05 Oct
- 2023 11:38:53 -0700 (PDT)
+        bh=VWddOZrmmasiWu5O0KWGa9lmgFQoWcrVlIGB6YyWgVs=;
+        b=ohIFFD7BSqaMhWrQnl2dl6k5cHhphbE47YwiiSpcBWmVNGsNohDh90AIH+IuioP6yu
+         SOnTJYwlAWPKGKzOEKaepMXu+7/kNzWsd5ow0hMXXukcrVWPHgIaAc2JDht6wgVui0yH
+         +perNaAIWlbhejpjnBhUzBZ78n3FmESGhXChaS0ntCGGa0uN0hQ/GPwg5iujAdmJHvEd
+         h+Ebi/lwfi1nLJclfC7VqoE/zRcsSPR0kR+srplgcx3BrqgVDMyG5KixQcK+6R7Crrr/
+         HsFHWy5SC6h6CxnFud4Te7y7eJ1zEPb3Vya4HNG5w1Ye3UMKu/xskEFkJAAgf9EAah17
+         gcUg==
+X-Gm-Message-State: AOJu0YzncJnvY0n5/JexBqlwK8p9e6lejNMChtbux8qzqA4HiVMInETA
+	jhZbcUfM1uOducmpBkiX1tEJsOJ41DFr4f8q6juTVg==
+X-Google-Smtp-Source: AGHT+IGlPnoq0UGE7DkoUzQp1yA5leDO8Cu3vmPbEmr9NZ49zBh/WWSakqyb4sccb/9wcCnTmo4j2D3js6AfFSbidkA=
+X-Received: by 2002:a50:9f67:0:b0:522:4741:d992 with SMTP id
+ b94-20020a509f67000000b005224741d992mr121564edf.4.1696541790666; Thu, 05 Oct
+ 2023 14:36:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231002-enable-wincompatible-function-pointer-types-strict-w-1-v1-1-808ab955d42d@kernel.org>
-In-Reply-To: <20231002-enable-wincompatible-function-pointer-types-strict-w-1-v1-1-808ab955d42d@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 5 Oct 2023 11:38:41 -0700
-Message-ID: <CAKwvOdnzi9g1sz6C_CBFfaqRu7HQ4ZfBphpyBrgV1C=bviR_Uw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Enable -Wincompatible-function-pointer-types-strict
- in W=1
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, keescook@chromium.org, samitolvanen@google.com, 
-	nicolas@fjasle.eu, trix@redhat.com, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20230928194801.2278999-1-mmaurer@google.com> <CAK7LNAQP9FVCArnw=JDBbtbu-3bxx162kqT24bUbffPtwE18uA@mail.gmail.com>
+In-Reply-To: <CAK7LNAQP9FVCArnw=JDBbtbu-3bxx162kqT24bUbffPtwE18uA@mail.gmail.com>
+From: Matthew Maurer <mmaurer@google.com>
+Date: Thu, 5 Oct 2023 14:36:19 -0700
+Message-ID: <CAGSQo01=UxFmPRo6OTU1443izumvF+Z0fevgdWVdHK6DGTehCQ@mail.gmail.com>
+Subject: Re: [PATCH v3] rust: Respect HOSTCC when linking for host
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 2, 2023 at 3:20=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
-> wrote:
+On Fri, Sep 29, 2023 at 10:59=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
 >
-> -Wincompatible-function-pointer-types-strict aims to catch clang kernel
-> Control Flow Integrity (kCFI) violations at build time (rather than run
-> time) by validating function pointer assignments against the expected
-> prototype, similar to the existing -Wincompatible-function-pointer-types
-> that is considered a hard error in the kernel. The -strict variant
-> requires the types to match exactly, as opposed to just matching in
-> terms of ABI compatibility. This is primarily visible with int/unsigned
-> int in lieu of enum types or vice versa.
+> On Fri, Sep 29, 2023 at 4:48=E2=80=AFAM Matthew Maurer <mmaurer@google.co=
+m> wrote:
+> >
+> > Currently, rustc defaults to invoking `cc`, even if `HOSTCC` is defined=
+,
+> > resulting in build failures in hermetic environments where `cc` does no=
+t
+> > exist. This includes both hostprogs and proc-macros.
+> >
+> > Since we are setting the linker to `HOSTCC`, we set the linker flavor t=
+o
+> > `gcc` explicitly. The linker-flavor selects both which linker to search
+> > for if the linker is unset, and which kind of linker flags to pass.
+> > Without this flag, `rustc` would attempt to determine which flags to
+> > pass based on the name of the binary passed as `HOSTCC`. `gcc` is the
+> > name of the linker-flavor used by `rustc` for all C compilers, includin=
+g
+> > both `gcc` and `clang`.
+> >
+> > Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> > ---
+> >  rust/Makefile         | 2 ++
+> >  scripts/Makefile.host | 2 ++
+> >  2 files changed, 4 insertions(+)
+> >
+> > diff --git a/rust/Makefile b/rust/Makefile
+> > index 87958e864be0..da664d7aed51 100644
+> > --- a/rust/Makefile
+> > +++ b/rust/Makefile
+> > @@ -383,6 +383,8 @@ $(obj)/exports_kernel_generated.h: $(obj)/kernel.o =
+FORCE
+> >  quiet_cmd_rustc_procmacro =3D $(RUSTC_OR_CLIPPY_QUIET) P $@
+> >        cmd_rustc_procmacro =3D \
+> >         $(RUSTC_OR_CLIPPY) $(rust_common_flags) \
+> > +               -Clinker-flavor=3Dgcc -Clinker=3D$(HOSTCC) \
+> > +               -Clink-args=3D'$(subst ','\'',$(KBUILD_HOSTLDFLAGS))' \
 >
-> The tree is not completely clean, so this warning cannot currently be
-> enabled unconditionally. However, there are only warnings in one
-> subsystem ('drivers/counter'), so it is really close. In order to
-> benefit from CI infrastructure that tests with W=3D1, enable this warning
-> at that level, so that new instances have a chance of being caught and
-> fixed during development.
 >
-> This should eventually be a hard error in a similar manner as
-> Wincompatible-function-pointer-types but some subsystems test
-> with W=3D1 + CONFIG_WERROR=3Dn, so it would be rude to break their builds
-> when they do not care about warnings outside of their subsystem.
 >
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Sounds like we're pretty close to just enabling this by default.
-Getting it on in W=3D1 for a cycle will help prevent any backslide.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  scripts/Makefile.extrawarn | 1 +
->  1 file changed, 1 insertion(+)
+> Why not consistently use the escsq macro here too ?
 >
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 2fe6f2828d37..9662f7fd6e39 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -108,6 +108,7 @@ KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-overflo=
-w)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-truncation)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-overflow)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-truncation)
-> +KBUILD_CFLAGS +=3D $(call cc-option, -Wincompatible-function-pointer-typ=
-es-strict)
 >
->  KBUILD_CPPFLAGS +=3D -Wundef
->  KBUILD_CPPFLAGS +=3D -DKBUILD_EXTRA_WARN1
+I didn't use it in rust/Makefile because that makefile doesn't
+directly import scripts/Kbuild.include, and I was under the mistaken
+impression that scripts/ was supposed to be its own namespace, even if
+Make wasn't enforcing it. Inspecting other functions in
+scripts/Kbuild.include though, it's clear they're called elsewhere, so
+I'll upload another version of the patch using escsq here as well.
 >
-> ---
-> base-commit: ce9ecca0238b140b88f43859b211c9fdfd8e5b70
-> change-id: 20231002-enable-wincompatible-function-pointer-types-strict-w-=
-1-4a56b99b8c6f
 >
-> Best regards,
+>
+>
+> >                 --emit=3Ddep-info=3D$(depfile) --emit=3Dlink=3D$@ --ext=
+ern proc_macro \
+> >                 --crate-type proc-macro \
+> >                 --crate-name $(patsubst lib%.so,%,$(notdir $@)) $<
+> > diff --git a/scripts/Makefile.host b/scripts/Makefile.host
+> > index 8f7f842b54f9..08d83d9db31a 100644
+> > --- a/scripts/Makefile.host
+> > +++ b/scripts/Makefile.host
+> > @@ -91,6 +91,8 @@ hostcxx_flags  =3D -Wp,-MMD,$(depfile) \
+> >  # current working directory, which may be not accessible in the out-of=
+-tree
+> >  # modules case.
+> >  hostrust_flags =3D --out-dir $(dir $@) --emit=3Ddep-info=3D$(depfile) =
+\
+> > +                -Clinker-flavor=3Dgcc -Clinker=3D$(HOSTCC) \
+> > +                -Clink-args=3D'$(call escsq,$(KBUILD_HOSTLDFLAGS))' \
+> >                   $(KBUILD_HOSTRUSTFLAGS) $(HOST_EXTRARUSTFLAGS) \
+> >                   $(HOSTRUSTFLAGS_$(target-stem))
+> >
+> > --
+> > 2.42.0.582.g8ccd20d70d-goog
+> >
+>
+>
 > --
-> Nathan Chancellor <nathan@kernel.org>
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+> Best Regards
+> Masahiro Yamada
