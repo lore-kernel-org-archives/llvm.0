@@ -1,164 +1,149 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F67F41E41
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 22:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6852014001
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2L3qoVHK"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-502f29ed596so2383e87.0
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 15:39:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wjg6H4/5"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d81a47e12b5so2169343276.0
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696545549; x=1697150349; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yVE7SUNr8dOdJFRW7Bjbr6OwiQITtpL3cHyTpIFhRi4=;
-        b=2L3qoVHK9RYaeMdDe4LbifWiQRe5yJj5yhZ5ybbNgir/a/LSX758quoEYdZ04b3wiU
-         aqdl+OeLZlKGnbIxDfkBlCO3JhVjnCYrbwoZ7uOGCWH6xI7DJzrn3FR4Lt782fdFD/Vy
-         dXsupX/c5K7LbQlgzXQAQ2HtOY7Gvf1j3t+mAKvIgbT1+TZmk0fKRmKYZ4Wn2yCy0twP
-         P2AKhYyBIp9qn2Zf1dztpBmvjFO+U9fXvZoPRAdbMCa9vWlHI8jGmjf31IWqz32Gb9PL
-         ypYcjEuCw2g/A54iDwbwvnr8GAkBUmbajh6osAcdYuvvSZ/UtKi/enp6bsAbsOSjvUeZ
-         OCMg==
+        d=google.com; s=20230601; t=1696547336; x=1697152136; darn=lists.linux.dev;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6PH2cAsL7ZmGW0ga84DGnl+E4H8MGEhL8hL3s4dJUcs=;
+        b=Wjg6H4/5zjJKHu5ULD853F/X9oMFaGoBq4wT37fRdYJePCDOmc6whscN0FArgIOa/J
+         UF3Vx6dyXI98WHQj+QwSz1Zqx1PPnVhmapvfKeXNE2lVDBLZ07v5iQsreqpuaBv2gVpW
+         lEegHuuqWKF1Xc1OfTSGhv4llkqI0u4A44QLPloB2FTKYin773nP3+SYCi4ioIIWCc0s
+         JQpkxMnSvlm504l2KUTSq1LEsnYYLGgIg6vewkAiJpVaKqQYyt//ue8g6XdAyUTiPRqi
+         3ehsPdCkARkWLOBATNZJv6qfYeaUfjXH/bhG96SCGHZQq+vw8xcJr9hhhhaad+OO++Ig
+         w+5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696545549; x=1697150349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yVE7SUNr8dOdJFRW7Bjbr6OwiQITtpL3cHyTpIFhRi4=;
-        b=vBoMNqMpElZlCOTc4Ju1HQrAxeyEo16ENgzyEtyYhJ4MMnyjjc0YX4ToRVaQYn8PLa
-         c/a/g868Rqn/vCJuETZq08zlQ11ABxHOHFoMTHuHgI2OYnb+4Ejy27ona2tz06x6U6wz
-         xlOpB7YXuW0Lhv+GjbInaKLhycz2HmuMksvzPABr1OR0RYlI6F1Ioun6pVLwJzAJFq0m
-         KCwMDbcIUf2VcXYlekvUBxEQ0mktiPbWfV1SKJtBkuhhJGURXQN90m4g56O3dUUf7NAb
-         a5it3+iKuKtsRLJWNbiQf9F9LlSCIABnMz2YlgMvxuwFAZCo1qxPm1+ddlD/LhqWxbGR
-         3jbg==
-X-Gm-Message-State: AOJu0Yz0WiQykZO7lNNnrNVAk0v3MZux9qrCNWA/IBEuVGmm69KfvZnI
-	svH0IWQKp9+4a/KEl1YybZ29i5n7sVvC9Uh3rVNwhg==
-X-Google-Smtp-Source: AGHT+IHYdBFarHeFFHinCQkTkwRAYhuGd8qGiXmmKvGN+V9Xz8zSAPN3oWFopZLixwBanSyCcHoIrKXARV0tZ/Pi7x8=
-X-Received: by 2002:ac2:51a5:0:b0:501:a2b9:6046 with SMTP id
- f5-20020ac251a5000000b00501a2b96046mr70418lfk.7.1696545549064; Thu, 05 Oct
- 2023 15:39:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696547336; x=1697152136;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6PH2cAsL7ZmGW0ga84DGnl+E4H8MGEhL8hL3s4dJUcs=;
+        b=wXOq9DAIIJw7tkJ5vhj94Sf5sJhFjmUEF6Iv0SzHIPc2ZtTij5dLfV8uvkzEex6U0O
+         C/ysr57hhjqXBkFrfGjfZ0ebpNf22MijTOLh0XOZNjxApaHx8H6gcIJijn7SsfmL4TNi
+         Ye+teu7hTGztB3kjR98ojrLfJLgc8BBmqqWv7xDiLVfttgY6D9U1/DSES2x9znryfutG
+         Z4HE/ShohuxSo77BlkJFqwN1g7z/wX/dswmLCY+l3fm92u8Ccm8aFVrCfpzA7ug41ElD
+         LrjSJdqFc2NDV5iAwAb7m+JaiDzquPvH+IbsJV/67Yoo+w+0lJZeadS/DDaS1G1n/Pzx
+         /Gjw==
+X-Gm-Message-State: AOJu0YwwTRrIRnTWG08bFIyrK40CXpnxCT82AYadACkfsJNg46p8D6nM
+	5JqTgeEn5Gmzu4viaEoF5U6ixHhIn4/A
+X-Google-Smtp-Source: AGHT+IGmTeCTxelDhJ6LgrAsC5ohSvy9KxR9w2zSEbYKKeER/RxN0dw/vm8Y+jDSo+tx+urMxsQIl5sLvuPE
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
+ (user=irogers job=sendgmr) by 2002:a25:694b:0:b0:d7b:8d0c:43f0 with SMTP id
+ e72-20020a25694b000000b00d7b8d0c43f0mr104227ybc.11.1696547336405; Thu, 05 Oct
+ 2023 16:08:56 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:33 -0700
+Message-Id: <20231005230851.3666908-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230923053515.535607-1-irogers@google.com> <20230923053515.535607-4-irogers@google.com>
- <CAKwvOdngy8a0n7TapeMPvANvp1uQuJAJk9i3kDNWx+czFL0=cQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdngy8a0n7TapeMPvANvp1uQuJAJk9i3kDNWx+czFL0=cQ@mail.gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
+Subject: [PATCH v2 00/18] clang-tools support in tools
 From: Ian Rogers <irogers@google.com>
-Date: Thu, 5 Oct 2023 15:38:57 -0700
-Message-ID: <CAP-5=fUos9Hv2OmVVGrcLdZz15U-L+xD5d-6HYaqaVSoT39siQ@mail.gmail.com>
-Subject: Re: [PATCH v1 03/18] run-clang-tools: Add pass through checks and and
- header-filter arguments
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Yicong Yang <yangyicong@hisilicon.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Ming Wang <wangming01@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Yanteng Si <siyanteng@loongson.cn>, Yuan Can <yuancan@huawei.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
+	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 25, 2023 at 8:44=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Sep 22, 2023 at 10:35=E2=80=AFPM Ian Rogers <irogers@google.com> =
-wrote:
-> >
-> > Add a -checks argument to allow the checks passed to the clang-tool to
-> > be set on the command line.
-> >
-> > Add a pass through -header-filter option.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  scripts/clang-tools/run-clang-tools.py | 34 ++++++++++++++++++++------
-> >  1 file changed, 27 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-too=
-ls/run-clang-tools.py
-> > index 3266708a8658..5dfe03852cb4 100755
-> > --- a/scripts/clang-tools/run-clang-tools.py
-> > +++ b/scripts/clang-tools/run-clang-tools.py
-> > @@ -33,6 +33,11 @@ def parse_arguments():
-> >      path_help =3D "Path to the compilation database to parse"
-> >      parser.add_argument("path", type=3Dstr, help=3Dpath_help)
-> >
-> > +    checks_help =3D "Checks to pass to the analysis"
-> > +    parser.add_argument("-checks", type=3Dstr, default=3DNone, help=3D=
-checks_help)
-> > +    header_filter_help =3D "Pass the -header-filter value to the tool"
-> > +    parser.add_argument("-header-filter", type=3Dstr, default=3DNone, =
-help=3Dheader_filter_help)
-> > +
-> >      return parser.parse_args()
-> >
-> >
-> > @@ -45,14 +50,29 @@ def init(l, a):
-> >
-> >  def run_analysis(entry):
-> >      # Disable all checks, then re-enable the ones we want
-> > -    checks =3D []
-> > -    checks.append("-checks=3D-*")
-> > -    if args.type =3D=3D "clang-tidy":
-> > -        checks.append("linuxkernel-*")
-> > +    global args
-> > +    checks =3D None
-> > +    if args.checks:
-> > +        checks =3D args.checks.split(',')
-> >      else:
-> > -        checks.append("clang-analyzer-*")
-> > -        checks.append("-clang-analyzer-security.insecureAPI.Deprecated=
-OrUnsafeBufferHandling")
-> > -    p =3D subprocess.run(["clang-tidy", "-p", args.path, ",".join(chec=
-ks), entry["file"]],
-> > +        checks =3D ["-*"]
-> > +        if args.type =3D=3D "clang-tidy":
-> > +            checks.append("linuxkernel-*")
-> > +        else:
-> > +            checks.append("clang-analyzer-*")
-> > +            checks.append("-clang-analyzer-security.insecureAPI.Deprec=
-atedOrUnsafeBufferHandling")
-> > +    file =3D entry["file"]
-> > +    if not file.endswith(".c") and not file.endswith(".cpp"):
-> > +        with lock:
-> > +            print(f"Skipping non-C file: '{file}'", file=3Dsys.stderr)
-> > +        return
-> > +    pargs =3D ["clang-tidy", "-p", args.path]
-> > +    if checks:
->
-> ^ can `checks` ever be falsy here?  I don't think we need this
-> conditional check?
+Allow the clang-tools scripts to work with builds in tools such as
+tools/perf and tools/lib/perf. An example use looks like:
 
-Agreed, it was for an option that I removed. Will fix in v2.
+```
+$ cd tools/perf
+$ make CC=clang CXX=clang++
+$ ../../scripts/clang-tools/gen_compile_commands.py
+$ ../../scripts/clang-tools/run-clang-tools.py clang-tidy compile_commands.json -checks=-*,readability-named-parameter
+Skipping non-C file: 'tools/perf/bench/mem-memcpy-x86-64-asm.S'
+Skipping non-C file: 'tools/perf/bench/mem-memset-x86-64-asm.S'
+Skipping non-C file: 'tools/perf/arch/x86/tests/regs_load.S'
+8 warnings generated.
+Suppressed 8 warnings (8 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+2 warnings generated.
+4 warnings generated.
+Suppressed 4 warnings (4 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+2 warnings generated.
+4 warnings generated.
+Suppressed 4 warnings (4 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+3 warnings generated.
+tools/perf/util/parse-events-flex.c:546:27: warning: all parameters should be named in a function [readability-named-parameter]
+void *yyalloc ( yy_size_t , yyscan_t yyscanner );
+                          ^
+                           /*size*/
+...
+```
 
-Thanks,
-Ian
+Fix a number of the more serious low-hanging issues in perf found by
+clang-tidy.
 
-> > +        pargs.append("-checks=3D" + ",".join(checks))
-> > +    if args.header_filter:
-> > +        pargs.append("-header-filter=3D" + args.header_filter)
-> > +    pargs.append(file)
-> > +    p =3D subprocess.run(pargs,
-> >                         stdout=3Dsubprocess.PIPE,
-> >                         stderr=3Dsubprocess.STDOUT,
-> >                         cwd=3Dentry["directory"])
-> > --
-> > 2.42.0.515.g380fc7ccd1-goog
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+This support isn't complete, in particular it doesn't support output
+directories properly and so fails for tools/lib/bpf, tools/bpf/bpftool
+and if an output directory is used.
+
+v2: Address comments by Nick Desaulniers in patch 3, and add their
+    Reviewed-by to patches 1 and 2.
+
+Ian Rogers (18):
+  gen_compile_commands: Allow the line prefix to still be cmd_
+  gen_compile_commands: Sort output compile commands by file name
+  run-clang-tools: Add pass through checks and and header-filter
+    arguments
+  perf hisi-ptt: Fix potential memory leak
+  perf bench uprobe: Fix potential use of memory after free
+  perf buildid-cache: Fix use of uninitialized value
+  perf env: Remove unnecessary NULL tests
+  perf jitdump: Avoid memory leak
+  perf mem-events: Avoid uninitialized read
+  perf dlfilter: Be defensive against potential NULL dereference
+  perf hists browser: Reorder variables to reduce padding
+  perf hists browser: Avoid potential NULL dereference
+  perf svghelper: Avoid memory leak
+  perf parse-events: Fix unlikely memory leak when cloning terms
+  tools api: Avoid potential double free
+  perf trace-event-info: Avoid passing NULL value to closedir
+  perf header: Fix various error path memory leaks
+  perf bpf_counter: Fix a few memory leaks
+
+ scripts/clang-tools/gen_compile_commands.py |  8 +--
+ scripts/clang-tools/run-clang-tools.py      | 32 ++++++++---
+ tools/lib/api/io.h                          |  1 +
+ tools/perf/bench/uprobe.c                   |  1 +
+ tools/perf/builtin-buildid-cache.c          |  6 +-
+ tools/perf/builtin-lock.c                   |  1 +
+ tools/perf/ui/browsers/hists.c              |  6 +-
+ tools/perf/util/bpf_counter.c               |  5 +-
+ tools/perf/util/dlfilter.c                  |  4 +-
+ tools/perf/util/env.c                       |  6 +-
+ tools/perf/util/header.c                    | 63 +++++++++++++--------
+ tools/perf/util/hisi-ptt.c                  | 12 ++--
+ tools/perf/util/jitdump.c                   |  1 +
+ tools/perf/util/mem-events.c                |  3 +-
+ tools/perf/util/parse-events.c              |  4 +-
+ tools/perf/util/svghelper.c                 |  5 +-
+ tools/perf/util/trace-event-info.c          |  3 +-
+ 17 files changed, 104 insertions(+), 57 deletions(-)
+
+-- 
+2.42.0.609.gbb76f46606-goog
+
