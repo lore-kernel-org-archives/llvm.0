@@ -1,46 +1,46 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAD814001
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5051114001
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1+kiBGZO"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d9299cac11aso1322408276.2
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2EENq9ZG"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5a4f656f751so23141477b3.0
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696547344; x=1697152144; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696547346; x=1697152146; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uVKoLuc5a7LEHlQh90vyaH3VbvcXZG1OCxjaJSmoY8k=;
-        b=1+kiBGZOW/hAKzQjGfVe5gkicaF6y0YheLRJyDBlnTYvLvL153aZlgxgGrnalR2YRW
-         mbvnvh7s9On++9yd9reOlJ2WXBvfZQ1jUljrRAaKRbbLYLfd2KrInSlg1dL361zUp/4b
-         Y/vnM7VBQUXPbq/X935SsFc+TnJZIhNAeil6riFuqWjbLXEU6J6VGxLEC0li4FBHh0mw
-         LS05spm/vsbEj4O496jRsgfCe2r5RfSGLlWS9d9ZXAFfUXfeC0MiJqhdM0lcqiV2K8u8
-         KMIBS9H8zcaw6eUIKhVnTq9Fkv/+PFEX4Q7LS/ox2UnNPRyppSppipUCy5ztw10irSzr
-         YxjQ==
+        bh=aDPuyVd3XTrJMjMwlPDdlF9+59DlOSoA2gz1djDjGjM=;
+        b=2EENq9ZGTf/RF4nq3LpMCscF1IjUQUrKQcxZUjprAEX43cKsVIWGRaHPbfk3+O/Znh
+         ftVUe1y5ZpY6ALM6WqcmjJSI3wK9X6vwipmUzttw2QYuDweruoxwWNyqMbhXvn+NQX11
+         H86kaD74Ll5vWCLMZdhEDBtYKfHkjM37CHYbGY7Hrkr9W7L+hnYOrkGLUOsUMmWDG8ej
+         SbXPXBMxYCP8iecMggLii1lgl5JcF63wgmBeetH5HIXP6Z2ZaTifnMISBZxpfEN1uNpQ
+         BvCvydhOyBwxLygXBJIchFMBlMhuyNAALlrx687nz0bQQL6syjxp/vJPcLHX8FLtjQ6s
+         G94w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696547344; x=1697152144;
+        d=1e100.net; s=20230601; t=1696547346; x=1697152146;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uVKoLuc5a7LEHlQh90vyaH3VbvcXZG1OCxjaJSmoY8k=;
-        b=pjr8xQiO/ONi2QeXzTR8Km94HxhFvbmhCbPhe0DN/cMPr6CZIlHrii2C9nfkx0Uu8K
-         Ghluv5TUlC24gnfziczzcwFyGniQmW8sEfYMmlCLj/FeJW/sxgdnAdHN8RLfWHzyCTJJ
-         4VzWxb1iIyXmf+Rwwvn9LpCiVS1t3Yz7PUEdWv150c48FpmULimMN0iJUVtlQvPVv9o8
-         qxrVOvqqyc4QqIv8ibX2MTUi81JX5mSwNDFFaCDh1p+kbvyXAN2ES4TNodpONttKB3OX
-         Vn7j8X1cTfpM088q2GJeAiU/KZWhotN+GFggwgtBow3yWQtrRpvHQ6nWCfrPw0Zsvn1Y
-         r8Cw==
-X-Gm-Message-State: AOJu0Yy1dXbyffHUJwLrNPpoZbSNasFEfXFgBfUext8APcG72tsajIfw
-	FJHTkoryGKPAjfXRPth6idvejhUjdCjj
-X-Google-Smtp-Source: AGHT+IHo6U+kJASF6nCohpjFiAn0CLPcx5Qb6otqZC+Kpf+MOzGXa7HHf6AdITUGY7vbn2be8G5F1c0EEIDU
+        bh=aDPuyVd3XTrJMjMwlPDdlF9+59DlOSoA2gz1djDjGjM=;
+        b=CiBwx7DX/uRGgPibBqBMlv050oShdx5sMpctJxHdbh79vyxqCSevQIgl4KB7yxfzMR
+         tsFQaUzFRSDXmKy0mPQ82OkpKTb0aOnSjhlOe2RYTfRKumXlmTY2aOasvGOLIttL38Le
+         If3b68CH94dfmOdugjpp972n+R5NtpDKEBw5vSgklpEZhrOqEJdBNYBtpyPYsjJ5xj3v
+         JzzLFNiibAgq8gVE8C0HDvVbijzT4DhK+/FoaBTCoi1phluO3dgFmMvS/PAW2aB8w8it
+         UIxLDtdpQ4JpgmXSLvY+47sh+JvYJ2j6EDlWfApNRqHTzYanAMaaVSMhMUin4+RpDGhU
+         enrQ==
+X-Gm-Message-State: AOJu0YwCYsgERP75YHKXFSZDxx0HQ4AgMmzsV/QIn29p9u4+pLBYMs+4
+	sw8+i7g8ZOTV2l9QCC5PU4qz/SSPHF/y
+X-Google-Smtp-Source: AGHT+IFQDjjuJ9i5zSFcUSzRWjUMmm/ajUwJIkmJtY7wD6WB6BJUTaAn4xhEtzWUY7ES/84RgxbXsLDpBnQp
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
- (user=irogers job=sendgmr) by 2002:a25:d4d1:0:b0:d81:7d48:a459 with SMTP id
- m200-20020a25d4d1000000b00d817d48a459mr114013ybf.8.1696547344121; Thu, 05 Oct
- 2023 16:09:04 -0700 (PDT)
-Date: Thu,  5 Oct 2023 16:08:36 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:3146:b0:5a4:f657:3a95 with SMTP
+ id fc6-20020a05690c314600b005a4f6573a95mr91738ywb.1.1696547346425; Thu, 05
+ Oct 2023 16:09:06 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:37 -0700
 In-Reply-To: <20231005230851.3666908-1-irogers@google.com>
-Message-Id: <20231005230851.3666908-4-irogers@google.com>
+Message-Id: <20231005230851.3666908-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,8 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231005230851.3666908-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v2 03/18] run-clang-tools: Add pass through checks and and
- header-filter arguments
+Subject: [PATCH v2 04/18] perf hisi-ptt: Fix potential memory leak
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -67,69 +66,80 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add a -checks argument to allow the checks passed to the clang-tool to
-be set on the command line.
-
-Add a pass through -header-filter option.
-
-Don't run analysis on non-C or CPP files.
+Fix clang-tidy found potential memory leak and unread value:
+```
+tools/perf/util/hisi-ptt.c:108:3: warning: Value stored to 'data_offset' is never read [clang-analyzer-deadcode.DeadStores]
+                data_offset = 0;
+                ^             ~
+tools/perf/util/hisi-ptt.c:108:3: note: Value stored to 'data_offset' is never read
+                data_offset = 0;
+                ^             ~
+tools/perf/util/hisi-ptt.c:112:12: warning: Potential leak of memory pointed to by 'data' [clang-analyzer-unix.Malloc]
+                        return -errno;
+                                ^
+/usr/include/errno.h:38:18: note: expanded from macro 'errno'
+                 ^
+tools/perf/util/hisi-ptt.c:100:15: note: Memory is allocated
+        void *data = malloc(size);
+                     ^~~~~~~~~~~~
+tools/perf/util/hisi-ptt.c:104:6: note: Assuming 'data' is non-null
+        if (!data)
+            ^~~~~
+tools/perf/util/hisi-ptt.c:104:2: note: Taking false branch
+        if (!data)
+        ^
+tools/perf/util/hisi-ptt.c:107:6: note: Assuming the condition is false
+        if (perf_data__is_pipe(session->data)) {
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/hisi-ptt.c:107:2: note: Taking false branch
+        if (perf_data__is_pipe(session->data)) {
+        ^
+tools/perf/util/hisi-ptt.c:111:7: note: Assuming the condition is true
+                if (data_offset == -1)
+                    ^~~~~~~~~~~~~~~~~
+tools/perf/util/hisi-ptt.c:111:3: note: Taking true branch
+                if (data_offset == -1)
+                ^
+tools/perf/util/hisi-ptt.c:112:12: note: Potential leak of memory pointed to by 'data'
+                        return -errno;
+                                ^
+/usr/include/errno.h:38:18: note: expanded from macro 'errno'
+```
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- scripts/clang-tools/run-clang-tools.py | 32 ++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 7 deletions(-)
+ tools/perf/util/hisi-ptt.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
-index 3266708a8658..f31ffd09e1ea 100755
---- a/scripts/clang-tools/run-clang-tools.py
-+++ b/scripts/clang-tools/run-clang-tools.py
-@@ -33,6 +33,11 @@ def parse_arguments():
-     path_help = "Path to the compilation database to parse"
-     parser.add_argument("path", type=str, help=path_help)
+diff --git a/tools/perf/util/hisi-ptt.c b/tools/perf/util/hisi-ptt.c
+index 45b614bb73bf..ea297329c526 100644
+--- a/tools/perf/util/hisi-ptt.c
++++ b/tools/perf/util/hisi-ptt.c
+@@ -98,18 +98,18 @@ static int hisi_ptt_process_auxtrace_event(struct perf_session *session,
+ 	int fd = perf_data__fd(session->data);
+ 	int size = event->auxtrace.size;
+ 	void *data = malloc(size);
+-	off_t data_offset;
+ 	int err;
  
-+    checks_help = "Checks to pass to the analysis"
-+    parser.add_argument("-checks", type=str, default=None, help=checks_help)
-+    header_filter_help = "Pass the -header-filter value to the tool"
-+    parser.add_argument("-header-filter", type=str, default=None, help=header_filter_help)
+ 	if (!data)
+ 		return -errno;
+ 
+-	if (perf_data__is_pipe(session->data)) {
+-		data_offset = 0;
+-	} else {
+-		data_offset = lseek(fd, 0, SEEK_CUR);
+-		if (data_offset == -1)
++	if (!perf_data__is_pipe(session->data)) {
++		off_t data_offset = lseek(fd, 0, SEEK_CUR);
 +
-     return parser.parse_args()
++		if (data_offset == -1) {
++			free(data);
+ 			return -errno;
++		}
+ 	}
  
- 
-@@ -45,14 +50,27 @@ def init(l, a):
- 
- def run_analysis(entry):
-     # Disable all checks, then re-enable the ones we want
--    checks = []
--    checks.append("-checks=-*")
--    if args.type == "clang-tidy":
--        checks.append("linuxkernel-*")
-+    global args
-+    checks = None
-+    if args.checks:
-+        checks = args.checks.split(',')
-     else:
--        checks.append("clang-analyzer-*")
--        checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling")
--    p = subprocess.run(["clang-tidy", "-p", args.path, ",".join(checks), entry["file"]],
-+        checks = ["-*"]
-+        if args.type == "clang-tidy":
-+            checks.append("linuxkernel-*")
-+        else:
-+            checks.append("clang-analyzer-*")
-+            checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling")
-+    file = entry["file"]
-+    if not file.endswith(".c") and not file.endswith(".cpp"):
-+        with lock:
-+            print(f"Skipping non-C file: '{file}'", file=sys.stderr)
-+        return
-+    pargs = ["clang-tidy", "-p", args.path, "-checks=" + ",".join(checks)]
-+    if args.header_filter:
-+        pargs.append("-header-filter=" + args.header_filter)
-+    pargs.append(file)
-+    p = subprocess.run(pargs,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.STDOUT,
-                        cwd=entry["directory"])
+ 	err = readn(fd, data, size);
 -- 
 2.42.0.609.gbb76f46606-goog
 
