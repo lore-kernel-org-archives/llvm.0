@@ -1,36 +1,36 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCF8372
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 04:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E977FA
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 04:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hehHETMl"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="T2bMfJeS"
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3953shNd003958;
-	Thu, 5 Oct 2023 04:31:46 GMT
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3952Wv5l000725;
+	Thu, 5 Oct 2023 04:31:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=H8Wr2XjEs5oHuA9SGyGdCEHWKMZtg85Nl/LHRslFifI=;
- b=hehHETMlVrTZWnAyRycCJEBk1939LNg5tLlo1n7Mqf1QPzJ574dKder4EGSyQQoEDQhw
- gDTM6tM/HXy2EfkemKtTt4MSa6U9HLAkfKJ02HuXDzh2NwOQOy2lhX5+wJQwn3LYCQyE
- 1HC6MMeO+EMFRAxQghNy/vsavbwylyegGAqg4GIvp/bOcmkjKbosc+zrIdkqxzgIYGgp
- 6vm3KibuDn5FAtaeCysp4QfQMUW2JZ5TCle1qDNp/fqfAJ6S05GZR5qLv5+HhMwRRJ60
- axI5XQ07ltDI1WpaGXl0LHaFPwvDLuSIivoMT+uaKDD1eDKTVlOowRKob7YmntUpsjGR Zw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgynhb4ac-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=aNc/qQqVLrd5xCqMkKsIbyqjupUyO0PkNQXzy7ahMHA=;
+ b=T2bMfJeSlP+bWY+aPttMPiUF7rC/gMuqJ42qsO0bYvxjWrEz+mLZyWkEEY+cX+wi1cP/
+ 0C4YVlBpN1JId0nBVc8wW7tU8X4BBpcppHnrZUVX7TPT3ppG6ORaX4ST64kDVuSLRqT9
+ GzH3d0/5gJw4i9e4GOO818F6POEqb4X6xIfbIr1M/8E3Xu6688pY94DeRR3vtOJNv5ZB
+ ql+6RpO77DOOcHgpgtvr/PLhM39tCzSab2M9OpFhb9mnfM9sSSDTsC+NQSWyGur98gNu
+ 1LD38eK/P5fhD4JCtSAQoK1gJLgsgnQYvR3QDZzbc8k17U9BnYwz71Jmy+GSQ9++hgdi CA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgqth3th1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Oct 2023 04:31:46 +0000
+	Thu, 05 Oct 2023 04:31:58 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3954VjL0031892
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3954VvpI011499
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Oct 2023 04:31:45 GMT
+	Thu, 5 Oct 2023 04:31:57 GMT
 Received: from hu-devipriy-blr.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Wed, 4 Oct 2023 21:31:39 -0700
+ 15.2.1118.36; Wed, 4 Oct 2023 21:31:51 -0700
 From: Devi Priya <quic_devipriy@quicinc.com>
 To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
         <lee@kernel.org>, <robh+dt@kernel.org>,
@@ -41,59 +41,160 @@ To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
         <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
 CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
         <nathan@kernel.org>
-Subject: [PATCH V14 0/4] Add PWM support for IPQ chipsets 
-Date: Thu, 5 Oct 2023 10:01:23 +0530
-Message-ID: <20231005043127.2690639-1-quic_devipriy@quicinc.com>
+Subject: [PATCH V14 2/4] dt-bindings: pwm: add IPQ6018 binding
+Date: Thu, 5 Oct 2023 10:01:25 +0530
+Message-ID: <20231005043127.2690639-3-quic_devipriy@quicinc.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231005043127.2690639-1-quic_devipriy@quicinc.com>
+References: <20231005043127.2690639-1-quic_devipriy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cD2-C3Mm6cNGDwF9ERfa-e35sLhrlgAm
-X-Proofpoint-ORIG-GUID: cD2-C3Mm6cNGDwF9ERfa-e35sLhrlgAm
+X-Proofpoint-ORIG-GUID: lhP7K0QSAbvAMaOZtoyHr8rw6AgOtNox
+X-Proofpoint-GUID: lhP7K0QSAbvAMaOZtoyHr8rw6AgOtNox
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-05_01,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=671 clxscore=1015 adultscore=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999
+ impostorscore=0 bulkscore=0 clxscore=1015 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2309180000 definitions=main-2310050037
 
-Add PWM driver and binding support for IPQ chipsets.
-Also, add support for pwm node in ipq6018.
+DT binding for the PWM block in Qualcomm IPQ6018 SoC.
 
-V14:
-Detailed Change logs are added to the respective patches.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
+Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
+Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+---
+v14:
 
-V13 can be found at:
-https://lore.kernel.org/linux-arm-msm/20231004090449.256229-1-quic_devipriy@quicinc.com/
+  Picked up the R-b tag
 
-Devi Priya (4):
-  pwm: driver for qualcomm ipq6018 pwm block
-  dt-bindings: pwm: add IPQ6018 binding
-  dt-bindings: mfd: qcom,tcsr: Add simple-mfd support for IPQ6018
-  arm64: dts: qcom: ipq6018: add pwm node
+v13:
 
- .../devicetree/bindings/mfd/qcom,tcsr.yaml    | 112 +++++--
- .../bindings/pwm/qcom,ipq6018-pwm.yaml        |  45 +++
- arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  15 +-
- drivers/pwm/Kconfig                           |  12 +
- drivers/pwm/Makefile                          |   1 +
- drivers/pwm/pwm-ipq.c                         | 282 ++++++++++++++++++
- 6 files changed, 435 insertions(+), 32 deletions(-)
+  Updated the file name to match the compatible
+  
+  Sorted the properties and updated the order in the required field
+
+  Dropped the syscon node from examples
+
+v12:
+
+  Picked up the R-b tag
+
+v11:
+
+  No change
+
+v10:
+
+  No change
+
+v9:
+
+  Add 'ranges' property to example (Rob)
+
+  Drop label in example (Rob)
+
+v8:
+
+  Add size cell to 'reg' (Rob)
+
+v7:
+
+  Use 'reg' instead of 'offset' (Rob)
+
+  Drop 'clock-names' and 'assigned-clock*' (Bjorn)
+
+  Use single cell address/size in example node (Bjorn)
+
+  Move '#pwm-cells' lower in example node (Bjorn)
+
+  List 'reg' as required
+
+v6:
+
+  Device node is child of TCSR; remove phandle (Rob Herring)
+
+  Add assigned-clocks/assigned-clock-rates (Uwe Kleine-König)
+
+v5: Use qcom,pwm-regs for phandle instead of direct regs (Bjorn
+    Andersson, Kathiravan T)
+
+v4: Update the binding example node as well (Rob Herring's bot)
+
+v3: s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
+
+v2: Make #pwm-cells const (Rob Herring)
+
+ .../bindings/pwm/qcom,ipq6018-pwm.yaml        | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml
- create mode 100644 drivers/pwm/pwm-ipq.c
 
+diff --git a/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml b/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml
+new file mode 100644
+index 000000000000..6d0d7ed271f7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pwm/qcom,ipq6018-pwm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm IPQ6018 PWM controller
++
++maintainers:
++  - Baruch Siach <baruch@tkos.co.il>
++
++properties:
++  compatible:
++    const: qcom,ipq6018-pwm
++
++  reg:
++    description: Offset of PWM register in the TCSR block.
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  "#pwm-cells":
++    const: 2
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - "#pwm-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,gcc-ipq6018.h>
++
++    pwm: pwm@a010 {
++        compatible = "qcom,ipq6018-pwm";
++        reg = <0xa010 0x20>;
++        clocks = <&gcc GCC_ADSS_PWM_CLK>;
++        assigned-clocks = <&gcc GCC_ADSS_PWM_CLK>;
++        assigned-clock-rates = <100000000>;
++        #pwm-cells = <2>;
++    };
 -- 
 2.34.1
 
