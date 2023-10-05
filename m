@@ -1,182 +1,362 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2A57F
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 09:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610BF134A0;
+	Thu,  5 Oct 2023 11:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWCcKM8N"
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40684f53ef3so7055575e9.3
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 02:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696498964; x=1697103764; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=693KH3zKhYevDlo1VF7tZiOPFyQxum49fs5ILYx5v8c=;
-        b=RWCcKM8Ny5qi+7wOk6Z75Wv7bID9POIIc1uDtvs6wlBvm14L01TY2BBOkGrbhkkqe2
-         DY5r1+kNBkRPgjtcfjU9o5dlwueXEzLp/wqXJsHo7NSDT4QqryRMFpRzh5ouUxqQucfE
-         Jx8fE0rF6MzcMSWcC9an63gLgHQGYdkQ9vR8CC/wISdiMMs6Cvk3YVySPOO4Rl13eHeV
-         5t1rVbwr9m5GCnXw5Or3KSgONjZIt8++51rfCdg0cQNJ7gxM8Wb7Lhc1Bk0KrRNseG/N
-         ET0AbIsxAc7Fjx82Gpq1D07nG+5FJhHqAWZG87LcIaglr3UB7MoACj3+2UpxqCprErA1
-         w6pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696498964; x=1697103764;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=693KH3zKhYevDlo1VF7tZiOPFyQxum49fs5ILYx5v8c=;
-        b=A+VaTwut4sDKdl3/pwCbU30QGwznjkejJwTsA78CEov+Vr72pXPAMuTyWItnIr7SJz
-         hAgg0UleDajeO0nL3rmQydFFbzKSkPbQ1nPKVk4f+5aBG4jcJDGj3QezDhZ4XWBFgEL+
-         lasaw9QnrWHpi8cBA0M/xsfApQMkxmBCUwLYCSvbn764GIpVF4XLD83KbYWA933Bbsfx
-         S7NDocFwx0WpCnTniOg3+0FQFGvHA0zyse4BypFS0kcYWrNHFyEeIg9+qRpo0biKI+TS
-         o8rIaJWOIPc5K0lm4f/Lno96eWEKKHSLUBNX+x43NLw2f/dpHzDBMCM0UIkPEkPyLTLR
-         FEvg==
-X-Gm-Message-State: AOJu0Yyi/U7/GFojVS22DEu3X4E9dFNVqeoxcZ41SEpIFVu9B6mKWFKG
-	AZ9dYNAoD29+WkCLGNZbibU=
-X-Google-Smtp-Source: AGHT+IEqCjtTNseNA7LGC5Lm5Y9+taQvSKRx7vpW4rapsxY7APIyKIIa0O5eElHs85P9+NWErlFwBw==
-X-Received: by 2002:a05:600c:c9:b0:405:3dee:3515 with SMTP id u9-20020a05600c00c900b004053dee3515mr4625492wmm.27.1696498964439;
-        Thu, 05 Oct 2023 02:42:44 -0700 (PDT)
-Received: from [10.254.108.106] (munvpn.amd.com. [165.204.72.6])
-        by smtp.gmail.com with ESMTPSA id w21-20020a05600c015500b0040535648639sm1103836wmm.36.2023.10.05.02.42.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 02:42:43 -0700 (PDT)
-Message-ID: <d58bbe17-efa7-4548-9c7d-bf0310d31ef5@gmail.com>
-Date: Thu, 5 Oct 2023 11:42:38 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HQPRrwDa"
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696505877; x=1728041877;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bioFuL2EwvNC9YQ/WhmfYbJLGPCrMDHXAPzqngxOiSw=;
+  b=HQPRrwDaj0/eg8XGBu40HH+NZdXLbtU/v7YjlL9zMWPtR7REBLdtbvH+
+   Jha1ypv/5nK2n9L4a0PmTl0SDSv616OI8BJmvSX6eMlcTEQ/BE7HHIPim
+   fUH3D0zRjYvzEaE2IieGhgXyIwp0sRsZ8gKd1xqIN9fAPCcvzf9g/07+a
+   kKggwLYPQPPNnnUAf975qXNcVvSSRqX24LBw4ufJ4XaEWMnsuFGW4sVzH
+   /DZAnnwB+jwT1Ig1TJUeOZNgKeakRCmR4SRB6eOOM1Z/FaAz09lX6bj7j
+   /VwbDFS9DKZ3O8+t6CizOA6gbsECeCPtyLISINq5O/ApsJbzCn2R7bHTD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="368544183"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="368544183"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 04:37:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="701624299"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="701624299"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 05 Oct 2023 04:37:50 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qoMfr-000LLc-2l;
+	Thu, 05 Oct 2023 11:37:47 +0000
+Date: Thu, 5 Oct 2023 19:37:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Michael Walle <michael@walle.cc>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Rob Herring <robh+dt@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Robert Marko <robert.marko@sartura.hr>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Luka Perkov <luka.perkov@sartura.hr>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Daniel Golle <daniel@makrotopia.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v11 3/7] nvmem: Move of_nvmem_layout_get_container() in
+ another header
+Message-ID: <202310051908.k19kiBY7-lkp@intel.com>
+References: <20231004222236.411248-4-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/9] drm: Annotate structs with __counted_by
-To: Kees Cook <keescook@chromium.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Alex Deucher <alexdeucher@gmail.com>, David Airlie <airlied@gmail.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, Karol Herbst <kherbst@redhat.com>,
- Tom Rix <trix@redhat.com>, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>, dri-devel@lists.freedesktop.org,
- Chris Wilson <chris@chris-wilson.co.uk>, Prike Liang <Prike.Liang@amd.com>,
- Huang Rui <ray.huang@amd.com>, Gerd Hoffmann <kraxel@redhat.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Matthew Brost <matthew.brost@intel.com>, Evan Quan <evan.quan@amd.com>,
- Emma Anholt <emma@anholt.net>, amd-gfx@lists.freedesktop.org,
- Kuogee Hsieh <quic_khsieh@quicinc.com>, Lijo Lazar <lijo.lazar@amd.com>,
- VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
- Ben Skeggs <bskeggs@redhat.com>, Andi Shyti <andi.shyti@linux.intel.com>,
- nouveau@lists.freedesktop.org, David Airlie <airlied@redhat.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Chia-I Wu
- <olvaffe@gmail.com>, llvm@lists.linux.dev, Yifan Zhang
- <yifan1.zhang@amd.com>, linux-arm-msm@vger.kernel.org,
- intel-gfx@lists.freedesktop.org, Kevin Wang <kevin1.wang@amd.com>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>, Le Ma <le.ma@amd.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>,
- Maxime Ripard <mripard@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- virtualization@lists.linux-foundation.org, Sean Paul <sean@poorly.run>,
- Neil Armstrong <neil.armstrong@linaro.org>, Xiaojian Du
- <Xiaojian.Du@amd.com>, Lang Yu <Lang.Yu@amd.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Tejas Upadhyay <tejas.upadhyay@intel.com>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
- Hawking Zhang <Hawking.Zhang@amd.com>, Rob Clark <robdclark@gmail.com>,
- Melissa Wen <mwen@igalia.com>, John Harrison <john.c.harrison@intel.com>,
- Daniel Vetter <daniel@ffwll.ch>, Alex Deucher <alexander.deucher@amd.com>,
- Nirmoy Das <nirmoy.das@intel.com>, freedreno@lists.freedesktop.org,
- Zack Rusin <zackr@vmware.com>, linux-hardening@vger.kernel.org
-References: <20230922173110.work.084-kees@kernel.org>
- <169601600138.3014939.8511343741428844249.b4-ty@chromium.org>
- <83cd056c-52ae-01dd-7576-42d41da64c26@gmail.com>
- <CADnq5_Ma2CrLYggJHKFEObsNmUoqJwb2p1xai5DfL=m43U6zEA@mail.gmail.com>
- <202310020952.E7DE0948C0@keescook>
- <10644b5f-b0a7-85ef-0658-2353ee14df0d@gmail.com>
- <202310021107.9BB46FB8E@keescook>
- <0be2dfa4-b6c1-f62a-66e1-615da7aa3c76@amd.com>
- <202310021122.B6DA850FB0@keescook>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <202310021122.B6DA850FB0@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231004222236.411248-4-miquel.raynal@bootlin.com>
 
-Am 02.10.23 um 20:22 schrieb Kees Cook:
-> On Mon, Oct 02, 2023 at 08:11:41PM +0200, Christian König wrote:
->> Am 02.10.23 um 20:08 schrieb Kees Cook:
->>> On Mon, Oct 02, 2023 at 08:01:57PM +0200, Christian König wrote:
->>>> Am 02.10.23 um 18:53 schrieb Kees Cook:
->>>>> On Mon, Oct 02, 2023 at 11:06:19AM -0400, Alex Deucher wrote:
->>>>>> On Mon, Oct 2, 2023 at 5:20 AM Christian König
->>>>>> <ckoenig.leichtzumerken@gmail.com> wrote:
->>>>>>> Am 29.09.23 um 21:33 schrieb Kees Cook:
->>>>>>>> On Fri, 22 Sep 2023 10:32:05 -0700, Kees Cook wrote:
->>>>>>>>> This is a batch of patches touching drm for preparing for the coming
->>>>>>>>> implementation by GCC and Clang of the __counted_by attribute. Flexible
->>>>>>>>> array members annotated with __counted_by can have their accesses
->>>>>>>>> bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS (for array
->>>>>>>>> indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family functions).
->>>>>>>>>
->>>>>>>>> As found with Coccinelle[1], add __counted_by to structs that would
->>>>>>>>> benefit from the annotation.
->>>>>>>>>
->>>>>>>>> [...]
->>>>>>>> Since this got Acks, I figure I should carry it in my tree. Let me know
->>>>>>>> if this should go via drm instead.
->>>>>>>>
->>>>>>>> Applied to for-next/hardening, thanks!
->>>>>>>>
->>>>>>>> [1/9] drm/amd/pm: Annotate struct smu10_voltage_dependency_table with __counted_by
->>>>>>>>           https://git.kernel.org/kees/c/a6046ac659d6
->>>>>>> STOP! In a follow up discussion Alex and I figured out that this won't work.
->>>>> I'm so confused; from the discussion I saw that Alex said both instances
->>>>> were false positives?
->>>>>
->>>>>>> The value in the structure is byte swapped based on some firmware
->>>>>>> endianness which not necessary matches the CPU endianness.
->>>>>> SMU10 is APU only so the endianess of the SMU firmware and the CPU
->>>>>> will always match.
->>>>> Which I think is what is being said here?
->>>>>
->>>>>>> Please revert that one from going upstream if it's already on it's way.
->>>>>>>
->>>>>>> And because of those reasons I strongly think that patches like this
->>>>>>> should go through the DRM tree :)
->>>>> Sure, that's fine -- please let me know. It was others Acked/etc. Who
->>>>> should carry these patches?
->>>> Probably best if the relevant maintainer pick them up individually.
->>>>
->>>> Some of those structures are filled in by firmware/hardware and only the
->>>> maintainers can judge if that value actually matches what the compiler
->>>> needs.
->>>>
->>>> We have cases where individual bits are used as flags or when the size is
->>>> byte swapped etc...
->>>>
->>>> Even Alex and I didn't immediately say how and where that field is actually
->>>> used and had to dig that up. That's where the confusion came from.
->>> Okay, I've dropped them all from my tree. Several had Acks/Reviews, so
->>> hopefully those can get picked up for the DRM tree?
->> I will pick those up to go through drm-misc-next.
->>
->> Going to ping maintainers once more when I'm not sure if stuff is correct or
->> not.
-> Sounds great; thanks!
+Hi Miquel,
 
-I wasn't 100% sure for the VC4 patch, but pushed the whole set to 
-drm-misc-next anyway.
+kernel test robot noticed the following build errors:
 
-This also means that the patches are now auto merged into the drm-tip 
-integration branch and should any build or unit test go boom we should 
-notice immediately and can revert it pretty easily.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.6-rc4 next-20231005]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Christian.
+url:    https://github.com/intel-lab-lkp/linux/commits/Miquel-Raynal/of-device-Export-of_device_make_bus_id/20231005-062417
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20231004222236.411248-4-miquel.raynal%40bootlin.com
+patch subject: [PATCH v11 3/7] nvmem: Move of_nvmem_layout_get_container() in another header
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231005/202310051908.k19kiBY7-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231005/202310051908.k19kiBY7-lkp@intel.com/reproduce)
 
->
-> -Kees
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310051908.k19kiBY7-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   In file included from block/partitions/msdos.c:31:
+   In file included from block/partitions/check.h:2:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from block/partitions/msdos.c:31:
+   In file included from block/partitions/check.h:2:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from block/partitions/msdos.c:31:
+   In file included from block/partitions/check.h:2:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from block/partitions/msdos.c:32:
+   In file included from block/partitions/efi.h:19:
+   In file included from include/linux/efi.h:20:
+   In file included from include/linux/rtc.h:18:
+>> include/linux/nvmem-provider.h:256:1: error: expected identifier or '('
+     256 | {
+         | ^
+   12 warnings and 1 error generated.
+--
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:18:
+>> include/linux/nvmem-provider.h:256:1: error: expected identifier or '('
+     256 | {
+         | ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     100 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+
+
+vim +256 include/linux/nvmem-provider.h
+
+   254	
+   255	static inline struct device_node *of_nvmem_layout_get_container(struct nvmem_device *nvmem);
+ > 256	{
+   257		return NULL;
+   258	}
+   259	#endif /* CONFIG_NVMEM */
+   260	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
