@@ -1,244 +1,126 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C1334188
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 16:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047CC30F93
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 16:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="p1OPRm2U"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395DiBDh026642;
-	Thu, 5 Oct 2023 16:06:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=zpPueMzy8NacgapM4hPPe1DYhp5ru0FS8kAbfBI2rSE=;
- b=p1OPRm2U++3oj0FDPkmqzzlevDAXENAmBLfKFwiG2galGYzuRt3SF9RA5Hx0+mALNKlS
- FFNacDyyvy21BT1chOjdftdM+OyivPcCmUvsgqBlivO81TNRV+qVmw4VLsVcbl7VymYU
- kwAucFqfEiK3eUofRe6ObWu/mUvcW2wpCvfKM1x5R9R8SeAxOsDvAJq7XT/jZtIG/csx
- Il+e5UtTzRtNCitpgpB9Vepujb4r4JntwXiOGXCZOzZYKwh8At0zqz+Q7MiYRjw9BGbM
- PpnqnaDJ6A3EUQF+FtjybG457/JEPm5M5H7soiSbiHXzHBwtRgvWumjai7xbDadB5ma5 Uw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3thnfa9bak-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Oct 2023 16:06:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 395G6XSJ027626
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Oct 2023 16:06:34 GMT
-Received: from hu-devipriy-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 5 Oct 2023 09:06:28 -0700
-From: Devi Priya <quic_devipriy@quicinc.com>
-To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <thierry.reding@gmail.com>, <ndesaulniers@google.com>,
-        <trix@redhat.com>, <baruch@tkos.co.il>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
-        <nathan@kernel.org>
-Subject: [PATCH V15 3/4] dt-bindings: mfd: qcom,tcsr: Add simple-mfd support for IPQ6018
-Date: Thu, 5 Oct 2023 21:35:49 +0530
-Message-ID: <20231005160550.2423075-4-quic_devipriy@quicinc.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JKvhewLw"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1c6219307b2so8278305ad.1
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 09:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696522455; x=1697127255; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xBF/uFJVvJ7YTUEt6WwDwwpmUQaEEUWvnNqj8YdJfwI=;
+        b=JKvhewLwaB3+qQsOuHKD6GFY4M9BpoKv48c20onNntVyDJXokbogSzS9CsOa/lQjUV
+         NuSJBxmmxuNOdkwI3IcJCCdztHBtgU3EiqQeS9//+ArFXT/EaM2oX3UikzoKLw7jc8w5
+         1MtsiT7GHZoLno2ePJLWl7yv4cjKPEyyBcS+A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696522455; x=1697127255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xBF/uFJVvJ7YTUEt6WwDwwpmUQaEEUWvnNqj8YdJfwI=;
+        b=H4XJj+I+IkOEsqANQkV5+gTY6alLEiIV0QeSbS7ZgPTK8UxBcTc0J/xCGDtbTemDTP
+         ialTQI27sdgVoy2ZBdd9qIkYRTtfFkT7pdtqBGVi8U5JA96chLyaBW7dmZSj6lp5onMK
+         glsKguMfO1J3GufsxO/eo9mNy5Mx5b/SOs15ZhNvi+iRVnOnK3dfx2FE85UKSwbiiYox
+         59GTfT3X8o5sqlcbwBpIFCkwm2WNcUZpS5nw4f5o0BaJDNwFFwQ5ZHL9HQC1aE1EUALX
+         NGthH1xd9WMInNH79SEsk0n1Vbz1cGbTOrFbvwtP7ooAONPxZedgJLuZV/Bl68KGg3FU
+         YFFA==
+X-Gm-Message-State: AOJu0Yxo90RwegdeoT3xyN667QtD3wNrVbyN/ETMIIZz1PI2BsDKkfwy
+	rRjM0w7aD5PYu88uv/dQt8HgDg==
+X-Google-Smtp-Source: AGHT+IGEiAWvdJBH7vw0BMgCGCiF3Mgfn0JsxTp7iLsTYooxV9aBdAbTG33uN0QT0rwuirwD86o/pA==
+X-Received: by 2002:a17:903:110d:b0:1bb:d59d:8c57 with SMTP id n13-20020a170903110d00b001bbd59d8c57mr6223640plh.18.1696522455224;
+        Thu, 05 Oct 2023 09:14:15 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id iw11-20020a170903044b00b001ab2b4105ddsm1908267plb.60.2023.10.05.09.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 09:14:14 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: James Smart <james.smart@broadcom.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	linux-nvme@lists.infradead.org,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Chaitanya Kulkarni <kch@nvidia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] nvmet-fc: Annotate struct nvmet_fc_tgt_queue with __counted_by
+Date: Thu,  5 Oct 2023 09:14:12 -0700
+Message-Id: <20231005161408.it.584-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
-References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1706; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=/lvW3aKbNdffAyIzlZf6gptKlwtHFiNZjl+aiSSruKE=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlHuDUOvSUL7xliWcJbrUDOxdv4EUfSnKX5nVYU
+ HaIdxE+uD+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZR7g1AAKCRCJcvTf3G3A
+ JiKOD/96Q3m/bw8VJQ0KeM2IuPUQ633i3udn5aE3jXFjW+0sbngxXC3XfZhjBPWqskqZeuFQt/7
+ C79xRJkXdJad1LJ7YM24WaCnCt+fl97aXOTe9PxxPcb1AcG4vXEGxDvTbNYMLjs8FHj2xqM1YbW
+ Dn8wFtBa0znQB2zkit7kGuGEK08HMpZWo9wau5NjzVRERVhH69QRP1XFBi/cyj9ipeOXNK2wsue
+ 3xBl9/iAexBwfkye17sBM7Tbb/63Vc2tK3VPlS823E7C7v/ZMLL5fRI71scSzDrEJPWlixjK6Uv
+ Hwh8dFGSftd5OxMzHhdhZ7QgnCUhvY+q/+6fFjSVDfdYRQ2l3cvFoxxmPh/pKjzj2/CUXCmMCf4
+ t01h2bm1zOWaYPqcNG1QcbkujeaIzZ5urnIPANLs7x4rtJ3atmjqBmsdVrtMIPR8jT+MSoWnYlh
+ 1vHZJeMPKspJrVFDFTUnI0N9CW5yE3ItLGWxYdWQ5g4gnMg1ZadPqj/m4zL3lGZ+mDeUD8cZaC7
+ bLE1/1rvg/yhBuLIf/9b9fP2P0eobnoGNccZYVMn7Ca8IGMViNPrd0lV72V9U4mV4blRV2JXAjH
+ Q2vFfDlimFZqEizGr9sC+SD368iX6rnr4xv8yXJOKnlr8wcYt20VBySEQfjg4aKu43PgU81/X9v
+ guQwQ4r EcbVCq3g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 12pXrpyw4m_B8_1g7uyH7Pg47S1eo8qT
-X-Proofpoint-ORIG-GUID: 12pXrpyw4m_B8_1g7uyH7Pg47S1eo8qT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_11,2023-10-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 spamscore=0
- impostorscore=0 clxscore=1015 adultscore=0 phishscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310050126
 
-Update the binding to include pwm as the child node to TCSR block and
-add simple-mfd support for IPQ6018.
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+As found with Coccinelle[1], add __counted_by for struct
+nvmet_fc_tgt_queue. Additionally, since the element count member must
+be set before accessing the annotated flexible array member, move its
+initialization earlier.
+
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+Cc: linux-nvme@lists.infradead.org
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-v15:
+v1 https://lore.kernel.org/all/20231003232511.work.459-kees@kernel.org/
+v2
+ - move comment to line above (hch)
+ - add reviewed-bys
+---
+ drivers/nvme/target/fc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- Picked up the R-b tag
-
-v14:
-
-Addressed comments suggested by krzysztof
-
- Added type: object to patternProperties and added the complete path to
- pwm.yaml in the reference
-
- Disallow pwm for targets other than ipq6018
-
- Moved ranges property just after reg in the examples
-
-v13:
-
- Added simple-mfd support for IPQ6018 based devices
-
- Added support to include pwm as the child node to TCSR
-
- Included syscon node found on IPQ6018 to the examples
-
- .../devicetree/bindings/mfd/qcom,tcsr.yaml    | 112 +++++++++++++-----
- 1 file changed, 81 insertions(+), 31 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index 33c3d023a106..f836b973e382 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -15,50 +15,100 @@ description:
+diff --git a/drivers/nvme/target/fc.c b/drivers/nvme/target/fc.c
+index 1ab6601fdd5c..bd59990b5250 100644
+--- a/drivers/nvme/target/fc.c
++++ b/drivers/nvme/target/fc.c
+@@ -146,7 +146,8 @@ struct nvmet_fc_tgt_queue {
+ 	struct workqueue_struct		*work_q;
+ 	struct kref			ref;
+ 	struct rcu_head			rcu;
+-	struct nvmet_fc_fcp_iod		fod[];		/* array of fcp_iods */
++	/* array of fcp_iods */
++	struct nvmet_fc_fcp_iod		fod[] __counted_by(sqsize);
+ } __aligned(sizeof(unsigned long long));
  
- properties:
-   compatible:
--    items:
--      - enum:
--          - qcom,msm8976-tcsr
--          - qcom,msm8998-tcsr
--          - qcom,qcs404-tcsr
--          - qcom,sc7180-tcsr
--          - qcom,sc7280-tcsr
--          - qcom,sc8280xp-tcsr
--          - qcom,sdm630-tcsr
--          - qcom,sdm845-tcsr
--          - qcom,sdx55-tcsr
--          - qcom,sdx65-tcsr
--          - qcom,sm4450-tcsr
--          - qcom,sm8150-tcsr
--          - qcom,sm8450-tcsr
--          - qcom,tcsr-apq8064
--          - qcom,tcsr-apq8084
--          - qcom,tcsr-ipq5332
--          - qcom,tcsr-ipq6018
--          - qcom,tcsr-ipq8064
--          - qcom,tcsr-ipq8074
--          - qcom,tcsr-ipq9574
--          - qcom,tcsr-mdm9615
--          - qcom,tcsr-msm8226
--          - qcom,tcsr-msm8660
--          - qcom,tcsr-msm8916
--          - qcom,tcsr-msm8953
--          - qcom,tcsr-msm8960
--          - qcom,tcsr-msm8974
--          - qcom,tcsr-msm8996
--      - const: syscon
-+    oneOf:
-+      - items:
-+          - enum:
-+              - qcom,msm8976-tcsr
-+              - qcom,msm8998-tcsr
-+              - qcom,qcs404-tcsr
-+              - qcom,sc7180-tcsr
-+              - qcom,sc7280-tcsr
-+              - qcom,sc8280xp-tcsr
-+              - qcom,sdm630-tcsr
-+              - qcom,sdm845-tcsr
-+              - qcom,sdx55-tcsr
-+              - qcom,sdx65-tcsr
-+              - qcom,sm4450-tcsr
-+              - qcom,sm8150-tcsr
-+              - qcom,sm8450-tcsr
-+              - qcom,tcsr-apq8064
-+              - qcom,tcsr-apq8084
-+              - qcom,tcsr-ipq5332
-+              - qcom,tcsr-ipq8064
-+              - qcom,tcsr-ipq8074
-+              - qcom,tcsr-ipq9574
-+              - qcom,tcsr-mdm9615
-+              - qcom,tcsr-msm8226
-+              - qcom,tcsr-msm8660
-+              - qcom,tcsr-msm8916
-+              - qcom,tcsr-msm8953
-+              - qcom,tcsr-msm8960
-+              - qcom,tcsr-msm8974
-+              - qcom,tcsr-msm8996
-+          - const: syscon
-+      - items:
-+          - const: qcom,tcsr-ipq6018
-+          - const: syscon
-+          - const: simple-mfd
- 
-   reg:
-     maxItems: 1
- 
-+  ranges: true
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+patternProperties:
-+  "pwm@[a-f0-9]+$":
-+    type: object
-+    $ref: /schemas/pwm/qcom,ipq6018-pwm.yaml
-+
- required:
-   - compatible
-   - reg
- 
-+allOf:
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              enum:
-+                - qcom,tcsr-ipq6018
-+    then:
-+      patternProperties:
-+        "pwm@[a-f0-9]+$": false
-+
- additionalProperties: false
- 
- examples:
-+  # Example 1 - Syscon node found on MSM8960
-   - |
-     syscon@1a400000 {
-         compatible = "qcom,tcsr-msm8960", "syscon";
-         reg = <0x1a400000 0x100>;
-     };
-+  # Example 2 - Syscon node found on IPQ6018
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-ipq6018.h>
-+
-+    syscon@1937000 {
-+        compatible = "qcom,tcsr-ipq6018", "syscon", "simple-mfd";
-+        reg = <0x01937000 0x21000>;
-+        ranges = <0 0x1937000 0x21000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        pwm: pwm@a010 {
-+            compatible = "qcom,ipq6018-pwm";
-+            reg = <0xa010 0x20>;
-+            clocks = <&gcc GCC_ADSS_PWM_CLK>;
-+            assigned-clocks = <&gcc GCC_ADSS_PWM_CLK>;
-+            assigned-clock-rates = <100000000>;
-+            #pwm-cells = <2>;
-+        };
-+    };
+ struct nvmet_fc_hostport {
 -- 
 2.34.1
 
