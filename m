@@ -1,52 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD84137B;
-	Thu,  5 Oct 2023 02:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE9D15B8;
+	Thu,  5 Oct 2023 02:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hJLJSK0c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzTJdmrm"
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696471481; x=1728007481;
+  t=1696472391; x=1728008391;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7f2TlIXBIJjbSNeuOq7FE3Xuyd7JTillqKjxVDak1fY=;
-  b=hJLJSK0csq69DUU4LIHCOSiKCkhZrlAodmog5YQEj7rGChJ0ufoTSXNe
-   cwLUgM6eFn1XVxRZaKPfvB+/FPxV6e6W5sJTusef5bcWH4NL78QYbJFE/
-   9w3M69zAYfVODnWKynGXL+6SbD5qWXqy1UkKsl1PA+rkZ2NrZxAtyr0dJ
-   AWmMdAZ/dR2OezPNWvjojgqvatskEY9dDI9IL1CongYOOzvahGCoSKsut
-   xvc48S5n+TZV13Ajowio5H7OxJgr1h9k1F/W4uMyU3pb3SalP2wenUBtB
-   mV2PHzToSQoLdKT+eqVswhucOwNbUYUDEt5YnLF2Rk2jLt5PI3Z/dRFrY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="449865050"
+  bh=XlOnScdtAGDG7tWSy3Li0cvXQjsbEt3gzAVcHpkWsQM=;
+  b=UzTJdmrm0UyeYw8IL2T78kCL3SfIyq3kklLp3BLaK1wPgYjdVQ4NQW9b
+   tO4gKCZBTTdN290pcGHDj5nWel2ISj/B//O1wbMMr2d1sIuRBpSiDH9yj
+   JMw7kWqHHvL+bognIqhcu6O1Qqx1wseWYRT+IjnxuDrGzp/p8u+ekt82g
+   98aJ/A8J0mEyPJnuzLa2RPsZLhF4cF3r8AFpmeJO/beOIB5MYrtEPiOv9
+   RfsTBRDVkqKHh/tdErNsQ841QI9kbnoS1jU9hs4cj29vaXVhLUuX7lOKy
+   Rw9dxONGC7eNc1/WLVUH083fVzm5e4k9E8uH29Rh26D+5hSpIS/ca+Ing
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="373725720"
 X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="449865050"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 19:04:40 -0700
+   d="scan'208";a="373725720"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 19:15:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="875366247"
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="925409747"
 X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="875366247"
+   d="scan'208";a="925409747"
 Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 04 Oct 2023 19:04:37 -0700
+  by orsmga005.jf.intel.com with ESMTP; 04 Oct 2023 19:15:37 -0700
 Received: from kbuild by c3b01524d57c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qoDj9-000Krs-0E;
-	Thu, 05 Oct 2023 02:04:35 +0000
-Date: Thu, 5 Oct 2023 10:04:17 +0800
+	id 1qoDtn-000KsK-16;
+	Thu, 05 Oct 2023 02:15:35 +0000
+Date: Thu, 5 Oct 2023 10:14:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: werneazc@gmail.com, jic23@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	lars@metafoo.de
+To: Mukesh Ojha <quic_mojha@quicinc.com>, mcgrof@kernel.org,
+	russell.h.weight@intel.com, gregkh@linuxfoundation.org,
+	rafael@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andre Werner <andre.werner@systec-electronic.com>
-Subject: Re: [PATCH 2/2] iio: adc: ads7038: Add driver support for 12bit ADC
-Message-ID: <202310050917.qrpQA2nb-lkp@intel.com>
-References: <20231004102330.3713-2-andre.werner@systec-electronic.com>
+	linux-kernel@vger.kernel.org, Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: Re: [PATCH v2] firmware_loader: Abort new fw load request once
+ firmware core knows about reboot
+Message-ID: <202310051011.PW217wHD-lkp@intel.com>
+References: <1696431327-7369-1-git-send-email-quic_mojha@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,87 +54,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231004102330.3713-2-andre.werner@systec-electronic.com>
+In-Reply-To: <1696431327-7369-1-git-send-email-quic_mojha@quicinc.com>
 
-Hi,
+Hi Mukesh,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on robh/for-next linus/master v6.6-rc4 next-20231004]
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.6-rc4 next-20231004]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/werneazc-gmail-com/iio-adc-ads7038-Add-driver-support-for-12bit-ADC/20231004-182531
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20231004102330.3713-2-andre.werner%40systec-electronic.com
-patch subject: [PATCH 2/2] iio: adc: ads7038: Add driver support for 12bit ADC
-config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20231005/202310050917.qrpQA2nb-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Ojha/firmware_loader-Abort-new-fw-load-request-once-firmware-core-knows-about-reboot/20231004-225910
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/1696431327-7369-1-git-send-email-quic_mojha%40quicinc.com
+patch subject: [PATCH v2] firmware_loader: Abort new fw load request once firmware core knows about reboot
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231005/202310051011.PW217wHD-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231005/202310050917.qrpQA2nb-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231005/202310051011.PW217wHD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310050917.qrpQA2nb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310051011.PW217wHD-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iio/adc/ti-ads7038-core.c:46:5: warning: no previous prototype for function 'ads7038_read_raw' [-Wmissing-prototypes]
-      46 | int ads7038_read_raw(struct iio_dev *indio_dev,
-         |     ^
-   drivers/iio/adc/ti-ads7038-core.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      46 | int ads7038_read_raw(struct iio_dev *indio_dev,
-         | ^
-         | static 
-   1 warning generated.
+   In file included from drivers/base/firmware_loader/main.c:21:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/base/firmware_loader/main.c:21:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/base/firmware_loader/main.c:21:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from drivers/base/firmware_loader/main.c:45:
+   In file included from drivers/base/firmware_loader/fallback.h:9:
+>> drivers/base/firmware_loader/sysfs.h:87:20: error: redefinition of 'fw_load_abort' as different kind of symbol
+      87 | static inline void fw_load_abort(struct fw_sysfs *fw_sysfs)
+         |                    ^
+   drivers/base/firmware_loader/firmware.h:89:13: note: previous definition is here
+      89 | extern bool fw_load_abort;
+         |             ^
+   12 warnings and 1 error generated.
 
 
-vim +/ads7038_read_raw +46 drivers/iio/adc/ti-ads7038-core.c
+vim +/fw_load_abort +87 drivers/base/firmware_loader/sysfs.h
 
-    45	
-  > 46	int ads7038_read_raw(struct iio_dev *indio_dev,
-    47			     struct iio_chan_spec const *chan,
-    48			     int *val, int *val2,
-    49			     long mask)
-    50	{
-    51		unsigned int ret;
-    52		struct ads7038_ch_meas_result tmp_val;
-    53		struct ads7038_data *const data = (struct ads7038_data *)iio_priv(indio_dev);
-    54		struct ads7038_info *const info = (struct ads7038_info *)data->info;
-    55	
-    56		ret = info->read_channel(indio_dev, chan->channel, &tmp_val);
-    57	
-    58		if (ret < 0) {
-    59			dev_err(&indio_dev->dev, "Read channel returned with error %d", ret);
-    60			return ret;
-    61		}
-    62	
-    63		switch (mask) {
-    64		case IIO_CHAN_INFO_RAW:
-    65			*val = tmp_val.raw;
-    66	
-    67			ret = IIO_VAL_INT;
-    68			break;
-    69		case IIO_CHAN_INFO_SCALE:
-    70			ret = regulator_get_voltage(data->reg);
-    71			if (ret < 0)
-    72				break;
-    73	
-    74			*val = ret / 1000;	/* uV -> mV */
-    75			*val2 = (1 << chan->scan_type.realbits) - 1;
-    76	
-    77			ret = IIO_VAL_FRACTIONAL;
-    78			break;
-    79		default:
-    80			ret = -EINVAL;
-    81			break;
-    82		}
-    83	
-    84		return ret;
-    85	}
-    86	
+e0c11a8b985137 Russ Weight 2022-04-21  86  
+e0c11a8b985137 Russ Weight 2022-04-21 @87  static inline void fw_load_abort(struct fw_sysfs *fw_sysfs)
+e0c11a8b985137 Russ Weight 2022-04-21  88  {
+e0c11a8b985137 Russ Weight 2022-04-21  89  	struct fw_priv *fw_priv = fw_sysfs->fw_priv;
+e0c11a8b985137 Russ Weight 2022-04-21  90  
+e0c11a8b985137 Russ Weight 2022-04-21  91  	__fw_load_abort(fw_priv);
+e0c11a8b985137 Russ Weight 2022-04-21  92  }
+e0c11a8b985137 Russ Weight 2022-04-21  93  
 
 -- 
 0-DAY CI Kernel Test Service
