@@ -1,46 +1,46 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F5243A8E
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F2643AA8
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BW1zQoub"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-59f61a639b9so22038447b3.1
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vviiJkSg"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d91c3b26c9eso1393828276.0
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696547373; x=1697152173; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696547375; x=1697152175; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XtYWHIWRia4V/bq2E7J5Z+6HzWlGjlCMeDuedPRX49U=;
-        b=BW1zQoubwG7YKBoST7V6DACShuNuo6Gs76m1XbwA7B6X/z0H0T8pIsOJckNMe1nyiL
-         Vzjc3V2WikDBNVxmAcktEHeDh3V7t0rSa44qxbZdw0DacgZtWTGdZkQcVO/Of3BFIB95
-         Nu5o74qHrLQRo0UH/EZDrvXLAH9W6wo8uwvxQS2y1n0j8/idoKmZ1jlhBKUuCA+CU+oI
-         o0xFHOEBtwYmyl0jaQTWyRAWOdatz1sywUXWl5eAYfONsPOezCSeZLfIr/5U2FtIzZ/D
-         nEWhKpqPHI2zcO1kP7YzAHn0bpwPo+UZ5TrJCtVpl3w9Ri6znF/pSLRV1n19N1WfBtvi
-         gPQg==
+        bh=oxVOZd3C3ppqYjNmukwrdUncP0WHK7JyRq4ciQhpawI=;
+        b=vviiJkSgUefjbrI27bXq7K6S/8jwtDUvW0jSMyouH/Q/+uT//pLvAWu3NG8B8QH8F1
+         +aYdF0TSjFuzZYtdTGu0v1KXe0XI43VXRjPSrE+BhaRPLkjZxL9qKWkkoSJWN1WDGHIy
+         aMhZfE0JkeQQLb56NOOlPq+M87SkwhhbDy4mX1UtMOZvf40F4KsOt8e251wQAQTLoU83
+         4Nsjt5h2+w9d+cth35SWODZvMe7dvkBljw4cINQX6ew1pkO71jg+In+PBDu2xDqJwS7c
+         HeO59klei5s6PZKHYmbCqF+EQ22nfuOSv2KNw3wrwQWSU9NprKZZaH6vbJUVciJj0eAZ
+         YdMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696547373; x=1697152173;
+        d=1e100.net; s=20230601; t=1696547375; x=1697152175;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XtYWHIWRia4V/bq2E7J5Z+6HzWlGjlCMeDuedPRX49U=;
-        b=O4fmbX0MnIJvX2a0qp4EQZqM1AcuYzuR0Oh0sYsZ5B9xmFgB0JH9GpO3Nk1u5e1FUf
-         ck4h7FUCY/G/wUFW/DI2RaeqCCmv8t+VNObnb4KJWFjR4TLipUwj6N43L/MIoSoWQ4is
-         orE02ugmzEhyFascGGZ7gnhzPqMhjmRC72xvbW0ulkgTV9UupLvVl4jGvTkjaxeEI/Db
-         VDCwKHfGTtmuX9HS1AdbW840ZlZFagFePtHXEh7FCQ0TYWQ2tMR4iW4cUC3skGMe+Hrz
-         xjJggIRU6+ktfuzVh9lUapMCsghT/sQut3RPToEFEu2rvhswhpGRzBjSm4OEJ4m7xwqw
-         p6bw==
-X-Gm-Message-State: AOJu0YzYu15xpdnzoMciA+82l1a0VOSl3iO0XK59IB3OnPT+O+DVgpA8
-	EFgXX1qeBND7tL26/poLu6Vix4TlJxN6
-X-Google-Smtp-Source: AGHT+IGYGvZnkG9pZnldPftjX0X/I/7GYYCZctlrfJO2uLsaOS59cFuWhBo7VZbssurDfKkKblBviKnfkqu4
+        bh=oxVOZd3C3ppqYjNmukwrdUncP0WHK7JyRq4ciQhpawI=;
+        b=YnSqLHAmEhCqtbKMfKVcjs9wCS9YQGeKLpuDNtt6X+EgUWJXSK7lToY7G86XPiwXJp
+         X5WmgqSJZOi8dZhwRMi7r74iaF+BaJ9nszW4J0JCZOV7lXjF2YKpUM63oHn6+zH57lEl
+         1NIdYG6a6IaIXTd0u64C5iM1TZWw2VoEdL44pwL9bhpc3qrzZUAtORkM/VIcJ/Tuzwle
+         AqkdmszJbRz9JCxbLhJz7+eNx+d8+MPSaBX9Ul+MV2GJmv9puyBviZBRpewqCGZtkhwb
+         GwNPCTFC32jECSTTF3Wnoc/evJoTlKMnYLLd8J0PquDYHscQU6d5I2d9pNKoYam9tb4n
+         sSxA==
+X-Gm-Message-State: AOJu0YxSwYc1mlUhPEkBAOkgTeUmeGbSMXt2FTl8fxpiN4Fin1CckKK2
+	XOx8jpfxcvK6AKqP0pHNvmVZQ/Cdw9Iu
+X-Google-Smtp-Source: AGHT+IGhoEJjFH3ZasD0vN2aSL1BJQWA509hpCLmPH3Yh8OO4E14fhwoU9hhQx/jEj6F0UZsTT+z8Dsn07pZ
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
- (user=irogers job=sendgmr) by 2002:a81:4325:0:b0:59b:eace:d46f with SMTP id
- q37-20020a814325000000b0059beaced46fmr114023ywa.8.1696547372891; Thu, 05 Oct
- 2023 16:09:32 -0700 (PDT)
-Date: Thu,  5 Oct 2023 16:08:48 -0700
+ (user=irogers job=sendgmr) by 2002:a25:6a04:0:b0:d89:42d7:e72d with SMTP id
+ f4-20020a256a04000000b00d8942d7e72dmr57696ybc.3.1696547375084; Thu, 05 Oct
+ 2023 16:09:35 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:49 -0700
 In-Reply-To: <20231005230851.3666908-1-irogers@google.com>
-Message-Id: <20231005230851.3666908-16-irogers@google.com>
+Message-Id: <20231005230851.3666908-17-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231005230851.3666908-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v2 15/18] tools api: Avoid potential double free
+Subject: [PATCH v2 16/18] perf trace-event-info: Avoid passing NULL value to closedir
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -66,27 +66,28 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-io__getline will free the line on error but it doesn't clear the out
-argument. This may lead to the line being freed twice, like in
-tools/perf/util/srcline.c as detected by clang-tidy.
+If opendir failed then closedir was passed NULL which is
+erroneous. Caught by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/api/io.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/trace-event-info.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
-index 9fc429d2852d..a77b74c5fb65 100644
---- a/tools/lib/api/io.h
-+++ b/tools/lib/api/io.h
-@@ -180,6 +180,7 @@ static inline ssize_t io__getline(struct io *io, char **line_out, size_t *line_l
- 	return line_len;
- err_out:
- 	free(line);
-+	*line_out = NULL;
- 	return -ENOMEM;
- }
+diff --git a/tools/perf/util/trace-event-info.c b/tools/perf/util/trace-event-info.c
+index 319ccf09a435..c8755679281e 100644
+--- a/tools/perf/util/trace-event-info.c
++++ b/tools/perf/util/trace-event-info.c
+@@ -313,7 +313,8 @@ static int record_event_files(struct tracepoint_path *tps)
+ 	}
+ 	err = 0;
+ out:
+-	closedir(dir);
++	if (dir)
++		closedir(dir);
+ 	put_tracing_file(path);
  
+ 	return err;
 -- 
 2.42.0.609.gbb76f46606-goog
 
