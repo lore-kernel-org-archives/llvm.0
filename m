@@ -1,46 +1,46 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CD9436B0
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255294369B
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C4AG1Pk5"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5a22eb73cb3so23039687b3.3
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h9uAPik5"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-59b5a586da6so12807847b3.1
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696547356; x=1697152156; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696547358; x=1697152158; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GouG30KZVQtjqm6aov/swqA2g+y6OD5o5DKI6J9/hJA=;
-        b=C4AG1Pk5OgHPF2UrZtyqgPwQE1u1+gpqMUeq4PT/kWFlM6FQ9CcYcEvDIFYQ/b3Wh1
-         4lPkUMa+xn9tK3RJR3RWNJyJJ9j9PEfgFsTVpCvVDnu3YpKXo9qjvhBVs8y98JuzZlun
-         LtWzza7m7jrFcLBlQwkr28qPKPZn8VKzHr5hDLwbbYudobTQkpuof7KfSj6qQUErGl5D
-         PH767vIEtQZI20nrURcMztj3HNLZL/EyZi4ad3B3SQ0TG4O8bG47qTHEPSiVeUxBtyCT
-         em7kmi7aOGEdg7g9cEIDuAmppTGX8pb634iTLmHJMBa05jxx2eU2dMr1/Qnz2jObj6h1
-         5jwA==
+        bh=JGGlE54ge9XxgsvPeqIZ7isbDlHsMUv/MJYLVA09opo=;
+        b=h9uAPik5Z2bX43/++WGwxikyNsadKKyvvFf7s+5aUnGPPHkZlQjlWVUQm7yWFr2ba0
+         qzCe14U6Dk7IVIeXPbqbSJY97YqP+8mpMkUbm4EiS8WFXAQLECw0q4PPZpjz/GxKFbSD
+         VqFJ4WLjmaGkyuzrm9WnRT4iQxsRSnE5rzrwhYLbXJhbtd3MpJObqEvqMQLUu/SwmM73
+         nAPU60qszEE/a7X1UI9z5WEmLplYZt+0CXTEIQpXn/teSDte11HmEASD/DjQVx3XulCL
+         42IXYgSj347kb2U+Yb7ebGW5RJ/lCrr9TswXqf7bL/8mY27eWwiQ7jHj5TOyF3WlaXDo
+         ndQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696547356; x=1697152156;
+        d=1e100.net; s=20230601; t=1696547358; x=1697152158;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GouG30KZVQtjqm6aov/swqA2g+y6OD5o5DKI6J9/hJA=;
-        b=YTvCgJFzyWCYeoie2XqCeKluP2Fp5f2Xv91zTWFNf4XyUmv3rj4W45O0xIWvD1G7B1
-         9uhfkIhlYlF3EborhlD+qK5We8RCQBN1b4dovX68kC1gWkPe5ivPtudBwcH5CWnisKJJ
-         Sx8smKBGqpdHy5V262rjT6VhNGrB5SqUX+MfBzUnrNr8E8aLKetMOSrTeisbBSYNyjv8
-         jI/dF6ujWfnF97GIm1D/O4H7nyUPGvH/dAD3doGGDdxsvvgAx239I6Z4Zn3S0SgIEhLI
-         5kuo80LtHiKk5mPWwt4EA0B0UO2welTzovEO7jAHV+abSrmw6pl8p76Pmxq8zn/KFAFu
-         z2Mg==
-X-Gm-Message-State: AOJu0Yxx+KnujmpF7Cl9DUk+Cpm4HD2RNzdUpHWdV5FTdTWw70GzuXmg
-	zFEOtyp6R+n5I22mGO2Wo+zWmCyyRyu9
-X-Google-Smtp-Source: AGHT+IGONU+OowDDx8a+TbL/FH+ObTrGvfI1GY50R5S+RVIAsaEN1VZNRoea3AVWMrrmFuuADHtm0K7HKpil
+        bh=JGGlE54ge9XxgsvPeqIZ7isbDlHsMUv/MJYLVA09opo=;
+        b=b0x1LnI7+dPR2bQZ5S3LRsGQs6DfalZn29b4C2MVxK7HpGRzveF+QJtzilYpSa6oE7
+         tivIlSTBeMaKzvXuCF5/JCmXZfY+Ya6TkE3H6kxbKrp98IINmiB0WI5heqCUwiNAi12n
+         QuKBTdzNleLxnSvShdxHOtax2sFp15hbUlLxbGesBIt/SzSfsxXmMgGt0fjxVxPWJGFh
+         28ZYwlGu6HtNJG/WkDlr5TDk0JYa3V2w1CR0gxu/DzFEcwiAW799GYQbOuFMBFSYSuMZ
+         LckTrElJlCXKyu81U2ziTYQqpTAU16DK/pPNtH1Zj9J8X7uNrbVuXhfhwtqGbkGpS+kx
+         549w==
+X-Gm-Message-State: AOJu0YyPeYrszDawfgAHlsBXqEDMqF4pl7eTlBAki+1uCOFDyTikjjuW
+	nOwux2y7F4MbPQ3ozRdPjQsJZpJ3yqej
+X-Google-Smtp-Source: AGHT+IHZIti6IayoNIIvrlr9f3twKSIg0zCXbRbou+pCuTID4omq25jI81Q4BzjSR5/jxW+VxluvDukpej+F
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
- (user=irogers job=sendgmr) by 2002:a81:430c:0:b0:576:8cb6:62a9 with SMTP id
- q12-20020a81430c000000b005768cb662a9mr115006ywa.6.1696547355929; Thu, 05 Oct
- 2023 16:09:15 -0700 (PDT)
-Date: Thu,  5 Oct 2023 16:08:41 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:c90:b0:59b:b0b1:d75a with SMTP id
+ cm16-20020a05690c0c9000b0059bb0b1d75amr51537ywb.4.1696547358196; Thu, 05 Oct
+ 2023 16:09:18 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:42 -0700
 In-Reply-To: <20231005230851.3666908-1-irogers@google.com>
-Message-Id: <20231005230851.3666908-9-irogers@google.com>
+Message-Id: <20231005230851.3666908-10-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231005230851.3666908-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v2 08/18] perf jitdump: Avoid memory leak
+Subject: [PATCH v2 09/18] perf mem-events: Avoid uninitialized read
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -66,27 +66,36 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-jit_repipe_unwinding_info is called in a loop by jit_process_dump,
-avoid leaking unwinding_data by free-ing before overwriting. Error
-detected by clang-tidy.
+pmu should be initialized to NULL before perf_pmus__scan loop. Fix and
+shrink the scope of pmu at the same time. Issue detected by clang-tidy.
 
+Fixes: 5752c20f3787 ("perf mem: Scan all PMUs instead of just core ones")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/jitdump.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/mem-events.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
-index 6b2b96c16ccd..1f657ef8975f 100644
---- a/tools/perf/util/jitdump.c
-+++ b/tools/perf/util/jitdump.c
-@@ -675,6 +675,7 @@ jit_repipe_unwinding_info(struct jit_buf_desc *jd, union jr_entry *jr)
- 	jd->eh_frame_hdr_size = jr->unwinding.eh_frame_hdr_size;
- 	jd->unwinding_size = jr->unwinding.unwinding_size;
- 	jd->unwinding_mapped_size = jr->unwinding.mapped_size;
-+	free(jd->unwinding_data);
- 	jd->unwinding_data = unwinding_data;
+diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+index 39ffe8ceb380..954b235e12e5 100644
+--- a/tools/perf/util/mem-events.c
++++ b/tools/perf/util/mem-events.c
+@@ -185,7 +185,6 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
+ {
+ 	int i = *argv_nr, k = 0;
+ 	struct perf_mem_event *e;
+-	struct perf_pmu *pmu;
  
- 	return 0;
+ 	for (int j = 0; j < PERF_MEM_EVENTS__MAX; j++) {
+ 		e = perf_mem_events__ptr(j);
+@@ -202,6 +201,8 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
+ 			rec_argv[i++] = "-e";
+ 			rec_argv[i++] = perf_mem_events__name(j, NULL);
+ 		} else {
++			struct perf_pmu *pmu = NULL;
++
+ 			if (!e->supported) {
+ 				perf_mem_events__print_unsupport_hybrid(e, j);
+ 				return -1;
 -- 
 2.42.0.609.gbb76f46606-goog
 
