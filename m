@@ -1,143 +1,589 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE061D698
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 14:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5102339A9
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 16:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TrFEqSJN"
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-327b7e08456so1070761f8f.2
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 07:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696516323; x=1697121123; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7lZZZ4/1+PKPxfykJQx+K5x1JSysyKZLvsajzTAsxdk=;
-        b=TrFEqSJNoB+wquUmG5hUbsskyb3CqHg+J8qUa99p0vRSVc7qYeo8J20MNvqvP6nSLr
-         DI804rRXe/tVdnR1cfuhQ9d6DasxssI+1KJ5garTG9bxaLwj7eLVMRfz5tAPwrv0W4Cv
-         B15L6C1hFxfepxPLSwHEdeTsUpfc7WxqcGN5B6g7iVKeCIbeAJR8YgFZGZc3dR4age3X
-         fliMeq8FBgJqVNWFRAO7S84POrlmn+5qgNl0m3qfxGXPkBUikHrCh3rXOZ0+XQpHgxDP
-         X42BDRSBxvBSwVFFCxUiDLGPZrZ6XUC19cKIhMNnow3BcWQjMtwchFjn3TwkWnFufIzP
-         +hfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696516323; x=1697121123;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7lZZZ4/1+PKPxfykJQx+K5x1JSysyKZLvsajzTAsxdk=;
-        b=DQhSknSX3bP5bt9mikqNqK/nsnC4nXchM/gNNcLRkQ43jmeU5zH2mTSzCXCk9W87fJ
-         L9Lxx9bFFOplxl/E0rsazPgLk3C8uCoQsqCqqoseueEDfihGy7xJFsxT8BH404Y9YpBJ
-         qp8dscttXbqYB2C/bXudzVBOomwHjkSZqvLzrotX79kaXihEygh9CGrFkgK8aPPayfim
-         oJN1vJT3PKybnNwC1F8Ym5ov5i0HoNOdFVuTbNrxKqk3tX1r1dlzcpck+LamrwC8zU3T
-         w+kbW0/urw6JAbezLRmK/2jfo+IvZZkmnd6njgTK4/RcFelE6eH3UDn1wGddMzoVcHvr
-         j0PA==
-X-Gm-Message-State: AOJu0Yw5b92fiZIIKFL6PZ5taEc1hvlivXyQN8GtQQqtp1/OX26n8tNY
-	vICoN6tpOe7WUPMZUOSKThDIutrAGw4=
-X-Google-Smtp-Source: AGHT+IGeNwFRiaR2N0eH2gDEphyHTycBq3NZEolG4ZYAdI003Zqp47OEBzOniXtW8LVUM2/Bd1MTnw==
-X-Received: by 2002:a05:6000:1946:b0:327:e073:d604 with SMTP id e6-20020a056000194600b00327e073d604mr4536663wry.45.1696516322757;
-        Thu, 05 Oct 2023 07:32:02 -0700 (PDT)
-Received: from [10.254.108.106] (munvpn.amd.com. [165.204.72.6])
-        by smtp.gmail.com with ESMTPSA id b18-20020a5d4d92000000b00327cd5e5ac1sm1954639wru.1.2023.10.05.07.32.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 07:32:02 -0700 (PDT)
-Message-ID: <ca2006f4-a038-460d-a9ca-d14dca8e4a8b@gmail.com>
-Date: Thu, 5 Oct 2023 16:31:59 +0200
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="N/VkHpLP"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395Aarqd017488;
+	Thu, 5 Oct 2023 16:06:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pL305QZpgz9DE4v+JRgsjWEqf1lM32BSKRkIofAZtYI=;
+ b=N/VkHpLPyHQX0FtgqwJTY18MM5NIRAxm/+ejcJgF+GzogJXQJVrX/JAaY+GrGMI/jBWB
+ fXAGI3rifkl9eKUkW2WiW2CM3NLpeKa1XcRfGYC3FvWNeVEKpAdNUnneWq5jII/7rjwr
+ LOEF9iGjSkqgE38uQGz0bcm+TCePCLBym1xS29C8u1B7Xx0M74w+Du98muz8yAqjQbLM
+ xbUkhQ5rGl34cLkYMUaT8Zuu4Je14xfsUL+dVCk2/TppUvaqZz3mzOdGiwKGz9AWdnJ2
+ 1+/sxswdw/5WhuALaDoCncbTHD0BtxYj3SYmNtE0+NHQ4IJ6rpa04qfytuU3+2V8h0xw FQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3th8e1u8ty-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Oct 2023 16:06:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 395G6Lmf025392
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 5 Oct 2023 16:06:21 GMT
+Received: from hu-devipriy-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Thu, 5 Oct 2023 09:06:16 -0700
+From: Devi Priya <quic_devipriy@quicinc.com>
+To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <thierry.reding@gmail.com>, <ndesaulniers@google.com>,
+        <trix@redhat.com>, <baruch@tkos.co.il>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+CC: <linux-pwm@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>,
+        <nathan@kernel.org>
+Subject: [PATCH V15 1/4] pwm: driver for qualcomm ipq6018 pwm block
+Date: Thu, 5 Oct 2023 21:35:47 +0530
+Message-ID: <20231005160550.2423075-2-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
+References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/amdgpu: Annotate struct amdgpu_bo_list with
- __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>,
- Alex Deucher <alexander.deucher@amd.com>
-Cc: llvm@lists.linux.dev,
- Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
- Tom Rix <trix@redhat.com>, Felix Kuehling <Felix.Kuehling@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>,
- Nick Desaulniers <ndesaulniers@google.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- Nathan Chancellor <nathan@kernel.org>, Luben Tuikov <luben.tuikov@amd.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
- David Airlie <airlied@gmail.com>, =?UTF-8?Q?Christian_K=C3=B6nig?=
- <christian.koenig@amd.com>, linux-hardening@vger.kernel.org
-References: <20231003232952.work.158-kees@kernel.org>
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20231003232952.work.158-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: dUK910BXNf0cPwSxJTAoChM7COrWyzeE
+X-Proofpoint-ORIG-GUID: dUK910BXNf0cPwSxJTAoChM7COrWyzeE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_11,2023-10-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310050126
 
-Am 04.10.23 um 01:29 schrieb Kees Cook:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
->
-> As found with Coccinelle[1], add __counted_by for struct amdgpu_bo_list.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
->
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Luben Tuikov <luben.tuikov@amd.com>
-> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-hardening@vger.kernel.org
-> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Driver for the PWM block in Qualcomm IPQ6018 line of SoCs. Based on
+driver from downstream Codeaurora kernel tree. Removed support for older
+(V1) variants because I have no access to that hardware.
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+Tested on IPQ6010 based hardware.
 
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c | 2 +-
->   drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
-> index 6f5b641b631e..781e5c5ce04d 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
-> @@ -84,6 +84,7 @@ int amdgpu_bo_list_create(struct amdgpu_device *adev, struct drm_file *filp,
->   
->   	kref_init(&list->refcount);
->   
-> +	list->num_entries = num_entries;
->   	array = list->entries;
->   
->   	for (i = 0; i < num_entries; ++i) {
-> @@ -129,7 +130,6 @@ int amdgpu_bo_list_create(struct amdgpu_device *adev, struct drm_file *filp,
->   	}
->   
->   	list->first_userptr = first_userptr;
-> -	list->num_entries = num_entries;
->   	sort(array, last_entry, sizeof(struct amdgpu_bo_list_entry),
->   	     amdgpu_bo_list_entry_cmp, NULL);
->   
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
-> index 6a703be45d04..555cd6d877c3 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
-> @@ -56,7 +56,7 @@ struct amdgpu_bo_list {
->   	 */
->   	struct mutex bo_list_mutex;
->   
-> -	struct amdgpu_bo_list_entry entries[];
-> +	struct amdgpu_bo_list_entry entries[] __counted_by(num_entries);
->   };
->   
->   int amdgpu_bo_list_get(struct amdgpu_fpriv *fpriv, int id,
+Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
+Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
+Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+---
+V15:
+  No change
+
+V14:
+  No change
+
+V13:
+  No change
+
+V12:
+
+  Fix the below clang warning for overflow check reported by kernel test robot
+  drivers/pwm/pwm-ipq.c:122:11: warning: result of comparison of constant 16000000000
+  with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+>>            if (rate > 16ULL * GIGA)
+
+v11:
+
+Address comment from Uwe Kleine-König:
+
+  Drop redundant registers field comments
+
+  Fix period limit check in .apply
+
+  Clarify the comment explaining skip of pre_div > pwm_div values
+
+  Add explicit check for clock rate within limit
+
+  Add comment explaining the selection of initial pre_div
+
+  Use pwm_div division with remainder instead of separate diff calculation
+
+  Round up duty_cycle calculation in .get_state
+
+v10:
+
+  Restore round up in pwm_div calculation; otherwise diff is always <=
+  0, so only bingo match works
+
+  Don't overwrite min_diff on every loop iteration
+
+v9:
+
+Address comment from Uwe Kleine-König:
+
+  Use period_ns*rate in dividers calculation for better accuracy
+
+  Round down pre_div and pwm_div
+
+  Add a comment explaining why pwm_div can't underflow
+
+  Add a comment explaining why pre_div > pwm_div end the search loop
+
+  Drop 'CFG_' from register macros
+
+  Rename to_ipq_pwm_chip() to ipq_pwm_from_chip()
+
+  Change bare 'unsigned' to 'unsigned int'
+
+  Clarify the comment on separate REG1 write for enable/disable
+  Round up the period value in .get_state
+
+  Use direct readl/writel so no need to check for regmap errors
+
+v7:
+
+  Change 'offset' to 'reg' for the tcsr offset (Rob)
+
+  Drop clock name; there is only one clock (Bjorn)
+
+  Simplify probe failure code path (Bjorn)
+
+v6:
+
+Address Uwe Kleine-König review comments:
+
+  Drop IPQ_PWM_MAX_DEVICES
+
+  Rely on assigned-clock-rates; drop IPQ_PWM_CLK_SRC_FREQ
+
+  Simplify register offset calculation
+
+  Calculate duty cycle more precisely
+
+  Refuse to set inverted polarity
+
+  Drop redundant IPQ_PWM_REG1_ENABLE bit clear
+
+  Remove x1000 factor in pwm_div calculation, use rate directly, and round up
+
+  Choose initial pre_div such that pwm_div < IPQ_PWM_MAX_DIV
+
+  Ensure pre_div <= pwm_div
+
+  Rename close_ to best_
+
+  Explain in comment why effective_div doesn't overflow
+
+  Limit pwm_div to IPQ_PWM_MAX_DIV - 1 to allow 100% duty cycle
+
+  Disable clock only after pwmchip_remove()
+
+  const pwm_ops
+
+Other changes:
+
+  Add missing linux/bitfield.h header include (kernel test robot)
+
+  Adjust code for PWM device node under TCSR (Rob Herring)
+
+v5:
+
+  Use &tcsr_q6 syscon to access registers (Bjorn Andersson)
+  
+  Address Uwe Kleine-König review comments:
+
+  Implement .get_state()
+
+  Add IPQ_PWM_ prefix to local macros
+
+  Use GENMASK/BIT/FIELD_PREP for register fields access
+
+  Make type of config_div_and_duty() parameters consistent
+
+  Derive IPQ_PWM_MIN_PERIOD_NS from IPQ_PWM_CLK_SRC_FREQ
+
+  Integrate enable/disable into config_div_and_duty() to save register read,
+  and reduce frequency glitch on update
+
+  Use min() instead of min_t()
+
+  Fix comment format
+
+  Use dev_err_probe() to indicate probe step failure
+
+  Add missing clk_disable_unprepare() in .remove
+
+  Don't set .owner
+
+v4:
+
+  Use div64_u64() to fix link for 32-bit targets ((kernel test robot
+  <lkp@intel.com>, Uwe Kleine-König)
+
+v3:
+
+  s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
+
+  Fix integer overflow on 32-bit targets (kernel test robot <lkp@intel.com>)
+
+v2:
+
+Address Uwe Kleine-König review comments:
+
+  Fix period calculation when out of range
+
+  Don't set period larger than requested
+
+  Remove PWM disable on configuration change
+
+  Implement .apply instead of non-atomic .config/.enable/.disable
+
+  Don't modify PWM on .request/.free
+
+  Check pwm_div underflow
+
+  Fix various code and comment formatting issues
+
+Other changes:
+  
+  Use u64 divisor safe division
+
+  Remove now empty .request/.free
+
+ drivers/pwm/Kconfig   |  12 ++
+ drivers/pwm/Makefile  |   1 +
+ drivers/pwm/pwm-ipq.c | 282 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 295 insertions(+)
+ create mode 100644 drivers/pwm/pwm-ipq.c
+
+diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+index 8ebcddf91f7b..c2d51680823a 100644
+--- a/drivers/pwm/Kconfig
++++ b/drivers/pwm/Kconfig
+@@ -282,6 +282,18 @@ config PWM_INTEL_LGM
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called pwm-intel-lgm.
+ 
++config PWM_IPQ
++	tristate "IPQ PWM support"
++	depends on ARCH_QCOM || COMPILE_TEST
++	depends on HAVE_CLK && HAS_IOMEM
++	help
++	  Generic PWM framework driver for IPQ PWM block which supports
++	  4 pwm channels. Each of the these channels can be configured
++	  independent of each other.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called pwm-ipq.
++
+ config PWM_IQS620A
+ 	tristate "Azoteq IQS620A PWM support"
+ 	depends on MFD_IQS62X || COMPILE_TEST
+diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+index c822389c2a24..1b69e8cb2b91 100644
+--- a/drivers/pwm/Makefile
++++ b/drivers/pwm/Makefile
+@@ -24,6 +24,7 @@ obj-$(CONFIG_PWM_IMX1)		+= pwm-imx1.o
+ obj-$(CONFIG_PWM_IMX27)		+= pwm-imx27.o
+ obj-$(CONFIG_PWM_IMX_TPM)	+= pwm-imx-tpm.o
+ obj-$(CONFIG_PWM_INTEL_LGM)	+= pwm-intel-lgm.o
++obj-$(CONFIG_PWM_IPQ)		+= pwm-ipq.o
+ obj-$(CONFIG_PWM_IQS620A)	+= pwm-iqs620a.o
+ obj-$(CONFIG_PWM_JZ4740)	+= pwm-jz4740.o
+ obj-$(CONFIG_PWM_KEEMBAY)	+= pwm-keembay.o
+diff --git a/drivers/pwm/pwm-ipq.c b/drivers/pwm/pwm-ipq.c
+new file mode 100644
+index 000000000000..5dbe46bb56d6
+--- /dev/null
++++ b/drivers/pwm/pwm-ipq.c
+@@ -0,0 +1,282 @@
++// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
++/*
++ * Copyright (c) 2016-2017, 2020 The Linux Foundation. All rights reserved.
++ */
++
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/pwm.h>
++#include <linux/clk.h>
++#include <linux/io.h>
++#include <linux/of.h>
++#include <linux/math64.h>
++#include <linux/of_device.h>
++#include <linux/bitfield.h>
++#include <linux/units.h>
++
++/* The frequency range supported is 1 Hz to clock rate */
++#define IPQ_PWM_MAX_PERIOD_NS	((u64)NSEC_PER_SEC)
++
++/*
++ * The max value specified for each field is based on the number of bits
++ * in the pwm control register for that field
++ */
++#define IPQ_PWM_MAX_DIV		0xFFFF
++
++/*
++ * Two 32-bit registers for each PWM: REG0, and REG1.
++ * Base offset for PWM #i is at 8 * #i.
++ */
++#define IPQ_PWM_REG0			0
++#define IPQ_PWM_REG0_PWM_DIV		GENMASK(15, 0)
++#define IPQ_PWM_REG0_HI_DURATION	GENMASK(31, 16)
++
++#define IPQ_PWM_REG1			4
++#define IPQ_PWM_REG1_PRE_DIV		GENMASK(15, 0)
++/*
++ * Enable bit is set to enable output toggling in pwm device.
++ * Update bit is set to reflect the changed divider and high duration
++ * values in register.
++ */
++#define IPQ_PWM_REG1_UPDATE		BIT(30)
++#define IPQ_PWM_REG1_ENABLE		BIT(31)
++
++struct ipq_pwm_chip {
++	struct pwm_chip chip;
++	struct clk *clk;
++	void __iomem *mem;
++};
++
++static struct ipq_pwm_chip *ipq_pwm_from_chip(struct pwm_chip *chip)
++{
++	return container_of(chip, struct ipq_pwm_chip, chip);
++}
++
++static unsigned int ipq_pwm_reg_read(struct pwm_device *pwm, unsigned int reg)
++{
++	struct ipq_pwm_chip *ipq_chip = ipq_pwm_from_chip(pwm->chip);
++	unsigned int off = 8 * pwm->hwpwm + reg;
++
++	return readl(ipq_chip->mem + off);
++}
++
++static void ipq_pwm_reg_write(struct pwm_device *pwm, unsigned int reg,
++			      unsigned int val)
++{
++	struct ipq_pwm_chip *ipq_chip = ipq_pwm_from_chip(pwm->chip);
++	unsigned int off = 8 * pwm->hwpwm + reg;
++
++	writel(val, ipq_chip->mem + off);
++}
++
++static void config_div_and_duty(struct pwm_device *pwm, unsigned int pre_div,
++				unsigned int pwm_div, unsigned long rate, u64 duty_ns,
++				bool enable)
++{
++	unsigned long hi_dur;
++	unsigned long val = 0;
++
++	/*
++	 * high duration = pwm duty * (pwm div + 1)
++	 * pwm duty = duty_ns / period_ns
++	 */
++	hi_dur = div64_u64(duty_ns * rate, (pre_div + 1) * NSEC_PER_SEC);
++
++	val = FIELD_PREP(IPQ_PWM_REG0_HI_DURATION, hi_dur) |
++		FIELD_PREP(IPQ_PWM_REG0_PWM_DIV, pwm_div);
++	ipq_pwm_reg_write(pwm, IPQ_PWM_REG0, val);
++
++	val = FIELD_PREP(IPQ_PWM_REG1_PRE_DIV, pre_div);
++	ipq_pwm_reg_write(pwm, IPQ_PWM_REG1, val);
++
++	/* PWM enable toggle needs a separate write to REG1 */
++	val |= IPQ_PWM_REG1_UPDATE;
++	if (enable)
++		val |= IPQ_PWM_REG1_ENABLE;
++	ipq_pwm_reg_write(pwm, IPQ_PWM_REG1, val);
++}
++
++static int ipq_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
++			 const struct pwm_state *state)
++{
++	struct ipq_pwm_chip *ipq_chip = ipq_pwm_from_chip(chip);
++	unsigned int pre_div, pwm_div, best_pre_div, best_pwm_div;
++	unsigned long rate = clk_get_rate(ipq_chip->clk);
++	u64 period_ns, duty_ns, period_rate;
++	u64 min_diff;
++
++	if (state->polarity != PWM_POLARITY_NORMAL)
++		return -EINVAL;
++
++	if (state->period < DIV64_U64_ROUND_UP(NSEC_PER_SEC, rate))
++		return -ERANGE;
++
++	period_ns = min(state->period, IPQ_PWM_MAX_PERIOD_NS);
++	duty_ns = min(state->duty_cycle, period_ns);
++
++	/*
++	 * period_ns is 1G or less. As long as rate is less than 16 GHz,
++	 * period_rate does not overflow. Make that explicit.
++	 */
++	if ((unsigned long long)rate > 16ULL * GIGA)
++		return -EINVAL;
++	period_rate = period_ns * rate;
++	best_pre_div = IPQ_PWM_MAX_DIV;
++	best_pwm_div = IPQ_PWM_MAX_DIV;
++	/*
++	 * We don't need to consider pre_div values smaller than
++	 *
++	 *                              period_rate
++	 *  pre_div_min := ------------------------------------
++	 *                 NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1)
++	 *
++	 * because pre_div = pre_div_min results in a better
++	 * approximation.
++	 */
++	pre_div = div64_u64(period_rate,
++			    (u64)NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1));
++	min_diff = period_rate;
++
++	for (; pre_div <= IPQ_PWM_MAX_DIV; pre_div++) {
++		u64 remainder;
++
++		pwm_div = div64_u64_rem(period_rate,
++					(u64)NSEC_PER_SEC * (pre_div + 1), &remainder);
++		/* pwm_div is unsigned; the check below catches underflow */
++		pwm_div--;
++
++		/*
++		 * Swapping values for pre_div and pwm_div produces the same
++		 * period length. So we can skip all settings with pre_div >
++		 * pwm_div which results in bigger constraints for selecting
++		 * the duty_cycle than with the two values swapped.
++		 */
++		if (pre_div > pwm_div)
++			break;
++
++		/*
++		 * Make sure we can do 100% duty cycle where
++		 * hi_dur == pwm_div + 1
++		 */
++		if (pwm_div > IPQ_PWM_MAX_DIV - 1)
++			continue;
++
++		if (remainder < min_diff) {
++			best_pre_div = pre_div;
++			best_pwm_div = pwm_div;
++			min_diff = remainder;
++
++			if (min_diff == 0) /* bingo */
++				break;
++		}
++	}
++
++	/* config divider values for the closest possible frequency */
++	config_div_and_duty(pwm, best_pre_div, best_pwm_div,
++			    rate, duty_ns, state->enabled);
++
++	return 0;
++}
++
++static int ipq_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
++			     struct pwm_state *state)
++{
++	struct ipq_pwm_chip *ipq_chip = ipq_pwm_from_chip(chip);
++	unsigned long rate = clk_get_rate(ipq_chip->clk);
++	unsigned int pre_div, pwm_div, hi_dur;
++	u64 effective_div, hi_div;
++	u32 reg0, reg1;
++
++	reg0 = ipq_pwm_reg_read(pwm, IPQ_PWM_REG0);
++	reg1 = ipq_pwm_reg_read(pwm, IPQ_PWM_REG1);
++
++	state->polarity = PWM_POLARITY_NORMAL;
++	state->enabled = reg1 & IPQ_PWM_REG1_ENABLE;
++
++	pwm_div = FIELD_GET(IPQ_PWM_REG0_PWM_DIV, reg0);
++	hi_dur = FIELD_GET(IPQ_PWM_REG0_HI_DURATION, reg0);
++	pre_div = FIELD_GET(IPQ_PWM_REG1_PRE_DIV, reg1);
++
++	/* No overflow here, both pre_div and pwm_div <= 0xffff */
++	effective_div = (u64)(pre_div + 1) * (pwm_div + 1);
++	state->period = DIV64_U64_ROUND_UP(effective_div * NSEC_PER_SEC, rate);
++
++	hi_div = hi_dur * (pre_div + 1);
++	state->duty_cycle = DIV64_U64_ROUND_UP(hi_div * NSEC_PER_SEC, rate);
++
++	return 0;
++}
++
++static const struct pwm_ops ipq_pwm_ops = {
++	.apply = ipq_pwm_apply,
++	.get_state = ipq_pwm_get_state,
++	.owner = THIS_MODULE,
++};
++
++static int ipq_pwm_probe(struct platform_device *pdev)
++{
++	struct ipq_pwm_chip *pwm;
++	struct device *dev = &pdev->dev;
++	int ret;
++
++	pwm = devm_kzalloc(dev, sizeof(*pwm), GFP_KERNEL);
++	if (!pwm)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, pwm);
++
++	pwm->mem = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(pwm->mem))
++		return dev_err_probe(dev, PTR_ERR(pwm->mem),
++				"regs map failed");
++
++	pwm->clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(pwm->clk))
++		return dev_err_probe(dev, PTR_ERR(pwm->clk),
++				"failed to get clock");
++
++	ret = clk_prepare_enable(pwm->clk);
++	if (ret)
++		return dev_err_probe(dev, ret, "clock enable failed");
++
++	pwm->chip.dev = dev;
++	pwm->chip.ops = &ipq_pwm_ops;
++	pwm->chip.npwm = 4;
++
++	ret = pwmchip_add(&pwm->chip);
++	if (ret < 0) {
++		dev_err_probe(dev, ret, "pwmchip_add() failed\n");
++		clk_disable_unprepare(pwm->clk);
++	}
++
++	return ret;
++}
++
++static int ipq_pwm_remove(struct platform_device *pdev)
++{
++	struct ipq_pwm_chip *pwm = platform_get_drvdata(pdev);
++
++	pwmchip_remove(&pwm->chip);
++	clk_disable_unprepare(pwm->clk);
++
++	return 0;
++}
++
++static const struct of_device_id pwm_ipq_dt_match[] = {
++	{ .compatible = "qcom,ipq6018-pwm", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, pwm_ipq_dt_match);
++
++static struct platform_driver ipq_pwm_driver = {
++	.driver = {
++		.name = "ipq-pwm",
++		.of_match_table = pwm_ipq_dt_match,
++	},
++	.probe = ipq_pwm_probe,
++	.remove = ipq_pwm_remove,
++};
++
++module_platform_driver(ipq_pwm_driver);
++
++MODULE_LICENSE("Dual BSD/GPL");
+-- 
+2.34.1
 
