@@ -1,362 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610BF134A0;
-	Thu,  5 Oct 2023 11:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE061D698
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 14:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HQPRrwDa"
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696505877; x=1728041877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bioFuL2EwvNC9YQ/WhmfYbJLGPCrMDHXAPzqngxOiSw=;
-  b=HQPRrwDaj0/eg8XGBu40HH+NZdXLbtU/v7YjlL9zMWPtR7REBLdtbvH+
-   Jha1ypv/5nK2n9L4a0PmTl0SDSv616OI8BJmvSX6eMlcTEQ/BE7HHIPim
-   fUH3D0zRjYvzEaE2IieGhgXyIwp0sRsZ8gKd1xqIN9fAPCcvzf9g/07+a
-   kKggwLYPQPPNnnUAf975qXNcVvSSRqX24LBw4ufJ4XaEWMnsuFGW4sVzH
-   /DZAnnwB+jwT1Ig1TJUeOZNgKeakRCmR4SRB6eOOM1Z/FaAz09lX6bj7j
-   /VwbDFS9DKZ3O8+t6CizOA6gbsECeCPtyLISINq5O/ApsJbzCn2R7bHTD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="368544183"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="368544183"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 04:37:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="701624299"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="701624299"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 05 Oct 2023 04:37:50 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qoMfr-000LLc-2l;
-	Thu, 05 Oct 2023 11:37:47 +0000
-Date: Thu, 5 Oct 2023 19:37:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Walle <michael@walle.cc>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-	Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Robert Marko <robert.marko@sartura.hr>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Luka Perkov <luka.perkov@sartura.hr>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Daniel Golle <daniel@makrotopia.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v11 3/7] nvmem: Move of_nvmem_layout_get_container() in
- another header
-Message-ID: <202310051908.k19kiBY7-lkp@intel.com>
-References: <20231004222236.411248-4-miquel.raynal@bootlin.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TrFEqSJN"
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-327b7e08456so1070761f8f.2
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 07:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696516323; x=1697121123; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7lZZZ4/1+PKPxfykJQx+K5x1JSysyKZLvsajzTAsxdk=;
+        b=TrFEqSJNoB+wquUmG5hUbsskyb3CqHg+J8qUa99p0vRSVc7qYeo8J20MNvqvP6nSLr
+         DI804rRXe/tVdnR1cfuhQ9d6DasxssI+1KJ5garTG9bxaLwj7eLVMRfz5tAPwrv0W4Cv
+         B15L6C1hFxfepxPLSwHEdeTsUpfc7WxqcGN5B6g7iVKeCIbeAJR8YgFZGZc3dR4age3X
+         fliMeq8FBgJqVNWFRAO7S84POrlmn+5qgNl0m3qfxGXPkBUikHrCh3rXOZ0+XQpHgxDP
+         X42BDRSBxvBSwVFFCxUiDLGPZrZ6XUC19cKIhMNnow3BcWQjMtwchFjn3TwkWnFufIzP
+         +hfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696516323; x=1697121123;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7lZZZ4/1+PKPxfykJQx+K5x1JSysyKZLvsajzTAsxdk=;
+        b=DQhSknSX3bP5bt9mikqNqK/nsnC4nXchM/gNNcLRkQ43jmeU5zH2mTSzCXCk9W87fJ
+         L9Lxx9bFFOplxl/E0rsazPgLk3C8uCoQsqCqqoseueEDfihGy7xJFsxT8BH404Y9YpBJ
+         qp8dscttXbqYB2C/bXudzVBOomwHjkSZqvLzrotX79kaXihEygh9CGrFkgK8aPPayfim
+         oJN1vJT3PKybnNwC1F8Ym5ov5i0HoNOdFVuTbNrxKqk3tX1r1dlzcpck+LamrwC8zU3T
+         w+kbW0/urw6JAbezLRmK/2jfo+IvZZkmnd6njgTK4/RcFelE6eH3UDn1wGddMzoVcHvr
+         j0PA==
+X-Gm-Message-State: AOJu0Yw5b92fiZIIKFL6PZ5taEc1hvlivXyQN8GtQQqtp1/OX26n8tNY
+	vICoN6tpOe7WUPMZUOSKThDIutrAGw4=
+X-Google-Smtp-Source: AGHT+IGeNwFRiaR2N0eH2gDEphyHTycBq3NZEolG4ZYAdI003Zqp47OEBzOniXtW8LVUM2/Bd1MTnw==
+X-Received: by 2002:a05:6000:1946:b0:327:e073:d604 with SMTP id e6-20020a056000194600b00327e073d604mr4536663wry.45.1696516322757;
+        Thu, 05 Oct 2023 07:32:02 -0700 (PDT)
+Received: from [10.254.108.106] (munvpn.amd.com. [165.204.72.6])
+        by smtp.gmail.com with ESMTPSA id b18-20020a5d4d92000000b00327cd5e5ac1sm1954639wru.1.2023.10.05.07.32.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Oct 2023 07:32:02 -0700 (PDT)
+Message-ID: <ca2006f4-a038-460d-a9ca-d14dca8e4a8b@gmail.com>
+Date: Thu, 5 Oct 2023 16:31:59 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231004222236.411248-4-miquel.raynal@bootlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/amdgpu: Annotate struct amdgpu_bo_list with
+ __counted_by
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>,
+ Alex Deucher <alexander.deucher@amd.com>
+Cc: llvm@lists.linux.dev,
+ Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+ Tom Rix <trix@redhat.com>, Felix Kuehling <Felix.Kuehling@amd.com>,
+ "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>, Luben Tuikov <luben.tuikov@amd.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@gmail.com>, =?UTF-8?Q?Christian_K=C3=B6nig?=
+ <christian.koenig@amd.com>, linux-hardening@vger.kernel.org
+References: <20231003232952.work.158-kees@kernel.org>
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20231003232952.work.158-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Miquel,
+Am 04.10.23 um 01:29 schrieb Kees Cook:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>
+> As found with Coccinelle[1], add __counted_by for struct amdgpu_bo_list.
+> Additionally, since the element count member must be set before accessing
+> the annotated flexible array member, move its initialization earlier.
+>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: "Christian König" <christian.koenig@amd.com>
+> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Luben Tuikov <luben.tuikov@amd.com>
+> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Cc: Felix Kuehling <Felix.Kuehling@amd.com>
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-hardening@vger.kernel.org
+> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.6-rc4 next-20231005]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c | 2 +-
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
+> index 6f5b641b631e..781e5c5ce04d 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
+> @@ -84,6 +84,7 @@ int amdgpu_bo_list_create(struct amdgpu_device *adev, struct drm_file *filp,
+>   
+>   	kref_init(&list->refcount);
+>   
+> +	list->num_entries = num_entries;
+>   	array = list->entries;
+>   
+>   	for (i = 0; i < num_entries; ++i) {
+> @@ -129,7 +130,6 @@ int amdgpu_bo_list_create(struct amdgpu_device *adev, struct drm_file *filp,
+>   	}
+>   
+>   	list->first_userptr = first_userptr;
+> -	list->num_entries = num_entries;
+>   	sort(array, last_entry, sizeof(struct amdgpu_bo_list_entry),
+>   	     amdgpu_bo_list_entry_cmp, NULL);
+>   
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
+> index 6a703be45d04..555cd6d877c3 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
+> @@ -56,7 +56,7 @@ struct amdgpu_bo_list {
+>   	 */
+>   	struct mutex bo_list_mutex;
+>   
+> -	struct amdgpu_bo_list_entry entries[];
+> +	struct amdgpu_bo_list_entry entries[] __counted_by(num_entries);
+>   };
+>   
+>   int amdgpu_bo_list_get(struct amdgpu_fpriv *fpriv, int id,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Miquel-Raynal/of-device-Export-of_device_make_bus_id/20231005-062417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20231004222236.411248-4-miquel.raynal%40bootlin.com
-patch subject: [PATCH v11 3/7] nvmem: Move of_nvmem_layout_get_container() in another header
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231005/202310051908.k19kiBY7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231005/202310051908.k19kiBY7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310051908.k19kiBY7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from block/partitions/msdos.c:31:
-   In file included from block/partitions/check.h:2:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from block/partitions/msdos.c:31:
-   In file included from block/partitions/check.h:2:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from block/partitions/msdos.c:31:
-   In file included from block/partitions/check.h:2:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from block/partitions/msdos.c:32:
-   In file included from block/partitions/efi.h:19:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:18:
->> include/linux/nvmem-provider.h:256:1: error: expected identifier or '('
-     256 | {
-         | ^
-   12 warnings and 1 error generated.
---
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:18:
->> include/linux/nvmem-provider.h:256:1: error: expected identifier or '('
-     256 | {
-         | ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      97 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      97 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     100 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:38:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-
-
-vim +256 include/linux/nvmem-provider.h
-
-   254	
-   255	static inline struct device_node *of_nvmem_layout_get_container(struct nvmem_device *nvmem);
- > 256	{
-   257		return NULL;
-   258	}
-   259	#endif /* CONFIG_NVMEM */
-   260	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
