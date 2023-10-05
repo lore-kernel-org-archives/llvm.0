@@ -1,155 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B1720E3
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 09:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2A57F
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 09:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EbE6dDrP"
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696497092;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=47YlQJswD2ZHMxt5MMY28CyNafQdgNErUcUJtgXMNr0=;
-	b=EbE6dDrPbLrlqI9YAb/RvIieIkS/y9qwcSGBpD400dnDgvwwl2IgmerDtMu66CkKC0zB7O
-	8/CwtzDRu6vCI8N92JaCmrQWOifSnboSHMXYl9qQZeJjHEgGjQ+WoaqqOPA/Sai9DArV03
-	ogVwPQ0kwHvp5gOW781zWqsxv4v+PgY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-YgTtdCwDMLygoVuOsYHM5Q-1; Thu, 05 Oct 2023 05:11:28 -0400
-X-MC-Unique: YgTtdCwDMLygoVuOsYHM5Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82CBE81D785
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 09:11:28 +0000 (UTC)
-Received: from [172.64.10.35] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 512FE493113;
-	Thu,  5 Oct 2023 09:11:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 230): Test report for master
- (6.6.0-rc4, mainline.kernel.org-clang, 3006adf3)
-Date: Thu, 05 Oct 2023 09:11:28 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, yizhan@redhat.com
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWCcKM8N"
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40684f53ef3so7055575e9.3
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 02:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696498964; x=1697103764; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=693KH3zKhYevDlo1VF7tZiOPFyQxum49fs5ILYx5v8c=;
+        b=RWCcKM8Ny5qi+7wOk6Z75Wv7bID9POIIc1uDtvs6wlBvm14L01TY2BBOkGrbhkkqe2
+         DY5r1+kNBkRPgjtcfjU9o5dlwueXEzLp/wqXJsHo7NSDT4QqryRMFpRzh5ouUxqQucfE
+         Jx8fE0rF6MzcMSWcC9an63gLgHQGYdkQ9vR8CC/wISdiMMs6Cvk3YVySPOO4Rl13eHeV
+         5t1rVbwr9m5GCnXw5Or3KSgONjZIt8++51rfCdg0cQNJ7gxM8Wb7Lhc1Bk0KrRNseG/N
+         ET0AbIsxAc7Fjx82Gpq1D07nG+5FJhHqAWZG87LcIaglr3UB7MoACj3+2UpxqCprErA1
+         w6pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696498964; x=1697103764;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=693KH3zKhYevDlo1VF7tZiOPFyQxum49fs5ILYx5v8c=;
+        b=A+VaTwut4sDKdl3/pwCbU30QGwznjkejJwTsA78CEov+Vr72pXPAMuTyWItnIr7SJz
+         hAgg0UleDajeO0nL3rmQydFFbzKSkPbQ1nPKVk4f+5aBG4jcJDGj3QezDhZ4XWBFgEL+
+         lasaw9QnrWHpi8cBA0M/xsfApQMkxmBCUwLYCSvbn764GIpVF4XLD83KbYWA933Bbsfx
+         S7NDocFwx0WpCnTniOg3+0FQFGvHA0zyse4BypFS0kcYWrNHFyEeIg9+qRpo0biKI+TS
+         o8rIaJWOIPc5K0lm4f/Lno96eWEKKHSLUBNX+x43NLw2f/dpHzDBMCM0UIkPEkPyLTLR
+         FEvg==
+X-Gm-Message-State: AOJu0Yyi/U7/GFojVS22DEu3X4E9dFNVqeoxcZ41SEpIFVu9B6mKWFKG
+	AZ9dYNAoD29+WkCLGNZbibU=
+X-Google-Smtp-Source: AGHT+IEqCjtTNseNA7LGC5Lm5Y9+taQvSKRx7vpW4rapsxY7APIyKIIa0O5eElHs85P9+NWErlFwBw==
+X-Received: by 2002:a05:600c:c9:b0:405:3dee:3515 with SMTP id u9-20020a05600c00c900b004053dee3515mr4625492wmm.27.1696498964439;
+        Thu, 05 Oct 2023 02:42:44 -0700 (PDT)
+Received: from [10.254.108.106] (munvpn.amd.com. [165.204.72.6])
+        by smtp.gmail.com with ESMTPSA id w21-20020a05600c015500b0040535648639sm1103836wmm.36.2023.10.05.02.42.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Oct 2023 02:42:43 -0700 (PDT)
+Message-ID: <d58bbe17-efa7-4548-9c7d-bf0310d31ef5@gmail.com>
+Date: Thu, 5 Oct 2023 11:42:38 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <76682.123100505112801979@us-mta-533.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/9] drm: Annotate structs with __counted_by
+To: Kees Cook <keescook@chromium.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Alex Deucher <alexdeucher@gmail.com>, David Airlie <airlied@gmail.com>,
+ "Pan, Xinhui" <Xinhui.Pan@amd.com>, Karol Herbst <kherbst@redhat.com>,
+ Tom Rix <trix@redhat.com>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, dri-devel@lists.freedesktop.org,
+ Chris Wilson <chris@chris-wilson.co.uk>, Prike Liang <Prike.Liang@amd.com>,
+ Huang Rui <ray.huang@amd.com>, Gerd Hoffmann <kraxel@redhat.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Matthew Brost <matthew.brost@intel.com>, Evan Quan <evan.quan@amd.com>,
+ Emma Anholt <emma@anholt.net>, amd-gfx@lists.freedesktop.org,
+ Kuogee Hsieh <quic_khsieh@quicinc.com>, Lijo Lazar <lijo.lazar@amd.com>,
+ VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>,
+ Ben Skeggs <bskeggs@redhat.com>, Andi Shyti <andi.shyti@linux.intel.com>,
+ nouveau@lists.freedesktop.org, David Airlie <airlied@redhat.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Chia-I Wu
+ <olvaffe@gmail.com>, llvm@lists.linux.dev, Yifan Zhang
+ <yifan1.zhang@amd.com>, linux-arm-msm@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, Kevin Wang <kevin1.wang@amd.com>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Nathan Chancellor <nathan@kernel.org>, Le Ma <le.ma@amd.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>,
+ Maxime Ripard <mripard@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ virtualization@lists.linux-foundation.org, Sean Paul <sean@poorly.run>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Xiaojian Du
+ <Xiaojian.Du@amd.com>, Lang Yu <Lang.Yu@amd.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Tejas Upadhyay <tejas.upadhyay@intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ Hawking Zhang <Hawking.Zhang@amd.com>, Rob Clark <robdclark@gmail.com>,
+ Melissa Wen <mwen@igalia.com>, John Harrison <john.c.harrison@intel.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Alex Deucher <alexander.deucher@amd.com>,
+ Nirmoy Das <nirmoy.das@intel.com>, freedreno@lists.freedesktop.org,
+ Zack Rusin <zackr@vmware.com>, linux-hardening@vger.kernel.org
+References: <20230922173110.work.084-kees@kernel.org>
+ <169601600138.3014939.8511343741428844249.b4-ty@chromium.org>
+ <83cd056c-52ae-01dd-7576-42d41da64c26@gmail.com>
+ <CADnq5_Ma2CrLYggJHKFEObsNmUoqJwb2p1xai5DfL=m43U6zEA@mail.gmail.com>
+ <202310020952.E7DE0948C0@keescook>
+ <10644b5f-b0a7-85ef-0658-2353ee14df0d@gmail.com>
+ <202310021107.9BB46FB8E@keescook>
+ <0be2dfa4-b6c1-f62a-66e1-615da7aa3c76@amd.com>
+ <202310021122.B6DA850FB0@keescook>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <202310021122.B6DA850FB0@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+Am 02.10.23 um 20:22 schrieb Kees Cook:
+> On Mon, Oct 02, 2023 at 08:11:41PM +0200, Christian König wrote:
+>> Am 02.10.23 um 20:08 schrieb Kees Cook:
+>>> On Mon, Oct 02, 2023 at 08:01:57PM +0200, Christian König wrote:
+>>>> Am 02.10.23 um 18:53 schrieb Kees Cook:
+>>>>> On Mon, Oct 02, 2023 at 11:06:19AM -0400, Alex Deucher wrote:
+>>>>>> On Mon, Oct 2, 2023 at 5:20 AM Christian König
+>>>>>> <ckoenig.leichtzumerken@gmail.com> wrote:
+>>>>>>> Am 29.09.23 um 21:33 schrieb Kees Cook:
+>>>>>>>> On Fri, 22 Sep 2023 10:32:05 -0700, Kees Cook wrote:
+>>>>>>>>> This is a batch of patches touching drm for preparing for the coming
+>>>>>>>>> implementation by GCC and Clang of the __counted_by attribute. Flexible
+>>>>>>>>> array members annotated with __counted_by can have their accesses
+>>>>>>>>> bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS (for array
+>>>>>>>>> indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family functions).
+>>>>>>>>>
+>>>>>>>>> As found with Coccinelle[1], add __counted_by to structs that would
+>>>>>>>>> benefit from the annotation.
+>>>>>>>>>
+>>>>>>>>> [...]
+>>>>>>>> Since this got Acks, I figure I should carry it in my tree. Let me know
+>>>>>>>> if this should go via drm instead.
+>>>>>>>>
+>>>>>>>> Applied to for-next/hardening, thanks!
+>>>>>>>>
+>>>>>>>> [1/9] drm/amd/pm: Annotate struct smu10_voltage_dependency_table with __counted_by
+>>>>>>>>           https://git.kernel.org/kees/c/a6046ac659d6
+>>>>>>> STOP! In a follow up discussion Alex and I figured out that this won't work.
+>>>>> I'm so confused; from the discussion I saw that Alex said both instances
+>>>>> were false positives?
+>>>>>
+>>>>>>> The value in the structure is byte swapped based on some firmware
+>>>>>>> endianness which not necessary matches the CPU endianness.
+>>>>>> SMU10 is APU only so the endianess of the SMU firmware and the CPU
+>>>>>> will always match.
+>>>>> Which I think is what is being said here?
+>>>>>
+>>>>>>> Please revert that one from going upstream if it's already on it's way.
+>>>>>>>
+>>>>>>> And because of those reasons I strongly think that patches like this
+>>>>>>> should go through the DRM tree :)
+>>>>> Sure, that's fine -- please let me know. It was others Acked/etc. Who
+>>>>> should carry these patches?
+>>>> Probably best if the relevant maintainer pick them up individually.
+>>>>
+>>>> Some of those structures are filled in by firmware/hardware and only the
+>>>> maintainers can judge if that value actually matches what the compiler
+>>>> needs.
+>>>>
+>>>> We have cases where individual bits are used as flags or when the size is
+>>>> byte swapped etc...
+>>>>
+>>>> Even Alex and I didn't immediately say how and where that field is actually
+>>>> used and had to dig that up. That's where the confusion came from.
+>>> Okay, I've dropped them all from my tree. Several had Acks/Reviews, so
+>>> hopefully those can get picked up for the DRM tree?
+>> I will pick those up to go through drm-misc-next.
+>>
+>> Going to ping maintainers once more when I'm not sure if stuff is correct or
+>> not.
+> Sounds great; thanks!
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I wasn't 100% sure for the VC4 patch, but pushed the whole set to 
+drm-misc-next anyway.
 
+This also means that the patches are now auto merged into the drm-tip 
+integration branch and should any build or unit test go boom we should 
+notice immediately and can revert it pretty easily.
 
-Kernel information:
-    Commit message: Merge tag 'rtla-v6.6-fixes' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/bristot/linux
+Thanks,
+Christian.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/107501
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9771662
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9771793
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Panic
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+>
+> -Kees
+>
 
