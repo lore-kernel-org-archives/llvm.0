@@ -1,91 +1,182 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86EE4111B
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 01:30:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6DD1373;
+	Thu,  5 Oct 2023 01:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K9jGoe14"
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59f2c7a4f24so5965297b3.0
-        for <llvm@lists.linux.dev>; Wed, 04 Oct 2023 18:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696469403; x=1697074203; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xqc981CBMLWk+FQW6EA7FJZRSQfVRhbIKI7MGCKnNEk=;
-        b=K9jGoe14PIJy0JhnX7Ivy9fY8CyUJMEaBPn23KuhbvPC0eNcnHotpdrggQUJzyJ0MV
-         /MkqRF+NNbFbabI/6yyGfau8CZKBRHj7l+IvhUEk3Q9zCZ7po4tWmo7asLo3YX4suQqw
-         xq/cGkuoHo1JlqYEMCx+MwvwzM5DQlZZ7q4zQX/mShzbGxsotoEg9qQ8SWbZ6Aor//et
-         GefPL7HBh+fS1fXVkCRab6Yf5XveqHrReRNbS994tsXIqxmd93iYHDR7KyIH5MxJOs5Z
-         kD8Nq4T2E+jLq03PyC5fZGT62b5o9M5AcgV4wiB8YkeuTanxW61S1mPfyxxhtn6aFXfx
-         f3xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696469403; x=1697074203;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xqc981CBMLWk+FQW6EA7FJZRSQfVRhbIKI7MGCKnNEk=;
-        b=M0v1nWr68D48TB63PBFNb5W3ObbJwU679bQN7Ov289XOrLWkaEnTnjqMCOSX1g9jJe
-         EzDooU63ifPyL0gl68nu3bjf3W+lNey6YoRo8jC4Omu1juNZf8Gs7rOkBDn9jdRi49/V
-         Fn0gWdF/lN1TdEXyDT3dRKdFdXC7g43qih+PV0LvwvqGK2im/4Cbcu6AvRAL67FJf2b/
-         fCMGjZ5zwY2cQhuMgUb7eZtNPjeIj8hIOZNz09C8wJb4tw1LgTpOwBPyzEezVNxEwQn6
-         DZQ4hCu93cS6U/KBy+Yhaz9pMVE6MSPxI/13g/5mEAKTBZaGrSDY2aG7jEuXdAZx59Xb
-         tUfQ==
-X-Gm-Message-State: AOJu0YxpP4hD2h5VQSm1xj71G/4qVAkb1vpem5ZcUYjQo+Q3Ea2ZY4s7
-	DybEtKEHvh77aJKsixWPeT8I0Zdd4ZQ=
-X-Google-Smtp-Source: AGHT+IFqbf0gkO9Qoa4YBFhqDgjc+6TQ/LCF7VPFui1r6bU6n9f4cTS1dfvkOaHDVedFUeqKKjsNdPOL4Qc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:431d:0:b0:59b:e684:3c76 with SMTP id
- q29-20020a81431d000000b0059be6843c76mr66748ywa.2.1696469403561; Wed, 04 Oct
- 2023 18:30:03 -0700 (PDT)
-Date: Wed,  4 Oct 2023 18:29:23 -0700
-In-Reply-To: <20230928001956.924301-1-seanjc@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W+0hp0XW"
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696470881; x=1728006881;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LsWZoE9GZIZHN47RtnN7750QQphkpmCgZgeeZiPTjbw=;
+  b=W+0hp0XW6YD4dcHB0rXX05x6IdLBkKjhtYzdtH8So7zs9QLVj8PqFCcl
+   aMo8bPfMFkTfwiPMy75IyMR4mwDYij55jU+w5QzIjwDOvkP+mkJVnOkD3
+   ss087eZuG939V/i9SoaBGUTavvxl3fW3zgJZnS1oKGl9GWWYZtBgbBjvJ
+   Ye5JZ8zJWnKRJJA1UAtMcUoAcNBM7sKaEX1EM+gjzyZV1cdqktnTsYeKA
+   67PQlrmmhxjtelWxyczN8V78w40nj/tLBM13y49KHpIu/kguU6DXer84R
+   QS9AebnfuJoGhK4p1OfsDHM/5B6xXRrpE6LBMOoiSPtFu2PGfmlENLkhp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="4933796"
+X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
+   d="scan'208";a="4933796"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 18:54:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="781046521"
+X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
+   d="scan'208";a="781046521"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 04 Oct 2023 18:54:37 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qoDZS-000KrU-2e;
+	Thu, 05 Oct 2023 01:54:34 +0000
+Date: Thu, 5 Oct 2023 09:53:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mukesh Ojha <quic_mojha@quicinc.com>, mcgrof@kernel.org,
+	russell.h.weight@intel.com, gregkh@linuxfoundation.org,
+	rafael@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: Re: [PATCH v2] firmware_loader: Abort new fw load request once
+ firmware core knows about reboot
+Message-ID: <202310050911.UHh53hem-lkp@intel.com>
+References: <1696431327-7369-1-git-send-email-quic_mojha@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230928001956.924301-1-seanjc@google.com>
-X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
-Message-ID: <169644980223.2754169.1786296654866171118.b4-ty@google.com>
-Subject: Re: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
-	Tyler Stachecki <stachecki.tyler@gmail.com>, Leonardo Bras <leobras@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1696431327-7369-1-git-send-email-quic_mojha@quicinc.com>
 
-On Wed, 27 Sep 2023 17:19:51 -0700, Sean Christopherson wrote:
-> Rework how KVM limits guest-unsupported xfeatures to effectively hide
-> only when saving state for userspace (KVM_GET_XSAVE), i.e. to let userspace
-> load all host-supported xfeatures (via KVM_SET_XSAVE) irrespective of
-> what features have been exposed to the guest.
-> 
-> The effect on KVM_SET_XSAVE was knowingly done by commit ad856280ddea
-> ("x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0"):
-> 
-> [...]
+Hi Mukesh,
 
-Applied to kvm-x86 fpu, even though there is still ongoing discussion.  I want
-to get this exposure in -next sooner than later.  I'll keep this in its own
-branch so it'll be easier to rewrite/discard if necessary.
+kernel test robot noticed the following build errors:
 
-[1/5] x86/fpu: Allow caller to constrain xfeatures when copying to uabi buffer
-      https://github.com/kvm-x86/linux/commit/2d287ec65e79
-[2/5] KVM: x86: Constrain guest-supported xfeatures only at KVM_GET_XSAVE{2}
-      https://github.com/kvm-x86/linux/commit/27526efb5cff
-[3/5] KVM: selftests: Touch relevant XSAVE state in guest for state test
-      https://github.com/kvm-x86/linux/commit/ff0654c71fb6
-[4/5] KVM: selftests: Load XSAVE state into untouched vCPU during state test
-      https://github.com/kvm-x86/linux/commit/d7b8762ec4a3
-[5/5] KVM: selftests: Force load all supported XSAVE state in state test
-      https://github.com/kvm-x86/linux/commit/afb2c7e27a7f
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.6-rc4 next-20231004]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Ojha/firmware_loader-Abort-new-fw-load-request-once-firmware-core-knows-about-reboot/20231004-225910
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/1696431327-7369-1-git-send-email-quic_mojha%40quicinc.com
+patch subject: [PATCH v2] firmware_loader: Abort new fw load request once firmware core knows about reboot
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231005/202310050911.UHh53hem-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231005/202310050911.UHh53hem-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310050911.UHh53hem-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/base/firmware_loader/fallback.c:11:
+   In file included from drivers/base/firmware_loader/fallback.h:9:
+   drivers/base/firmware_loader/sysfs.h:87:20: error: redefinition of 'fw_load_abort' as different kind of symbol
+   static inline void fw_load_abort(struct fw_sysfs *fw_sysfs)
+                      ^
+   drivers/base/firmware_loader/firmware.h:89:13: note: previous definition is here
+   extern bool fw_load_abort;
+               ^
+>> drivers/base/firmware_loader/fallback.c:113:16: error: called object type 'bool' (aka '_Bool') is not a function or function pointer
+                   fw_load_abort(fw_sysfs);
+                   ~~~~~~~~~~~~~^
+   2 errors generated.
 --
-https://github.com/kvm-x86/linux/tree/next
+   In file included from drivers/base/firmware_loader/sysfs.c:9:
+   drivers/base/firmware_loader/sysfs.h:87:20: error: redefinition of 'fw_load_abort' as different kind of symbol
+   static inline void fw_load_abort(struct fw_sysfs *fw_sysfs)
+                      ^
+   drivers/base/firmware_loader/firmware.h:89:13: note: previous definition is here
+   extern bool fw_load_abort;
+               ^
+>> drivers/base/firmware_loader/sysfs.c:218:16: error: called object type 'bool' (aka '_Bool') is not a function or function pointer
+                   fw_load_abort(fw_sysfs);
+                   ~~~~~~~~~~~~~^
+   drivers/base/firmware_loader/sysfs.c:302:16: error: called object type 'bool' (aka '_Bool') is not a function or function pointer
+                   fw_load_abort(fw_sysfs);
+                   ~~~~~~~~~~~~~^
+   3 errors generated.
+
+
+vim +113 drivers/base/firmware_loader/fallback.c
+
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   66  
+60fa74263cbeae1 drivers/base/firmware_loader/fallback.c Luis R. Rodriguez  2018-03-10   67  /**
+c35f9cbb1df8f17 drivers/base/firmware_loader/fallback.c Andres Rodriguez   2018-05-10   68   * fw_load_sysfs_fallback() - load a firmware via the sysfs fallback mechanism
+b93815d0f37e7c4 drivers/base/firmware_loader/fallback.c Andres Rodriguez   2018-04-25   69   * @fw_sysfs: firmware sysfs information for the firmware to load
+60fa74263cbeae1 drivers/base/firmware_loader/fallback.c Luis R. Rodriguez  2018-03-10   70   * @timeout: timeout to wait for the load
+60fa74263cbeae1 drivers/base/firmware_loader/fallback.c Luis R. Rodriguez  2018-03-10   71   *
+60fa74263cbeae1 drivers/base/firmware_loader/fallback.c Luis R. Rodriguez  2018-03-10   72   * In charge of constructing a sysfs fallback interface for firmware loading.
+60fa74263cbeae1 drivers/base/firmware_loader/fallback.c Luis R. Rodriguez  2018-03-10   73   **/
+89287c169f8ff79 drivers/base/firmware_loader/fallback.c Kees Cook          2020-10-02   74  static int fw_load_sysfs_fallback(struct fw_sysfs *fw_sysfs, long timeout)
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   75  {
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   76  	int retval = 0;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   77  	struct device *f_dev = &fw_sysfs->dev;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   78  	struct fw_priv *fw_priv = fw_sysfs->fw_priv;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   79  
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   80  	/* fall back on userspace loading */
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   81  	if (!fw_priv->data)
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   82  		fw_priv->is_paged_buf = true;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   83  
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   84  	dev_set_uevent_suppress(f_dev, true);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   85  
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   86  	retval = device_add(f_dev);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   87  	if (retval) {
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   88  		dev_err(f_dev, "%s: device_register failed\n", __func__);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   89  		goto err_put_dev;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   90  	}
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   91  
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   92  	mutex_lock(&fw_lock);
+b30557dae4a363d drivers/base/firmware_loader/fallback.c Mukesh Ojha        2023-10-04   93  	if (fw_load_abort || fw_state_is_aborted(fw_priv)) {
+75d95e2e39b27f7 drivers/base/firmware_loader/fallback.c Anirudh Rayabharam 2021-07-28   94  		mutex_unlock(&fw_lock);
+75d95e2e39b27f7 drivers/base/firmware_loader/fallback.c Anirudh Rayabharam 2021-07-28   95  		retval = -EINTR;
+75d95e2e39b27f7 drivers/base/firmware_loader/fallback.c Anirudh Rayabharam 2021-07-28   96  		goto out;
+75d95e2e39b27f7 drivers/base/firmware_loader/fallback.c Anirudh Rayabharam 2021-07-28   97  	}
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   98  	list_add(&fw_priv->pending_list, &pending_fw_head);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10   99  	mutex_unlock(&fw_lock);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  100  
+89287c169f8ff79 drivers/base/firmware_loader/fallback.c Kees Cook          2020-10-02  101  	if (fw_priv->opt_flags & FW_OPT_UEVENT) {
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  102  		fw_priv->need_uevent = true;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  103  		dev_set_uevent_suppress(f_dev, false);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  104  		dev_dbg(f_dev, "firmware: requesting %s\n", fw_priv->fw_name);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  105  		kobject_uevent(&fw_sysfs->dev.kobj, KOBJ_ADD);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  106  	} else {
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  107  		timeout = MAX_JIFFY_OFFSET;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  108  	}
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  109  
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  110  	retval = fw_sysfs_wait_timeout(fw_priv, timeout);
+bcfbd3523f3c6ee drivers/base/firmware_loader/fallback.c Junyong Sun        2020-03-03  111  	if (retval < 0 && retval != -ENOENT) {
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  112  		mutex_lock(&fw_lock);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10 @113  		fw_load_abort(fw_sysfs);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  114  		mutex_unlock(&fw_lock);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  115  	}
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  116  
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  117  	if (fw_state_is_aborted(fw_priv)) {
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  118  		if (retval == -ERESTARTSYS)
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  119  			retval = -EINTR;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  120  	} else if (fw_priv->is_paged_buf && !fw_priv->data)
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  121  		retval = -ENOMEM;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  122  
+75d95e2e39b27f7 drivers/base/firmware_loader/fallback.c Anirudh Rayabharam 2021-07-28  123  out:
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  124  	device_del(f_dev);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  125  err_put_dev:
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  126  	put_device(f_dev);
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  127  	return retval;
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  128  }
+d73f821c7aea16a drivers/base/firmware_fallback.c        Luis R. Rodriguez  2018-03-10  129  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
