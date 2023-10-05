@@ -1,46 +1,46 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5051114001
-	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FB614001
+	for <llvm@lists.linux.dev>; Thu,  5 Oct 2023 23:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2EENq9ZG"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5a4f656f751so23141477b3.0
-        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="03LAQllx"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5a507eb61a6so21366457b3.1
+        for <llvm@lists.linux.dev>; Thu, 05 Oct 2023 16:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696547346; x=1697152146; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696547349; x=1697152149; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aDPuyVd3XTrJMjMwlPDdlF9+59DlOSoA2gz1djDjGjM=;
-        b=2EENq9ZGTf/RF4nq3LpMCscF1IjUQUrKQcxZUjprAEX43cKsVIWGRaHPbfk3+O/Znh
-         ftVUe1y5ZpY6ALM6WqcmjJSI3wK9X6vwipmUzttw2QYuDweruoxwWNyqMbhXvn+NQX11
-         H86kaD74Ll5vWCLMZdhEDBtYKfHkjM37CHYbGY7Hrkr9W7L+hnYOrkGLUOsUMmWDG8ej
-         SbXPXBMxYCP8iecMggLii1lgl5JcF63wgmBeetH5HIXP6Z2ZaTifnMISBZxpfEN1uNpQ
-         BvCvydhOyBwxLygXBJIchFMBlMhuyNAALlrx687nz0bQQL6syjxp/vJPcLHX8FLtjQ6s
-         G94w==
+        bh=i2XqQMJ0GkpZoKYBOeb+AHUkFWOwFAfTNDekNOfqFv8=;
+        b=03LAQllxPrwuM/pplAU13NoF0ksb6v/CWQT9d5ylOxs3tYA1IMgamE1DsIBt994cjJ
+         WKlzBrZYthaS/REgg0pH2W16/0CS8X93wzMkBg2ve9PW/6eRMVl5kExuNQStBMG06kIm
+         EBnttWJFiGUYZM/pD6jgJreBbxRA9Jj9MFFzNh4pbFCgG1F95oOTPv2dMRZnqfPmRG2M
+         mcKNFkwOdmsopc1ODQTIMa/KLxCUbexIJrvWK6rBXmBXI7P2zugORAty7FwDemaZzqyx
+         caZD9XibWgZdUsfCVOjFV/owwspTxtaj2zxH39iAbhGMtyFD2Vy5f14z7Y6iNLmbbbyT
+         WjWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696547346; x=1697152146;
+        d=1e100.net; s=20230601; t=1696547349; x=1697152149;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aDPuyVd3XTrJMjMwlPDdlF9+59DlOSoA2gz1djDjGjM=;
-        b=CiBwx7DX/uRGgPibBqBMlv050oShdx5sMpctJxHdbh79vyxqCSevQIgl4KB7yxfzMR
-         tsFQaUzFRSDXmKy0mPQ82OkpKTb0aOnSjhlOe2RYTfRKumXlmTY2aOasvGOLIttL38Le
-         If3b68CH94dfmOdugjpp972n+R5NtpDKEBw5vSgklpEZhrOqEJdBNYBtpyPYsjJ5xj3v
-         JzzLFNiibAgq8gVE8C0HDvVbijzT4DhK+/FoaBTCoi1phluO3dgFmMvS/PAW2aB8w8it
-         UIxLDtdpQ4JpgmXSLvY+47sh+JvYJ2j6EDlWfApNRqHTzYanAMaaVSMhMUin4+RpDGhU
-         enrQ==
-X-Gm-Message-State: AOJu0YwCYsgERP75YHKXFSZDxx0HQ4AgMmzsV/QIn29p9u4+pLBYMs+4
-	sw8+i7g8ZOTV2l9QCC5PU4qz/SSPHF/y
-X-Google-Smtp-Source: AGHT+IFQDjjuJ9i5zSFcUSzRWjUMmm/ajUwJIkmJtY7wD6WB6BJUTaAn4xhEtzWUY7ES/84RgxbXsLDpBnQp
+        bh=i2XqQMJ0GkpZoKYBOeb+AHUkFWOwFAfTNDekNOfqFv8=;
+        b=tb9MYFlhB3wXLIT7RUiC1nuTEM3dsnxMpR6MHdHDBhalytRQYvl4xrYdrE5dpbdpuY
+         Hdmk9CmW3DAzT656xT/zn8u75sOCE+VXlnnmYBY1J5wAtiZHQuxBcMrSU8YnW/2qG/jV
+         7Je+yye1bfULEEuZWBN0RgKJXsdzrNkQl6pGRSiIbpdkfYTnmg9cDDrAjPpGT/EnUcMN
+         aAPqBuQBDUHlRhuUBjH4RUMcQsuZ2zse2mjMQiUkShzm/v4j/Vcuj0RqwTuNAGrDwakJ
+         7bZFsYbnbdpq08GWvlRRanBvijP3aHYFb1bII+xp1b4NGe6QB6NgbWynoI5CMQ71Gofp
+         lySA==
+X-Gm-Message-State: AOJu0YxiIB46yaxM2ST7PRBLH7lDI5vUmmXymTjjzC6hvQTgLpxMuehy
+	v/cg9pKqiHDZV48Krue4+7Oq2gALIGxV
+X-Google-Smtp-Source: AGHT+IGfGlEcR5cafu/s4l0RQy8FE4MK3zRFkQ6Zp8BoRNaDEtxn5kvn9B3Xn4doaEJk2RCpa1Y7G/TCwC7Y
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
- (user=irogers job=sendgmr) by 2002:a05:690c:3146:b0:5a4:f657:3a95 with SMTP
- id fc6-20020a05690c314600b005a4f6573a95mr91738ywb.1.1696547346425; Thu, 05
- Oct 2023 16:09:06 -0700 (PDT)
-Date: Thu,  5 Oct 2023 16:08:37 -0700
+ (user=irogers job=sendgmr) by 2002:a81:a9c4:0:b0:59b:eace:d467 with SMTP id
+ g187-20020a81a9c4000000b0059beaced467mr116956ywh.3.1696547348754; Thu, 05 Oct
+ 2023 16:09:08 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:38 -0700
 In-Reply-To: <20231005230851.3666908-1-irogers@google.com>
-Message-Id: <20231005230851.3666908-5-irogers@google.com>
+Message-Id: <20231005230851.3666908-6-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231005230851.3666908-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v2 04/18] perf hisi-ptt: Fix potential memory leak
+Subject: [PATCH v2 05/18] perf bench uprobe: Fix potential use of memory after free
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -66,80 +66,29 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Fix clang-tidy found potential memory leak and unread value:
+Found by clang-tidy:
 ```
-tools/perf/util/hisi-ptt.c:108:3: warning: Value stored to 'data_offset' is never read [clang-analyzer-deadcode.DeadStores]
-                data_offset = 0;
-                ^             ~
-tools/perf/util/hisi-ptt.c:108:3: note: Value stored to 'data_offset' is never read
-                data_offset = 0;
-                ^             ~
-tools/perf/util/hisi-ptt.c:112:12: warning: Potential leak of memory pointed to by 'data' [clang-analyzer-unix.Malloc]
-                        return -errno;
-                                ^
-/usr/include/errno.h:38:18: note: expanded from macro 'errno'
-                 ^
-tools/perf/util/hisi-ptt.c:100:15: note: Memory is allocated
-        void *data = malloc(size);
-                     ^~~~~~~~~~~~
-tools/perf/util/hisi-ptt.c:104:6: note: Assuming 'data' is non-null
-        if (!data)
-            ^~~~~
-tools/perf/util/hisi-ptt.c:104:2: note: Taking false branch
-        if (!data)
-        ^
-tools/perf/util/hisi-ptt.c:107:6: note: Assuming the condition is false
-        if (perf_data__is_pipe(session->data)) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-tools/perf/util/hisi-ptt.c:107:2: note: Taking false branch
-        if (perf_data__is_pipe(session->data)) {
-        ^
-tools/perf/util/hisi-ptt.c:111:7: note: Assuming the condition is true
-                if (data_offset == -1)
-                    ^~~~~~~~~~~~~~~~~
-tools/perf/util/hisi-ptt.c:111:3: note: Taking true branch
-                if (data_offset == -1)
-                ^
-tools/perf/util/hisi-ptt.c:112:12: note: Potential leak of memory pointed to by 'data'
-                        return -errno;
-                                ^
-/usr/include/errno.h:38:18: note: expanded from macro 'errno'
+bench/uprobe.c:98:3: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
+                bench_uprobe_bpf__destroy(skel);
 ```
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/hisi-ptt.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/perf/bench/uprobe.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/hisi-ptt.c b/tools/perf/util/hisi-ptt.c
-index 45b614bb73bf..ea297329c526 100644
---- a/tools/perf/util/hisi-ptt.c
-+++ b/tools/perf/util/hisi-ptt.c
-@@ -98,18 +98,18 @@ static int hisi_ptt_process_auxtrace_event(struct perf_session *session,
- 	int fd = perf_data__fd(session->data);
- 	int size = event->auxtrace.size;
- 	void *data = malloc(size);
--	off_t data_offset;
- 	int err;
+diff --git a/tools/perf/bench/uprobe.c b/tools/perf/bench/uprobe.c
+index 914c0817fe8a..5c71fdc419dd 100644
+--- a/tools/perf/bench/uprobe.c
++++ b/tools/perf/bench/uprobe.c
+@@ -89,6 +89,7 @@ static int bench_uprobe__setup_bpf_skel(enum bench_uprobe bench)
+ 	return err;
+ cleanup:
+ 	bench_uprobe_bpf__destroy(skel);
++	skel = NULL;
+ 	return err;
+ }
  
- 	if (!data)
- 		return -errno;
- 
--	if (perf_data__is_pipe(session->data)) {
--		data_offset = 0;
--	} else {
--		data_offset = lseek(fd, 0, SEEK_CUR);
--		if (data_offset == -1)
-+	if (!perf_data__is_pipe(session->data)) {
-+		off_t data_offset = lseek(fd, 0, SEEK_CUR);
-+
-+		if (data_offset == -1) {
-+			free(data);
- 			return -errno;
-+		}
- 	}
- 
- 	err = readn(fd, data, size);
 -- 
 2.42.0.609.gbb76f46606-goog
 
