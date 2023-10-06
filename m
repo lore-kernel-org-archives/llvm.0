@@ -1,133 +1,444 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3066F1D554
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 15:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1293C1CF8A;
+	Fri,  6 Oct 2023 16:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljynjWJs"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1c60a514f3aso18513745ad.3
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 08:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696607865; x=1697212665; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TMaXSdjxbXsiAirTGof/GcimC3N7kI+/btaqyHpj49Y=;
-        b=ljynjWJsgS6imbuvwd8ZQmmgP5GLxa8NZr1FUVmyrcAvUd7FQnGSi+UNiOLcHXD5Cd
-         ofX3kQoiJa9N1Nvku+78aX99zlCh0/W8H7kdH0vd51G6WK5/x9c4vrxF/G+HY1DJIOVf
-         IXvovoIVmU6DJ/Ig6v+vPtOjLn4p61zhb49kk0gHw4sjpGSqPT0MrhwBAXdtGPedYohI
-         oY8BkNaqXB787qqNIOtIv5AwoaRVZoIot9bHGbja/eEq5Uk7D6aKZcLXUzjrmHFhS2PQ
-         Kj5EhXLwDHO+vUml0O3bKFkQtuZ7Iu7X4QN5LwwXtoeOkG1Cg/csw8aGx5eLjlB4iPd9
-         JCDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696607865; x=1697212665;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TMaXSdjxbXsiAirTGof/GcimC3N7kI+/btaqyHpj49Y=;
-        b=Yg/CrCrkn5yHNVLrR1bwQnBCsjUGM1pLgYIv7dybS0v+Evm5PsFoWz0toOCygCfiuE
-         gzCDm9dmAi0SjcfMoAD1fjydzpOQMNJotsjhyKIzWfjB89+LONP1oKW8vxpdip0o7fPK
-         thwKhgkdpO/Qfrx6tAxtyi/1Zuns9HqBPJH27CJp9qF+vGTNxOM2McETqsMAHSo0EZqS
-         zN6wogqXkYY6PsEaJxPAdVmUSfEYzoRcbQhSYnmZGpVYQH1dEOHlnIMe75SEkGsyN69u
-         boRomfUURlv5RzQoyThRrUvCLMeS6fgBqNcju4mM4kDr74e95WxZ6IjB2Cgl/AyHi6IP
-         1LdA==
-X-Gm-Message-State: AOJu0Yw390sN3EjqCLKzmD9PlKiYQiutqtp0YagSqDHyp/csnFsueoiU
-	KMmIl+hV42hmoAdrjOTbVUE=
-X-Google-Smtp-Source: AGHT+IEhBhuGTi2CtNQboZ4D7jHQZWBTQVsg1o+NrcmVE4/6qmh4tDyC3SB+mQ4mPpSIDN7aN2NiWw==
-X-Received: by 2002:a17:903:124b:b0:1c8:791c:d78b with SMTP id u11-20020a170903124b00b001c8791cd78bmr8760716plh.29.1696607865385;
-        Fri, 06 Oct 2023 08:57:45 -0700 (PDT)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902eac400b001aaf2e8b1eesm4040797pld.248.2023.10.06.08.57.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 08:57:45 -0700 (PDT)
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HYhXRrbF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696611027; x=1728147027;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TyZTCYRndky9FsZgVN2Q0xbD13CmF4KqHE4WAZmVZT0=;
+  b=HYhXRrbFM+bdFIWC6wqpy8bJ1YlSGEw7bNo2dEWmads2yf6nFY99Noao
+   vi784gZj2ECtpJVQ/TgzIQuczEpFLoLbm5fPCejmEylXKaFMKrw0L4W8I
+   46MDgyDztTjUaBvsUWxhx4hm+1sr4LS524T+8qaZzkYTUDVsUMB6PuwDO
+   /XujiS5n8Z3g10ztCC806lWU4L0B8kzWSyaq2HS1rCKuKUDdTHRjwtRWl
+   0sDWj5BJm153LrPKg8hVXabMKcU1RzQU9/iCVOQPcL4VJCTZLOzwTGcwC
+   KRFie+Bwl8oi2GuhHUmz/harU4PcReWhMU1kMGhLicVhl/fUIo3eiy3e+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="382650034"
+X-IronPort-AV: E=Sophos;i="6.03,204,1694761200"; 
+   d="scan'208";a="382650034"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2023 09:50:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="1083515255"
+X-IronPort-AV: E=Sophos;i="6.03,204,1694761200"; 
+   d="scan'208";a="1083515255"
+Received: from lkp-server01.sh.intel.com (HELO 8a3a91ad4240) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Oct 2023 09:50:22 -0700
+Received: from kbuild by 8a3a91ad4240 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qoo1s-0003RN-2o;
+	Fri, 06 Oct 2023 16:50:20 +0000
+Date: Sat, 7 Oct 2023 00:49:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org,
+	jani.nikula@intel.com, Masahiro Yamada <masahiroy@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Cc: rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [RFC PATCH 0/1] rust: crates in other kernel directories
-Date: Fri,  6 Oct 2023 12:57:36 -0300
-Message-ID: <20231006155739.246381-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.42.0
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [Intel-gfx] [PATCH 2/2] drm/i915: enable W=1 warnings by default
+Message-ID: <202310070011.Fji48IBk-lkp@intel.com>
+References: <f50c8ea0e63615aea28fe7f6049703e1d28ba7eb.1696595500.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f50c8ea0e63615aea28fe7f6049703e1d28ba7eb.1696595500.git.jani.nikula@intel.com>
 
-This RFC provides makes possible to have bindings for kernel subsystems
-that are compiled as modules.
+Hi Jani,
 
-Previously, if you wanted to have Rust bindings for a subsystem, like
-AMBA for example, you had to put it under `rust/kernel/` so it came
-part of the `kernel` crate, but this came with many downsides. Namely
-if you compiled said subsystem as a module you've a dependency on it
-from `kernel`, which is linked directly on `vmlinux`.
+kernel test robot noticed the following build warnings:
 
-So instead of overpopulating `kernel` with a gazillion modules that
-throws you into dire straits you should rather have the bindings in the
-same directory as the subsystem you want to bind with and link it to
-it.
+[auto build test WARNING on drm-tip/drm-tip]
 
-For now I don't have a completely working example but I have an MWE as
-following...
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-i915-drop-Wall-and-related-disables-from-cflags-as-redundant/20231006-203658
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/f50c8ea0e63615aea28fe7f6049703e1d28ba7eb.1696595500.git.jani.nikula%40intel.com
+patch subject: [Intel-gfx] [PATCH 2/2] drm/i915: enable W=1 warnings by default
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231007/202310070011.Fji48IBk-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231007/202310070011.Fji48IBk-lkp@intel.com/reproduce)
 
-    # Add this line to drivers/usb/core/Kconfig
-    config USB_RUST
-    	bool "Rust USB bindings"
-    	depends on USB && RUST
-    	default n
-    	help
-    	  Enables Rust bindings for USB.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310070011.Fji48IBk-lkp@intel.com/
 
-    # Add this line to drivers/usb/core/Makefile
-    usbcore-$(CONFIG_USB_RUST)		+= usb.rlib
+All warnings (new ones prefixed by >>):
 
-    # Create this file drivers/usb/core/usb.rs
-    // SPDX-License-Identifier: GPL-2.0
-    
-    //! USB devices and drivers.
-    //!
-    //! C header: [`include/linux/usb.h`](../../../../include/linux/usb.h)
-    
-    use kernel::bindings;
-    
-    /// Check if USB is disabled.
-    pub fn disabled() -> bool {
-        // SAFETY: FFI call.
-        unsafe { bindings::usb_disabled() != 0 }
-    }
+   In file included from drivers/gpu/drm/i915/i915_driver.c:30:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from arch/x86/include/asm/preempt.h:9:
+>> include/linux/thread_info.h:240:29: warning: comparison of integers of different signs: 'int' and 'size_t' (aka 'unsigned long') [-Wsign-compare]
+           if (unlikely(sz >= 0 && sz < bytes)) {
+                                   ~~ ^ ~~~~~
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   In file included from drivers/gpu/drm/i915/i915_driver.c:30:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+>> include/linux/mm_types.h:1036:13: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           return cid == MM_CID_UNSET;
+                  ~~~ ^  ~~~~~~~~~~~~
+   include/linux/mm_types.h:1074:2: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           for_each_possible_cpu(i) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:974:36: note: expanded from macro 'for_each_possible_cpu'
+   #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:282:2: note: expanded from macro 'for_each_cpu'
+           for_each_set_bit(cpu, cpumask_bits(mask), small_cpumask_bits)
+           ^                ~~~                      ~~~~~~~~~~~~~~~~~~
+   include/linux/find.h:559:70: note: expanded from macro 'for_each_set_bit'
+           for ((bit) = 0; (bit) = find_next_bit((addr), (size), (bit)), (bit) < (size); (bit)++)
+                                                                          ~~~  ^  ~~~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:30:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+>> include/linux/mmzone.h:1627:44: warning: comparison of integers of different signs: 'int' and 'enum zone_type' [-Wsign-compare]
+           if (likely(!nodes && zonelist_zone_idx(z) <= highest_zoneidx))
+                                ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   In file included from drivers/gpu/drm/i915/i915_driver.c:30:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:20:
+>> include/linux/percpu-refcount.h:205:3: warning: comparison of integers of different signs: 'unsigned long' and 'int' [-Wsign-compare]
+                   this_cpu_add(*percpu_count, nr);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:491:33: note: expanded from macro 'this_cpu_add'
+   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:368:11: note: expanded from macro '__pcpu_size_call'
+                   case 8: stem##8(variable, __VA_ARGS__);break;           \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:49:1: note: expanded from here
+   this_cpu_add_8
+   ^
+   arch/x86/include/asm/percpu.h:370:35: note: expanded from macro 'this_cpu_add_8'
+   #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatile, (pcp), val)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
+                                 ((val) == 1 || (val) == -1)) ?            \
+                                                 ~~~  ^  ~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:30:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:20:
+   include/linux/percpu-refcount.h:244:3: warning: comparison of integers of different signs: 'unsigned long' and 'int' [-Wsign-compare]
+                   this_cpu_add(*percpu_count, nr);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:491:33: note: expanded from macro 'this_cpu_add'
+   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:368:11: note: expanded from macro '__pcpu_size_call'
+                   case 8: stem##8(variable, __VA_ARGS__);break;           \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:101:1: note: expanded from here
+   this_cpu_add_8
+   ^
+   arch/x86/include/asm/percpu.h:370:35: note: expanded from macro 'this_cpu_add_8'
+   #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatile, (pcp), val)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
+                                 ((val) == 1 || (val) == -1)) ?            \
+                                                 ~~~  ^  ~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:30:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:20:
+   include/linux/percpu-refcount.h:333:3: warning: comparison of integers of different signs: 'unsigned long' and 'int' [-Wsign-compare]
+                   this_cpu_sub(*percpu_count, nr);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:500:33: note: expanded from macro 'this_cpu_sub'
+   #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:491:33: note: expanded from macro 'this_cpu_add'
+   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:368:11: note: expanded from macro '__pcpu_size_call'
+                   case 8: stem##8(variable, __VA_ARGS__);break;           \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+   this_cpu_add_8
+   ^
+   arch/x86/include/asm/percpu.h:370:35: note: expanded from macro 'this_cpu_add_8'
+   #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatile, (pcp), val)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
+                                 ((val) == 1 || (val) == -1)) ?            \
+                                                 ~~~  ^  ~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:33:
+   In file included from include/linux/oom.h:11:
+   In file included from include/linux/mm.h:2168:
+>> include/linux/vmstat.h:231:2: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           for_each_online_cpu(cpu)
+           ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:975:36: note: expanded from macro 'for_each_online_cpu'
+   #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:282:2: note: expanded from macro 'for_each_cpu'
+           for_each_set_bit(cpu, cpumask_bits(mask), small_cpumask_bits)
+           ^                ~~~                      ~~~~~~~~~~~~~~~~~~
+   include/linux/find.h:559:70: note: expanded from macro 'for_each_set_bit'
+           for ((bit) = 0; (bit) = find_next_bit((addr), (size), (bit)), (bit) < (size); (bit)++)
+                                                                          ~~~  ^  ~~~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:39:
+   In file included from include/linux/vga_switcheroo.h:34:
+   In file included from include/linux/fb.h:7:
+   In file included from include/uapi/linux/fb.h:6:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:22:
+   In file included from include/linux/writeback.h:203:
+>> include/linux/bio.h:401:14: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           if (sectors >= bio_sectors(bio))
+               ~~~~~~~ ^  ~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:39:
+   In file included from include/linux/vga_switcheroo.h:34:
+   In file included from include/linux/fb.h:7:
+   In file included from include/uapi/linux/fb.h:6:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:13:
+>> include/linux/pagemap.h:813:36: warning: comparison of integers of different signs: 'unsigned long' and 'long' [-Wsign-compare]
+           return index - folio_index(folio) < folio_nr_pages(folio);
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:52:
+   In file included from drivers/gpu/drm/i915/display/intel_display_types.h:31:
+>> include/linux/pwm.h:335:50: warning: comparison of integers of different signs: 'u64' (aka 'unsigned long long') and 'int' [-Wsign-compare]
+           if (state.duty_cycle == duty_ns && state.period == period_ns)
+                                              ~~~~~~~~~~~~ ^  ~~~~~~~~~
+   include/linux/pwm.h:335:23: warning: comparison of integers of different signs: 'u64' (aka 'unsigned long long') and 'int' [-Wsign-compare]
+           if (state.duty_cycle == duty_ns && state.period == period_ns)
+               ~~~~~~~~~~~~~~~~ ^  ~~~~~~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:52:
+   In file included from drivers/gpu/drm/i915/display/intel_display_types.h:49:
+   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_object.h:15:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_object_types.h:13:
+   In file included from include/drm/ttm/ttm_bo.h:39:
+   In file included from include/drm/ttm/ttm_device.h:30:
+>> include/drm/ttm/ttm_resource.h:312:16: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           for (i = 0; i < TTM_MAX_BO_PRIORITY; i++)
+                       ~ ^ ~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/i915/i915_driver.c:52:
+   In file included from drivers/gpu/drm/i915/display/intel_display_types.h:49:
+   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_object.h:16:
+   In file included from drivers/gpu/drm/i915/i915_gem_gtt.h:14:
+>> drivers/gpu/drm/i915/gt/intel_gtt.h:435:16: warning: comparison of integers of different signs: 'int' and 'unsigned long' [-Wsign-compare]
+           if ((int)type >= ARRAY_SIZE(vm->min_alignment))
+               ~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   14 warnings generated.
+--
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:7:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from arch/x86/include/asm/preempt.h:9:
+>> include/linux/thread_info.h:240:29: warning: comparison of integers of different signs: 'int' and 'size_t' (aka 'unsigned long') [-Wsign-compare]
+           if (unlikely(sz >= 0 && sz < bytes)) {
+                                   ~~ ^ ~~~~~
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:7:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+>> include/linux/mm_types.h:1036:13: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           return cid == MM_CID_UNSET;
+                  ~~~ ^  ~~~~~~~~~~~~
+   include/linux/mm_types.h:1074:2: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           for_each_possible_cpu(i) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:974:36: note: expanded from macro 'for_each_possible_cpu'
+   #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:282:2: note: expanded from macro 'for_each_cpu'
+           for_each_set_bit(cpu, cpumask_bits(mask), small_cpumask_bits)
+           ^                ~~~                      ~~~~~~~~~~~~~~~~~~
+   include/linux/find.h:559:70: note: expanded from macro 'for_each_set_bit'
+           for ((bit) = 0; (bit) = find_next_bit((addr), (size), (bit)), (bit) < (size); (bit)++)
+                                                                          ~~~  ^  ~~~~
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:7:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+>> include/linux/mmzone.h:1627:44: warning: comparison of integers of different signs: 'int' and 'enum zone_type' [-Wsign-compare]
+           if (likely(!nodes && zonelist_zone_idx(z) <= highest_zoneidx))
+                                ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:7:
+   In file included from include/linux/slab.h:20:
+>> include/linux/percpu-refcount.h:205:3: warning: comparison of integers of different signs: 'unsigned long' and 'int' [-Wsign-compare]
+                   this_cpu_add(*percpu_count, nr);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:491:33: note: expanded from macro 'this_cpu_add'
+   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:368:11: note: expanded from macro '__pcpu_size_call'
+                   case 8: stem##8(variable, __VA_ARGS__);break;           \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:28:1: note: expanded from here
+   this_cpu_add_8
+   ^
+   arch/x86/include/asm/percpu.h:370:35: note: expanded from macro 'this_cpu_add_8'
+   #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatile, (pcp), val)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
+                                 ((val) == 1 || (val) == -1)) ?            \
+                                                 ~~~  ^  ~~
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:7:
+   In file included from include/linux/slab.h:20:
+   include/linux/percpu-refcount.h:244:3: warning: comparison of integers of different signs: 'unsigned long' and 'int' [-Wsign-compare]
+                   this_cpu_add(*percpu_count, nr);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:491:33: note: expanded from macro 'this_cpu_add'
+   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:368:11: note: expanded from macro '__pcpu_size_call'
+                   case 8: stem##8(variable, __VA_ARGS__);break;           \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:80:1: note: expanded from here
+   this_cpu_add_8
+   ^
+   arch/x86/include/asm/percpu.h:370:35: note: expanded from macro 'this_cpu_add_8'
+   #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatile, (pcp), val)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
+                                 ((val) == 1 || (val) == -1)) ?            \
+                                                 ~~~  ^  ~~
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:7:
+   In file included from include/linux/slab.h:20:
+   include/linux/percpu-refcount.h:333:3: warning: comparison of integers of different signs: 'unsigned long' and 'int' [-Wsign-compare]
+                   this_cpu_sub(*percpu_count, nr);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:500:33: note: expanded from macro 'this_cpu_sub'
+   #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:491:33: note: expanded from macro 'this_cpu_add'
+   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:368:11: note: expanded from macro '__pcpu_size_call'
+                   case 8: stem##8(variable, __VA_ARGS__);break;           \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:188:1: note: expanded from here
+   this_cpu_add_8
+   ^
+   arch/x86/include/asm/percpu.h:370:35: note: expanded from macro 'this_cpu_add_8'
+   #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatile, (pcp), val)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
+                                 ((val) == 1 || (val) == -1)) ?            \
+                                                 ~~~  ^  ~~
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:14:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_context.h:10:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_context_types.h:20:
+   In file included from drivers/gpu/drm/i915/gt/intel_context_types.h:18:
+   In file included from drivers/gpu/drm/i915/gt/intel_engine_types.h:21:
+   In file included from drivers/gpu/drm/i915/i915_pmu.h:11:
+   In file included from include/linux/perf_event.h:18:
+   In file included from include/uapi/linux/bpf_perf_event.h:11:
+   In file included from ./arch/x86/include/generated/uapi/asm/bpf_perf_event.h:1:
+   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2168:
+>> include/linux/vmstat.h:231:2: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           for_each_online_cpu(cpu)
+           ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:975:36: note: expanded from macro 'for_each_online_cpu'
+   #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:282:2: note: expanded from macro 'for_each_cpu'
+           for_each_set_bit(cpu, cpumask_bits(mask), small_cpumask_bits)
+           ^                ~~~                      ~~~~~~~~~~~~~~~~~~
+   include/linux/find.h:559:70: note: expanded from macro 'for_each_set_bit'
+           for ((bit) = 0; (bit) = find_next_bit((addr), (size), (bit)), (bit) < (size); (bit)++)
+                                                                          ~~~  ^  ~~~~
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:14:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_context.h:12:
+   In file included from drivers/gpu/drm/i915/gt/intel_context.h:14:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:37:
+   In file included from include/drm/ttm/ttm_device.h:30:
+>> include/drm/ttm/ttm_resource.h:312:16: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
+           for (i = 0; i < TTM_MAX_BO_PRIORITY; i++)
+                       ~ ^ ~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/i915/i915_drm_client.c:14:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_context.h:12:
+   In file included from drivers/gpu/drm/i915/gt/intel_context.h:14:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:46:
+   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
+   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:19:
+   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
+   In file included from drivers/gpu/drm/i915/gt/uc/intel_gsc_uc.h:9:
+   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:14:
+   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_object.h:16:
+   In file included from drivers/gpu/drm/i915/i915_gem_gtt.h:14:
+>> drivers/gpu/drm/i915/gt/intel_gtt.h:435:16: warning: comparison of integers of different signs: 'int' and 'unsigned long' [-Wsign-compare]
+           if ((int)type >= ARRAY_SIZE(vm->min_alignment))
+               ~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   10 warnings generated.
+..
 
-    # Compile the .rlib with
-    make drivers/usb/core/usb.rlib LLVM=1
 
-If everything went well then you should have
-`drivers/usb/core/usb.rlib` ready to be linked.
+vim +240 include/linux/thread_info.h
 
-As of now this PR won't compile the kernel fully as it serves as an
-starting point and it's going to change in the future.
-
-Martin Rodriguez Reboredo (1):
-  scripts: Build per module Rust crates
-
- Makefile               |  4 ++--
- scripts/Makefile.build | 10 +++++++++-
- scripts/Makefile.lib   | 19 +++++++++++++------
- 3 files changed, 24 insertions(+), 9 deletions(-)
+b0377fedb65280 Al Viro   2017-06-29  235  
+9dd819a15162f8 Kees Cook 2019-09-25  236  static __always_inline __must_check bool
+b0377fedb65280 Al Viro   2017-06-29  237  check_copy_size(const void *addr, size_t bytes, bool is_source)
+b0377fedb65280 Al Viro   2017-06-29  238  {
+c80d92fbb67b2c Kees Cook 2021-06-17  239  	int sz = __builtin_object_size(addr, 0);
+b0377fedb65280 Al Viro   2017-06-29 @240  	if (unlikely(sz >= 0 && sz < bytes)) {
+b0377fedb65280 Al Viro   2017-06-29  241  		if (!__builtin_constant_p(bytes))
+b0377fedb65280 Al Viro   2017-06-29  242  			copy_overflow(sz, bytes);
+b0377fedb65280 Al Viro   2017-06-29  243  		else if (is_source)
+b0377fedb65280 Al Viro   2017-06-29  244  			__bad_copy_from();
+b0377fedb65280 Al Viro   2017-06-29  245  		else
+b0377fedb65280 Al Viro   2017-06-29  246  			__bad_copy_to();
+b0377fedb65280 Al Viro   2017-06-29  247  		return false;
+b0377fedb65280 Al Viro   2017-06-29  248  	}
+6d13de1489b6bf Kees Cook 2019-12-04  249  	if (WARN_ON_ONCE(bytes > INT_MAX))
+6d13de1489b6bf Kees Cook 2019-12-04  250  		return false;
+b0377fedb65280 Al Viro   2017-06-29  251  	check_object_size(addr, bytes, is_source);
+b0377fedb65280 Al Viro   2017-06-29  252  	return true;
+b0377fedb65280 Al Viro   2017-06-29  253  }
+b0377fedb65280 Al Viro   2017-06-29  254  
 
 -- 
-2.42.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
