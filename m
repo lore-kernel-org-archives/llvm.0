@@ -1,75 +1,93 @@
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3840546B3
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 05:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 41DD92087D;
-	Fri,  6 Oct 2023 07:47:31 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pHY9T4XaCd70; Fri,  6 Oct 2023 07:47:30 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id 01E5D207BB;
-	Fri,  6 Oct 2023 07:47:30 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout1.secunet.com (Postfix) with ESMTP id E937280004A;
-	Fri,  6 Oct 2023 07:47:29 +0200 (CEST)
-Received: from mbx-essen-02.secunet.de (10.53.40.198) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Fri, 6 Oct 2023 07:47:29 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-02.secunet.de
- (10.53.40.198) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Fri, 6 Oct
- 2023 07:47:29 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-	id 29F9B3182C7D; Fri,  6 Oct 2023 07:47:29 +0200 (CEST)
-Date: Fri, 6 Oct 2023 07:47:29 +0200
-From: Steffen Klassert <steffen.klassert@secunet.com>
-To: Kees Cook <keescook@chromium.org>
-CC: Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
-	<davem@davemloft.net>, <netdev@vger.kernel.org>, "Gustavo A. R. Silva"
-	<gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, "Nick
- Desaulniers" <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-	<linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PATCH] xfrm: Annotate struct xfrm_sec_ctx with __counted_by
-Message-ID: <ZR+fcY+W5CBODmfX@gauss3.secunet.de>
-References: <20231003231828.work.527-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7FF4414
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 07:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v5M1tU6q"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-27740ce6c76so1256582a91.0
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 00:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696576795; x=1697181595; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QLbD36lfGshKBD/IHq1uy+catxZoLx+hDosAbEWMfB8=;
+        b=v5M1tU6qtXSTOFJMcoaHJlxzFR92uACnn32sRcIE8sKerfEb3R+v69BjPrzpwOx+kh
+         OztZ1dVm6qLhscJ06X5hJYmQbSDh+tePYSm8sImPyJ7GkbIQLNp0JivKbKXfGz8nIiMv
+         X6q8LYOI59VG2ERr85i9yQnotWwvbYDmNEToWvQMU4dlmwyBFAv0r1aNX/QElw37FjVS
+         Sjs9lgUBfffUZqPlsZAN2VMzfUMlC0mjL9yxumM9+nKN8NQZTJM1atEQFUqGGrlu4wak
+         wm5kcozXFcDX7DN2NNM7h0LBsNPPlkcoTy8fYHCBtY9DgOcfjBPgG61zddGm8NJVzsC0
+         /0cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696576795; x=1697181595;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QLbD36lfGshKBD/IHq1uy+catxZoLx+hDosAbEWMfB8=;
+        b=q5+nZq1jGk0tA7k+ySKEoy3BQjQTh+cCShXcFqcVylUfwN+JA2fm69Go6p/bPazEWn
+         7NiQ8Chjp7N2DM6mZ/HY37V64FFJyx+NGNWn/uym6GVobVlX5jWXKC/5ECbZe+ioVcWe
+         MZ0HwkWMSaM5hI/HKidpoEP6PBQ/1ni1n3omO9xIF2RdQ7TnbaAzwHxy/Zlg5v1moakH
+         Yv1RKaLdem40xChcG7xbqKeTStCZXiM9+qzqsy+QCtlj/FVcR5FBsnEjAf6XtEB/F/vG
+         s4Em/sreWdThPEBN5n48ErMgXN6ZHE3wdBCWKo7/cST8ScMPTJKQNwGpXcw6rYp81DNB
+         TDlw==
+X-Gm-Message-State: AOJu0YyYMsxAAqoEm5/SgX6AJ5DcjYamJAhB21LbiOFjmQ6gI+aQy4xh
+	/LHQ37K7gOU+MCS2mBFK4VvMAw==
+X-Google-Smtp-Source: AGHT+IEnIZWIPATAMO46x1U1rXCCVIqKIMiKNxn+ZYVTiXHcvpjaRtDDpI08eGoBu+OpT0LvVnZPcQ==
+X-Received: by 2002:a17:90b:4c07:b0:262:d661:2963 with SMTP id na7-20020a17090b4c0700b00262d6612963mr7011516pjb.39.1696576794865;
+        Fri, 06 Oct 2023 00:19:54 -0700 (PDT)
+Received: from localhost ([122.172.81.92])
+        by smtp.gmail.com with ESMTPSA id 21-20020a17090a035500b002796494b98csm5132242pjf.37.2023.10.06.00.19.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 00:19:54 -0700 (PDT)
+Date: Fri, 6 Oct 2023 12:49:52 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, vireshk@kernel.org, nm@ti.com,
+	sboyd@kernel.org, ulf.hansson@linaro.org, trix@redhat.com,
+	linux-pm@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] OPP: Fix -Wunsequenced in _of_add_opp_table_v1()
+Message-ID: <20231006071952.b43vbnrhax7g6vta@vireshk-i7>
+References: <20231005-opp-of-wunsequenced-v1-1-778815980a8d@kernel.org>
+ <CAKwvOdmhtS6LAcckceXLftKeqxthdHEEi-zr8EiOW0hRYwsjEA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231003231828.work.527-kees@kernel.org>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-02.secunet.de (10.53.40.198)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdmhtS6LAcckceXLftKeqxthdHEEi-zr8EiOW0hRYwsjEA@mail.gmail.com>
 
-On Tue, Oct 03, 2023 at 04:18:28PM -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On 05-10-23, 11:31, Nick Desaulniers wrote:
+> On Thu, Oct 5, 2023 at 10:25 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Clang warns (or errors with CONFIG_WERROR=y):
+> >
+> >   drivers/opp/of.c:1081:28: error: multiple unsequenced modifications to 'val' [-Werror,-Wunsequenced]
+> >    1081 |                         .freq = be32_to_cpup(val++) * 1000,
+> >         |                                                 ^
+> >    1082 |                         .u_volt = be32_to_cpup(val++),
+> >         |                                                   ~~
+> >   1 error generated.
+> >
+> > There is no sequence point in a designated initializer. Move back to
+> > separate variables for the creation of the values, so that there are
+> > sequence points between each evaluation and increment of val.
+> >
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1940
+> > Fixes: 75bbc92c09d8 ("OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> As found with Coccinelle[1], add __counted_by for struct xfrm_sec_ctx.
-> 
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: netdev@vger.kernel.org
-> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Thanks for the patch!
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Applied to ipsec-next, thanks!
+Applied. Thanks.
+
+-- 
+viresh
