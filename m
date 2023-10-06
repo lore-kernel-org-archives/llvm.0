@@ -1,155 +1,212 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766EE139B
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 02:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D3D139B;
+	Fri,  6 Oct 2023 04:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZG9UATOA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696558908;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mjF0H1yzZh/g7yEt//Hs1MvKryW1JhRbhQKF7FG+KL8=;
-	b=ZG9UATOAg+0FxHLKqCeLjUEn7mP9TO95AFisuz44q6u3K12XBNZWCC8bPNy+KEk7gWH6uZ
-	uLhcmZKouokHVfbvys5bY1tTvKD1PG1x6XCO+j5QpAR7++QF8WLFfis31u2CmjsCN5ys3t
-	0gTGdLW92/AdnILWinVrFf8BpjB/sxc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-303-ivew7DTtPPywhiqwe5lbDA-1; Thu, 05 Oct 2023 22:21:31 -0400
-X-MC-Unique: ivew7DTtPPywhiqwe5lbDA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A50B3185A797
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 02:21:31 +0000 (UTC)
-Received: from [172.64.10.35] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8B6ADC15BB8;
-	Fri,  6 Oct 2023 02:21:31 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 4 of 230): Test report for master
- (6.6.0-rc4, mainline.kernel.org-clang, f291209e)
-Date: Fri, 06 Oct 2023 02:21:31 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com, yizhan@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UrKaDNn2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696567143; x=1728103143;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lwz8dh5i4hfu2JGlBGmn/i2VE2F6ip9fAIHvqo5nI3U=;
+  b=UrKaDNn2lmfaYtSFdfXD4rjExboKUyCFR8JHfofCl00+Qihb4rXrzVlR
+   cWSvcaZc5Ui3JRu+aazm+I+FEaQvEIWuJb3sm3tfP6d5Ty6FcZBpCxfee
+   T253I2lEiZbqG0Ww659OMQsTht/2VR+W/ze43Na7nx2/zQr1WIbMQyp4J
+   ppGbkwBNCyOaf5afr5qNUs8vPE+RoISmkEB9i/lnth5qDPPOWZ3NiIz/T
+   utfq2FusOyj/yClwfxoALg2T1IFQHm2dol73tElJTBbmjIWQanYXha3vv
+   RjuksEDeMopD9QNHlMxKuDxen+RnwWkMTEbAYcEeQO6e6pLcXve+Zyo+3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="387555823"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="387555823"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 21:39:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="745726711"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="745726711"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 05 Oct 2023 21:38:55 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qocc0-000MFk-2h;
+	Fri, 06 Oct 2023 04:38:52 +0000
+Date: Fri, 6 Oct 2023 12:38:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, kuba@kernel.org, toke@kernel.org,
+	willemb@google.com, dsahern@kernel.org, magnus.karlsson@intel.com,
+	bjorn@kernel.org, maciej.fijalkowski@intel.com, hawk@kernel.org,
+	yoong.siang.song@intel.com, netdev@vger.kernel.org,
+	xdp-hints@xdp-project.net
+Subject: Re: [PATCH bpf-next v3 05/10] net: stmmac: Add Tx HWTS support to
+ XDP ZC
+Message-ID: <202310061208.tATL34LR-lkp@intel.com>
+References: <20231003200522.1914523-6-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <29443.123100522213100489@us-mta-303.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231003200522.1914523-6-sdf@google.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Stanislav,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on bpf-next/master]
 
-Kernel information:
-    Commit message: Merge tag 'net-6.6-rc5' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/xsk-Support-tx_metadata_len/20231004-040718
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20231003200522.1914523-6-sdf%40google.com
+patch subject: [PATCH bpf-next v3 05/10] net: stmmac: Add Tx HWTS support to XDP ZC
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231006/202310061208.tATL34LR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231006/202310061208.tATL34LR-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/107611
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310061208.tATL34LR-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9778927
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-          x86_64 (debug) - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9778996
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL generic/497
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [upstream] readpage_elf: Attempt to read non-existent page a=
-t 0x4000000000000000
-            URL: https://gitlab.com/cki-project/kernel-ark/-/issues/132
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2554:3: error: call to undeclared function 'xsk_tx_metadata_to_compl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2554 |                 xsk_tx_metadata_to_compl(meta, &tx_q->tx_skbuff_dma[entry].xsk_meta);
+         |                 ^
+   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2554:3: note: did you mean 'xsk_tx_metadata_complete'?
+   include/net/xdp_sock.h:185:20: note: 'xsk_tx_metadata_complete' declared here
+     185 | static inline void xsk_tx_metadata_complete(struct xsk_tx_metadata_compl *compl,
+         |                    ^
+   1 error generated.
 
 
+vim +/xsk_tx_metadata_to_compl +2554 drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  2464	
+  2465	static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
+  2466	{
+  2467		struct netdev_queue *nq = netdev_get_tx_queue(priv->dev, queue);
+  2468		struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[queue];
+  2469		struct stmmac_txq_stats *txq_stats = &priv->xstats.txq_stats[queue];
+  2470		struct xsk_buff_pool *pool = tx_q->xsk_pool;
+  2471		unsigned int entry = tx_q->cur_tx;
+  2472		struct dma_desc *tx_desc = NULL;
+  2473		struct xdp_desc xdp_desc;
+  2474		bool work_done = true;
+  2475		u32 tx_set_ic_bit = 0;
+  2476		unsigned long flags;
+  2477	
+  2478		/* Avoids TX time-out as we are sharing with slow path */
+  2479		txq_trans_cond_update(nq);
+  2480	
+  2481		budget = min(budget, stmmac_tx_avail(priv, queue));
+  2482	
+  2483		while (budget-- > 0) {
+  2484			struct stmmac_metadata_request meta_req;
+  2485			struct xsk_tx_metadata *meta = NULL;
+  2486			dma_addr_t dma_addr;
+  2487			bool set_ic;
+  2488	
+  2489			/* We are sharing with slow path and stop XSK TX desc submission when
+  2490			 * available TX ring is less than threshold.
+  2491			 */
+  2492			if (unlikely(stmmac_tx_avail(priv, queue) < STMMAC_TX_XSK_AVAIL) ||
+  2493			    !netif_carrier_ok(priv->dev)) {
+  2494				work_done = false;
+  2495				break;
+  2496			}
+  2497	
+  2498			if (!xsk_tx_peek_desc(pool, &xdp_desc))
+  2499				break;
+  2500	
+  2501			if (likely(priv->extend_desc))
+  2502				tx_desc = (struct dma_desc *)(tx_q->dma_etx + entry);
+  2503			else if (tx_q->tbs & STMMAC_TBS_AVAIL)
+  2504				tx_desc = &tx_q->dma_entx[entry].basic;
+  2505			else
+  2506				tx_desc = tx_q->dma_tx + entry;
+  2507	
+  2508			dma_addr = xsk_buff_raw_get_dma(pool, xdp_desc.addr);
+  2509			meta = xsk_buff_get_metadata(pool, xdp_desc.addr);
+  2510			xsk_buff_raw_dma_sync_for_device(pool, dma_addr, xdp_desc.len);
+  2511	
+  2512			tx_q->tx_skbuff_dma[entry].buf_type = STMMAC_TXBUF_T_XSK_TX;
+  2513	
+  2514			/* To return XDP buffer to XSK pool, we simple call
+  2515			 * xsk_tx_completed(), so we don't need to fill up
+  2516			 * 'buf' and 'xdpf'.
+  2517			 */
+  2518			tx_q->tx_skbuff_dma[entry].buf = 0;
+  2519			tx_q->xdpf[entry] = NULL;
+  2520	
+  2521			tx_q->tx_skbuff_dma[entry].map_as_page = false;
+  2522			tx_q->tx_skbuff_dma[entry].len = xdp_desc.len;
+  2523			tx_q->tx_skbuff_dma[entry].last_segment = true;
+  2524			tx_q->tx_skbuff_dma[entry].is_jumbo = false;
+  2525	
+  2526			stmmac_set_desc_addr(priv, tx_desc, dma_addr);
+  2527	
+  2528			tx_q->tx_count_frames++;
+  2529	
+  2530			if (!priv->tx_coal_frames[queue])
+  2531				set_ic = false;
+  2532			else if (tx_q->tx_count_frames % priv->tx_coal_frames[queue] == 0)
+  2533				set_ic = true;
+  2534			else
+  2535				set_ic = false;
+  2536	
+  2537			meta_req.priv = priv;
+  2538			meta_req.tx_desc = tx_desc;
+  2539			meta_req.set_ic = &set_ic;
+  2540			xsk_tx_metadata_request(meta, &stmmac_xsk_tx_metadata_ops, &meta_req);
+  2541	
+  2542			if (set_ic) {
+  2543				tx_q->tx_count_frames = 0;
+  2544				stmmac_set_tx_ic(priv, tx_desc);
+  2545				tx_set_ic_bit++;
+  2546			}
+  2547	
+  2548			stmmac_prepare_tx_desc(priv, tx_desc, 1, xdp_desc.len,
+  2549					       true, priv->mode, true, true,
+  2550					       xdp_desc.len);
+  2551	
+  2552			stmmac_enable_dma_transmission(priv, priv->ioaddr);
+  2553	
+> 2554			xsk_tx_metadata_to_compl(meta, &tx_q->tx_skbuff_dma[entry].xsk_meta);
+  2555	
+  2556			tx_q->cur_tx = STMMAC_GET_ENTRY(tx_q->cur_tx, priv->dma_conf.dma_tx_size);
+  2557			entry = tx_q->cur_tx;
+  2558		}
+  2559		flags = u64_stats_update_begin_irqsave(&txq_stats->syncp);
+  2560		txq_stats->tx_set_ic_bit += tx_set_ic_bit;
+  2561		u64_stats_update_end_irqrestore(&txq_stats->syncp, flags);
+  2562	
+  2563		if (tx_desc) {
+  2564			stmmac_flush_tx_descriptors(priv, queue);
+  2565			xsk_tx_release(pool);
+  2566		}
+  2567	
+  2568		/* Return true if all of the 3 conditions are met
+  2569		 *  a) TX Budget is still available
+  2570		 *  b) work_done = true when XSK TX desc peek is empty (no more
+  2571		 *     pending XSK TX for transmission)
+  2572		 */
+  2573		return !!budget && work_done;
+  2574	}
+  2575	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
