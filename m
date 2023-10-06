@@ -1,83 +1,79 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B34A28692
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AED042C1C
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:22:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UqPUsRKh"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1c723f1c80fso19656555ad.1
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:21:15 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EsXlfWcD"
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3ae65e8eb45so1681911b6e.1
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696623674; x=1697228474; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N1oQgMYYOHJAqGUemakHE7gLhffpSOgun7mdtdcyLAY=;
-        b=UqPUsRKhCJBtUUeOP3IiFO4XfOFC6Zvlzo2jKzwkHozUZxPtci235O90bvxW02TxdW
-         6bnOX/bCuvhX6BpQVIRP4q1vpJBQFQnAexgWCTk3rAeU2nwDr1/PDYosl6QNBVMiHiFk
-         JkVbmx0MQp9zT4jMkf24aLSh1txUEtQoUkJks=
+        d=chromium.org; s=google; t=1696623777; x=1697228577; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v8kAE0L3XYT2zduhiLheo6/OoQQtkbHtadi2JLu6gYg=;
+        b=EsXlfWcDkF7d8EuSgiFYgTX5HS3WpRXG0NVBIHqMHzpGJ4Mtp+T5U9HbW3dbsa8vEY
+         1pdQqgDxhQUqucGXeQF5Df+kQkEWulMW93lSWiWjlNAb848+s4u4AC1TWK1lT9HN26GH
+         /nEz9zKoXOSZXAz2Kd4LKq5j5PYgoV6jLPb6U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696623674; x=1697228474;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1oQgMYYOHJAqGUemakHE7gLhffpSOgun7mdtdcyLAY=;
-        b=GtIKORJTSEr0OB/z0YDOOzG+OzpXL6ZXcBry4jt4oz+4noYt8M1BrsnzhFxaFAtfI7
-         BVVY4FMr4rZO9uNo2ijnriy5FmpBqSlttgCjQa2VgVQRzgyFrIKyq6f6Pmt41dFKhG/m
-         +h1Cd4E7jqeURL2WAvqbHqj/VPVZcRTG6xpgqGWWXJusfhRVBLAnKFrM4kRvBVuTH6x8
-         SSeR4Cfc0do093UdOVk1LbK8G5lcJp5x0zPV5eTRmkZAkivQOVAWrhGttEhAKvsCtXse
-         7MrQKdFnzJi+4mqdtWveNtudU6RnzRT4TBuAeN61RhJjIx8dMg9X85U7VJRgXeJLyqpI
-         UI4g==
-X-Gm-Message-State: AOJu0YzZ6cFwnd+UF03ve0ElqlY4Ie4BlpZa4cwbJALENp47jyfKiMHJ
-	0tPbPJUEJHYNbxdKpnu+qe6HvA==
-X-Google-Smtp-Source: AGHT+IGu32OJlQsQg2gdMOhdV/v2W3V3QUsAfaY6LRJfqpsCLXyocjInS1I983619DISa2FBj4aXpA==
-X-Received: by 2002:a17:902:e810:b0:1c5:59ea:84de with SMTP id u16-20020a170902e81000b001c559ea84demr11148430plg.29.1696623674642;
-        Fri, 06 Oct 2023 13:21:14 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696623777; x=1697228577;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v8kAE0L3XYT2zduhiLheo6/OoQQtkbHtadi2JLu6gYg=;
+        b=h593w4dxpDgifJlvU8kUWXvRLbVvKUtZ5wztBALg7v/ZZbyOOPDazmGyDNlXESrfch
+         vrTzxB2ph42QvphktkUGnPJyGnL5OdATMVbWeabBYUKwJ7OwNVfHKyR3IOt89JpJBYSN
+         N7UG0Lz7rJZ8sD4o7wHaj/LG10YeBm7fUMM9DchpiELoWa9j/iJkuHdn414ucOx3nHrW
+         NlotXTMULU3/xiMkFS3JAtsRS7QkVrhh6cIotlmMo+6vJ46VCYZQUIpnvbUUpKPuQuKL
+         whASV+nTjfeOioJuqXCrZYQszfTX2nQOVAvoKmsftCJo90HGWY/1z7zi5WWydKUyTomG
+         S9kw==
+X-Gm-Message-State: AOJu0YyV8Gkp3avw6zkNM2Dn2ulP6a9KsrGSdtt4960csqRF+Unco9bA
+	yQ2eRKb2JFJlJRMJSyPdErIgFg==
+X-Google-Smtp-Source: AGHT+IFJgYFdXQLoiEQmx+lFHyuC0qUrDFQKLIKGfw/wrLmvAN6GJdpM5ZD/9ihDG8TtTiEFnZjYhg==
+X-Received: by 2002:a05:6358:9691:b0:164:8742:525 with SMTP id o17-20020a056358969100b0016487420525mr1346056rwa.17.1696623777190;
+        Fri, 06 Oct 2023 13:22:57 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ji2-20020a170903324200b001c75f94b0b0sm4333924plb.213.2023.10.06.13.21.13
+        by smtp.gmail.com with ESMTPSA id 19-20020a17090a1a1300b00273744e6eccsm4271576pjk.12.2023.10.06.13.22.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 13:21:14 -0700 (PDT)
-Date: Fri, 6 Oct 2023 13:21:13 -0700
+        Fri, 06 Oct 2023 13:22:56 -0700 (PDT)
+Date: Fri, 6 Oct 2023 13:22:55 -0700
 From: Kees Cook <keescook@chromium.org>
-To: Felix Fietkau <nbd@nbd.name>, Kalle Valo <kvalo@kernel.org>
-Cc: Lorenzo Bianconi <lorenzo@kernel.org>,
-	Ryder Lee <ryder.lee@mediatek.com>,
-	Shayne Chen <shayne.chen@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-wireless@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Nathan Chancellor <nathan@kernel.org>,
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev,
+	alsa-devel@alsa-project.org, Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] wifi: mt76: Annotate struct mt76_rx_tid with __counted_by
-Message-ID: <202310061320.8630F7E51@keescook>
-References: <20230915200612.never.786-kees@kernel.org>
+Subject: Re: [PATCH] ASoC: apple: mca: Annotate struct mca_data with
+ __counted_by
+Message-ID: <202310061321.E7247C52B@keescook>
+References: <20230922175050.work.819-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230915200612.never.786-kees@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230922175050.work.819-kees@kernel.org>
 
-On Fri, Sep 15, 2023 at 01:06:12PM -0700, Kees Cook wrote:
+On Fri, Sep 22, 2023 at 10:50:50AM -0700, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
 > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct mt76_rx_tid.
+> As found with Coccinelle[1], add __counted_by for struct mca_data.
 
-Friendly ping. Can this get picked up by the wifi tree, or should it go
-via something else?
+Friendly ping. Mark, can you pick this up please?
 
 Thanks!
 
@@ -86,35 +82,31 @@ Thanks!
 > 
 > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 > 
-> Cc: Felix Fietkau <nbd@nbd.name>
-> Cc: Lorenzo Bianconi <lorenzo@kernel.org>
-> Cc: Ryder Lee <ryder.lee@mediatek.com>
-> Cc: Shayne Chen <shayne.chen@mediatek.com>
-> Cc: Sean Wang <sean.wang@mediatek.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
+> Cc: "Martin Povišer" <povik+lin@cutebit.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Jaroslav Kysela <perex@perex.cz>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> Cc: asahi@lists.linux.dev
+> Cc: alsa-devel@alsa-project.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  drivers/net/wireless/mediatek/mt76/mt76.h | 2 +-
+>  sound/soc/apple/mca.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wireless/mediatek/mt76/mt76.h
-> index e8757865a3d0..03ef617b1527 100644
-> --- a/drivers/net/wireless/mediatek/mt76/mt76.h
-> +++ b/drivers/net/wireless/mediatek/mt76/mt76.h
-> @@ -376,7 +376,7 @@ struct mt76_rx_tid {
+> diff --git a/sound/soc/apple/mca.c b/sound/soc/apple/mca.c
+> index ce77934f3eef..99e547ef95e6 100644
+> --- a/sound/soc/apple/mca.c
+> +++ b/sound/soc/apple/mca.c
+> @@ -161,7 +161,7 @@ struct mca_data {
+>  	struct mutex port_mutex;
 >  
->  	u8 started:1, stopped:1, timer_pending:1;
->  
-> -	struct sk_buff *reorder_buf[];
-> +	struct sk_buff *reorder_buf[] __counted_by(size);
+>  	int nclusters;
+> -	struct mca_cluster clusters[];
+> +	struct mca_cluster clusters[] __counted_by(nclusters);
 >  };
 >  
->  #define MT_TX_CB_DMA_DONE		BIT(0)
+>  static void mca_modify(struct mca_cluster *cl, int regoffset, u32 mask, u32 val)
 > -- 
 > 2.34.1
 > 
