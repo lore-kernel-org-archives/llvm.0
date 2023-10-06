@@ -1,154 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD3931A6F;
-	Fri,  6 Oct 2023 17:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003CC30FA0
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bVPS2ODc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696614267; x=1728150267;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VhHENdpgY+sILTg2ivPgyRFZ3jNbhscJkyL8yBGyQjU=;
-  b=bVPS2ODcUx4nqbEKfsvQmzWjWfiXHh7vJPJHJbrRC+GNZrM6fvCA0MMQ
-   JpOblSOM2MHDSm6I8F8QwkuFJDkb4IoKpfPMp2ebDIOxBHKKzlC29VmMA
-   VLkIMEXyHT4HKUl1VFE6cItN4HbOSgRDIXOk0xhU+/JOHxDRNXjCpnK8r
-   WfluKQ0zv7KqItra81ZI5TYY3pPAfYDbdkPEK0+7YJQ78LjShPHl+OS/Q
-   SxzNIcM4IevJeWrqlpZPp3n4eg/s9i9aSLHA0I7+fLR4/mqJE7PmmN86t
-   OfQiIiDfOJFVDkKQXFMEA9R+RNYqmbkdanleePP3/gZ/9pOTqZOwftmbi
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="2399414"
-X-IronPort-AV: E=Sophos;i="6.03,204,1694761200"; 
-   d="scan'208";a="2399414"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2023 10:44:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="868417795"
-X-IronPort-AV: E=Sophos;i="6.03,204,1694761200"; 
-   d="scan'208";a="868417795"
-Received: from lkp-server01.sh.intel.com (HELO 8a3a91ad4240) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Oct 2023 10:44:25 -0700
-Received: from kbuild by 8a3a91ad4240 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qoosA-0003U7-2k;
-	Fri, 06 Oct 2023 17:44:22 +0000
-Date: Sat, 7 Oct 2023 01:43:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-omap1/timer32k.c:186: warning: cannot understand
- function prototype: 'struct timespec64 persistent_ts; '
-Message-ID: <202310070106.8QSyJOm3-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ch0jrbng"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-693375d2028so2226128b3a.2
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696623423; x=1697228223; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SYgd9NJoGeVd+4g2HyXZYAbiV1zNgq5LXMke4LgVM60=;
+        b=Ch0jrbngUo7/aaYMjF9J2b9C2LE/q8yVq5GHfjqihvXNa9TWAUXM2khOZ2l/tebWUq
+         e+s2XCFHnWFTKWoffBHwJHAql+QgsjoZtBLPxVcP7EEcT97hhGa1OOvc5lLfJnfcDyep
+         W8ImCVAmxGWgmytg/nBCkw5wBbiSlftAxcKHs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696623423; x=1697228223;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SYgd9NJoGeVd+4g2HyXZYAbiV1zNgq5LXMke4LgVM60=;
+        b=Aw3XjR4H2T4RNDEWhczyVOCLNf8MkqPYjeT01gJdudE5rS/C4brH/2F4T3SxvlpfPM
+         SgFPGLk26weoSxS4EC9IvkDRp11JtDw6oC13ox+qkAZimextLC6TXbUARpOhOriXmAqp
+         oAnwn1AACWnuLR0NIJ+Ai0txv+VR2lHGF0J5gyx/xSWMnQuDh8i/z2GtCxozxZ2F4OLN
+         WHyF0Vjr5j7fs0S2RQ8UfUaf4BQCiYuYQLBOSChyr9nLdh3LryjqBd6Yyq5RzoT9ZjSF
+         5C1tbtR3JOdDzqAMjQQtcfUSVplXcg6rMSNsjxFP88b5N+BJzyBZk87Do6FCmAS1LIGi
+         jlZg==
+X-Gm-Message-State: AOJu0YwqkYN4mmCDsoFHx2fXCEcpn7LIN4zEu5r5qzGrA9KdwDQ4v+gl
+	U7fE6nybq4vQZh0CyI7fM5ArSQ==
+X-Google-Smtp-Source: AGHT+IHNx7VkfRUNypD93pqsPmMMdOU2NO3A55MZeXkGPOgFGJWdkVlpQzoHs03ZJTKJS6nWutO5pQ==
+X-Received: by 2002:a05:6a20:324d:b0:14d:7511:1c2 with SMTP id hm13-20020a056a20324d00b0014d751101c2mr8303161pzc.55.1696623423132;
+        Fri, 06 Oct 2023 13:17:03 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id w18-20020aa78592000000b0064f76992905sm1879945pfn.202.2023.10.06.13.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 13:17:02 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Song Liu <song@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] bpf: Annotate struct bpf_stack_map with __counted_by
+Date: Fri,  6 Oct 2023 13:17:00 -0700
+Message-Id: <20231006201657.work.531-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1619; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=Cn0rZ3uKUzlAqWZVBxaI1s9wb/BhJmGzsMuyAyrT7Jg=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlIGs8PUE7GHQQH9B2FtvPO9v/D7n9b+rl68H2W
+ RKqjf8h0JKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZSBrPAAKCRCJcvTf3G3A
+ JtaTEACURo4jMkXwmgS7m4ShxZQ4TwAfA6ZzmjYsh6vYRU9jgLzxlVmFZGarKW2zf9Cv86qoTQB
+ OuLpPhBaNyLhx6zEvR7V9tnxUwEkqNowljuks8/uiTM7dKUMCX8mPrr0W8i7NY3rag314m42553
+ 4Qg7E6CGkIv9FjnVwEy+WwyO4gtQ9T6LSBaDiqznryLw4DMRHSPX5FY1RreXN0hu2KlSN6NE/95
+ 6y+nhBnSpe5AG0WcCaKwduCSLQAYDwu5gSLTQC8ufTlI+8wLVB9RxmJVplQ6ifVtmjwG0mal2Q9
+ g4CWK58aEl82E6jwl1ibHfcGfj1BOPSrjGWgcVRQGS4Oz95mMtS36TUv3GF/NGMEYbeVMSAOYF/
+ dZ+ZDcDelDkkrftFCQ0GblqS/FPjlacGmdkA99CUVIKR0c9Dwzz2pJCPVrLvu/vVGqSoU2DKd2O
+ S/u5edTIQKXF+6S74bRXmCTvYDFgRzeDFVbxJ/gKxodnhRJZOwKgzpFeqz2h5A2DjvMkysoTOLr
+ QgNDS9ZfejJ6ptqnkCoFaLOYYEdwTTjLQ/2vQ0ruMLTLZWT6fYMQYrP/Cd9bfrPxcuNg6YA1iqv
+ 5A2La5ev+YTxG4cMliYTclB/18XZ5/C74z+hmZYBC6SCICu7BofIrV+WBsrWOqzu+iMD2dRwPe0
+ DtdkIXf jUFo8IGQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   af95dc6fdc25e616051d0234aad638e15c02ec8f
-commit: d379e8899a8da1041c347ae5b792773c48a559a9 ARM: omap1: move 32k counter from plat-omap to mach-omap1
-date:   1 year, 6 months ago
-config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20231007/202310070106.8QSyJOm3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231007/202310070106.8QSyJOm3-lkp@intel.com/reproduce)
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310070106.8QSyJOm3-lkp@intel.com/
+As found with Coccinelle[1], add __counted_by for struct bpf_stack_map.
 
-All warnings (new ones prefixed by >>):
+Cc: Song Liu <song@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: linux-hardening@vger.kernel.org
+Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ kernel/bpf/stackmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> arch/arm/mach-omap1/timer32k.c:186: warning: cannot understand function prototype: 'struct timespec64 persistent_ts; '
->> arch/arm/mach-omap1/timer32k.c:216: warning: Function parameter or member 'vbase' not described in 'omap_init_clocksource_32k'
->> arch/arm/mach-omap1/timer32k.c:216: warning: Excess function parameter 'pbase' description in 'omap_init_clocksource_32k'
->> arch/arm/mach-omap1/timer32k.c:216: warning: Excess function parameter 'size' description in 'omap_init_clocksource_32k'
-
-
-vim +186 arch/arm/mach-omap1/timer32k.c
-
-   178	
-   179	/**
-   180	 * omap_read_persistent_clock64 -  Return time from a persistent clock.
-   181	 *
-   182	 * Reads the time from a source which isn't disabled during PM, the
-   183	 * 32k sync timer.  Convert the cycles elapsed since last read into
-   184	 * nsecs and adds to a monotonically increasing timespec64.
-   185	 */
- > 186	static struct timespec64 persistent_ts;
-   187	static cycles_t cycles;
-   188	static unsigned int persistent_mult, persistent_shift;
-   189	
-   190	static void omap_read_persistent_clock64(struct timespec64 *ts)
-   191	{
-   192		unsigned long long nsecs;
-   193		cycles_t last_cycles;
-   194	
-   195		last_cycles = cycles;
-   196		cycles = sync32k_cnt_reg ? readl_relaxed(sync32k_cnt_reg) : 0;
-   197	
-   198		nsecs = clocksource_cyc2ns(cycles - last_cycles,
-   199						persistent_mult, persistent_shift);
-   200	
-   201		timespec64_add_ns(&persistent_ts, nsecs);
-   202	
-   203		*ts = persistent_ts;
-   204	}
-   205	
-   206	/**
-   207	 * omap_init_clocksource_32k - setup and register counter 32k as a
-   208	 * kernel clocksource
-   209	 * @pbase: base addr of counter_32k module
-   210	 * @size: size of counter_32k to map
-   211	 *
-   212	 * Returns 0 upon success or negative error code upon failure.
-   213	 *
-   214	 */
-   215	int __init omap_init_clocksource_32k(void __iomem *vbase)
- > 216	{
-   217		int ret;
-   218	
-   219		/*
-   220		 * 32k sync Counter IP register offsets vary between the
-   221		 * highlander version and the legacy ones.
-   222		 * The 'SCHEME' bits(30-31) of the revision register is used
-   223		 * to identify the version.
-   224		 */
-   225		if (readl_relaxed(vbase + OMAP2_32KSYNCNT_REV_OFF) &
-   226							OMAP2_32KSYNCNT_REV_SCHEME)
-   227			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_HIGH;
-   228		else
-   229			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_LOW;
-   230	
-   231		/*
-   232		 * 120000 rough estimate from the calculations in
-   233		 * __clocksource_update_freq_scale.
-   234		 */
-   235		clocks_calc_mult_shift(&persistent_mult, &persistent_shift,
-   236				32768, NSEC_PER_SEC, 120000);
-   237	
-   238		ret = clocksource_mmio_init(sync32k_cnt_reg, "32k_counter", 32768,
-   239					250, 32, clocksource_mmio_readl_up);
-   240		if (ret) {
-   241			pr_err("32k_counter: can't register clocksource\n");
-   242			return ret;
-   243		}
-   244	
-   245		sched_clock_register(omap_32k_read_sched_clock, 32, 32768);
-   246		register_persistent_clock(omap_read_persistent_clock64);
-   247		pr_info("OMAP clocksource: 32k_counter at 32768 Hz\n");
-   248	
-   249		return 0;
-   250	}
-   251	
-
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 458bb80b14d5..d6b277482085 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -28,7 +28,7 @@ struct bpf_stack_map {
+ 	void *elems;
+ 	struct pcpu_freelist freelist;
+ 	u32 n_buckets;
+-	struct stack_map_bucket *buckets[];
++	struct stack_map_bucket *buckets[] __counted_by(n_buckets);
+ };
+ 
+ static inline bool stack_map_use_build_id(struct bpf_map *map)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
