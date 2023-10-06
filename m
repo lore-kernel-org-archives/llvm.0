@@ -1,138 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3652A4414
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 11:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3066F1D554
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 15:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O4QvQBN+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696590681;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9uPtCcbYaFmk2s0o8l5gVTfz/zMFPxORW1YeEVtyENI=;
-	b=O4QvQBN+gRgWbCjwhL7nkXzZAo94pJDi8h6idajFNn4a+xXleBnnkZTrjpZ2XdcK689H99
-	WbqLAWC13npYKtCUolSFum1kyOzA6RHA26tt9feo7YK+0ZwXEc8Yj2mIgGaOKXdUQQGlJy
-	zxCfOg5zW/Dr4HCbfCbn5o3oqLo+vKU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-151-RVZsYqljOvCVz-cKLYJt1A-1; Fri, 06 Oct 2023 07:11:20 -0400
-X-MC-Unique: RVZsYqljOvCVz-cKLYJt1A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29A3E1C06528
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 11:11:20 +0000 (UTC)
-Received: from [172.64.10.35] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 112B92027045;
-	Fri,  6 Oct 2023 11:11:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 8 of 230): Test report for master
- (6.6.0-rc4, mainline.kernel.org-clang, b78b18fb)
-Date: Fri, 06 Oct 2023 11:11:20 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljynjWJs"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1c60a514f3aso18513745ad.3
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 08:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696607865; x=1697212665; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TMaXSdjxbXsiAirTGof/GcimC3N7kI+/btaqyHpj49Y=;
+        b=ljynjWJsgS6imbuvwd8ZQmmgP5GLxa8NZr1FUVmyrcAvUd7FQnGSi+UNiOLcHXD5Cd
+         ofX3kQoiJa9N1Nvku+78aX99zlCh0/W8H7kdH0vd51G6WK5/x9c4vrxF/G+HY1DJIOVf
+         IXvovoIVmU6DJ/Ig6v+vPtOjLn4p61zhb49kk0gHw4sjpGSqPT0MrhwBAXdtGPedYohI
+         oY8BkNaqXB787qqNIOtIv5AwoaRVZoIot9bHGbja/eEq5Uk7D6aKZcLXUzjrmHFhS2PQ
+         Kj5EhXLwDHO+vUml0O3bKFkQtuZ7Iu7X4QN5LwwXtoeOkG1Cg/csw8aGx5eLjlB4iPd9
+         JCDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696607865; x=1697212665;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TMaXSdjxbXsiAirTGof/GcimC3N7kI+/btaqyHpj49Y=;
+        b=Yg/CrCrkn5yHNVLrR1bwQnBCsjUGM1pLgYIv7dybS0v+Evm5PsFoWz0toOCygCfiuE
+         gzCDm9dmAi0SjcfMoAD1fjydzpOQMNJotsjhyKIzWfjB89+LONP1oKW8vxpdip0o7fPK
+         thwKhgkdpO/Qfrx6tAxtyi/1Zuns9HqBPJH27CJp9qF+vGTNxOM2McETqsMAHSo0EZqS
+         zN6wogqXkYY6PsEaJxPAdVmUSfEYzoRcbQhSYnmZGpVYQH1dEOHlnIMe75SEkGsyN69u
+         boRomfUURlv5RzQoyThRrUvCLMeS6fgBqNcju4mM4kDr74e95WxZ6IjB2Cgl/AyHi6IP
+         1LdA==
+X-Gm-Message-State: AOJu0Yw390sN3EjqCLKzmD9PlKiYQiutqtp0YagSqDHyp/csnFsueoiU
+	KMmIl+hV42hmoAdrjOTbVUE=
+X-Google-Smtp-Source: AGHT+IEhBhuGTi2CtNQboZ4D7jHQZWBTQVsg1o+NrcmVE4/6qmh4tDyC3SB+mQ4mPpSIDN7aN2NiWw==
+X-Received: by 2002:a17:903:124b:b0:1c8:791c:d78b with SMTP id u11-20020a170903124b00b001c8791cd78bmr8760716plh.29.1696607865385;
+        Fri, 06 Oct 2023 08:57:45 -0700 (PDT)
+Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902eac400b001aaf2e8b1eesm4040797pld.248.2023.10.06.08.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 08:57:45 -0700 (PDT)
+From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH 0/1] rust: crates in other kernel directories
+Date: Fri,  6 Oct 2023 12:57:36 -0300
+Message-ID: <20231006155739.246381-1-yakoyoku@gmail.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <51988.123100607112000489@us-mta-151.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+This RFC provides makes possible to have bindings for kernel subsystems
+that are compiled as modules.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Previously, if you wanted to have Rust bindings for a subsystem, like
+AMBA for example, you had to put it under `rust/kernel/` so it came
+part of the `kernel` crate, but this came with many downsides. Namely
+if you compiled said subsystem as a module you've a dependency on it
+from `kernel`, which is linked directly on `vmlinux`.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+So instead of overpopulating `kernel` with a gazillion modules that
+throws you into dire straits you should rather have the bindings in the
+same directory as the subsystem you want to bind with and link it to
+it.
 
-Kernel information:
-    Commit message: Merge tag 'erofs-for-6.6-rc5-fixes' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/xiang/erofs
+For now I don't have a completely working example but I have an MWE as
+following...
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/107666
+    # Add this line to drivers/usb/core/Kconfig
+    config USB_RUST
+    	bool "Rust USB bindings"
+    	depends on USB && RUST
+    	default n
+    	help
+    	  Enables Rust bindings for USB.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+    # Add this line to drivers/usb/core/Makefile
+    usbcore-$(CONFIG_USB_RUST)		+= usb.rlib
 
+    # Create this file drivers/usb/core/usb.rs
+    // SPDX-License-Identifier: GPL-2.0
+    
+    //! USB devices and drivers.
+    //!
+    //! C header: [`include/linux/usb.h`](../../../../include/linux/usb.h)
+    
+    use kernel::bindings;
+    
+    /// Check if USB is disabled.
+    pub fn disabled() -> bool {
+        // SAFETY: FFI call.
+        unsafe { bindings::usb_disabled() != 0 }
+    }
 
+    # Compile the .rlib with
+    make drivers/usb/core/usb.rlib LLVM=1
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+If everything went well then you should have
+`drivers/usb/core/usb.rlib` ready to be linked.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+As of now this PR won't compile the kernel fully as it serves as an
+starting point and it's going to change in the future.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Martin Rodriguez Reboredo (1):
+  scripts: Build per module Rust crates
+
+ Makefile               |  4 ++--
+ scripts/Makefile.build | 10 +++++++++-
+ scripts/Makefile.lib   | 19 +++++++++++++------
+ 3 files changed, 24 insertions(+), 9 deletions(-)
+
+-- 
+2.42.0
 
