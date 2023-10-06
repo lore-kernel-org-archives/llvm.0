@@ -1,72 +1,68 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BB441E38
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAC341E38
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:17:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nwHA2BqV"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2776d882214so1907763a91.2
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:17:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="S8eczWFc"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-69101d33315so2243749b3a.3
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696623451; x=1697228251; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696623456; x=1697228256; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=44cFvtKqMAZFN6/2W4HaH3hNmYSsLMnAgOIOpwVomfM=;
-        b=nwHA2BqVYm92p+EZWyn4iBn1aXMWahHZvLdjYVXCE1NeD6pH4A+L+cgoNxmm4+G/jP
-         wn7bWg1kNmsfu9V/iCrsXFq+7zDIkMvUjv0yUubBEd5V6ZsxOpPUC8R2iN3Y5zqyZrCM
-         p8xJPdU4Ofgd6Q+wEKa0SbxY0Y+t8Exw3wP4g=
+        bh=SVW48+aAw5RrT5lkfRy3SJYTnhGkwarT0QT62F6zY44=;
+        b=S8eczWFc234rxGwHQTSKUS8pSscEsA8LrlXKUruPqx2nwA6Ytqll9wknFwaJ0kNFbw
+         7swH4enoL2bNk46wZLa2bu9tBaHMOaIuYAPOi3ro+ptdniplOcqJTUJbycagHLizMAF7
+         5UNtHT67Hkmu5pnmsiLBD/y5kFohnCjqTpahE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696623451; x=1697228251;
+        d=1e100.net; s=20230601; t=1696623456; x=1697228256;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=44cFvtKqMAZFN6/2W4HaH3hNmYSsLMnAgOIOpwVomfM=;
-        b=fETVRc41umf4JIeHjPGU9R6+R6iMXL4Xt1C8csM3TZhjZg+yY4KJq1QTcR3JKt3H9D
-         YvT0MMdt2M/bNP4TbMYrQPHR2NU7h2ak5GbdMLGoPCO0BnbsFJOjJ30tbhAWKPg3phfe
-         UMvnJ12pBIq/4QZdd4Lr5D/JhmoDh658+9Qu7BwZAqKlphuYBtopFT7JcKu5a4VB1bJi
-         WPnDAgXAr/WOHkpN1e2J0mUoc8SfgndvjSTTTmvbw/+UupgtvOFBIUS58obJaEZHUIOF
-         0A4OgN6HaRbEx7duMdhchKERgxY4UnfHAF/KcVv76+4tIBPDMoGZ52mTrvB5ABePQN9a
-         idCw==
-X-Gm-Message-State: AOJu0Yx5ZMXsdFA8EQMwD6sirKKF21yjG8xpdjZFtbbVfMrrqPYOkroe
-	EbMfLlNZfKzgKjd+2Hv/uyAWAiRRg1PXVdMQ+uk=
-X-Google-Smtp-Source: AGHT+IE8lO1ha8XBa5ezgrgQtzWsAVLftgkmKffd4oVNSVoxQYbXsRdlq6o27BW5+g4zJ9hXC4kqeA==
-X-Received: by 2002:a17:90a:e98c:b0:268:414c:ff3 with SMTP id v12-20020a17090ae98c00b00268414c0ff3mr9383030pjy.23.1696623450927;
-        Fri, 06 Oct 2023 13:17:30 -0700 (PDT)
+        bh=SVW48+aAw5RrT5lkfRy3SJYTnhGkwarT0QT62F6zY44=;
+        b=hoUrC5Bbm6QfNy99iP63HMNO+jEgcFKFexfMQyrpP9TRc6U1IdiH83b2BdtNOvSMLC
+         /sB94ssuzwACwIM3G4dGAHEFKQTOpbkdvvn6qMk6pesiSZcWH1YLbdNFfoRbEC2ln45j
+         HI1REqvDrM9K9M0O9JKf+pUmzbeXwvRabE2Dm6v8b7Jr7/NLOGvWW3jwQCUkuHsp0/zV
+         PiY2mw74xXDD1dbqvEo6YL9DAzPZP2AaoxKtfkyYUzO78YhnziJaPqkjCzgvg2jod5qa
+         o10oPsFjF0/66JDfwdM5y98BIlUZztEEO3X97N1Tk+CMZYsbVmXFnrppOz1z+pMKdFaK
+         OgsA==
+X-Gm-Message-State: AOJu0YxVsb4eYiJqSQLUS01MTqwJTWV8RTnBcq996TeLPmWH25wZ2dC/
+	rJzK9IzYobI1tFzP1JpGEQHygA==
+X-Google-Smtp-Source: AGHT+IGgULuRMAk+2xAiqAngtQMYH/45dfkfgIQakgeEwSnSB9Ck2fpTw3sOiYnEFueq2+Zw0HIj5g==
+X-Received: by 2002:a05:6a00:1d89:b0:68f:c6f8:144a with SMTP id z9-20020a056a001d8900b0068fc6f8144amr8344041pfw.22.1696623456614;
+        Fri, 06 Oct 2023 13:17:36 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b0026d214a2b33sm5865157pjb.7.2023.10.06.13.17.30
+        by smtp.gmail.com with ESMTPSA id g29-20020a63375d000000b0056c2de1f32esm3761746pgn.78.2023.10.06.13.17.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 13:17:30 -0700 (PDT)
+        Fri, 06 Oct 2023 13:17:36 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Miquel Raynal <miquel.raynal@bootlin.com>
 Cc: Kees Cook <keescook@chromium.org>,
 	Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
 	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Thierry Reding <treding@nvidia.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
 	Roger Quadros <rogerq@kernel.org>,
+	Thierry Reding <treding@nvidia.com>,
+	Yang Yingliang <yangyingliang@huawei.com>,
 	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Cai Huoqing <cai.huoqing@linux.dev>,
-	Chuanhong Guo <gch981213@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Li Zetao <lizetao1@huawei.com>,
+	Valentin Korenblit <vkorenblit@sequans.com>,
+	ye xingchen <ye.xingchen@zte.com.cn>,
 	linux-mtd@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
 	linux-hardening@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
+	Heiko Stuebner <heiko@sntech.de>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] mtd: rawnand: Annotate struct mtk_nfc_nand_chip with __counted_by
-Date: Fri,  6 Oct 2023 13:17:28 -0700
-Message-Id: <20231006201728.work.750-kees@kernel.org>
+Subject: [PATCH] mtd: rawnand: cadence: Annotate struct cdns_nand_chip with __counted_by
+Date: Fri,  6 Oct 2023 13:17:34 -0700
+Message-Id: <20231006201734.work.060-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -75,20 +71,20 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1866; i=keescook@chromium.org;
- h=from:subject:message-id; bh=wj52WE7CwlsQ2BB8Uem6TW+tv4z8geFWBQTRgq+pZr0=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlIGtYrtnPKsIg2iO4Dd3ybiJdrRew0N9KKrFWo
- eR191/wOjuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZSBrWAAKCRCJcvTf3G3A
- JjxZEACEq9RQuj5y0ShuaIfEUoej7S27zHMK5VDww5pUKfNkAzMupLwYOh2Yk6q7ltkpvX6IuWW
- ROopZqHz/SA0ETIcIKxfWi6DKM+3eaNFCK84JR573dTGlnCvAQEuzLRPoHp7gYUAc1voMXNV4Eb
- onEUUeNpgaVY1gO+a5QuSTDx1ZFLJpzhHf9AyuEJ1j4o4W7ftzF5ZOrXwh3m2AEcdNudTDX8sdt
- TZ2xWMWVUU96nOJ351JSEB2DYIQc9B6G2zPFUxsa5FcaCAn76Tll91uRAEcrn8ZIJUwEGFlZccG
- XWqPoVBzHp4HNxPVdE800NRDNHXVtIZ/7j43uOZPXxRzgdoIcKqScm6sbIAbXp0R1EmfwoYAwfW
- Nu4VRs3Ar1aLm0xV82hvR3gW6mSSiRLFzRxzj/fl415Q98XkwErnfKjkEmrFO0ox6U9JjwMM4Om
- gXE59HAKzBYeWuaGTg8Prfd706WGU9dX+bcmHkGhSjZi9/s5cjyliCYIlKW3SZ5/r8eVDT7U5eM
- Ul6QML+ml7X3z4kkuuJ+h/wDqoXcal+zei2gPVUMcumoxLw1LIC01d6WE/KJ3P8ubWfTWyLJmjp
- 13WmQW8lobfY1U0km8vVLpbpnjq3XkQP3rmrzLF282/rrCfukJH1zYa43nf6BLyjap2Bi6hSY66
- 4Z3lS7/ Aj1sqFAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=v/mBW37FRWiHDbQSeKGRt7jHSIbBK2m2caz2GN2pAMs=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlIGtehhtNs4fsQLlK/idmpyBfIyy3VLPUCxgiM
+ uN0LPqd+ImJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZSBrXgAKCRCJcvTf3G3A
+ JkStEACSGTbTsp8zz1atoDGJhIXcLq7dkczKkpuqx43dYR8vq3nM6javyZ6DU7cAg2OhRoAplw0
+ mA8jHnMFQixkl5LkbmCfoRytUqgJCK+dMCySAAPwBp9IItFtaqczmNI/I6/d/gDJvtqQQep0jSk
+ PW0HSCeEDsFzX/CdW0t6C1dRPVu7gddhQI2dT1KUMTLPghKqCKjqgUrKfruh+yarpwMIKUmhV3X
+ rklM4b718lqThCqUPASeb/zZeCoN3g+MQAmL5MM3Vf9Vtx780jFE4SHxFwk+do0CrYsWhTxO9a4
+ 8FNOJNfUrv8dasPXCafK9pQxYkzRE4lKjDlKWPbrzSfelocXGryBNFQPiOTkAkRMf3RqiNh2GCR
+ z8QM/L+lmF4dv//gnu3oXL3ds1MRzA8FY5nKjYoduHvOOsVDQTEx+B+4XPa6vTmDxWk68HDhoOV
+ CKOyMtZUCdXdo7dGXx+OhYtsFT/beclrvneNK+WXJJ8DAXpxRJYlmCGfmAV1/okr5oEOrE8U8ru
+ cshkana+HpzpbJuzw28HhcouY+hWSF2Clzt6FUws6hL+evFTv6yEopyovGmCakC3k2VR5UMumZ7
+ MvA//yU5JMxP7SDbF30UVevcNuhKSu2LoEBaAp4CJ4xAJzaBrUaKqgdOogIP6IIGac0nANokUqs
+ 9OfVz+T lNbq/PRA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -98,47 +94,41 @@ their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
 array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct
-mtk_nfc_nand_chip.
+As found with Coccinelle[1], add __counted_by for struct cdns_nand_chip.
 
 Cc: Miquel Raynal <miquel.raynal@bootlin.com>
 Cc: Richard Weinberger <richard@nod.at>
 Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>
 Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: Thierry Reding <treding@nvidia.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
 Cc: Roger Quadros <rogerq@kernel.org>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
 Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-Cc: Cai Huoqing <cai.huoqing@linux.dev>
-Cc: Chuanhong Guo <gch981213@gmail.com>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Li Zetao <lizetao1@huawei.com>
+Cc: Valentin Korenblit <vkorenblit@sequans.com>
+Cc: ye xingchen <ye.xingchen@zte.com.cn>
 Cc: linux-mtd@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
 Cc: linux-hardening@vger.kernel.org
 Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/mtd/nand/raw/mtk_nand.c | 2 +-
+ drivers/mtd/nand/raw/cadence-nand-controller.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/raw/mtk_nand.c b/drivers/mtd/nand/raw/mtk_nand.c
-index 29c8bddde67f..60198e33d2d5 100644
---- a/drivers/mtd/nand/raw/mtk_nand.c
-+++ b/drivers/mtd/nand/raw/mtk_nand.c
-@@ -130,7 +130,7 @@ struct mtk_nfc_nand_chip {
- 	u32 spare_per_sector;
+diff --git a/drivers/mtd/nand/raw/cadence-nand-controller.c b/drivers/mtd/nand/raw/cadence-nand-controller.c
+index 034ec564c2ed..7d5ef7ffe0fe 100644
+--- a/drivers/mtd/nand/raw/cadence-nand-controller.c
++++ b/drivers/mtd/nand/raw/cadence-nand-controller.c
+@@ -526,7 +526,7 @@ struct cdns_nand_chip {
+ 	/* ECC strength index. */
+ 	u8 corr_str_idx;
  
- 	int nsels;
--	u8 sels[];
-+	u8 sels[] __counted_by(nsels);
- 	/* nothing after this field */
+-	u8 cs[];
++	u8 cs[] __counted_by(nsels);
  };
  
+ struct ecc_info {
 -- 
 2.34.1
 
