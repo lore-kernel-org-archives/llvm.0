@@ -1,71 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1222F15492;
-	Fri,  6 Oct 2023 10:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3652A4414
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 11:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MV/Kwoml"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8ECCDC43391;
-	Fri,  6 Oct 2023 10:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696588824;
-	bh=KzIZOnElrqYjlyNCRhXZ/6dGkAdW/0c9GqOyBEpsNSY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=MV/KwomlYP3ethv7qRyi1HhKSpMRJQaqjQIimlbvulYa2t67ba9M1V8xuxMDFEQK+
-	 EUGMCd3/3Crxija3JP/m6nR38DDF4vlcJQPIGm+8wuZb6SsbERYTKjo/DLa0brCfEa
-	 xVPPzkd51dBirKbzrjrLZw66w2FQSrDUCwi3k7WOqZh+R5aLcvjI8Tbd9IZlU6MTTK
-	 vpf3a4Rnasccgdlhb9HqiJcNArs10qxyCSnD/ZJqcct0BvAmkiCnrHzjvES95Do088
-	 5NrycW+SLm5h6E4eI9F9Ouj7EnYkDG+BS1yxkf/S4ixWFRmVCNxAOtZILbJH7/2RfF
-	 2Dct7quwMbVSg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69844C595CB;
-	Fri,  6 Oct 2023 10:40:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O4QvQBN+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1696590681;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9uPtCcbYaFmk2s0o8l5gVTfz/zMFPxORW1YeEVtyENI=;
+	b=O4QvQBN+gRgWbCjwhL7nkXzZAo94pJDi8h6idajFNn4a+xXleBnnkZTrjpZ2XdcK689H99
+	WbqLAWC13npYKtCUolSFum1kyOzA6RHA26tt9feo7YK+0ZwXEc8Yj2mIgGaOKXdUQQGlJy
+	zxCfOg5zW/Dr4HCbfCbn5o3oqLo+vKU=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-151-RVZsYqljOvCVz-cKLYJt1A-1; Fri, 06 Oct 2023 07:11:20 -0400
+X-MC-Unique: RVZsYqljOvCVz-cKLYJt1A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29A3E1C06528
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 11:11:20 +0000 (UTC)
+Received: from [172.64.10.35] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 112B92027045;
+	Fri,  6 Oct 2023 11:11:20 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 8 of 230): Test report for master
+ (6.6.0-rc4, mainline.kernel.org-clang, b78b18fb)
+Date: Fri, 06 Oct 2023 11:11:20 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] flow_offload: Annotate struct flow_action_entry with
- __counted_by
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169658882442.10984.13385053977600897940.git-patchwork-notify@kernel.org>
-Date: Fri, 06 Oct 2023 10:40:24 +0000
-References: <20231003231833.work.027-kees@kernel.org>
-In-Reply-To: <20231003231833.work.027-kees@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, netdev@vger.kernel.org, gustavoars@kernel.org,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <51988.123100607112000489@us-mta-151.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi, we tested your kernel and here are the results:
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-On Tue,  3 Oct 2023 16:18:33 -0700 you wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct flow_action_entry.
-> 
-> [...]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Here is the summary with links:
-  - flow_offload: Annotate struct flow_action_entry with __counted_by
-    https://git.kernel.org/netdev/net-next/c/99474727d5d5
+Kernel information:
+    Commit message: Merge tag 'erofs-for-6.6-rc5-fixes' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/xiang/erofs
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/107666
 
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
