@@ -1,47 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AB715C2;
-	Fri,  6 Oct 2023 10:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B518B1C28D;
+	Fri,  6 Oct 2023 10:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XjW0dVhs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b79RTl8S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696587674; x=1728123674;
+  t=1696588404; x=1728124404;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cnBX3yGmQzn0lVjgGu9lazbJAxYXsKftWp12kbfT8CE=;
-  b=XjW0dVhsMgaCRN3dUiJi7Uiaws5fv6SFMMgM8A9N+bprTcXxDfBaFr4B
-   noXAh7FIeQfA4UkQpzsEhf3h4Tjh2Jyvo4La+Uo3wyQO7aKkAkkCAxurW
-   NIV/R1lKfbzEBro2LpSe9/Z2oFEbNGvWf2thaYrUX5JJQtGT/SnNXagS6
-   nSNFgkGC6MKuz1ZjENKCK9LJCjjHNI4shQBHpizJtTSMvd1etWGW/Vcgk
-   V6bdjFsBqZFmOTO3nfghLQGaYB8w7p2zdAbjtldxGZuCWFuVrX2Sv7GvZ
-   zr7/hfuNfhjog+ipJEk5crxTS+Y5vQrDy4EeX+1/1FdrxyGEag5+grCmb
+  bh=if2DbiSbXczOLktQKNmjPWjll0iHKhW6IGipZHwsYkw=;
+  b=b79RTl8SEcIE5XFmnxeJd7M409ppPMR7SRk5jF7gJfxV4oJ4Yv7dRTmt
+   lvzIZquX6Kpe5YKy08puCnajwFCJX+byxC+L7CIeqz2oTCfZM3fmTS5cs
+   IrYFaoKWZDaQmV1HcMG1njkOrFFI0NhUsvV/JB+moGTY9tau7Gop4jaeV
+   UdXjNcaZj3HMMNdJuhPtsMzAk+ioL19OMAQf8b94FC1XV/FmgZuCrrT6/
+   XSmdXnlSDcnel4U575rVHO4iCMQ3M+lHyTKUf62ndGRcTrTYpvZ/lyK5n
+   1HZkc8YMu5OWlrw+FJ73qTus8jPXRr1CpwTNYlAvPPIkpfIrNVOPWZ+9K
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="447910450"
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="2328241"
 X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="447910450"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2023 03:21:13 -0700
+   d="scan'208";a="2328241"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2023 03:33:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="745828311"
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="895836965"
 X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="745828311"
+   d="scan'208";a="895836965"
 Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 06 Oct 2023 03:21:12 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 06 Oct 2023 03:31:49 -0700
 Received: from kbuild by c3b01524d57c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qohxF-000MUy-2R;
-	Fri, 06 Oct 2023 10:21:09 +0000
-Date: Fri, 6 Oct 2023 18:20:49 +0800
+	id 1qoi91-000MVi-0g;
+	Fri, 06 Oct 2023 10:33:19 +0000
+Date: Fri, 6 Oct 2023 18:32:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
- for function 'mpc52xx_psc_spi_transfer_one_message'
-Message-ID: <202310061815.7Rtyi4hs-lkp@intel.com>
+	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: [pci:pm 2/2] arch/x86/pci/fixup.c:929:6: error: use of undeclared
+ identifier 'pm_suspend_target_state'
+Message-ID: <202310061830.A7jaXxeG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,182 +51,79 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Mark,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b78b18fb8ee19f7a05f20c3abc865b3bfe182884
-commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
-date:   1 year, 3 months ago
-config: powerpc-mpc5200_defconfig (https://download.01.org/0day-ci/archive/20231006/202310061815.7Rtyi4hs-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231006/202310061815.7Rtyi4hs-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git pm
+head:   624306d2c241c274e498619cabc2ae1dc7112ad1
+commit: 624306d2c241c274e498619cabc2ae1dc7112ad1 [2/2] x86/PCI: Avoid PME from D3hot/D3cold for AMD Rembrandt and Phoenix USB4
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231006/202310061830.A7jaXxeG-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231006/202310061830.A7jaXxeG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310061815.7Rtyi4hs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310061830.A7jaXxeG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   __do_insb
-   ^
-   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insb'
-   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:641:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:117:1: note: expanded from here
-   __do_insw
-   ^
-   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insw'
-   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:641:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:119:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:580:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:641:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:121:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:641:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:123:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:641:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:125:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:583:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for function 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
-   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-       ^
-   drivers/spi/spi-mpc52xx-psc.c:195:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-   ^
-   static 
-   7 warnings generated.
+>> arch/x86/pci/fixup.c:929:6: error: use of undeclared identifier 'pm_suspend_target_state'
+           if (pm_suspend_target_state == PM_SUSPEND_ON)
+               ^
+>> arch/x86/pci/fixup.c:929:33: error: use of undeclared identifier 'PM_SUSPEND_ON'
+           if (pm_suspend_target_state == PM_SUSPEND_ON)
+                                          ^
+>> arch/x86/pci/fixup.c:951:20: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           rp->pme_support = FIELD_GET(PCI_PM_CAP_PME_MASK, pmc);
+                             ^
+   3 errors generated.
 
 
-vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
+vim +/pm_suspend_target_state +929 arch/x86/pci/fixup.c
 
-   194	
- > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-   196						 struct spi_message *m)
-   197	{
-   198		struct spi_device *spi;
-   199		struct spi_transfer *t = NULL;
-   200		unsigned cs_change;
-   201		int status;
-   202	
-   203		spi = m->spi;
-   204		cs_change = 1;
-   205		status = 0;
-   206		list_for_each_entry (t, &m->transfers, transfer_list) {
-   207			if (t->bits_per_word || t->speed_hz) {
-   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
-   209				if (status < 0)
-   210					break;
-   211			}
-   212	
-   213			if (cs_change)
-   214				mpc52xx_psc_spi_activate_cs(spi);
-   215			cs_change = t->cs_change;
-   216	
-   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
-   218			if (status)
-   219				break;
-   220			m->actual_length += t->len;
-   221	
-   222			spi_transfer_delay_exec(t);
-   223	
-   224			if (cs_change)
-   225				mpc52xx_psc_spi_deactivate_cs(spi);
-   226		}
-   227	
-   228		m->status = status;
-   229		if (status || !cs_change)
-   230			mpc52xx_psc_spi_deactivate_cs(spi);
-   231	
-   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
-   233	
-   234		spi_finalize_current_message(ctlr);
-   235	
-   236		return 0;
-   237	}
-   238	
+   907	
+   908	#ifdef CONFIG_SUSPEND
+   909	/*
+   910	 * Root Ports on some AMD SoCs advertise PME_Support for D3hot and D3cold, but
+   911	 * if the SoC is put into a hardware sleep state by the amd-pmc driver, the
+   912	 * Root Ports don't generate wakeup interrupts for USB devices.
+   913	 *
+   914	 * When suspending, remove D3hot and D3cold from the PME_Support advertised
+   915	 * by the Root Port so we don't use those states if we're expecting wakeup
+   916	 * interrupts.  Restore the advertised PME_Support when resuming.
+   917	 */
+   918	static void amd_rp_pme_suspend(struct pci_dev *dev)
+   919	{
+   920		struct pci_dev *rp;
+   921	
+   922		/*
+   923		 * PM_SUSPEND_ON means we're doing runtime suspend, which means
+   924		 * amd-pmc will not be involved so PMEs during D3 work as advertised.
+   925		 *
+   926		 * The PMEs *do* work if amd-pmc doesn't put the SoC in the hardware
+   927		 * sleep state, but we assume amd-pmc is always present.
+   928		 */
+ > 929		if (pm_suspend_target_state == PM_SUSPEND_ON)
+   930			return;
+   931	
+   932		rp = pcie_find_root_port(dev);
+   933		if (!rp->pm_cap)
+   934			return;
+   935	
+   936		rp->pme_support &= ~((PCI_PM_CAP_PME_D3hot|PCI_PM_CAP_PME_D3cold) >>
+   937					    PCI_PM_CAP_PME_SHIFT);
+   938		dev_info_once(&rp->dev, "quirk: disabling D3cold for suspend\n");
+   939	}
+   940	
+   941	static void amd_rp_pme_resume(struct pci_dev *dev)
+   942	{
+   943		struct pci_dev *rp;
+   944		u16 pmc;
+   945	
+   946		rp = pcie_find_root_port(dev);
+   947		if (!rp->pm_cap)
+   948			return;
+   949	
+   950		pci_read_config_word(rp, rp->pm_cap + PCI_PM_PMC, &pmc);
+ > 951		rp->pme_support = FIELD_GET(PCI_PM_CAP_PME_MASK, pmc);
 
 -- 
 0-DAY CI Kernel Test Service
