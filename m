@@ -1,114 +1,167 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758B638FA6
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 21:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1804338FB5
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 21:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NQ1MjstO"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-56fb25fdf06so2000655a12.1
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 14:17:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GJgXhwl6"
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-4527d7f7305so1172918137.1
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 14:22:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696627076; x=1697231876; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z8YyZNdSqKiy5DzZ/PIG6aNvb3OwzQTDwFSCpe0do0I=;
-        b=NQ1MjstONKvacZ29gnNEscyt8Zinn+/dOaMY+ri1e3YcN1b4IRMH5kp0ul++iYI+zY
-         m/mRDNHxypy4JkgZPFKsi4TszrKdMia+A1KO5cEOVsBUHmyKl6SAyopmYdMFoMByOo7t
-         u3et8kcwWAL6AkP2g692uAOTghEPmlBEoutrCYSI+Rcuk1K7NT/0di36BMT7PH4rWvXM
-         4sVI8Yfv+EAbuJNmySMEU19VARiAJwlzce41IMLr46S4tA4zYxaaQs0qrGYx5IM156g6
-         dhMK578FRZ8SH04QZKqlhyMIiL6BzvlUa8Y7Z2Xly/6odQTYHYarrQTFZs/1YsZyHbpL
-         w+bQ==
+        d=google.com; s=20230601; t=1696627375; x=1697232175; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sGVNTkTuEhOSEasSh+f06Vtoy0x55i2wMcWJNOvGy7A=;
+        b=GJgXhwl6CUXIIcOtUvxYb2gnGiw8TDs8Aw5/UH5QsE6F1a5ThqkWyHY+9QTSxChkwp
+         Ysgqc9swDb04UuZthpFO70I6fbFVWPQjRLHI5OCn02RdtrmEdKJJoObtPZUINQvTa0+f
+         F3iuE3l32z63qD4GIbaKvseaT0B0YC8TsfXxw9RavAAkaO5HCr3+dRlkuBiMZo/Bl9vR
+         Xmicj63hnOAr3GEDurJgDgsE8mlDgPPNp3VA1iSz2dXjABA9evSO33qGU0xD60Xy79JD
+         1Q5oFiFoLwz6XezRtub8moSHKx59zmsneWotzfDUYSdY2DlS1o37TlvAIaPwQAhSm17b
+         Bz8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696627076; x=1697231876;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z8YyZNdSqKiy5DzZ/PIG6aNvb3OwzQTDwFSCpe0do0I=;
-        b=V0chbZxTvb7EXWqvjNup+3pIludOvTVem8x3xTBqxviyGanvKDHKiOPInnLtKCz7B8
-         YIrw6bO+tTBZmS1XDqp1sOn3piKPYiwkL8hINVdn7d1IMOOAoNxLJNzgvJVio80Z+6xZ
-         fqIXZiEA6e4rmVkAw7REet/XrextqVTrZgR/f1puf+qLCD7VGQWSLhgXuOv57Cqlg8m3
-         oHqKVCLntW5nrzIEkevTv1ley4X0vFKkphIq1iqcUHO83Vb++Wqm9N+g8yIoThh91Zxi
-         Q1eqBY7MHNi5n/UC7Dng2LqvzLnjVAieZh5AvYxGYkn8NsNzvXpu8vWMl/CApYQOuUrf
-         Qr/g==
-X-Gm-Message-State: AOJu0Yy179KU7/xTtqgVFw0J0rIzS+ODZbuSVqK4Z8lz4ZxBFn0Boeo9
-	AfsEwD2FfA9wZyTt0t6h8tMaQI8=
-X-Google-Smtp-Source: AGHT+IGnmD6XCIMe/EZKQtEqPeVmzgwcfi0GavAMqiLOd1teM7yDtIh3f0wNuZUWye4WBFumI9XzkvY=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a63:4e4d:0:b0:589:86ae:2107 with SMTP id
- o13-20020a634e4d000000b0058986ae2107mr57778pgl.9.1696627076618; Fri, 06 Oct
- 2023 14:17:56 -0700 (PDT)
-Date: Fri, 6 Oct 2023 14:17:55 -0700
-In-Reply-To: <20231006201657.work.531-kees@kernel.org>
+        d=1e100.net; s=20230601; t=1696627375; x=1697232175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sGVNTkTuEhOSEasSh+f06Vtoy0x55i2wMcWJNOvGy7A=;
+        b=pSBs/QfKz0NRXZoQ7xVqYJLNiXmkdqPHE4vX3v53K3XgfHJw3oM3WV4tIbiAqJHSVg
+         s9ZhUqnzJotzqyGgzXpK62TbUVs4sKasrQrd5bKiQUe1td145eonqaR2QQOpSfveWHlE
+         GsAeGYXtPn2N3AZBk31Y9KVWr2Pmb/8eglzf/CxCCLtz/1V83QXm9w+NTqWGUBTcGlHR
+         cLE9CZr6fI/9/RriFa6uVpvvDODFXXL5mBFbwjlcHgOynPJUxJWHPLGt16lROmbd8M54
+         o2XsyT9KE2DqdOCoGgXzw2da5Ed2JczCJVp1d4Wv7hJQku2vgP+FA3AX/nekhT71S1bf
+         bG1Q==
+X-Gm-Message-State: AOJu0YziblMZWXKM4jOCsqbQXTVLFbJg3qX2U5vd6BqMOnc8xd+nS7W8
+	ryKVjDQBmEaKq79P7eXtMFCPhv63HhCzxM6hLXOX3A==
+X-Google-Smtp-Source: AGHT+IHnX81YT51zxIXl1qmhGCbeGEzay4hR/OGqRxoTUMH7ud/FezhnE2gFVlk4Zt9S1a9t+vYObTEVG+pZ/4S4UyE=
+X-Received: by 2002:a67:fe58:0:b0:44d:4c28:55ca with SMTP id
+ m24-20020a67fe58000000b0044d4c2855camr9318168vsr.16.1696627374720; Fri, 06
+ Oct 2023 14:22:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20231006201657.work.531-kees@kernel.org>
-Message-ID: <ZSB5g6CmpjS-l5nK@google.com>
-Subject: Re: [PATCH] bpf: Annotate struct bpf_stack_map with __counted_by
-From: Stanislav Fomichev <sdf@google.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, bpf@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-4-irogers@google.com>
+In-Reply-To: <20231005230851.3666908-4-irogers@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 6 Oct 2023 14:22:42 -0700
+Message-ID: <CAKwvOd=7r9v72UadbTqk1EK=kMEH3-JybkmarToCs1_ohRC1sw@mail.gmail.com>
+Subject: Re: [PATCH v2 03/18] run-clang-tools: Add pass through checks and and
+ header-filter arguments
+To: Ian Rogers <irogers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Yicong Yang <yangyicong@hisilicon.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Ming Wang <wangming01@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Sean Christopherson <seanjc@google.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Yanteng Si <siyanteng@loongson.cn>, Yuan Can <yuancan@huawei.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/06, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct bpf_stack_map.
-> 
-> Cc: Song Liu <song@kernel.org>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Yonghong Song <yonghong.song@linux.dev>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Cc: linux-hardening@vger.kernel.org
-> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
+e:
+>
+> Add a -checks argument to allow the checks passed to the clang-tool to
+> be set on the command line.
+>
+> Add a pass through -header-filter option.
+>
+> Don't run analysis on non-C or CPP files.
 
-TIL about __counted_by :-)
+Three distinct changes; I wouldn't have minded that as three distinct patch=
+es.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
-
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  kernel/bpf/stackmap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 458bb80b14d5..d6b277482085 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -28,7 +28,7 @@ struct bpf_stack_map {
->  	void *elems;
->  	struct pcpu_freelist freelist;
->  	u32 n_buckets;
-> -	struct stack_map_bucket *buckets[];
-> +	struct stack_map_bucket *buckets[] __counted_by(n_buckets);
->  };
->  
->  static inline bool stack_map_use_build_id(struct bpf_map *map)
-> -- 
-> 2.34.1
-> 
+>  scripts/clang-tools/run-clang-tools.py | 32 ++++++++++++++++++++------
+>  1 file changed, 25 insertions(+), 7 deletions(-)
+>
+> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools=
+/run-clang-tools.py
+> index 3266708a8658..f31ffd09e1ea 100755
+> --- a/scripts/clang-tools/run-clang-tools.py
+> +++ b/scripts/clang-tools/run-clang-tools.py
+> @@ -33,6 +33,11 @@ def parse_arguments():
+>      path_help =3D "Path to the compilation database to parse"
+>      parser.add_argument("path", type=3Dstr, help=3Dpath_help)
+>
+> +    checks_help =3D "Checks to pass to the analysis"
+> +    parser.add_argument("-checks", type=3Dstr, default=3DNone, help=3Dch=
+ecks_help)
+> +    header_filter_help =3D "Pass the -header-filter value to the tool"
+> +    parser.add_argument("-header-filter", type=3Dstr, default=3DNone, he=
+lp=3Dheader_filter_help)
+> +
+>      return parser.parse_args()
+>
+>
+> @@ -45,14 +50,27 @@ def init(l, a):
+>
+>  def run_analysis(entry):
+>      # Disable all checks, then re-enable the ones we want
+> -    checks =3D []
+> -    checks.append("-checks=3D-*")
+> -    if args.type =3D=3D "clang-tidy":
+> -        checks.append("linuxkernel-*")
+> +    global args
+> +    checks =3D None
+> +    if args.checks:
+> +        checks =3D args.checks.split(',')
+>      else:
+> -        checks.append("clang-analyzer-*")
+> -        checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOr=
+UnsafeBufferHandling")
+> -    p =3D subprocess.run(["clang-tidy", "-p", args.path, ",".join(checks=
+), entry["file"]],
+> +        checks =3D ["-*"]
+> +        if args.type =3D=3D "clang-tidy":
+> +            checks.append("linuxkernel-*")
+> +        else:
+> +            checks.append("clang-analyzer-*")
+> +            checks.append("-clang-analyzer-security.insecureAPI.Deprecat=
+edOrUnsafeBufferHandling")
+> +    file =3D entry["file"]
+> +    if not file.endswith(".c") and not file.endswith(".cpp"):
+> +        with lock:
+> +            print(f"Skipping non-C file: '{file}'", file=3Dsys.stderr)
+> +        return
+
+^ perhaps worth returning earlier if this guard fails? i.e.
+
+rather than do a bunch of work, then do a guard that may return early
+that doesn't depend on the earlier work, instead guard first then do
+all work.
+
+I don't mind that as a follow up rather than a whole v3 for the series.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> +    pargs =3D ["clang-tidy", "-p", args.path, "-checks=3D" + ",".join(ch=
+ecks)]
+> +    if args.header_filter:
+> +        pargs.append("-header-filter=3D" + args.header_filter)
+> +    pargs.append(file)
+> +    p =3D subprocess.run(pargs,
+>                         stdout=3Dsubprocess.PIPE,
+>                         stderr=3Dsubprocess.STDOUT,
+>                         cwd=3Dentry["directory"])
+> --
+> 2.42.0.609.gbb76f46606-goog
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
