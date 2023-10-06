@@ -1,35 +1,47 @@
-Received: from out-207.mta0.migadu.com (out-207.mta0.migadu.com [91.218.175.207])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FAF731A6F
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 17:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD3931A6F;
+	Fri,  6 Oct 2023 17:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NFVqlDcw"
-Date: Fri, 6 Oct 2023 13:32:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1696613571;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iUMRqrzp9W95pILwy96rYNmF5hIvu0nKh4XVqWJvVSc=;
-	b=NFVqlDcwNUWDo8jT9q7F9j+KLX1hUbmwWpDbz6g6QmFFw2uCJ9T/1s8Y+LDo5tNftPqdkB
-	9WHn1P6XslM4qUBwY6IQgTK86eE6M0I0l9MXwmZT8y3VhoIwz9jzP6StUedJU02/QxdsrN
-	xlctjU3lE2jpUGnG7b09S4MGHW4uTwk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Brian Foster <bfoster@redhat.com>, Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] bcachefs: Use struct_size()
-Message-ID: <20231006173247.zn4l6mwhup4bjkrf@moria.home.lan>
-References: <120b638f99b088f91d5a4491c800463c554e70b8.1696144401.git.christophe.jaillet@wanadoo.fr>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bVPS2ODc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696614267; x=1728150267;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VhHENdpgY+sILTg2ivPgyRFZ3jNbhscJkyL8yBGyQjU=;
+  b=bVPS2ODcUx4nqbEKfsvQmzWjWfiXHh7vJPJHJbrRC+GNZrM6fvCA0MMQ
+   JpOblSOM2MHDSm6I8F8QwkuFJDkb4IoKpfPMp2ebDIOxBHKKzlC29VmMA
+   VLkIMEXyHT4HKUl1VFE6cItN4HbOSgRDIXOk0xhU+/JOHxDRNXjCpnK8r
+   WfluKQ0zv7KqItra81ZI5TYY3pPAfYDbdkPEK0+7YJQ78LjShPHl+OS/Q
+   SxzNIcM4IevJeWrqlpZPp3n4eg/s9i9aSLHA0I7+fLR4/mqJE7PmmN86t
+   OfQiIiDfOJFVDkKQXFMEA9R+RNYqmbkdanleePP3/gZ/9pOTqZOwftmbi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="2399414"
+X-IronPort-AV: E=Sophos;i="6.03,204,1694761200"; 
+   d="scan'208";a="2399414"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2023 10:44:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="868417795"
+X-IronPort-AV: E=Sophos;i="6.03,204,1694761200"; 
+   d="scan'208";a="868417795"
+Received: from lkp-server01.sh.intel.com (HELO 8a3a91ad4240) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Oct 2023 10:44:25 -0700
+Received: from kbuild by 8a3a91ad4240 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qoosA-0003U7-2k;
+	Fri, 06 Oct 2023 17:44:22 +0000
+Date: Sat, 7 Oct 2023 01:43:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-omap1/timer32k.c:186: warning: cannot understand
+ function prototype: 'struct timespec64 persistent_ts; '
+Message-ID: <202310070106.8QSyJOm3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,19 +50,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <120b638f99b088f91d5a4491c800463c554e70b8.1696144401.git.christophe.jaillet@wanadoo.fr>
-X-Migadu-Flow: FLOW_OUT
 
-On Sun, Oct 01, 2023 at 09:13:54AM +0200, Christophe JAILLET wrote:
-> Use struct_size() instead of hand writing it.
-> This is less verbose and more robust.
-> 
-> While at it, prepare for the coming implementation by GCC and Clang of the
-> __counted_by attribute. Flexible array members annotated with __counted_by
-> can have their accesses bounds-checked at run-time checking via
-> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
-> strcpy/memcpy-family functions).
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   af95dc6fdc25e616051d0234aad638e15c02ec8f
+commit: d379e8899a8da1041c347ae5b792773c48a559a9 ARM: omap1: move 32k counter from plat-omap to mach-omap1
+date:   1 year, 6 months ago
+config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20231007/202310070106.8QSyJOm3-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231007/202310070106.8QSyJOm3-lkp@intel.com/reproduce)
 
-Thanks! Applied.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310070106.8QSyJOm3-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-omap1/timer32k.c:186: warning: cannot understand function prototype: 'struct timespec64 persistent_ts; '
+>> arch/arm/mach-omap1/timer32k.c:216: warning: Function parameter or member 'vbase' not described in 'omap_init_clocksource_32k'
+>> arch/arm/mach-omap1/timer32k.c:216: warning: Excess function parameter 'pbase' description in 'omap_init_clocksource_32k'
+>> arch/arm/mach-omap1/timer32k.c:216: warning: Excess function parameter 'size' description in 'omap_init_clocksource_32k'
+
+
+vim +186 arch/arm/mach-omap1/timer32k.c
+
+   178	
+   179	/**
+   180	 * omap_read_persistent_clock64 -  Return time from a persistent clock.
+   181	 *
+   182	 * Reads the time from a source which isn't disabled during PM, the
+   183	 * 32k sync timer.  Convert the cycles elapsed since last read into
+   184	 * nsecs and adds to a monotonically increasing timespec64.
+   185	 */
+ > 186	static struct timespec64 persistent_ts;
+   187	static cycles_t cycles;
+   188	static unsigned int persistent_mult, persistent_shift;
+   189	
+   190	static void omap_read_persistent_clock64(struct timespec64 *ts)
+   191	{
+   192		unsigned long long nsecs;
+   193		cycles_t last_cycles;
+   194	
+   195		last_cycles = cycles;
+   196		cycles = sync32k_cnt_reg ? readl_relaxed(sync32k_cnt_reg) : 0;
+   197	
+   198		nsecs = clocksource_cyc2ns(cycles - last_cycles,
+   199						persistent_mult, persistent_shift);
+   200	
+   201		timespec64_add_ns(&persistent_ts, nsecs);
+   202	
+   203		*ts = persistent_ts;
+   204	}
+   205	
+   206	/**
+   207	 * omap_init_clocksource_32k - setup and register counter 32k as a
+   208	 * kernel clocksource
+   209	 * @pbase: base addr of counter_32k module
+   210	 * @size: size of counter_32k to map
+   211	 *
+   212	 * Returns 0 upon success or negative error code upon failure.
+   213	 *
+   214	 */
+   215	int __init omap_init_clocksource_32k(void __iomem *vbase)
+ > 216	{
+   217		int ret;
+   218	
+   219		/*
+   220		 * 32k sync Counter IP register offsets vary between the
+   221		 * highlander version and the legacy ones.
+   222		 * The 'SCHEME' bits(30-31) of the revision register is used
+   223		 * to identify the version.
+   224		 */
+   225		if (readl_relaxed(vbase + OMAP2_32KSYNCNT_REV_OFF) &
+   226							OMAP2_32KSYNCNT_REV_SCHEME)
+   227			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_HIGH;
+   228		else
+   229			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_LOW;
+   230	
+   231		/*
+   232		 * 120000 rough estimate from the calculations in
+   233		 * __clocksource_update_freq_scale.
+   234		 */
+   235		clocks_calc_mult_shift(&persistent_mult, &persistent_shift,
+   236				32768, NSEC_PER_SEC, 120000);
+   237	
+   238		ret = clocksource_mmio_init(sync32k_cnt_reg, "32k_counter", 32768,
+   239					250, 32, clocksource_mmio_readl_up);
+   240		if (ret) {
+   241			pr_err("32k_counter: can't register clocksource\n");
+   242			return ret;
+   243		}
+   244	
+   245		sched_clock_register(omap_32k_read_sched_clock, 32, 32768);
+   246		register_persistent_clock(omap_read_persistent_clock64);
+   247		pr_info("OMAP clocksource: 32k_counter at 32768 Hz\n");
+   248	
+   249		return 0;
+   250	}
+   251	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
