@@ -1,78 +1,114 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C3438FA6
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 21:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758B638FA6
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 21:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fGF/2q8H"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-59e88a28b98so23654167b3.1
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 14:14:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NQ1MjstO"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-56fb25fdf06so2000655a12.1
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 14:17:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696626850; x=1697231650; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Nc/T8mYGdG+8ih2hLlQGq5+NcAgLXntLW2uGZP0254=;
-        b=fGF/2q8HiB0Xv0XSXbdtbil/JMlv30UXLJ3goXuX63zTym60n//S91/jPW+FV3LZut
-         ndNBixImc4NsVlKGU1lX+sY2Gq9rSP62UbZ1qtwUwlVADYHW3th5g9Hxgu3rg9/THspY
-         cIMBYkp6yw46ydoufqtphZomjqXStvQQB0dmemOrFmBcf5Hr3A+VvzBdN35dL9leh5nN
-         3Td3zQ0kdgaL4Cqt7XXsVFLulD7kM2yUx44cLsBMXPDhxh/3Qr7+J7RYnzejpdr1EQUU
-         E6P2E97Eqjq8VFKyk24AiecNk5QOZEvM+ee7DSMHC5wTQK148ero61y0cnLYOVoOPfgD
-         M7PQ==
+        d=google.com; s=20230601; t=1696627076; x=1697231876; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z8YyZNdSqKiy5DzZ/PIG6aNvb3OwzQTDwFSCpe0do0I=;
+        b=NQ1MjstONKvacZ29gnNEscyt8Zinn+/dOaMY+ri1e3YcN1b4IRMH5kp0ul++iYI+zY
+         m/mRDNHxypy4JkgZPFKsi4TszrKdMia+A1KO5cEOVsBUHmyKl6SAyopmYdMFoMByOo7t
+         u3et8kcwWAL6AkP2g692uAOTghEPmlBEoutrCYSI+Rcuk1K7NT/0di36BMT7PH4rWvXM
+         4sVI8Yfv+EAbuJNmySMEU19VARiAJwlzce41IMLr46S4tA4zYxaaQs0qrGYx5IM156g6
+         dhMK578FRZ8SH04QZKqlhyMIiL6BzvlUa8Y7Z2Xly/6odQTYHYarrQTFZs/1YsZyHbpL
+         w+bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696626850; x=1697231650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5Nc/T8mYGdG+8ih2hLlQGq5+NcAgLXntLW2uGZP0254=;
-        b=Y7AlDGQPJijprZByuWJ8Ekv/K4D9R6kmUKTbV8im4GsQQH1FDPf5wvEy0Tegv5UvRR
-         v7zs22tLlXYIPH40kZK7H59NqGX1e0wRNOorTZPyR6ncMgJjvrZ3ltiqOyp0XgD4xbRO
-         EXF3L6MYhJKFByDDhuKJHa9KrOn8Ja6bJHlEhosh8I6WpxeUwYt9+c/DoBpQg8OIgDT+
-         r+s8gjl0WQ/zZvA3xaVU5jvr1wVi2fkNvq1BKFm6j8N4H5v0SdfuXoEiYFI20g/fM3Yl
-         7zR2ZrZGqyBIirBlt/gwd5CS1eYUnfI/ndbP0zuUaGHL8jxF/UEurh2r9GwVu/yHBPuL
-         UeSQ==
-X-Gm-Message-State: AOJu0Yw8cAwRWjshR3UXk6zVW1Cu6McIaq0YYML8ryLuut2LVSf+JqYW
-	mg80v1wL4h1wSyToEI8xWkFadKACe778S/YI7RE=
-X-Google-Smtp-Source: AGHT+IF93T3qsAxAkn+t2xPXukfWdiK2UF06Y+uSH9E8CpAZtB7uhKm55ZhACUZizhnql8ASfsktQognQfG1cPb0RVA=
-X-Received: by 2002:a0d:ca0b:0:b0:586:a680:250 with SMTP id
- m11-20020a0dca0b000000b00586a6800250mr4368286ywd.5.1696626850035; Fri, 06 Oct
- 2023 14:14:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696627076; x=1697231876;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z8YyZNdSqKiy5DzZ/PIG6aNvb3OwzQTDwFSCpe0do0I=;
+        b=V0chbZxTvb7EXWqvjNup+3pIludOvTVem8x3xTBqxviyGanvKDHKiOPInnLtKCz7B8
+         YIrw6bO+tTBZmS1XDqp1sOn3piKPYiwkL8hINVdn7d1IMOOAoNxLJNzgvJVio80Z+6xZ
+         fqIXZiEA6e4rmVkAw7REet/XrextqVTrZgR/f1puf+qLCD7VGQWSLhgXuOv57Cqlg8m3
+         oHqKVCLntW5nrzIEkevTv1ley4X0vFKkphIq1iqcUHO83Vb++Wqm9N+g8yIoThh91Zxi
+         Q1eqBY7MHNi5n/UC7Dng2LqvzLnjVAieZh5AvYxGYkn8NsNzvXpu8vWMl/CApYQOuUrf
+         Qr/g==
+X-Gm-Message-State: AOJu0Yy179KU7/xTtqgVFw0J0rIzS+ODZbuSVqK4Z8lz4ZxBFn0Boeo9
+	AfsEwD2FfA9wZyTt0t6h8tMaQI8=
+X-Google-Smtp-Source: AGHT+IGnmD6XCIMe/EZKQtEqPeVmzgwcfi0GavAMqiLOd1teM7yDtIh3f0wNuZUWye4WBFumI9XzkvY=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a63:4e4d:0:b0:589:86ae:2107 with SMTP id
+ o13-20020a634e4d000000b0058986ae2107mr57778pgl.9.1696627076618; Fri, 06 Oct
+ 2023 14:17:56 -0700 (PDT)
+Date: Fri, 6 Oct 2023 14:17:55 -0700
+In-Reply-To: <20231006201657.work.531-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20231006155739.246381-1-yakoyoku@gmail.com>
-In-Reply-To: <20231006155739.246381-1-yakoyoku@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 6 Oct 2023 23:13:58 +0200
-Message-ID: <CANiq72m3mpcJfiOxaACLtyaUfBR2j8rtbLdj5eZT08zywKzCfw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] rust: crates in other kernel directories
-To: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20231006201657.work.531-kees@kernel.org>
+Message-ID: <ZSB5g6CmpjS-l5nK@google.com>
+Subject: Re: [PATCH] bpf: Annotate struct bpf_stack_map with __counted_by
+From: Stanislav Fomichev <sdf@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, bpf@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, Oct 6, 2023 at 5:57=E2=80=AFPM Martin Rodriguez Reboredo
-<yakoyoku@gmail.com> wrote:
->
-> For now I don't have a completely working example but I have an MWE as
-> following...
+On 10/06, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct bpf_stack_map.
+> 
+> Cc: Song Liu <song@kernel.org>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Yonghong Song <yonghong.song@linux.dev>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: bpf@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Thanks Martin, I appreciate it, but I don't think this would work in
-the general case we want to solve.
+TIL about __counted_by :-)
 
-I have been intending to work on this for a long time now, and I still
-mean to. Hopefully I will have some news at LPC.
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
-Cheers,
-Miguel
+> ---
+>  kernel/bpf/stackmap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 458bb80b14d5..d6b277482085 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -28,7 +28,7 @@ struct bpf_stack_map {
+>  	void *elems;
+>  	struct pcpu_freelist freelist;
+>  	u32 n_buckets;
+> -	struct stack_map_bucket *buckets[];
+> +	struct stack_map_bucket *buckets[] __counted_by(n_buckets);
+>  };
+>  
+>  static inline bool stack_map_use_build_id(struct bpf_map *map)
+> -- 
+> 2.34.1
+> 
