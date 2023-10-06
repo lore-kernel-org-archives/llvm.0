@@ -1,87 +1,125 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BCE374E7
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F493AC33
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="If16ysVo"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1c62d61dc96so19160465ad.0
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696624883; x=1697229683; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GURnAZx4gtWmv3AO8Lj9TIfuZbs5tNuLiF2FqF49VSs=;
-        b=If16ysVorLKcCA1JovgbbuzpJPUiMefpe6GR0Fme+1j9bfKRq2LurrDfMZq/vqqfvc
-         mJhFyH+P1kYDu+BK+HSPzX9oxJK0XL/7+MZFoxDKQnFVJkRedyzHKELmNfCcgXSQSLn3
-         Nm0ivM69aXyccDZL4S2HETsoDIWc4iOvz6xQg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696624883; x=1697229683;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GURnAZx4gtWmv3AO8Lj9TIfuZbs5tNuLiF2FqF49VSs=;
-        b=FQjItV6T0ysBxQYj7r6iLWOh8yIJZCOPKYkhOMFSEuBlqU8nYyD0hVG3sduw3Sof48
-         mL2S57/EqZO/ULIAq6Z993HuZHYNaaQ/LO0Hzi47YWoqQ1GEUnfL9BhGvGW/S+NsbJQu
-         QkQHaWyWfPbMQJmp3oRFp0H6DVnErKTB4w73xYmkyQtaSGFcDzAgmUFbclOghcZZzJIg
-         BC6uMlfvOPVEEcVV9z2tzYYyJCm334P5D6eSoz4CV9vxhWMYSybUa+yW45zqgGB1lNfN
-         PlKlSIpY1FUNg0KMqt5HkqaWeGhxqo/3pkG2oh4i/GorR9JWq8XHRtGQ/ij9MhrZIclr
-         DdZw==
-X-Gm-Message-State: AOJu0YzKavv3Bkj2nB/u2smOfLAVuJj34p7Z4InIDn/+aL5wqOhcjMbi
-	BuJZx5WjivKx18txaFZUxGybtQ==
-X-Google-Smtp-Source: AGHT+IGYMji8WWmS2cMJoZ5nClhJOhH5qp5E4dC5W/5rnEY2qlLb77bHw85K9B2xCd+v5N5AN6yVWQ==
-X-Received: by 2002:a17:903:25c3:b0:1c5:76b6:d4f7 with SMTP id jc3-20020a17090325c300b001c576b6d4f7mr8158493plb.36.1696624882955;
-        Fri, 06 Oct 2023 13:41:22 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t17-20020a170902e85100b001b9c5e07bc3sm4348373plg.238.2023.10.06.13.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 13:41:20 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Kees Cook <keescook@chromium.org>
-Cc: kvm@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] KVM: Annotate struct kvm_irq_routing_table with __counted_by
-Date: Fri,  6 Oct 2023 13:41:11 -0700
-Message-Id: <169662486908.2156024.3248243280882819249.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230922175121.work.660-kees@kernel.org>
-References: <20230922175121.work.660-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="ftxxo9hJ"
+Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
+	by cmsmtp with ESMTP
+	id oqqOqH0pOaLCxori0qnopJ; Fri, 06 Oct 2023 20:46:04 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id orhzq7QXqzh7corhzqFCal; Fri, 06 Oct 2023 20:46:03 +0000
+X-Authority-Analysis: v=2.4 cv=Bb3Lb5h2 c=1 sm=1 tr=0 ts=6520720b
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=Dx1Zrv+1i3YEdDUMOX3koA==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
+ a=NEAV23lmAAAA:8 a=cm27Pg_UAAAA:8 a=0yL73Cyy68KADmUz8mEA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=BRGB0NNwE8hDgjYAd2KbQaPiR2c564MmUQFT4MQXCS8=; b=ftxxo9hJw61JRpQuu6HdG7d+W4
+	bxpt7e2vZYKe3mjDxgN3zkzzvZFDmbmkvPlJZtZhCDi+QjV6zuddVimrTWiRoh00JErWaG279i52c
+	QjwhC8+7UF7RgUbL+awusED3/kBKuMP87idsx2YLTf8I0fRWq5/1baJYkJ+e9/g7vMcUXD+MdMqy0
+	xjRtCZFap4WaNWMIeTAcJBJSnCu83tGOnezwaY09s2R4UjpYFAgiXhMx55Z8g3fcFgd27CgC5RZ2v
+	0NiPIkX+8aTbOzj30hb3swM8y1gelQjdi4/ugEz/NcqGxxPOl+dlzQ9PUj1Hcy+S0XZKLbeC4Q61Z
+	dFlArn6A==;
+Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:47408 helo=[192.168.1.98])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.1)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qorhy-001Bge-23;
+	Fri, 06 Oct 2023 15:46:02 -0500
+Message-ID: <94848cc3-6f5c-46d7-8cc7-98a4f10865b3@embeddedor.com>
+Date: Fri, 6 Oct 2023 22:45:10 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] wifi: intersil: hostap: Annotate struct
+ prism2_download_data with __counted_by
+To: Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ linux-wireless@vger.kernel.org, linux-hardening@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20231006201901.work.278-kees@kernel.org>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20231006201901.work.278-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.238.9.39
+X-Source-L: No
+X-Exim-ID: 1qorhy-001Bge-23
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:47408
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfA8Tqgwjze3Ml+5S88F6kfsJ/AWlEu4Ub4mH/jT+YL3LSa4exHi5UV/DEk2YkSamoVNzYSaohLGoqBNp4Sj00/DsBwGcLyEYITI512BQVzEaQrqVQLOd
+ k1xDiTn/VUPWHcQJYs5FP4PH0Kvs/+609I/Yl/CLD4wRDmlEk9s7VCZtfauhdGGpUg5DbcPNMOD1PA1xgFFqOKcwQ6zzsGFAzGE=
 
-On Fri, 22 Sep 2023 10:51:21 -0700, Kees Cook wrote:
+
+
+On 10/6/23 22:19, Kees Cook wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct kvm_irq_routing_table.
+> As found with Coccinelle[1], add __counted_by for struct
+> prism2_download_data.
 > 
-> [...]
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Applied to for-next/hardening, thanks!
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-[1/1] KVM: Annotate struct kvm_irq_routing_table with __counted_by
-      https://git.kernel.org/kees/c/bbf75528039a
+Thanks!
+--
+Gustavo
 
-Take care,
-
--- 
-Kees Cook
-
+> ---
+>   drivers/net/wireless/intersil/hostap/hostap_wlan.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/intersil/hostap/hostap_wlan.h b/drivers/net/wireless/intersil/hostap/hostap_wlan.h
+> index c25cd21d18bd..f71c0545c0be 100644
+> --- a/drivers/net/wireless/intersil/hostap/hostap_wlan.h
+> +++ b/drivers/net/wireless/intersil/hostap/hostap_wlan.h
+> @@ -617,7 +617,7 @@ struct prism2_download_data {
+>   		u32 addr; /* wlan card address */
+>   		u32 len;
+>   		u8 *data; /* allocated data */
+> -	} data[];
+> +	} data[] __counted_by(num_areas);
+>   };
+>   
+>   
