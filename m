@@ -1,63 +1,58 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4FE43687
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:17:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDE642C18
+	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 20:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CazAdo5p"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-69af8a42066so1462673b3a.1
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:17:10 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fjPnHO66"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-69af8a42066so1462759b3a.1
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 13:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696623430; x=1697228230; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1696623438; x=1697228238; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K1eBnvmyPH2CZ9nM0L4OdqfRabPTQXIENd6RkEgpAic=;
-        b=CazAdo5p7gh+0G9/SrAnpWDrNrgn3oQdmdYiKuLhhGHHXYuNfKuuyRwIuSrWrh5W7Y
-         IFxxhKrlBTHbOYrqAxx9BWuzYs4S3quT6dcNOIDEd+W3k7v6cbrRlKEn4/+wreHi65N0
-         MdwuiQ/KUR2rv2XW2J1Y1izluqkum1z5KuNNM=
+        bh=pjnr6MIfdcujcCvyrDmadksDTc6dwprcRhGznzbOSQc=;
+        b=fjPnHO666FCumPv5lU7x2zo/w8WXUx5wsfpANTQH1Z6PmsVKef1CDsoqnkFnIoU3S9
+         QbTMD3Twz9HNdvsaqZ1g+Ht2W9rkt34FKx3Y0ZHbYi66/NfUWOQHxgGk0ggYPtK3lpC+
+         P8wLM6VwL5hBZCncIaTp+naiwJPtYkqaHsK54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696623430; x=1697228230;
+        d=1e100.net; s=20230601; t=1696623438; x=1697228238;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=K1eBnvmyPH2CZ9nM0L4OdqfRabPTQXIENd6RkEgpAic=;
-        b=gbEurpcEvBJf15n2LBGtJFQrN7fsyQ1RXz7mAmISGZmG7fzzrCxblR484N3f1qZ4Yc
-         +PdTBLxrrAr96DKYUlBkgcXl9nwd9kqw1/04EveGMHnB1tTK485j73XBqzMJSp4XOMtu
-         hj4e9G4EkfAHDOvn98xAROPsqjcHtVMOy1HSwU9uzipHbwf5Y+rJsZfY1B3IlfPs60kL
-         DhLveDCkdIPfUP+9Sut5OKTIky8GBTKB/vuv/dQENI+AOvCQwHPPADmvH/11LWXo/JGn
-         WLKRj81J6j/CMrOLb5T4tq28jqndR65FCO/MRL0o6Hf0gbyPQAm5stZZKXhG2UDAkKq0
-         +u2w==
-X-Gm-Message-State: AOJu0Yy3Fk+f24xVQ/rfLcyYYbCXjCNBrGG0RYMSrF6xop18/kLoS7f0
-	lnLe/Bk79a0IF7SFJ76AJbi4Fg==
-X-Google-Smtp-Source: AGHT+IEtlTeDLTCL/lFi+oJBgl0DcZtNH+OVNahSkKRT97SzL7fnVmB7IYgd/mR8i75HJAy9DMPCdg==
-X-Received: by 2002:a05:6a20:2451:b0:14d:5580:8ff0 with SMTP id t17-20020a056a20245100b0014d55808ff0mr10184865pzc.25.1696623430379;
-        Fri, 06 Oct 2023 13:17:10 -0700 (PDT)
+        bh=pjnr6MIfdcujcCvyrDmadksDTc6dwprcRhGznzbOSQc=;
+        b=OsP6dxGsVFBJZ9j1i9rS+gVFFM4b7iPhil8gMcSjmZOS6KcEdseJjPfsEGR2TVUXjJ
+         dhRmfUiIKD7zSoPJpPNrqw3igQz8KZFUWGI1LIEpYb/i+BOS1lpi2jx7GzX2/nznIqIw
+         BX82tPBeewrriZuDkQE+oUYUof16vCuMVDLx/F4DD0R4/Wx5WtUbEcBdROUPj4FJGj7t
+         yau6K/HX1LQYgSaIkqrH4TPBaTpt+0EmORdd3SQPCqITk7fFClDcHSF9ZpERX9V8L7bw
+         RZOoAUIiltOeY5CfeTEEMpAArmIMDA1DyCuNhyQocQlTCjSrRA5yH5yCT/S9wEt5wLfq
+         O9TQ==
+X-Gm-Message-State: AOJu0YwKxLFZIs79W7/UHXMSz/MHi1SZ5LUJ/VB5egt2MDlc9368ezhB
+	1B53TT1GfETRg2xVaXgm3HYdiA==
+X-Google-Smtp-Source: AGHT+IGhzG4GvBHXlZewAFuebmu7Hkj7yf8HoMy1nAAB2s5OGn1TAkAWTm0IKsfUQhnoYlxwPnQqsA==
+X-Received: by 2002:a05:6a20:6a11:b0:15a:1817:c493 with SMTP id p17-20020a056a206a1100b0015a1817c493mr10463727pzk.39.1696623437921;
+        Fri, 06 Oct 2023 13:17:17 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 15-20020aa7914f000000b00692c5b1a731sm1875791pfi.186.2023.10.06.13.17.09
+        by smtp.gmail.com with ESMTPSA id c9-20020aa78809000000b0068a13b0b300sm1951757pfo.11.2023.10.06.13.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 13:17:09 -0700 (PDT)
+        Fri, 06 Oct 2023 13:17:17 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
-To: Tomasz Figa <tomasz.figa@gmail.com>
+To: Ping-Ke Shih <pkshih@realtek.com>
 Cc: Kees Cook <keescook@chromium.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
+	Kalle Valo <kvalo@kernel.org>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] pinctrl: samsung: Annotate struct exynos_muxed_weint_data with __counted_by
-Date: Fri,  6 Oct 2023 13:17:07 -0700
-Message-Id: <20231006201707.work.405-kees@kernel.org>
+Subject: [PATCH] wifi: rtw89: coex: Annotate struct rtw89_btc_btf_set_slot_table with __counted_by
+Date: Fri,  6 Oct 2023 13:17:15 -0700
+Message-Id: <20231006201715.work.239-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -65,20 +60,20 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2568; i=keescook@chromium.org;
- h=from:subject:message-id; bh=lsTbTj1Qtp6GgXJHYDIN0GpRbyjpp/e7Ct6QQbjSy0Q=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlIGtDy9BWBe1i4kwKNKaTCXh1WjWe/M2wbybFm
- RGQGh5dTv+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZSBrQwAKCRCJcvTf3G3A
- JkxPEACXFEGhNrvxBkTKUfgVjkyDrnxC4WfPJdhQxqmOPOzyY7EPwkDCEoiad2SUhfNal9NNCX2
- YG6o8XD/Uh2tW7jyIlkOfT6uBfN7mpF6v8hCUD+fj68+miZhqVOIS/HHe0lZoS+pIPABq9VOexQ
- jjhxKYKoT8/9zXbQpD73TUCh9JHPIVlA3/ogT3ZoqWFJxtyNsuR//kYxSK3cTmx7KTH2cjdhNfE
- FOVAGIaap8Ql40LUwC7YnOL3GgFklirZ49tih0ydJ92l/cBHsNFOneuAL9sAORZPXrC9U3zx2wl
- 5PwxcY6gIE6Qt+/crsR7qoAO5VwSQGiDcgv/NfhyFZ8WIeDnffMI47fj8qHurqCTH2to25FGThw
- Wae7K4YrpBU7BQ1VjmJpSAT3vTjH/7gsV1m6n93iTXw6A+M8li7P5V1kpw1VTdyRmEvikJfo5SL
- HIJ89R8z5r9OZLteo3msJf6liREQIfgVYXvyAFMP5F/MRQO2jV2nRG9V9Q9epbB6SdpTjzxiO3Q
- 971qa3ROTD5xraPe3iEYKh/b5jWN9fzoYD4WWl+ptluj6FTIhL0MqsPBkRwH2EkTIYRsncnJZd+
- Yrf3FjEvpL7AzCI34QOyMBEeP2ttb4NVoGGAQWWt5I97UEdH5QyqDsOL/vI8bR3Oj3ccd8l77Eq
- 6vqzydT cWFqXEJQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1321; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=eu6W7wXw5RTTiD60SAAgUrQDRZxpZuc1EvwMJ2JgTAI=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlIGtLFrvUk7TV+fsu3RoZBXUeAY5BE45UBpI5o
+ H04FXBoP4qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZSBrSwAKCRCJcvTf3G3A
+ JkN9D/9DbkQ9s24VTWKihPeasIWSlCASR9Q6UgMN2sh4QmgFMoBiZlxb12IObvOXPnLVlYdHbmX
+ EVy9OcIWuPk43HGC3iU/j44eEHlpM/TqUYFwvguvhr8W3ZvbTF8lzfpmCs0SmJXhbFMBaZ5+mB2
+ 2qIy4G6fMNcmwLK4jH/1l5P8/Ls4R6xkfMqkDb4ibaFLM+VlsWnSEQYN7HIWR5ZiT8vPIHPAymc
+ 6mi+AVnfzirQ380CiVqi7z4Llsn8ZXvpBa7RbJc+XMfQlLESPt2LTk6gskIP+d/mAzribY7z7xF
+ UJr/yeImzGyEY+MrWTNG64p3AhBR3uTee3rMN+6QU/hQu8A9ng7ddLD+J/uVZYdOdMXqpHIQD0T
+ sKVockWMg/GUEvNzpsNb6ebVslSZXGRRCN7NKF8y7T3jNQKzxDO0dppZdThl+D9gjUNeILx4rqs
+ UWb00OkZQK2gTdUSzsm3Qy9fwl0/nCa7nwaIT86096mOrdJx+kkV23p4fujH9DXzzzuKJIrZ63h
+ 2aXKuHw1/zaTlGRFHj0yAW1UVA487R9UVz+H/dDgCooswodM7cvImtDGZvKogqwPG2ICG7pepP2
+ V75uq6CUWbyaJRKJxrdFTlZLJtnlcmkqDtyNWUN7zOI8kEGoDOLH5Ab4a73LxseCO2tTiBtgstk
+ FLmAlOo dZguPuXA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -89,60 +84,32 @@ array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
 As found with Coccinelle[1], add __counted_by for struct
-exynos_muxed_weint_data. Additionally, since the element count member
-must be set before accessing the annotated flexible array member, move
-its initialization earlier.
+rtw89_btc_btf_set_slot_table.
 
-Cc: Tomasz Figa <tomasz.figa@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Ping-Ke Shih <pkshih@realtek.com>
+Cc: Kalle Valo <kvalo@kernel.org>
 Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-gpio@vger.kernel.org
+Cc: linux-wireless@vger.kernel.org
 Cc: linux-hardening@vger.kernel.org
 Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/pinctrl/samsung/pinctrl-exynos.c | 2 +-
- drivers/pinctrl/samsung/pinctrl-exynos.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/realtek/rtw89/coex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
-index a8212fc126bf..6b58ec84e34b 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
-@@ -616,6 +616,7 @@ __init int exynos_eint_wkup_init(struct samsung_pinctrl_drv_data *d)
- 		+ muxed_banks*sizeof(struct samsung_pin_bank *), GFP_KERNEL);
- 	if (!muxed_data)
- 		return -ENOMEM;
-+	muxed_data->nr_banks = muxed_banks;
+diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
+index 4ba8b3df70ae..d66a1152c3f5 100644
+--- a/drivers/net/wireless/realtek/rtw89/coex.c
++++ b/drivers/net/wireless/realtek/rtw89/coex.c
+@@ -237,7 +237,7 @@ struct rtw89_btc_btf_set_report {
+ struct rtw89_btc_btf_set_slot_table {
+ 	u8 fver;
+ 	u8 tbl_num;
+-	u8 buf[];
++	u8 buf[] __counted_by(tbl_num);
+ } __packed;
  
- 	irq_set_chained_handler_and_data(irq, exynos_irq_demux_eint16_31,
- 					 muxed_data);
-@@ -628,7 +629,6 @@ __init int exynos_eint_wkup_init(struct samsung_pinctrl_drv_data *d)
- 
- 		muxed_data->banks[idx++] = bank;
- 	}
--	muxed_data->nr_banks = muxed_banks;
- 
- 	return 0;
- }
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/samsung/pinctrl-exynos.h
-index 7bd6d82c9f36..3ac52c2cf998 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.h
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
-@@ -159,7 +159,7 @@ struct exynos_weint_data {
-  */
- struct exynos_muxed_weint_data {
- 	unsigned int nr_banks;
--	struct samsung_pin_bank *banks[];
-+	struct samsung_pin_bank *banks[] __counted_by(nr_banks);
- };
- 
- int exynos_eint_gpio_init(struct samsung_pinctrl_drv_data *d);
+ struct rtw89_btc_btf_set_mon_reg {
 -- 
 2.34.1
 
