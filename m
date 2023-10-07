@@ -1,130 +1,103 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B916039D
-	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 00:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EkLMEP5M"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50435ad51bbso3305119e87.2
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 17:01:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696636913; x=1697241713; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vxBb/fEacQHB9wWPR/CpHe2sp5nl5oUFXbr6032DRc0=;
-        b=EkLMEP5M/yn6g9mn5FypsisTqzk44lZkZu7RgInluu60P+GXD77G7UN8JHOpLfmcZk
-         pB1XikdSGZYYlDv1VxjRWdIj8K/JCQNdKWLubdHztuqUZGHSJ4MnCYwWD3VjRA5WQdgd
-         wxcvJI02+j5rmf4fCHlS8hjWtwnLaIvp21inVudJLZ4u7vyAzwpbaPBlD1jozVHq0tOr
-         lSi0JcksGLJ7GTF36nhf4CYWzMAYqhqaQBsbozTnpwBAOXnkg1nh+pxgo7ulwDWi71zX
-         /wzXTLUFnB21qkSs7gJIKTVwEG6+Xql19PxMZekOBRFonDSDkoGlIX8TweY2FpHtS8eS
-         ITSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696636913; x=1697241713;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vxBb/fEacQHB9wWPR/CpHe2sp5nl5oUFXbr6032DRc0=;
-        b=iyFdBJ+3+ZVi+Cm4ZN4II1F0ti+td1clfJpoMeNyrnwRgCFvq4K8TnP/qP7dWskQEs
-         i0tNVlWD1ThL5KJ5ki2mUDXiXKccljS0sYa8+GVGeZO8FKUz1VilWSuENPNn6hUevkwI
-         VgCTYmy91kaQLF6VTKOxbX8M1xPQNz+nneFoVG/hXScsUw/M3VcbmViRmwVhpy2vVsed
-         Vysld0n643p1xos3hCB7WXnruxKdleIuFcNC/dN1cVi8JTC2B7cRiToZDvitJTWjb3m6
-         1kGVfGSpuh5y066c9xPUnD/oTMOqvpA6eyB5vmpMEKvZ1CznJRyPqVr+AtNK1dubwpYH
-         IVFQ==
-X-Gm-Message-State: AOJu0Yzqr1hPQyGxz+NPFLdDf/vH2DGKjw4GTZSLtidzT04sZGeGdoim
-	jdujtvCV/69TXwZFnXK21PmbxA==
-X-Google-Smtp-Source: AGHT+IHAEf2yoq/ewBVbR7rd/U7LE53ZFo8um+Ru4U3sr/d4iwC2DVJ6OZ5Ld2siYgTEFcBVVOV+Kg==
-X-Received: by 2002:a05:6512:3256:b0:4fd:c715:5667 with SMTP id c22-20020a056512325600b004fdc7155667mr6889212lfr.20.1696636913647;
-        Fri, 06 Oct 2023 17:01:53 -0700 (PDT)
-Received: from [192.168.200.173] (178235177147.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.147])
-        by smtp.gmail.com with ESMTPSA id r3-20020a056512102300b005009c4ba3f0sm480526lfr.72.2023.10.06.17.01.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Oct 2023 17:01:53 -0700 (PDT)
-Message-ID: <1d6f2ea9-d2bf-472d-98eb-1b711211ab59@linaro.org>
-Date: Sat, 7 Oct 2023 02:01:50 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C731360
+	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 01:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3971KhZN22568955, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 3971KhZN22568955
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 7 Oct 2023 09:20:43 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Sat, 7 Oct 2023 09:20:44 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Sat, 7 Oct 2023 09:20:43 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Sat, 7 Oct 2023 09:20:43 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: "keescook@chromium.org" <keescook@chromium.org>
+CC: "kvalo@kernel.org" <kvalo@kernel.org>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org"
+	<linux-wireless@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com"
+	<ndesaulniers@google.com>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>
+Subject: Re: [PATCH] wifi: rtw89: coex: Annotate struct rtw89_btc_btf_set_slot_table with __counted_by
+Thread-Topic: [PATCH] wifi: rtw89: coex: Annotate struct
+ rtw89_btc_btf_set_slot_table with __counted_by
+Thread-Index: AQHZ+JIdINNFwhWCA0q/Xu1rquYi7LA9Aa0A
+Date: Sat, 7 Oct 2023 01:20:43 +0000
+Message-ID: <4716f3c7bf3d34ea25229edd5250f5f0cff639d8.camel@realtek.com>
+References: <20231006201715.work.239-kees@kernel.org>
+In-Reply-To: <20231006201715.work.239-kees@kernel.org>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [125.224.81.64]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <055816771E1C154CA2754D4B6C70B030@realtek.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V14 3/4] dt-bindings: mfd: qcom,tcsr: Add simple-mfd
- support for IPQ6018
-Content-Language: en-US
-To: Devi Priya <quic_devipriy@quicinc.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, agross@kernel.org,
- andersson@kernel.org, lee@kernel.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
- baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Cc: linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
- nathan@kernel.org
-References: <20231005033053.2626465-1-quic_devipriy@quicinc.com>
- <20231005033053.2626465-4-quic_devipriy@quicinc.com>
- <cfbc4805-c2e8-4dee-92bc-14d805dc2320@linaro.org>
- <cc5fef7a-d4d1-d725-36a5-86183bacc5a0@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
- BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
- HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
- TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
- zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
- MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
- t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
- UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
- aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
- kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
- Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
- R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
- BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
- yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
- xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
- 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
- GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
- mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
- x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
- BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
- mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
- Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
- xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
- AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
- 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
- jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
- cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
- jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
- cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
- bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
- YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
- bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
- nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
- izWDgYvmBE8=
-In-Reply-To: <cc5fef7a-d4d1-d725-36a5-86183bacc5a0@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-On 5.10.2023 09:36, Devi Priya wrote:
-> 
-> 
-> On 10/5/2023 1:04 PM, Krzysztof Kozlowski wrote:
->> On 05/10/2023 05:30, Devi Priya wrote:
->>> Update the binding to include pwm as the child node to TCSR block and
->>> add simple-mfd support for IPQ6018.
->>>
->>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>
->> Why did you send it twice? It's just brings confusion...
-> 
-> Sorry, kindly ignore. As the patches were not delivered to the list,
-> tried sending it again.
-In such cases, you should include RESEND in the subjects, like
-this:
-
-[RESEND PATCH v6 17/17] media: qcom: camss: Comment CSID dt_id field
-
-Konrad
+T24gRnJpLCAyMDIzLTEwLTA2IGF0IDEzOjE3IC0wNzAwLCBLZWVzIENvb2sgd3JvdGU6DQo+IA0K
+PiBQcmVwYXJlIGZvciB0aGUgY29taW5nIGltcGxlbWVudGF0aW9uIGJ5IEdDQyBhbmQgQ2xhbmcg
+b2YgdGhlIF9fY291bnRlZF9ieQ0KPiBhdHRyaWJ1dGUuIEZsZXhpYmxlIGFycmF5IG1lbWJlcnMg
+YW5ub3RhdGVkIHdpdGggX19jb3VudGVkX2J5IGNhbiBoYXZlDQo+IHRoZWlyIGFjY2Vzc2VzIGJv
+dW5kcy1jaGVja2VkIGF0IHJ1bi10aW1lIHZpYSBDT05GSUdfVUJTQU5fQk9VTkRTIChmb3INCj4g
+YXJyYXkgaW5kZXhpbmcpIGFuZCBDT05GSUdfRk9SVElGWV9TT1VSQ0UgKGZvciBzdHJjcHkvbWVt
+Y3B5LWZhbWlseQ0KPiBmdW5jdGlvbnMpLg0KPiANCj4gQXMgZm91bmQgd2l0aCBDb2NjaW5lbGxl
+WzFdLCBhZGQgX19jb3VudGVkX2J5IGZvciBzdHJ1Y3QNCj4gcnR3ODlfYnRjX2J0Zl9zZXRfc2xv
+dF90YWJsZS4NCj4gDQo+IENjOiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFsdGVrLmNvbT4NCj4g
+Q2M6IEthbGxlIFZhbG8gPGt2YWxvQGtlcm5lbC5vcmc+DQo+IENjOiAiR3VzdGF2byBBLiBSLiBT
+aWx2YSIgPGd1c3Rhdm9hcnNAa2VybmVsLm9yZz4NCj4gQ2M6IGxpbnV4LXdpcmVsZXNzQHZnZXIu
+a2VybmVsLm9yZw0KPiBDYzogbGludXgtaGFyZGVuaW5nQHZnZXIua2VybmVsLm9yZw0KPiBMaW5r
+OiBodHRwczovL2dpdGh1Yi5jb20va2Vlcy9rZXJuZWwtdG9vbHMvYmxvYi90cnVuay9jb2NjaW5l
+bGxlL2V4YW1wbGVzL2NvdW50ZWRfYnkuY29jY2kgWzFdDQo+IFNpZ25lZC1vZmYtYnk6IEtlZXMg
+Q29vayA8a2Vlc2Nvb2tAY2hyb21pdW0ub3JnPg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L3dpcmVs
+ZXNzL3JlYWx0ZWsvcnR3ODkvY29leC5jIHwgMiArLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5z
+ZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvcmVhbHRlay9ydHc4OS9jb2V4LmMgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFs
+dGVrL3J0dzg5L2NvZXguYw0KPiBpbmRleCA0YmE4YjNkZjcwYWUuLmQ2NmExMTUyYzNmNSAxMDA2
+NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OS9jb2V4LmMNCj4g
+KysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OS9jb2V4LmMNCj4gQEAgLTIz
+Nyw3ICsyMzcsNyBAQCBzdHJ1Y3QgcnR3ODlfYnRjX2J0Zl9zZXRfcmVwb3J0IHsNCj4gIHN0cnVj
+dCBydHc4OV9idGNfYnRmX3NldF9zbG90X3RhYmxlIHsNCj4gICAgICAgICB1OCBmdmVyOw0KPiAg
+ICAgICAgIHU4IHRibF9udW07DQo+IC0gICAgICAgdTggYnVmW107DQo+ICsgICAgICAgdTggYnVm
+W10gX19jb3VudGVkX2J5KHRibF9udW0pOw0KDQpUaGlzIHN0cnVjdCBpc24ndCBkZWZpbmVkIHBy
+b3Blcmx5LiBJdCBzaG91bGQgYmUgDQoNCnN0cnVjdCBydHc4OV9idGNfYnRmX3NldF9zbG90X3Rh
+YmxlIHsNCgl1OCBmdmVyOw0KCXU4IHRibF9udW07DQoJc3RydWN0IHJ0dzg5X2J0Y19mYnRjX3Ns
+b3QgdGJsW10gX19jb3VudGVkX2J5KHRibF9udW0pOw0KfSBfX3BhY2tlZDsNCg0KQW5kLCB3ZSBz
+aG91bGQgbW9kaWZ5IHJ0dzg5X2J0Y19md19zZXRfc2xvdHMoKSBhcyB3ZWxsLiANCg0KQW5vdGhl
+ciBzdHJ1Y3QgJ3J0dzg5X2J0Y19idGZfc2V0X21vbl9yZWcnIGhhcyBzaW1pbGFyIHByb2JsZW0u
+DQoNClNvLCBOQUNLIHRoaXMgcGF0Y2guIEkgd2lsbCBwcmVwYXJlIG9uZSBvciB0d28gcGF0Y2hl
+cyBmb3IgdGhlbSBuZXh0IHdlZWsuIA0KDQpCeSB0aGUgd2F5LCBJIGhhdmUgcXVlc3Rpb24gYWJv
+dXQgX19jb3VudGVkX2J5KCkuIENhbiBJIGFwcGx5IGl0IHRvIGxpdHRsZS9iaWctDQplbmRpYW4g
+J251bSc/IExpa2UNCg0Kc3RydWN0IGZvbyB7DQoJLi4uDQoJX19sZTMyIG51bTsNCglfX2xlMzIg
+ZGF0YVtdIF9fY291bnRlZF9ieShudW0pOw0KfQ0KDQoNCj4gIH0gX19wYWNrZWQ7DQo+IA0KPiAg
+c3RydWN0IHJ0dzg5X2J0Y19idGZfc2V0X21vbl9yZWcgew0KPiAtLQ0KPiAyLjM0LjENCj4gDQoN
+Cg0KDQo=
