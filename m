@@ -1,70 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BA917FC;
-	Sat,  7 Oct 2023 03:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nai38z5t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1D1C433C8;
-	Sat,  7 Oct 2023 03:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696650213;
-	bh=/XnJFcvVU6ZpIin+GOGN2gLHcNQTV4L7LTIlpf+1yQY=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=nai38z5tQi/p+Yb92wCONFYch2eSpqfHrzRMrnJ7iVeumcdV887o0orT0t+lcNxbD
-	 i40XIhm1BvRGR2ZMm9DH7dxV++olEpvAkXVd2E4mYUe8BtD/3KIZunE3wZ200+FA4e
-	 BVzRxvSlnUrshY2lDc56P5Hdequv+9GOndP7+nYDi1H3p7tMgPUekIdu2PwlCkjMAH
-	 KJ956YKUgrVkzSVW8EgLKj7UAnqXalGPoLumnXY8f5ot1+bmNpwT0pPydbsN+uByu4
-	 U3sdDb8y3JeAf6SLYC8az7syBFG43FhZ4FKz8XJST4Ym/fAmRDep1oEenb1kvF2zue
-	 xGX8o2/Ru1yfg==
-From: Kalle Valo <kvalo@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Felix Fietkau <nbd@nbd.name>,  Lorenzo Bianconi <lorenzo@kernel.org>,
-  Ryder Lee <ryder.lee@mediatek.com>,  Shayne Chen
- <shayne.chen@mediatek.com>,  Sean Wang <sean.wang@mediatek.com>,  Matthias
- Brugger <matthias.bgg@gmail.com>,  AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>,
-  linux-wireless@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
-  linux-mediatek@lists.infradead.org,  Nathan Chancellor
- <nathan@kernel.org>,  Nick Desaulniers <ndesaulniers@google.com>,  Tom Rix
- <trix@redhat.com>,  linux-kernel@vger.kernel.org,  llvm@lists.linux.dev,
-  linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] wifi: mt76: Annotate struct mt76_rx_tid with __counted_by
-References: <20230915200612.never.786-kees@kernel.org>
-	<202310061320.8630F7E51@keescook>
-Date: Sat, 07 Oct 2023 06:45:52 +0300
-In-Reply-To: <202310061320.8630F7E51@keescook> (Kees Cook's message of "Fri, 6
-	Oct 2023 13:21:13 -0700")
-Message-ID: <87cyxrgknj.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70C5168BA;
+	Sat,  7 Oct 2023 09:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31520C433C8;
+	Sat,  7 Oct 2023 09:21:27 +0000 (UTC)
+Message-ID: <eeeb183e-f6ed-4158-8852-04da5e452d9b@xs4all.nl>
+Date: Sat, 7 Oct 2023 11:21:26 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: v4l2-event: Annotate struct v4l2_subscribed_event
+ with __counted_by
+Content-Language: en-US, nl
+To: Kees Cook <keescook@chromium.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: lijian <lijian@yulong.com>, linux-media@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20230922174951.work.160-kees@kernel.org>
+ <169662411867.2154917.2192633783167073007.b4-ty@chromium.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <169662411867.2154917.2192633783167073007.b4-ty@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Kees Cook <keescook@chromium.org> writes:
-
-> On Fri, Sep 15, 2023 at 01:06:12PM -0700, Kees Cook wrote:
+On 06/10/2023 22:28, Kees Cook wrote:
+> On Fri, 22 Sep 2023 10:49:52 -0700, Kees Cook wrote:
 >> Prepare for the coming implementation by GCC and Clang of the __counted_by
 >> attribute. Flexible array members annotated with __counted_by can have
 >> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 >> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 >> functions).
->> 
->> As found with Coccinelle[1], add __counted_by for struct mt76_rx_tid.
->
-> Friendly ping. Can this get picked up by the wifi tree, or should it go
-> via something else?
+>>
+>> As found with Coccinelle[1], add __counted_by for struct v4l2_subscribed_event.
+>> Additionally, since the element count member must be set before accessing
+>> the annotated flexible array member, move its initialization earlier.
+>>
+>> [...]
+> 
+> Since this is a trivial change and it's been 2 week without further
+> discussion, I'll snag this patch.
 
-It's already in mt76 pull request and should be in wireless-next next
-week:
+Ah, I picked this up for media as well. Same for the other patch.
+You should have gotten an email from patchwork on Oct 3 that it was accepted.
 
-https://patchwork.kernel.org/project/linux-wireless/patch/a5a2baaa-0db4-403e-9ebd-a7ff089675b4@nbd.name/
+I think I should be more pro-active and reply when I pick up patches from
+non-media developers instead of relying on patchwork. It seems that it is
+easy to miss emails from patchwork.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Regards,
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+	Hans
+
+> 
+> Applied to for-next/hardening, thanks!
+> 
+> [1/1] media: v4l2-event: Annotate struct v4l2_subscribed_event with __counted_by
+>       https://git.kernel.org/kees/c/b1a20bbd4687
+> 
+> Take care,
+> 
+
