@@ -1,95 +1,89 @@
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071B53D82
-	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 14:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2D229428
+	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 15:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="aaTGehvo"
-Received: from pop-os.home ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id p8M7q9ALBzRICp8M7qMa0a; Sat, 07 Oct 2023 16:32:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1696689156;
-	bh=MjiCcPHgIztJA3fnnekG+6x6iUsfkXWEmL8zOsP0oyA=;
-	h=From:To:Cc:Subject:Date;
-	b=aaTGehvocX9wx7mzR++6IjvE/DnvOr1TK37GENxTG7UcuGGj71s15N9fuweFAnxxI
-	 ESKXegYY0HxgSvoQRDsUPvuPSW94PdhLG0UFGRucogB/jIThA0DThR8TbAWUEhnqIl
-	 26R7DE6KcGns2SgqBf9EnJQky6wt4TVQnHPjiSiRPCBw5yI0xWJ6jnblqxZwpIn0Qt
-	 FOWsYidbppIjC6EYKl+1Hkda0hbZqfdw0FgIVGY/Dzwt7D4JpP6DCAGUPFxSUmlFAI
-	 AhAlenwT1BDhFtdxtXbNTiZUZ2RB8kvdPktkfqSoBnmQL+Q8GANy/OroO97bNapOIh
-	 RC2t7Cv91bz3Q==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 07 Oct 2023 16:32:36 +0200
-X-ME-IP: 86.243.2.178
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Bryan Tan <bryantan@vmware.com>,
-	Vishnu Dasa <vdasa@vmware.com>,
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] VMCI: Annotate struct vmci_handle_arr with __counted_by
-Date: Sat,  7 Oct 2023 16:32:34 +0200
-Message-Id: <56bef519d982218176b59bbba64a3a308d8733d5.1696689091.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JmTczBYx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F28C43395
+	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 15:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696693102;
+	bh=9RxkWlQoVdIXC1kqthSAlbAWe5HDp6fdl+KbwgqaPQA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JmTczBYxUclmMypR5UJkRc2/LgJ6+KWaUof6cuKd+k6x7+b2EUZ8gPxeh75v3U41L
+	 qkqPe+YsDwPJXOldm/WFJg4UTwwlJdmAYFKGYAM9UOOXkSFIkQKgE/6Fi2WyeGD4Wc
+	 yr2Y2Ga+8qbdrmGKZQNNKbS2yONQt1nt8RNHnur9YhniSJCYcvVbJuUw0HikESU8ZJ
+	 +iPD3inze4KRTPDlpVgxhkc+xsaen8rSVSwVUjFkYvW0rLXnW/hVMxPfP+HkU405Rn
+	 kX8VpcrgVPLXgsMJ2ZsgAWJG0/N1C8ohcl6b2HRewTrgRB9Bj2E795vzvp3Q34S1tK
+	 CjUAU9sugmu4Q==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1e113555a47so2020930fac.2
+        for <llvm@lists.linux.dev>; Sat, 07 Oct 2023 08:38:22 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yw/7j7mQs5AS2NHFseKmXCP/wLtlFyiXzcGXSAK7NYOj7IvaZOa
+	DalPVSGCO7iNnwBN9DM2BCu1IWCthmSIsOeWBQQ=
+X-Google-Smtp-Source: AGHT+IFjx6hBQQR76o5ah5rxZqz3wBxxDJuAHX1t4tCqPwUAXWHZTp/T+cfuRstjJssObOSnrdbHZUeMNYmK0l07/Ow=
+X-Received: by 2002:a05:6870:4710:b0:1d5:cba4:a6f6 with SMTP id
+ b16-20020a056870471000b001d5cba4a6f6mr13705200oaq.6.1696693101851; Sat, 07
+ Oct 2023 08:38:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231005214057.759089-1-mmaurer@google.com>
+In-Reply-To: <20231005214057.759089-1-mmaurer@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 8 Oct 2023 00:37:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATBBk-a0EJcxpWGJ9n+9BHQUw3a4s41LTtC-R8fYrVMpw@mail.gmail.com>
+Message-ID: <CAK7LNATBBk-a0EJcxpWGJ9n+9BHQUw3a4s41LTtC-R8fYrVMpw@mail.gmail.com>
+Subject: Re: [PATCH v4] rust: Respect HOSTCC when linking for host
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+On Fri, Oct 6, 2023 at 6:41=E2=80=AFAM Matthew Maurer <mmaurer@google.com> =
+wrote:
+>
+> Currently, rustc defaults to invoking `cc`, even if `HOSTCC` is defined,
+> resulting in build failures in hermetic environments where `cc` does not
+> exist. This includes both hostprogs and proc-macros.
+>
+> Since we are setting the linker to `HOSTCC`, we set the linker flavor to
+> `gcc` explicitly. The linker-flavor selects both which linker to search
+> for if the linker is unset, and which kind of linker flags to pass.
+> Without this flag, `rustc` would attempt to determine which flags to
+> pass based on the name of the binary passed as `HOSTCC`. `gcc` is the
+> name of the linker-flavor used by `rustc` for all C compilers, including
+> both `gcc` and `clang`.
+>
+> Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> ---
+>
+> Edited to use escsq in both Makefiles, as per Masahiro Yamada's
+> suggestion.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is part of a work done in parallel of what is currently worked
-on by Kees Cook.
 
-My patches are only related to corner cases that do NOT match the
-semantic of his Coccinelle script[1].
 
-In this case, something similar to struct_size() is implemented in
-handle_arr_calc_size().
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Note that I'm slightly unsure on how things will behave in regards to the
-krealloc() in vmci_handle_arr_append_entry().
+if Miguel picked this up.
 
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
----
- drivers/misc/vmw_vmci/vmci_handle_array.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/misc/vmw_vmci/vmci_handle_array.h b/drivers/misc/vmw_vmci/vmci_handle_array.h
-index 96193f85be5b..b0e6b1956014 100644
---- a/drivers/misc/vmw_vmci/vmci_handle_array.h
-+++ b/drivers/misc/vmw_vmci/vmci_handle_array.h
-@@ -17,7 +17,7 @@ struct vmci_handle_arr {
- 	u32 max_capacity;
- 	u32 size;
- 	u32 pad;
--	struct vmci_handle entries[];
-+	struct vmci_handle entries[] __counted_by(capacity);
- };
- 
- #define VMCI_HANDLE_ARRAY_HEADER_SIZE				\
--- 
-2.34.1
+Please let me know if I should pick this up.
 
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
