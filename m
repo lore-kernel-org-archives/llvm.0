@@ -1,64 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F74171AF
-	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 09:56:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B241802D
+	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 11:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rVCTmleu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC631C433C8;
-	Sat,  7 Oct 2023 09:56:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696672572;
-	bh=cjSdvgy+F3bHC3Fhr8uA8IIadAj6KK16Go6VF12lU2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rVCTmleuVvB22ihcWk3W/QbC/+xIuFctv++xzEOPVxIs9jR7W+lhvBfwcMXOGi5Iv
-	 KOS66jaEybXkUmgxUtDOFGGNhZo2fO6t2nE2xstK+zepuG8MXM4jj5E8Fxb2HEg5hb
-	 giXyywUTzTUIej41T42iTl3uBRcfmWz78lVtDP+k=
-Date: Sat, 7 Oct 2023 11:56:08 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-mediatek@lists.infradead.org, stable@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="pa0Ht/+k"
+Received: from pop-os.home ([86.243.2.178])
+	by smtp.orange.fr with ESMTPA
+	id p5FLqUFvtkkaep5FPqw9oL; Sat, 07 Oct 2023 13:13:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1696677208;
+	bh=SyXlzkufD32ONJRqEUudpUaKb11ktLKN0H131JCB37s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=pa0Ht/+kirGb8FefDOjnr78UXIM/jKWvkUJW1HqJ1jqV7PCngyX3to4Qwqebkgm9K
+	 3keqCckP+l0pg1CZP9QpPxdvHMzp3RoDABNokHmtkj1SUaK2ZyKJV7/oknFCxppc46
+	 kzzfVDxSvYGwDoTWHYd54DNXfyDKjuC3mPB6jbK2jKFqomJRipzuC2iwChQczE8MxN
+	 YyBDLqCvyKmJQv9dQjlhwHIzLY2vGzlmlUh2waj4iT8JTurRZuc5uvUMuLi14Jki8C
+	 rfo7eAe+o2iy++uI6XfvE26dIt5fRBM1g1p6lAkk2tGCrKpszW9ummZdTZliNSyY2N
+	 ff9FzmYcnxY8w==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 07 Oct 2023 13:13:28 +0200
+X-ME-IP: 86.243.2.178
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: keescook@chromium.org,
+	gustavoars@kernel.org,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Vinod Koul <vkoul@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-arm-kernel@lists.infradead.org,
+	dmaengine@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH 5.10] drm/mediatek: Fix backport issue in
- mtk_drm_gem_prime_vmap()
-Message-ID: <2023100700-cosponsor-risotto-2a0a@gregkh>
-References: <20230922-5-10-fix-drm-mediatek-backport-v1-1-912d76cd4a96@kernel.org>
+Subject: [PATCH 2/2] dmaengine: pxa_dma: Annotate struct pxad_desc_sw with __counted_by
+Date: Sat,  7 Oct 2023 13:13:10 +0200
+Message-Id: <1c9ef22826f449a3756bb13a83494e9fe3e0be8b.1696676782.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <c8fc5563c9593c914fde41f0f7d1489a21b45a9a.1696676782.git.christophe.jaillet@wanadoo.fr>
+References: <c8fc5563c9593c914fde41f0f7d1489a21b45a9a.1696676782.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230922-5-10-fix-drm-mediatek-backport-v1-1-912d76cd4a96@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 22, 2023 at 08:51:17AM -0700, Nathan Chancellor wrote:
-> When building with clang:
-> 
->   drivers/gpu/drm/mediatek/mtk_drm_gem.c:255:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
->     255 |                 return -ENOMEM;
->         |                        ^~~~~~~
->   1 error generated.
-> 
-> GCC reports the same issue as a warning, rather than an error.
-> 
-> Prior to commit 7e542ff8b463 ("drm/mediatek: Use struct dma_buf_map in
-> GEM vmap ops"), this function returned a pointer rather than an integer.
-> This function is indirectly called in drm_gem_vmap(), which treats NULL
-> as -ENOMEM through an error pointer. Return NULL in this block to
-> resolve the warning but keep the same end result.
-> 
-> Fixes: 43f561e809aa ("drm/mediatek: Fix potential memory leak if vmap() fail")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> This is a fix for a 5.10 backport, so it has no upstream relevance but
-> I've still cc'd the relevant maintainers in case they have any comments
-> or want to double check my work.
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-Now queued up, thanks.
+To do so, the code needs a little shuffling related to how hw_desc is used
+and nb_desc incremented.
 
-greg k-h
+The one by one increment is needed for the error handling path, calling
+pxad_free_desc(), to work correctly.
+
+So, add a new intermediate variable, desc, to store the result of the
+dma_pool_alloc() call.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is part of a work done in parallel of what is currently worked
+on by Kees Cook.
+
+My patches are only related to corner cases that do NOT match the
+semantic of his Coccinelle script[1].
+
+[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+---
+ drivers/dma/pxa_dma.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/dma/pxa_dma.c b/drivers/dma/pxa_dma.c
+index 94cef2905940..c6e2862896e3 100644
+--- a/drivers/dma/pxa_dma.c
++++ b/drivers/dma/pxa_dma.c
+@@ -91,7 +91,8 @@ struct pxad_desc_sw {
+ 	bool			cyclic;
+ 	struct dma_pool		*desc_pool;	/* Channel's used allocator */
+ 
+-	struct pxad_desc_hw	*hw_desc[];	/* DMA coherent descriptors */
++	struct pxad_desc_hw	*hw_desc[] __counted_by(nb_desc);
++						/* DMA coherent descriptors */
+ };
+ 
+ struct pxad_phy {
+@@ -739,6 +740,7 @@ pxad_alloc_desc(struct pxad_chan *chan, unsigned int nb_hw_desc)
+ {
+ 	struct pxad_desc_sw *sw_desc;
+ 	dma_addr_t dma;
++	void *desc;
+ 	int i;
+ 
+ 	sw_desc = kzalloc(struct_size(sw_desc, hw_desc, nb_hw_desc),
+@@ -748,20 +750,21 @@ pxad_alloc_desc(struct pxad_chan *chan, unsigned int nb_hw_desc)
+ 	sw_desc->desc_pool = chan->desc_pool;
+ 
+ 	for (i = 0; i < nb_hw_desc; i++) {
+-		sw_desc->hw_desc[i] = dma_pool_alloc(sw_desc->desc_pool,
+-						     GFP_NOWAIT, &dma);
+-		if (!sw_desc->hw_desc[i]) {
++		desc = dma_pool_alloc(sw_desc->desc_pool, GFP_NOWAIT, &dma);
++		if (!desc) {
+ 			dev_err(&chan->vc.chan.dev->device,
+ 				"%s(): Couldn't allocate the %dth hw_desc from dma_pool %p\n",
+ 				__func__, i, sw_desc->desc_pool);
+ 			goto err;
+ 		}
+ 
++		sw_desc->nb_desc++;
++		sw_desc->hw_desc[i] = desc;
++
+ 		if (i == 0)
+ 			sw_desc->first = dma;
+ 		else
+ 			sw_desc->hw_desc[i - 1]->ddadr = dma;
+-		sw_desc->nb_desc++;
+ 	}
+ 
+ 	return sw_desc;
+-- 
+2.34.1
+
