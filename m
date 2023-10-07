@@ -1,49 +1,49 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EC644487
-	for <llvm@lists.linux.dev>; Fri,  6 Oct 2023 23:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B916039D
+	for <llvm@lists.linux.dev>; Sat,  7 Oct 2023 00:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiwtbWbm"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-692c70bc440so2280243b3a.3
-        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 16:07:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EkLMEP5M"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50435ad51bbso3305119e87.2
+        for <llvm@lists.linux.dev>; Fri, 06 Oct 2023 17:01:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696633649; x=1697238449; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1696636913; x=1697241713; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GKyvM6ylbhTdR67AI9jZVPgkogDuDD04vi10dphci88=;
-        b=FiwtbWbmPZ6+Mkh9n41myEbuQD0GZTWHjf/tlMCAlnGeaw2Xh4zR6lHgwIG+VV5HR+
-         9qNKA9U83gPfymjnOmzo7D9XxipUZAv8lpI9+aRW4E0It49Ekb0aEuXt1eB4XJk1PQPT
-         TkhYO9XJ6IFNTJBcYU9ANyIE2C2KLT5qVITiiAkHXb5iQ5HThomL8zWul3PJPp4jBnST
-         RA78hWA5VhccG/fJXx01ymVZGAkbehQjSJoBzS+EFWVROfrJs1SQTKxEJQFwQFKmcCoU
-         9kST3lLooHpXIgWxOwTDff3VJwuLeAXpTAaL5Ct2xb0qOocNyd8tKZzFZjDQupUj61vo
-         c8HA==
+        bh=vxBb/fEacQHB9wWPR/CpHe2sp5nl5oUFXbr6032DRc0=;
+        b=EkLMEP5M/yn6g9mn5FypsisTqzk44lZkZu7RgInluu60P+GXD77G7UN8JHOpLfmcZk
+         pB1XikdSGZYYlDv1VxjRWdIj8K/JCQNdKWLubdHztuqUZGHSJ4MnCYwWD3VjRA5WQdgd
+         wxcvJI02+j5rmf4fCHlS8hjWtwnLaIvp21inVudJLZ4u7vyAzwpbaPBlD1jozVHq0tOr
+         lSi0JcksGLJ7GTF36nhf4CYWzMAYqhqaQBsbozTnpwBAOXnkg1nh+pxgo7ulwDWi71zX
+         /wzXTLUFnB21qkSs7gJIKTVwEG6+Xql19PxMZekOBRFonDSDkoGlIX8TweY2FpHtS8eS
+         ITSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696633649; x=1697238449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1696636913; x=1697241713;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKyvM6ylbhTdR67AI9jZVPgkogDuDD04vi10dphci88=;
-        b=e6baOdf5EkiMxOu40oiWxVT4wCIzCMWMrQRQguNowYAzLOJd4S5ceNOtDHbFMml9yD
-         j/18Rh1dO2QT98tIFIqSm3hqebfiZoSEYS4WPFS4JercV5cya3kIwH+x1PYZ0zKk5aHn
-         1pJi8LA+MpEYdl3cpcE42g3vcXdhUM8vDJzkA59KUjWoWWeAjblDR2pMjC7lH1+9UtGf
-         jVWv52JGg1fb+b7CgTLwh7viIfKYYlB9RH5pPU5V7Fxp0aYZVZeNEmQMG7jSAyFoBtPL
-         JTe2bm71Fql8zyDVcVL7udWpH1uVm6ElM9cjTYSFKHEBKiHM0maA91fgeov55otKABXH
-         uDag==
-X-Gm-Message-State: AOJu0Yzb/cmmjOSpTROY5OYl1oH8QzMO15x5es8yNOso4QvYFiXatMzD
-	4xdTvyhaSTaoMMVaY1NZs1I=
-X-Google-Smtp-Source: AGHT+IHODLwNnd6ydPyKfu0PfI5BXRnfHFd+3Nc0BcuTy0VSSA+2tTY1JaCstzJ379/39+3oCP6YaQ==
-X-Received: by 2002:a05:6a20:a11f:b0:163:4288:1c3d with SMTP id q31-20020a056a20a11f00b0016342881c3dmr10646062pzk.43.1696633649083;
-        Fri, 06 Oct 2023 16:07:29 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c24600b001b89a6164desm4498195plg.118.2023.10.06.16.07.25
+        bh=vxBb/fEacQHB9wWPR/CpHe2sp5nl5oUFXbr6032DRc0=;
+        b=iyFdBJ+3+ZVi+Cm4ZN4II1F0ti+td1clfJpoMeNyrnwRgCFvq4K8TnP/qP7dWskQEs
+         i0tNVlWD1ThL5KJ5ki2mUDXiXKccljS0sYa8+GVGeZO8FKUz1VilWSuENPNn6hUevkwI
+         VgCTYmy91kaQLF6VTKOxbX8M1xPQNz+nneFoVG/hXScsUw/M3VcbmViRmwVhpy2vVsed
+         Vysld0n643p1xos3hCB7WXnruxKdleIuFcNC/dN1cVi8JTC2B7cRiToZDvitJTWjb3m6
+         1kGVfGSpuh5y066c9xPUnD/oTMOqvpA6eyB5vmpMEKvZ1CznJRyPqVr+AtNK1dubwpYH
+         IVFQ==
+X-Gm-Message-State: AOJu0Yzqr1hPQyGxz+NPFLdDf/vH2DGKjw4GTZSLtidzT04sZGeGdoim
+	jdujtvCV/69TXwZFnXK21PmbxA==
+X-Google-Smtp-Source: AGHT+IHAEf2yoq/ewBVbR7rd/U7LE53ZFo8um+Ru4U3sr/d4iwC2DVJ6OZ5Ld2siYgTEFcBVVOV+Kg==
+X-Received: by 2002:a05:6512:3256:b0:4fd:c715:5667 with SMTP id c22-20020a056512325600b004fdc7155667mr6889212lfr.20.1696636913647;
+        Fri, 06 Oct 2023 17:01:53 -0700 (PDT)
+Received: from [192.168.200.173] (178235177147.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.147])
+        by smtp.gmail.com with ESMTPSA id r3-20020a056512102300b005009c4ba3f0sm480526lfr.72.2023.10.06.17.01.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Oct 2023 16:07:28 -0700 (PDT)
-Message-ID: <ca2cd71c-0aa1-4365-961c-c10737a9e9a6@gmail.com>
-Date: Fri, 6 Oct 2023 20:07:23 -0300
+        Fri, 06 Oct 2023 17:01:53 -0700 (PDT)
+Message-ID: <1d6f2ea9-d2bf-472d-98eb-1b711211ab59@linaro.org>
+Date: Sat, 7 Oct 2023 02:01:50 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,43 +51,80 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/1] rust: crates in other kernel directories
+Subject: Re: [PATCH V14 3/4] dt-bindings: mfd: qcom,tcsr: Add simple-mfd
+ support for IPQ6018
 Content-Language: en-US
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
- <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
- <aliceryhl@google.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-References: <20231006155739.246381-1-yakoyoku@gmail.com>
- <CANiq72m3mpcJfiOxaACLtyaUfBR2j8rtbLdj5eZT08zywKzCfw@mail.gmail.com>
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <CANiq72m3mpcJfiOxaACLtyaUfBR2j8rtbLdj5eZT08zywKzCfw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Devi Priya <quic_devipriy@quicinc.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, agross@kernel.org,
+ andersson@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
+ baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Cc: linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+ nathan@kernel.org
+References: <20231005033053.2626465-1-quic_devipriy@quicinc.com>
+ <20231005033053.2626465-4-quic_devipriy@quicinc.com>
+ <cfbc4805-c2e8-4dee-92bc-14d805dc2320@linaro.org>
+ <cc5fef7a-d4d1-d725-36a5-86183bacc5a0@quicinc.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <cc5fef7a-d4d1-d725-36a5-86183bacc5a0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 10/6/23 18:13, Miguel Ojeda wrote:
-> On Fri, Oct 6, 2023 at 5:57 PM Martin Rodriguez Reboredo
-> <yakoyoku@gmail.com> wrote:
+On 5.10.2023 09:36, Devi Priya wrote:
+> 
+> 
+> On 10/5/2023 1:04 PM, Krzysztof Kozlowski wrote:
+>> On 05/10/2023 05:30, Devi Priya wrote:
+>>> Update the binding to include pwm as the child node to TCSR block and
+>>> add simple-mfd support for IPQ6018.
+>>>
+>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 >>
->> For now I don't have a completely working example but I have an MWE as
->> following...
+>> Why did you send it twice? It's just brings confusion...
 > 
-> Thanks Martin, I appreciate it, but I don't think this would work in
-> the general case we want to solve.
+> Sorry, kindly ignore. As the patches were not delivered to the list,
+> tried sending it again.
+In such cases, you should include RESEND in the subjects, like
+this:
 
-Well, there's the network PHY driver series that is stuck on this
-topic, I (and probably others) have local work that have the same issue
-and said general case might not arrive that soon. So it'd better to
-start on a feature that will benefit API users right away and can be
-updated to fit needs. That's what I think.
+[RESEND PATCH v6 17/17] media: qcom: camss: Comment CSID dt_id field
 
-> I have been intending to work on this for a long time now, and I still
-> mean to. Hopefully I will have some news at LPC.
-> 
-> Cheers,
-> Miguel
+Konrad
