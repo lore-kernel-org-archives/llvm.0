@@ -1,99 +1,128 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5F315C3
-	for <llvm@lists.linux.dev>; Sun,  8 Oct 2023 11:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4521BC158
+	for <llvm@lists.linux.dev>; Sun,  8 Oct 2023 17:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JLrXD/gN"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-406618d0992so35551055e9.0
-        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 04:37:50 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fqdUI44L"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-69101022969so3396582b3a.3
+        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 10:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696765069; x=1697369869; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dhou/iQjgPMNfD8wPNvACa70iSwou2YDuR+hhlISzLw=;
-        b=JLrXD/gNRgLBwO9IqfYHSGloxQBiGCebMf2CnWP/GWNArhWlnJZLcNnDLyb0LBZi5q
-         8xqociU0reRLaipjTIVxgejdcjwIiwofuKMh8LpRjZUrLWyhnTnmAwIuvrlO6rrNUPOf
-         qUhOwVusCioh6csLnBBeXe6Fcj7ymIwf/hhCheXXgICN1vLBo7BOc37sbgyDJMuAupFD
-         Q7lhnc50r9qkk7bv1ynJa0JVvm8yatvfMhaDzBPI90MdpCajLSc4gkOogQr8Qo42Gnw3
-         mjk4FqQFO3+ClAkS4mUaQ9yaRHPwELQtdpV3CxVLk3JsdgENFPwyqhf/ItDsRQsy8jYj
-         xbCg==
+        d=chromium.org; s=google; t=1696785124; x=1697389924; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bdDGhksNk+95G2Rk4jqSpCJbRS1WE04e+7m7Uoe1Ug8=;
+        b=fqdUI44LyOhZi+vjcQm4bbNKG+5gsDCrogTNvcUqPDndzJgIQeEBykewUQ2kMt0TQG
+         3q98yGzNqvunh1XMiggxExygpDPq+QkV+OvPXQN4uymF8EL6PkcgcU5JhCXhXB46C/uz
+         dJXtwQ7L61NousgL4YIAdtNYNC79votRuXrok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696765069; x=1697369869;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dhou/iQjgPMNfD8wPNvACa70iSwou2YDuR+hhlISzLw=;
-        b=Gl5gl2NqdHgVfLBnGQgMB57DQzCLKAfacdJZkmaF2WDNqox9jmo/NUu9efcV3+bVwx
-         J5wvAW76u8Fv8pJJ4Y3LZQ3Eqm/kFLx8Bkbdzokp295mKvsAhXR7QnIQ3L0qCNF9xRRA
-         U0uuV5eZjiqshc0SV+XzflEC91ota7ld1jr5CPHTZ8vU3wL6JA0qpIzz1EYTeAZoJEXL
-         rx9g/RH7T7sAYPgT8TCWGKq7AC093fnXGam9UTR+dkW1C4xY1wffrXbRfC447CuB6+0p
-         m6n2tomwVhWhMs9STvZSrdMtmTc4jgw6yYMsmaFMGXbDEZbU3thXNrwxvfw1D//5XuA1
-         qbSg==
-X-Gm-Message-State: AOJu0Ywdn7pqT7vOitiKbfAISdcrwnlkcpc30Z0oXYF22Qx+AgKPYQS1
-	Z1R6AtI5KV/vtdU47XfGw82wng==
-X-Google-Smtp-Source: AGHT+IHfU/4FonXooH8mQh6VhiaLNCGIy3nUcvXfhakX0VtM/Y+M17cRdFlbYAwKC6lTVuO4vitI/Q==
-X-Received: by 2002:a05:600c:2113:b0:401:73b2:f043 with SMTP id u19-20020a05600c211300b0040173b2f043mr12078730wml.1.1696765068892;
-        Sun, 08 Oct 2023 04:37:48 -0700 (PDT)
-Received: from krzk-bin.. (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id m10-20020a7bce0a000000b00405953973c3sm10577942wmc.6.2023.10.08.04.37.47
+        d=1e100.net; s=20230601; t=1696785124; x=1697389924;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bdDGhksNk+95G2Rk4jqSpCJbRS1WE04e+7m7Uoe1Ug8=;
+        b=k3j+4Cv3f9drP3EUcRKrzwXuf3oWT1ijEM+P7QSmjoxCmuY2p6srjr8UWmwCIkYElo
+         fJ7BsM12vfb1AiQkQfPowflSpyVc5sI9jqT8WVIgNR+64Sk/J91gTq5z0L/4SN4wtkns
+         92098EzWGkVkhWRg8Ri6GF1O+LZmfxA1NCymm0cv21obRC6Cs4xjjy015QEmrv2I/4RM
+         Q3pIQGx5ZKZNH65vX42l5KmWy1axnJRcJFF0YUCLnODOSBiQauUdO6gFwSQDF1Krgbj4
+         t4uda6kdUi79W+pAUDmnbesj5D9+uMkMAEcpJvuzzIJkjr7U6EOqtv+MwxcadIZghUJZ
+         Cnlw==
+X-Gm-Message-State: AOJu0Ywm//UWaf8VtFfg4kDz6W9cUFZNcaPuZxtpZ87puhHn4IoC04AL
+	M3roxNtWifv7YDd21FUdZmhQjw==
+X-Google-Smtp-Source: AGHT+IHHu6wejYufFLWQOKaw9Sok91yvolc0x+XXaNMoZPSzMAJuU/9qzMAG/BoOfXai94GB8wgegA==
+X-Received: by 2002:a05:6a00:39a6:b0:690:fa09:61d3 with SMTP id fi38-20020a056a0039a600b00690fa0961d3mr17059096pfb.15.1696785124399;
+        Sun, 08 Oct 2023 10:12:04 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k22-20020aa78216000000b0069337938be8sm4748906pfi.110.2023.10.08.10.12.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Oct 2023 04:37:48 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Tomasz Figa <tomasz.figa@gmail.com>,
-	Kees Cook <keescook@chromium.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
+        Sun, 08 Oct 2023 10:12:03 -0700 (PDT)
+Date: Sun, 8 Oct 2023 10:12:01 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>,
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH] pinctrl: samsung: Annotate struct exynos_muxed_weint_data with __counted_by
-Date: Sun,  8 Oct 2023 13:37:45 +0200
-Message-Id: <169676506007.13281.4277310481310428464.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231006201707.work.405-kees@kernel.org>
-References: <20231006201707.work.405-kees@kernel.org>
+Subject: Re: [PATCH] VMCI: Annotate struct vmci_handle_arr with __counted_by
+Message-ID: <202310081009.045F3E99@keescook>
+References: <56bef519d982218176b59bbba64a3a308d8733d5.1696689091.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56bef519d982218176b59bbba64a3a308d8733d5.1696689091.git.christophe.jaillet@wanadoo.fr>
 
-
-On Fri, 06 Oct 2023 13:17:07 -0700, Kees Cook wrote:
+On Sat, Oct 07, 2023 at 04:32:34PM +0200, Christophe JAILLET wrote:
 > Prepare for the coming implementation by GCC and Clang of the __counted_by
 > attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
 > 
-> As found with Coccinelle[1], add __counted_by for struct
-> exynos_muxed_weint_data. Additionally, since the element count member
-> must be set before accessing the annotated flexible array member, move
-> its initialization earlier.
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This patch is part of a work done in parallel of what is currently worked
+> on by Kees Cook.
 > 
-> [...]
+> My patches are only related to corner cases that do NOT match the
+> semantic of his Coccinelle script[1].
+> 
+> In this case, something similar to struct_size() is implemented in
+> handle_arr_calc_size().
 
-Applied, thanks!
+I think this should likely lose VMCI_HANDLE_ARRAY_HEADER_SIZE entirely
+and the helper to use sizeof() and struct_size() directly, but probably
+as a separate patch.
 
-[1/1] pinctrl: samsung: Annotate struct exynos_muxed_weint_data with __counted_by
-      https://git.kernel.org/pinctrl/samsung/c/4e1e21117e7e1275477ba80e634c769a511249bd
+> 
+> Note that I'm slightly unsure on how things will behave in regards to the
+> krealloc() in vmci_handle_arr_append_entry().
 
-Best regards,
+It looks correct to me:
+
+                new_array = krealloc(array, new_size, GFP_ATOMIC);
+		...
+                new_array->capacity += capacity_bump;
+
+i.e. "capacity" is adjusted up before accessing any "entries".
+
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> ---
+>  drivers/misc/vmw_vmci/vmci_handle_array.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/vmw_vmci/vmci_handle_array.h b/drivers/misc/vmw_vmci/vmci_handle_array.h
+> index 96193f85be5b..b0e6b1956014 100644
+> --- a/drivers/misc/vmw_vmci/vmci_handle_array.h
+> +++ b/drivers/misc/vmw_vmci/vmci_handle_array.h
+> @@ -17,7 +17,7 @@ struct vmci_handle_arr {
+>  	u32 max_capacity;
+>  	u32 size;
+>  	u32 pad;
+> -	struct vmci_handle entries[];
+> +	struct vmci_handle entries[] __counted_by(capacity);
+>  };
+>  
+>  #define VMCI_HANDLE_ARRAY_HEADER_SIZE				\
+> -- 
+> 2.34.1
+> 
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Kees Cook
