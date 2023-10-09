@@ -1,46 +1,46 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448A41DA2A
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905DA1803C
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:39:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vNIpUe4F"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d86dac81f8fso6738329276.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:39:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LujeMfWQ"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5a7b9e83b70so1330697b3.0
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696876773; x=1697481573; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696876776; x=1697481576; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
         bh=husYgJZI8HkXIeEAlVmrxb2HP2ESjHLdcuso9o2l4OQ=;
-        b=vNIpUe4FzyxBh98AvEuhGnfuMnfef2iQLwrnHUJx4uMr8BBVDC7McajzbV7KkwdleR
-         OrVCVo+zDvFIu8tt5ADQYDyX3sePr/TdtBOa5vHWpzUAnLCM/LRz//6NwTh2nB6+66ek
-         DaTaatBzq04xtuiNfM7sWA0SztzaT7QA/5wKodHfgUm4qC5mFnnJ7zW70MIOx/HyfF5t
-         tVBDVWdmaTu1bigErlRB+r7kEwcV+I8Jxwu8IpJDl1qfbUXl9r/rlJc9Zkog5uMg+2MA
-         6Bj99OYkXfVOlUqQcUwcRAPEI0uNxRgCgP46P/MRTOHOFG/zcEGsHcDn/fvsQO6lvnaj
-         egAQ==
+        b=LujeMfWQyzTUQm3heSPg7j5dw9Gu0TGbeUfq0iTVmYKkjOVkyYET1YyuOnIRaYGPZj
+         l3hs50K1PY+EYbGzXQbuqRCZZLF3ndHdogB07R2l9zGeCvFs5TsmDwQXaKfesbpbtL7H
+         Ijh/FL6BKoJ7a60FnKuiGC9Gvgfr3Qr57PRM2DyiDLprTyj0OmrgzC2qRnQpfukfeR/5
+         HAohU75jTY2JnU2e1uC+LDViFpoI5T0Utbw/TuXDB7S4kRjb88nyET1Yb2LNQK1L5gRR
+         VjMe3TedhQQcLL6kB1IHMlP2rj4SCFMxrBqFwX6fNBkdCOEP9fevEbuju0M8f3yl3SZQ
+         H2Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696876773; x=1697481573;
+        d=1e100.net; s=20230601; t=1696876776; x=1697481576;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
         bh=husYgJZI8HkXIeEAlVmrxb2HP2ESjHLdcuso9o2l4OQ=;
-        b=u6p5UDSOZwe0LJvDxkys1Q7SsvufX4AfPcIqAF/12zoi2G32pgbli7Ib2NyAL/jB0u
-         6qJoH0k7xFpYgvJFo7cZY6jEOZF4H9uaQ1stim9DZYNR2CYwFK78H6rW5kvXJP/7SMtp
-         SfH59tefJCUDQd042lDExgaM3WWe0Y66Cs8/f2LVgxWyqMbe7k1OvBVrJ1UtEMdJ/NZa
-         4W/fqTwnDgBoQiUHRvQVhKk8kWgvVkl9uyg/TVKZNi1VgxsZj8h552473WN1MkQyYKAF
-         JHVOjZC9mjWbYwOexN+MonSccdS11Z4rQACyOkp0Pe4wc0xZQaVTOrDp4eh3Hs5MHdrY
-         +1Dg==
-X-Gm-Message-State: AOJu0YzCKH0T8x4RNmtEZiEqdg93hxjqF5le4fsmOAcN6BpgCQz3iZIl
-	wDrrRVzRROxKjVN6NG0NJA4eP1h94jlY
-X-Google-Smtp-Source: AGHT+IHhtsuWVOhbFVDqVr7kwVoc3IhqYcfVk/+Ozn3UkaCuNcjQLVk5uFUA97D/yQhm0NP4FMqRmqlmjGkp
+        b=ipHlI9kXB/LbUBk44jXG5tpJji2p/KYiWLeKyhiugV6AZi/M+VcN5kGS5c+SzlWVsY
+         Ec+WDqt9UjOSaYcLYTTjS+ZNCHW7AeUYs46pROFhYFRuxSNa5vUNBQ2j/PephiIyBYu4
+         8i09jRLd97YdQaavP8qgKfo91PHwJgnOLErksl9vA6z/Cpnik02ehnF2sMk00azu9VRT
+         HgrCwb5bwVtHiprxgO8KbVUCfHml5jhUUkAI6LswT00Aljeag/3Aov1OZu24vqTkOX01
+         rj577aLhOm8XfB+z5Wqvi8LjGMGUdfCbYouZZ4vNFPXDDw2IcjidKqEOw5q6MEhw/wId
+         TSEw==
+X-Gm-Message-State: AOJu0Ywmv1DNe0UsphAzM00sXSnP5ogrO2EOBLoivldHqzG5g0k6p4Bg
+	45CsbGAdtY6w41/SiQBCE51xBZkOS0Lq
+X-Google-Smtp-Source: AGHT+IEmIpves+ngQa/FnxLG2CDSAz+zgDHCABHfkgCw1xRVBQfEO08K/FXFPnYfqQ71+Ihm3xsKsmi3qj2I
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:ac4a:9b94:7158:3f4e])
- (user=irogers job=sendgmr) by 2002:a05:6902:212:b0:d89:b072:d06f with SMTP id
- j18-20020a056902021200b00d89b072d06fmr251520ybs.7.1696876773275; Mon, 09 Oct
- 2023 11:39:33 -0700 (PDT)
-Date: Mon,  9 Oct 2023 11:39:04 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:c90:b0:59b:b0b1:d75a with SMTP id
+ cm16-20020a05690c0c9000b0059bb0b1d75amr262884ywb.4.1696876775752; Mon, 09 Oct
+ 2023 11:39:35 -0700 (PDT)
+Date: Mon,  9 Oct 2023 11:39:05 -0700
 In-Reply-To: <20231009183920.200859-1-irogers@google.com>
-Message-Id: <20231009183920.200859-4-irogers@google.com>
+Message-Id: <20231009183920.200859-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231009183920.200859-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v3 03/18] run-clang-tools: Add pass through checks and and
+Subject: [PATCH v3 03/18] run-clang-tools: Add pass through checks and
  header-filter arguments
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
