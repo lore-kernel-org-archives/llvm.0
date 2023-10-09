@@ -1,44 +1,43 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87E8B651
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 06:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABCDBE48
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 06:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-565334377d0so3366932a12.2
-        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 23:21:15 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-578b407045bso3387408a12.0
+        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 23:31:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696832475; x=1697437275;
+        d=1e100.net; s=20230601; t=1696833072; x=1697437872;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DqzxkQ2kaFA3LhoAZmBsNaaLHYDoJFZNDM8wtB/redY=;
-        b=W1WEoOuRXhOFXWUocSlQO2962LVnAy10UWMSJRbsDInMADRFNahQIdMvPUj7NdU+u0
-         a3sivrs339SmJj1wuSHbllyCHq2JZSzJafHFRWI2whps2SZgg/fOCkWnkO2b9WJqTZuH
-         Z2CezKfpqsgGRRllkMZzwh3TXfnJux80WoNVjF2puxop72s+V5hqS8694p3g7FRu1Inu
-         Jzf5ddXLxl4+jJiLRHT2BcbJ3Os64CWP+6Q7NDrhcKQaNqM+Yn2NTwLlepXfwKJKtYd2
-         6PY43Ug4T6zo2/DV3aRPYwQUIMJU0QhY5KUUMWOIbEMQfgjqnzNl9pk7hKr83P+WLtQg
-         18bg==
-X-Gm-Message-State: AOJu0Yy11Cl+bMSIQMs0YII7lmHvpGGAn3uo7uNCVZz1XWkRVohWRedm
-	8aMFndxiB3Jc9eV374s7mrIi86smxSXDSSWvtng=
-X-Google-Smtp-Source: AGHT+IHipStQxQb3cJsEmsKyjG2x73hMhk0WqgsHINOilfTS5PE0o/18YQpFkwA82j4XWhtNLoMGqq0ExLQXvPsOs/w=
-X-Received: by 2002:a05:6a21:7881:b0:15e:a653:fed5 with SMTP id
- bf1-20020a056a21788100b0015ea653fed5mr18979636pzc.16.1696832475036; Sun, 08
- Oct 2023 23:21:15 -0700 (PDT)
+        bh=vD0Fv9cM67zX2LwKdhCrzGLuQATLW6HXC5O4/Nd4nTE=;
+        b=sCu5JAzx+KYvLn1OCVtI/g0txlSX1ORRKrlbToZXXvmF7tTU+ndm0A0Oe7XWP8FTs2
+         l08V968OroMO5HTyyBxjoVrfsdzxcO//jNDi+FZAlehVJfzjkfZcrVHRFAJ3zteFtjx/
+         ZYmnbrAkW9rudrKaVFFxzFUO6B/h0kqc0CE7tBH66i3rF0GLbijVRmmCuQb2Bmu1uyC5
+         pfXWasp6LUR0pMzdtARHeywSeDUJc92DgkpIABjf8yLNWcv5QcDpB1VBVOWsbnWU63Z6
+         h39JqEJaDKeqlzVY3PXk6Odhxusj4XSFDV/KTfi4mQD0CFutLDjGaXLrgmUaMZjj2gdc
+         xwSQ==
+X-Gm-Message-State: AOJu0YzqOrbYr17lVK3a/ibnnpi7727rBM6+Qhk4nWC9qHYupPswoBXY
+	eB9sb+2ojSlkXCteHvUsvMznCt3GHy/85AHMpaM=
+X-Google-Smtp-Source: AGHT+IEOQspT2cmBHQKFmpyVLLR+19S0QFb8macQedL/e+/KbEJLcVDbtXZ0lZH43XNvVA3aOx01YcU7aI64n/+lMyk=
+X-Received: by 2002:a17:90b:11cc:b0:277:6d6a:33ba with SMTP id
+ gv12-20020a17090b11cc00b002776d6a33bamr14075416pjb.28.1696833072180; Sun, 08
+ Oct 2023 23:31:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-11-irogers@google.com>
-In-Reply-To: <20231005230851.3666908-11-irogers@google.com>
+References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-14-irogers@google.com>
+In-Reply-To: <20231005230851.3666908-14-irogers@google.com>
 From: Namhyung Kim <namhyung@kernel.org>
-Date: Sun, 8 Oct 2023 23:21:03 -0700
-Message-ID: <CAM9d7cj3AuAo-+ncd6nULusvgw1NUhBdSAED9vf_eDQ7Z=cEPQ@mail.gmail.com>
-Subject: Re: [PATCH v2 10/18] perf dlfilter: Be defensive against potential
- NULL dereference
+Date: Sun, 8 Oct 2023 23:31:01 -0700
+Message-ID: <CAM9d7cj-ANu1j-6WxGDQ_+pJtDt1xfyuGCNyC_dTpCDECZZgCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 13/18] perf svghelper: Avoid memory leak
 To: Ian Rogers <irogers@google.com>
 Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -58,39 +57,61 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
 e:
 >
-> In the unlikely case of having a symbol without a mapping, avoid a
-> NULL dereference that clang-tidy warns about.
+> On success path the sib_core and sib_thr values weren't being
+> freed. Detected by clang-tidy.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-lock.c   | 1 +
+>  tools/perf/util/svghelper.c | 5 +++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+> index d4b22313e5fc..1b40b00c9563 100644
+> --- a/tools/perf/builtin-lock.c
+> +++ b/tools/perf/builtin-lock.c
+> @@ -2463,6 +2463,7 @@ static int parse_call_stack(const struct option *op=
+t __maybe_unused, const char
+>                 entry =3D malloc(sizeof(*entry) + strlen(tok) + 1);
+>                 if (entry =3D=3D NULL) {
+>                         pr_err("Memory allocation failure\n");
+> +                       free(s);
+>                         return -1;
+>                 }
+>
 
-I'm not sure if it's possible to have a symbol without a map,
-but I'm also fine with being conservative.
+This is unrelated.  Please put it in a separate patch.
 
 Thanks,
 Namhyung
 
+
+> diff --git a/tools/perf/util/svghelper.c b/tools/perf/util/svghelper.c
+> index 0e4dc31c6c9c..1892e9b6aa7f 100644
+> --- a/tools/perf/util/svghelper.c
+> +++ b/tools/perf/util/svghelper.c
+> @@ -754,6 +754,7 @@ int svg_build_topology_map(struct perf_env *env)
+>         int i, nr_cpus;
+>         struct topology t;
+>         char *sib_core, *sib_thr;
+> +       int ret =3D -1;
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/dlfilter.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>         nr_cpus =3D min(env->nr_cpus_online, MAX_NR_CPUS);
 >
-> diff --git a/tools/perf/util/dlfilter.c b/tools/perf/util/dlfilter.c
-> index 1dbf27822ee2..5e54832137a9 100644
-> --- a/tools/perf/util/dlfilter.c
-> +++ b/tools/perf/util/dlfilter.c
-> @@ -52,8 +52,10 @@ static void al_to_d_al(struct addr_location *al, struc=
-t perf_dlfilter_al *d_al)
->                 d_al->sym_end =3D sym->end;
->                 if (al->addr < sym->end)
->                         d_al->symoff =3D al->addr - sym->start;
-> -               else
-> +               else if (al->map)
->                         d_al->symoff =3D al->addr - map__start(al->map) -=
- sym->start;
-> +               else
-> +                       d_al->symoff =3D 0;
->                 d_al->sym_binding =3D sym->binding;
->         } else {
->                 d_al->sym =3D NULL;
+> @@ -799,11 +800,11 @@ int svg_build_topology_map(struct perf_env *env)
+>
+>         scan_core_topology(topology_map, &t, nr_cpus);
+>
+> -       return 0;
+> +       ret =3D 0;
+>
+>  exit:
+>         zfree(&t.sib_core);
+>         zfree(&t.sib_thr);
+>
+> -       return -1;
+> +       return ret;
+>  }
 > --
 > 2.42.0.609.gbb76f46606-goog
 >
