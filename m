@@ -1,139 +1,132 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CEF1A70C
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 16:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0951799B
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 16:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uk2b5kbg"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50348c54439so7267e87.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 09:37:37 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ouz/fPMp"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-69af8a42066so2557231b3a.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 09:56:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696869456; x=1697474256; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UCcIV6Mm7zw1gNMMm0ZkrKGglzNc/5vCe0dsXvh6bqw=;
-        b=uk2b5kbg9HiFN2NBL2atozJ7mbJpoB3uWXleUqyKxyNntsHgNuDkhPt41lcY0k7uI7
-         ugjl+duvqOxwcxfmsAlVJO3lk1u6RxA1V8SW47xGiiUf+no+ErVCfoOAkclLWpvuF4GW
-         BP0hCd8fLp/7pb+CrwByKEsr/ioDEXMRDZ2QhMVrrDGKJ/rwwNqaXHLtblXAHUce6D34
-         AEjuY68TU7J9J+srOSKd5NG0gWDiue0OMGd8LjwlwegZyiPWk+8CRrB8F8zhbdDftBwg
-         ofbN98pHB/9hySD+Ba0ag7dhqa9Zu1rakvEecQYePRICbFsGsI7jfcsMHOPb37fxi7Tb
-         mTYg==
+        d=chromium.org; s=google; t=1696870574; x=1697475374; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BI1wdHvupQf0LaYbc5/G8p3qu/45NR/6x8pz02yh3PE=;
+        b=Ouz/fPMpDAPtZuUOnEW525CHtZv0NfSCJco5yDdZZisbElLdnLimAIPfJXlLOx1hZ6
+         dgMlKjwU589qT9uCw3bnuI9UljSQZIRim/kZwM3rCX6ha0b2b1DzN3GVG5i1vfPm9vNm
+         gamyegcV8eO+3COGbJGE+nNGsszD4tDJxkMy0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696869456; x=1697474256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UCcIV6Mm7zw1gNMMm0ZkrKGglzNc/5vCe0dsXvh6bqw=;
-        b=FLelv9KWKRmldk9wH0HU5QAlheN85uEDmfL+LNDcWyeO9LIMwn/Ik5VKC0II/UJIiP
-         gAIsms8TO4tiABL2BG9165iJi+BTpYQlRrfM0qj7zer/+zNs4mQCX8E670qt33Wp0xyZ
-         oryrtO1QljF7Rgt7mz+x93bC5X3kCeJhQV105Vj2VFkHQ0E0RDAlzTNgF1zTvj3b0TKw
-         H/HtBKdw4ZQgOjrkjGuhZkAeq3++0GZqicBkOfCm/RtSk8cPfKJDyJXjdLiG2PkQuaGH
-         EBXjw7jQzfiFwKpJBBYR3vhNj4OFbkJaZuTRtmKfusDXJzC3KfVYt4EjhMTnHSKuNzKE
-         F6UA==
-X-Gm-Message-State: AOJu0YzqE2D/sFck1a+HZJTRdmiQzOY+E4PM+LNlxk66VZVlyZ328gkt
-	a6bDrF3XVPwp1S5lDyu0poMNbvrUOtRij+u5/JzJgQ==
-X-Google-Smtp-Source: AGHT+IFrz2vFJU/zI3Q1h36XuYf4dJwSe0vnT+pqWgCqVmuceBLNptLoibz7FuY74kPBGRakIVvBm12RbdQ4QIDmIJE=
-X-Received: by 2002:ac2:44db:0:b0:505:7c88:9e45 with SMTP id
- d27-20020ac244db000000b005057c889e45mr231500lfm.0.1696869455500; Mon, 09 Oct
- 2023 09:37:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696870574; x=1697475374;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BI1wdHvupQf0LaYbc5/G8p3qu/45NR/6x8pz02yh3PE=;
+        b=RWI3jh/WWoqfOkZMl+Om8IHWMMtIsFFGizb+YnMKDWZxXiaYVvW9ALaYbFbAEKPZha
+         VPPKERCfin1fr4DIufcaDP5DmhZOd+FlIaFA2cxMRlw9WXPfNjXpDxKfVT+yc7JqzRLS
+         IXFfssHBH8CGNTbcWalhFHE77Z8dmRi6EbjQ6Sc1t7dmHUaG1vWm793aQE5GfAzkcCkt
+         YyoDkqiuq6Z7vXxb/52UKJhI7uu53LOyWbEgDfTZQ3hsmNueIGJNGOxV0kWSnn6RpgRa
+         EO6H1dLCi+LV3HKjnCDrPAxb9D5nE3tbIsBNXN/8FmBbPHoZAnH4tShew5RKbtsREGWU
+         2FvQ==
+X-Gm-Message-State: AOJu0Yysm65QzF4hVcDt5IkojXIbiUYXD8Rh36y/xFkB4tj2Z3vdMqA0
+	kIwbtvalNjJozBSIY3sM4WGthQ==
+X-Google-Smtp-Source: AGHT+IExmUks9+I/YiKBGr4BtICx6xzlqORwNadZpHtAORGWPchSbI37a3pFI+AKwfNa/ZHilpgCWw==
+X-Received: by 2002:a05:6a00:124a:b0:690:ce30:47e5 with SMTP id u10-20020a056a00124a00b00690ce3047e5mr14761348pfi.6.1696870574128;
+        Mon, 09 Oct 2023 09:56:14 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id l3-20020a62be03000000b00688c733fe92sm6540299pff.215.2023.10.09.09.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 09:56:13 -0700 (PDT)
+Date: Mon, 9 Oct 2023 09:56:11 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Ping-Ke Shih <pkshih@realtek.com>
+Cc: "kvalo@kernel.org" <kvalo@kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"trix@redhat.com" <trix@redhat.com>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>,
+	"gustavoars@kernel.org" <gustavoars@kernel.org>
+Subject: Re: [PATCH] wifi: rtw89: coex: Annotate struct
+ rtw89_btc_btf_set_slot_table with __counted_by
+Message-ID: <202310090953.B7CE5CF4B@keescook>
+References: <20231006201715.work.239-kees@kernel.org>
+ <4716f3c7bf3d34ea25229edd5250f5f0cff639d8.camel@realtek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-14-irogers@google.com>
- <CAM9d7cj-ANu1j-6WxGDQ_+pJtDt1xfyuGCNyC_dTpCDECZZgCQ@mail.gmail.com>
-In-Reply-To: <CAM9d7cj-ANu1j-6WxGDQ_+pJtDt1xfyuGCNyC_dTpCDECZZgCQ@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 9 Oct 2023 09:37:24 -0700
-Message-ID: <CAP-5=fVpkvtf=8niBTcLUcpEjypJAui0yT4ATtY763-mCSXamg@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] perf svghelper: Avoid memory leak
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
-	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4716f3c7bf3d34ea25229edd5250f5f0cff639d8.camel@realtek.com>
 
-On Sun, Oct 8, 2023 at 11:31=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
-> >
-> > On success path the sib_core and sib_thr values weren't being
-> > freed. Detected by clang-tidy.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+On Sat, Oct 07, 2023 at 01:20:43AM +0000, Ping-Ke Shih wrote:
+> On Fri, 2023-10-06 at 13:17 -0700, Kees Cook wrote:
+> > 
+> > Prepare for the coming implementation by GCC and Clang of the __counted_by
+> > attribute. Flexible array members annotated with __counted_by can have
+> > their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> > array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> > functions).
+> > 
+> > As found with Coccinelle[1], add __counted_by for struct
+> > rtw89_btc_btf_set_slot_table.
+> > 
+> > Cc: Ping-Ke Shih <pkshih@realtek.com>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: linux-hardening@vger.kernel.org
+> > Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > > ---
-> >  tools/perf/builtin-lock.c   | 1 +
-> >  tools/perf/util/svghelper.c | 5 +++--
-> >  2 files changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> > index d4b22313e5fc..1b40b00c9563 100644
-> > --- a/tools/perf/builtin-lock.c
-> > +++ b/tools/perf/builtin-lock.c
-> > @@ -2463,6 +2463,7 @@ static int parse_call_stack(const struct option *=
-opt __maybe_unused, const char
-> >                 entry =3D malloc(sizeof(*entry) + strlen(tok) + 1);
-> >                 if (entry =3D=3D NULL) {
-> >                         pr_err("Memory allocation failure\n");
-> > +                       free(s);
-> >                         return -1;
-> >                 }
-> >
->
-> This is unrelated.  Please put it in a separate patch.
+> >  drivers/net/wireless/realtek/rtw89/coex.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
+> > index 4ba8b3df70ae..d66a1152c3f5 100644
+> > --- a/drivers/net/wireless/realtek/rtw89/coex.c
+> > +++ b/drivers/net/wireless/realtek/rtw89/coex.c
+> > @@ -237,7 +237,7 @@ struct rtw89_btc_btf_set_report {
+> >  struct rtw89_btc_btf_set_slot_table {
+> >         u8 fver;
+> >         u8 tbl_num;
+> > -       u8 buf[];
+> > +       u8 buf[] __counted_by(tbl_num);
+> 
+> This struct isn't defined properly. It should be 
+> 
+> struct rtw89_btc_btf_set_slot_table {
+> 	u8 fver;
+> 	u8 tbl_num;
+> 	struct rtw89_btc_fbtc_slot tbl[] __counted_by(tbl_num);
+> } __packed;
+> 
+> And, we should modify rtw89_btc_fw_set_slots() as well. 
+> 
+> Another struct 'rtw89_btc_btf_set_mon_reg' has similar problem.
+> 
+> So, NACK this patch. I will prepare one or two patches for them next week. 
 
-Sorry, will fix in v3.
+Ah-ha; thank you!
 
-Thanks,
-Ian
+> By the way, I have question about __counted_by(). Can I apply it to little/big-
+> endian 'num'? Like
+> 
+> struct foo {
+> 	...
+> 	__le32 num;
+> 	__le32 data[] __counted_by(num);
+> }
 
-> Thanks,
-> Namhyung
->
->
-> > diff --git a/tools/perf/util/svghelper.c b/tools/perf/util/svghelper.c
-> > index 0e4dc31c6c9c..1892e9b6aa7f 100644
-> > --- a/tools/perf/util/svghelper.c
-> > +++ b/tools/perf/util/svghelper.c
-> > @@ -754,6 +754,7 @@ int svg_build_topology_map(struct perf_env *env)
-> >         int i, nr_cpus;
-> >         struct topology t;
-> >         char *sib_core, *sib_thr;
-> > +       int ret =3D -1;
-> >
-> >         nr_cpus =3D min(env->nr_cpus_online, MAX_NR_CPUS);
-> >
-> > @@ -799,11 +800,11 @@ int svg_build_topology_map(struct perf_env *env)
-> >
-> >         scan_core_topology(topology_map, &t, nr_cpus);
-> >
-> > -       return 0;
-> > +       ret =3D 0;
-> >
-> >  exit:
-> >         zfree(&t.sib_core);
-> >         zfree(&t.sib_thr);
-> >
-> > -       return -1;
-> > +       return ret;
-> >  }
-> > --
-> > 2.42.0.609.gbb76f46606-goog
-> >
+Unfortunately not yet. I hope to see it extended in the future to allow
+for arbitrary expressions. For this first step, it only handles native
+sizes.
+
+-- 
+Kees Cook
