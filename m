@@ -1,118 +1,235 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D711737CA5
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 16:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D65B38BA7
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 16:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ferqfnnn"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1c60f1a2652so34582045ad.0
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 09:10:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T2hnYcgO"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5032a508e74so6913e87.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 09:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696867844; x=1697472644; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OlqtVYWDwFjsVmMJ3ynK5zOk4WfBZOLfWnDThZr9WAg=;
-        b=ferqfnnn86ALb8BVdrJKq6ym7ZmOrSKSgYJPjeHO+YB6DHmRQ2NQSYWbp24BzzuUEX
-         QxCH/yN906kNvh9yV5smsXkQaoA9WztWQuYgR3XlzUaVAIKMrHD0UiEiKIKkM3vXwWzf
-         DW/Hik+amWou8o/le3gzav9l3/9CzXvfrG23E=
+        d=google.com; s=20230601; t=1696867999; x=1697472799; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g0jKnvS+p6tLusyf0KR6YxKQNRwudB/CjvpEJfWJaDA=;
+        b=T2hnYcgOz3tdkKEIgLF6VmXOlTZZvKEA6NOth9jtHtbxDcZmIAm772DIrp+OsZWlpo
+         kceD4o6kGmHmEs0DApwSfg0IhkLgz78C5QpcvqPsXWefthB06hK6Re+Q8PhMbTNupHaW
+         isD6hlvRJQwuT5Piomz9tCcxiRWxWvMZmC247+gZPtSDuKnMPOGPaBx8gAivoyNyf7aW
+         QkqcTQOkUjwNATfQEqjGMq0oDOEb8Irhw8wW3NIE1UZG3ibeW39I/3ApDbpXJbH0cfUB
+         0mkM7Oet05IN/7YIstA66U5jyABShWBJI6TPN8rWPeSuv8V3TdYdhCMbEydWTQVWIArj
+         P9qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696867844; x=1697472644;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OlqtVYWDwFjsVmMJ3ynK5zOk4WfBZOLfWnDThZr9WAg=;
-        b=Mmqq5SoV519GOhExb/jL0lo7S0Szm0b6dsuRRECLbANK9Y8Su101bJTp+gXX35Lmo3
-         1tb+X3ZAPzPRgwVwUOzS1g3sLxzB+Jy2psv/5E+UndAhmyT1ApKx4GXd9FY2z+awVcwo
-         SwRJDfNWVdEZmPV1drBDtgpGHLzxf0SqHsD9IUzDWuu/uB8TQuX19dazJhMEgZb1OLDi
-         HjK6LddFGX1AE7rNOKfDi78qH3dURvTF/W5LZ5HUQ37fdKfOD/hj2FsISA22Q4s84CUG
-         RIn2pzrwOUxVwxj8b0A0Ckx6ViV0t6r0ZLnqHU5oqtyLpXWzPEWGMZxZhJTAujI87g7q
-         Ytgg==
-X-Gm-Message-State: AOJu0YwxcayGjF43sq+9FLBGMZ5m7Z5vs7CbC/R1lLK7TQ3Pze/aZaeo
-	axWhU9F+AAFovZ2KIsaorkuyGA==
-X-Google-Smtp-Source: AGHT+IHaNSM/F/12DdBX+Ma4QCHh9fYvjPMd3UIX2uPTMcfa9A3UPB2KEI6+rdRMpT5sMW4arXdLgg==
-X-Received: by 2002:a17:902:e54a:b0:1b5:674d:2aa5 with SMTP id n10-20020a170902e54a00b001b5674d2aa5mr19275942plf.13.1696867844107;
-        Mon, 09 Oct 2023 09:10:44 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t19-20020a1709028c9300b001c5eb2c4d8csm9765942plo.160.2023.10.09.09.10.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 09:10:43 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Christian Lamparter <chunkeey@googlemail.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Kalle Valo <kvalo@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-wireless@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	Jason Andryuk <jandryuk@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] wifi: p54: Annotate struct p54_cal_database with __counted_by
-Date: Mon,  9 Oct 2023 09:10:35 -0700
-Message-Id: <20231009161028.it.544-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1696867999; x=1697472799;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g0jKnvS+p6tLusyf0KR6YxKQNRwudB/CjvpEJfWJaDA=;
+        b=UkwV/cZ260GWphZthZqSnOZC33vIbumcO/aikwMQPAEiKX/L2odGGi5EHL8R7Z7otN
+         BFsKFY8716lo9BKvKH6SSN+bPKnF40JUMkL09N2glCCmvhlRd1+OSvY7i8WvQBD0GuQC
+         eqtNb6ICZvCn+o9OwUMfMfKEd+R9nhzY/sWFdQfCQyrTchJEXnvvGzc77Rowur2fTp23
+         bofbnOXmzsAFa4B3w9y17oOcArKR1ofbR/IpK2Cu5GdQM/zuSPc+jHOXwqsSfeortGRk
+         CgfP63rePt5ER29dT5hJ+fV6qoGH+zga5sNvJ4+jwU/3/rtdcC3fpELO15fAI7oaKzTp
+         D2XA==
+X-Gm-Message-State: AOJu0YzxQbZ5XEsiU/i7PUPNRfOYKe6D6WmGdBiB68LhQRPWwP2hSLjM
+	Bit8XtlD8pGxDakpCKIAYVxUkr2IUuJJkfpONIHfGg==
+X-Google-Smtp-Source: AGHT+IF1HdpHvO8s/EVxVQ0me6ekTtk7UbIlgadFNqVNz5wYB+4oNqfX/opeS9wuIKe7sPJkg7G/ilLuNk6Uh/uD+jE=
+X-Received: by 2002:a19:7006:0:b0:502:dc15:7fb with SMTP id
+ h6-20020a197006000000b00502dc1507fbmr284723lfc.5.1696867999100; Mon, 09 Oct
+ 2023 09:13:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1323; i=keescook@chromium.org;
- h=from:subject:message-id; bh=YzjePAWoD+DSEw/PjSkFzQTncEdbJTF0SrU+nTfsVaM=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlJCX7vlAstYYRr8Z0mnQUxiZDkskkZO9CJ+b9t
- NQY4DZg256JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZSQl+wAKCRCJcvTf3G3A
- JipyD/4sIWmxi4BQzwpXVms+RWPCLNRlL9RbPY9/6KGp/spGVvhfdxb7V5cwLlX3GDeUD4zWExn
- GL7Yshbfo9iR3OiRxGmXof9oOVdJ6rhNsdi/HaGLCJxqZp6UdcoXN1F5bAybLPkF0R9JykkW9Ea
- M/jd8F1k/G6thhfd19vPkqDHxueFyxdiOPlOS6NuaICkM6neQU6M09h4xn+Vv7RFvMjZDe9x/Qe
- sDOrFQa2QZZ1mU1Q+XVnTxdDpnw958GqUGOHUOHpx/qnaGINbJVa4zghSsD69C4T22b+izuJHyV
- cX9u+G3yKOZwwU4k4t1eOFqX3lpuhpSXWcnDgLbGgp/Srxgqvcav8uXHmR8W3clzEJdtMHn0tnF
- MMsim49cLaji7VkQ6bMHWQa/JKA3bbsCSplAtYKKJ9kzjzmogKelO/hGnJZCp5owdHvB5/FPlVR
- ftsmoa9PUhBYum9S5Bzn32x4oSqUgbJSzcV/PTBGJJvZuhgX11pq/CpboblX430xR9cwLXIcCb9
- zwBrkfxpegvYmUWwoVXb9czxB1ud+1nKRAJnNE6urfE4ZwNMoZeRSJUMGzbIIL5V9qAQ9dZlEVZ
- lbvq8Dhe0C5f/7rQZ19uHWcvxM5w1hyFShmp9LmlkNMc3PUdvSmJ59onewKaqMANKH0HSMow/fm
- sGR2+E1 nI8wezkg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-6-irogers@google.com>
+ <CAM9d7chmVRrFgEZMYk3EWG+1wjXqLC3suu-xrX64hmfBSAFi0A@mail.gmail.com>
+In-Reply-To: <CAM9d7chmVRrFgEZMYk3EWG+1wjXqLC3suu-xrX64hmfBSAFi0A@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 9 Oct 2023 09:13:05 -0700
+Message-ID: <CAP-5=fXbU_hckJp=evE5ja7BA4sS30E6hHryXXAEvwXs=1qkBA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/18] perf bench uprobe: Fix potential use of memory
+ after free
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
+	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+On Sun, Oct 8, 2023 at 10:51=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+> >
+> > Found by clang-tidy:
+> > ```
+> > bench/uprobe.c:98:3: warning: Use of memory after it is freed [clang-an=
+alyzer-unix.Malloc]
+> >                 bench_uprobe_bpf__destroy(skel);
+> > ```
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> I'm ok with the change but I think it won't call
+> bench_uprobe__teardown_bpf_skel() if the setup function
+> returns a negative value.  Maybe we also need to set the
+> err in the default case of `switch (bench)` statement.
 
-Add __counted_by for struct p54_cal_database.
+Yes, the analysis (I'll put it below) assumes that the err can be
+positive yielding destroy being called twice, the second creating a
+use-after-free. I think it is worth cleaning the code up and making
+the analyzer's job easier.
 
-Cc: Christian Lamparter <chunkeey@googlemail.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-wireless@vger.kernel.org
-Cc: linux-hardening@vger.kernel.org
-Suggested-by: Jason Andryuk <jandryuk@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v1 - https://lore.kernel.org/all/20231006201719.work.356-kees@kernel.org/
-v2 - use the correct member (jandryuk)
----
- drivers/net/wireless/intersil/p54/p54.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Ian
 
-diff --git a/drivers/net/wireless/intersil/p54/p54.h b/drivers/net/wireless/intersil/p54/p54.h
-index 3356ea708d81..522656de4159 100644
---- a/drivers/net/wireless/intersil/p54/p54.h
-+++ b/drivers/net/wireless/intersil/p54/p54.h
-@@ -126,7 +126,7 @@ struct p54_cal_database {
- 	size_t entry_size;
- 	size_t offset;
- 	size_t len;
--	u8 data[];
-+	u8 data[] __counted_by(len);
- };
- 
- #define EEPROM_READBACK_LEN 0x3fc
--- 
-2.34.1
+```
+bench/uprobe.c:98:3: warning: Use of memory after it is freed
+[clang-analyzer-unix.Malloc]
+               bench_uprobe_bpf__destroy(skel);
+               ^
+tools/perf/bench/uprobe.c:197:9: note: Calling 'bench_uprobe'
+       return bench_uprobe(argc, argv, BENCH_UPROBE__TRACE_PRINTK);
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/bench/uprobe.c:150:6: note: 'bench' is not equal to
+BENCH_UPROBE__BASELINE
+       if (bench !=3D BENCH_UPROBE__BASELINE &&
+bench_uprobe__setup_bpf_skel(bench) < 0)
+           ^~~~~
+tools/perf/bench/uprobe.c:150:6: note: Left side of '&&' is true
+tools/perf/bench/uprobe.c:150:41: note: Calling 'bench_uprobe__setup_bpf_sk=
+el'
+       if (bench !=3D BENCH_UPROBE__BASELINE &&
+bench_uprobe__setup_bpf_skel(bench) < 0)
 
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/bench/uprobe.c:68:7: note: 'skel' is non-null
+       if (!skel) {
+            ^~~~
+tools/perf/bench/uprobe.c:68:2: note: Taking false branch
+       if (!skel) {
+       ^
+tools/perf/bench/uprobe.c:74:6: note: Assuming 'err' is not equal to 0
+       if (err) {
+           ^~~
+tools/perf/bench/uprobe.c:74:2: note: Taking true branch
+       if (err) {
+       ^
+tools/perf/bench/uprobe.c:76:3: note: Control jumps to line 91
+               goto cleanup;
+               ^
+tools/perf/bench/uprobe.c:91:2: note: Calling 'bench_uprobe_bpf__destroy'
+       bench_uprobe_bpf__destroy(skel);
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/bpf_skel/bench_uprobe.skel.h:44:6: note: Assuming
+'obj' is non-null
+       if (!obj)
+           ^~~~
+tools/perf/util/bpf_skel/bench_uprobe.skel.h:44:2: note: Taking false branc=
+h
+       if (!obj)
+       ^
+tools/perf/util/bpf_skel/bench_uprobe.skel.h:46:6: note: Assuming
+field 'skeleton' is null
+       if (obj->skeleton)
+           ^~~~~~~~~~~~~
+tools/perf/util/bpf_skel/bench_uprobe.skel.h:46:2: note: Taking false branc=
+h
+       if (obj->skeleton)
+       ^
+tools/perf/util/bpf_skel/bench_uprobe.skel.h:48:2: note: Memory is released
+       free(obj);
+       ^~~~~~~~~
+tools/perf/bench/uprobe.c:91:2: note: Returning; memory was released
+via 1st parameter
+       bench_uprobe_bpf__destroy(skel);
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/bench/uprobe.c:150:41: note: Returning; memory was released
+       if (bench !=3D BENCH_UPROBE__BASELINE &&
+bench_uprobe__setup_bpf_skel(bench) < 0)
+
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/bench/uprobe.c:150:41: note: Assuming the condition is false
+       if (bench !=3D BENCH_UPROBE__BASELINE &&
+bench_uprobe__setup_bpf_skel(bench) < 0)
+
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/bench/uprobe.c:150:2: note: Taking false branch
+       if (bench !=3D BENCH_UPROBE__BASELINE &&
+bench_uprobe__setup_bpf_skel(bench) < 0)
+       ^
+tools/perf/bench/uprobe.c:155:14: note: Assuming 'i' is >=3D 'loops'
+       for (i =3D 0; i < loops; i++) {
+                   ^~~~~~~~~
+tools/perf/bench/uprobe.c:155:2: note: Loop condition is false.
+Execution continues on line 159
+       for (i =3D 0; i < loops; i++) {
+       ^
+tools/perf/bench/uprobe.c:164:2: note: Control jumps to 'case 1:'  at line =
+169
+       switch (bench_format) {
+       ^
+tools/perf/bench/uprobe.c:171:3: note:  Execution continues on line 179
+               break;
+               ^
+tools/perf/bench/uprobe.c:179:6: note: 'bench' is not equal to
+BENCH_UPROBE__BASELINE
+       if (bench !=3D BENCH_UPROBE__BASELINE)
+           ^~~~~
+tools/perf/bench/uprobe.c:179:2: note: Taking true branch
+       if (bench !=3D BENCH_UPROBE__BASELINE)
+       ^
+tools/perf/bench/uprobe.c:180:3: note: Calling 'bench_uprobe__teardown_bpf_=
+skel'
+               bench_uprobe__teardown_bpf_skel();
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/bench/uprobe.c:97:6: note: 'skel' is non-null
+       if (skel) {
+           ^~~~
+tools/perf/bench/uprobe.c:97:2: note: Taking true branch
+       if (skel) {
+       ^
+tools/perf/bench/uprobe.c:98:3: note: Use of memory after it is freed
+               bench_uprobe_bpf__destroy(skel);
+               ^                         ~~~~
+1 warning generated.
+```
+
+> Thanks,
+> Namhyung
+>
+>
+> > ---
+> >  tools/perf/bench/uprobe.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/perf/bench/uprobe.c b/tools/perf/bench/uprobe.c
+> > index 914c0817fe8a..5c71fdc419dd 100644
+> > --- a/tools/perf/bench/uprobe.c
+> > +++ b/tools/perf/bench/uprobe.c
+> > @@ -89,6 +89,7 @@ static int bench_uprobe__setup_bpf_skel(enum bench_up=
+robe bench)
+> >         return err;
+> >  cleanup:
+> >         bench_uprobe_bpf__destroy(skel);
+> > +       skel =3D NULL;
+> >         return err;
+> >  }
+> >
+> > --
+> > 2.42.0.609.gbb76f46606-goog
+> >
