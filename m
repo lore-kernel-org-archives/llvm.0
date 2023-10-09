@@ -1,132 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B84B3714F;
-	Mon,  9 Oct 2023 18:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE2D2C9C
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T8rRKyjn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696875611; x=1728411611;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e5iN/2ttRBZtDAKCXaXbpaBsZWwX9XofORZVJVhyEgU=;
-  b=T8rRKyjnwkNQg6Mivhl6PDH6izVf9s3NfMabZcXGVL9+lS2pVwtuGydr
-   T1nDPAsDa24TQxctKWwByIjzIlRkIwbcG4eq+hQDodOUU4sNaPjIOdqZN
-   ExOUyijAEupMN73mK2qjMT/HrNG4SV7Q0EGV+RNsQHgBSXLZ5TxkNEUWq
-   xoMXsKq1f7YSHYHcUTm8kaJ+uLoA6zUDB9Su6mSPfQk6pD4HJobSyc5SX
-   oACMd0HuVBXIt9V1O3v1JeNnoVita6mEB733TcT/wcF83/OHi6qLKrNtY
-   x9OHD/kiknbtoNHWvjzIeNrWwziuQXM4I903bcNv6AOBoDaEgTMveg4EB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="448405833"
-X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="448405833"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 11:20:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="818939027"
-X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="818939027"
-Received: from lkp-server02.sh.intel.com (HELO 4ed589823ba4) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Oct 2023 11:20:09 -0700
-Received: from kbuild by 4ed589823ba4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qpurO-0000VQ-2X;
-	Mon, 09 Oct 2023 18:20:06 +0000
-Date: Tue, 10 Oct 2023 02:19:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Xu Yilun <yilun.xu@linux.intel.com>
-Subject: [linux-next:master 10253/10591]
- drivers/fpga/xilinx-pr-decoupler.c:94:34: warning: unused variable
- 'xlnx_pr_decoupler_of_match'
-Message-ID: <202310100247.Y7BFcalX-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qRF062Bf"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5a7ac9c1522so7543617b3.0
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1696876766; x=1697481566; darn=lists.linux.dev;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BpyZW6SIyDMddq/KpJ5/Dy63Sl93+U/oxSoQXfrAQ3A=;
+        b=qRF062BftOSZchSWKk3Lpbrnfz9SLfmisc+083y8UTg/ORdQWgOMr3bbaioeBfs/MM
+         kerjty7ZO4kLGq+unjIM57Ocmk3e+bgHR6+CqM9zVIeyOSTV/GSypOdy+T5/FusjyWgR
+         kA3RuRXx8Hau+GOkJ5AlK+QvFqFxoYJoFQba+9UNPKfmCY7nAwyyfXoklQu+6709tst1
+         UOzadU2e6+y1a1V4TdVnHqnJi7RhQifGMkhAC2bhR5OAQ1nLA8leRI77N72/1kH0qcxU
+         7+Ji4yF1X5GcUde+n9JWUD7VxU72akFaUcbYOt8EeL9+RUlVK+czfXkbOlVpiuCGNv+X
+         mVNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696876766; x=1697481566;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BpyZW6SIyDMddq/KpJ5/Dy63Sl93+U/oxSoQXfrAQ3A=;
+        b=CyEj2+c3Mg72rqYxQKQpc52NFgsyO/iB43oulxlTTrdlZQLDP44eirrxmIcBhWMOF/
+         P44NjVPfZ59PNOcF/mBJRmrqBB5Q/L+UeDu0aoHV+pMyykgqsRgtcZm091thFe78oiEJ
+         GbFASyKdlTk/eoVUMTU+cBPb7ME9R9OFwW9XqvR/eSsq2i/k1hr2C4M9ahWlpNTcBv/x
+         A2yCgBp3hT/6j0jmr8solqMEowu/WA+t5BjDD6DMp6HR+BYhnlHGCX8e3xuP1/H46Sqw
+         Hz9uDNK5Lwi2Gh+XszXhFYfdvaIjRCnSgJpNXktCCeOP7d1kfYstxcmTfLScKy/u4s2u
+         bfow==
+X-Gm-Message-State: AOJu0Yzz63IvfuWUhnip65sklIR7zxrgnYmISqbNq7bzozevLK2l16lf
+	qNOEcXKk1SY44URpmoayi3yQP6Mhgwhz
+X-Google-Smtp-Source: AGHT+IE5eoNJprN8tdSYHf6jE8fdT3BZ0VpowwVuHGUswqy5qF7XIcGdLKN5PekbQIWRZ7TgfCwwYCkWsS2V
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:ac4a:9b94:7158:3f4e])
+ (user=irogers job=sendgmr) by 2002:a81:bd08:0:b0:59b:c811:a702 with SMTP id
+ b8-20020a81bd08000000b0059bc811a702mr300054ywi.6.1696876766254; Mon, 09 Oct
+ 2023 11:39:26 -0700 (PDT)
+Date: Mon,  9 Oct 2023 11:39:01 -0700
+Message-Id: <20231009183920.200859-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
+Subject: [PATCH v3 00/18] clang-tools support in tools
+From: Ian Rogers <irogers@google.com>
+To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, Ming Wang <wangming01@loongson.cn>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ravi Bangoria <ravi.bangoria@amd.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   2a860505b617cf8fda4ebff6cf05d3f774145440
-commit: 8c966aadcc023c8db7a9d24a3a504a9b39b1202c [10253/10591] fpga: Use device_get_match_data()
-config: hexagon-randconfig-r021-20221128 (https://download.01.org/0day-ci/archive/20231010/202310100247.Y7BFcalX-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231010/202310100247.Y7BFcalX-lkp@intel.com/reproduce)
+Allow the clang-tools scripts to work with builds in tools such as
+tools/perf and tools/lib/perf. An example use looks like:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310100247.Y7BFcalX-lkp@intel.com/
+```
+$ cd tools/perf
+$ make CC=clang CXX=clang++
+$ ../../scripts/clang-tools/gen_compile_commands.py
+$ ../../scripts/clang-tools/run-clang-tools.py clang-tidy compile_commands.json -checks=-*,readability-named-parameter
+Skipping non-C file: 'tools/perf/bench/mem-memcpy-x86-64-asm.S'
+Skipping non-C file: 'tools/perf/bench/mem-memset-x86-64-asm.S'
+Skipping non-C file: 'tools/perf/arch/x86/tests/regs_load.S'
+8 warnings generated.
+Suppressed 8 warnings (8 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+2 warnings generated.
+4 warnings generated.
+Suppressed 4 warnings (4 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+2 warnings generated.
+4 warnings generated.
+Suppressed 4 warnings (4 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+3 warnings generated.
+tools/perf/util/parse-events-flex.c:546:27: warning: all parameters should be named in a function [readability-named-parameter]
+void *yyalloc ( yy_size_t , yyscan_t yyscanner );
+                          ^
+                           /*size*/
+...
+```
 
-All warnings (new ones prefixed by >>):
+Fix a number of the more serious low-hanging issues in perf found by
+clang-tidy.
 
-   In file included from drivers/fpga/xilinx-pr-decoupler.c:11:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/fpga/xilinx-pr-decoupler.c:11:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/fpga/xilinx-pr-decoupler.c:11:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/fpga/xilinx-pr-decoupler.c:94:34: warning: unused variable 'xlnx_pr_decoupler_of_match' [-Wunused-const-variable]
-   static const struct of_device_id xlnx_pr_decoupler_of_match[] = {
-                                    ^
-   7 warnings generated.
+This support isn't complete, in particular it doesn't support output
+directories properly and so fails for tools/lib/bpf, tools/bpf/bpftool
+and if an output directory is used.
 
+v3. Add Nick Desaulniers reviewed-by to patch 3. For Namhyung, drop
+    "perf hisi-ptt: Fix potential memory leak", split lock change out
+    of "perf svghelper: Avoid memory leak" and address comments in
+    "perf header: Fix various error path memory leaks".
+v2: Address comments by Nick Desaulniers in patch 3, and add their
+    Reviewed-by to patches 1 and 2.
 
-vim +/xlnx_pr_decoupler_of_match +94 drivers/fpga/xilinx-pr-decoupler.c
+Ian Rogers (18):
+  gen_compile_commands: Allow the line prefix to still be cmd_
+  gen_compile_commands: Sort output compile commands by file name
+  run-clang-tools: Add pass through checks and header-filter arguments
+  perf bench uprobe: Fix potential use of memory after free
+  perf buildid-cache: Fix use of uninitialized value
+  perf env: Remove unnecessary NULL tests
+  perf jitdump: Avoid memory leak
+  perf mem-events: Avoid uninitialized read
+  perf dlfilter: Be defensive against potential NULL dereference
+  perf hists browser: Reorder variables to reduce padding
+  perf hists browser: Avoid potential NULL dereference
+  perf svghelper: Avoid memory leak
+  perf lock: Fix a memory leak on an error path
+  perf parse-events: Fix unlikely memory leak when cloning terms
+  tools api: Avoid potential double free
+  perf trace-event-info: Avoid passing NULL value to closedir
+  perf header: Fix various error path memory leaks
+  perf bpf_counter: Fix a few memory leaks
 
-30a2ac9a8bb5fce1 Nava kishore Manne 2021-02-11   93  
-7e961c12be424c6c Moritz Fischer     2017-03-24  @94  static const struct of_device_id xlnx_pr_decoupler_of_match[] = {
-30a2ac9a8bb5fce1 Nava kishore Manne 2021-02-11   95  	{ .compatible = "xlnx,pr-decoupler-1.00", .data = &decoupler_config },
-30a2ac9a8bb5fce1 Nava kishore Manne 2021-02-11   96  	{ .compatible = "xlnx,pr-decoupler", .data = &decoupler_config },
-30a2ac9a8bb5fce1 Nava kishore Manne 2021-02-11   97  	{ .compatible = "xlnx,dfx-axi-shutdown-manager-1.00",
-30a2ac9a8bb5fce1 Nava kishore Manne 2021-02-11   98  					.data = &shutdown_config },
-30a2ac9a8bb5fce1 Nava kishore Manne 2021-02-11   99  	{ .compatible = "xlnx,dfx-axi-shutdown-manager",
-30a2ac9a8bb5fce1 Nava kishore Manne 2021-02-11  100  					.data = &shutdown_config },
-7e961c12be424c6c Moritz Fischer     2017-03-24  101  	{},
-7e961c12be424c6c Moritz Fischer     2017-03-24  102  };
-7e961c12be424c6c Moritz Fischer     2017-03-24  103  MODULE_DEVICE_TABLE(of, xlnx_pr_decoupler_of_match);
-7e961c12be424c6c Moritz Fischer     2017-03-24  104  
-
-:::::: The code at line 94 was first introduced by commit
-:::::: 7e961c12be424c6c1e355d469cc1b82dbf3af718 fpga: Add support for Xilinx LogiCORE PR Decoupler
-
-:::::: TO: Moritz Fischer <mdf@kernel.org>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ scripts/clang-tools/gen_compile_commands.py |  8 +--
+ scripts/clang-tools/run-clang-tools.py      | 32 ++++++++---
+ tools/lib/api/io.h                          |  1 +
+ tools/perf/bench/uprobe.c                   |  1 +
+ tools/perf/builtin-buildid-cache.c          |  6 ++-
+ tools/perf/builtin-lock.c                   |  1 +
+ tools/perf/ui/browsers/hists.c              |  6 +--
+ tools/perf/util/bpf_counter.c               |  5 +-
+ tools/perf/util/dlfilter.c                  |  4 +-
+ tools/perf/util/env.c                       |  6 +--
+ tools/perf/util/header.c                    | 60 ++++++++++++---------
+ tools/perf/util/jitdump.c                   |  1 +
+ tools/perf/util/mem-events.c                |  3 +-
+ tools/perf/util/parse-events.c              |  4 +-
+ tools/perf/util/svghelper.c                 |  5 +-
+ tools/perf/util/trace-event-info.c          |  3 +-
+ 16 files changed, 94 insertions(+), 52 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0.609.gbb76f46606-goog
+
