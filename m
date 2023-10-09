@@ -1,107 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5771EFC04;
-	Sun,  8 Oct 2023 22:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AU2GoFws"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696803927; x=1728339927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yPD6DsIdg9+uokcveGmkjl3wIt7hKAzaaoSXHfIFMT8=;
-  b=AU2GoFwsVRQ4jc41D/qBsOlQDuFenhqbFRFfhJWVAL2Rzn0xWPFNVwBr
-   1UlY//ZOqfdP20tTOiMB/rGumzS/JHldQwsCuhSeYWrOhfdJW7Ylx28O+
-   1PqbjxUDJRxxwEsraa2SRWHOXvUy2zT0JWIueh9NA8+tcU8yEPDkf4GhO
-   1Ax/kcwzf9KPn3bQ23rpynuA8Si7j7welqB1Wg84MldaqgjN6ykOL8BjZ
-   LM6ebnDcotuFKHuBwy6Ui/tZiktNZk9aoxxaRGb0sqTQYy4JGGAMQZ10w
-   PvZMpXXBmQ/qlDUAKdPXLpLhOIf+fJbIMtOTMOrFBQVhBf/YUloc2VKpy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="387900176"
-X-IronPort-AV: E=Sophos;i="6.03,207,1694761200"; 
-   d="scan'208";a="387900176"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2023 15:25:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="869025176"
-X-IronPort-AV: E=Sophos;i="6.03,207,1694761200"; 
-   d="scan'208";a="869025176"
-Received: from lkp-server01.sh.intel.com (HELO 8a3a91ad4240) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Oct 2023 15:25:21 -0700
-Received: from kbuild by 8a3a91ad4240 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qpcD9-0005p2-1q;
-	Sun, 08 Oct 2023 22:25:19 +0000
-Date: Mon, 9 Oct 2023 06:25:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tianyi Liu <i.pear@outlook.com>, seanjc@google.com, pbonzini@redhat.com,
-	peterz@infradead.org, mingo@redhat.com, acme@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	kvm@vger.kernel.org, x86@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	Tianyi Liu <i.pear@outlook.com>
-Subject: Re: [PATCH v2 1/5] KVM: Add arch specific interfaces for sampling
- guest callchains
-Message-ID: <202310090652.6TMWiCuU-lkp@intel.com>
-References: <SY4P282MB10840154D4F09917D6528BC69DCFA@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4561FC5
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 05:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1c9a1762b43so1852505ad.1
+        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 22:41:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696830111; x=1697434911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2RX7tLaR5cxlZGvCt5yVuBVmtnOHN5nH9geYt6ELosk=;
+        b=B07exWjkW04NSGCtnIdSkKOZMvZ/pZZHVjC7o+WEO+63QH1d/btodO5v0wD4c3B/DE
+         45l5mPCKtNGSWNP5TmoEc8VtKd7BD5Yc3uCINAqEFzhBoA6pqnRNRzF3RblAkfvJU2cg
+         SRYx8WWybhpq4Mp/NWDZfZ4dvzQaOK3iPUhk7m5Y+h1l6Mh2SsElFvA52zidDEsqPTpl
+         xajs1Nxo/LN0Y15G3v9qgsbgNyUbtxquD4eLu61+CqUFNQjkIFdfiU95opyevRLagUxx
+         fBqlMOu+ORscjCnEUEjCyVTnGnOkwoJvgb1FLDDBe1pbYmf0MQywsUCuFfDtra8IosbW
+         2VWg==
+X-Gm-Message-State: AOJu0YzILqg1V2wMK02nOTmk9/Hoee8tIGKbh/2IYmutbjntDOVlpa5T
+	SNajAG2yXBd0roIzDM+E6OP2hjAKAR0PQEH4F3I=
+X-Google-Smtp-Source: AGHT+IGE0tedBFfLbmKhVN5DwRDxqT1mpIyYE7VWdPjl5uPqunimpunTgmJdNT28U9fMQdA+O0b56HxncBIqBMuQf5M=
+X-Received: by 2002:a17:90b:3e87:b0:274:755b:63b8 with SMTP id
+ rj7-20020a17090b3e8700b00274755b63b8mr14069468pjb.43.1696830111351; Sun, 08
+ Oct 2023 22:41:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SY4P282MB10840154D4F09917D6528BC69DCFA@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
+References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-5-irogers@google.com>
+In-Reply-To: <20231005230851.3666908-5-irogers@google.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Sun, 8 Oct 2023 22:41:40 -0700
+Message-ID: <CAM9d7ch4SLLbORdhkanCoPQZX=f-p-HxsYX2YWYbtLR4beD4wg@mail.gmail.com>
+Subject: Re: [PATCH v2 04/18] perf hisi-ptt: Fix potential memory leak
+To: Ian Rogers <irogers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
+	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tianyi,
+On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
+e:
+>
+> Fix clang-tidy found potential memory leak and unread value:
+> ```
+> tools/perf/util/hisi-ptt.c:108:3: warning: Value stored to 'data_offset' =
+is never read [clang-analyzer-deadcode.DeadStores]
+>                 data_offset =3D 0;
+>                 ^             ~
+> tools/perf/util/hisi-ptt.c:108:3: note: Value stored to 'data_offset' is =
+never read
+>                 data_offset =3D 0;
+>                 ^             ~
+> tools/perf/util/hisi-ptt.c:112:12: warning: Potential leak of memory poin=
+ted to by 'data' [clang-analyzer-unix.Malloc]
+>                         return -errno;
+>                                 ^
+> /usr/include/errno.h:38:18: note: expanded from macro 'errno'
+>                  ^
+> tools/perf/util/hisi-ptt.c:100:15: note: Memory is allocated
+>         void *data =3D malloc(size);
+>                      ^~~~~~~~~~~~
+> tools/perf/util/hisi-ptt.c:104:6: note: Assuming 'data' is non-null
+>         if (!data)
+>             ^~~~~
+> tools/perf/util/hisi-ptt.c:104:2: note: Taking false branch
+>         if (!data)
+>         ^
+> tools/perf/util/hisi-ptt.c:107:6: note: Assuming the condition is false
+>         if (perf_data__is_pipe(session->data)) {
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> tools/perf/util/hisi-ptt.c:107:2: note: Taking false branch
+>         if (perf_data__is_pipe(session->data)) {
+>         ^
+> tools/perf/util/hisi-ptt.c:111:7: note: Assuming the condition is true
+>                 if (data_offset =3D=3D -1)
+>                     ^~~~~~~~~~~~~~~~~
+> tools/perf/util/hisi-ptt.c:111:3: note: Taking true branch
+>                 if (data_offset =3D=3D -1)
+>                 ^
+> tools/perf/util/hisi-ptt.c:112:12: note: Potential leak of memory pointed=
+ to by 'data'
+>                         return -errno;
+>                                 ^
+> /usr/include/errno.h:38:18: note: expanded from macro 'errno'
+> ```
 
-kernel test robot noticed the following build errors:
+We already have
 
-[auto build test ERROR on 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa]
+  https://lore.kernel.org/r/20230930072719.1267784-1-visitorckw@gmail.com
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianyi-Liu/KVM-Add-arch-specific-interfaces-for-sampling-guest-callchains/20231008-230042
-base:   8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-patch link:    https://lore.kernel.org/r/SY4P282MB10840154D4F09917D6528BC69DCFA%40SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM
-patch subject: [PATCH v2 1/5] KVM: Add arch specific interfaces for sampling guest callchains
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231009/202310090652.6TMWiCuU-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231009/202310090652.6TMWiCuU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310090652.6TMWiCuU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/x86.c:12917:35: error: incompatible pointer to integer conversion passing 'void *' to parameter of type 'gva_t' (aka 'unsigned long') [-Wint-conversion]
-           return kvm_read_guest_virt(vcpu, addr, dest, length, &e) == X86EMUL_CONTINUE;
-                                            ^~~~
-   arch/x86/kvm/x86.c:7403:19: note: passing argument to parameter here
-   EXPORT_SYMBOL_GPL(kvm_read_guest_virt);
-                     ^
-   1 error generated.
+Thanks,
+Namhyung
 
 
-vim +12917 arch/x86/kvm/x86.c
-
- 12911	
- 12912	bool kvm_arch_vcpu_read_virt(struct kvm_vcpu *vcpu, void *addr, void *dest, unsigned int length)
- 12913	{
- 12914		struct x86_exception e;
- 12915	
- 12916		/* Return true on success */
- 12917		return kvm_read_guest_virt(vcpu, addr, dest, length, &e) == X86EMUL_CONTINUE;
- 12918	}
- 12919	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/hisi-ptt.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/perf/util/hisi-ptt.c b/tools/perf/util/hisi-ptt.c
+> index 45b614bb73bf..ea297329c526 100644
+> --- a/tools/perf/util/hisi-ptt.c
+> +++ b/tools/perf/util/hisi-ptt.c
+> @@ -98,18 +98,18 @@ static int hisi_ptt_process_auxtrace_event(struct per=
+f_session *session,
+>         int fd =3D perf_data__fd(session->data);
+>         int size =3D event->auxtrace.size;
+>         void *data =3D malloc(size);
+> -       off_t data_offset;
+>         int err;
+>
+>         if (!data)
+>                 return -errno;
+>
+> -       if (perf_data__is_pipe(session->data)) {
+> -               data_offset =3D 0;
+> -       } else {
+> -               data_offset =3D lseek(fd, 0, SEEK_CUR);
+> -               if (data_offset =3D=3D -1)
+> +       if (!perf_data__is_pipe(session->data)) {
+> +               off_t data_offset =3D lseek(fd, 0, SEEK_CUR);
+> +
+> +               if (data_offset =3D=3D -1) {
+> +                       free(data);
+>                         return -errno;
+> +               }
+>         }
+>
+>         err =3D readn(fd, data, size);
+> --
+> 2.42.0.609.gbb76f46606-goog
+>
