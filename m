@@ -1,88 +1,101 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE3F63DF
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 12:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03853182BE
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 12:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGv6K3m5"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5a7ab31fb8bso1405147b3.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 05:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696852881; x=1697457681; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S8xlOdoGoANNG8/4z3J1BZ3qILcNZDx9JymkslqHebI=;
-        b=jGv6K3m5yrNdMnhJs3XeGvmNDc9cf89nd+9djrWtaLJkesRK1PC3MDk9rWXSLNZ1Rx
-         qIdHsRAKVhRjmxxj24r4ABv7x5/9P3fjBp40UPn6rhmgF6bHGmH6J3gYghJHJOzsz+Hh
-         6O4gHjPDN2SY58A2Ket+QSJAQXhJGaOq1ILuSuDYHg7Nfx9OJKJE9QBbTFn5jggDha9z
-         R9J5KmrG1UVMXKAgqCo5u+hZBGow8OmYLEML0G6HW9fZV8V1C3nHRHkAt8SLrj/qP+bU
-         wYSzOpmQ71tpTRsIMAKH5rKE2ZGVAntMJL9lcVOEGYr1+cQ8OPCQqJr8BDoL7l+i1YPG
-         Nw8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696852881; x=1697457681;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S8xlOdoGoANNG8/4z3J1BZ3qILcNZDx9JymkslqHebI=;
-        b=LNLBaCRFcmATfo6KoqAxnQ95FsDbBzqcWG4uPJ077nkYIUVHhOMI8sk2lTHkpC3Xo1
-         AxdYlOojS1zgOFw7jLOgsfJlME+vMKt903soV9zjcdhpw/rjkCT/q5kdN99t7NUI+smN
-         yLECq+SmR8+sqMwIehU6ZM/SEamfFucMwiMLe4mGw7qMbQm3bG1bYovjhp9m38E8U7oC
-         4DPIKtAFt8WD7NRH11z/8ltKOD10cTxM7XD1D0zu/7xs2FHlXG4EsNWt7Q1TPKr4F+fO
-         uuGWHddvkzS5IjoOrXmfkp1+TgQoc9CmG2ys7wWZ2D/wDQfEu084RLjOkppfYMQtr+xG
-         G60g==
-X-Gm-Message-State: AOJu0YwUSuBc9t8yZjxVkWpYzTnPpcXshlvXe9zdUkjwEuEqdO2UxRST
-	XzmepScWaxhwQ1u1vvTdImG5DDWB853FIYjO6BM=
-X-Google-Smtp-Source: AGHT+IH7s5WFh4TVf+bXzMwSO2Y6ijsHfTYRfD4CrHh3NkMPsS9azV+Yzbvm85DpSIEmX55bgdwBCe8HGeIEzKvFNEU=
-X-Received: by 2002:a0d:c886:0:b0:59f:9c08:8f12 with SMTP id
- k128-20020a0dc886000000b0059f9c088f12mr18976846ywd.38.1696852881009; Mon, 09
- Oct 2023 05:01:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fUDPshpf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696854519; x=1728390519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RfddNvi5x0wejZG5QzaCfI3Qcz87rv0fDzUvwx9WuLY=;
+  b=fUDPshpfWyU0gstdvmwc7yu5vRQjt5H8WEwzNEyynd1VWg/F4XMp6Qhy
+   Y7JOYJpT5EZv8imQGi8sv5IPX3QxVx6e6aZGjP5o9zimyj7r2jYMGp4UY
+   tfeF0n3CxHlz9nCS1MG9uLfYC8Mb2/R+sy5zcrevYcRVWCnnmHG5ohvnB
+   Kylf0jTO1+G3MruC70DrSnfFsOEkF39xiMdLUu3u/AU9la93Qa6FSLIYC
+   5NofFMSgsLm78Daos+ZIopxmRZHdDbIHGPPeLMgpruFJQdnHTtL5bMeZI
+   6aTM4zBVNqGJGFfwZPrzxQd3VxQrOXdL/pqDHihIsw8oOQ8j2laPNDUsW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="384004948"
+X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
+   d="scan'208";a="384004948"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:28:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="746656325"
+X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
+   d="scan'208";a="746656325"
+Received: from ibrahim2-mobl2.gar.corp.intel.com (HELO intel.com) ([10.213.42.185])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:28:26 -0700
+Date: Mon, 9 Oct 2023 14:28:20 +0200
+From: Andi Shyti <andi.shyti@linux.intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	John Harrison <John.C.Harrison@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Michal Wajdeczko <michal.wajdeczko@intel.com>,
+	Matt Roper <matthew.d.roper@intel.com>,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-hardening@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Andi Shyti <andi.shyti@linux.intel.com>,
+	Nirmoy Das <nirmoy.das@intel.com>,
+	Jonathan Cavitt <jonathan.cavitt@intel.com>,
+	Fei Yang <fei.yang@intel.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/i915/guc: Annotate struct ct_incoming_msg with
+ __counted_by
+Message-ID: <ZSPx5OrMBm0O6wpL@ashyti-mobl2.lan>
+References: <20231006201744.work.135-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231006155739.246381-1-yakoyoku@gmail.com> <CANiq72m3mpcJfiOxaACLtyaUfBR2j8rtbLdj5eZT08zywKzCfw@mail.gmail.com>
- <ca2cd71c-0aa1-4365-961c-c10737a9e9a6@gmail.com>
-In-Reply-To: <ca2cd71c-0aa1-4365-961c-c10737a9e9a6@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 9 Oct 2023 14:01:10 +0200
-Message-ID: <CANiq72mM2BeWtZNqhvnbA3XR_ArfAi3CG3oxMuu+C74rB0+mBA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] rust: crates in other kernel directories
-To: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231006201744.work.135-kees@kernel.org>
 
-On Sat, Oct 7, 2023 at 1:07=E2=80=AFAM Martin Rodriguez Reboredo
-<yakoyoku@gmail.com> wrote:
->
-> Well, there's the network PHY driver series that is stuck on this
-> topic, I (and probably others) have local work that have the same issue
+Hi Kees,
 
-No, that series is not stuck on this.
+On Fri, Oct 06, 2023 at 01:17:45PM -0700, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct ct_incoming_msg.
+> 
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: John Harrison <John.C.Harrison@Intel.com>
+> Cc: Matthew Brost <matthew.brost@intel.com>
+> Cc: Michal Wajdeczko <michal.wajdeczko@intel.com>
+> Cc: Matt Roper <matthew.d.roper@intel.com>
+> Cc: intel-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-hardening@vger.kernel.org
+> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-> and said general case might not arrive that soon. So it'd better to
-> start on a feature that will benefit API users right away and can be
-> updated to fit needs. That's what I think.
+merged in drm-intel-gt-next.
 
-If there is an in-tree use case that will really require a solution to
-this very soon, then please focus on explaining that (e.g. what "local
-work" do you have and what are your plans for landing it upstream?)
-and we will do our best to reschedule priorities or we can provide a
-workaround for the time being.
-
-In any case, please note that this RFC breaks the kernel build and
-does not really solve the overall issue.
-
-Cheers,
-Miguel
+Thanks,
+Andi
