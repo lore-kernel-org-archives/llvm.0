@@ -1,46 +1,46 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57ECB1A701
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A521C18C20
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:39:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a+O+ZURi"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59ee66806d7so73528407b3.0
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:39:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WIhdxZVG"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d8b2eec15d3so6404186276.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696876782; x=1697481582; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696876784; x=1697481584; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fapvG1sgoYBqHgoFOW9TcSIAiI5hx1hj0GAN7+v4jh4=;
-        b=a+O+ZURiBUX9XCvy0TxyIjIlvsrZK65Gwd+tDURHzhDO6jnZdEg9pZgKlwUB+Ptgn1
-         UMHaINYreUs9FID6uvN4GaukozfrFPCpXJ+LoxEMipLFv8C4MCM4h/ji0Pf9hmPr1FWp
-         cB/qlw40s1K7906BIzrSPWKR8W1+khqMekHlu5Yh4K1JyFfQrxfEWCtRk5zhMAJSOUXB
-         /0ETM3Egf+R6QbuVGdCMxtBK+9TTqG/xSDqw4ylZ6vk2RM/qXQ8FrU1626u9pSqjxUHc
-         OuDUDpsF6PFEfLo1c0IigI5GPqyyrGxfR/pWBmeTacDjZ45bWv+PCu/DplL+Qam7V/n2
-         otkw==
+        bh=GouG30KZVQtjqm6aov/swqA2g+y6OD5o5DKI6J9/hJA=;
+        b=WIhdxZVGDbRzm3ihmon7nasXnkkwaOxj6J0KX3/47ruggCljbNcoQydEUqbFNAy+vN
+         7SeZ5yfo9VpvrEI4S/2yIhJTUjNEe4iH35B+Zh27Vp76MX+azifJIlF1oxo2Bubi7ddq
+         NgnoYK9T7FriYa3ytEghg9PAOWhA79URwb1TlWBWjPxJ0IUxh3S9TEWPe+S/XkZPbXbs
+         Ka/cZPXXEx1i3tabwibkwCOAGKkLhy0ctzQ1VEBrlIXJqKRqmSVJnrPA0Hs1jXPBM1Jm
+         UA9Bch/e6QDy7Kg3QplMdmkzDfFUzMOy8gYTO+e/hxs4xoacg1hsza3d6eGCbWdyAdxw
+         qKrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696876782; x=1697481582;
+        d=1e100.net; s=20230601; t=1696876784; x=1697481584;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fapvG1sgoYBqHgoFOW9TcSIAiI5hx1hj0GAN7+v4jh4=;
-        b=TO0pnF47qW1OgOsyUibsvSTLQnag/fAg7PgmcNcHnE33xhGI71two139jtrLu2leT2
-         Keu6ILBxuJCJZEiGTuMWDLk33EWYYISItNBSjrDRRBovuxeIYXQkYZsFm+MxcdaubIXJ
-         EljFo1b9bTK66x6oBvKX3orjX03SJtqtIHKUxjy1n+vc7ampcp+4+6/LZcD/FI3dFF0l
-         j3P6eJNE7Ayxeg8ngenkG2bInQyN+X0Ifsg/uyKRAJUBtjs3KNLlulXxnsD3X0hVwJX8
-         T+/HvbWVO1RoX1jNimmXnQjlWMtmlOP5/AZy/3LSpYyDDW4wFwVnBBiDqIPdZTnqwOIt
-         CH1A==
-X-Gm-Message-State: AOJu0Yyf9pkGkJFcj9CHg08KTlIhX2nNEHqdvCNYNBjBigGc5f/Iu3KQ
-	h3Aq0gFCD8/J5YH/LcOPlAu11Qlk2rHm
-X-Google-Smtp-Source: AGHT+IFF5Ce3xTASsAOk8I7voMtqVFZ/Fie+83QxW2GS/qJ0vRq1xrYlGTONWtgU9T98ME4DI6ky2PLg0Jc+
+        bh=GouG30KZVQtjqm6aov/swqA2g+y6OD5o5DKI6J9/hJA=;
+        b=oWER8vIxuK3hZlGfMZHEMU2drmayNL3Vp6CvZiBygEl9EYiRT5UL7ssMhCLrVYb3YG
+         x9jsW6b+K70+BbrKCrIaRwiXuxDO6F1+5qyvvz6gOnoyxdTCmK5nHYydAtbkD0cFEc5A
+         HrgZXc0kiB0kqpdGOxrMGE6R9nQAmQdol58OHJKvJNSUQ5MnwdDVESFHPEPBNCfrq4SA
+         Ku4uyb6kVKqYVG67d0tH2vA0CbmJJXkaN46g8ie3pPKF+qk3TC8loBrm4kDJ7wGiWAxa
+         G5OF9ZfmCBBiUIp6xzsYg7sJEsrjqRJzvzfWaNNj5LevGQN4kYJt/7lXhBlWcFeFgFsV
+         pK0g==
+X-Gm-Message-State: AOJu0Yyi0D5zf+fiS8CgpEEVLj65M8d1L1a/hTGebe8B5A3tfuQS7xcm
+	ZXwHfTAV/u/Ics6fnKGeOtswzWxp9b/h
+X-Google-Smtp-Source: AGHT+IFoEQ7Dzv18PcmdjnpaSDsoWF/VAum2oAmj8wWzPzLIX73XPP1Ukf1ru5WFK6DwCtdvNWmpgT87L/bK
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:ac4a:9b94:7158:3f4e])
- (user=irogers job=sendgmr) by 2002:a81:bc03:0:b0:59b:c6bb:babb with SMTP id
- a3-20020a81bc03000000b0059bc6bbbabbmr297631ywi.6.1696876782479; Mon, 09 Oct
- 2023 11:39:42 -0700 (PDT)
-Date: Mon,  9 Oct 2023 11:39:08 -0700
+ (user=irogers job=sendgmr) by 2002:a25:d12:0:b0:d9a:3bee:255c with SMTP id
+ 18-20020a250d12000000b00d9a3bee255cmr25038ybn.7.1696876784641; Mon, 09 Oct
+ 2023 11:39:44 -0700 (PDT)
+Date: Mon,  9 Oct 2023 11:39:09 -0700
 In-Reply-To: <20231009183920.200859-1-irogers@google.com>
-Message-Id: <20231009183920.200859-8-irogers@google.com>
+Message-Id: <20231009183920.200859-9-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231009183920.200859-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v3 06/18] perf env: Remove unnecessary NULL tests
+Subject: [PATCH v3 07/18] perf jitdump: Avoid memory leak
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -63,52 +63,27 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-clang-tidy was warning:
-```
-util/env.c:334:23: warning: Access to field 'nr_pmu_mappings' results in a dereference of a null pointer (loaded from variable 'env') [clang-analyzer-core.NullDereference]
-        env->nr_pmu_mappings = pmu_num;
-```
-
-As functions are called potentially when !env was true. This condition
-could never be true as it would produce a segv, so remove the
-unnecessary NULL tests and silence clang-tidy.
+jit_repipe_unwinding_info is called in a loop by jit_process_dump,
+avoid leaking unwinding_data by free-ing before overwriting. Error
+detected by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/env.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/util/jitdump.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index a164164001fb..44140b7f596a 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -457,7 +457,7 @@ const char *perf_env__cpuid(struct perf_env *env)
- {
- 	int status;
+diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
+index 6b2b96c16ccd..1f657ef8975f 100644
+--- a/tools/perf/util/jitdump.c
++++ b/tools/perf/util/jitdump.c
+@@ -675,6 +675,7 @@ jit_repipe_unwinding_info(struct jit_buf_desc *jd, union jr_entry *jr)
+ 	jd->eh_frame_hdr_size = jr->unwinding.eh_frame_hdr_size;
+ 	jd->unwinding_size = jr->unwinding.unwinding_size;
+ 	jd->unwinding_mapped_size = jr->unwinding.mapped_size;
++	free(jd->unwinding_data);
+ 	jd->unwinding_data = unwinding_data;
  
--	if (!env || !env->cpuid) { /* Assume local operation */
-+	if (!env->cpuid) { /* Assume local operation */
- 		status = perf_env__read_cpuid(env);
- 		if (status)
- 			return NULL;
-@@ -470,7 +470,7 @@ int perf_env__nr_pmu_mappings(struct perf_env *env)
- {
- 	int status;
- 
--	if (!env || !env->nr_pmu_mappings) { /* Assume local operation */
-+	if (!env->nr_pmu_mappings) { /* Assume local operation */
- 		status = perf_env__read_pmu_mappings(env);
- 		if (status)
- 			return 0;
-@@ -483,7 +483,7 @@ const char *perf_env__pmu_mappings(struct perf_env *env)
- {
- 	int status;
- 
--	if (!env || !env->pmu_mappings) { /* Assume local operation */
-+	if (!env->pmu_mappings) { /* Assume local operation */
- 		status = perf_env__read_pmu_mappings(env);
- 		if (status)
- 			return NULL;
+ 	return 0;
 -- 
 2.42.0.609.gbb76f46606-goog
 
