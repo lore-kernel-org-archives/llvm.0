@@ -1,132 +1,539 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0951799B
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 16:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AAE10A1E
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 17:13:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ouz/fPMp"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-69af8a42066so2557231b3a.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 09:56:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qCLZI3OU"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5032a508e74so7349e87.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 10:13:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696870574; x=1697475374; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BI1wdHvupQf0LaYbc5/G8p3qu/45NR/6x8pz02yh3PE=;
-        b=Ouz/fPMpDAPtZuUOnEW525CHtZv0NfSCJco5yDdZZisbElLdnLimAIPfJXlLOx1hZ6
-         dgMlKjwU589qT9uCw3bnuI9UljSQZIRim/kZwM3rCX6ha0b2b1DzN3GVG5i1vfPm9vNm
-         gamyegcV8eO+3COGbJGE+nNGsszD4tDJxkMy0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696870574; x=1697475374;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1696871612; x=1697476412; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BI1wdHvupQf0LaYbc5/G8p3qu/45NR/6x8pz02yh3PE=;
-        b=RWI3jh/WWoqfOkZMl+Om8IHWMMtIsFFGizb+YnMKDWZxXiaYVvW9ALaYbFbAEKPZha
-         VPPKERCfin1fr4DIufcaDP5DmhZOd+FlIaFA2cxMRlw9WXPfNjXpDxKfVT+yc7JqzRLS
-         IXFfssHBH8CGNTbcWalhFHE77Z8dmRi6EbjQ6Sc1t7dmHUaG1vWm793aQE5GfAzkcCkt
-         YyoDkqiuq6Z7vXxb/52UKJhI7uu53LOyWbEgDfTZQ3hsmNueIGJNGOxV0kWSnn6RpgRa
-         EO6H1dLCi+LV3HKjnCDrPAxb9D5nE3tbIsBNXN/8FmBbPHoZAnH4tShew5RKbtsREGWU
-         2FvQ==
-X-Gm-Message-State: AOJu0Yysm65QzF4hVcDt5IkojXIbiUYXD8Rh36y/xFkB4tj2Z3vdMqA0
-	kIwbtvalNjJozBSIY3sM4WGthQ==
-X-Google-Smtp-Source: AGHT+IExmUks9+I/YiKBGr4BtICx6xzlqORwNadZpHtAORGWPchSbI37a3pFI+AKwfNa/ZHilpgCWw==
-X-Received: by 2002:a05:6a00:124a:b0:690:ce30:47e5 with SMTP id u10-20020a056a00124a00b00690ce3047e5mr14761348pfi.6.1696870574128;
-        Mon, 09 Oct 2023 09:56:14 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id l3-20020a62be03000000b00688c733fe92sm6540299pff.215.2023.10.09.09.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 09:56:13 -0700 (PDT)
-Date: Mon, 9 Oct 2023 09:56:11 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Ping-Ke Shih <pkshih@realtek.com>
-Cc: "kvalo@kernel.org" <kvalo@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-	"trix@redhat.com" <trix@redhat.com>,
-	"nathan@kernel.org" <nathan@kernel.org>,
-	"ndesaulniers@google.com" <ndesaulniers@google.com>,
-	"gustavoars@kernel.org" <gustavoars@kernel.org>
-Subject: Re: [PATCH] wifi: rtw89: coex: Annotate struct
- rtw89_btc_btf_set_slot_table with __counted_by
-Message-ID: <202310090953.B7CE5CF4B@keescook>
-References: <20231006201715.work.239-kees@kernel.org>
- <4716f3c7bf3d34ea25229edd5250f5f0cff639d8.camel@realtek.com>
+        bh=USZw0GHNuB175V2YHfKKNgurGef2WdvOjtdu3+1mZgo=;
+        b=qCLZI3OUPCQpTDvw5TWGHfSs9FVFMG3mzP1rPwHq184ykkk8ER2CPiU5GdRyF1bWMn
+         /nJontSOXtSmkkNmKF07WdYMuIUzfkaVm7ALlZUtgypO7mRgEi3O7Xqm1pPzw8Axea/5
+         +H70bNbC5eAdqiC8r+1BBS6kl9+iWNdby5HZpv4ejBvx478zQ3nYRn7m48os8EweaGfy
+         ikRay2GArIr1YlSLjNr142KjWmqDlePeuCJ/WatYeh79H+VGp5klpxMZvBwH2KL3vHFk
+         gwHsLEwQaS2CRfv0BCzV94Rog1jKBd38tJ3cDiCZTIY+GduXi9DG7qshNMxL6rettdHH
+         N4fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696871612; x=1697476412;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=USZw0GHNuB175V2YHfKKNgurGef2WdvOjtdu3+1mZgo=;
+        b=VoqhEig5MjVLqKz7SEmvjc+Fnv+OU2U1oRul9Co8WngMWeqWiQfyuNpga4Ugak9/mB
+         iRIaqF0dRIzjEOUPny+ZVdjy6ZG1A5YQFdBWgVcipP4zL8d5BNs1m2bqJWA0QYGO7b2H
+         Po4qfNa0rdH3e7BAnjj78muBztv6cFD+Oq3mlkLob0AFft2Ovwm0auUM6bRnT5At3liq
+         vgi25LG1hfxURn9K3m4uRsgJvmehB5Gw2ZIhDKVUCaJYVPMN6rzqueaw/RUaV5K/qmYV
+         JV0IjcMLylHBN9vTsbdNRXLRRePA7LcUAo6eUL2FfXKvcJrbwzK7vaxiuZbow8T4PAOs
+         Vqbg==
+X-Gm-Message-State: AOJu0YwD/eIDaeWLbkWorgNW1t0M8N0FNviVNhFkaVQeFd8bNVTTuuih
+	03xXTygHl2muiQYdheZRaYbzdkbDA4Cp1cIdqfujUQ==
+X-Google-Smtp-Source: AGHT+IGVsX4xfHStmDL+x1OifbyOceUXKJcxj4/NHb1DoOc5oXAK1xokifhDJ9++bokH9VsHXchQtCdyLgMwzO6fTxs=
+X-Received: by 2002:ac2:558c:0:b0:502:cdb6:f316 with SMTP id
+ v12-20020ac2558c000000b00502cdb6f316mr231818lfg.3.1696871612180; Mon, 09 Oct
+ 2023 10:13:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4716f3c7bf3d34ea25229edd5250f5f0cff639d8.camel@realtek.com>
+References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-18-irogers@google.com>
+ <CAM9d7cj=au3DVNqA0OYU_9eu=R9kTz6SQrtfKuSGnrm=FAY=CA@mail.gmail.com>
+In-Reply-To: <CAM9d7cj=au3DVNqA0OYU_9eu=R9kTz6SQrtfKuSGnrm=FAY=CA@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 9 Oct 2023 10:13:20 -0700
+Message-ID: <CAP-5=fWtYPzGw0zvPd1VJc8RWi9cRQDg=ZF3Wjxf9yyY1QuPGA@mail.gmail.com>
+Subject: Re: [PATCH v2 17/18] perf header: Fix various error path memory leaks
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
+	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 07, 2023 at 01:20:43AM +0000, Ping-Ke Shih wrote:
-> On Fri, 2023-10-06 at 13:17 -0700, Kees Cook wrote:
-> > 
-> > Prepare for the coming implementation by GCC and Clang of the __counted_by
-> > attribute. Flexible array members annotated with __counted_by can have
-> > their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> > array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> > functions).
-> > 
-> > As found with Coccinelle[1], add __counted_by for struct
-> > rtw89_btc_btf_set_slot_table.
-> > 
-> > Cc: Ping-Ke Shih <pkshih@realtek.com>
-> > Cc: Kalle Valo <kvalo@kernel.org>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: linux-wireless@vger.kernel.org
-> > Cc: linux-hardening@vger.kernel.org
-> > Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
+On Sun, Oct 8, 2023 at 11:57=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+> >
+> > Memory leaks were detected by clang-tidy.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> >  drivers/net/wireless/realtek/rtw89/coex.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
-> > index 4ba8b3df70ae..d66a1152c3f5 100644
-> > --- a/drivers/net/wireless/realtek/rtw89/coex.c
-> > +++ b/drivers/net/wireless/realtek/rtw89/coex.c
-> > @@ -237,7 +237,7 @@ struct rtw89_btc_btf_set_report {
-> >  struct rtw89_btc_btf_set_slot_table {
-> >         u8 fver;
-> >         u8 tbl_num;
-> > -       u8 buf[];
-> > +       u8 buf[] __counted_by(tbl_num);
-> 
-> This struct isn't defined properly. It should be 
-> 
-> struct rtw89_btc_btf_set_slot_table {
-> 	u8 fver;
-> 	u8 tbl_num;
-> 	struct rtw89_btc_fbtc_slot tbl[] __counted_by(tbl_num);
-> } __packed;
-> 
-> And, we should modify rtw89_btc_fw_set_slots() as well. 
-> 
-> Another struct 'rtw89_btc_btf_set_mon_reg' has similar problem.
-> 
-> So, NACK this patch. I will prepare one or two patches for them next week. 
+> >  tools/perf/util/header.c | 63 ++++++++++++++++++++++++----------------
+> >  1 file changed, 38 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+> > index d812e1e371a7..41b78e40b22b 100644
+> > --- a/tools/perf/util/header.c
+> > +++ b/tools/perf/util/header.c
+> > @@ -2598,8 +2598,10 @@ static int process_cpu_topology(struct feat_fd *=
+ff, void *data __maybe_unused)
+> >                         goto error;
+> >
+> >                 /* include a NULL character at the end */
+> > -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
+> > +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
+> > +                       free(str);
+> >                         goto error;
+> > +               }
+> >                 size +=3D string_size(str);
+> >                 free(str);
+> >         }
+> > @@ -2617,8 +2619,10 @@ static int process_cpu_topology(struct feat_fd *=
+ff, void *data __maybe_unused)
+> >                         goto error;
+> >
+> >                 /* include a NULL character at the end */
+> > -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
+> > +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
+> > +                       free(str);
+> >                         goto error;
+> > +               }
+> >                 size +=3D string_size(str);
+> >                 free(str);
+> >         }
+> > @@ -2681,8 +2685,10 @@ static int process_cpu_topology(struct feat_fd *=
+ff, void *data __maybe_unused)
+> >                         goto error;
+> >
+> >                 /* include a NULL character at the end */
+> > -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
+> > +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
+> > +                       free(str);
+> >                         goto error;
+> > +               }
+> >                 size +=3D string_size(str);
+> >                 free(str);
+> >         }
+>
+> For these cases, it'd be simpler to free it in the error path.
 
-Ah-ha; thank you!
+It was a slightly larger change to do it that way, but I'll alter it.
+The issue is not getting a double free on str, which is most easily
+handled by switching frees to zfrees.
 
-> By the way, I have question about __counted_by(). Can I apply it to little/big-
-> endian 'num'? Like
-> 
-> struct foo {
-> 	...
-> 	__le32 num;
-> 	__le32 data[] __counted_by(num);
-> }
 
-Unfortunately not yet. I hope to see it extended in the future to allow
-for arbitrary expressions. For this first step, it only handles native
-sizes.
+>
+>
+> > @@ -2736,10 +2742,9 @@ static int process_numa_topology(struct feat_fd =
+*ff, void *data __maybe_unused)
+> >                         goto error;
+> >
+> >                 n->map =3D perf_cpu_map__new(str);
+> > +               free(str);
+> >                 if (!n->map)
+> >                         goto error;
+> > -
+> > -               free(str);
+> >         }
+> >         ff->ph->env.nr_numa_nodes =3D nr;
+> >         ff->ph->env.numa_nodes =3D nodes;
+> > @@ -2913,10 +2918,10 @@ static int process_cache(struct feat_fd *ff, vo=
+id *data __maybe_unused)
+> >                 return -1;
+> >
+> >         for (i =3D 0; i < cnt; i++) {
+> > -               struct cpu_cache_level c;
+> > +               struct cpu_cache_level *c =3D &caches[i];
+> >
+> >                 #define _R(v)                                          =
+ \
+> > -                       if (do_read_u32(ff, &c.v))\
+> > +                       if (do_read_u32(ff, &c->v))                    =
+ \
+> >                                 goto out_free_caches;                  =
+ \
+> >
+> >                 _R(level)
+> > @@ -2926,22 +2931,25 @@ static int process_cache(struct feat_fd *ff, vo=
+id *data __maybe_unused)
+> >                 #undef _R
+> >
+> >                 #define _R(v)                                   \
+> > -                       c.v =3D do_read_string(ff);               \
+> > -                       if (!c.v)                               \
+> > -                               goto out_free_caches;
+> > +                       c->v =3D do_read_string(ff);              \
+> > +                       if (!c->v)                              \
+> > +                               goto out_free_caches;           \
+> >
+> >                 _R(type)
+> >                 _R(size)
+> >                 _R(map)
+> >                 #undef _R
+> > -
+> > -               caches[i] =3D c;
+> >         }
+> >
+> >         ff->ph->env.caches =3D caches;
+> >         ff->ph->env.caches_cnt =3D cnt;
+> >         return 0;
+> >  out_free_caches:
+> > +       for (i =3D 0; i < cnt; i++) {
+> > +               free(caches[i].type);
+> > +               free(caches[i].size);
+> > +               free(caches[i].map);
+> > +       }
+> >         free(caches);
+> >         return -1;
+> >  }
+>
+> Looks ok.
+>
+>
+> > @@ -3585,18 +3593,16 @@ static int perf_header__adds_write(struct perf_=
+header *header,
+> >                                    struct feat_copier *fc)
+> >  {
+> >         int nr_sections;
+> > -       struct feat_fd ff;
+> > +       struct feat_fd ff =3D {
+> > +               .fd  =3D fd,
+> > +               .ph =3D header,
+> > +       };
+>
+> I'm fine with this change.
+>
+>
+> >         struct perf_file_section *feat_sec, *p;
+> >         int sec_size;
+> >         u64 sec_start;
+> >         int feat;
+> >         int err;
+> >
+> > -       ff =3D (struct feat_fd){
+> > -               .fd  =3D fd,
+> > -               .ph =3D header,
+> > -       };
+> > -
+> >         nr_sections =3D bitmap_weight(header->adds_features, HEADER_FEA=
+T_BITS);
+> >         if (!nr_sections)
+> >                 return 0;
+> > @@ -3623,6 +3629,7 @@ static int perf_header__adds_write(struct perf_he=
+ader *header,
+> >         err =3D do_write(&ff, feat_sec, sec_size);
+> >         if (err < 0)
+> >                 pr_debug("failed to write feature section\n");
+> > +       free(ff.buf);
+>
+> But it looks like false alarams.  Since the feat_fd has fd
+> and no buf, it won't allocate the buffer in do_write() and
+> just use __do_write_fd().  So no need to free the buf.
 
--- 
-Kees Cook
+This code looks like it has had a half-done optimization applied to it
+- why have >1 buffer? why are we making the code's life hard? In
+__do_write_buf there is a test that can be true even when a buf is
+provided:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/header.c?h=3Dperf-tools-next#n125
+```
+if (ff->size < new_size) {
+        addr =3D realloc(ff->buf, new_size);
+        if (!addr)
+                return -ENOMEM;
+        ff->buf =3D addr;
+```
+In the case clang-tidy (I'll put the analysis below) has determined
+that new_size may be greater than size (I believe the intent in the
+code is they both evaluate to 0) and this causes the memory leak being
+fixed here. I'll add a TODO comment in v3 but things like 'buf' are
+opaque and not intention revealing in the code, which makes any kind
+of interpretation hard.
+
+I think again this is a good signal that there is worthwhile
+simplification/cleanup in this code.
+
+Thanks,
+Ian
+
+```
+tools/perf/util/header.c:3628:6: warning: Potential leak of memory
+pointed to by 'ff.buf' [clang-analyzer-unix.Malloc]
+        err =3D do_write(&ff, feat_sec, sec_size);
+            ^
+tools/perf/util/header.c:3778:9: note: Calling 'perf_session__do_write_head=
+er'
+        return perf_session__do_write_header(session, evlist, fd, true, fc)=
+;
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:3675:2: note: Loop condition is false.
+Execution continues on line 3685
+        evlist__for_each_entry(session->evlist, evsel) {
+        ^
+tools/perf/util/evlist.h:276:2: note: expanded from macro
+'evlist__for_each_entry'
+        __evlist__for_each_entry(&(evlist)->core.entries, evsel)
+        ^
+tools/perf/util/evlist.h:268:9: note: expanded from macro
+'__evlist__for_each_entry'
+        list_for_each_entry(evsel, list, core.node)
+        ^
+tools/include/linux/list.h:458:2: note: expanded from macro
+'list_for_each_entry'
+        for (pos =3D list_first_entry(head, typeof(*pos), member);        \
+        ^
+tools/perf/util/header.c:3687:2: note: Loop condition is false.
+Execution continues on line 3711
+        evlist__for_each_entry(evlist, evsel) {
+        ^
+tools/perf/util/evlist.h:276:2: note: expanded from macro
+'evlist__for_each_entry'
+        __evlist__for_each_entry(&(evlist)->core.entries, evsel)
+        ^
+tools/perf/util/evlist.h:268:9: note: expanded from macro
+'__evlist__for_each_entry'
+        list_for_each_entry(evsel, list, core.node)
+        ^
+tools/include/linux/list.h:458:2: note: expanded from macro
+'list_for_each_entry'
+        for (pos =3D list_first_entry(head, typeof(*pos), member);        \
+        ^
+tools/perf/util/header.c:3711:6: note: Assuming field 'data_offset' is
+not equal to 0
+        if (!header->data_offset)
+            ^~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:3711:2: note: Taking false branch
+        if (!header->data_offset)
+        ^
+tools/perf/util/header.c:3715:6: note: 'at_exit' is true
+        if (at_exit) {
+            ^~~~~~~
+tools/perf/util/header.c:3715:2: note: Taking true branch
+        if (at_exit) {
+        ^
+tools/perf/util/header.c:3716:9: note: Calling 'perf_header__adds_write'
+                err =3D perf_header__adds_write(header, evlist, fd, fc);
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:3606:6: note: Assuming 'nr_sections' is not equal
+ to 0
+        if (!nr_sections)
+            ^~~~~~~~~~~~
+tools/perf/util/header.c:3606:2: note: Taking false branch
+        if (!nr_sections)
+        ^
+tools/perf/util/header.c:3610:6: note: Assuming 'feat_sec' is not equal to
+ NULL
+        if (feat_sec =3D=3D NULL)
+            ^~~~~~~~~~~~~~~~
+tools/perf/util/header.c:3610:2: note: Taking false branch
+        if (feat_sec =3D=3D NULL)
+        ^
+tools/perf/util/header.c:3618:2: note: Assuming 'feat' is < HEADER_FEAT_BIT=
+S
+        for_each_set_bit(feat, header->adds_features, HEADER_FEAT_BITS) {
+        ^
+tools/include/linux/bitops.h:54:7: note: expanded from macro 'for_each_set_=
+bit'
+             (bit) < (size);                                    \
+             ^~~~~~~~~~~~~~
+tools/perf/util/header.c:3618:2: note: Loop condition is true.
+Entering loop body
+        for_each_set_bit(feat, header->adds_features, HEADER_FEAT_BITS) {
+        ^
+tools/include/linux/bitops.h:53:2: note: expanded from macro 'for_each_set_=
+bit'
+        for ((bit) =3D find_first_bit((addr), (size));            \
+        ^
+tools/perf/util/header.c:3619:3: note: Taking true branch
+                if (do_write_feat(&ff, feat, &p, evlist, fc))
+                ^
+tools/perf/util/header.c:3618:2: note: Assuming 'feat' is >=3D HEADER_FEAT_=
+BITS
+        for_each_set_bit(feat, header->adds_features, HEADER_FEAT_BITS) {
+tools/include/linux/bitops.h:54:7: note: expanded from macro 'for_each_set_=
+bit'
+             (bit) < (size);                                    \
+             ^~~~~~~~~~~~~~
+tools/perf/util/header.c:3618:2: note: Loop condition is false.
+Execution continues on line 3623
+        for_each_set_bit(feat, header->adds_features, HEADER_FEAT_BITS) {
+        ^
+tools/include/linux/bitops.h:53:2: note: expanded from macro 'for_each_set_=
+bit'
+        for ((bit) =3D find_first_bit((addr), (size));            \
+        ^
+tools/perf/util/header.c:3628:8: note: Calling 'do_write'
+        err =3D do_write(&ff, feat_sec, sec_size);
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:141:6: note: Assuming field 'buf' is non-null
+        if (!ff->buf)
+            ^~~~~~~~
+tools/perf/util/header.c:141:2: note: Taking false branch
+        if (!ff->buf)
+        ^
+tools/perf/util/header.c:143:9: note: Calling '__do_write_buf'
+        return __do_write_buf(ff, buf, size);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:117:6: note: Assuming the condition is false
+        if (size + ff->offset > max_size)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:117:2: note: Taking false branch
+        if (size + ff->offset > max_size)
+        ^
+tools/perf/util/header.c:120:9: note: Assuming the condition is true
+        while (size > (new_size - ff->offset))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:120:2: note: Loop condition is true.
+Entering loop body
+        while (size > (new_size - ff->offset))
+        ^
+tools/perf/util/header.c:120:9: note: Assuming the condition is false
+        while (size > (new_size - ff->offset))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:120:2: note: Loop condition is false.
+Execution continues on line 122
+        while (size > (new_size - ff->offset))
+        ^
+tools/perf/util/header.c:122:13: note: Assuming '_min1' is >=3D '_min2'
+        new_size =3D min(max_size, new_size);
+                   ^
+tools/include/linux/kernel.h:53:2: note: expanded from macro 'min'
+        _min1 < _min2 ? _min1 : _min2; })
+        ^~~~~~~~~~~~~
+tools/perf/util/header.c:122:13: note: '?' condition is false
+        new_size =3D min(max_size, new_size);
+                   ^
+tools/include/linux/kernel.h:53:2: note: expanded from macro 'min'
+        _min1 < _min2 ? _min1 : _min2; })
+        ^
+tools/perf/util/header.c:124:6: note: Assuming 'new_size' is > field 'size'
+        if (ff->size < new_size) {
+            ^~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:124:2: note: Taking true branch
+        if (ff->size < new_size) {
+        ^
+tools/perf/util/header.c:125:10: note: Memory is allocated
+                addr =3D realloc(ff->buf, new_size);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:126:7: note: Assuming 'addr' is non-null
+                if (!addr)
+                    ^~~~~
+tools/perf/util/header.c:126:3: note: Taking false branch
+                if (!addr)
+                ^
+tools/perf/util/header.c:143:9: note: Returned allocated memory
+        return __do_write_buf(ff, buf, size);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:3628:8: note: Returned allocated memory
+        err =3D do_write(&ff, feat_sec, sec_size);
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/perf/util/header.c:3628:6: note: Potential leak of memory
+pointed to by 'ff.buf'
+        err =3D do_write(&ff, feat_sec, sec_size);
+```
+
+
+> Thanks,
+> Namhyung
+>
+>
+> >         free(feat_sec);
+> >         return err;
+> >  }
+> > @@ -3630,11 +3637,11 @@ static int perf_header__adds_write(struct perf_=
+header *header,
+> >  int perf_header__write_pipe(int fd)
+> >  {
+> >         struct perf_pipe_file_header f_header;
+> > -       struct feat_fd ff;
+> > +       struct feat_fd ff =3D {
+> > +               .fd =3D fd,
+> > +       };
+> >         int err;
+> >
+> > -       ff =3D (struct feat_fd){ .fd =3D fd };
+> > -
+> >         f_header =3D (struct perf_pipe_file_header){
+> >                 .magic     =3D PERF_MAGIC,
+> >                 .size      =3D sizeof(f_header),
+> > @@ -3645,7 +3652,7 @@ int perf_header__write_pipe(int fd)
+> >                 pr_debug("failed to write perf pipe header\n");
+> >                 return err;
+> >         }
+> > -
+> > +       free(ff.buf);
+> >         return 0;
+> >  }
+> >
+> > @@ -3658,11 +3665,12 @@ static int perf_session__do_write_header(struct=
+ perf_session *session,
+> >         struct perf_file_attr   f_attr;
+> >         struct perf_header *header =3D &session->header;
+> >         struct evsel *evsel;
+> > -       struct feat_fd ff;
+> > +       struct feat_fd ff =3D {
+> > +               .fd =3D fd,
+> > +       };
+> >         u64 attr_offset;
+> >         int err;
+> >
+> > -       ff =3D (struct feat_fd){ .fd =3D fd};
+> >         lseek(fd, sizeof(f_header), SEEK_SET);
+> >
+> >         evlist__for_each_entry(session->evlist, evsel) {
+> > @@ -3670,6 +3678,7 @@ static int perf_session__do_write_header(struct p=
+erf_session *session,
+> >                 err =3D do_write(&ff, evsel->core.id, evsel->core.ids *=
+ sizeof(u64));
+> >                 if (err < 0) {
+> >                         pr_debug("failed to write perf header\n");
+> > +                       free(ff.buf);
+> >                         return err;
+> >                 }
+> >         }
+> > @@ -3695,6 +3704,7 @@ static int perf_session__do_write_header(struct p=
+erf_session *session,
+> >                 err =3D do_write(&ff, &f_attr, sizeof(f_attr));
+> >                 if (err < 0) {
+> >                         pr_debug("failed to write perf header attribute=
+\n");
+> > +                       free(ff.buf);
+> >                         return err;
+> >                 }
+> >         }
+> > @@ -3705,8 +3715,10 @@ static int perf_session__do_write_header(struct =
+perf_session *session,
+> >
+> >         if (at_exit) {
+> >                 err =3D perf_header__adds_write(header, evlist, fd, fc)=
+;
+> > -               if (err < 0)
+> > +               if (err < 0) {
+> > +                       free(ff.buf);
+> >                         return err;
+> > +               }
+> >         }
+> >
+> >         f_header =3D (struct perf_file_header){
+> > @@ -3728,6 +3740,7 @@ static int perf_session__do_write_header(struct p=
+erf_session *session,
+> >
+> >         lseek(fd, 0, SEEK_SET);
+> >         err =3D do_write(&ff, &f_header, sizeof(f_header));
+> > +       free(ff.buf);
+> >         if (err < 0) {
+> >                 pr_debug("failed to write perf header\n");
+> >                 return err;
+> > --
+> > 2.42.0.609.gbb76f46606-goog
+> >
