@@ -1,46 +1,46 @@
 Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514C337170
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBCB358B0
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zm8m8us7"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59f8188b718so77598187b3.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:40:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ANrZASXd"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59f7d4bbfc7so77504437b3.3
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696876799; x=1697481599; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696876801; x=1697481601; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=niI1DS8q+ZbexmAiDdLr0rnTr4377R73icOoozlTydQ=;
-        b=zm8m8us7MpyHpLIJhtt3pJIkYBDCvkP8znto3ytu9K9dqbE2IxvRacWDE3nPT2B9kC
-         ItHHsoWsrjBbh4LbkGlPmyvjtVxwCOiuFUIMPegsbcEsf1TCAs5G6gQ5eNMfPBWgDwXr
-         rM33ubJFIc18LG96qzgUlyq62so1QghIBMwWI9kst6N6KE/tOEPrWOfCQO8/4N6LB52p
-         owTUNSkTb3UZ3gncuGd/BBkQYmGrkEa26fB1220Ad+4oTjXvXNfKZZQnyinwNEps5Ysx
-         DhAj7xRNKM8v5kCZajkkyt2x63YzvRBi/5yR6faCaPVAlMmcx6fnb1M1uQ25MHRb7MeK
-         dFXw==
+        bh=HGxcidzGPRegna1u1K7BT077Nrlph2dhlmMJs3FQauY=;
+        b=ANrZASXdPL2E5u/VDNmCrTQKNizdD0ZmWw5+He0hceenXEjXT3v0dDupcZYc6Grp3q
+         VCPYkQfIJBdGW/G0GUrxC0/9uNgnkccRcEZ9TS+PRgAseIN/P2tJGh6ipuNwuXW0RvAe
+         NsEslWo/foFUoUdcQ2P+0IWvi2pgcVDKoBMalBAz6vfqjv4U3Dmyw1skb7Qy2htuteiN
+         sBwUMGBykguu9VQ9nbX3CTfDyFDE1DXM6CvY05ZR6nIPslK6HZypBNzK+YfKAu0FyPNA
+         aKiukL05ZjZuIbpXm4/ZHkI6DKd8VysT6zZgI7N/Q5eMqKY5AWKyCgjcI0YG5kNxDZqa
+         cqfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696876799; x=1697481599;
+        d=1e100.net; s=20230601; t=1696876801; x=1697481601;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=niI1DS8q+ZbexmAiDdLr0rnTr4377R73icOoozlTydQ=;
-        b=OYLTVcOn0KIau95QIWFQyjiD0iRShPzNAaUBjLXhdnSxcdqTC5FSoqXfo12URRE0iZ
-         P+JHbSX4mFLP8IkPZ7z9X+j6WYoEKXfjaIJQyQLHe0YcWMs+ejalOOMmvNDVTWbWUajN
-         YwWXa2Ns/RiBnxfQxH8NxXQcTPI0q5zWNYdxsGxw+Sm8gQlG3xWwa8/f5DzG1gCoGx6d
-         NDuLtLSJt3QKg9A4rkrQpjhtDs2HZEGVkfl+MiMNFiwzFzcbsZhEZtshPE7Ek45wQtU/
-         cSgr8Pcco+VHmzyTOwTeVB7/XRbinrdAkN7k35KIEWpweuKrtc6NLzrI/aUgcbvGW37b
-         iMcQ==
-X-Gm-Message-State: AOJu0YwWM5Bs8wbZshuYdL3zUcj5P0II43/M+oSnOw3RVRiwxUXt9Ps0
-	65zT9VuEZotnbMdWJZQhEhAieboM1S6V
-X-Google-Smtp-Source: AGHT+IHVauHFJJ6dURYCURIsUyMaH8uHK9E3Vkz92KCp4HMULUMevSk/Te5SUgiu4nvqqGfnHApJa8igvKfI
+        bh=HGxcidzGPRegna1u1K7BT077Nrlph2dhlmMJs3FQauY=;
+        b=D7jpRW0DjpENLtR6gt7qqy7T7T+AvoK+IjL17SCHNliIs80TzmtesyW/Y0VESfKUd2
+         el3WN4raXS8ETYurNgp38FlHDCt4LG9ETt0c38w53Qm/e5ruoKN0LsN5CmhbpjlHL6/R
+         bc5F9RAhwmGrkAtT+5nm3QsvPmkJhVpSICM3t+pkv6aQjs9Q8+2w7wUU3NIiQMZapP8n
+         z0duFXkuYVij7UpvJgstA+cSMDUF+ZLsH+eynp25XNjNNB0owM4Hubg5ogKhkRASnFEX
+         7jiy7pPWPWScT7YYj3wtvr1WalHOD/+n5hZsqKSn/PSSr0X+FaKe5j5yVfpnydECQ39L
+         aBbw==
+X-Gm-Message-State: AOJu0YzcfibDSGKfkSrf4Du+LIEWYB6D+PLaKHzLKjA++mKXglfagKT9
+	waZbqlDWZ0jKHdCIMF4H3/wXe+fP6LWj
+X-Google-Smtp-Source: AGHT+IHv/D+bxgRzhvH5SJtdaUWM0vtK5Kcw+aA2tiW8Y4QaDfmm5vLlI9ULokvCKbvDQyU/3LpdJsz6h2n6
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:ac4a:9b94:7158:3f4e])
- (user=irogers job=sendgmr) by 2002:a25:bcd:0:b0:d7f:2cb6:7d8c with SMTP id
- 196-20020a250bcd000000b00d7f2cb67d8cmr247211ybl.13.1696876799415; Mon, 09 Oct
- 2023 11:39:59 -0700 (PDT)
-Date: Mon,  9 Oct 2023 11:39:15 -0700
+ (user=irogers job=sendgmr) by 2002:a81:a849:0:b0:577:619e:d3c9 with SMTP id
+ f70-20020a81a849000000b00577619ed3c9mr336831ywh.10.1696876801567; Mon, 09 Oct
+ 2023 11:40:01 -0700 (PDT)
+Date: Mon,  9 Oct 2023 11:39:16 -0700
 In-Reply-To: <20231009183920.200859-1-irogers@google.com>
-Message-Id: <20231009183920.200859-15-irogers@google.com>
+Message-Id: <20231009183920.200859-16-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231009183920.200859-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v3 13/18] perf lock: Fix a memory leak on an error path
+Subject: [PATCH v3 14/18] perf parse-events: Fix unlikely memory leak when
+ cloning terms
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -63,25 +64,28 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-If a memory allocation fails then the strdup-ed string needs
-freeing. Detected by clang-tidy.
+Add missing free on an error path as detected by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-lock.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/parse-events.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index fa7419978353..a3ff2f4edbaa 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -2478,6 +2478,7 @@ static int parse_call_stack(const struct option *opt __maybe_unused, const char
- 		entry = malloc(sizeof(*entry) + strlen(tok) + 1);
- 		if (entry == NULL) {
- 			pr_err("Memory allocation failure\n");
-+			free(s);
- 			return -1;
- 		}
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index c56e07bd7dd6..23c027cf20ae 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -2549,8 +2549,10 @@ int parse_events_term__clone(struct parse_events_term **new,
+ 		return new_term(new, &temp, /*str=*/NULL, term->val.num);
+ 
+ 	str = strdup(term->val.str);
+-	if (!str)
++	if (!str) {
++		zfree(&temp.config);
+ 		return -ENOMEM;
++	}
+ 	return new_term(new, &temp, str, /*num=*/0);
+ }
  
 -- 
 2.42.0.609.gbb76f46606-goog
