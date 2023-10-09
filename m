@@ -1,48 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6419A35895
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 14:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A31358A1
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 14:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KbPr75Hl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NJEzlhPu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1696861306;
+	s=mimecast20190719; t=1696862480;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=UMzxpc93x1TQoUxDoX9IUWZp6Vc8u96gkM5xKUGGBaI=;
-	b=KbPr75HlkQpixSobDlyROOwJ1oauBkLAlcZhqlVXwscuOOUeUU6n6X+HkScZssmtbLUB2z
-	pipxkQMwQqJvrbMtYz+qGzF1ke3PPxYdTJSLXbF6p2ZBW2ZRHPgGV4uN40zkANMuZpHg/r
-	ysuQnaJ0FIruXs18kYzVebYv6pGEaHY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-ZAPB15ugMEuPgtpbpm5rdQ-1; Mon, 09 Oct 2023 10:21:44 -0400
-X-MC-Unique: ZAPB15ugMEuPgtpbpm5rdQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	bh=ef6r6jOSWSUVGBzEEBqP0nHf74Ce5kXmryrX5o3StLw=;
+	b=NJEzlhPuJRM5N41LvC2eslyafnDRp2LDtNdPlXxRDy7EmP+pGjLPI9Wcv/AR/nYufqHEN+
+	1Mdx4Zl2EfNPIgNkmbI2V91rBMkHLxE8TY56fW6HPwAbGUeo0CsHhQYYMF9BTuUvKuzHIX
+	2+9h1R3WHvJnNYLZqfvtksqLTT8q1XI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-391-FcoG7KKFNZKW26eUT6WOSQ-1; Mon, 09 Oct 2023 10:41:19 -0400
+X-MC-Unique: FcoG7KKFNZKW26eUT6WOSQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 27B3F29ABA1C
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 14:21:44 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F3FB41875054
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 14:41:18 +0000 (UTC)
 Received: from [172.64.15.49] (unknown [10.30.32.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 02DE9492B16;
-	Mon,  9 Oct 2023 14:21:43 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D71B540C6EA8;
+	Mon,  9 Oct 2023 14:41:18 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 7 of 230): Test report for master
- (6.6.0-rc4, mainline.kernel.org-clang, 7de25c85)
-Date: Mon, 09 Oct 2023 14:21:43 -0000
-To: bgoncalv@redhat.com, jbastian@redhat.com, yizhan@redhat.com,
- llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 10 of 230): Test report for master
+ (6.6.0-rc5, mainline.kernel.org-clang, 94f6f055)
+Date: Mon, 09 Oct 2023 14:41:18 -0000
+To: bgoncalv@redhat.com, jbastian@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <32014.123100910214401396@us-mta-445.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <78389.123100910411901072@us-mta-391.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -57,37 +56,53 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'for-6.6-rc4-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
+    Commit message: Linux 6.6-rc5
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/107804
+    https://datawarehouse.cki-project.org/kcidb/checkouts/107958
 
 One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
+    =E2=9D=97 Regression(s) detected:
+          x86_64 - stress: stress-ng - memory
+                   Issue: stress: stress-ng - memory: stress-ng invoked oom=
+-killer: gfp_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), o=
+rder=3D0, oom_score_adj=3D1000
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1214
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9790665
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+9807856
+                   Issue: stress: stress-ng - memory: system hit OOM
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1425
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9807856
+
+    Note: Any of these might not be a regression and/or we might have mista=
+kenly thought this issue to be fixed.
+          If it is not a regression, please ask the test maintainer to reop=
+en the issue and untag the regression from this execution.
+
+    Unrecognized or new issues:
            s390x - stress: stress-ng - memory
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9790669
+9807781
                    Non-passing subtests:
                        =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9790716
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
           x86_64 (debug) - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9790627
+9807707
                    Non-passing subtests:
                        =E2=9D=8C FAIL Panic
 
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
         Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
 robe of ARMHC500:20 failed with error -17
             URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
@@ -124,35 +139,24 @@ l-tests/-/issues/843
             Affected tests:
                  aarch64 - xfstests - btrfs
                   x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - btrfs
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1267
             Affected tests:
                  ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
         Issue: xfstests: generic/354 file exists
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1654
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
         Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
 d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
 
 
 
