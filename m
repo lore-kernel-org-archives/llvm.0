@@ -1,156 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9D415AFF;
-	Mon,  9 Oct 2023 10:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE3F63DF
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 12:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J8ZHx2Xw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696846272; x=1728382272;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z8fmbK0qvlMiW8gOXAxAw84fmJJdFWzIXoYfwW3JOtM=;
-  b=J8ZHx2XwJC+FxaiAPIMeli08LCAt+zJzPitDvEgh4nFiZm00uMKgjFTU
-   T4c1MQPJl2fDxj6HhGdi8ygQobiShuYaY+FPjSVfGYRfq21M9NwKItbsb
-   5pGVuohxdylzLM6/LHkgo7NPDrJI11eHy7cIGqrHoki2OdhDmikgbIe41
-   sMwlj0sYuohtT9XQWZqIYp1LaDj0eDOH6ToveCk2K0XrROfm2lIEW5z19
-   aXIRbOMEzx7286yc3grHSoH/cnwxHT7tuf3IFq8C6/t0rXt9FORZbdVub
-   4BIugaDmoO92+mkT0Y2OtQdVC+or1BxAqh+XuILDaWn8juKV5d591Ug1X
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="381374676"
-X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="381374676"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 03:11:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="782438248"
-X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="782438248"
-Received: from lkp-server02.sh.intel.com (HELO 4ed589823ba4) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 09 Oct 2023 03:11:04 -0700
-Received: from kbuild by 4ed589823ba4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qpnE5-00006X-3A;
-	Mon, 09 Oct 2023 10:11:01 +0000
-Date: Mon, 9 Oct 2023 18:08:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ivan Mikhaylov <fr0st61te@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, Ivan Mikhaylov <fr0st61te@gmail.com>
-Subject: Re: [PATCH v5 2/2] iio: adc: Add driver support for MAX34408/9
-Message-ID: <202310091704.gr3fx4Vo-lkp@intel.com>
-References: <20231007234838.8748-3-fr0st61te@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGv6K3m5"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5a7ab31fb8bso1405147b3.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 05:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696852881; x=1697457681; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S8xlOdoGoANNG8/4z3J1BZ3qILcNZDx9JymkslqHebI=;
+        b=jGv6K3m5yrNdMnhJs3XeGvmNDc9cf89nd+9djrWtaLJkesRK1PC3MDk9rWXSLNZ1Rx
+         qIdHsRAKVhRjmxxj24r4ABv7x5/9P3fjBp40UPn6rhmgF6bHGmH6J3gYghJHJOzsz+Hh
+         6O4gHjPDN2SY58A2Ket+QSJAQXhJGaOq1ILuSuDYHg7Nfx9OJKJE9QBbTFn5jggDha9z
+         R9J5KmrG1UVMXKAgqCo5u+hZBGow8OmYLEML0G6HW9fZV8V1C3nHRHkAt8SLrj/qP+bU
+         wYSzOpmQ71tpTRsIMAKH5rKE2ZGVAntMJL9lcVOEGYr1+cQ8OPCQqJr8BDoL7l+i1YPG
+         Nw8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696852881; x=1697457681;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S8xlOdoGoANNG8/4z3J1BZ3qILcNZDx9JymkslqHebI=;
+        b=LNLBaCRFcmATfo6KoqAxnQ95FsDbBzqcWG4uPJ077nkYIUVHhOMI8sk2lTHkpC3Xo1
+         AxdYlOojS1zgOFw7jLOgsfJlME+vMKt903soV9zjcdhpw/rjkCT/q5kdN99t7NUI+smN
+         yLECq+SmR8+sqMwIehU6ZM/SEamfFucMwiMLe4mGw7qMbQm3bG1bYovjhp9m38E8U7oC
+         4DPIKtAFt8WD7NRH11z/8ltKOD10cTxM7XD1D0zu/7xs2FHlXG4EsNWt7Q1TPKr4F+fO
+         uuGWHddvkzS5IjoOrXmfkp1+TgQoc9CmG2ys7wWZ2D/wDQfEu084RLjOkppfYMQtr+xG
+         G60g==
+X-Gm-Message-State: AOJu0YwUSuBc9t8yZjxVkWpYzTnPpcXshlvXe9zdUkjwEuEqdO2UxRST
+	XzmepScWaxhwQ1u1vvTdImG5DDWB853FIYjO6BM=
+X-Google-Smtp-Source: AGHT+IH7s5WFh4TVf+bXzMwSO2Y6ijsHfTYRfD4CrHh3NkMPsS9azV+Yzbvm85DpSIEmX55bgdwBCe8HGeIEzKvFNEU=
+X-Received: by 2002:a0d:c886:0:b0:59f:9c08:8f12 with SMTP id
+ k128-20020a0dc886000000b0059f9c088f12mr18976846ywd.38.1696852881009; Mon, 09
+ Oct 2023 05:01:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231007234838.8748-3-fr0st61te@gmail.com>
+References: <20231006155739.246381-1-yakoyoku@gmail.com> <CANiq72m3mpcJfiOxaACLtyaUfBR2j8rtbLdj5eZT08zywKzCfw@mail.gmail.com>
+ <ca2cd71c-0aa1-4365-961c-c10737a9e9a6@gmail.com>
+In-Reply-To: <ca2cd71c-0aa1-4365-961c-c10737a9e9a6@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 9 Oct 2023 14:01:10 +0200
+Message-ID: <CANiq72mM2BeWtZNqhvnbA3XR_ArfAi3CG3oxMuu+C74rB0+mBA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] rust: crates in other kernel directories
+To: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ivan,
+On Sat, Oct 7, 2023 at 1:07=E2=80=AFAM Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> Well, there's the network PHY driver series that is stuck on this
+> topic, I (and probably others) have local work that have the same issue
 
-kernel test robot noticed the following build warnings:
+No, that series is not stuck on this.
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on robh/for-next linus/master v6.6-rc5 next-20231009]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> and said general case might not arrive that soon. So it'd better to
+> start on a feature that will benefit API users right away and can be
+> updated to fit needs. That's what I think.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Mikhaylov/dt-bindings-adc-provide-max34408-9-device-tree-binding-document/20231008-074933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20231007234838.8748-3-fr0st61te%40gmail.com
-patch subject: [PATCH v5 2/2] iio: adc: Add driver support for MAX34408/9
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231009/202310091704.gr3fx4Vo-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231009/202310091704.gr3fx4Vo-lkp@intel.com/reproduce)
+If there is an in-tree use case that will really require a solution to
+this very soon, then please focus on explaining that (e.g. what "local
+work" do you have and what are your plans for landing it upstream?)
+and we will do our best to reschedule priorities or we can provide a
+workaround for the time being.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310091704.gr3fx4Vo-lkp@intel.com/
+In any case, please note that this RFC breaks the kernel build and
+does not really solve the overall issue.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/adc/max34408.c:240:31: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-     240 |                                          &max34408->input_rsense[i]);
-         |                                                                  ^
-   drivers/iio/adc/max34408.c:215:11: note: initialize the variable 'i' to silence this warning
-     215 |         int rc, i;
-         |                  ^
-         |                   = 0
-   1 warning generated.
-
-
-vim +/i +240 drivers/iio/adc/max34408.c
-
-   205	
-   206	static int max34408_probe(struct i2c_client *client)
-   207	{
-   208		const struct max34408_adc_model_data *model_data;
-   209		struct device *dev = &client->dev;
-   210		const struct of_device_id *match;
-   211		struct max34408_data *max34408;
-   212		struct fwnode_handle *node;
-   213		struct iio_dev *indio_dev;
-   214		struct regmap *regmap;
-   215		int rc, i;
-   216	
-   217		match = i2c_of_match_device(max34408_of_match, client);
-   218		if (!match)
-   219			return -EINVAL;
-   220		model_data = i2c_get_match_data(client);
-   221	
-   222		regmap = devm_regmap_init_i2c(client, &max34408_regmap_config);
-   223		if (IS_ERR(regmap)) {
-   224			dev_err_probe(dev, PTR_ERR(regmap),
-   225				      "regmap_init failed\n");
-   226			return PTR_ERR(regmap);
-   227		}
-   228	
-   229		indio_dev = devm_iio_device_alloc(dev, sizeof(*max34408));
-   230		if (!indio_dev)
-   231			return -ENOMEM;
-   232	
-   233		max34408 = iio_priv(indio_dev);
-   234		max34408->regmap = regmap;
-   235		max34408->dev = dev;
-   236		mutex_init(&max34408->lock);
-   237	
-   238		device_for_each_child_node(dev, node) {
-   239			fwnode_property_read_u32(node, "maxim,rsense-val-micro-ohms",
- > 240						 &max34408->input_rsense[i]);
-   241			i++;
-   242		}
-   243	
-   244		/* disable ALERT and averaging */
-   245		rc = regmap_write(max34408->regmap, MAX34408_CONTROL_REG, 0x0);
-   246		if (rc)
-   247			return rc;
-   248	
-   249		indio_dev->channels = model_data->channels;
-   250		indio_dev->num_channels = model_data->num_channels;
-   251		indio_dev->name = model_data->model_name;
-   252	
-   253		indio_dev->info = &max34408_info;
-   254		indio_dev->modes = INDIO_DIRECT_MODE;
-   255	
-   256		return devm_iio_device_register(dev, indio_dev);
-   257	}
-   258	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
