@@ -1,43 +1,43 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABCDBE48
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 06:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597D346A9
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 06:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-578b407045bso3387408a12.0
-        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 23:31:12 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-279294d94acso3933085a91.0
+        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 23:57:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696833072; x=1697437872;
+        d=1e100.net; s=20230601; t=1696834666; x=1697439466;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vD0Fv9cM67zX2LwKdhCrzGLuQATLW6HXC5O4/Nd4nTE=;
-        b=sCu5JAzx+KYvLn1OCVtI/g0txlSX1ORRKrlbToZXXvmF7tTU+ndm0A0Oe7XWP8FTs2
-         l08V968OroMO5HTyyBxjoVrfsdzxcO//jNDi+FZAlehVJfzjkfZcrVHRFAJ3zteFtjx/
-         ZYmnbrAkW9rudrKaVFFxzFUO6B/h0kqc0CE7tBH66i3rF0GLbijVRmmCuQb2Bmu1uyC5
-         pfXWasp6LUR0pMzdtARHeywSeDUJc92DgkpIABjf8yLNWcv5QcDpB1VBVOWsbnWU63Z6
-         h39JqEJaDKeqlzVY3PXk6Odhxusj4XSFDV/KTfi4mQD0CFutLDjGaXLrgmUaMZjj2gdc
-         xwSQ==
-X-Gm-Message-State: AOJu0YzqOrbYr17lVK3a/ibnnpi7727rBM6+Qhk4nWC9qHYupPswoBXY
-	eB9sb+2ojSlkXCteHvUsvMznCt3GHy/85AHMpaM=
-X-Google-Smtp-Source: AGHT+IEOQspT2cmBHQKFmpyVLLR+19S0QFb8macQedL/e+/KbEJLcVDbtXZ0lZH43XNvVA3aOx01YcU7aI64n/+lMyk=
-X-Received: by 2002:a17:90b:11cc:b0:277:6d6a:33ba with SMTP id
- gv12-20020a17090b11cc00b002776d6a33bamr14075416pjb.28.1696833072180; Sun, 08
- Oct 2023 23:31:12 -0700 (PDT)
+        bh=NJS+WW4cuCDjk8wiGEOmjzB/AsEq+gw5dUopoJp/L9I=;
+        b=VhQyalx+8KHJzYJxodsn9NzWvqDENc9tp659oNQJHioPVtNqQvnXHTEojRZO7RvC3B
+         L+T7xNOkhR69r2xcNCUfKuQcjLFGATJdfsb7emDYMnciq0vnHUwqu2cM4qXGcHhmvAS+
+         dAQ0auol2o38NT6JKVRDTK+jCX8WnTD7NQG2LUgTIuhlFAvNrc1Ljd+fq8sJwL4YkWOM
+         L6K7iwig+7g8QlCA2Jg/QqyyEyteiNO07SHlIHsaOHT2Doj9+Ctbvez9Ql/4pmt9Ub6/
+         llNiPnDj5pd0j7DhEb1atT9ESaeZxpX0g1gxvnuE+9Lj3DfV3YKxkd0Oy1tzSL+oZZfU
+         3CpA==
+X-Gm-Message-State: AOJu0YwQJ7bxm+0jKRKE1sujpjC4vfg3j2q99GhZ3spAqvucF+XXnXI1
+	mguo++TPP1mPMrSzj6ko0g01DamFLR+VotcaQmw=
+X-Google-Smtp-Source: AGHT+IHXDstWDIhlW/S4bsymJirCqCBInGZVRXyjHfslyOtLbNqbOvsSRor3/F2SZ3hUb4HZKk1bXdnh057wT6n2BHw=
+X-Received: by 2002:a17:90a:e557:b0:277:3379:ce04 with SMTP id
+ ei23-20020a17090ae55700b002773379ce04mr16019603pjb.18.1696834666501; Sun, 08
+ Oct 2023 23:57:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-14-irogers@google.com>
-In-Reply-To: <20231005230851.3666908-14-irogers@google.com>
+References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-18-irogers@google.com>
+In-Reply-To: <20231005230851.3666908-18-irogers@google.com>
 From: Namhyung Kim <namhyung@kernel.org>
-Date: Sun, 8 Oct 2023 23:31:01 -0700
-Message-ID: <CAM9d7cj-ANu1j-6WxGDQ_+pJtDt1xfyuGCNyC_dTpCDECZZgCQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] perf svghelper: Avoid memory leak
+Date: Sun, 8 Oct 2023 23:57:35 -0700
+Message-ID: <CAM9d7cj=au3DVNqA0OYU_9eu=R9kTz6SQrtfKuSGnrm=FAY=CA@mail.gmail.com>
+Subject: Re: [PATCH v2 17/18] perf header: Fix various error path memory leaks
 To: Ian Rogers <irogers@google.com>
 Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -57,61 +57,253 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
 e:
 >
-> On success path the sib_core and sib_thr values weren't being
-> freed. Detected by clang-tidy.
+> Memory leaks were detected by clang-tidy.
 >
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  tools/perf/builtin-lock.c   | 1 +
->  tools/perf/util/svghelper.c | 5 +++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  tools/perf/util/header.c | 63 ++++++++++++++++++++++++----------------
+>  1 file changed, 38 insertions(+), 25 deletions(-)
 >
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index d4b22313e5fc..1b40b00c9563 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -2463,6 +2463,7 @@ static int parse_call_stack(const struct option *op=
-t __maybe_unused, const char
->                 entry =3D malloc(sizeof(*entry) + strlen(tok) + 1);
->                 if (entry =3D=3D NULL) {
->                         pr_err("Memory allocation failure\n");
-> +                       free(s);
->                         return -1;
->                 }
+> diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+> index d812e1e371a7..41b78e40b22b 100644
+> --- a/tools/perf/util/header.c
+> +++ b/tools/perf/util/header.c
+> @@ -2598,8 +2598,10 @@ static int process_cpu_topology(struct feat_fd *ff=
+, void *data __maybe_unused)
+>                         goto error;
 >
+>                 /* include a NULL character at the end */
+> -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
+> +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
+> +                       free(str);
+>                         goto error;
+> +               }
+>                 size +=3D string_size(str);
+>                 free(str);
+>         }
+> @@ -2617,8 +2619,10 @@ static int process_cpu_topology(struct feat_fd *ff=
+, void *data __maybe_unused)
+>                         goto error;
+>
+>                 /* include a NULL character at the end */
+> -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
+> +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
+> +                       free(str);
+>                         goto error;
+> +               }
+>                 size +=3D string_size(str);
+>                 free(str);
+>         }
+> @@ -2681,8 +2685,10 @@ static int process_cpu_topology(struct feat_fd *ff=
+, void *data __maybe_unused)
+>                         goto error;
+>
+>                 /* include a NULL character at the end */
+> -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
+> +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
+> +                       free(str);
+>                         goto error;
+> +               }
+>                 size +=3D string_size(str);
+>                 free(str);
+>         }
 
-This is unrelated.  Please put it in a separate patch.
+For these cases, it'd be simpler to free it in the error path.
+
+
+> @@ -2736,10 +2742,9 @@ static int process_numa_topology(struct feat_fd *f=
+f, void *data __maybe_unused)
+>                         goto error;
+>
+>                 n->map =3D perf_cpu_map__new(str);
+> +               free(str);
+>                 if (!n->map)
+>                         goto error;
+> -
+> -               free(str);
+>         }
+>         ff->ph->env.nr_numa_nodes =3D nr;
+>         ff->ph->env.numa_nodes =3D nodes;
+> @@ -2913,10 +2918,10 @@ static int process_cache(struct feat_fd *ff, void=
+ *data __maybe_unused)
+>                 return -1;
+>
+>         for (i =3D 0; i < cnt; i++) {
+> -               struct cpu_cache_level c;
+> +               struct cpu_cache_level *c =3D &caches[i];
+>
+>                 #define _R(v)                                           \
+> -                       if (do_read_u32(ff, &c.v))\
+> +                       if (do_read_u32(ff, &c->v))                     \
+>                                 goto out_free_caches;                   \
+>
+>                 _R(level)
+> @@ -2926,22 +2931,25 @@ static int process_cache(struct feat_fd *ff, void=
+ *data __maybe_unused)
+>                 #undef _R
+>
+>                 #define _R(v)                                   \
+> -                       c.v =3D do_read_string(ff);               \
+> -                       if (!c.v)                               \
+> -                               goto out_free_caches;
+> +                       c->v =3D do_read_string(ff);              \
+> +                       if (!c->v)                              \
+> +                               goto out_free_caches;           \
+>
+>                 _R(type)
+>                 _R(size)
+>                 _R(map)
+>                 #undef _R
+> -
+> -               caches[i] =3D c;
+>         }
+>
+>         ff->ph->env.caches =3D caches;
+>         ff->ph->env.caches_cnt =3D cnt;
+>         return 0;
+>  out_free_caches:
+> +       for (i =3D 0; i < cnt; i++) {
+> +               free(caches[i].type);
+> +               free(caches[i].size);
+> +               free(caches[i].map);
+> +       }
+>         free(caches);
+>         return -1;
+>  }
+
+Looks ok.
+
+
+> @@ -3585,18 +3593,16 @@ static int perf_header__adds_write(struct perf_he=
+ader *header,
+>                                    struct feat_copier *fc)
+>  {
+>         int nr_sections;
+> -       struct feat_fd ff;
+> +       struct feat_fd ff =3D {
+> +               .fd  =3D fd,
+> +               .ph =3D header,
+> +       };
+
+I'm fine with this change.
+
+
+>         struct perf_file_section *feat_sec, *p;
+>         int sec_size;
+>         u64 sec_start;
+>         int feat;
+>         int err;
+>
+> -       ff =3D (struct feat_fd){
+> -               .fd  =3D fd,
+> -               .ph =3D header,
+> -       };
+> -
+>         nr_sections =3D bitmap_weight(header->adds_features, HEADER_FEAT_=
+BITS);
+>         if (!nr_sections)
+>                 return 0;
+> @@ -3623,6 +3629,7 @@ static int perf_header__adds_write(struct perf_head=
+er *header,
+>         err =3D do_write(&ff, feat_sec, sec_size);
+>         if (err < 0)
+>                 pr_debug("failed to write feature section\n");
+> +       free(ff.buf);
+
+But it looks like false alarams.  Since the feat_fd has fd
+and no buf, it won't allocate the buffer in do_write() and
+just use __do_write_fd().  So no need to free the buf.
 
 Thanks,
 Namhyung
 
 
-> diff --git a/tools/perf/util/svghelper.c b/tools/perf/util/svghelper.c
-> index 0e4dc31c6c9c..1892e9b6aa7f 100644
-> --- a/tools/perf/util/svghelper.c
-> +++ b/tools/perf/util/svghelper.c
-> @@ -754,6 +754,7 @@ int svg_build_topology_map(struct perf_env *env)
->         int i, nr_cpus;
->         struct topology t;
->         char *sib_core, *sib_thr;
-> +       int ret =3D -1;
->
->         nr_cpus =3D min(env->nr_cpus_online, MAX_NR_CPUS);
->
-> @@ -799,11 +800,11 @@ int svg_build_topology_map(struct perf_env *env)
->
->         scan_core_topology(topology_map, &t, nr_cpus);
->
-> -       return 0;
-> +       ret =3D 0;
->
->  exit:
->         zfree(&t.sib_core);
->         zfree(&t.sib_thr);
->
-> -       return -1;
-> +       return ret;
+>         free(feat_sec);
+>         return err;
 >  }
+> @@ -3630,11 +3637,11 @@ static int perf_header__adds_write(struct perf_he=
+ader *header,
+>  int perf_header__write_pipe(int fd)
+>  {
+>         struct perf_pipe_file_header f_header;
+> -       struct feat_fd ff;
+> +       struct feat_fd ff =3D {
+> +               .fd =3D fd,
+> +       };
+>         int err;
+>
+> -       ff =3D (struct feat_fd){ .fd =3D fd };
+> -
+>         f_header =3D (struct perf_pipe_file_header){
+>                 .magic     =3D PERF_MAGIC,
+>                 .size      =3D sizeof(f_header),
+> @@ -3645,7 +3652,7 @@ int perf_header__write_pipe(int fd)
+>                 pr_debug("failed to write perf pipe header\n");
+>                 return err;
+>         }
+> -
+> +       free(ff.buf);
+>         return 0;
+>  }
+>
+> @@ -3658,11 +3665,12 @@ static int perf_session__do_write_header(struct p=
+erf_session *session,
+>         struct perf_file_attr   f_attr;
+>         struct perf_header *header =3D &session->header;
+>         struct evsel *evsel;
+> -       struct feat_fd ff;
+> +       struct feat_fd ff =3D {
+> +               .fd =3D fd,
+> +       };
+>         u64 attr_offset;
+>         int err;
+>
+> -       ff =3D (struct feat_fd){ .fd =3D fd};
+>         lseek(fd, sizeof(f_header), SEEK_SET);
+>
+>         evlist__for_each_entry(session->evlist, evsel) {
+> @@ -3670,6 +3678,7 @@ static int perf_session__do_write_header(struct per=
+f_session *session,
+>                 err =3D do_write(&ff, evsel->core.id, evsel->core.ids * s=
+izeof(u64));
+>                 if (err < 0) {
+>                         pr_debug("failed to write perf header\n");
+> +                       free(ff.buf);
+>                         return err;
+>                 }
+>         }
+> @@ -3695,6 +3704,7 @@ static int perf_session__do_write_header(struct per=
+f_session *session,
+>                 err =3D do_write(&ff, &f_attr, sizeof(f_attr));
+>                 if (err < 0) {
+>                         pr_debug("failed to write perf header attribute\n=
+");
+> +                       free(ff.buf);
+>                         return err;
+>                 }
+>         }
+> @@ -3705,8 +3715,10 @@ static int perf_session__do_write_header(struct pe=
+rf_session *session,
+>
+>         if (at_exit) {
+>                 err =3D perf_header__adds_write(header, evlist, fd, fc);
+> -               if (err < 0)
+> +               if (err < 0) {
+> +                       free(ff.buf);
+>                         return err;
+> +               }
+>         }
+>
+>         f_header =3D (struct perf_file_header){
+> @@ -3728,6 +3740,7 @@ static int perf_session__do_write_header(struct per=
+f_session *session,
+>
+>         lseek(fd, 0, SEEK_SET);
+>         err =3D do_write(&ff, &f_header, sizeof(f_header));
+> +       free(ff.buf);
+>         if (err < 0) {
+>                 pr_debug("failed to write perf header\n");
+>                 return err;
 > --
 > 2.42.0.609.gbb76f46606-goog
 >
