@@ -1,109 +1,163 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DB8374C2
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B673B7B3;
+	Mon,  9 Oct 2023 19:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SylLpda0"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-59b59e1ac70so77266367b3.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696876811; x=1697481611; darn=lists.linux.dev;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wfL4FLU++s9CKjil59t6XdpqiER2jatUC+zl7nbhx6Q=;
-        b=SylLpda0z9ABB+JirEFwrZecjfQwUH1yPshUab/DV0MUwXJ7zgUsMU7xudhXovqnfA
-         18z3tCGEat1CXcIvlLkbYtlMaOHKqf4tYxfBouLPSvBoMmPFOqJIGbRQCjS+pBXZOwDv
-         E8cYOI2LwGU4poxkG/DpI84bjO8LXYhBkCn+00Y0AcNN2KHxUQef/2U8D11T3EndYlX2
-         6UAiesyJd0xAB9WqGcTwu5KE6ZSvcgY1tsRHJEENaa/wTbRogLwh2vtM8VjgT8Gx44ba
-         TLHTcJd7b1Gs8sCTs2prf6MTUpVfiHPTKoepQWDJFYvUXnJ+hEx6fy0m4gJfdJ5dyz+c
-         4tUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696876811; x=1697481611;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wfL4FLU++s9CKjil59t6XdpqiER2jatUC+zl7nbhx6Q=;
-        b=WI2VEGqjUSpHknyWLW2A73lolMEVA2pvibva3Buo2KWkRviQ8OkPm6Mxsf9eO5NI62
-         bqbU7v46kOb5qiGIF5giH/eeJ+x7lbekAZoSa5c01h1hSKMTSCrePk+NOUJjTpTZanCC
-         irD6zY0XKVGw9/+7kT6p5o+5rrnD2qQ+HW7NFYScWktilPplj3YCTpKik1XBIiPKXg9s
-         Ng1hfjx4U+8wnOItj5kgECuuPKQt0PfKt7lw0fg3TNTGVTHmybEhAyfAyCneQ5YPHoXt
-         FlgKGXUkMQks3l1zNHqquQqN2LLN2+zFRQa/8G42XHbJimRgUCzDibtIAIKNjkEBoZMo
-         Bfrw==
-X-Gm-Message-State: AOJu0YyCghJAjHXR2zXajrEhOYlSEvVqfVJ+ZfqV4e+94UQy1wgWUsJV
-	seGH0614vckdOLS3JDOoufK0WDGXUTNl
-X-Google-Smtp-Source: AGHT+IEgB0ixdKNlygdhv4h59H76SFd7CewMHkUz7uO+EUvepYTGPVZ0JlyDFpg5Eeb38pxoje/eR8ZZskOD
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:ac4a:9b94:7158:3f4e])
- (user=irogers job=sendgmr) by 2002:a25:e74f:0:b0:d9a:43eb:4391 with SMTP id
- e76-20020a25e74f000000b00d9a43eb4391mr17704ybh.9.1696876810948; Mon, 09 Oct
- 2023 11:40:10 -0700 (PDT)
-Date: Mon,  9 Oct 2023 11:39:20 -0700
-In-Reply-To: <20231009183920.200859-1-irogers@google.com>
-Message-Id: <20231009183920.200859-20-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZQrpLLa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A64C433C7;
+	Mon,  9 Oct 2023 19:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696880631;
+	bh=YfxqTSYOT3VS+bRSZm1IokFfH9SJpPuVC57XIHPEazM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jZQrpLLa+O8FD3mcAg/kZXws2IqrU5KE7NC8BhjKtYoS4Wh0V95J3DbXqVVsdQ0wo
+	 E77MJtmvY5Jh5rBuhAvMKkSK6pp+nEHyKLrai3ps3UxZEHqia+3y0VPgPAPAtDXdTu
+	 vhgafmCDi5B97DYvx5yYdB0DCg5bq9aqMHjzrYkl1rQBVyf0NrcntDBid9mbYPp1FF
+	 RMLJ5LjbpeY4eLR5bttaBKGYqL8C5/6lKuD4nsPXbH+TSNlvRZ5g5pV3n/Xqp9+sdM
+	 Dap7fMsY5FnGpVY8VqrTQN4q0PALJGZ0wYxYA1I10uME5vWOuL7QUq94Sz8Nk5q3uq
+	 PE0ivw3SRxXQg==
+Date: Mon, 9 Oct 2023 20:43:44 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ASoC: apple: mca: Annotate struct mca_data with
+ __counted_by
+Message-ID: <6d665575-7658-4619-a763-438e0d3aaf2e@sirena.org.uk>
+References: <20230922175050.work.819-kees@kernel.org>
+ <202310061321.E7247C52B@keescook>
+ <6c7db067-78f2-4637-8064-3dc7c0489b90@sirena.org.uk>
+ <202310090958.27F5025BDB@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20231009183920.200859-1-irogers@google.com>
-X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v3 18/18] perf bpf_counter: Fix a few memory leaks
-From: Ian Rogers <irogers@google.com>
-To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, Ming Wang <wangming01@loongson.cn>, 
-	Kan Liang <kan.liang@linux.intel.com>, Ravi Bangoria <ravi.bangoria@amd.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wbIehCkvRN7FYjXS"
+Content-Disposition: inline
+In-Reply-To: <202310090958.27F5025BDB@keescook>
+X-Cookie: What is the sound of one hand clapping?
 
-Memory leaks were detected by clang-tidy.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/bpf_counter.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+--wbIehCkvRN7FYjXS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index 6732cbbcf9b3..7f9b0e46e008 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -104,7 +104,7 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
- 	struct bpf_prog_profiler_bpf *skel;
- 	struct bpf_counter *counter;
- 	struct bpf_program *prog;
--	char *prog_name;
-+	char *prog_name = NULL;
- 	int prog_fd;
- 	int err;
- 
-@@ -155,10 +155,12 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
- 	assert(skel != NULL);
- 	counter->skel = skel;
- 	list_add(&counter->list, &evsel->bpf_counter_list);
-+	free(prog_name);
- 	close(prog_fd);
- 	return 0;
- err_out:
- 	bpf_prog_profiler_bpf__destroy(skel);
-+	free(prog_name);
- 	free(counter);
- 	close(prog_fd);
- 	return -1;
-@@ -180,6 +182,7 @@ static int bpf_program_profiler__load(struct evsel *evsel, struct target *target
- 		    (*p != '\0' && *p != ',')) {
- 			pr_err("Failed to parse bpf prog ids %s\n",
- 			       target->bpf_str);
-+			free(bpf_str_);
- 			return -1;
- 		}
- 
--- 
-2.42.0.609.gbb76f46606-goog
+On Mon, Oct 09, 2023 at 10:17:33AM -0700, Kees Cook wrote:
+> On Fri, Oct 06, 2023 at 09:53:49PM +0100, Mark Brown wrote:
 
+> > Please don't send content free pings and please allow a reasonable time
+> > for review.  People get busy, go on holiday, attend conferences and so=
+=20
+> > on so unless there is some reason for urgency (like critical bug fixes)
+> > please allow at least a couple of weeks for review.  If there have been
+> > review comments then people may be waiting for those to be addressed.
+
+> I'm happy to do whatever you'd like for this kind of thing, but I'm
+> annoyed by this likely automated response seems to ask for the things
+> that have already happened or generally don't make sense. :P
+
+It's a form letter so not quite automated but sure.  Since it's the same
+form letter I send for all these pings it covers a bunch of things that
+might not apply in each individual case.
+
+> - It _has_ been 2 weeks.
+
+That's *at least* two weeks.  For a non-urgent change like this I'd
+generally go with longer than that, for example I'd originally had these
+changes queued for -rc5 to give the driver maintainers a couple of weeks
+to look at them (my scripting understands -rcs more than dates so you'll
+see more patches going in on Mondays). =20
+
+> - Review comments have _not_ required changes.
+> - Sending a no-change patch is just as much email as sending a ping.
+
+A no-change patch is directly and readily actionable, a ping typically
+requires going and digging out the original mail or sending a reply
+asking for a resend.
+
+> - It's not content-free: I'm asking if you're going to take it;
+>   patches have gotten lost in the past, so it's a valid question.
+
+That is not something I can meaningfully distinguish from being content
+free, it provides no new information.  Something with content would be
+for example information about dependencies progressing.
+
+> - I'm not interested in other subsystems, I'm interested in yours. :P
+
+> You've made it clear you don't want me to pick up these kinds of trivial
+> patches that would normally go through your tree, so I'm left waiting
+> with no indication if you've seen the patch.
+
+Sure, but that seems fairly normal for the kernel - when sending this
+sort of stuff myself I'd be leaving it more like a month before I got
+particularly worried.  One way or another it seems fairly common for
+things to be left for at least a couple of weeks with things like
+waiting for review, restrictions on when patches actually get applied
+and just people being busy or whatever.
+
+Personally for incoming patches when I'm leaving time for driver
+maintainers I tend to go for leaving things for a -rc or two - things
+like who's involved, how early it is in the week when the original patch
+gets sent and how late in the release cycle we are will factor in there.
+More urgent things like fixes will tend to go faster, minor stuff that
+just needs to be handled sometime before the next release will tend to
+be slower.
+
+I don't send out mails saying that I've reviewed and queued things
+before actually applying them since doing that tends to discourage other
+people from doing review and I'd rather they did, this means I don't
+generally send out entirely positive review comments prior to applying
+anything unless I'm actively chasing for feedback from someone.  It can
+also be a bit confusing for people if I tell them something is OK then
+later run into test issues.
+
+> My normal routine with treewide changes is to pick up trivial stuff that
+> has gotten review but the traditional maintainer hasn't responded to
+> in 2 weeks.
+
+> Do you want these kinds of patches to be re-sent every 2 weeks if they
+> haven't been replied to by you?
+
+No, please leave it longer - that's the main thing here, you're not
+leaving adequate time for non-urgent patches like this.  If you leave it
+two weeks for maintainer review and I also leave it two weeks for
+maintainer review then we will both expire the timers at the same time
+and we're going to trample over each other.  For me it will typically be
+a bit more or less than two weeks rather than two weeks to the day but
+IIRC the time you applied something it was while the patch was actually
+running through my CI.
+
+Off the top of my head I'd say wait at least three weeks for this sort
+of patch before doing anything and then prefer to do a resend, that's
+should avoid most issues.  If you're going to just apply things yourself
+I'd suggest waiting for -rc6 or so before doing so (assuming the patches
+were initially sent reasonably early), that does seem like a reasonable
+backstop so things don't completely miss releases.
+
+--wbIehCkvRN7FYjXS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUkV/AACgkQJNaLcl1U
+h9Cx6wf+Mp6vpDV8u/RSsfNyyeauwAka4z1Hlk5P6r1BUk1ILsu1HZenW134Gs9B
+TVvsTnRHXt+ncyEVjC/JOrPHanYdJ1mAuTeYA9zYpmq1KnxE/Nkj+wUwbyytSpq4
+JDiC5X03Vfra9BWkTKlFzOTpRkfOj5nXukvKxsHPZS2g3j5eEH/V2ZbEk6Wp0b8b
+M9dU6NviQJtpgCPKtj1R4D7HQ5MZ6IWagIHWk0P8sxU6aM6QJkTJlUv4eZ/gWh+Y
+0gMPR0XkpoITVUbXrpvpPN2jAthOMMm+erfm9E8pb1eceGv+UKTJR8f6ELtojzU/
+4jy8hXGLu/8ghtVcLfX+6p9YQAP1wA==
+=d//l
+-----END PGP SIGNATURE-----
+
+--wbIehCkvRN7FYjXS--
