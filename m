@@ -1,46 +1,46 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-oo1-f74.google.com (mail-oo1-f74.google.com [209.85.161.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF32C18E24
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D23374CE
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 18:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eXa9FNbv"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5784ef4be4fso4372535a12.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:39:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SqOwrnVs"
+Received: by mail-oo1-f74.google.com with SMTP id 006d021491bc7-57be2b0e95cso6575070eaf.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 11:39:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696876794; x=1697481594; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1696876797; x=1697481597; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uSqAvWdBbUtQxC7pnyJJtR4WVxr7hcg6OVnTaxh+F6M=;
-        b=eXa9FNbv/JvmD1pwNQDU1pGEDdsZ6ncTFrobsu1eIWTrvXWpQrrkR1wk5Gr9ulLX4e
-         OTzKL7ejfdyBevRbo3+agejAfGvE5C1cumihbI34C8pDCWijnmhyweJFAaImW4lBJ+b3
-         9SLj+JBxyYAH7Y8jAO0f4yatakQm9Ec6519xTC65h0Jcx04eqEu09X54neiJJ0LBZgqt
-         B/WJVAdOXZjbwFO4hNqjr4CrtQYHKBaXjW96Enc3VGQt9z4HPfX+qzxzeet17h95Hu5i
-         DTfpBEWFb+EKTfmJz8Z/9RgfQ0gBwg0mTPDmq9dYk9uvMDsnsUk6t17rbXpvhNt1BGRA
-         C1nA==
+        bh=49ZawQt+7SlBsoWKownV7zVOA634acLMIh7oRlSswNg=;
+        b=SqOwrnVsWAoj+iuOSFXy/Zd2OQYtDTxCJEd7nz1LsnPnM5LMqeLn96i7RePcv7V4Ir
+         k1yEu6BEMVzN/evjD8mbylxUoPDwFlQiRBdqgKdMb5UD7u1Rk8tmFp3M7l38R/Es63v8
+         G5iZEK1MZIg64j1KHfH7XzDDAHEKDCkNHsbFDzFoAUFCXCvhkvS8d9EI77+xmf81e8eB
+         5MGgphl3lZOupOS+m7Bl+HBMi9R/9G3q39k3RmRDdyobmX1NPUEKbrxQWY0GS0xRyBfV
+         v7C+c+HnjBbPRLJlur8Y2GRyv+NIqLnWCH/eZesvhldirde+i5lWs1YCSoeDjLpVYGr+
+         zL5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696876794; x=1697481594;
+        d=1e100.net; s=20230601; t=1696876797; x=1697481597;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uSqAvWdBbUtQxC7pnyJJtR4WVxr7hcg6OVnTaxh+F6M=;
-        b=vzSIbnKpQRhrPaKnBIgq/ddTk0xNSbnE6gRSIp19fL1fXD+4jNUsUbbsz3dfQxy/5N
-         sMuyDkqYwZPtpVv1xpL8VWs+OjH6zr66oZjq6+yD82w+juRPgS6biBzuBAIrk5QE83NA
-         5mWnsVyQEkpi0s6mvniEA4ztWnAJMJoMawp1ioeOyQMjIhFXRNBRGkhGe/4QU0Su70e/
-         lfNGkf/dmt70e23aaClWbeUmxqIkhfGb26wEP6g6RkmkTRD9GvqxOuJyplwKNxrF97k2
-         UBkgTUD1hGh/xRY9xBDilwtAe/Cz/U3VNFeAta8zmCSk4I7DynDHwdlkZV8EHYRfAsB/
-         DN9A==
-X-Gm-Message-State: AOJu0YxGeVlyqqFBdtUE9zasPbVIDCCtRJgere8I9YZGN/QrepXNgakG
-	z1aObdrtgBvxxmBvcMoVlSZJexYE2kry
-X-Google-Smtp-Source: AGHT+IGswY8IBRO4qisurfCsmW1G2owhcv59h934/6N9kUBhkSh8az8mizPfb84iHYV8EZ8p3euRKpw5IRrs
+        bh=49ZawQt+7SlBsoWKownV7zVOA634acLMIh7oRlSswNg=;
+        b=N8owIugujMKSIcwrtvpu4sQienaZae4hjPY+2l6Q6zAjExWGA+aLevl0t4cBdZtrV+
+         /pgh4U6g3eD1tKyNNiAFmPN4FNOi8mGsyaRytI+Z5Y4L4fiSe3zLFo1F/4Zz+mOMAoNL
+         SSCmPqeY02S1yvOcbUl9JaOSNNla0nHpuvDvFFKy4i6pT2KnzwobM2sUvNvx6mRLY0Zr
+         znzK8/ZnSJsSaDCoZJ0xomw9YsE2vOAOssw1s426qAL3Reoqqiy2hQADC2bU0YMONEbV
+         tJJ2I1N3u67oOkyPaNDC6k0MBpZ7pkPNkjg22fBH2/QbQlTE4tQI+To3l4GSs6rwudVm
+         KvxA==
+X-Gm-Message-State: AOJu0Yx/LXfDW5b97GDBydq7zuKbIq2rus0QtYkCEd3xgYnAEmvSRWyT
+	jkrD/hb6ZgX5os+WXkzs9f0OBWrqESQu
+X-Google-Smtp-Source: AGHT+IEQO/YSLvuW5lkkNTKqekhHTTuwM6kivSrFg1QMVwNQ4jbE84siI8dfYQbP2HOz0jg1yFaPHkpxB9tv
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:ac4a:9b94:7158:3f4e])
- (user=irogers job=sendgmr) by 2002:a17:90a:bc48:b0:277:d8:abd9 with SMTP id
- t8-20020a17090abc4800b0027700d8abd9mr318272pjv.0.1696876794049; Mon, 09 Oct
- 2023 11:39:54 -0700 (PDT)
-Date: Mon,  9 Oct 2023 11:39:13 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6820:100d:b0:57f:10cb:516b with SMTP
+ id v13-20020a056820100d00b0057f10cb516bmr3087810oor.0.1696876797162; Mon, 09
+ Oct 2023 11:39:57 -0700 (PDT)
+Date: Mon,  9 Oct 2023 11:39:14 -0700
 In-Reply-To: <20231009183920.200859-1-irogers@google.com>
-Message-Id: <20231009183920.200859-13-irogers@google.com>
+Message-Id: <20231009183920.200859-14-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20231009183920.200859-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v3 11/18] perf hists browser: Avoid potential NULL dereference
+Subject: [PATCH v3 12/18] perf svghelper: Avoid memory leak
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -63,27 +63,40 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On other code paths browser->he_selection is NULL checked, add a
-missing case reported by clang-tidy.
+On success path the sib_core and sib_thr values weren't being
+freed. Detected by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/ui/browsers/hists.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/svghelper.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/ui/browsers/hists.c b/tools/perf/ui/browsers/hists.c
-index f02ee605bbce..f4812b226818 100644
---- a/tools/perf/ui/browsers/hists.c
-+++ b/tools/perf/ui/browsers/hists.c
-@@ -3302,7 +3302,7 @@ static int evsel__hists_browse(struct evsel *evsel, int nr_events, const char *h
- 							&options[nr_options],
- 							&bi->to.ms,
- 							bi->to.al_addr);
--		} else {
-+		} else if (browser->he_selection) {
- 			nr_options += add_annotate_opt(browser,
- 						       &actions[nr_options],
- 						       &options[nr_options],
+diff --git a/tools/perf/util/svghelper.c b/tools/perf/util/svghelper.c
+index 0e4dc31c6c9c..1892e9b6aa7f 100644
+--- a/tools/perf/util/svghelper.c
++++ b/tools/perf/util/svghelper.c
+@@ -754,6 +754,7 @@ int svg_build_topology_map(struct perf_env *env)
+ 	int i, nr_cpus;
+ 	struct topology t;
+ 	char *sib_core, *sib_thr;
++	int ret = -1;
+ 
+ 	nr_cpus = min(env->nr_cpus_online, MAX_NR_CPUS);
+ 
+@@ -799,11 +800,11 @@ int svg_build_topology_map(struct perf_env *env)
+ 
+ 	scan_core_topology(topology_map, &t, nr_cpus);
+ 
+-	return 0;
++	ret = 0;
+ 
+ exit:
+ 	zfree(&t.sib_core);
+ 	zfree(&t.sib_thr);
+ 
+-	return -1;
++	return ret;
+ }
 -- 
 2.42.0.609.gbb76f46606-goog
 
