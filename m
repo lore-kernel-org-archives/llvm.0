@@ -1,173 +1,153 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDD618E35
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 15:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC83235894
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 16:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FzpKPAkg"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5032a508e74so6522e87.1
-        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 08:45:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gkHn8q9x"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-692ada71d79so3535287b3a.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 09:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696866337; x=1697471137; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TfVtaRDig7D+Ty8+FieODZ141554VQ+ssPrPXjaViV4=;
-        b=FzpKPAkgYu2EFm/x+J6hELZRHnxDfxm1wOElkIYE5ZwaZP/Yd6pZo3gJkvSfeJo5vk
-         dsUZdy1M2NGDgLi9LlEYYaaDxa2NXmGoh/VDasegkIOvUniSQHhU6aVvo5p55Esx1yOu
-         aNrxmtKNyBYpVuBm4M0ZdnrsbWMCpaco8vlX+x23pIHX0h6YSeGliVVhaULDWPRPdw10
-         ISuvn9ebNqXzgOZ/hitJxKmn7mFsFddAf80Lg2quIkhB8KqHIT8GXxek0boMqif354/x
-         wDRIEn3j9YNONC6n7YdtD82PqXQZ+rZqofYKKzwAc0700kPE7/oXSOid2JCZqRAehvaU
-         4hPA==
+        d=chromium.org; s=google; t=1696867640; x=1697472440; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=U+3JOkz9MNIB/AjXQf1d+fgFmd+7/qyXYPjw/Dl3hcQ=;
+        b=gkHn8q9xCvLfJE22+SXA1btMOiDPkQaGR1XOKkj0Qr8TxY9c4/yd0d1YNeh2cRcrL3
+         LxZJ3dkqtFt1YqDnj1UBb2cqCjrad7VIn+eGHLV8AtuJo3zYvSmy4x9d0nAgr7Rabo8Q
+         0XIMrpqyINVvlydPTHhuYIwOJnnuSHhQlhEZw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696866337; x=1697471137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TfVtaRDig7D+Ty8+FieODZ141554VQ+ssPrPXjaViV4=;
-        b=E/FLZXArq8Q2MtNFjMN1/ylsJDNfsfqX9/xYRoVIOcBsf6O57qqE/ivcrwBOg3D3oE
-         eUdX5roA38HmJjPy7fCf/qyh5Kj6KYO0KYVldYEIGj/8zZKy7QgptiRc3rOmdPU56bL7
-         keNVF8ocKm+berjz1sXoT05yLFTXJ3IFAYGUEZ1EA0F0iQCdIWhkrJJl+8HEImEyo5RH
-         2rOlu67I1nkWgwaOAviX2Bo0zeEIkDoBWcMMPzIZFFz9mnIh2KldTwqACyQKuoGOnZk/
-         4sUodK+4de4ayRH4K4E72RSJrqJaUYnFyunX7LStEcSzmb70LlBcPh/uazbigq/eJopc
-         dWiQ==
-X-Gm-Message-State: AOJu0YwQRIs6TsdCxoZDwvwkJZauzKnLyK7jf6BEA0rrlDrAv8FwrJfN
-	HCO+ih6T7r8Nr1DigB5r/GwWRAtbFclIbP4+gmekyw==
-X-Google-Smtp-Source: AGHT+IHyqimkAN/ZGin5q4+q2QxBs1Lei/HTv3/YCpCfU6KTN/Jvvy/WxyiYZnOsxUwM84s6ifYLH255oUoVtofxu+M=
-X-Received: by 2002:ac2:51a5:0:b0:501:a2b9:6046 with SMTP id
- f5-20020ac251a5000000b00501a2b96046mr220584lfk.7.1696866336692; Mon, 09 Oct
- 2023 08:45:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696867640; x=1697472440;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+3JOkz9MNIB/AjXQf1d+fgFmd+7/qyXYPjw/Dl3hcQ=;
+        b=kCfdTORikM7AdOB1aPc6dmkhylxV9ET4Lz5TMhqT+EmbEMg3l4dOIHXX1iE+ujOVwt
+         S5R2VLbvpdEZeFGFH5H27JZeyjb43snZ3+Hp+XlNaYoFC7ZQKfRiZSTU2fimxwmRZQ4W
+         l/gIdFmjbVQ+8XQ2odfJOGTQkwZJDi4e0bCXMTkJAlGNv8Eaqk8zhFwvvy8kqg75Y7xU
+         Na/MoowbuyUx6g+zcTDlnP78EEpzB8oDnUQvbDVX5dPPcpR5kW+q6yO60BEE2RxXyOVL
+         VoMHqqG3VvCKi3/Ld+pF2PGjOpviFdC4E757tyB8fwbETUArIXXksAUczrK/jQ/Z1vc4
+         1n7Q==
+X-Gm-Message-State: AOJu0Yy+JAnbBMYDuZ+GnOfWdx9m9/XOMM5X8zhaetcch4otGPNTIpDM
+	s+IMivAHyjfh44AyG30wwxajqw==
+X-Google-Smtp-Source: AGHT+IHxVEnRf0aA6FaBJyvYV0PmwQxq1Mlqp/9m+bsbe4WdfYasO6y6M2RZ8ABlDSvD8B9tNe2i5A==
+X-Received: by 2002:a05:6a20:244f:b0:159:dccb:8bb4 with SMTP id t15-20020a056a20244f00b00159dccb8bb4mr16029001pzc.23.1696867640247;
+        Mon, 09 Oct 2023 09:07:20 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id m26-20020a056a00165a00b0068fb4f5f38fsm6589398pfc.30.2023.10.09.09.07.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 09:07:19 -0700 (PDT)
+Date: Mon, 9 Oct 2023 09:07:17 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Jason Andryuk <jandryuk@gmail.com>
+Cc: Christian Lamparter <chunkeey@googlemail.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-wireless@vger.kernel.org, linux-hardening@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] wifi: p54: Annotate struct p54_cal_database with
+ __counted_by
+Message-ID: <202310090906.9310CF4434@keescook>
+References: <20231006201719.work.356-kees@kernel.org>
+ <CAKf6xptEEHJAsrwh_oebK1_AMb+_tvLtiY8sP-Qk=Z9jXhVf7Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-5-irogers@google.com>
- <CAM9d7ch4SLLbORdhkanCoPQZX=f-p-HxsYX2YWYbtLR4beD4wg@mail.gmail.com>
-In-Reply-To: <CAM9d7ch4SLLbORdhkanCoPQZX=f-p-HxsYX2YWYbtLR4beD4wg@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 9 Oct 2023 08:45:25 -0700
-Message-ID: <CAP-5=fXtx20VWAVpxAB-HHONx-8MUQKyFm9iSf7ohNBhoESoYg@mail.gmail.com>
-Subject: Re: [PATCH v2 04/18] perf hisi-ptt: Fix potential memory leak
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
-	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKf6xptEEHJAsrwh_oebK1_AMb+_tvLtiY8sP-Qk=Z9jXhVf7Q@mail.gmail.com>
 
-On Sun, Oct 8, 2023 at 10:41=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
+On Mon, Oct 09, 2023 at 10:55:32AM -0400, Jason Andryuk wrote:
+> Hi,
+> 
+> I randomly peeked at this patch.  Unfortunately, I am not familiar
+> with the actual p54 code.
+> 
+> On Fri, Oct 6, 2023 at 4:17 PM Kees Cook <keescook@chromium.org> wrote:
 > >
-> > Fix clang-tidy found potential memory leak and unread value:
-> > ```
-> > tools/perf/util/hisi-ptt.c:108:3: warning: Value stored to 'data_offset=
-' is never read [clang-analyzer-deadcode.DeadStores]
-> >                 data_offset =3D 0;
-> >                 ^             ~
-> > tools/perf/util/hisi-ptt.c:108:3: note: Value stored to 'data_offset' i=
-s never read
-> >                 data_offset =3D 0;
-> >                 ^             ~
-> > tools/perf/util/hisi-ptt.c:112:12: warning: Potential leak of memory po=
-inted to by 'data' [clang-analyzer-unix.Malloc]
-> >                         return -errno;
-> >                                 ^
-> > /usr/include/errno.h:38:18: note: expanded from macro 'errno'
-> >                  ^
-> > tools/perf/util/hisi-ptt.c:100:15: note: Memory is allocated
-> >         void *data =3D malloc(size);
-> >                      ^~~~~~~~~~~~
-> > tools/perf/util/hisi-ptt.c:104:6: note: Assuming 'data' is non-null
-> >         if (!data)
-> >             ^~~~~
-> > tools/perf/util/hisi-ptt.c:104:2: note: Taking false branch
-> >         if (!data)
-> >         ^
-> > tools/perf/util/hisi-ptt.c:107:6: note: Assuming the condition is false
-> >         if (perf_data__is_pipe(session->data)) {
-> >             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > tools/perf/util/hisi-ptt.c:107:2: note: Taking false branch
-> >         if (perf_data__is_pipe(session->data)) {
-> >         ^
-> > tools/perf/util/hisi-ptt.c:111:7: note: Assuming the condition is true
-> >                 if (data_offset =3D=3D -1)
-> >                     ^~~~~~~~~~~~~~~~~
-> > tools/perf/util/hisi-ptt.c:111:3: note: Taking true branch
-> >                 if (data_offset =3D=3D -1)
-> >                 ^
-> > tools/perf/util/hisi-ptt.c:112:12: note: Potential leak of memory point=
-ed to by 'data'
-> >                         return -errno;
-> >                                 ^
-> > /usr/include/errno.h:38:18: note: expanded from macro 'errno'
-> > ```
->
-> We already have
->
->   https://lore.kernel.org/r/20230930072719.1267784-1-visitorckw@gmail.com
-
-Agreed. There is a written to but not read addressed in this one, but
-I think that is okay to clean up later and to drop this patch.
-
-Thanks,
-Ian
-
-> Thanks,
-> Namhyung
->
->
+> > Prepare for the coming implementation by GCC and Clang of the __counted_by
+> > attribute. Flexible array members annotated with __counted_by can have
+> > their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> > array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> > functions).
 > >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > As found with Coccinelle[1], add __counted_by for struct p54_cal_database.
+> >
+> > Cc: Christian Lamparter <chunkeey@googlemail.com>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: linux-hardening@vger.kernel.org
+> > Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > > ---
-> >  tools/perf/util/hisi-ptt.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> >  drivers/net/wireless/intersil/p54/p54.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > diff --git a/tools/perf/util/hisi-ptt.c b/tools/perf/util/hisi-ptt.c
-> > index 45b614bb73bf..ea297329c526 100644
-> > --- a/tools/perf/util/hisi-ptt.c
-> > +++ b/tools/perf/util/hisi-ptt.c
-> > @@ -98,18 +98,18 @@ static int hisi_ptt_process_auxtrace_event(struct p=
-erf_session *session,
-> >         int fd =3D perf_data__fd(session->data);
-> >         int size =3D event->auxtrace.size;
-> >         void *data =3D malloc(size);
-> > -       off_t data_offset;
-> >         int err;
-> >
-> >         if (!data)
-> >                 return -errno;
-> >
-> > -       if (perf_data__is_pipe(session->data)) {
-> > -               data_offset =3D 0;
-> > -       } else {
-> > -               data_offset =3D lseek(fd, 0, SEEK_CUR);
-> > -               if (data_offset =3D=3D -1)
-> > +       if (!perf_data__is_pipe(session->data)) {
-> > +               off_t data_offset =3D lseek(fd, 0, SEEK_CUR);
-> > +
-> > +               if (data_offset =3D=3D -1) {
-> > +                       free(data);
-> >                         return -errno;
-> > +               }
-> >         }
-> >
-> >         err =3D readn(fd, data, size);
-> > --
-> > 2.42.0.609.gbb76f46606-goog
-> >
+> > diff --git a/drivers/net/wireless/intersil/p54/p54.h b/drivers/net/wireless/intersil/p54/p54.h
+> > index 3356ea708d81..770e348d1f6c 100644
+> > --- a/drivers/net/wireless/intersil/p54/p54.h
+> > +++ b/drivers/net/wireless/intersil/p54/p54.h
+> > @@ -126,7 +126,7 @@ struct p54_cal_database {
+> >         size_t entry_size;
+> >         size_t offset;
+> >         size_t len;
+> > -       u8 data[];
+> > +       u8 data[] __counted_by(entries);
+> 
+> This looks incorrect - I think you want __counted_by(len)?  The
+> presence of entry_size made me suspicious.
+> 
+> >  };
+> 
+> This is the function that creates struct p54_cal_database:
+> 
+> static struct p54_cal_database *p54_convert_db(struct pda_custom_wrapper *src,
+>                                                size_t total_len)
+> {
+>         struct p54_cal_database *dst;
+>         size_t payload_len, entries, entry_size, offset;
+> 
+>         payload_len = le16_to_cpu(src->len);
+>         entries = le16_to_cpu(src->entries);
+>         entry_size = le16_to_cpu(src->entry_size);
+>         offset = le16_to_cpu(src->offset);
+>         if (((entries * entry_size + offset) != payload_len) ||
+>              (payload_len + sizeof(*src) != total_len))
+>                 return NULL;
+> 
+>         dst = kmalloc(sizeof(*dst) + payload_len, GFP_KERNEL);
+>         if (!dst)
+>                 return NULL;
+> 
+>         dst->entries = entries;
+>         dst->entry_size = entry_size;
+>         dst->offset = offset;
+>         dst->len = payload_len;
+> 
+>         memcpy(dst->data, src->data, payload_len);
+>         return dst;
+> }
+> 
+> You can see that kmalloc is performed with `sizeof(*dst) +
+> payload_len`, and payload_len is assigned to ->len.
+
+Agreed!
+
+> I don't read Coccinelle, but, if this patch was auto-generated, I
+> wonder if the script has an error.
+
+Yeah, I'm not sure which part went wrong. I will investigate. Thanks for
+catching this!
+
+-- 
+Kees Cook
