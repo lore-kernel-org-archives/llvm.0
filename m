@@ -1,309 +1,156 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597D346A9
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 06:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-279294d94acso3933085a91.0
-        for <llvm@lists.linux.dev>; Sun, 08 Oct 2023 23:57:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696834666; x=1697439466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NJS+WW4cuCDjk8wiGEOmjzB/AsEq+gw5dUopoJp/L9I=;
-        b=VhQyalx+8KHJzYJxodsn9NzWvqDENc9tp659oNQJHioPVtNqQvnXHTEojRZO7RvC3B
-         L+T7xNOkhR69r2xcNCUfKuQcjLFGATJdfsb7emDYMnciq0vnHUwqu2cM4qXGcHhmvAS+
-         dAQ0auol2o38NT6JKVRDTK+jCX8WnTD7NQG2LUgTIuhlFAvNrc1Ljd+fq8sJwL4YkWOM
-         L6K7iwig+7g8QlCA2Jg/QqyyEyteiNO07SHlIHsaOHT2Doj9+Ctbvez9Ql/4pmt9Ub6/
-         llNiPnDj5pd0j7DhEb1atT9ESaeZxpX0g1gxvnuE+9Lj3DfV3YKxkd0Oy1tzSL+oZZfU
-         3CpA==
-X-Gm-Message-State: AOJu0YwQJ7bxm+0jKRKE1sujpjC4vfg3j2q99GhZ3spAqvucF+XXnXI1
-	mguo++TPP1mPMrSzj6ko0g01DamFLR+VotcaQmw=
-X-Google-Smtp-Source: AGHT+IHXDstWDIhlW/S4bsymJirCqCBInGZVRXyjHfslyOtLbNqbOvsSRor3/F2SZ3hUb4HZKk1bXdnh057wT6n2BHw=
-X-Received: by 2002:a17:90a:e557:b0:277:3379:ce04 with SMTP id
- ei23-20020a17090ae55700b002773379ce04mr16019603pjb.18.1696834666501; Sun, 08
- Oct 2023 23:57:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9D415AFF;
+	Mon,  9 Oct 2023 10:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J8ZHx2Xw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696846272; x=1728382272;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z8fmbK0qvlMiW8gOXAxAw84fmJJdFWzIXoYfwW3JOtM=;
+  b=J8ZHx2XwJC+FxaiAPIMeli08LCAt+zJzPitDvEgh4nFiZm00uMKgjFTU
+   T4c1MQPJl2fDxj6HhGdi8ygQobiShuYaY+FPjSVfGYRfq21M9NwKItbsb
+   5pGVuohxdylzLM6/LHkgo7NPDrJI11eHy7cIGqrHoki2OdhDmikgbIe41
+   sMwlj0sYuohtT9XQWZqIYp1LaDj0eDOH6ToveCk2K0XrROfm2lIEW5z19
+   aXIRbOMEzx7286yc3grHSoH/cnwxHT7tuf3IFq8C6/t0rXt9FORZbdVub
+   4BIugaDmoO92+mkT0Y2OtQdVC+or1BxAqh+XuILDaWn8juKV5d591Ug1X
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="381374676"
+X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
+   d="scan'208";a="381374676"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 03:11:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="782438248"
+X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
+   d="scan'208";a="782438248"
+Received: from lkp-server02.sh.intel.com (HELO 4ed589823ba4) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 09 Oct 2023 03:11:04 -0700
+Received: from kbuild by 4ed589823ba4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qpnE5-00006X-3A;
+	Mon, 09 Oct 2023 10:11:01 +0000
+Date: Mon, 9 Oct 2023 18:08:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ivan Mikhaylov <fr0st61te@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, Ivan Mikhaylov <fr0st61te@gmail.com>
+Subject: Re: [PATCH v5 2/2] iio: adc: Add driver support for MAX34408/9
+Message-ID: <202310091704.gr3fx4Vo-lkp@intel.com>
+References: <20231007234838.8748-3-fr0st61te@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-18-irogers@google.com>
-In-Reply-To: <20231005230851.3666908-18-irogers@google.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Sun, 8 Oct 2023 23:57:35 -0700
-Message-ID: <CAM9d7cj=au3DVNqA0OYU_9eu=R9kTz6SQrtfKuSGnrm=FAY=CA@mail.gmail.com>
-Subject: Re: [PATCH v2 17/18] perf header: Fix various error path memory leaks
-To: Ian Rogers <irogers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
-	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231007234838.8748-3-fr0st61te@gmail.com>
 
-On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
-e:
->
-> Memory leaks were detected by clang-tidy.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/header.c | 63 ++++++++++++++++++++++++----------------
->  1 file changed, 38 insertions(+), 25 deletions(-)
->
-> diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-> index d812e1e371a7..41b78e40b22b 100644
-> --- a/tools/perf/util/header.c
-> +++ b/tools/perf/util/header.c
-> @@ -2598,8 +2598,10 @@ static int process_cpu_topology(struct feat_fd *ff=
-, void *data __maybe_unused)
->                         goto error;
->
->                 /* include a NULL character at the end */
-> -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
-> +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
-> +                       free(str);
->                         goto error;
-> +               }
->                 size +=3D string_size(str);
->                 free(str);
->         }
-> @@ -2617,8 +2619,10 @@ static int process_cpu_topology(struct feat_fd *ff=
-, void *data __maybe_unused)
->                         goto error;
->
->                 /* include a NULL character at the end */
-> -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
-> +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
-> +                       free(str);
->                         goto error;
-> +               }
->                 size +=3D string_size(str);
->                 free(str);
->         }
-> @@ -2681,8 +2685,10 @@ static int process_cpu_topology(struct feat_fd *ff=
-, void *data __maybe_unused)
->                         goto error;
->
->                 /* include a NULL character at the end */
-> -               if (strbuf_add(&sb, str, strlen(str) + 1) < 0)
-> +               if (strbuf_add(&sb, str, strlen(str) + 1) < 0) {
-> +                       free(str);
->                         goto error;
-> +               }
->                 size +=3D string_size(str);
->                 free(str);
->         }
+Hi Ivan,
 
-For these cases, it'd be simpler to free it in the error path.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on robh/for-next linus/master v6.6-rc5 next-20231009]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Mikhaylov/dt-bindings-adc-provide-max34408-9-device-tree-binding-document/20231008-074933
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20231007234838.8748-3-fr0st61te%40gmail.com
+patch subject: [PATCH v5 2/2] iio: adc: Add driver support for MAX34408/9
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231009/202310091704.gr3fx4Vo-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231009/202310091704.gr3fx4Vo-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310091704.gr3fx4Vo-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/adc/max34408.c:240:31: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+     240 |                                          &max34408->input_rsense[i]);
+         |                                                                  ^
+   drivers/iio/adc/max34408.c:215:11: note: initialize the variable 'i' to silence this warning
+     215 |         int rc, i;
+         |                  ^
+         |                   = 0
+   1 warning generated.
 
 
-> @@ -2736,10 +2742,9 @@ static int process_numa_topology(struct feat_fd *f=
-f, void *data __maybe_unused)
->                         goto error;
->
->                 n->map =3D perf_cpu_map__new(str);
-> +               free(str);
->                 if (!n->map)
->                         goto error;
-> -
-> -               free(str);
->         }
->         ff->ph->env.nr_numa_nodes =3D nr;
->         ff->ph->env.numa_nodes =3D nodes;
-> @@ -2913,10 +2918,10 @@ static int process_cache(struct feat_fd *ff, void=
- *data __maybe_unused)
->                 return -1;
->
->         for (i =3D 0; i < cnt; i++) {
-> -               struct cpu_cache_level c;
-> +               struct cpu_cache_level *c =3D &caches[i];
->
->                 #define _R(v)                                           \
-> -                       if (do_read_u32(ff, &c.v))\
-> +                       if (do_read_u32(ff, &c->v))                     \
->                                 goto out_free_caches;                   \
->
->                 _R(level)
-> @@ -2926,22 +2931,25 @@ static int process_cache(struct feat_fd *ff, void=
- *data __maybe_unused)
->                 #undef _R
->
->                 #define _R(v)                                   \
-> -                       c.v =3D do_read_string(ff);               \
-> -                       if (!c.v)                               \
-> -                               goto out_free_caches;
-> +                       c->v =3D do_read_string(ff);              \
-> +                       if (!c->v)                              \
-> +                               goto out_free_caches;           \
->
->                 _R(type)
->                 _R(size)
->                 _R(map)
->                 #undef _R
-> -
-> -               caches[i] =3D c;
->         }
->
->         ff->ph->env.caches =3D caches;
->         ff->ph->env.caches_cnt =3D cnt;
->         return 0;
->  out_free_caches:
-> +       for (i =3D 0; i < cnt; i++) {
-> +               free(caches[i].type);
-> +               free(caches[i].size);
-> +               free(caches[i].map);
-> +       }
->         free(caches);
->         return -1;
->  }
+vim +/i +240 drivers/iio/adc/max34408.c
 
-Looks ok.
+   205	
+   206	static int max34408_probe(struct i2c_client *client)
+   207	{
+   208		const struct max34408_adc_model_data *model_data;
+   209		struct device *dev = &client->dev;
+   210		const struct of_device_id *match;
+   211		struct max34408_data *max34408;
+   212		struct fwnode_handle *node;
+   213		struct iio_dev *indio_dev;
+   214		struct regmap *regmap;
+   215		int rc, i;
+   216	
+   217		match = i2c_of_match_device(max34408_of_match, client);
+   218		if (!match)
+   219			return -EINVAL;
+   220		model_data = i2c_get_match_data(client);
+   221	
+   222		regmap = devm_regmap_init_i2c(client, &max34408_regmap_config);
+   223		if (IS_ERR(regmap)) {
+   224			dev_err_probe(dev, PTR_ERR(regmap),
+   225				      "regmap_init failed\n");
+   226			return PTR_ERR(regmap);
+   227		}
+   228	
+   229		indio_dev = devm_iio_device_alloc(dev, sizeof(*max34408));
+   230		if (!indio_dev)
+   231			return -ENOMEM;
+   232	
+   233		max34408 = iio_priv(indio_dev);
+   234		max34408->regmap = regmap;
+   235		max34408->dev = dev;
+   236		mutex_init(&max34408->lock);
+   237	
+   238		device_for_each_child_node(dev, node) {
+   239			fwnode_property_read_u32(node, "maxim,rsense-val-micro-ohms",
+ > 240						 &max34408->input_rsense[i]);
+   241			i++;
+   242		}
+   243	
+   244		/* disable ALERT and averaging */
+   245		rc = regmap_write(max34408->regmap, MAX34408_CONTROL_REG, 0x0);
+   246		if (rc)
+   247			return rc;
+   248	
+   249		indio_dev->channels = model_data->channels;
+   250		indio_dev->num_channels = model_data->num_channels;
+   251		indio_dev->name = model_data->model_name;
+   252	
+   253		indio_dev->info = &max34408_info;
+   254		indio_dev->modes = INDIO_DIRECT_MODE;
+   255	
+   256		return devm_iio_device_register(dev, indio_dev);
+   257	}
+   258	
 
-
-> @@ -3585,18 +3593,16 @@ static int perf_header__adds_write(struct perf_he=
-ader *header,
->                                    struct feat_copier *fc)
->  {
->         int nr_sections;
-> -       struct feat_fd ff;
-> +       struct feat_fd ff =3D {
-> +               .fd  =3D fd,
-> +               .ph =3D header,
-> +       };
-
-I'm fine with this change.
-
-
->         struct perf_file_section *feat_sec, *p;
->         int sec_size;
->         u64 sec_start;
->         int feat;
->         int err;
->
-> -       ff =3D (struct feat_fd){
-> -               .fd  =3D fd,
-> -               .ph =3D header,
-> -       };
-> -
->         nr_sections =3D bitmap_weight(header->adds_features, HEADER_FEAT_=
-BITS);
->         if (!nr_sections)
->                 return 0;
-> @@ -3623,6 +3629,7 @@ static int perf_header__adds_write(struct perf_head=
-er *header,
->         err =3D do_write(&ff, feat_sec, sec_size);
->         if (err < 0)
->                 pr_debug("failed to write feature section\n");
-> +       free(ff.buf);
-
-But it looks like false alarams.  Since the feat_fd has fd
-and no buf, it won't allocate the buffer in do_write() and
-just use __do_write_fd().  So no need to free the buf.
-
-Thanks,
-Namhyung
-
-
->         free(feat_sec);
->         return err;
->  }
-> @@ -3630,11 +3637,11 @@ static int perf_header__adds_write(struct perf_he=
-ader *header,
->  int perf_header__write_pipe(int fd)
->  {
->         struct perf_pipe_file_header f_header;
-> -       struct feat_fd ff;
-> +       struct feat_fd ff =3D {
-> +               .fd =3D fd,
-> +       };
->         int err;
->
-> -       ff =3D (struct feat_fd){ .fd =3D fd };
-> -
->         f_header =3D (struct perf_pipe_file_header){
->                 .magic     =3D PERF_MAGIC,
->                 .size      =3D sizeof(f_header),
-> @@ -3645,7 +3652,7 @@ int perf_header__write_pipe(int fd)
->                 pr_debug("failed to write perf pipe header\n");
->                 return err;
->         }
-> -
-> +       free(ff.buf);
->         return 0;
->  }
->
-> @@ -3658,11 +3665,12 @@ static int perf_session__do_write_header(struct p=
-erf_session *session,
->         struct perf_file_attr   f_attr;
->         struct perf_header *header =3D &session->header;
->         struct evsel *evsel;
-> -       struct feat_fd ff;
-> +       struct feat_fd ff =3D {
-> +               .fd =3D fd,
-> +       };
->         u64 attr_offset;
->         int err;
->
-> -       ff =3D (struct feat_fd){ .fd =3D fd};
->         lseek(fd, sizeof(f_header), SEEK_SET);
->
->         evlist__for_each_entry(session->evlist, evsel) {
-> @@ -3670,6 +3678,7 @@ static int perf_session__do_write_header(struct per=
-f_session *session,
->                 err =3D do_write(&ff, evsel->core.id, evsel->core.ids * s=
-izeof(u64));
->                 if (err < 0) {
->                         pr_debug("failed to write perf header\n");
-> +                       free(ff.buf);
->                         return err;
->                 }
->         }
-> @@ -3695,6 +3704,7 @@ static int perf_session__do_write_header(struct per=
-f_session *session,
->                 err =3D do_write(&ff, &f_attr, sizeof(f_attr));
->                 if (err < 0) {
->                         pr_debug("failed to write perf header attribute\n=
-");
-> +                       free(ff.buf);
->                         return err;
->                 }
->         }
-> @@ -3705,8 +3715,10 @@ static int perf_session__do_write_header(struct pe=
-rf_session *session,
->
->         if (at_exit) {
->                 err =3D perf_header__adds_write(header, evlist, fd, fc);
-> -               if (err < 0)
-> +               if (err < 0) {
-> +                       free(ff.buf);
->                         return err;
-> +               }
->         }
->
->         f_header =3D (struct perf_file_header){
-> @@ -3728,6 +3740,7 @@ static int perf_session__do_write_header(struct per=
-f_session *session,
->
->         lseek(fd, 0, SEEK_SET);
->         err =3D do_write(&ff, &f_header, sizeof(f_header));
-> +       free(ff.buf);
->         if (err < 0) {
->                 pr_debug("failed to write perf header\n");
->                 return err;
-> --
-> 2.42.0.609.gbb76f46606-goog
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
