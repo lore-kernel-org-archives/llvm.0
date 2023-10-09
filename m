@@ -1,180 +1,173 @@
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4447171C0
-	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 15:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDD618E35
+	for <llvm@lists.linux.dev>; Mon,  9 Oct 2023 15:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="znvEX22W"
-Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
-	by cmsmtp with ESMTP
-	id pnm3qmd2CqBU3prmrql0Ca; Mon, 09 Oct 2023 15:03:13 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id prmqqeGoUV7CyprmrqENph; Mon, 09 Oct 2023 15:03:13 +0000
-X-Authority-Analysis: v=2.4 cv=DdEEF9hW c=1 sm=1 tr=0 ts=65241631
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=cm27Pg_UAAAA:8
- a=mK_AVkanAAAA:8 a=VwQbUJbxAAAA:8 a=NEAV23lmAAAA:8 a=JpHVVEXmboDBK7eC_9wA:9
- a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22 a=3gWm3jAn84ENXaBijsEo:22
- a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=kwshnLMBhyxMuxeif4XuR1omG3UT2LUWqR6gAPw6dmc=; b=znvEX22WjX1jnbPoXogMVrmMO7
-	N/kwpYLfNNQtNaU3yGtsaUjkSB67eUuw5TxzjXhReIXhyl7hPPI2lqcsVU5YLOwE0V7Mve0KqevYD
-	ypJCZkTN+dOfUFVfec3O7q2bRn2Qdpg/NmGVDnLNMjNfGU1MbpBc6UTvL/H0cctYtEe6rh7oPUqX/
-	LAYAiSkfvWxsNffMXW/QyWW53Nzbo8UfM7piMD80qMLmwvivSdPfL6Fn7IoYzOBbWoR76WeZwmzQ/
-	lzk/+nCplL4h5w4FCd2mJBCi+7OjEiScT7f1yUAq658AHYKouSotVcRIcBcyVvAtpzJ11GlzPeu2Y
-	zsk6dM0Q==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:46332 helo=[192.168.15.7])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qprmo-004OOb-24;
-	Mon, 09 Oct 2023 10:03:10 -0500
-Message-ID: <9477fcb5-1cca-435e-a1af-e02edff1551c@embeddedor.com>
-Date: Mon, 9 Oct 2023 09:03:08 -0600
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FzpKPAkg"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5032a508e74so6522e87.1
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 08:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1696866337; x=1697471137; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TfVtaRDig7D+Ty8+FieODZ141554VQ+ssPrPXjaViV4=;
+        b=FzpKPAkgYu2EFm/x+J6hELZRHnxDfxm1wOElkIYE5ZwaZP/Yd6pZo3gJkvSfeJo5vk
+         dsUZdy1M2NGDgLi9LlEYYaaDxa2NXmGoh/VDasegkIOvUniSQHhU6aVvo5p55Esx1yOu
+         aNrxmtKNyBYpVuBm4M0ZdnrsbWMCpaco8vlX+x23pIHX0h6YSeGliVVhaULDWPRPdw10
+         ISuvn9ebNqXzgOZ/hitJxKmn7mFsFddAf80Lg2quIkhB8KqHIT8GXxek0boMqif354/x
+         wDRIEn3j9YNONC6n7YdtD82PqXQZ+rZqofYKKzwAc0700kPE7/oXSOid2JCZqRAehvaU
+         4hPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696866337; x=1697471137;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TfVtaRDig7D+Ty8+FieODZ141554VQ+ssPrPXjaViV4=;
+        b=E/FLZXArq8Q2MtNFjMN1/ylsJDNfsfqX9/xYRoVIOcBsf6O57qqE/ivcrwBOg3D3oE
+         eUdX5roA38HmJjPy7fCf/qyh5Kj6KYO0KYVldYEIGj/8zZKy7QgptiRc3rOmdPU56bL7
+         keNVF8ocKm+berjz1sXoT05yLFTXJ3IFAYGUEZ1EA0F0iQCdIWhkrJJl+8HEImEyo5RH
+         2rOlu67I1nkWgwaOAviX2Bo0zeEIkDoBWcMMPzIZFFz9mnIh2KldTwqACyQKuoGOnZk/
+         4sUodK+4de4ayRH4K4E72RSJrqJaUYnFyunX7LStEcSzmb70LlBcPh/uazbigq/eJopc
+         dWiQ==
+X-Gm-Message-State: AOJu0YwQRIs6TsdCxoZDwvwkJZauzKnLyK7jf6BEA0rrlDrAv8FwrJfN
+	HCO+ih6T7r8Nr1DigB5r/GwWRAtbFclIbP4+gmekyw==
+X-Google-Smtp-Source: AGHT+IHyqimkAN/ZGin5q4+q2QxBs1Lei/HTv3/YCpCfU6KTN/Jvvy/WxyiYZnOsxUwM84s6ifYLH255oUoVtofxu+M=
+X-Received: by 2002:ac2:51a5:0:b0:501:a2b9:6046 with SMTP id
+ f5-20020ac251a5000000b00501a2b96046mr220584lfk.7.1696866336692; Mon, 09 Oct
+ 2023 08:45:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] wifi: p54: Annotate struct p54_cal_database with
- __counted_by
-Content-Language: en-US
-To: Jason Andryuk <jandryuk@gmail.com>, Kees Cook <keescook@chromium.org>
-Cc: Christian Lamparter <chunkeey@googlemail.com>,
- Kalle Valo <kvalo@kernel.org>, "Gustavo A. R. Silva"
- <gustavoars@kernel.org>, linux-wireless@vger.kernel.org,
- linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20231006201719.work.356-kees@kernel.org>
- <CAKf6xptEEHJAsrwh_oebK1_AMb+_tvLtiY8sP-Qk=Z9jXhVf7Q@mail.gmail.com>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <CAKf6xptEEHJAsrwh_oebK1_AMb+_tvLtiY8sP-Qk=Z9jXhVf7Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qprmo-004OOb-24
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.7]) [187.162.21.192]:46332
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 1
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfHpDJUAKzZdfcoySTLN7j+zt0PzIqMSSdyWmH4SHmnGoO72vI5Whum936LJ5PcCZ2wwKgmL2K0Z83RO/0GbPBcYu4d8+zVKElF1D/mvcOnBPZF74+sgd
- mH8FYRiwam/NvMlI6OkkXAtiBzRMpqQuSzVpPu3ltXB6gYZwyTGpa3cQ5f/07TwghnV74+XYX1k3msEgO41HmYdAcBfsxBBu3B4=
+References: <20231005230851.3666908-1-irogers@google.com> <20231005230851.3666908-5-irogers@google.com>
+ <CAM9d7ch4SLLbORdhkanCoPQZX=f-p-HxsYX2YWYbtLR4beD4wg@mail.gmail.com>
+In-Reply-To: <CAM9d7ch4SLLbORdhkanCoPQZX=f-p-HxsYX2YWYbtLR4beD4wg@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 9 Oct 2023 08:45:25 -0700
+Message-ID: <CAP-5=fXtx20VWAVpxAB-HHONx-8MUQKyFm9iSf7ohNBhoESoYg@mail.gmail.com>
+Subject: Re: [PATCH v2 04/18] perf hisi-ptt: Fix potential memory leak
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yicong Yang <yangyicong@hisilicon.com>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ming Wang <wangming01@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	K Prateek Nayak <kprateek.nayak@amd.com>, Yanteng Si <siyanteng@loongson.cn>, 
+	Yuan Can <yuancan@huawei.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	James Clark <james.clark@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sun, Oct 8, 2023 at 10:41=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> On Thu, Oct 5, 2023 at 4:09=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+> >
+> > Fix clang-tidy found potential memory leak and unread value:
+> > ```
+> > tools/perf/util/hisi-ptt.c:108:3: warning: Value stored to 'data_offset=
+' is never read [clang-analyzer-deadcode.DeadStores]
+> >                 data_offset =3D 0;
+> >                 ^             ~
+> > tools/perf/util/hisi-ptt.c:108:3: note: Value stored to 'data_offset' i=
+s never read
+> >                 data_offset =3D 0;
+> >                 ^             ~
+> > tools/perf/util/hisi-ptt.c:112:12: warning: Potential leak of memory po=
+inted to by 'data' [clang-analyzer-unix.Malloc]
+> >                         return -errno;
+> >                                 ^
+> > /usr/include/errno.h:38:18: note: expanded from macro 'errno'
+> >                  ^
+> > tools/perf/util/hisi-ptt.c:100:15: note: Memory is allocated
+> >         void *data =3D malloc(size);
+> >                      ^~~~~~~~~~~~
+> > tools/perf/util/hisi-ptt.c:104:6: note: Assuming 'data' is non-null
+> >         if (!data)
+> >             ^~~~~
+> > tools/perf/util/hisi-ptt.c:104:2: note: Taking false branch
+> >         if (!data)
+> >         ^
+> > tools/perf/util/hisi-ptt.c:107:6: note: Assuming the condition is false
+> >         if (perf_data__is_pipe(session->data)) {
+> >             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > tools/perf/util/hisi-ptt.c:107:2: note: Taking false branch
+> >         if (perf_data__is_pipe(session->data)) {
+> >         ^
+> > tools/perf/util/hisi-ptt.c:111:7: note: Assuming the condition is true
+> >                 if (data_offset =3D=3D -1)
+> >                     ^~~~~~~~~~~~~~~~~
+> > tools/perf/util/hisi-ptt.c:111:3: note: Taking true branch
+> >                 if (data_offset =3D=3D -1)
+> >                 ^
+> > tools/perf/util/hisi-ptt.c:112:12: note: Potential leak of memory point=
+ed to by 'data'
+> >                         return -errno;
+> >                                 ^
+> > /usr/include/errno.h:38:18: note: expanded from macro 'errno'
+> > ```
+>
+> We already have
+>
+>   https://lore.kernel.org/r/20230930072719.1267784-1-visitorckw@gmail.com
 
+Agreed. There is a written to but not read addressed in this one, but
+I think that is okay to clean up later and to drop this patch.
 
-On 10/9/23 16:55, Jason Andryuk wrote:
-> Hi,
-> 
-> I randomly peeked at this patch.  Unfortunately, I am not familiar
-> with the actual p54 code.
-> 
-> On Fri, Oct 6, 2023 at 4:17 PM Kees Cook <keescook@chromium.org> wrote:
->>
->> Prepare for the coming implementation by GCC and Clang of the __counted_by
->> attribute. Flexible array members annotated with __counted_by can have
->> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
->> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
->> functions).
->>
->> As found with Coccinelle[1], add __counted_by for struct p54_cal_database.
->>
->> Cc: Christian Lamparter <chunkeey@googlemail.com>
->> Cc: Kalle Valo <kvalo@kernel.org>
->> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
->> Cc: linux-wireless@vger.kernel.org
->> Cc: linux-hardening@vger.kernel.org
->> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
->> Signed-off-by: Kees Cook <keescook@chromium.org>
->> ---
->>   drivers/net/wireless/intersil/p54/p54.h | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/wireless/intersil/p54/p54.h b/drivers/net/wireless/intersil/p54/p54.h
->> index 3356ea708d81..770e348d1f6c 100644
->> --- a/drivers/net/wireless/intersil/p54/p54.h
->> +++ b/drivers/net/wireless/intersil/p54/p54.h
->> @@ -126,7 +126,7 @@ struct p54_cal_database {
->>          size_t entry_size;
->>          size_t offset;
->>          size_t len;
->> -       u8 data[];
->> +       u8 data[] __counted_by(entries);
-> 
-> This looks incorrect - I think you want __counted_by(len)?  The
+Thanks,
+Ian
 
-I think you're right. More comments below...
-
-> presence of entry_size made me suspicious.
-> 
->>   };
-> 
-> This is the function that creates struct p54_cal_database:
-> 
-> static struct p54_cal_database *p54_convert_db(struct pda_custom_wrapper *src,
->                                                 size_t total_len)
-> {
->          struct p54_cal_database *dst;
->          size_t payload_len, entries, entry_size, offset;
-> 
->          payload_len = le16_to_cpu(src->len);
->          entries = le16_to_cpu(src->entries);
->          entry_size = le16_to_cpu(src->entry_size);
->          offset = le16_to_cpu(src->offset);
->          if (((entries * entry_size + offset) != payload_len) ||
->               (payload_len + sizeof(*src) != total_len))
->                  return NULL;
-> 
->          dst = kmalloc(sizeof(*dst) + payload_len, GFP_KERNEL);
->          if (!dst)
->                  return NULL;
-> 
->          dst->entries = entries;
->          dst->entry_size = entry_size;
->          dst->offset = offset;
->          dst->len = payload_len;
-> 
->          memcpy(dst->data, src->data, payload_len);
->          return dst;
-> }
-> 
-> You can see that kmalloc is performed with `sizeof(*dst) +
-> payload_len`, and payload_len is assigned to ->len.
-
-This should be changed to:
-
--       dst = kmalloc(sizeof(*dst) + payload_len, GFP_KERNEL);
-+       dst = kmalloc(struct_size(dst, data, payload_len), GFP_KERNEL);
-
-> 
-> I don't read Coccinelle, but, if this patch was auto-generated, I
-> wonder if the script has an error.
-
-With the struct_size() change, the Coccinelle script should be able to
-generate a correct patch for this.
-
---
-Gustavo
+> Thanks,
+> Namhyung
+>
+>
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/hisi-ptt.c | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/perf/util/hisi-ptt.c b/tools/perf/util/hisi-ptt.c
+> > index 45b614bb73bf..ea297329c526 100644
+> > --- a/tools/perf/util/hisi-ptt.c
+> > +++ b/tools/perf/util/hisi-ptt.c
+> > @@ -98,18 +98,18 @@ static int hisi_ptt_process_auxtrace_event(struct p=
+erf_session *session,
+> >         int fd =3D perf_data__fd(session->data);
+> >         int size =3D event->auxtrace.size;
+> >         void *data =3D malloc(size);
+> > -       off_t data_offset;
+> >         int err;
+> >
+> >         if (!data)
+> >                 return -errno;
+> >
+> > -       if (perf_data__is_pipe(session->data)) {
+> > -               data_offset =3D 0;
+> > -       } else {
+> > -               data_offset =3D lseek(fd, 0, SEEK_CUR);
+> > -               if (data_offset =3D=3D -1)
+> > +       if (!perf_data__is_pipe(session->data)) {
+> > +               off_t data_offset =3D lseek(fd, 0, SEEK_CUR);
+> > +
+> > +               if (data_offset =3D=3D -1) {
+> > +                       free(data);
+> >                         return -errno;
+> > +               }
+> >         }
+> >
+> >         err =3D readn(fd, data, size);
+> > --
+> > 2.42.0.609.gbb76f46606-goog
+> >
