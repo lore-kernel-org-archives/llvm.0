@@ -1,55 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA20441F;
-	Tue, 10 Oct 2023 00:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06877F0
+	for <llvm@lists.linux.dev>; Tue, 10 Oct 2023 02:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Wb+Xk4J3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDF3C433C7;
-	Tue, 10 Oct 2023 00:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1696897924;
-	bh=LDyd7HoMfWZeooT24v4F76QudG81vVKSM7PM7vJRP0c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Wb+Xk4J3tAsqKsKwwBacAoxb9jiZt4+KD4sS1mRAZhgT98aSQ31gweLX77wBzAP35
-	 QMH407LwvF/I9Ly8JdgZEt0SawDDS2QPsH8/vo+jCJ3whIB7S4Zt4omOZeRsNvVBmS
-	 Fpv1kG0alPvZpa8PgAn+4rxdfmx6wwpxlLyjKpTk=
-Date: Mon, 9 Oct 2023 17:31:47 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>
-Subject: Re: [akpm-mm:mm-stable 175/204] mm/list_lru.c:98:7: error: call to
- undeclared function 'list_lru_from_kmem'; ISO C99 and later do not support
- implicit function declarations
-Message-Id: <20231009173147.0ab0e6136e461c6bd246775e@linux-foundation.org>
-In-Reply-To: <202310072139.CXKkky51-lkp@intel.com>
-References: <202310072139.CXKkky51-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="1VSbNAdY"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 399NwuB9016274;
+	Tue, 10 Oct 2023 02:09:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=tLdCG6jN7hKzemz3BqeIqgk+1LWVl64DMX/5vSOGzuU=;
+ b=1VSbNAdYfjhd59uutV3S/ras1X34agVW3cGcUSEjg8U/657+vAVblWInhj8XJ+38mqyC
+ V9/p9cPxOA1udFDuIl+4+SOU6s9pVo3W7OVhxPHPBYarR8k4CFSCSVH8gztAyMRVGLeJ
+ pNVldwuKDfs88Pp89q5DnbtvqWgwd1lNs8q/xADnNt3vsU5MT2MEPPKz9/r8z+ow0VmZ
+ Nf7gtXF7piozNM2A2vQ3D4R7IdbJusKtbS3TuIosLpyQ85S5q/65922YxTnaCClXK1oF
+ ZRTRZB2AMyBs/rYAXIncrPjio/EKHj/0SUeRVqC7LzEWxtwiONulWYooRnNlk//lquBR Cg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tmh89sdk8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 Oct 2023 02:09:44 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39A1JBsp014884;
+	Tue, 10 Oct 2023 02:09:43 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3tjws63mcb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 Oct 2023 02:09:43 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39A29dUM036611;
+	Tue, 10 Oct 2023 02:09:42 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3tjws63m9y-3;
+	Tue, 10 Oct 2023 02:09:42 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Bodo Stroesser <bostroesser@gmail.com>, Kees Cook <keescook@chromium.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: target: tcmu: Annotate struct tcmu_tmr with __counted_by
+Date: Mon,  9 Oct 2023 22:09:34 -0400
+Message-Id: <169690017527.1410956.11295274010331353504.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230922175300.work.148-kees@kernel.org>
+References: <20230922175300.work.148-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-10_01,2023-10-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=682 mlxscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310100013
+X-Proofpoint-GUID: bkFeGgmIwkMBadGMwEnQVSLRIbis1HxP
+X-Proofpoint-ORIG-GUID: bkFeGgmIwkMBadGMwEnQVSLRIbis1HxP
 
-On Sat, 7 Oct 2023 22:08:25 +0800 kernel test robot <lkp@intel.com> wrote:
+On Fri, 22 Sep 2023 10:53:01 -0700, Kees Cook wrote:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-stable
-> head:   2b76550922a81fd63e16b81b6b39f1eb19df52f0
-> commit: a39744c1a652d8847098d9f1a022b50a9ceb3f10 [175/204] mm/list_lru: remove unused function
-> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231007/202310072139.CXKkky51-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231007/202310072139.CXKkky51-lkp@intel.com/reproduce)
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202310072139.CXKkky51-lkp@intel.com/
+> As found with Coccinelle[1], add __counted_by for struct tcmu_tmr.
+> 
+> [...]
 
-Well drat.  It's a shame that it took 2+ weeks for this to be discovered.
+Applied to 6.7/scsi-queue, thanks!
 
-I'll plan on dropping a39744c1a652 from mm-stable, thanks.
+[1/1] scsi: target: tcmu: Annotate struct tcmu_tmr with __counted_by
+      https://git.kernel.org/mkp/scsi/c/caf22c969ed1
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
