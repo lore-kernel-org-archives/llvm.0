@@ -1,89 +1,86 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06877F0
-	for <llvm@lists.linux.dev>; Tue, 10 Oct 2023 02:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2807F10F5
+	for <llvm@lists.linux.dev>; Tue, 10 Oct 2023 03:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="1VSbNAdY"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 399NwuB9016274;
-	Tue, 10 Oct 2023 02:09:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=tLdCG6jN7hKzemz3BqeIqgk+1LWVl64DMX/5vSOGzuU=;
- b=1VSbNAdYfjhd59uutV3S/ras1X34agVW3cGcUSEjg8U/657+vAVblWInhj8XJ+38mqyC
- V9/p9cPxOA1udFDuIl+4+SOU6s9pVo3W7OVhxPHPBYarR8k4CFSCSVH8gztAyMRVGLeJ
- pNVldwuKDfs88Pp89q5DnbtvqWgwd1lNs8q/xADnNt3vsU5MT2MEPPKz9/r8z+ow0VmZ
- Nf7gtXF7piozNM2A2vQ3D4R7IdbJusKtbS3TuIosLpyQ85S5q/65922YxTnaCClXK1oF
- ZRTRZB2AMyBs/rYAXIncrPjio/EKHj/0SUeRVqC7LzEWxtwiONulWYooRnNlk//lquBR Cg== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tmh89sdk8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Oct 2023 02:09:44 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39A1JBsp014884;
-	Tue, 10 Oct 2023 02:09:43 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3tjws63mcb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Oct 2023 02:09:43 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39A29dUM036611;
-	Tue, 10 Oct 2023 02:09:42 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3tjws63m9y-3;
-	Tue, 10 Oct 2023 02:09:42 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bodo Stroesser <bostroesser@gmail.com>, Kees Cook <keescook@chromium.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] scsi: target: tcmu: Annotate struct tcmu_tmr with __counted_by
-Date: Mon,  9 Oct 2023 22:09:34 -0400
-Message-Id: <169690017527.1410956.11295274010331353504.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230922175300.work.148-kees@kernel.org>
-References: <20230922175300.work.148-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CiynIaXV"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-53b962f09e0so3976518a12.0
+        for <llvm@lists.linux.dev>; Mon, 09 Oct 2023 20:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696906938; x=1697511738; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7NFw7jVHwZYrsuKeB3oiagILvwz0AJLaFyHBUay/pXI=;
+        b=CiynIaXVow1d+QWVpyemfPWwfJO9s3GkuVUL3NN9DBjWqKPe/1osjup1gA40KsMGk5
+         kyTzh3xy/Vi8vmrSDpQuJZTBBOvkX0ufJOYFx4eUyAV8S6atQWkpAST/2wE2u6wlGjTV
+         4rbPhkyMk9UkyaT/L89m3d9GGnz88GAbilWh0+craCUEqoOHUwvK4JoYSGj2inBFGtaN
+         sJXD81RMxXthQw95EE4oZWXalS0XedEFlbgjaGNsKVOzsQenD87yAjrT/Iqp2NsYSIyh
+         fkWoC0l/ewx3b0okF0cD0084T0IjTVNzzWd66/ogPwsmlM21RxD74Ues2mmNB1idlNnL
+         8TNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696906938; x=1697511738;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7NFw7jVHwZYrsuKeB3oiagILvwz0AJLaFyHBUay/pXI=;
+        b=QD6Cq/fquxvj1KtLoJVnu5baxTVtRah7wQJnF98Ps+ijdKpl6Q6vFA+GUM/EwNYJjY
+         iQTvYNvVTBbUHwmr1t88fWd8nfuH5w/2CzRa6hvOY8VEIUAf1OrjHH57MG2fX1ePvyum
+         MvrtLcTlV+z0tKeeKMvLT7UoyEuNd1NsGe7FLt9Rsopqgt4djYX92EBX4n7NPbDKhMeE
+         Aj1ojwYvoQcnW2xMsrnw2MFB1ZwCN/XGfBzcZlVTzHi1580T6a3vWT0mSVq83gswbZWf
+         pZcLIxaC18vgk8xszbJDIpq6I+8B4RcIbNhvFIOPbN/eIIXhqT3fypbf8LcsHAa6hcq5
+         NoTg==
+X-Gm-Message-State: AOJu0YwsfunGZCi8fTP02RDYJrXfswFOLzw3VOiWoq304B/h6Z4cVaPk
+	W++1MRK+N4KJdwXYT2gfCrF6e7t6v1B0huIxItI=
+X-Google-Smtp-Source: AGHT+IH6dZvjOAHSoyZ23JF4sn6FJyDLMeAw5grAZpTEz+0OBLlzvWWcjEkif2Tg9mP7XdnE3F8cAKLKbkxmFY5kzDE=
+X-Received: by 2002:a50:fa95:0:b0:52c:92e3:1d12 with SMTP id
+ w21-20020a50fa95000000b0052c92e31d12mr14278796edr.11.1696906938155; Mon, 09
+ Oct 2023 20:02:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-10_01,2023-10-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=682 mlxscore=0
- bulkscore=0 phishscore=0 suspectscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310100013
-X-Proofpoint-GUID: bkFeGgmIwkMBadGMwEnQVSLRIbis1HxP
-X-Proofpoint-ORIG-GUID: bkFeGgmIwkMBadGMwEnQVSLRIbis1HxP
+References: <20231009161028.it.544-kees@kernel.org>
+In-Reply-To: <20231009161028.it.544-kees@kernel.org>
+From: Jason Andryuk <jandryuk@gmail.com>
+Date: Mon, 9 Oct 2023 23:02:06 -0400
+Message-ID: <CAKf6xpvPgaSMA=oCMgXqoHWYfYt53_U1vAhvh1dX6HHytKjOwA@mail.gmail.com>
+Subject: Re: [PATCH v2] wifi: p54: Annotate struct p54_cal_database with __counted_by
+To: Kees Cook <keescook@chromium.org>
+Cc: Christian Lamparter <chunkeey@googlemail.com>, Kalle Valo <kvalo@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-wireless@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 22 Sep 2023 10:53:01 -0700, Kees Cook wrote:
-
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
+On Mon, Oct 9, 2023 at 12:10=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> Prepare for the coming implementation by GCC and Clang of the __counted_b=
+y
 > attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 > functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct tcmu_tmr.
-> 
-> [...]
+>
+> Add __counted_by for struct p54_cal_database.
+>
+> Cc: Christian Lamparter <chunkeey@googlemail.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Suggested-by: Jason Andryuk <jandryuk@gmail.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Applied to 6.7/scsi-queue, thanks!
+Reviewed-by: Jason Andryuk <jandryuk@gmail.com>
 
-[1/1] scsi: target: tcmu: Annotate struct tcmu_tmr with __counted_by
-      https://git.kernel.org/mkp/scsi/c/caf22c969ed1
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Thanks,
+Jason
