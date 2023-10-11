@@ -1,170 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9139DD2F0
-	for <llvm@lists.linux.dev>; Wed, 11 Oct 2023 06:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="feGzylGk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697004625;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RBs1UvRmT7rn8T+Sm5tlBqRxk4hvhi5aLz9B6wAttaE=;
-	b=feGzylGk5EWlXsGdBX7z5brav7nRdBxklRArmVa3Q2DgQx0Ul7sYIkNsa5Hjcu6ufTHvXV
-	r8q9LGTlxL8b90y1KiNmKBCTN9UCssS/BKhbsJ97AQcjEvXfVRKFGihhi9TTNyjTaU4yi7
-	l+dm5PHrs5TrPIgkPCi0Fe5hWXLb6Dc=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-543-ZiwLGnciPJKy-Qw58V-m7g-1; Wed, 11 Oct 2023 02:10:18 -0400
-X-MC-Unique: ZiwLGnciPJKy-Qw58V-m7g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E4022825E8A
-	for <llvm@lists.linux.dev>; Wed, 11 Oct 2023 06:10:18 +0000 (UTC)
-Received: from [172.64.9.45] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 677B6492C3E;
-	Wed, 11 Oct 2023 06:10:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 11 of 230): Test report for master
- (6.6.0-rc5, mainline.kernel.org-clang, 1c8b86a3)
-Date: Wed, 11 Oct 2023 06:10:18 -0000
-To: jbastian@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AEE6132
+	for <llvm@lists.linux.dev>; Wed, 11 Oct 2023 06:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 39B6gOcJ53664973, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 39B6gOcJ53664973
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 11 Oct 2023 14:42:24 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 11 Oct 2023 14:42:24 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 11 Oct 2023 14:42:24 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Wed, 11 Oct 2023 14:42:24 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: Kees Cook <keescook@chromium.org>
+CC: "kvalo@kernel.org" <kvalo@kernel.org>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org"
+	<linux-wireless@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com"
+	<ndesaulniers@google.com>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>
+Subject: RE: [PATCH] wifi: rtw89: coex: Annotate struct rtw89_btc_btf_set_slot_table with __counted_by
+Thread-Topic: [PATCH] wifi: rtw89: coex: Annotate struct
+ rtw89_btc_btf_set_slot_table with __counted_by
+Thread-Index: AQHZ+JIdINNFwhWCA0q/Xu1rquYi7LA9Aa0AgAQqFYCAAv5lMA==
+Date: Wed, 11 Oct 2023 06:42:23 +0000
+Message-ID: <a47f01def02c4ccdb0d4ca3967ad7584@realtek.com>
+References: <20231006201715.work.239-kees@kernel.org>
+ <4716f3c7bf3d34ea25229edd5250f5f0cff639d8.camel@realtek.com>
+ <202310090953.B7CE5CF4B@keescook>
+In-Reply-To: <202310090953.B7CE5CF4B@keescook>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+x-originating-ip: [172.21.69.25]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <92021.123101102101900120@us-mta-543.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-Hi, we tested your kernel and here are the results:
+Hi Kees,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> -----Original Message-----
+> From: Kees Cook <keescook@chromium.org>
+> Sent: Tuesday, October 10, 2023 12:56 AM
+> To: Ping-Ke Shih <pkshih@realtek.com>
+> Cc: kvalo@kernel.org; llvm@lists.linux.dev; linux-kernel@vger.kernel.org;=
+ linux-wireless@vger.kernel.org;
+> linux-hardening@vger.kernel.org; trix@redhat.com; nathan@kernel.org; ndes=
+aulniers@google.com;
+> gustavoars@kernel.org
+> Subject: Re: [PATCH] wifi: rtw89: coex: Annotate struct rtw89_btc_btf_set=
+_slot_table with __counted_by
+>=20
+> On Sat, Oct 07, 2023 at 01:20:43AM +0000, Ping-Ke Shih wrote:
+> > On Fri, 2023-10-06 at 13:17 -0700, Kees Cook wrote:
+> >
+> > So, NACK this patch. I will prepare one or two patches for them next we=
+ek.
+>=20
+> Ah-ha; thank you!
 
+I have sent two patches [1]. Please help to review and Cc people if needed.=
+=20
 
-Kernel information:
-    Commit message: Merge tag 'xsa441-6.6-tag' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/xen/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/108377
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9837851
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9837806
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests: generic/174 - wrong fs type, bad option, bad super=
-block
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/843
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+[1] https://lore.kernel.org/linux-wireless/20231011063725.25276-1-pkshih@re=
+altek.com/T/#t
 
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
