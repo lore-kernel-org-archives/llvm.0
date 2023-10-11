@@ -1,96 +1,211 @@
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AEE6132
-	for <llvm@lists.linux.dev>; Wed, 11 Oct 2023 06:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 39B6gOcJ53664973, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 39B6gOcJ53664973
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 11 Oct 2023 14:42:24 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 11 Oct 2023 14:42:24 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 11 Oct 2023 14:42:24 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
- RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
- 15.01.2375.007; Wed, 11 Oct 2023 14:42:24 +0800
-From: Ping-Ke Shih <pkshih@realtek.com>
-To: Kees Cook <keescook@chromium.org>
-CC: "kvalo@kernel.org" <kvalo@kernel.org>,
-        "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org"
-	<linux-wireless@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org"
-	<linux-hardening@vger.kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com"
-	<ndesaulniers@google.com>,
-        "gustavoars@kernel.org" <gustavoars@kernel.org>
-Subject: RE: [PATCH] wifi: rtw89: coex: Annotate struct rtw89_btc_btf_set_slot_table with __counted_by
-Thread-Topic: [PATCH] wifi: rtw89: coex: Annotate struct
- rtw89_btc_btf_set_slot_table with __counted_by
-Thread-Index: AQHZ+JIdINNFwhWCA0q/Xu1rquYi7LA9Aa0AgAQqFYCAAv5lMA==
-Date: Wed, 11 Oct 2023 06:42:23 +0000
-Message-ID: <a47f01def02c4ccdb0d4ca3967ad7584@realtek.com>
-References: <20231006201715.work.239-kees@kernel.org>
- <4716f3c7bf3d34ea25229edd5250f5f0cff639d8.camel@realtek.com>
- <202310090953.B7CE5CF4B@keescook>
-In-Reply-To: <202310090953.B7CE5CF4B@keescook>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-x-originating-ip: [172.21.69.25]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A1718C13;
+	Wed, 11 Oct 2023 07:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TNoW/9pZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697008656; x=1728544656;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BXg2wEQCreA5bYXJyzy3HRYJ0Jes4DTVCpbQGgIvo8w=;
+  b=TNoW/9pZI6wxJ4+E59pshqtWudaxIiXF6T4533d7l0VNuXfrAjpyUq6o
+   GrMFYX0mfQzJrA7GESKRxmfPbUh2Ngqc6rc6y0wdF/bk2rLqdi2Pxdnpg
+   UxWxMuwqbf18UL/Sx97wQBDHmcIn9WPN1MKuL02fzZQFXQ3FcrFxAVQL3
+   NOVaXtuRYunNCvDnBi2AiwLhFv5ob1LSR23t1wXSUTdPAq0W0DSauTRFV
+   DWtxmXBb7WWcmJFq6kBNnzRRT4bnvVnggiPQ6OdMqGYQ1NwOnMue91BPh
+   Hk6Q5EoRK9bhrm2J50MSLoRYHJG5/56a2lCIcNjCLvVQXykNDIx43OTWy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="3190306"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="3190306"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 00:17:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="747350894"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="747350894"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 11 Oct 2023 00:17:32 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qqTTF-0001u5-3B;
+	Wed, 11 Oct 2023 07:17:29 +0000
+Date: Wed, 11 Oct 2023 15:16:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hengqi Chen <hengqi.chen@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	keescook@chromium.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, luto@amacapital.net, wad@chromium.org,
+	alexyonghe@tencent.com, hengqi.chen@gmail.com
+Subject: Re: [PATCH 2/4] seccomp, bpf: Introduce SECCOMP_LOAD_FILTER operation
+Message-ID: <202310111556.DzEDzt3Z-lkp@intel.com>
+References: <20231009124046.74710-3-hengqi.chen@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231009124046.74710-3-hengqi.chen@gmail.com>
 
-Hi Kees,
+Hi Hengqi,
 
-> -----Original Message-----
-> From: Kees Cook <keescook@chromium.org>
-> Sent: Tuesday, October 10, 2023 12:56 AM
-> To: Ping-Ke Shih <pkshih@realtek.com>
-> Cc: kvalo@kernel.org; llvm@lists.linux.dev; linux-kernel@vger.kernel.org;=
- linux-wireless@vger.kernel.org;
-> linux-hardening@vger.kernel.org; trix@redhat.com; nathan@kernel.org; ndes=
-aulniers@google.com;
-> gustavoars@kernel.org
-> Subject: Re: [PATCH] wifi: rtw89: coex: Annotate struct rtw89_btc_btf_set=
-_slot_table with __counted_by
->=20
-> On Sat, Oct 07, 2023 at 01:20:43AM +0000, Ping-Ke Shih wrote:
-> > On Fri, 2023-10-06 at 13:17 -0700, Kees Cook wrote:
-> >
-> > So, NACK this patch. I will prepare one or two patches for them next we=
-ek.
->=20
-> Ah-ha; thank you!
+kernel test robot noticed the following build errors:
 
-I have sent two patches [1]. Please help to review and Cc people if needed.=
-=20
+[auto build test ERROR on kees/for-next/seccomp]
+[also build test ERROR on bpf-next/master bpf/master kees/for-next/pstore kees/for-next/kspp linus/master v6.6-rc5 next-20231010]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[1] https://lore.kernel.org/linux-wireless/20231011063725.25276-1-pkshih@re=
-altek.com/T/#t
+url:    https://github.com/intel-lab-lkp/linux/commits/Hengqi-Chen/seccomp-Refactor-filter-copy-create-for-reuse/20231010-100354
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/seccomp
+patch link:    https://lore.kernel.org/r/20231009124046.74710-3-hengqi.chen%40gmail.com
+patch subject: [PATCH 2/4] seccomp, bpf: Introduce SECCOMP_LOAD_FILTER operation
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20231011/202310111556.DzEDzt3Z-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231011/202310111556.DzEDzt3Z-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310111556.DzEDzt3Z-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/seccomp.c:29:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/seccomp.c:29:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/seccomp.c:29:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> kernel/seccomp.c:2046:8: error: implicit declaration of function 'security_bpf_prog_alloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ret = security_bpf_prog_alloc(prog->aux);
+                 ^
+   kernel/seccomp.c:2046:8: note: did you mean 'security_msg_msg_alloc'?
+   include/linux/security.h:1245:19: note: 'security_msg_msg_alloc' declared here
+   static inline int security_msg_msg_alloc(struct msg_msg *msg)
+                     ^
+>> kernel/seccomp.c:2056:8: error: implicit declaration of function 'bpf_prog_new_fd' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ret = bpf_prog_new_fd(prog);
+                 ^
+   12 warnings and 2 errors generated.
 
 
+vim +/security_bpf_prog_alloc +2046 kernel/seccomp.c
 
+  2031	
+  2032	static long seccomp_load_filter(const char __user *filter)
+  2033	{
+  2034		struct sock_fprog fprog;
+  2035		struct bpf_prog *prog;
+  2036		int ret;
+  2037	
+  2038		ret = seccomp_copy_user_filter(filter, &fprog);
+  2039		if (ret)
+  2040			return ret;
+  2041	
+  2042		ret = seccomp_prepare_prog(&prog, &fprog);
+  2043		if (ret)
+  2044			return ret;
+  2045	
+> 2046		ret = security_bpf_prog_alloc(prog->aux);
+  2047		if (ret) {
+  2048			bpf_prog_free(prog);
+  2049			return ret;
+  2050		}
+  2051	
+  2052		prog->aux->user = get_current_user();
+  2053		atomic64_set(&prog->aux->refcnt, 1);
+  2054		prog->type = BPF_PROG_TYPE_SECCOMP;
+  2055	
+> 2056		ret = bpf_prog_new_fd(prog);
+  2057		if (ret < 0)
+  2058			bpf_prog_put(prog);
+  2059		return ret;
+  2060	}
+  2061	#else
+  2062	static inline long seccomp_set_mode_filter(unsigned int flags,
+  2063						   const char __user *filter)
+  2064	{
+  2065		return -EINVAL;
+  2066	}
+  2067	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
