@@ -1,36 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD17914A80;
-	Wed, 11 Oct 2023 14:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0E03A26E;
+	Wed, 11 Oct 2023 20:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JN08u+FL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EFA2C433C8;
-	Wed, 11 Oct 2023 14:50:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="peocWnSI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1E7C433C7;
+	Wed, 11 Oct 2023 20:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697035849;
-	bh=D9pqkQn2GvEbB4YXfJmtr5GvHtbWhi/1v/+iPM/ovgQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=JN08u+FLFxwWnU8bT3fDcRyo3s1NXX6saj27sklrkikmLG2f9Z784B2ct04hXVHq3
-	 iLlihkOfMnRavREw4HenZDpIl30bVTkzL4V9RmPhUK6N9tM4yNZUe50c8at8P9kdVu
-	 m4xE5wYBIfCt2hgmUoIxQuj4vxQa3ctkbMmBBzOHCTZiYFBvML16bEW9JuWthpyIpi
-	 tycQCXcEfujepVAFc4nCYxT+hhJgwFmxnBAd1PGkw1hFLG8NYsQ/r7scjYEfPLUDXe
-	 97gsHU7XETucf29kiLW4h8t+LBhaWYa7vRBIyJMQVnWMbYGaUIfX4M8C1qJDqDPVSR
-	 6l+B0Yhrj3arg==
-From: Mark Brown <broonie@kernel.org>
-To: Support Opensource <support.opensource@diasemi.com>, 
- Kees Cook <keescook@chromium.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- linux-hardening@vger.kernel.org
-In-Reply-To: <20230922175207.work.576-kees@kernel.org>
-References: <20230922175207.work.576-kees@kernel.org>
-Subject: Re: [PATCH] regulator: da9063: Annotate struct da9063_regulators
- with __counted_by
-Message-Id: <169703584111.51285.14211447144066955668.b4-ty@kernel.org>
-Date: Wed, 11 Oct 2023 15:50:41 +0100
+	s=k20201202; t=1697055729;
+	bh=oEPFEr69GOFnlvxRi+OQJiP0bTLBwUD6RP2Enyu8lR0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=peocWnSImSksa62GSPAn85I3k+ZvLdOPgLVoQt5Vuy/sPj9YK66RvBb43iKxBOHw3
+	 cTYd37njxwYGCpuF/kg+f3j13Ac7nBoaxAPKxrwoxX3sjmEn6nNRqGEvJS7KinK40l
+	 /Jupky0h+QKMjw3UNe41uZ5qN/0C/xdymc0SIB+ijTje5xbC0zb9h8uwmOi6hy2Lyf
+	 m1QSEDD3/AMXmF5nRmsoTUoYtmF2e10dVbo/NkvAjZMH4Sx+ygoFrNajvGY1KVjYhB
+	 XW6GNOoURwhir5Ko3mFOsF3A2/IOixOk0bRvqiezLMVcyJ27s4npOofcwqAANBZz/g
+	 o8Wrxk/tqXgFA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 11 Oct 2023 13:21:51 -0700
+Subject: [PATCH] ASoC: tegra: Fix -Wuninitialized in
+ tegra210_amx_platform_probe()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,44 +29,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+Message-Id: <20231011-asoc-tegra-fix-uninit-soc_data-v1-1-0ef0ab44cf48@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAN4DJ2UC/x2NQQqAMAwEvyI5G2grIvgVEYlt1FyqtFUE8e8Gj
+ zMssw9kTsIZ+uqBxJdk2aOCrSvwG8WVUYIyOOMaa6xFyrvHwmsiXOTGM0qUgiqnQEWdD2ZeWkN
+ d40AjR2Kd/QfD+L4fw2s7k3AAAAA=
+To: broonie@kernel.org, robh@kernel.org
+Cc: lgirdwood@gmail.com, thierry.reding@gmail.com, jonathanh@nvidia.com, 
+ ndesaulniers@google.com, trix@redhat.com, alsa-devel@alsa-project.org, 
+ linux-tegra@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1815; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=oEPFEr69GOFnlvxRi+OQJiP0bTLBwUD6RP2Enyu8lR0=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKnqzB88WXaLHs65y1J1srv9tdnW2KAIqa2lLzVmTw+t/
+ aXNcU2go5SFQYyDQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzkVQ0jw4/wh6eyfp06I+s8
+ L1XEO+GPR/N+s5y60A0X2YoMwxjeizD893I9Hef6XIDJYtaaUOO7zObp1vWV/Esu6ua4v7UT91J
+ jAAA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Fri, 22 Sep 2023 10:52:07 -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct da9063_regulators.
-> 
-> [...]
+Clang warns (or errors with CONFIG_WERROR=y):
 
-Applied to
+  sound/soc/tegra/tegra210_amx.c:553:10: error: variable 'soc_data' is uninitialized when used here [-Werror,-Wuninitialized]
+    553 |                                             soc_data->regmap_conf);
+        |                                             ^~~~~~~~
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+A refactoring removed the initialization of this variable but its use
+was not updated. Use the soc_data value in the amx variable to resolve
+the warning and remove the soc_data variable, as it is now entirely
+unused.
 
-Thanks!
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1943
+Fixes: 9958d85968ed ("ASoC: Use device_get_match_data()")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ sound/soc/tegra/tegra210_amx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-[1/1] regulator: da9063: Annotate struct da9063_regulators with __counted_by
-      commit: 1096f9fa2be18a1340d1299b4c4329af211076e7
+diff --git a/sound/soc/tegra/tegra210_amx.c b/sound/soc/tegra/tegra210_amx.c
+index dd1a2c77c6ea..91e405909e0f 100644
+--- a/sound/soc/tegra/tegra210_amx.c
++++ b/sound/soc/tegra/tegra210_amx.c
+@@ -535,7 +535,6 @@ static int tegra210_amx_platform_probe(struct platform_device *pdev)
+ 	struct tegra210_amx *amx;
+ 	void __iomem *regs;
+ 	int err;
+-	struct tegra210_amx_soc_data *soc_data;
+ 
+ 	amx = devm_kzalloc(dev, sizeof(*amx), GFP_KERNEL);
+ 	if (!amx)
+@@ -550,7 +549,7 @@ static int tegra210_amx_platform_probe(struct platform_device *pdev)
+ 		return PTR_ERR(regs);
+ 
+ 	amx->regmap = devm_regmap_init_mmio(dev, regs,
+-					    soc_data->regmap_conf);
++					    amx->soc_data->regmap_conf);
+ 	if (IS_ERR(amx->regmap)) {
+ 		dev_err(dev, "regmap init failed\n");
+ 		return PTR_ERR(amx->regmap);
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+---
+base-commit: 59825951707eccf92782e109c04772d34fc07eb6
+change-id: 20231011-asoc-tegra-fix-uninit-soc_data-fcd0bf50a732
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
