@@ -1,74 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B46A21373;
-	Thu, 12 Oct 2023 10:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD7D1F19B;
+	Thu, 12 Oct 2023 10:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZf0271o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23DCAC433C8;
-	Thu, 12 Oct 2023 10:25:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697106350;
-	bh=wzBgNttTkwq+ey3nh0EClZ1bDYJi51qfQW72cGgJJR8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dZf0271oiB81Qb9DHNDeeIaaCtG5Bs/F5DwukXxhL2PBdOlmTBlKedMCJtrkMu5WG
-	 /MpuSpxGv5cBUVI9yjaCQR8MJvpvcQ1XagFHTi8smebHKMSMKTky0HjHKh9/Wq31J+
-	 d2oQMniPYfOxxjlAWAFh1RboinpW7Fq7xcoghwfXYF1QI20PhpChhq9d3tbI6r8z91
-	 Q/9hROpL7jKiO0MvqRA/t2c4CGrm3lFjpYh9Y6SU/GatLa4TJxvLouY7WuQIlGjCHS
-	 QB/qk3l9pX33FdunNm2oFIzKzzgppj4l99CLUUptW/7pL/dQ4LyrYGCSK+Cb1VAvSO
-	 Niynl0PqXZNKg==
-Date: Thu, 12 Oct 2023 11:25:44 +0100
-From: Lee Jones <lee@kernel.org>
-To: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, thierry.reding@gmail.com,
-	ndesaulniers@google.com, trix@redhat.com, baruch@tkos.co.il,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Devi Priya <quic_devipriy@quicinc.com>
-Cc: linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
-	nathan@kernel.org
-Subject: Re: [PATCH V15 0/4] Add PWM support for IPQ chipsets
-Message-ID: <20231012102544.GH8314@google.com>
-References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
- <169710516837.1166696.14907666532929973777.b4-ty@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GGBH6AwA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697108390; x=1728644390;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3YC+4BLVMkkibIln0wa4F1QGAJso+eq+Ty6FTxk84Ig=;
+  b=GGBH6AwAa6etIyzzMEKORMiqNZtlsfMJFUA3mA1SDaLH4I8a2IJT2WpV
+   2zloSCkG/e8Rg44GY0e2Nbikh2gPZg6/CkdfxcBIoVCnX4IRns0gdSdGE
+   ucpbl7qjZKzJRSmqaXmYE7F6QlRjFKfKqSFkVZZp7tl+5pR9elL9Rx1CD
+   kLxzziu7P9sNLvQFoHSo/sziurYeEks3QtkJe+wTu8uVkeAV23ShiETiF
+   6Eza23wk6aPVTAEpDKIVuyIAI0SrxIP+34R3/Hip1aKB1yMPQ9/kyzNZc
+   dpR+IQ9IfWiCKUwWMuEsjwFjTj2K9XxNnM0jw2oudklVJNODs+tgJoBps
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="415941085"
+X-IronPort-AV: E=Sophos;i="6.03,218,1694761200"; 
+   d="scan'208";a="415941085"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 03:59:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="820093078"
+X-IronPort-AV: E=Sophos;i="6.03,218,1694761200"; 
+   d="scan'208";a="820093078"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Oct 2023 03:59:46 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qqtPs-0003O9-04;
+	Thu, 12 Oct 2023 10:59:44 +0000
+Date: Thu, 12 Oct 2023 18:59:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>,
+	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH] sunrpc: Use no_printk() in dfprintk*() dummies
+Message-ID: <202310121849.fnsB0A2T-lkp@intel.com>
+References: <707e5e6dd0db9a663cf443564d1f8ee1c10a0086.1697018818.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <169710516837.1166696.14907666532929973777.b4-ty@kernel.org>
+In-Reply-To: <707e5e6dd0db9a663cf443564d1f8ee1c10a0086.1697018818.git.geert+renesas@glider.be>
 
-On Thu, 12 Oct 2023, Lee Jones wrote:
+Hi Geert,
 
-> On Thu, 05 Oct 2023 21:35:46 +0530, Devi Priya wrote:
-> > Add PWM driver and binding support for IPQ chipsets.
-> > Also, add support for pwm node in ipq6018.
-> > 
-> > V15:
-> > Detailed Change logs are added to the respective patches.
-> > 
-> > V14 can be found at:
-> > https://lore.kernel.org/linux-arm-msm/20231005043127.2690639-1-quic_devipriy@quicinc.com/
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [1/4] pwm: driver for qualcomm ipq6018 pwm block
->       (no commit info)
-> [2/4] dt-bindings: pwm: add IPQ6018 binding
->       (no commit info)
-> [3/4] dt-bindings: mfd: qcom,tcsr: Add simple-mfd support for IPQ6018
->       commit: b4a32d218d424b81a58fbd419e1114b1c1f76168
-> [4/4] arm64: dts: qcom: ipq6018: add pwm node
->       (no commit info)
+kernel test robot noticed the following build warnings:
 
-Disregard - tooling error!
+[auto build test WARNING on trondmy-nfs/linux-next]
+[also build test WARNING on linus/master v6.6-rc5 next-20231012]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Geert-Uytterhoeven/sunrpc-Use-no_printk-in-dfprintk-dummies/20231011-181013
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/707e5e6dd0db9a663cf443564d1f8ee1c10a0086.1697018818.git.geert%2Brenesas%40glider.be
+patch subject: [PATCH] sunrpc: Use no_printk() in dfprintk*() dummies
+config: powerpc-ebony_defconfig (https://download.01.org/0day-ci/archive/20231012/202310121849.fnsB0A2T-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231012/202310121849.fnsB0A2T-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310121849.fnsB0A2T-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   fs/lockd/svclock.c:164:5: error: call to undeclared function 'nlmdbg_cookie2a'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     164 |                                 nlmdbg_cookie2a(&block->b_call->a_args.cookie));
+         |                                 ^
+>> fs/lockd/svclock.c:164:5: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
+     164 |                 dprintk("lockd: check f=%p pd=%d %Ld-%Ld ty=%d cookie=%s\n",
+         |                                                                       ~~
+         |                                                                       %d
+     165 |                                 block->b_file, fl->fl_pid,
+     166 |                                 (long long)fl->fl_start,
+     167 |                                 (long long)fl->fl_end, fl->fl_type,
+     168 |                                 nlmdbg_cookie2a(&block->b_call->a_args.cookie));
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                            ~~~    ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:70:51: note: expanded from macro 'dfprintk'
+      70 | # define dfprintk(fac, fmt, ...)        no_printk(fmt, ##__VA_ARGS__)
+         |                                                   ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:129:17: note: expanded from macro 'no_printk'
+     129 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                        ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   fs/lockd/svclock.c:203:47: error: call to undeclared function 'nlmdbg_cookie2a'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     203 |         dprintk("nlmsvc_find_block(%s): block=%p\n", nlmdbg_cookie2a(cookie), block);
+         |                                                      ^
+   fs/lockd/svclock.c:203:47: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
+     203 |         dprintk("nlmsvc_find_block(%s): block=%p\n", nlmdbg_cookie2a(cookie), block);
+         |                                    ~~                ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                    %d
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                            ~~~    ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:70:51: note: expanded from macro 'dfprintk'
+      70 | # define dfprintk(fac, fmt, ...)        no_printk(fmt, ##__VA_ARGS__)
+         |                                                   ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:129:17: note: expanded from macro 'no_printk'
+     129 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                        ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   fs/lockd/svclock.c:494:5: error: use of undeclared identifier 'inode'
+     494 |                                 inode->i_sb->s_id, inode->i_ino,
+         |                                 ^
+   fs/lockd/svclock.c:494:24: error: use of undeclared identifier 'inode'
+     494 |                                 inode->i_sb->s_id, inode->i_ino,
+         |                                                    ^
+   2 warnings and 4 errors generated.
+
+
+vim +164 fs/lockd/svclock.c
+
+^1da177e4c3f41 Linus Torvalds  2005-04-16  143  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  144  /*
+d9f6eb75d49007 Trond Myklebust 2006-03-20  145   * Find a block for a given lock
+^1da177e4c3f41 Linus Torvalds  2005-04-16  146   */
+^1da177e4c3f41 Linus Torvalds  2005-04-16  147  static struct nlm_block *
+d9f6eb75d49007 Trond Myklebust 2006-03-20  148  nlmsvc_lookup_block(struct nlm_file *file, struct nlm_lock *lock)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  149  {
+68a2d76cea4234 Olaf Kirch      2006-10-04  150  	struct nlm_block	*block;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  151  	struct file_lock	*fl;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  152  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  153  	dprintk("lockd: nlmsvc_lookup_block f=%p pd=%d %Ld-%Ld ty=%d\n",
+^1da177e4c3f41 Linus Torvalds  2005-04-16  154  				file, lock->fl.fl_pid,
+^1da177e4c3f41 Linus Torvalds  2005-04-16  155  				(long long)lock->fl.fl_start,
+^1da177e4c3f41 Linus Torvalds  2005-04-16  156  				(long long)lock->fl.fl_end, lock->fl.fl_type);
+be2be5f7f44364 Alexander Aring 2023-07-20  157  	spin_lock(&nlm_blocked_lock);
+68a2d76cea4234 Olaf Kirch      2006-10-04  158  	list_for_each_entry(block, &nlm_blocked, b_list) {
+92737230dd3f14 Trond Myklebust 2006-03-20  159  		fl = &block->b_call->a_args.lock.fl;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  160  		dprintk("lockd: check f=%p pd=%d %Ld-%Ld ty=%d cookie=%s\n",
+^1da177e4c3f41 Linus Torvalds  2005-04-16  161  				block->b_file, fl->fl_pid,
+^1da177e4c3f41 Linus Torvalds  2005-04-16  162  				(long long)fl->fl_start,
+^1da177e4c3f41 Linus Torvalds  2005-04-16  163  				(long long)fl->fl_end, fl->fl_type,
+92737230dd3f14 Trond Myklebust 2006-03-20 @164  				nlmdbg_cookie2a(&block->b_call->a_args.cookie));
+^1da177e4c3f41 Linus Torvalds  2005-04-16  165  		if (block->b_file == file && nlm_compare_locks(fl, &lock->fl)) {
+6849c0cab69f5d Trond Myklebust 2006-03-20  166  			kref_get(&block->b_count);
+be2be5f7f44364 Alexander Aring 2023-07-20  167  			spin_unlock(&nlm_blocked_lock);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  168  			return block;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  169  		}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  170  	}
+be2be5f7f44364 Alexander Aring 2023-07-20  171  	spin_unlock(&nlm_blocked_lock);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  172  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  173  	return NULL;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  174  }
+^1da177e4c3f41 Linus Torvalds  2005-04-16  175  
 
 -- 
-Lee Jones [李琼斯]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
