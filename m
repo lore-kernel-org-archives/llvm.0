@@ -1,36 +1,51 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECEFEA3
-	for <llvm@lists.linux.dev>; Thu, 12 Oct 2023 00:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077AC62B;
+	Thu, 12 Oct 2023 00:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hqYqYBkF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91027C433C7;
-	Thu, 12 Oct 2023 00:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697069010;
-	bh=NT3MPmQP3Ft6GdyMVBxqACxP/O1fU4jdsdkufjHBiEg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hqYqYBkFhsX6TUC0NEdxv5i1JF06rhgBuWKrC3ryn6AUmvQS0enolBalfzAw9pyTo
-	 zb7MVxHQXznqKOntvAN/HhCuibAuCb734kG3xgvPZrF904nc8HqkD3EkfRpE+Nqxel
-	 scpGE/oJOZaeF+3lrGyH7dNws4rLYi2Det6YGH4lFv6BBVq0hQ/fVCgxhoE1nxyI1o
-	 dJnM0xH6yok5mP8hopqdLFyZvCoWocJ4Yz1P3nEAAZ2TSH0Xi19LsLJCdoq9TXkTML
-	 wNCthCivvtAl1dMPykEtbGibUd0X9T8Ci5qKHZrTKSokLWevQ1MEAynYs6FU/uwhbQ
-	 flkMomB+XOJmA==
-Date: Wed, 11 Oct 2023 17:03:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Usama Arif <usama.arif@bytedance.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	muchun.song@linux.dev, songmuchun@bytedance.com,
-	fam.zheng@bytedance.com, liangma@liangbit.com,
-	punit.agrawal@bytedance.com,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm: hugetlb: Only prep and add allocated folios for
- non-gigantic pages
-Message-ID: <20231012000327.GA1855399@dev-arch.thelio-3990X>
-References: <20231009145605.2150897-1-usama.arif@bytedance.com>
- <20231010012345.GA108129@monkey>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b55evIAZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697070300; x=1728606300;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0HUebaRBYhlIpKvGorr/6r29hcHREKHAHTKFVOf5rLI=;
+  b=b55evIAZffOTh/82gEeVkdJsufqwY4FV5kj2xK9J/FlaL9gRdsnQgLxP
+   7x0sUgF+K7iIkDn6nIyXbA72FsFPAPi/RvlLAX8qHwLMO3hYFbb71ufrA
+   yxMoqvl2d+S6nOqmXKoxG4Trvfty7jjiuplT0E7LoXfcH3DjuRx/gcCJ9
+   Ee72lD+Y9A896WoqDsfMAx9F3t8kbNrABM+6HjZNcsz4AdKw+x+3ycs57
+   8lkfg+MSNj7PGZDL6DADLBj5crEOtADpJwKxJ7cVGlK39g7jNlIxVQ6oX
+   QRxuBdocctb8ygjeDv2nRh0rnsYWXJVvoaOq7g0REFcMAkYow56uBscQG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="375153891"
+X-IronPort-AV: E=Sophos;i="6.03,217,1694761200"; 
+   d="scan'208";a="375153891"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 17:24:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="927767467"
+X-IronPort-AV: E=Sophos;i="6.03,217,1694761200"; 
+   d="scan'208";a="927767467"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 11 Oct 2023 17:24:46 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qqjVL-0002tR-2C;
+	Thu, 12 Oct 2023 00:24:43 +0000
+Date: Thu, 12 Oct 2023 08:24:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Cavitt <jonathan.cavitt@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andi.shyti@intel.com, jonathan.cavitt@intel.com,
+	saurabhg.gupta@intel.com, nirmoy.das@intel.com
+Subject: Re: [Intel-gfx] [PATCH dii-client 2/2] drm/i915: Use selective tlb
+ invalidations where supported
+Message-ID: <202310120817.oZ9qYP5h-lkp@intel.com>
+References: <20231010184423.2118908-4-jonathan.cavitt@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,238 +54,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231010012345.GA108129@monkey>
+In-Reply-To: <20231010184423.2118908-4-jonathan.cavitt@intel.com>
 
-Hi Mike,
+Hi Jonathan,
 
-On Mon, Oct 09, 2023 at 06:23:45PM -0700, Mike Kravetz wrote:
-> On 10/09/23 15:56, Usama Arif wrote:
-> > Calling prep_and_add_allocated_folios when allocating gigantic pages
-> > at boot time causes the kernel to crash as folio_list is empty
-> > and iterating it causes a NULL pointer dereference. Call this only
-> > for non-gigantic pages when folio_list has entires.
-> 
-> Thanks!
-> 
-> However, are you sure the issue is the result of iterating through a
-> NULL list?  For reference, the routine prep_and_add_allocated_folios is:
-> 
-> static void prep_and_add_allocated_folios(struct hstate *h,
-> 					struct list_head *folio_list)
-> {
-> 	struct folio *folio, *tmp_f;
-> 
-> 	/* Add all new pool pages to free lists in one lock cycle */
-> 	spin_lock_irq(&hugetlb_lock);
-> 	list_for_each_entry_safe(folio, tmp_f, folio_list, lru) {
-> 		__prep_account_new_huge_page(h, folio_nid(folio));
-> 		enqueue_hugetlb_folio(h, folio);
-> 	}
-> 	spin_unlock_irq(&hugetlb_lock);
-> }
-> 
-> If folio_list is empty, then the only code that should be executed is
-> acquiring the lock, notice the list is empty, release the lock.
-> 
-> In the case of gigantic pages addressed below, I do see the warning:
-> 
-> [    0.055140] DEBUG_LOCKS_WARN_ON(early_boot_irqs_disabled)
-> [    0.055149] WARNING: CPU: 0 PID: 0 at kernel/locking/lockdep.c:4345 lockdep_hardirqs_on_prepare+0x1a8/0x1b0
-> [    0.055153] Modules linked in:
-> [    0.055155] CPU: 0 PID: 0 Comm: swapper Not tainted 6.6.0-rc4+ #40
-> [    0.055157] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-1.fc37 04/01/2014
-> [    0.055158] RIP: 0010:lockdep_hardirqs_on_prepare+0x1a8/0x1b0
-> [    0.055160] Code: 00 85 c0 0f 84 5e ff ff ff 8b 0d a7 20 74 01 85 c9 0f 85 50 ff ff ff 48 c7 c6 48 25 42 82 48 c7 c7 70 7f 40 82 e8 18 10 f7 ff <0f> 0b 5b e9 e0 d8 af 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90
-> [    0.055162] RSP: 0000:ffffffff82603d40 EFLAGS: 00010086 ORIG_RAX: 0000000000000000
-> [    0.055164] RAX: 0000000000000000 RBX: ffffffff827911e0 RCX: 0000000000000000
-> [    0.055165] RDX: 0000000000000004 RSI: ffffffff8246b3e1 RDI: 00000000ffffffff
-> [    0.055166] RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000000
-> [    0.055166] R10: ffffffffffffffff R11: 284e4f5f4e524157 R12: 0000000000000001
-> [    0.055167] R13: ffffffff82eb6316 R14: ffffffff82603d70 R15: ffffffff82ee5f70
-> [    0.055169] FS:  0000000000000000(0000) GS:ffff888277c00000(0000) knlGS:0000000000000000
-> [    0.055170] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.055171] CR2: ffff88847ffff000 CR3: 000000000263a000 CR4: 00000000000200b0
-> [    0.055174] Call Trace:
-> [    0.055174]  <TASK>
-> [    0.055175]  ? lockdep_hardirqs_on_prepare+0x1a8/0x1b0
-> [    0.055177]  ? __warn+0x81/0x170
-> [    0.055181]  ? lockdep_hardirqs_on_prepare+0x1a8/0x1b0
-> [    0.055182]  ? report_bug+0x18d/0x1c0
-> [    0.055186]  ? early_fixup_exception+0x92/0xb0
-> [    0.055189]  ? early_idt_handler_common+0x2f/0x40
-> [    0.055194]  ? lockdep_hardirqs_on_prepare+0x1a8/0x1b0
-> [    0.055196]  trace_hardirqs_on+0x10/0xa0
-> [    0.055198]  _raw_spin_unlock_irq+0x24/0x50
-> [    0.055201]  hugetlb_hstate_alloc_pages+0x311/0x3e0
-> [    0.055206]  hugepages_setup+0x220/0x2c0
-> [    0.055210]  unknown_bootoption+0x98/0x1d0
-> [    0.055213]  parse_args+0x152/0x440
-> [    0.055216]  ? __pfx_unknown_bootoption+0x10/0x10
-> [    0.055220]  start_kernel+0x1af/0x6c0
-> [    0.055222]  ? __pfx_unknown_bootoption+0x10/0x10
-> [    0.055225]  x86_64_start_reservations+0x14/0x30
-> [    0.055227]  x86_64_start_kernel+0x74/0x80
-> [    0.055229]  secondary_startup_64_no_verify+0x166/0x16b
-> [    0.055234]  </TASK>
-> [    0.055235] irq event stamp: 0
-> [    0.055236] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-> [    0.055238] hardirqs last disabled at (0): [<0000000000000000>] 0x0
-> [    0.055239] softirqs last  enabled at (0): [<0000000000000000>] 0x0
-> [    0.055240] softirqs last disabled at (0): [<0000000000000000>] 0x0
-> [    0.055240] ---[ end trace 0000000000000000 ]---
-> 
-> This is because interrupts are not enabled this early in boot, and the
-> spin_unlock_irq() would incorrectly enable interrupts too early.  I wonder
-> if this 'warning' could translate to a panic or NULL deref under certain
-> configurations?
-> 
-> Konrad, I am interested to see if this addresses your booting problem.  But,
-> your stack trace is a bit different.  My 'guess' is that this will not address
-> your issue.  If it does not, can you try the following patch?  This
-> applies to next-20231009.
-> -- 
-> Mike Kravetz
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index f3749fc125d4..8346c98e5616 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -2178,18 +2178,19 @@ static struct folio *alloc_fresh_hugetlb_folio(struct hstate *h,
->  static void prep_and_add_allocated_folios(struct hstate *h,
->  					struct list_head *folio_list)
->  {
-> +	unsigned long flags;
->  	struct folio *folio, *tmp_f;
->  
->  	/* Send list for bulk vmemmap optimization processing */
->  	hugetlb_vmemmap_optimize_folios(h, folio_list);
->  
->  	/* Add all new pool pages to free lists in one lock cycle */
-> -	spin_lock_irq(&hugetlb_lock);
-> +	spin_lock_irqsave(&hugetlb_lock, flags);
->  	list_for_each_entry_safe(folio, tmp_f, folio_list, lru) {
->  		__prep_account_new_huge_page(h, folio_nid(folio));
->  		enqueue_hugetlb_folio(h, folio);
->  	}
-> -	spin_unlock_irq(&hugetlb_lock);
-> +	spin_unlock_irqrestore(&hugetlb_lock, flags);
->  }
->  
->  /*
-> @@ -3224,13 +3225,14 @@ static void __init hugetlb_folio_init_vmemmap(struct folio *folio,
->  static void __init prep_and_add_bootmem_folios(struct hstate *h,
->  					struct list_head *folio_list)
->  {
-> +	unsigned long flags;
->  	struct folio *folio, *tmp_f;
->  
->  	/* Send list for bulk vmemmap optimization processing */
->  	hugetlb_vmemmap_optimize_folios(h, folio_list);
->  
->  	/* Add all new pool pages to free lists in one lock cycle */
-> -	spin_lock_irq(&hugetlb_lock);
-> +	spin_lock_irqsave(&hugetlb_lock, flags);
->  	list_for_each_entry_safe(folio, tmp_f, folio_list, lru) {
->  		if (!folio_test_hugetlb_vmemmap_optimized(folio)) {
->  			/*
-> @@ -3246,7 +3248,7 @@ static void __init prep_and_add_bootmem_folios(struct hstate *h,
->  		__prep_account_new_huge_page(h, folio_nid(folio));
->  		enqueue_hugetlb_folio(h, folio);
->  	}
-> -	spin_unlock_irq(&hugetlb_lock);
-> +	spin_unlock_irqrestore(&hugetlb_lock, flags);
->  }
->  
->  /*
+kernel test robot noticed the following build errors:
 
-I suspect the crash that our continuous integration spotted [1] is the
-same issue that Konrad is seeing, as I have bisected that failure to
-bfb41d6b2fe1 in next-20231009. However, neither the first half of your
-diff (since the second half does not apply at bfb41d6b2fe1) nor the
-original patch in this thread resolves the issue though, so maybe it is
-entirely different from Konrad's?
+[auto build test ERROR on drm-tip/drm-tip]
 
-For what it's worth, this issue is only visible for me when building for
-arm64 using LLVM with CONFIG_INIT_STACK_NONE=y, instead of the default
-CONFIG_INIT_STACK_ALL_ZERO=y (which appears to hide the problem?),
-making it seem like it could be something with uninitialized memory... I
-have not been able to reproduce it with GCC, which could also mean
-something.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cavitt/drm-i915-Use-selective-tlb-invalidations-where-supported/20231011-034501
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20231010184423.2118908-4-jonathan.cavitt%40intel.com
+patch subject: [Intel-gfx] [PATCH dii-client 2/2] drm/i915: Use selective tlb invalidations where supported
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231012/202310120817.oZ9qYP5h-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231012/202310120817.oZ9qYP5h-lkp@intel.com/reproduce)
 
-Using LLVM 17.0.2 from kernel.org [2]:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310120817.oZ9qYP5h-lkp@intel.com/
 
-$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 mrproper defconfig
+All errors (new ones prefixed by >>):
 
-$ scripts/config -d INIT_STACK_ALL_ZERO -e INIT_STACK_NONE
+>> drivers/gpu/drm/i915/i915_vma.c:1343:4: error: expected ')'
+                           u64 start, u64 size)
+                           ^
+   drivers/gpu/drm/i915/i915_vma.c:1342:24: note: to match this '('
+   void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb
+                          ^
+>> drivers/gpu/drm/i915/i915_vma.c:1342:6: error: conflicting types for 'vma_invalidate_tlb'
+   void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb
+        ^
+   drivers/gpu/drm/i915/i915_vma.h:263:6: note: previous declaration is here
+   void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb,
+        ^
+>> drivers/gpu/drm/i915/i915_vma.c:1360:42: error: use of undeclared identifier 'start'; did you mean 'stac'?
+                   if (!intel_gt_invalidate_tlb_range(gt, start, size))
+                                                          ^~~~~
+                                                          stac
+   arch/x86/include/asm/smap.h:36:29: note: 'stac' declared here
+   static __always_inline void stac(void)
+                               ^
+>> drivers/gpu/drm/i915/i915_vma.c:1360:49: error: use of undeclared identifier 'size'; did you mean 'ksize'?
+                   if (!intel_gt_invalidate_tlb_range(gt, start, size))
+                                                                 ^~~~
+                                                                 ksize
+   include/linux/slab.h:245:8: note: 'ksize' declared here
+   size_t ksize(const void *objp);
+          ^
+   4 errors generated.
 
-$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 Image.gz
 
-$ qemu-system-aarch64 \
-    -display none \
-    -nodefaults \
-    -cpu max,pauth-impdef=true \
-    -machine virt,gic-version=max,virtualization=true \
-    -append 'console=ttyAMA0 earlycon' \
-    -kernel arch/arm64/boot/Image.gz \
-    -initrd arm64-rootfs.cpio \
-    -m 512m \
-    -serial mon:stdio
-...
-[    0.000000] Linux version 6.6.0-rc4-00317-gbfb41d6b2fe1 (nathan@dev-arch.thelio-3990X) (ClangBuiltLinux clang version 17.0.2 (https://github.com/llvm/llvm-project b2417f51dbbd7435eb3aaf203de24de6754da50e), ClangBuiltLinux LLD 17.0.2) #1 SMP PREEMPT Wed Oct 11 16:44:41 MST 2023
-...
-[    0.304543] Unable to handle kernel paging request at virtual address ffffff602827f9f4
-[    0.304899] Mem abort info:
-[    0.305022]   ESR = 0x0000000096000004
-[    0.305438]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    0.305668]   SET = 0, FnV = 0
-[    0.305804]   EA = 0, S1PTW = 0
-[    0.305949]   FSC = 0x04: level 0 translation fault
-[    0.306156] Data abort info:
-[    0.306287]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-[    0.306500]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[    0.306711]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[    0.306976] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000041cc3000
-[    0.307251] [ffffff602827f9f4] pgd=0000000000000000, p4d=0000000000000000
-[    0.308086] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-[    0.308428] Modules linked in:
-[    0.308722] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc4-00317-gbfb41d6b2fe1 #1
-[    0.309159] Hardware name: linux,dummy-virt (DT)
-[    0.309496] pstate: 61400009 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
-[    0.309987] pc : gather_bootmem_prealloc+0x80/0x1a8
-[    0.310673] lr : hugetlb_init+0x1c8/0x2ec
-[    0.310871] sp : ffff80008000ba10
-[    0.311038] x29: ffff80008000ba30 x28: 0000000000000000 x27: ffffd80a09fe7db8
-[    0.311417] x26: 0000000000000001 x25: ffffd80a09fe7db8 x24: 0000000000000100
-[    0.311702] x23: fffffc0000000000 x22: 0001000000000000 x21: ffff80008000ba18
-[    0.311987] x20: ffffff602827f9c0 x19: ffffd80a0a555b60 x18: 00000000fbf7386f
-[    0.312272] x17: 00000000bee83943 x16: 000000002ae32058 x15: 0000000000000000
-[    0.312557] x14: 0000000000000009 x13: ffffd80a0a556d28 x12: ffffffffffffee38
-[    0.312831] x11: ffffd80a0a556d28 x10: 0000000000000004 x9 : ffffd80a09fe7000
-[    0.313141] x8 : 0000000d80a09fe7 x7 : 0000000001e1f7fb x6 : 0000000000000008
-[    0.313425] x5 : ffffd80a09ef1454 x4 : ffff00001fed5630 x3 : 0000000000019e00
-[    0.313703] x2 : ffff000002407b80 x1 : 0000000000019d00 x0 : 0000000000000000
-[    0.314054] Call trace:
-[    0.314259]  gather_bootmem_prealloc+0x80/0x1a8
-[    0.314536]  hugetlb_init+0x1c8/0x2ec
-[    0.314743]  do_one_initcall+0xac/0x220
-[    0.314928]  do_initcall_level+0x8c/0xac
-[    0.315114]  do_initcalls+0x54/0x94
-[    0.315276]  do_basic_setup+0x1c/0x28
-[    0.315450]  kernel_init_freeable+0x104/0x170
-[    0.315648]  kernel_init+0x20/0x1a0
-[    0.315822]  ret_from_fork+0x10/0x20
-[    0.316235] Code: 979e8c0d 8b160328 d34cfd08 8b081af4 (b9403688)
-[    0.316745] ---[ end trace 0000000000000000 ]---
-[    0.317463] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-[    0.318093] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+vim +1343 drivers/gpu/drm/i915/i915_vma.c
 
-The rootfs is available at [3] in case it is relevant. I am more than
-happy to provide any additional information or test any patches as
-necessary.
+  1341	
+> 1342	void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb
+> 1343				u64 start, u64 size)
+  1344	{
+  1345		struct intel_gt *gt;
+  1346		int id;
+  1347	
+  1348		if (!tlb)
+  1349			return;
+  1350	
+  1351		/*
+  1352		 * Before we release the pages that were bound by this vma, we
+  1353		 * must invalidate all the TLBs that may still have a reference
+  1354		 * back to our physical address. It only needs to be done once,
+  1355		 * so after updating the PTE to point away from the pages, record
+  1356		 * the most recent TLB invalidation seqno, and if we have not yet
+  1357		 * flushed the TLBs upon release, perform a full invalidation.
+  1358		 */
+  1359		for_each_gt(gt, vm->i915, id) {
+> 1360			if (!intel_gt_invalidate_tlb_range(gt, start, size))
+  1361				WRITE_ONCE(tlb[id],
+  1362					   intel_gt_next_invalidate_tlb_full(gt));
+  1363		}
+  1364	}
+  1365	
 
-[1]: https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/6469151768/job/17570882198
-[2]: https://mirrors.edge.kernel.org/pub/tools/llvm/
-[3]: https://github.com/ClangBuiltLinux/boot-utils/releases
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
