@@ -1,72 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3098424A0B;
-	Thu, 12 Oct 2023 12:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E846F17F5
+	for <llvm@lists.linux.dev>; Thu, 12 Oct 2023 14:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnXyh/1J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8540C433C8;
-	Thu, 12 Oct 2023 12:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697112776;
-	bh=b8BfMObBykm/amO/S9HTj8NCZ8lSEHJnylp7Iixrelg=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=HnXyh/1JtDFJPMutjG1drZN79OU8VOwrjRf3QnTje1l52GU4tuS4jltsO5jTr8Ze1
-	 WPibteX9NDTm6YDlIDxF5Z1FuXqPhB7mQPf60ikM4U1CWval213mjNN4czWwpfnqMu
-	 RA4+3kCNlPCWdP8Y5THHnzZaqABIC7A3qCxi1X8kQ9zeluCWrhvoSOtz/N8L6rtL0d
-	 Dt+n8ccH+UHZhvCYXcoSDm/Qq1xsuW4zE78vMz+mi3s4K/y4VaWzQ1y2doI22vtcnB
-	 jbegiWzKp6CIDq7Hmi4KgNcWbBQRafLL76BofmwShaCtDcDa1hB7ghRzUE+q8PzfI0
-	 CvNSgbpznSxQA==
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z4PAl8mg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1697121957;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+	b=Z4PAl8mgCe1Zxx5gicROaTZ/VIB5CprJmZQKcrv+43q1tQTvpvkwQj4CAuUWZuTqUJ7wdB
+	e3Ysb2Ri7G++TUbAJXA6igoLS0DaS/G/zlOVkvjDEoEdhBPL8xnxFY0z94NxuIczdyeTfO
+	gUsDqciBhLuRCXmM0CT+no48n7FblfA=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-364-K14H80dQPSGwJqnhsUzYDA-1; Thu, 12 Oct 2023 10:45:54 -0400
+X-MC-Unique: K14H80dQPSGwJqnhsUzYDA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50C5C1C01512;
+	Thu, 12 Oct 2023 14:45:50 +0000 (UTC)
+Received: from virtlab511.virt.lab.eng.bos.redhat.com (virtlab511.virt.lab.eng.bos.redhat.com [10.19.152.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C0FEB40C6F79;
+	Thu, 12 Oct 2023 14:45:49 +0000 (UTC)
+From: Paolo Bonzini <pbonzini@redhat.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tyler Stachecki <stachecki.tyler@gmail.com>,
+	Leonardo Bras <leobras@redhat.com>
+Subject: Re: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
+Date: Thu, 12 Oct 2023 10:45:48 -0400
+Message-Id: <20231012144548.1354277-1-pbonzini@redhat.com>
+In-Reply-To: <20230928001956.924301-1-seanjc@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] wifi: p54: Annotate struct p54_cal_database with
- __counted_by
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20231009161028.it.544-kees@kernel.org>
-References: <20231009161028.it.544-kees@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Christian Lamparter <chunkeey@googlemail.com>,
- Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- linux-wireless@vger.kernel.org, linux-hardening@vger.kernel.org,
- Jason Andryuk <jandryuk@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
-Message-ID: <169711277180.2932680.4051421133229549634.kvalo@kernel.org>
-Date: Thu, 12 Oct 2023 12:12:53 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
 
-Kees Cook <keescook@chromium.org> wrote:
+Queued, thanks.
 
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> Add __counted_by for struct p54_cal_database.
-> 
-> Cc: Christian Lamparter <chunkeey@googlemail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-hardening@vger.kernel.org
-> Suggested-by: Jason Andryuk <jandryuk@gmail.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Jason Andryuk <jandryuk@gmail.com>
+Paolo
 
-Patch applied to wireless-next.git, thanks.
-
-d9756ce618f3 wifi: p54: Annotate struct p54_cal_database with __counted_by
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20231009161028.it.544-kees@kernel.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
