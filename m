@@ -1,167 +1,105 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D34ABA3C
-	for <llvm@lists.linux.dev>; Thu, 12 Oct 2023 15:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181A12AB57;
+	Thu, 12 Oct 2023 17:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ORspvAD2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697124032;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Gng1BF6hoLR+SoWpzDGy+ytgpj4M+FrHoIrJdhLp3B0=;
-	b=ORspvAD2nnQK0/y+985wJaNrIIjnKHYArp4aF2fSiyiZ4lZptz9laA6UJWHREWqNDmiPri
-	QihmT+JMGqEC02KRKNcxvBFY0PdDKv15/sK8QnxNwTDWOPObb3mmxbbkPx94b4gklcHKd4
-	ojjj9vxTKlx89RdkNWt9Vp+DQ49kH3Q=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-475-DObAXR2ONJm8H555BwPApw-1; Thu, 12 Oct 2023 11:20:20 -0400
-X-MC-Unique: DObAXR2ONJm8H555BwPApw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00CCD3857B86
-	for <llvm@lists.linux.dev>; Thu, 12 Oct 2023 15:20:20 +0000 (UTC)
-Received: from [172.64.4.52] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D987625C0;
-	Thu, 12 Oct 2023 15:20:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 3 of 230): Test report for master
- (6.6.0-rc5, mainline.kernel.org-clang, 8182d7a3)
-Date: Thu, 12 Oct 2023 15:20:19 -0000
-To: yizhan@redhat.com, jbastian@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRNW6j7H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4223C433C7;
+	Thu, 12 Oct 2023 17:04:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697130254;
+	bh=ZbdxYCJsXfSn4QkqlDcEI6V10CuHxqW03BUMi4lw3m0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=SRNW6j7HGGAHmacPEdOqt+JeMG3zGuNbwTV382uqdBmFfS7ikqffSrG+Ydam7u4IY
+	 OBSt7vtJvGSuzIaeSJoINXkJsq+BNPyJEng4/kp+HQtvBot3UrflA1wc5CgllJXLEZ
+	 p0hUBKYC2NUNrWOiHzzKhfhCsy6CDGD8qksJQAmNS30QOCOK+l9fK1GC+ml9kDOzAd
+	 YxhdGP0mDtKnveSL/QkVm9url4IbMD6PuQUTWbzdptUvEpxVTEKMJOgxlv2GJyKPBd
+	 qW4K3LLlxAf0Q3w+THt4pc/pH66WI7U4KFU3IcNYNbLR50OimMkP23Hzzc57bnFAcr
+	 WdA6hj92AeoGQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 12 Oct 2023 10:04:01 -0700
+Subject: [PATCH] remoteproc: st: Fix sometimes uninitialized ret in
+ st_rproc_probe()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
-Message-Id: <51577.123101211202001277@us-mta-475.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231012-st_remoteproc-fix-sometimes-uninit-v1-1-f64d0f2d5b37@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAnKGUC/x2NzQqDMBAGX0X23AUTBdFXKaX486XdQxLZTUtBf
+ PcGjwPDzEEGFRhNzUGKr5jkVMHdGlrfc3qBZatMvvWda51nK09FzAW75pWD/NhyRJEI40+SJIW
+ HOQS3bMvQ9SPV0K6o3jW5P87zDy5aRZh0AAAA
+To: patrice.chotard@foss.st.com, andersson@kernel.org, 
+ mathieu.poirier@linaro.org, robh@kernel.org
+Cc: ndesaulniers@google.com, trix@redhat.com, 
+ linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2048; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ZbdxYCJsXfSn4QkqlDcEI6V10CuHxqW03BUMi4lw3m0=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKka6rzCHx9MkA7/rbR2W+GjN4s5U7vemOWZzCr/ccpOq
+ EHsufbSjlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCR6gMMf7hv2UY/THn/dv+K
+ L4u/PezbsI31QYY3w6z+S0derXlt7sPKyNCUcbwyLsUybPX6jb/LNPeWSNi+aFR7rPD3ja53+xo
+ xLw4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Clang warns (or errors with CONFIG_WERROR=y):
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+  drivers/remoteproc/st_remoteproc.c:357:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    357 |         if (!ddata->config)
+        |             ^~~~~~~~~~~~~~
+  drivers/remoteproc/st_remoteproc.c:442:9: note: uninitialized use occurs here
+    442 |         return ret;
+        |                ^~~
+  drivers/remoteproc/st_remoteproc.c:357:2: note: remove the 'if' if its condition is always false
+    357 |         if (!ddata->config)
+        |         ^~~~~~~~~~~~~~~~~~~
+    358 |                 goto free_rproc;
+        |                 ~~~~~~~~~~~~~~~
+  drivers/remoteproc/st_remoteproc.c:348:9: note: initialize the variable 'ret' to silence this warning
+    348 |         int ret, i;
+        |                ^
+        |                 = 0
+  1 error generated.
 
+Set ret to -ENODEV, which seems to be a standard return code when
+device_get_match_data() returns NULL.
 
-Kernel information:
-    Commit message: Merge tag 'ata-6.6-rc6' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/dlemoal/libata
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1944
+Fixes: 5c77ebcd05ac ("remoteproc: st: Use device_get_match_data()")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/remoteproc/st_remoteproc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/108734
+diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
+index b0638f984842..cb163766c56d 100644
+--- a/drivers/remoteproc/st_remoteproc.c
++++ b/drivers/remoteproc/st_remoteproc.c
+@@ -354,8 +354,10 @@ static int st_rproc_probe(struct platform_device *pdev)
+ 	rproc->has_iommu = false;
+ 	ddata = rproc->priv;
+ 	ddata->config = (struct st_rproc_config *)device_get_match_data(dev);
+-	if (!ddata->config)
++	if (!ddata->config) {
++		ret = -ENODEV;
+ 		goto free_rproc;
++	}
+ 
+ 	platform_set_drvdata(pdev, rproc);
+ 
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9866073
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/block/024
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9866077
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9866020
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
+---
+base-commit: 5c77ebcd05acf3789949c8a387df72381d949ca2
+change-id: 20231012-st_remoteproc-fix-sometimes-uninit-7aff1bdb7349
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: xfstests: generic/174 - wrong fs type, bad option, bad super=
-block
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/843
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
