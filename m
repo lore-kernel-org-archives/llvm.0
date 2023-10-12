@@ -1,105 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181A12AB57;
-	Thu, 12 Oct 2023 17:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRNW6j7H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4223C433C7;
-	Thu, 12 Oct 2023 17:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697130254;
-	bh=ZbdxYCJsXfSn4QkqlDcEI6V10CuHxqW03BUMi4lw3m0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=SRNW6j7HGGAHmacPEdOqt+JeMG3zGuNbwTV382uqdBmFfS7ikqffSrG+Ydam7u4IY
-	 OBSt7vtJvGSuzIaeSJoINXkJsq+BNPyJEng4/kp+HQtvBot3UrflA1wc5CgllJXLEZ
-	 p0hUBKYC2NUNrWOiHzzKhfhCsy6CDGD8qksJQAmNS30QOCOK+l9fK1GC+ml9kDOzAd
-	 YxhdGP0mDtKnveSL/QkVm9url4IbMD6PuQUTWbzdptUvEpxVTEKMJOgxlv2GJyKPBd
-	 qW4K3LLlxAf0Q3w+THt4pc/pH66WI7U4KFU3IcNYNbLR50OimMkP23Hzzc57bnFAcr
-	 WdA6hj92AeoGQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 12 Oct 2023 10:04:01 -0700
-Subject: [PATCH] remoteproc: st: Fix sometimes uninitialized ret in
- st_rproc_probe()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FEC341BE
+	for <llvm@lists.linux.dev>; Thu, 12 Oct 2023 17:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5789ffc8ae0so914105a12.0
+        for <llvm@lists.linux.dev>; Thu, 12 Oct 2023 10:24:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697131442; x=1697736242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CJnRK+79WNn0lGWIpav/hJW9jfda5+J6HE7W4OW4WDg=;
+        b=DJyVLECElK4TJe6iqm6F/VhfvMpFexqxGgqX3VG5BGhycM5yTrjnrEp2QV+tjx5Fqx
+         2SMo6WowX6fewMg/b7mD5B0xn3wj95su93RrwA/qi5cikrIVNYI61ouAHl4LYo421Uk/
+         uRwnNIUdy6UWIiV8iwDONkMbWuls1WKA4kVg1TsbkV96C/nn+JS1jaFsmyxDent87MlU
+         /IzlENR2T9R6eLeHicxji+/sHFm0p/kB3/p7YCUccF9VT6fA8jx3+rhnUcEeh9TriFez
+         XAVV07j0O9LT1scAwYQ2zeju6Ox9JLAV5lqTTpRRRqkmzUxUcgnO55lUpGQptep2lTJI
+         8CFQ==
+X-Gm-Message-State: AOJu0YwqZOgkAcCnrCHkzJKkEFMCuVq5GwqyEMtsj3baDfUS4uyyFcEP
+	xG5ynAAJX2vZLbZxH68F8FcOF8J8weAVIuw+wzlJoURSe0g=
+X-Google-Smtp-Source: AGHT+IFUhH11sDmFlYL7MWiTUMkq8goHP9pDVnkcL763Chb34fwG4DLwbzeA5QXZ9dzWHTz7uN1GoKUjJnFvWXox8KU=
+X-Received: by 2002:a17:90b:14a:b0:27c:facc:e3eb with SMTP id
+ em10-20020a17090b014a00b0027cfacce3ebmr6883711pjb.31.1697131442112; Thu, 12
+ Oct 2023 10:24:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231012-st_remoteproc-fix-sometimes-uninit-v1-1-f64d0f2d5b37@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAnKGUC/x2NzQqDMBAGX0X23AUTBdFXKaX486XdQxLZTUtBf
- PcGjwPDzEEGFRhNzUGKr5jkVMHdGlrfc3qBZatMvvWda51nK09FzAW75pWD/NhyRJEI40+SJIW
- HOQS3bMvQ9SPV0K6o3jW5P87zDy5aRZh0AAAA
-To: patrice.chotard@foss.st.com, andersson@kernel.org, 
- mathieu.poirier@linaro.org, robh@kernel.org
-Cc: ndesaulniers@google.com, trix@redhat.com, 
- linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2048; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ZbdxYCJsXfSn4QkqlDcEI6V10CuHxqW03BUMi4lw3m0=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDKka6rzCHx9MkA7/rbR2W+GjN4s5U7vemOWZzCr/ccpOq
- EHsufbSjlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCR6gMMf7hv2UY/THn/dv+K
- L4u/PezbsI31QYY3w6z+S0derXlt7sPKyNCUcbwyLsUybPX6jb/LNPeWSNi+aFR7rPD3ja53+xo
- xLw4A
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20231009183920.200859-1-irogers@google.com> <CAM9d7cgwam22Fn3tvJ7dJL1zHWTQa1ixvePTMPQmvYQLn2=DxA@mail.gmail.com>
+In-Reply-To: <CAM9d7cgwam22Fn3tvJ7dJL1zHWTQa1ixvePTMPQmvYQLn2=DxA@mail.gmail.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Thu, 12 Oct 2023 10:23:51 -0700
+Message-ID: <CAM9d7cjgpXwC6D7F1DMrMw1j1k=o7oDw94Ofb_Xiyt_s7t5gJA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/18] clang-tools support in tools
+To: Ian Rogers <irogers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, Ming Wang <wangming01@loongson.cn>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ravi Bangoria <ravi.bangoria@amd.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Clang warns (or errors with CONFIG_WERROR=y):
+On Mon, Oct 9, 2023 at 10:31=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> Hi Ian,
+>
+> On Mon, Oct 9, 2023 at 11:39=E2=80=AFAM Ian Rogers <irogers@google.com> w=
+rote:
+> >
+> > Allow the clang-tools scripts to work with builds in tools such as
+> > tools/perf and tools/lib/perf. An example use looks like:
+> >
+> > ```
+> > $ cd tools/perf
+> > $ make CC=3Dclang CXX=3Dclang++
+> > $ ../../scripts/clang-tools/gen_compile_commands.py
+> > $ ../../scripts/clang-tools/run-clang-tools.py clang-tidy compile_comma=
+nds.json -checks=3D-*,readability-named-parameter
+> > Skipping non-C file: 'tools/perf/bench/mem-memcpy-x86-64-asm.S'
+> > Skipping non-C file: 'tools/perf/bench/mem-memset-x86-64-asm.S'
+> > Skipping non-C file: 'tools/perf/arch/x86/tests/regs_load.S'
+> > 8 warnings generated.
+> > Suppressed 8 warnings (8 in non-user code).
+> > Use -header-filter=3D.* to display errors from all non-system headers. =
+Use -system-headers to display errors from system headers as well.
+> > 2 warnings generated.
+> > 4 warnings generated.
+> > Suppressed 4 warnings (4 in non-user code).
+> > Use -header-filter=3D.* to display errors from all non-system headers. =
+Use -system-headers to display errors from system headers as well.
+> > 2 warnings generated.
+> > 4 warnings generated.
+> > Suppressed 4 warnings (4 in non-user code).
+> > Use -header-filter=3D.* to display errors from all non-system headers. =
+Use -system-headers to display errors from system headers as well.
+> > 3 warnings generated.
+> > tools/perf/util/parse-events-flex.c:546:27: warning: all parameters sho=
+uld be named in a function [readability-named-parameter]
+> > void *yyalloc ( yy_size_t , yyscan_t yyscanner );
+> >                           ^
+> >                            /*size*/
+> > ...
+> > ```
+> >
+> > Fix a number of the more serious low-hanging issues in perf found by
+> > clang-tidy.
+> >
+> > This support isn't complete, in particular it doesn't support output
+> > directories properly and so fails for tools/lib/bpf, tools/bpf/bpftool
+> > and if an output directory is used.
+> >
+> > v3. Add Nick Desaulniers reviewed-by to patch 3. For Namhyung, drop
+> >     "perf hisi-ptt: Fix potential memory leak", split lock change out
+> >     of "perf svghelper: Avoid memory leak" and address comments in
+> >     "perf header: Fix various error path memory leaks".
+> > v2: Address comments by Nick Desaulniers in patch 3, and add their
+> >     Reviewed-by to patches 1 and 2.
+> >
+> > Ian Rogers (18):
+> >   gen_compile_commands: Allow the line prefix to still be cmd_
+> >   gen_compile_commands: Sort output compile commands by file name
+> >   run-clang-tools: Add pass through checks and header-filter arguments
+> >   perf bench uprobe: Fix potential use of memory after free
+> >   perf buildid-cache: Fix use of uninitialized value
+> >   perf env: Remove unnecessary NULL tests
+> >   perf jitdump: Avoid memory leak
+> >   perf mem-events: Avoid uninitialized read
+> >   perf dlfilter: Be defensive against potential NULL dereference
+> >   perf hists browser: Reorder variables to reduce padding
+> >   perf hists browser: Avoid potential NULL dereference
+> >   perf svghelper: Avoid memory leak
+> >   perf lock: Fix a memory leak on an error path
+> >   perf parse-events: Fix unlikely memory leak when cloning terms
+> >   tools api: Avoid potential double free
+> >   perf trace-event-info: Avoid passing NULL value to closedir
+> >   perf header: Fix various error path memory leaks
+> >   perf bpf_counter: Fix a few memory leaks
+>
+> I agree with your comment on v2 that it needs more work
+> to clean the code up.  Anyway I'm ok with v3 now.
+>
+> For ther perf part (patch 4 to 18),
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-  drivers/remoteproc/st_remoteproc.c:357:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    357 |         if (!ddata->config)
-        |             ^~~~~~~~~~~~~~
-  drivers/remoteproc/st_remoteproc.c:442:9: note: uninitialized use occurs here
-    442 |         return ret;
-        |                ^~~
-  drivers/remoteproc/st_remoteproc.c:357:2: note: remove the 'if' if its condition is always false
-    357 |         if (!ddata->config)
-        |         ^~~~~~~~~~~~~~~~~~~
-    358 |                 goto free_rproc;
-        |                 ~~~~~~~~~~~~~~~
-  drivers/remoteproc/st_remoteproc.c:348:9: note: initialize the variable 'ret' to silence this warning
-    348 |         int ret, i;
-        |                ^
-        |                 = 0
-  1 error generated.
-
-Set ret to -ENODEV, which seems to be a standard return code when
-device_get_match_data() returns NULL.
-
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1944
-Fixes: 5c77ebcd05ac ("remoteproc: st: Use device_get_match_data()")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/remoteproc/st_remoteproc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
-index b0638f984842..cb163766c56d 100644
---- a/drivers/remoteproc/st_remoteproc.c
-+++ b/drivers/remoteproc/st_remoteproc.c
-@@ -354,8 +354,10 @@ static int st_rproc_probe(struct platform_device *pdev)
- 	rproc->has_iommu = false;
- 	ddata = rproc->priv;
- 	ddata->config = (struct st_rproc_config *)device_get_match_data(dev);
--	if (!ddata->config)
-+	if (!ddata->config) {
-+		ret = -ENODEV;
- 		goto free_rproc;
-+	}
- 
- 	platform_set_drvdata(pdev, rproc);
- 
-
----
-base-commit: 5c77ebcd05acf3789949c8a387df72381d949ca2
-change-id: 20231012-st_remoteproc-fix-sometimes-uninit-7aff1bdb7349
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Applied to perf-tools-next, thanks!
