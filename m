@@ -1,48 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE092812;
-	Thu, 12 Oct 2023 03:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E25D296;
+	Thu, 12 Oct 2023 06:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dk4Yc1uG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C3nbJVSo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697082000; x=1728618000;
+  t=1697092921; x=1728628921;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p8SBRFphgAc7XrE3Rb1ofRf9mr/jw3QSkmnhwpE8Gxc=;
-  b=dk4Yc1uGsUwC8kTq1LXDAx9LHwxvp0P6zLhlEp/JpN4UHW+ihPgLNTiR
-   Lum5TYzLk9LlOa1MhFrMrBVezdvtK9VSjeCIr8o9bgYye/1hMkXJPwN4o
-   GeVkScpyCAzrbno5GxtzwxUPOmTUdNtU9C266XwqxfavQ/DLvgbco97+0
-   wwBJ3/px8dYtXckqkkxZ6oppIK1fmCPf7B+3QR9cdQWCkwy0lukUKD/M+
-   Nf7lUe2ttzZ+DeeOUGHM8PyRDfXtEnIqM0/vEy1U98cSDn8dT42ng1rhn
-   NSWGxoOIGPfImixBuGYsYAREBhUGZ5hKwngMN8gDQ7qgQfuFk7XVT7UTG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="387662610"
-X-IronPort-AV: E=Sophos;i="6.03,217,1694761200"; 
-   d="scan'208";a="387662610"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 20:40:00 -0700
+  bh=vF0WG1Mj7+os4Om7QmhqGbhkCL+L4Yw401Jf1PqOjn8=;
+  b=C3nbJVSoKW9+UP+IOdjaCFEWf1EXWo3H0oNTEnDjINgC+TqNzqdKY4Nb
+   0Nvma1a9gEqxwo9RJVgRQ8hta80j5EH4YjIJSFq3NfJgnBO3Dd6TFtQDQ
+   6O8PpOYDSwS9NZm2+eNyE0zc5xH6hnz8qNtdwe85JyqziRBdrJqIb6bec
+   4qOx2kOTj+fSMX4GWUbJ/aTWtcj8dMiz0L34fiK4tXNT71ViWzFT91dvq
+   dEivAJw/1xgqUmkxhE+JE76G+xKyzFEeVEyZcpXXrD0xsq8Pj4W/AJKsJ
+   Rv2VL733pF4FnMSJBXoRMG2LGiO05dvf6C9hiWkWFqvP0uvmU/zj56YKb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="471101443"
+X-IronPort-AV: E=Sophos;i="6.03,218,1694761200"; 
+   d="scan'208";a="471101443"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 23:41:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="754085414"
-X-IronPort-AV: E=Sophos;i="6.03,217,1694761200"; 
-   d="scan'208";a="754085414"
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="1085549662"
+X-IronPort-AV: E=Sophos;i="6.03,218,1694761200"; 
+   d="scan'208";a="1085549662"
 Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 11 Oct 2023 20:39:57 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 11 Oct 2023 23:41:57 -0700
 Received: from kbuild by f64821696465 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qqmWl-00036b-1a;
-	Thu, 12 Oct 2023 03:38:51 +0000
-Date: Thu, 12 Oct 2023 11:37:34 +0800
+	id 1qqpON-0003HV-0l;
+	Thu, 12 Oct 2023 06:41:55 +0000
+Date: Thu, 12 Oct 2023 14:41:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Berlin <dberlin@dberlin.org>
+To: Stefan Roesch <shr@devkernel.io>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/080-wifi 30/32]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3965:7: warning:
- variable 'netinfo' is used uninitialized whenever switch case is taken
-Message-ID: <202310121102.nSPI9qYu-lkp@intel.com>
+	Jens Axboe <axboe@kernel.dk>
+Subject: [axboe-block:io_uring-napi 3/9] net/core/dev.c:6214:6: warning: no
+ previous prototype for function '__napi_busy_loop'
+Message-ID: <202310121423.ikhh9Eyf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,126 +51,192 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   2fac67e22f6cf7c8b1261e1bc9a33de738859b89
-commit: 3952a7bc01860b0efa4efc162197fc0ddafe7187 [30/32] Finish 6G support by supporting new scan structures
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231012/202310121102.nSPI9qYu-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-napi
+head:   b57e2332bcb91e0740ce2a7cf47bcdb8870b571a
+commit: 1f760c8312577ac66150b4c9163c4163a56ed971 [3/9] net: split off __napi_busy_poll from napi_busy_poll
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231012/202310121423.ikhh9Eyf-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231012/202310121102.nSPI9qYu-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231012/202310121423.ikhh9Eyf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310121102.nSPI9qYu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310121423.ikhh9Eyf-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3965:7: warning: variable 'netinfo' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-    3965 |         case cpu_to_le32(3):
-         |              ^~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-      88 | #define cpu_to_le32 __cpu_to_le32
-         |                     ^
-   include/uapi/linux/byteorder/little_endian.h:34:26: note: expanded from macro '__cpu_to_le32'
-      34 | #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3971:9: note: uninitialized use occurs here
-    3971 |         return netinfo;
-         |                ^~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3952:39: note: initialize the variable 'netinfo' to silence this warning
-    3952 |         struct brcmf_pno_net_info_le *netinfo;
-         |                                              ^
-         |                                               = NULL
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3984:7: warning: variable 'netinfo' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-    3984 |         case cpu_to_le32(1):
-         |              ^~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-      88 | #define cpu_to_le32 __cpu_to_le32
-         |                     ^
-   include/uapi/linux/byteorder/little_endian.h:34:26: note: expanded from macro '__cpu_to_le32'
-      34 | #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3995:9: note: uninitialized use occurs here
-    3995 |         return netinfo;
-         |                ^~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3985:7: warning: variable 'netinfo' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-    3985 |         case cpu_to_le32(2):
-         |              ^~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-      88 | #define cpu_to_le32 __cpu_to_le32
-         |                     ^
-   include/uapi/linux/byteorder/little_endian.h:34:26: note: expanded from macro '__cpu_to_le32'
-      34 | #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3995:9: note: uninitialized use occurs here
-    3995 |         return netinfo;
-         |                ^~~~~~~
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3981:2: warning: variable 'netinfo' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-    3981 |         default:
-         |         ^~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3995:9: note: uninitialized use occurs here
-    3995 |         return netinfo;
-         |                ^~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:3978:42: note: initialize the variable 'netinfo' to silence this warning
-    3978 |         struct brcmf_pno_net_info_v3_le *netinfo;
-         |                                                 ^
-         |                                                  = NULL
-   4 warnings generated.
+   In file included from net/core/dev.c:88:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/core/dev.c:88:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/core/dev.c:88:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> net/core/dev.c:6214:6: warning: no previous prototype for function '__napi_busy_loop' [-Wmissing-prototypes]
+    6214 | void __napi_busy_loop(unsigned int napi_id,
+         |      ^
+   net/core/dev.c:6214:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    6214 | void __napi_busy_loop(unsigned int napi_id,
+         | ^
+         | static 
+   net/core/dev.c:4075:1: warning: unused function 'sch_handle_ingress' [-Wunused-function]
+    4075 | sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
+         | ^
+   net/core/dev.c:4082:1: warning: unused function 'sch_handle_egress' [-Wunused-function]
+    4082 | sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
+         | ^
+   net/core/dev.c:5292:19: warning: unused function 'nf_ingress' [-Wunused-function]
+    5292 | static inline int nf_ingress(struct sk_buff *skb, struct packet_type **pt_prev,
+         |                   ^
+   16 warnings generated.
 
 
-vim +/netinfo +3965 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+vim +/__napi_busy_loop +6214 net/core/dev.c
 
-  3947	
-  3948	static struct brcmf_pno_net_info_le *
-  3949	brcmf_get_netinfo_array(struct brcmf_pno_scanresults_le *pfn_v1)
-  3950	{
-  3951		struct brcmf_pno_scanresults_v2_le *pfn_v2;
-  3952		struct brcmf_pno_net_info_le *netinfo;
-  3953	
-  3954		switch (pfn_v1->version) {
-  3955		default:
-  3956			WARN_ON(1);
-  3957			fallthrough;
-  3958		case cpu_to_le32(1):
-  3959			netinfo = (struct brcmf_pno_net_info_le *)(pfn_v1 + 1);
-  3960			break;
-  3961		case cpu_to_le32(2):
-  3962			pfn_v2 = (struct brcmf_pno_scanresults_v2_le *)pfn_v1;
-  3963			netinfo = (struct brcmf_pno_net_info_le *)(pfn_v2 + 1);
-  3964			break;
-> 3965		case cpu_to_le32(3):
-  3966			brcmf_err(
-  3967				"This should use the brcmf_get_netinfo_v3_array function to retrieve the array\n");
-  3968			break;
-  3969		}
-  3970	
-  3971		return netinfo;
-  3972	}
-  3973	
-  3974	static struct brcmf_pno_net_info_v3_le *
-  3975	brcmf_get_netinfo_v3_array(struct brcmf_pno_scanresults_le *pfn_v1)
-  3976	{
-  3977		struct brcmf_pno_scanresults_v2_le *pfn_v2;
-  3978		struct brcmf_pno_net_info_v3_le *netinfo;
-  3979	
-  3980		switch (pfn_v1->version) {
-> 3981		default:
-  3982			WARN_ON(1);
-  3983			fallthrough;
-  3984		case cpu_to_le32(1):
-  3985		case cpu_to_le32(2):
-  3986			brcmf_err(
-  3987				"This should use the brcmf_get_netinfo_array function to retrieve the array\n");
-  3988			break;
-  3989		case cpu_to_le32(3):
-  3990			pfn_v2 = (struct brcmf_pno_scanresults_v2_le *)pfn_v1;
-  3991			netinfo = (struct brcmf_pno_net_info_v3_le *)(pfn_v2 + 1);
-  3992			break;
-  3993		}
-  3994	
-  3995		return netinfo;
-  3996	}
-  3997	
+  6213	
+> 6214	void __napi_busy_loop(unsigned int napi_id,
+  6215			      bool (*loop_end)(void *, unsigned long),
+  6216			      void *loop_end_arg, bool prefer_busy_poll, u16 budget,
+  6217			      bool rcu)
+  6218	{
+  6219		unsigned long start_time = loop_end ? busy_loop_current_time() : 0;
+  6220		int (*napi_poll)(struct napi_struct *napi, int budget);
+  6221		void *have_poll_lock = NULL;
+  6222		struct napi_struct *napi;
+  6223	
+  6224	restart:
+  6225		napi_poll = NULL;
+  6226	
+  6227		if (!rcu)
+  6228			rcu_read_lock();
+  6229	
+  6230		napi = napi_by_id(napi_id);
+  6231		if (!napi)
+  6232			goto out;
+  6233	
+  6234		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+  6235			preempt_disable();
+  6236		for (;;) {
+  6237			int work = 0;
+  6238	
+  6239			local_bh_disable();
+  6240			if (!napi_poll) {
+  6241				unsigned long val = READ_ONCE(napi->state);
+  6242	
+  6243				/* If multiple threads are competing for this napi,
+  6244				 * we avoid dirtying napi->state as much as we can.
+  6245				 */
+  6246				if (val & (NAPIF_STATE_DISABLE | NAPIF_STATE_SCHED |
+  6247					   NAPIF_STATE_IN_BUSY_POLL)) {
+  6248					if (prefer_busy_poll)
+  6249						set_bit(NAPI_STATE_PREFER_BUSY_POLL, &napi->state);
+  6250					goto count;
+  6251				}
+  6252				if (cmpxchg(&napi->state, val,
+  6253					    val | NAPIF_STATE_IN_BUSY_POLL |
+  6254						  NAPIF_STATE_SCHED) != val) {
+  6255					if (prefer_busy_poll)
+  6256						set_bit(NAPI_STATE_PREFER_BUSY_POLL, &napi->state);
+  6257					goto count;
+  6258				}
+  6259				have_poll_lock = netpoll_poll_lock(napi);
+  6260				napi_poll = napi->poll;
+  6261			}
+  6262			work = napi_poll(napi, budget);
+  6263			trace_napi_poll(napi, work, budget);
+  6264			gro_normal_list(napi);
+  6265	count:
+  6266			if (work > 0)
+  6267				__NET_ADD_STATS(dev_net(napi->dev),
+  6268						LINUX_MIB_BUSYPOLLRXPACKETS, work);
+  6269			local_bh_enable();
+  6270	
+  6271			if (!loop_end || loop_end(loop_end_arg, start_time))
+  6272				break;
+  6273	
+  6274			if (unlikely(need_resched())) {
+  6275				if (rcu)
+  6276					break;
+  6277				if (napi_poll)
+  6278					busy_poll_stop(napi, have_poll_lock, prefer_busy_poll, budget);
+  6279				if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+  6280					preempt_enable();
+  6281				rcu_read_unlock();
+  6282				cond_resched();
+  6283				if (loop_end(loop_end_arg, start_time))
+  6284					return;
+  6285				goto restart;
+  6286			}
+  6287			cpu_relax();
+  6288		}
+  6289		if (napi_poll)
+  6290			busy_poll_stop(napi, have_poll_lock, prefer_busy_poll, budget);
+  6291		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+  6292			preempt_enable();
+  6293	out:
+  6294		if (!rcu)
+  6295			rcu_read_unlock();
+  6296	}
+  6297	
 
 -- 
 0-DAY CI Kernel Test Service
