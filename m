@@ -1,137 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A00F1C3C;
-	Fri, 13 Oct 2023 05:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F037BDDB0
+	for <llvm@lists.linux.dev>; Fri, 13 Oct 2023 08:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QPU19xI+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697173991; x=1728709991;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Fq+2aXruiq6cYxjIPxlEZ/+Q8nqk9oZLyJpiOkqszL4=;
-  b=QPU19xI+jY+16rgMs2uLx1Qh1RugFMNTXHGP80z9YqE4ZJYGKQ3f5tka
-   PaUKXVcO3MN4acQ8VSaI6TK6e+S6OF6NePxktJw0yJw9Xd8NO1PzpYAKe
-   U12NCU2JG6J4aNsp3RjePiQ0XiY86JYzKX3/YI49TqXt2B6sjdGMFs2pl
-   KlzuCEsWlQRzV94Kok7i4X1PjPtdDTB/ln9iDG9d/sh4cENW4C9SKX1RK
-   J4icnIQGFEROmQ/m23dE9iyjxh6D5ZrqUPCrg6mc3vVQcm+d6Sni0QgAP
-   zg5JNvJHlEsmZUBUY17H9SEZdvAwmtOaA0Rf4aIPd9U8GNT5bsk7vdEVj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="387961523"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="387961523"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 22:13:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="824893364"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="824893364"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Oct 2023 22:13:00 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qrATp-0004ML-3A;
-	Fri, 13 Oct 2023 05:12:58 +0000
-Date: Fri, 13 Oct 2023 13:12:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 10163/11653]
- sound/soc/rockchip/rockchip_i2s_tdm.c:1315:34: warning: unused variable
- 'rockchip_i2s_tdm_match'
-Message-ID: <202310131310.Em4Ucd4e-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="edSwfH2X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1697184617;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=IAvrLTh220AN0c+i7JE4z5BVsYfRLcQTuKjd/lkdJLY=;
+	b=edSwfH2XXYGEZby7SUARWdSAur7F20OYlzzENVJWN93VVSiHaDays7ZpZfyIFGYj4TkQyU
+	H1Yxy/mVuG1f9kvLZE37bASyRS7mKQ+99qPSlP9RctpXyCKZmkC6bsJ91q5O9jXurhXo5L
+	TnYeQqEhKLC/Ow1xGHJaLh8iqhFbP2c=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-v0g1f-NLMe6FcweDe98N1w-1; Fri, 13 Oct 2023 04:10:16 -0400
+X-MC-Unique: v0g1f-NLMe6FcweDe98N1w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D912E3C170A5
+	for <llvm@lists.linux.dev>; Fri, 13 Oct 2023 08:10:15 +0000 (UTC)
+Received: from [172.64.4.52] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BF11640C6F79;
+	Fri, 13 Oct 2023 08:10:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 3 of 230): Test report for master
+ (6.6.0-rc5, mainline.kernel.org-clang, 20f4757f)
+Date: Fri, 13 Oct 2023 08:10:15 -0000
+To: bgoncalv@redhat.com, jbastian@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <62307.123101304101600367@us-mta-283.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f9a6bea131849702d591d18d5c8b8a0eda6f62b3
-commit: 9958d85968ed2df4b704105fd2a9c3669eb9cd97 [10163/11653] ASoC: Use device_get_match_data()
-config: hexagon-randconfig-r002-20211203 (https://download.01.org/0day-ci/archive/20231013/202310131310.Em4Ucd4e-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231013/202310131310.Em4Ucd4e-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310131310.Em4Ucd4e-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from sound/soc/rockchip/rockchip_i2s_tdm.c:15:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from sound/soc/rockchip/rockchip_i2s_tdm.c:15:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from sound/soc/rockchip/rockchip_i2s_tdm.c:15:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> sound/soc/rockchip/rockchip_i2s_tdm.c:1315:34: warning: unused variable 'rockchip_i2s_tdm_match' [-Wunused-const-variable]
-   static const struct of_device_id rockchip_i2s_tdm_match[] = {
-                                    ^
-   7 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/rockchip_i2s_tdm_match +1315 sound/soc/rockchip/rockchip_i2s_tdm.c
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.6-rc5-fixes' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tj/cgroup
 
-081068fd641403 Nicolas Frattaroli 2021-10-01  1314  
-081068fd641403 Nicolas Frattaroli 2021-10-01 @1315  static const struct of_device_id rockchip_i2s_tdm_match[] = {
-081068fd641403 Nicolas Frattaroli 2021-10-01  1316  	{ .compatible = "rockchip,px30-i2s-tdm", .data = &px30_i2s_soc_data },
-081068fd641403 Nicolas Frattaroli 2021-10-01  1317  	{ .compatible = "rockchip,rk1808-i2s-tdm", .data = &rk1808_i2s_soc_data },
-081068fd641403 Nicolas Frattaroli 2021-10-01  1318  	{ .compatible = "rockchip,rk3308-i2s-tdm", .data = &rk3308_i2s_soc_data },
-081068fd641403 Nicolas Frattaroli 2021-10-01  1319  	{ .compatible = "rockchip,rk3568-i2s-tdm", .data = &rk3568_i2s_soc_data },
-c619bd4268ff98 Nicolas Frattaroli 2022-10-25  1320  	{ .compatible = "rockchip,rk3588-i2s-tdm" },
-081068fd641403 Nicolas Frattaroli 2021-10-01  1321  	{ .compatible = "rockchip,rv1126-i2s-tdm", .data = &rv1126_i2s_soc_data },
-081068fd641403 Nicolas Frattaroli 2021-10-01  1322  	{},
-081068fd641403 Nicolas Frattaroli 2021-10-01  1323  };
-081068fd641403 Nicolas Frattaroli 2021-10-01  1324  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/108942
 
-:::::: The code at line 1315 was first introduced by commit
-:::::: 081068fd641403994f0505e6b91e021d3925f348 ASoC: rockchip: add support for i2s-tdm controller
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9885083
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9884956
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Panic
 
-:::::: TO: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
