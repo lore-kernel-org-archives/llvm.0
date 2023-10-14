@@ -1,260 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B5E1C27;
-	Sat, 14 Oct 2023 06:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BBC1C27
+	for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 06:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GhUME8y+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697265434; x=1728801434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qTONI1fWdA+lqNPUY29CNOZIdwmpNPm69ZTN+9zKPhg=;
-  b=GhUME8y+hMrjv27NSVlZMXqhY7S0ETmS4+dL5QvmnAy6qwXJPnLTjZpk
-   +rsF3K1eQBeN7+YqqQOmQGHlO6JpKJgTkNGzN5KIs5hvVNbdJkqc7sp+i
-   Q9qi/YmkAQ0+FmOUagsZqZJGCRVHLJvPBA2Zfwp1QVukq2Fzwtk//9216
-   5QoN9zFJ004V00j/W2T+wjoPqWkeviljEeqmCjwdvpONOHzzuB9a0feJK
-   LCWXhCXq7BPZeiHIV0KV5m179XwsrtsZzLJ7cn73s5XnLPgmhiJlkgJ0/
-   LcozfmC0gBtA5UPj5UGpDxMVqV5v+hriqMTZeybrkYs+X9V4raIU1wWCX
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="375658888"
-X-IronPort-AV: E=Sophos;i="6.03,224,1694761200"; 
-   d="scan'208";a="375658888"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 23:37:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="790108731"
-X-IronPort-AV: E=Sophos;i="6.03,224,1694761200"; 
-   d="scan'208";a="790108731"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Oct 2023 23:37:07 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qrYGm-0005mp-1d;
-	Sat, 14 Oct 2023 06:37:04 +0000
-Date: Sat, 14 Oct 2023 14:37:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-	s.nawrocki@samsung.com, linus.walleij@linaro.org,
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
-	will@kernel.org, arnd@arndb.de, olof@lixom.net,
-	cw00.choi@samsung.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peter.griffin@linaro.org, tudor.ambarus@linaro.org,
-	andre.draszik@linaro.org, semen.protsenko@linaro.org,
-	soc@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 13/21] clk: samsung: clk-gs101: Add cmu_top registers,
- plls, mux and gates
-Message-ID: <202310141437.xBrLtPIH-lkp@intel.com>
-References: <20231005155618.700312-14-peter.griffin@linaro.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jE/VRUpf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1697266229;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PK+z1Gb8xS0FqPMnraSXzFsnYh1sFozS7gsGXtTKvCM=;
+	b=jE/VRUpf515PwMvm/6F/UA5qAhhUKC/8qOPtwjrqkxsTy0bAhf1P1wS6Mst87Hi7tEq34u
+	TUuQ28mkyWvrslMyG14DC3AY79NUjfQZvvTq+dXYkW33FX01f/OU3VOOqvN1oWUu5tpNhU
+	t35CAEngMA4Bhr17NGXJo/1Y//mAgTM=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-452-0VZui5QuNRykVOF-35_5Yw-1; Sat, 14 Oct 2023 02:50:26 -0400
+X-MC-Unique: 0VZui5QuNRykVOF-35_5Yw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6EDE13C025B4
+	for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 06:50:26 +0000 (UTC)
+Received: from [172.64.15.46] (unknown [10.30.32.48])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4A55140C6CA0;
+	Sat, 14 Oct 2023 06:50:26 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 230): Test report for master
+ (6.6.0-rc5, mainline.kernel.org-clang, 8cb1f10d)
+Date: Sat, 14 Oct 2023 06:50:26 -0000
+To: jbastian@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231005155618.700312-14-peter.griffin@linaro.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <20476.123101402502600150@us-mta-452.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Peter,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on krzk/for-next]
-[also build test WARNING on robh/for-next linus/master pinctrl-samsung/for-next v6.6-rc5 next-20231013]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-interrupt-controller-Add-gs101-interrupt-controller/20231005-235922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
-patch link:    https://lore.kernel.org/r/20231005155618.700312-14-peter.griffin%40linaro.org
-patch subject: [PATCH 13/21] clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231014/202310141437.xBrLtPIH-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310141437.xBrLtPIH-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310141437.xBrLtPIH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/clk/samsung/clk-gs101.c:809:7: warning: unused variable 'mout_cmu_pdp_vra_p' [-Wunused-const-variable]
-     809 | PNAME(mout_cmu_pdp_vra_p)       = { "fout_shared2_pll", "dout_shared0_div3",
-         |       ^
->> drivers/clk/samsung/clk-gs101.c:888:7: warning: unused variable 'mout_cmu_boost_p' [-Wunused-const-variable]
-     888 | PNAME(mout_cmu_boost_p)         = { "dout_shared0_div4", "dout_shared1_div4",
-         |       ^
->> drivers/clk/samsung/clk-gs101.c:935:7: warning: unused variable 'mout_cmu_g2d_p' [-Wunused-const-variable]
-     935 | PNAME(mout_cmu_g2d_p)           = { "dout_shared0_div3", "fout_shared3_pll",
-         |       ^
-   3 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/mout_cmu_pdp_vra_p +809 drivers/clk/samsung/clk-gs101.c
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-   790	
-   791	PNAME(mout_cmu_hsi2_ufs_embd_p)	= { "oscclk", "dout_shared0_div4",
-   792					    "dout_shared2_div2", "fout_spare_pll" };
-   793	
-   794	PNAME(mout_cmu_hsi2_mmc_card_p)	= { "fout_shared2_pll", "fout_shared3_pll",
-   795					    "dout_shared0_div4", "fout_spare_pll" };
-   796	
-   797	/* List of parent clocks for Muxes in CMU_TOP: for CMU_CSIS */
-   798	PNAME(mout_cmu_csis_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   799					    "dout_shared1_div3", "dout_shared0_div4",
-   800					    "dout_shared1_div4", "dout_shared2_div2",
-   801					    "fout_spare_pll" };
-   802	
-   803	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PDP */
-   804	PNAME(mout_cmu_pdp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   805					    "dout_shared1_div3", "dout_shared0_div4",
-   806					    "dout_shared1_div4", "dout_shared2_div2",
-   807					    "fout_spare_pll" };
-   808	
- > 809	PNAME(mout_cmu_pdp_vra_p)	= { "fout_shared2_pll", "dout_shared0_div3",
-   810					    "fout_shared3_pll", "dout_shared1_div3",
-   811					    "dout_shared0_div4", "dout_shared1_div4",
-   812					    "fout_spare_pll" };
-   813	
-   814	/* List of parent clocks for Muxes in CMU_TOP: for CMU_IPP */
-   815	PNAME(mout_cmu_ipp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   816					    "dout_shared1_div3", "dout_shared0_div4",
-   817					    "dout_shared1_div4", "dout_shared2_div2",
-   818					    "fout_spare_pll" };
-   819	
-   820	/* List of parent clocks for Muxes in CMU_TOP: for CMU_G3AA */
-   821	PNAME(mout_cmu_g3aa_p)		= { "dout_shared0_div3", "fout_shared3_pll",
-   822					    "dout_shared1_div3", "dout_shared0_div4",
-   823					    "dout_shared1_div4", "dout_shared2_div2",
-   824					    "fout_spare_pll" };
-   825	
-   826	/* List of parent clocks for Muxes in CMU_TOP: for CMU_ITP */
-   827	PNAME(mout_cmu_itp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   828					    "dout_shared1_div3", "dout_shared0_div4",
-   829					    "dout_shared1_div4", "dout_shared2_div2",
-   830					    "fout_spare_pll" };
-   831	
-   832	/* List of parent clocks for Muxes in CMU_TOP: for CMU_DNS */
-   833	PNAME(mout_cmu_dns_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   834					    "dout_shared1_div3", "dout_shared0_div4",
-   835					    "dout_shared1_div4", "dout_shared2_div2",
-   836					    "fout_spare_pll" };
-   837	
-   838	/* List of parent clocks for Muxes in CMU_TOP: for CMU_TNR */
-   839	PNAME(mout_cmu_tnr_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   840					    "dout_shared1_div3", "dout_shared0_div4",
-   841					    "dout_shared1_div4", "dout_shared2_div2",
-   842					    "fout_spare_pll" };
-   843	
-   844	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MCSC */
-   845	PNAME(mout_cmu_mcsc_itsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   846					    "dout_shared1_div3", "dout_shared0_div4",
-   847					    "dout_shared1_div4", "dout_shared2_div2",
-   848					    "fout_spare_pll" };
-   849	
-   850	PNAME(mout_cmu_mcsc_mcsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   851					    "dout_shared1_div3", "dout_shared0_div4",
-   852					    "dout_shared1_div4", "dout_shared2_div2",
-   853					    "fout_spare_pll" };
-   854	
-   855	/* List of parent clocks for Muxes in CMU_TOP: for CMU_GDC */
-   856	PNAME(mout_cmu_gdc_scsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   857					    "dout_shared1_div3", "dout_shared0_div4",
-   858					    "dout_shared1_div4", "dout_shared2_div2",
-   859					    "fout_spare_pll" };
-   860	
-   861	PNAME(mout_cmu_gdc_gdc0_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   862					    "dout_shared1_div3", "dout_shared0_div4",
-   863					    "dout_shared1_div4", "dout_shared2_div2",
-   864					    "fout_spare_pll" };
-   865	
-   866	PNAME(mout_cmu_gdc_gdc1_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   867					    "dout_shared1_div3", "dout_shared0_div4",
-   868					    "dout_shared1_div4", "dout_shared2_div2",
-   869					    "fout_spare_pll" };
-   870	
-   871	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MFC */
-   872	PNAME(mout_cmu_mfc_mfc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   873					    "dout_shared1_div3", "dout_shared0_div4",
-   874					    "dout_shared1_div4", "dout_shared2_div2",
-   875					    "fout_spare_pll" };
-   876	
-   877	/* List of parent clocks for Muxes in CMU_TOP: for DDRPHY0/1/2/3 */
-   878	
-   879	PNAME(mout_cmu_mif_switch_p)	= { "fout_shared0_pll", "fout_shared1_pll",
-   880					    "dout_shared0_div2", "dout_shared1_div2",
-   881					    "fout_shared2_pll", "dout_shared0_div3",
-   882					    "fout_shared3_pll", "fout_spare_pll" };
-   883	
-   884	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MIF0/1/2/3 */
-   885	PNAME(mout_cmu_mif_busp_p)	= { "dout_shared0_div4", "dout_shared1_div4",
-   886					    "dout_shared0_div5", "fout_spare_pll" };
-   887	
- > 888	PNAME(mout_cmu_boost_p)		= { "dout_shared0_div4", "dout_shared1_div4",
-   889					    "dout_shared2_div2", "dout_shared3_div2" };
-   890	
-   891	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MISC */
-   892	PNAME(mout_cmu_misc_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   893					    "dout_shared3_div2", "fout_spare_pll" };
-   894	PNAME(mout_cmu_misc_sss_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   895					    "dout_shared3_div2", "fout_spare_pll" };
-   896	
-   897	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PERIC0 */
-   898	PNAME(mout_cmu_peric0_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   899					    "dout_shared3_div2", "fout_spare_pll" };
-   900	PNAME(mout_cmu_peric0_ip_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   901					    "dout_shared3_div2", "fout_spare_pll" };
-   902	
-   903	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PERIC1 */
-   904	PNAME(mout_cmu_peric1_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   905					    "dout_shared3_div2", "fout_spare_pll" };
-   906	PNAME(mout_cmu_peric1_ip_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   907					    "dout_shared3_div2", "fout_spare_pll" };
-   908	
-   909	/* List of parent clocks for Muxes in CMU_TOP: for CMU_TPU */
-   910	PNAME(mout_cmu_tpu_tpu_p)	= { "dout_shared0_div2", "dout_shared1_div2",
-   911					    "fout_shared2_pll", "fout_shared3_pll",
-   912					    "dout_shared0_div3", "dout_shared1_div3",
-   913					    "dout_shared0_div4", "fout_spare_pll" };
-   914	
-   915	PNAME(mout_cmu_tpu_tpuctl_p)	= { "dout_shared0_div2", "dout_shared1_div2",
-   916					    "fout_shared2_pll", "fout_shared3_pll",
-   917					    "dout_shared0_div3", "dout_shared1_div3",
-   918					    "dout_shared0_div4", "fout_spare_pll" };
-   919	
-   920	PNAME(mout_cmu_tpu_bus_p)	= { "dout_shared0_div2", "dout_shared1_div2",
-   921					    "fout_shared2_pll", "fout_shared3_pll",
-   922					    "dout_shared0_div3", "dout_shared1_div3",
-   923					    "dout_shared0_div4", "fout_spare_pll" };
-   924	
-   925	PNAME(mout_cmu_tpu_uart_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   926					    "dout_shared3_div2", "fout_spare_pll" };
-   927	
-   928	/* List of parent clocks for Muxes in CMU_TOP: for CMU_BO */
-   929	PNAME(mout_cmu_bo_bus_p)	= { "fout_shared2_pll", "dout_shared0_div3",
-   930					    "fout_shared3_pll", "dout_shared1_div3",
-   931					    "dout_shared0_div4", "dout_shared1_div4",
-   932					    "fout_spare_pll" };
-   933	
-   934	/* List of parent clocks for Muxes in CMU_TOP: for CMU_G2D */
- > 935	PNAME(mout_cmu_g2d_p)		= { "dout_shared0_div3", "fout_shared3_pll",
-   936					    "dout_shared1_div3", "dout_shared0_div4",
-   937					    "dout_shared1_div4", "dout_shared2_div2",
-   938					    "fout_spare_pll" };
-   939	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/109121
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+         aarch64 - stress: stress-ng - memory
+                   Issue: stress: stress-ng - memory: (panic) Comm: systemd=
+-oomd Not tainted 6.1.0-rc3
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1461
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9898642
+
+    Note: Any of these might not be a regression and/or we might have mista=
+kenly thought this issue to be fixed.
+          If it is not a regression, please ask the test maintainer to reop=
+en the issue and untag the regression from this execution.
+
+    Unrecognized or new issues:
+           s390x - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9898742
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
