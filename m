@@ -1,156 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62C8125C3
-	for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 13:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBA012B9F;
+	Sat, 14 Oct 2023 15:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YcsfbcUp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697290897;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=f5IvTUFIB+HQn2uMCWW1K2lRat/YQcmQtQ8Y7/X5vR0=;
-	b=YcsfbcUpFd57QExtnkUmNWCcknbV6F/5/ZY18TXAtwNmI+y4zcsRG0B0KqD43zvpqN53CY
-	wrWa7W0Yo3JK0nq6+KtBIH4jkB+Ie85u39ByvkhFQG35pso0dYCn+H3z7WxbbMNztMp9/4
-	zyBokSQD5iJjFp4TbCNYpSVR7ExVTU4=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-299-AGqqrtRTPFmTwHSLQA4FQg-1; Sat, 14 Oct 2023 09:41:25 -0400
-X-MC-Unique: AGqqrtRTPFmTwHSLQA4FQg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2177E3C025B3
-	for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 13:41:25 +0000 (UTC)
-Received: from [172.64.15.46] (unknown [10.30.32.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D6732C15BB8;
-	Sat, 14 Oct 2023 13:41:24 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 8 of 230): Test report for master
- (6.6.0-rc5, mainline.kernel.org-clang, 727fb837)
-Date: Sat, 14 Oct 2023 13:41:24 -0000
-To: jbastian@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X8ecC4Hd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697297097; x=1728833097;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=kx1+TTLF1ucZTxYiEphIfa+W3aDIJP8Sq6ixFjJcFqI=;
+  b=X8ecC4HdnQEFp+UDolJr9qp8UtCSOyy9wPtTFzkOCQgQ3AJiXWuJbm5R
+   IMh4sxggQelbKxL6M2CUttA4qaLpI9tl+0bwmqSG2/dRd7DhEXBe+4RZe
+   uyrN5YxXuPmVExP5BINjhWTk44ILuvk/cUZtLZsXholMGmQAG8zpiUrU9
+   jrUdI/LaKpuTdNEFG1B+FxaezzrhTE3QFvixO/BibGTEMicedK/wZgC/Z
+   bg1TYJjeyla5mWWL1LVogzb5jW2uAtWgrD6poys5JItbBOxpucwhoW90t
+   fGyAH68p6zXIafEYPHVjTCoZEquCG5jb/qCRebtxHp6VnyQfjSaNUuE8/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="375683291"
+X-IronPort-AV: E=Sophos;i="6.03,224,1694761200"; 
+   d="scan'208";a="375683291"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2023 08:24:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="731700751"
+X-IronPort-AV: E=Sophos;i="6.03,224,1694761200"; 
+   d="scan'208";a="731700751"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Oct 2023 08:24:56 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qrgVX-0006JA-0K;
+	Sat, 14 Oct 2023 15:24:51 +0000
+Date: Sat, 14 Oct 2023 23:23:51 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
+ kallsyms_sym_address: .text+0x10): relocation R_RISCV_PCREL_HI20 out of
+ range: -524527 is not in [-524288, 524287]; references
+ kallsyms_relative_base
+Message-ID: <202310142300.teTn3YiW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <90014.123101409412500477@us-mta-299.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+CC: linux-kernel@vger.kernel.org
+TO: Zhen Lei <thunder.leizhen@huawei.com>
+CC: Luis Chamberlain <mcgrof@kernel.org>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Hi Zhen,
 
+FYI, the error/warning still remains.
 
-Kernel information:
-    Commit message: Merge tag 'input-for-v6.6-rc5' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/dtor/input
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   727fb83765049981e342db4c5a8b51aca72201d8
+commit: 30f3bb09778de64ef9f23fb4bb5f868c4728a071 kallsyms: Add self-test facility
+date:   11 months ago
+config: riscv-randconfig-r021-20230908 (https://download.01.org/0day-ci/archive/20231014/202310142300.teTn3YiW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310142300.teTn3YiW-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/109152
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310142300.teTn3YiW-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9901715
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
-p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
-om_score_adj=3D1000
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1214
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_sym_address: .text+0x10): relocation R_RISCV_PCREL_HI20 out of range: -524527 is not in [-524288, 524287]; references kallsyms_relative_base
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_sym_address: .text+0x20): relocation R_RISCV_PCREL_HI20 out of range: -524527 is not in [-524288, 524287]; references kallsyms_offsets
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
