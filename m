@@ -1,101 +1,81 @@
-Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7FC1859
-	for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 07:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F13C63B0
+	for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 09:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Bo+61VSX"
-Received: from pop-os.home ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id rYEiqpnupvhM3rYEtqYMoq; Sat, 14 Oct 2023 08:35:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1697265308;
-	bh=il89cLsUPoSfIl2uIujuHP4uRIM1OQ8+x9zRodfnRok=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Bo+61VSX/YyYHCKiYBpJL1M4zOyIazFJEkWMUYYuOZqqleYlxrRVIWb5m9/g/i2fk
-	 /mQgtot4aePqBFtElrsXiGMGf5KEJ4gObLlcrOg2AT7E8FiuLIIy8w9LlFI5aikPrA
-	 WEpS8BipFODvU5kvBv0CRASebxqMW9PzIhLsTjuYoW5kMujbLL2jeuQFVJD6XNLPz6
-	 QRELQx1T+AF5t8a4aMQxgdNyOYAkg2CkE5AtMEZWBLHPaFs7yYPB0Q9ebCjXDTqe5g
-	 Fwi4uo3NH/U9hS6shMji3XkK8YyMNjJjJ9XxaHF65GbJRWwoi3n57YNfnv8yG1/vNJ
-	 C5YpJmAFysrEg==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 14 Oct 2023 08:35:08 +0200
-X-ME-IP: 86.243.2.178
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Pravin B Shelar <pshelar@ovn.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	netdev@vger.kernel.org,
-	dev@openvswitch.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 2/2] net: openvswitch: Annotate struct mask_array with __counted_by
-Date: Sat, 14 Oct 2023 08:34:53 +0200
-Message-Id: <ca5c8049f58bb933f231afd0816e30a5aaa0eddd.1697264974.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e5122b4ff878cbf3ed72653a395ad5c4da04dc1e.1697264974.git.christophe.jaillet@wanadoo.fr>
-References: <e5122b4ff878cbf3ed72653a395ad5c4da04dc1e.1697264974.git.christophe.jaillet@wanadoo.fr>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RaWJ/fOo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7897C43397
+	for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 09:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697275605;
+	bh=aGl4g3Sh3c+rQVAipdArG0sIEhyzdN1YpzpNOg38+TI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RaWJ/fOo5o9ngjwhlR5S1QxO8pKwquGkpkBM6XON34hCB9ktWAhmItUaTCPG8EXPv
+	 Q0rN9mTSYY5a22niHACtv8SKegbOBoDoy7ux0LbcOwvMhGDsU8avWdT0Piye8E3wCR
+	 OMvDD9CglE649f8pRbJlRWA6XZlz/T6PTXmo0D6w2a5IUWzOqgkzWIW5vMVMvF4h++
+	 zrK9Joklh91odonXxDzQybPy2znw0P+/NjNs/2nYQhN8Pab9pT79S86VGIYcHhAOH+
+	 T0hcJpbTAisMpbG+aDEiReqd3yLtGEv88A4WcelCwp6IAj0P5wIAkrDd+8PBHZrrQD
+	 bV8c2MdvRQIlQ==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1e9db321ed1so912765fac.3
+        for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 02:26:45 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yzi68xh13HV+FIYAcbtG8jXkWJpRb9BLNtQ19Lvm9l/w0vZZbXR
+	GdTL4kJ29hCuiE37WV9EeMY10wxdP+FRNXY6llg=
+X-Google-Smtp-Source: AGHT+IEwEQUUC1JNZqjlzEvZLXYqnFViuoo3sDCGG2QuSlxycV452MkTdFFBAni9pTPEblM/p69MXbyOyylRdCUdRis=
+X-Received: by 2002:a05:6870:d905:b0:1e9:f4e4:2882 with SMTP id
+ gq5-20020a056870d90500b001e9f4e42882mr3597436oab.38.1697275604992; Sat, 14
+ Oct 2023 02:26:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231005214057.759089-1-mmaurer@google.com> <CAK7LNATBBk-a0EJcxpWGJ9n+9BHQUw3a4s41LTtC-R8fYrVMpw@mail.gmail.com>
+ <CANiq72=Dsaa77n-OKDZCcv6TWgxZf7R00n=X137WbsUzwgU4RA@mail.gmail.com>
+In-Reply-To: <CANiq72=Dsaa77n-OKDZCcv6TWgxZf7R00n=X137WbsUzwgU4RA@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 14 Oct 2023 18:26:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATmscONw-Sy7tkgEY=z9i7Rgt0G0Mq9+FV8nN_vP+Q4mg@mail.gmail.com>
+Message-ID: <CAK7LNATmscONw-Sy7tkgEY=z9i7Rgt0G0Mq9+FV8nN_vP+Q4mg@mail.gmail.com>
+Subject: Re: [PATCH v4] rust: Respect HOSTCC when linking for host
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Matthew Maurer <mmaurer@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+On Tue, Oct 10, 2023 at 7:00=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Sat, Oct 7, 2023 at 5:38=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
+> >
+> > Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+> >
+> > if Miguel picked this up.
+> >
+> > Please let me know if I should pick this up.
+>
+> Thanks a lot for taking a look Masahiro -- either way is fine for me.
+> If you want to take it, please feel free to add my `Acked-by`.
+>
+> Cheers,
+> Miguel
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-v2: Fix the subject  [Ilya Maximets]
-    fix the field name used with __counted_by  [Ilya Maximets]
+I do not see this yet in linux-next.
 
-v1: https://lore.kernel.org/all/f66ddcf1ef9328f10292ea75a17b584359b6cde3.1696156198.git.christophe.jaillet@wanadoo.fr/
+So, I applied to linux-kbuild with Miguel's Ack now.
 
 
-This patch is part of a work done in parallel of what is currently worked
-on by Kees Cook.
 
-My patches are only related to corner cases that do NOT match the
-semantic of his Coccinelle script[1].
-
-In this case, in tbl_mask_array_alloc(), several things are allocated with
-a single allocation. Then, some pointer arithmetic computes the address of
-the memory after the flex-array.
-
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
----
- net/openvswitch/flow_table.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/openvswitch/flow_table.h b/net/openvswitch/flow_table.h
-index 9e659db78c05..f524dc3e4862 100644
---- a/net/openvswitch/flow_table.h
-+++ b/net/openvswitch/flow_table.h
-@@ -48,7 +48,7 @@ struct mask_array {
- 	int count, max;
- 	struct mask_array_stats __percpu *masks_usage_stats;
- 	u64 *masks_usage_zero_cntr;
--	struct sw_flow_mask __rcu *masks[];
-+	struct sw_flow_mask __rcu *masks[] __counted_by(max);
- };
- 
- struct table_instance {
--- 
-2.34.1
-
+--=20
+Best Regards
+Masahiro Yamada
