@@ -1,48 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A393185E;
-	Sun, 15 Oct 2023 11:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD85979F4;
+	Sun, 15 Oct 2023 16:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UKx6tsTS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fc1XJMth"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697370402; x=1728906402;
+  t=1697386705; x=1728922705;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w1UhkjN+dDfJXbl8IqejJHX8ps6EPQmAWj+ZLPrfwwk=;
-  b=UKx6tsTSZ/r9n5Kx98DzPqQRj6lsRWSIH3pauRaD2wb4zh+lbBOW/SYW
-   B8LuvJxIFA5q8OwmrXpyxOIedB1tm2Jbd9fix4MXLdyVXNeCyk+5etvXa
-   UEPkZ9H7dBCdLMwQmWJkY5Y7e6k3Q38sMemn6raIBSuitAbHhYy2X/F/O
-   6+qM8/sfH9c2RxV9ukriBKVroe9Be/BHLKSkoE3N0GCFZ4VNOVhAu72bx
-   EdXyorA59WqmYPqAhm0PztR87ro8c629TRQbeQ+OB7Ij56GizkXIOV6f3
-   +XjK00OQdvBWuHur659X0iSG2xPx6k6/UcOw4fMB/Z54eZ3Y8ru0X4XfC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="384256519"
+  bh=rATI1Hmy6yiVcD0qBZP/oh/fcJkEVdB9U91QYMV0CHs=;
+  b=fc1XJMthpCdVzngB27h+vDpPyZbNaEGoZJ6jtEaoA4OAZXKAt9BXMeci
+   TmeDFA1RO0ZW1z9SBjfAL7ja5d4N1BhMCLAOGVbU+Qpzn9EEWnoO7X47/
+   Wtad8U6ccu9FuO4/HtjquWJKzWI8ZAvtdu7jbBqBnbA5SyJXPcO5rTwQ7
+   npiUMXi711LGIBSnaiUDfnXp1yadbTwB5yxauGU3dJFoz1HAtsCIHTh4u
+   v8YGH+r6aW/kMLP8yipwFAA6ilPbg3Quz7cIF+hqIWzcFz+Dp2rA6HeiD
+   et1w8XD1oHYQkdsQFGhb/wl0N8Rq11ZHTRpEba/xgy/mUwGveRBe1xgP4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="389261372"
 X-IronPort-AV: E=Sophos;i="6.03,226,1694761200"; 
-   d="scan'208";a="384256519"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2023 04:46:41 -0700
+   d="scan'208";a="389261372"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2023 09:18:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="821246752"
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="825712711"
 X-IronPort-AV: E=Sophos;i="6.03,226,1694761200"; 
-   d="scan'208";a="821246752"
+   d="scan'208";a="825712711"
 Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Oct 2023 04:46:39 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 15 Oct 2023 09:18:21 -0700
 Received: from kbuild by f64821696465 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qrzZt-0007NF-0w;
-	Sun, 15 Oct 2023 11:46:37 +0000
-Date: Sun, 15 Oct 2023 19:46:00 +0800
+	id 1qs3op-0007Yb-0i;
+	Sun, 15 Oct 2023 16:18:19 +0000
+Date: Mon, 16 Oct 2023 00:17:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eileen Yoon <eyn@gmx.com>
+To: Matthew Garrett <mjg59@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/240-isp 1/54]
- drivers/media/platform/apple/isp/isp-cam.c:378:58: warning: format specifies
- type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202310151949.HqZIKANt-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+	Bartosz Szczepanek <bsz@semihalf.com>
+Subject: include/linux/tpm_eventlog.h:165:6: warning: variable 'mapping_size'
+ set but not used
+Message-ID: <202310160026.eOXhKeWr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,384 +53,170 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux bits/240-isp
-head:   345b0eda7c39b11429a7f06e4c83618167aa2f40
-commit: f0f1b152058cd2c9ee3a042da1349a1f88663d82 [1/54] media: apple: Add Apple ISP driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20231015/202310151949.HqZIKANt-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231015/202310151949.HqZIKANt-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9a3dad63edbe9a2ab2be1e7361a2133f519f855b
+commit: c46f3405692de1ac82240d927b9c7a0f9d6a4a36 tpm: Reserve the TPM final events table
+date:   4 years, 4 months ago
+config: x86_64-randconfig-013-20230909 (https://download.01.org/0day-ci/archive/20231016/202310160026.eOXhKeWr-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231016/202310160026.eOXhKeWr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310151949.HqZIKANt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310160026.eOXhKeWr-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/media/platform/apple/isp/isp-cam.c:6:
-   In file included from drivers/media/platform/apple/isp/isp-cam.h:7:
-   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
-   In file included from include/media/v4l2-device.h:12:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/apple/isp/isp-cam.c:6:
-   In file included from drivers/media/platform/apple/isp/isp-cam.h:7:
-   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
-   In file included from include/media/v4l2-device.h:12:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/apple/isp/isp-cam.c:6:
-   In file included from drivers/media/platform/apple/isp/isp-cam.h:7:
-   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
-   In file included from include/media/v4l2-device.h:12:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/media/platform/apple/isp/isp-cam.c:378:58: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     378 |                 dev_err(isp->dev, "setfile too small (0x%lx/0x%zx)\n", fw->size,
-         |                                                         ~~~            ^~~~~~~~
-         |                                                         %zx
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   7 warnings generated.
+   clang-16: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
+   In file included from drivers/char/tpm/eventlog/common.c:20:
+>> include/linux/tpm_eventlog.h:165:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+   1 warning generated.
 --
-   In file included from drivers/media/platform/apple/isp/isp-fw.c:7:
-   In file included from drivers/media/platform/apple/isp/isp-cmd.h:7:
-   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
-   In file included from include/media/v4l2-device.h:12:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/apple/isp/isp-fw.c:7:
-   In file included from drivers/media/platform/apple/isp/isp-cmd.h:7:
-   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
-   In file included from include/media/v4l2-device.h:12:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/apple/isp/isp-fw.c:7:
-   In file included from drivers/media/platform/apple/isp/isp-cmd.h:7:
-   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
-   In file included from include/media/v4l2-device.h:12:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   drivers/media/platform/apple/isp/isp-fw.c:245:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     245 |         if (!isp->data_surf) {
-         |             ^~~~~~~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-fw.c:298:9: note: uninitialized use occurs here
-     298 |         return err;
-         |                ^~~
-   drivers/media/platform/apple/isp/isp-fw.c:245:2: note: remove the 'if' if its condition is always false
-     245 |         if (!isp->data_surf) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-     246 |                 isp_err(isp, "failed to alloc surface for data files\n");
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     247 |                 goto free_extra;
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     248 |         }
-         | ~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-fw.c:239:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     239 |         if (!isp->extra_surf) {
-         |             ^~~~~~~~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-fw.c:298:9: note: uninitialized use occurs here
-     298 |         return err;
-         |                ^~~
-   drivers/media/platform/apple/isp/isp-fw.c:239:2: note: remove the 'if' if its condition is always false
-     239 |         if (!isp->extra_surf) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-     240 |                 isp_err(isp, "failed to alloc surface for extra heap\n");
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     241 |                 goto free_ipc;
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     242 |         }
-         | ~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-fw.c:216:9: note: initialize the variable 'err' to silence this warning
-     216 |         int err, retries;
-         |                ^
-         |                 = 0
->> drivers/media/platform/apple/isp/isp-fw.c:364:4: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     364 |                 isp_dbg(isp, "chan: %s type: %d src: %d num: %d iova: 0x%llx\n",
-         |                                                                         ~~~~
-         |                                                                         %x
-     365 |                         chan->name, chan->type, chan->src, chan->num,
-     366 |                         chan->iova);
-         |                         ^~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-drv.h:249:47: note: expanded from macro 'isp_dbg'
-     249 |         dev_dbg((isp)->dev, "[%s] " fmt, __func__, ##__VA_ARGS__)
-         |                                     ~~~              ^~~~~~~~~~~
-   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:272:19: note: expanded from macro 'dynamic_dev_dbg'
-     272 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:59: note: expanded from macro '_dynamic_func_call'
-     248 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:246:65: note: expanded from macro '_dynamic_func_call_cls'
-     246 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:222:15: note: expanded from macro '__dynamic_func_call_cls'
-     222 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-fw.c:513:4: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     513 |                 isp_dbg(isp, "freeing iova: 0x%llx size: 0x%llx virt: %pS\n",
-         |                                               ~~~~
-         |                                               %x
-     514 |                         surf->iova, surf->size, (void *)surf->virt);
-         |                         ^~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-drv.h:249:47: note: expanded from macro 'isp_dbg'
-     249 |         dev_dbg((isp)->dev, "[%s] " fmt, __func__, ##__VA_ARGS__)
-         |                                     ~~~              ^~~~~~~~~~~
-   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:272:19: note: expanded from macro 'dynamic_dev_dbg'
-     272 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:59: note: expanded from macro '_dynamic_func_call'
-     248 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:246:65: note: expanded from macro '_dynamic_func_call_cls'
-     246 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:222:15: note: expanded from macro '__dynamic_func_call_cls'
-     222 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-fw.c:580:5: warning: no previous prototype for function 'apple_isp_firmware_boot' [-Wmissing-prototypes]
-     580 | int apple_isp_firmware_boot(struct apple_isp *isp)
-         |     ^
-   drivers/media/platform/apple/isp/isp-fw.c:580:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     580 | int apple_isp_firmware_boot(struct apple_isp *isp)
-         | ^
-         | static 
-   drivers/media/platform/apple/isp/isp-fw.c:601:6: warning: no previous prototype for function 'apple_isp_firmware_shutdown' [-Wmissing-prototypes]
-     601 | void apple_isp_firmware_shutdown(struct apple_isp *isp)
-         |      ^
-   drivers/media/platform/apple/isp/isp-fw.c:601:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     601 | void apple_isp_firmware_shutdown(struct apple_isp *isp)
-         | ^
-         | static 
-   12 warnings generated.
---
-   In file included from drivers/media/platform/apple/isp/isp-iommu.c:4:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/apple/isp/isp-iommu.c:4:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/apple/isp/isp-iommu.c:4:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/media/platform/apple/isp/isp-iommu.c:136:4: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     136 |                 dev_err(isp->dev, "failed to iommu_map sgt to iova 0x%llx\n",
-         |                                                                      ~~~~
-         |                                                                      %x
-     137 |                         surf->iova);
-         |                         ^~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-iommu.c:182:16: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     182 |                         "failed to iommu_map size 0x%llx to iova 0x%llx\n",
-         |                                                                    ~~~~
-         |                                                                    %x
-     183 |                         surf->size, surf->iova);
-         |                                     ^~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-iommu.c:212:4: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     212 |                 dev_err(isp->dev, "failed to vmap iova 0x%llx - 0x%llx\n",
-         |                                                          ~~~~
-         |                                                          %x
-     213 |                         surf->iova, surf->iova + surf->size);
-         |                         ^~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/media/platform/apple/isp/isp-iommu.c:260:4: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     260 |                 dev_err(isp->dev, "failed to iommu_map sgt to iova 0x%llx\n",
-         |                                                                      ~~~~
-         |                                                                      %x
-     261 |                         surf->iova);
-         |                         ^~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   10 warnings generated.
-..
+   clang-16: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
+   In file included from drivers/char/tpm/eventlog/tpm1.c:24:
+>> include/linux/tpm_eventlog.h:165:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+   drivers/char/tpm/eventlog/tpm1.c:253:6: warning: variable 'len' set but not used [-Wunused-but-set-variable]
+           int len = 0;
+               ^
+   2 warnings generated.
 
 
-vim +378 drivers/media/platform/apple/isp/isp-cam.c
+vim +/mapping_size +165 include/linux/tpm_eventlog.h
 
-   361	
-   362	static int isp_ch_load_setfile(struct apple_isp *isp, u32 ch)
-   363	{
-   364		struct isp_format *fmt = isp_get_format(isp, ch);
-   365		const struct isp_setfile *setfile = &isp_setfiles[fmt->id];
-   366		const struct firmware *fw;
-   367		u32 magic;
-   368		int err;
-   369	
-   370		err = request_firmware(&fw, setfile->path, isp->dev);
-   371		if (err) {
-   372			dev_err(isp->dev, "failed to request setfile '%s': %d\n",
-   373				setfile->path, err);
-   374			return err;
-   375		}
-   376	
-   377		if (fw->size < setfile->size) {
- > 378			dev_err(isp->dev, "setfile too small (0x%lx/0x%zx)\n", fw->size,
-   379				setfile->size);
-   380			release_firmware(fw);
-   381			return -EINVAL;
-   382		}
-   383	
-   384		magic = be32_to_cpup((__be32 *)fw->data);
-   385		if (magic != setfile->magic) {
-   386			dev_err(isp->dev, "setfile '%s' corrupted?\n", setfile->path);
-   387			release_firmware(fw);
-   388			return -EINVAL;
-   389		}
-   390	
-   391		isp_iowrite(isp, isp->data_surf->iova, (void *)fw->data, setfile->size);
-   392		release_firmware(fw);
-   393	
-   394		return isp_cmd_ch_set_file_load(isp, ch, isp->data_surf->iova,
-   395						setfile->size);
-   396	}
-   397	
+   138	
+   139	/**
+   140	 * __calc_tpm2_event_size - calculate the size of a TPM2 event log entry
+   141	 * @event:        Pointer to the event whose size should be calculated
+   142	 * @event_header: Pointer to the initial event containing the digest lengths
+   143	 * @do_mapping:   Whether or not the event needs to be mapped
+   144	 *
+   145	 * The TPM2 event log format can contain multiple digests corresponding to
+   146	 * separate PCR banks, and also contains a variable length of the data that
+   147	 * was measured. This requires knowledge of how long each digest type is,
+   148	 * and this information is contained within the first event in the log.
+   149	 *
+   150	 * We calculate the length by examining the number of events, and then looking
+   151	 * at each event in turn to determine how much space is used for events in
+   152	 * total. Once we've done this we know the offset of the data length field,
+   153	 * and can calculate the total size of the event.
+   154	 *
+   155	 * Return: size of the event on success, <0 on failure
+   156	 */
+   157	
+   158	static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+   159						 struct tcg_pcr_event *event_header,
+   160						 bool do_mapping)
+   161	{
+   162		struct tcg_efi_specid_event_head *efispecid;
+   163		struct tcg_event_field *event_field;
+   164		void *mapping = NULL;
+ > 165		int mapping_size;
+   166		void *marker;
+   167		void *marker_start;
+   168		u32 halg_size;
+   169		size_t size;
+   170		u16 halg;
+   171		int i;
+   172		int j;
+   173	
+   174		marker = event;
+   175		marker_start = marker;
+   176		marker = marker + sizeof(event->pcr_idx) + sizeof(event->event_type)
+   177			+ sizeof(event->count);
+   178	
+   179		/* Map the event header */
+   180		if (do_mapping) {
+   181			mapping_size = marker - marker_start;
+   182			mapping = TPM_MEMREMAP((unsigned long)marker_start,
+   183					       mapping_size);
+   184			if (!mapping) {
+   185				size = 0;
+   186				goto out;
+   187			}
+   188		} else {
+   189			mapping = marker_start;
+   190		}
+   191	
+   192		event = (struct tcg_pcr_event2_head *)mapping;
+   193	
+   194		efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
+   195	
+   196		/* Check if event is malformed. */
+   197		if (event->count > efispecid->num_algs) {
+   198			size = 0;
+   199			goto out;
+   200		}
+   201	
+   202		for (i = 0; i < event->count; i++) {
+   203			halg_size = sizeof(event->digests[i].alg_id);
+   204	
+   205			/* Map the digest's algorithm identifier */
+   206			if (do_mapping) {
+   207				TPM_MEMUNMAP(mapping, mapping_size);
+   208				mapping_size = halg_size;
+   209				mapping = TPM_MEMREMAP((unsigned long)marker,
+   210						     mapping_size);
+   211				if (!mapping) {
+   212					size = 0;
+   213					goto out;
+   214				}
+   215			} else {
+   216				mapping = marker;
+   217			}
+   218	
+   219			memcpy(&halg, mapping, halg_size);
+   220			marker = marker + halg_size;
+   221	
+   222			for (j = 0; j < efispecid->num_algs; j++) {
+   223				if (halg == efispecid->digest_sizes[j].alg_id) {
+   224					marker +=
+   225						efispecid->digest_sizes[j].digest_size;
+   226					break;
+   227				}
+   228			}
+   229			/* Algorithm without known length. Such event is unparseable. */
+   230			if (j == efispecid->num_algs) {
+   231				size = 0;
+   232				goto out;
+   233			}
+   234		}
+   235	
+   236		/*
+   237		 * Map the event size - we don't read from the event itself, so
+   238		 * we don't need to map it
+   239		 */
+   240		if (do_mapping) {
+   241			TPM_MEMUNMAP(mapping, mapping_size);
+   242			mapping_size += sizeof(event_field->event_size);
+   243			mapping = TPM_MEMREMAP((unsigned long)marker,
+   244					       mapping_size);
+   245			if (!mapping) {
+   246				size = 0;
+   247				goto out;
+   248			}
+   249		} else {
+   250			mapping = marker;
+   251		}
+   252	
+   253		event_field = (struct tcg_event_field *)mapping;
+   254	
+   255		marker = marker + sizeof(event_field->event_size)
+   256			+ event_field->event_size;
+   257		size = marker - marker_start;
+   258	
+   259		if ((event->event_type == 0) && (event_field->event_size == 0))
+   260			size = 0;
+   261	out:
+   262		if (do_mapping)
+   263			TPM_MEMUNMAP(mapping, mapping_size);
+   264		return size;
+   265	}
+   266	
 
 -- 
 0-DAY CI Kernel Test Service
