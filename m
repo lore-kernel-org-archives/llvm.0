@@ -1,62 +1,46 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FAE111F
-	for <llvm@lists.linux.dev>; Sun, 15 Oct 2023 02:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A67615D4;
+	Sun, 15 Oct 2023 03:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lAiHymfE"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6bd73395bceso168493b3a.0
-        for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 19:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697336998; x=1697941798; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dhN/OgC882rYGvnQvvtSIJopNEt0MUImMTuzjqZB2Xk=;
-        b=lAiHymfE3A8+eE7uNFMCyMxwceDW7dDfyLIBMY4lpqisp58J3tsNwoxWZlO4u3h/4G
-         S1dwjSMQ4hvPOpDC7vAPNA8Cl04JTzn7aWm2TVH/jL3SJ3Ck7yg2frgsU4LJyrL1QtBJ
-         7LRH2OOBZY2oXbfzurppMPGoY3sOy4giD1ZEg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697336998; x=1697941798;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dhN/OgC882rYGvnQvvtSIJopNEt0MUImMTuzjqZB2Xk=;
-        b=NOF+EAKdM48eCSv+wnFLwg5Vso+DSqw3mjEhsleolCBRk3aQbogS180eqZGjBPJIMJ
-         Gnk7xqcjGnyLyYMDs5DT+AZaXqed1mtOGA5AiKNYMT1hStDw6GgI3GesJ8WG5FWb1WHl
-         MakRMPb+7I6glrS/Slpor5MblYZqZuZ4N/dpP4Qe+ZGh7vO7YzqhT1WVKYhKQ6e2Bj65
-         /Mh2jGNopCIbNZBTuj4qIrRfikyzvH/ob6Ltt/PFbD07UBIrQTnuIaxhvXcJVuSEnT//
-         HJwX7F4dE8CVNObOU02zl5ibqiZxr/+pNR0ZbeXiZU1yoWSbwZOe9pvhxnNBWtUSuK7n
-         CwOA==
-X-Gm-Message-State: AOJu0YwBRKxa4uSN596Z2l+QeSAdsXSlWIuOocTPk5Nxwg8sN+c5F2vP
-	V1iiP8ur1kcSdHYNRLSy3Hga9A==
-X-Google-Smtp-Source: AGHT+IHFveeRvUhPLEvQmB6YP6tVaXJOJXks9U+vR3El7JIrG5IcRyQop3DrOWjlCqDIVoZMvrQUcA==
-X-Received: by 2002:a05:6a00:318c:b0:68f:cdb8:ae33 with SMTP id bj12-20020a056a00318c00b0068fcdb8ae33mr5233919pfb.10.1697336998549;
-        Sat, 14 Oct 2023 19:29:58 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t1-20020a63b701000000b005776446f7cbsm4589302pgf.66.2023.10.14.19.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Oct 2023 19:29:57 -0700 (PDT)
-Date: Sat, 14 Oct 2023 19:29:57 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Pravin B Shelar <pshelar@ovn.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-	dev@openvswitch.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] net: openvswitch: Annotate struct mask_array with
- __counted_by
-Message-ID: <202310141928.23985F1CA@keescook>
-References: <e5122b4ff878cbf3ed72653a395ad5c4da04dc1e.1697264974.git.christophe.jaillet@wanadoo.fr>
- <ca5c8049f58bb933f231afd0816e30a5aaa0eddd.1697264974.git.christophe.jaillet@wanadoo.fr>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IgA8g90L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697340930; x=1728876930;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8b09t44QvGcHI0fs/XmChyo1CVEs+5NK0eZdgA5Z3Jk=;
+  b=IgA8g90LxB8/ge835qbBFbIEUDzoVL+FamqPbQo14CDp/MFa8p3avWpm
+   g+2cZmTiQLyiLkmgx1wc9PSSG+nvBA5MiMN77eyMAbT9agV/C4labczQ5
+   1l9OTriZaSCcNt60CoDBV3VkKr049JDQ0Yg3dgYL2gub3YSYK+jNSUBRB
+   yLX5RNPgAbwFJIbU1u0Qe0A8dyGYB00FCpHa+jdPRHRnWstLiihAxPVjD
+   BwxcK39xLFua/GjYw3Iq6WA5ZhNVxe+s0LD/He4FgaDkMkkg6VROPbwJV
+   /Kwn82f128jRDDOKct8NWBkw5k6XpaNoedhCpoKNsVJ9Ck0cGkZgkXkXe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="416426922"
+X-IronPort-AV: E=Sophos;i="6.03,226,1694761200"; 
+   d="scan'208";a="416426922"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2023 20:35:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="821147896"
+X-IronPort-AV: E=Sophos;i="6.03,226,1694761200"; 
+   d="scan'208";a="821147896"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Oct 2023 20:35:27 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qrruX-0006zh-21;
+	Sun, 15 Oct 2023 03:35:25 +0000
+Date: Sun, 15 Oct 2023 11:35:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mark:arm64/insn/rework 28/38] arch/arm64/lib/test_insn.c:2436:6:
+ warning: no previous prototype for function 'test_insn_add_imm'
+Message-ID: <202310151101.ruKVXjfK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,53 +49,209 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ca5c8049f58bb933f231afd0816e30a5aaa0eddd.1697264974.git.christophe.jaillet@wanadoo.fr>
 
-On Sat, Oct 14, 2023 at 08:34:53AM +0200, Christophe JAILLET wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> v2: Fix the subject  [Ilya Maximets]
->     fix the field name used with __counted_by  [Ilya Maximets]
-> 
-> v1: https://lore.kernel.org/all/f66ddcf1ef9328f10292ea75a17b584359b6cde3.1696156198.git.christophe.jaillet@wanadoo.fr/
-> 
-> 
-> This patch is part of a work done in parallel of what is currently worked
-> on by Kees Cook.
-> 
-> My patches are only related to corner cases that do NOT match the
-> semantic of his Coccinelle script[1].
-> 
-> In this case, in tbl_mask_array_alloc(), several things are allocated with
-> a single allocation. Then, some pointer arithmetic computes the address of
-> the memory after the flex-array.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> ---
->  net/openvswitch/flow_table.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/openvswitch/flow_table.h b/net/openvswitch/flow_table.h
-> index 9e659db78c05..f524dc3e4862 100644
-> --- a/net/openvswitch/flow_table.h
-> +++ b/net/openvswitch/flow_table.h
-> @@ -48,7 +48,7 @@ struct mask_array {
->  	int count, max;
->  	struct mask_array_stats __percpu *masks_usage_stats;
->  	u64 *masks_usage_zero_cntr;
-> -	struct sw_flow_mask __rcu *masks[];
-> +	struct sw_flow_mask __rcu *masks[] __counted_by(max);
->  };
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/insn/rework
+head:   37bd99f160dd83ccdfd3f50c685259ae62a81e68
+commit: d2212d582b02f2d0b6aca087a101e7b163eed6fd [28/38] arm64: insn: rework ADD / SUB (immediate)
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231015/202310151101.ruKVXjfK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231015/202310151101.ruKVXjfK-lkp@intel.com/reproduce)
 
-Yup, this looks correct to me. Thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310151101.ruKVXjfK-lkp@intel.com/
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+All warnings (new ones prefixed by >>):
+
+   arch/arm64/lib/test_insn.c:1779:6: warning: no previous prototype for function 'test_insn_ldp_pre' [-Wmissing-prototypes]
+    1779 | void test_insn_ldp_pre(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:1779:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1779 | void test_insn_ldp_pre(struct kunit *test)
+         | ^
+         | static 
+   arch/arm64/lib/test_insn.c:1848:6: warning: no previous prototype for function 'test_insn_stp_pre' [-Wmissing-prototypes]
+    1848 | void test_insn_stp_pre(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:1848:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1848 | void test_insn_stp_pre(struct kunit *test)
+         | ^
+         | static 
+   arch/arm64/lib/test_insn.c:1949:6: warning: no previous prototype for function 'test_insn_ldp_post' [-Wmissing-prototypes]
+    1949 | void test_insn_ldp_post(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:1949:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1949 | void test_insn_ldp_post(struct kunit *test)
+         | ^
+         | static 
+   arch/arm64/lib/test_insn.c:2012:6: warning: no previous prototype for function 'test_insn_stp_post' [-Wmissing-prototypes]
+    2012 | void test_insn_stp_post(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:2012:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2012 | void test_insn_stp_post(struct kunit *test)
+         | ^
+         | static 
+>> arch/arm64/lib/test_insn.c:2436:6: warning: no previous prototype for function 'test_insn_add_imm' [-Wmissing-prototypes]
+    2436 | void test_insn_add_imm(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:2436:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2436 | void test_insn_add_imm(struct kunit *test)
+         | ^
+         | static 
+>> arch/arm64/lib/test_insn.c:2444:6: warning: no previous prototype for function 'test_insn_adds_imm' [-Wmissing-prototypes]
+    2444 | void test_insn_adds_imm(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:2444:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2444 | void test_insn_adds_imm(struct kunit *test)
+         | ^
+         | static 
+>> arch/arm64/lib/test_insn.c:2452:6: warning: no previous prototype for function 'test_insn_sub_imm' [-Wmissing-prototypes]
+    2452 | void test_insn_sub_imm(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:2452:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2452 | void test_insn_sub_imm(struct kunit *test)
+         | ^
+         | static 
+>> arch/arm64/lib/test_insn.c:2460:6: warning: no previous prototype for function 'test_insn_subs_imm' [-Wmissing-prototypes]
+    2460 | void test_insn_subs_imm(struct kunit *test)
+         |      ^
+   arch/arm64/lib/test_insn.c:2460:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2460 | void test_insn_subs_imm(struct kunit *test)
+         | ^
+         | static 
+   arch/arm64/lib/test_insn.c:2260:2: error: instruction requires: lse
+    2260 |         TEST_LSE_LD_CASES(test, ldadd, AARCH64_INSN_MEM_ATOMIC_ADD);
+         |         ^
+   arch/arm64/lib/test_insn.c:2251:2: note: expanded from macro 'TEST_LSE_LD_CASES'
+    2251 |         TEST_LSE_LD_ORDER_CASES(test, insn, x, AARCH64_INSN_SIZE_64, op);               \
+         |         ^
+   arch/arm64/lib/test_insn.c:2232:2: note: expanded from macro 'TEST_LSE_LD_ORDER_CASES'
+    2232 |         TEST_LSE_LD_CASE(test, insn,                                                    \
+         |         ^
+   arch/arm64/lib/test_insn.c:2213:25: note: expanded from macro 'TEST_LSE_LD_CASE'
+    2213 |         u32 obj_insn = ASM_U32(#insn " " #arg_rs ", " #arg_rt ", [" #arg_rn "]");       \
+         |                                ^
+   <scratch space>:29:2: note: expanded from here
+      29 | "ldadd"
+         |  ^
+   <inline asm>:4:1: note: instantiated into assembly here
+       4 | ldadd x0, x1, [x2]
+         | ^
+   arch/arm64/lib/test_insn.c:2260:2: error: instruction requires: lse
+    2260 |         TEST_LSE_LD_CASES(test, ldadd, AARCH64_INSN_MEM_ATOMIC_ADD);
+         |         ^
+   arch/arm64/lib/test_insn.c:2251:2: note: expanded from macro 'TEST_LSE_LD_CASES'
+    2251 |         TEST_LSE_LD_ORDER_CASES(test, insn, x, AARCH64_INSN_SIZE_64, op);               \
+         |         ^
+   arch/arm64/lib/test_insn.c:2236:2: note: expanded from macro 'TEST_LSE_LD_ORDER_CASES'
+    2236 |         TEST_LSE_LD_CASE(test, insn,                                                    \
+         |         ^
+   arch/arm64/lib/test_insn.c:2213:25: note: expanded from macro 'TEST_LSE_LD_CASE'
+    2213 |         u32 obj_insn = ASM_U32(#insn " " #arg_rs ", " #arg_rt ", [" #arg_rn "]");       \
+         |                                ^
+   <scratch space>:101:2: note: expanded from here
+     101 | "ldadda"
+         |  ^
+   <inline asm>:4:1: note: instantiated into assembly here
+       4 | ldadda x3, x4, [x5]
+         | ^
+   arch/arm64/lib/test_insn.c:2260:2: error: instruction requires: lse
+    2260 |         TEST_LSE_LD_CASES(test, ldadd, AARCH64_INSN_MEM_ATOMIC_ADD);
+         |         ^
+   arch/arm64/lib/test_insn.c:2251:2: note: expanded from macro 'TEST_LSE_LD_CASES'
+    2251 |         TEST_LSE_LD_ORDER_CASES(test, insn, x, AARCH64_INSN_SIZE_64, op);               \
+         |         ^
+   arch/arm64/lib/test_insn.c:2240:2: note: expanded from macro 'TEST_LSE_LD_ORDER_CASES'
+    2240 |         TEST_LSE_LD_CASE(test, insn,                                                    \
+         |         ^
+   arch/arm64/lib/test_insn.c:2213:25: note: expanded from macro 'TEST_LSE_LD_CASE'
+    2213 |         u32 obj_insn = ASM_U32(#insn " " #arg_rs ", " #arg_rt ", [" #arg_rn "]");       \
+         |                                ^
+   <scratch space>:173:2: note: expanded from here
+     173 | "ldaddl"
+         |  ^
+   <inline asm>:4:1: note: instantiated into assembly here
+       4 | ldaddl x6, x7, [x8]
+         | ^
+   arch/arm64/lib/test_insn.c:2260:2: error: instruction requires: lse
+    2260 |         TEST_LSE_LD_CASES(test, ldadd, AARCH64_INSN_MEM_ATOMIC_ADD);
+         |         ^
+   arch/arm64/lib/test_insn.c:2251:2: note: expanded from macro 'TEST_LSE_LD_CASES'
+    2251 |         TEST_LSE_LD_ORDER_CASES(test, insn, x, AARCH64_INSN_SIZE_64, op);               \
+         |         ^
+   arch/arm64/lib/test_insn.c:2244:2: note: expanded from macro 'TEST_LSE_LD_ORDER_CASES'
+    2244 |         TEST_LSE_LD_CASE(test, insn,                                                    \
+         |         ^
+   arch/arm64/lib/test_insn.c:2213:25: note: expanded from macro 'TEST_LSE_LD_CASE'
+    2213 |         u32 obj_insn = ASM_U32(#insn " " #arg_rs ", " #arg_rt ", [" #arg_rn "]");       \
+         |                                ^
+   <scratch space>:16:2: note: expanded from here
+      16 | "ldaddal"
+         |  ^
+   <inline asm>:4:1: note: instantiated into assembly here
+       4 | ldaddal x9, x10, [x11]
+         | ^
+   arch/arm64/lib/test_insn.c:2260:2: error: instruction requires: lse
+    2260 |         TEST_LSE_LD_CASES(test, ldadd, AARCH64_INSN_MEM_ATOMIC_ADD);
+         |         ^
+   arch/arm64/lib/test_insn.c:2252:2: note: expanded from macro 'TEST_LSE_LD_CASES'
+    2252 |         TEST_LSE_LD_ORDER_CASES(test, insn, w, AARCH64_INSN_SIZE_32, op);               \
+         |         ^
+   arch/arm64/lib/test_insn.c:2232:2: note: expanded from macro 'TEST_LSE_LD_ORDER_CASES'
+    2232 |         TEST_LSE_LD_CASE(test, insn,                                                    \
+         |         ^
+   arch/arm64/lib/test_insn.c:2213:25: note: expanded from macro 'TEST_LSE_LD_CASE'
+    2213 |         u32 obj_insn = ASM_U32(#insn " " #arg_rs ", " #arg_rt ", [" #arg_rn "]");       \
+         |                                ^
+   <scratch space>:87:2: note: expanded from here
+      87 | "ldadd"
+         |  ^
+   <inline asm>:4:1: note: instantiated into assembly here
+       4 | ldadd w0, w1, [x2]
+         | ^
+   arch/arm64/lib/test_insn.c:2260:2: error: instruction requires: lse
+    2260 |         TEST_LSE_LD_CASES(test, ldadd, AARCH64_INSN_MEM_ATOMIC_ADD);
+         |         ^
+   arch/arm64/lib/test_insn.c:2252:2: note: expanded from macro 'TEST_LSE_LD_CASES'
+
+
+vim +/test_insn_add_imm +2436 arch/arm64/lib/test_insn.c
+
+  2435	
+> 2436	void test_insn_add_imm(struct kunit *test)
+  2437	{
+  2438		TEST_ADSB_IMM_CASES(test,
+  2439				    add,
+  2440				    AARCH64_INSN_VARIANT_64BIT,
+  2441				    AARCH64_INSN_ADSB_ADD);
+  2442	}
+  2443	
+> 2444	void test_insn_adds_imm(struct kunit *test)
+  2445	{
+  2446		TEST_ADSB_IMM_CASES(test,
+  2447				    adds,
+  2448				    AARCH64_INSN_VARIANT_64BIT,
+  2449				    AARCH64_INSN_ADSB_ADD_SETFLAGS);
+  2450	}
+  2451	
+> 2452	void test_insn_sub_imm(struct kunit *test)
+  2453	{
+  2454		TEST_ADSB_IMM_CASES(test,
+  2455				    sub,
+  2456				    AARCH64_INSN_VARIANT_64BIT,
+  2457				    AARCH64_INSN_ADSB_SUB);
+  2458	}
+  2459	
+> 2460	void test_insn_subs_imm(struct kunit *test)
+  2461	{
+  2462		TEST_ADSB_IMM_CASES(test,
+  2463				    subs,
+  2464				    AARCH64_INSN_VARIANT_64BIT,
+  2465				    AARCH64_INSN_ADSB_SUB_SETFLAGS);
+  2466	}
+  2467	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
