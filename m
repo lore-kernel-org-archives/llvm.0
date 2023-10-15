@@ -1,158 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAB57FA
-	for <llvm@lists.linux.dev>; Sun, 15 Oct 2023 00:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FAE111F
+	for <llvm@lists.linux.dev>; Sun, 15 Oct 2023 02:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NoorFeb7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697331082;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=kegjy2ZcFZ6EN786K+CjrcwUpXQn1U4uJU8occuC5zE=;
-	b=NoorFeb73vUS8SPXQ+SPUH9bQCk2iifTEKg8Km59X1uCuxeOADJbRLRoMqm+W0BY4iy8QN
-	luvkcpbVn6ZR7Y6//v+cVsXj6nNXCczkgVcEBfcq5yKECR2mDgMHRHnsPD5DVW4Eq4zQLy
-	a/KkcD7mVUWBnUEPhiu181JLLkYupEE=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-421-aXN_7_EoNkWan0tYFaBlxQ-1; Sat, 14 Oct 2023 20:51:20 -0400
-X-MC-Unique: aXN_7_EoNkWan0tYFaBlxQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 95E5D38107A9
-	for <llvm@lists.linux.dev>; Sun, 15 Oct 2023 00:51:20 +0000 (UTC)
-Received: from [172.64.15.46] (unknown [10.30.32.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 636EC63F46;
-	Sun, 15 Oct 2023 00:51:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 8 of 230): Test report for master
- (6.6.0-rc5, mainline.kernel.org-clang, 70f8c6f8)
-Date: Sun, 15 Oct 2023 00:51:20 -0000
-To: jbastian@redhat.com, llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lAiHymfE"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6bd73395bceso168493b3a.0
+        for <llvm@lists.linux.dev>; Sat, 14 Oct 2023 19:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1697336998; x=1697941798; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dhN/OgC882rYGvnQvvtSIJopNEt0MUImMTuzjqZB2Xk=;
+        b=lAiHymfE3A8+eE7uNFMCyMxwceDW7dDfyLIBMY4lpqisp58J3tsNwoxWZlO4u3h/4G
+         S1dwjSMQ4hvPOpDC7vAPNA8Cl04JTzn7aWm2TVH/jL3SJ3Ck7yg2frgsU4LJyrL1QtBJ
+         7LRH2OOBZY2oXbfzurppMPGoY3sOy4giD1ZEg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697336998; x=1697941798;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dhN/OgC882rYGvnQvvtSIJopNEt0MUImMTuzjqZB2Xk=;
+        b=NOF+EAKdM48eCSv+wnFLwg5Vso+DSqw3mjEhsleolCBRk3aQbogS180eqZGjBPJIMJ
+         Gnk7xqcjGnyLyYMDs5DT+AZaXqed1mtOGA5AiKNYMT1hStDw6GgI3GesJ8WG5FWb1WHl
+         MakRMPb+7I6glrS/Slpor5MblYZqZuZ4N/dpP4Qe+ZGh7vO7YzqhT1WVKYhKQ6e2Bj65
+         /Mh2jGNopCIbNZBTuj4qIrRfikyzvH/ob6Ltt/PFbD07UBIrQTnuIaxhvXcJVuSEnT//
+         HJwX7F4dE8CVNObOU02zl5ibqiZxr/+pNR0ZbeXiZU1yoWSbwZOe9pvhxnNBWtUSuK7n
+         CwOA==
+X-Gm-Message-State: AOJu0YwBRKxa4uSN596Z2l+QeSAdsXSlWIuOocTPk5Nxwg8sN+c5F2vP
+	V1iiP8ur1kcSdHYNRLSy3Hga9A==
+X-Google-Smtp-Source: AGHT+IHFveeRvUhPLEvQmB6YP6tVaXJOJXks9U+vR3El7JIrG5IcRyQop3DrOWjlCqDIVoZMvrQUcA==
+X-Received: by 2002:a05:6a00:318c:b0:68f:cdb8:ae33 with SMTP id bj12-20020a056a00318c00b0068fcdb8ae33mr5233919pfb.10.1697336998549;
+        Sat, 14 Oct 2023 19:29:58 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t1-20020a63b701000000b005776446f7cbsm4589302pgf.66.2023.10.14.19.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Oct 2023 19:29:57 -0700 (PDT)
+Date: Sat, 14 Oct 2023 19:29:57 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Pravin B Shelar <pshelar@ovn.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+	dev@openvswitch.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] net: openvswitch: Annotate struct mask_array with
+ __counted_by
+Message-ID: <202310141928.23985F1CA@keescook>
+References: <e5122b4ff878cbf3ed72653a395ad5c4da04dc1e.1697264974.git.christophe.jaillet@wanadoo.fr>
+ <ca5c8049f58bb933f231afd0816e30a5aaa0eddd.1697264974.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <71068.123101420512000179@us-mta-421.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca5c8049f58bb933f231afd0816e30a5aaa0eddd.1697264974.git.christophe.jaillet@wanadoo.fr>
 
-Hi, we tested your kernel and here are the results:
+On Sat, Oct 14, 2023 at 08:34:53AM +0200, Christophe JAILLET wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> v2: Fix the subject  [Ilya Maximets]
+>     fix the field name used with __counted_by  [Ilya Maximets]
+> 
+> v1: https://lore.kernel.org/all/f66ddcf1ef9328f10292ea75a17b584359b6cde3.1696156198.git.christophe.jaillet@wanadoo.fr/
+> 
+> 
+> This patch is part of a work done in parallel of what is currently worked
+> on by Kees Cook.
+> 
+> My patches are only related to corner cases that do NOT match the
+> semantic of his Coccinelle script[1].
+> 
+> In this case, in tbl_mask_array_alloc(), several things are allocated with
+> a single allocation. Then, some pointer arithmetic computes the address of
+> the memory after the flex-array.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> ---
+>  net/openvswitch/flow_table.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/openvswitch/flow_table.h b/net/openvswitch/flow_table.h
+> index 9e659db78c05..f524dc3e4862 100644
+> --- a/net/openvswitch/flow_table.h
+> +++ b/net/openvswitch/flow_table.h
+> @@ -48,7 +48,7 @@ struct mask_array {
+>  	int count, max;
+>  	struct mask_array_stats __percpu *masks_usage_stats;
+>  	u64 *masks_usage_zero_cntr;
+> -	struct sw_flow_mask __rcu *masks[];
+> +	struct sw_flow_mask __rcu *masks[] __counted_by(max);
+>  };
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Yup, this looks correct to me. Thanks!
 
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Kernel information:
-    Commit message: Merge tag 'xfs-6.6-fixes-5' of git://git.kernel.org/pub=
-/scm/fs/xfs/xfs-linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/109172
-
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         aarch64 - stress: stress-ng - memory
-                   Issue: stress: stress-ng - memory: (panic) Comm: systemd=
--oomd Not tainted 6.1.0-rc3
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1461
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9903709
-
-    Note: Any of these might not be a regression and/or we might have mista=
-kenly thought this issue to be fixed.
-          If it is not a regression, please ask the test maintainer to reop=
-en the issue and untag the regression from this execution.
-
-    Unrecognized or new issues:
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9903761
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
-ile type of kdump kernel
-            URL: https://issues.redhat.com/browse/RHEL-9434
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - sysrq-c
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Kees Cook
