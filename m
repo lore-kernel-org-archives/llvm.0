@@ -1,137 +1,150 @@
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D261FC1
-	for <llvm@lists.linux.dev>; Sun, 15 Oct 2023 07:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B21663B6
+	for <llvm@lists.linux.dev>; Sun, 15 Oct 2023 10:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ZVOR5zlD"
-Received: from [192.168.1.18] ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id rvQlqlOldkfHLrvQlqgQkx; Sun, 15 Oct 2023 09:21:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1697354461;
-	bh=CkMEGgZwHRms+QfdcCyXBzqoAD058xSJsj4PCuedEAQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ZVOR5zlDJkFJ22EOrV+ZfsTbTSzjgzsqCxZxSnUVlguN6lErURSadOdj2w+Mk9uMx
-	 P99tBfga5DvYePOn/p3vjsbXzzwiTwWxDdHHY2SZdDgBVfLhtoJr8FE3oN9qND4K1a
-	 V/mQzgQDkyiPUEMuEJf9b4Zfi8fSx3PIyQbQ0Lj1e30loOmLyyS9k1js+3Zampf6mF
-	 sMCb8DNq+oVm40lKiPE72jZwKBpMKIQdpQOPQLbYgiFWbk770aK9qoXXVcv+X6EVKP
-	 QT51jR2XXBLHV3wfVg4bMLChtItL1pC4otPGwlfDCi3fItU8IqDQ5KcnEM7qZJjjyM
-	 WSgiA063ZpkHw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 15 Oct 2023 09:21:01 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <61b78f8e-98be-4392-9d3b-f1d211adb384@wanadoo.fr>
-Date: Sun, 15 Oct 2023 09:20:54 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pt4vv32D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1697365839;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5oiQK1sfzZ5ULYJ5+oZtj611cFb/HCATyG5qOtojfEE=;
+	b=Pt4vv32Di2ataeCEl2SFOT7Nlnf70fcAOGHDJoE3yd2yygRIdTeactZQ/9777SxEthjGhl
+	sKie7v1FOwYHBXMsT686DR4IqYzi4mkaxFLeHadFZyj1d4n4kAbgIyUbGD1ftwjUbvgCey
+	+gyF2EfQDCx43L7Hk96VPqx7nppMr2Q=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-90-QZmYpphAMwaEknJIfKyLFw-1; Sun, 15 Oct 2023 06:30:27 -0400
+X-MC-Unique: QZmYpphAMwaEknJIfKyLFw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 769D73800E9D
+	for <llvm@lists.linux.dev>; Sun, 15 Oct 2023 10:30:27 +0000 (UTC)
+Received: from [172.64.15.46] (unknown [10.30.32.48])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2E1F51C060AE;
+	Sun, 15 Oct 2023 10:30:27 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 230): Test report for master
+ (6.6.0-rc5, mainline.kernel.org-clang, bf2069d1)
+Date: Sun, 15 Oct 2023 10:30:27 -0000
+To: xzhou@redhat.com, jbastian@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] net: openvswitch: Annotate struct mask_array with
- __counted_by
-To: Julia Lawall <julia.lawall@inria.fr>, Kees Cook <keescook@chromium.org>
-Cc: Pravin B Shelar <pshelar@ovn.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
- netdev@vger.kernel.org, dev@openvswitch.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-References: <e5122b4ff878cbf3ed72653a395ad5c4da04dc1e.1697264974.git.christophe.jaillet@wanadoo.fr>
- <ca5c8049f58bb933f231afd0816e30a5aaa0eddd.1697264974.git.christophe.jaillet@wanadoo.fr>
- <202310141928.23985F1CA@keescook>
- <alpine.DEB.2.22.394.2310150653070.3260@hadrien>
-Content-Language: fr
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <alpine.DEB.2.22.394.2310150653070.3260@hadrien>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <63868.123101506302700311@us-mta-90.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le 15/10/2023 à 06:53, Julia Lawall a écrit :
-> 
-> 
-> On Sat, 14 Oct 2023, Kees Cook wrote:
-> 
->> On Sat, Oct 14, 2023 at 08:34:53AM +0200, Christophe JAILLET wrote:
->>> Prepare for the coming implementation by GCC and Clang of the __counted_by
->>> attribute. Flexible array members annotated with __counted_by can have
->>> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
->>> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
->>> functions).
->>>
->>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->>> ---
->>> v2: Fix the subject  [Ilya Maximets]
->>>      fix the field name used with __counted_by  [Ilya Maximets]
->>>
->>> v1: https://lore.kernel.org/all/f66ddcf1ef9328f10292ea75a17b584359b6cde3.1696156198.git.christophe.jaillet@wanadoo.fr/
->>>
->>>
->>> This patch is part of a work done in parallel of what is currently worked
->>> on by Kees Cook.
->>>
->>> My patches are only related to corner cases that do NOT match the
->>> semantic of his Coccinelle script[1].
-> 
-> What was the problem with the semantic patch in this case?
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-The allocation in tbl_mask_array_alloc() looks like:
-	new = kzalloc(sizeof(struct mask_array) +
-		      sizeof(struct sw_flow_mask *) * size +
-		      sizeof(u64) * size, GFP_KERNEL);
+Kernel information:
+    Commit message: Merge tag '6.6-rc5-smb3-client-fixes' of git://git.samb=
+a.org/sfrench/cifs-2.6
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/109178
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9904796
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9905015
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
-We allocated the struct, the ending flex aray *and* some more memory at 
-the same time.
 
-IIUC the cocci script, this extra space is not taken into account with 
-the current script and it won't match.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-CJ
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-
-> 
-> thanks,
-> julia
-> 
-> 
->>>
->>> In this case, in tbl_mask_array_alloc(), several things are allocated with
->>> a single allocation. Then, some pointer arithmetic computes the address of
->>> the memory after the flex-array.
->>>
->>> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
->>> ---
->>>   net/openvswitch/flow_table.h | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/net/openvswitch/flow_table.h b/net/openvswitch/flow_table.h
->>> index 9e659db78c05..f524dc3e4862 100644
->>> --- a/net/openvswitch/flow_table.h
->>> +++ b/net/openvswitch/flow_table.h
->>> @@ -48,7 +48,7 @@ struct mask_array {
->>>   	int count, max;
->>>   	struct mask_array_stats __percpu *masks_usage_stats;
->>>   	u64 *masks_usage_zero_cntr;
->>> -	struct sw_flow_mask __rcu *masks[];
->>> +	struct sw_flow_mask __rcu *masks[] __counted_by(max);
->>>   };
->>
->> Yup, this looks correct to me. Thanks!
->>
->> Reviewed-by: Kees Cook <keescook@chromium.org>
->>
->> --
->> Kees Cook
->>
-> 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
