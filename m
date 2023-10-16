@@ -1,116 +1,158 @@
-Received: from cmccmta1.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C36620
-	for <llvm@lists.linux.dev>; Mon, 16 Oct 2023 02:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee4652ca502bbb-fe48b;
-	Mon, 16 Oct 2023 10:50:42 +0800 (CST)
-X-RM-TRANSID:2ee4652ca502bbb-fe48b
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[10.54.5.252])
-	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee2652ca500a2c-27a95;
-	Mon, 16 Oct 2023 10:50:41 +0800 (CST)
-X-RM-TRANSID:2ee2652ca500a2c-27a95
-From: zhujun2 <zhujun2@cmss.chinamobile.com>
-To: shuah@kernel.org
-Cc: nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	zhujun2@cmss.chinamobile.com
-Subject: [PATCH] selftests:modify the incorrect print format
-Date: Sun, 15 Oct 2023 19:50:38 -0700
-Message-Id: <20231016025038.1677-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32794620
+	for <llvm@lists.linux.dev>; Mon, 16 Oct 2023 03:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rh0tyzpk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1697425292;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wBerxKD9GTZX7UPsQqdDrXnl6Qo13jUHXZTk3Ab0wi4=;
+	b=Rh0tyzpkRPd9FQGTW5/kUqu7Hwo63QMevXjhUZkUldcP7ShiZU7h610/cPpq2PkKPw05M1
+	MSCKEfjYYx47DG190gBrIcUvrDdPawPGUkj4BA0QtuC/hN/aAmwUfpEgcvZh+9Utk9kwGq
+	lFYGibnDqS5A+vvk613uNp6CPh7YaB0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-691-PbQ8fkrSPPuXjGJTDx8QAQ-1; Sun, 15 Oct 2023 23:01:21 -0400
+X-MC-Unique: PbQ8fkrSPPuXjGJTDx8QAQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5230A805BC3
+	for <llvm@lists.linux.dev>; Mon, 16 Oct 2023 03:01:21 +0000 (UTC)
+Received: from [172.64.15.46] (unknown [10.30.32.48])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 33EDA40C6F79;
+	Mon, 16 Oct 2023 03:01:21 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 8 of 230): Test report for master
+ (6.6.0-rc5, mainline.kernel.org-clang, 11d3f726)
+Date: Mon, 16 Oct 2023 03:01:21 -0000
+To: mhoyer@redhat.com, xzhou@redhat.com, jbastian@redhat.com,
+ llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <10766.123101523012100234@us-mta-691.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-printf %d in format string requires 'int' but the argument type is 'unsigned int'
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
----
- tools/testing/selftests/kselftest.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 529d29a35..bec2fae58 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -129,7 +129,7 @@ static inline void ksft_print_header(void)
- static inline void ksft_set_plan(unsigned int plan)
- {
- 	ksft_plan = plan;
--	printf("1..%d\n", ksft_plan);
-+	printf("1..%u\n", ksft_plan);
- }
- 
- static inline void ksft_print_cnts(void)
-@@ -137,7 +137,7 @@ static inline void ksft_print_cnts(void)
- 	if (ksft_plan != ksft_test_num())
- 		printf("# Planned tests != run tests (%u != %u)\n",
- 			ksft_plan, ksft_test_num());
--	printf("# Totals: pass:%d fail:%d xfail:%d xpass:%d skip:%d error:%d\n",
-+	printf("# Totals: pass:%u fail:%u xfail:%u xpass:%u skip:%u error:%u\n",
- 		ksft_cnt.ksft_pass, ksft_cnt.ksft_fail,
- 		ksft_cnt.ksft_xfail, ksft_cnt.ksft_xpass,
- 		ksft_cnt.ksft_xskip, ksft_cnt.ksft_error);
-@@ -163,7 +163,7 @@ static inline void ksft_test_result_pass(const char *msg, ...)
- 	ksft_cnt.ksft_pass++;
- 
- 	va_start(args, msg);
--	printf("ok %d ", ksft_test_num());
-+	printf("ok %u ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -177,7 +177,7 @@ static inline void ksft_test_result_fail(const char *msg, ...)
- 	ksft_cnt.ksft_fail++;
- 
- 	va_start(args, msg);
--	printf("not ok %d ", ksft_test_num());
-+	printf("not ok %u ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -203,7 +203,7 @@ static inline void ksft_test_result_xfail(const char *msg, ...)
- 	ksft_cnt.ksft_xfail++;
- 
- 	va_start(args, msg);
--	printf("ok %d # XFAIL ", ksft_test_num());
-+	printf("ok %u # XFAIL ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -217,7 +217,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
- 	ksft_cnt.ksft_xskip++;
- 
- 	va_start(args, msg);
--	printf("ok %d # SKIP ", ksft_test_num());
-+	printf("ok %u # SKIP ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -232,7 +232,7 @@ static inline void ksft_test_result_error(const char *msg, ...)
- 	ksft_cnt.ksft_error++;
- 
- 	va_start(args, msg);
--	printf("not ok %d # error ", ksft_test_num());
-+	printf("not ok %u # error ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
--- 
-2.17.1
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+Kernel information:
+    Commit message: Merge tag 'usb-6.6-rc6' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/gregkh/usb
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/109212
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9907132
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 (debug) - Storage - iSCSI parameters
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9907109
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9907118
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL generic/052
+                       =E2=9D=8C FAIL /01_dmesg_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+        Issue: [RHEL9][aarch64] kdump - kexec_load(): can't determine the f=
+ile type of kdump kernel
+            URL: https://issues.redhat.com/browse/RHEL-9434
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - sysrq-c
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
