@@ -1,104 +1,78 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184D930F95;
-	Mon, 16 Oct 2023 17:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD4CC433C8;
-	Mon, 16 Oct 2023 17:54:54 +0000 (UTC)
-Date: Mon, 16 Oct 2023 18:54:52 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>, Will Deacon <will@kernel.org>,
-	Steven Price <steven.price@arm.com>,
-	Peter Collingbourne <pcc@google.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
-Message-ID: <ZS147N1JKyUvaHyJ@arm.com>
-References: <20231005140730.2191134-1-ryan.roberts@arm.com>
- <202310140531.BQQwt3NQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15ED339BE
+	for <llvm@lists.linux.dev>; Mon, 16 Oct 2023 19:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JvfSAVuP"
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-79fab2caf70so31704739f.1
+        for <llvm@lists.linux.dev>; Mon, 16 Oct 2023 12:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1697483815; x=1698088615; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o8eYRGRtH2Fn/z90b+vACllQCdROhKOQRPM4SZCUCIQ=;
+        b=JvfSAVuPaKYIUUWRz8eEt2NS9u2OmnPiUxSO4x4fGJQd6CK/z9azY/yclqME9i9Ay8
+         tomj6aGWuDOfSTDZ+I4flb19xxFMnynMbpS2SwGu+nkKtylDAfZnO9t4IZ3f1Zhonf1e
+         Z8D5ETAnEYA918FysM1jyBdqelIjM5zRBHUto=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697483815; x=1698088615;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8eYRGRtH2Fn/z90b+vACllQCdROhKOQRPM4SZCUCIQ=;
+        b=uYRp/s3l7B3AcEDR4YlMeAdOd7Gmb6GDXruUWCz+38RWZQAsk9waOgrsFN+3chHTVq
+         9jBcoZp5LjftBKGT1r3oPgFcHmxEFbyIxbfjsk67ILG2XpyL20yHJBHr1o+hbyy3Pqe2
+         gXkvxC6NsyzwWkhG8FZEa9krQB0YANjDwKa7xDX1Upw/9IfvErLFrEYPSjjXG8nYtcqS
+         1HTGugTA8mMl9WZO/1UXUtnaxcHn8RLUkA+kTEnnsAg4VMKGA8KJIPjCE+UL+AU/YMGp
+         mQJfM1ZFRR/prFAuG82f4UcFu/jdnGWr5wpOh1RcEP7yNfUrpESXbsKBSLQclw4g0VMu
+         a2tw==
+X-Gm-Message-State: AOJu0YyuCF3oiW8S2EvRTLnDoiApqjW8nMuuCFmQOHRKpjGB6EIt9y7h
+	Rq4fA6lIKGi5PalnHUb4LQN8Fg==
+X-Google-Smtp-Source: AGHT+IFn1ecQPDmAmDXWidaDLU/nr0Tzhtrs0dUVOUBVzpssFg4fsI+vtOqUvgh1sUS+F79tV8d5lg==
+X-Received: by 2002:a05:6602:35a:b0:792:7c78:55be with SMTP id w26-20020a056602035a00b007927c7855bemr190345iou.0.1697483814866;
+        Mon, 16 Oct 2023 12:16:54 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g21-20020a02cd15000000b00458e239fa31sm1109479jaq.55.2023.10.16.12.16.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 12:16:54 -0700 (PDT)
+Message-ID: <148d2485-798a-4258-bfa2-870b7b6b95a3@linuxfoundation.org>
+Date: Mon, 16 Oct 2023 13:16:53 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202310140531.BQQwt3NQ-lkp@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests:modify the incorrect print format
+Content-Language: en-US
+To: zhujun2 <zhujun2@cmss.chinamobile.com>, shuah@kernel.org
+Cc: nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+References: <20231016025038.1677-1-zhujun2@cmss.chinamobile.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20231016025038.1677-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 14, 2023 at 05:15:51AM +0800, kernel test robot wrote:
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on arm64/for-next/core]
-> [also build test WARNING on arm-perf/for-next/perf arm/for-next kvmarm/next soc/for-next linus/master v6.6-rc5 next-20231013]
-> [cannot apply to arm/fixes]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-mm-Hoist-synchronization-out-of-set_ptes-loop/20231005-231636
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-> patch link:    https://lore.kernel.org/r/20231005140730.2191134-1-ryan.roberts%40arm.com
-> patch subject: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
-> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202310140531.BQQwt3NQ-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from net/ipv4/route.c:66:
->    In file included from include/linux/mm.h:29:
->    In file included from include/linux/pgtable.h:6:
-> >> arch/arm64/include/asm/pgtable.h:344:65: warning: parameter 'addr' set but not used [-Wunused-but-set-parameter]
->      344 | static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
->          |                                                                 ^
->    1 warning generated.
+On 10/15/23 20:50, zhujun2 wrote:
+> printf %d in format string requires 'int' but the argument type is 'unsigned int'
 
-Thanks for the report. I think something like below will do (I'll test
-and commit as a separate patch, it's not something that Ryan's patch
-introduces):
+This line to long. Character limit is < 75/line.
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 68984ba9ce2a..b19a8aee684c 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -341,8 +341,9 @@ static inline void __sync_cache_and_tags(pte_t pte, unsigned int nr_pages)
- 		mte_sync_tags(pte, nr_pages);
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--			      pte_t *ptep, pte_t pte, unsigned int nr)
-+static inline void set_ptes(struct mm_struct *mm,
-+			    unsigned long __always_unused addr,
-+			    pte_t *ptep, pte_t pte, unsigned int nr)
- {
- 	page_table_check_ptes_set(mm, ptep, pte, nr);
- 	__sync_cache_and_tags(pte, nr);
-@@ -353,7 +354,6 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 		if (--nr == 0)
- 			break;
- 		ptep++;
--		addr += PAGE_SIZE;
- 		pte_val(pte) += PAGE_SIZE;
- 	}
- }
-@@ -528,7 +528,8 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
- #define pud_pfn(pud)		((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
- #define pfn_pud(pfn,prot)	__pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
- 
--static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
-+static inline void __set_pte_at(struct mm_struct *mm,
-+				unsigned long __always_unused addr,
- 				pte_t *ptep, pte_t pte, unsigned int nr)
- {
- 	__sync_cache_and_tags(pte, nr);
+How did you find this problem? Please add the details to
+the commit log.
 
--- 
-Catalin
+
+> 
+> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+> ---
+
+thanks,
+-- Shuah
+
