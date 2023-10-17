@@ -1,119 +1,150 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457C74404;
-	Tue, 17 Oct 2023 07:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DEC52F4;
-	Tue, 17 Oct 2023 00:37:26 -0700 (PDT)
-Received: from [10.57.66.147] (unknown [10.57.66.147])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA2463F5A1;
-	Tue, 17 Oct 2023 00:36:44 -0700 (PDT)
-Message-ID: <b463b420-c2be-49c5-bed6-0ff896851adb@arm.com>
-Date: Tue, 17 Oct 2023 08:36:43 +0100
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C19C15F;
+	Tue, 17 Oct 2023 09:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iU/y67hJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697533551; x=1729069551;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=452qn26qIg++kDc9+o5iVjKdIN5ZR9oFy25uoF7nnqw=;
+  b=iU/y67hJFjUUP5EHlpoAWuXhmkEpmGDZ8hotTkD+xwZIiIAxzEIlipsP
+   lCAwROcFBXMD663Iq08WCnksKrQu0lxbvFDAJFxbt6JpVaz7/28wvb8jY
+   glSJx9pJNFDfpraz4gUN4b9DMdlvS2CPg7JsAnDX1hnEBj0jGshBz6wE9
+   wIYORSej+RKMdurHKMDKkvadXfJYXxzJNnopRWKM6xTCtoBHmQCtE+3Lj
+   yo/27992LySU0jFf7c1UjeIp/iUeX7BnuM8ODEGQm/rmKrzcXZ/BZZN49
+   KvD4WGrQpj5v1pyr2sbspd7jTC/eTX1nHq5EHq7kiAZBz48pqZzeRrMIh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="370806841"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="370806841"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 02:05:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="821898276"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="821898276"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Oct 2023 02:05:47 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qsg1I-0009Nr-1N;
+	Tue, 17 Oct 2023 09:05:44 +0000
+Date: Tue, 17 Oct 2023 17:05:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Subject: [linux-next:master 12600/13086] security/landlock/net.h:28:1: error:
+ expected identifier or '('
+Message-ID: <202310171612.nWyFirmz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
-Content-Language: en-GB
-To: Catalin Marinas <catalin.marinas@arm.com>,
- kernel test robot <lkp@intel.com>
-Cc: Will Deacon <will@kernel.org>, Steven Price <steven.price@arm.com>,
- Peter Collingbourne <pcc@google.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20231005140730.2191134-1-ryan.roberts@arm.com>
- <202310140531.BQQwt3NQ-lkp@intel.com> <ZS147N1JKyUvaHyJ@arm.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <ZS147N1JKyUvaHyJ@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 16/10/2023 18:54, Catalin Marinas wrote:
-> On Sat, Oct 14, 2023 at 05:15:51AM +0800, kernel test robot wrote:
->> kernel test robot noticed the following build warnings:
->>
->> [auto build test WARNING on arm64/for-next/core]
->> [also build test WARNING on arm-perf/for-next/perf arm/for-next kvmarm/next soc/for-next linus/master v6.6-rc5 next-20231013]
->> [cannot apply to arm/fixes]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-mm-Hoist-synchronization-out-of-set_ptes-loop/20231005-231636
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
->> patch link:    https://lore.kernel.org/r/20231005140730.2191134-1-ryan.roberts%40arm.com
->> patch subject: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
->> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/config)
->> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202310140531.BQQwt3NQ-lkp@intel.com/
->>
->> All warnings (new ones prefixed by >>):
->>
->>    In file included from net/ipv4/route.c:66:
->>    In file included from include/linux/mm.h:29:
->>    In file included from include/linux/pgtable.h:6:
->>>> arch/arm64/include/asm/pgtable.h:344:65: warning: parameter 'addr' set but not used [-Wunused-but-set-parameter]
->>      344 | static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
->>          |                                                                 ^
->>    1 warning generated.
-> 
-> Thanks for the report. I think something like below will do (I'll test
-> and commit as a separate patch, it's not something that Ryan's patch
-> introduces):
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   4d5ab2376ec576af173e5eac3887ed0b51bd8566
+commit: 614d46b333ab905ca99acf076e4abdc84afd3da7 [12600/13086] landlock: Add network rules and TCP hooks support
+config: hexagon-buildonly-randconfig-r005-20211202 (https://download.01.org/0day-ci/archive/20231017/202310171612.nWyFirmz-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231017/202310171612.nWyFirmz-lkp@intel.com/reproduce)
 
-I was actually just trying to repro this and was planning to send out a v3 of my
-patch. But if you are happy to handle it as you suggest, then I guess you don't
-need anything further from me?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310171612.nWyFirmz-lkp@intel.com/
 
-Thanks,
-Ryan
+All errors (new ones prefixed by >>):
+
+   In file included from security/landlock/setup.c:17:
+>> security/landlock/net.h:28:1: error: expected identifier or '('
+   {
+   ^
+   1 error generated.
+--
+   In file included from security/landlock/syscalls.c:24:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from security/landlock/syscalls.c:24:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from security/landlock/syscalls.c:24:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   In file included from security/landlock/syscalls.c:32:
+>> security/landlock/net.h:28:1: error: expected identifier or '('
+   {
+   ^
+   6 warnings and 1 error generated.
 
 
-> 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 68984ba9ce2a..b19a8aee684c 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -341,8 +341,9 @@ static inline void __sync_cache_and_tags(pte_t pte, unsigned int nr_pages)
->  		mte_sync_tags(pte, nr_pages);
->  }
->  
-> -static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t pte, unsigned int nr)
-> +static inline void set_ptes(struct mm_struct *mm,
-> +			    unsigned long __always_unused addr,
-> +			    pte_t *ptep, pte_t pte, unsigned int nr)
->  {
->  	page_table_check_ptes_set(mm, ptep, pte, nr);
->  	__sync_cache_and_tags(pte, nr);
-> @@ -353,7 +354,6 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
->  		if (--nr == 0)
->  			break;
->  		ptep++;
-> -		addr += PAGE_SIZE;
->  		pte_val(pte) += PAGE_SIZE;
->  	}
->  }
-> @@ -528,7 +528,8 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
->  #define pud_pfn(pud)		((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
->  #define pfn_pud(pfn,prot)	__pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
->  
-> -static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
-> +static inline void __set_pte_at(struct mm_struct *mm,
-> +				unsigned long __always_unused addr,
->  				pte_t *ptep, pte_t pte, unsigned int nr)
->  {
->  	__sync_cache_and_tags(pte, nr);
-> 
+vim +28 security/landlock/net.h
 
+    24	
+    25	static inline int
+    26	landlock_append_net_rule(struct landlock_ruleset *const ruleset, const u16 port,
+    27				 access_mask_t access_rights);
+  > 28	{
+    29		return -EAFNOSUPPORT;
+    30	}
+    31	#endif /* IS_ENABLED(CONFIG_INET) */
+    32	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
