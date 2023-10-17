@@ -1,154 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2528188;
-	Tue, 17 Oct 2023 00:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9A115CC;
+	Tue, 17 Oct 2023 01:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NalP6nNC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697501768; x=1729037768;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L0ARAMviEoscBZLUZvYoBR/8PaPFjPFOsRoLfbc0sxo=;
-  b=NalP6nNCHkIhXlXgjZrdHyRyq3AjgJ7PEwrXQjzIWXYtdCcM3Rg2tIUj
-   d87sgM64pQVkPEon1OZhx0nmKDwscPv4/NLeHPyDhsOFit71DSoBgMXBw
-   hPKj/4fhU2en4hFvD8fqcpGHcX/WjM9i9PnQqWfNHtoEKoWivN9Efpx1z
-   Pi/rz8CTW5z7VkkJ1X6QVA/OsWmETZPsAefNpz6+ZLyXFHGHy9hRwa0Ey
-   nu7tG1HAlHD1r6RyH+b+VmpO6rb2pGVYKZFIVoxWLQmt0SwA4QXuLT+6G
-   8BskAtwYtRwknADInz+KjtaoqBX9JeS7jvv5w3PFlKwcWuSrDmi9MHtcV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="384540714"
-X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
-   d="scan'208";a="384540714"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 17:16:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="785284227"
-X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
-   d="scan'208";a="785284227"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 Oct 2023 17:16:05 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qsXkg-0008m3-2H;
-	Tue, 17 Oct 2023 00:16:02 +0000
-Date: Tue, 17 Oct 2023 08:15:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 11471/12451]
- drivers/net/mdio/mdio-xgene.c:303:34: warning: unused variable
- 'xgene_mdio_of_match'
-Message-ID: <202310170832.xnVXw1bb-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ccZ8tDzU"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39GKOApQ013037;
+	Tue, 17 Oct 2023 01:12:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=Xs+QD230V90/UG6DoR1nbW1dfXhgdVRcogMOWpKkp+E=;
+ b=ccZ8tDzU22fJjPK4Tj33ctkm3A+wyHBe7iX0r0h1zIxaNZ9zcSPiMpajeUrI78L7XhbK
+ s5ox8sf0HGAuYLOEai3Dks60Jlqvu4S35Q9W//bQZfTls2v/DHmRssWSD8gYk38ODwxu
+ ryXkUn/sGkNGacveZavUOfDEx8mD43d3gj7D8GJdQlSkolEQfX0t5/Qo9pHzTIdnVJhm
+ 1XDUmlpXjJjXvS8dZQ/GVL8pwqTSWApqGbV68DQlyB3mtAKOvSAOB86IwYiVuAyzDQNZ
+ Znb3wolZob4aLTfGKNmH7uTX7P7g9muT301yltCWzMhjiMuTgaQ0waNLNb1TPJKXBTvY sA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tqk3jm253-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Oct 2023 01:12:12 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39GN0GAp027087;
+	Tue, 17 Oct 2023 01:12:11 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3trg5366rm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Oct 2023 01:12:11 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39H1C3su039761;
+	Tue, 17 Oct 2023 01:12:10 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3trg5366mf-8;
+	Tue, 17 Oct 2023 01:12:10 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: tyreld@linux.ibm.com, Nathan Chancellor <nathan@kernel.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jejb@linux.ibm.com,
+        ndesaulniers@google.com, trix@redhat.com, brking@linux.vnet.ibm.com,
+        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] scsi: ibmvfc: Use 'unsigned int' for single-bit bitfields in 'struct ibmvfc_host'
+Date: Mon, 16 Oct 2023 21:11:55 -0400
+Message-Id: <169750286917.2183937.1857222190314885925.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20231010-ibmvfc-fix-bitfields-type-v1-1-37e95b5a60e5@kernel.org>
+References: <20231010-ibmvfc-fix-bitfields-type-v1-1-37e95b5a60e5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-16_13,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 suspectscore=0 mlxlogscore=858 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310170008
+X-Proofpoint-GUID: NfheMxzNAJGvnXMTzl5tZqtIkAH1iC5e
+X-Proofpoint-ORIG-GUID: NfheMxzNAJGvnXMTzl5tZqtIkAH1iC5e
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4d0515b235dec789578d135a5db586b25c5870cb
-commit: a243ecc323b99f1042262319c1d77f1c52f0e307 [11471/12451] net: mdio: xgene: Use device_get_match_data()
-config: hexagon-randconfig-r005-20221019 (https://download.01.org/0day-ci/archive/20231017/202310170832.xnVXw1bb-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231017/202310170832.xnVXw1bb-lkp@intel.com/reproduce)
+On Tue, 10 Oct 2023 13:32:37 -0700, Nathan Chancellor wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310170832.xnVXw1bb-lkp@intel.com/
+> Clang warns (or errors with CONFIG_WERROR=y) several times along the
+> lines of:
+> 
+>   drivers/scsi/ibmvscsi/ibmvfc.c:650:17: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+>     650 |                 vhost->reinit = 1;
+>         |                               ^ ~
+> 
+> [...]
 
-All warnings (new ones prefixed by >>):
+Applied to 6.7/scsi-queue, thanks!
 
-   In file included from drivers/net/mdio/mdio-xgene.c:11:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/net/mdio/mdio-xgene.c:11:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/net/mdio/mdio-xgene.c:11:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/net/mdio/mdio-xgene.c:303:34: warning: unused variable 'xgene_mdio_of_match' [-Wunused-const-variable]
-   static const struct of_device_id xgene_mdio_of_match[] = {
-                                    ^
-   7 warnings generated.
-
-
-vim +/xgene_mdio_of_match +303 drivers/net/mdio/mdio-xgene.c
-
-43b3cf6634a4ae drivers/net/phy/mdio-xgene.c Iyappan Subramanian 2016-07-25  302  
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01 @303  static const struct of_device_id xgene_mdio_of_match[] = {
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  304  	{
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  305  		.compatible = "apm,xgene-mdio-rgmii",
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  306  		.data = (void *)XGENE_MDIO_RGMII
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  307  	},
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  308  	{
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  309  		.compatible = "apm,xgene-mdio-xfi",
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  310  		.data = (void *)XGENE_MDIO_XFI
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  311  	},
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  312  	{},
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  313  };
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  314  MODULE_DEVICE_TABLE(of, xgene_mdio_of_match);
-1f3d62090d3ba4 drivers/net/phy/mdio-xgene.c Arnd Bergmann       2017-02-01  315  
-
-:::::: The code at line 303 was first introduced by commit
-:::::: 1f3d62090d3ba4d0c14e5271be87812fc577b197 xgene_enet: remove bogus forward declarations
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: David S. Miller <davem@davemloft.net>
+[1/1] scsi: ibmvfc: Use 'unsigned int' for single-bit bitfields in 'struct ibmvfc_host'
+      https://git.kernel.org/mkp/scsi/c/78882c7657bb
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Martin K. Petersen	Oracle Linux Engineering
