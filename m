@@ -1,93 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF3C43AB3
-	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 15:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BF04448F
+	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 15:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOjHqgEI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EBDC433C8;
-	Tue, 17 Oct 2023 15:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697556744;
-	bh=gEjMKkoJZQgKHA815iyJtPqk+ih8igqa9RyW+EN97CE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gOjHqgEIBPUKbXerOqT4j3GgldYb+fLWbr/jxY2/CGAsZVBJellxxATXsMp0TLFOr
-	 v7DueZntYAQQdRmuDg05xw+zEcIsGnVfL0t2k9RoZV3rPTiWvf3rrOcDWN+Dq5ZN2w
-	 hTlffSw8MCOHdD8iLUJgRSW/Kb31gGwK9w3+yZRgwNwGQ7zBjZSYadSVHWzIWZZxGF
-	 3P+63BnLCNyqHko13Pdsinh1akIWIeLqUrLNmTnfCr+ue/8bZ+bESAkhdln+oJOEVD
-	 M1nAXIw6WEqP0qBhZnp/fSh0RfvyhG+iZxLEsE8lipGQPYpEJ9WjeFPwkRAKGkqbQG
-	 wprIGMwCwOz1g==
-Date: Tue, 17 Oct 2023 08:32:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: "Kaplan, David" <David.Kaplan@amd.com>, Borislav Petkov <bp@alien8.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-tip-commits@vger.kernel.org" <linux-tip-commits@vger.kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [tip: x86/bugs] x86/retpoline: Ensure default return thunk isn't
- used at runtime
-Message-ID: <20231017153222.GA707258@dev-arch.thelio-3990X>
-References: <20231012141031.GHZSf+V1NjjUJTc9a9@fat_crate.local>
- <169713303534.3135.10558074245117750218.tip-bot2@tip-bot2>
- <20231016211040.GA3789555@dev-arch.thelio-3990X>
- <20231016212944.GGZS2rSCbIsViqZBDe@fat_crate.local>
- <20231016214810.GA3942238@dev-arch.thelio-3990X>
- <SN6PR12MB270273A7D1AF5D59B920C94194D6A@SN6PR12MB2702.namprd12.prod.outlook.com>
- <20231017052834.v53regh66hspv45n@treble>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qe2xT+ea"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7a66555061eso4485539f.0
+        for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 08:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1697558070; x=1698162870; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S4G1qT6aCa9jONcb1w7B7j7yaP96Lr1tt891SPK3dpg=;
+        b=Qe2xT+eaev+BNLXAA5x138aEhfjYD0C3wSR2q8sNoRvZCzOqP626NSd+zItVILliG4
+         rGr60W07rxAEk97J4B+4qAX7sxbVNE7VRX6HdxHfURbr3ui6ODAjZjpecj9F9lhf+4PT
+         3dCXLiA6vq46aVSXz/mADNFjWhKizAKJDSMys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697558070; x=1698162870;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S4G1qT6aCa9jONcb1w7B7j7yaP96Lr1tt891SPK3dpg=;
+        b=mVtLYlXbzykwYTrxNM9FIPXN5BQJKNDF7ru25eTFCNrFEyybIUIHQjxfDKF9RMuwyQ
+         5o0KdRrE68+ON+CoUlAvoMoA4/qbVKdBblmeCEYuBPmcq2vYuYZ5ozwxuFZNogQ1zB6f
+         ug3If9ebBd8tNzaFz2mHFKPVIP9d7/a7S6hLnVPN6qZpl/j53H14E14GdPXyofg/AZa0
+         FM+YVAvYqfrGSv+ap6BllN4DXxe66uUakQPBKpMzQxyU01JAC7V1RIbcdS65sXV1TAIK
+         B12ULqRJ5mMcNk1idhyXcB5TTux8K8+ZInqpRdOcvvGfJA/a8RjZvKBV+YGscQTQKBrk
+         g7YQ==
+X-Gm-Message-State: AOJu0YyF2FInaVgQcSz/ulrsX363f2dSzr6Dhqd6CBZrU9yWqrjARnYu
+	PVfZkT9YiUWLcIKF3+RAcWLP7g==
+X-Google-Smtp-Source: AGHT+IE1gm5UPb4UgknT2djO05i1WKcZkMahvgNJZx0obMBFURyRnux/GWy/wHUc51MJlLYA/ThrrQ==
+X-Received: by 2002:a05:6602:1513:b0:79f:a8c2:290d with SMTP id g19-20020a056602151300b0079fa8c2290dmr3370902iow.0.1697558070367;
+        Tue, 17 Oct 2023 08:54:30 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id fj1-20020a056638634100b0042b4f9ddecasm597648jab.85.2023.10.17.08.54.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Oct 2023 08:54:30 -0700 (PDT)
+Message-ID: <f1857ee6-1569-4a85-ba51-94c3d841cb61@linuxfoundation.org>
+Date: Tue, 17 Oct 2023 09:54:29 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231017052834.v53regh66hspv45n@treble>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests:modify the incorrect print format
+Content-Language: en-US
+To: zhujun2 <zhujun2@cmss.chinamobile.com>, shuah@kernel.org
+Cc: nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+References: <20231017020856.7003-1-zhujun2@cmss.chinamobile.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20231017020856.7003-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 16, 2023 at 10:28:34PM -0700, Josh Poimboeuf wrote:
-> On Tue, Oct 17, 2023 at 04:31:09AM +0000, Kaplan, David wrote:
-> > I think I found the problem, although I'm not sure the best way to fix it.
-> > 
-> > When KCSAN is enabled, GCC generates lots of constructor functions named _sub_I_00099_0 which call __tsan_init and then return.  The returns in these are generally annotated normally by objtool and fixed up at runtime.  But objtool runs on vmlinux.o and vmlinux.o does not include a couple of object files that are in vmlinux, like init/version-timestamp.o and .vmlinux.export.o, both of which contain _sub_I_00099_0 functions.  As a result, the returns in these functions are not annotated, and the panic occurs when we call one of them in do_ctors and it uses the default return thunk.
-> > 
-> > This difference can be seen by counting the number of these functions in the object files:
-> > $ objdump -d vmlinux.o|grep -c "<_sub_I_00099_0>:"
-> > 2601
-> > $ objdump -d vmlinux|grep -c "<_sub_I_00099_0>:"
-> > 2603
-> > 
-> > If these functions are only run during kernel boot, there is no speculation concern.  My first thought is that these two object files perhaps should be built without -mfunction-return=thunk-extern.  The use of that flag requires objtool to have the intended behavior and objtool isn't seeing these files.
-> > 
-> > Perhaps another option would be to not compile these two files with KCSAN, as they are already excluded from KASAN and GCOV it looks like.
+On 10/16/23 20:08, zhujun2 wrote:
+> when the argument type is 'unsigned int',printf '%u'
+> in format string
 > 
-> I think the latter would be the easy fix, does this make it go away?
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Please add how you found the problem to the commit log.
 
-Thanks for figuring this out!
+> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
 
-> diff --git a/init/Makefile b/init/Makefile
-> index ec557ada3c12..cbac576c57d6 100644
-> --- a/init/Makefile
-> +++ b/init/Makefile
-> @@ -60,4 +60,5 @@ include/generated/utsversion.h: FORCE
->  $(obj)/version-timestamp.o: include/generated/utsversion.h
->  CFLAGS_version-timestamp.o := -include include/generated/utsversion.h
->  KASAN_SANITIZE_version-timestamp.o := n
-> +KCSAN_SANITIZE_version-timestamp.o := n
->  GCOV_PROFILE_version-timestamp.o := n
-> diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> index 3cd6ca15f390..c9f3e03124d7 100644
-> --- a/scripts/Makefile.vmlinux
-> +++ b/scripts/Makefile.vmlinux
-> @@ -19,6 +19,7 @@ quiet_cmd_cc_o_c = CC      $@
->  
->  ifdef CONFIG_MODULES
->  KASAN_SANITIZE_.vmlinux.export.o := n
-> +KCSAN_SANITIZE_.vmlinux.export.o := n
->  GCOV_PROFILE_.vmlinux.export.o := n
->  targets += .vmlinux.export.o
->  vmlinux: .vmlinux.export.o
+thanks,
+-- Shuah
+
