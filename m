@@ -1,144 +1,186 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DFF1F606
-	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 21:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFBC430E8;
+	Tue, 17 Oct 2023 22:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BxoUTvhN"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-507ad511315so3779701e87.0
-        for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 14:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697577646; x=1698182446; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YLqkTI6vR2tWYnFN+W6Diu3XdGs+XBePZt+SQIcTiUA=;
-        b=BxoUTvhNieKnZPWscessTC4DdHLGYx5AHtdSRnRYTranKDM9koHns/YrtTV524qOkR
-         GUeN1z9CIUBnm4LRd9hvRyugKcwFxNSrwiMFxwX7X6tNqcnDaX4D7pL4BLcaqctyNdgL
-         jqeOn2uEVgyu7Kf+tW3ms2/GyYM/FSn3Sa+ohDKmZ7gcr9zSdArjXLINvTreNBs2y1gz
-         kVsaTV4UrFlnnu7u/ETiY7qQGGQCETieu2oJ3Wz+r1DN/oDLlgdbT6N78psYL+ciFRkF
-         g6gXG2EwKstLYciPJrmhaT4pMaYbW1Jdx0L9533LByE5UiH8iISdeV+Ue9A9QLME3A4p
-         EHcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697577646; x=1698182446;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YLqkTI6vR2tWYnFN+W6Diu3XdGs+XBePZt+SQIcTiUA=;
-        b=OteRXP12lMH/MSKJSsufiR6JU3C24uYvA/cTf0YRbu3hlKnswXYFlNC2viS7sth+WW
-         MPHXvj2kCT0JMRksLhOpNVEhur63VPkbAw6WWs+Dxt+alo72FuyG9jFlvreXRiAfEWt4
-         okSfG50qyyNq2Kc7Yxt8dhJwBxx1lV3+0HgbCQ1LcadDaiZrbv62G2ceBNLmh4tPSPMy
-         duI7cQc6pgQlk9rcE3aJS8pG+g3m5dM/YcEtDngMBNNpP82+kb/T8TA705j/j4IDNASH
-         z+Ilh5KcvoDnzEA9iQwL2duaSmRlcO7opHIbCE/SDI4cSJtYtlXQBTV+t2928R5UOMTW
-         AKbQ==
-X-Gm-Message-State: AOJu0YxX7ulZL/YPr9fMHIQ6xmFbxiFOuwX3PiOXHBAVnCOLdSg+X5Vd
-	SnXQ9pIerrfJ1ZSxdNjm8gZIbxJUHiBOjw1qx/c=
-X-Google-Smtp-Source: AGHT+IEX66yGLsUmWpfPuM7qG4EZifdUZj5cmuIWShTCT3XjtT7PriVg4+B3fJa3odYHvc+U59+Pwg==
-X-Received: by 2002:a19:9153:0:b0:507:a8d1:6e57 with SMTP id y19-20020a199153000000b00507a8d16e57mr2270797lfj.40.1697577646432;
-        Tue, 17 Oct 2023 14:20:46 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id eo9-20020a056402530900b0053defc8c15asm1769060edb.51.2023.10.17.14.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Oct 2023 14:20:46 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Tue, 17 Oct 2023 21:20:45 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <771768025.42201.1697577646021@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.6-rc1-17-ge0750d947352: Failure on arm
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OvBREbvq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FDADC433C8;
+	Tue, 17 Oct 2023 22:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697581272;
+	bh=+fbBrH01A4z4Q/htd056bjoXXyg9yXR/YaOstQWBWjo=;
+	h=From:Date:Subject:To:Cc:From;
+	b=OvBREbvqWTLv87kM888ykcgWoXc/bBm5U4bLkAjHRzzwu0HCu+yxsPwzccwmB/70p
+	 /Crbggvcqv2MNC11GNGP8LUcppIg/pWJ3+jUSFEQTQdeU7Fz6MZimO9a4C2LIDE9YY
+	 SPShs0mx1Ksi1I37QH+zjzQSK4bRWcYFch9Pn65O6xI+flH0JOTaV5MbboXA5HMXQ3
+	 QxfH1TrbHJzqygTwWF5/YvV/tHijlMW6cPJpHYkjWjKz9q3uveFDuU/R90xVElhOK9
+	 PRmBru7IlVMPd+RFv6W8eZMgoYSIVP+nVkOsBTDcJ/17jnCCaUupUnhiNzshWcbW2r
+	 3hsJqF+ywwmHA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 17 Oct 2023 15:21:04 -0700
+Subject: [PATCH v4] RISC-V: build: Allow LTO to be selected
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_42200_2085860166.1697577645493"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allmodconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
-
-------=_Part_42200_2085860166.1697577645493
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20231017-riscv-lto-v4-1-e7810b24e805@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAM8IL2UC/22OywqDMBREf6Vk3YQ8TBu78j+KixivGqqm3ATbI
+ v57o9BdNwMHZg6zkgjoIZLbaSUIi48+zBmK84m4wc49UN9mJpJLJThXFH10Cx1ToB0XqgFojTZ
+ XkvtPhM6/D9e9ztxhmGgaEOzPILkWe+hCs7KU0hgqaHq1kk1Q9ZP1I3Nh2l2Djyng57i1qN347
+ 8Gi8t5YZy/CFuCaonoAzjCygD2pt237Ak0WjA7fAAAA
+To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+ conor@kernel.org
+Cc: ndesaulniers@google.com, trix@redhat.com, samitolvanen@google.com, 
+ twd2.me@gmail.com, linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5712; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=6DF5TQYgQXh8UF8vonZlb3mmg4CViQmZyu8y06LElhY=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKn6HNf37nkcbPZf507Cd7mjsxrsJKLl1Qt5zdyYHuRNK
+ XjP+XBNRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhIzwKG/3FG5ZyLM2L/e5Vf
+ ftY1XYNPi+nVI7W9dx8ubAzk7D5xdR8jw1PZVUuXfKrc4Hb0zZ2saONvEdzJ0xd5GoRb3py64ND
+ 63YwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+From: Wende Tan <twd2.me@gmail.com>
 
-In CI config tcwg_kernel/llvm-master-arm-next-allmodconfig after:
+Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is
+an issue [1] in prior LLD versions that prevents LLD to generate proper
+machine code for RISC-V when writing `nop`s.
 
-  | commit v6.6-rc1-17-ge0750d947352
-  | Author: Kent Overstreet <kent.overstreet@gmail.com>
-  | Date:   Thu Mar 16 22:18:50 2017 -0800
-  | 
-  |     bcachefs: Initial commit
-  |     
-  |     Initially forked from drivers/md/bcache, bcachefs is a new copy-on-write
-  |     filesystem with every feature you could possibly want.
-  |     
-  |     Website: https://bcachefs.org
-  |     
-  | ... 1 lines of the commit log omitted.
+To avoid boot failures in QEMU [2], '-mattr=+c' and '-mattr=+relax'
+need to be passed via '-mllvm' to ld.lld, as there appears to be an
+issue with LLVM's target-features and LTO [3], which can result in
+incorrect relocations to branch targets [4]. Once this is fixed in LLVM,
+it can be made conditional on affected ld.lld versions.
 
-Results changed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-23730
-# First few build errors in logs:
+Disable LTO for arch/riscv/kernel/pi, as llvm-objcopy expects an ELF
+object file when manipulating the files in that subfolder, rather than
+LLVM bitcode.
 
-# 00:20:55 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
-# 00:20:56 fs/bcachefs/alloc.c:332:9: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-# 00:20:56 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/alloc.o] Error 1
-# 00:21:08 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
-# 00:21:08 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
-# 00:21:08 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/bset.o] Error 1
-# 00:21:09 fs/bcachefs/btree_cache.c:67:9: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
-# 00:21:09 fs/bcachefs/btree_cache.c:120:2: error: array index 0 is past the end of the array (that has type '__u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
-# 00:21:09 fs/bcachefs/btree_cache.c:201:6: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
-# 00:21:09 fs/bcachefs/btree_cache.c:607:3: error: array index 0 is past the end of the array (that has type '__u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
+[1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
+    commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
+[2] https://github.com/ClangBuiltLinux/linux/issues/1942
+[3] https://github.com/llvm/llvm-project/issues/59350
+[4] https://github.com/llvm/llvm-project/issues/65090
 
-From
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-32815
-# linux build successful:
-all
-# linux boot successful:
-boot
+Tested-by: Wende Tan <twd2.me@gmail.com>
+Signed-off-by: Wende Tan <twd2.me@gmail.com>
+Co-developed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Testing notes from Nathan:
 
-The configuration of this build is:
-CI config tcwg_kernel/llvm-master-arm-next-allmodconfig
+I tested LLVM 14 through 18 with defconfig + full/thin LTO and
+allmodconfig + thin LTO. allmodconfig + thin LTO with LLVM 15 and 16
+shows
 
------------------8<--------------------------8<--------------------------8<--------------------------
-The information below can be used to reproduce a debug environment:
+  ld.lld: error: section size decrease is too large
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/135/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/134/artifact/artifacts
+when linking vmlinux. This appears to be resolved in LLVM 17 with
+https://github.com/llvm/llvm-project/commit/9d37ea95df1b84cca9b5e954d8964c976a5e303e
+(I did not bisect but the commit message lines up with the issue). I
+kept the existing version check because defconfig worked fine but we may
+want to bump it to 17.0.0 if randconfigs trip over this.
 
-Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/e0750d9473522d076b33ee257a21e27a5dd75031/tcwg_kernel/llvm-master-arm-next-allmodconfig/reproduction_instructions.txt
+v4 now boots in QEMU for me with both full and thin LTO.
 
-Full commit : https://git.linaro.org/kernel-org/linux-next.git/commit/?id=e0750d9473522d076b33ee257a21e27a5dd75031
+Testing notes from Wende:
 
-Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1005
+I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
+on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
+can boot to shell using an archriscv rootfs on QEMU.
 
-List of configurations that regressed due to this commit :
-* tcwg_kernel
-** llvm-master-arm-next-allmodconfig
-*** Failure
-*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/e0750d9473522d076b33ee257a21e27a5dd75031/tcwg_kernel/llvm-master-arm-next-allmodconfig/details.txt
-*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/135/
-------=_Part_42200_2085860166.1697577645493--
+I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
+KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
+successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
+image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
+`BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
+separate patch further.
+
+Changes in v4:
+- Pass '-mattr=+c' and '-mattr=+relax' to ld.lld via '-mllvm' flags when
+  doing LTO due to LLVM not appearing to honor target-features when
+  performing LTO, which can result in incorrect branch targets. This
+  fixes boot with CONFIG_LTO_CLANG=y with LLVM 15.0.0+.
+- Tidy up commit message and move testing notes to below the fold, as it
+  is not too relevant to the git history and it makes the rest of the
+  message more of an imperative mood.
+- Link to v3: https://lore.kernel.org/r/20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org
+
+Changes in v3:
+- Disable LTO in arch/riscv/kernel/pi/Makefile, which was added to the
+  kernel after the submission of v2. This change matches arm64.
+- Link to v2: https://lore.kernel.org/r/20220512205545.992288-1-twd2.me@gmail.com/
+
+Changes in v2:
+- Some textual changes suggested by Nick.
+- Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is
+  filed and resolved.
+- Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
+- Link to v1: https://lore.kernel.org/r/20210719205208.1023221-1-twd2.me@gmail.com/
+---
+ arch/riscv/Kconfig            | 3 +++
+ arch/riscv/Makefile           | 5 +++++
+ arch/riscv/kernel/pi/Makefile | 3 +++
+ 3 files changed, 11 insertions(+)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index d607ab0f7c6d..523640f7441e 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -46,6 +46,9 @@ config RISCV
+ 	select ARCH_SUPPORTS_CFI_CLANG
+ 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+ 	select ARCH_SUPPORTS_HUGETLBFS if MMU
++	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
++	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
++	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+ 	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
+ 	select ARCH_USE_MEMTEST
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 1329e060c548..709400ceac60 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -52,6 +52,11 @@ ifndef CONFIG_AS_IS_LLVM
+ 	KBUILD_CFLAGS += -Wa,-mno-relax
+ 	KBUILD_AFLAGS += -Wa,-mno-relax
+ endif
++# LLVM has an issue with target-features and LTO: https://github.com/llvm/llvm-project/issues/59350
++# Ensure it is aware of linker relaxation with LTO, otherwise relocations may
++# be incorrect: https://github.com/llvm/llvm-project/issues/65090
++else ifeq ($(CONFIG_LTO_CLANG),y)
++	KBUILD_LDFLAGS += -mllvm -mattr=+c -mllvm -mattr=+relax
+ endif
+ endif
+ 
+diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
+index 07915dc9279e..b75f150b923d 100644
+--- a/arch/riscv/kernel/pi/Makefile
++++ b/arch/riscv/kernel/pi/Makefile
+@@ -9,6 +9,9 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
+ 		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+ 		   $(call cc-option,-fno-addrsig)
+ 
++# Disable LTO
++KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
++
+ KBUILD_CFLAGS	+= -mcmodel=medany
+ 
+ CFLAGS_cmdline_early.o += -D__NO_FORTIFY
+
+---
+base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+change-id: 20231003-riscv-lto-f013beed8587
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
