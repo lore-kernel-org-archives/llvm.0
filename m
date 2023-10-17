@@ -1,161 +1,109 @@
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E962D784
-	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 18:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DBEEBE;
+	Tue, 17 Oct 2023 18:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EqjEuo+Y"
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1e58a522e41so3512986fac.2
-        for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 11:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697565746; x=1698170546; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N4411VFYng8a8HDyhdYjQJ87gKPXTNmusC5D18lXs6s=;
-        b=EqjEuo+YasOY3RDlAeu/9DVk6f3aSdTQY3lwVpnJ9VZsTij9egHHUApohvHlhkbq2a
-         SY3Nh3iL29RLZoYtLRgg8BSlgOFdZYrDAkzuKcfIkewksSiq0jFNhzP6tnciaZ+mJn2n
-         hkb4Tas7uddBFyDIpGEkjmzgIBwSVPBxAFAbwq186ud3vVWZvu242CSUqluOITV3ggCa
-         bfYLnSR+oRZdp3acqslDGjpmPcoaTEpEbnRvnmn6mc3WZxwhq3BrkQCOkT9FvuFlzNeJ
-         zbjhJqxkWxi8y+tD4ZsrF+hNneLPLBnrkCWYlwMkkUG12bKpLaJ5xB9DjsMcAzM/ckJT
-         kOAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697565746; x=1698170546;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N4411VFYng8a8HDyhdYjQJ87gKPXTNmusC5D18lXs6s=;
-        b=YUl5ngOpN0Y6D/wvaosdasTXQkET5C8OJSF2J2KflZzdIiseipBDkhJR9ef+vGAkLo
-         DCTr0oqiPi42J9BMckG9I3AfXvGYDKGUg8WMafQzP2fSniHLMjdNAw7GCrnrFO68nToO
-         vwS+eSqmh7q4JBwWlAf4EtlQ2oiIuTU7JZJr6mwZiKMTsVfx6SNnH1HKAbji+7Vx5BI9
-         HfpCE7np4wqX+znwtY8IK8a9XW6csYJMwMcuCL3VRLXtjPZeonQwjJC9NEabHyE384J2
-         RQ4Hid/OqkJahhjRz8ZmvirbtFnWMg8U1q3KUkwb16vr5nceAWIwIPb+RtA60TZ3PIpc
-         h2pg==
-X-Gm-Message-State: AOJu0Yw7yRGYlKvUIAixWnT9teKLQaYqtcpTkP0GQ//UyV1RNWuVAMN7
-	eSLGzuJzDy3G2M65AKgu5tW60g3hXIG3C6TjQ1A=
-X-Google-Smtp-Source: AGHT+IEWhwy7nMPvdqBQrj3XNb2/fzLnp9F8pJjwtxWOPLaUknBvhhMta1zuQbN9r9f9Gn6rFIioHJiegVhhEqh0GS4=
-X-Received: by 2002:a05:6871:2206:b0:1e9:bd5c:ae8b with SMTP id
- sc6-20020a056871220600b001e9bd5cae8bmr2686071oab.5.1697565745825; Tue, 17 Oct
- 2023 11:02:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0OMPh1b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D623CC433C7;
+	Tue, 17 Oct 2023 18:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697568127;
+	bh=lGFXEWFnum9tD8Qq7965lPiDiK5TjJr0YSfkEVSWvV4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=E0OMPh1bZEzpKFMSF2r+o5Do6gdJ2zoZV3pv8cqFm9FPDHMy5+6PEb7kknuVvURHY
+	 iet7AjRkxuZ/2As/yWkKgNljaOLrClxg4dNFjcPRCh74G0dMyG5eiG/5Zq8pvV3MUe
+	 uMczM3Vmjtq06rYJNwFg6cSKm6wTg+CMOWKDpppMdH8EBBgxgiboUFSBJ0QjxzJNlz
+	 wRjLxiU6/Q09rkPL0l8N5YPzr/BYwPAAOVgEUZljoKGJkcAig/bAwmO4FPw/fON8h+
+	 A3Jj69s1IHpuXNGFUOM1802tSnsixRp6UQAq78YIBB9S37D0LkLfKE7kXykpPENVyO
+	 Ajt8MLBbg7xBA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 17 Oct 2023 11:41:58 -0700
+Subject: [PATCH] PCI: rcar-gen4: Fix type of type parameter in
+ rcar_gen4_pcie_ep_raise_irq()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231016142031.241912-1-Rodrigo.Siqueira@amd.com> <20231017172231.GA2348194@dev-arch.thelio-3990X>
-In-Reply-To: <20231017172231.GA2348194@dev-arch.thelio-3990X>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Tue, 17 Oct 2023 14:02:14 -0400
-Message-ID: <CADnq5_OyO9CHqahFvdnx7-8s9654udgdfhUntyxfjae+iHey0Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Reduce stack size for DML2
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev, 
-	Roman Li <roman.li@amd.com>, amd-gfx@lists.freedesktop.org, 
-	linux-next@vger.kernel.org, Alex Deucher <alexander.deucher@amd.com>, 
-	Chaitanya Dhere <chaitanya.dhere@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231017-pcie-rcar-wifpts-v1-1-ab1f42bf9386@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHXVLmUC/x3MQQ5AMBBA0avIrE3SEiWuIhZMp8yGZipIxN01l
+ m/x/wOJVThBXzygfEqSfcuwZQG0TtvCKD4bKlPV1tgWIwmj0qR4SYhHQkeu8cGFjroZchaVg9z
+ /chjf9wNTBEnZYgAAAA==
+To: marek.vasut+renesas@gmail.com, yoshihiro.shimoda.uh@renesas.com, 
+ lpieralisi@kernel.org, kw@linux.com
+Cc: robh@kernel.org, bhelgaas@google.com, ndesaulniers@google.com, 
+ trix@redhat.com, fancer.lancer@gmail.com, mani@kernel.org, 
+ linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2708; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=lGFXEWFnum9tD8Qq7965lPiDiK5TjJr0YSfkEVSWvV4=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKl6V+tMfm849+t5ybYrynFuydfNOJ4pf/9out3wjJB40
+ TxhI8nYjlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRxJcM/xPLP0veNtjB8pOz
+ Js9px7+UVKNoHo//3WvvRew5NvtbvyPD/4hFW/6v7pAJCQqym/o5JWDKoZV/nW7eOFKUl+2lYrH
+ /ORsA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Oct 17, 2023 at 1:22=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Hi Rodrigo,
->
-> On Mon, Oct 16, 2023 at 08:19:16AM -0600, Rodrigo Siqueira wrote:
-> > Stephen discovers a stack size issue when compiling the latest amdgpu
-> > code with allmodconfig. This patchset addresses that issue by splitting
-> > a large function into two smaller parts.
-> >
-> > Thanks
-> > Siqueira
-> >
-> > Rodrigo Siqueira (2):
-> >   drm/amd/display: Reduce stack size by splitting function
-> >   drm/amd/display: Fix stack size issue on DML2
-> >
-> >  .../amd/display/dc/dml2/display_mode_core.c   | 3289 +++++++++--------
-> >  1 file changed, 1653 insertions(+), 1636 deletions(-)
-> >
-> > --
-> > 2.42.0
-> >
->
-> This series appears in -next as commit c587ee30f376 ("drm/amd/display:
-> Reduce stack size by splitting function"); while it may help stack usage
-> for GCC, clang still suffers. All clang versions that the kernel
-> supports show a warning for dml_prefetch_check(), the following is with
-> LLVM 17.0.2 from kernel.org [1].
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6263:=
-13: error: stack frame size (2520) exceeds limit (2048) in 'dml_prefetch_ch=
-eck' [-Werror,-Wframe-larger-than]
->    6263 | static void dml_prefetch_check(struct display_mode_lib_st *mode=
-_lib)
->         |             ^
->
-> With clang 18.0.0 (tip of tree) and 15.0.7, I see:
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8277:=
-6: error: stack frame size (2056) exceeds limit (2048) in 'dml_core_mode_pr=
-ogramming' [-Werror,-Wframe-larger-than]
->    8277 | void dml_core_mode_programming(struct display_mode_lib_st *mode=
-_lib, const struct dml_clk_cfg_st *clk_cfg)
->         |      ^
->
-> For what it's worth, building with GCC 13.2.0 with a slighly lower
-> -Wframe-larger-than value reveals that dml_prefetch_check() is right at
-> the current limit and the stack usage of dml_core_mode_programming()
-> when built with GCC is not too far of clang's, so it seems like there
-> should be a more robust set of fixes, such as the ones that I have
-> already done for older generations of this code.
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In f=
-unction 'dml_prefetch_check':
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6705:=
-1: error: the frame size of 2048 bytes is larger than 1800 bytes [-Werror=
-=3Dframe-larger-than=3D]
->    6705 | }
->         | ^
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In f=
-unction 'dml_core_mode_programming':
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:9893:=
-1: error: the frame size of 1880 bytes is larger than 1800 bytes [-Werror=
-=3Dframe-larger-than=3D]
->    9893 | } // dml_core_mode_programming
->         | ^
->
-> 41012d715d5d drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline=
- for stack usage
-> 21485d3da659 drm/amd/display: Reduce number of arguments of dml31's Calcu=
-lateFlipSchedule()
-> 37934d4118e2 drm/amd/display: Reduce number of arguments of dml31's Calcu=
-lateWatermarksAndDRAMSpeedChangeSupport()
-> a3fef74b1d48 drm/amd/display: Reduce number of arguments of dml32_Calcula=
-tePrefetchSchedule()
-> c4be0ac987f2 drm/amd/display: Reduce number of arguments of dml32_Calcula=
-teWatermarksMALLUseAndDRAMSpeedChangeSupport()
-> 25ea501ed85d drm/amd/display: Reduce number of arguments of dml314's Calc=
-ulateFlipSchedule()
-> ca07f4f5a98b drm/amd/display: Reduce number of arguments of dml314's Calc=
-ulateWatermarksAndDRAMSpeedChangeSupport()
->
-> It would be really nice if these would somehow make it back to the
-> original sources so that we stop going through this every time a new
-> version of this code shows up. I thought that AMD has started testing
-> with clang, how were these warnings not caught before the code was
-> merged? If you are unable to look into these warnings, I can try to
-> double back to this once I look into the other fires in -next...
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+warning in clang aims to catch these at compile time, which reveals:
 
-Our clang CI builds are passing just fine.  It seems to be specific to
-certain kernel configs.  I guess it depends on how different functions
-get inlined.  This issue was reported by Stephen originally which is
-how we discovered it.
+  drivers/pci/controller/dwc/pcie-rcar-gen4.c:403:15: error: incompatible function pointer types initializing 'int (*)(struct dw_pcie_ep *, u8, enum pci_epc_irq_type, u16)' (aka 'int (*)(struct dw_pcie_ep *, unsigned char, enum pci_epc_irq_type, unsigned sort)') with an expression of type 'int (struct dw_pcie_ep *, u8, unsigned int, u16)' (aka 'int (struct dw_pcie_ep *, unsigned char, unsigned int, unsigned short)') [-Werror,-Wincompatible-function-pointer-types-strict]
+    403 |         .raise_irq = rcar_gen4_pcie_ep_raise_irq,
+        |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-Alex
+'->raise_irq()' in 'struct dw_pcie_ep_ops' expects a type parameter of
+type 'enum pci_epc_irq_type', not 'unsigned int'. Adjust the type to
+match and use the proper enum values in the switch. The underlying value
+of both the enum and the macro is the same, so there is no functional
+change while clearing up the warning and avoiding a CFI failure at run
+time.
 
+Fixes: 32b83c68d634 ("PCI: rcar-gen4: Add endpoint mode support")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/pci/controller/dwc/pcie-rcar-gen4.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Alex
+diff --git a/drivers/pci/controller/dwc/pcie-rcar-gen4.c b/drivers/pci/controller/dwc/pcie-rcar-gen4.c
+index 619262d32f4e..0c0f5c257b14 100644
+--- a/drivers/pci/controller/dwc/pcie-rcar-gen4.c
++++ b/drivers/pci/controller/dwc/pcie-rcar-gen4.c
+@@ -353,14 +353,15 @@ static void rcar_gen4_pcie_ep_deinit(struct dw_pcie_ep *ep)
+ }
+ 
+ static int rcar_gen4_pcie_ep_raise_irq(struct dw_pcie_ep *ep, u8 func_no,
+-				       unsigned int type, u16 interrupt_num)
++				       enum pci_epc_irq_type type,
++				       u16 interrupt_num)
+ {
+ 	struct dw_pcie *dw = to_dw_pcie_from_ep(ep);
+ 
+ 	switch (type) {
+-	case PCI_IRQ_LEGACY:
++	case PCI_EPC_IRQ_LEGACY:
+ 		return dw_pcie_ep_raise_legacy_irq(ep, func_no);
+-	case PCI_IRQ_MSI:
++	case PCI_EPC_IRQ_MSI:
+ 		return dw_pcie_ep_raise_msi_irq(ep, func_no, interrupt_num);
+ 	default:
+ 		dev_err(dw->dev, "Unknown IRQ type\n");
+
+---
+base-commit: de45624e69e14ccd6b4b2886155578bb218925de
+change-id: 20231017-pcie-rcar-wifpts-6c65df6f8c8b
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
