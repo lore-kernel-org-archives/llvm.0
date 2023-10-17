@@ -1,50 +1,25 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F46A405D2;
-	Tue, 17 Oct 2023 09:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E2DCGFvX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697536216; x=1729072216;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ulb7cSEhESqDzZUxcUfJ7v060zndAh0SkSmzlX/ode4=;
-  b=E2DCGFvXXP923A4i/OHA93vGiiGYmCjUqB12UfQmhzH7sM6L/8YRlktV
-   xjE7Om1x2acZKhnzj6yB713hn2EMfbJxoSrNsEHuHBk7HrdGtrkvFBjgt
-   s0YQexahB7hReepLpMf8pfz9nyVgjHa44asRClAWQxpiloAz8/fV8BwA9
-   UcQ9AFrl+1Be9PO4kVzEN8UppXdcNtVC8xQGR3r2MUqQpcnwpsv96DxNu
-   jFAkvWwFHEJArBew45rY7/B4IhCcKdYoEhzGpBAuSrsc/uKV3DixG9Gyb
-   x9oAisg7FcW6rMVgyA9onBtJFfT+45UIbRF0J5bCN7IUz53LV1VXJ/uMc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="365097970"
-X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="365097970"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 02:50:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="826376669"
-X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="826376669"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Oct 2023 02:50:14 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qsgiJ-0009RD-2w;
-	Tue, 17 Oct 2023 09:50:11 +0000
-Date: Tue, 17 Oct 2023 17:49:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jani.nikula@intel.com
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: Add bigjoiner force enable option
- to debugfs
-Message-ID: <202310171756.yzfTKqav-lkp@intel.com>
-References: <20231012123411.17241-1-stanislav.lisovskiy@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DBF41E34;
+	Tue, 17 Oct 2023 12:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA74C433C8;
+	Tue, 17 Oct 2023 12:57:34 +0000 (UTC)
+Date: Tue, 17 Oct 2023 13:57:32 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: kernel test robot <lkp@intel.com>, Will Deacon <will@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Peter Collingbourne <pcc@google.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
+Message-ID: <ZS6EvMiJ0QF5INkv@arm.com>
+References: <20231005140730.2191134-1-ryan.roberts@arm.com>
+ <202310140531.BQQwt3NQ-lkp@intel.com>
+ <ZS147N1JKyUvaHyJ@arm.com>
+ <b463b420-c2be-49c5-bed6-0ff896851adb@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,73 +28,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231012123411.17241-1-stanislav.lisovskiy@intel.com>
+In-Reply-To: <b463b420-c2be-49c5-bed6-0ff896851adb@arm.com>
 
-Hi Stanislav,
+On Tue, Oct 17, 2023 at 08:36:43AM +0100, Ryan Roberts wrote:
+> On 16/10/2023 18:54, Catalin Marinas wrote:
+> > On Sat, Oct 14, 2023 at 05:15:51AM +0800, kernel test robot wrote:
+> >> kernel test robot noticed the following build warnings:
+> >>
+> >> [auto build test WARNING on arm64/for-next/core]
+> >> [also build test WARNING on arm-perf/for-next/perf arm/for-next kvmarm/next soc/for-next linus/master v6.6-rc5 next-20231013]
+> >> [cannot apply to arm/fixes]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> >> And when submitting patch, we suggest to use '--base' as documented in
+> >> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >>
+> >> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-mm-Hoist-synchronization-out-of-set_ptes-loop/20231005-231636
+> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+> >> patch link:    https://lore.kernel.org/r/20231005140730.2191134-1-ryan.roberts%40arm.com
+> >> patch subject: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
+> >> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/config)
+> >> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> >> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/reproduce)
+> >>
+> >> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> >> the same patch/commit), kindly add following tags
+> >> | Reported-by: kernel test robot <lkp@intel.com>
+> >> | Closes: https://lore.kernel.org/oe-kbuild-all/202310140531.BQQwt3NQ-lkp@intel.com/
+> >>
+> >> All warnings (new ones prefixed by >>):
+> >>
+> >>    In file included from net/ipv4/route.c:66:
+> >>    In file included from include/linux/mm.h:29:
+> >>    In file included from include/linux/pgtable.h:6:
+> >>>> arch/arm64/include/asm/pgtable.h:344:65: warning: parameter 'addr' set but not used [-Wunused-but-set-parameter]
+> >>      344 | static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> >>          |                                                                 ^
+> >>    1 warning generated.
+> > 
+> > Thanks for the report. I think something like below will do (I'll test
+> > and commit as a separate patch, it's not something that Ryan's patch
+> > introduces):
+> 
+> I was actually just trying to repro this and was planning to send out a v3 of my
+> patch. But if you are happy to handle it as you suggest, then I guess you don't
+> need anything further from me?
 
-kernel test robot noticed the following build warnings:
+If you feel like testing, please give this a go ;)
 
-[auto build test WARNING on drm-tip/drm-tip]
+------------8<---------------------------
+From e6255237acfc21e92252653c3ed42446ef67f625 Mon Sep 17 00:00:00 2001
+From: Catalin Marinas <catalin.marinas@arm.com>
+Date: Tue, 17 Oct 2023 11:57:55 +0100
+Subject: [PATCH] arm64: Mark the 'addr' argument to set_ptes() and
+ __set_pte_at() as unused
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Lisovskiy/drm-i915-Add-bigjoiner-force-enable-option-to-debugfs/20231017-105841
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20231012123411.17241-1-stanislav.lisovskiy%40intel.com
-patch subject: [Intel-gfx] [PATCH] drm/i915: Add bigjoiner force enable option to debugfs
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231017/202310171756.yzfTKqav-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231017/202310171756.yzfTKqav-lkp@intel.com/reproduce)
+This argument is not used by the arm64 implementation. Mark it as
+__always_unused and also remove the unnecessary 'addr' increment in
+set_ptes().
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310171756.yzfTKqav-lkp@intel.com/
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202310140531.BQQwt3NQ-lkp@intel.com/
+Cc: Will Deacon <will@kernel.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+---
+ arch/arm64/include/asm/pgtable.h | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_display_debugfs.c:1413:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (connector->base.status != connector_status_connected || !crtc) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_display_debugfs.c:1422:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/gpu/drm/i915/display/intel_display_debugfs.c:1413:2: note: remove the 'if' if its condition is always true
-           if (connector->base.status != connector_status_connected || !crtc) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_display_debugfs.c:1407:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +1413 drivers/gpu/drm/i915/display/intel_display_debugfs.c
-
-  1400	
-  1401	static int i915_bigjoiner_enable_show(struct seq_file *m, void *data)
-  1402	{
-  1403		struct intel_connector *connector = to_intel_connector(m->private);
-  1404		struct drm_crtc *crtc;
-  1405		struct intel_encoder *encoder = intel_attached_encoder(connector);
-  1406		struct intel_dp *intel_dp = enc_to_intel_dp(encoder);
-  1407		int ret;
-  1408	
-  1409		if (!encoder)
-  1410			return -ENODEV;
-  1411	
-  1412		crtc = connector->base.state->crtc;
-> 1413		if (connector->base.status != connector_status_connected || !crtc) {
-  1414			ret = -ENODEV;
-  1415			goto out;
-  1416		}
-  1417	
-  1418		seq_printf(m, "Bigjoiner enable: %d\n", intel_dp->force_bigjoiner_enable);
-  1419	
-  1420	out:
-  1421	
-  1422		return ret;
-  1423	}
-  1424	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 68984ba9ce2a..b19a8aee684c 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -341,8 +341,9 @@ static inline void __sync_cache_and_tags(pte_t pte, unsigned int nr_pages)
+ 		mte_sync_tags(pte, nr_pages);
+ }
+ 
+-static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+-			      pte_t *ptep, pte_t pte, unsigned int nr)
++static inline void set_ptes(struct mm_struct *mm,
++			    unsigned long __always_unused addr,
++			    pte_t *ptep, pte_t pte, unsigned int nr)
+ {
+ 	page_table_check_ptes_set(mm, ptep, pte, nr);
+ 	__sync_cache_and_tags(pte, nr);
+@@ -353,7 +354,6 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+ 		if (--nr == 0)
+ 			break;
+ 		ptep++;
+-		addr += PAGE_SIZE;
+ 		pte_val(pte) += PAGE_SIZE;
+ 	}
+ }
+@@ -528,7 +528,8 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
+ #define pud_pfn(pud)		((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
+ #define pfn_pud(pfn,prot)	__pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
+ 
+-static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
++static inline void __set_pte_at(struct mm_struct *mm,
++				unsigned long __always_unused addr,
+ 				pte_t *ptep, pte_t pte, unsigned int nr)
+ {
+ 	__sync_cache_and_tags(pte, nr);
