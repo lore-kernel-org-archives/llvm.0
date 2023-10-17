@@ -1,41 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974C53D99D;
-	Tue, 17 Oct 2023 09:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F46A405D2;
+	Tue, 17 Oct 2023 09:50:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HYFrKPux"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7A1C433C8;
-	Tue, 17 Oct 2023 09:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697533809;
-	bh=XzWNIY/hrbTa3IpvjUeTL3enp5iOsmUIH+SzZ2/j/S4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HYFrKPuxxNnAO4bIJuWAo3vtIdUGAyUiM0Ji3FbzfmtycscCLf6EbhI0QBq1XyWZp
-	 v9HCOlY08mIS+7BDSJEyqQ9hbVrLXQ+qUeYPciXTcPP2mswDuUoDVITdjw8G3MYpm3
-	 0yy0JpWRsLtBixnefQMKg8SBdh6hldh8rt4ltCZsuipjz11rIaPwSpRLR1s8KCcH7k
-	 1oC4SuX7bcQk5aS6RpG41SLA0wEqXTzSFX2TndKUdUGP97V82uFSw+wpNHJV31PDeq
-	 vvMssJPuN3bgBsQsFyDvrPPlHo6QmDFEOuLMGFSH1jCL9zh28CM9ChnDRQIK8ffU4Q
-	 vioQ+2/eFWkcw==
-Date: Tue, 17 Oct 2023 11:10:02 +0200
-From: Simon Horman <horms@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, dev@openvswitch.org,
-	kernel-janitors@vger.kernel.org, Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, linux-hardening@vger.kernel.org,
-	netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [ovs-dev] [PATCH v2 2/2] net: openvswitch: Annotate struct
- mask_array with __counted_by
-Message-ID: <20231017091002.GR1751252@kernel.org>
-References: <e5122b4ff878cbf3ed72653a395ad5c4da04dc1e.1697264974.git.christophe.jaillet@wanadoo.fr>
- <ca5c8049f58bb933f231afd0816e30a5aaa0eddd.1697264974.git.christophe.jaillet@wanadoo.fr>
- <202310141928.23985F1CA@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E2DCGFvX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697536216; x=1729072216;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ulb7cSEhESqDzZUxcUfJ7v060zndAh0SkSmzlX/ode4=;
+  b=E2DCGFvXXP923A4i/OHA93vGiiGYmCjUqB12UfQmhzH7sM6L/8YRlktV
+   xjE7Om1x2acZKhnzj6yB713hn2EMfbJxoSrNsEHuHBk7HrdGtrkvFBjgt
+   s0YQexahB7hReepLpMf8pfz9nyVgjHa44asRClAWQxpiloAz8/fV8BwA9
+   UcQ9AFrl+1Be9PO4kVzEN8UppXdcNtVC8xQGR3r2MUqQpcnwpsv96DxNu
+   jFAkvWwFHEJArBew45rY7/B4IhCcKdYoEhzGpBAuSrsc/uKV3DixG9Gyb
+   x9oAisg7FcW6rMVgyA9onBtJFfT+45UIbRF0J5bCN7IUz53LV1VXJ/uMc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="365097970"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="365097970"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 02:50:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="826376669"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="826376669"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Oct 2023 02:50:14 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qsgiJ-0009RD-2w;
+	Tue, 17 Oct 2023 09:50:11 +0000
+Date: Tue, 17 Oct 2023 17:49:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jani.nikula@intel.com
+Subject: Re: [Intel-gfx] [PATCH] drm/i915: Add bigjoiner force enable option
+ to debugfs
+Message-ID: <202310171756.yzfTKqav-lkp@intel.com>
+References: <20231012123411.17241-1-stanislav.lisovskiy@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,56 +53,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202310141928.23985F1CA@keescook>
+In-Reply-To: <20231012123411.17241-1-stanislav.lisovskiy@intel.com>
 
-On Sat, Oct 14, 2023 at 07:29:57PM -0700, Kees Cook wrote:
-> On Sat, Oct 14, 2023 at 08:34:53AM +0200, Christophe JAILLET wrote:
-> > Prepare for the coming implementation by GCC and Clang of the __counted_by
-> > attribute. Flexible array members annotated with __counted_by can have
-> > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> > functions).
-> > 
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > ---
-> > v2: Fix the subject  [Ilya Maximets]
-> >     fix the field name used with __counted_by  [Ilya Maximets]
-> > 
-> > v1: https://lore.kernel.org/all/f66ddcf1ef9328f10292ea75a17b584359b6cde3.1696156198.git.christophe.jaillet@wanadoo.fr/
-> > 
-> > 
-> > This patch is part of a work done in parallel of what is currently worked
-> > on by Kees Cook.
-> > 
-> > My patches are only related to corner cases that do NOT match the
-> > semantic of his Coccinelle script[1].
-> > 
-> > In this case, in tbl_mask_array_alloc(), several things are allocated with
-> > a single allocation. Then, some pointer arithmetic computes the address of
-> > the memory after the flex-array.
-> > 
-> > [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> > ---
-> >  net/openvswitch/flow_table.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/net/openvswitch/flow_table.h b/net/openvswitch/flow_table.h
-> > index 9e659db78c05..f524dc3e4862 100644
-> > --- a/net/openvswitch/flow_table.h
-> > +++ b/net/openvswitch/flow_table.h
-> > @@ -48,7 +48,7 @@ struct mask_array {
-> >  	int count, max;
-> >  	struct mask_array_stats __percpu *masks_usage_stats;
-> >  	u64 *masks_usage_zero_cntr;
-> > -	struct sw_flow_mask __rcu *masks[];
-> > +	struct sw_flow_mask __rcu *masks[] __counted_by(max);
-> >  };
-> 
-> Yup, this looks correct to me. Thanks!
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
+Hi Stanislav,
 
-Likewise, I agree this is correct.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+[auto build test WARNING on drm-tip/drm-tip]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Lisovskiy/drm-i915-Add-bigjoiner-force-enable-option-to-debugfs/20231017-105841
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20231012123411.17241-1-stanislav.lisovskiy%40intel.com
+patch subject: [Intel-gfx] [PATCH] drm/i915: Add bigjoiner force enable option to debugfs
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231017/202310171756.yzfTKqav-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231017/202310171756.yzfTKqav-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310171756.yzfTKqav-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_display_debugfs.c:1413:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (connector->base.status != connector_status_connected || !crtc) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_display_debugfs.c:1422:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/gpu/drm/i915/display/intel_display_debugfs.c:1413:2: note: remove the 'if' if its condition is always true
+           if (connector->base.status != connector_status_connected || !crtc) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_display_debugfs.c:1407:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +1413 drivers/gpu/drm/i915/display/intel_display_debugfs.c
+
+  1400	
+  1401	static int i915_bigjoiner_enable_show(struct seq_file *m, void *data)
+  1402	{
+  1403		struct intel_connector *connector = to_intel_connector(m->private);
+  1404		struct drm_crtc *crtc;
+  1405		struct intel_encoder *encoder = intel_attached_encoder(connector);
+  1406		struct intel_dp *intel_dp = enc_to_intel_dp(encoder);
+  1407		int ret;
+  1408	
+  1409		if (!encoder)
+  1410			return -ENODEV;
+  1411	
+  1412		crtc = connector->base.state->crtc;
+> 1413		if (connector->base.status != connector_status_connected || !crtc) {
+  1414			ret = -ENODEV;
+  1415			goto out;
+  1416		}
+  1417	
+  1418		seq_printf(m, "Bigjoiner enable: %d\n", intel_dp->force_bigjoiner_enable);
+  1419	
+  1420	out:
+  1421	
+  1422		return ret;
+  1423	}
+  1424	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
