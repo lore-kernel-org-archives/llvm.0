@@ -1,34 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D509A2D7AB;
-	Tue, 17 Oct 2023 18:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91A32E3E4;
+	Tue, 17 Oct 2023 20:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UyobkITy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67DD4C433C7;
-	Tue, 17 Oct 2023 18:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697568681;
-	bh=X7SS8Q1JzPNkllfotLzHoOYimaJPy4IFHtOQJPWKqNY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=UyobkITyE+GCzbfrnzFL0yQZ8SUgwZo/PjFx3/9zVMjHTkC/z/TldDy1wI0vgou9m
-	 gLKrQ3zFzL9bT1DN/feWZ1o0/5cnL0qc1JWZ5QQyx4t25oARbA+2aS04dA0NemVHSs
-	 gZK6CT3UsDwXv6vfXiZpi4SS5BCS7NcgKGnRd7MZoLM5MnI4/bn+F4vmW7R6mXzLwD
-	 6cEYoWFPcEfSWMUGUEzGR4A6vjmdTurf5yNJnWnVDueKplZGVS3f8aWdJ2nDtA8qw+
-	 i3X1UXYxZbeybmqiz6G9Q0xiYplWxFeyAUjY6ypCXKL950PosaLJysK1bfSgHs+NtD
-	 3lAqFCCGSEU6Q==
-Date: Tue, 17 Oct 2023 13:51:19 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: marek.vasut+renesas@gmail.com, lpieralisi@kernel.org, kw@linux.com,
-	robh@kernel.org, bhelgaas@google.com, ndesaulniers@google.com,
-	trix@redhat.com, fancer.lancer@gmail.com, mani@kernel.org,
-	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] PCI: rcar-gen4: Fix type of type parameter in
- rcar_gen4_pcie_ep_raise_irq()
-Message-ID: <20231017185119.GA1315341@bhelgaas>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XR+yU5Hr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697572884; x=1729108884;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=XNa67o/INi282OnSB0/IbLa6Lwlzd3NgopowbZSEkWc=;
+  b=XR+yU5Hr61s0B0gvvFTd9NcHzoRLO6kk6YgJrLQgWF4XtAu5l3kYYPrs
+   Ai7QquqL4Ofmjm/06LV7o9U1yPuAwvhBwStG8NqG8K/RML1A9g6A0W+Sn
+   iAIrnRcqO2pBZfqHjpyaXCN6AZ6YCBnpq8+xpSJrWqaedIDoJbGm8n3Hb
+   N5UylRB/vv/sBKcl0j9LgDZ6xEUNz4ru9HlFsbjUP4mA9jtUu7UJ+C0no
+   9xu6UYSA94LLiZxDt/U2KKsSXfqsyiKFRtwEkj50SsyBiIfdeFR0cBs9y
+   Fe84tOfhr89euXZ0fILLApQ+M8hJeFK/gtJWhd8i8gL8zSUg7n4258CGX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="4468478"
+X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
+   d="scan'208";a="4468478"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 13:01:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="706151629"
+X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
+   d="scan'208";a="706151629"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 Oct 2023 13:01:08 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qsqFW-000A1S-1O;
+	Tue, 17 Oct 2023 20:01:06 +0000
+Date: Wed, 18 Oct 2023 04:00:48 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [djwong-xfs:xfs-merge-6.7 47/51] clang: error: unknown argument:
+ '-femit-struct-debug-detailed=any'
+Message-ID: <202310180355.WJvjRDzm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,73 +48,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231017-pcie-rcar-wifpts-v1-1-ab1f42bf9386@kernel.org>
 
-On Tue, Oct 17, 2023 at 11:41:58AM -0700, Nathan Chancellor wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> warning in clang aims to catch these at compile time, which reveals:
-> 
->   drivers/pci/controller/dwc/pcie-rcar-gen4.c:403:15: error: incompatible function pointer types initializing 'int (*)(struct dw_pcie_ep *, u8, enum pci_epc_irq_type, u16)' (aka 'int (*)(struct dw_pcie_ep *, unsigned char, enum pci_epc_irq_type, unsigned sort)') with an expression of type 'int (struct dw_pcie_ep *, u8, unsigned int, u16)' (aka 'int (struct dw_pcie_ep *, unsigned char, unsigned int, unsigned short)') [-Werror,-Wincompatible-function-pointer-types-strict]
->     403 |         .raise_irq = rcar_gen4_pcie_ep_raise_irq,
->         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
-> 
-> '->raise_irq()' in 'struct dw_pcie_ep_ops' expects a type parameter of
-> type 'enum pci_epc_irq_type', not 'unsigned int'. Adjust the type to
-> match and use the proper enum values in the switch. The underlying value
-> of both the enum and the macro is the same, so there is no functional
-> change while clearing up the warning and avoiding a CFI failure at run
-> time.
-> 
-> Fixes: 32b83c68d634 ("PCI: rcar-gen4: Add endpoint mode support")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+TO: "Darrick J. Wong" <darrick.wong@oracle.com>
 
-Thanks, Nathan.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git xfs-merge-6.7
+head:   eee9645e1bf5f060c24ab0f52b2fc55a3ff68ec6
+commit: 5ae98786123bf094d32671f561362d74160288a5 [47/51] fs: turn on more warnings for the filesystem code we modify most
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231018/202310180355.WJvjRDzm-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231018/202310180355.WJvjRDzm-lkp@intel.com/reproduce)
 
-Yoshihiro, can you fold this in on the next rev of your rcar-gen4
-series?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310180355.WJvjRDzm-lkp@intel.com/
 
-I dropped the rcar-gen4 branch for today since it broke Marek's system
-(Samsung Exynos5433-based TM2e board), so when we fix that we should
-be able to fold in this fix at the same time.
+All errors (new ones prefixed by >>):
 
-> ---
->  drivers/pci/controller/dwc/pcie-rcar-gen4.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-rcar-gen4.c b/drivers/pci/controller/dwc/pcie-rcar-gen4.c
-> index 619262d32f4e..0c0f5c257b14 100644
-> --- a/drivers/pci/controller/dwc/pcie-rcar-gen4.c
-> +++ b/drivers/pci/controller/dwc/pcie-rcar-gen4.c
-> @@ -353,14 +353,15 @@ static void rcar_gen4_pcie_ep_deinit(struct dw_pcie_ep *ep)
->  }
->  
->  static int rcar_gen4_pcie_ep_raise_irq(struct dw_pcie_ep *ep, u8 func_no,
-> -				       unsigned int type, u16 interrupt_num)
-> +				       enum pci_epc_irq_type type,
-> +				       u16 interrupt_num)
->  {
->  	struct dw_pcie *dw = to_dw_pcie_from_ep(ep);
->  
->  	switch (type) {
-> -	case PCI_IRQ_LEGACY:
-> +	case PCI_EPC_IRQ_LEGACY:
->  		return dw_pcie_ep_raise_legacy_irq(ep, func_no);
-> -	case PCI_IRQ_MSI:
-> +	case PCI_EPC_IRQ_MSI:
->  		return dw_pcie_ep_raise_msi_irq(ep, func_no, interrupt_num);
->  	default:
->  		dev_err(dw->dev, "Unknown IRQ type\n");
-> 
-> ---
-> base-commit: de45624e69e14ccd6b4b2886155578bb218925de
-> change-id: 20231017-pcie-rcar-wifpts-6c65df6f8c8b
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+>> clang: error: unknown argument: '-femit-struct-debug-detailed=any'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
