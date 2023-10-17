@@ -1,86 +1,117 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9A115CC;
-	Tue, 17 Oct 2023 01:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ccZ8tDzU"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39GKOApQ013037;
-	Tue, 17 Oct 2023 01:12:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=Xs+QD230V90/UG6DoR1nbW1dfXhgdVRcogMOWpKkp+E=;
- b=ccZ8tDzU22fJjPK4Tj33ctkm3A+wyHBe7iX0r0h1zIxaNZ9zcSPiMpajeUrI78L7XhbK
- s5ox8sf0HGAuYLOEai3Dks60Jlqvu4S35Q9W//bQZfTls2v/DHmRssWSD8gYk38ODwxu
- ryXkUn/sGkNGacveZavUOfDEx8mD43d3gj7D8GJdQlSkolEQfX0t5/Qo9pHzTIdnVJhm
- 1XDUmlpXjJjXvS8dZQ/GVL8pwqTSWApqGbV68DQlyB3mtAKOvSAOB86IwYiVuAyzDQNZ
- Znb3wolZob4aLTfGKNmH7uTX7P7g9muT301yltCWzMhjiMuTgaQ0waNLNb1TPJKXBTvY sA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tqk3jm253-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Oct 2023 01:12:12 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39GN0GAp027087;
-	Tue, 17 Oct 2023 01:12:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3trg5366rm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Oct 2023 01:12:11 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39H1C3su039761;
-	Tue, 17 Oct 2023 01:12:10 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3trg5366mf-8;
-	Tue, 17 Oct 2023 01:12:10 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: tyreld@linux.ibm.com, Nathan Chancellor <nathan@kernel.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jejb@linux.ibm.com,
-        ndesaulniers@google.com, trix@redhat.com, brking@linux.vnet.ibm.com,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] scsi: ibmvfc: Use 'unsigned int' for single-bit bitfields in 'struct ibmvfc_host'
-Date: Mon, 16 Oct 2023 21:11:55 -0400
-Message-Id: <169750286917.2183937.1857222190314885925.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231010-ibmvfc-fix-bitfields-type-v1-1-37e95b5a60e5@kernel.org>
-References: <20231010-ibmvfc-fix-bitfields-type-v1-1-37e95b5a60e5@kernel.org>
+Received: from cmccmta1.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812984404
+	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 02:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app03-12003 (RichMail) with SMTP id 2ee3652decb9f61-04750;
+	Tue, 17 Oct 2023 10:08:58 +0800 (CST)
+X-RM-TRANSID:2ee3652decb9f61-04750
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from ubuntu.localdomain (unknown[10.54.5.252])
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee7652decb9424-35455;
+	Tue, 17 Oct 2023 10:08:58 +0800 (CST)
+X-RM-TRANSID:2ee7652decb9424-35455
+From: zhujun2 <zhujun2@cmss.chinamobile.com>
+To: shuah@kernel.org
+Cc: nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	zhujun2@cmss.chinamobile.com
+Subject: [PATCH] selftests:modify the incorrect print format
+Date: Mon, 16 Oct 2023 19:08:56 -0700
+Message-Id: <20231017020856.7003-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-16_13,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=858 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310170008
-X-Proofpoint-GUID: NfheMxzNAJGvnXMTzl5tZqtIkAH1iC5e
-X-Proofpoint-ORIG-GUID: NfheMxzNAJGvnXMTzl5tZqtIkAH1iC5e
 
-On Tue, 10 Oct 2023 13:32:37 -0700, Nathan Chancellor wrote:
+when the argument type is 'unsigned int',printf '%u'
+in format string
 
-> Clang warns (or errors with CONFIG_WERROR=y) several times along the
-> lines of:
-> 
->   drivers/scsi/ibmvscsi/ibmvfc.c:650:17: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
->     650 |                 vhost->reinit = 1;
->         |                               ^ ~
-> 
-> [...]
+Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+---
+ tools/testing/selftests/kselftest.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Applied to 6.7/scsi-queue, thanks!
-
-[1/1] scsi: ibmvfc: Use 'unsigned int' for single-bit bitfields in 'struct ibmvfc_host'
-      https://git.kernel.org/mkp/scsi/c/78882c7657bb
-
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 529d29a35..bec2fae58 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -129,7 +129,7 @@ static inline void ksft_print_header(void)
+ static inline void ksft_set_plan(unsigned int plan)
+ {
+ 	ksft_plan = plan;
+-	printf("1..%d\n", ksft_plan);
++	printf("1..%u\n", ksft_plan);
+ }
+ 
+ static inline void ksft_print_cnts(void)
+@@ -137,7 +137,7 @@ static inline void ksft_print_cnts(void)
+ 	if (ksft_plan != ksft_test_num())
+ 		printf("# Planned tests != run tests (%u != %u)\n",
+ 			ksft_plan, ksft_test_num());
+-	printf("# Totals: pass:%d fail:%d xfail:%d xpass:%d skip:%d error:%d\n",
++	printf("# Totals: pass:%u fail:%u xfail:%u xpass:%u skip:%u error:%u\n",
+ 		ksft_cnt.ksft_pass, ksft_cnt.ksft_fail,
+ 		ksft_cnt.ksft_xfail, ksft_cnt.ksft_xpass,
+ 		ksft_cnt.ksft_xskip, ksft_cnt.ksft_error);
+@@ -163,7 +163,7 @@ static inline void ksft_test_result_pass(const char *msg, ...)
+ 	ksft_cnt.ksft_pass++;
+ 
+ 	va_start(args, msg);
+-	printf("ok %d ", ksft_test_num());
++	printf("ok %u ", ksft_test_num());
+ 	errno = saved_errno;
+ 	vprintf(msg, args);
+ 	va_end(args);
+@@ -177,7 +177,7 @@ static inline void ksft_test_result_fail(const char *msg, ...)
+ 	ksft_cnt.ksft_fail++;
+ 
+ 	va_start(args, msg);
+-	printf("not ok %d ", ksft_test_num());
++	printf("not ok %u ", ksft_test_num());
+ 	errno = saved_errno;
+ 	vprintf(msg, args);
+ 	va_end(args);
+@@ -203,7 +203,7 @@ static inline void ksft_test_result_xfail(const char *msg, ...)
+ 	ksft_cnt.ksft_xfail++;
+ 
+ 	va_start(args, msg);
+-	printf("ok %d # XFAIL ", ksft_test_num());
++	printf("ok %u # XFAIL ", ksft_test_num());
+ 	errno = saved_errno;
+ 	vprintf(msg, args);
+ 	va_end(args);
+@@ -217,7 +217,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
+ 	ksft_cnt.ksft_xskip++;
+ 
+ 	va_start(args, msg);
+-	printf("ok %d # SKIP ", ksft_test_num());
++	printf("ok %u # SKIP ", ksft_test_num());
+ 	errno = saved_errno;
+ 	vprintf(msg, args);
+ 	va_end(args);
+@@ -232,7 +232,7 @@ static inline void ksft_test_result_error(const char *msg, ...)
+ 	ksft_cnt.ksft_error++;
+ 
+ 	va_start(args, msg);
+-	printf("not ok %d # error ", ksft_test_num());
++	printf("not ok %u # error ", ksft_test_num());
+ 	errno = saved_errno;
+ 	vprintf(msg, args);
+ 	va_end(args);
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.17.1
+
+
+
