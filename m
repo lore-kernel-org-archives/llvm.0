@@ -1,184 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333431F606
-	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 21:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DFF1F606
+	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 21:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N90iWyBr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F627C433C7;
-	Tue, 17 Oct 2023 21:19:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697577591;
-	bh=vRZpg6PdpL3MhE26E/oC79Qb79senuuvZ43lnvsq0nQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N90iWyBrofTafsz5IKzp3zu0oZh0l/5hfUL6JLJT+VcUAJjm8RyYqFeCY9i5oR5BS
-	 LYXQl50He5hlt8Duo6+20IfNNieFjn0XGI9LetezJzpAefOlqvMvwTAgTjvTtm1l1T
-	 ShECQmXtBGaKoF0rt+aJbjm8vH8XsKqpiyZu1M/yDIEaJqryjEWoSChe40mbbRPVPI
-	 VmyruZKlKAZ1tsrc3trQo3ecmeyybmI6690EYrdrQTtWyg98gPWFrT5RGBIbimBl4W
-	 H+G7SdTr9VY5wrI2IGGdjDhcatHxpRFlBWRqkVPhWokYFyZmJhscO9Ww38a5cKjIEq
-	 SEibGCVx0D2eA==
-Date: Tue, 17 Oct 2023 14:19:49 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Chaitanya Dhere <chaitanya.dhere@amd.com>,
-	Roman Li <roman.li@amd.com>, linux-next@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
-	"Mahfooz, Hamza" <hamza.mahfooz@amd.com>
-Subject: Re: [PATCH 0/2] Reduce stack size for DML2
-Message-ID: <20231017211949.GA2311196@dev-arch.thelio-3990X>
-References: <20231016142031.241912-1-Rodrigo.Siqueira@amd.com>
- <20231017172231.GA2348194@dev-arch.thelio-3990X>
- <af5900a6-e3ae-4cf1-9a29-89484f411a1c@amd.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BxoUTvhN"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-507ad511315so3779701e87.0
+        for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 14:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697577646; x=1698182446; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=YLqkTI6vR2tWYnFN+W6Diu3XdGs+XBePZt+SQIcTiUA=;
+        b=BxoUTvhNieKnZPWscessTC4DdHLGYx5AHtdSRnRYTranKDM9koHns/YrtTV524qOkR
+         GUeN1z9CIUBnm4LRd9hvRyugKcwFxNSrwiMFxwX7X6tNqcnDaX4D7pL4BLcaqctyNdgL
+         jqeOn2uEVgyu7Kf+tW3ms2/GyYM/FSn3Sa+ohDKmZ7gcr9zSdArjXLINvTreNBs2y1gz
+         kVsaTV4UrFlnnu7u/ETiY7qQGGQCETieu2oJ3Wz+r1DN/oDLlgdbT6N78psYL+ciFRkF
+         g6gXG2EwKstLYciPJrmhaT4pMaYbW1Jdx0L9533LByE5UiH8iISdeV+Ue9A9QLME3A4p
+         EHcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697577646; x=1698182446;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YLqkTI6vR2tWYnFN+W6Diu3XdGs+XBePZt+SQIcTiUA=;
+        b=OteRXP12lMH/MSKJSsufiR6JU3C24uYvA/cTf0YRbu3hlKnswXYFlNC2viS7sth+WW
+         MPHXvj2kCT0JMRksLhOpNVEhur63VPkbAw6WWs+Dxt+alo72FuyG9jFlvreXRiAfEWt4
+         okSfG50qyyNq2Kc7Yxt8dhJwBxx1lV3+0HgbCQ1LcadDaiZrbv62G2ceBNLmh4tPSPMy
+         duI7cQc6pgQlk9rcE3aJS8pG+g3m5dM/YcEtDngMBNNpP82+kb/T8TA705j/j4IDNASH
+         z+Ilh5KcvoDnzEA9iQwL2duaSmRlcO7opHIbCE/SDI4cSJtYtlXQBTV+t2928R5UOMTW
+         AKbQ==
+X-Gm-Message-State: AOJu0YxX7ulZL/YPr9fMHIQ6xmFbxiFOuwX3PiOXHBAVnCOLdSg+X5Vd
+	SnXQ9pIerrfJ1ZSxdNjm8gZIbxJUHiBOjw1qx/c=
+X-Google-Smtp-Source: AGHT+IEX66yGLsUmWpfPuM7qG4EZifdUZj5cmuIWShTCT3XjtT7PriVg4+B3fJa3odYHvc+U59+Pwg==
+X-Received: by 2002:a19:9153:0:b0:507:a8d1:6e57 with SMTP id y19-20020a199153000000b00507a8d16e57mr2270797lfj.40.1697577646432;
+        Tue, 17 Oct 2023 14:20:46 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id eo9-20020a056402530900b0053defc8c15asm1769060edb.51.2023.10.17.14.20.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Oct 2023 14:20:46 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Tue, 17 Oct 2023 21:20:45 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <771768025.42201.1697577646021@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v6.6-rc1-17-ge0750d947352: Failure on arm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af5900a6-e3ae-4cf1-9a29-89484f411a1c@amd.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_42200_2085860166.1697577645493"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allmodconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-On Tue, Oct 17, 2023 at 11:45:42AM -0600, Rodrigo Siqueira Jordao wrote:
-> Hi Nathan,
-> (+Hamza)
-> 
-> First of all, thanks a lot for your feedback. You can see my comments
-> inline.
-> 
-> On 10/17/23 11:22, Nathan Chancellor wrote:
-> > Hi Rodrigo,
-> > 
-> > On Mon, Oct 16, 2023 at 08:19:16AM -0600, Rodrigo Siqueira wrote:
-> > > Stephen discovers a stack size issue when compiling the latest amdgpu
-> > > code with allmodconfig. This patchset addresses that issue by splitting
-> > > a large function into two smaller parts.
-> > > 
-> > > Thanks
-> > > Siqueira
-> > > 
-> > > Rodrigo Siqueira (2):
-> > >    drm/amd/display: Reduce stack size by splitting function
-> > >    drm/amd/display: Fix stack size issue on DML2
-> > > 
-> > >   .../amd/display/dc/dml2/display_mode_core.c   | 3289 +++++++++--------
-> > >   1 file changed, 1653 insertions(+), 1636 deletions(-)
-> > > 
-> > > -- 
-> > > 2.42.0
-> > > 
-> > 
-> > This series appears in -next as commit c587ee30f376 ("drm/amd/display:
-> > Reduce stack size by splitting function"); while it may help stack usage
-> > for GCC, clang still suffers. All clang versions that the kernel
-> > supports show a warning for dml_prefetch_check(), the following is with
-> > LLVM 17.0.2 from kernel.org [1].
-> > 
-> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6263:13: error: stack frame size (2520) exceeds limit (2048) in 'dml_prefetch_check' [-Werror,-Wframe-larger-than]
-> >     6263 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
-> >          |             ^
-> > 
-> > With clang 18.0.0 (tip of tree) and 15.0.7, I see:
-> > 
-> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8277:6: error: stack frame size (2056) exceeds limit (2048) in 'dml_core_mode_programming' [-Werror,-Wframe-larger-than]
-> >     8277 | void dml_core_mode_programming(struct display_mode_lib_st *mode_lib, const struct dml_clk_cfg_st *clk_cfg)
-> >          |      ^
-> > 
-> > For what it's worth, building with GCC 13.2.0 with a slighly lower
-> > -Wframe-larger-than value reveals that dml_prefetch_check() is right at
-> > the current limit and the stack usage of dml_core_mode_programming()
-> > when built with GCC is not too far of clang's, so it seems like there
-> > should be a more robust set of fixes, such as the ones that I have
-> > already done for older generations of this code.
-> > 
-> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_prefetch_check':
-> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6705:1: error: the frame size of 2048 bytes is larger than 1800 bytes [-Werror=frame-larger-than=]
-> >     6705 | }
-> >          | ^
-> > 
-> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_core_mode_programming':
-> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:9893:1: error: the frame size of 1880 bytes is larger than 1800 bytes [-Werror=frame-larger-than=]
-> >     9893 | } // dml_core_mode_programming
-> >          | ^
-> > 
-> > 41012d715d5d drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack usage
-> > 21485d3da659 drm/amd/display: Reduce number of arguments of dml31's CalculateFlipSchedule()
-> > 37934d4118e2 drm/amd/display: Reduce number of arguments of dml31's CalculateWatermarksAndDRAMSpeedChangeSupport()
-> > a3fef74b1d48 drm/amd/display: Reduce number of arguments of dml32_CalculatePrefetchSchedule()
-> > c4be0ac987f2 drm/amd/display: Reduce number of arguments of dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
-> > 25ea501ed85d drm/amd/display: Reduce number of arguments of dml314's CalculateFlipSchedule()
-> > ca07f4f5a98b drm/amd/display: Reduce number of arguments of dml314's CalculateWatermarksAndDRAMSpeedChangeSupport()
-> > 
-> > It would be really nice if these would somehow make it back to the
-> > original sources so that we stop going through this every time a new
-> > version of this code shows up.
-> 
-> I'm familiar with that approach of reducing the stack size. Correct me if
-> I'm wrong, but the idea can be summarized as:
-> 
-> 1. Move the local variable to a new struct.
-> 2. Add the new struct as a reference to the main struct.
-> 3. Update the function to use the elements in those structs.
-> 
-> I used this approach a lot in the past to reduce the stack size. However, I
-> think this case is a little bit different. The target function is
+------=_Part_42200_2085860166.1697577645493
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Right, I would agree with this assessment.
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-> display_mode_core, which does not have a lot of local variables, as you can
-> see in the below link:
-> 
-> https://gitlab.freedesktop.org/agd5f/linux/-/blob/amd-staging-drm-next/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c#L6212
+In CI config tcwg_kernel/llvm-master-arm-next-allmodconfig after:
 
-Based on my experience in the past and my limited knowledge of LLVM
-internals, I think this is likely caused by excessive inlining combined
-with several functions that take a high number of parameters, which
-means the compiler has to spill passing parameters to the stack when it
-runs out of registers. The majority of the commits I mentioned above
-were focused on reducing the number of parameters to various functions,
-which showed the largest stack usage wins.
+  | commit v6.6-rc1-17-ge0750d947352
+  | Author: Kent Overstreet <kent.overstreet@gmail.com>
+  | Date:   Thu Mar 16 22:18:50 2017 -0800
+  | 
+  |     bcachefs: Initial commit
+  |     
+  |     Initially forked from drivers/md/bcache, bcachefs is a new copy-on-write
+  |     filesystem with every feature you could possibly want.
+  |     
+  |     Website: https://bcachefs.org
+  |     
+  | ... 1 lines of the commit log omitted.
 
-> > I thought that AMD has started testing
-> > with clang, how were these warnings not caught before the code was
-> > merged? If you are unable to look into these warnings, I can try to
-> > double back to this once I look into the other fires in -next...
-> 
-> Yeah, our CI uses GCC and Clang, but the version provided by the distro.
-> Additionally, we do not use allmodconfig per patch; we use a custom config
-> file to keep the build time under control.
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+23730
+# First few build errors in logs:
 
-That is understandable. I am not sure how much control over the build
-command you have with your target or how much spare capacity you are
-working with but it would be nice if you could run allmodconfig and just
-the AMDGPU folder target, which would catch a majority of problems. For
-example, this problem reproduces for me with just:
+# 00:20:55 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:20:56 fs/bcachefs/alloc.c:332:9: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+# 00:20:56 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/alloc.o] Error 1
+# 00:21:08 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:21:08 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:21:08 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/bset.o] Error 1
+# 00:21:09 fs/bcachefs/btree_cache.c:67:9: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:21:09 fs/bcachefs/btree_cache.c:120:2: error: array index 0 is past the end of the array (that has type '__u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:21:09 fs/bcachefs/btree_cache.c:201:6: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:21:09 fs/bcachefs/btree_cache.c:607:3: error: array index 0 is past the end of the array (that has type '__u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
 
-  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 allmodconfig drivers/gpu/drm/amd/amdgpu/
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+32815
+# linux build successful:
+all
+# linux boot successful:
+boot
 
-which should not take that long, even on a relatively slow machine. One
-of my test machines has a Ryzen 3 4300G (4C/8T), which did that command
-in around 3 minutes, and I assume you have access to better machines
-than that.
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-arm-next-allmodconfig
 
-> Anyway, we tried to understand why this issue only showed up with the
-> allmodconfig, and Hamza figured out that enabling the KCSAN option in our
-> config file exposes those stack issues. I don't know the details behind
-> KCSAN, but it looks like it will expand the stack size in the functions.
-> 
-> Maybe can you check in your side if disable KCSAN also fix the issues on
-> clang? Do you have any other suggestion on how I can try to reduce the stack
-> size in this particular case?
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
 
-If CONFIG_KASAN, CONFIG_KCSAN, and CONFIG_KMSAN are disabled, I see no
--Wframe-larger-than warnings (I tested with KCONFIG_ALLCONFIG). While I
-would personally like to see these disabled with allmodconfig, that is
-not the current reality. We are also looking into reducing stack usage
-in clang but that will only help newer releases. I think looking into
-reducing the number of parameters of various functions called throughout
-dml_prefetch_check() and dml_core_mode_programming() is likely the right
-way to solve this, or at least the most reliable methods.
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/135/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/134/artifact/artifacts
 
-Cheers,
-Nathan
+Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/e0750d9473522d076b33ee257a21e27a5dd75031/tcwg_kernel/llvm-master-arm-next-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://git.linaro.org/kernel-org/linux-next.git/commit/?id=e0750d9473522d076b33ee257a21e27a5dd75031
+
+Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1005
+
+List of configurations that regressed due to this commit :
+* tcwg_kernel
+** llvm-master-arm-next-allmodconfig
+*** Failure
+*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/e0750d9473522d076b33ee257a21e27a5dd75031/tcwg_kernel/llvm-master-arm-next-allmodconfig/details.txt
+*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/135/
+------=_Part_42200_2085860166.1697577645493--
