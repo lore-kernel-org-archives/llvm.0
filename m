@@ -1,135 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC5B2D03D
-	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 16:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F951F606
+	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 17:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nc9rTl4P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B373C433C7;
-	Tue, 17 Oct 2023 16:59:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltwurKU7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C8FC433C7;
+	Tue, 17 Oct 2023 17:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697561988;
-	bh=geQXKRC2Jvb636FBZET9oMZ/p3D7F0Z9S0YyA2XEv1I=;
+	s=k20201202; t=1697563353;
+	bh=ldcTy7nmaNgK6Z75DboPq9fYVJTPVI4Cmp0eph9Rp08=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nc9rTl4PB8xxDCMVkyK3df1khEKShyJ57b6NDmta0G2eJU2ZvclP44qA/XiusW0S5
-	 D97OnJZLlKyg2zbwoGWPg/rWGjKiNb1x1F9oe2tXplNWGfr4dPS7Q5573kYwlt5er8
-	 B/2QMqCcZFyNoFMP2NVxLLJBEPLbasPIapHFS3r/2Y6mlFhOGrgVgbOb2yjqfnixnE
-	 T/YFYT+970Fl3Yk//lRN4LSeVvjJUtrtQ8U+VMJfvbfUQ4rv7kk6sP2dZMn1Uoi2KS
-	 AtX9jeMJCLQGrQds3DPLPzAeOgk8FbMvPkvnif0xghx5KCMhapfwIhjffbMKd38kEi
-	 jiQdkUSdfBRtA==
-Date: Tue, 17 Oct 2023 09:59:46 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Kaplan, David" <David.Kaplan@amd.com>, Borislav Petkov <bp@alien8.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-tip-commits@vger.kernel.org" <linux-tip-commits@vger.kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: [PATCH] x86/srso: Fix panic in return thunk during boot
-Message-ID: <20231017165946.v4i2d4exyqwqq3bx@treble>
-References: <20231012141031.GHZSf+V1NjjUJTc9a9@fat_crate.local>
- <169713303534.3135.10558074245117750218.tip-bot2@tip-bot2>
- <20231016211040.GA3789555@dev-arch.thelio-3990X>
- <20231016212944.GGZS2rSCbIsViqZBDe@fat_crate.local>
- <20231016214810.GA3942238@dev-arch.thelio-3990X>
- <SN6PR12MB270273A7D1AF5D59B920C94194D6A@SN6PR12MB2702.namprd12.prod.outlook.com>
- <20231017052834.v53regh66hspv45n@treble>
- <20231017153222.GA707258@dev-arch.thelio-3990X>
+	b=ltwurKU7VtuKw9asHVe1cFLIbWL5uWaoltF9Hn09WHcOvCrBFcKXxc8uQ5R6zTGIy
+	 8bux/E6i/m5QvrG6mbkCCUaOBl8jPcuXd0mOHvWjcJjN6rU0AcWTbpnetHu5Y4L3vr
+	 ZvufaP7LkkZ7dD+p23bLx/CSQEt8DYqtu9AceZW5szaITwmIp7tVoACbDv47mqlqut
+	 z9JE5G0MKBhDyp+5+N/OF48hX7xriawRXy3YnOQ4q5eELeY/fBDY/PlB66/exh9upU
+	 sjD7SlHCn5zZ5CvZV2e+xrssMb0cwaXr/VtPiPml26WYCoGCMDqzVl/PYgi6JeRi/3
+	 KWEP7DFE8gV1Q==
+Date: Tue, 17 Oct 2023 10:22:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Chaitanya Dhere <chaitanya.dhere@amd.com>,
+	Roman Li <roman.li@amd.com>, linux-next@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] Reduce stack size for DML2
+Message-ID: <20231017172231.GA2348194@dev-arch.thelio-3990X>
+References: <20231016142031.241912-1-Rodrigo.Siqueira@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231017153222.GA707258@dev-arch.thelio-3990X>
+In-Reply-To: <20231016142031.241912-1-Rodrigo.Siqueira@amd.com>
 
-Enabling CONFIG_KCSAN causes a panic during boot due to an "invalid
-opcode" in __x86_return_thunk():
+Hi Rodrigo,
 
-  invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc2-00316-g91174087dcc7 #1
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.2-14-g1e1da7a96300-prebuilt.qemu.org 04/01/2014
-  RIP: 0010:__x86_return_thunk+0x0/0x10
-  Code: e8 01 00 00 00 cc e8 01 00 00 00 cc 48 81 c4 80 00 00 00 65 48 c7 04 25 d0 ac 02 00 ff ff ff ff c3 cc 0f 1f 84 00 00 00 00 00 <0f> 0b cc cc cc cc cc cc cc cc cc cc cc cc cc cc e9 db 8c 8e fe 0f
-  RSP: 0018:ffffaef1c0013ed0 EFLAGS: 00010246
-  RAX: ffffffffa0e80eb0 RBX: ffffffffa0f05240 RCX: 0001ffffffffffff
-  RDX: 0000000000000551 RSI: ffffffffa0dcc64e RDI: ffffffffa0f05238
-  RBP: ffff8f93c11708e0 R08: ffffffffa1387280 R09: 0000000000000000
-  R10: 0000000000000282 R11: 0001ffffa0f05238 R12: 0000000000000002
-  R13: 0000000000000282 R14: 0000000000000001 R15: 0000000000000000
-  FS:  0000000000000000(0000) GS:ffff8f93df000000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: ffff8f93d6c01000 CR3: 0000000015c2e000 CR4: 0000000000350ef0
+On Mon, Oct 16, 2023 at 08:19:16AM -0600, Rodrigo Siqueira wrote:
+> Stephen discovers a stack size issue when compiling the latest amdgpu
+> code with allmodconfig. This patchset addresses that issue by splitting
+> a large function into two smaller parts.
+> 
+> Thanks
+> Siqueira
+> 
+> Rodrigo Siqueira (2):
+>   drm/amd/display: Reduce stack size by splitting function
+>   drm/amd/display: Fix stack size issue on DML2
+> 
+>  .../amd/display/dc/dml2/display_mode_core.c   | 3289 +++++++++--------
+>  1 file changed, 1653 insertions(+), 1636 deletions(-)
+> 
+> -- 
+> 2.42.0
+> 
 
-The panic is triggered by the UD2 instruction which gets patched into
-__x86_return_thunk() when alternatives are applied.  After that point,
-the default return thunk should no longer be used.
+This series appears in -next as commit c587ee30f376 ("drm/amd/display:
+Reduce stack size by splitting function"); while it may help stack usage
+for GCC, clang still suffers. All clang versions that the kernel
+supports show a warning for dml_prefetch_check(), the following is with
+LLVM 17.0.2 from kernel.org [1].
 
-As David Kaplan describes, the issue is caused by a couple of
-KCSAN-generated constructors which aren't processed by objtool:
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6263:13: error: stack frame size (2520) exceeds limit (2048) in 'dml_prefetch_check' [-Werror,-Wframe-larger-than]
+   6263 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+        |             ^
 
-  "When KCSAN is enabled, GCC generates lots of constructor functions
-  named _sub_I_00099_0 which call __tsan_init and then return.  The
-  returns in these are generally annotated normally by objtool and fixed
-  up at runtime.  But objtool runs on vmlinux.o and vmlinux.o does not
-  include a couple of object files that are in vmlinux, like
-  init/version-timestamp.o and .vmlinux.export.o, both of which contain
-  _sub_I_00099_0 functions.  As a result, the returns in these functions
-  are not annotated, and the panic occurs when we call one of them in
-  do_ctors and it uses the default return thunk.
+With clang 18.0.0 (tip of tree) and 15.0.7, I see:
 
-  This difference can be seen by counting the number of these functions in the object files:
-  $ objdump -d vmlinux.o|grep -c "<_sub_I_00099_0>:"
-  2601
-  $ objdump -d vmlinux|grep -c "<_sub_I_00099_0>:"
-  2603
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8277:6: error: stack frame size (2056) exceeds limit (2048) in 'dml_core_mode_programming' [-Werror,-Wframe-larger-than]
+   8277 | void dml_core_mode_programming(struct display_mode_lib_st *mode_lib, const struct dml_clk_cfg_st *clk_cfg)
+        |      ^
 
-  If these functions are only run during kernel boot, there is no
-  speculation concern."
+For what it's worth, building with GCC 13.2.0 with a slighly lower
+-Wframe-larger-than value reveals that dml_prefetch_check() is right at
+the current limit and the stack usage of dml_core_mode_programming()
+when built with GCC is not too far of clang's, so it seems like there
+should be a more robust set of fixes, such as the ones that I have
+already done for older generations of this code.
 
-Fix it by disabling KCSAN on version-timestamp.o and .vmlinux.export.o
-so the extra functions don't get generated.  KASAN and GCOV are already
-disabled for those files.
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_prefetch_check':
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6705:1: error: the frame size of 2048 bytes is larger than 1800 bytes [-Werror=frame-larger-than=]
+   6705 | }
+        | ^
 
-Fixes: 91174087dcc7 ("x86/retpoline: Ensure default return thunk isn't used at runtime")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://lore.kernel.org/lkml/20231016214810.GA3942238@dev-arch.thelio-3990X/
-Debugged-by: David Kaplan <David.Kaplan@amd.com>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Marco Elver <elver@google.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- init/Makefile            | 1 +
- scripts/Makefile.vmlinux | 1 +
- 2 files changed, 2 insertions(+)
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_core_mode_programming':
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:9893:1: error: the frame size of 1880 bytes is larger than 1800 bytes [-Werror=frame-larger-than=]
+   9893 | } // dml_core_mode_programming
+        | ^
 
-diff --git a/init/Makefile b/init/Makefile
-index ec557ada3c12..cbac576c57d6 100644
---- a/init/Makefile
-+++ b/init/Makefile
-@@ -60,4 +60,5 @@ include/generated/utsversion.h: FORCE
- $(obj)/version-timestamp.o: include/generated/utsversion.h
- CFLAGS_version-timestamp.o := -include include/generated/utsversion.h
- KASAN_SANITIZE_version-timestamp.o := n
-+KCSAN_SANITIZE_version-timestamp.o := n
- GCOV_PROFILE_version-timestamp.o := n
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index 3cd6ca15f390..c9f3e03124d7 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -19,6 +19,7 @@ quiet_cmd_cc_o_c = CC      $@
- 
- ifdef CONFIG_MODULES
- KASAN_SANITIZE_.vmlinux.export.o := n
-+KCSAN_SANITIZE_.vmlinux.export.o := n
- GCOV_PROFILE_.vmlinux.export.o := n
- targets += .vmlinux.export.o
- vmlinux: .vmlinux.export.o
--- 
-2.41.0
+41012d715d5d drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack usage
+21485d3da659 drm/amd/display: Reduce number of arguments of dml31's CalculateFlipSchedule()
+37934d4118e2 drm/amd/display: Reduce number of arguments of dml31's CalculateWatermarksAndDRAMSpeedChangeSupport()
+a3fef74b1d48 drm/amd/display: Reduce number of arguments of dml32_CalculatePrefetchSchedule()
+c4be0ac987f2 drm/amd/display: Reduce number of arguments of dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
+25ea501ed85d drm/amd/display: Reduce number of arguments of dml314's CalculateFlipSchedule()
+ca07f4f5a98b drm/amd/display: Reduce number of arguments of dml314's CalculateWatermarksAndDRAMSpeedChangeSupport()
 
+It would be really nice if these would somehow make it back to the
+original sources so that we stop going through this every time a new
+version of this code shows up. I thought that AMD has started testing
+with clang, how were these warnings not caught before the code was
+merged? If you are unable to look into these warnings, I can try to
+double back to this once I look into the other fires in -next...
+
+[1]: https://mirrors.edge.kernel.org/pub/tools/llvm/
+
+Cheers,
+Nathan
