@@ -1,45 +1,36 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91A32E3E4;
-	Tue, 17 Oct 2023 20:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333431F606
+	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 21:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XR+yU5Hr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697572884; x=1729108884;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=XNa67o/INi282OnSB0/IbLa6Lwlzd3NgopowbZSEkWc=;
-  b=XR+yU5Hr61s0B0gvvFTd9NcHzoRLO6kk6YgJrLQgWF4XtAu5l3kYYPrs
-   Ai7QquqL4Ofmjm/06LV7o9U1yPuAwvhBwStG8NqG8K/RML1A9g6A0W+Sn
-   iAIrnRcqO2pBZfqHjpyaXCN6AZ6YCBnpq8+xpSJrWqaedIDoJbGm8n3Hb
-   N5UylRB/vv/sBKcl0j9LgDZ6xEUNz4ru9HlFsbjUP4mA9jtUu7UJ+C0no
-   9xu6UYSA94LLiZxDt/U2KKsSXfqsyiKFRtwEkj50SsyBiIfdeFR0cBs9y
-   Fe84tOfhr89euXZ0fILLApQ+M8hJeFK/gtJWhd8i8gL8zSUg7n4258CGX
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="4468478"
-X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
-   d="scan'208";a="4468478"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 13:01:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="706151629"
-X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
-   d="scan'208";a="706151629"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 17 Oct 2023 13:01:08 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qsqFW-000A1S-1O;
-	Tue, 17 Oct 2023 20:01:06 +0000
-Date: Wed, 18 Oct 2023 04:00:48 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [djwong-xfs:xfs-merge-6.7 47/51] clang: error: unknown argument:
- '-femit-struct-debug-detailed=any'
-Message-ID: <202310180355.WJvjRDzm-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N90iWyBr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F627C433C7;
+	Tue, 17 Oct 2023 21:19:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697577591;
+	bh=vRZpg6PdpL3MhE26E/oC79Qb79senuuvZ43lnvsq0nQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=N90iWyBrofTafsz5IKzp3zu0oZh0l/5hfUL6JLJT+VcUAJjm8RyYqFeCY9i5oR5BS
+	 LYXQl50He5hlt8Duo6+20IfNNieFjn0XGI9LetezJzpAefOlqvMvwTAgTjvTtm1l1T
+	 ShECQmXtBGaKoF0rt+aJbjm8vH8XsKqpiyZu1M/yDIEaJqryjEWoSChe40mbbRPVPI
+	 VmyruZKlKAZ1tsrc3trQo3ecmeyybmI6690EYrdrQTtWyg98gPWFrT5RGBIbimBl4W
+	 H+G7SdTr9VY5wrI2IGGdjDhcatHxpRFlBWRqkVPhWokYFyZmJhscO9Ww38a5cKjIEq
+	 SEibGCVx0D2eA==
+Date: Tue, 17 Oct 2023 14:19:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Chaitanya Dhere <chaitanya.dhere@amd.com>,
+	Roman Li <roman.li@amd.com>, linux-next@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
+	"Mahfooz, Hamza" <hamza.mahfooz@amd.com>
+Subject: Re: [PATCH 0/2] Reduce stack size for DML2
+Message-ID: <20231017211949.GA2311196@dev-arch.thelio-3990X>
+References: <20231016142031.241912-1-Rodrigo.Siqueira@amd.com>
+ <20231017172231.GA2348194@dev-arch.thelio-3990X>
+ <af5900a6-e3ae-4cf1-9a29-89484f411a1c@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,25 +39,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <af5900a6-e3ae-4cf1-9a29-89484f411a1c@amd.com>
 
-TO: "Darrick J. Wong" <darrick.wong@oracle.com>
+On Tue, Oct 17, 2023 at 11:45:42AM -0600, Rodrigo Siqueira Jordao wrote:
+> Hi Nathan,
+> (+Hamza)
+> 
+> First of all, thanks a lot for your feedback. You can see my comments
+> inline.
+> 
+> On 10/17/23 11:22, Nathan Chancellor wrote:
+> > Hi Rodrigo,
+> > 
+> > On Mon, Oct 16, 2023 at 08:19:16AM -0600, Rodrigo Siqueira wrote:
+> > > Stephen discovers a stack size issue when compiling the latest amdgpu
+> > > code with allmodconfig. This patchset addresses that issue by splitting
+> > > a large function into two smaller parts.
+> > > 
+> > > Thanks
+> > > Siqueira
+> > > 
+> > > Rodrigo Siqueira (2):
+> > >    drm/amd/display: Reduce stack size by splitting function
+> > >    drm/amd/display: Fix stack size issue on DML2
+> > > 
+> > >   .../amd/display/dc/dml2/display_mode_core.c   | 3289 +++++++++--------
+> > >   1 file changed, 1653 insertions(+), 1636 deletions(-)
+> > > 
+> > > -- 
+> > > 2.42.0
+> > > 
+> > 
+> > This series appears in -next as commit c587ee30f376 ("drm/amd/display:
+> > Reduce stack size by splitting function"); while it may help stack usage
+> > for GCC, clang still suffers. All clang versions that the kernel
+> > supports show a warning for dml_prefetch_check(), the following is with
+> > LLVM 17.0.2 from kernel.org [1].
+> > 
+> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6263:13: error: stack frame size (2520) exceeds limit (2048) in 'dml_prefetch_check' [-Werror,-Wframe-larger-than]
+> >     6263 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+> >          |             ^
+> > 
+> > With clang 18.0.0 (tip of tree) and 15.0.7, I see:
+> > 
+> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8277:6: error: stack frame size (2056) exceeds limit (2048) in 'dml_core_mode_programming' [-Werror,-Wframe-larger-than]
+> >     8277 | void dml_core_mode_programming(struct display_mode_lib_st *mode_lib, const struct dml_clk_cfg_st *clk_cfg)
+> >          |      ^
+> > 
+> > For what it's worth, building with GCC 13.2.0 with a slighly lower
+> > -Wframe-larger-than value reveals that dml_prefetch_check() is right at
+> > the current limit and the stack usage of dml_core_mode_programming()
+> > when built with GCC is not too far of clang's, so it seems like there
+> > should be a more robust set of fixes, such as the ones that I have
+> > already done for older generations of this code.
+> > 
+> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_prefetch_check':
+> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6705:1: error: the frame size of 2048 bytes is larger than 1800 bytes [-Werror=frame-larger-than=]
+> >     6705 | }
+> >          | ^
+> > 
+> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_core_mode_programming':
+> >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:9893:1: error: the frame size of 1880 bytes is larger than 1800 bytes [-Werror=frame-larger-than=]
+> >     9893 | } // dml_core_mode_programming
+> >          | ^
+> > 
+> > 41012d715d5d drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack usage
+> > 21485d3da659 drm/amd/display: Reduce number of arguments of dml31's CalculateFlipSchedule()
+> > 37934d4118e2 drm/amd/display: Reduce number of arguments of dml31's CalculateWatermarksAndDRAMSpeedChangeSupport()
+> > a3fef74b1d48 drm/amd/display: Reduce number of arguments of dml32_CalculatePrefetchSchedule()
+> > c4be0ac987f2 drm/amd/display: Reduce number of arguments of dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
+> > 25ea501ed85d drm/amd/display: Reduce number of arguments of dml314's CalculateFlipSchedule()
+> > ca07f4f5a98b drm/amd/display: Reduce number of arguments of dml314's CalculateWatermarksAndDRAMSpeedChangeSupport()
+> > 
+> > It would be really nice if these would somehow make it back to the
+> > original sources so that we stop going through this every time a new
+> > version of this code shows up.
+> 
+> I'm familiar with that approach of reducing the stack size. Correct me if
+> I'm wrong, but the idea can be summarized as:
+> 
+> 1. Move the local variable to a new struct.
+> 2. Add the new struct as a reference to the main struct.
+> 3. Update the function to use the elements in those structs.
+> 
+> I used this approach a lot in the past to reduce the stack size. However, I
+> think this case is a little bit different. The target function is
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git xfs-merge-6.7
-head:   eee9645e1bf5f060c24ab0f52b2fc55a3ff68ec6
-commit: 5ae98786123bf094d32671f561362d74160288a5 [47/51] fs: turn on more warnings for the filesystem code we modify most
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231018/202310180355.WJvjRDzm-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231018/202310180355.WJvjRDzm-lkp@intel.com/reproduce)
+Right, I would agree with this assessment.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310180355.WJvjRDzm-lkp@intel.com/
+> display_mode_core, which does not have a lot of local variables, as you can
+> see in the below link:
+> 
+> https://gitlab.freedesktop.org/agd5f/linux/-/blob/amd-staging-drm-next/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c#L6212
 
-All errors (new ones prefixed by >>):
+Based on my experience in the past and my limited knowledge of LLVM
+internals, I think this is likely caused by excessive inlining combined
+with several functions that take a high number of parameters, which
+means the compiler has to spill passing parameters to the stack when it
+runs out of registers. The majority of the commits I mentioned above
+were focused on reducing the number of parameters to various functions,
+which showed the largest stack usage wins.
 
->> clang: error: unknown argument: '-femit-struct-debug-detailed=any'
+> > I thought that AMD has started testing
+> > with clang, how were these warnings not caught before the code was
+> > merged? If you are unable to look into these warnings, I can try to
+> > double back to this once I look into the other fires in -next...
+> 
+> Yeah, our CI uses GCC and Clang, but the version provided by the distro.
+> Additionally, we do not use allmodconfig per patch; we use a custom config
+> file to keep the build time under control.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+That is understandable. I am not sure how much control over the build
+command you have with your target or how much spare capacity you are
+working with but it would be nice if you could run allmodconfig and just
+the AMDGPU folder target, which would catch a majority of problems. For
+example, this problem reproduces for me with just:
+
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 allmodconfig drivers/gpu/drm/amd/amdgpu/
+
+which should not take that long, even on a relatively slow machine. One
+of my test machines has a Ryzen 3 4300G (4C/8T), which did that command
+in around 3 minutes, and I assume you have access to better machines
+than that.
+
+> Anyway, we tried to understand why this issue only showed up with the
+> allmodconfig, and Hamza figured out that enabling the KCSAN option in our
+> config file exposes those stack issues. I don't know the details behind
+> KCSAN, but it looks like it will expand the stack size in the functions.
+> 
+> Maybe can you check in your side if disable KCSAN also fix the issues on
+> clang? Do you have any other suggestion on how I can try to reduce the stack
+> size in this particular case?
+
+If CONFIG_KASAN, CONFIG_KCSAN, and CONFIG_KMSAN are disabled, I see no
+-Wframe-larger-than warnings (I tested with KCONFIG_ALLCONFIG). While I
+would personally like to see these disabled with allmodconfig, that is
+not the current reality. We are also looking into reducing stack usage
+in clang but that will only help newer releases. I think looking into
+reducing the number of parameters of various functions called throughout
+dml_prefetch_check() and dml_core_mode_programming() is likely the right
+way to solve this, or at least the most reliable methods.
+
+Cheers,
+Nathan
