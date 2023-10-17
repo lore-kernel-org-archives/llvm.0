@@ -1,87 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330E9BE58
-	for <llvm@lists.linux.dev>; Tue, 17 Oct 2023 05:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntF7ZIGw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57768C433C7;
-	Tue, 17 Oct 2023 05:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697520516;
-	bh=cd+YCcvaHShnXv8nfPjDdkeIq4Z59L04bYAn6IBtZqw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ntF7ZIGwmlpol29wyVdJbpc8ID4cq0mtwqrWBDTeXAskry0rMCdoEruNogvmNsU+t
-	 NqQxKvSGs75U5msvpeYdfieKunLtc052QQH4DU0a1YqSij6JKj9AjYwiUx6IJF+vx7
-	 3hB2jykjVWnSdGmbbsidS3PKfrMzY2XXRKAyV3YNzG/4pjrrbMOWhmgZSVxAIMb1g8
-	 pl21yGph/khjwE3zcQaY+r6QNKk3FbGILEtQcXNPrSm5LeBHiMpU9qNdbVOBCSBiFI
-	 IXqh9/KduF32ZjkJiSMiVWKflbBYScyvvDDo4TgBsQLWoenLVAbzi/Zc4K0CCIrqDV
-	 +TNT6LtjCrf8g==
-Date: Mon, 16 Oct 2023 22:28:34 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: "Kaplan, David" <David.Kaplan@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-tip-commits@vger.kernel.org" <linux-tip-commits@vger.kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [tip: x86/bugs] x86/retpoline: Ensure default return thunk isn't
- used at runtime
-Message-ID: <20231017052834.v53regh66hspv45n@treble>
-References: <20231012141031.GHZSf+V1NjjUJTc9a9@fat_crate.local>
- <169713303534.3135.10558074245117750218.tip-bot2@tip-bot2>
- <20231016211040.GA3789555@dev-arch.thelio-3990X>
- <20231016212944.GGZS2rSCbIsViqZBDe@fat_crate.local>
- <20231016214810.GA3942238@dev-arch.thelio-3990X>
- <SN6PR12MB270273A7D1AF5D59B920C94194D6A@SN6PR12MB2702.namprd12.prod.outlook.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457C74404;
+	Tue, 17 Oct 2023 07:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DEC52F4;
+	Tue, 17 Oct 2023 00:37:26 -0700 (PDT)
+Received: from [10.57.66.147] (unknown [10.57.66.147])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA2463F5A1;
+	Tue, 17 Oct 2023 00:36:44 -0700 (PDT)
+Message-ID: <b463b420-c2be-49c5-bed6-0ff896851adb@arm.com>
+Date: Tue, 17 Oct 2023 08:36:43 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SN6PR12MB270273A7D1AF5D59B920C94194D6A@SN6PR12MB2702.namprd12.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
+Content-Language: en-GB
+To: Catalin Marinas <catalin.marinas@arm.com>,
+ kernel test robot <lkp@intel.com>
+Cc: Will Deacon <will@kernel.org>, Steven Price <steven.price@arm.com>,
+ Peter Collingbourne <pcc@google.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20231005140730.2191134-1-ryan.roberts@arm.com>
+ <202310140531.BQQwt3NQ-lkp@intel.com> <ZS147N1JKyUvaHyJ@arm.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <ZS147N1JKyUvaHyJ@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 17, 2023 at 04:31:09AM +0000, Kaplan, David wrote:
-> I think I found the problem, although I'm not sure the best way to fix it.
+On 16/10/2023 18:54, Catalin Marinas wrote:
+> On Sat, Oct 14, 2023 at 05:15:51AM +0800, kernel test robot wrote:
+>> kernel test robot noticed the following build warnings:
+>>
+>> [auto build test WARNING on arm64/for-next/core]
+>> [also build test WARNING on arm-perf/for-next/perf arm/for-next kvmarm/next soc/for-next linus/master v6.6-rc5 next-20231013]
+>> [cannot apply to arm/fixes]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-mm-Hoist-synchronization-out-of-set_ptes-loop/20231005-231636
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+>> patch link:    https://lore.kernel.org/r/20231005140730.2191134-1-ryan.roberts%40arm.com
+>> patch subject: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
+>> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/config)
+>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202310140531.BQQwt3NQ-lkp@intel.com/
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>    In file included from net/ipv4/route.c:66:
+>>    In file included from include/linux/mm.h:29:
+>>    In file included from include/linux/pgtable.h:6:
+>>>> arch/arm64/include/asm/pgtable.h:344:65: warning: parameter 'addr' set but not used [-Wunused-but-set-parameter]
+>>      344 | static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+>>          |                                                                 ^
+>>    1 warning generated.
 > 
-> When KCSAN is enabled, GCC generates lots of constructor functions named _sub_I_00099_0 which call __tsan_init and then return.  The returns in these are generally annotated normally by objtool and fixed up at runtime.  But objtool runs on vmlinux.o and vmlinux.o does not include a couple of object files that are in vmlinux, like init/version-timestamp.o and .vmlinux.export.o, both of which contain _sub_I_00099_0 functions.  As a result, the returns in these functions are not annotated, and the panic occurs when we call one of them in do_ctors and it uses the default return thunk.
-> 
-> This difference can be seen by counting the number of these functions in the object files:
-> $ objdump -d vmlinux.o|grep -c "<_sub_I_00099_0>:"
-> 2601
-> $ objdump -d vmlinux|grep -c "<_sub_I_00099_0>:"
-> 2603
-> 
-> If these functions are only run during kernel boot, there is no speculation concern.  My first thought is that these two object files perhaps should be built without -mfunction-return=thunk-extern.  The use of that flag requires objtool to have the intended behavior and objtool isn't seeing these files.
-> 
-> Perhaps another option would be to not compile these two files with KCSAN, as they are already excluded from KASAN and GCOV it looks like.
+> Thanks for the report. I think something like below will do (I'll test
+> and commit as a separate patch, it's not something that Ryan's patch
+> introduces):
 
-I think the latter would be the easy fix, does this make it go away?
+I was actually just trying to repro this and was planning to send out a v3 of my
+patch. But if you are happy to handle it as you suggest, then I guess you don't
+need anything further from me?
 
-diff --git a/init/Makefile b/init/Makefile
-index ec557ada3c12..cbac576c57d6 100644
---- a/init/Makefile
-+++ b/init/Makefile
-@@ -60,4 +60,5 @@ include/generated/utsversion.h: FORCE
- $(obj)/version-timestamp.o: include/generated/utsversion.h
- CFLAGS_version-timestamp.o := -include include/generated/utsversion.h
- KASAN_SANITIZE_version-timestamp.o := n
-+KCSAN_SANITIZE_version-timestamp.o := n
- GCOV_PROFILE_version-timestamp.o := n
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index 3cd6ca15f390..c9f3e03124d7 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -19,6 +19,7 @@ quiet_cmd_cc_o_c = CC      $@
- 
- ifdef CONFIG_MODULES
- KASAN_SANITIZE_.vmlinux.export.o := n
-+KCSAN_SANITIZE_.vmlinux.export.o := n
- GCOV_PROFILE_.vmlinux.export.o := n
- targets += .vmlinux.export.o
- vmlinux: .vmlinux.export.o
+Thanks,
+Ryan
+
+
+> 
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 68984ba9ce2a..b19a8aee684c 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -341,8 +341,9 @@ static inline void __sync_cache_and_tags(pte_t pte, unsigned int nr_pages)
+>  		mte_sync_tags(pte, nr_pages);
+>  }
+>  
+> -static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep, pte_t pte, unsigned int nr)
+> +static inline void set_ptes(struct mm_struct *mm,
+> +			    unsigned long __always_unused addr,
+> +			    pte_t *ptep, pte_t pte, unsigned int nr)
+>  {
+>  	page_table_check_ptes_set(mm, ptep, pte, nr);
+>  	__sync_cache_and_tags(pte, nr);
+> @@ -353,7 +354,6 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+>  		if (--nr == 0)
+>  			break;
+>  		ptep++;
+> -		addr += PAGE_SIZE;
+>  		pte_val(pte) += PAGE_SIZE;
+>  	}
+>  }
+> @@ -528,7 +528,8 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
+>  #define pud_pfn(pud)		((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
+>  #define pfn_pud(pfn,prot)	__pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
+>  
+> -static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+> +static inline void __set_pte_at(struct mm_struct *mm,
+> +				unsigned long __always_unused addr,
+>  				pte_t *ptep, pte_t pte, unsigned int nr)
+>  {
+>  	__sync_cache_and_tags(pte, nr);
+> 
+
