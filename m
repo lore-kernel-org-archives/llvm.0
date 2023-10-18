@@ -1,102 +1,179 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2E23E017
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 20:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qtDWs-0002aR-OD; Wed, 18 Oct 2023 22:52:34 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qtDWr-002dSr-Fc; Wed, 18 Oct 2023 22:52:33 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qtDWr-001Ewi-5y; Wed, 18 Oct 2023 22:52:33 +0200
-Date: Wed, 18 Oct 2023 22:52:32 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-	andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, thierry.reding@gmail.com,
-	ndesaulniers@google.com, trix@redhat.com, baruch@tkos.co.il,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-pwm@vger.kernel.org, nathan@kernel.org
-Subject: Re: [PATCH V15 0/4] Add PWM support for IPQ chipsets
-Message-ID: <20231018205232.p5d4xaqsd5fcbvfi@pengutronix.de>
-References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
- <f87f480d-6775-44c9-8a2b-05d47bb0dc5d@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82A5134BF
+	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 20:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hLF7tobi"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-405497850dbso68099325e9.0
+        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 13:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697662507; x=1698267307; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aM7Lcg58eaICcI7n9hqCMKVzpyeJKHwBAKrGqarbnys=;
+        b=hLF7tobifZfVJS/VWPMLTgSUdH3dT/yxUb2SysFNiYQMyOwFs2Y8dJwdTL+TqpgJDG
+         /byX45YlLnn3n6KfBS8WBsH9fESZ+4ceQ4/u4hqDebTmQQNv578DkNZ8wM9yaUFlViEj
+         kQv65iSyINzrP8za4UqwXgb0/JW67qhn+8hwEgzGMwqNkuN/nzAkaranazAKkvTk0xKo
+         keDb6SiyT378M5vHiOaeLIz37Sgz6iUNO+hPPSl80Rdrv4HXxr4xX9AWQkHThQvn7EKg
+         BIAxb/HdFlA/wVXspmya3g5PMGTZOc5l9FTY3ITvc34WAinFcWwB68K7ba5z5lRR2h5d
+         FaDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697662507; x=1698267307;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aM7Lcg58eaICcI7n9hqCMKVzpyeJKHwBAKrGqarbnys=;
+        b=Z1uQQwEknchQ82P6IzPl+5KUg8j9AtPCI6luqFVKwJfxDlLBN84sGECkO813Dy/Mxo
+         BuJApikcP1QhWXf5LrgwmTTgl5uAsIia4k4KFTSv8TJDJZdlhqzwMkxRI0mm7Tvj/XaO
+         bz4ceFT76CFeu8DJpcmIQHhS3SCQU/UgUfwnLmo5fhqq9rnDWfRL+Ot0hmIgCxSChtf6
+         PozwfD27zJHY98fsV4pVgJLgIyf38/eD1QEI/713Ge+RG+UGxIVg6yA9GgvMzH4VDe/P
+         FcYpHi5gqnHg+LtDKcrWroX8w3JUgQ5TPJdOTXoR33avJ7+GoYiV8bnB/yp3zdi6Lg+X
+         jdOA==
+X-Gm-Message-State: AOJu0Yx44Jkw6oKPjYeBcLCMzyC5M2b6nI8VhpR4h0U9Q3K29DhEttW2
+	WMgbHSDtJ1w91Fcb2mYTDpOBF6fMgFRt9nUsq1Q5Qg==
+X-Google-Smtp-Source: AGHT+IGMqUrVfV+dz/gW9YaHJqOGThqNoUvNg3dX8yRlXQiXmYJ84aNlFY5GFAPOcqrTuilhkUJIA1J5zqNQf0x+Iq8=
+X-Received: by 2002:a05:6000:45:b0:32d:96a7:9551 with SMTP id
+ k5-20020a056000004500b0032d96a79551mr137837wrx.36.1697662506602; Wed, 18 Oct
+ 2023 13:55:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6foex2ayshpkzjy2"
-Content-Disposition: inline
-In-Reply-To: <f87f480d-6775-44c9-8a2b-05d47bb0dc5d@linaro.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
-
-
---6foex2ayshpkzjy2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+References: <20231009145605.2150897-1-usama.arif@bytedance.com>
+ <20231010012345.GA108129@monkey> <20231012000327.GA1855399@dev-arch.thelio-3990X>
+ <20231012145318.GA5127@monkey> <20231013001203.GA3812@monkey> <20231014000450.GA253713@monkey>
+In-Reply-To: <20231014000450.GA253713@monkey>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 18 Oct 2023 13:54:52 -0700
+Message-ID: <CAKwvOdm9xKGQzi6_j=gGZCEmKJe6b9o8+jen1oEeAhyjcaSnxQ@mail.gmail.com>
+Subject: Re: [PATCH] mm: hugetlb: Only prep and add allocated folios for
+ non-gigantic pages
+To: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Usama Arif <usama.arif@bytedance.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
+	muchun.song@linux.dev, songmuchun@bytedance.com, fam.zheng@bytedance.com, 
+	liangma@liangbit.com, punit.agrawal@bytedance.com, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Fri, Oct 13, 2023 at 5:05=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
+om> wrote:
+>
+> On 10/12/23 17:12, Mike Kravetz wrote:
+> > On 10/12/23 07:53, Mike Kravetz wrote:
+> > > On 10/11/23 17:03, Nathan Chancellor wrote:
+> > > > On Mon, Oct 09, 2023 at 06:23:45PM -0700, Mike Kravetz wrote:
+> > > > > On 10/09/23 15:56, Usama Arif wrote:
+> > >
+> > > Thank you Nathan!  That is very helpful.
+> > >
+> > > I will use this information to try and recreate.  If I can recreate, =
+I
+> > > should be able to get to root cause.
+> >
+> > I could easily recreate the issue using the provided instructions.  Fir=
+st
+> > thing I did was add a few printk's to check/verify state.  The beginnin=
+g
+> > of gather_bootmem_prealloc looked like this:
+>
+> Hi Nathan,
+>
+> This is looking more and more like a Clang issue to me.  I did a little
+> more problem isolation today.  Here is what I did:
+>
+> - Check out commit "hugetlb: restructure pool allocations" in linux-next
+> - Fix the known issue with early disable/enable IRQs via locking by
+>   applying:
+>
+> commit 266789498210dff6cf9a14b64fa3a5cb2fcc5858
+> Author: Mike Kravetz <mike.kravetz@oracle.com>
+> Date:   Fri Oct 13 13:14:15 2023 -0700
+>
+>     fix prep_and_add_allocated_folios locking
+>
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index c843506654f8..d8ab2d9b391b 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -2246,15 +2246,16 @@ static struct folio *alloc_fresh_hugetlb_folio(st=
+ruct hstate *h,
+>  static void prep_and_add_allocated_folios(struct hstate *h,
+>                                         struct list_head *folio_list)
+>  {
+> +       unsigned long flags;
+>         struct folio *folio, *tmp_f;
+>
+>         /* Add all new pool pages to free lists in one lock cycle */
+> -       spin_lock_irq(&hugetlb_lock);
+> +       spin_lock_irqsave(&hugetlb_lock, flags);
+>         list_for_each_entry_safe(folio, tmp_f, folio_list, lru) {
+>                 __prep_account_new_huge_page(h, folio_nid(folio));
+>                 enqueue_hugetlb_folio(h, folio);
+>         }
+> -       spin_unlock_irq(&hugetlb_lock);
+> +       spin_unlock_irqrestore(&hugetlb_lock, flags);
+>  }
+>
+>  /*
+>
+> - Add the following code which would only trigger a BUG if we were to
+>   traverse an empty list; which should NEVER happen.
+>
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index d8ab2d9b391b..be234831b33f 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -3294,11 +3294,21 @@ static void __init gather_bootmem_prealloc(void)
+>         LIST_HEAD(folio_list);
+>         struct huge_bootmem_page *m;
+>         struct hstate *h, *prev_h =3D NULL;
+> +       bool empty;
+> +
+> +       empty =3D list_empty(&huge_boot_pages);
+> +       if (empty)
+> +               printk("gather_bootmem_prealloc: huge_boot_pages list emp=
+ty\n");
+>
+>         list_for_each_entry(m, &huge_boot_pages, list) {
+>                 struct page *page =3D virt_to_page(m);
+>                 struct folio *folio =3D (void *)page;
+>
+> +               if (empty) {
+> +                       printk("    Traversing an empty list as if not em=
+pty!!!\n");
+> +                       BUG();
+> +               }
+> +
+>                 h =3D m->hstate;
+>                 /*
+>                  * It is possible to have multiple huge page sizes (hstat=
+es)
+>
+> - As you have experienced, this will BUG if built with LLVM 17.0.2 and
+>   CONFIG_INIT_STACK_NONE
+>
+> - It will NOT BUG if built with LLVM 13.0.1 but will BUG if built with
+>   LLVM llvm-14.0.6-x86_64 and later.
+>
+> As mentioned in the previous email, the generated code for loop entry
+> looks wrong to my untrained eyes.  Can you or someone on the llvm team
+> take a look?
 
-On Wed, Oct 18, 2023 at 06:29:30PM +0200, Krzysztof Kozlowski wrote:
-> On 05/10/2023 18:05, Devi Priya wrote:
-> > Add PWM driver and binding support for IPQ chipsets.
-> > Also, add support for pwm node in ipq6018.
-> >=20
->=20
-> You need to clearly mark dependencies.
-
-This is something I wouldn't blame Devi for. The dependency is not very
-obvious and its kind of normal and expected for a patch series to have
-dependencies. *shrug*
-
-> Next is now broken because of this patchset.
-
-If I understand correctly this affects "only" the dtb check targets,
-right? Is this bad enough that it needs an urgent fix? I would expect it
-doesn't hurt much, am I right here?
-
-I just looked into patch #2 and had a few comments for it.
-
-Best regards
-Uwe
-
+I think you need to initialize h, otherwise what value is passed to
+prep_and_add_bootmem_folios if the loop is not run because the list is
+empty.  The compiler sees `h` is only given a value in the loop, so
+the loop must be run.  That's obviously hazardous, but the compiler
+assumes there's no UB. At least that's my limited understanding
+looking at the IR diff Nathan got me in
+https://github.com/ClangBuiltLinux/linux/issues/1946.
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---6foex2ayshpkzjy2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUwRZAACgkQj4D7WH0S
-/k4XJQgAp4VfEVwgDzWlPPCnQWB0m+MuYItgUfBPVM+8B48xCCnkP5UocEn4hI3q
-Zjek7v+tQBAXIckXu6RndUjFF2H5PrV4f2EpUAyVtyONFLA6zl4fd3LxiXZsOS6/
-LeTITpIekRlPZFRh3pvscS8O2/ZkXfU3PYV2jb1Ch4woaVYAui2IcmcqsyWVUE9J
-Wd4hLPLNHCAoK4aYz3xEnNOM2/x9LT2KqxndiTFtpZS6auOf+dWVJndAehIPbXsC
-mzSNBelj8MItVL8kucOY34s6DLj1GPTSSklE1yyM3W9TQ7Nn0xKbbaem/XqkG/Gv
-lfiB9x/hb7yFBv3crIPZfiRd5kLgmg==
-=XXnl
------END PGP SIGNATURE-----
-
---6foex2ayshpkzjy2--
+Thanks,
+~Nick Desaulniers
