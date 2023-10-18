@@ -1,179 +1,144 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82A5134BF
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 20:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3D94291A
+	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 21:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hLF7tobi"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-405497850dbso68099325e9.0
-        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 13:55:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rpFi4Sat"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2bb9a063f26so96964201fa.2
+        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 14:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697662507; x=1698267307; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aM7Lcg58eaICcI7n9hqCMKVzpyeJKHwBAKrGqarbnys=;
-        b=hLF7tobifZfVJS/VWPMLTgSUdH3dT/yxUb2SysFNiYQMyOwFs2Y8dJwdTL+TqpgJDG
-         /byX45YlLnn3n6KfBS8WBsH9fESZ+4ceQ4/u4hqDebTmQQNv578DkNZ8wM9yaUFlViEj
-         kQv65iSyINzrP8za4UqwXgb0/JW67qhn+8hwEgzGMwqNkuN/nzAkaranazAKkvTk0xKo
-         keDb6SiyT378M5vHiOaeLIz37Sgz6iUNO+hPPSl80Rdrv4HXxr4xX9AWQkHThQvn7EKg
-         BIAxb/HdFlA/wVXspmya3g5PMGTZOc5l9FTY3ITvc34WAinFcWwB68K7ba5z5lRR2h5d
-         FaDA==
+        d=linaro.org; s=google; t=1697663149; x=1698267949; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3Sf2UavZlGlSuMBGqSBmnqFseiSuYY3mpQFJNM7ytS0=;
+        b=rpFi4SatvR83WrWdIzn7Aa43AUbqVjajLpjpbi48S2V1vF7FjwTMmfP0I933uGFube
+         1iOe0Q9GkBotRvyv6RbADD+V4Q6dlnlsOn/NqEnhq32qNk3/aHjTLdzhyWcTRqpI3Zo/
+         SbzmifnWq6T7RulGPCSSaEOp9z1c+u9o+aUq7sYbGsPJEUBmX35wHb88tX4iuhxr36ig
+         gqeRSZ5GhaukrwqrYvVFSKfdZWqWljJv35CP9H3WDu/GvtUb9rTIGkAvH0oOqygcSlbw
+         y8fjbQ/Joyf9DeEIYPFZzSHg94QEkUWMfofrMUo3/fI/PJ9DSxSF5Rmb+ZitCV1d25sy
+         2zAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697662507; x=1698267307;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aM7Lcg58eaICcI7n9hqCMKVzpyeJKHwBAKrGqarbnys=;
-        b=Z1uQQwEknchQ82P6IzPl+5KUg8j9AtPCI6luqFVKwJfxDlLBN84sGECkO813Dy/Mxo
-         BuJApikcP1QhWXf5LrgwmTTgl5uAsIia4k4KFTSv8TJDJZdlhqzwMkxRI0mm7Tvj/XaO
-         bz4ceFT76CFeu8DJpcmIQHhS3SCQU/UgUfwnLmo5fhqq9rnDWfRL+Ot0hmIgCxSChtf6
-         PozwfD27zJHY98fsV4pVgJLgIyf38/eD1QEI/713Ge+RG+UGxIVg6yA9GgvMzH4VDe/P
-         FcYpHi5gqnHg+LtDKcrWroX8w3JUgQ5TPJdOTXoR33avJ7+GoYiV8bnB/yp3zdi6Lg+X
-         jdOA==
-X-Gm-Message-State: AOJu0Yx44Jkw6oKPjYeBcLCMzyC5M2b6nI8VhpR4h0U9Q3K29DhEttW2
-	WMgbHSDtJ1w91Fcb2mYTDpOBF6fMgFRt9nUsq1Q5Qg==
-X-Google-Smtp-Source: AGHT+IGMqUrVfV+dz/gW9YaHJqOGThqNoUvNg3dX8yRlXQiXmYJ84aNlFY5GFAPOcqrTuilhkUJIA1J5zqNQf0x+Iq8=
-X-Received: by 2002:a05:6000:45:b0:32d:96a7:9551 with SMTP id
- k5-20020a056000004500b0032d96a79551mr137837wrx.36.1697662506602; Wed, 18 Oct
- 2023 13:55:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697663149; x=1698267949;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Sf2UavZlGlSuMBGqSBmnqFseiSuYY3mpQFJNM7ytS0=;
+        b=kiwbteS9xUfrVsq/Ok6L0U+7C+20TkVcdB8fDn1iKPIQ4gy4IbjwVyDQitFtm5hqWH
+         ZD48DU+7eQ9oEMjtkZZYTUZUQyU32okh0cZ+vWLpeg7YC7Khw+mSrvUwJAn+6uPevVYk
+         Q0gmx5b1EYqDCLBSZzBEtUb+UUSrQsUDaTGsBLJuecZu6zkycCnzJ+gI7qXRxE0wO8Ss
+         Ln+i9yclbF5lnQ/Z3oO9wOasuc9EBSz0CRsSE1EIgsxegEWlt4F6YuYgF62dOikXpCdh
+         LwsquIeQY+t9XWjWyOddBg7lNSMgYheSp6n5v6VCeiBZja6mSFhYVWPhmOt1IayFUGTG
+         3I8w==
+X-Gm-Message-State: AOJu0YyjweiKEJUrow9t3L5P945zBkxeugADTgBPC6St5yYgsWgSRtZM
+	WUERRcSm8jHaAO9aW57QKYAAdA==
+X-Google-Smtp-Source: AGHT+IElb950wuSzxs8BkHLrrK3qUYdY9ithi5BODcRu6swCodyhbhJKucw0xer+AXhZI46HGGK+sg==
+X-Received: by 2002:a2e:a792:0:b0:2c5:14eb:1080 with SMTP id c18-20020a2ea792000000b002c514eb1080mr146417ljf.21.1697663149614;
+        Wed, 18 Oct 2023 14:05:49 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.49])
+        by smtp.gmail.com with ESMTPSA id p21-20020a05600c431500b004076f522058sm2619431wme.0.2023.10.18.14.05.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Oct 2023 14:05:49 -0700 (PDT)
+Message-ID: <fd64faf0-a149-400d-8cb7-244253c917d7@linaro.org>
+Date: Wed, 18 Oct 2023 23:05:46 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231009145605.2150897-1-usama.arif@bytedance.com>
- <20231010012345.GA108129@monkey> <20231012000327.GA1855399@dev-arch.thelio-3990X>
- <20231012145318.GA5127@monkey> <20231013001203.GA3812@monkey> <20231014000450.GA253713@monkey>
-In-Reply-To: <20231014000450.GA253713@monkey>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 18 Oct 2023 13:54:52 -0700
-Message-ID: <CAKwvOdm9xKGQzi6_j=gGZCEmKJe6b9o8+jen1oEeAhyjcaSnxQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: hugetlb: Only prep and add allocated folios for
- non-gigantic pages
-To: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Usama Arif <usama.arif@bytedance.com>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
-	muchun.song@linux.dev, songmuchun@bytedance.com, fam.zheng@bytedance.com, 
-	liangma@liangbit.com, punit.agrawal@bytedance.com, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V15 0/4] Add PWM support for IPQ chipsets
+Content-Language: en-US
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
+ baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-pwm@vger.kernel.org, nathan@kernel.org
+References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
+ <f87f480d-6775-44c9-8a2b-05d47bb0dc5d@linaro.org>
+ <20231018205232.p5d4xaqsd5fcbvfi@pengutronix.de>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231018205232.p5d4xaqsd5fcbvfi@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 13, 2023 at 5:05=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
-om> wrote:
->
-> On 10/12/23 17:12, Mike Kravetz wrote:
-> > On 10/12/23 07:53, Mike Kravetz wrote:
-> > > On 10/11/23 17:03, Nathan Chancellor wrote:
-> > > > On Mon, Oct 09, 2023 at 06:23:45PM -0700, Mike Kravetz wrote:
-> > > > > On 10/09/23 15:56, Usama Arif wrote:
-> > >
-> > > Thank you Nathan!  That is very helpful.
-> > >
-> > > I will use this information to try and recreate.  If I can recreate, =
-I
-> > > should be able to get to root cause.
-> >
-> > I could easily recreate the issue using the provided instructions.  Fir=
-st
-> > thing I did was add a few printk's to check/verify state.  The beginnin=
-g
-> > of gather_bootmem_prealloc looked like this:
->
-> Hi Nathan,
->
-> This is looking more and more like a Clang issue to me.  I did a little
-> more problem isolation today.  Here is what I did:
->
-> - Check out commit "hugetlb: restructure pool allocations" in linux-next
-> - Fix the known issue with early disable/enable IRQs via locking by
->   applying:
->
-> commit 266789498210dff6cf9a14b64fa3a5cb2fcc5858
-> Author: Mike Kravetz <mike.kravetz@oracle.com>
-> Date:   Fri Oct 13 13:14:15 2023 -0700
->
->     fix prep_and_add_allocated_folios locking
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index c843506654f8..d8ab2d9b391b 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -2246,15 +2246,16 @@ static struct folio *alloc_fresh_hugetlb_folio(st=
-ruct hstate *h,
->  static void prep_and_add_allocated_folios(struct hstate *h,
->                                         struct list_head *folio_list)
->  {
-> +       unsigned long flags;
->         struct folio *folio, *tmp_f;
->
->         /* Add all new pool pages to free lists in one lock cycle */
-> -       spin_lock_irq(&hugetlb_lock);
-> +       spin_lock_irqsave(&hugetlb_lock, flags);
->         list_for_each_entry_safe(folio, tmp_f, folio_list, lru) {
->                 __prep_account_new_huge_page(h, folio_nid(folio));
->                 enqueue_hugetlb_folio(h, folio);
->         }
-> -       spin_unlock_irq(&hugetlb_lock);
-> +       spin_unlock_irqrestore(&hugetlb_lock, flags);
->  }
->
->  /*
->
-> - Add the following code which would only trigger a BUG if we were to
->   traverse an empty list; which should NEVER happen.
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index d8ab2d9b391b..be234831b33f 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -3294,11 +3294,21 @@ static void __init gather_bootmem_prealloc(void)
->         LIST_HEAD(folio_list);
->         struct huge_bootmem_page *m;
->         struct hstate *h, *prev_h =3D NULL;
-> +       bool empty;
-> +
-> +       empty =3D list_empty(&huge_boot_pages);
-> +       if (empty)
-> +               printk("gather_bootmem_prealloc: huge_boot_pages list emp=
-ty\n");
->
->         list_for_each_entry(m, &huge_boot_pages, list) {
->                 struct page *page =3D virt_to_page(m);
->                 struct folio *folio =3D (void *)page;
->
-> +               if (empty) {
-> +                       printk("    Traversing an empty list as if not em=
-pty!!!\n");
-> +                       BUG();
-> +               }
-> +
->                 h =3D m->hstate;
->                 /*
->                  * It is possible to have multiple huge page sizes (hstat=
-es)
->
-> - As you have experienced, this will BUG if built with LLVM 17.0.2 and
->   CONFIG_INIT_STACK_NONE
->
-> - It will NOT BUG if built with LLVM 13.0.1 but will BUG if built with
->   LLVM llvm-14.0.6-x86_64 and later.
->
-> As mentioned in the previous email, the generated code for loop entry
-> looks wrong to my untrained eyes.  Can you or someone on the llvm team
-> take a look?
+On 18/10/2023 22:52, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Wed, Oct 18, 2023 at 06:29:30PM +0200, Krzysztof Kozlowski wrote:
+>> On 05/10/2023 18:05, Devi Priya wrote:
+>>> Add PWM driver and binding support for IPQ chipsets.
+>>> Also, add support for pwm node in ipq6018.
+>>>
+>>
+>> You need to clearly mark dependencies.
+> 
+> This is something I wouldn't blame Devi for. The dependency is not very
+> obvious and its kind of normal and expected for a patch series to have
+> dependencies. *shrug*
+> 
+>> Next is now broken because of this patchset.
+> 
+> If I understand correctly this affects "only" the dtb check targets,
+> right? Is this bad enough that it needs an urgent fix? I would expect it
+> doesn't hurt much, am I right here?
+> 
+> I just looked into patch #2 and had a few comments for it.
 
-I think you need to initialize h, otherwise what value is passed to
-prep_and_add_bootmem_folios if the loop is not run because the list is
-empty.  The compiler sees `h` is only given a value in the loop, so
-the loop must be run.  That's obviously hazardous, but the compiler
-assumes there's no UB. At least that's my limited understanding
-looking at the IR diff Nathan got me in
-https://github.com/ClangBuiltLinux/linux/issues/1946.
---=20
-Thanks,
-~Nick Desaulniers
+Check/Tests of bindings (make dt_binding_check) has warnings because of
+missing PWM schema.
+
+Best regards,
+Krzysztof
+
