@@ -1,134 +1,228 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634991B271
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 19:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208E93E016
+	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 20:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5a7d9d357faso90200067b3.0
-        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 12:12:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697656361; x=1698261161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bm/QitVoXGxf3ERCz3VJAvR9l7hSVdW0OvjmYyP6n1s=;
-        b=BVbRM4HYjpwvvfcAkwiFrBe+pAB6dG/fCw2xh+U53wn/laRP0hsJEov4yTRUBR7we7
-         VtujUDPsHXK6rv7cvp32s8ErweBBATDSql8NzP/ZMu8CPLYMP0qUm0mWIDxgbIJkh1ce
-         /nMNYMldP7E1SV6QfHwHoBhwkXq5KH+v1QskEAm6S1G1fsLRm6NoI2yFyXuD7hxy7Ff7
-         BVprlzVKndUVM/biALAG1UHcSi/FVrL1SYRuXeWC0HSQsT+PhjrF84c5Ni0ZjMR84pxX
-         HtYku1LPYkYK0uxFnoPnOrdo6ATgOrEOPWt2/xObIqEcE84cFqJTwCIlU8KN4U0lDJ+g
-         lSiQ==
-X-Gm-Message-State: AOJu0YxZ/l0C/No0XiLwPfHQ3Qae8x3WV6rxm0O+hzsf6LHws6caYpR5
-	Jh9IefV8fKW6x73Z5z9vLxR95HHHbBZpRw==
-X-Google-Smtp-Source: AGHT+IH6TntERzVLymahHdFpEo8FIYVOzoaYdqw1LwEUotuwl0j8h5RXwcEjDuzuAa6f9O3+8Vgz3Q==
-X-Received: by 2002:a0d:fc06:0:b0:586:a684:e7ba with SMTP id m6-20020a0dfc06000000b00586a684e7bamr183521ywf.39.1697656361280;
-        Wed, 18 Oct 2023 12:12:41 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id v196-20020a8148cd000000b005928ba6806dsm1750089ywa.97.2023.10.18.12.12.40
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 12:12:41 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-d84f18e908aso8157339276.1
-        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 12:12:40 -0700 (PDT)
-X-Received: by 2002:a25:d7c7:0:b0:d80:1604:f6e9 with SMTP id
- o190-20020a25d7c7000000b00d801604f6e9mr285943ybg.44.1697656360583; Wed, 18
- Oct 2023 12:12:40 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qtDQh-0000gU-1z; Wed, 18 Oct 2023 22:46:11 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qtDQf-002dSA-0e; Wed, 18 Oct 2023 22:46:09 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qtDQe-001EpL-N1; Wed, 18 Oct 2023 22:46:08 +0200
+Date: Wed, 18 Oct 2023 22:46:08 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Devi Priya <quic_devipriy@quicinc.com>
+Cc: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+	lee@kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
+	baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pwm@vger.kernel.org, nathan@kernel.org
+Subject: Re: [PATCH V15 2/4] dt-bindings: pwm: add IPQ6018 binding
+Message-ID: <20231018204608.qyifcnnzgi2bgzn6@pengutronix.de>
+References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
+ <20231005160550.2423075-3-quic_devipriy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231018182412.80291-1-hamza.mahfooz@amd.com> <CAMuHMdXSzMJe1zyJu1HkxWggTKJj_sxkPOejjbdRjg3FeFTVHQ@mail.gmail.com>
- <d764242f-cde0-47c0-ae2c-f94b199c93df@amd.com>
-In-Reply-To: <d764242f-cde0-47c0-ae2c-f94b199c93df@amd.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 18 Oct 2023 21:12:29 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXYDQi5+x1KxMG0wnjSfa=A547B9tgAbgbHbV42bbRu8Q@mail.gmail.com>
-Message-ID: <CAMuHMdXYDQi5+x1KxMG0wnjSfa=A547B9tgAbgbHbV42bbRu8Q@mail.gmail.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: disable FRAME_WARN for kasan and kcsan
-To: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Cc: linux-kernel@vger.kernel.org, Rodrigo Siqueira <rodrigo.siqueira@amd.com>, 
-	Harry Wentland <harry.wentland@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Nick Terrell <terrelln@fb.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Kees Cook <keescook@chromium.org>, Zhaoyang Huang <zhaoyang.huang@unisoc.com>, 
-	Li Hua <hucool.lihua@huawei.com>, Alexander Potapenko <glider@google.com>, Rae Moar <rmoar@google.com>, 
-	rust-for-linux@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xtsetqyrpzzycxzw"
+Content-Disposition: inline
+In-Reply-To: <20231005160550.2423075-3-quic_devipriy@quicinc.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
+
+
+--xtsetqyrpzzycxzw
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Hamza,
+Hello,
 
-On Wed, Oct 18, 2023 at 8:39=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@amd.co=
-m> wrote:
-> On 10/18/23 14:29, Geert Uytterhoeven wrote:
-> > On Wed, Oct 18, 2023 at 8:24=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@am=
-d.com> wrote:
-> >> With every release of LLVM, both of these sanitizers eat up more and
-> >> more of the stack. So, set FRAME_WARN to 0 if either of them is enable=
-d
-> >> for a given build.
-> >>
-> >> Cc: stable@vger.kernel.org
-> >> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> >
-> > Thanks for your patch!
-> >
-> >> --- a/lib/Kconfig.debug
-> >> +++ b/lib/Kconfig.debug
-> >> @@ -429,11 +429,10 @@ endif # DEBUG_INFO
-> >>   config FRAME_WARN
-> >>          int "Warn for stack frames larger than"
-> >>          range 0 8192
-> >> -       default 0 if KMSAN
-> >> +       default 0 if KASAN || KCSAN || KMSAN
-> >
-> > Are kernels with KASAN || KCSAN || KMSAN enabled supposed to be bootabl=
-e?
->
-> They are all intended to be used for runtime debugging, so I'd imagine so=
-.
+On Thu, Oct 05, 2023 at 09:35:48PM +0530, Devi Priya wrote:
+> DT binding for the PWM block in Qualcomm IPQ6018 SoC.
+>=20
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
+> Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+> v15:
+>=20
+>   No change
+>=20
+> v14:
+>=20
+>   Picked up the R-b tag
+>=20
+> v13:
+>=20
+>   Updated the file name to match the compatible
+>  =20
+>   Sorted the properties and updated the order in the required field
+>=20
+>   Dropped the syscon node from examples
+>=20
+> v12:
+>=20
+>   Picked up the R-b tag
+>=20
+> v11:
+>=20
+>   No change
+>=20
+> v10:
+>=20
+>   No change
+>=20
+> v9:
+>=20
+>   Add 'ranges' property to example (Rob)
+>=20
+>   Drop label in example (Rob)
+>=20
+> v8:
+>=20
+>   Add size cell to 'reg' (Rob)
+>=20
+> v7:
+>=20
+>   Use 'reg' instead of 'offset' (Rob)
+>=20
+>   Drop 'clock-names' and 'assigned-clock*' (Bjorn)
+>=20
+>   Use single cell address/size in example node (Bjorn)
+>=20
+>   Move '#pwm-cells' lower in example node (Bjorn)
+>=20
+>   List 'reg' as required
+>=20
+> v6:
+>=20
+>   Device node is child of TCSR; remove phandle (Rob Herring)
+>=20
+>   Add assigned-clocks/assigned-clock-rates (Uwe Kleine-K=F6nig)
+>=20
+> v5: Use qcom,pwm-regs for phandle instead of direct regs (Bjorn
+>     Andersson, Kathiravan T)
+>=20
+> v4: Update the binding example node as well (Rob Herring's bot)
+>=20
+> v3: s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
+>=20
+> v2: Make #pwm-cells const (Rob Herring)
+>=20
+>  .../bindings/pwm/qcom,ipq6018-pwm.yaml        | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/qcom,ipq6018-pw=
+m.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml =
+b/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml
+> new file mode 100644
+> index 000000000000..6d0d7ed271f7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml
+> @@ -0,0 +1,45 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/qcom,ipq6018-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm IPQ6018 PWM controller
+> +
+> +maintainers:
+> +  - Baruch Siach <baruch@tkos.co.il>
 
-Then I strongly suggest putting a nonzero value here.  As you write
-that "with every release of LLVM, both of these sanitizers eat up more and =
-more
-of the stack", don't you want to have at least some canary to detect
-when "more and more" is guaranteed to run into problems?
+Not being very fluent in dt and binding yaml I wonder if adding
 
-> > Stack overflows do cause crashes.
->
-> It is worth noting that FRAME_WARN has been disabled for KMSAN for quite
-> a while and as far as I can tell no one has complained.
+	allOf:
+	  - $ref: pwm.yaml#
 
-ROTFL...
+would be beneficial?!
 
-> >>          default 2048 if GCC_PLUGIN_LATENT_ENTROPY
-> >>          default 2048 if PARISC
-> >>          default 1536 if (!64BIT && XTENSA)
-> >> -       default 1280 if KASAN && !64BIT
-> >>          default 1024 if !64BIT
-> >>          default 2048 if 64BIT
-> >>          help
+> +properties:
+> +  compatible:
+> +    const: qcom,ipq6018-pwm
+> +
+> +  reg:
+> +    description: Offset of PWM register in the TCSR block.
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#pwm-cells":
+> +    const: 2
 
-Gr{oetje,eeting}s,
+The driver only supports normal polarity. Is this a shortcoming of the
+driver, or is the hardware incapable to do that, too?
 
-                        Geert
+If it's only the former I'd want #pwm-cells =3D <3> here. For ease of use
+I'd not oppose if you pick #pwm-cells =3D <3> even if the hardware can
+only do normal polarity.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - "#pwm-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-ipq6018.h>
+> +
+> +    pwm: pwm@a010 {
+> +        compatible =3D "qcom,ipq6018-pwm";
+> +        reg =3D <0xa010 0x20>;
+> +        clocks =3D <&gcc GCC_ADSS_PWM_CLK>;
+> +        assigned-clocks =3D <&gcc GCC_ADSS_PWM_CLK>;
+> +        assigned-clock-rates =3D <100000000>;
+> +        #pwm-cells =3D <2>;
+> +    };
+
+Best regards
+Uwe
 
 --=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+--xtsetqyrpzzycxzw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUwRA8ACgkQj4D7WH0S
+/k4+QAf/WN6mLqG3+DlwosYZcJESOcX2S6K+CSxJ+01EkCGvXaNAPnaNasVmGzCa
+iWvYmgoRhuFYuzrppCsUER6+lrHZz/C4HfnOsQlsVfjRIm/Si4qelPWc0jKfvsQ9
+EV82d4hR/X2OT0ujmOcJZvwTMaITfER4B+9lzkVE0NvDzUIxzjZRgLDUX1j75All
+994dvdSy0b6x3NHnCuryt4ORwe8cIj866wXsJgrSC/Cg+9kyqW7UXWriTGQNAcfT
+0cfY92KCimjFjqfCuanOyBBN+41jlwwaiUnsB4gx8ZEh1mFgE50OXX9QK8eEgzzl
+56qTKAjNGv8LdOd+XgAiPuVPd0+6yg==
+=Vd7V
+-----END PGP SIGNATURE-----
+
+--xtsetqyrpzzycxzw--
