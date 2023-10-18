@@ -1,169 +1,138 @@
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3FBBE62
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 16:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE6DBE62
+	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 16:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="La7BVBvI"
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-457e36dcab6so2392860137.0
-        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 09:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697647929; x=1698252729; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/pMxszsWHDpKedI/5pITYv9bsseXhLI86JME0Jv0Euc=;
-        b=La7BVBvIpk+qm0Ioqkyz6eU/QgLLdNvJ+TqRs7V8aXmcW8LRJ+GV9D21G+DKG9ewz4
-         ErEUBJ3ishTXcUK/4foPk53aJTWl/tnpIn6YH/JbIU+nrhZU7mk+zz+kM1nWlZ1BDRzU
-         Ue4Bjdr4pObxPpxNizPjTHlaKfpi4/sO8nvPiMARIrDZ9xzMk50W8TdvIkSLbKiDyBIG
-         oCAJLZcag60AA6wZquvtp5pc5df/vudWgISJfFlAzcnqKWSqzmexXqrVlTykatukxLxw
-         fBSB+8pDiriqCMExXRH7idoXRxZLaNdUlIworYHc0dzA+xk4OLHFU/61hll4WG3Mb3Ff
-         N30Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697647929; x=1698252729;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/pMxszsWHDpKedI/5pITYv9bsseXhLI86JME0Jv0Euc=;
-        b=moHzenAtAq1AfLEWgDeCsvNITLWdmzFsmFOZ5Sy1NeHTF5g34hCXGzJO3VVp3Ez4pq
-         Jmbh+euzhdVohKXD7m3fw4WaWWLQ9FmPys9pfLxTsKSVdRalRA9LSdgtARPDqE2DNSIl
-         UFjLO6rcR9aA3FDvqRtRcPz9YaHrx+63xiwTIQ76sVJ8Deo+X8RVrBRXGw1Lft4JUKTX
-         RlB2qzYzLxD8YVdz49XhGJkskffu1a7VFQE2lK7DCUw8/dwthQJ80BpONHXSdQa1OngC
-         UPe9a0jdAFRpuI+M8LeanrLHggJavT7A/DDJuBvUfpyWmDloxa1rHAM12lfhulrkEYnZ
-         Ehhg==
-X-Gm-Message-State: AOJu0Yy7w54huva3EBkzti3VVigvJ6n3y4U0I0sFrGYKnVWC6TAYZ7fr
-	lOmxf11tn0KI+q2XwFw1YpLqBbd9Aq24xi3QPmyY8Q==
-X-Google-Smtp-Source: AGHT+IEDAauOr7AIlzL5NAmxKhOC4C7rRTgtECEtEKwhJHKWqxBEca7qyt2mnP+agJe96xEEpLJR6JsuHHE23NypJC0=
-X-Received: by 2002:a67:e156:0:b0:452:61eb:dc26 with SMTP id
- o22-20020a67e156000000b0045261ebdc26mr3477209vsl.16.1697647929398; Wed, 18
- Oct 2023 09:52:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cd5ply3z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF27C433C8;
+	Wed, 18 Oct 2023 16:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697647952;
+	bh=SsGg2JqeewKiiSWRS7ZexJq3uiXt0rUFI1EQnbTVJAY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=cd5ply3z+r3w/NRCWPDxJ7JGivJSePVUFTojZ2T9UrwCvpSDPfOKq8rlamVobPWA/
+	 klQ8zxpqNwjRrXvaR07x2D3NqvpLbe8kZUFTeqyx2Sm2cPXy5d8CHfFG9vgCvgZzH9
+	 5DzuCcGUWtlvdg6638VTE9nkOuDYZxFeKstMq7SYaNJ6QU8vQJ9i4FcDXeHJtx5aK3
+	 4hH/qy3FvyoyLfB/wooOd4aAvB3857LhuNOxquutLG+4KxHDz0yQTmwhbVkI7AygCQ
+	 2e6n4HG4jVZKvK9rQwI4Q9gOH9EG5xUmJdGBdslWgLYMAGDP89zY5q0gC7y+MIuz/l
+	 uZ6sWIdoAFWLQ==
+Date: Wed, 18 Oct 2023 11:52:31 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Reinette Chatre <reinette.chatre@intel.com>
+Cc: bhelgaas@google.com, nathan@kernel.org, ndesaulniers@google.com,
+	trix@redhat.com, tglx@linutronix.de, kevin.tian@intel.com,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] PCI/MSI: Provide stubs for IMS functions
+Message-ID: <20231018165231.GA1365828@bhelgaas>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231018153147.167393-1-hamza.mahfooz@amd.com>
- <CANpmjNPZ0Eii3ZTrVqEL2Ez0Jv23y-emLBCLSZ==xmH--4E65g@mail.gmail.com> <c7a80dc5-d18f-4a7d-915b-1803cc3e33ca@amd.com>
-In-Reply-To: <c7a80dc5-d18f-4a7d-915b-1803cc3e33ca@amd.com>
-From: Marco Elver <elver@google.com>
-Date: Wed, 18 Oct 2023 18:51:31 +0200
-Message-ID: <CANpmjNN7yvEjvTDHzzEqvN2iKvxjvOjpsz_ugSjwh4VBKDNH6g@mail.gmail.com>
-Subject: Re: [PATCH] lib: Kconfig: disable dynamic sanitizers for test builds
-To: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Cc: linux-kernel@vger.kernel.org, Rodrigo Siqueira <rodrigo.siqueira@amd.com>, 
-	Harry Wentland <harry.wentland@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231018164351.GA1365452@bhelgaas>
 
-On Wed, 18 Oct 2023 at 18:43, Hamza Mahfooz <hamza.mahfooz@amd.com> wrote:
->
-> On 10/18/23 12:22, Marco Elver wrote:
-> > On Wed, 18 Oct 2023 at 17:32, 'Hamza Mahfooz' via kasan-dev
-> > <kasan-dev@googlegroups.com> wrote:
-> >>
-> >> kasan, kcsan and kmsan all have the tendency to blow up the stack
-> >> and there isn't a lot of value in having them enabled for test builds,
-> >> since they are intended to be useful for runtime debugging. So, disable
-> >> them for test builds.
-> >>
-> >> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> >> ---
-> >>   lib/Kconfig.kasan | 1 +
-> >>   lib/Kconfig.kcsan | 1 +
-> >>   lib/Kconfig.kmsan | 1 +
-> >>   3 files changed, 3 insertions(+)
-> >
-> > Do you have links to discussions that motivate this change? This has
-> > been discussed in the past. One recommendation is to adjust the
->
-> Sure, you can checkout:
-> https://lore.kernel.org/amd-gfx/CADnq5_OyO9CHqahFvdnx7-8s9654udgdfhUntyxfjae+iHey0Q@mail.gmail.com/T/#m5d227dc1ef07b1f4953312287dce4568666c5e09
+On Wed, Oct 18, 2023 at 11:43:51AM -0500, Bjorn Helgaas wrote:
+> On Tue, Oct 17, 2023 at 10:56:38AM -0700, Reinette Chatre wrote:
+> > The IMS related functions (pci_create_ims_domain(),
+> > pci_ims_alloc_irq(), and pci_ims_free_irq()) are not declared
+> > when CONFIG_PCI_MSI is disabled.
+> > 
+> > Provide definitions of these functions for use when callers
+> > are compiled with CONFIG_PCI_MSI disabled.
+> > 
+> > Fixes: 0194425af0c8 ("PCI/MSI: Provide IMS (Interrupt Message Store) support")
+> > Fixes: c9e5bea27383 ("PCI/MSI: Provide pci_ims_alloc/free_irq()")
+> > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> > Cc: stable@vger.kernel.org      # v6.2+
+> 
+> Applied to pci/misc for v6.7, thanks!
 
-I would add this as a Link context to the patch.
+And dropped, since Thomas applied it via -tip:
+https://git.kernel.org/tip/41efa431244f6498833ff8ee8dde28c4924c5479
 
-> > build/test scripts to exclude some combination of configs if they are
-> > causing issues. Or we increase CONFIG_FRAME_WARN if one of them is
-> > enabled (KMSAN sets it to 0, 32-bit KASAN increases it a bit).
-> >
-> > That being said, we're aware of KASAN having had more issues and there
-> > are some suboptions that have been disabled because of that (like
-> > KASAN_STACK). I'm not sure if Clang's KASAN instrumentation has had
-> > some recent improvements (we did investigate it, but I can't recall
-> > what the outcome was [1]) - maybe try a more recent compiler? However,
-> > KCSAN and KMSAN shouldn't have any issues (if KMSAN is enabled,
->
-> This patch was initially motivated by KCSAN (i.e. I am able to get it to
-> blow up the stack with a minimal .config). I don't mind dropping the
-> other ones since I only included them because Nathan implied that they
-> could cause similar issues.
-
-!COMPILE_TEST is not the solution. Clearly from the link you provided
-build testing is helpful in catching early issues, so that these tools
-remain usable for everyone. But we know they use a little more stack,
-and the warnings need to be adjusted accordingly.
-
-My suggestion is to just increase FRAME_WARN for KCSAN, or set it to 0
-(like for KMSAN). My guess is that first trying to increase it is the
-safer option.
-
-> > FRAME_WARN is 0). And having build tests with them enabled isn't
-> > useless at all: we're making sure that these tools (even though only
-> > for debugging), still work. We _want_ them to work during random build
-> > testing!
-> >
-> > Please share the concrete problem you're having, because this change
-> > will make things worse for everyone in the long run.
-> >
-> > [1] https://github.com/llvm/llvm-project/issues/38157
-> >
-> >> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> >> index fdca89c05745..fbd85c4872c0 100644
-> >> --- a/lib/Kconfig.kasan
-> >> +++ b/lib/Kconfig.kasan
-> >> @@ -38,6 +38,7 @@ menuconfig KASAN
-> >>                      CC_HAS_WORKING_NOSANITIZE_ADDRESS) || \
-> >>                     HAVE_ARCH_KASAN_HW_TAGS
-> >>          depends on (SLUB && SYSFS && !SLUB_TINY) || (SLAB && !DEBUG_SLAB)
-> >> +       depends on !COMPILE_TEST
-> >>          select STACKDEPOT_ALWAYS_INIT
-> >>          help
-> >>            Enables KASAN (Kernel Address Sanitizer) - a dynamic memory safety
-> >
-> > This also disables KASAN_HW_TAGS, which is actually enabled in
-> > production kernels and does not use any compiler instrumentation.
-> >
-> >> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-> >> index 609ddfc73de5..7bcefdbfb46f 100644
-> >> --- a/lib/Kconfig.kcsan
-> >> +++ b/lib/Kconfig.kcsan
-> >> @@ -14,6 +14,7 @@ menuconfig KCSAN
-> >>          bool "KCSAN: dynamic data race detector"
-> >>          depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
-> >>          depends on DEBUG_KERNEL && !KASAN
-> >> +       depends on !COMPILE_TEST
-> >>          select CONSTRUCTORS
-> >>          select STACKTRACE
-> >>          help
-> >> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
-> >> index ef2c8f256c57..eb05c885d3fd 100644
-> >> --- a/lib/Kconfig.kmsan
-> >> +++ b/lib/Kconfig.kmsan
-> >> @@ -13,6 +13,7 @@ config KMSAN
-> >>          depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
-> >>          depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
-> >>          depends on !PREEMPT_RT
-> >> +       depends on !COMPILE_TEST
-> >
-> > KMSAN already selects FRAME_WARN of 0 and should not cause you any
-> > issues during build testing.
-> >
-> > Nack.
-> --
-> Hamza
->
+> > ---
+> > 
+> > This is a preparatory patch for the first caller of these
+> > functions (VFIO) for which work is in progress:
+> > https://lore.kernel.org/lkml/cover.1696609476.git.reinette.chatre@intel.com/
+> > 
+> > checkpatch.pl complains about the usage of ENOSYS but
+> > it does appear to be the custom.
+> > 
+> >  include/linux/pci.h | 34 ++++++++++++++++++++++++++--------
+> >  1 file changed, 26 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index 8c7c2c3c6c65..b56417276042 100644
+> > --- a/include/linux/pci.h
+> > +++ b/include/linux/pci.h
+> > @@ -1624,6 +1624,8 @@ struct msix_entry {
+> >  	u16	entry;	/* Driver uses to specify entry, OS writes */
+> >  };
+> >  
+> > +struct msi_domain_template;
+> > +
+> >  #ifdef CONFIG_PCI_MSI
+> >  int pci_msi_vec_count(struct pci_dev *dev);
+> >  void pci_disable_msi(struct pci_dev *dev);
+> > @@ -1656,6 +1658,11 @@ void pci_msix_free_irq(struct pci_dev *pdev, struct msi_map map);
+> >  void pci_free_irq_vectors(struct pci_dev *dev);
+> >  int pci_irq_vector(struct pci_dev *dev, unsigned int nr);
+> >  const struct cpumask *pci_irq_get_affinity(struct pci_dev *pdev, int vec);
+> > +bool pci_create_ims_domain(struct pci_dev *pdev, const struct msi_domain_template *template,
+> > +			   unsigned int hwsize, void *data);
+> > +struct msi_map pci_ims_alloc_irq(struct pci_dev *pdev, union msi_instance_cookie *icookie,
+> > +				 const struct irq_affinity_desc *affdesc);
+> > +void pci_ims_free_irq(struct pci_dev *pdev, struct msi_map map);
+> >  
+> >  #else
+> >  static inline int pci_msi_vec_count(struct pci_dev *dev) { return -ENOSYS; }
+> > @@ -1719,6 +1726,25 @@ static inline const struct cpumask *pci_irq_get_affinity(struct pci_dev *pdev,
+> >  {
+> >  	return cpu_possible_mask;
+> >  }
+> > +
+> > +static inline bool pci_create_ims_domain(struct pci_dev *pdev,
+> > +					 const struct msi_domain_template *template,
+> > +					 unsigned int hwsize, void *data)
+> > +{ return false; }
+> > +
+> > +static inline struct msi_map pci_ims_alloc_irq(struct pci_dev *pdev,
+> > +					       union msi_instance_cookie *icookie,
+> > +					       const struct irq_affinity_desc *affdesc)
+> > +{
+> > +	struct msi_map map = { .index = -ENOSYS, };
+> > +
+> > +	return map;
+> > +}
+> > +
+> > +static inline void pci_ims_free_irq(struct pci_dev *pdev, struct msi_map map)
+> > +{
+> > +}
+> > +
+> >  #endif
+> >  
+> >  /**
+> > @@ -2616,14 +2642,6 @@ static inline bool pci_is_thunderbolt_attached(struct pci_dev *pdev)
+> >  void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+> >  #endif
+> >  
+> > -struct msi_domain_template;
+> > -
+> > -bool pci_create_ims_domain(struct pci_dev *pdev, const struct msi_domain_template *template,
+> > -			   unsigned int hwsize, void *data);
+> > -struct msi_map pci_ims_alloc_irq(struct pci_dev *pdev, union msi_instance_cookie *icookie,
+> > -				 const struct irq_affinity_desc *affdesc);
+> > -void pci_ims_free_irq(struct pci_dev *pdev, struct msi_map map);
+> > -
+> >  #include <linux/dma-mapping.h>
+> >  
+> >  #define pci_printk(level, pdev, fmt, arg...) \
+> > -- 
+> > 2.34.1
+> > 
