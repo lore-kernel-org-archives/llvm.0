@@ -1,214 +1,153 @@
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2095.outbound.protection.outlook.com [40.107.114.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C223915A2;
-	Wed, 18 Oct 2023 00:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="YXkYkjHx"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nnYPuwqiIS4aoqppKGxEulD9Sxv7xfPHbbfLLbfObIaCCD7gc4p7UlyCY/JRMCxwimXloeUPiankve2e0W7Ys2/yAwb8BOgtb2BohBgZm0VdQFYHXEDpL0I43D7sLlzg1L3tyuiwJuTzfC3d8XmPjmH7w1n51mglcPt2hNWtXwr5DOOaLHZ9/icfLXfwtGs+rI8dMd39HIQPRL+rcqb1a//4O9noJbxJ+AKA8BHWfEyH65GSC7GK8WVVdRcj6fbdf7d+mGPP07ODwZRSOEr1rtQUNfQwTxYJ8YiFI5DhePvfoUt3YHp61w8f9pTNlYge3MsNPRPCsHNF+wlzTIP0UA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BTeoz2WdknRninISThb6HEdU1RKcA2fL5H139zE0icw=;
- b=gojX6s0GlmEJSX2JtquaC0novHLVB4H8UMfDSqbhUgazaSOq3Xi0EW8itF+FefSOTz3vPY2PKKsO0066NzwnAUidh5DCjD04811znnebmzLPySznzHe2U4HPPxnPKIGFu+DQLE5cfpJt/Hm3P+HCo4006W0LLnJzguQ8SkNKoQGGhn3tFvOgS9F+rvIcdjdkfBEkYZk2FiQvqUpmd9fumJFYOwndoBGpOgWgvmwqFtQk0RaTFPytqX7Zp/mQYqFoRcRRn1weaVRXVO5pBPfUv9B0WyDAIpWunNcXtvIV3o3eKHjU5DWM4P+1JwXERjzyFjhPRBvTqt8mmKUBNdlItQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BTeoz2WdknRninISThb6HEdU1RKcA2fL5H139zE0icw=;
- b=YXkYkjHxw8Im7+NAFAfNKPPvQRHhDwr2IxJO9Q95rSc3h/8TA6mMkYEai5BzrJ3Q8x2cHg23lVfjBuXtyQ9x269b8zYFpvLk8+uFvHqEq+JhrnHuCqmo7SIvPJnwx9NopP/F3LV5korilJiETLFwzDPMHzwaP/XG+rz0a6qmnPk=
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- (2603:1096:404:8028::13) by TY3PR01MB11188.jpnprd01.prod.outlook.com
- (2603:1096:400:3d7::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.21; Wed, 18 Oct
- 2023 00:16:24 +0000
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::a188:9424:be62:e5fb]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::a188:9424:be62:e5fb%6]) with mapi id 15.20.6907.021; Wed, 18 Oct 2023
- 00:16:24 +0000
-From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To: Bjorn Helgaas <helgaas@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-CC: "marek.vasut+renesas@gmail.com" <marek.vasut+renesas@gmail.com>,
-	"lpieralisi@kernel.org" <lpieralisi@kernel.org>, "kw@linux.com"
-	<kw@linux.com>, "robh@kernel.org" <robh@kernel.org>, "bhelgaas@google.com"
-	<bhelgaas@google.com>, "ndesaulniers@google.com" <ndesaulniers@google.com>,
-	"trix@redhat.com" <trix@redhat.com>, "fancer.lancer@gmail.com"
-	<fancer.lancer@gmail.com>, "mani@kernel.org" <mani@kernel.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>
-Subject: RE: [PATCH] PCI: rcar-gen4: Fix type of type parameter in
- rcar_gen4_pcie_ep_raise_irq()
-Thread-Topic: [PATCH] PCI: rcar-gen4: Fix type of type parameter in
- rcar_gen4_pcie_ep_raise_irq()
-Thread-Index: AQHaASmkpnPNsAO5wEiJrokjJ6MdbrBOU4GAgABZlGA=
-Date: Wed, 18 Oct 2023 00:16:24 +0000
-Message-ID:
- <TYBPR01MB53410A9FC80204414692264FD8D5A@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-References: <20231017-pcie-rcar-wifpts-v1-1-ab1f42bf9386@kernel.org>
- <20231017185119.GA1315341@bhelgaas>
-In-Reply-To: <20231017185119.GA1315341@bhelgaas>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|TY3PR01MB11188:EE_
-x-ms-office365-filtering-correlation-id: 2b9fe5a7-c0e2-4624-f659-08dbcf6f76a7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- HDF/mAYuTYRqFenShcSqv0DvO3FcES1W7+B2viy3UvIfiIcXyUK2VtJu4isUv5h2tvp2pycIOneXvSwzhUsYnV5PXK9P/yvoLoJowiD9eXZY23t+RE3kOkTp8Io5nlEKaM3Ep7o8qzyE/cX+Gm4Jy6T5WmPQJD5fppSd3bZoC7wVTC4Qn96iJnT5/hGgW8NxXUq9IF9LWz+4qkb5V1ILFrxJDHIW3dCHc9QtL7IH2Hmz1Hg+s4oZuWKQeYeUW70VX2Xjs4OxD9pW25pHDp3mt4yYAgiTiTRwpz/YwR6b8pPPDggcegWm1AmPr6WcrE5NJJf9mI4jyfeKxjxtzfwFQRJqQoIxb/zrUhCe1GyE2VOHbUAyUqRBKAsOJRgvVejXb0xXoG9GRqSHlxuGsrdC0lAL1VGIRaSDYmA/BiF20LPMtSY0dMNe/Oaw1ypMY6UGHHNvFAApHRtv7rg5x9cTD3flctW9OgzikyY4U0vHRsf1aVgRflR4lPmWwYUMM2u3rNJphV7enYM7rZhxprnigPBKoRhVX/8AOPRSBzE4PXmlztZIqvFxGAfsBJv3GmCc5FYmgnJf18bEjcGncGvYpt9EknnYtGdXhD4+lCsVL5+2cIZjLNgCNBBEkODCmF62
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(396003)(366004)(39860400002)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(478600001)(122000001)(38100700002)(7696005)(6506007)(33656002)(83380400001)(38070700005)(9686003)(71200400001)(52536014)(5660300002)(4326008)(55016003)(8936002)(8676002)(316002)(66476007)(66946007)(54906003)(76116006)(86362001)(2906002)(110136005)(66556008)(66446008)(7416002)(41300700001)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?1pZ1xgu5vpwjD/33kt+iPoewqGboXoql1KJact3bc3k39nDzCcit/bBJ9a6T?=
- =?us-ascii?Q?YLNXgQe6hGjPWtD545tJMILVGs0BVRvGqeUYGhdH8c95tF6D8qJSTSz1Ti2l?=
- =?us-ascii?Q?qwdv3HuDMqwZx0BK17/v44QeOCRoWzUHdo93CWj3o2h+42zA15SmzCNN3xaN?=
- =?us-ascii?Q?9roCZQC91WY4/od4DR2GluAmRVyOMu4PT35PiLeGbbbo5CgEJvDkEi6Os0Nt?=
- =?us-ascii?Q?b33BoEACghToF2gyKrVVIyZad+VLGaPD6GYV5mh0eXAw7SJdOQREMT5WesUy?=
- =?us-ascii?Q?CNBZThRiBi3e0RYesm1VjhyQwMmZjWC+tjN2oEhyzJ/w2+XZP74igsrR8GaX?=
- =?us-ascii?Q?FdgOIUJ74CzX7+fYNjjlCxkukvysDgDpCK1W3UHX8Jpu80TMIqiAyTXuFywx?=
- =?us-ascii?Q?SUgr08SHyhhjfXZHcd84PsQfCxBz1o1YC1t/p6xQtLqyPl2gJYYJvm62vhRH?=
- =?us-ascii?Q?3fpESDEDl/K1NQo+/hkG8Md/mgplfQxrlOEVA5zxB00X2d0YQVAidwzP23Gk?=
- =?us-ascii?Q?T3ktN0l+AknXdTxb7iobPhpDyd8wm0LGZwi0VCIkWibAujhPC/dFUXQ/EXvQ?=
- =?us-ascii?Q?o2c09UXJUPEZJPcFpG25TSHlGzw+IvO8rnDustaGwJMIRkrPvvtCfUj3ZG8l?=
- =?us-ascii?Q?E9q0tC28D/4GQ1ebv2xrh4S+p/t9Cbh/V2j3B7FOslogNoojJStLz2Ot39Sb?=
- =?us-ascii?Q?J7ozGlwu3SypII14zWQMJb7okfXzHkDqXIYDpSpYwy8U6unM7rt0H5WD3Cdc?=
- =?us-ascii?Q?bNQFPX6K3nJgTzdXuzTIM2BrgNgUKz/BsVsnvkf/bkmd/v/oyy3/wBtbLoxh?=
- =?us-ascii?Q?bf45wACmEPaXRq4YwjoEhwIeV0LR4u87spAsC4tdSXf47tJ3cqZP5J3aQ54n?=
- =?us-ascii?Q?bjwS86SZctZU1MA67OMyFU8YWx4EwdebEIpkJyjcVBVuDOiTFMv1vV/4ngFd?=
- =?us-ascii?Q?Hsk/YpVs+ZhW/GUKj+58MlKj1uHm9Err25wNd6SY1WzKBcuPGJHHnWAdQYWS?=
- =?us-ascii?Q?2eBtHF9X3u4HQ7sFOyTcmInhw5aqnbt2OrgyqQHf/LAnTsU3wBC4ueIPF5H6?=
- =?us-ascii?Q?Tzq2pEPYsnScr9siCH38SqAW2g/2BiTZ+lhRA3YTB3Tui3etCn+wyPa4q5vj?=
- =?us-ascii?Q?CmyrKNHhi7w7Z1F94Iuatw/vFioCpf5B5/7Zd3mAtaDSL7t49djC3IO8P8IS?=
- =?us-ascii?Q?JMbrk0hCHgqvpKUhSwbHfeh4+jqQGdqUZM1tBe/atYGexhmQXpM7zww1FgRf?=
- =?us-ascii?Q?JDO0nmsX/1G9z5v1wtwZN8n5J5A4ByHEwLy+byuOj9PRlm6o4pLJZIVBUlee?=
- =?us-ascii?Q?U0WKEpRYxOAiOGcOeYHwrY4UDoTOvW25cbG+Oa0Wn8TrZ04LX1292LBSBBLN?=
- =?us-ascii?Q?5PecdKX1Wipky52lISgaGum2fZc3LvvNrYeoaiV4UgLnobiXJjV+k7v1LJBi?=
- =?us-ascii?Q?8Dk8CAQPRy4yg0ypmVV5UbhetYbUliF3wOV6phzbX47SCaM8YaAD1YveR/dw?=
- =?us-ascii?Q?A97Vry3yQkzr+n9RhZjp+gGbrG5NL2POdXVj2O7a08P9p3MgTXVvRywKSDv6?=
- =?us-ascii?Q?TS7mHeHviDJET5LNCdsopcAMA+IA8JIZonBWFpyZG3v9/gQ/chp125zLkKQZ?=
- =?us-ascii?Q?0AaljDLOCmVZWCKAKlfy7OsT1KSO7eyoZaNG/LF0j/Ud2fwl5QY2gK9QpDCm?=
- =?us-ascii?Q?IdCGwg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0123A125AB;
+	Wed, 18 Oct 2023 08:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1C912F4;
+	Wed, 18 Oct 2023 01:21:45 -0700 (PDT)
+Received: from [10.57.66.147] (unknown [10.57.66.147])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C2FBA3F64C;
+	Wed, 18 Oct 2023 01:21:03 -0700 (PDT)
+Message-ID: <1634d3e0-ac13-4f08-97e3-9b04a9202431@arm.com>
+Date: Wed, 18 Oct 2023 09:21:02 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b9fe5a7-c0e2-4624-f659-08dbcf6f76a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2023 00:16:24.1727
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BZXaPK6xTDm72vfrv0HgB+ycvY2y1mB2GYrQ6tB20ZqXgqkXcwDop2Eu18VXJHjGjDCi6eMbRmUKZ8k6wV+AgmnrN8wx1rcqqp2753D6gfPcvZw7pCItvHfzCFXoxiBT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11188
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
+Content-Language: en-GB
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: kernel test robot <lkp@intel.com>, Will Deacon <will@kernel.org>,
+ Steven Price <steven.price@arm.com>, Peter Collingbourne <pcc@google.com>,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20231005140730.2191134-1-ryan.roberts@arm.com>
+ <202310140531.BQQwt3NQ-lkp@intel.com> <ZS147N1JKyUvaHyJ@arm.com>
+ <b463b420-c2be-49c5-bed6-0ff896851adb@arm.com> <ZS6EvMiJ0QF5INkv@arm.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <ZS6EvMiJ0QF5INkv@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Bjorn, Nathan,
+On 17/10/2023 13:57, Catalin Marinas wrote:
+> On Tue, Oct 17, 2023 at 08:36:43AM +0100, Ryan Roberts wrote:
+>> On 16/10/2023 18:54, Catalin Marinas wrote:
+>>> On Sat, Oct 14, 2023 at 05:15:51AM +0800, kernel test robot wrote:
+>>>> kernel test robot noticed the following build warnings:
+>>>>
+>>>> [auto build test WARNING on arm64/for-next/core]
+>>>> [also build test WARNING on arm-perf/for-next/perf arm/for-next kvmarm/next soc/for-next linus/master v6.6-rc5 next-20231013]
+>>>> [cannot apply to arm/fixes]
+>>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>>> And when submitting patch, we suggest to use '--base' as documented in
+>>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>>
+>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-mm-Hoist-synchronization-out-of-set_ptes-loop/20231005-231636
+>>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+>>>> patch link:    https://lore.kernel.org/r/20231005140730.2191134-1-ryan.roberts%40arm.com
+>>>> patch subject: [PATCH v2] arm64/mm: Hoist synchronization out of set_ptes() loop
+>>>> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/config)
+>>>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310140531.BQQwt3NQ-lkp@intel.com/reproduce)
+>>>>
+>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>>> the same patch/commit), kindly add following tags
+>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202310140531.BQQwt3NQ-lkp@intel.com/
+>>>>
+>>>> All warnings (new ones prefixed by >>):
+>>>>
+>>>>    In file included from net/ipv4/route.c:66:
+>>>>    In file included from include/linux/mm.h:29:
+>>>>    In file included from include/linux/pgtable.h:6:
+>>>>>> arch/arm64/include/asm/pgtable.h:344:65: warning: parameter 'addr' set but not used [-Wunused-but-set-parameter]
+>>>>      344 | static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+>>>>          |                                                                 ^
+>>>>    1 warning generated.
+>>>
+>>> Thanks for the report. I think something like below will do (I'll test
+>>> and commit as a separate patch, it's not something that Ryan's patch
+>>> introduces):
+>>
+>> I was actually just trying to repro this and was planning to send out a v3 of my
+>> patch. But if you are happy to handle it as you suggest, then I guess you don't
+>> need anything further from me?
+> 
+> If you feel like testing, please give this a go ;)
 
-> From: Bjorn Helgaas, Sent: Wednesday, October 18, 2023 3:51 AM
->=20
-> On Tue, Oct 17, 2023 at 11:41:58AM -0700, Nathan Chancellor wrote:
-> > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> > indirect call targets are validated against the expected function
-> > pointer prototype to make sure the call target is valid to help mitigat=
-e
-> > ROP attacks. If they are not identical, there is a failure at run time,
-> > which manifests as either a kernel panic or thread getting killed. A
-> > warning in clang aims to catch these at compile time, which reveals:
-> >
-> >   drivers/pci/controller/dwc/pcie-rcar-gen4.c:403:15: error: incompatib=
-le function pointer types initializing 'int
-> (*)(struct dw_pcie_ep *, u8, enum pci_epc_irq_type, u16)' (aka 'int (*)(s=
-truct dw_pcie_ep *, unsigned char, enum
-> pci_epc_irq_type, unsigned sort)') with an expression of type 'int (struc=
-t dw_pcie_ep *, u8, unsigned int, u16)' (aka
-> 'int (struct dw_pcie_ep *, unsigned char, unsigned int, unsigned short)')
-> [-Werror,-Wincompatible-function-pointer-types-strict]
-> >     403 |         .raise_irq =3D rcar_gen4_pcie_ep_raise_irq,
-> >         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >   1 error generated.
-> >
-> > '->raise_irq()' in 'struct dw_pcie_ep_ops' expects a type parameter of
-> > type 'enum pci_epc_irq_type', not 'unsigned int'. Adjust the type to
-> > match and use the proper enum values in the switch. The underlying valu=
-e
-> > of both the enum and the macro is the same, so there is no functional
-> > change while clearing up the warning and avoiding a CFI failure at run
-> > time.
-> >
-> > Fixes: 32b83c68d634 ("PCI: rcar-gen4: Add endpoint mode support")
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->=20
-> Thanks, Nathan.
+Compile tested and observed that warning is gone with your change. Also ran mm
+selftests and all looks good. So:
 
-Thank you for the patch!
+Tested-by: Ryan Roberts <ryan.roberts@arm.com>
 
-> Yoshihiro, can you fold this in on the next rev of your rcar-gen4
-> series?
->=20
-> I dropped the rcar-gen4 branch for today since it broke Marek's system
-> (Samsung Exynos5433-based TM2e board), so when we fix that we should
-> be able to fold in this fix at the same time.
 
-I got it. I'll fix this code and send patch-set as v25.
+> 
+> ------------8<---------------------------
+> From e6255237acfc21e92252653c3ed42446ef67f625 Mon Sep 17 00:00:00 2001
+> From: Catalin Marinas <catalin.marinas@arm.com>
+> Date: Tue, 17 Oct 2023 11:57:55 +0100
+> Subject: [PATCH] arm64: Mark the 'addr' argument to set_ptes() and
+>  __set_pte_at() as unused
+> 
+> This argument is not used by the arm64 implementation. Mark it as
+> __always_unused and also remove the unnecessary 'addr' increment in
+> set_ptes().
+> 
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202310140531.BQQwt3NQ-lkp@intel.com/
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  arch/arm64/include/asm/pgtable.h | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 68984ba9ce2a..b19a8aee684c 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -341,8 +341,9 @@ static inline void __sync_cache_and_tags(pte_t pte, unsigned int nr_pages)
+>  		mte_sync_tags(pte, nr_pages);
+>  }
+>  
+> -static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep, pte_t pte, unsigned int nr)
+> +static inline void set_ptes(struct mm_struct *mm,
+> +			    unsigned long __always_unused addr,
 
-Best regards,
-Yoshihiro Shimoda
+Personally I'm not a huge fan of the __always_unused mark up, given that it's
+used so patchily in the source. The warning also disappears without these
+markups. (the real problem is just the `addr += PAGE_SIZE` below.
 
-> > ---
-> >  drivers/pci/controller/dwc/pcie-rcar-gen4.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-rcar-gen4.c b/drivers/pci/=
-controller/dwc/pcie-rcar-gen4.c
-> > index 619262d32f4e..0c0f5c257b14 100644
-> > --- a/drivers/pci/controller/dwc/pcie-rcar-gen4.c
-> > +++ b/drivers/pci/controller/dwc/pcie-rcar-gen4.c
-> > @@ -353,14 +353,15 @@ static void rcar_gen4_pcie_ep_deinit(struct dw_pc=
-ie_ep *ep)
-> >  }
-> >
-> >  static int rcar_gen4_pcie_ep_raise_irq(struct dw_pcie_ep *ep, u8 func_=
-no,
-> > -				       unsigned int type, u16 interrupt_num)
-> > +				       enum pci_epc_irq_type type,
-> > +				       u16 interrupt_num)
-> >  {
-> >  	struct dw_pcie *dw =3D to_dw_pcie_from_ep(ep);
-> >
-> >  	switch (type) {
-> > -	case PCI_IRQ_LEGACY:
-> > +	case PCI_EPC_IRQ_LEGACY:
-> >  		return dw_pcie_ep_raise_legacy_irq(ep, func_no);
-> > -	case PCI_IRQ_MSI:
-> > +	case PCI_EPC_IRQ_MSI:
-> >  		return dw_pcie_ep_raise_msi_irq(ep, func_no, interrupt_num);
-> >  	default:
-> >  		dev_err(dw->dev, "Unknown IRQ type\n");
-> >
-> > ---
-> > base-commit: de45624e69e14ccd6b4b2886155578bb218925de
-> > change-id: 20231017-pcie-rcar-wifpts-6c65df6f8c8b
-> >
-> > Best regards,
-> > --
-> > Nathan Chancellor <nathan@kernel.org>
-> >
+Thanks,
+Ryan
+
+
+> +			    pte_t *ptep, pte_t pte, unsigned int nr)
+>  {
+>  	page_table_check_ptes_set(mm, ptep, pte, nr);
+>  	__sync_cache_and_tags(pte, nr);
+> @@ -353,7 +354,6 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+>  		if (--nr == 0)
+>  			break;
+>  		ptep++;
+> -		addr += PAGE_SIZE;
+>  		pte_val(pte) += PAGE_SIZE;
+>  	}
+>  }
+> @@ -528,7 +528,8 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
+>  #define pud_pfn(pud)		((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
+>  #define pfn_pud(pfn,prot)	__pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
+>  
+> -static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+> +static inline void __set_pte_at(struct mm_struct *mm,
+> +				unsigned long __always_unused addr,
+>  				pte_t *ptep, pte_t pte, unsigned int nr)
+>  {
+>  	__sync_cache_and_tags(pte, nr);
+
