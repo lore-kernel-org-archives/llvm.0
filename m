@@ -1,31 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE6DBE62
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 16:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140E7374F3
+	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 16:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cd5ply3z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF27C433C8;
-	Wed, 18 Oct 2023 16:52:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H3cQz036"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB57FC433C7;
+	Wed, 18 Oct 2023 16:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697647952;
-	bh=SsGg2JqeewKiiSWRS7ZexJq3uiXt0rUFI1EQnbTVJAY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=cd5ply3z+r3w/NRCWPDxJ7JGivJSePVUFTojZ2T9UrwCvpSDPfOKq8rlamVobPWA/
-	 klQ8zxpqNwjRrXvaR07x2D3NqvpLbe8kZUFTeqyx2Sm2cPXy5d8CHfFG9vgCvgZzH9
-	 5DzuCcGUWtlvdg6638VTE9nkOuDYZxFeKstMq7SYaNJ6QU8vQJ9i4FcDXeHJtx5aK3
-	 4hH/qy3FvyoyLfB/wooOd4aAvB3857LhuNOxquutLG+4KxHDz0yQTmwhbVkI7AygCQ
-	 2e6n4HG4jVZKvK9rQwI4Q9gOH9EG5xUmJdGBdslWgLYMAGDP89zY5q0gC7y+MIuz/l
-	 uZ6sWIdoAFWLQ==
-Date: Wed, 18 Oct 2023 11:52:31 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Reinette Chatre <reinette.chatre@intel.com>
-Cc: bhelgaas@google.com, nathan@kernel.org, ndesaulniers@google.com,
-	trix@redhat.com, tglx@linutronix.de, kevin.tian@intel.com,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] PCI/MSI: Provide stubs for IMS functions
-Message-ID: <20231018165231.GA1365828@bhelgaas>
+	s=k20201202; t=1697648158;
+	bh=FhJt2vNLVuhy7x9s2wmhEtB3RvSozgHH/YZh9yYPj4c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H3cQz036JQg3nyZgCDH2boZgyUF6nTnxBXrYb7RH6+XduR0hU21m9oh5M6+bCuKYZ
+	 J4pg5smzBj5uG44HDZVsNQJNCSIKp25eAlha1DymuL3TVRm/hurMUmHCA79FKXl/ME
+	 z0O93xG2uhS1OtXHMLnSzSzuDb2/2ReI0z7GspQ2isDYSGTtJmsidvm33pCdrjdqS2
+	 /g1xPQRCvu1UnCBYJNs2qGfUdcuvyz1NzXDVFVKjfOaNenfXLfWFDRMD44xMIBiB3U
+	 ZONOH1PO5UwFdYlrVjIBry1fZMgaOXOs8TRl3KMn6UsrN9XWF6QguZ3jZ3nHZlR8jl
+	 31ZuH141YOH0Q==
+Date: Wed, 18 Oct 2023 09:55:56 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Hamza Mahfooz <hamza.mahfooz@amd.com>, linux-kernel@vger.kernel.org,
+	Rodrigo Siqueira <rodrigo.siqueira@amd.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] lib: Kconfig: disable dynamic sanitizers for test builds
+Message-ID: <20231018165556.GA3842315@dev-arch.thelio-3990X>
+References: <20231018153147.167393-1-hamza.mahfooz@amd.com>
+ <CANpmjNPZ0Eii3ZTrVqEL2Ez0Jv23y-emLBCLSZ==xmH--4E65g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,105 +44,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231018164351.GA1365452@bhelgaas>
+In-Reply-To: <CANpmjNPZ0Eii3ZTrVqEL2Ez0Jv23y-emLBCLSZ==xmH--4E65g@mail.gmail.com>
 
-On Wed, Oct 18, 2023 at 11:43:51AM -0500, Bjorn Helgaas wrote:
-> On Tue, Oct 17, 2023 at 10:56:38AM -0700, Reinette Chatre wrote:
-> > The IMS related functions (pci_create_ims_domain(),
-> > pci_ims_alloc_irq(), and pci_ims_free_irq()) are not declared
-> > when CONFIG_PCI_MSI is disabled.
-> > 
-> > Provide definitions of these functions for use when callers
-> > are compiled with CONFIG_PCI_MSI disabled.
-> > 
-> > Fixes: 0194425af0c8 ("PCI/MSI: Provide IMS (Interrupt Message Store) support")
-> > Fixes: c9e5bea27383 ("PCI/MSI: Provide pci_ims_alloc/free_irq()")
-> > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> > Cc: stable@vger.kernel.org      # v6.2+
+On Wed, Oct 18, 2023 at 06:22:14PM +0200, Marco Elver wrote:
+> On Wed, 18 Oct 2023 at 17:32, 'Hamza Mahfooz' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+
+<snip>
+
+> > diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+> > index ef2c8f256c57..eb05c885d3fd 100644
+> > --- a/lib/Kconfig.kmsan
+> > +++ b/lib/Kconfig.kmsan
+> > @@ -13,6 +13,7 @@ config KMSAN
+> >         depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
+> >         depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
+> >         depends on !PREEMPT_RT
+> > +       depends on !COMPILE_TEST
 > 
-> Applied to pci/misc for v6.7, thanks!
+> KMSAN already selects FRAME_WARN of 0 and should not cause you any
+> issues during build testing.
 
-And dropped, since Thomas applied it via -tip:
-https://git.kernel.org/tip/41efa431244f6498833ff8ee8dde28c4924c5479
+Yeah, this particular case is a bug in the AMDGPU dml2 Makefile, where
+CONFIG_FRAME_WARN=0 is not respected.
 
-> > ---
-> > 
-> > This is a preparatory patch for the first caller of these
-> > functions (VFIO) for which work is in progress:
-> > https://lore.kernel.org/lkml/cover.1696609476.git.reinette.chatre@intel.com/
-> > 
-> > checkpatch.pl complains about the usage of ENOSYS but
-> > it does appear to be the custom.
-> > 
-> >  include/linux/pci.h | 34 ++++++++++++++++++++++++++--------
-> >  1 file changed, 26 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index 8c7c2c3c6c65..b56417276042 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -1624,6 +1624,8 @@ struct msix_entry {
-> >  	u16	entry;	/* Driver uses to specify entry, OS writes */
-> >  };
-> >  
-> > +struct msi_domain_template;
-> > +
-> >  #ifdef CONFIG_PCI_MSI
-> >  int pci_msi_vec_count(struct pci_dev *dev);
-> >  void pci_disable_msi(struct pci_dev *dev);
-> > @@ -1656,6 +1658,11 @@ void pci_msix_free_irq(struct pci_dev *pdev, struct msi_map map);
-> >  void pci_free_irq_vectors(struct pci_dev *dev);
-> >  int pci_irq_vector(struct pci_dev *dev, unsigned int nr);
-> >  const struct cpumask *pci_irq_get_affinity(struct pci_dev *pdev, int vec);
-> > +bool pci_create_ims_domain(struct pci_dev *pdev, const struct msi_domain_template *template,
-> > +			   unsigned int hwsize, void *data);
-> > +struct msi_map pci_ims_alloc_irq(struct pci_dev *pdev, union msi_instance_cookie *icookie,
-> > +				 const struct irq_affinity_desc *affdesc);
-> > +void pci_ims_free_irq(struct pci_dev *pdev, struct msi_map map);
-> >  
-> >  #else
-> >  static inline int pci_msi_vec_count(struct pci_dev *dev) { return -ENOSYS; }
-> > @@ -1719,6 +1726,25 @@ static inline const struct cpumask *pci_irq_get_affinity(struct pci_dev *pdev,
-> >  {
-> >  	return cpu_possible_mask;
-> >  }
-> > +
-> > +static inline bool pci_create_ims_domain(struct pci_dev *pdev,
-> > +					 const struct msi_domain_template *template,
-> > +					 unsigned int hwsize, void *data)
-> > +{ return false; }
-> > +
-> > +static inline struct msi_map pci_ims_alloc_irq(struct pci_dev *pdev,
-> > +					       union msi_instance_cookie *icookie,
-> > +					       const struct irq_affinity_desc *affdesc)
-> > +{
-> > +	struct msi_map map = { .index = -ENOSYS, };
-> > +
-> > +	return map;
-> > +}
-> > +
-> > +static inline void pci_ims_free_irq(struct pci_dev *pdev, struct msi_map map)
-> > +{
-> > +}
-> > +
-> >  #endif
-> >  
-> >  /**
-> > @@ -2616,14 +2642,6 @@ static inline bool pci_is_thunderbolt_attached(struct pci_dev *pdev)
-> >  void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
-> >  #endif
-> >  
-> > -struct msi_domain_template;
-> > -
-> > -bool pci_create_ims_domain(struct pci_dev *pdev, const struct msi_domain_template *template,
-> > -			   unsigned int hwsize, void *data);
-> > -struct msi_map pci_ims_alloc_irq(struct pci_dev *pdev, union msi_instance_cookie *icookie,
-> > -				 const struct irq_affinity_desc *affdesc);
-> > -void pci_ims_free_irq(struct pci_dev *pdev, struct msi_map map);
-> > -
-> >  #include <linux/dma-mapping.h>
-> >  
-> >  #define pci_printk(level, pdev, fmt, arg...) \
-> > -- 
-> > 2.34.1
-> > 
+diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+index f35ed8de260d..66431525f2a0 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+@@ -61,7 +61,7 @@ ifneq ($(CONFIG_FRAME_WARN),0)
+ frame_warn_flag := -Wframe-larger-than=2048
+ endif
+ 
+-CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_core.o := $(dml2_ccflags) -Wframe-larger-than=2048
++CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_core.o := $(dml2_ccflags) $(frame_warn_flag)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_util.o := $(dml2_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml2_wrapper.o := $(dml2_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml2_utils.o := $(dml2_ccflags)
+
+I will try to send that patch soon, unless one of the AMDGPU folks wants
+to beat me to it.
+
+Cheers,
+Nathan
