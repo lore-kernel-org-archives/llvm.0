@@ -1,144 +1,244 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3D94291A
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 21:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4018737155;
+	Wed, 18 Oct 2023 22:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rpFi4Sat"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2bb9a063f26so96964201fa.2
-        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 14:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697663149; x=1698267949; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3Sf2UavZlGlSuMBGqSBmnqFseiSuYY3mpQFJNM7ytS0=;
-        b=rpFi4SatvR83WrWdIzn7Aa43AUbqVjajLpjpbi48S2V1vF7FjwTMmfP0I933uGFube
-         1iOe0Q9GkBotRvyv6RbADD+V4Q6dlnlsOn/NqEnhq32qNk3/aHjTLdzhyWcTRqpI3Zo/
-         SbzmifnWq6T7RulGPCSSaEOp9z1c+u9o+aUq7sYbGsPJEUBmX35wHb88tX4iuhxr36ig
-         gqeRSZ5GhaukrwqrYvVFSKfdZWqWljJv35CP9H3WDu/GvtUb9rTIGkAvH0oOqygcSlbw
-         y8fjbQ/Joyf9DeEIYPFZzSHg94QEkUWMfofrMUo3/fI/PJ9DSxSF5Rmb+ZitCV1d25sy
-         2zAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697663149; x=1698267949;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Sf2UavZlGlSuMBGqSBmnqFseiSuYY3mpQFJNM7ytS0=;
-        b=kiwbteS9xUfrVsq/Ok6L0U+7C+20TkVcdB8fDn1iKPIQ4gy4IbjwVyDQitFtm5hqWH
-         ZD48DU+7eQ9oEMjtkZZYTUZUQyU32okh0cZ+vWLpeg7YC7Khw+mSrvUwJAn+6uPevVYk
-         Q0gmx5b1EYqDCLBSZzBEtUb+UUSrQsUDaTGsBLJuecZu6zkycCnzJ+gI7qXRxE0wO8Ss
-         Ln+i9yclbF5lnQ/Z3oO9wOasuc9EBSz0CRsSE1EIgsxegEWlt4F6YuYgF62dOikXpCdh
-         LwsquIeQY+t9XWjWyOddBg7lNSMgYheSp6n5v6VCeiBZja6mSFhYVWPhmOt1IayFUGTG
-         3I8w==
-X-Gm-Message-State: AOJu0YyjweiKEJUrow9t3L5P945zBkxeugADTgBPC6St5yYgsWgSRtZM
-	WUERRcSm8jHaAO9aW57QKYAAdA==
-X-Google-Smtp-Source: AGHT+IElb950wuSzxs8BkHLrrK3qUYdY9ithi5BODcRu6swCodyhbhJKucw0xer+AXhZI46HGGK+sg==
-X-Received: by 2002:a2e:a792:0:b0:2c5:14eb:1080 with SMTP id c18-20020a2ea792000000b002c514eb1080mr146417ljf.21.1697663149614;
-        Wed, 18 Oct 2023 14:05:49 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.49])
-        by smtp.gmail.com with ESMTPSA id p21-20020a05600c431500b004076f522058sm2619431wme.0.2023.10.18.14.05.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 14:05:49 -0700 (PDT)
-Message-ID: <fd64faf0-a149-400d-8cb7-244253c917d7@linaro.org>
-Date: Wed, 18 Oct 2023 23:05:46 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z8uUmIvi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697667453; x=1729203453;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z3IIJfbvuEma13Urz3y6LBWe3hMdSfJB7K0I1h7YR0E=;
+  b=Z8uUmIviQSSMFh95oYHXDi03MrVEoeVGjyAEADwcmLWe0Vh/6TZamhrJ
+   57eQqTa6nrSNnvJ/BrV10odqmdoNRpajs+ax5MWjpCDJjNixBnrOT3HrF
+   fkvfNbumUC6TfNgu0cVb372Pgx6pEpTFhJh+elYDoJVQkjrkaN6U36pEX
+   b/gcp1R06pyuuPCcZFPUSHnDz6L6iC6AY9Lcoba5ncLXV0EXHtCToDnr6
+   PNkoaj/mcUrV/MG8rTl9IyG3XUQaphPQzHOPTv9IATvj7mouc9ePhSBZ0
+   pKcNM9K3iEFp1c9cIGs3evsPsKosorYPNFmgNsqeiAnJpiP+LDgVJDAt6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="388987169"
+X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
+   d="scan'208";a="388987169"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 15:17:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="827090382"
+X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
+   d="scan'208";a="827090382"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Oct 2023 15:17:29 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qtEr1-00019g-20;
+	Wed, 18 Oct 2023 22:17:27 +0000
+Date: Thu, 19 Oct 2023 06:17:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Caleb Connolly <caleb.connolly@linaro.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Vincent Huang <vincent.huang@tw.synaptics.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	methanal <baclofen@tuta.io>, linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+	~postmarketos/upstreaming@lists.sr.ht,
+	Caleb Connolly <caleb.connolly@linaro.org>
+Subject: Re: [PATCH v2 7/7] Input: synaptics-rmi4 - support fallback values
+ for PDT descriptor bytes
+Message-ID: <202310190640.pxJQCbWc-lkp@intel.com>
+References: <20230929-caleb-rmi4-quirks-v2-7-b227ac498d88@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V15 0/4] Add PWM support for IPQ chipsets
-Content-Language: en-US
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
- andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
- baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-pwm@vger.kernel.org, nathan@kernel.org
-References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
- <f87f480d-6775-44c9-8a2b-05d47bb0dc5d@linaro.org>
- <20231018205232.p5d4xaqsd5fcbvfi@pengutronix.de>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231018205232.p5d4xaqsd5fcbvfi@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230929-caleb-rmi4-quirks-v2-7-b227ac498d88@linaro.org>
 
-On 18/10/2023 22:52, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Wed, Oct 18, 2023 at 06:29:30PM +0200, Krzysztof Kozlowski wrote:
->> On 05/10/2023 18:05, Devi Priya wrote:
->>> Add PWM driver and binding support for IPQ chipsets.
->>> Also, add support for pwm node in ipq6018.
->>>
->>
->> You need to clearly mark dependencies.
-> 
-> This is something I wouldn't blame Devi for. The dependency is not very
-> obvious and its kind of normal and expected for a patch series to have
-> dependencies. *shrug*
-> 
->> Next is now broken because of this patchset.
-> 
-> If I understand correctly this affects "only" the dtb check targets,
-> right? Is this bad enough that it needs an urgent fix? I would expect it
-> doesn't hurt much, am I right here?
-> 
-> I just looked into patch #2 and had a few comments for it.
+Hi Caleb,
 
-Check/Tests of bindings (make dt_binding_check) has warnings because of
-missing PWM schema.
+kernel test robot noticed the following build errors:
 
-Best regards,
-Krzysztof
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.6-rc6 next-20231018]
+[cannot apply to dtor-input/next dtor-input/for-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Caleb-Connolly/Input-synaptics-rmi4-handle-duplicate-unknown-PDT-entries/20231017-132844
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230929-caleb-rmi4-quirks-v2-7-b227ac498d88%40linaro.org
+patch subject: [PATCH v2 7/7] Input: synaptics-rmi4 - support fallback values for PDT descriptor bytes
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231019/202310190640.pxJQCbWc-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231019/202310190640.pxJQCbWc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310190640.pxJQCbWc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/input/rmi4/rmi_driver.c:1223:32: error: incompatible pointer types passing 'struct rmi_device *' to parameter of type 'struct device *' [-Werror,-Wincompatible-pointer-types]
+                   retval = rmi_driver_of_probe(rmi_dev, pdata);
+                                                ^~~~~~~
+   drivers/input/rmi4/rmi_driver.c:1101:54: note: passing argument to parameter 'dev' here
+   static inline int rmi_driver_of_probe(struct device *dev,
+                                                        ^
+   1 error generated.
+
+
+vim +1223 drivers/input/rmi4/rmi_driver.c
+
+  1199	
+  1200	static int rmi_driver_probe(struct device *dev)
+  1201	{
+  1202		struct rmi_driver *rmi_driver;
+  1203		struct rmi_driver_data *data;
+  1204		struct rmi_device_platform_data *pdata;
+  1205		struct rmi_device *rmi_dev;
+  1206		int retval;
+  1207	
+  1208		rmi_dbg(RMI_DEBUG_CORE, dev, "%s: Starting probe.\n",
+  1209				__func__);
+  1210	
+  1211		if (!rmi_is_physical_device(dev)) {
+  1212			rmi_dbg(RMI_DEBUG_CORE, dev, "Not a physical device.\n");
+  1213			return -ENODEV;
+  1214		}
+  1215	
+  1216		rmi_dev = to_rmi_device(dev);
+  1217		rmi_driver = to_rmi_driver(dev->driver);
+  1218		rmi_dev->driver = rmi_driver;
+  1219	
+  1220		pdata = rmi_get_platform_data(rmi_dev);
+  1221	
+  1222		if (rmi_dev->xport->dev->of_node) {
+> 1223			retval = rmi_driver_of_probe(rmi_dev, pdata);
+  1224			if (retval)
+  1225				return retval;
+  1226		}
+  1227	
+  1228		data = devm_kzalloc(dev, sizeof(struct rmi_driver_data), GFP_KERNEL);
+  1229		if (!data)
+  1230			return -ENOMEM;
+  1231	
+  1232		INIT_LIST_HEAD(&data->function_list);
+  1233		data->rmi_dev = rmi_dev;
+  1234		dev_set_drvdata(&rmi_dev->dev, data);
+  1235	
+  1236		/*
+  1237		 * Right before a warm boot, the sensor might be in some unusual state,
+  1238		 * such as F54 diagnostics, or F34 bootloader mode after a firmware
+  1239		 * or configuration update.  In order to clear the sensor to a known
+  1240		 * state and/or apply any updates, we issue a initial reset to clear any
+  1241		 * previous settings and force it into normal operation.
+  1242		 *
+  1243		 * We have to do this before actually building the PDT because
+  1244		 * the reflash updates (if any) might cause various registers to move
+  1245		 * around.
+  1246		 *
+  1247		 * For a number of reasons, this initial reset may fail to return
+  1248		 * within the specified time, but we'll still be able to bring up the
+  1249		 * driver normally after that failure.  This occurs most commonly in
+  1250		 * a cold boot situation (where then firmware takes longer to come up
+  1251		 * than from a warm boot) and the reset_delay_ms in the platform data
+  1252		 * has been set too short to accommodate that.  Since the sensor will
+  1253		 * eventually come up and be usable, we don't want to just fail here
+  1254		 * and leave the customer's device unusable.  So we warn them, and
+  1255		 * continue processing.
+  1256		 */
+  1257		retval = rmi_scan_pdt(rmi_dev, NULL, rmi_initial_reset);
+  1258		if (retval < 0)
+  1259			dev_warn(dev, "RMI initial reset failed! Continuing in spite of this.\n");
+  1260	
+  1261		retval = rmi_read(rmi_dev, PDT_PROPERTIES_LOCATION, &data->pdt_props);
+  1262		if (retval < 0) {
+  1263			/*
+  1264			 * we'll print out a warning and continue since
+  1265			 * failure to get the PDT properties is not a cause to fail
+  1266			 */
+  1267			dev_warn(dev, "Could not read PDT properties from %#06x (code %d). Assuming 0x00.\n",
+  1268				 PDT_PROPERTIES_LOCATION, retval);
+  1269		}
+  1270	
+  1271		mutex_init(&data->irq_mutex);
+  1272		mutex_init(&data->enabled_mutex);
+  1273	
+  1274		retval = rmi_probe_interrupts(data);
+  1275		if (retval)
+  1276			goto err;
+  1277	
+  1278		if (rmi_dev->xport->input) {
+  1279			/*
+  1280			 * The transport driver already has an input device.
+  1281			 * In some cases it is preferable to reuse the transport
+  1282			 * devices input device instead of creating a new one here.
+  1283			 * One example is some HID touchpads report "pass-through"
+  1284			 * button events are not reported by rmi registers.
+  1285			 */
+  1286			data->input = rmi_dev->xport->input;
+  1287		} else {
+  1288			data->input = devm_input_allocate_device(dev);
+  1289			if (!data->input) {
+  1290				dev_err(dev, "%s: Failed to allocate input device.\n",
+  1291					__func__);
+  1292				retval = -ENOMEM;
+  1293				goto err;
+  1294			}
+  1295			rmi_driver_set_input_params(rmi_dev, data->input);
+  1296			data->input->phys = devm_kasprintf(dev, GFP_KERNEL,
+  1297							"%s/input0", dev_name(dev));
+  1298		}
+  1299	
+  1300		retval = rmi_init_functions(data);
+  1301		if (retval)
+  1302			goto err;
+  1303	
+  1304		retval = rmi_f34_create_sysfs(rmi_dev);
+  1305		if (retval)
+  1306			goto err;
+  1307	
+  1308		if (data->input) {
+  1309			rmi_driver_set_input_name(rmi_dev, data->input);
+  1310			if (!rmi_dev->xport->input) {
+  1311				retval = input_register_device(data->input);
+  1312				if (retval) {
+  1313					dev_err(dev, "%s: Failed to register input device.\n",
+  1314						__func__);
+  1315					goto err_destroy_functions;
+  1316				}
+  1317			}
+  1318		}
+  1319	
+  1320		retval = rmi_irq_init(rmi_dev);
+  1321		if (retval < 0)
+  1322			goto err_destroy_functions;
+  1323	
+  1324		if (data->f01_container->dev.driver) {
+  1325			/* Driver already bound, so enable ATTN now. */
+  1326			retval = rmi_enable_sensor(rmi_dev);
+  1327			if (retval)
+  1328				goto err_disable_irq;
+  1329		}
+  1330	
+  1331		return 0;
+  1332	
+  1333	err_disable_irq:
+  1334		rmi_disable_irq(rmi_dev, false);
+  1335	err_destroy_functions:
+  1336		rmi_free_function_list(rmi_dev);
+  1337	err:
+  1338		return retval;
+  1339	}
+  1340	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
