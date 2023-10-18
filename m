@@ -1,141 +1,125 @@
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAB51F188
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 16:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81191944A
+	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 16:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RU4Ksptu"
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-45853ab5556so518079137.2
-        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 09:22:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wWDudXrU"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40836ea8cbaso13463095e9.0
+        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 09:29:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697646173; x=1698250973; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8uMytjHiXi9xKsw6qoUi0Pc7HNlD5A1bFtvpbrNGTM=;
-        b=RU4KsptuFnVg6Qa5xxwnOSjpNekP8568eOJRJhYyyOSGYowPWTZ/tM1wjHEl/5bCAC
-         psWbs6aVAGgzm/MSQu8wH9di/tNxD/fY5ZoOohT66cN6foEHkNpVpTWvf8nVgm4AcuAg
-         BBAk3018mGq6zJPWQcBhnAG59RZuUupARaRYLDkyyN41Yzpg24kt/nRMwBDy4y5E4x7J
-         2t0RAVx5N/nVRaPoGy+3m86CF+TAEnOLavnDXeGEhHBsdDKXlOk4h7rSCnjhyoCU4i8Q
-         urMaH7zuZVis9vftMau1zZM0+97UZwAujssaSEmP3slPUIgCQohXzIoG5v2YFAlOuMrM
-         QBNA==
+        d=linaro.org; s=google; t=1697646573; x=1698251373; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fOxskDfC7UdA36cNfLZwzB1EBzu5Hisy2kWvdoViG+M=;
+        b=wWDudXrUBGEFqiw6kHymvtYFZfR8Dr2b7Bst6RdcZ9zCC/rgKImEGUxchW2XzStnQF
+         ykXsgGLlT9MLO2tD3miEiaO1i5CGFlPi4vycS28co+J/SfveL+KX0gO52cOb8NOyyNvU
+         o58nds3OuvnHtc2t4ssxLMDRASqzj2DRn1Goe53wdtWoSQWuWD33KUU0WT6mxB1j+JEr
+         tJqwfTZgpqZfOK6I39sULiONtQlo7rxxcuDDUGht9U6fciu1BDGO1cG7GiQLBwF1Rwuw
+         5l7ApJmgh6H7CRMmidaR2xe/G5WTrNaRkG51qvisNJLYv3Gj7zZRFrJM1yt/UysC5KwB
+         nDfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697646173; x=1698250973;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i8uMytjHiXi9xKsw6qoUi0Pc7HNlD5A1bFtvpbrNGTM=;
-        b=T1KTBPEgXAErNiVXzrIrQIXlAkxWAzVDLvRdYyidV/ce/YbIO7ReQaGTJYTIHyG3ld
-         eduajy4PadUgMFFhwQ7Dz6LbxxCtxLEtloJyR5sbx9ezU3fkrVK7ePhZoV/mY2AXFK33
-         hwAUxh3BBTev2bL4Y7cBp+QFRk6GNA4o915HAdSjbu03MOt1oK4mMrsgVxKPhxeLMGbQ
-         sNva4DWvfwaEdLOc5r9sJXIP6xodhurotQK+WxTOSHK/i+9nbPQW3tepSM5Z1Q/i7zBX
-         Nciw6wE0znkMQyd5no2gGP8y/F9S/vS+aZoKLJ726EnvZehQGXeuZmyXgUs5/TC/Nn/g
-         /B5w==
-X-Gm-Message-State: AOJu0YzPoAAY+O5TB40r3A4amIMDn0v3abhqOTJxr3QYE+L9DfRh+l38
-	8vaXvO0of6Mu6y7zwgRGpBBV8szvlnj8RZ0ynPJaRQ==
-X-Google-Smtp-Source: AGHT+IFzH1hAB4L9o9TIfKMNKAd7uyjYsU8V76NgA+b0+gVU3MqhuWUL+GxNzQRo+5zSfcLtXgyABQUYfqGL8Yl4k40=
-X-Received: by 2002:a67:e14c:0:b0:457:cc6c:9491 with SMTP id
- o12-20020a67e14c000000b00457cc6c9491mr5467384vsl.17.1697646172621; Wed, 18
- Oct 2023 09:22:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697646573; x=1698251373;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fOxskDfC7UdA36cNfLZwzB1EBzu5Hisy2kWvdoViG+M=;
+        b=MGfBVqwGn5/EcmvPsWwFj844fJshLEI4PkH3LY4H90lLKjBrWofebgw02bo1UBvcQr
+         cQqGbkoY31yBx+Rc0ZJgGcsFFi38HUO/HoHHKvxbLfDbmFzzNum8UifJNrrsQ/aum0EO
+         RyLlTkhT39w9qbRx7UKnDRsfZMIWAdBBNe9XZo7KVMNIUVrnAgN+fe+d3c0BJjYXM9AT
+         cFllehzIYm9Pu8OLFAKOP35N4uE/Wii+JYHSjm/l1ty90Twi+qnL3MV5QQc0AkM8343t
+         ZeiSOVnH5YIKNnIbPPC25iDfNOo1hw25NnCfFLE6B3a+9R6oL8q7pllO5RZGLzT+uDU4
+         8k6A==
+X-Gm-Message-State: AOJu0YwvO/z3gWuytlcrXRymEb33mkbgkGzYE/zsRHQpSwmv4MIm5Xm1
+	BVXsx1W8TxnemvO67qaFnyYucg==
+X-Google-Smtp-Source: AGHT+IHlbC88Biwr7o4WQnFHw/cwAm5/kJ04aqB5iPYwY5HsICEStH+VlgSjG7uqaR0zaLdpP43TFA==
+X-Received: by 2002:a05:600c:1912:b0:401:bd2e:49fc with SMTP id j18-20020a05600c191200b00401bd2e49fcmr4202862wmq.24.1697646573072;
+        Wed, 18 Oct 2023 09:29:33 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.154])
+        by smtp.gmail.com with ESMTPSA id f19-20020adfb613000000b003232380ffd7sm2424163wre.102.2023.10.18.09.29.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Oct 2023 09:29:32 -0700 (PDT)
+Message-ID: <f87f480d-6775-44c9-8a2b-05d47bb0dc5d@linaro.org>
+Date: Wed, 18 Oct 2023 18:29:30 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231018153147.167393-1-hamza.mahfooz@amd.com>
-In-Reply-To: <20231018153147.167393-1-hamza.mahfooz@amd.com>
-From: Marco Elver <elver@google.com>
-Date: Wed, 18 Oct 2023 18:22:14 +0200
-Message-ID: <CANpmjNPZ0Eii3ZTrVqEL2Ez0Jv23y-emLBCLSZ==xmH--4E65g@mail.gmail.com>
-Subject: Re: [PATCH] lib: Kconfig: disable dynamic sanitizers for test builds
-To: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Cc: linux-kernel@vger.kernel.org, Rodrigo Siqueira <rodrigo.siqueira@amd.com>, 
-	Harry Wentland <harry.wentland@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V15 0/4] Add PWM support for IPQ chipsets
+Content-Language: en-US
+To: Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
+ baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Cc: linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+ nathan@kernel.org
+References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 18 Oct 2023 at 17:32, 'Hamza Mahfooz' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> kasan, kcsan and kmsan all have the tendency to blow up the stack
-> and there isn't a lot of value in having them enabled for test builds,
-> since they are intended to be useful for runtime debugging. So, disable
-> them for test builds.
->
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> ---
->  lib/Kconfig.kasan | 1 +
->  lib/Kconfig.kcsan | 1 +
->  lib/Kconfig.kmsan | 1 +
->  3 files changed, 3 insertions(+)
+On 05/10/2023 18:05, Devi Priya wrote:
+> Add PWM driver and binding support for IPQ chipsets.
+> Also, add support for pwm node in ipq6018.
+> 
 
-Do you have links to discussions that motivate this change? This has
-been discussed in the past. One recommendation is to adjust the
-build/test scripts to exclude some combination of configs if they are
-causing issues. Or we increase CONFIG_FRAME_WARN if one of them is
-enabled (KMSAN sets it to 0, 32-bit KASAN increases it a bit).
+You need to clearly mark dependencies. Next is now broken because of
+this patchset.
 
-That being said, we're aware of KASAN having had more issues and there
-are some suboptions that have been disabled because of that (like
-KASAN_STACK). I'm not sure if Clang's KASAN instrumentation has had
-some recent improvements (we did investigate it, but I can't recall
-what the outcome was [1]) - maybe try a more recent compiler? However,
-KCSAN and KMSAN shouldn't have any issues (if KMSAN is enabled,
-FRAME_WARN is 0). And having build tests with them enabled isn't
-useless at all: we're making sure that these tools (even though only
-for debugging), still work. We _want_ them to work during random build
-testing!
+Best regards,
+Krzysztof
 
-Please share the concrete problem you're having, because this change
-will make things worse for everyone in the long run.
-
-[1] https://github.com/llvm/llvm-project/issues/38157
-
-> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> index fdca89c05745..fbd85c4872c0 100644
-> --- a/lib/Kconfig.kasan
-> +++ b/lib/Kconfig.kasan
-> @@ -38,6 +38,7 @@ menuconfig KASAN
->                     CC_HAS_WORKING_NOSANITIZE_ADDRESS) || \
->                    HAVE_ARCH_KASAN_HW_TAGS
->         depends on (SLUB && SYSFS && !SLUB_TINY) || (SLAB && !DEBUG_SLAB)
-> +       depends on !COMPILE_TEST
->         select STACKDEPOT_ALWAYS_INIT
->         help
->           Enables KASAN (Kernel Address Sanitizer) - a dynamic memory safety
-
-This also disables KASAN_HW_TAGS, which is actually enabled in
-production kernels and does not use any compiler instrumentation.
-
-> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-> index 609ddfc73de5..7bcefdbfb46f 100644
-> --- a/lib/Kconfig.kcsan
-> +++ b/lib/Kconfig.kcsan
-> @@ -14,6 +14,7 @@ menuconfig KCSAN
->         bool "KCSAN: dynamic data race detector"
->         depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
->         depends on DEBUG_KERNEL && !KASAN
-> +       depends on !COMPILE_TEST
->         select CONSTRUCTORS
->         select STACKTRACE
->         help
-> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
-> index ef2c8f256c57..eb05c885d3fd 100644
-> --- a/lib/Kconfig.kmsan
-> +++ b/lib/Kconfig.kmsan
-> @@ -13,6 +13,7 @@ config KMSAN
->         depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
->         depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
->         depends on !PREEMPT_RT
-> +       depends on !COMPILE_TEST
-
-KMSAN already selects FRAME_WARN of 0 and should not cause you any
-issues during build testing.
-
-Nack.
