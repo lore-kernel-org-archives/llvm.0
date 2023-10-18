@@ -1,148 +1,141 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EEF27700
-	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 15:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAB51F188
+	for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 16:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Cl5teZ2e"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=clNpQy5ZybGfdVjI2sKzIxRKmWpuzX2t0fMpvx+gtGr6SdUPC4mHrXl5pKMa8b8DqLnPfteTwDyz5c0OaQFge4/w+Gsm3R5UvaQxoyDzrGmJs/Vp/F5HCBwwnaUme88ndNW3u6vUA9LRRZc6LsddGgat8OubVIfSJyfaHFDJKMuabd6RkKuprPmBwoMqgb1mlBGxlM1qgl1AIc0Y17eCJJYIjAj/oGjmQXOcvp2IPW596LhXumYxTIGMCK+6n6ZRNhTzJ/6Cc90iilwhunel7douEx4Jh9lha9kABb8qq1h+2E/N/EM6QmyAhs/hrcvNFmdfZZykckfwC+ubAZWyVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t4EGmEG7/6VTSsdQ95kDL3H+dHVvpGu9d8qKc+oIY+I=;
- b=AgXkfxaz5NN2az36eZOBWUJ3V1J6QcnydNd0R4y148BY+dpzaz/gzvL1G4ExrEUuRJci9+dlt42o331CYIcWJ6bFhCTSKvpJ343JmLh+yRPi3uZ3BEYmIoE9zZfswBfm79Y/p3RuYAJPEgfHfXUY9j8wK4IXdhWoSyCqHuUyt1bwLPC7Edh92FjiCIYZgxcOrMP0EFTa3wnhwg9wl8YzKksp9F72OrfEB/mChcmP0kmOpmYpML5IjbbOTf3BjwA73cHEwcJwIkbaU3wDKmxqbEtL+pAk/Y+pmo1kUEjZlY0baJ4ojqHpKNg1WFHRdAdkm3cW1OE8g31pk7fTRRQjjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t4EGmEG7/6VTSsdQ95kDL3H+dHVvpGu9d8qKc+oIY+I=;
- b=Cl5teZ2eVqGH/sCiuMwYQzFpmIrzDnu/BxbHiIASf/XVswi86yp1E+xQxUHWzcGlhvbwoWPg28J7hrqI3kr2E66VC1FklXRJ6PzANwpmYhfAj5Upc0zzUmWdorc5vvhpxaFg2tz6RyTj3zkHVEZImjLxmvYy/tNpC0cj7VkC/Pk=
-Received: from CH2PR18CA0024.namprd18.prod.outlook.com (2603:10b6:610:4f::34)
- by IA1PR12MB6018.namprd12.prod.outlook.com (2603:10b6:208:3d6::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36; Wed, 18 Oct
- 2023 15:32:33 +0000
-Received: from DS3PEPF000099D6.namprd04.prod.outlook.com
- (2603:10b6:610:4f:cafe::f0) by CH2PR18CA0024.outlook.office365.com
- (2603:10b6:610:4f::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.21 via Frontend
- Transport; Wed, 18 Oct 2023 15:32:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS3PEPF000099D6.mail.protection.outlook.com (10.167.17.7) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6907.20 via Frontend Transport; Wed, 18 Oct 2023 15:32:32 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 18 Oct
- 2023 10:32:31 -0500
-From: Hamza Mahfooz <hamza.mahfooz@amd.com>
-To: <linux-kernel@vger.kernel.org>
-CC: Rodrigo Siqueira <rodrigo.siqueira@amd.com>, Harry Wentland
-	<harry.wentland@amd.com>, Alex Deucher <alexander.deucher@amd.com>, "Hamza
- Mahfooz" <hamza.mahfooz@amd.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>, Andrey Konovalov
-	<andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino
-	<vincenzo.frascino@arm.com>, Marco Elver <elver@google.com>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, <kasan-dev@googlegroups.com>,
-	<llvm@lists.linux.dev>
-Subject: [PATCH] lib: Kconfig: disable dynamic sanitizers for test builds
-Date: Wed, 18 Oct 2023 11:31:47 -0400
-Message-ID: <20231018153147.167393-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.42.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RU4Ksptu"
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-45853ab5556so518079137.2
+        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 09:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697646173; x=1698250973; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i8uMytjHiXi9xKsw6qoUi0Pc7HNlD5A1bFtvpbrNGTM=;
+        b=RU4KsptuFnVg6Qa5xxwnOSjpNekP8568eOJRJhYyyOSGYowPWTZ/tM1wjHEl/5bCAC
+         psWbs6aVAGgzm/MSQu8wH9di/tNxD/fY5ZoOohT66cN6foEHkNpVpTWvf8nVgm4AcuAg
+         BBAk3018mGq6zJPWQcBhnAG59RZuUupARaRYLDkyyN41Yzpg24kt/nRMwBDy4y5E4x7J
+         2t0RAVx5N/nVRaPoGy+3m86CF+TAEnOLavnDXeGEhHBsdDKXlOk4h7rSCnjhyoCU4i8Q
+         urMaH7zuZVis9vftMau1zZM0+97UZwAujssaSEmP3slPUIgCQohXzIoG5v2YFAlOuMrM
+         QBNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697646173; x=1698250973;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i8uMytjHiXi9xKsw6qoUi0Pc7HNlD5A1bFtvpbrNGTM=;
+        b=T1KTBPEgXAErNiVXzrIrQIXlAkxWAzVDLvRdYyidV/ce/YbIO7ReQaGTJYTIHyG3ld
+         eduajy4PadUgMFFhwQ7Dz6LbxxCtxLEtloJyR5sbx9ezU3fkrVK7ePhZoV/mY2AXFK33
+         hwAUxh3BBTev2bL4Y7cBp+QFRk6GNA4o915HAdSjbu03MOt1oK4mMrsgVxKPhxeLMGbQ
+         sNva4DWvfwaEdLOc5r9sJXIP6xodhurotQK+WxTOSHK/i+9nbPQW3tepSM5Z1Q/i7zBX
+         Nciw6wE0znkMQyd5no2gGP8y/F9S/vS+aZoKLJ726EnvZehQGXeuZmyXgUs5/TC/Nn/g
+         /B5w==
+X-Gm-Message-State: AOJu0YzPoAAY+O5TB40r3A4amIMDn0v3abhqOTJxr3QYE+L9DfRh+l38
+	8vaXvO0of6Mu6y7zwgRGpBBV8szvlnj8RZ0ynPJaRQ==
+X-Google-Smtp-Source: AGHT+IFzH1hAB4L9o9TIfKMNKAd7uyjYsU8V76NgA+b0+gVU3MqhuWUL+GxNzQRo+5zSfcLtXgyABQUYfqGL8Yl4k40=
+X-Received: by 2002:a67:e14c:0:b0:457:cc6c:9491 with SMTP id
+ o12-20020a67e14c000000b00457cc6c9491mr5467384vsl.17.1697646172621; Wed, 18
+ Oct 2023 09:22:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099D6:EE_|IA1PR12MB6018:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a9b12ee-24d8-449f-8024-08dbcfef7267
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	mctP/W0JJzx5e8Gr0LMtnjvwecDuaiSjxQc0JAwdrUEgI52ao7heP2qJs/AjRaI4uxNjKcIaX+a1XmQMzQlJtdnbVrrGycazbHE1wn96wX6pI0Q2cfZIw2CiXtq1rthkYADckm0zVE2TePGJpAHpiPKoAXoBhWfnyX+pOmXs9UOSC+d0fbquVKZigbwzmUVMYBKcXz0gNi/89TjBK9jAKvq2BsPenHLB64J2/lDXjmQenYpwl4yD8Wa35NiE7nSVE8HnDo76kO5loD6dRNuwNmdNKBk1Xt3OGN7QeqUIno1XnRwTpQpnwnFx3KHzYOq6EST32iFZ2sucXBby52HRrrYUKDqrCW4Jm58KWtbYfISxDwAE0aBoQhDBbzX52bem1tvFaQuz4X5LKDK+Ps2Tfk0achvSMrv/2l+prssuff5qgOjo/nSloRtApFj/5maql8HfesCs/5u2C7oGxlomGWQCheLWWzZDh3e6V46io/T8Nro5/6FQE3A8dDDmzR1noVwOKUaXFgA/8ivrDPKE2iylFq9+5TYhqnkMKmFZ1hFGtWkALLSIEe0PdlNcc3DhAHgoGJOn5hMh3G7bPD+v869QZ3S2Un8xw1QvLav2vTL6IEmOjndxKQO5qJbL3VPQ/K6EosnmjiYUbsXy+knDtKWAJQVOlPs+bdNLZY4gAavafsMD7gAqgQF3SGLKugGTdDCe7RtgFjowSarCHVFN5U1S3Q3+l5a7ySo0pGs446zEBOzjk1SSCxuz3oMBcX4nCzvUAczYtEA42WlHwUW96IedgvNk8m+W9qIZaNHOIKQ=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(376002)(396003)(346002)(230922051799003)(186009)(1800799009)(82310400011)(64100799003)(451199024)(36840700001)(40470700004)(46966006)(478600001)(40460700003)(70206006)(70586007)(6916009)(54906003)(336012)(36756003)(40480700001)(16526019)(81166007)(426003)(1076003)(26005)(2616005)(86362001)(83380400001)(356005)(82740400003)(36860700001)(2906002)(7416002)(316002)(47076005)(41300700001)(6666004)(4326008)(5660300002)(8676002)(8936002)(44832011)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2023 15:32:32.5794
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a9b12ee-24d8-449f-8024-08dbcfef7267
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF000099D6.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6018
+References: <20231018153147.167393-1-hamza.mahfooz@amd.com>
+In-Reply-To: <20231018153147.167393-1-hamza.mahfooz@amd.com>
+From: Marco Elver <elver@google.com>
+Date: Wed, 18 Oct 2023 18:22:14 +0200
+Message-ID: <CANpmjNPZ0Eii3ZTrVqEL2Ez0Jv23y-emLBCLSZ==xmH--4E65g@mail.gmail.com>
+Subject: Re: [PATCH] lib: Kconfig: disable dynamic sanitizers for test builds
+To: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc: linux-kernel@vger.kernel.org, Rodrigo Siqueira <rodrigo.siqueira@amd.com>, 
+	Harry Wentland <harry.wentland@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-kasan, kcsan and kmsan all have the tendency to blow up the stack
-and there isn't a lot of value in having them enabled for test builds,
-since they are intended to be useful for runtime debugging. So, disable
-them for test builds.
+On Wed, 18 Oct 2023 at 17:32, 'Hamza Mahfooz' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> kasan, kcsan and kmsan all have the tendency to blow up the stack
+> and there isn't a lot of value in having them enabled for test builds,
+> since they are intended to be useful for runtime debugging. So, disable
+> them for test builds.
+>
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> ---
+>  lib/Kconfig.kasan | 1 +
+>  lib/Kconfig.kcsan | 1 +
+>  lib/Kconfig.kmsan | 1 +
+>  3 files changed, 3 insertions(+)
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- lib/Kconfig.kasan | 1 +
- lib/Kconfig.kcsan | 1 +
- lib/Kconfig.kmsan | 1 +
- 3 files changed, 3 insertions(+)
+Do you have links to discussions that motivate this change? This has
+been discussed in the past. One recommendation is to adjust the
+build/test scripts to exclude some combination of configs if they are
+causing issues. Or we increase CONFIG_FRAME_WARN if one of them is
+enabled (KMSAN sets it to 0, 32-bit KASAN increases it a bit).
 
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index fdca89c05745..fbd85c4872c0 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -38,6 +38,7 @@ menuconfig KASAN
- 		    CC_HAS_WORKING_NOSANITIZE_ADDRESS) || \
- 		   HAVE_ARCH_KASAN_HW_TAGS
- 	depends on (SLUB && SYSFS && !SLUB_TINY) || (SLAB && !DEBUG_SLAB)
-+	depends on !COMPILE_TEST
- 	select STACKDEPOT_ALWAYS_INIT
- 	help
- 	  Enables KASAN (Kernel Address Sanitizer) - a dynamic memory safety
-diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-index 609ddfc73de5..7bcefdbfb46f 100644
---- a/lib/Kconfig.kcsan
-+++ b/lib/Kconfig.kcsan
-@@ -14,6 +14,7 @@ menuconfig KCSAN
- 	bool "KCSAN: dynamic data race detector"
- 	depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
- 	depends on DEBUG_KERNEL && !KASAN
-+	depends on !COMPILE_TEST
- 	select CONSTRUCTORS
- 	select STACKTRACE
- 	help
-diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
-index ef2c8f256c57..eb05c885d3fd 100644
---- a/lib/Kconfig.kmsan
-+++ b/lib/Kconfig.kmsan
-@@ -13,6 +13,7 @@ config KMSAN
- 	depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
- 	depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
- 	depends on !PREEMPT_RT
-+	depends on !COMPILE_TEST
- 	select STACKDEPOT
- 	select STACKDEPOT_ALWAYS_INIT
- 	help
--- 
-2.42.0
+That being said, we're aware of KASAN having had more issues and there
+are some suboptions that have been disabled because of that (like
+KASAN_STACK). I'm not sure if Clang's KASAN instrumentation has had
+some recent improvements (we did investigate it, but I can't recall
+what the outcome was [1]) - maybe try a more recent compiler? However,
+KCSAN and KMSAN shouldn't have any issues (if KMSAN is enabled,
+FRAME_WARN is 0). And having build tests with them enabled isn't
+useless at all: we're making sure that these tools (even though only
+for debugging), still work. We _want_ them to work during random build
+testing!
 
+Please share the concrete problem you're having, because this change
+will make things worse for everyone in the long run.
+
+[1] https://github.com/llvm/llvm-project/issues/38157
+
+> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+> index fdca89c05745..fbd85c4872c0 100644
+> --- a/lib/Kconfig.kasan
+> +++ b/lib/Kconfig.kasan
+> @@ -38,6 +38,7 @@ menuconfig KASAN
+>                     CC_HAS_WORKING_NOSANITIZE_ADDRESS) || \
+>                    HAVE_ARCH_KASAN_HW_TAGS
+>         depends on (SLUB && SYSFS && !SLUB_TINY) || (SLAB && !DEBUG_SLAB)
+> +       depends on !COMPILE_TEST
+>         select STACKDEPOT_ALWAYS_INIT
+>         help
+>           Enables KASAN (Kernel Address Sanitizer) - a dynamic memory safety
+
+This also disables KASAN_HW_TAGS, which is actually enabled in
+production kernels and does not use any compiler instrumentation.
+
+> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+> index 609ddfc73de5..7bcefdbfb46f 100644
+> --- a/lib/Kconfig.kcsan
+> +++ b/lib/Kconfig.kcsan
+> @@ -14,6 +14,7 @@ menuconfig KCSAN
+>         bool "KCSAN: dynamic data race detector"
+>         depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+>         depends on DEBUG_KERNEL && !KASAN
+> +       depends on !COMPILE_TEST
+>         select CONSTRUCTORS
+>         select STACKTRACE
+>         help
+> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+> index ef2c8f256c57..eb05c885d3fd 100644
+> --- a/lib/Kconfig.kmsan
+> +++ b/lib/Kconfig.kmsan
+> @@ -13,6 +13,7 @@ config KMSAN
+>         depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
+>         depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
+>         depends on !PREEMPT_RT
+> +       depends on !COMPILE_TEST
+
+KMSAN already selects FRAME_WARN of 0 and should not cause you any
+issues during build testing.
+
+Nack.
