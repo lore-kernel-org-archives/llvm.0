@@ -1,320 +1,165 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BAD8F54
-	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 21:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A48DF57
+	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 21:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w1tC0CVS"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5068b69f4aeso478e87.0
-        for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 14:57:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A1KjzpwG"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-53eeb28e8e5so1728a12.1
+        for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 14:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697752634; x=1698357434; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1697752702; x=1698357502; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XajYlYAO8Kk7inISBTtrUw4bdn+rl2BtGkmrWxdlT40=;
-        b=w1tC0CVSouOfFRbaNaVOAtqvV2wYqG8UU3zha2VO0JFfDi+4TgAkKyLa0kWmzOd98a
-         WHlwQ6lSYPMU/4/9ZU3Whu3QHU0GbItINhyIZ9/LRQRLdbNdpbr5PY9qEDT+lFqxM4uH
-         trTTjvs6jT/DIam7p3bPTRNov5PlxS4N7vU6czC4+oRLdhEL77Du7RFKGyli5QG0qUMg
-         KeJ3vlpb4XgmWYWGXIYR0OWSwBhPkqhsiGzNqrFE0v5mGC0eNhrrJ4Nr3v/+OgTqXCPw
-         2XovId/dzGdYog38piAiByYKZR2PFtxD7HzGGzn8DPWdioPPM9Qw6iFbjItfNn4PE00n
-         USDQ==
+        bh=xwvPbEHpAjaA4Y9KWdhz2lpaz5n8xnml5PfY99zf+1c=;
+        b=A1KjzpwGsb99SlpMeXd0XdAryLYZuRBHTeOnrRGmANesQ1R8WmiHsZYadQ834l1BSF
+         AiAEeYsO+ON2FTOko3pszA7yXKg6sl19i/RYJ3M1LCgaiHP9Wh/Rmvpnc8tOx36sDNFZ
+         RSDPSWrnpF/6BH4zvIHmmP3hU0dpDMAYgixtwukffeWIhFzVSdQPi0U51QTmGoE8cxyL
+         UoLKHapmOqOaItZtaPeULQ8O+YvR9uyzIxjMyuUFlSrO3UiRz635JObSmqPY3lADsylQ
+         4U2os1TfQomJsMl5iRhp0L9pOLyEnSYD0vQmKntSeQZwIfSO+NiPQZVR1iF+lPyNaUCQ
+         XWhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697752634; x=1698357434;
+        d=1e100.net; s=20230601; t=1697752702; x=1698357502;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XajYlYAO8Kk7inISBTtrUw4bdn+rl2BtGkmrWxdlT40=;
-        b=vgEZk3IkM9eTSUge51cs/sZ7PFr77wnfhdA2SEz2DQ54yFJ/NMIMm5LH0kjWYqfglN
-         HpOF04haZkYnytGG5owjaQ/UM3HpzI5u0DtB0CxqZNcdT0LEaOS3HUwGyoCJOnDFfdCz
-         eP9q962ZncXoGDc1j445f9F61AlGMbveqGIlGQfDEz3x85u649FtfcttQFWzMof1bVO8
-         YWnjTyvL1wNFWruziHdi54+5uJHmV7G2y8vmxdCH/85OiDgbBZG0A4EKtAiQP4FTCIk+
-         c5MCE5Hiqv8oi0I6Swpic112GJ7WQQ7rapHnnkdyghVniWVVrUj4jZDBfAoxdrO+jD1p
-         Y9YA==
-X-Gm-Message-State: AOJu0Yzge1D6ies1fOOQ7e5FXc95JJFrM7w8Yr5JlANFeTkS3JL/oHEc
-	ek0rnotaKVGKYRty4mWV9tG2E61sVrDebFB6wBihIg==
-X-Google-Smtp-Source: AGHT+IE2v4Wr4RNxELB1a8mWDC9skPvwIt1rxIqCVgLu5Uiyjg78Fr/2hugh2CoSyopYsjyCQHrqzyBSgJpifeeul5A=
-X-Received: by 2002:a05:6512:754:b0:502:a55e:fec0 with SMTP id
- c20-20020a056512075400b00502a55efec0mr19637lfs.6.1697752634350; Thu, 19 Oct
- 2023 14:57:14 -0700 (PDT)
+        bh=xwvPbEHpAjaA4Y9KWdhz2lpaz5n8xnml5PfY99zf+1c=;
+        b=USanmDf9qx0VhTvUpWkFe/QGtei2IgvOy/ESLKqPk7k7Ac2dd14bgc348zJN8HI+nf
+         gLoOTgrmg7ZxxwHcEpjJM8awx7ZZBicroreGC2hzpZeaqcngQtKLKRXsQ1r+WIuH0gdp
+         N49MUUPYMsO+dspunUZymdzKb2MiS3IjSxGSrhNHvDc3igZvYRvRq6t25NDA1pOZ4cd6
+         izCNF7YNPyTLxblcy5Kyc/BfO0DUyiBpafSTvip6IcTTQHu6DfMJX7/CpIfpIQjMl9L6
+         hL+BSkhtPUyOiv+ZojUiy4nWrsD9IMFX27MveHkezi/+eFgYGjjdHgUaFDsAoxhDgzN6
+         wtbg==
+X-Gm-Message-State: AOJu0Yww0uZl/oOnKcF/EwGv9//iMmmlSwlFRT7hri0xfewA10qe77Hf
+	oiAS//rccrMEzbheUAvqrq3MdPzCq5vljwLN4bd6hw==
+X-Google-Smtp-Source: AGHT+IFgg66TljOkm3tijcLjKf1m1/ftpVCM+vMIHZGZl6rTGngvrOHroEZ5mWAb5CekzqWB8Eh5AVZaefCrfPgVOhA=
+X-Received: by 2002:a50:d49e:0:b0:53f:90a8:2794 with SMTP id
+ s30-20020a50d49e000000b0053f90a82794mr39158edi.0.1697752702382; Thu, 19 Oct
+ 2023 14:58:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230810184853.2860737-1-irogers@google.com> <20230810184853.2860737-2-irogers@google.com>
- <ZNZJCWi9MT/HZdQ/@kernel.org> <ZNZWsAXg2px1sm2h@kernel.org>
- <ZTGHRAlQtF7Fq8vn@surya> <ZTGa0Ukt7QyxWcVy@kernel.org>
-In-Reply-To: <ZTGa0Ukt7QyxWcVy@kernel.org>
+References: <ZTGc8S293uaTqHja@kernel.org>
+In-Reply-To: <ZTGc8S293uaTqHja@kernel.org>
 From: Ian Rogers <irogers@google.com>
-Date: Thu, 19 Oct 2023 14:57:00 -0700
-Message-ID: <CAP-5=fU9DHYDAcGuX=7SHy2J09bqcYpP+_8NXKbnVDtSjrw01g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] perf parse-events: Remove BPF event support
+Date: Thu, 19 Oct 2023 14:58:10 -0700
+Message-ID: <CAP-5=fX=Uj0mqGGtrGMpF4aAuBWps3DcS8zVAhRDMbo37TdX6w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] tools build: Fix llvm feature detection, still used
+ by bpftool
 To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Manu Bretelle <chantr4@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Fangrui Song <maskray@google.com>, Anshuman Khandual <anshuman.khandual@arm.com>, 
-	Andi Kleen <ak@linux.intel.com>, Leo Yan <leo.yan@linaro.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, James Clark <james.clark@arm.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>, Rob Herring <robh@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, Wang Nan <wangnan0@huawei.com>, 
-	Wang ShaoBo <bobo.shaobowang@huawei.com>, YueHaibing <yuehaibing@huawei.com>, 
-	He Kuang <hekuang@huawei.com>, Brendan Gregg <brendan.d.gregg@gmail.com>, 
-	Quentin Monnet <quentin@isovalent.com>
+Cc: linux-kernel@vger.kernel.org, Manu Bretelle <chantr4@gmail.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Andi Kleen <ak@linux.intel.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Anshuman Khandual <anshuman.khandual@arm.com>, 
+	Carsten Haitzler <carsten.haitzler@arm.com>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Fangrui Song <maskray@google.com>, He Kuang <hekuang@huawei.com>, Ingo Molnar <mingo@redhat.com>, 
+	James Clark <james.clark@arm.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Kan Liang <kan.liang@linux.intel.com>, Leo Yan <leo.yan@linaro.org>, llvm@lists.linux.dev, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Quentin Monnet <quentin@isovalent.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Rob Herring <robh@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>, Tom Rix <trix@redhat.com>, 
+	Wang Nan <wangnan0@huawei.com>, Wang ShaoBo <bobo.shaobowang@huawei.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, Yonghong Song <yhs@fb.com>, YueHaibing <yuehaibing@huawei.com>, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 19, 2023 at 2:08=E2=80=AFPM Arnaldo Carvalho de Melo
+On Thu, Oct 19, 2023 at 2:17=E2=80=AFPM Arnaldo Carvalho de Melo
 <acme@kernel.org> wrote:
 >
-> Em Thu, Oct 19, 2023 at 12:45:08PM -0700, Manu Bretelle escreveu:
-> > cc @quentin
-> >
-> > On Fri, Aug 11, 2023 at 12:41:36PM -0300, Arnaldo Carvalho de Melo wrot=
-e:
-> > > Em Fri, Aug 11, 2023 at 11:43:22AM -0300, Arnaldo Carvalho de Melo es=
-creveu:
-> > > > Right now it is not applying due to some clash with other changes a=
-nd
-> > > > when I tried to apply it manually there were some formatting issues=
-:
-> > > >
-> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$ head ~/wb/1.patch
-> > > > From SRS0=3DEALy=3DD3=3Dflex--irogers.bounces.google.com=3D3IDHVZAc=
-KBAUnwtljwxlttlqj.htrfhrjpjwsjq.twl@kernel.org Thu Aug 10 17:53:46 2023
-> > > > Delivered-To: arnaldo.melo@gmail.com
-> > > > Received: from imap.gmail.com [64.233.186.109]
-> > > >   by quaco with IMAP (fetchmail-6.4.37)
-> > > >   for <acme@localhost> (single-drop); Thu, 10 Aug 2023 17:53:46 -03=
-00 (-03)
-> > > > Received: by 2002:a0c:ab03:0:b0:63d:780e:9480 with SMTP id h3csp908=
-198qvb;
-> > > >  Thu, 10 Aug 2023 11:49:52 -0700 (PDT)
-> > > > X-Google-Smtp-Source: AGHT+IH9N/knUCyQ0tQ2Q0XBH0gqf8A8DB8/37YHWAJDK=
-Bmz7AGSV9CvCKYDuE3EwxriZFBwtZMs
-> > > > X-Received: by 2002:a4a:6b4f:0:b0:56c:b2ab:9820 with SMTP id
-> > > >  h15-20020a4a6b4f000000b0056cb2ab9820mr2695332oof.8.1691693392493; =
-Thu, 10 Aug
-> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$ patch -p1 < ~/wb/1.patch
-> > > > patching file tools/perf/Documentation/perf-config.txt
-> > > > patch: **** malformed patch at line 234: ith
-> > > >
-> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$
-> > > >
-> > > > I'm trying to apply it manually.
-> > >
-> > > I have this extracted from this patch as the first patch in the serie=
-s:
-> > >
-> > > >From adc61b5774a9de62f34d593f164ca02daa6fb44c Mon Sep 17 00:00:00 20=
-01
-> > > From: Ian Rogers <irogers@google.com>
-> > > Date: Fri, 11 Aug 2023 12:19:48 -0300
-> > > Subject: [PATCH 1/1] perf bpf: Remove support for embedding clang for
-> > >  compiling BPF events (-e foo.c)
-> > >
-> > > This never was in the default build for perf, is difficult to maintai=
-n
-> > > as it uses clang/llvm internals so ditch it, keeping, for now, the
-> > > external compilation of .c BPF into .o bytecode and its subsequent
-> > > loading, that is also going to be removed, do it separately to help
-> > > bisection and to properly document what is being removed and why.
-> > >
-> > > Committer notes:
-> > >
-> > > Extracted from a larger patch and removed some leftovers, namely
-> > > deleting these now unused feature tests:
-> > >
-> > >     tools/build/feature/test-clang.cpp
-> > >     tools/build/feature/test-cxx.cpp
-> > >     tools/build/feature/test-llvm-version.cpp
-> > >     tools/build/feature/test-llvm.cpp
-> > >
-> >
-> > This seem to have broken `llvm` feature detection for `bpftool`.
-> >
-> > The feature detections are still available in `tools/build/Makefile.fea=
-ture` [0]
-> > but the .cpp files are gone.
-> >
-> > `bpftool` still rely on the `llvm` feature:
-> >
-> >     $ git --no-pager grep 'feature-llvm'
-> >     tools/bpf/bpftool/Makefile:ifeq ($(feature-llvm),1)
-> >
-> > The result of testing llvm feature is:
-> >
-> >     $ cat tools/build/feature/test-llvm.make.output
-> >     cc1plus: fatal error: test-llvm.cpp: No such file or directory
-> >     compilation terminated.
-> >
-> > With current head:
-> >
-> >     make -j $((4*$(nproc))) -C tools/bpf/bpftool && ./tools/bpf/bpftool=
-/bpftool --version
-> >     ...
-> >     Auto-detecting system features:
-> >     ...                         clang-bpf-co-re: [ on  ]
-> >     ...                                    llvm: [ OFF ]
-> >     ...                                  libcap: [ on  ]
-> >     ...                                  libbfd: [ on  ]
-> >     ...
-> >     ...
-> >     ...
-> >     bpftool v7.3.0
-> >     using libbpf v1.3
-> >     features: libbfd, skeletons
-> >
-> > After applying
-> >
-> >     git show 56b11a2126bf2f422831ecf6112b87a4485b221b  tools/build/feat=
-ure | \
-> >         patch -p1 -R
+> When removing the BPF event for perf a feature test that checks if the
+> llvm devel files are availabe was removed but that is also used by
+> bpftool.
 >
+> bpftool uses it to decide what kind of disassembly it will use: llvm or
+> binutils based.
 >
-> Ouch, so probably we need just to reintroduce that one
-> tools/build/feature/test-llvm.cpp file.
->
-> Building perf these days ends up using bpftool, and the end result as
-> noticed with me testing perf, perf trace with bpf, etc didn't change, so
-> I didn't notice :-\
->
-> And:
->
-> ifeq ($(feature-llvm),1)
->   # If LLVM is available, use it for JIT disassembly
->   CFLAGS  +=3D -DHAVE_LLVM_SUPPORT
->   LLVM_CONFIG_LIB_COMPONENTS :=3D mcdisassembler all-targets
->   CFLAGS  +=3D $(shell $(LLVM_CONFIG) --cflags --libs $(LLVM_CONFIG_LIB_C=
-OMPONENTS))
->   LIBS    +=3D $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS=
-))
->   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
->     LIBS +=3D $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMP=
-ONENTS))
->     LIBS +=3D -lstdc++
->   endif
->   LDFLAGS +=3D $(shell $(LLVM_CONFIG) --ldflags)
-> else
->   # Fall back on libbfd
->   ifeq ($(feature-libbfd),1)
->     LIBS +=3D -lbfd -ldl -lopcodes
->   else ifeq ($(feature-libbfd-liberty),1)
->     LIBS +=3D -lbfd -ldl -lopcodes -liberty
->   else ifeq ($(feature-libbfd-liberty-z),1)
->     LIBS +=3D -lbfd -ldl -lopcodes -liberty -lz
->   endif
->
->   # If one of the above feature combinations is set, we support libbfd
->   ifneq ($(filter -lbfd,$(LIBS)),)
->     CFLAGS +=3D -DHAVE_LIBBFD_SUPPORT
->
->     # Libbfd interface changed over time, figure out what we need
->     ifeq ($(feature-disassembler-four-args), 1)
->       CFLAGS +=3D -DDISASM_FOUR_ARGS_SIGNATURE
->     endif
->     ifeq ($(feature-disassembler-init-styled), 1)
->       CFLAGS +=3D -DDISASM_INIT_STYLED
->     endif
->   endif
-> endif
->
-> And there is a fallback to using binutils, so most people ended up not
-> noticing.
->
-> I wonder how to improve the current situation to detect these kinds of
-> problems in the future, i.e. how to notice that some file needed by some
-> Makefile, etc got removed or that some feature test fails because some
-> change in the test .c files makes them fail and thus activates fallbacks
-> like the one above :-\
->
->
-> So if I just get this back:
->
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ cat tools/build/feature/test-llv=
-m.cpp
-> // SPDX-License-Identifier: GPL-2.0
-> #include "llvm/Support/ManagedStatic.h"
-> #include "llvm/Support/raw_ostream.h"
-> #define NUM_VERSION (((LLVM_VERSION_MAJOR) << 16) + (LLVM_VERSION_MINOR <=
-< 8) + LLVM_VERSION_PATCH)
->
-> #if NUM_VERSION < 0x030900
-> # error "LLVM version too low"
-> #endif
-> int main()
-> {
->         llvm::errs() << "Hello World!\n";
->         llvm::llvm_shutdown();
->         return 0;
-> }
-> =E2=AC=A2[acme@toolbox perf-tools-next]$
->
-> And install the llvm-devel package then it back working:
->
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ make -C tools/bpf/bpftool
-> make: Entering directory '/home/acme/git/perf-tools-next/tools/bpf/bpftoo=
-l'
->
-> Auto-detecting system features:
-> ...                         clang-bpf-co-re: [ on  ]
-> ...                                    llvm: [ on  ]
-> ...                                  libcap: [ on  ]
-> ...                                  libbfd: [ on  ]
-> <SNIP>
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ cat tools/build/feature/test-llv=
-m.make.output
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ ls -la tools/build/feature/test-=
-llvm.
-> test-llvm.bin          test-llvm.cpp          test-llvm.d            test=
--llvm.make.output
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ ls -la tools/build/feature/test-=
-llvm.bin
-> -rwxr-xr-x. 1 acme acme 17712 Oct 19 18:04 tools/build/feature/test-llvm.=
-bin
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ ldd tools/build/feature/test-llv=
-m.bin
->         linux-vdso.so.1 (0x00007ffcaf5d9000)
->         libLLVM-16.so =3D> /lib64/libLLVM-16.so (0x00007fc4faefa000)
->         libstdc++.so.6 =3D> /lib64/libstdc++.so.6 (0x00007fc4faca6000)
->         libm.so.6 =3D> /lib64/libm.so.6 (0x00007fc4fabc5000)
->         libgcc_s.so.1 =3D> /lib64/libgcc_s.so.1 (0x00007fc4faba1000)
->         libc.so.6 =3D> /lib64/libc.so.6 (0x00007fc4fa9c3000)
->         libffi.so.8 =3D> /lib64/libffi.so.8 (0x00007fc4fa9b7000)
->         libedit.so.0 =3D> /lib64/libedit.so.0 (0x00007fc4fa978000)
->         libz.so.1 =3D> /lib64/libz.so.1 (0x00007fc4fa95e000)
->         libtinfo.so.6 =3D> /lib64/libtinfo.so.6 (0x00007fc4fa92b000)
->         /lib64/ld-linux-x86-64.so.2 (0x00007fc502404000)
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ sudo dnf install llvm-devel
->
-> I'll get this merged in my perf-tools-fixes-for-v6.6 that I'll submit
-> tomorrow to Linus, thanks for reporting!
->
-> I'll add your:
->
-> Reported-by: Manu Bretelle <chantr4@gmail.com>
->
-> And:
+> Removing the tools/build/feature/test-llvm.cpp file made bpftool to
+> always fallback to binutils disassembly, even with the llvm devel files
+> installed, fix it by restoring just that small test-llvm.cpp test file.
 >
 > Fixes: 56b11a2126bf2f42 ("perf bpf: Remove support for embedding clang fo=
 r compiling BPF events (-e foo.c)")
->
-> Ok?
+> Reported-by: Manu Bretelle <chantr4@gmail.com>
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Carsten Haitzler <carsten.haitzler@arm.com>
+> Cc: Eduard Zingerman <eddyz87@gmail.com>
+> Cc: Fangrui Song <maskray@google.com>
+> Cc: He Kuang <hekuang@huawei.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: James Clark <james.clark@arm.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Kan Liang <kan.liang@linux.intel.com>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: llvm@lists.linux.dev
+> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Quentin Monnet <quentin@isovalent.com>
+> Cc: Ravi Bangoria <ravi.bangoria@amd.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Wang Nan <wangnan0@huawei.com>
+> Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
+> Cc: Yang Jihong <yangjihong1@huawei.com>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: YueHaibing <yuehaibing@huawei.com>
+> Link: https://lore.kernel.org/lkml/ZTGa0Ukt7QyxWcVy@kernel.org
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+Sorry for the breakage.
 
 Reviewed-by: Ian Rogers <irogers@google.com>
 
 Thanks,
 Ian
 
-> - Arnaldo
+> ---
+>  tools/build/feature/test-llvm.cpp | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>  create mode 100644 tools/build/feature/test-llvm.cpp
+>
+> diff --git a/tools/build/feature/test-llvm.cpp b/tools/build/feature/test=
+-llvm.cpp
+> new file mode 100644
+> index 0000000000000000..88a3d1bdd9f6978e
+> --- /dev/null
+> +++ b/tools/build/feature/test-llvm.cpp
+> @@ -0,0 +1,14 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "llvm/Support/ManagedStatic.h"
+> +#include "llvm/Support/raw_ostream.h"
+> +#define NUM_VERSION (((LLVM_VERSION_MAJOR) << 16) + (LLVM_VERSION_MINOR =
+<< 8) + LLVM_VERSION_PATCH)
+> +
+> +#if NUM_VERSION < 0x030900
+> +# error "LLVM version too low"
+> +#endif
+> +int main()
+> +{
+> +       llvm::errs() << "Hello World!\n";
+> +       llvm::llvm_shutdown();
+> +       return 0;
+> +}
+> --
+> 2.41.0
+>
