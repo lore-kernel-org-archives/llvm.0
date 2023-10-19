@@ -1,134 +1,85 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE34C1772E
-	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 09:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0470D168DB
+	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 10:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CpO3z6dS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697709086;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Gt+E4gALfJLeCNl40fKRDFcD1lVGFFbe13VFQwZ7IrI=;
-	b=CpO3z6dSv7JgmY/o8Ajka8Smo7/QuTTQgM39CrUfEos6Gcd+IxnqmM7yLT9FannKNouSUL
-	tbyddODGy7acS9p1ethLtM0VUrWy8mKdzjS6oq+PYuQhNCIZGIMCIIGiUd/7DnqRB5PLd8
-	MgjgPZ31yhuaM2q4L5oiTPXlHZsp9Rg=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-131-A0TvbrEkPx232nVIOcvZbg-1; Thu, 19 Oct 2023 05:51:15 -0400
-X-MC-Unique: A0TvbrEkPx232nVIOcvZbg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B307E3C0F67F
-	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 09:51:14 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9E8A3492BFA;
-	Thu, 19 Oct 2023 09:51:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 230): Test report for master
- (6.6.0-rc6, mainline.kernel.org-clang, dd72f9c7)
-Date: Thu, 19 Oct 2023 09:51:14 -0000
-To: llvm@lists.linux.dev, jbastian@redhat.com
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zZ5cpGmi"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-77432add7caso459604985a.2
+        for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 03:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697709906; x=1698314706; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X3bjb9rubAXmEx3BuTMzb9DXzA+Icb3ceQsdxtJC/Jk=;
+        b=zZ5cpGmiJ6LHOvdE+xbTV/tQmKvsfldaItwirtXlAqC1RdBenfLUDEHcHW3uqi5QAi
+         Uaqg2BrSiLNEa5HYliPUc7NuOiTkux2zVr+SZqCID6gO6beyl3u9EftjT2NohNLKJxET
+         7dlq6IHTxMK1xFtWRHbi8LsKpQaOKU5xRTmoo74cEQrxNX8FH0smSTIw6NtuQ+qdL6O4
+         +zvX/D69SSDKEtNaMTyQHiCUjpXMAlYT1w85oDvTm+FYH+piSpP1h4hUMDQTqtmnL3yp
+         a/zqS7T073IpM8bFU7F/PIHBL/RyYb/94Am1H6YSTyH7kIB7vLxuh/B9VSHB8K2t2Bzw
+         BX5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697709906; x=1698314706;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X3bjb9rubAXmEx3BuTMzb9DXzA+Icb3ceQsdxtJC/Jk=;
+        b=n5rb16OUOy4UqgHffWR1xWZVt0YV+Pc9XEjPAhtVVYWfxSA4dzGaJ4eZ2LEa4MLsGz
+         C3RZk30Hm1WTQBtKSJwRhylBM1261aSHIQw+CtpQSkhqRgqfgp+pDbOdvNBNIhZO+Axt
+         WKK36LdL2x7ZonNMCf4zREs6aLnX4FH5qq0268sWDOYnpkvNKufi04prH+ww1DoSUJb0
+         SzMBRNpbxvZWDDF4afn2xxR6lOkNJQS8Csj/ib87NJHGwfYhnDtPVdcfSmSltHVmIhLe
+         G/i5pioLRjHU8oyHj/RnZREnd5Fpp/8B857Ststfzx83S2MCIK3U1BEP7gY+KQdqHQIO
+         NMEQ==
+X-Gm-Message-State: AOJu0Yy5ndOMGC/eONenGX1DiKnT5CySknECRo6w5klGrl5X9DVPXoRI
+	yvWaz7PsIaOgB88B++NIGq3W/wmkouFS5e5+kzBaJQ==
+X-Google-Smtp-Source: AGHT+IH6FHJbxjRMVCH1yb8tkbndeFnPREHuEjI+EYywqZ7BjmHUvnxgyZZpMGESGZMAgQQUcjtqiwGQIFSoapndiHM=
+X-Received: by 2002:ad4:5f0b:0:b0:66d:1624:2200 with SMTP id
+ fo11-20020ad45f0b000000b0066d16242200mr1943369qvb.13.1697709905579; Thu, 19
+ Oct 2023 03:05:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <01362.123101905511500189@us-mta-131.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20231018182412.80291-1-hamza.mahfooz@amd.com> <CAMuHMdXSzMJe1zyJu1HkxWggTKJj_sxkPOejjbdRjg3FeFTVHQ@mail.gmail.com>
+ <d764242f-cde0-47c0-ae2c-f94b199c93df@amd.com> <CAMuHMdXYDQi5+x1KxMG0wnjSfa=A547B9tgAbgbHbV42bbRu8Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdXYDQi5+x1KxMG0wnjSfa=A547B9tgAbgbHbV42bbRu8Q@mail.gmail.com>
+From: Alexander Potapenko <glider@google.com>
+Date: Thu, 19 Oct 2023 12:04:23 +0200
+Message-ID: <CAG_fn=XcJ=rZEJN+L1zZwk=qA90KShhZK1MA6fdW0oh7BqSJKw@mail.gmail.com>
+Subject: Re: [PATCH] lib/Kconfig.debug: disable FRAME_WARN for kasan and kcsan
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Hamza Mahfooz <hamza.mahfooz@amd.com>, linux-kernel@vger.kernel.org, 
+	Rodrigo Siqueira <rodrigo.siqueira@amd.com>, Harry Wentland <harry.wentland@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Nick Terrell <terrelln@fb.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Kees Cook <keescook@chromium.org>, Zhaoyang Huang <zhaoyang.huang@unisoc.com>, 
+	Li Hua <hucool.lihua@huawei.com>, Rae Moar <rmoar@google.com>, 
+	rust-for-linux@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+> > > Are kernels with KASAN || KCSAN || KMSAN enabled supposed to be bootable?
+> >
+> > They are all intended to be used for runtime debugging, so I'd imagine so.
+>
+> Then I strongly suggest putting a nonzero value here.  As you write
+> that "with every release of LLVM, both of these sanitizers eat up more and more
+> of the stack", don't you want to have at least some canary to detect
+> when "more and more" is guaranteed to run into problems?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v6-6-rc4' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/broonie/spi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/109865
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-9953807
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: use after free in reweight_entity
-            URL: https://lkml.iu.edu/hypermail/linux/kernel/2310.2/00187.ht=
-ml
-            Affected tests:
-                  x86_64 (debug) - xfstests - ext4
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+FRAME_WARN is a poor canary. First, it does not necessarily indicate
+that a build is faulty (a single bloated stack frame won't crash the
+system).
+Second, devs are unlikely to fix a function because its stack frame is
+too big under some exotic tool+compiler combination.
+So the remaining option would be to just increase the frame size every
+time a new function surpasses the limit.
