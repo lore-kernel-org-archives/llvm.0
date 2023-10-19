@@ -1,442 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B5C81E;
-	Thu, 19 Oct 2023 02:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8739455
+	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 02:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kStukJq/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697681644; x=1729217644;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4c/itabvrXhR8WgsH/PWOo4RVu6pTiOfc9UFiriduiQ=;
-  b=kStukJq//R4gd9LxiQMnWVXvSZhrMdz+RAF5D2slScpBLAnLVJffhCUB
-   ucEBaLhO+oSFPq328JTJsEAmWJq4ADB4afJgrSwjRk9Nlbq3D0p+tVID+
-   g9ZTR4opie+T2xJpGPt5lj2sAibo08Q3uUx8MJe3zPh0pgYJOM4MNgi4i
-   eJTfObraS6Rbtj+nYqUelO1QmzM2CMnqbRyo5i+6ReVMdhG9eJtZpz+cq
-   NovY0jFNaGzYrZYHYpyRe0rn6NJhwORc4FpZOWuk3CyWFGG9c+rlRmGJ0
-   Ex+qo11HrwppVefzWypL0PGoNwXPteflw+pJwd94YPWGL/OH7nUpiBv6K
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="389018097"
-X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
-   d="scan'208";a="389018097"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 19:13:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="791833083"
-X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
-   d="scan'208";a="791833083"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 18 Oct 2023 19:13:40 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qtIXa-0001Qp-1O;
-	Thu, 19 Oct 2023 02:13:38 +0000
-Date: Thu, 19 Oct 2023 10:12:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: "David E. Box" <david.e.box@linux.intel.com>,
-	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	dave.hansen@linux.intel.com, arnd@arndb.de, peterz@infradead.org,
-	aleksander.lobakin@intel.com, ilpo.jarvinen@linux.intel.com,
-	rajvi.jingar@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH V4 10/17] linux/io.h: iounmap/ioport_unmap cleanup.h
- support
-Message-ID: <202310191031.Nkp72kk7-lkp@intel.com>
-References: <20231018231624.1044633-11-david.e.box@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FvL3h1IG"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-507bd19eac8so3793600e87.0
+        for <llvm@lists.linux.dev>; Wed, 18 Oct 2023 19:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697682701; x=1698287501; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=N2p08wC4tKVROHRqaVb3YQYT+vGh6GpV+SUcuVPLxDk=;
+        b=FvL3h1IGR02fniN/QjJWzFgAife9UFZdwsLF7nT/oFesXGeGz7IhF9vSipNx4uqwCk
+         iWiWSLooG1AxCneaQ7Q065eGVjAZNNk5/KgGme8GYfvLP4EoksB7rpxu3deyTDxWZ7Jf
+         Tt7HzhyMGwnpgQ4lgl5yto7PaS/4ilfyq7/tFa6MG1vxQE8scDDktGrI/BvbsSHCkLxn
+         YrQdw51gC/hJLC4db9b2syvY8Jsymrqufr7pPS/lQcZznUMV7uuINcwIGQh36fgxXVGS
+         GB4AjgMK9LiUuxbFOQ9hKHErWIpbAP0otFl+fIg7FjNWmOzeHxpPq3y8ue9wIyHq/cCV
+         NX5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697682701; x=1698287501;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N2p08wC4tKVROHRqaVb3YQYT+vGh6GpV+SUcuVPLxDk=;
+        b=KtJzF7eeX0qiFfTqOzxIFvOJ9tEruPJ5hvb3PtnNhzlMNeKiuoPBnmK76poXd5Z63H
+         sQRIvfRZ+Eq98JhUXqL2l1ztdrgik6VLNS0ULYsOZvalgNSv//JyLSqMaPvUPCEky8W5
+         g8uLhZ8B5523pZtlgQoo3kByp32o/7a1SYgwpOlfp+RpyqNRzFbS6fHX0cmInwuiMINM
+         3G7wQ4fngChkgs33b5Mh26oxidFE/rvrw0BWaa7XOf8q29fcafqCz8M0YTzE8Wx4BnaY
+         +UMk6E6+izQ6vTCxvobuUS1nJPUSNCY+FipApT/f5T82Rc43NK+wKlzjCksh1b5OdCv0
+         16/A==
+X-Gm-Message-State: AOJu0YyrC9DQ1HwosOOkihEm4i86MF8bbw/Oh2fZx1uGBIejGqWEB8Od
+	OWtymjupjVtPNtUj5nMZgIpF2kZwA9ayPeB7g0M=
+X-Google-Smtp-Source: AGHT+IHg0C86vg1RmHxX74AHtIQ/ML4ZpTw7gL6b4imecjDE85QYX/rXD97wZV+KKwi4GAl/6AB0/A==
+X-Received: by 2002:ac2:46c5:0:b0:503:1c07:f7f9 with SMTP id p5-20020ac246c5000000b005031c07f7f9mr419867lfo.29.1697682701500;
+        Wed, 18 Oct 2023 19:31:41 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id fj27-20020a0564022b9b00b005309eb7544fsm3599964edb.45.2023.10.18.19.31.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Oct 2023 19:31:41 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Thu, 19 Oct 2023 02:31:40 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <937553743.43340.1697682701023@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-18-init-8757-gfd311126349b: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231018231624.1044633-11-david.e.box@linux.intel.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_43339_1784571385.1697682700344"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-stable-defconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-Hi David,
+------=_Part_43339_1784571385.1697682700344
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build errors:
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-[auto build test ERROR on 3f720b21ec5af466e50e99dc517af267b67d248c]
+In CI config tcwg_kernel/llvm-master-aarch64-stable-defconfig after:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-E-Box/platform-x86-intel-vsec-Move-structures-to-header/20231019-071914
-base:   3f720b21ec5af466e50e99dc517af267b67d248c
-patch link:    https://lore.kernel.org/r/20231018231624.1044633-11-david.e.box%40linux.intel.com
-patch subject: [PATCH V4 10/17] linux/io.h: iounmap/ioport_unmap cleanup.h support
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231019/202310191031.Nkp72kk7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231019/202310191031.Nkp72kk7-lkp@intel.com/reproduce)
+  | commit llvmorg-18-init-8757-gfd311126349b
+  | Author: Florian Hahn <flo@fhahn.com>
+  | Date:   Tue Oct 17 19:17:40 2023 +0100
+  | 
+  |     [VPlan] Insert Trunc/Exts for reductions directly in VPlan.
+  |     
+  |     Update the code to create Trunc/Ext recipes directly in
+  |     adjustRecipesForReductions instead of fixing it up later in
+  |     fixReductions.
+  |     
+  |     This explicitly models the required conversions and also makes sure they
+  | ... 2 lines of the commit log omitted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310191031.Nkp72kk7-lkp@intel.com/
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+8020
+# First few build errors in logs:
 
-All errors (new ones prefixed by >>):
+# 00:12:40 clang: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:12:40 make[5]: *** [scripts/Makefile.build:243: drivers/platform/chrome/cros_ec_i2c.o] Error 1
+# 00:13:18 make[4]: *** [scripts/Makefile.build:480: drivers/platform/chrome] Error 2
+# 00:13:18 make[3]: *** [scripts/Makefile.build:480: drivers/platform] Error 2
+# 00:13:37 clang: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:13:37 make[7]: *** [scripts/Makefile.build:243: drivers/net/ethernet/intel/igb/igb_main.o] Error 1
+# 00:13:46 make[6]: *** [scripts/Makefile.build:480: drivers/net/ethernet/intel/igb] Error 2
+# 00:13:53 make[5]: *** [scripts/Makefile.build:480: drivers/net/ethernet/intel] Error 2
+# 00:16:54 make[4]: *** [scripts/Makefile.build:480: drivers/net/ethernet] Error 2
+# 00:16:54 make[3]: *** [scripts/Makefile.build:480: drivers/net] Error 2
 
-   In file included from init/main.c:21:
-   In file included from include/linux/syscalls.h:90:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from init/main.c:21:
-   In file included from include/linux/syscalls.h:90:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from init/main.c:21:
-   In file included from include/linux/syscalls.h:90:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from init/main.c:21:
-   In file included from include/linux/syscalls.h:90:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
->> include/linux/io.h:25:43: error: call to undeclared function 'ioport_unmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      25 | DEFINE_FREE(ioport_unmap, void __iomem *, ioport_unmap(_T));
-         |                                           ^
-   12 warnings and 1 error generated.
---
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
->> include/linux/io.h:25:43: error: call to undeclared function 'ioport_unmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      25 | DEFINE_FREE(ioport_unmap, void __iomem *, ioport_unmap(_T));
-         |                                           ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:1075:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      97 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:1075:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      97 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:1075:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:1075:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     100 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:1075:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:1075:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
---
-   In file included from arch/um/kernel/mem.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/um/kernel/mem.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/um/kernel/mem.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from arch/um/kernel/mem.c:9:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
->> include/linux/io.h:25:43: error: call to undeclared function 'ioport_unmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      25 | DEFINE_FREE(ioport_unmap, void __iomem *, ioport_unmap(_T));
-         |                                           ^
-   arch/um/kernel/mem.c:202:8: warning: no previous prototype for function 'pgd_alloc' [-Wmissing-prototypes]
-     202 | pgd_t *pgd_alloc(struct mm_struct *mm)
-         |        ^
-   arch/um/kernel/mem.c:202:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     202 | pgd_t *pgd_alloc(struct mm_struct *mm)
-         | ^
-         | static 
-   arch/um/kernel/mem.c:215:7: warning: no previous prototype for function 'uml_kmalloc' [-Wmissing-prototypes]
-     215 | void *uml_kmalloc(int size, int flags)
-         |       ^
-   arch/um/kernel/mem.c:215:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     215 | void *uml_kmalloc(int size, int flags)
-         | ^
-         | static 
-   14 warnings and 1 error generated.
-..
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+9166
+# linux build successful:
+all
+# linux boot successful:
+boot
 
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-aarch64-stable-defconfig
 
-vim +/ioport_unmap +25 include/linux/io.h
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
 
-    23	
-    24	DEFINE_FREE(iounmap, void __iomem *, iounmap(_T));
-  > 25	DEFINE_FREE(ioport_unmap, void __iomem *, ioport_unmap(_T));
-    26	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-defconfig-build/60/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-defconfig-build/59/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/fd311126349b8fe1684d62154a9fa5a7bbb0b713/tcwg_kernel/llvm-master-aarch64-stable-defconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/fd311126349b8fe1684d62154a9fa5a7bbb0b713
+
+Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1007
+
+List of configurations that regressed due to this commit :
+* tcwg_kernel
+** llvm-master-aarch64-stable-defconfig
+*** Failure
+*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/fd311126349b8fe1684d62154a9fa5a7bbb0b713/tcwg_kernel/llvm-master-aarch64-stable-defconfig/details.txt
+*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-defconfig-build/60/
+------=_Part_43339_1784571385.1697682700344--
