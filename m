@@ -1,106 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE282744F
-	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 14:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21701225D3
+	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 15:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgD2mszF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F70C433C7;
-	Thu, 19 Oct 2023 14:20:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697725256;
-	bh=SYQufYvEZp9QNGvUcctMCtYxQ/T4Y0G7ziduh+OoWz8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JgD2mszFwXbGqZjltRRw8W7Bx7zE5dcFMSEro4HKnBpuRrCYwv4bEWSooANfsPsVM
-	 dxnaVVc83hzYSVEWHLiciE9bwVsPDhttdIEZuGvQguCnj+YIT9iFYQtE5yqyHU9j+P
-	 ufs9cTOUT07f7ddLgKb9TuF/xoVRRNxqbiy4KZGtMpabk8AftSOj82yqqamIVIkDTH
-	 1nHzpeiAZ9alKDeMtfUjhnNy89NOOFeh9DXOqv/hmqZqL2mym64yIHJvjuEfuAFUrw
-	 rYWA9mK6OKwjJrdgOQ4qFCQAJFB+LCLV1DTx6R6o0uB03wyt/3k9e4nJqoab2lc4K4
-	 LS3UnXH9gIvjA==
-Date: Thu, 19 Oct 2023 07:20:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Usama Arif <usama.arif@bytedance.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	muchun.song@linux.dev, songmuchun@bytedance.com,
-	fam.zheng@bytedance.com, liangma@liangbit.com,
-	punit.agrawal@bytedance.com,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm: hugetlb: Only prep and add allocated folios for
- non-gigantic pages
-Message-ID: <20231019142054.GA60597@dev-arch.thelio-3990X>
-References: <20231009145605.2150897-1-usama.arif@bytedance.com>
- <20231010012345.GA108129@monkey>
- <20231012000327.GA1855399@dev-arch.thelio-3990X>
- <20231012145318.GA5127@monkey>
- <20231013001203.GA3812@monkey>
- <20231014000450.GA253713@monkey>
- <CAKwvOdm9xKGQzi6_j=gGZCEmKJe6b9o8+jen1oEeAhyjcaSnxQ@mail.gmail.com>
- <20231018222003.GA21776@monkey>
- <20231019043305.GB14965@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Eqnaa3UN"
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-7ab9f1efecfso2880124241.3
+        for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 08:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697729371; x=1698334171; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QcCWZrS9nr2T1Ft3SnepOqpeblKGImQnACoIdicePjc=;
+        b=Eqnaa3UNJ4plBgWLDEDYxLoUtcbsiL3AwunaGI8/V1/oaTEo+WH/P4+4CJOHSOXwDL
+         d+Y48Pp69iP7oWBYELAUPUfum4XPDaJOmEaU4oqZHUzuIV1iyHO2vI2LHEYu97yfjr7U
+         xLMBmMQYrkBGLDkX74HnBOTwzWXIlZUHB/2lst0St95PpLA1cVKvT3+YC17eJaxj6dna
+         OyQx4bkHZ4OzoIcdvHMuAZszvu5SEBmGkXVdS9Kxp5AO8OKEpBgDoJ4Ypkh0etO9pv74
+         l4A/l/a1eE9DBCozHT3Ev6ndNp7nQZvqsFzxI/xaGP72TdZLLsPqteqB1YK6j262UDKi
+         0Cyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697729371; x=1698334171;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QcCWZrS9nr2T1Ft3SnepOqpeblKGImQnACoIdicePjc=;
+        b=R+NMIP/VP/AB+gMk/EEQFpGHEMEzDxRcZx53IUHrIPJurP6wQcVT4B7sbpAiCPIueG
+         iWB8tiwU6SmWLWGbfD4SEo95OO6YupRwe73BtFzPKQaF91CWeOoMsA2JuIAnWVcRJhJK
+         TDEd2aF8F0oGb2oGOKpMb5czZmTt059WcIYAR04jDpqG6c7sjq/maFShA+uk+jY5m4mZ
+         efCfqc45ZJMId5EOgjY3+98PeQoVeXFSpTyRUtZ6OKZ+/LVMs61fiIyOzKNXxMhYEtn9
+         Y7fxw+Qz2py9SZzsrO3vvF0Ic2f7Kh9Ppby6AI1ZdH9gEXGK/4mtiDcjF5ekVMYNLLGU
+         Rnog==
+X-Gm-Message-State: AOJu0Yz/e+6EYw2B8t9GrupJP1aDPiDhAIJY7Me+pCdwea5yOdSqGCb+
+	2CcEaZ8WWzPufspbZU2XE4WiEqRGQTg9FhhUgL42b7xc4kfZ4KkNzOpS2Q==
+X-Google-Smtp-Source: AGHT+IExtpbxdBhQiplIsId+RjA6Ng1l3yPFnI90JPewRHxp0H1F3923YuNaDMbqTC0oMvbxq4PJ+5TwP756RdbTIeY=
+X-Received: by 2002:a67:b048:0:b0:457:c9ae:6c6e with SMTP id
+ q8-20020a67b048000000b00457c9ae6c6emr2554036vsh.12.1697729370667; Thu, 19 Oct
+ 2023 08:29:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231019043305.GB14965@google.com>
+References: <937553743.43340.1697682701023@jenkins.jenkins>
+In-Reply-To: <937553743.43340.1697682701023@jenkins.jenkins>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 19 Oct 2023 08:29:15 -0700
+Message-ID: <CAKwvOd=bG0a_aOK-PvFFpkjsFN8cYc9xmeXMoOkHpUuan_zupw@mail.gmail.com>
+Subject: Re: [Linaro-TCWG-CI] llvmorg-18-init-8757-gfd311126349b: Failure on aarch64
+To: linaro-toolchain@lists.linaro.org
+Cc: llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 19, 2023 at 01:33:05PM +0900, Sergey Senozhatsky wrote:
-> On (23/10/18 15:20), Mike Kravetz wrote:
-> > > I think you need to initialize h, otherwise what value is passed to
-> > > prep_and_add_bootmem_folios if the loop is not run because the list is
-> > > empty.  The compiler sees `h` is only given a value in the loop, so
-> > > the loop must be run.  That's obviously hazardous, but the compiler
-> > > assumes there's no UB. At least that's my limited understanding
-> > > looking at the IR diff Nathan got me in
-> > > https://github.com/ClangBuiltLinux/linux/issues/1946.
-> > 
-> > Thanks for looking closer at this Nick and Nathan!
-> > 
-> > I think you are saying the compiler is running the loop because it wants
-> > to initialize h before passing the value to another function.  It does
-> > this even if the explicit loop entry condition is false.  Is that correct?
-> 
-> The loop is getting promoted to "infinite" loop, there is no
-> &pos->member != (head) condition check in the generated code
-> at all (at least on my machine).
-> 
-> I wish we could at least get the "possibly uninitialized variable"
-> warning from the compiler in this case, which we'd translate to
-> "hold my beer, I'm going to try one thing".
+Thanks for the report. Looks like Nathan has reported this, too (as
+have Google3 folks):
+https://github.com/llvm/llvm-project/commit/fd311126349b8fe1684d62154a9fa5a=
+7bbb0b713#commitcomment-130346081
 
-GCC would warn about this under -Wmaybe-uninitialized but it has been
-disabled in a normal build for the past three years, see commit
-78a5255ffb6a ("Stop the ad-hoc games with -Wno-maybe-initialized").
+On Wed, Oct 18, 2023 at 7:31=E2=80=AFPM <ci_notify@linaro.org> wrote:
+>
+> Dear contributor, our automatic CI has detected problems related to your =
+patch(es).  Please find some details below.  If you have any questions, ple=
+ase follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #=
+linaro-tcwg channel, or ping your favourite Linaro toolchain developer on t=
+he usual project channel.
+>
+> In CI config tcwg_kernel/llvm-master-aarch64-stable-defconfig after:
+>
+>   | commit llvmorg-18-init-8757-gfd311126349b
+>   | Author: Florian Hahn <flo@fhahn.com>
+>   | Date:   Tue Oct 17 19:17:40 2023 +0100
+>   |
+>   |     [VPlan] Insert Trunc/Exts for reductions directly in VPlan.
+>   |
+>   |     Update the code to create Trunc/Ext recipes directly in
+>   |     adjustRecipesForReductions instead of fixing it up later in
+>   |     fixReductions.
+>   |
+>   |     This explicitly models the required conversions and also makes su=
+re they
+>   | ... 2 lines of the commit log omitted.
+>
+> Results changed to
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 8020
+> # First few build errors in logs:
+>
+> # 00:12:40 clang: error: clang frontend command failed with exit code 134=
+ (use -v to see invocation)
+> # 00:12:40 make[5]: *** [scripts/Makefile.build:243: drivers/platform/chr=
+ome/cros_ec_i2c.o] Error 1
+> # 00:13:18 make[4]: *** [scripts/Makefile.build:480: drivers/platform/chr=
+ome] Error 2
+> # 00:13:18 make[3]: *** [scripts/Makefile.build:480: drivers/platform] Er=
+ror 2
+> # 00:13:37 clang: error: clang frontend command failed with exit code 134=
+ (use -v to see invocation)
+> # 00:13:37 make[7]: *** [scripts/Makefile.build:243: drivers/net/ethernet=
+/intel/igb/igb_main.o] Error 1
+> # 00:13:46 make[6]: *** [scripts/Makefile.build:480: drivers/net/ethernet=
+/intel/igb] Error 2
+> # 00:13:53 make[5]: *** [scripts/Makefile.build:480: drivers/net/ethernet=
+/intel] Error 2
+> # 00:16:54 make[4]: *** [scripts/Makefile.build:480: drivers/net/ethernet=
+] Error 2
+> # 00:16:54 make[3]: *** [scripts/Makefile.build:480: drivers/net] Error 2
+>
+> From
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 9166
+> # linux build successful:
+> all
+> # linux boot successful:
+> boot
+>
+> The configuration of this build is:
+> CI config tcwg_kernel/llvm-master-aarch64-stable-defconfig
+>
+> -----------------8<--------------------------8<--------------------------=
+8<--------------------------
+> The information below can be used to reproduce a debug environment:
+>
+> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarc=
+h64-stable-defconfig-build/60/artifact/artifacts
+> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarc=
+h64-stable-defconfig-build/59/artifact/artifacts
+>
+> Reproduce last good and first bad builds: https://git-us.linaro.org/toolc=
+hain/ci/interesting-commits.git/plain/llvm/sha1/fd311126349b8fe1684d62154a9=
+fa5a7bbb0b713/tcwg_kernel/llvm-master-aarch64-stable-defconfig/reproduction=
+_instructions.txt
+>
+> Full commit : https://github.com/llvm/llvm-project/commit/fd311126349b8fe=
+1684d62154a9fa5a7bbb0b713
+>
+> Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1007
+>
+> List of configurations that regressed due to this commit :
+> * tcwg_kernel
+> ** llvm-master-aarch64-stable-defconfig
+> *** Failure
+> *** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/=
+llvm/sha1/fd311126349b8fe1684d62154a9fa5a7bbb0b713/tcwg_kernel/llvm-master-=
+aarch64-stable-defconfig/details.txt
+> *** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-def=
+config-build/60/
 
-  In function 'gather_bootmem_prealloc',
-      inlined from 'hugetlb_init' at mm/hugetlb.c:4299:2:
-  mm/hugetlb.c:3203:9: warning: 'h' may be used uninitialized [-Wmaybe-uninitialized]
-   3203 |         prep_and_add_allocated_folios(h, &folio_list);
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  mm/hugetlb.c: In function 'hugetlb_init':
-  mm/hugetlb.c:3166:24: note: 'h' was declared here
-   3166 |         struct hstate *h, *prev_h = NULL;
-        |                        ^
 
-Clang's -Wconditional-uninitialized would have flagged it too but it
-suffers from the same problems as -Wmaybe-uninitialized.
 
-  mm/hugetlb.c:3203:32: warning: variable 'h' may be uninitialized when used here [-Wconditional-uninitialized]
-   3203 |         prep_and_add_allocated_folios(h, &folio_list);
-        |                                       ^
-  mm/hugetlb.c:3166:18: note: initialize the variable 'h' to silence this warning
-   3166 |         struct hstate *h, *prev_h = NULL;
-        |                         ^
-        |                          = NULL
-
-I know clang has some handling for loops in -Wsometimes-uninitialized, I
-wonder why that does not trigger here...
-
-Cheers,
-Nathan
+--=20
+Thanks,
+~Nick Desaulniers
