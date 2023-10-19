@@ -1,164 +1,320 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4EACC140;
-	Thu, 19 Oct 2023 21:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BAD8F54
+	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 21:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Md74B/T8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697750913; x=1729286913;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tKa4MQ+PBKaXg5BBwkeyeILYw9gKB4mpdkP2+KY/7fw=;
-  b=Md74B/T86CrpSUPjWUM38n3Oi5gCmi4Ik+8D0preEVuIBXGc0SomqOya
-   5a3V7NeYsMCROyuSnCk1YhZWyZx6cftIm0iFb1GOMH4vx0xt1Q4wv7rjq
-   E/e4tzBpNHgJFR3i8DsgpUmzpJnIY2QIVI9IKziPnru704G5Vj0UFA4qj
-   bTPoJXVDdaXBWLAFOOL5jIMuSDKpOqgrS4lQoRqZNieyCFSrqxh6nKajA
-   0ADwIwdof47IJs5DjsqrENxvNEfWhJsvcr25dBxhFoQyrwf3pFiBGLsHj
-   salZ76WJ8AQ7/2QyxJ7mb5f405/JfvnigRHvXAmpBdVi8ccmiL5bmKjTi
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="452846782"
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="452846782"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 14:28:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="5157592"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Oct 2023 14:28:33 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qtaZB-0002cE-0G;
-	Thu, 19 Oct 2023 21:28:29 +0000
-Date: Fri, 20 Oct 2023 05:27:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 8592/13518] fs/tracefs/event_inode.c:734:10:
- error: casting from randomized structure pointer type 'struct dentry *' to
- 'struct eventfs_inode *'
-Message-ID: <202310200550.p46bE4w7-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w1tC0CVS"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5068b69f4aeso478e87.0
+        for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 14:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697752634; x=1698357434; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XajYlYAO8Kk7inISBTtrUw4bdn+rl2BtGkmrWxdlT40=;
+        b=w1tC0CVSouOfFRbaNaVOAtqvV2wYqG8UU3zha2VO0JFfDi+4TgAkKyLa0kWmzOd98a
+         WHlwQ6lSYPMU/4/9ZU3Whu3QHU0GbItINhyIZ9/LRQRLdbNdpbr5PY9qEDT+lFqxM4uH
+         trTTjvs6jT/DIam7p3bPTRNov5PlxS4N7vU6czC4+oRLdhEL77Du7RFKGyli5QG0qUMg
+         KeJ3vlpb4XgmWYWGXIYR0OWSwBhPkqhsiGzNqrFE0v5mGC0eNhrrJ4Nr3v/+OgTqXCPw
+         2XovId/dzGdYog38piAiByYKZR2PFtxD7HzGGzn8DPWdioPPM9Qw6iFbjItfNn4PE00n
+         USDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697752634; x=1698357434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XajYlYAO8Kk7inISBTtrUw4bdn+rl2BtGkmrWxdlT40=;
+        b=vgEZk3IkM9eTSUge51cs/sZ7PFr77wnfhdA2SEz2DQ54yFJ/NMIMm5LH0kjWYqfglN
+         HpOF04haZkYnytGG5owjaQ/UM3HpzI5u0DtB0CxqZNcdT0LEaOS3HUwGyoCJOnDFfdCz
+         eP9q962ZncXoGDc1j445f9F61AlGMbveqGIlGQfDEz3x85u649FtfcttQFWzMof1bVO8
+         YWnjTyvL1wNFWruziHdi54+5uJHmV7G2y8vmxdCH/85OiDgbBZG0A4EKtAiQP4FTCIk+
+         c5MCE5Hiqv8oi0I6Swpic112GJ7WQQ7rapHnnkdyghVniWVVrUj4jZDBfAoxdrO+jD1p
+         Y9YA==
+X-Gm-Message-State: AOJu0Yzge1D6ies1fOOQ7e5FXc95JJFrM7w8Yr5JlANFeTkS3JL/oHEc
+	ek0rnotaKVGKYRty4mWV9tG2E61sVrDebFB6wBihIg==
+X-Google-Smtp-Source: AGHT+IE2v4Wr4RNxELB1a8mWDC9skPvwIt1rxIqCVgLu5Uiyjg78Fr/2hugh2CoSyopYsjyCQHrqzyBSgJpifeeul5A=
+X-Received: by 2002:a05:6512:754:b0:502:a55e:fec0 with SMTP id
+ c20-20020a056512075400b00502a55efec0mr19637lfs.6.1697752634350; Thu, 19 Oct
+ 2023 14:57:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230810184853.2860737-1-irogers@google.com> <20230810184853.2860737-2-irogers@google.com>
+ <ZNZJCWi9MT/HZdQ/@kernel.org> <ZNZWsAXg2px1sm2h@kernel.org>
+ <ZTGHRAlQtF7Fq8vn@surya> <ZTGa0Ukt7QyxWcVy@kernel.org>
+In-Reply-To: <ZTGa0Ukt7QyxWcVy@kernel.org>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 19 Oct 2023 14:57:00 -0700
+Message-ID: <CAP-5=fU9DHYDAcGuX=7SHy2J09bqcYpP+_8NXKbnVDtSjrw01g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] perf parse-events: Remove BPF event support
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Manu Bretelle <chantr4@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Fangrui Song <maskray@google.com>, Anshuman Khandual <anshuman.khandual@arm.com>, 
+	Andi Kleen <ak@linux.intel.com>, Leo Yan <leo.yan@linaro.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, James Clark <james.clark@arm.com>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>, Rob Herring <robh@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, Wang Nan <wangnan0@huawei.com>, 
+	Wang ShaoBo <bobo.shaobowang@huawei.com>, YueHaibing <yuehaibing@huawei.com>, 
+	He Kuang <hekuang@huawei.com>, Brendan Gregg <brendan.d.gregg@gmail.com>, 
+	Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4230ea146b1e64628f11e44290bb4008e391bc24
-commit: 5790b1fb3d672d9a1fe3881a7181dfdbe741568f [8592/13518] eventfs: Remove eventfs_file and just use eventfs_inode
-config: hexagon-randconfig-r001-20230603 (https://download.01.org/0day-ci/archive/20231020/202310200550.p46bE4w7-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231020/202310200550.p46bE4w7-lkp@intel.com/reproduce)
+On Thu, Oct 19, 2023 at 2:08=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Thu, Oct 19, 2023 at 12:45:08PM -0700, Manu Bretelle escreveu:
+> > cc @quentin
+> >
+> > On Fri, Aug 11, 2023 at 12:41:36PM -0300, Arnaldo Carvalho de Melo wrot=
+e:
+> > > Em Fri, Aug 11, 2023 at 11:43:22AM -0300, Arnaldo Carvalho de Melo es=
+creveu:
+> > > > Right now it is not applying due to some clash with other changes a=
+nd
+> > > > when I tried to apply it manually there were some formatting issues=
+:
+> > > >
+> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$ head ~/wb/1.patch
+> > > > From SRS0=3DEALy=3DD3=3Dflex--irogers.bounces.google.com=3D3IDHVZAc=
+KBAUnwtljwxlttlqj.htrfhrjpjwsjq.twl@kernel.org Thu Aug 10 17:53:46 2023
+> > > > Delivered-To: arnaldo.melo@gmail.com
+> > > > Received: from imap.gmail.com [64.233.186.109]
+> > > >   by quaco with IMAP (fetchmail-6.4.37)
+> > > >   for <acme@localhost> (single-drop); Thu, 10 Aug 2023 17:53:46 -03=
+00 (-03)
+> > > > Received: by 2002:a0c:ab03:0:b0:63d:780e:9480 with SMTP id h3csp908=
+198qvb;
+> > > >  Thu, 10 Aug 2023 11:49:52 -0700 (PDT)
+> > > > X-Google-Smtp-Source: AGHT+IH9N/knUCyQ0tQ2Q0XBH0gqf8A8DB8/37YHWAJDK=
+Bmz7AGSV9CvCKYDuE3EwxriZFBwtZMs
+> > > > X-Received: by 2002:a4a:6b4f:0:b0:56c:b2ab:9820 with SMTP id
+> > > >  h15-20020a4a6b4f000000b0056cb2ab9820mr2695332oof.8.1691693392493; =
+Thu, 10 Aug
+> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$ patch -p1 < ~/wb/1.patch
+> > > > patching file tools/perf/Documentation/perf-config.txt
+> > > > patch: **** malformed patch at line 234: ith
+> > > >
+> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$
+> > > >
+> > > > I'm trying to apply it manually.
+> > >
+> > > I have this extracted from this patch as the first patch in the serie=
+s:
+> > >
+> > > >From adc61b5774a9de62f34d593f164ca02daa6fb44c Mon Sep 17 00:00:00 20=
+01
+> > > From: Ian Rogers <irogers@google.com>
+> > > Date: Fri, 11 Aug 2023 12:19:48 -0300
+> > > Subject: [PATCH 1/1] perf bpf: Remove support for embedding clang for
+> > >  compiling BPF events (-e foo.c)
+> > >
+> > > This never was in the default build for perf, is difficult to maintai=
+n
+> > > as it uses clang/llvm internals so ditch it, keeping, for now, the
+> > > external compilation of .c BPF into .o bytecode and its subsequent
+> > > loading, that is also going to be removed, do it separately to help
+> > > bisection and to properly document what is being removed and why.
+> > >
+> > > Committer notes:
+> > >
+> > > Extracted from a larger patch and removed some leftovers, namely
+> > > deleting these now unused feature tests:
+> > >
+> > >     tools/build/feature/test-clang.cpp
+> > >     tools/build/feature/test-cxx.cpp
+> > >     tools/build/feature/test-llvm-version.cpp
+> > >     tools/build/feature/test-llvm.cpp
+> > >
+> >
+> > This seem to have broken `llvm` feature detection for `bpftool`.
+> >
+> > The feature detections are still available in `tools/build/Makefile.fea=
+ture` [0]
+> > but the .cpp files are gone.
+> >
+> > `bpftool` still rely on the `llvm` feature:
+> >
+> >     $ git --no-pager grep 'feature-llvm'
+> >     tools/bpf/bpftool/Makefile:ifeq ($(feature-llvm),1)
+> >
+> > The result of testing llvm feature is:
+> >
+> >     $ cat tools/build/feature/test-llvm.make.output
+> >     cc1plus: fatal error: test-llvm.cpp: No such file or directory
+> >     compilation terminated.
+> >
+> > With current head:
+> >
+> >     make -j $((4*$(nproc))) -C tools/bpf/bpftool && ./tools/bpf/bpftool=
+/bpftool --version
+> >     ...
+> >     Auto-detecting system features:
+> >     ...                         clang-bpf-co-re: [ on  ]
+> >     ...                                    llvm: [ OFF ]
+> >     ...                                  libcap: [ on  ]
+> >     ...                                  libbfd: [ on  ]
+> >     ...
+> >     ...
+> >     ...
+> >     bpftool v7.3.0
+> >     using libbpf v1.3
+> >     features: libbfd, skeletons
+> >
+> > After applying
+> >
+> >     git show 56b11a2126bf2f422831ecf6112b87a4485b221b  tools/build/feat=
+ure | \
+> >         patch -p1 -R
+>
+>
+> Ouch, so probably we need just to reintroduce that one
+> tools/build/feature/test-llvm.cpp file.
+>
+> Building perf these days ends up using bpftool, and the end result as
+> noticed with me testing perf, perf trace with bpf, etc didn't change, so
+> I didn't notice :-\
+>
+> And:
+>
+> ifeq ($(feature-llvm),1)
+>   # If LLVM is available, use it for JIT disassembly
+>   CFLAGS  +=3D -DHAVE_LLVM_SUPPORT
+>   LLVM_CONFIG_LIB_COMPONENTS :=3D mcdisassembler all-targets
+>   CFLAGS  +=3D $(shell $(LLVM_CONFIG) --cflags --libs $(LLVM_CONFIG_LIB_C=
+OMPONENTS))
+>   LIBS    +=3D $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS=
+))
+>   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+>     LIBS +=3D $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMP=
+ONENTS))
+>     LIBS +=3D -lstdc++
+>   endif
+>   LDFLAGS +=3D $(shell $(LLVM_CONFIG) --ldflags)
+> else
+>   # Fall back on libbfd
+>   ifeq ($(feature-libbfd),1)
+>     LIBS +=3D -lbfd -ldl -lopcodes
+>   else ifeq ($(feature-libbfd-liberty),1)
+>     LIBS +=3D -lbfd -ldl -lopcodes -liberty
+>   else ifeq ($(feature-libbfd-liberty-z),1)
+>     LIBS +=3D -lbfd -ldl -lopcodes -liberty -lz
+>   endif
+>
+>   # If one of the above feature combinations is set, we support libbfd
+>   ifneq ($(filter -lbfd,$(LIBS)),)
+>     CFLAGS +=3D -DHAVE_LIBBFD_SUPPORT
+>
+>     # Libbfd interface changed over time, figure out what we need
+>     ifeq ($(feature-disassembler-four-args), 1)
+>       CFLAGS +=3D -DDISASM_FOUR_ARGS_SIGNATURE
+>     endif
+>     ifeq ($(feature-disassembler-init-styled), 1)
+>       CFLAGS +=3D -DDISASM_INIT_STYLED
+>     endif
+>   endif
+> endif
+>
+> And there is a fallback to using binutils, so most people ended up not
+> noticing.
+>
+> I wonder how to improve the current situation to detect these kinds of
+> problems in the future, i.e. how to notice that some file needed by some
+> Makefile, etc got removed or that some feature test fails because some
+> change in the test .c files makes them fail and thus activates fallbacks
+> like the one above :-\
+>
+>
+> So if I just get this back:
+>
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ cat tools/build/feature/test-llv=
+m.cpp
+> // SPDX-License-Identifier: GPL-2.0
+> #include "llvm/Support/ManagedStatic.h"
+> #include "llvm/Support/raw_ostream.h"
+> #define NUM_VERSION (((LLVM_VERSION_MAJOR) << 16) + (LLVM_VERSION_MINOR <=
+< 8) + LLVM_VERSION_PATCH)
+>
+> #if NUM_VERSION < 0x030900
+> # error "LLVM version too low"
+> #endif
+> int main()
+> {
+>         llvm::errs() << "Hello World!\n";
+>         llvm::llvm_shutdown();
+>         return 0;
+> }
+> =E2=AC=A2[acme@toolbox perf-tools-next]$
+>
+> And install the llvm-devel package then it back working:
+>
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ make -C tools/bpf/bpftool
+> make: Entering directory '/home/acme/git/perf-tools-next/tools/bpf/bpftoo=
+l'
+>
+> Auto-detecting system features:
+> ...                         clang-bpf-co-re: [ on  ]
+> ...                                    llvm: [ on  ]
+> ...                                  libcap: [ on  ]
+> ...                                  libbfd: [ on  ]
+> <SNIP>
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ cat tools/build/feature/test-llv=
+m.make.output
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ ls -la tools/build/feature/test-=
+llvm.
+> test-llvm.bin          test-llvm.cpp          test-llvm.d            test=
+-llvm.make.output
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ ls -la tools/build/feature/test-=
+llvm.bin
+> -rwxr-xr-x. 1 acme acme 17712 Oct 19 18:04 tools/build/feature/test-llvm.=
+bin
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ ldd tools/build/feature/test-llv=
+m.bin
+>         linux-vdso.so.1 (0x00007ffcaf5d9000)
+>         libLLVM-16.so =3D> /lib64/libLLVM-16.so (0x00007fc4faefa000)
+>         libstdc++.so.6 =3D> /lib64/libstdc++.so.6 (0x00007fc4faca6000)
+>         libm.so.6 =3D> /lib64/libm.so.6 (0x00007fc4fabc5000)
+>         libgcc_s.so.1 =3D> /lib64/libgcc_s.so.1 (0x00007fc4faba1000)
+>         libc.so.6 =3D> /lib64/libc.so.6 (0x00007fc4fa9c3000)
+>         libffi.so.8 =3D> /lib64/libffi.so.8 (0x00007fc4fa9b7000)
+>         libedit.so.0 =3D> /lib64/libedit.so.0 (0x00007fc4fa978000)
+>         libz.so.1 =3D> /lib64/libz.so.1 (0x00007fc4fa95e000)
+>         libtinfo.so.6 =3D> /lib64/libtinfo.so.6 (0x00007fc4fa92b000)
+>         /lib64/ld-linux-x86-64.so.2 (0x00007fc502404000)
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ sudo dnf install llvm-devel
+>
+> I'll get this merged in my perf-tools-fixes-for-v6.6 that I'll submit
+> tomorrow to Linus, thanks for reporting!
+>
+> I'll add your:
+>
+> Reported-by: Manu Bretelle <chantr4@gmail.com>
+>
+> And:
+>
+> Fixes: 56b11a2126bf2f42 ("perf bpf: Remove support for embedding clang fo=
+r compiling BPF events (-e foo.c)")
+>
+> Ok?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310200550.p46bE4w7-lkp@intel.com/
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-All errors (new ones prefixed by >>):
+Thanks,
+Ian
 
->> fs/tracefs/event_inode.c:734:10: error: casting from randomized structure pointer type 'struct dentry *' to 'struct eventfs_inode *'
-                   return (struct eventfs_inode *)dentry;
-                          ^
-   fs/tracefs/event_inode.c:909:6: warning: no previous prototype for function 'eventfs_remove_events_dir' [-Wmissing-prototypes]
-   void eventfs_remove_events_dir(struct dentry *dentry)
-        ^
-   fs/tracefs/event_inode.c:909:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void eventfs_remove_events_dir(struct dentry *dentry)
-   ^
-   static 
-   1 warning and 1 error generated.
-
-
-vim +734 fs/tracefs/event_inode.c
-
-   710	
-   711	/**
-   712	 * eventfs_create_events_dir - create the top level events directory
-   713	 * @name: The name of the top level directory to create.
-   714	 * @parent: Parent dentry for this file in the tracefs directory.
-   715	 * @entries: A list of entries that represent the files under this directory
-   716	 * @size: The number of @entries
-   717	 * @data: The default data to pass to the files (an entry may override it).
-   718	 *
-   719	 * This function creates the top of the trace event directory.
-   720	 */
-   721	struct eventfs_inode *eventfs_create_events_dir(const char *name, struct dentry *parent,
-   722							const struct eventfs_entry *entries,
-   723							int size, void *data)
-   724	{
-   725		struct dentry *dentry = tracefs_start_creating(name, parent);
-   726		struct eventfs_inode *ei;
-   727		struct tracefs_inode *ti;
-   728		struct inode *inode;
-   729	
-   730		if (security_locked_down(LOCKDOWN_TRACEFS))
-   731			return NULL;
-   732	
-   733		if (IS_ERR(dentry))
- > 734			return (struct eventfs_inode *)dentry;
-   735	
-   736		ei = kzalloc(sizeof(*ei), GFP_KERNEL);
-   737		if (!ei)
-   738			goto fail;
-   739	
-   740		inode = tracefs_get_inode(dentry->d_sb);
-   741		if (unlikely(!inode))
-   742			goto fail;
-   743	
-   744		if (size) {
-   745			ei->d_children = kzalloc(sizeof(*ei->d_children) * size, GFP_KERNEL);
-   746			if (!ei->d_children)
-   747				goto fail;
-   748		}
-   749	
-   750		ei->dentry = dentry;
-   751		ei->entries = entries;
-   752		ei->nr_entries = size;
-   753		ei->data = data;
-   754		ei->name = kstrdup_const(name, GFP_KERNEL);
-   755		if (!ei->name)
-   756			goto fail;
-   757	
-   758		INIT_LIST_HEAD(&ei->children);
-   759		INIT_LIST_HEAD(&ei->list);
-   760	
-   761		ti = get_tracefs(inode);
-   762		ti->flags |= TRACEFS_EVENT_INODE | TRACEFS_EVENT_TOP_INODE;
-   763		ti->private = ei;
-   764	
-   765		inode->i_mode = S_IFDIR | S_IRWXU | S_IRUGO | S_IXUGO;
-   766		inode->i_op = &eventfs_root_dir_inode_operations;
-   767		inode->i_fop = &eventfs_file_operations;
-   768	
-   769		/* directory inodes start off with i_nlink == 2 (for "." entry) */
-   770		inc_nlink(inode);
-   771		d_instantiate(dentry, inode);
-   772		inc_nlink(dentry->d_parent->d_inode);
-   773		fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
-   774		tracefs_end_creating(dentry);
-   775	
-   776		/* Will call dput when the directory is removed */
-   777		dget(dentry);
-   778	
-   779		return ei;
-   780	
-   781	 fail:
-   782		kfree(ei->d_children);
-   783		kfree(ei);
-   784		tracefs_failed_creating(dentry);
-   785		return ERR_PTR(-ENOMEM);
-   786	}
-   787	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> - Arnaldo
