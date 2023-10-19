@@ -1,341 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAF11DFD1;
-	Thu, 19 Oct 2023 12:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A885225A4
+	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 12:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gj0i2Oy3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697717894; x=1729253894;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=egphvTp+G9uX9PWRwebQ2cv7azqdCltj2VjYqZBu8EM=;
-  b=Gj0i2Oy3KaU0dXD+cEIY0U5HWN+h01MaDTdJdEXCvoTXmAZz69isfT0I
-   IaXnpkTLfxoKV3SMkYQ9Ut0JWocwfs/kTpEaeI7oBGXmr/YlMcNz/a6si
-   3wglGh3ZvCABWEg2Bn2atrW2UdC7urx/TtY8bTE/od2s/mwBdGJUwOcKH
-   y2HueqPxg1Q3dZ9L7G6sf7R+5FwPW1pw63UuozIvvETWRDKi0vvp/2Z9p
-   oBPJ0SfcMX7l9mrqI2vNXZs0rgGPJAyUk2dHc3CDfDM3IL4hRiCJpL8y8
-   oPmzNBf2ybLS6Yz6R0zEruB13hYLWOmEJ7Ke0oEuH17AaRSNmHyj3zNlL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="417346999"
-X-IronPort-AV: E=Sophos;i="6.03,237,1694761200"; 
-   d="scan'208";a="417346999"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 05:18:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="822819350"
-X-IronPort-AV: E=Sophos;i="6.03,237,1694761200"; 
-   d="scan'208";a="822819350"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Oct 2023 05:18:10 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qtRyZ-00025t-1M;
-	Thu, 19 Oct 2023 12:18:07 +0000
-Date: Thu, 19 Oct 2023 20:18:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Coddington <bcodding@redhat.com>,
-	trond.myklebust@hammerspace.com, anna@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org
-Subject: Re: [PATCH 2/2] NFSv4: Allow per-mount tuning of READDIR attrs
-Message-ID: <202310192058.OzHqCGKn-lkp@intel.com>
-References: <bd900de1d19bc56e6df5b44379f373617acc894e.1697577945.git.bcodding@redhat.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="iYYwDelQ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mjx3p4xy"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id C215C3200ACE;
+	Thu, 19 Oct 2023 08:53:23 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 19 Oct 2023 08:53:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1697720003; x=1697806403; bh=c+
+	OQf9mXsocdxZsSc7Qg9I7aF5FCLMuGCb54DwDnDIE=; b=iYYwDelQB/1pQrjDqD
+	+wxGOVgX15b5fVhHulX5D1KgWssBiLtEWMUm88IdtPhTBXrrU9TAAhOpVPuIRXAd
+	haM0sz6u4GsmCMqTZnboeJ19b/464N1s4W9XOb/c+kQl+rjHcxyug0YtC0Z0G7fH
+	Lo1s+nzXVPBk6KSGQdaPQ5YSYTSTI1X0Qjrv4O96eWvkvB73sNDiGS4ENUnryZxA
+	NNC2CKuqGgMR2DBoAh1Y6wCkll44M0s0+mvq8IPRFUF0zB/O8RxRjhGypTK9EpbC
+	lLqUFX0K6H9h4Rrot0pMdqcUgLY05kdLNbZn0kdKfwfrT6T7lgqX5rH4gqrofkIh
+	PiwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1697720003; x=1697806403; bh=c+OQf9mXsocdx
+	ZsSc7Qg9I7aF5FCLMuGCb54DwDnDIE=; b=mjx3p4xyhc148ce0bmL6NGiNVF1PH
+	2meSQ1Y0xo9jkztYxxZFxoOx17sAyptr3psxKQqa0+BItwMMmC1FBeHMJltK7+Fw
+	zwx9HSmRJfmu5jO+yLEZ5PToLdjzHgM94u006RLdD9ovfMO3O+bGeLmnazuCaYx5
+	ciN2DuwDBblj09x3ph3Sdnko+BJjvPWL36HJ1UPSmiF8I0X3UHv0gEwGHeI3EXd2
+	yPtWh7jXY83BOvm1qRWUG68wjzryk0qQyj9ON0OEmBRziZPp5RkXiNbD1iUlMcd2
+	2GTxSJiLqzT2C4DDykOJACpAXeIC+tfbFm0sNSgHElPCIED44huQMMFkQ==
+X-ME-Sender: <xms:wiYxZfvAYJ87OzL9VJN9VajqrAd9mgWFUIqvh_ipRUCu-oDhieqG8A>
+    <xme:wiYxZQfJ7aLYw3RUOtljHcmchazyXW_2og17Uv9qdFEdGeBWvD90Z6CJ1xuSNYCcU
+    NZBv0Z-xolbQEy2UFI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrjeeigdehjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:wiYxZSw6r134fUYOgOhgv3ngUAo50bNAGvSy1QLaIZNf49-vBL7Cbg>
+    <xmx:wiYxZeO4Ul-zvjp16Ul8GX0sKIdVXOp2j_Z0qhNLwYD_8-gua6JlzA>
+    <xmx:wiYxZf9u3G-k4Z-_FQ-mwH9HDOaPIijI0xYy-wXAB9T3ew_sRQDhgg>
+    <xmx:wyYxZVFsp_WBSxC4d5aZFDo0KbDS7UHeT8xw3LEAywvqBYOea_Hrnw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 2D5DEB60089; Thu, 19 Oct 2023 08:53:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bd900de1d19bc56e6df5b44379f373617acc894e.1697577945.git.bcodding@redhat.com>
+Message-Id: <22580470-7def-4723-b836-1688db6da038@app.fastmail.com>
+In-Reply-To: 
+ <CAG_fn=XcJ=rZEJN+L1zZwk=qA90KShhZK1MA6fdW0oh7BqSJKw@mail.gmail.com>
+References: <20231018182412.80291-1-hamza.mahfooz@amd.com>
+ <CAMuHMdXSzMJe1zyJu1HkxWggTKJj_sxkPOejjbdRjg3FeFTVHQ@mail.gmail.com>
+ <d764242f-cde0-47c0-ae2c-f94b199c93df@amd.com>
+ <CAMuHMdXYDQi5+x1KxMG0wnjSfa=A547B9tgAbgbHbV42bbRu8Q@mail.gmail.com>
+ <CAG_fn=XcJ=rZEJN+L1zZwk=qA90KShhZK1MA6fdW0oh7BqSJKw@mail.gmail.com>
+Date: Thu, 19 Oct 2023 14:53:01 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Alexander Potapenko" <glider@google.com>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc: "Hamza Mahfooz" <hamza.mahfooz@amd.com>, linux-kernel@vger.kernel.org,
+ "Rodrigo Siqueira" <rodrigo.siqueira@amd.com>,
+ "Harry Wentland" <harry.wentland@amd.com>,
+ "Alex Deucher" <alexander.deucher@amd.com>, stable@vger.kernel.org,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>,
+ "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Nick Terrell" <terrelln@fb.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Tom Rix" <trix@redhat.com>, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Randy Dunlap" <rdunlap@infradead.org>,
+ "Kees Cook" <keescook@chromium.org>,
+ "Zhaoyang Huang" <zhaoyang.huang@unisoc.com>,
+ "Li Hua" <hucool.lihua@huawei.com>, "Rae Moar" <rmoar@google.com>,
+ rust-for-linux@vger.kernel.org, bpf@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] lib/Kconfig.debug: disable FRAME_WARN for kasan and kcsan
+Content-Type: text/plain
 
-Hi Benjamin,
+On Thu, Oct 19, 2023, at 12:04, Alexander Potapenko wrote:
+>> > > Are kernels with KASAN || KCSAN || KMSAN enabled supposed to be bootable?
+>> >
+>> > They are all intended to be used for runtime debugging, so I'd imagine so.
+>>
+>> Then I strongly suggest putting a nonzero value here.  As you write
+>> that "with every release of LLVM, both of these sanitizers eat up more and more
+>> of the stack", don't you want to have at least some canary to detect
+>> when "more and more" is guaranteed to run into problems?
+>
+> FRAME_WARN is a poor canary. First, it does not necessarily indicate
+> that a build is faulty (a single bloated stack frame won't crash the
+> system).
 
-kernel test robot noticed the following build errors:
+I agree it's flawed, but it does catch a lot of bugs, both in the
+driver and the compiler. What we should probably have is some better
+runtime debugging in addition to FRAME_WARN, but it's better than
+nothing.
 
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on linus/master v6.6-rc6 next-20231019]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+One idea that I've suggested in the past is to add a soft stack
+limit that is lower than THREAD_SIZE, using VMAP_STACK with a custom
+stack start and a read-only page at the end to catch a thread
+exceeding the soft limit and print a backtrace before marking
+the page writable.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Coddington/NFSv4-Always-ask-for-type-with-READDIR/20231018-053217
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/bd900de1d19bc56e6df5b44379f373617acc894e.1697577945.git.bcodding%40redhat.com
-patch subject: [PATCH 2/2] NFSv4: Allow per-mount tuning of READDIR attrs
-config: powerpc-mpc885_ads_defconfig (https://download.01.org/0day-ci/archive/20231019/202310192058.OzHqCGKn-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231019/202310192058.OzHqCGKn-lkp@intel.com/reproduce)
+> Second, devs are unlikely to fix a function because its stack frame is
+> too big under some exotic tool+compiler combination.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310192058.OzHqCGKn-lkp@intel.com/
+I've probably sent hundreds of fixes for these in the past. Most
+of the time there is an actual driver bug, and almost always
+the driver maintainers are responsive and treat the report with
+the appropriate urgency: even if only some configurations actually
+push it over the limit, the general case is some data structure that
+is hundreds of bytes long and was not actually meant to be on
+the stack.
 
-All errors (new ones prefixed by >>):
+The gcc bug reports also usually get addressed quickly, though
+we've had problems with clang not making progress on known
+bugs for years. It sounds like Nick has made some important
+progress on clang very recently, so we should be able to
+raise the minimum clang version for kasan and kcsan once
+there is a known good release.
 
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:98:1: note: expanded from here
-      98 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/nfs/client.c:19:
-   In file included from include/linux/sunrpc/addr.h:14:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:94:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:100:1: note: expanded from here
-     100 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/nfs/client.c:19:
-   In file included from include/linux/sunrpc/addr.h:14:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:94:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:102:1: note: expanded from here
-     102 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/nfs/client.c:19:
-   In file included from include/linux/sunrpc/addr.h:14:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:94:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:104:1: note: expanded from here
-     104 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> fs/nfs/client.c:925:17: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     925 |         memcpy(target->readdir_attrs, source->readdir_attrs,
-         |                ~~~~~~  ^
-   fs/nfs/client.c:925:40: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     925 |         memcpy(target->readdir_attrs, source->readdir_attrs,
-         |                                       ~~~~~~  ^
-   fs/nfs/client.c:926:19: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     926 |                         sizeof(target->readdir_attrs));
-         |                                ~~~~~~  ^
-   6 warnings and 3 errors generated.
---
-   In file included from fs/nfs/sysfs.c:11:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:182:1: note: expanded from here
-     182 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/nfs/sysfs.c:11:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:184:1: note: expanded from here
-     184 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/nfs/sysfs.c:11:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:186:1: note: expanded from here
-     186 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/nfs/sysfs.c:11:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:188:1: note: expanded from here
-     188 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> fs/nfs/sysfs.c:281:12: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     281 |                         server->readdir_attrs[0],
-         |                         ~~~~~~  ^
-   fs/nfs/sysfs.c:282:12: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     282 |                         server->readdir_attrs[1],
-         |                         ~~~~~~  ^
-   fs/nfs/sysfs.c:283:12: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     283 |                         server->readdir_attrs[2]);
-         |                         ~~~~~~  ^
-   fs/nfs/sysfs.c:338:11: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     338 |                 server->readdir_attrs[0] = attrs[0];
-         |                 ~~~~~~  ^
-   fs/nfs/sysfs.c:340:11: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     340 |                 server->readdir_attrs[1] = attrs[1];
-         |                 ~~~~~~  ^
-   fs/nfs/sysfs.c:342:11: error: no member named 'readdir_attrs' in 'struct nfs_server'
-     342 |                 server->readdir_attrs[2] = attrs[2];
-         |                 ~~~~~~  ^
-   6 warnings and 6 errors generated.
+> So the remaining option would be to just increase the frame size every
+> time a new function surpasses the limit.
 
+That is clearly not an option, though we could try to
+add Kconfig dependencies that avoid the known bad combinations,
+such as annotating the AMD GPU driver as
 
-vim +925 fs/nfs/client.c
+      depends on (CC_IS_GCC || CLANG_VERSION >=180000) || !(KASAN || KCSAN)
 
-   908	
-   909	/*
-   910	 * Copy useful information when duplicating a server record
-   911	 */
-   912	void nfs_server_copy_userdata(struct nfs_server *target, struct nfs_server *source)
-   913	{
-   914		target->flags = source->flags;
-   915		target->rsize = source->rsize;
-   916		target->wsize = source->wsize;
-   917		target->acregmin = source->acregmin;
-   918		target->acregmax = source->acregmax;
-   919		target->acdirmin = source->acdirmin;
-   920		target->acdirmax = source->acdirmax;
-   921		target->caps = source->caps;
-   922		target->options = source->options;
-   923		target->auth_info = source->auth_info;
-   924		target->port = source->port;
- > 925		memcpy(target->readdir_attrs, source->readdir_attrs,
-   926				sizeof(target->readdir_attrs));
-   927	}
-   928	EXPORT_SYMBOL_GPL(nfs_server_copy_userdata);
-   929	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    Arnd
