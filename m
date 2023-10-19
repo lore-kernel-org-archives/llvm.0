@@ -1,190 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2046.outbound.protection.outlook.com [40.107.102.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC942EAFF;
-	Thu, 19 Oct 2023 19:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F873D3AC
+	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 20:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VVCyLCsz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697745571; x=1729281571;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Kqe67uRvu2IwQQgejNjoiziKr0XZYQQ4fkgtkOWJGBQ=;
-  b=VVCyLCszzRO3xkh6XcQSX3Fg774V+gM9DDXL86WnLKf7o1J2NFnZJ6Ek
-   04mzksw17bpDgeS656RMEIHXkjywDFETSnzHZsnaSyrw5tx0uVU+L5KFZ
-   oZ5ZHLSxeqnWo0lQiHWX1kdmCijKoCVMAqX3kVe6N72/8z/xJIO1vMQZj
-   EyT6KNzOnXBy41aNCR1BwDQS0KtdZ0Rn3e6cPv/FW9h+GQfOCJHQeX0is
-   OwoAhZsEDXbhcQS2lA3wPdPyZQjifqfjpDRQeq36Vj+iqItW4IzyNrWw8
-   QC3jRlGKvyyOnlBJ8L/AxxABjStfZCn5fAEF2xN0nTvN+esRJ/Gy0N10e
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="386178723"
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="386178723"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 12:59:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="750650656"
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="750650656"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Oct 2023 12:59:27 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qtZAz-0002Xs-20;
-	Thu, 19 Oct 2023 19:59:25 +0000
-Date: Fri, 20 Oct 2023 03:59:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kai Huang <kai.huang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:host-upstream-wip 21/24] drivers/acpi/sleep.c:600:8:
- error: use of undeclared identifier 'acpi_suspend_lowlevel'; did you mean
- 'acpi_set_suspend_lowlevel'?
-Message-ID: <202310200316.MHNJkSlG-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="c6/FDmwx"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aYTkTYgn1C7k+gulS0SXPggS4Ri1fY0uKt1HdZbDAhdkNFh6+zFDlsBenvE2hNa7MwJnXIzYvQKwO4orXCfK+6sYSUK3uvMjAXbLR+6OqZ0/H5W895UinH3mN5tNDq9gQiBjAGKj0KwVs4cX48BYLQG7O2hrZQdxrq3Lg2cU0+dApJK2QkfyPu7q9rYnsySjSONausb3vydRgGzL2o3y8AolGfPBxtVJ9150AebDvoz5Le6TeUeTwe9ZT8mSZDmkPN59gCu3qxxBGX69/bSjIOFV7Rs/SvRQ4r+NXZQbi+hSfu2gxF8ngERlJU4YC2QXRt6YA3/8eC4BrpLtqnoejw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q+1qGJ1b1W/hrmbe9VlayPZ0BGk79yLrvvAYCz9Z+Ic=;
+ b=EB51bvc8luL0XcOTcBIK8LmOw+FAIrkF/V3mvKKd1zGxi+mUBnXKLb9VZ8CvKYAQdnVygRPtqQWRcBGVwC6JHX9t2aPPQxS6hC2t6a417bSnGwH+cMk4S1pMqkU25s6REqGIkfJo/nuC40qQNUhP7xYQeDNGSAw6SBE7qIGkRBkz8/HYvu1xcIm18H+jrogLi0EVhkNFp1F5J4JrYZpnmfA5gQTzIH9x01bW9z6zYK1cL1Nv1MlCmq8osOYzuDQUj8KVPhrF7OGxA52X+JlDpDAHJEAwK2m5cOzLPXzQ/Cskydb2daV4LFMtW5l1fE+nk2IrIOvNjNnNPzwQRZmeDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q+1qGJ1b1W/hrmbe9VlayPZ0BGk79yLrvvAYCz9Z+Ic=;
+ b=c6/FDmwx4W1xMVmG+lxU3pOHFRWdezlf3Eis1sYqACwuJ9rVI7JKSkHEYeJ8V/UIVLSONfKPeXUzOsGmTfp3TxIDvWeehgKfhpADFvX7JshfixIskCEeF/j3MQ/DSxYrxGL5AoKFoois7f9QyHJZqRWdW9UlSil6QWMCFtNWelw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DS0PR12MB7632.namprd12.prod.outlook.com (2603:10b6:8:11f::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.24; Thu, 19 Oct 2023 20:17:31 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::5aa2:3605:1718:3332]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::5aa2:3605:1718:3332%7]) with mapi id 15.20.6886.034; Thu, 19 Oct 2023
+ 20:17:31 +0000
+Message-ID: <a9237e7a-e08c-4904-b84a-f6198333a78c@amd.com>
+Date: Thu, 19 Oct 2023 16:17:26 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] lib/Kconfig.debug: disable FRAME_WARN for kasan and kcsan
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Alexander Potapenko <glider@google.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org,
+ Rodrigo Siqueira <rodrigo.siqueira@amd.com>,
+ Harry Wentland <harry.wentland@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>, stable@vger.kernel.org,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Nick Terrell <terrelln@fb.com>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Kees Cook <keescook@chromium.org>,
+ Zhaoyang Huang <zhaoyang.huang@unisoc.com>, Li Hua
+ <hucool.lihua@huawei.com>, Rae Moar <rmoar@google.com>,
+ rust-for-linux@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20231018182412.80291-1-hamza.mahfooz@amd.com>
+ <CAMuHMdXSzMJe1zyJu1HkxWggTKJj_sxkPOejjbdRjg3FeFTVHQ@mail.gmail.com>
+ <d764242f-cde0-47c0-ae2c-f94b199c93df@amd.com>
+ <CAMuHMdXYDQi5+x1KxMG0wnjSfa=A547B9tgAbgbHbV42bbRu8Q@mail.gmail.com>
+ <CAG_fn=XcJ=rZEJN+L1zZwk=qA90KShhZK1MA6fdW0oh7BqSJKw@mail.gmail.com>
+ <22580470-7def-4723-b836-1688db6da038@app.fastmail.com>
+ <20231019155600.GB60597@dev-arch.thelio-3990X>
+From: Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20231019155600.GB60597@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0208.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:67::31) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DS0PR12MB7632:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1758f286-9ebe-459b-f9a4-08dbd0e06c6a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	1YUWApU2IIWDF6DjVLrfsugTaHu+NQ5NGOoBZfg3WfZFNydhnrpdQei+AxxkLZtUtOyWgi7y4fLf9khvcw/yW/21NAEIRLQh+rB+HAfW11/vccRctgoUFQVOkO0le+M/oVcEXbQIsTP0U4xvJbgW6jXJlqf+pH/WiXq5Jz+rn++eNdz1nInESobUlhW1alN703tK1CzxvLirWVZ42ejJbSoA+G4EfI35RR30DvihnKz4lZsVrRJ4t+oLxbCDfOj4RoLFrm/lhWSDq38pSlP/NoMFUzOqrqunERnBWXeHkmfXjVmgutv7wePUF2lOxEsJ+kRlCS74fj/aP01m/sKzN05DVSTvPnAbOhvySki4z8UY0Cybcy6YCTJi7ftJenNj7zqO1K6CX+GRIeIyBkUV62AOAlJIa6BhDIktnadb6G5f1ZTyQeHwaz5QOJhSovnLdXhiej45soSiqESh1ieYcXld0hK4x59QoLnDSOYiOCJuJv22B4LhdUomX1GlFtD4dZfZlHOXcJbKrXtwJbSEBnIceFDGS+m+4FnlAzO7Orf3zAi9y3rGWgHZ3sRRT+wtiOoMAri00PDqFwIrDrTBHS6BnYKhkvqGcyMRJebW/hN2q7ECQQ7e8CgpS4OykJ+i6RnKXOImnQhzdYMTkzQ/CB5p6u4RFJkx37FrhReYeHflG+iOnAygwu874+Fq6YLQ
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(366004)(39860400002)(396003)(346002)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(26005)(31686004)(38100700002)(83380400001)(54906003)(5660300002)(66946007)(8676002)(4326008)(7416002)(8936002)(86362001)(2906002)(110136005)(66476007)(44832011)(966005)(6486002)(66556008)(53546011)(6506007)(478600001)(6666004)(316002)(31696002)(66899024)(2616005)(36756003)(6512007)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?K1ZsRUQrcFYxS1BBcDRWTnFxOWRsU2lhYVE0YmpJdE5GdFNOL0ZKQVJ0bWQ5?=
+ =?utf-8?B?OEJiTlRXZGtJZElPUW1uSU1lUWU1RHZaS1FVV1k3MXRqb0FBVmZ0M0VJUlJL?=
+ =?utf-8?B?ZThhdFhQMWdtRXBKa3h3WWdzYllPTVJqU0NRbTBsWGJrRERvVkpQMk1EVFBz?=
+ =?utf-8?B?V2lJMkxVdzY5RllURjNYMzU2aDZSWVFDdGZJaTB1MFlZSGEzMWlPanhJNGhv?=
+ =?utf-8?B?SGRKR28rUDUzcUVCbEJXSzZ0Y24vaTdBb2xpVENWaGJBZlBaNUNFNkUzc0k0?=
+ =?utf-8?B?aklXRlE5dkpiUFp6c0RJVlJBTE1CRVdwWE90dFU5bjNoM092NkhHL09vK1J4?=
+ =?utf-8?B?YjJyWjlNZStIdUtHMlIrOFlMTG9CT05wUTFwS0lic3lMbWR5VFprRlUzQlBH?=
+ =?utf-8?B?MHJnQzhYYUNXUzJmckNZb0FBM0RIZytWMTh1RDZKWmhFWkpqVG1YbEdRN0JI?=
+ =?utf-8?B?LytFUlpud2FVWFIvYXA3VmlVaFRMc2VTVm4zcFZvaDBvcHhRVW56QWUwamdS?=
+ =?utf-8?B?MGF1SXBxZXlPQjRNd2FZVjJOUlYveFZWV2JRdk4rVXRmRlJjZnZBcmpCanY4?=
+ =?utf-8?B?MDFqTUR1bndpUVR0NFN5dEJ1djFmd3lDclhRbzBhYkRTZG9nZGtHWTM0Ukwx?=
+ =?utf-8?B?YXN2WDZ1dFY3ZzUvUUhubXJFWTE3OTVjQ2RJZ2FMUWZibG8rWHdCRTIxaDVo?=
+ =?utf-8?B?OXRseExLZ2pOaGJ3OUdzRmJzZFJFMTFJVkdpUndQUUxQeWNVRTQ4UGluMWpU?=
+ =?utf-8?B?NzFLaE1Fb2kvK25DQTJ3WFF3TTBZUm5UN3VTQ08xRXc3aUkxRnVlcnR6SVFD?=
+ =?utf-8?B?NFB6NFJvVGhkUFNvekY1U3ZUaC9wajdaK2RwV3FReUhlZWVQcEJ1R3Q1dmw0?=
+ =?utf-8?B?SGdoWXBVRzRJcFpNY2xCc2xrRCtUTjZ4OXJ1Z0F5bUwwS1BnTXByRGVsazJH?=
+ =?utf-8?B?Q3J6RjlYTWpQZkVnNGJoWGNLeHZpK044ZWhpM0o0TFJLVDJ1S0JNcytTQ011?=
+ =?utf-8?B?bEJYMVV6eVU2Q3lXU2tkaElKcHBkZUM3L0N1MWkwMFROUHZDSlFiUCtCQ2Ru?=
+ =?utf-8?B?K2ZNNFRSUVRYQUtUTTd0THVtak1ESlJTN3JCTVJmRzNVdHdwYkFCYWZIOUpU?=
+ =?utf-8?B?MERyNk9oZVc2ZWxTWEdCQkRGY2o0aFcyMU1Kam14TnI2R294Tm1rSjY1dmNK?=
+ =?utf-8?B?WG5qTFdNN1JWYjZXRll4dzRORXQ0N0lTYXkrOERKaTRvU0JFcWNFK256cHBY?=
+ =?utf-8?B?V1N5T0FPUkI4NlZVRHZ4TDJ5SHMySmdFbTFWY3ZCZm5kb3NNRmZ6ZTZWQ250?=
+ =?utf-8?B?a1dSYUVscDAxR0YwK2dsWHRZOFBOTTdneXdmUWxneHlUcWFMK3R3QjBEZTQv?=
+ =?utf-8?B?RFpuRHI2TW4ycDc0blo4Z0lBdmZZUVE4cUZpV0FDTGlNNDM4UE9LRmZ2Q0Vs?=
+ =?utf-8?B?ckRUdFNnUndxN0pONGJrMUxpcVEwbTdRS2txQWpQdnZPTEdOckFaMWhTUHBq?=
+ =?utf-8?B?UDl0SWZwb3p6NE1IUEtUMFk4a2RXMDlJVmd5VXA5U09WbVcyMTJmeGVuYlEz?=
+ =?utf-8?B?blA4SzVOYlpJUS8xVUJEQWR3bzZhc3hPY0R1MWtnaGh0M0NpZDRaOXF3aFFF?=
+ =?utf-8?B?UzMrNUFzWEM3SDJ0R0x5S3ZkUTRFNkp6dC82dnZWZGZIQ08rWUlyY0V1MG5z?=
+ =?utf-8?B?TWJ3R1JXaWhYdU5tNlhRb050NENscm9oclh2eU5BbmxyRXkvNkVYUWR5Tk9T?=
+ =?utf-8?B?R200K2RjdEtCK2lVWE8yMGJYVEhYcWJkempsb0kwZ3NXUEp3UHRpOXdoMmh2?=
+ =?utf-8?B?ZWhvV2xlRDhxa2c4RUpjWXNNQ2RGL0U2azdQNDNQZGtzZmhwdTRLaFJWNktX?=
+ =?utf-8?B?TWU4dnNPczFsdTE5dDlDa1Q5bTV2VDBEZDNPbG9rRmQvQ2NsWFV3RTZDYW1l?=
+ =?utf-8?B?Z0sxcWViRVJISVcwT1hYWnRUaWh1WTlSS0tIWTdMOG1tbW1MNkFJbDg2OElt?=
+ =?utf-8?B?cTc4V0xSc2c5Yk9IdEpIKzFFMUdHTXpROFNISHl5am51eC9VQVE4Q0tQUzE5?=
+ =?utf-8?B?VGZHaUQra0lySWxiSE84SXROdjZtelJvbHlFdkg0cklWUE80MFIySWtUMWVK?=
+ =?utf-8?Q?RNsGZrR/C761Q0i+L6lJjCbLT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1758f286-9ebe-459b-f9a4-08dbd0e06c6a
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2023 20:17:31.4993
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3ieGRtnbjL0PaAYTLLaRYZtkLrz/fyA6g8zaYKgOIYzyc3MPkojFvvLfOXjSakbcIJ9r/7n6iNVQJJF16dD8pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7632
 
-Hi Kai,
+On 10/19/23 11:56, Nathan Chancellor wrote:
+> On Thu, Oct 19, 2023 at 02:53:01PM +0200, Arnd Bergmann wrote:
+>> On Thu, Oct 19, 2023, at 12:04, Alexander Potapenko wrote:
+>>> So the remaining option would be to just increase the frame size every
+>>> time a new function surpasses the limit.
+>>
+>> That is clearly not an option, though we could try to
+>> add Kconfig dependencies that avoid the known bad combinations,
+>> such as annotating the AMD GPU driver as
+>>
+>>        depends on (CC_IS_GCC || CLANG_VERSION >=180000) || !(KASAN || KCSAN)
+> 
+> This would effectively disable the AMDGPU driver for allmodconfig, which
+> is somewhat unfortunate as it is an easy testing target.
+> 
+> Taking a step back, this is all being done because of a couple of
+> warnings in the AMDGPU code. If fixing those in the source is too much
+> effort (I did note [1] that GCC is at the current limit for that file
+> even with Rodrigo's series applied [2]), couldn't we just take the
+> existing workaround that this Makefile has for this file and its high
+> stack usage and just extend it slightly for clang?
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+I personally don't mind fixing these issues in the driver, but the fact
+that they the creep back every time a new major version of Clang rolls
+out (that has been true for the past couple of years at the very
+least), makes it rather annoying to deal with.
 
-tree:   https://github.com/intel/tdx.git host-upstream-wip
-head:   4a933b5b72651711967d2a5b3cfeca8d19cc9935
-commit: d7d589a0625432361e8b952682ee2177d0dad677 [21/24] x86/acpi: Add a helper to override ACPI lowlevel suspend function
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231020/202310200316.MHNJkSlG-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231020/202310200316.MHNJkSlG-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310200316.MHNJkSlG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/acpi/sleep.c:600:8: error: use of undeclared identifier 'acpi_suspend_lowlevel'; did you mean 'acpi_set_suspend_lowlevel'?
-                   if (!acpi_suspend_lowlevel)
-                        ^~~~~~~~~~~~~~~~~~~~~
-                        acpi_set_suspend_lowlevel
-   arch/x86/include/asm/acpi.h:64:6: note: 'acpi_set_suspend_lowlevel' declared here
-   void acpi_set_suspend_lowlevel(int (*suspend_lowlevel)(void));
-        ^
-   drivers/acpi/sleep.c:600:8: warning: address of function 'acpi_set_suspend_lowlevel' will always evaluate to 'true' [-Wpointer-bool-conversion]
-                   if (!acpi_suspend_lowlevel)
-                       ~^~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/sleep.c:600:8: note: prefix with the address-of operator to silence this warning
-                   if (!acpi_suspend_lowlevel)
-                        ^
-                        &
->> drivers/acpi/sleep.c:602:11: error: call to undeclared function 'acpi_suspend_lowlevel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   error = acpi_suspend_lowlevel();
-                           ^
-   drivers/acpi/sleep.c:602:11: note: did you mean 'acpi_set_suspend_lowlevel'?
-   arch/x86/include/asm/acpi.h:64:6: note: 'acpi_set_suspend_lowlevel' declared here
-   void acpi_set_suspend_lowlevel(int (*suspend_lowlevel)(void));
-        ^
-   1 warning and 2 errors generated.
-
-
-vim +600 drivers/acpi/sleep.c
-
-e9b3aba887f47f drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-17  577  
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  578  /**
-2c6e33c366bff2 drivers/acpi/sleep/main.c Len Brown             2008-04-23  579   *	acpi_suspend_enter - Actually enter a sleep state.
-e9b3aba887f47f drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-17  580   *	@pm_state: ignored
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  581   *
-50ad147aa09c82 drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-24  582   *	Flush caches and go to sleep. For STR we have to call arch-specific
-50ad147aa09c82 drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-24  583   *	assembly, which in turn call acpi_enter_sleep_state().
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  584   *	It's unfortunate, but it works. Please fix if you're feeling frisky.
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  585   */
-2c6e33c366bff2 drivers/acpi/sleep/main.c Len Brown             2008-04-23  586  static int acpi_suspend_enter(suspend_state_t pm_state)
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  587  {
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  588  	acpi_status status = AE_OK;
-e9b3aba887f47f drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-17  589  	u32 acpi_state = acpi_target_sleep_state;
-979f11b060c0b3 drivers/acpi/sleep.c      Rafael J. Wysocki     2011-02-08  590  	int error;
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  591  
-bb3632c6101b2f drivers/acpi/sleep.c      Todd E Brandt         2014-06-06  592  	trace_suspend_resume(TPS("acpi_suspend"), acpi_state, true);
-e9b3aba887f47f drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-17  593  	switch (acpi_state) {
-e9b3aba887f47f drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-17  594  	case ACPI_STATE_S1:
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  595  		barrier();
-3f6f49c7854c92 drivers/acpi/sleep.c      Len Brown             2012-07-26  596  		status = acpi_enter_sleep_state(acpi_state);
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  597  		break;
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  598  
-e9b3aba887f47f drivers/acpi/sleep/main.c Rafael J. Wysocki     2007-07-17  599  	case ACPI_STATE_S3:
-d6a77ead21b69c drivers/acpi/sleep.c      Konrad Rzeszutek Wilk 2013-05-14 @600  		if (!acpi_suspend_lowlevel)
-d6a77ead21b69c drivers/acpi/sleep.c      Konrad Rzeszutek Wilk 2013-05-14  601  			return -ENOSYS;
-f1a2003e22f6b5 drivers/acpi/sleep.c      Rafael J. Wysocki     2011-02-08 @602  		error = acpi_suspend_lowlevel();
-979f11b060c0b3 drivers/acpi/sleep.c      Rafael J. Wysocki     2011-02-08  603  		if (error)
-979f11b060c0b3 drivers/acpi/sleep.c      Rafael J. Wysocki     2011-02-08  604  			return error;
-f5ee87df7a4dab drivers/acpi/sleep.c      Hanjun Guo            2021-06-02  605  		pr_info("Low-level resume complete\n");
-ef25ba04760159 drivers/acpi/sleep.c      Rafael J. Wysocki     2015-10-07  606  		pm_set_resume_via_firmware();
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  607  		break;
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  608  	}
-bb3632c6101b2f drivers/acpi/sleep.c      Todd E Brandt         2014-06-06  609  	trace_suspend_resume(TPS("acpi_suspend"), acpi_state, false);
-872d83d00f6702 drivers/acpi/sleep/main.c Arnaud Patard         2006-04-27  610  
-b6dacf63e9fb2e drivers/acpi/sleep.c      Matthew Garrett       2010-05-11  611  	/* This violates the spec but is required for bug compatibility. */
-50ffba1bd3120b drivers/acpi/sleep.c      Bob Moore             2009-02-23  612  	acpi_write_bit_register(ACPI_BITREG_SCI_ENABLE, 1);
-65df78473ffbf3 drivers/acpi/sleep/main.c Rafael J. Wysocki     2008-11-26  613  
-3f6f49c7854c92 drivers/acpi/sleep.c      Len Brown             2012-07-26  614  	/* Reprogram control registers */
-3f6f49c7854c92 drivers/acpi/sleep.c      Len Brown             2012-07-26  615  	acpi_leave_sleep_state_prep(acpi_state);
-c95d47a868f35c drivers/acpi/sleep/main.c Rafael J. Wysocki     2008-01-08  616  
-23b168d425ca0c drivers/acpi/sleep/main.c Pavel Machek          2008-02-05  617  	/* ACPI 3.0 specs (P62) says that it's the responsibility
-872d83d00f6702 drivers/acpi/sleep/main.c Arnaud Patard         2006-04-27  618  	 * of the OSPM to clear the status bit [ implying that the
-872d83d00f6702 drivers/acpi/sleep/main.c Arnaud Patard         2006-04-27  619  	 * POWER_BUTTON event should not reach userspace ]
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  620  	 *
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  621  	 * However, we do generate a small hint for userspace in the form of
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  622  	 * a wakeup event. We flag this condition for now and generate the
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  623  	 * event later, as we're currently too early in resume to be able to
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  624  	 * generate wakeup events.
-872d83d00f6702 drivers/acpi/sleep/main.c Arnaud Patard         2006-04-27  625  	 */
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  626  	if (ACPI_SUCCESS(status) && (acpi_state == ACPI_STATE_S3)) {
-51468a9d3a8024 drivers/acpi/sleep.c      Al Stone              2013-11-20  627  		acpi_event_status pwr_btn_status = ACPI_EVENT_FLAG_DISABLED;
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  628  
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  629  		acpi_get_event_status(ACPI_EVENT_POWER_BUTTON, &pwr_btn_status);
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  630  
-18864cc4892d20 drivers/acpi/sleep.c      Lv Zheng              2016-08-04  631  		if (pwr_btn_status & ACPI_EVENT_FLAG_STATUS_SET) {
-872d83d00f6702 drivers/acpi/sleep/main.c Arnaud Patard         2006-04-27  632  			acpi_clear_event(ACPI_EVENT_POWER_BUTTON);
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  633  			/* Flag for later */
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  634  			pwr_btn_event_pending = true;
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  635  		}
-c10d7a13846bff drivers/acpi/sleep.c      Daniel Drake          2012-05-10  636  	}
-872d83d00f6702 drivers/acpi/sleep/main.c Arnaud Patard         2006-04-27  637  
-a3627f67b1d5dd drivers/acpi/sleep/main.c Shaohua Li            2007-06-20  638  	/*
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  639  	 * Disable all GPE and clear their status bits before interrupts are
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  640  	 * enabled. Some GPEs (like wakeup GPEs) have no handlers and this can
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  641  	 * prevent them from producing spurious interrups.
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  642  	 *
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  643  	 * acpi_leave_sleep_state() will reenable specific GPEs later.
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  644  	 *
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  645  	 * Because this code runs on one CPU with disabled interrupts (all of
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  646  	 * the other CPUs are offline at this time), it need not acquire any
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  647  	 * sleeping locks which may trigger an implicit preemption point even
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  648  	 * if there is no contention, so avoid doing that by using a low-level
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  649  	 * library routine here.
-a3627f67b1d5dd drivers/acpi/sleep/main.c Shaohua Li            2007-06-20  650  	 */
-22db06337f590d drivers/acpi/sleep.c      Rafael J. Wysocki     2023-06-14  651  	acpi_hw_disable_all_gpes();
-d5a64513c6a171 drivers/acpi/sleep.c      Rafael J. Wysocki     2010-04-09  652  	/* Allow EC transactions to happen. */
-c2b46d679b30c5 drivers/acpi/sleep.c      Lv Zheng              2016-08-03  653  	acpi_ec_unblock_transactions();
-a3627f67b1d5dd drivers/acpi/sleep/main.c Shaohua Li            2007-06-20  654  
-2a6b69765ad794 drivers/acpi/sleep.c      Matthew Garrett       2010-05-28  655  	suspend_nvs_restore();
-2a6b69765ad794 drivers/acpi/sleep.c      Matthew Garrett       2010-05-28  656  
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  657  	return ACPI_SUCCESS(status) ? 0 : -EFAULT;
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  658  }
-^1da177e4c3f41 drivers/acpi/sleep/main.c Linus Torvalds        2005-04-16  659  
-
-:::::: The code at line 600 was first introduced by commit
-:::::: d6a77ead21b69c395ca6d09a066ededfac601bcc x86 / ACPI / sleep: Provide registration for acpi_suspend_lowlevel.
-
-:::::: TO: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> index 66431525f2a0..fd49e3526c0d 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> @@ -58,7 +58,7 @@ endif
+>   endif
+>   
+>   ifneq ($(CONFIG_FRAME_WARN),0)
+> -frame_warn_flag := -Wframe-larger-than=2048
+> +frame_warn_flag := -Wframe-larger-than=$(if $(CONFIG_CC_IS_CLANG),3072,2048)
+>   endif
+>   
+>   CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_core.o := $(dml2_ccflags) $(frame_warn_flag)
+> 
+> That would address the immediate concern of the warning breaking builds
+> with CONFIG_WERROR=y while not raising the limit for other files in the
+> kernel (just this one file in AMDGPU) and avoiding disabling the whole
+> driver. The number could be lower, I think ~2500 bytes is the most usage
+> I see with Rodrigo's series applied, so maybe 2800 would be a decent
+> limit? Once there is a fix in the compiler, this expression could be
+> changed to use clang-min-version or something of that sort.
+> 
+> [1]: https://lore.kernel.org/20231017172231.GA2348194@dev-arch.thelio-3990X/
+> [2]: https://lore.kernel.org/20231016142031.241912-1-Rodrigo.Siqueira@amd.com/
+> 
+> Cheers,
+> Nathan
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Hamza
+
