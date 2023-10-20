@@ -1,118 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDACC2DF;
-	Fri, 20 Oct 2023 06:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63499CA6C
+	for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 07:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bR5yTs7d"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697783097; x=1729319097;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R79iSo+vI4TO5UruwkgFEskq6WOSxr38k5BKT2X6DDc=;
-  b=bR5yTs7d1a38A0WA6yTdTGe41U5hPf9Im0asrKeENOEBe1XFptDPG1Fs
-   cfRTOfRgaqcEWRJsoYsLZwOyhhknqu70etVJeZiqRuGZ1Lee50biHLoOe
-   W8d0G6WvsUIGj4u3/1Ufjth9vtiu4w6svlO8gY/uVJ+wJR04CFbT/cZq3
-   dZJbWTN1AjfLOQ8sNZU1JaDYgO0YjoVatIAsbGDFXtsn2wdcGr3OQIDbo
-   /hRiasL75t0K4P5Jzz7J9V6gQeodW8PVr1WMcBrLEG+UOjecnaATKh4Qo
-   tTBt7l/idW+Du8g/k3fFS539YWeEuvrkGyv3ndL4j5a49M0tXLYHdH2di
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="417569783"
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="417569783"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 23:24:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="707136981"
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="707136981"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Oct 2023 23:24:53 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qtiwF-00038g-0F;
-	Fri, 20 Oct 2023 06:24:51 +0000
-Date: Fri, 20 Oct 2023 14:24:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [frederic-dynticks:rcu/dev 4/4] include/linux/rcupdate.h:137:2:
- error: void function 'rcu_spawn_tasks_kthread' should not return a value
-Message-ID: <202310201433.pvZqPrwK-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e1iaHMzI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1697785275;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nPaU3vCu2hkcjQD5766l6qNT8uXalAG8naJYDj3FA30=;
+	b=e1iaHMzI5QsUMWGWKe0I/XDelN5IB91xnMlkw0KbyAmkYvgAri2XySwZ0OgLFYxdUMNLrF
+	S0fFSYKoBU7scVVuXjSoS0E+XQP3VwVDKCJB6Y10z6LxngJceRzk4iJiM8yP4GEMxDcF3u
+	jCv9ZQj5SenDG+7hDpSqmynA4K2ozpw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-zk-SoKNdN1mz0DL0unFXjg-1; Fri, 20 Oct 2023 03:01:13 -0400
+X-MC-Unique: zk-SoKNdN1mz0DL0unFXjg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 767883827988
+	for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 07:01:13 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5F4791C060AE;
+	Fri, 20 Oct 2023 07:01:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 23 of 230): Test report for master
+ (6.6.0-rc6, mainline.kernel.org-clang, 74e9347e)
+Date: Fri, 20 Oct 2023 07:01:13 -0000
+To: yizhan@redhat.com, llvm@lists.linux.dev, jbastian@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <89783.123102003011300536@us-mta-556.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
-head:   f9a3a161b4eb14012fe048077374c34046b770a3
-commit: f9a3a161b4eb14012fe048077374c34046b770a3 [4/4] rcu/tasks: Delay creation of RCU-Tasks gp kthread to real idle code
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231020/202310201433.pvZqPrwK-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231020/202310201433.pvZqPrwK-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310201433.pvZqPrwK-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/x86/um/user-offsets.c:17:6: warning: no previous prototype for function 'foo' [-Wmissing-prototypes]
-      17 | void foo(void)
-         |      ^
-   arch/x86/um/user-offsets.c:17:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      17 | void foo(void)
-         | ^
-         | static 
-   1 warning generated.
-   In file included from arch/um/kernel/asm-offsets.c:1:
-   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:3:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
->> include/linux/rcupdate.h:137:2: error: void function 'rcu_spawn_tasks_kthread' should not return a value [-Wreturn-type]
-     137 |         return 0;
-         |         ^      ~
-   In file included from arch/um/kernel/asm-offsets.c:1:
-   arch/x86/um/shared/sysdep/kernel-offsets.h:9:6: warning: no previous prototype for function 'foo' [-Wmissing-prototypes]
-       9 | void foo(void)
-         |      ^
-   arch/x86/um/shared/sysdep/kernel-offsets.h:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-       9 | void foo(void)
-         | ^
-         | static 
-   1 warning and 1 error generated.
-   make[3]: *** [scripts/Makefile.build:116: arch/um/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1202: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:234: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:234: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/rcu_spawn_tasks_kthread +137 include/linux/rcupdate.h
+Kernel information:
+    Commit message: Merge tag 'loongarch-fixes-6.6-3' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/chenhuacai/linux-loongson
 
-   131	
-   132	#ifdef CONFIG_TASKS_RCU
-   133	int rcu_spawn_tasks_kthread(void);
-   134	#else
-   135	static inline void rcu_spawn_tasks_kthread(void)
-   136	{
- > 137		return 0;
-   138	}
-   139	#endif
-   140	
-   141	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/110158
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9980250
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+           s390x - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9980254
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+9980075
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: use after free in reweight_entity
+            URL: https://lkml.iu.edu/hypermail/linux/kernel/2310.2/00187.ht=
+ml
+            Affected tests:
+                  x86_64 (debug) - xfstests - ext4
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
