@@ -1,211 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C7E1BDDC;
-	Fri, 20 Oct 2023 13:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A121DA45
+	for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 15:15:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AimdY6mZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697808735; x=1729344735;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=q1lappJawf9QdpseUkh3M9M1cp57mIDp6pSVPbTxZMQ=;
-  b=AimdY6mZJWjtxcFG0dRfeXzwRqbtWwzUN6fVe8inxZzJ2Td9zyTnw4sX
-   00OQxFq3l0Ec3sVq9Gni7xd9bcykb0bnswgvuS1ZLJtEtMqn9ZCZ2DXgs
-   99zVtLHpHUuCpM8DL6Mh2G396GdET7XFOgzeyHPXTv3tIcWymgcr+4V5G
-   5Ldeu5meqSFsnLSp8TIAXyVhtlxx2qTMHFBI5GJhVClSlhUz0kb7vDvLQ
-   wuc7tRedjPv7mOJi9Y1aAuG3y5fXGLGzR9nTAPuv/MOAwUpkDBtu3KkrT
-   2FwERzE9BnzK0jtc4//JizwOe143LwmL3INJKkGt2X6ANH+VxFVrfTcm/
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10869"; a="8060215"
-X-IronPort-AV: E=Sophos;i="6.03,239,1694761200"; 
-   d="scan'208";a="8060215"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 06:32:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10869"; a="707226765"
-X-IronPort-AV: E=Sophos;i="6.03,239,1694761200"; 
-   d="scan'208";a="707226765"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 20 Oct 2023 06:32:11 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qtpbl-0003ZP-0n;
-	Fri, 20 Oct 2023 13:32:09 +0000
-Date: Fri, 20 Oct 2023 21:31:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Louis Kuo <louis.kuo@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Phi-bang Nguyen <pnguyen@baylibre.com>,
-	Florian Sylvestre <fsylvestre@baylibre.com>,
-	Julien Stephan <jstephan@baylibre.com>
-Subject: [pinchartl:mtk/v6.6/pumpkin/camera 12/35]
- drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:401:3: error:
- call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202310202107.B1ZUl70i-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6K6Ioat"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC73DC433CA
+	for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 15:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697814902;
+	bh=fQWTPcxX2DTXkfY3FpRlIf4VIzmaST2HtcNdBmy+f1o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=E6K6IoatxWWQ+lVg/PZxX9Q7T1Ekg7NYw5jKs0nsptV6TCXov2uZaeZTiH3YanVJn
+	 dW9sI7e2VAOaFofprb4gz2qVAUYfzESWOSTF3WfnQDknB3kAW8+H6JPYhgxwN3AEse
+	 qNMw+aZcaAGPJjGjXYfdsTt6cOGUauMRMMeYtzcgxHphWfFLkVEt6n906mCLFUnJCH
+	 lyxGIMxlYnoOXaUVA9I63VPQOWAjVirM6aENuDUVkdg4CRNlwrgB+Ao3fgrleN+cik
+	 sv8Yeg5piWIdogVAM13Z43kMVFqtKVu6IiFTIb6l5dhoJfGsYUnyvSdefL3LvDEKsY
+	 yIWA6SsnHE3rA==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-507cd62472dso2332923e87.0
+        for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 08:15:02 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yzp8Kqj0kHdQBOM1Mcvo42hwBqfjSDAMF3QEBDB7Ie3rVJ7dqEC
+	pK3+YC7lqr4Tr8tgNhgW8PBukcq2peITb6J3ng==
+X-Google-Smtp-Source: AGHT+IGOqTTM+pZlPxJbb1PzmIynWyFPKiahnRFqNvOq08Vu4pWF7xMH4GoE8Q4fjtpxgTCClRTvF4DhW3eoVcfs1XE=
+X-Received: by 2002:a05:6512:108d:b0:500:acae:30c5 with SMTP id
+ j13-20020a056512108d00b00500acae30c5mr1833965lfg.15.1697814900823; Fri, 20
+ Oct 2023 08:15:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
+ <20231005160550.2423075-3-quic_devipriy@quicinc.com> <20231018204608.qyifcnnzgi2bgzn6@pengutronix.de>
+In-Reply-To: <20231018204608.qyifcnnzgi2bgzn6@pengutronix.de>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Fri, 20 Oct 2023 10:14:48 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+df_nmNVuf46-a5Dafe4THxD-5HS-BPsTn_yzTckrOJw@mail.gmail.com>
+Message-ID: <CAL_Jsq+df_nmNVuf46-a5Dafe4THxD-5HS-BPsTn_yzTckrOJw@mail.gmail.com>
+Subject: Re: [PATCH V15 2/4] dt-bindings: pwm: add IPQ6018 binding
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Devi Priya <quic_devipriy@quicinc.com>
+Cc: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	lee@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com, 
+	baruch@tkos.co.il, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-pwm@vger.kernel.org, 
+	nathan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git mtk/v6.6/pumpkin/camera
-head:   c595443dd479579398aff2c7a3991dfeacb6090d
-commit: 58edac54d6fd6ad03fbf9b2a590287296860f845 [12/35] media: platform: mediatek: isp_30: add mediatek ISP3.0 sensor interface
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231020/202310202107.B1ZUl70i-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231020/202310202107.B1ZUl70i-lkp@intel.com/reproduce)
+On Wed, Oct 18, 2023 at 3:46=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> Hello,
+>
+> On Thu, Oct 05, 2023 at 09:35:48PM +0530, Devi Priya wrote:
+> > DT binding for the PWM block in Qualcomm IPQ6018 SoC.
+> >
+> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Co-developed-by: Baruch Siach <baruch.siach@siklu.com>
+> > Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
+> > Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> > ---
+> > v15:
+> >
+> >   No change
+> >
+> > v14:
+> >
+> >   Picked up the R-b tag
+> >
+> > v13:
+> >
+> >   Updated the file name to match the compatible
+> >
+> >   Sorted the properties and updated the order in the required field
+> >
+> >   Dropped the syscon node from examples
+> >
+> > v12:
+> >
+> >   Picked up the R-b tag
+> >
+> > v11:
+> >
+> >   No change
+> >
+> > v10:
+> >
+> >   No change
+> >
+> > v9:
+> >
+> >   Add 'ranges' property to example (Rob)
+> >
+> >   Drop label in example (Rob)
+> >
+> > v8:
+> >
+> >   Add size cell to 'reg' (Rob)
+> >
+> > v7:
+> >
+> >   Use 'reg' instead of 'offset' (Rob)
+> >
+> >   Drop 'clock-names' and 'assigned-clock*' (Bjorn)
+> >
+> >   Use single cell address/size in example node (Bjorn)
+> >
+> >   Move '#pwm-cells' lower in example node (Bjorn)
+> >
+> >   List 'reg' as required
+> >
+> > v6:
+> >
+> >   Device node is child of TCSR; remove phandle (Rob Herring)
+> >
+> >   Add assigned-clocks/assigned-clock-rates (Uwe Kleine-K=C3=B6nig)
+> >
+> > v5: Use qcom,pwm-regs for phandle instead of direct regs (Bjorn
+> >     Andersson, Kathiravan T)
+> >
+> > v4: Update the binding example node as well (Rob Herring's bot)
+> >
+> > v3: s/qcom,pwm-ipq6018/qcom,ipq6018-pwm/ (Rob Herring)
+> >
+> > v2: Make #pwm-cells const (Rob Herring)
+> >
+> >  .../bindings/pwm/qcom,ipq6018-pwm.yaml        | 45 +++++++++++++++++++
+> >  1 file changed, 45 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/pwm/qcom,ipq6018-=
+pwm.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yam=
+l b/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml
+> > new file mode 100644
+> > index 000000000000..6d0d7ed271f7
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/pwm/qcom,ipq6018-pwm.yaml
+> > @@ -0,0 +1,45 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/pwm/qcom,ipq6018-pwm.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm IPQ6018 PWM controller
+> > +
+> > +maintainers:
+> > +  - Baruch Siach <baruch@tkos.co.il>
+>
+> Not being very fluent in dt and binding yaml I wonder if adding
+>
+>         allOf:
+>           - $ref: pwm.yaml#
+>
+> would be beneficial?!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310202107.B1ZUl70i-lkp@intel.com/
+Not really because the only thing you pick up is #pwm-cells, but
+that's still needed here since that varies by binding. A reference
+generally becomes useful when there are child nodes (e.g. a bus
+binding) or multiple properties.
 
-All errors (new ones prefixed by >>):
+> > +properties:
+> > +  compatible:
+> > +    const: qcom,ipq6018-pwm
+> > +
+> > +  reg:
+> > +    description: Offset of PWM register in the TCSR block.
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  "#pwm-cells":
+> > +    const: 2
+>
+> The driver only supports normal polarity. Is this a shortcoming of the
+> driver, or is the hardware incapable to do that, too?
+>
+> If it's only the former I'd want #pwm-cells =3D <3> here. For ease of use
+> I'd not oppose if you pick #pwm-cells =3D <3> even if the hardware can
+> only do normal polarity.
 
->> drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:401:3: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI0,
-                   ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:328:8: note: expanded from macro 'mtk_seninf_update'
-                               FIELD_PREP(reg##_##field, val))
-                               ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:415:3: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI1,
-                   ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:328:8: note: expanded from macro 'mtk_seninf_update'
-                               FIELD_PREP(reg##_##field, val))
-                               ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:447:2: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           mtk_seninf_input_update(input, MIPI_RX_CON24_CSI0, CSI0_BIST_LN0_MUX, lanes[0]);
-           ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:340:7: note: expanded from macro 'mtk_seninf_input_update'
-                                     FIELD_PREP(reg##_##field, val))
-                                     ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:472:2: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           mtk_seninf_input_update(input, SENINF_CTRL, SENINF_EN, 1);
-           ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:340:7: note: expanded from macro 'mtk_seninf_input_update'
-                                     FIELD_PREP(reg##_##field, val))
-                                     ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:550:2: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           mtk_seninf_mux_update(mux, SENINF_MUX_CTRL, SENINF_MUX_EN, 1);
-           ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:363:5: note: expanded from macro 'mtk_seninf_mux_update'
-                                   FIELD_PREP(reg##_##field, val))
-                                   ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:623:2: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           mtk_seninf_update(priv, SENINF_TOP_CTRL, MUX_LP_MODE, 0);
-           ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:328:8: note: expanded from macro 'mtk_seninf_update'
-                               FIELD_PREP(reg##_##field, val))
-                               ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:1068:27: error: field has incomplete type 'struct v4l2_async_subdev'
-           struct v4l2_async_subdev asd;
-                                    ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:1068:9: note: forward declaration of 'struct v4l2_async_subdev'
-           struct v4l2_async_subdev asd;
-                  ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:1101:8: error: invalid application of 'sizeof' to an incomplete type 'struct v4l2_async_subdev'
-           asd = v4l2_async_nf_add_fwnode(&priv->notifier,
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/media/v4l2-async.h:196:56: note: expanded from macro 'v4l2_async_nf_add_fwnode'
-           ((type *)__v4l2_async_nf_add_fwnode(notifier, fwnode, sizeof(type)))
-                                                                 ^     ~~~~~~
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:1068:9: note: forward declaration of 'struct v4l2_async_subdev'
-           struct v4l2_async_subdev asd;
-                  ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:1215:11: error: incompatible function pointer types initializing 'int (*)(struct v4l2_async_notifier *, struct v4l2_subdev *, struct v4l2_async_connection *)' with an expression of type 'int (struct v4l2_async_notifier *, struct v4l2_subdev *, struct v4l2_async_subdev *)' [-Wincompatible-function-pointer-types]
-           .bound = mtk_seninf_notifier_bound,
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:1259:36: error: too few arguments to function call, expected 2, have 1
-           v4l2_async_nf_init(&priv->notifier);
-           ~~~~~~~~~~~~~~~~~~                ^
-   include/media/v4l2-async.h:159:6: note: 'v4l2_async_nf_init' declared here
-   void v4l2_async_nf_init(struct v4l2_async_notifier *notifier,
-        ^
-   drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c:1271:48: error: too many arguments to function call, expected single argument 'notifier', have 2 arguments
-           ret = v4l2_async_nf_register(&priv->v4l2_dev, &priv->notifier);
-                 ~~~~~~~~~~~~~~~~~~~~~~                  ^~~~~~~~~~~~~~~
-   include/media/v4l2-async.h:281:5: note: 'v4l2_async_nf_register' declared here
-   int v4l2_async_nf_register(struct v4l2_async_notifier *notifier);
-       ^
-   11 errors generated.
+Devi, Can we get an answer here soon.
 
+The MFD part has been applied and it references this schema causing
+warnings. So this needs to land or MFD schema reverted.
 
-vim +/FIELD_PREP +401 drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c
-
-   360	
-   361	#define mtk_seninf_mux_update(mux, reg, field, val)			\
-   362		__mtk_seninf_mux_update(mux, reg, reg##_##field,	\
-   363					FIELD_PREP(reg##_##field, val))
-   364	
-   365	/* -----------------------------------------------------------------------------
-   366	 * Hardware Configuration
-   367	 *
-   368	 * The SENINF is the camera sensor interface. On the input side it contains
-   369	 * input channels (also named SENINF), each made of a CSI-2 receiver, an
-   370	 * interface for parallel sensors, and a test pattern generator. The inputs are
-   371	 * routed through a N:M crossbar switch (TOP MUX) to VC/DT filters with a FIFO
-   372	 * (MUX). The MUX are routed to another N:M crossbar switch (CAM MUX), whose
-   373	 * output is then connected to other IP cores.
-   374	 *
-   375	 *            +-------------------------------------------------------+
-   376	 *            | SENINF                                                |
-   377	 *            |                                                       |
-   378	 * +-------+  |   +----------+    TOP MUX                             |
-   379	 * |       |  |   |  SENINF  |      |\                        CAM MUX |
-   380	 * | D-PHY | ---> | CSI-2 RX | ---> | |      +------------+      |\   |
-   381	 * |       |  |   |   TPG    |   -> | | ---> | MUX (FIFO) | ---> | | ---> CAMSV
-   382	 * +-------+  |   +----------+   -> | |      +------------+   -> | |  |
-   383	 *            |                     |/                        -> | |  |
-   384	 *            |                                                  |/   |
-   385	 *            |                                                       |
-   386	 *    ...     |       ...                         ...                --->
-   387	 *            |                                                       |
-   388	 *            |                                                       |
-   389	 *            +-------------------------------------------------------+
-   390	 *
-   391	 * The number of PHYs, SENINF and MUX differ between SoCs. MT8167 has a single
-   392	 * MUX and thus no output CAM MUX crossbar switch.
-   393	 */
-   394	
-   395	static void mtk_seninf_csi2_setup_phy(struct mtk_seninf *priv)
-   396	{
-   397		/* CSI0 */
-   398		if (priv->inputs[CSI_PORT_0].phy) {
-   399			struct mtk_seninf_input *input = &priv->inputs[CSI_PORT_0];
-   400	
- > 401			mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI0,
-   402					  DPHY_MODE, 0 /* 4D1C*/);
-   403			mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI0,
-   404					  CK_SEL_1, input->bus.clock_lane);
-   405			mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI0,
-   406					  CK_SEL_2, 2);
-   407			mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI0,
-   408					  PHY_SENINF_LANE_MUX_CSI0_EN, 1);
-   409		}
-   410	
-   411		/* CSI1 */
-   412		if (priv->inputs[CSI_PORT_1].phy) {
-   413			struct mtk_seninf_input *input = &priv->inputs[CSI_PORT_1];
-   414	
-   415			mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI1,
-   416					  DPHY_MODE, 0 /* 4D1C */);
-   417			mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI1,
-   418					  CK_SEL_1, input->bus.clock_lane);
-   419			mtk_seninf_update(priv, SENINF_TOP_PHY_SENINF_CTL_CSI1,
-   420					  PHY_SENINF_LANE_MUX_CSI1_EN, 1);
-   421		}
-   422	}
-   423	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rob
