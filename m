@@ -1,106 +1,151 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB72F1DDDC
-	for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 15:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qtrat-0004Hd-RC; Fri, 20 Oct 2023 17:39:23 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qtras-0033gL-9T; Fri, 20 Oct 2023 17:39:22 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qtrar-002bLX-Ve; Fri, 20 Oct 2023 17:39:22 +0200
-Date: Fri, 20 Oct 2023 17:39:21 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Rob Herring <robh+dt@kernel.org>
-Cc: Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-	andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	thierry.reding@gmail.com, ndesaulniers@google.com, trix@redhat.com,
-	baruch@tkos.co.il, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-pwm@vger.kernel.org, nathan@kernel.org
-Subject: Re: [PATCH V15 2/4] dt-bindings: pwm: add IPQ6018 binding
-Message-ID: <20231020153921.54m3pg4ocb4wy4jn@pengutronix.de>
-References: <20231005160550.2423075-1-quic_devipriy@quicinc.com>
- <20231005160550.2423075-3-quic_devipriy@quicinc.com>
- <20231018204608.qyifcnnzgi2bgzn6@pengutronix.de>
- <CAL_Jsq+df_nmNVuf46-a5Dafe4THxD-5HS-BPsTn_yzTckrOJw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005C21DA50;
+	Fri, 20 Oct 2023 20:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQAL7fTF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43957C433C8;
+	Fri, 20 Oct 2023 20:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697834367;
+	bh=ZKOUkKpmzLJ4Oe8gj86+MBT/cFfPWTMJrQMWrCMlLRA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GQAL7fTFj73N9mM17vO7a1XNixX0srzkwvr30qZUA8sPcIXo6f6GD3XCMHBwpvnii
+	 +sCJehoG1dQw/quOQxyee96FL6M2Sfzu2A2SNIE5YBMtxC8cVUXjKdMUp2BfLsKycz
+	 NPbSxvES6U+nuY//yvUzhucrHcqX0tWP+czV7T39Ra6JuvC2UH9tnGOpPAWOH777JA
+	 EoDEsYhfcoq/tdDTk3y8swxIe9nVX7YbJUoS+UpyMVfMsFIdpT4cbjYPks+ZHU/eDv
+	 Wwui7oB22qAf88qYV9N6z62ZcvQBdtaV9SfSYGfbDArlDgd5QsOxzbV/wdV8i6sYMw
+	 vn6PxhkmQj5jg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 24B354035D; Fri, 20 Oct 2023 17:39:25 -0300 (-03)
+Date: Fri, 20 Oct 2023 17:39:25 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Manu Bretelle <chantr4@gmail.com>
+Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Fangrui Song <maskray@google.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Andi Kleen <ak@linux.intel.com>, Leo Yan <leo.yan@linaro.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Carsten Haitzler <carsten.haitzler@arm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	James Clark <james.clark@arm.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>,
+	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, Wang Nan <wangnan0@huawei.com>,
+	Wang ShaoBo <bobo.shaobowang@huawei.com>,
+	YueHaibing <yuehaibing@huawei.com>, He Kuang <hekuang@huawei.com>,
+	Brendan Gregg <brendan.d.gregg@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [PATCH v1 1/4] perf parse-events: Remove BPF event support
+Message-ID: <ZTLlfXM4MhW1GEIJ@kernel.org>
+References: <20230810184853.2860737-1-irogers@google.com>
+ <20230810184853.2860737-2-irogers@google.com>
+ <ZNZJCWi9MT/HZdQ/@kernel.org>
+ <ZNZWsAXg2px1sm2h@kernel.org>
+ <ZTGHRAlQtF7Fq8vn@surya>
+ <ZTGa0Ukt7QyxWcVy@kernel.org>
+ <ZTGyWHTOE8OEhQWq@surya>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7qb63ejcofu46z6d"
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+df_nmNVuf46-a5Dafe4THxD-5HS-BPsTn_yzTckrOJw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
-
-
---7qb63ejcofu46z6d
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZTGyWHTOE8OEhQWq@surya>
+X-Url: http://acmel.wordpress.com
 
-Hello,
+Em Thu, Oct 19, 2023 at 03:48:56PM -0700, Manu Bretelle escreveu:
+> On Thu, Oct 19, 2023 at 06:08:33PM -0300, Arnaldo Carvalho de Melo wrote:
+> > I wonder how to improve the current situation to detect these kinds of
+> > problems in the future, i.e. how to notice that some file needed by some
+> > Makefile, etc got removed or that some feature test fails because some
+> > change in the test .c files makes them fail and thus activates fallbacks
+> > like the one above :-\
+ 
+> I think it is tricky. Specifically to this situation, some CI could try to build
+> the different combinaison of bpftool and check the features through the build
+> `bpftool --version`.
 
-On Fri, Oct 20, 2023 at 10:14:48AM -0500, Rob Herring wrote:
-> On Wed, Oct 18, 2023 at 3:46=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Thu, Oct 05, 2023 at 09:35:48PM +0530, Devi Priya wrote:
-> > > +  "#pwm-cells":
-> > > +    const: 2
-> >
-> > The driver only supports normal polarity. Is this a shortcoming of the
-> > driver, or is the hardware incapable to do that, too?
-> >
-> > If it's only the former I'd want #pwm-cells =3D <3> here. For ease of u=
-se
-> > I'd not oppose if you pick #pwm-cells =3D <3> even if the hardware can
-> > only do normal polarity.
->=20
-> Devi, Can we get an answer here soon.
->=20
-> The MFD part has been applied and it references this schema causing
-> warnings. So this needs to land or MFD schema reverted.
+Right, if the right packages are installed, we expect to get some
+bpftool build output, if that changes after some patch, flag it.
 
-Or the reference to the pwm stuff deleted from the mfd binding?
+Does bpftool have something like:
 
-Best regards
-Uwe
+⬢[acme@toolbox perf-tools-next]$ perf version --build-options
+perf version 6.6.rc1.ga8dd62d05e56
+                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+                libbfd: [ OFF ]  # HAVE_LIBBFD_SUPPORT
+            debuginfod: [ on  ]  # HAVE_DEBUGINFOD_SUPPORT
+                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+               libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+               libpfm4: [ on  ]  # HAVE_LIBPFM
+         libtraceevent: [ on  ]  # HAVE_LIBTRACEEVENT
+         bpf_skeletons: [ on  ]  # HAVE_BPF_SKEL
+⬢[acme@toolbox perf-tools-next]$
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+?
 
---7qb63ejcofu46z6d
-Content-Type: application/pgp-signature; name="signature.asc"
+> This is actually a test that I run internally to make sure our build has some
+> feature enabled.
+> This is actually tested by bpftool in the GH CI:
+> https://github.com/libbpf/bpftool/blob/main/.github/workflows/build.yaml#L62
+ 
+> As a matter of fact, it would not have been detected because that CI uses a
+> different Makefile.feature.
+ 
+> Quentin and I were talking offline how we could improve bpftool CI at diff time.
+> This is an example where it would have helped :)
+> 
+> > I'll get this merged in my perf-tools-fixes-for-v6.6 that I'll submit
+> > tomorrow to Linus, thanks for reporting!
+> > 
+> > I'll add your:
+> > 
+> > Reported-by: Manu Bretelle <chantr4@gmail.com>
+> > 
+> > And:
+> > 
+> > Fixes: 56b11a2126bf2f42 ("perf bpf: Remove support for embedding clang for compiling BPF events (-e foo.c)")
+> > 
+> > Ok?
+ 
+> SGTM. Thanks for the quick turnaround.
+ 
+> Reviewed-by: Manu Bretelle <chantr4@gmail.com>
 
------BEGIN PGP SIGNATURE-----
+You're welcome, thanks for the detailed report, the patch was just sent
+to Linus.
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUynykACgkQj4D7WH0S
-/k48jQgAmXt8jVXBYTItnGzsR/oCdJ99o6oIa2BvsxBL50ugA62CUaeC83anLO1a
-qOrcp+6bNp+XAZpxNOirz3EeQKLrLQ+qpb/1fNBn4+e1YT7zv3MMXQesZWt7fhN1
-OZ3pBJktPyO9ozHKXuTTOiTUwuKPPfJemCDMAEksxTCa9Wu3hgdMcjG7CmFN0XDI
-Tl8XEyZIbN8h+FZDx6GTeVcr6AVy/m+ntGIY4EhLMPjNzG1HPVfWFCeIo0L9trzk
-PxM3UkBQbepxL3faE+2V1J5grhNdsOH0y+avnw2jQvWMauopMpSRRtWj1WffPowd
-c8b7t3zQV1HkugMxC8hE//Ph/krjyA==
-=kaZT
------END PGP SIGNATURE-----
-
---7qb63ejcofu46z6d--
+- Arnaldo
