@@ -1,79 +1,54 @@
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0180FC140
-	for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 22:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60A5398;
+	Fri, 20 Oct 2023 01:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIHRFoj0"
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5840fe01176so123951eaf.1
-        for <llvm@lists.linux.dev>; Thu, 19 Oct 2023 15:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697755939; x=1698360739; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gw+NhNs7Kd8Sn7Jgw+a43o7ZL5jXRR/xNu8rKmPPZ40=;
-        b=YIHRFoj0YWgVqKHh7c8sW7BHAL5ZCfHKP5v3WRFein0e7lib38KK4UgZrlwDVGp2xR
-         GRJlNUKrC66ND2Pg8/KHkP13JPBK9rrb2/65oFL+J9/WBGcOEnxzyFrjlP1nud6ErTwL
-         O2gNE41tNPgugJOU3dRauX1WJkwdMvVfITRKAZCzMQveiH6G5WEB5HpvqvhqtkIsMMel
-         KLw/hKWnop/7xspU7eGX9urZX4qwASIkHloRHGBgTcpfpzJuvfZkNx/eYc+M3GKOsOF1
-         FvgL6vuFJqhEinROWkzQ0UNG/ZuW7rYKLv429jUOtaYWEJJTEHrghcVpdywuK8iF65vD
-         hKOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697755939; x=1698360739;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gw+NhNs7Kd8Sn7Jgw+a43o7ZL5jXRR/xNu8rKmPPZ40=;
-        b=tRdjw4Ve9SkVXWI7Hd/8OeBt1pvMIqgpa0ytSR8qLt3Utbl2cwxeOdBr/u+kLGIwnA
-         DfhMsCx7RwTpz+ajQW3eVvvQtPmGsggU6TCunqUer6hRhSi9mw5eFsG7pdlgocv+q6TI
-         uzmjAvUNybfA8NYqvi2p7hpi0KTHUbB2jt4dhzfdrjVb6EoiUzNkZA0hrRJm/IKFhif7
-         Av8YwVLtEvqundMCB1hy7Xg0GS38FwxSlm39m+ZztqcFkEed8bqUDPUmZCZ9mObcraUl
-         E8pECmUhI6DxniQVguB/EEbv9roQwNNlPdLiY5WsMwTb0QLE01Yp4lNmhKFG5K496O1v
-         Q1yQ==
-X-Gm-Message-State: AOJu0Yxo0ix8TCmYO3/pkfdWFT7mE9h8WF8gBMR4rhR2FTRY7L7SvS5i
-	WNVN3EW0Yb8vHPL7bK1Ft1I=
-X-Google-Smtp-Source: AGHT+IFYnyvkEDIVfG+6uXEDLM3MsKx6hhZ2KQYVQfuI264k9/7LuO5GxhihGAcLJrxNg6KXaIO4ZQ==
-X-Received: by 2002:a05:6358:724e:b0:166:dc89:8c92 with SMTP id i14-20020a056358724e00b00166dc898c92mr108490rwa.26.1697755938799;
-        Thu, 19 Oct 2023 15:52:18 -0700 (PDT)
-Received: from surya ([2600:1700:3ec2:2011:b14a:c750:3938:f592])
-        by smtp.gmail.com with ESMTPSA id x26-20020aa79ada000000b006be5af77f06sm289689pfp.2.2023.10.19.15.52.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Oct 2023 15:52:18 -0700 (PDT)
-Date: Thu, 19 Oct 2023 15:52:15 -0700
-From: Manu Bretelle <chantr4@gmail.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Carsten Haitzler <carsten.haitzler@arm.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Fangrui Song <maskray@google.com>, He Kuang <hekuang@huawei.com>,
-	Ian Rogers <irogers@google.com>, Ingo Molnar <mingo@redhat.com>,
-	James Clark <james.clark@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Kan Liang <kan.liang@linux.intel.com>, Leo Yan <leo.yan@linaro.org>,
-	llvm@lists.linux.dev, Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Quentin Monnet <quentin@isovalent.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Rob Herring <robh@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Tom Rix <trix@redhat.com>, Wang Nan <wangnan0@huawei.com>,
-	Wang ShaoBo <bobo.shaobowang@huawei.com>,
-	Yang Jihong <yangjihong1@huawei.com>, Yonghong Song <yhs@fb.com>,
-	YueHaibing <yuehaibing@huawei.com>,
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/1] tools build: Fix llvm feature detection, still used
- by bpftool
-Message-ID: <ZTGzHzhZwJv0+xBH@surya>
-References: <ZTGc8S293uaTqHja@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N9tsfyW3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697766044; x=1729302044;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UBcNQvxkTEiXwcSho1CR+VNvdSGqKOWhVmYFDSRz1yk=;
+  b=N9tsfyW3YA6IXbD694rIefn5tlz+OAnaM/95MWEg7mgYHkfSN8bVhM6A
+   xaKuTephrKquIoezsVUCH9Y0CtvmMVvKmcAqp0OWOnreH7Aj6HwCx7H81
+   yVlqnyfO+ln47I9TTiuUoEUpwi8ShLWOws87SaixU2L3dgH3r4Idcobzq
+   eCMBRO0+Ski9rE0RMvPQYC3SzYS7oZOVqTMat+u0SWk31WLyuVX/+sTnn
+   9kiPOp6hz8/O60g0wPkmykCornY6VZp9fApBJYXcSzNLK1O5ogTaBJb/v
+   ArDe59BSZJ7lYBJ9coZTayedIzEGGSddEJMekmwL+6EJFc734gx1NwSXQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="389272341"
+X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
+   d="scan'208";a="389272341"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 18:40:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
+   d="scan'208";a="5221860"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 19 Oct 2023 18:40:42 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qteVC-0002q6-0w;
+	Fri, 20 Oct 2023 01:40:38 +0000
+Date: Fri, 20 Oct 2023 09:40:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>,
+	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH -next v2] sunrpc: Use no_printk() in dfprintk*() dummies
+Message-ID: <202310200948.TK9Y6iGy-lkp@intel.com>
+References: <a93de2e8afa826745746b00fc5f64e513df5d52f.1697104757.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,82 +57,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZTGc8S293uaTqHja@kernel.org>
+In-Reply-To: <a93de2e8afa826745746b00fc5f64e513df5d52f.1697104757.git.geert+renesas@glider.be>
 
-On Thu, Oct 19, 2023 at 06:17:37PM -0300, Arnaldo Carvalho de Melo wrote:
-> When removing the BPF event for perf a feature test that checks if the
-> llvm devel files are availabe was removed but that is also used by
-> bpftool.
-> 
-> bpftool uses it to decide what kind of disassembly it will use: llvm or
-> binutils based.
-> 
-> Removing the tools/build/feature/test-llvm.cpp file made bpftool to
-> always fallback to binutils disassembly, even with the llvm devel files
-> installed, fix it by restoring just that small test-llvm.cpp test file.
-> 
-> Fixes: 56b11a2126bf2f42 ("perf bpf: Remove support for embedding clang for compiling BPF events (-e foo.c)")
-> Reported-by: Manu Bretelle <chantr4@gmail.com>
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Carsten Haitzler <carsten.haitzler@arm.com>
-> Cc: Eduard Zingerman <eddyz87@gmail.com>
-> Cc: Fangrui Song <maskray@google.com>
-> Cc: He Kuang <hekuang@huawei.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: James Clark <james.clark@arm.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Kan Liang <kan.liang@linux.intel.com>
-> Cc: Leo Yan <leo.yan@linaro.org>
-> Cc: llvm@lists.linux.dev
-> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Quentin Monnet <quentin@isovalent.com>
-> Cc: Ravi Bangoria <ravi.bangoria@amd.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Cc: Tom Rix <trix@redhat.com>
-> Cc: Wang Nan <wangnan0@huawei.com>
-> Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
-> Cc: Yang Jihong <yangjihong1@huawei.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: YueHaibing <yuehaibing@huawei.com>
-> Link: https://lore.kernel.org/lkml/ZTGa0Ukt7QyxWcVy@kernel.org
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> ---
->  tools/build/feature/test-llvm.cpp | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->  create mode 100644 tools/build/feature/test-llvm.cpp
-> 
-> diff --git a/tools/build/feature/test-llvm.cpp b/tools/build/feature/test-llvm.cpp
-> new file mode 100644
-> index 0000000000000000..88a3d1bdd9f6978e
-> --- /dev/null
-> +++ b/tools/build/feature/test-llvm.cpp
-> @@ -0,0 +1,14 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "llvm/Support/ManagedStatic.h"
-> +#include "llvm/Support/raw_ostream.h"
-> +#define NUM_VERSION (((LLVM_VERSION_MAJOR) << 16) + (LLVM_VERSION_MINOR << 8) + LLVM_VERSION_PATCH)
-> +
-> +#if NUM_VERSION < 0x030900
-> +# error "LLVM version too low"
-> +#endif
-> +int main()
-> +{
-> +	llvm::errs() << "Hello World!\n";
-> +	llvm::llvm_shutdown();
-> +	return 0;
-> +}
+Hi Geert,
 
-Thanks for the quick turnaround!
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on next-20231016]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Geert-Uytterhoeven/sunrpc-Use-no_printk-in-dfprintk-dummies/20231017-104813
+base:   next-20231016
+patch link:    https://lore.kernel.org/r/a93de2e8afa826745746b00fc5f64e513df5d52f.1697104757.git.geert%2Brenesas%40glider.be
+patch subject: [PATCH -next v2] sunrpc: Use no_printk() in dfprintk*() dummies
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231020/202310200948.TK9Y6iGy-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231020/202310200948.TK9Y6iGy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310200948.TK9Y6iGy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/nfsd/nfsfh.c:111:45: error: use of undeclared identifier 'buf'
+                           svc_print_addr(rqstp, buf, sizeof(buf)));
+                                                             ^
+   fs/nfsd/nfsfh.c:111:33: error: use of undeclared identifier 'buf'
+                           svc_print_addr(rqstp, buf, sizeof(buf)));
+                                                 ^
+   2 errors generated.
+
+
+vim +/buf +111 fs/nfsd/nfsfh.c
+
+9d7ed1355db5b00 J. Bruce Fields 2018-03-08  101  
+6fa02839bf9412e J. Bruce Fields 2007-11-12  102  static __be32 nfsd_setuser_and_check_port(struct svc_rqst *rqstp,
+6fa02839bf9412e J. Bruce Fields 2007-11-12  103  					  struct svc_export *exp)
+6fa02839bf9412e J. Bruce Fields 2007-11-12  104  {
+12045a6ee9908b3 J. Bruce Fields 2009-12-08  105  	int flags = nfsexp_flags(rqstp, exp);
+12045a6ee9908b3 J. Bruce Fields 2009-12-08  106  
+6fa02839bf9412e J. Bruce Fields 2007-11-12  107  	/* Check if the request originated from a secure port. */
+9d7ed1355db5b00 J. Bruce Fields 2018-03-08  108  	if (!nfsd_originating_port_ok(rqstp, flags)) {
+5216a8e70e25b01 Pavel Emelyanov 2008-02-21  109  		RPC_IFDEBUG(char buf[RPC_MAX_ADDRBUFLEN]);
+a48fd0f9f77b6e1 Kinglong Mee    2014-05-29  110  		dprintk("nfsd: request from insecure port %s!\n",
+6fa02839bf9412e J. Bruce Fields 2007-11-12 @111  		        svc_print_addr(rqstp, buf, sizeof(buf)));
+6fa02839bf9412e J. Bruce Fields 2007-11-12  112  		return nfserr_perm;
+6fa02839bf9412e J. Bruce Fields 2007-11-12  113  	}
+6fa02839bf9412e J. Bruce Fields 2007-11-12  114  
+6fa02839bf9412e J. Bruce Fields 2007-11-12  115  	/* Set user creds for this exportpoint */
+6fa02839bf9412e J. Bruce Fields 2007-11-12  116  	return nfserrno(nfsd_setuser(rqstp, exp));
+6fa02839bf9412e J. Bruce Fields 2007-11-12  117  }
+6fa02839bf9412e J. Bruce Fields 2007-11-12  118  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
