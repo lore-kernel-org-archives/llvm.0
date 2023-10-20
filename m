@@ -1,267 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A536107A9;
-	Fri, 20 Oct 2023 08:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1577011CBE
+	for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 09:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMQPkfCt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QDFfFLzL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697789400; x=1729325400;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fzQAByBb0zMzpuQqU2gEWFmvKOK/rsdKAhBNTAZkj5o=;
-  b=ZMQPkfCtx6j5Ydou9SSnVmomOEonDLQDUi4UJjbjPG98v09j/49HfAyX
-   7aroJYL2jggQIR1JJWN/4YbvEU4xdBnDKTRVwE9XYKd+Pox0VmkkZ//np
-   wACZvLJet0jwV8+zn1tzm36TDhnEnNtPMBrMhtObpyGbmCGASa9MiW8zs
-   NvKiiCXDSwmOjEAe8cyAcg9dPFjYAp8KLvCd5XKaUZ2ssRxAOaL78Tpbr
-   zNof3fFFAaFvhX2r8ftDdBnICyts/B3XWV2wsQm9GhkgfY0omxK/foj3b
-   DIJHz+8Mnfq7tnNct+vZ8ltnxgrkm3mnYXNL56iBLiRIFPg5yIpH0UTku
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="8018232"
+  t=1697793739; x=1729329739;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=TqqSqvxGgaA7ur9Wt86j29F82tEcjiTSCY/9DmzPSFk=;
+  b=QDFfFLzLRQHmunfXkj9zAlsIDUA3gk7iIQM/zqsxWprEunAb8weyG/R/
+   mm43yzYs9zREdeNm9WLkFvK+YLMtQsebGOQdk0YzpAwE9W//aIZfdK1hk
+   jl6lZglAMBs2UqfkCjKM3JiBoJ8kuO4YlnBpy/mxURgwztXnX9LIAGnJm
+   5SeOii9D4faxFzlOkgz2d+rFJMKqZP6Z7hT8PyOWmSA7U/uU02lRyuy0K
+   FRexq2PmyYDVJHATujoz2bTK8LrzjYr8HhRijhUGTpaA0fNTTyZ2SlJS2
+   SO52QaK790eXkOg6P32K2SC+KEar8nsbRM3C/sg4Y/il9rsRD74RdFmIr
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="390347411"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="8018232"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 01:09:59 -0700
+   d="scan'208";a="390347411"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 02:22:17 -0700
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="823180580"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="5310076"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 20 Oct 2023 01:09:58 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qtkZv-0003Fo-1v;
-	Fri, 20 Oct 2023 08:09:55 +0000
-Date: Fri, 20 Oct 2023 16:09:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Wei <davidhwei@meta.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [isilence:zc/veth 1005/1018] include/linux/io_uring.h:120:60:
- warning: declaration of 'struct io_zc_rx_ifq' will not be visible outside of
- this function
-Message-ID: <202310201622.6m4cA3Gm-lkp@intel.com>
+   d="scan'208";a="823180580"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 20 Oct 2023 02:22:17 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Fri, 20 Oct 2023 02:22:16 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Fri, 20 Oct 2023 02:22:16 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Fri, 20 Oct 2023 02:22:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ONpRncANEaucK1Gh8PBtKKJYD5mBQDGeYa9CnmKmjDZfPRLjIZ7gJ/NWzwLtg9Bjo691irMWhM9D2J2zwM/0WTllGwrcM7cCABVk+fmzk8GNLCbwKq/fTX4SJJlRnQ8qVjBDrvgohTdy7kkYYRNLem/IhJK2EF9OsK8ng9ag1D5MkwZPaWvcM1Bpos43qecGpsGs3azdO0/WeOwRtO0VD8pj56o/X4Jq5orDVNGdOz8EBLyv4TEC5P67PkM4yBBYagQR5K9NNzouo01sv0UcrCAQelGEGXYHyISR7O5RFcWJEgKWOU0SrXxwkZihUI42UBcG9+kn1gOl21MmXL5UOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vt/pVCV0GyRmBJOdKR3vsgLyS9rnL1K4dIwfJmQw6wE=;
+ b=fu22fP4R4Vxd1Tv5Bjzg7MK9hTgJSWAOKEZAJ1ha5glSXhnLUKnJXiu5udrw6NVENtS237eoI3pTBRNFIcXAf+liA68gp+FI0z0lc8LsgKqG9ReKvWVvpe8NLScIW2bXcM8DGuvSaiSCo7KvjYAZouxaOLMmtTJMIR7ntkLNtb88FJxXv6aWEuk2kOTIeXOzWQiF+o5PxS7QvOoYMdRhYkUiLBsgzG6RZFm3L+zKSrOI4js0O6iPj2nU+cWaiWmu+do68UaJJkej1zOXC85yXIh/V4UPtAgxyowRwr7mdAqplGuU78VCcLbe7o0v7q3vSIp7/HEdPOEdr6hh2XNejw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
+ PH8PR11MB6877.namprd11.prod.outlook.com (2603:10b6:510:22b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.26; Fri, 20 Oct
+ 2023 09:22:08 +0000
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::cc5d:d2c9:b39a:3de7]) by DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::cc5d:d2c9:b39a:3de7%3]) with mapi id 15.20.6907.025; Fri, 20 Oct 2023
+ 09:22:07 +0000
+From: =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+To: <llvm@lists.linux.dev>, <linux-um@lists.infradead.org>,
+	<linux-doc@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+	<linux-kselftest@vger.kernel.org>
+CC: Tom Rix <trix@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>, Johannes Berg
+	<johannes@sipsolutions.net>, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Richard Weinberger <richard@nod.at>, Jonathan Corbet <corbet@lwn.net>, "David
+ Gow" <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>,
+	=?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+Subject: [PATCH 0/2] um: kunit: Add Clang support for CONFIG_GCOV
+Date: Fri, 20 Oct 2023 11:21:57 +0200
+Message-ID: <20231020092159.2486063-1-michal.winiarski@intel.com>
+X-Mailer: git-send-email 2.42.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: WA0P291CA0010.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1::12) To DM4PR11MB5373.namprd11.prod.outlook.com
+ (2603:10b6:5:394::7)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|PH8PR11MB6877:EE_
+X-MS-Office365-Filtering-Correlation-Id: 86b6f9f3-586a-4881-77e9-08dbd14e0782
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VVW0Tu0XVheuAmFhubeVhitTX5w8wQNehBkesOSXdK8CCekpTN6R5lPKuX1hK9/joOS3z/Ue+Z5KWonWDYQ2WI0glu34rDTev2oyEFaxXC+c9HdZCcuBMj8DOfrcMk9SoTD7lLOLtpAT06AZNWrHvphT8TTxv9PVNlOWtRyt+Dju63ypcqPI+7dlt0259GYHIvqn6PyvGOn6j+d822ixO85nAx4cwsI8QrDrLlu9bNC2imDgenSN8jow/j/fkeaoX7t/UxWejEeRoYL9+/8kBCGjXSKxWU5N+tT6yxAmH3SOJNcx74iMVMmZDpVMEowKlqJN94hDWr6mf5bjFtZZEaRZ4VRUZxXEyTmOJjKLv8NMNxKyDuYim5EiVCrdEl6tWUOri0aQceNoDnuZhsuBsvebh4IxjZtXdyCF5PmAFvq6QSRJWbHiKYk9EkJGHalAEJ+csmdNOdGHkU7hQ3+hOtaCcpPDH67UFvdoDM2dHyx5mcyjxKt+6OWUntlMl74v2zAWAShNYeyama/oI9+mQC1crSyntNOi6tGO0ntWykdMWEj2enmUGzKattdSCUFk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(366004)(136003)(376002)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(2906002)(5660300002)(82960400001)(36756003)(86362001)(4744005)(7416002)(26005)(478600001)(83380400001)(6506007)(6486002)(316002)(2616005)(1076003)(6512007)(8676002)(4326008)(107886003)(8936002)(41300700001)(6666004)(54906003)(66946007)(66556008)(66476007)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bWNsek5tdkNCckF0UVhrRVRIdVNDZ3pzeWxqYWhwU1NOajQwM1FzMWpIMUto?=
+ =?utf-8?B?aHkwTkl6c3dheXRYdUJpWVJTUFFzaEc1bGZ0YnBjUmhJbFZWblpxTHk5cmhL?=
+ =?utf-8?B?NXNlTVR2ZXc4NWhDd0dlZVMwYlZYcnhLaTFiSEZEQmRjSklPTmhML1IvWmZO?=
+ =?utf-8?B?NHNDTysxckxIaG9qbmJpNHlZL2dEbnpUbjlzalRHZFlzc1lDQWdlRlgxTHFq?=
+ =?utf-8?B?VWtsZ1k2cjJCWldqc0N3WnViamI0Y3ArRmxYYWRQdGhuc2haMDRYcHBoNTJs?=
+ =?utf-8?B?UjlTZHBDOVF4Z2cxWkJFMk9zd0FQWTJLZzVKV294R1FyYk9CbEY3dUtuTzY1?=
+ =?utf-8?B?enFMR0Ixb2NRWCtJTkNUNTN4TkJ6d2tqSDNkb0pHQmUwMWVERUxGVVZBK2No?=
+ =?utf-8?B?eVVUazZaM0x0MHphWkMxM0lpT2hicGxaU1E4M1gzMmFwUjVaRFZyam1MZEhF?=
+ =?utf-8?B?dnFqaW0veSt5ZjZ5eFYyUUYxdlNLVWszU2lmZWVmTzUxcFU2dFJ0MVFlSDNs?=
+ =?utf-8?B?Mk9uK0h0S2RVbzY5K2NPTU9US2doc3FRMTRwT3R1RjJzL2dqV0NHSVJyMEtB?=
+ =?utf-8?B?WW8yeGRFN2dPT2Q5VmowS3NobzAxNFV3eUVvMWtWZmZOL3d3ZWo2ZzhHQXBV?=
+ =?utf-8?B?NVJDbE5NWU9WbTdLMVJ5U0ZjRFpIYURwUXZ1QnBmNXRBMUtoU1BFaWdZT2dw?=
+ =?utf-8?B?OCs4eXlIS0xtZERGSEt6S1g2SlduM2V1WVZ1UkYveFBVWjBHMitybWcwMFJZ?=
+ =?utf-8?B?R3UwME9zSkNyeHcvSVhCaEtMZzRXeVg0S0JzNFFrSEFodnp2MERrblFxODZT?=
+ =?utf-8?B?Lzg5dmdlR0dpeE92eHpmcEV2YWV5K3RtNk1oYnk5NHkxaU9lM1U4cFNmV3N2?=
+ =?utf-8?B?bHUrdjRMZnJZK0FhdXdZNTJJalN3OEpxbmphNmphanBxQ3dFOHFxcXgvNU1u?=
+ =?utf-8?B?Tld2VUh3T2JOL0hrd3R1ZFRxL2JEYnRYQ0VuS3VWUkRhY2c3M0VvTEdTbU42?=
+ =?utf-8?B?OXJ2b2VNNTZmdGVmTkhuRGZ6K2hYZmRPemE3ZGpMU2ZWY0hwZjJkRHFqNkgz?=
+ =?utf-8?B?RkpLV25WSDFqSVQxenpJK0toZFlUMUYwUk5hc3N5VzVTMUNadU9kSWNvc25N?=
+ =?utf-8?B?VEdwRmlhV0RSYXFzSjZWelRlRXBkOEprMU84bGJGV3lNUDFHQUgramsxb1dQ?=
+ =?utf-8?B?RDV6U3AwZ0tqcnkrWHBzZ09ZSnBmN1hnY2ZNVWt0U0FRUzA0ajNVNjVjcHRJ?=
+ =?utf-8?B?N1BZWE05Yjk3WGR5YmtBZU5hOFpqWXRUOVhHbjFZTWpodmltNmRRajhTUkVQ?=
+ =?utf-8?B?M0dmNEJkZ2JlUzFHa3pjQ21aUjJ6MXAwTXExYWI1UWxtcVc1WjdMYm0rc2lx?=
+ =?utf-8?B?c3FZY1NRKzRPZm5EQWdwdTlrMHBPalJJUys3bmRYMEZOQVp4cTlQU29RZVpv?=
+ =?utf-8?B?b043aDU2VGdCdkxDdUlHbmlFYmNzSnZUQVdUd3lZK3hpek9QdU92bjA0TURQ?=
+ =?utf-8?B?THBPV0hjbElBNFU2K0d4OEszS0VNRUJaVGVoQndxQTRrcVMzSUJVQTBWVjVt?=
+ =?utf-8?B?Z25zeW1WOHluUm9Tc0pCOS9uWkVjZWdOZDd6WVRZTjYwSytwTjZvWlc4RkVR?=
+ =?utf-8?B?SytINHFhcGNkUXRBWFZYRGZDWURSV0RrQVpXSCtaWXZVUjZXT29wTHpXOHNW?=
+ =?utf-8?B?ZmViTmRVbGZhcFlEYTB6bjNidk9JSWdMTDRQeHoxWXJvN3BnY1BWSWY5YU5D?=
+ =?utf-8?B?UUU3d3h5MkJGdjdqeWsrQkFsUWp1UCtuUkpNMEZ5UW9aUlN6K0xUb295Nm5J?=
+ =?utf-8?B?Z0tsZGNEaTZZQWZveHFLRzdtVWxFbE1FaVFMMmF0aGVmeStwanhqcmFrNzlG?=
+ =?utf-8?B?bjk1NmtHbnIrK2x0NFNnbzdGcnNXVFRpMjFGUWg3MUpBbUswb01SbUp5SFhr?=
+ =?utf-8?B?SGZjVUVwTnA2Rmt2Q1BnQ292a1drck8xbkFycnBLZzRrTGswbnh5VzdORnNx?=
+ =?utf-8?B?UTYxanQ4K0RLV0RtOWFJNm1hanNrSzBVZ0JHMVpjTFJMKzlxcXp0SVJ3dHZq?=
+ =?utf-8?B?U0JCVkI2cnNGVWs0Tm1NckdDYzZXMFozY0lFY3JVUDN0a0JqK2JVRFQ5SCt4?=
+ =?utf-8?B?akRXVkZRczJCeEVuR01lazNPWTB4b3VqMCtBRFA1M3NkZnpZeEQzb0tldFV2?=
+ =?utf-8?B?Z2c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86b6f9f3-586a-4881-77e9-08dbd14e0782
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2023 09:22:06.7962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ycQHkeQBu5Mx5C7Zyg9Kh1CJygbF98iUSXqcklGUjTpX58gEUKkVxvYM6HYilH1eRUPas1/5NiFUfjxlGH4jhjxGqpm+QDDEubv1nV7AcRI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6877
+X-OriginatorOrg: intel.com
 
-tree:   https://github.com/isilence/linux zc/veth
-head:   cff8a226d561bc0db814b65ca5d2c97894d4d1cd
-commit: af0d7997ce7db79cf67af9211e630ac1b95a3924 [1005/1018] io_uring: add ZC pool API
-config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive/20231020/202310201622.6m4cA3Gm-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231020/202310201622.6m4cA3Gm-lkp@intel.com/reproduce)
+Clang uses a different set of CLI args for coverage, and the output
+needs to be processed by a different set of tools.
+Update the Makefile and add an example of usage in kunit docs.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310201622.6m4cA3Gm-lkp@intel.com/
+Michał Winiarski (2):
+  arch: um: Add Clang coverage support
+  Documentation: kunit: Add clang UML coverage example
 
-All warnings (new ones prefixed by >>):
-
-   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     743 |         insb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     751 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     759 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     768 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     777 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     786 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1115:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1115 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:97:
->> include/linux/io_uring.h:120:60: warning: declaration of 'struct io_zc_rx_ifq' will not be visible outside of this function [-Wvisibility]
-     120 | static inline struct io_zc_rx_buf *io_zc_rx_get_buf(struct io_zc_rx_ifq *ifq)
-         |                                                            ^
-   include/linux/io_uring.h:124:30: warning: declaration of 'struct io_zc_rx_ifq' will not be visible outside of this function [-Wvisibility]
-     124 | void io_zc_rx_put_buf(struct io_zc_rx_ifq *ifq, struct io_zc_rx_buf *buf)
-         |                              ^
->> include/linux/io_uring.h:124:6: warning: no previous prototype for function 'io_zc_rx_put_buf' [-Wmissing-prototypes]
-     124 | void io_zc_rx_put_buf(struct io_zc_rx_ifq *ifq, struct io_zc_rx_buf *buf)
-         |      ^
-   include/linux/io_uring.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     124 | void io_zc_rx_put_buf(struct io_zc_rx_ifq *ifq, struct io_zc_rx_buf *buf)
-         | ^
-         | static 
-   16 warnings generated.
-
-
-vim +120 include/linux/io_uring.h
-
-    72	
-    73	struct io_zc_rx_ifq;
-    74	struct io_zc_rx_buf *io_zc_rx_get_buf(struct io_zc_rx_ifq *ifq);
-    75	void io_zc_rx_put_buf(struct io_zc_rx_ifq *ifq, struct io_zc_rx_buf *buf);
-    76	static inline dma_addr_t io_zc_rx_buf_dma(struct io_zc_rx_buf *buf)
-    77	{
-    78		return buf->dma;
-    79	}
-    80	static inline struct page *io_zc_rx_buf_page(struct io_zc_rx_buf *buf)
-    81	{
-    82		return buf->page;
-    83	}
-    84	static inline void io_uring_files_cancel(void)
-    85	{
-    86		if (current->io_uring) {
-    87			io_uring_unreg_ringfd();
-    88			__io_uring_cancel(false);
-    89		}
-    90	}
-    91	static inline void io_uring_task_cancel(void)
-    92	{
-    93		if (current->io_uring)
-    94			__io_uring_cancel(true);
-    95	}
-    96	static inline void io_uring_free(struct task_struct *tsk)
-    97	{
-    98		if (tsk->io_uring)
-    99			__io_uring_free(tsk);
-   100	}
-   101	int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags);
-   102	#else
-   103	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
-   104				      struct iov_iter *iter, void *ioucmd)
-   105	{
-   106		return -EOPNOTSUPP;
-   107	}
-   108	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
-   109			ssize_t ret2, unsigned issue_flags)
-   110	{
-   111	}
-   112	static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
-   113				void (*task_work_cb)(struct io_uring_cmd *, unsigned))
-   114	{
-   115	}
-   116	static inline void io_uring_cmd_do_in_task_lazy(struct io_uring_cmd *ioucmd,
-   117				void (*task_work_cb)(struct io_uring_cmd *, unsigned))
-   118	{
-   119	}
- > 120	static inline struct io_zc_rx_buf *io_zc_rx_get_buf(struct io_zc_rx_ifq *ifq)
-   121	{
-   122		return NULL;
-   123	}
- > 124	void io_zc_rx_put_buf(struct io_zc_rx_ifq *ifq, struct io_zc_rx_buf *buf)
-   125	{
-   126	}
-   127	static inline struct sock *io_uring_get_socket(struct file *file)
-   128	{
-   129		return NULL;
-   130	}
-   131	static inline void io_uring_task_cancel(void)
-   132	{
-   133	}
-   134	static inline void io_uring_files_cancel(void)
-   135	{
-   136	}
-   137	static inline void io_uring_free(struct task_struct *tsk)
-   138	{
-   139	}
-   140	static inline const char *io_uring_get_opcode(u8 opcode)
-   141	{
-   142		return "";
-   143	}
-   144	static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd,
-   145					    unsigned int issue_flags)
-   146	{
-   147		return -EOPNOTSUPP;
-   148	}
-   149	#endif
-   150	
+ Documentation/dev-tools/kunit/running_tips.rst | 11 +++++++++++
+ arch/um/Makefile-skas                          |  5 +++++
+ 2 files changed, 16 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
