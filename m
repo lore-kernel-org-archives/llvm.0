@@ -1,1217 +1,220 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964BB35509
-	for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 23:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6DBA32;
+	Sat, 21 Oct 2023 02:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="VIud/aHv"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1c9b95943beso11278835ad.1
-        for <llvm@lists.linux.dev>; Fri, 20 Oct 2023 16:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697845725; x=1698450525; darn=lists.linux.dev;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=q9HuF1PQabUfrlBeSCvnXlXKcMaDsZpqqJ7/YdoSoMA=;
-        b=VIud/aHvtPfEOxHUbRqx+QMGQgTHSDztF7pcMCtm6dfUS6kCtO3ntvlGIiRZfcuyfP
-         TgXvcCFSWd6aybbo2wpKv6niwbpHmX//IuiHonT32lOakPvZ8dkRWiFk8sn2EK/HKfoX
-         +OXFeMj6kstsCa3Irc2bPjoo9HU49r/iDoGhNhgAOYC4X1E+5K/C2O5WzVmOj4+7M0Vv
-         rtVd/H9gzlimc8YQHFvz62EnBTr/TJLjvwX0XrQ/lk5D4hZWNf2kxd8BD2qM6dUdgy1b
-         1hQcjFokelTfjBq3IXWFLtcGgNDKIv1QlBDJOk9i274bTvXnWZcKY6WfQXd8wA1ja7ny
-         waGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697845725; x=1698450525;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q9HuF1PQabUfrlBeSCvnXlXKcMaDsZpqqJ7/YdoSoMA=;
-        b=uxdEMWnpO3wT3krajowmtPGPBtqC6M/H7JeRBF+77RVDrYzhId+FHbFX4aHBDiPfD1
-         kf1ZCdjEPxYY05SIsIO778lcIdZYsoT4UABSnQ+2mJf/DSmFqIwu7iCVaXVCTSSzBH+i
-         hWXob0fqPkdvSj5WzY4FAMP26Iy1Ijnr1WExJlUyiXZQVC2QC+G1h01RWUUzz3triebf
-         v6BtkVATUuoSrQEFzJvBFqosf8HZnK5itsvv2rW5YocQ4l0qntOFEWE8xAy2uVbwaVT+
-         OhQ0WniCgs4itGamz5umRQGbBpEse1gwaWaVf57pf1UJBMA0kuwFDf9rCVaQaAhusaLo
-         7fkw==
-X-Gm-Message-State: AOJu0YxgxL8smMI68T7+FzhP1kOQNDo1apHIHMbpjUuti3RRBVHM6QgY
-	gQzdiiPSfv6ikdc8qfM7lmTfiElPgU0SiWi0rVmHQQ==
-X-Google-Smtp-Source: AGHT+IH0dH8HDcNNVvwCDyIOQH3p9roaNJ1PNHHrLBpsZI9BAPN87BIsTaZsbZwYDXlk4v66APvAfQ==
-X-Received: by 2002:a17:902:d3cc:b0:1bb:598a:14e5 with SMTP id w12-20020a170902d3cc00b001bb598a14e5mr3408515plb.43.1697845724707;
-        Fri, 20 Oct 2023 16:48:44 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170902bc4300b001c60ba709b7sm2041636plz.125.2023.10.20.16.48.43
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Oct 2023 16:48:43 -0700 (PDT)
-Message-ID: <653311db.170a0220.465a7.7da5@mx.google.com>
-Date: Fri, 20 Oct 2023 16:48:43 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GB0huT1v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697855325; x=1729391325;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V2N8FCbnpATNLD5IQsLXnVyPaQW5ZV+iV8Hc1wgFzxk=;
+  b=GB0huT1vpiQbaHnpY/ZQhRu59yb2v00wA+yx/M3opjt4iiWiD+aUdzJm
+   3Jp6MTipbT1XplbAptEUsrZPS8aC9Me22DcmlwbQACkCUdgSGsdDeStXl
+   R4DU34SL6yNmXAXROhAShkG/YPAz8+rcbOWoJI35E9G3XBr2HMNFqQzXM
+   p5b8C+iUnCE6fi7V6JvYZOxgrOSQWzuKa/vTCQAe+qQD6kuao1q8RLSs9
+   cjjiZZpdb6iGpXL7+3WQfxaG8zqlcRlt7n8Q60WoS5MmlmsabJiu7WqYe
+   CybWgWgLCiXs0TEmka37dRqi8EPZ5S6XusbnPp4S/ZHCjN9ao1tSwfDXo
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10869"; a="389456320"
+X-IronPort-AV: E=Sophos;i="6.03,239,1694761200"; 
+   d="scan'208";a="389456320"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 19:28:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10869"; a="901295475"
+X-IronPort-AV: E=Sophos;i="6.03,239,1694761200"; 
+   d="scan'208";a="901295475"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Oct 2023 19:26:31 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qu1jE-0004HO-0I;
+	Sat, 21 Oct 2023 02:28:40 +0000
+Date: Sat, 21 Oct 2023 10:28:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chuyi Zhou <zhouchuyi@bytedance.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: [linux-next:master 13777/13906] kernel/bpf/task_iter.c:919:7: error:
+ use of undeclared identifier 'CSS_TASK_ITER_PROCS'
+Message-ID: <202310211011.pTzXR2o9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20231020
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master build: 182 builds: 6 failed, 176 passed, 25 errors,
- 22 warnings (next-20231020)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 182 builds: 6 failed, 176 passed, 25 errors, 22 warnings=
- (next-20231020)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20231020/
-
-Tree: next
-Branch: master
-Git Describe: next-20231020
-Git Commit: 2030579113a1b1b5bfd7ff24c0852847836d8fd1
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arc:
-    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
-
-arm:
-    rpc_defconfig: (gcc-10) FAIL
-
-mips:
-    cavium_octeon_defconfig: (gcc-10) FAIL
-    decstation_64_defconfig: (gcc-10) FAIL
-    decstation_defconfig: (gcc-10) FAIL
-    decstation_r4k_defconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
-
-arm64:
-
-arm:
-    rpc_defconfig (gcc-10): 2 errors
-
-i386:
-
-mips:
-    cavium_octeon_defconfig (gcc-10): 4 errors, 3 warnings
-    decstation_64_defconfig (gcc-10): 6 errors, 2 warnings
-    decstation_defconfig (gcc-10): 6 errors, 2 warnings
-    decstation_r4k_defconfig (gcc-10): 6 errors, 2 warnings
-
-riscv:
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-    sparc32_defconfig (gcc-10): 2 warnings
-    sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-    x86_64_defconfig+kselftest (rustc-1.72): 1 warning
-
-Errors summary:
-
-    3    kernel/bpf/task_iter.c:947:2: error: implicit declaration of funct=
-ion =E2=80=98css_task_iter_end=E2=80=99 [-Werror=3Dimplicit-function-declar=
-ation]
-    3    kernel/bpf/task_iter.c:938:9: error: implicit declaration of funct=
-ion =E2=80=98css_task_iter_next=E2=80=99; did you mean =E2=80=98class_dev_i=
-ter_next=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    3    kernel/bpf/task_iter.c:928:2: error: implicit declaration of funct=
-ion =E2=80=98css_task_iter_start=E2=80=99; did you mean =E2=80=98task_seq_s=
-tart=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    3    kernel/bpf/task_iter.c:925:53: error: invalid application of =E2=
-=80=98sizeof=E2=80=99 to incomplete type =E2=80=98struct css_task_iter=E2=
-=80=99
-    3    kernel/bpf/task_iter.c:917:7: error: =E2=80=98CSS_TASK_ITER_PROCS=
-=E2=80=99 undeclared (first use in this function)
-    3    kernel/bpf/task_iter.c:917:29: error: =E2=80=98CSS_TASK_ITER_THREA=
-DED=E2=80=99 undeclared (first use in this function)
-    1    fs/proc/task_mmu.c:2099:21: error: 'HPAGE_SIZE' undeclared (first =
-use in this function); did you mean 'PAGE_SIZE'?
-    1    drivers/staging/octeon/ethernet.c:801:8: error: variable =E2=80=98=
-imode=E2=80=99 has initializer but incomplete type
-    1    drivers/staging/octeon/ethernet.c:801:35: error: storage size of =
-=E2=80=98imode=E2=80=99 isn=E2=80=99t known
-    1    drivers/staging/octeon/ethernet.c:205:30: error: storage size of =
-=E2=80=98tx_status=E2=80=99 isn=E2=80=99t known
-    1    drivers/staging/octeon/ethernet.c:204:30: error: storage size of =
-=E2=80=98rx_status=E2=80=99 isn=E2=80=99t known
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-
-Warnings summary:
-
-    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    3    kernel/bpf/task_iter.c:938:9: warning: returning =E2=80=98int=E2=
-=80=99 from a function with return type =E2=80=98struct task_struct *=E2=80=
-=99 makes pointer from integer without a cast [-Wint-conversion]
-    3    cc1: some warnings being treated as errors
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x14cd8b
-    1    drivers/staging/octeon/ethernet.c:801:35: warning: unused variable=
- =E2=80=98imode=E2=80=99 [-Wunused-variable]
-    1    drivers/staging/octeon/ethernet.c:205:30: warning: unused variable=
- =E2=80=98tx_status=E2=80=99 [-Wunused-variable]
-    1    drivers/staging/octeon/ethernet.c:204:30: warning: unused variable=
- =E2=80=98rx_status=E2=80=99 [-Wunused-variable]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 FAIL, 4 errors, 3 warnings=
-, 0 section mismatches
-
-Errors:
-    drivers/staging/octeon/ethernet.c:204:30: error: storage size of =E2=80=
-=98rx_status=E2=80=99 isn=E2=80=99t known
-    drivers/staging/octeon/ethernet.c:205:30: error: storage size of =E2=80=
-=98tx_status=E2=80=99 isn=E2=80=99t known
-    drivers/staging/octeon/ethernet.c:801:8: error: variable =E2=80=98imode=
-=E2=80=99 has initializer but incomplete type
-    drivers/staging/octeon/ethernet.c:801:35: error: storage size of =E2=80=
-=98imode=E2=80=99 isn=E2=80=99t known
-
-Warnings:
-    drivers/staging/octeon/ethernet.c:205:30: warning: unused variable =E2=
-=80=98tx_status=E2=80=99 [-Wunused-variable]
-    drivers/staging/octeon/ethernet.c:204:30: warning: unused variable =E2=
-=80=98rx_status=E2=80=99 [-Wunused-variable]
-    drivers/staging/octeon/ethernet.c:801:35: warning: unused variable =E2=
-=80=98imode=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings=
-, 0 section mismatches
-
-Errors:
-    kernel/bpf/task_iter.c:917:7: error: =E2=80=98CSS_TASK_ITER_PROCS=E2=80=
-=99 undeclared (first use in this function)
-    kernel/bpf/task_iter.c:917:29: error: =E2=80=98CSS_TASK_ITER_THREADED=
-=E2=80=99 undeclared (first use in this function)
-    kernel/bpf/task_iter.c:925:53: error: invalid application of =E2=80=98s=
-izeof=E2=80=99 to incomplete type =E2=80=98struct css_task_iter=E2=80=99
-    kernel/bpf/task_iter.c:928:2: error: implicit declaration of function =
-=E2=80=98css_task_iter_start=E2=80=99; did you mean =E2=80=98task_seq_start=
-=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    kernel/bpf/task_iter.c:938:9: error: implicit declaration of function =
-=E2=80=98css_task_iter_next=E2=80=99; did you mean =E2=80=98class_dev_iter_=
-next=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    kernel/bpf/task_iter.c:947:2: error: implicit declaration of function =
-=E2=80=98css_task_iter_end=E2=80=99 [-Werror=3Dimplicit-function-declaratio=
-n]
-
-Warnings:
-    kernel/bpf/task_iter.c:938:9: warning: returning =E2=80=98int=E2=80=99 =
-from a function with return type =E2=80=98struct task_struct *=E2=80=99 mak=
-es pointer from integer without a cast [-Wint-conversion]
-    cc1: some warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0=
- section mismatches
-
-Errors:
-    kernel/bpf/task_iter.c:917:7: error: =E2=80=98CSS_TASK_ITER_PROCS=E2=80=
-=99 undeclared (first use in this function)
-    kernel/bpf/task_iter.c:917:29: error: =E2=80=98CSS_TASK_ITER_THREADED=
-=E2=80=99 undeclared (first use in this function)
-    kernel/bpf/task_iter.c:925:53: error: invalid application of =E2=80=98s=
-izeof=E2=80=99 to incomplete type =E2=80=98struct css_task_iter=E2=80=99
-    kernel/bpf/task_iter.c:928:2: error: implicit declaration of function =
-=E2=80=98css_task_iter_start=E2=80=99; did you mean =E2=80=98task_seq_start=
-=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    kernel/bpf/task_iter.c:938:9: error: implicit declaration of function =
-=E2=80=98css_task_iter_next=E2=80=99; did you mean =E2=80=98class_dev_iter_=
-next=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    kernel/bpf/task_iter.c:947:2: error: implicit declaration of function =
-=E2=80=98css_task_iter_end=E2=80=99 [-Werror=3Dimplicit-function-declaratio=
-n]
-
-Warnings:
-    kernel/bpf/task_iter.c:938:9: warning: returning =E2=80=98int=E2=80=99 =
-from a function with return type =E2=80=98struct task_struct *=E2=80=99 mak=
-es pointer from integer without a cast [-Wint-conversion]
-    cc1: some warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warning=
-s, 0 section mismatches
-
-Errors:
-    kernel/bpf/task_iter.c:917:7: error: =E2=80=98CSS_TASK_ITER_PROCS=E2=80=
-=99 undeclared (first use in this function)
-    kernel/bpf/task_iter.c:917:29: error: =E2=80=98CSS_TASK_ITER_THREADED=
-=E2=80=99 undeclared (first use in this function)
-    kernel/bpf/task_iter.c:925:53: error: invalid application of =E2=80=98s=
-izeof=E2=80=99 to incomplete type =E2=80=98struct css_task_iter=E2=80=99
-    kernel/bpf/task_iter.c:928:2: error: implicit declaration of function =
-=E2=80=98css_task_iter_start=E2=80=99; did you mean =E2=80=98task_seq_start=
-=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    kernel/bpf/task_iter.c:938:9: error: implicit declaration of function =
-=E2=80=98css_task_iter_next=E2=80=99; did you mean =E2=80=98class_dev_iter_=
-next=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    kernel/bpf/task_iter.c:947:2: error: implicit declaration of function =
-=E2=80=98css_task_iter_end=E2=80=99 [-Werror=3Dimplicit-function-declaratio=
-n]
-
-Warnings:
-    kernel/bpf/task_iter.c:938:9: warning: returning =E2=80=98int=E2=80=99 =
-from a function with return type =E2=80=98struct task_struct *=E2=80=99 mak=
-es pointer from integer without a cast [-Wint-conversion]
-    cc1: some warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
-rnings, 0 section mismatches
-
-Errors:
-    fs/proc/task_mmu.c:2099:21: error: 'HPAGE_SIZE' undeclared (first use i=
-n this function); did you mean 'PAGE_SIZE'?
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, rustc-1.72) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, rustc-1.72) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x14cd8b
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust (x86_64, rustc-1.72) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust-samples (x86_64, rustc-1.72) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   2030579113a1b1b5bfd7ff24c0852847836d8fd1
+commit: 9c66dc94b62aef23300f05f63404afb8990920b4 [13777/13906] bpf: Introduce css_task open-coded iterator kfuncs
+config: hexagon-randconfig-r003-20230725 (https://download.01.org/0day-ci/archive/20231021/202310211011.pTzXR2o9-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231021/202310211011.pTzXR2o9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310211011.pTzXR2o9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/bpf/task_iter.c:9:
+   In file included from include/linux/filter.h:9:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/bpf/task_iter.c:9:
+   In file included from include/linux/filter.h:9:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/bpf/task_iter.c:9:
+   In file included from include/linux/filter.h:9:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/bpf/task_iter.c:919:7: error: use of undeclared identifier 'CSS_TASK_ITER_PROCS'
+           case CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED:
+                ^
+>> kernel/bpf/task_iter.c:919:29: error: use of undeclared identifier 'CSS_TASK_ITER_THREADED'
+           case CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED:
+                                      ^
+   kernel/bpf/task_iter.c:920:7: error: use of undeclared identifier 'CSS_TASK_ITER_PROCS'
+           case CSS_TASK_ITER_PROCS:
+                ^
+>> kernel/bpf/task_iter.c:927:46: error: invalid application of 'sizeof' to an incomplete type 'struct css_task_iter'
+           kit->css_it = bpf_mem_alloc(&bpf_global_ma, sizeof(struct css_task_iter));
+                                                       ^     ~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/task_iter.c:902:9: note: forward declaration of 'struct css_task_iter'
+           struct css_task_iter *css_it;
+                  ^
+>> kernel/bpf/task_iter.c:930:2: error: call to undeclared function 'css_task_iter_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           css_task_iter_start(css, flags, kit->css_it);
+           ^
+   kernel/bpf/task_iter.c:930:2: note: did you mean '__sg_page_iter_start'?
+   include/linux/scatterlist.h:573:6: note: '__sg_page_iter_start' declared here
+   void __sg_page_iter_start(struct sg_page_iter *piter,
+        ^
+>> kernel/bpf/task_iter.c:940:9: error: call to undeclared function 'css_task_iter_next'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return css_task_iter_next(kit->css_it);
+                  ^
+>> kernel/bpf/task_iter.c:940:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct task_struct *' [-Wint-conversion]
+           return css_task_iter_next(kit->css_it);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/bpf/task_iter.c:949:2: error: call to undeclared function 'css_task_iter_end'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           css_task_iter_end(kit->css_it);
+           ^
+   6 warnings and 8 errors generated.
+
+
+vim +/CSS_TASK_ITER_PROCS +919 kernel/bpf/task_iter.c
+
+   904	
+   905	__diag_push();
+   906	__diag_ignore_all("-Wmissing-prototypes",
+   907			  "Global functions as their definitions will be in vmlinux BTF");
+   908	
+   909	__bpf_kfunc int bpf_iter_css_task_new(struct bpf_iter_css_task *it,
+   910			struct cgroup_subsys_state *css, unsigned int flags)
+   911	{
+   912		struct bpf_iter_css_task_kern *kit = (void *)it;
+   913	
+   914		BUILD_BUG_ON(sizeof(struct bpf_iter_css_task_kern) != sizeof(struct bpf_iter_css_task));
+   915		BUILD_BUG_ON(__alignof__(struct bpf_iter_css_task_kern) !=
+   916						__alignof__(struct bpf_iter_css_task));
+   917		kit->css_it = NULL;
+   918		switch (flags) {
+ > 919		case CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED:
+ > 920		case CSS_TASK_ITER_PROCS:
+   921		case 0:
+   922			break;
+   923		default:
+   924			return -EINVAL;
+   925		}
+   926	
+ > 927		kit->css_it = bpf_mem_alloc(&bpf_global_ma, sizeof(struct css_task_iter));
+   928		if (!kit->css_it)
+   929			return -ENOMEM;
+ > 930		css_task_iter_start(css, flags, kit->css_it);
+   931		return 0;
+   932	}
+   933	
+   934	__bpf_kfunc struct task_struct *bpf_iter_css_task_next(struct bpf_iter_css_task *it)
+   935	{
+   936		struct bpf_iter_css_task_kern *kit = (void *)it;
+   937	
+   938		if (!kit->css_it)
+   939			return NULL;
+ > 940		return css_task_iter_next(kit->css_it);
+   941	}
+   942	
+   943	__bpf_kfunc void bpf_iter_css_task_destroy(struct bpf_iter_css_task *it)
+   944	{
+   945		struct bpf_iter_css_task_kern *kit = (void *)it;
+   946	
+   947		if (!kit->css_it)
+   948			return;
+ > 949		css_task_iter_end(kit->css_it);
+   950		bpf_mem_free(&bpf_global_ma, kit->css_it);
+   951	}
+   952	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
