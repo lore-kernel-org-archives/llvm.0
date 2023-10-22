@@ -1,131 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3914310FC
-	for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 08:51:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C12B11C96
+	for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 18:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="awlbgmGm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697964695;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7BcnC3QOZwgxy8K2sN7QJPWYsvmj9Mk7wzOg7oiwZwM=;
-	b=awlbgmGmJ1CctDYquQSh7uqg1t6Rd/Tr3oyfO9ILyFMr2K7Y4midx+ZAtmRV/R57/fCpN6
-	Ia91nT4VjvpSgJlKp6s9Ry5Ne0rnecoO+FfZ3fS+jJWrWlezyiu/upM8a83QpGFs3rCkgf
-	V3fvjFt2wkP7L3GyUQewMUPBkVEsy+c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-GCkIbR5BO6WIJjJBc8PUNw-1; Sun, 22 Oct 2023 04:51:18 -0400
-X-MC-Unique: GCkIbR5BO6WIJjJBc8PUNw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 06239185A7A7
-	for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 08:51:18 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D5BBD8CEF;
-	Sun, 22 Oct 2023 08:51:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 7 of 230): Test report for master
- (6.6.0-rc6, mainline.kernel.org-clang, 1acfd2bd)
-Date: Sun, 22 Oct 2023 08:51:17 -0000
-To: llvm@lists.linux.dev, jbastian@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJyBooX9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B244DC433CC
+	for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 18:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697998836;
+	bh=mEp++I8t5CKsdkk+WGXyvZfMPyEBzD2ehBmGFgB2fjM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WJyBooX9TgkRDI+B9zaL4p4RP5fdDtwWfjBt61C3Ae9dzCbSOxa0OoxgEXJNVyVqn
+	 c5x0vTTRPhxD4rcW0s626B2IHtq/llncMBsb2wvMSH2uo30dw4YJ9tn3dXx+i/QDYG
+	 bn+epxYaW84/+AOEGkXZ4elNvCKFJlMXgoYNAjMwTqIQyWiWuYB4IvA1PWhPlrIH7i
+	 aDyqJdNrC9ima2D9fasHb9coEpwdnIzxTpLou1oaT+6OqX81eKiI99o64mG5lljEYp
+	 ZqJBEq/Ofz3Z4yD9H7iJNmHMZj0w+lgvi9bWWZmeg1rbLf789ouXuMTOI9aPrf+8YS
+	 Eyz3Ti8m7dW0w==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-58410ce2f02so923243eaf.2
+        for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 11:20:36 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxKttNjs27MkvhoFU32lIgBM31JqpxfsQd+klxO82gdh/ohXxN2
+	l6cVTO8SerilMxyDlJ4K9UC+Gfork/l1ukQRxIY=
+X-Google-Smtp-Source: AGHT+IEjD8Slx30IEYd+xtbzAF0sakEzBn1Rc2ae3BD/CHMYgVq0LPEVA7T4yjHFbvZoOqvvvDl1uSPNnrWsEBDvZzg=
+X-Received: by 2002:a05:6870:6592:b0:1e9:858e:ff23 with SMTP id
+ fp18-20020a056870659200b001e9858eff23mr6439038oab.55.1697998836006; Sun, 22
+ Oct 2023 11:20:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <15233.123102204511800305@us-mta-626.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20231006155739.246381-1-yakoyoku@gmail.com> <CANiq72m3mpcJfiOxaACLtyaUfBR2j8rtbLdj5eZT08zywKzCfw@mail.gmail.com>
+ <ca2cd71c-0aa1-4365-961c-c10737a9e9a6@gmail.com> <CANiq72mM2BeWtZNqhvnbA3XR_ArfAi3CG3oxMuu+C74rB0+mBA@mail.gmail.com>
+In-Reply-To: <CANiq72mM2BeWtZNqhvnbA3XR_ArfAi3CG3oxMuu+C74rB0+mBA@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 23 Oct 2023 03:19:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASWc8wn+wcf1qYPTtZvWx-VX27TwgdyimJ4kh1=4GBRcQ@mail.gmail.com>
+Message-ID: <CAK7LNASWc8wn+wcf1qYPTtZvWx-VX27TwgdyimJ4kh1=4GBRcQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] rust: crates in other kernel directories
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Oct 9, 2023 at 9:01=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Sat, Oct 7, 2023 at 1:07=E2=80=AFAM Martin Rodriguez Reboredo
+> <yakoyoku@gmail.com> wrote:
+> >
+> > Well, there's the network PHY driver series that is stuck on this
+> > topic, I (and probably others) have local work that have the same issue
+>
+> No, that series is not stuck on this.
+>
+> > and said general case might not arrive that soon. So it'd better to
+> > start on a feature that will benefit API users right away and can be
+> > updated to fit needs. That's what I think.
+>
+> If there is an in-tree use case that will really require a solution to
+> this very soon, then please focus on explaining that (e.g. what "local
+> work" do you have and what are your plans for landing it upstream?)
+> and we will do our best to reschedule priorities or we can provide a
+> workaround for the time being.
+>
+> In any case, please note that this RFC breaks the kernel build and
+> does not really solve the overall issue.
+>
+> Cheers,
+> Miguel
+>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
 
+Does this rely on the assumption that usb.rlib is small enough
+because usb.rlib will be linked to every usb driver.
 
-Kernel information:
-    Commit message: Merge tag 'powerpc-6.6-5' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/powerpc/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/110555
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10018447
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10018499
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10018545
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+So, usb.rlib is just a binding, not able to write the
+subsystem code in Rust, correct?
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
+
+--=20
+Best Regards
+Masahiro Yamada
