@@ -1,322 +1,105 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544553229;
-	Sun, 22 Oct 2023 19:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C43313AEC;
+	Sun, 22 Oct 2023 21:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R6Bdihc+"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1c9b95943beso21690495ad.1;
-        Sun, 22 Oct 2023 12:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698003743; x=1698608543; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZAxrY+DvSeV1naph1YQXGdec4N9VEG4ODQW1BRo0mtE=;
-        b=R6Bdihc+eqMejVJVygHviv+61updBIfo1ol84PsXGXuLD1t+8ByFpxVKbtS26PqSak
-         C/Y596hneuL4o1itfzdk1EQEWOqnL3Kxr3ODIgn2NsCk4buFt6bqojRqbAtja3QL0oVu
-         qMEhX09s165fcOv52kQmdjJtKEjhwmH4k1SmAjgApL8KC9ZBcSN8F3eUKKT9RAQrMmvi
-         9gN015DBEgm26HjVRX23kPKYH2uJ9Mwft+e670g4bSf5tX1BGGxlb2Qx4LpeHLGIO7XI
-         6fvRLyBgnsEa2aaSKMvplj+NbW9PvsLAzg96yS6Lcx7m3DnJotNiUIZEr8lYg/TssRQf
-         OSvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698003743; x=1698608543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZAxrY+DvSeV1naph1YQXGdec4N9VEG4ODQW1BRo0mtE=;
-        b=hwW7uA8H0Kzr/PN5lgl5FV1BKpfwOnfT7Am1FfvLPyzUdiy8vyKu6iUZneeSc4t5H7
-         3eGqmFupBxGaEUQ/MFvNB7QPhRrgDMd5PXgiXsEvyH/dxn1/iVEBDQfxgyMHARmWDXDm
-         /MRjP+QV3CTTrZYY3XMvlJXrKs/91eUYgHClA7QBpv8MTN0mjDVyuqzm2STYLUswN/LU
-         po5zx4gSUSet2Vy/dNp2ynkW9/eVHc+m6SV4r0QOTUzPps9O/DQz4jO/VrEaHWxmGQW9
-         BRKkDnYeCHX3g9t1410OgOUXLIgriwSSuiVO4MuPlPl6PG5Sbt1FG05KI4waedtM6iX1
-         ZqjQ==
-X-Gm-Message-State: AOJu0YwDzBkn3lJwNrkUdXw2IN/O2+utTmgx46QHA4ydFACfRP7bPKAv
-	t6m2F86N3Iotyn5370ynB1nfmjkZgM+lUNJGKiM=
-X-Google-Smtp-Source: AGHT+IF8XB/A8NP85Pe587yFKnS6LdoZGhge8fVO5EX6Ihc8E5PRzEzZo+aPhtlxatQN/tETpb/Nf5oxE9zgv2shppk=
-X-Received: by 2002:a17:903:1246:b0:1ca:28f3:5690 with SMTP id
- u6-20020a170903124600b001ca28f35690mr9491555plh.46.1698003743433; Sun, 22 Oct
- 2023 12:42:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A0F0PKd+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698011235; x=1729547235;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V9fgD/1WCdZwn29ccuNz/etmXEjj+eZaFD/OmvNCXIg=;
+  b=A0F0PKd+I1fmEA5EZ2J/YKSBkcH0psORfhAiPtnXL6qBjgLi0E6PO0bI
+   qo7zCes7CS6iabc7K7biD+gS6rs4wnka3H+u+gfbZftdd3VFTQFXra6fg
+   cHnsJKsOhYNdjyOsqFjllDEsieomLFQDpjPMxHUe/vc4gxfBkm8E81moi
+   tfQB3HNxx4Ja+F8sQiRUQgGO3za7KpyLqwDJDWJUVNZliDNTDSSOPukfD
+   WR5Ic5AgT7AlbyEEFNpCzAiFhs4Amm2RVRlc4CKyKRA6k5HO1ZQWJgO6F
+   jeJzi6ojNsA3rpVu1s4jElG1tq/ken/vlXEABXkVjOTQ9R2venwhoI/ov
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10871"; a="386554065"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="386554065"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2023 14:47:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10871"; a="828240346"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="828240346"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Oct 2023 14:47:11 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qugHs-0006Ha-2W;
+	Sun, 22 Oct 2023 21:47:08 +0000
+Date: Mon, 23 Oct 2023 05:46:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dexuan Cui <decui@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dcui-tdx:decui/tip/tdx/2023/1013 10/10]
+ arch/x86/kernel/x86_init.c:153:32: error: use of undeclared identifier
+ 'print_mem_encrypt_feature_info'
+Message-ID: <202310230519.cdlkHIMz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231022183917.1013135-1-sanpeqf@gmail.com> <CAH2r5mvAvXaXTWr8CWnVZcXa3tiU+ZfpBoo0tiY-RH194f2xow@mail.gmail.com>
- <CAH2r5mvAOYqjP7JvGxF5Jt58386Sjwke7516XUet-6L6XW3_NQ@mail.gmail.com>
-In-Reply-To: <CAH2r5mvAOYqjP7JvGxF5Jt58386Sjwke7516XUet-6L6XW3_NQ@mail.gmail.com>
-From: ronnie sahlberg <ronniesahlberg@gmail.com>
-Date: Mon, 23 Oct 2023 05:42:11 +1000
-Message-ID: <CAN05THRzP6uFyza90kBy5Ku8yGKMi2K5VYX1TJsjbvQrLfAEiw@mail.gmail.com>
-Subject: Re: [PATCH] fs/smb: using crypto lib instead cifs_arc4
-To: Steve French <smfrench@gmail.com>
-Cc: John Sanpe <sanpeqf@gmail.com>, stfrench@microsoft.com, linkinjeon@kernel.org, 
-	pc@manguebit.com, sprasad@microsoft.com, linux-cifs@vger.kernel.org, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, 
-	samba-technical <samba-technical@lists.samba.org>, Jeremy Allison <jra@samba.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-You are right. The reason that arc4 and friend were moved into cifs
-was because the crypto guys told us "we will delete these algorithms
-from the crypto library"
+tree:   https://github.com/dcui/tdx decui/tip/tdx/2023/1013
+head:   a1d4d1204a2799ff94c9d1d01f2dda125aafa8e2
+commit: a1d4d1204a2799ff94c9d1d01f2dda125aafa8e2 [10/10] x86/mm: Print the encryption features correctly when a paravisor is present
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231023/202310230519.cdlkHIMz-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231023/202310230519.cdlkHIMz-lkp@intel.com/reproduce)
 
-On Mon, 23 Oct 2023 at 05:40, Steve French <smfrench@gmail.com> wrote:
->
-> Adding Ronnie to cc: since he may have additional context why arc4 was
-> moved out of crypto to cifs common code
->
-> On Sun, Oct 22, 2023 at 2:38=E2=80=AFPM Steve French <smfrench@gmail.com>=
- wrote:
-> >
-> > I thought that the whole point of kernel crypto guys was the reverse -
-> > ie arc4 must be moved to cifs.ko since cifs/smb3 mounts had the only
-> > approved use case.  Ronnie may have additional context, but there was
-> > a push to remove arc4 and md4 (see e.g. the emails threads about:
-> > "crypto: remove MD4 generic shash").  I also want to be careful that
-> > we don't accidentally disable smb3.1.1 mounts (which are highly
-> > secure) because they have small dependencies on old algorithms (even
-> > if that doesn't cause problems with typical reasonable length password
-> > cases)
-> >
-> > commit 71c02863246167b3d1639b8278681ca8ebedcb4e
-> > Author: Ronnie Sahlberg <lsahlber@redhat.com>
-> > Date:   Thu Aug 19 20:34:59 2021 +1000
-> >
-> >     cifs: fork arc4 and create a separate module for it for cifs and ot=
-her users
-> >
-> >     We can not drop ARC4 and basically destroy CIFS connectivity for
-> >     almost all CIFS users so create a new forked ARC4 module that CIFS =
-and other
-> >     subsystems that have a hard dependency on ARC4 can use.
-> >
-> > On Sun, Oct 22, 2023 at 1:39=E2=80=AFPM John Sanpe <sanpeqf@gmail.com> =
-wrote:
-> > >
-> > > Replace internal logic with an independent arc4 library.
-> > >
-> > > Signed-off-by: John Sanpe <sanpeqf@gmail.com>
-> > > ---
-> > >  fs/smb/Kconfig              |  1 +
-> > >  fs/smb/client/cifsencrypt.c |  7 ++--
-> > >  fs/smb/common/Makefile      |  1 -
-> > >  fs/smb/common/arc4.h        | 23 ------------
-> > >  fs/smb/common/cifs_arc4.c   | 74 -----------------------------------=
---
-> > >  fs/smb/server/auth.c        |  6 +--
-> > >  6 files changed, 7 insertions(+), 105 deletions(-)
-> > >  delete mode 100644 fs/smb/common/arc4.h
-> > >  delete mode 100644 fs/smb/common/cifs_arc4.c
-> > >
-> > > diff --git a/fs/smb/Kconfig b/fs/smb/Kconfig
-> > > index ef425789fa6a..65e5a437898b 100644
-> > > --- a/fs/smb/Kconfig
-> > > +++ b/fs/smb/Kconfig
-> > > @@ -7,5 +7,6 @@ source "fs/smb/server/Kconfig"
-> > >
-> > >  config SMBFS
-> > >         tristate
-> > > +       select CRYPTO_LIB_ARC4
-> > >         default y if CIFS=3Dy || SMB_SERVER=3Dy
-> > >         default m if CIFS=3Dm || SMB_SERVER=3Dm
-> > > diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.=
-c
-> > > index ef4c2e3c9fa6..d8754c406b5f 100644
-> > > --- a/fs/smb/client/cifsencrypt.c
-> > > +++ b/fs/smb/client/cifsencrypt.c
-> > > @@ -21,7 +21,7 @@
-> > >  #include <linux/random.h>
-> > >  #include <linux/highmem.h>
-> > >  #include <linux/fips.h>
-> > > -#include "../common/arc4.h"
-> > > +#include <crypto/arc4.h>
-> > >  #include <crypto/aead.h>
-> > >
-> > >  /*
-> > > @@ -826,9 +826,8 @@ calc_seckey(struct cifs_ses *ses)
-> > >                 return -ENOMEM;
-> > >         }
-> > >
-> > > -       cifs_arc4_setkey(ctx_arc4, ses->auth_key.response, CIFS_SESS_=
-KEY_SIZE);
-> > > -       cifs_arc4_crypt(ctx_arc4, ses->ntlmssp->ciphertext, sec_key,
-> > > -                       CIFS_CPHTXT_SIZE);
-> > > +       arc4_setkey(ctx_arc4, ses->auth_key.response, CIFS_SESS_KEY_S=
-IZE);
-> > > +       arc4_crypt(ctx_arc4, ses->ntlmssp->ciphertext, sec_key, CIFS_=
-CPHTXT_SIZE);
-> > >
-> > >         /* make secondary_key/nonce as session key */
-> > >         memcpy(ses->auth_key.response, sec_key, CIFS_SESS_KEY_SIZE);
-> > > diff --git a/fs/smb/common/Makefile b/fs/smb/common/Makefile
-> > > index c66dbbc1469c..9e0730a385fb 100644
-> > > --- a/fs/smb/common/Makefile
-> > > +++ b/fs/smb/common/Makefile
-> > > @@ -3,5 +3,4 @@
-> > >  # Makefile for Linux filesystem routines that are shared by client a=
-nd server.
-> > >  #
-> > >
-> > > -obj-$(CONFIG_SMBFS) +=3D cifs_arc4.o
-> > >  obj-$(CONFIG_SMBFS) +=3D cifs_md4.o
-> > > diff --git a/fs/smb/common/arc4.h b/fs/smb/common/arc4.h
-> > > deleted file mode 100644
-> > > index 12e71ec033a1..000000000000
-> > > --- a/fs/smb/common/arc4.h
-> > > +++ /dev/null
-> > > @@ -1,23 +0,0 @@
-> > > -/* SPDX-License-Identifier: GPL-2.0+ */
-> > > -/*
-> > > - * Common values for ARC4 Cipher Algorithm
-> > > - */
-> > > -
-> > > -#ifndef _CRYPTO_ARC4_H
-> > > -#define _CRYPTO_ARC4_H
-> > > -
-> > > -#include <linux/types.h>
-> > > -
-> > > -#define ARC4_MIN_KEY_SIZE      1
-> > > -#define ARC4_MAX_KEY_SIZE      256
-> > > -#define ARC4_BLOCK_SIZE                1
-> > > -
-> > > -struct arc4_ctx {
-> > > -       u32 S[256];
-> > > -       u32 x, y;
-> > > -};
-> > > -
-> > > -int cifs_arc4_setkey(struct arc4_ctx *ctx, const u8 *in_key, unsigne=
-d int key_len);
-> > > -void cifs_arc4_crypt(struct arc4_ctx *ctx, u8 *out, const u8 *in, un=
-signed int len);
-> > > -
-> > > -#endif /* _CRYPTO_ARC4_H */
-> > > diff --git a/fs/smb/common/cifs_arc4.c b/fs/smb/common/cifs_arc4.c
-> > > deleted file mode 100644
-> > > index 043e4cb839fa..000000000000
-> > > --- a/fs/smb/common/cifs_arc4.c
-> > > +++ /dev/null
-> > > @@ -1,74 +0,0 @@
-> > > -// SPDX-License-Identifier: GPL-2.0-or-later
-> > > -/*
-> > > - * Cryptographic API
-> > > - *
-> > > - * ARC4 Cipher Algorithm
-> > > - *
-> > > - * Jon Oberheide <jon@oberheide.org>
-> > > - */
-> > > -
-> > > -#include <linux/module.h>
-> > > -#include "arc4.h"
-> > > -
-> > > -MODULE_LICENSE("GPL");
-> > > -
-> > > -int cifs_arc4_setkey(struct arc4_ctx *ctx, const u8 *in_key, unsigne=
-d int key_len)
-> > > -{
-> > > -       int i, j =3D 0, k =3D 0;
-> > > -
-> > > -       ctx->x =3D 1;
-> > > -       ctx->y =3D 0;
-> > > -
-> > > -       for (i =3D 0; i < 256; i++)
-> > > -               ctx->S[i] =3D i;
-> > > -
-> > > -       for (i =3D 0; i < 256; i++) {
-> > > -               u32 a =3D ctx->S[i];
-> > > -
-> > > -               j =3D (j + in_key[k] + a) & 0xff;
-> > > -               ctx->S[i] =3D ctx->S[j];
-> > > -               ctx->S[j] =3D a;
-> > > -               if (++k >=3D key_len)
-> > > -                       k =3D 0;
-> > > -       }
-> > > -
-> > > -       return 0;
-> > > -}
-> > > -EXPORT_SYMBOL_GPL(cifs_arc4_setkey);
-> > > -
-> > > -void cifs_arc4_crypt(struct arc4_ctx *ctx, u8 *out, const u8 *in, un=
-signed int len)
-> > > -{
-> > > -       u32 *const S =3D ctx->S;
-> > > -       u32 x, y, a, b;
-> > > -       u32 ty, ta, tb;
-> > > -
-> > > -       if (len =3D=3D 0)
-> > > -               return;
-> > > -
-> > > -       x =3D ctx->x;
-> > > -       y =3D ctx->y;
-> > > -
-> > > -       a =3D S[x];
-> > > -       y =3D (y + a) & 0xff;
-> > > -       b =3D S[y];
-> > > -
-> > > -       do {
-> > > -               S[y] =3D a;
-> > > -               a =3D (a + b) & 0xff;
-> > > -               S[x] =3D b;
-> > > -               x =3D (x + 1) & 0xff;
-> > > -               ta =3D S[x];
-> > > -               ty =3D (y + ta) & 0xff;
-> > > -               tb =3D S[ty];
-> > > -               *out++ =3D *in++ ^ S[a];
-> > > -               if (--len =3D=3D 0)
-> > > -                       break;
-> > > -               y =3D ty;
-> > > -               a =3D ta;
-> > > -               b =3D tb;
-> > > -       } while (true);
-> > > -
-> > > -       ctx->x =3D x;
-> > > -       ctx->y =3D y;
-> > > -}
-> > > -EXPORT_SYMBOL_GPL(cifs_arc4_crypt);
-> > > diff --git a/fs/smb/server/auth.c b/fs/smb/server/auth.c
-> > > index 229a6527870d..5640196b313f 100644
-> > > --- a/fs/smb/server/auth.c
-> > > +++ b/fs/smb/server/auth.c
-> > > @@ -29,7 +29,7 @@
-> > >  #include "mgmt/user_config.h"
-> > >  #include "crypto_ctx.h"
-> > >  #include "transport_ipc.h"
-> > > -#include "../common/arc4.h"
-> > > +#include <crypto/arc4.h>
-> > >
-> > >  /*
-> > >   * Fixed format data defining GSS header and fixed string
-> > > @@ -362,9 +362,9 @@ int ksmbd_decode_ntlmssp_auth_blob(struct authent=
-icate_message *authblob,
-> > >                 if (!ctx_arc4)
-> > >                         return -ENOMEM;
-> > >
-> > > -               cifs_arc4_setkey(ctx_arc4, sess->sess_key,
-> > > +               arc4_setkey(ctx_arc4, sess->sess_key,
-> > >                                  SMB2_NTLMV2_SESSKEY_SIZE);
-> > > -               cifs_arc4_crypt(ctx_arc4, sess->sess_key,
-> > > +               arc4_crypt(ctx_arc4, sess->sess_key,
-> > >                                 (char *)authblob + sess_key_off, sess=
-_key_len);
-> > >                 kfree_sensitive(ctx_arc4);
-> > >         }
-> > > --
-> > > 2.41.0
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> >
-> > Steve
->
->
->
-> --
-> Thanks,
->
-> Steve
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310230519.cdlkHIMz-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/x86_init.c:153:32: error: use of undeclared identifier 'print_mem_encrypt_feature_info'
+           .print_mem_enc_feature_info     = print_mem_encrypt_feature_info,
+                                             ^
+   1 error generated.
+
+
+vim +/print_mem_encrypt_feature_info +153 arch/x86/kernel/x86_init.c
+
+   139	
+   140	struct x86_platform_ops x86_platform __ro_after_init = {
+   141		.calibrate_cpu			= native_calibrate_cpu_early,
+   142		.calibrate_tsc			= native_calibrate_tsc,
+   143		.get_wallclock			= mach_get_cmos_time,
+   144		.set_wallclock			= mach_set_cmos_time,
+   145		.iommu_shutdown			= iommu_shutdown_noop,
+   146		.is_untracked_pat_range		= is_ISA_range,
+   147		.nmi_init			= default_nmi_init,
+   148		.get_nmi_reason			= default_get_nmi_reason,
+   149		.save_sched_clock_state		= tsc_save_sched_clock_state,
+   150		.restore_sched_clock_state	= tsc_restore_sched_clock_state,
+   151		.realmode_reserve		= reserve_real_mode,
+   152		.realmode_init			= init_real_mode,
+ > 153		.print_mem_enc_feature_info	= print_mem_encrypt_feature_info,
+   154		.hyper.pin_vcpu			= x86_op_int_noop,
+   155		.hyper.is_private_mmio		= is_private_mmio_noop,
+   156	
+   157		.guest = {
+   158			.enc_status_change_prepare = enc_status_change_prepare_noop,
+   159			.enc_status_change_finish  = enc_status_change_finish_noop,
+   160			.enc_tlb_flush_required	   = enc_tlb_flush_required_noop,
+   161			.enc_cache_flush_required  = enc_cache_flush_required_noop,
+   162		},
+   163	};
+   164	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
