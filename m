@@ -1,97 +1,262 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C12B11C96
-	for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 18:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348E763CE;
+	Sun, 22 Oct 2023 18:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJyBooX9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B244DC433CC
-	for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 18:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697998836;
-	bh=mEp++I8t5CKsdkk+WGXyvZfMPyEBzD2ehBmGFgB2fjM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WJyBooX9TgkRDI+B9zaL4p4RP5fdDtwWfjBt61C3Ae9dzCbSOxa0OoxgEXJNVyVqn
-	 c5x0vTTRPhxD4rcW0s626B2IHtq/llncMBsb2wvMSH2uo30dw4YJ9tn3dXx+i/QDYG
-	 bn+epxYaW84/+AOEGkXZ4elNvCKFJlMXgoYNAjMwTqIQyWiWuYB4IvA1PWhPlrIH7i
-	 aDyqJdNrC9ima2D9fasHb9coEpwdnIzxTpLou1oaT+6OqX81eKiI99o64mG5lljEYp
-	 ZqJBEq/Ofz3Z4yD9H7iJNmHMZj0w+lgvi9bWWZmeg1rbLf789ouXuMTOI9aPrf+8YS
-	 Eyz3Ti8m7dW0w==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-58410ce2f02so923243eaf.2
-        for <llvm@lists.linux.dev>; Sun, 22 Oct 2023 11:20:36 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxKttNjs27MkvhoFU32lIgBM31JqpxfsQd+klxO82gdh/ohXxN2
-	l6cVTO8SerilMxyDlJ4K9UC+Gfork/l1ukQRxIY=
-X-Google-Smtp-Source: AGHT+IEjD8Slx30IEYd+xtbzAF0sakEzBn1Rc2ae3BD/CHMYgVq0LPEVA7T4yjHFbvZoOqvvvDl1uSPNnrWsEBDvZzg=
-X-Received: by 2002:a05:6870:6592:b0:1e9:858e:ff23 with SMTP id
- fp18-20020a056870659200b001e9858eff23mr6439038oab.55.1697998836006; Sun, 22
- Oct 2023 11:20:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z7EIG+bg"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-1c9b95943beso21413225ad.1;
+        Sun, 22 Oct 2023 11:39:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697999967; x=1698604767; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I9XnGTqS6VWrLiI+nuP6yzxfhhc0PJY1/9rd1gvde04=;
+        b=Z7EIG+bgE3VR2bJV5Ye3UJ39rOC85AaYl5iYlcuP6PUFmcspeBqV+Y3ZPK5iG5iOON
+         l7sTjQ5fozaKRCdtc3zUl2hH03BDGyFsbPhJHycFv2mcfFy5c4hPJYQTE37bo9tok8G3
+         KxQfzz8mxw+e7REiqCEql3Nb3yfupLX6vrTBSnKjx+sW7aGfM72OZAernRFwNquMO77d
+         NzS48YTmBcYNS5q353L5JpyFPyFxefawyenWkapSkjCCOWQRC86kFUzH7mV7G+0/ze8Y
+         kcPnQSoOt791xj6p76AOjZq9OlKNYIn39ULa5/csEap+JvQ6XjAn6/GY4WVazGuF1Aul
+         Dbtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697999967; x=1698604767;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I9XnGTqS6VWrLiI+nuP6yzxfhhc0PJY1/9rd1gvde04=;
+        b=kZt6PA2qBrlxclSEMFrDpXdLRh+RybGY6W+ntJIo30fzE7H7s1YVbdqWM5U4Vz9zPY
+         mappKKA4yXQzaFiITX4ZC/oDS5PGStrkWCols0ZCyj3Wr2iQcYwpTjI2FnJOuVs0r7Rg
+         gHXBnNC7csWON+RgswnQcn2ZYxn/kSkroybGhYkPCDCxb/QYvSsdUCqLebiMPpcwBIWn
+         ZhC/Unav89bRD/ksfg1qTT9pKCOL5lqjz8LzFmB07iytS4jFynXnyyIwyCWJaZpbcLQK
+         omd06HF4Bk8beXcC37ej2nLpSaqpgIAzeTFwBVzd6nlYXMtRdZ0EDQlKbhz4PIlrCzN7
+         cNUg==
+X-Gm-Message-State: AOJu0YxKZmAVMD8LUNIrqRlG7OijDhwDADy03/FaP23GlwQUvzckcI1P
+	VkHsW7L2rENV+zUC1DRR9yQ=
+X-Google-Smtp-Source: AGHT+IGtJn40MHIY1wL/r/2JYdCJPBQM+Et+9XlN6Ua5mnUsXU68QMG0DWmO7g0krYdP9MYWZgbJqg==
+X-Received: by 2002:a17:902:e844:b0:1c6:25c3:13d3 with SMTP id t4-20020a170902e84400b001c625c313d3mr8145238plg.6.1697999967482;
+        Sun, 22 Oct 2023 11:39:27 -0700 (PDT)
+Received: from localhost ([2409:8a3c:3640:7481:178a:30e9:674c:c2f3])
+        by smtp.gmail.com with ESMTPSA id d15-20020a170903230f00b001b8b07bc600sm4649961plh.186.2023.10.22.11.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Oct 2023 11:39:27 -0700 (PDT)
+From: John Sanpe <sanpeqf@gmail.com>
+To: stfrench@microsoft.com,
+	linkinjeon@kernel.org,
+	pc@manguebit.com,
+	sprasad@microsoft.com,
+	linux-cifs@vger.kernel.org
+Cc: llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	John Sanpe <sanpeqf@gmail.com>
+Subject: [PATCH] fs/smb: using crypto lib instead cifs_arc4
+Date: Mon, 23 Oct 2023 02:39:17 +0800
+Message-ID: <20231022183917.1013135-1-sanpeqf@gmail.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231006155739.246381-1-yakoyoku@gmail.com> <CANiq72m3mpcJfiOxaACLtyaUfBR2j8rtbLdj5eZT08zywKzCfw@mail.gmail.com>
- <ca2cd71c-0aa1-4365-961c-c10737a9e9a6@gmail.com> <CANiq72mM2BeWtZNqhvnbA3XR_ArfAi3CG3oxMuu+C74rB0+mBA@mail.gmail.com>
-In-Reply-To: <CANiq72mM2BeWtZNqhvnbA3XR_ArfAi3CG3oxMuu+C74rB0+mBA@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 23 Oct 2023 03:19:59 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASWc8wn+wcf1qYPTtZvWx-VX27TwgdyimJ4kh1=4GBRcQ@mail.gmail.com>
-Message-ID: <CAK7LNASWc8wn+wcf1qYPTtZvWx-VX27TwgdyimJ4kh1=4GBRcQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] rust: crates in other kernel directories
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 9, 2023 at 9:01=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Sat, Oct 7, 2023 at 1:07=E2=80=AFAM Martin Rodriguez Reboredo
-> <yakoyoku@gmail.com> wrote:
-> >
-> > Well, there's the network PHY driver series that is stuck on this
-> > topic, I (and probably others) have local work that have the same issue
->
-> No, that series is not stuck on this.
->
-> > and said general case might not arrive that soon. So it'd better to
-> > start on a feature that will benefit API users right away and can be
-> > updated to fit needs. That's what I think.
->
-> If there is an in-tree use case that will really require a solution to
-> this very soon, then please focus on explaining that (e.g. what "local
-> work" do you have and what are your plans for landing it upstream?)
-> and we will do our best to reschedule priorities or we can provide a
-> workaround for the time being.
->
-> In any case, please note that this RFC breaks the kernel build and
-> does not really solve the overall issue.
->
-> Cheers,
-> Miguel
->
+Replace internal logic with an independent arc4 library.
 
+Signed-off-by: John Sanpe <sanpeqf@gmail.com>
+---
+ fs/smb/Kconfig              |  1 +
+ fs/smb/client/cifsencrypt.c |  7 ++--
+ fs/smb/common/Makefile      |  1 -
+ fs/smb/common/arc4.h        | 23 ------------
+ fs/smb/common/cifs_arc4.c   | 74 -------------------------------------
+ fs/smb/server/auth.c        |  6 +--
+ 6 files changed, 7 insertions(+), 105 deletions(-)
+ delete mode 100644 fs/smb/common/arc4.h
+ delete mode 100644 fs/smb/common/cifs_arc4.c
 
-Does this rely on the assumption that usb.rlib is small enough
-because usb.rlib will be linked to every usb driver.
+diff --git a/fs/smb/Kconfig b/fs/smb/Kconfig
+index ef425789fa6a..65e5a437898b 100644
+--- a/fs/smb/Kconfig
++++ b/fs/smb/Kconfig
+@@ -7,5 +7,6 @@ source "fs/smb/server/Kconfig"
+ 
+ config SMBFS
+ 	tristate
++	select CRYPTO_LIB_ARC4
+ 	default y if CIFS=y || SMB_SERVER=y
+ 	default m if CIFS=m || SMB_SERVER=m
+diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
+index ef4c2e3c9fa6..d8754c406b5f 100644
+--- a/fs/smb/client/cifsencrypt.c
++++ b/fs/smb/client/cifsencrypt.c
+@@ -21,7 +21,7 @@
+ #include <linux/random.h>
+ #include <linux/highmem.h>
+ #include <linux/fips.h>
+-#include "../common/arc4.h"
++#include <crypto/arc4.h>
+ #include <crypto/aead.h>
+ 
+ /*
+@@ -826,9 +826,8 @@ calc_seckey(struct cifs_ses *ses)
+ 		return -ENOMEM;
+ 	}
+ 
+-	cifs_arc4_setkey(ctx_arc4, ses->auth_key.response, CIFS_SESS_KEY_SIZE);
+-	cifs_arc4_crypt(ctx_arc4, ses->ntlmssp->ciphertext, sec_key,
+-			CIFS_CPHTXT_SIZE);
++	arc4_setkey(ctx_arc4, ses->auth_key.response, CIFS_SESS_KEY_SIZE);
++	arc4_crypt(ctx_arc4, ses->ntlmssp->ciphertext, sec_key, CIFS_CPHTXT_SIZE);
+ 
+ 	/* make secondary_key/nonce as session key */
+ 	memcpy(ses->auth_key.response, sec_key, CIFS_SESS_KEY_SIZE);
+diff --git a/fs/smb/common/Makefile b/fs/smb/common/Makefile
+index c66dbbc1469c..9e0730a385fb 100644
+--- a/fs/smb/common/Makefile
++++ b/fs/smb/common/Makefile
+@@ -3,5 +3,4 @@
+ # Makefile for Linux filesystem routines that are shared by client and server.
+ #
+ 
+-obj-$(CONFIG_SMBFS) += cifs_arc4.o
+ obj-$(CONFIG_SMBFS) += cifs_md4.o
+diff --git a/fs/smb/common/arc4.h b/fs/smb/common/arc4.h
+deleted file mode 100644
+index 12e71ec033a1..000000000000
+--- a/fs/smb/common/arc4.h
++++ /dev/null
+@@ -1,23 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0+ */
+-/*
+- * Common values for ARC4 Cipher Algorithm
+- */
+-
+-#ifndef _CRYPTO_ARC4_H
+-#define _CRYPTO_ARC4_H
+-
+-#include <linux/types.h>
+-
+-#define ARC4_MIN_KEY_SIZE	1
+-#define ARC4_MAX_KEY_SIZE	256
+-#define ARC4_BLOCK_SIZE		1
+-
+-struct arc4_ctx {
+-	u32 S[256];
+-	u32 x, y;
+-};
+-
+-int cifs_arc4_setkey(struct arc4_ctx *ctx, const u8 *in_key, unsigned int key_len);
+-void cifs_arc4_crypt(struct arc4_ctx *ctx, u8 *out, const u8 *in, unsigned int len);
+-
+-#endif /* _CRYPTO_ARC4_H */
+diff --git a/fs/smb/common/cifs_arc4.c b/fs/smb/common/cifs_arc4.c
+deleted file mode 100644
+index 043e4cb839fa..000000000000
+--- a/fs/smb/common/cifs_arc4.c
++++ /dev/null
+@@ -1,74 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Cryptographic API
+- *
+- * ARC4 Cipher Algorithm
+- *
+- * Jon Oberheide <jon@oberheide.org>
+- */
+-
+-#include <linux/module.h>
+-#include "arc4.h"
+-
+-MODULE_LICENSE("GPL");
+-
+-int cifs_arc4_setkey(struct arc4_ctx *ctx, const u8 *in_key, unsigned int key_len)
+-{
+-	int i, j = 0, k = 0;
+-
+-	ctx->x = 1;
+-	ctx->y = 0;
+-
+-	for (i = 0; i < 256; i++)
+-		ctx->S[i] = i;
+-
+-	for (i = 0; i < 256; i++) {
+-		u32 a = ctx->S[i];
+-
+-		j = (j + in_key[k] + a) & 0xff;
+-		ctx->S[i] = ctx->S[j];
+-		ctx->S[j] = a;
+-		if (++k >= key_len)
+-			k = 0;
+-	}
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(cifs_arc4_setkey);
+-
+-void cifs_arc4_crypt(struct arc4_ctx *ctx, u8 *out, const u8 *in, unsigned int len)
+-{
+-	u32 *const S = ctx->S;
+-	u32 x, y, a, b;
+-	u32 ty, ta, tb;
+-
+-	if (len == 0)
+-		return;
+-
+-	x = ctx->x;
+-	y = ctx->y;
+-
+-	a = S[x];
+-	y = (y + a) & 0xff;
+-	b = S[y];
+-
+-	do {
+-		S[y] = a;
+-		a = (a + b) & 0xff;
+-		S[x] = b;
+-		x = (x + 1) & 0xff;
+-		ta = S[x];
+-		ty = (y + ta) & 0xff;
+-		tb = S[ty];
+-		*out++ = *in++ ^ S[a];
+-		if (--len == 0)
+-			break;
+-		y = ty;
+-		a = ta;
+-		b = tb;
+-	} while (true);
+-
+-	ctx->x = x;
+-	ctx->y = y;
+-}
+-EXPORT_SYMBOL_GPL(cifs_arc4_crypt);
+diff --git a/fs/smb/server/auth.c b/fs/smb/server/auth.c
+index 229a6527870d..5640196b313f 100644
+--- a/fs/smb/server/auth.c
++++ b/fs/smb/server/auth.c
+@@ -29,7 +29,7 @@
+ #include "mgmt/user_config.h"
+ #include "crypto_ctx.h"
+ #include "transport_ipc.h"
+-#include "../common/arc4.h"
++#include <crypto/arc4.h>
+ 
+ /*
+  * Fixed format data defining GSS header and fixed string
+@@ -362,9 +362,9 @@ int ksmbd_decode_ntlmssp_auth_blob(struct authenticate_message *authblob,
+ 		if (!ctx_arc4)
+ 			return -ENOMEM;
+ 
+-		cifs_arc4_setkey(ctx_arc4, sess->sess_key,
++		arc4_setkey(ctx_arc4, sess->sess_key,
+ 				 SMB2_NTLMV2_SESSKEY_SIZE);
+-		cifs_arc4_crypt(ctx_arc4, sess->sess_key,
++		arc4_crypt(ctx_arc4, sess->sess_key,
+ 				(char *)authblob + sess_key_off, sess_key_len);
+ 		kfree_sensitive(ctx_arc4);
+ 	}
+-- 
+2.41.0
 
-So, usb.rlib is just a binding, not able to write the
-subsystem code in Rust, correct?
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
