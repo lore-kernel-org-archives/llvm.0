@@ -1,143 +1,337 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB68A48
-	for <llvm@lists.linux.dev>; Sat, 21 Oct 2023 12:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5217F4;
+	Sun, 22 Oct 2023 01:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U3Tc2l2I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697890224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xUyGNELdBtY+0H7mzQ2Zl3YCm/4PRInvQ/tIRmOxET8=;
-	b=U3Tc2l2IEdWYziExfLaubN4HYNw1R+DT2hIBFk1eXX9diS70wrlftZZJV0znnvPjNOyl7c
-	o1kOsiZSfOOt4zWyP3vY3CJZ9pHkzL7YLwnEHxmSCN6vLxDhi2uupyt0/2Ww0/h1RTR9y5
-	7Ji5x7TC328SZGgNcNrIdhPGe4eJ/SM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-673-pBqctw-7OD6S8WGbS24jVw-1; Sat, 21 Oct 2023 08:10:22 -0400
-X-MC-Unique: pBqctw-7OD6S8WGbS24jVw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E5B687A9F4
-	for <llvm@lists.linux.dev>; Sat, 21 Oct 2023 12:10:22 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 137758C2;
-	Sat, 21 Oct 2023 12:10:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 7 of 230): Test report for master
- (6.6.0-rc6, mainline.kernel.org-clang, 75e167c2)
-Date: Sat, 21 Oct 2023 12:10:22 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, jbastian@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C8Odru9q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697937340; x=1729473340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RaBJhY6Noscr6BKqNP3rnbzAtIyQU+7PO2jqJX1CmRA=;
+  b=C8Odru9qAZfjecL36YWTiD50VYhXfRrIxr1RS0I3HHw/8a3atNY7v/pv
+   sLxr/9wMBde2gRSLy6Bj9nyaeM0iE2ksEKxWVnghBtP16WCJFDoGXsDDE
+   p8UQo1uv5gQeBWrBLFhikfZOd2J6pXFnkdJzgxu9X1b5vmwpSyJV50A7p
+   orGId/aG1Pj7en/0djhr6Tms7GYL5Y3WqB/C1XEdHtVW60TQYo6mLlYl6
+   H7IvoErN387aSD+tQUUGbl2qfJrQ8IcvyrCzkaBKeejtYE7RX1qXiBtQK
+   pvSVpF/Xsa3eW8tlkdoKDx4tQR6iwPAyep973P+IUUbSFAYvptzJUAt63
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10870"; a="383872722"
+X-IronPort-AV: E=Sophos;i="6.03,242,1694761200"; 
+   d="scan'208";a="383872722"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2023 18:15:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,242,1694761200"; 
+   d="scan'208";a="5713592"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 21 Oct 2023 18:15:32 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1quN40-0005S2-2v;
+	Sun, 22 Oct 2023 01:15:32 +0000
+Date: Sun, 22 Oct 2023 09:14:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yishai Hadas <yishaih@nvidia.com>, alex.williamson@redhat.com,
+	mst@redhat.com, jasowang@redhat.com, jgg@nvidia.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+	parav@nvidia.com, feliu@nvidia.com, jiri@nvidia.com,
+	kevin.tian@intel.com, joao.m.martins@oracle.com,
+	si-wei.liu@oracle.com, leonro@nvidia.com, yishaih@nvidia.com,
+	maorg@nvidia.com
+Subject: Re: [PATCH V1 vfio 6/9] virtio-pci: Introduce APIs to execute legacy
+ IO admin commands
+Message-ID: <202310220842.ADAIiZsO-lkp@intel.com>
+References: <20231017134217.82497-7-yishaih@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
-Message-Id: <91692.123102108102200339@us-mta-673.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231017134217.82497-7-yishaih@nvidia.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Yishai,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.6-rc6]
+[cannot apply to next-20231020]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+url:    https://github.com/intel-lab-lkp/linux/commits/Yishai-Hadas/virtio-pci-Fix-common-config-map-for-modern-device/20231017-214450
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231017134217.82497-7-yishaih%40nvidia.com
+patch subject: [PATCH V1 vfio 6/9] virtio-pci: Introduce APIs to execute legacy IO admin commands
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231022/202310220842.ADAIiZsO-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231022/202310220842.ADAIiZsO-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/110412
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310220842.ADAIiZsO-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10007434
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10007261
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10007307
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10007388
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: use after free in reweight_entity
-            URL: https://lkml.iu.edu/hypermail/linux/kernel/2310.2/00187.ht=
-ml
-            Affected tests:
-                  x86_64 (debug) - xfstests - ext4
+>> drivers/virtio/virtio_pci_modern.c:731:5: warning: no previous prototype for function 'virtio_pci_admin_list_query' [-Wmissing-prototypes]
+   int virtio_pci_admin_list_query(struct pci_dev *pdev, u8 *buf, int buf_size)
+       ^
+   drivers/virtio/virtio_pci_modern.c:731:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_pci_admin_list_query(struct pci_dev *pdev, u8 *buf, int buf_size)
+   ^
+   static 
+>> drivers/virtio/virtio_pci_modern.c:758:5: warning: no previous prototype for function 'virtio_pci_admin_list_use' [-Wmissing-prototypes]
+   int virtio_pci_admin_list_use(struct pci_dev *pdev, u8 *buf, int buf_size)
+       ^
+   drivers/virtio/virtio_pci_modern.c:758:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_pci_admin_list_use(struct pci_dev *pdev, u8 *buf, int buf_size)
+   ^
+   static 
+>> drivers/virtio/virtio_pci_modern.c:786:5: warning: no previous prototype for function 'virtio_pci_admin_legacy_io_write' [-Wmissing-prototypes]
+   int virtio_pci_admin_legacy_io_write(struct pci_dev *pdev, u16 opcode,
+       ^
+   drivers/virtio/virtio_pci_modern.c:786:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_pci_admin_legacy_io_write(struct pci_dev *pdev, u16 opcode,
+   ^
+   static 
+>> drivers/virtio/virtio_pci_modern.c:831:5: warning: no previous prototype for function 'virtio_pci_admin_legacy_io_read' [-Wmissing-prototypes]
+   int virtio_pci_admin_legacy_io_read(struct pci_dev *pdev, u16 opcode,
+       ^
+   drivers/virtio/virtio_pci_modern.c:831:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_pci_admin_legacy_io_read(struct pci_dev *pdev, u16 opcode,
+   ^
+   static 
+>> drivers/virtio/virtio_pci_modern.c:877:5: warning: no previous prototype for function 'virtio_pci_admin_legacy_io_notify_info' [-Wmissing-prototypes]
+   int virtio_pci_admin_legacy_io_notify_info(struct pci_dev *pdev,
+       ^
+   drivers/virtio/virtio_pci_modern.c:877:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_pci_admin_legacy_io_notify_info(struct pci_dev *pdev,
+   ^
+   static 
+   5 warnings generated.
 
 
+vim +/virtio_pci_admin_list_query +731 drivers/virtio/virtio_pci_modern.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   721	
+   722	/*
+   723	 * virtio_pci_admin_list_query - Provides to driver list of commands
+   724	 * supported for the PCI VF.
+   725	 * @dev: VF pci_dev
+   726	 * @buf: buffer to hold the returned list
+   727	 * @buf_size: size of the given buffer
+   728	 *
+   729	 * Returns 0 on success, or negative on failure.
+   730	 */
+ > 731	int virtio_pci_admin_list_query(struct pci_dev *pdev, u8 *buf, int buf_size)
+   732	{
+   733		struct virtio_device *virtio_dev = virtio_pci_vf_get_pf_dev(pdev);
+   734		struct virtio_admin_cmd cmd = {};
+   735		struct scatterlist result_sg;
+   736	
+   737		if (!virtio_dev)
+   738			return -ENODEV;
+   739	
+   740		sg_init_one(&result_sg, buf, buf_size);
+   741		cmd.opcode = cpu_to_le16(VIRTIO_ADMIN_CMD_LIST_QUERY);
+   742		cmd.group_type = cpu_to_le16(VIRTIO_ADMIN_GROUP_TYPE_SRIOV);
+   743		cmd.result_sg = &result_sg;
+   744	
+   745		return vp_modern_admin_cmd_exec(virtio_dev, &cmd);
+   746	}
+   747	EXPORT_SYMBOL_GPL(virtio_pci_admin_list_query);
+   748	
+   749	/*
+   750	 * virtio_pci_admin_list_use - Provides to device list of commands
+   751	 * used for the PCI VF.
+   752	 * @dev: VF pci_dev
+   753	 * @buf: buffer which holds the list
+   754	 * @buf_size: size of the given buffer
+   755	 *
+   756	 * Returns 0 on success, or negative on failure.
+   757	 */
+ > 758	int virtio_pci_admin_list_use(struct pci_dev *pdev, u8 *buf, int buf_size)
+   759	{
+   760		struct virtio_device *virtio_dev = virtio_pci_vf_get_pf_dev(pdev);
+   761		struct virtio_admin_cmd cmd = {};
+   762		struct scatterlist data_sg;
+   763	
+   764		if (!virtio_dev)
+   765			return -ENODEV;
+   766	
+   767		sg_init_one(&data_sg, buf, buf_size);
+   768		cmd.opcode = cpu_to_le16(VIRTIO_ADMIN_CMD_LIST_USE);
+   769		cmd.group_type = cpu_to_le16(VIRTIO_ADMIN_GROUP_TYPE_SRIOV);
+   770		cmd.data_sg = &data_sg;
+   771	
+   772		return vp_modern_admin_cmd_exec(virtio_dev, &cmd);
+   773	}
+   774	EXPORT_SYMBOL_GPL(virtio_pci_admin_list_use);
+   775	
+   776	/*
+   777	 * virtio_pci_admin_legacy_io_write - Write legacy registers of a member device
+   778	 * @dev: VF pci_dev
+   779	 * @opcode: op code of the io write command
+   780	 * @offset: starting byte offset within the registers to write to
+   781	 * @size: size of the data to write
+   782	 * @buf: buffer which holds the data
+   783	 *
+   784	 * Returns 0 on success, or negative on failure.
+   785	 */
+ > 786	int virtio_pci_admin_legacy_io_write(struct pci_dev *pdev, u16 opcode,
+   787					     u8 offset, u8 size, u8 *buf)
+   788	{
+   789		struct virtio_device *virtio_dev = virtio_pci_vf_get_pf_dev(pdev);
+   790		struct virtio_admin_cmd_legacy_wr_data *data;
+   791		struct virtio_admin_cmd cmd = {};
+   792		struct scatterlist data_sg;
+   793		int vf_id;
+   794		int ret;
+   795	
+   796		if (!virtio_dev)
+   797			return -ENODEV;
+   798	
+   799		vf_id = pci_iov_vf_id(pdev);
+   800		if (vf_id < 0)
+   801			return vf_id;
+   802	
+   803		data = kzalloc(sizeof(*data) + size, GFP_KERNEL);
+   804		if (!data)
+   805			return -ENOMEM;
+   806	
+   807		data->offset = offset;
+   808		memcpy(data->registers, buf, size);
+   809		sg_init_one(&data_sg, data, sizeof(*data) + size);
+   810		cmd.opcode = cpu_to_le16(opcode);
+   811		cmd.group_type = cpu_to_le16(VIRTIO_ADMIN_GROUP_TYPE_SRIOV);
+   812		cmd.group_member_id = cpu_to_le64(vf_id + 1);
+   813		cmd.data_sg = &data_sg;
+   814		ret = vp_modern_admin_cmd_exec(virtio_dev, &cmd);
+   815	
+   816		kfree(data);
+   817		return ret;
+   818	}
+   819	EXPORT_SYMBOL_GPL(virtio_pci_admin_legacy_io_write);
+   820	
+   821	/*
+   822	 * virtio_pci_admin_legacy_io_read - Read legacy registers of a member device
+   823	 * @dev: VF pci_dev
+   824	 * @opcode: op code of the io read command
+   825	 * @offset: starting byte offset within the registers to read from
+   826	 * @size: size of the data to be read
+   827	 * @buf: buffer to hold the returned data
+   828	 *
+   829	 * Returns 0 on success, or negative on failure.
+   830	 */
+ > 831	int virtio_pci_admin_legacy_io_read(struct pci_dev *pdev, u16 opcode,
+   832					    u8 offset, u8 size, u8 *buf)
+   833	{
+   834		struct virtio_device *virtio_dev = virtio_pci_vf_get_pf_dev(pdev);
+   835		struct virtio_admin_cmd_legacy_rd_data *data;
+   836		struct scatterlist data_sg, result_sg;
+   837		struct virtio_admin_cmd cmd = {};
+   838		int vf_id;
+   839		int ret;
+   840	
+   841		if (!virtio_dev)
+   842			return -ENODEV;
+   843	
+   844		vf_id = pci_iov_vf_id(pdev);
+   845		if (vf_id < 0)
+   846			return vf_id;
+   847	
+   848		data = kzalloc(sizeof(*data), GFP_KERNEL);
+   849		if (!data)
+   850			return -ENOMEM;
+   851	
+   852		data->offset = offset;
+   853		sg_init_one(&data_sg, data, sizeof(*data));
+   854		sg_init_one(&result_sg, buf, size);
+   855		cmd.opcode = cpu_to_le16(opcode);
+   856		cmd.group_type = cpu_to_le16(VIRTIO_ADMIN_GROUP_TYPE_SRIOV);
+   857		cmd.group_member_id = cpu_to_le64(vf_id + 1);
+   858		cmd.data_sg = &data_sg;
+   859		cmd.result_sg = &result_sg;
+   860		ret = vp_modern_admin_cmd_exec(virtio_dev, &cmd);
+   861	
+   862		kfree(data);
+   863		return ret;
+   864	}
+   865	EXPORT_SYMBOL_GPL(virtio_pci_admin_legacy_io_read);
+   866	
+   867	/*
+   868	 * virtio_pci_admin_legacy_io_notify_info - Read the queue notification
+   869	 * information for legacy interface
+   870	 * @dev: VF pci_dev
+   871	 * @req_bar_flags: requested bar flags
+   872	 * @bar: on output the BAR number of the member device
+   873	 * @bar_offset: on output the offset within bar
+   874	 *
+   875	 * Returns 0 on success, or negative on failure.
+   876	 */
+ > 877	int virtio_pci_admin_legacy_io_notify_info(struct pci_dev *pdev,
+   878						   u8 req_bar_flags, u8 *bar,
+   879						   u64 *bar_offset)
+   880	{
+   881		struct virtio_device *virtio_dev = virtio_pci_vf_get_pf_dev(pdev);
+   882		struct virtio_admin_cmd_notify_info_result *result;
+   883		struct virtio_admin_cmd cmd = {};
+   884		struct scatterlist result_sg;
+   885		int vf_id;
+   886		int ret;
+   887	
+   888		if (!virtio_dev)
+   889			return -ENODEV;
+   890	
+   891		vf_id = pci_iov_vf_id(pdev);
+   892		if (vf_id < 0)
+   893			return vf_id;
+   894	
+   895		result = kzalloc(sizeof(*result), GFP_KERNEL);
+   896		if (!result)
+   897			return -ENOMEM;
+   898	
+   899		sg_init_one(&result_sg, result, sizeof(*result));
+   900		cmd.opcode = cpu_to_le16(VIRTIO_ADMIN_CMD_LEGACY_NOTIFY_INFO);
+   901		cmd.group_type = cpu_to_le16(VIRTIO_ADMIN_GROUP_TYPE_SRIOV);
+   902		cmd.group_member_id = cpu_to_le64(vf_id + 1);
+   903		cmd.result_sg = &result_sg;
+   904		ret = vp_modern_admin_cmd_exec(virtio_dev, &cmd);
+   905		if (!ret) {
+   906			struct virtio_admin_cmd_notify_info_data *entry;
+   907			int i;
+   908	
+   909			ret = -ENOENT;
+   910			for (i = 0; i < VIRTIO_ADMIN_CMD_MAX_NOTIFY_INFO; i++) {
+   911				entry = &result->entries[i];
+   912				if (entry->flags == VIRTIO_ADMIN_CMD_NOTIFY_INFO_FLAGS_END)
+   913					break;
+   914				if (entry->flags != req_bar_flags)
+   915					continue;
+   916				*bar = entry->bar;
+   917				*bar_offset = le64_to_cpu(entry->offset);
+   918				ret = 0;
+   919				break;
+   920			}
+   921		}
+   922	
+   923		kfree(result);
+   924		return ret;
+   925	}
+   926	EXPORT_SYMBOL_GPL(virtio_pci_admin_legacy_io_notify_info);
+   927	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
