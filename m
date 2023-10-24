@@ -1,52 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68985224FE;
-	Tue, 24 Oct 2023 12:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A1921378;
+	Tue, 24 Oct 2023 13:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wo5PR8sr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IIKiXeOy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698148917; x=1729684917;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MSFPHxmeW5WSuXly2eTbwDelfWxIjNRRHxOhXiFLHDA=;
-  b=Wo5PR8srdYFzgEf2Ovk6+ofpMUMy/LyXqiQVnvwOSf8kyoERyP4ig+G2
-   A9jhkzzH21+NealggV0DUFg3HRz+UU8gufkJCVihAu3BD+GEHObvPdmUR
-   ivZtrC4MEifyZTzmdLEYSAW2eaxWuRIt95arTKZUoqxRx1PAi1fS8n3iL
-   SNUZC7yYBgflKOd62ZZ5R6IVt71z00pr6c5n5JTsbw7fESrjUOOtxd+CB
-   NRSCBAyWUmCQVh3SWIvFkCJLdeCJjDN0f0sOXgtmJ0cYHiKCkLvnyloyn
-   1IOWcwAy28ZD3uY/Tlnshib2S9y9ZOAqJ0/3iYWoJi0HPiuQl+xPwAkfP
+  t=1698155066; x=1729691066;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D+zq5i7oXV9GIgVjOh2+d3R+3GpyVVxZ8aarU5qe8bA=;
+  b=IIKiXeOyPPCdmd8FH/qss7NCdN4QvEtd3vP3S2TX2jwWRXNO7nWdwSdc
+   8slY4n/HZ2wgXjoVulKMsMd4Pk9NPofSFGIQNGvSuX7nSam9hefpK4iXm
+   MxhN15nWIZIEWw4r1L/Nsus0/5uQ7T32gBx8DbgRGM8n/2VQscm8aWa4s
+   k+g9tgshuFpuWflpaMJSMCstJCMcAYLrkwTvQGKswtNNsRM7dHNogP8Q/
+   WumZgVIOhTcvhSdOnd0NGG/LdAiH3Hg2aid1Hhiwhmj51a8Vk6ZConT9h
+   ExcrD0OwfkmY3y+xx+BD3TS7P4bn5K83soyIpdko19MmslQjkNU/1vjFC
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="384239643"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="453524493"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="384239643"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 05:01:00 -0700
+   d="scan'208";a="453524493"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 06:39:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="1005635660"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="1005635660"
+   d="scan'208";a="6176840"
 Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 05:00:57 -0700
+  by orviesa001.jf.intel.com with ESMTP; 24 Oct 2023 06:37:43 -0700
 Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qvG5f-0007qd-1i;
-	Tue, 24 Oct 2023 12:00:55 +0000
-Date: Tue, 24 Oct 2023 20:00:43 +0800
+	id 1qvHcY-0007tx-2A;
+	Tue, 24 Oct 2023 13:38:58 +0000
+Date: Tue, 24 Oct 2023 21:38:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Manas Ghandat <ghandatmanas@gmail.com>, dave.kleikamp@oracle.com,
-	shaggy@kernel.org
+To: Andreas Gruenbacher <agruenba@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Manas Ghandat <ghandatmanas@gmail.com>,
-	Linux-kernel-mentees@lists.linuxfoundation.org,
-	jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-	syzbot+9924e2a08d9ba0fd4ce2@syzkaller.appspotmail.com
-Subject: Re: [PATCH] jfs: fix slab-out-of-bounds Read in dtSearch
-Message-ID: <202310241933.iekefgtT-lkp@intel.com>
-References: <20231016171130.15952-1-ghandatmanas@gmail.com>
+	gfs2@lists.linux.dev
+Subject: [gfs2:for-next 14/21] fs/gfs2/bmap.c:893:9: warning: variable 'ret'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202310242105.0fHmealv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,287 +49,251 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231016171130.15952-1-ghandatmanas@gmail.com>
 
-Hi Manas,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on kleikamp-shaggy/jfs-next]
-[also build test WARNING on linus/master v6.6-rc7 next-20231023]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Manas-Ghandat/jfs-fix-slab-out-of-bounds-Read-in-dtSearch/20231017-152500
-base:   https://github.com/kleikamp/linux-shaggy jfs-next
-patch link:    https://lore.kernel.org/r/20231016171130.15952-1-ghandatmanas%40gmail.com
-patch subject: [PATCH] jfs: fix slab-out-of-bounds Read in dtSearch
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231024/202310241933.iekefgtT-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
+head:   ec6e8472a6a78f4c630fb45a07a354bbfbeb5660
+commit: 2cd225820b919acde16729f05f9f8841de682eef [14/21] gfs2: Initialize metapaths outside of __gfs2_iomap_get
+config: hexagon-randconfig-r033-20220828 (https://download.01.org/0day-ci/archive/20231024/202310242105.0fHmealv-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231024/202310241933.iekefgtT-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231024/202310242105.0fHmealv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310241933.iekefgtT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310242105.0fHmealv-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/jfs/jfs_dtree.c:636:20: warning: result of comparison of constant 128 with expression of type 's8' (aka 'signed char') is always false [-Wtautological-constant-out-of-range-compare]
-                           if (stbl[index] > 128 || stbl[index] < 0)
-                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
+   In file included from fs/gfs2/bmap.c:9:
+   In file included from include/linux/buffer_head.h:12:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from fs/gfs2/bmap.c:9:
+   In file included from include/linux/buffer_head.h:12:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from fs/gfs2/bmap.c:9:
+   In file included from include/linux/buffer_head.h:12:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> fs/gfs2/bmap.c:893:9: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                                   if (flags & IOMAP_REPORT) {
+                                       ^~~~~~~~~~~~~~~~~~~~
+   fs/gfs2/bmap.c:950:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/gfs2/bmap.c:893:5: note: remove the 'if' if its condition is always true
+                                   if (flags & IOMAP_REPORT) {
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/gfs2/bmap.c:892:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (pos >= size) {
+                               ^~~~~~~~~~~
+   fs/gfs2/bmap.c:950:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/gfs2/bmap.c:892:4: note: remove the 'if' if its condition is always true
+                           if (pos >= size) {
+                           ^~~~~~~~~~~~~~~~~
+   fs/gfs2/bmap.c:888:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (pos + length > max_size)
+                               ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/gfs2/bmap.c:950:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/gfs2/bmap.c:888:4: note: remove the 'if' if its condition is always true
+                           if (pos + length > max_size)
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/gfs2/bmap.c:871:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   9 warnings generated.
 
 
-vim +636 fs/jfs/jfs_dtree.c
+vim +893 fs/gfs2/bmap.c
 
-   555	
-   556	/*
-   557	 *	dtSearch()
-   558	 *
-   559	 * function:
-   560	 *	Search for the entry with specified key
-   561	 *
-   562	 * parameter:
-   563	 *
-   564	 * return: 0 - search result on stack, leaf page pinned;
-   565	 *	   errno - I/O error
-   566	 */
-   567	int dtSearch(struct inode *ip, struct component_name * key, ino_t * data,
-   568		     struct btstack * btstack, int flag)
-   569	{
-   570		int rc = 0;
-   571		int cmp = 1;		/* init for empty page */
-   572		s64 bn;
-   573		struct metapage *mp;
-   574		dtpage_t *p;
-   575		s8 *stbl;
-   576		int base, index, lim;
-   577		struct btframe *btsp;
-   578		pxd_t *pxd;
-   579		int psize = 288;	/* initial in-line directory */
-   580		ino_t inumber;
-   581		struct component_name ciKey;
-   582		struct super_block *sb = ip->i_sb;
-   583	
-   584		ciKey.name = kmalloc_array(JFS_NAME_MAX + 1, sizeof(wchar_t),
-   585					   GFP_NOFS);
-   586		if (!ciKey.name) {
-   587			rc = -ENOMEM;
-   588			goto dtSearch_Exit2;
-   589		}
-   590	
-   591	
-   592		/* uppercase search key for c-i directory */
-   593		UniStrcpy(ciKey.name, key->name);
-   594		ciKey.namlen = key->namlen;
-   595	
-   596		/* only uppercase if case-insensitive support is on */
-   597		if ((JFS_SBI(sb)->mntflag & JFS_OS2) == JFS_OS2) {
-   598			ciToUpper(&ciKey);
-   599		}
-   600		BT_CLR(btstack);	/* reset stack */
-   601	
-   602		/* init level count for max pages to split */
-   603		btstack->nsplit = 1;
-   604	
-   605		/*
-   606		 *	search down tree from root:
-   607		 *
-   608		 * between two consecutive entries of <Ki, Pi> and <Kj, Pj> of
-   609		 * internal page, child page Pi contains entry with k, Ki <= K < Kj.
-   610		 *
-   611		 * if entry with search key K is not found
-   612		 * internal page search find the entry with largest key Ki
-   613		 * less than K which point to the child page to search;
-   614		 * leaf page search find the entry with smallest key Kj
-   615		 * greater than K so that the returned index is the position of
-   616		 * the entry to be shifted right for insertion of new entry.
-   617		 * for empty tree, search key is greater than any key of the tree.
-   618		 *
-   619		 * by convention, root bn = 0.
-   620		 */
-   621		for (bn = 0;;) {
-   622			/* get/pin the page to search */
-   623			DT_GETPAGE(ip, bn, mp, psize, p, rc);
-   624			if (rc)
-   625				goto dtSearch_Exit1;
-   626	
-   627			/* get sorted entry table of the page */
-   628			stbl = DT_GETSTBL(p);
-   629	
-   630			/*
-   631			 * binary search with search key K on the current page.
-   632			 */
-   633			for (base = 0, lim = p->header.nextindex; lim; lim >>= 1) {
-   634				index = base + (lim >> 1);
-   635	
- > 636				if (stbl[index] > 128 || stbl[index] < 0)
-   637					goto out;
-   638	
-   639				if (p->header.flag & BT_LEAF) {
-   640					/* uppercase leaf name to compare */
-   641					cmp =
-   642					    ciCompare(&ciKey, p, stbl[index],
-   643						      JFS_SBI(sb)->mntflag);
-   644				} else {
-   645					/* router key is in uppercase */
-   646	
-   647					cmp = dtCompare(&ciKey, p, stbl[index]);
-   648	
-   649	
-   650				}
-   651				if (cmp == 0) {
-   652					/*
-   653					 *	search hit
-   654					 */
-   655					/* search hit - leaf page:
-   656					 * return the entry found
-   657					 */
-   658					if (p->header.flag & BT_LEAF) {
-   659						inumber = le32_to_cpu(
-   660				((struct ldtentry *) & p->slot[stbl[index]])->inumber);
-   661	
-   662						/*
-   663						 * search for JFS_LOOKUP
-   664						 */
-   665						if (flag == JFS_LOOKUP) {
-   666							*data = inumber;
-   667							rc = 0;
-   668							goto out;
-   669						}
-   670	
-   671						/*
-   672						 * search for JFS_CREATE
-   673						 */
-   674						if (flag == JFS_CREATE) {
-   675							*data = inumber;
-   676							rc = -EEXIST;
-   677							goto out;
-   678						}
-   679	
-   680						/*
-   681						 * search for JFS_REMOVE or JFS_RENAME
-   682						 */
-   683						if ((flag == JFS_REMOVE ||
-   684						     flag == JFS_RENAME) &&
-   685						    *data != inumber) {
-   686							rc = -ESTALE;
-   687							goto out;
-   688						}
-   689	
-   690						/*
-   691						 * JFS_REMOVE|JFS_FINDDIR|JFS_RENAME
-   692						 */
-   693						/* save search result */
-   694						*data = inumber;
-   695						btsp = btstack->top;
-   696						btsp->bn = bn;
-   697						btsp->index = index;
-   698						btsp->mp = mp;
-   699	
-   700						rc = 0;
-   701						goto dtSearch_Exit1;
-   702					}
-   703	
-   704					/* search hit - internal page:
-   705					 * descend/search its child page
-   706					 */
-   707					goto getChild;
-   708				}
-   709	
-   710				if (cmp > 0) {
-   711					base = index + 1;
-   712					--lim;
-   713				}
-   714			}
-   715	
-   716			/*
-   717			 *	search miss
-   718			 *
-   719			 * base is the smallest index with key (Kj) greater than
-   720			 * search key (K) and may be zero or (maxindex + 1) index.
-   721			 */
-   722			/*
-   723			 * search miss - leaf page
-   724			 *
-   725			 * return location of entry (base) where new entry with
-   726			 * search key K is to be inserted.
-   727			 */
-   728			if (p->header.flag & BT_LEAF) {
-   729				/*
-   730				 * search for JFS_LOOKUP, JFS_REMOVE, or JFS_RENAME
-   731				 */
-   732				if (flag == JFS_LOOKUP || flag == JFS_REMOVE ||
-   733				    flag == JFS_RENAME) {
-   734					rc = -ENOENT;
-   735					goto out;
-   736				}
-   737	
-   738				/*
-   739				 * search for JFS_CREATE|JFS_FINDDIR:
-   740				 *
-   741				 * save search result
-   742				 */
-   743				*data = 0;
-   744				btsp = btstack->top;
-   745				btsp->bn = bn;
-   746				btsp->index = base;
-   747				btsp->mp = mp;
-   748	
-   749				rc = 0;
-   750				goto dtSearch_Exit1;
-   751			}
-   752	
-   753			/*
-   754			 * search miss - internal page
-   755			 *
-   756			 * if base is non-zero, decrement base by one to get the parent
-   757			 * entry of the child page to search.
-   758			 */
-   759			index = base ? base - 1 : base;
-   760	
-   761			/*
-   762			 * go down to child page
-   763			 */
-   764		      getChild:
-   765			/* update max. number of pages to split */
-   766			if (BT_STACK_FULL(btstack)) {
-   767				/* Something's corrupted, mark filesystem dirty so
-   768				 * chkdsk will fix it.
-   769				 */
-   770				jfs_error(sb, "stack overrun!\n");
-   771				BT_STACK_DUMP(btstack);
-   772				rc = -EIO;
-   773				goto out;
-   774			}
-   775			btstack->nsplit++;
-   776	
-   777			/* push (bn, index) of the parent page/entry */
-   778			BT_PUSH(btstack, bn, index);
-   779	
-   780			/* get the child page block number */
-   781			pxd = (pxd_t *) & p->slot[stbl[index]];
-   782			bn = addressPXD(pxd);
-   783			psize = lengthPXD(pxd) << JFS_SBI(ip->i_sb)->l2bsize;
-   784	
-   785			/* unpin the parent page */
-   786			DT_PUTPAGE(mp);
-   787		}
-   788	
-   789	      out:
-   790		DT_PUTPAGE(mp);
-   791	
-   792	      dtSearch_Exit1:
-   793	
-   794		kfree(ciKey.name);
-   795	
-   796	      dtSearch_Exit2:
-   797	
-   798		return rc;
-   799	}
-   800	
+7ee66c03e40a57 Christoph Hellwig   2018-06-01  849  
+3974320ca6aa68 Bob Peterson        2017-02-16  850  /**
+54992257fe4bb9 Andreas Gruenbacher 2021-03-27  851   * __gfs2_iomap_get - Map blocks from an inode to disk blocks
+3974320ca6aa68 Bob Peterson        2017-02-16  852   * @inode: The inode
+3974320ca6aa68 Bob Peterson        2017-02-16  853   * @pos: Starting position in bytes
+3974320ca6aa68 Bob Peterson        2017-02-16  854   * @length: Length to map, in bytes
+3974320ca6aa68 Bob Peterson        2017-02-16  855   * @flags: iomap flags
+3974320ca6aa68 Bob Peterson        2017-02-16  856   * @iomap: The iomap structure
+628e366df11c0a Andreas Gruenbacher 2018-06-04  857   * @mp: The metapath
+3974320ca6aa68 Bob Peterson        2017-02-16  858   *
+3974320ca6aa68 Bob Peterson        2017-02-16  859   * Returns: errno
+3974320ca6aa68 Bob Peterson        2017-02-16  860   */
+54992257fe4bb9 Andreas Gruenbacher 2021-03-27  861  static int __gfs2_iomap_get(struct inode *inode, loff_t pos, loff_t length,
+628e366df11c0a Andreas Gruenbacher 2018-06-04  862  			    unsigned flags, struct iomap *iomap,
+628e366df11c0a Andreas Gruenbacher 2018-06-04  863  			    struct metapath *mp)
+b3b94faa5fe596 David Teigland      2006-01-16  864  {
+feaa7bba026c18 Steven Whitehouse   2006-06-14  865  	struct gfs2_inode *ip = GFS2_I(inode);
+feaa7bba026c18 Steven Whitehouse   2006-06-14  866  	struct gfs2_sbd *sdp = GFS2_SB(inode);
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  867  	loff_t size = i_size_read(inode);
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  868  	__be64 *ptr;
+3974320ca6aa68 Bob Peterson        2017-02-16  869  	sector_t lblock;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  870  	sector_t lblock_stop;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  871  	int ret;
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  872  	int eob;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  873  	u64 len;
+2cd225820b919a Andreas Gruenbacher 2023-10-20  874  	struct buffer_head *bh;
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  875  	u8 height;
+7276b3b0c77101 Steven Whitehouse   2006-09-21  876  
+628e366df11c0a Andreas Gruenbacher 2018-06-04  877  	if (!length)
+628e366df11c0a Andreas Gruenbacher 2018-06-04  878  		return -EINVAL;
+b3b94faa5fe596 David Teigland      2006-01-16  879  
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  880  	down_read(&ip->i_rw_mutex);
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  881  
+49edd5bf429c40 Andreas Gruenbacher 2018-02-06  882  	if (gfs2_is_stuffed(ip)) {
+2cd225820b919a Andreas Gruenbacher 2023-10-20  883  		struct buffer_head *dibh = metapath_dibh(mp);
+2cd225820b919a Andreas Gruenbacher 2023-10-20  884  
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  885  		if (flags & IOMAP_WRITE) {
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  886  			loff_t max_size = gfs2_max_stuffed_size(ip);
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  887  
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  888  			if (pos + length > max_size)
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  889  				goto unstuff;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  890  			iomap->length = max_size;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  891  		} else {
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  892  			if (pos >= size) {
+49edd5bf429c40 Andreas Gruenbacher 2018-02-06 @893  				if (flags & IOMAP_REPORT) {
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  894  					ret = -ENOENT;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  895  					goto unlock;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  896  				} else {
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  897  					iomap->offset = pos;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  898  					iomap->length = length;
+566a2ab3c9005f Andreas Gruenbacher 2020-04-20  899  					goto hole_found;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  900  				}
+3974320ca6aa68 Bob Peterson        2017-02-16  901  			}
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  902  			iomap->length = size;
+49edd5bf429c40 Andreas Gruenbacher 2018-02-06  903  		}
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  904  		iomap->addr = (ip->i_no_addr << inode->i_blkbits) +
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  905  			      sizeof(struct gfs2_dinode);
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  906  		iomap->type = IOMAP_INLINE;
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  907  		iomap->inline_data = dibh->b_data + sizeof(struct gfs2_dinode);
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  908  		goto out;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  909  	}
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  910  
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  911  unstuff:
+3974320ca6aa68 Bob Peterson        2017-02-16  912  	lblock = pos >> inode->i_blkbits;
+3974320ca6aa68 Bob Peterson        2017-02-16  913  	iomap->offset = lblock << inode->i_blkbits;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  914  	lblock_stop = (pos + length - 1) >> inode->i_blkbits;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  915  	len = lblock_stop - lblock + 1;
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  916  	iomap->length = len << inode->i_blkbits;
+20cdc1931ee8e0 Andreas Gruenbacher 2017-09-22  917  
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  918  	height = ip->i_height;
+9a38662ba4e268 Andreas Gruenbacher 2018-04-16  919  	while ((lblock + 1) * sdp->sd_sb.sb_bsize > sdp->sd_heightsize[height])
+ecc30c79157103 Steven Whitehouse   2008-01-28  920  		height++;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  921  	find_metapath(sdp, lblock, mp, height);
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  922  	if (height > ip->i_height || gfs2_is_stuffed(ip))
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  923  		goto do_alloc;
+3974320ca6aa68 Bob Peterson        2017-02-16  924  
+628e366df11c0a Andreas Gruenbacher 2018-06-04  925  	ret = lookup_metapath(ip, mp);
+e8b43fe0c1e035 Andreas Gruenbacher 2017-12-08  926  	if (ret)
+628e366df11c0a Andreas Gruenbacher 2018-06-04  927  		goto unlock;
+3974320ca6aa68 Bob Peterson        2017-02-16  928  
+628e366df11c0a Andreas Gruenbacher 2018-06-04  929  	if (mp->mp_aheight != ip->i_height)
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  930  		goto do_alloc;
+3974320ca6aa68 Bob Peterson        2017-02-16  931  
+628e366df11c0a Andreas Gruenbacher 2018-06-04  932  	ptr = metapointer(ip->i_height - 1, mp);
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  933  	if (*ptr == 0)
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  934  		goto do_alloc;
+3974320ca6aa68 Bob Peterson        2017-02-16  935  
+628e366df11c0a Andreas Gruenbacher 2018-06-04  936  	bh = mp->mp_bh[ip->i_height - 1];
+b4bf3d5c37d404 Andreas Gruenbacher 2023-09-14  937  	len = gfs2_extent_length(bh, ptr, &eob);
+3974320ca6aa68 Bob Peterson        2017-02-16  938  
+628e366df11c0a Andreas Gruenbacher 2018-06-04  939  	iomap->addr = be64_to_cpu(*ptr) << inode->i_blkbits;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  940  	iomap->length = len << inode->i_blkbits;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  941  	iomap->type = IOMAP_MAPPED;
+0ed91eca1130e6 Andreas Gruenbacher 2018-07-25  942  	iomap->flags |= IOMAP_F_MERGED;
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  943  	if (eob)
+7ee66c03e40a57 Christoph Hellwig   2018-06-01  944  		iomap->flags |= IOMAP_F_GFS2_BOUNDARY;
+3974320ca6aa68 Bob Peterson        2017-02-16  945  
+3974320ca6aa68 Bob Peterson        2017-02-16  946  out:
+628e366df11c0a Andreas Gruenbacher 2018-06-04  947  	iomap->bdev = inode->i_sb->s_bdev;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  948  unlock:
+628e366df11c0a Andreas Gruenbacher 2018-06-04  949  	up_read(&ip->i_rw_mutex);
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  950  	return ret;
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  951  
+9b8c81d1de4994 Steven Whitehouse   2008-02-22  952  do_alloc:
+628e366df11c0a Andreas Gruenbacher 2018-06-04  953  	if (flags & IOMAP_REPORT) {
+49edd5bf429c40 Andreas Gruenbacher 2018-02-06  954  		if (pos >= size)
+3974320ca6aa68 Bob Peterson        2017-02-16  955  			ret = -ENOENT;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  956  		else if (height == ip->i_height)
+628e366df11c0a Andreas Gruenbacher 2018-06-04  957  			ret = gfs2_hole_size(inode, lblock, len, mp, iomap);
+49edd5bf429c40 Andreas Gruenbacher 2018-02-06  958  		else
+f3506eee81d1f7 Andreas Gruenbacher 2021-11-06  959  			iomap->length = size - iomap->offset;
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  960  	} else if (flags & IOMAP_WRITE) {
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  961  		u64 alloc_size;
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  962  
+967bcc91b04493 Andreas Gruenbacher 2018-06-19  963  		if (flags & IOMAP_DIRECT)
+967bcc91b04493 Andreas Gruenbacher 2018-06-19  964  			goto out;  /* (see gfs2_file_direct_write) */
+967bcc91b04493 Andreas Gruenbacher 2018-06-19  965  
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  966  		len = gfs2_alloc_size(inode, mp, len);
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  967  		alloc_size = len << inode->i_blkbits;
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  968  		if (alloc_size < iomap->length)
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  969  			iomap->length = alloc_size;
+64bc06bb32ee9c Andreas Gruenbacher 2018-06-24  970  	} else {
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  971  		if (pos < size && height == ip->i_height)
+d505a96a3b16f4 Andreas Gruenbacher 2018-06-24  972  			ret = gfs2_hole_size(inode, lblock, len, mp, iomap);
+3974320ca6aa68 Bob Peterson        2017-02-16  973  	}
+566a2ab3c9005f Andreas Gruenbacher 2020-04-20  974  hole_found:
+566a2ab3c9005f Andreas Gruenbacher 2020-04-20  975  	iomap->addr = IOMAP_NULL_ADDR;
+566a2ab3c9005f Andreas Gruenbacher 2020-04-20  976  	iomap->type = IOMAP_HOLE;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  977  	goto out;
+628e366df11c0a Andreas Gruenbacher 2018-06-04  978  }
+628e366df11c0a Andreas Gruenbacher 2018-06-04  979  
+
+:::::: The code at line 893 was first introduced by commit
+:::::: 49edd5bf429c405b3a7f75503845d9f66a47dd4b gfs2: Fixes to "Implement iomap for block_map"
+
+:::::: TO: Andreas Gruenbacher <agruenba@redhat.com>
+:::::: CC: Bob Peterson <rpeterso@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
