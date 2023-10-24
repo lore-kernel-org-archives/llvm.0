@@ -1,88 +1,75 @@
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95AA6ABB
-	for <llvm@lists.linux.dev>; Mon, 23 Oct 2023 15:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riseup.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83C6566A;
+	Tue, 24 Oct 2023 01:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="duF/zOC4"
-Received: from fews02-sea.riseup.net (fews02-sea-pn.riseup.net [10.0.1.112])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx1.riseup.net (Postfix) with ESMTPS id 4SDdcc1yfdzDqNf;
-	Mon, 23 Oct 2023 14:58:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-	t=1698073136; bh=0EwVX4x8/C/wp6TVJp3GOQOulro1hRYNPscctE5kWGo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=duF/zOC4tRpvihCIOFQ1Azq7UG/6zbCxA2sQjcuPPm3C55okjUmgXHl6GFHFvbpp8
-	 wUxRSoX9PGbZh+27k+LwPOow/yAtWKoKE6azytvFl2N7LTzsDR80G6JUcQJEyrg7Rd
-	 tVZoe9T1vY6/UzTMYLQoy5u8e7WbBBgKe0kYn+5s=
-X-Riseup-User-ID: 78D5FF85C1AECE59B001A8F588ABCF4E6B83636AF5BBC44C7A4D11F0DD8AA434
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews02-sea.riseup.net (Postfix) with ESMTPSA id 4SDdcW0H5gzFpWN;
-	Mon, 23 Oct 2023 14:58:50 +0000 (UTC)
-Message-ID: <80904787-def1-424d-abd7-e49e671b502f@riseup.net>
-Date: Mon, 23 Oct 2023 11:58:47 -0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ci3WbMjP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698110558; x=1729646558;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nDTslLenkizcRrHJKivdjS1LbaTiffk2Cypje6raSv4=;
+  b=Ci3WbMjPeQkAG/mwfn00aQwoVAe3hGEuvrjcvHbNKGfN+gsHveFbzlhv
+   34N5rY/aPVt5KmoffaY7bxnDcOjr15sWPRbMfAHqTstn18IJtIzIOUUYe
+   ckG38eDnqVlCKwrDQG2mvD2B151w5y840TmiZULvlGKKjw+lcTyPscI0V
+   GhDU+bLJxFMLbaNddgDmyrmLcK6X5ZM4yb9490ySi0H3UNt5Y/MPW+mfh
+   NjHK/G+oo1zjZ7z76dtkhVNDXShY1i/ETWimx3pW4MwGdGSIi7EsdQxuG
+   /q7lUuGVeC7HJu7q8bGJEshosWEXpWaH/qZbUahcS3/xFLjRJ3FJa6SqZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="366306519"
+X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
+   d="scan'208";a="366306519"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 18:22:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="1005511042"
+X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
+   d="scan'208";a="1005511042"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Oct 2023 18:22:33 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qv67r-0007RR-12;
+	Tue, 24 Oct 2023 01:22:31 +0000
+Date: Tue, 24 Oct 2023 09:21:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: [paulmck-rcu:mmap_sem.2023.10.18a 31/31] ld.lld: error: undefined
+ symbol: __bad_udelay
+Message-ID: <202310240930.H14JVILQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/2] um: kunit: Add Clang support for CONFIG_GCOV
-Content-Language: en-US
-To: =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
- llvm@lists.linux.dev, linux-um@lists.infradead.org,
- linux-doc@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kselftest@vger.kernel.org
-Cc: Tom Rix <trix@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Johannes Berg <johannes@sipsolutions.net>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Richard Weinberger <richard@nod.at>, Jonathan Corbet <corbet@lwn.net>,
- David Gow <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>
-References: <20231020092159.2486063-1-michal.winiarski@intel.com>
-From: Arthur Grillo <arthurgrillo@riseup.net>
-In-Reply-To: <20231020092159.2486063-1-michal.winiarski@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git mmap_sem.2023.10.18a
+head:   4015256f2bc734d4175381762282784597f41cfa
+commit: 4015256f2bc734d4175381762282784597f41cfa [31/31] EXP TESTING: introduce delay between getting a VMA and using it in show_map
+config: arm-ixp4xx_defconfig (https://download.01.org/0day-ci/archive/20231024/202310240930.H14JVILQ-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231024/202310240930.H14JVILQ-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310240930.H14JVILQ-lkp@intel.com/
 
-On 20/10/23 06:21, Michał Winiarski wrote:
-> Clang uses a different set of CLI args for coverage, and the output
-> needs to be processed by a different set of tools.
-> Update the Makefile and add an example of usage in kunit docs.
+All errors (new ones prefixed by >>):
 
-Great change! It's great not to rely on older versions of GCC for
-that.
+>> ld.lld: error: undefined symbol: __bad_udelay
+   >>> referenced by task_mmu.c
+   >>>               fs/proc/task_mmu.o:(show_map) in archive vmlinux.a
 
-I was able to generate coverage reports, but I have a few of things to
-note:
-
-When I ran the kunit.py it generated this warning several times:
-
-WARNING: modpost: vmlinux (__llvm_covfun): unexpected non-allocatable section.
-Did you forget to use "ax"/"aw" in a .S file?
-Note that for example <linux/init.h> contains
-section definitions for use in .S files.
-
-Maybe it would be great to know why this is happening.
-
-Also, the linker consumed a lot of RAM to build the kernel with those
-additional flags, but maybe this is expected :P.
-
-Best Regards,
-~Arthur Grillo
-
-> 
-> Michał Winiarski (2):
->   arch: um: Add Clang coverage support
->   Documentation: kunit: Add clang UML coverage example
-> 
->  Documentation/dev-tools/kunit/running_tips.rst | 11 +++++++++++
->  arch/um/Makefile-skas                          |  5 +++++
->  2 files changed, 16 insertions(+)
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
