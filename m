@@ -1,155 +1,117 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E321D6A9;
-	Tue, 24 Oct 2023 15:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FE02C866;
+	Tue, 24 Oct 2023 16:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WcXmRNzJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iapgXHGF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698162972; x=1729698972;
+  t=1698164236; x=1729700236;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vKnb1pkNJBElrMmDQTHLa1aDlzaoDjjjnmPUwHZ2DCQ=;
-  b=WcXmRNzJSL08Eva7tzBZwfhAJv2Akyd2vGwTfnnakwVqxX7DR9DGjSNh
-   zkoW1sXPgjltjCvhsFqFEECM4KnUPVk4Ib+usOuqDfltRqLgC4aF5JoqP
-   ZeReK2VjDRb/pznWU2rpeo3mlI+ZpdK2tmiTIKmlePsCWjagr8D57xLru
-   7ji2pYBqZKSafhjtmHNQhVLkidO/n/g9m4iyqrssDFx9faAhdAUW3+q3v
-   hPwzA+h6JRYXHlJ/MtvqtFyO+S7AfigdgC0NAYSYXpT2aoFwsW37/4Bsi
-   cxL5MTe46lDYPs2IU4CmQkAUqrZDwtaDqRK1EeDMtSHotu5YUGMHZIWO+
+   mime-version:in-reply-to;
+  bh=vU6NUxn0dSy8CYFpKW21RatM/5zlQn8ad7r9qtdb8U4=;
+  b=iapgXHGFcwqgC4c37OBq9E2w3Sz/ff+2brfdMDtKdseSzRncxgqXIPc+
+   g6bMFlbFV88i8nmbY8vRe3ARtOD9TrddcsB7x3DRj7WijkSb3P8q5wPFV
+   77v30zoYGPqF4hpXUuPrefABxuy06thsZuYBK4R1QWzeiAHy9qVMIz7kO
+   6YoSHRcNJsNI5Ou056gbUXxfj4hMbjVPdDc7btsmiq32gebo+iM3o3hn1
+   zSTRh0BBrhgTRbadDHxLQMjLf0kbN6vuQax9MVp/R6b861Rh1i4dMLIbV
+   DlzUV1AQgVBysaUlbgxeef5aZTbGnx1QYlhgAQbvJ9kiqrq/piM4emiAQ
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="5719674"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="5725473"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="5719674"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:56:10 -0700
+   d="scan'208";a="5725473"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 09:17:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="758510352"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="735081789"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="758510352"
+   d="scan'208";a="735081789"
 Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 24 Oct 2023 08:56:07 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Oct 2023 09:17:10 -0700
 Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qvJlF-0007yL-1n;
-	Tue, 24 Oct 2023 15:56:05 +0000
-Date: Tue, 24 Oct 2023 23:55:29 +0800
+	id 1qvK5b-00081n-38;
+	Tue, 24 Oct 2023 16:17:07 +0000
+Date: Wed, 25 Oct 2023 00:16:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: fenghui <fenghui@nfschina.com>, wim@linux-watchdog.org,
-	linux@roeck-us.net
+To: Shenwei Wang <shenwei.wang@nxp.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-	fenghui <fenghui@nfschina.com>
-Subject: Re: [PATCH] watchdog_dev: =?utf-8?Q?Remove?=
- =?utf-8?B?IHVubmVjZXNzYXJ5IOKAmDDigJk=?= values from err
-Message-ID: <202310242358.POvbqd5T-lkp@intel.com>
-References: <20231021110538.441-1-fenghui@nfschina.com>
+	netdev@vger.kernel.org,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com, imx@lists.linux.dev,
+	Shenwei Wang <shenwei.wang@nxp.com>,
+	Mario Castaneda <mario.ignacio.castaneda.lopez@nxp.com>
+Subject: Re: [PATCH net] net: stmmac: dwmac-imx: request high frequency mode
+Message-ID: <202310250045.xYg3qn6G-lkp@intel.com>
+References: <20231004195442.414766-1-shenwei.wang@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231021110538.441-1-fenghui@nfschina.com>
+In-Reply-To: <20231004195442.414766-1-shenwei.wang@nxp.com>
 
-Hi fenghui,
+Hi Shenwei,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.6-rc7 next-20231024]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/fenghui/watchdog_dev-Remove-unnecessary-0-values-from-err/20231021-190730
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231021110538.441-1-fenghui%40nfschina.com
-patch subject: [PATCH] watchdog_dev: Remove unnecessary ‘0’ values from err
-config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20231024/202310242358.POvbqd5T-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231024/202310242358.POvbqd5T-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shenwei-Wang/net-stmmac-dwmac-imx-request-high-frequency-mode/20231005-035606
+base:   net/main
+patch link:    https://lore.kernel.org/r/20231004195442.414766-1-shenwei.wang%40nxp.com
+patch subject: [PATCH net] net: stmmac: dwmac-imx: request high frequency mode
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231025/202310250045.xYg3qn6G-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231025/202310250045.xYg3qn6G-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310242358.POvbqd5T-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310250045.xYg3qn6G-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/watchdog/watchdog_dev.c:305:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     305 |         if (wdd->ops->stop) {
-         |             ^~~~~~~~~~~~~~
-   drivers/watchdog/watchdog_dev.c:313:6: note: uninitialized use occurs here
-     313 |         if (err == 0) {
-         |             ^~~
-   drivers/watchdog/watchdog_dev.c:305:2: note: remove the 'if' if its condition is always true
-     305 |         if (wdd->ops->stop) {
-         |         ^~~~~~~~~~~~~~~~~~~~
-     306 |                 clear_bit(WDOG_HW_RUNNING, &wdd->status);
-     307 |                 err = wdd->ops->stop(wdd);
-     308 |                 trace_watchdog_stop(wdd, err);
-     309 |         } else {
-         |          ~~~~~~~
-     310 |                 set_bit(WDOG_HW_RUNNING, &wdd->status);
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     311 |         }
-         | ~~~~~~~~~
-   drivers/watchdog/watchdog_dev.c:294:9: note: initialize the variable 'err' to silence this warning
-     294 |         int err;
-         |                ^
-         |                 = 0
-   1 warning generated.
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c:9:10: fatal error: 'linux/busfreq-imx.h' file not found
+   #include <linux/busfreq-imx.h>
+            ^~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +305 drivers/watchdog/watchdog_dev.c
+vim +9 drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
 
-234445b4e4542f Wim Van Sebroeck           2011-07-22  281  
-234445b4e4542f Wim Van Sebroeck           2011-07-22  282  /*
-ba6c89ab3b5878 Daniel Bristot de Oliveira 2022-02-11  283   * watchdog_stop - wrapper to stop the watchdog
-ba6c89ab3b5878 Daniel Bristot de Oliveira 2022-02-11  284   * @wdd: The watchdog device to stop
-b4ffb1909843b2 Guenter Roeck              2015-12-25  285   *
-234445b4e4542f Wim Van Sebroeck           2011-07-22  286   * Stop the watchdog if it is still active and unmark it active.
-7e192b9c4234d2 Wim Van Sebroeck           2011-07-22  287   * If the 'nowayout' feature was set, the watchdog cannot be stopped.
-ba6c89ab3b5878 Daniel Bristot de Oliveira 2022-02-11  288   * The caller must hold wd_data->lock.
-ba6c89ab3b5878 Daniel Bristot de Oliveira 2022-02-11  289   *
-ba6c89ab3b5878 Daniel Bristot de Oliveira 2022-02-11  290   * Return: 0 on success or a negative errno code for failure.
-234445b4e4542f Wim Van Sebroeck           2011-07-22  291   */
-bc794ac3b5836e Guenter Roeck              2015-09-29  292  static int watchdog_stop(struct watchdog_device *wdd)
-234445b4e4542f Wim Van Sebroeck           2011-07-22  293  {
-585c761ac0ef85 fenghui                    2023-10-21  294  	int err;
-e907df32725204 Hans de Goede              2012-05-22  295  
-bc794ac3b5836e Guenter Roeck              2015-09-29  296  	if (!watchdog_active(wdd))
-b4ffb1909843b2 Guenter Roeck              2015-12-25  297  		return 0;
-7e192b9c4234d2 Wim Van Sebroeck           2011-07-22  298  
-bc794ac3b5836e Guenter Roeck              2015-09-29  299  	if (test_bit(WDOG_NO_WAY_OUT, &wdd->status)) {
-0254e953537c92 Guenter Roeck              2016-01-03  300  		pr_info("watchdog%d: nowayout prevents watchdog being stopped!\n",
-0254e953537c92 Guenter Roeck              2016-01-03  301  			wdd->id);
-b4ffb1909843b2 Guenter Roeck              2015-12-25  302  		return -EBUSY;
-7e192b9c4234d2 Wim Van Sebroeck           2011-07-22  303  	}
-234445b4e4542f Wim Van Sebroeck           2011-07-22  304  
-3c10bbde10fe4d Guenter Roeck              2016-07-21 @305  	if (wdd->ops->stop) {
-3c10bbde10fe4d Guenter Roeck              2016-07-21  306  		clear_bit(WDOG_HW_RUNNING, &wdd->status);
-bc794ac3b5836e Guenter Roeck              2015-09-29  307  		err = wdd->ops->stop(wdd);
-e25b091bed4946 Uwe Kleine-König           2022-10-08  308  		trace_watchdog_stop(wdd, err);
-3c10bbde10fe4d Guenter Roeck              2016-07-21  309  	} else {
-d0684c8a935495 Guenter Roeck              2016-02-28  310  		set_bit(WDOG_HW_RUNNING, &wdd->status);
-3c10bbde10fe4d Guenter Roeck              2016-07-21  311  	}
-d0684c8a935495 Guenter Roeck              2016-02-28  312  
-664a39236e718f Guenter Roeck              2016-02-28  313  	if (err == 0) {
-bc794ac3b5836e Guenter Roeck              2015-09-29  314  		clear_bit(WDOG_ACTIVE, &wdd->status);
-ee142889e32f56 Guenter Roeck              2016-02-28  315  		watchdog_update_worker(wdd);
-7b7d2fdc8c3e3f Curtis Klein               2021-02-03  316  		watchdog_hrtimer_pretimeout_stop(wdd);
-664a39236e718f Guenter Roeck              2016-02-28  317  	}
-7a87982420e5e1 Hans de Goede              2012-05-22  318  
-234445b4e4542f Wim Van Sebroeck           2011-07-22  319  	return err;
-7a87982420e5e1 Hans de Goede              2012-05-22  320  }
-234445b4e4542f Wim Van Sebroeck           2011-07-22  321  
+   > 9	#include <linux/busfreq-imx.h>
+    10	#include <linux/clk.h>
+    11	#include <linux/gpio/consumer.h>
+    12	#include <linux/kernel.h>
+    13	#include <linux/mfd/syscon.h>
+    14	#include <linux/module.h>
+    15	#include <linux/of.h>
+    16	#include <linux/of_net.h>
+    17	#include <linux/phy.h>
+    18	#include <linux/platform_device.h>
+    19	#include <linux/pm_wakeirq.h>
+    20	#include <linux/regmap.h>
+    21	#include <linux/slab.h>
+    22	#include <linux/stmmac.h>
+    23	
 
 -- 
 0-DAY CI Kernel Test Service
