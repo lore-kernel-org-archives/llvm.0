@@ -1,191 +1,136 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24EC02E64B
-	for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 14:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC758829;
+	Thu, 26 Oct 2023 14:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kIE1i3CT"
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-d9ca471cf3aso675302276.2
-        for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 07:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698330204; x=1698935004; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qmQ12llQk3IZSo1cj6ehbveeVOkoR+zL/LYihr+kgBA=;
-        b=kIE1i3CTdqCrKpA9dC9vC7mOC7E1RJJcn0TF936/OzDAJlv4vfcH+c3cM+bTomHMiK
-         0//nDQpbVzAXiipNs5EQEPzIl43EA/jLlehU2soq+NKEwm35EcVF0bKczxK5xtRRYsUd
-         BSNVLo8ZwMwW+O2S//X7h2eQCUucagv7/WLViocjzDMFxvKqYeGabrE2LZI6Buz+5HZ8
-         tje/CmBiNKLFDKccVs+eW3uiBnKYM+54sY5ggZ22oVMOkc5hDIjx5kOlibXznWEGsHia
-         WNPHDdaRJf7R9t1BcwHcnx54YkPLd2M8FwhjeG95cyXro/or4OyZUg065RCx4errt2ic
-         TjWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698330204; x=1698935004;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qmQ12llQk3IZSo1cj6ehbveeVOkoR+zL/LYihr+kgBA=;
-        b=PX7gDM6+wCOu1LZAUpNT+Bt8Q9MTtuLtnPpdGNEVezQDicLgyOOH3pxof/KDaeHhhC
-         wBGSD3D/VVnG0rPqSr7o7BuY/pSxjXZq7lR79Jct2gs0CekrBX4JzP4QVAE+tyq7IHJz
-         jif7uDzMWzPrOWdA9t3Fo/Q0rDWiRusdHCHAkm/00XA7FDFVoszTmNfiJq+myVqjsjT1
-         s113Ig6yGEB5i6uNejJU228EZERQpUTRdSWDEOehHZBy+M8mPApROngLIXjrB8g6p7KU
-         slKNC023cxx1FcXh9BPyz8dKqahVxCmupMjftDz6vYryY8sX74iOIkHTQ/0shzhAZp5u
-         Gvjw==
-X-Gm-Message-State: AOJu0Yy/RJG57agwmGOSk015AXiTHDsoZsWUfFZoD6/gchwgJjOoIUmp
-	zxt0oPsVuAvyXNXWk1ylZb4=
-X-Google-Smtp-Source: AGHT+IH1fP8m0ZfURzq/DYK3dN0nkQ4K1zNYSBgKw8eHs+E9drhtEjW1W3aytItYucb04Mw1q71plA==
-X-Received: by 2002:a25:aca7:0:b0:d9c:fd8d:833a with SMTP id x39-20020a25aca7000000b00d9cfd8d833amr19746794ybi.59.1698330204037;
-        Thu, 26 Oct 2023 07:23:24 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id 205-20020a2505d6000000b00d814d8dfd69sm5314546ybf.27.2023.10.26.07.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Oct 2023 07:23:23 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailauth.nyi.internal (Postfix) with ESMTP id A68B127C005B;
-	Thu, 26 Oct 2023 10:23:22 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 26 Oct 2023 10:23:22 -0400
-X-ME-Sender: <xms:WnY6ZXn4lB9TVEVhjEs-iMQ9zSHVUF7Brqfa3pebbcmICW4qc1-epA>
-    <xme:WnY6Za2dLI94QaOdsGzzxDYwgH4jbKkYMI2jLX_H5AqoCUD_hHvTwuPsl-uc2J0Yv
-    ZV5GmpIhA6KvHlGUw>
-X-ME-Received: <xmr:WnY6ZdrohGQwXZCTCBX8y3wgWXGPxQW0ied1kmNm-PKN5gslsVoPX1-kodA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledvgdejiecutefuodetggdotefrodftvf
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="M8rt++6e";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EdV2l51B"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.nyi.internal (Postfix) with ESMTP id 4FCA35C0244;
+	Thu, 26 Oct 2023 10:37:39 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 26 Oct 2023 10:37:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1698331059; x=1698417459; bh=AP
+	8v+9R0WrLVWBhLRKm9UmDroDPmhVEEfTlQz4HJVnU=; b=M8rt++6eTTYC1j08ZK
+	ohAxU29e9JXfAKi4N+lgWoBKJ7sButBmrl1OG9+AxAJMUL6V/sdBKL3tsVv9lQIE
+	d2ufUxXIl941nqKYMngMibqRRUpg4c6sVDcpfVTmiK2GmlZwmi0ausyTJ8bKwKQi
+	m442uUCFOvzmexnyi6XX7+A51ATLzpXVj074YKT2AqbfJJeBBfgzaybCKItcL+wr
+	47spdPgzT/ynwbf67tlwkCEU3TuzreDPLFPBePXK75d0CfC2jU+9yXKa8Cq34UDv
+	9RJxc0UZvJT9Tqt4XcN1AU5GDa21c4At9qodr03G54MeG0do3vJHbI53aQHMwH4y
+	3wug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1698331059; x=1698417459; bh=AP8v+9R0WrLVW
+	BhLRKm9UmDroDPmhVEEfTlQz4HJVnU=; b=EdV2l51B6e/QASMdncz48I39lBDvg
+	UEKh2kXV9ImwaE3vqVSN5DNhG27bacvnsc0bDrye6bJHfOGu4R2h5dVTpeswn35X
+	0E2Yr70ly1tk81YwKwO2URJRNc5/R2QQ3fCZlZjYupOVxzyIz+3ZYX1TEOsc3y8A
+	09vpRNX6wj2/SQvOi77kCFwgXT25JCrNFLCX7jKz49PtBBw+nx9gTVyGiI7nzyUa
+	mGZ8kEFakFMnHAflO9TriRKtpDIARLV+9EpXGAg+HC1rFJ/4FoNJd5HNInnDXYLa
+	TjeVAXBC9rPcA9q1Z9BA2gYXIYCIY5ev9Pw7da9VRilT0DT49APvWNbdw==
+X-ME-Sender: <xms:s3k6Zd4uSf4yZTQw5MapamckErRvpOf7FQ1Z9YkbbccSzm2J0aKKqw>
+    <xme:s3k6Za6E4gUiEI5eBlb4zG-7uPaY3eIbAPOGWCNXTsVXugeKlN1cELX37vSBYWfHP
+    VIJuDhuGWAm_xKyJFk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledvgdejlecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudff
-    iedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
-    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
-    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
-    hmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:WnY6Zflspi88sF3fgu01H4l2D0B37XPK_uXRLMaRv-2LcyiuWY0dHw>
-    <xmx:WnY6ZV3gk2_I24ou6ijCgALyVCEzmtKZEcc60DuXfHxUIXZDP2aIHg>
-    <xmx:WnY6ZeuxLFr0iJhu9Gs7yct3EP3TeJ3owikW4OPYePen44xv2Z0Q8w>
-    <xmx:WnY6ZSK-H_V8jB0yAOJA6Ttrl4PfsNmA3jL339jK2qrz7MGEyht4JQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Oct 2023 10:23:21 -0400 (EDT)
-Date: Thu, 26 Oct 2023 07:23:21 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
- Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	Tom Rix <trix@redhat.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Matthew Wilcox <willy@infradead.org>,	Dave Chinner <david@fromorbit.com>,
- linux-fsdevel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [RFC] rust: types: Add read_once and write_once
-Message-ID: <ZTp2WVlMxqmlC4Rb@Boquns-Mac-mini.home>
-References: <20231025195339.1431894-1-boqun.feng@gmail.com>
- <20231026081345.GJ31411@noisy.programming.kicks-ass.net>
- <20231026113610.1425be1b@eugeo>
- <20231026111625.GK33965@noisy.programming.kicks-ass.net>
- <ZTp2AVY5twZOKEtX@Boquns-Mac-mini.home>
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeujeeffedvfeehtdfgtdekkeefleegudetjeegtedvieduiedvueduudefieei
+    gfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpddtuddrohhrghdpghhithhhuhgsrd
+    gtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
+    rghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:s3k6ZUcqbzBFb2GxA4QF89fQyMuSsPXecXSvaNgShN5YiubpfHagFA>
+    <xmx:s3k6ZWI2qE_4v5lVUEssmyY7y_hK5bL7v-nQOShMkHtGvxxoXoUIsg>
+    <xmx:s3k6ZRL4FmY4raZq383JDeufch5p_uj3fwtSeHxcNnOOS5w2k80FxQ>
+    <xmx:s3k6Zfh5aTqtZq8jrRzzvACkgfCwcPnJTBCo-74-cZSuFCmXuW15ag>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 09C7DB6008D; Thu, 26 Oct 2023 10:37:38 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1048-g9229b632c5-fm-20231019.001-g9229b632
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZTp2AVY5twZOKEtX@Boquns-Mac-mini.home>
+Message-Id: <dd4bf45e-2ef3-4975-904d-f72c3d4af7c7@app.fastmail.com>
+In-Reply-To: <202310262151.renqMvme-lkp@intel.com>
+References: <202310262151.renqMvme-lkp@intel.com>
+Date: Thu, 26 Oct 2023 16:37:18 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "kernel test robot" <lkp@intel.com>, "Amir Goldstein" <amir73il@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Linux Memory Management List" <linux-mm@kvack.org>,
+ "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
+ "Jeff Layton" <jlayton@kernel.org>
+Subject: Re: [linux-next:master 14416/15220] fs/exportfs/expfs.c:357:5: error: expected
+ identifier or '('
+Content-Type: text/plain
 
-On Thu, Oct 26, 2023 at 07:21:53AM -0700, Boqun Feng wrote:
-> On Thu, Oct 26, 2023 at 01:16:25PM +0200, Peter Zijlstra wrote:
-> > On Thu, Oct 26, 2023 at 11:36:10AM +0100, Gary Guo wrote:
-> > 
-> > > There's two reasons that we are using volatile read/write as opposed to
-> > > relaxed atomic:
-> > > * Rust lacks volatile atomics at the moment. Non-volatile atomics are
-> > >   not sufficient because the compiler is allowed (although they
-> > >   currently don't) optimise atomics. If you have two adjacent relaxed
-> > >   loads, they could be merged into one.
-> > 
-> > Ah yes, that would be problematic, eg, if lifted out of a loop things
-> > could go sideways fast.
-> > 
-> 
-> Maybe we can workaround this limitation by using compiler barriers, i.e.
-> 
-> 	compiler_fence(SeqCst);
-> 	load(Relaxed);
-> 	compiler_fence(Acquire);
-> 
-> this is slightly stronger than a volatile atomic.
-> 
-> > > * Atomics only works for integer types determined by the platform. On
-> > >   some 32-bit platforms you wouldn't be able to use 64-bit atomics at
-> > >   all, and on x86 you get less optimal sequence since volatile load is
-> > >   permitted to tear while atomic load needs to use LOCK CMPXCHG8B.
-> > 
-> > We only grudgingly allowed u64 READ_ONCE() on 32bit platforms because
-> > the fallout was too numerous to fix. Some of them are probably bugs.
-> > 
-> > Also, I think cmpxchg8b without lock prefix would be sufficient, but
-> > I've got too much of a head-ache to be sure. Worse is that we still
-> > support targets without cmpxchg8b.
-> > 
-> > It might be interesting to make the Rust side more strict in this regard
-> > and see where/when we run into trouble.
-> > 
-> 
-> Sounds good to me. If the compiler barriers make sense for now, then
-> we can do:
-> 
-> 	pub unsafe fn read_once_usize(ptr: *const usize) -> usize {
-> 		core::sync::atomic::compiler_fence(SeqCst);
-> 		let r = unsafe { *ptr.cast::<AtomicUsize>() }.load(Relaxed);
-> 		core::sync::atomic::compiler_fence(Acquire);
-> 		r
-> 	}
-> 
+On Thu, Oct 26, 2023, at 15:49, kernel test robot wrote:
+> tree:   
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
+> master
+> head:   2ef7141596eed0b4b45ef18b3626f428a6b0a822
+> commit: dfaf653dc41557548b2e75e6cd837071f7c63289 [14416/15220] 
+> exportfs: make ->encode_fh() a mandatory method for NFS export
+> config: hexagon-randconfig-r015-20211224 
+> (https://download.01.org/0day-ci/archive/20231026/202310262151.renqMvme-lkp@intel.com/config)
+> compiler: clang version 16.0.4 
+> (https://github.com/llvm/llvm-project.git 
+> ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): 
+> (https://download.01.org/0day-ci/archive/20231026/202310262151.renqMvme-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new 
+> version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: 
+> https://lore.kernel.org/oe-kbuild-all/202310262151.renqMvme-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>>> fs/exportfs/expfs.c:357:5: error: expected identifier or '('
+>    int generic_encode_ino32_fh(struct inode *inode, __u32 *fh, int 
+> *max_len,
+>        ^
+>    include/linux/exportfs.h:286:33: note: expanded from macro 
 
-I forgot to mention, this can also resolve the comments from Marco, i.e.
-switching implemention to Acquire if ARM64 & LTO.
+This bit is trivially fixed by allowing the protoype to
+be visible for CONFIG_EXPORTFS=m
 
-Regards,
-Boqun
+--- a/include/linux/exportfs.h
++++ b/include/linux/exportfs.h
+@@ -314,7 +314,7 @@ extern struct dentry *exportfs_decode_fh(struct vfsmount *mnt, struct fid *fid,
+ /*
+  * Generic helpers for filesystems.
+  */
+-#ifdef CONFIG_EXPORTFS
++#if IS_ENABLED(CONFIG_EXPORTFS)
+ int generic_encode_ino32_fh(struct inode *inode, __u32 *fh, int *max_len,
+                            struct inode *parent);
+ #else
 
-> and if the other side (i.e. write) is also atomic (e.g. WRITE_ONCE()),
-> we don't have data race.
-> 
-> However, there are still cases where data races are ignored in C code,
-> for example inode::i_state: reads out of locks race with writes inside
-> locks, since writes are done by plain accesses. Nothing can be done to
-> fix that from Rust side only, and fixing the C side is a separate topic.
-> 
-> Thoughts?
-> 
-> Regards,
-> Boqun
-> 
-> > > * Atomics doesn't work for complex structs. Although I am not quite sure
-> > >   of the value of supporting it.
-> > 
-> > So on the C side we mandate the size is no larger than machine word,
-> > with the exception of the u64 on 32bit thing. We don't mandate strict
-> > integer types because things like pte_t are wrapper types.
-> > 
-> > 
+but then we instead get link failures when the callers are
+built-in:
+
+x86_64-linux-ld: fs/ext4/super.o:(.rodata+0x11a0): undefined reference to `generic_encode_ino32_fh'
+x86_64-linux-ld: fs/ext2/super.o:(.rodata+0x3a0): undefined reference to `generic_encode_ino32_fh'
+x86_64-linux-ld: fs/fat/nfs.o:(.rodata+0x120): undefined reference to `generic_encode_ino32_fh'
+x86_64-linux-ld: fs/ntfs3/super.o:(.rodata+0x2a0): undefined reference to `generic_encode_ino32_fh'
+x86_64-linux-ld: fs/befs/linuxvfs.o:(.rodata+0x240): undefined reference to `generic_encode_ino32_fh'
+
+Could this function just be move to fs/libfs.c or similar?
+
+      Arnd
