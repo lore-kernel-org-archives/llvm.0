@@ -1,109 +1,114 @@
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF4E37C93
-	for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 16:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58792381C4;
+	Thu, 26 Oct 2023 17:08:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjABxFJq"
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3b2f507c03cso628015b6e.2
-        for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 09:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698339522; x=1698944322; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2My7dzj7Sa0rgTJc/yeT+l3xQqlYTaObutNlMsCM2Jk=;
-        b=kjABxFJqgHunX4C6I7WyCGr0q0hlZhI/urQoDrDhlqEG2SpxuIyB5gsH0XPP5laUkz
-         Xixs2LqTQAovBTMmFjDypSeu+Xgnp86/XPzq7RkdMnOutJRpZpDjwtnrqdUsS7IUonUP
-         hcxiDadb5ItwLLQnXnM9s7z1aOtvx8EHkWUA35mMdDxPEXKeWVq2GPBDMXXYIsi9oEIN
-         hIbEzDsdq2Q4xRYQgpHpjLbtS8o3kAvef1DZNmlUIR0tKrzBiUwutojhh7BVeYPEcZkg
-         SX6U7sxBOPlauRZBq7b5B3H2o6tf4KqsbwLOTOt6ZqtLUWcwZyjN41XPz4i20ctS82Ug
-         /2uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698339522; x=1698944322;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2My7dzj7Sa0rgTJc/yeT+l3xQqlYTaObutNlMsCM2Jk=;
-        b=nrP7EiAyL+Zo+OQTZ6fD4ocxikq8VPsYywKfWFE2a5MKhJ1oWRZ+s8cr01g1FOpn0e
-         oHjgeaCzq1es1pA0jk5Xgg12TQ6GutUOKgVw2vRTaawdZVM7UMw4p9aA519L7MRsShKY
-         QsW4HG4treGiZiOBDQXCDGq+tfnWiSEGenXZwCgaskT+sFPWJzoD6uw9UIqwMhr66vEF
-         86jZrDAJNbRbrA3tDYXz5e+yJwWdO9eTPSISqWqUlwlgBg3rXjrzxdTzL7sg7R66Jx9Z
-         i3cW18hg8JMqhOX2D0q3NfLgLLeQBq3n/MT3RrGqRd6pREGASDMRYQcuKNIpJo9c1ymj
-         CZlQ==
-X-Gm-Message-State: AOJu0YxmHPap4kiF6uPZxScumJ3XrBZxsxeNqfIBF3yMyss9u2W2/qZn
-	+jO2doBuLBvhx5rh3IpUqO0N9qSPYjY07gc9Meg=
-X-Google-Smtp-Source: AGHT+IHYIEtTPq49J47m7L+kP4zWLW1jW3174fCj7Z5xpN8ntf/ECHptkhk8TAFzmkQ0ZcFZSrtrZcJRSuTa9xWZ1g0=
-X-Received: by 2002:a05:6808:4d3:b0:3a7:2524:6d3b with SMTP id
- a19-20020a05680804d300b003a725246d3bmr18779047oie.12.1698339522590; Thu, 26
- Oct 2023 09:58:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvKAZN2M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A6EC433C7;
+	Thu, 26 Oct 2023 17:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698340108;
+	bh=q5nu5IfnRwPtcWkLDIu4aKyLwlMTLZH09mIm5x2Tuis=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=kvKAZN2MMSkl1+CvCbw+bKVWIonlMLlGvoyOkrluhiKxg6aAKGv7elmEkFI6RMlk1
+	 L2WGU4VBOmRIzvFLMQIivxqRBZldlSs8hE8LrXKkZvVdM2jdW0IhKifYjRnNGI7dp0
+	 7GQYBSYrAQlElOlklY4PCPR1C1dNMK0Uw2AOLO2LFZDz38HOx9uPZRUVr74ZD42lkF
+	 uppRnkPjzY+r3oIpxavk/wSZbZ/WlJA9yD6XOQadktbY7anFw+dikPBP35tY9L6fPm
+	 qG6bVF1QQPHi3CLYEyTauxQqHXJDcKe4/mmhnOyBtQH8L5gr09L5S4iXS8vUROldXF
+	 udSXExCrBk2jA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id E3628CE0D12; Thu, 26 Oct 2023 10:08:27 -0700 (PDT)
+Date: Thu, 26 Oct 2023 10:08:27 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Matthew Wilcox <willy@infradead.org>,
+	Dave Chinner <david@fromorbit.com>, linux-fsdevel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [RFC] rust: types: Add read_once and write_once
+Message-ID: <272fb0fa-bff7-4ccf-bea1-fba388c5d512@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20231025195339.1431894-1-boqun.feng@gmail.com>
+ <20231026081345.GJ31411@noisy.programming.kicks-ass.net>
+ <20231026113610.1425be1b@eugeo>
+ <20231026111625.GK33965@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231024201157.748254-1-alessandro.carminati@gmail.com>
- <5776666.DvuYhMxLoT@pwmachine> <CAPp5cGToUaPCr3Fp2PUQ1yQJ8ci+wTVqgTCEs2OxvR+yTr2oOQ@mail.gmail.com>
- <2162048.irdbgypaU6@pwmachine>
-In-Reply-To: <2162048.irdbgypaU6@pwmachine>
-From: Alessandro Carminati <alessandro.carminati@gmail.com>
-Date: Thu, 26 Oct 2023 18:58:06 +0200
-Message-ID: <CAPp5cGQsm9jJw5dktGbM1EpvU1wi1c+Bt2r+Lj=Wn_pBkt6oSw@mail.gmail.com>
-Subject: Re: [PATCH v6] scripts/link-vmlinux.sh: Add alias to duplicate
- symbols for kallsyms
-To: Francis Laniel <flaniel@linux.microsoft.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	Nick Alcock <nick.alcock@oracle.com>, Kris Van Hees <kris.van.hees@oracle.com>, 
-	Eugene Loh <eugene.loh@oracle.com>, Viktor Malik <vmalik@redhat.com>, 
-	Petr Mladek <pmladek@suse.com>, Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231026111625.GK33965@noisy.programming.kicks-ass.net>
 
-Hello Francis,
+On Thu, Oct 26, 2023 at 01:16:25PM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 26, 2023 at 11:36:10AM +0100, Gary Guo wrote:
+> 
+> > There's two reasons that we are using volatile read/write as opposed to
+> > relaxed atomic:
+> > * Rust lacks volatile atomics at the moment. Non-volatile atomics are
+> >   not sufficient because the compiler is allowed (although they
+> >   currently don't) optimise atomics. If you have two adjacent relaxed
+> >   loads, they could be merged into one.
+> 
+> Ah yes, that would be problematic, eg, if lifted out of a loop things
+> could go sideways fast.
+> 
+> > * Atomics only works for integer types determined by the platform. On
+> >   some 32-bit platforms you wouldn't be able to use 64-bit atomics at
+> >   all, and on x86 you get less optimal sequence since volatile load is
+> >   permitted to tear while atomic load needs to use LOCK CMPXCHG8B.
+> 
+> We only grudgingly allowed u64 READ_ONCE() on 32bit platforms because
+> the fallout was too numerous to fix. Some of them are probably bugs.
+> 
+> Also, I think cmpxchg8b without lock prefix would be sufficient, but
+> I've got too much of a head-ache to be sure. Worse is that we still
+> support targets without cmpxchg8b.
 
+Plus cmpxchg8b can be quite a bit heavier weight than READ_ONCE(),
+in some cases to the point that you would instead use some other
+concurrency design.
 
-Il giorno gio 26 ott 2023 alle ore 18:01 Francis Laniel
-<flaniel@linux.microsoft.com> ha scritto:
->
-> Hi!
->
->
-> Le mercredi 25 octobre 2023, 21:33:43 EEST Alessandro Carminati a =C3=A9c=
-rit :
-> > Hi Francis,
-> > Thanks a lot for your feedback!
->
-> You are welcome!
->
-> > Il giorno mer 25 ott 2023 alle ore 15:21 Francis Laniel
-> >
-> > /* SNIP */
-> > > > debug >=3D DebugLevel.INFO.value:
-> > > Shouldn't this rather test nmdata?
-> >
-> > Not sure to understand this feedback.
->
-> Sorry, this was not clear.
-> Rather than testing vmlinux_file, shouldn't you test nmdata_file?
-Now I see your point.
-If the assumption is that scripts/kas_alias.py is triggered by
-scripts/link-vmlinux.sh I dare to say that it makes no difference.
-But, since the purpose of this work is to manipulate the nmdata_file, using
-it is probably fitting more the use case.
->
->
-> Best regards.
->
->
-Thank you for the precious suggestions.
-Regards
-Alessandro
+> It might be interesting to make the Rust side more strict in this regard
+> and see where/when we run into trouble.
+
+And maybe have some other name for READ_ONCE() that is permitted to tear.
+
+> > * Atomics doesn't work for complex structs. Although I am not quite sure
+> >   of the value of supporting it.
+> 
+> So on the C side we mandate the size is no larger than machine word,
+> with the exception of the u64 on 32bit thing. We don't mandate strict
+> integer types because things like pte_t are wrapper types.
+
+On C-language atomics, people who have talked about implementing atomics
+for objects too large for tear-free loads and stores have tended to want
+ot invent locks.  :-(
+
+							Thanx, Paul
