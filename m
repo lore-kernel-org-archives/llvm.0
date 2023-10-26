@@ -1,188 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E0E163;
-	Thu, 26 Oct 2023 02:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7A1646
+	for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 03:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y140UGfc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698287875; x=1729823875;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Izu7oXybb60DQ3mhCLHJYn0C+zLjdBPuST0SpoLL5iw=;
-  b=Y140UGfctp1amBvcTqPewlitKdb+wIM8pafDSmeUq2TTUgMp1xkqdHTS
-   +MQp1gFyB7CWozS4F3izIOMR2MVBV0+nr7HV7WPhs0pIcbZVavo/xOqWk
-   OvTujz5ZWck4VStF6SobgOrHM0l4oY8W5g6TDQb7vVO0Q7Hfm6dAUet+R
-   qrwyVAxkUG8UTkswMqE5p51fiZ+LwT599nhql5qinVAjvAK/4bZIK2wEQ
-   ZqXmDnIiroGM4qeN3CBFbX72QRXgqH2u385OhwoLjcHRE5GvbxMUF8fFV
-   Udb8oOgv9hVO8HOL/HI9S4akfAJ7zPR/lXd41avFauZl+MnBVQ8CUurWT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="453914180"
-X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="453914180"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 19:37:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="762667649"
-X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="762667649"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Oct 2023 19:37:53 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qvqFr-0009Oe-0Z;
-	Thu, 26 Oct 2023 02:37:51 +0000
-Date: Thu, 26 Oct 2023 10:37:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Wei <davidhwei@meta.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pavel Begunkov <asml.silence@gmail.com>
-Subject: [isilence:zc/veth2 14/16] io_uring/zc_rx.c:644:93: warning: format
- specifies type 'unsigned long' but the argument has type 'size_t' (aka
- 'unsigned int')
-Message-ID: <202310261045.4iDfHVTB-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZSDPqKWf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1698289842;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1mGlDZj4U67SKfPQBvx1EgftcIVusElDFpwo0sV7KK4=;
+	b=ZSDPqKWftJyF7Q6LaDMX/Iq5xhQI00aKOuNbsNQlXtEFTUr8i0eyrNsAe6ALQjlv7YNI5x
+	IEm6WZSgdXnYYwruqbK+K1X5O0wVSYY4JEDBU0o6z2qKLts4U3dJfW1yrbxdXVc8e+BWgt
+	IA7+16nSQYANynQEttca7Z2YI9XwiCA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-643-A4aMHJIpNDe3q-_etwZ1OQ-1; Wed, 25 Oct 2023 23:10:21 -0400
+X-MC-Unique: A4aMHJIpNDe3q-_etwZ1OQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 084F5800CAA
+	for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 03:10:21 +0000 (UTC)
+Received: from [172.64.15.15] (unknown [10.30.32.48])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DE45A2026D4C;
+	Thu, 26 Oct 2023 03:10:20 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 7 of 230): Test report for master
+ (6.6.0-rc7, mainline.kernel.org-clang, 611da07b)
+Date: Thu, 26 Oct 2023 03:10:20 -0000
+To: llvm@lists.linux.dev, jbastian@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <23227.123102523102100339@us-mta-643.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/isilence/linux zc/veth2
-head:   731b7375c43d08e971bcafcd9e90c1c0c8250678
-commit: 1e65d03befc872b1f243c468fd33761c1a5d253f [14/16] make it work
-config: arm-vexpress_defconfig (https://download.01.org/0day-ci/archive/20231026/202310261045.4iDfHVTB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231026/202310261045.4iDfHVTB-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310261045.4iDfHVTB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   io_uring/zc_rx.c:62:51: warning: shift count >= width of type [-Wshift-count-overflow]
-      62 |         return PagePrivate(page) && ((page_private(page) >> 48) == 0xface);
-         |                                                          ^  ~~
-   io_uring/zc_rx.c:186:5: warning: no previous prototype for function 'io_zc_rx_create_pool' [-Wmissing-prototypes]
-     186 | int io_zc_rx_create_pool(struct io_ring_ctx *ctx,
-         |     ^
-   io_uring/zc_rx.c:186:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     186 | int io_zc_rx_create_pool(struct io_ring_ctx *ctx,
-         | ^
-         | static 
-   io_uring/zc_rx.c:262:4: warning: variable 'count' is uninitialized when used here [-Wuninitialized]
-     262 |                         count++;
-         |                         ^~~~~
-   io_uring/zc_rx.c:252:20: note: initialize the variable 'count' to silence this warning
-     252 |         int i, refc, count;
-         |                           ^
-         |                            = 0
->> io_uring/zc_rx.c:644:93: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     644 |         printk("----- zc_rx_recv_skb: start=%d, offset=%d, len=%lu, nr_frags=%d\n", start, offset, len, skb_shinfo(skb)->nr_frags);
-         |                                                                ~~~                                 ^~~
-         |                                                                %zu
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   4 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +644 io_uring/zc_rx.c
+Kernel information:
+    Commit message: Merge tag 'acpi-6.6-rc8' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/rafael/linux-pm
 
-   623	
-   624	static int
-   625	zc_rx_recv_skb(read_descriptor_t *desc, struct sk_buff *skb,
-   626		       unsigned int offset, size_t len)
-   627	{
-   628		struct io_zc_rx_ifq *ifq;
-   629		struct sk_buff *frag_iter;
-   630		unsigned start, start_off;
-   631		int i, copy, end, off;
-   632		int ret = 0;
-   633	
-   634		ifq = io_zc_rx_ifq_skb(skb);
-   635		if (!ifq) {
-   636			pr_debug("non zerocopy pages are not supported\n");
-   637			return -EFAULT;
-   638		}
-   639		start = skb_headlen(skb);
-   640		start_off = offset;
-   641	
-   642		// TODO: copy payload in skb linear data */
-   643		WARN_ON(offset < start);
- > 644		printk("----- zc_rx_recv_skb: start=%d, offset=%d, len=%lu, nr_frags=%d\n", start, offset, len, skb_shinfo(skb)->nr_frags);
-   645	
-   646		// TODO: make sure theres at least nr_frags entries in cq ring
-   647		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
-   648			const skb_frag_t *frag;
-   649	
-   650			WARN_ON(start > offset + len);
-   651	
-   652			frag = &skb_shinfo(skb)->frags[i];
-   653			end = start + skb_frag_size(frag);
-   654			printk("----- zc_rx_recv_skb: skb frag size=%d, end=%d\n", skb_frag_size(frag), end);
-   655	
-   656			if (offset < end) {
-   657				copy = end - offset;
-   658				if (copy > len)
-   659					copy = len;
-   660	
-   661				off = offset - start;
-   662				ret = zc_rx_recv_frag(ifq, frag, off, copy);
-   663				if (ret < 0) {
-   664					printk("----- zc_rx_recv_skb: recv_frag err=%d\n", ret);
-   665					goto out;
-   666				}
-   667	
-   668				offset += ret;
-   669				len -= ret;
-   670				if (len == 0 || ret != copy)
-   671					goto out;
-   672			}
-   673			start = end;
-   674		}
-   675	
-   676		skb_walk_frags(skb, frag_iter) {
-   677			WARN_ON(start > offset + len);
-   678	
-   679			end = start + frag_iter->len;
-   680			if (offset < end) {
-   681				copy = end - offset;
-   682				if (copy > len)
-   683					copy = len;
-   684	
-   685				off = offset - start;
-   686				ret = zc_rx_recv_skb(desc, frag_iter, off, copy);
-   687				if (ret < 0)
-   688					goto out;
-   689	
-   690				offset += ret;
-   691				len -= ret;
-   692				if (len == 0 || ret != copy)
-   693					goto out;
-   694			}
-   695			start = end;
-   696		}
-   697	
-   698	out:
-   699		printk("----- zc_rx_recv_skb: updating tail, tail=%u, cached_tail=%u\n", ifq->ring->cq.tail, ifq->cached_cq_tail);
-   700		smp_store_release(&ifq->ring->cq.tail, ifq->cached_cq_tail);
-   701		if (offset == start_off)
-   702			return ret;
-   703		printk("----- zc_rx_recv_skb: out, offset=%d, start_off=%d\n", offset, start_off);
-   704		return offset - start_off;
-   705	}
-   706	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/111334
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10061910
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10061998
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10061772
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
