@@ -1,132 +1,165 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7A1646
-	for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 03:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0D4646
+	for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 03:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZSDPqKWf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698289842;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1mGlDZj4U67SKfPQBvx1EgftcIVusElDFpwo0sV7KK4=;
-	b=ZSDPqKWftJyF7Q6LaDMX/Iq5xhQI00aKOuNbsNQlXtEFTUr8i0eyrNsAe6ALQjlv7YNI5x
-	IEm6WZSgdXnYYwruqbK+K1X5O0wVSYY4JEDBU0o6z2qKLts4U3dJfW1yrbxdXVc8e+BWgt
-	IA7+16nSQYANynQEttca7Z2YI9XwiCA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-643-A4aMHJIpNDe3q-_etwZ1OQ-1; Wed, 25 Oct 2023 23:10:21 -0400
-X-MC-Unique: A4aMHJIpNDe3q-_etwZ1OQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 084F5800CAA
-	for <llvm@lists.linux.dev>; Thu, 26 Oct 2023 03:10:21 +0000 (UTC)
-Received: from [172.64.15.15] (unknown [10.30.32.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DE45A2026D4C;
-	Thu, 26 Oct 2023 03:10:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 7 of 230): Test report for master
- (6.6.0-rc7, mainline.kernel.org-clang, 611da07b)
-Date: Thu, 26 Oct 2023 03:10:20 -0000
-To: llvm@lists.linux.dev, jbastian@redhat.com
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iay1PqNN"
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-d9c2420e417so319406276.2
+        for <llvm@lists.linux.dev>; Wed, 25 Oct 2023 20:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698291102; x=1698895902; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6GDP4Ji1MuCk3r0rvr3Ck3tuIDn99qjLg2EPnlAxDfI=;
+        b=iay1PqNNkMAlf+uasn17L5zl2CcdwK1emlOIoxCVcOwIDYQdLytGiShMe33vogE2ps
+         /WTY65EDBnfQsNVshYE3kXcPlgxaX0lP+8E+po+KCytulE1N2RWnydFKk16oyZNvRbtX
+         M47vKEKdYjf7v/GAk1aHrH/2duSDbI1t2gWJvcspVD4HSK55RmTHGvbKjGxyEEzcnxGe
+         0fyeZNUZEXjR+RC1DjabXJ5TWIMnlGhSgZG6oE4KrH7tpvuApisOCihZ305v0AqkPjgC
+         1W/kGNno+7GSs2Ogs1AYIhEz4gX5QWjf+dezoU8Z4fB4VP9siAOtDALQU/qGtx7cE04u
+         raCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698291102; x=1698895902;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6GDP4Ji1MuCk3r0rvr3Ck3tuIDn99qjLg2EPnlAxDfI=;
+        b=Hua4uoPXKxUOGj9S+ZZYa3pXbhoEgpbNiHJTxLciS/Hbnf5rt+ZYMwOt+Kg/fvzkYN
+         jCfG54jOuKevxOOzuUa8EAMfGf8vf7VgsmOgmCD1/Fz8rlVDhS+jGqT/EQrHGAQZBRic
+         hhR9BX6uFMQuqxuxb7xzJ1l2ZsCRnV9Wx6sB0chw5AfZ4CbSCHU0xmQc2YQ0BOoPnLsI
+         kXOpqmSRfinhkdvQdGUExu7IAq1NW22YttBjagder7gvIyhbA2E3kkKHyNxv6W8Ai709
+         mn8GGDB5pVC9olfkTcI4J56Gq/r5A63FYMvf+mHa5Tpc4wTDWsRnFzISzriwQ9J5bSkh
+         PjvA==
+X-Gm-Message-State: AOJu0YyhLELSfqwf9bGK0bglt6UCFWEeZCubm3ZITLqo3iqZpR+Hmud2
+	BtWD7xxlICNTlk1tbKYWkIA=
+X-Google-Smtp-Source: AGHT+IE6nWVjaeF4q/0JgTm0tiEMymvKwaOV3OJaUyaEBTfVrh0s6CM2luZevzfv2bUOnfOHijnNPw==
+X-Received: by 2002:a25:918e:0:b0:d36:99eb:fc01 with SMTP id w14-20020a25918e000000b00d3699ebfc01mr15701879ybl.15.1698291102146;
+        Wed, 25 Oct 2023 20:31:42 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id w31-20020a25ac1f000000b00d9ab86bdaffsm4984302ybi.12.2023.10.25.20.31.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 20:31:41 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailauth.nyi.internal (Postfix) with ESMTP id 3B45227C0054;
+	Wed, 25 Oct 2023 23:31:40 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 25 Oct 2023 23:31:40 -0400
+X-ME-Sender: <xms:m905ZXHeabl3payzsGhnipr0939fPX1WxlYXtDpPGBitYhhuzVsEdA>
+    <xme:m905ZUVYD2YuuzvX0WrBbGOn5IYF7wzv9iuP8I0NfXrxZVCPa6fP7gmRROY4s1l4r
+    FxrMeZeluMTg5R2Ew>
+X-ME-Received: <xmr:m905ZZLr0mpZlucqGn--iRC_i9zBXh9l9NxoYesfxctvOjI6E6ycdTs-5fk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledugdejtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudff
+    iedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
+    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
+    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
+    hmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:m905ZVHl7gYAxsC6OQxxI0jqcNrRPp__xknC5IfWjYIw-hYel9CIww>
+    <xmx:m905ZdUtrnbZBu41BsfJOKZhpSQNJ0GohEakOq0QmMlAM6gtBAW0Wg>
+    <xmx:m905ZQN-mXx_OzXtxWGhLrWAbo0hWFgf1CNJu5jeGVb7iSg9X2xGJw>
+    <xmx:nN05ZX3KwPnCn483ZeL7KokyhKS-GhK5quGqZ46tVJYPU14rgOCwSw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Oct 2023 23:31:38 -0400 (EDT)
+Date: Wed, 25 Oct 2023 20:31:37 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Benno Lossin <benno.lossin@proton.me>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	Tom Rix <trix@redhat.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Matthew Wilcox <willy@infradead.org>,	Dave Chinner <david@fromorbit.com>,
+ linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC] rust: types: Add read_once and write_once
+Message-ID: <ZTndmXEBf37G84X-@Boquns-Mac-mini.home>
+References: <20231025195339.1431894-1-boqun.feng@gmail.com>
+ <VEhpQqgTM0U-aNYRUQ89ICIHW9Eehr66yw92DrmBZcZOah2mLqlz24HxEwDwYPVDOnaigDiZDEVl5mWqZJxoAtRheqTMjzpxuTKe0sr1uZs=@proton.me>
+ <ZTmelWlSncdtExXp@boqun-archlinux>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <23227.123102523102100339@us-mta-643.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZTmelWlSncdtExXp@boqun-archlinux>
 
-Hi, we tested your kernel and here are the results:
+On Wed, Oct 25, 2023 at 04:02:45PM -0700, Boqun Feng wrote:
+[...]
+> > > +/// The counter part of C `READ_ONCE()`.
+> > > +///
+> > > +/// The semantics is exactly the same as `READ_ONCE()`, especially when used for intentional data
+> > > +/// races.
+> > 
+> > It would be great if these semantics are either linked or spelled out
+> > here. Ideally both.
+> > 
+> 
+> Actually I haven't found any document about `READ_ONCE()` races with
+> writes is not UB: we do have document saying `READ_ONCE()` will disable
+> KCSAN checks, but no document says (explicitly) that it's not a UB.
+> 
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Apparently I wasn't carefully reading the doc, in
+tools/memory-model/Documentation/explanation.txt, there is:
 
+	In technical terms, the compiler is allowed to assume that when the
+	program executes, there will not be any data races.  A "data race"
+	occurs when there are two memory accesses such that:
 
-Kernel information:
-    Commit message: Merge tag 'acpi-6.6-rc8' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/rafael/linux-pm
+	1.      they access the same location,
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/111334
+	2.      at least one of them is a store,
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10061910
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10061998
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10061772
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
+	3.      at least one of them is plain,
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
+	4.      they occur on different CPUs (or in different threads on the
+		same CPU), and
 
+	5.      they execute concurrently.
 
+the #3 limits that in LKMM, data races cannot happen if both accesses
+are marked (i.e. not plain).
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Thank Paul for bringing this to me, and I will update this accordingly
+in the next version.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Regards,
+Boqun
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> > > +///
+> > > +/// # Safety
+> > > +///
+> > > +/// * `src` must be valid for reads.
+> > > +/// * `src` must be properly aligned.
+> > > +/// * `src` must point to a properly initialized value of value `T`.
+> > > +#[inline(always)]
+> > > +pub unsafe fn read_once<T: Copy>(src: *const T) -> T {
+> > 
+> > Why only `T: Copy`?
+> > 
+[...]
