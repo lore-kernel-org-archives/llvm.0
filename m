@@ -1,139 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE45E156C8
-	for <llvm@lists.linux.dev>; Fri, 27 Oct 2023 09:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710F98489;
+	Fri, 27 Oct 2023 10:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LoglJyxj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698397309;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0AhArftzaLVZpfdrytS4KkUTZvByRm5Drc++qM79RBU=;
-	b=LoglJyxjm7RzLIzKH/sIqGwFplMC6h+TPXXliIQnpTYzsBTmC+gTf+oOIirRq+PjuPDBIe
-	JF+8GztVvftXynFl/qdBdCaRIsU2YzP4UChKavmg7Z9l67yotnbaT/CrfjOOz98sFHaVXo
-	MT4PZOvBnhqN9Yf8FeRB1Nwbaa2BRH4=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-66-tHCBBjgvPm2OyfgUU8yOIA-1; Fri,
- 27 Oct 2023 05:01:47 -0400
-X-MC-Unique: tHCBBjgvPm2OyfgUU8yOIA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 226843C108CC
-	for <llvm@lists.linux.dev>; Fri, 27 Oct 2023 09:01:47 +0000 (UTC)
-Received: from [172.64.15.15] (unknown [10.30.32.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 09872492BE0;
-	Fri, 27 Oct 2023 09:01:47 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 7 of 230): Test report for master
- (6.6.0-rc7, mainline.kernel.org-clang, 3a568e3a)
-Date: Fri, 27 Oct 2023 09:01:46 -0000
-To: llvm@lists.linux.dev, jbastian@redhat.com
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xoX6gomj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D37DC433C9;
+	Fri, 27 Oct 2023 10:54:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1698404044;
+	bh=lUoVkVRWYboaXOG1iSFoxBHubtU45Ewvbk18Js/2Bg8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=xoX6gomj/9mhYXVTBg0WYsqQKuKyr/cCGDcj3ekj/ALzPQpaoQSEEMNE2DSrDnmOl
+	 N79GV9602oBVR0q38BAO2GuXqARKoN3uG2rNmUN02EFlo0E+NAeq/qTdPqZ1QzMoSo
+	 NwUqvLDPbhrGUxhpJ4nWsWrPTrDmSgJ4n3PaeXUQ=
+Date: Fri, 27 Oct 2023 12:54:02 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Xingxing Luo <xingxing.luo@unisoc.com>
+Cc: b-liu@ti.com, keescook@chromium.org, nathan@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev, xingxing0070.luo@gmail.com,
+	Zhiyong.Liu@unisoc.com, Cixi.Geng1@unisoc.com,
+	Orson.Zhai@unisoc.com, zhang.lyra@gmail.com
+Subject: Re: [PATCH] usb: musb: Check requset->buf before use to avoid crash
+ issue
+Message-ID: <2023102742-barmaid-doorframe-3731@gregkh>
+References: <20231023093153.6748-1-xingxing.luo@unisoc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <22594.123102705014700721@us-mta-66.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231023093153.6748-1-xingxing.luo@unisoc.com>
 
-Hi, we tested your kernel and here are the results:
+On Mon, Oct 23, 2023 at 05:31:53PM +0800, Xingxing Luo wrote:
+> When connecting USB to PC, there is a very low probability of kernel
+> crash. The reason is that in ep0_txstate(), the buf member of struct
+> usb_request used may be a null pointer. Therefore, it needs to
+> determine whether it is null before using it.
+> 
+> [ 4888.071462][T597@C0] Call trace:
+> [ 4888.071467][T597@C0]  musb_default_write_fifo+0xa0/0x1ac [musb_hdrc]
+> [ 4888.087190][T597@C0]  musb_write_fifo+0x3c/0x90 [musb_hdrc]
+> [ 4888.099826][T597@C0]  ep0_txstate+0x78/0x218 [musb_hdrc]
+> [ 4888.153918][T597@C0]  musb_g_ep0_irq+0x3c4/0xe10 [musb_hdrc]
+> [ 4888.159663][T597@C0]  musb_interrupt+0xab4/0xf1c [musb_hdrc]
+> [ 4888.165391][T597@C0]  sprd_musb_interrupt+0x1e4/0x484 [musb_sprd]
+> [ 4888.171447][T597@C0]  __handle_irq_event_percpu+0xd8/0x2f8
+> [ 4888.176901][T597@C0]  handle_irq_event+0x70/0xe4
+> [ 4888.181487][T597@C0]  handle_fasteoi_irq+0x15c/0x230
+> [ 4888.186420][T597@C0]  handle_domain_irq+0x88/0xfc
+> [ 4888.191090][T597@C0]  gic_handle_irq+0x60/0x138
+> [ 4888.195591][T597@C0]  call_on_irq_stack+0x40/0x70
+> [ 4888.200263][T597@C0]  do_interrupt_handler+0x50/0xac
+> [ 4888.205196][T597@C0]  el1_interrupt+0x34/0x64
+> [ 4888.209524][T597@C0]  el1h_64_irq_handler+0x1c/0x2c
+> [ 4888.214370][T597@C0]  el1h_64_irq+0x7c/0x80
+> [ 4888.218525][T597@C0]  __check_heap_object+0x1ac/0x1fc
+> [ 4888.223544][T597@C0]  __check_object_size+0x10c/0x20c
+> [ 4888.228563][T597@C0]  simple_copy_to_iter+0x40/0x74
+> [ 4888.233410][T597@C0]  __skb_datagram_iter+0xa0/0x310
+> [ 4888.238343][T597@C0]  skb_copy_datagram_iter+0x44/0x110
+> [ 4888.243535][T597@C0]  netlink_recvmsg+0xdc/0x364
+> [ 4888.248123][T597@C0]  ____sys_recvmsg.llvm.16749613423860851707+0x358/0x6c0
+> [ 4888.255045][T597@C0]  ___sys_recvmsg+0xe0/0x1dc
+> [ 4888.259544][T597@C0]  __arm64_sys_recvmsg+0xc4/0x10c
+> [ 4888.264478][T597@C0]  invoke_syscall+0x6c/0x15c
+> [ 4888.268976][T597@C0]  el0_svc_common.llvm.12373701176611417606+0xd4/0x120
+> [ 4888.275726][T597@C0]  do_el0_svc+0x34/0xac
+> [ 4888.279795][T597@C0]  el0_svc+0x28/0x90
+> [ 4888.283603][T597@C0]  el0t_64_sync_handler+0x88/0xec
+> [ 4888.288548][T597@C0]  el0t_64_sync+0x1b4/0x1b8
+> [ 4888.292956][T597@C0] Code: 540002c3 53027ea8 aa1303e9 71000508 (b840452a)
+> [ 4888.299789][T597@C0] ---[ end trace 14a301b7253e83cc ]---
+> 
+> Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
+> ---
+>  drivers/usb/musb/musb_gadget_ep0.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/musb/musb_gadget_ep0.c b/drivers/usb/musb/musb_gadget_ep0.c
+> index 6d7336727388..5d0629866128 100644
+> --- a/drivers/usb/musb/musb_gadget_ep0.c
+> +++ b/drivers/usb/musb/musb_gadget_ep0.c
+> @@ -531,6 +531,11 @@ static void ep0_txstate(struct musb *musb)
+>  
+>  	request = &req->request;
+>  
+> +	if (!requset->buf) {
+> +		musb_dbg(musb, "request->buf is NULL");
+> +		return;
+> +	}
+> +
+>  	/* load the data */
+>  	fifo_src = (u8 *) request->buf + request->actual;
+>  	fifo_count = min((unsigned) MUSB_EP0_FIFOSIZE,
+> -- 
+> 2.17.1
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+This patch does not even build, how did you test it?
 
+And what commit id does this fix?
 
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-6.7-3' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/soc/soc
+thanks,
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/111539
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10077564
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10077434
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10077274
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] readpage_elf: Attempt to read non-existent page a=
-t 0x4000000000000000
-            URL: https://gitlab.com/cki-project/kernel-ark/-/issues/132
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+greg k-h
