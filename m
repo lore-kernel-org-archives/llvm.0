@@ -1,49 +1,33 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6575358A4;
-	Fri, 27 Oct 2023 14:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9AC1F5E7;
+	Fri, 27 Oct 2023 15:48:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cuTivgAM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698416398; x=1729952398;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/3MjWdUu93UyGtsDfyNZphbPlJVBEtND/OXKFp3KrVY=;
-  b=cuTivgAMVs9TG92s76u3BgifYEzpwKBRZWujNnacTFDz/fd+EtyjtQVz
-   tCv9CvZWnv+vujP6tyWdqLMVAuZ9BhmXZK1+PL43vuihJMGJsJBec8RWZ
-   lIfVc8+MxsdBRfWiAdNTJGFx0k3zaZH3ng1e27HZu8ovNg8TsCPHq9D5P
-   N5oJu0moxHJ4xykZK9hPLyLOyuSio+UXTq5gc7JVOMJsgTm30W0opNpS4
-   FJ5jfoOTeZI5BlyC3WsuQ793rmyGyTD4TlRO2un7Fn4Bh5QwE5bjp9lPW
-   KZym72paKY8CLuDe4O6b0zz2MuBhTBnqaqr+1OhpsAPfkIkuySGIfDVC2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="372831774"
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="372831774"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 07:19:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="883194016"
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="883194016"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Oct 2023 07:19:46 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qwNge-000Av9-0O;
-	Fri, 27 Oct 2023 14:19:44 +0000
-Date: Fri, 27 Oct 2023 22:18:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: "wuqiang.matt" <wuqiang.matt@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: [linux-next:master 14180/15478] lib/objpool.c:169:12: error: call to
- undeclared function 'arch_cmpxchg_local'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202310272207.tLPflya4-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/Lav+w/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9002FC433C8;
+	Fri, 27 Oct 2023 15:48:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698421706;
+	bh=Hy/FQULDu9zWeRDtjQvNW569qijmMlcI9GMzkeTwT4A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J/Lav+w/Q7kocodO3Evvm4cQYUPtOaYEQeVrWek/DnxCm8yj6WT5breizqXZY/rA6
+	 gMn1vyC9eTqDfnE89W+5frLA6J8artD4lZeHiqDwW9PaBL7Qibik98u6r9N2lXKVnY
+	 7xQL6PlDcdSbVvX5dOZh9CuEA6QMcr+S4psRxkO80M+gLgni6i5iK7yAiX1W9EqpEF
+	 tlJ70ZlxTPlt6qqHOwcnnXE7e5qnRxcwXws7Xk70bgCmDXHdVZX5Wvmc06TxEawBX3
+	 +ybQoTv9fqooR8ovLjLNDi/+5XebPIvjN8M9Jr3zLl8d6W/noWQtAIESx5igyWRIld
+	 dkN7uUyhA/Rbg==
+Date: Fri, 27 Oct 2023 08:48:23 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	ndesaulniers@google.com, trix@redhat.com, samitolvanen@google.com,
+	twd2.me@gmail.com, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH v4] RISC-V: build: Allow LTO to be selected
+Message-ID: <20231027154823.GA3812247@dev-arch.thelio-3990X>
+References: <20231017-riscv-lto-v4-1-e7810b24e805@kernel.org>
+ <20231027-disband-return-3a26708d772f@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,64 +36,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231027-disband-return-3a26708d772f@spud>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   66f1e1ea3548378ff6387b1ce0b40955d54e86aa
-commit: 49c19389876002dc46d0c1344c056a6366745d07 [14180/15478] lib,kprobes: using try_cmpxchg_local in objpool_push
-config: hexagon-randconfig-r016-20230107 (https://download.01.org/0day-ci/archive/20231027/202310272207.tLPflya4-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231027/202310272207.tLPflya4-lkp@intel.com/reproduce)
+On Fri, Oct 27, 2023 at 02:45:27PM +0100, Conor Dooley wrote:
+> Hey Nathan,
+> 
+> On Tue, Oct 17, 2023 at 03:21:04PM -0700, Nathan Chancellor wrote:
+> > From: Wende Tan <twd2.me@gmail.com>
+> > 
+> > Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is
+> > an issue [1] in prior LLD versions that prevents LLD to generate proper
+> > machine code for RISC-V when writing `nop`s.
+> > 
+> > To avoid boot failures in QEMU [2], '-mattr=+c' and '-mattr=+relax'
+> > need to be passed via '-mllvm' to ld.lld, as there appears to be an
+> > issue with LLVM's target-features and LTO [3], which can result in
+> > incorrect relocations to branch targets [4]. Once this is fixed in LLVM,
+> > it can be made conditional on affected ld.lld versions.
+> > 
+> > Disable LTO for arch/riscv/kernel/pi, as llvm-objcopy expects an ELF
+> > object file when manipulating the files in that subfolder, rather than
+> > LLVM bitcode.
+> > 
+> > [1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
+> >     commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
+> > [2] https://github.com/ClangBuiltLinux/linux/issues/1942
+> > [3] https://github.com/llvm/llvm-project/issues/59350
+> > [4] https://github.com/llvm/llvm-project/issues/65090
+> > 
+> > Tested-by: Wende Tan <twd2.me@gmail.com>
+> > Signed-off-by: Wende Tan <twd2.me@gmail.com>
+> > Co-developed-by: Nathan Chancellor <nathan@kernel.org>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> > Testing notes from Nathan:
+> > 
+> > I tested LLVM 14 through 18 with defconfig + full/thin LTO and
+> > allmodconfig + thin LTO. allmodconfig + thin LTO with LLVM 15 and 16
+> > shows
+> > 
+> >   ld.lld: error: section size decrease is too large
+> > 
+> > when linking vmlinux. This appears to be resolved in LLVM 17 with
+> > https://github.com/llvm/llvm-project/commit/9d37ea95df1b84cca9b5e954d8964c976a5e303e
+> > (I did not bisect but the commit message lines up with the issue). I
+> > kept the existing version check because defconfig worked fine but we may
+> > want to bump it to 17.0.0 if randconfigs trip over this.
+> > 
+> > v4 now boots in QEMU for me with both full and thin LTO.
+> > 
+> > Testing notes from Wende:
+> > 
+> > I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
+> > on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
+> > can boot to shell using an archriscv rootfs on QEMU.
+> > 
+> > I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
+> > KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
+> > successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
+> > image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
+> > `BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
+> > separate patch further.
+> > 
+> > Changes in v4:
+> > - Pass '-mattr=+c' and '-mattr=+relax' to ld.lld via '-mllvm' flags when
+> >   doing LTO due to LLVM not appearing to honor target-features when
+> >   performing LTO, which can result in incorrect branch targets. This
+> >   fixes boot with CONFIG_LTO_CLANG=y with LLVM 15.0.0+.
+> > - Tidy up commit message and move testing notes to below the fold, as it
+> >   is not too relevant to the git history and it makes the rest of the
+> >   message more of an imperative mood.
+> > - Link to v3: https://lore.kernel.org/r/20231003-riscv-lto-v3-1-8aca61a4ecb4@kernel.org
+> > 
+> > Changes in v3:
+> > - Disable LTO in arch/riscv/kernel/pi/Makefile, which was added to the
+> >   kernel after the submission of v2. This change matches arm64.
+> > - Link to v2: https://lore.kernel.org/r/20220512205545.992288-1-twd2.me@gmail.com/
+> > 
+> > Changes in v2:
+> > - Some textual changes suggested by Nick.
+> > - Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is
+> >   filed and resolved.
+> > - Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
+> > - Link to v1: https://lore.kernel.org/r/20210719205208.1023221-1-twd2.me@gmail.com/
+> > ---
+> >  arch/riscv/Kconfig            | 3 +++
+> >  arch/riscv/Makefile           | 5 +++++
+> >  arch/riscv/kernel/pi/Makefile | 3 +++
+> >  3 files changed, 11 insertions(+)
+> > 
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index d607ab0f7c6d..523640f7441e 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -46,6 +46,9 @@ config RISCV
+> >  	select ARCH_SUPPORTS_CFI_CLANG
+> >  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+> >  	select ARCH_SUPPORTS_HUGETLBFS if MMU
+> > +	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
+> > +	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
+> > +	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
+> >  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+> >  	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
+> >  	select ARCH_USE_MEMTEST
+> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> > index 1329e060c548..709400ceac60 100644
+> > --- a/arch/riscv/Makefile
+> > +++ b/arch/riscv/Makefile
+> > @@ -52,6 +52,11 @@ ifndef CONFIG_AS_IS_LLVM
+> >  	KBUILD_CFLAGS += -Wa,-mno-relax
+> >  	KBUILD_AFLAGS += -Wa,-mno-relax
+> >  endif
+> > +# LLVM has an issue with target-features and LTO: https://github.com/llvm/llvm-project/issues/59350
+> > +# Ensure it is aware of linker relaxation with LTO, otherwise relocations may
+> > +# be incorrect: https://github.com/llvm/llvm-project/issues/65090
+> > +else ifeq ($(CONFIG_LTO_CLANG),y)
+> > +	KBUILD_LDFLAGS += -mllvm -mattr=+c -mllvm -mattr=+relax
+> >  endif
+> >  endif
+> >  
+> > diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
+> > index 07915dc9279e..b75f150b923d 100644
+> > --- a/arch/riscv/kernel/pi/Makefile
+> > +++ b/arch/riscv/kernel/pi/Makefile
+> > @@ -9,6 +9,9 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
+> >  		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+> >  		   $(call cc-option,-fno-addrsig)
+> >  
+> 
+> > +# Disable LTO
+> 
+> FWIW, this is a bit of a statement of the obvious, rather than being
+> helpful. If this ends up being respun, I think it'd be good to add the
+> context from the commit message.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310272207.tLPflya4-lkp@intel.com/
+Heh, good point. I had copied this from arm64 IIRC so I was not paying
+much attention. If I have to respin, I will update this to:
 
-All errors (new ones prefixed by >>):
+# Disable LTO, as objcopy needs to work on ELF files, rather than LLVM
+# bitcode.
 
->> lib/objpool.c:169:12: error: call to undeclared function 'arch_cmpxchg_local'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           } while (!try_cmpxchg_local(&slot->tail, &tail, tail + 1));
-                     ^
-   include/linux/atomic/atomic-instrumented.h:4980:2: note: expanded from macro 'try_cmpxchg_local'
-           raw_try_cmpxchg_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-           ^
-   include/linux/atomic/atomic-arch-fallback.h:392:9: note: expanded from macro 'raw_try_cmpxchg_local'
-           ___r = raw_cmpxchg_local((_ptr), ___o, (_new)); \
-                  ^
-   include/linux/atomic/atomic-arch-fallback.h:384:27: note: expanded from macro 'raw_cmpxchg_local'
-   #define raw_cmpxchg_local arch_cmpxchg_local
-                             ^
-   1 error generated.
+> Otherwise,
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks for the review!
+
+> > +KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+> > +
+> >  KBUILD_CFLAGS	+= -mcmodel=medany
+> >  
+> >  CFLAGS_cmdline_early.o += -D__NO_FORTIFY
+> > 
+> > ---
+> > base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+> > change-id: 20231003-riscv-lto-f013beed8587
+> > 
+> > Best regards,
+> > -- 
+> > Nathan Chancellor <nathan@kernel.org>
+> > 
 
 
-vim +/arch_cmpxchg_local +169 lib/objpool.c
-
-   154	
-   155	/* adding object to slot, abort if the slot was already full */
-   156	static inline int
-   157	objpool_try_add_slot(void *obj, struct objpool_head *pool, int cpu)
-   158	{
-   159		struct objpool_slot *slot = pool->cpu_slots[cpu];
-   160		uint32_t head, tail;
-   161	
-   162		/* loading tail and head as a local snapshot, tail first */
-   163		tail = READ_ONCE(slot->tail);
-   164	
-   165		do {
-   166			head = READ_ONCE(slot->head);
-   167			/* fault caught: something must be wrong */
-   168			WARN_ON_ONCE(tail - head > pool->nr_objs);
- > 169		} while (!try_cmpxchg_local(&slot->tail, &tail, tail + 1));
-   170	
-   171		/* now the tail position is reserved for the given obj */
-   172		WRITE_ONCE(slot->entries[tail & slot->mask], obj);
-   173		/* update sequence to make this obj available for pop() */
-   174		smp_store_release(&slot->last, tail + 1);
-   175	
-   176		return 0;
-   177	}
-   178	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
