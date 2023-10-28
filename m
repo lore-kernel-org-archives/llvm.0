@@ -1,129 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239DDB65D
-	for <llvm@lists.linux.dev>; Sat, 28 Oct 2023 11:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06122944D;
+	Sat, 28 Oct 2023 15:31:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TL65/uAb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698491482;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=To10UeZ+nv8Yo/rbekJVLrGwRvTkgt1hXyO+hLFifn8=;
-	b=TL65/uAbVeJYtw8DSGpM31HxWgXaQ2GPWsu6OksYCpXldcYR+trmyOP+Rn9KB4r/LHZzld
-	pSYVQDeM2E7r6ZDciGHubiASC0lPnoRBgTS8T9EvhBMxJPdT2qVjqu5HaiVBPVB4wg2OcB
-	Attsv6E/ZrlkBZhVkCuALfNYfNMTSzA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-427-f0Ue3is3NKqddXLI6TLq_Q-1; Sat, 28 Oct 2023 07:11:21 -0400
-X-MC-Unique: f0Ue3is3NKqddXLI6TLq_Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA705811E7B
-	for <llvm@lists.linux.dev>; Sat, 28 Oct 2023 11:11:20 +0000 (UTC)
-Received: from [172.64.15.15] (unknown [10.30.32.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 67265492BFC;
-	Sat, 28 Oct 2023 11:11:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.6.0-rc7,
- mainline.kernel.org-clang, 56567a20)
-Date: Sat, 28 Oct 2023 11:11:20 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Aee4jssl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698507092; x=1730043092;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lXhBg7CyUNDTmqFAHnbpKEyoQJs4rn3WPxNcO3/MONs=;
+  b=Aee4jssl0HAQYKuQzTq9gXQRnmMgCcc2u/jFZkyrP/mujR2ENc5J3YvO
+   pSuYbfGDa8K0Qr9cjVU7T75Ei0Sl5T7zFwwJiNDTWzp4+vvsjnWBI9zWG
+   AOAYfb/UHAGYJUw1asP68lbp14xNaQ+xpu/aGlUEjF/FKZlZF/NrWSoC3
+   2j9BwtM2sjedZs7aXDAiKjWjMcbV2pQBTan+CTGaB20rC4q6iNM7SQa+t
+   ROjzFjhrAXFwb4TOsmqEiMjqmZ2HGRAXcrvpHdh37sI33jIbc5gl+tplL
+   4Z6TweKIDjcQIFw9gW7XzGXU1hOHlqcCVGAav/I6ys7N9ATikf1ity8Zx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="387717874"
+X-IronPort-AV: E=Sophos;i="6.03,259,1694761200"; 
+   d="scan'208";a="387717874"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 08:31:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,259,1694761200"; 
+   d="scan'208";a="1120418"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 28 Oct 2023 08:31:15 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qwlHY-000Br5-3D;
+	Sat, 28 Oct 2023 15:31:25 +0000
+Date: Sat, 28 Oct 2023 23:30:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xingxing Luo <xingxing.luo@unisoc.com>, b-liu@ti.com,
+	gregkh@linuxfoundation.org, keescook@chromium.org,
+	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, xingxing0070.luo@gmail.com,
+	Zhiyong.Liu@unisoc.com, Cixi.Geng1@unisoc.com,
+	Orson.Zhai@unisoc.com, zhang.lyra@gmail.com
+Subject: Re: [PATCH] usb: musb: Check requset->buf before use to avoid crash
+ issue
+Message-ID: <202310282331.d4wx1Z6b-lkp@intel.com>
+References: <20231023093153.6748-1-xingxing.luo@unisoc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <81134.123102807112100273@us-mta-427.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231023093153.6748-1-xingxing.luo@unisoc.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Xingxing,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.6-rc7 next-20231027]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'io_uring-6.6-2023-10-27' of git://git.kernel=
-.dk/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Xingxing-Luo/usb-musb-Check-requset-buf-before-use-to-avoid-crash-issue/20231023-173938
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20231023093153.6748-1-xingxing.luo%40unisoc.com
+patch subject: [PATCH] usb: musb: Check requset->buf before use to avoid crash issue
+config: arm-davinci_all_defconfig (https://download.01.org/0day-ci/archive/20231028/202310282331.d4wx1Z6b-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231028/202310282331.d4wx1Z6b-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/111769
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310282331.d4wx1Z6b-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-        Issue: Firmware test suite: Failed to clone git git://kernel.ubuntu=
-.com/hwe/fwts.git branch V21.02.00 repository
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/878
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/musb/musb_gadget_ep0.c:534:7: error: use of undeclared identifier 'requset'; did you mean 'request'?
+     534 |         if (!requset->buf) {
+         |              ^~~~~~~
+         |              request
+   drivers/usb/musb/musb_gadget_ep0.c:521:22: note: 'request' declared here
+     521 |         struct usb_request      *request;
+         |                                  ^
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PINCTRL_SINGLE
+   Depends on [n]: PINCTRL [=n] && OF [=y] && HAS_IOMEM [=y]
+   Selected by [y]:
+   - ARCH_DAVINCI [=y] && ARCH_MULTI_V5 [=y] && CPU_LITTLE_ENDIAN [=y]
 
 
+vim +534 drivers/usb/musb/musb_gadget_ep0.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   510	
+   511	/*
+   512	 * transmitting to the host (IN), this code might be called from IRQ
+   513	 * and from kernel thread.
+   514	 *
+   515	 * Context:  caller holds controller lock
+   516	 */
+   517	static void ep0_txstate(struct musb *musb)
+   518	{
+   519		void __iomem		*regs = musb->control_ep->regs;
+   520		struct musb_request	*req = next_ep0_request(musb);
+   521		struct usb_request	*request;
+   522		u16			csr = MUSB_CSR0_TXPKTRDY;
+   523		u8			*fifo_src;
+   524		u8			fifo_count;
+   525	
+   526		if (!req) {
+   527			/* WARN_ON(1); */
+   528			musb_dbg(musb, "odd; csr0 %04x", musb_readw(regs, MUSB_CSR0));
+   529			return;
+   530		}
+   531	
+   532		request = &req->request;
+   533	
+ > 534		if (!requset->buf) {
+   535			musb_dbg(musb, "request->buf is NULL");
+   536			return;
+   537		}
+   538	
+   539		/* load the data */
+   540		fifo_src = (u8 *) request->buf + request->actual;
+   541		fifo_count = min((unsigned) MUSB_EP0_FIFOSIZE,
+   542			request->length - request->actual);
+   543		musb_write_fifo(&musb->endpoints[0], fifo_count, fifo_src);
+   544		request->actual += fifo_count;
+   545	
+   546		/* update the flags */
+   547		if (fifo_count < MUSB_MAX_END0_PACKET
+   548				|| (request->actual == request->length
+   549					&& !request->zero)) {
+   550			musb->ep0_state = MUSB_EP0_STAGE_STATUSOUT;
+   551			csr |= MUSB_CSR0_P_DATAEND;
+   552		} else
+   553			request = NULL;
+   554	
+   555		/* report completions as soon as the fifo's loaded; there's no
+   556		 * win in waiting till this last packet gets acked.  (other than
+   557		 * very precise fault reporting, needed by USB TMC; possible with
+   558		 * this hardware, but not usable from portable gadget drivers.)
+   559		 */
+   560		if (request) {
+   561			musb->ackpend = csr;
+   562			musb_g_ep0_giveback(musb, request);
+   563			if (!musb->ackpend)
+   564				return;
+   565			musb->ackpend = 0;
+   566		}
+   567	
+   568		/* send it out, triggering a "txpktrdy cleared" irq */
+   569		musb_ep_select(musb->mregs, 0);
+   570		musb_writew(regs, MUSB_CSR0, csr);
+   571	}
+   572	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
