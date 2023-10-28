@@ -1,170 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06122944D;
-	Sat, 28 Oct 2023 15:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Aee4jssl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698507092; x=1730043092;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lXhBg7CyUNDTmqFAHnbpKEyoQJs4rn3WPxNcO3/MONs=;
-  b=Aee4jssl0HAQYKuQzTq9gXQRnmMgCcc2u/jFZkyrP/mujR2ENc5J3YvO
-   pSuYbfGDa8K0Qr9cjVU7T75Ei0Sl5T7zFwwJiNDTWzp4+vvsjnWBI9zWG
-   AOAYfb/UHAGYJUw1asP68lbp14xNaQ+xpu/aGlUEjF/FKZlZF/NrWSoC3
-   2j9BwtM2sjedZs7aXDAiKjWjMcbV2pQBTan+CTGaB20rC4q6iNM7SQa+t
-   ROjzFjhrAXFwb4TOsmqEiMjqmZ2HGRAXcrvpHdh37sI33jIbc5gl+tplL
-   4Z6TweKIDjcQIFw9gW7XzGXU1hOHlqcCVGAav/I6ys7N9ATikf1ity8Zx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="387717874"
-X-IronPort-AV: E=Sophos;i="6.03,259,1694761200"; 
-   d="scan'208";a="387717874"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 08:31:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,259,1694761200"; 
-   d="scan'208";a="1120418"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Oct 2023 08:31:15 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qwlHY-000Br5-3D;
-	Sat, 28 Oct 2023 15:31:25 +0000
-Date: Sat, 28 Oct 2023 23:30:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xingxing Luo <xingxing.luo@unisoc.com>, b-liu@ti.com,
-	gregkh@linuxfoundation.org, keescook@chromium.org,
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, xingxing0070.luo@gmail.com,
-	Zhiyong.Liu@unisoc.com, Cixi.Geng1@unisoc.com,
-	Orson.Zhai@unisoc.com, zhang.lyra@gmail.com
-Subject: Re: [PATCH] usb: musb: Check requset->buf before use to avoid crash
- issue
-Message-ID: <202310282331.d4wx1Z6b-lkp@intel.com>
-References: <20231023093153.6748-1-xingxing.luo@unisoc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5817D168A3
+	for <llvm@lists.linux.dev>; Sat, 28 Oct 2023 17:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1e9e17b3269so3966001fac.3
+        for <llvm@lists.linux.dev>; Sat, 28 Oct 2023 10:05:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698512705; x=1699117505;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VTo/MYGjU98OZVhpt1voIWuh+FHLPG7oyJBS1qD9LfQ=;
+        b=aCURP6TuwVxkP+uKYQxwmrF+nvkrcpN1h4PZM5ShkVFlG0xMIKHYJU4qEZwGPrfddg
+         7iG+PgnGvx9NQCEXgPq+HWH76xTBC8zwegUms2xC3mC1dvQfxCvSN57YH3UEK2suuA+T
+         DjPuqU98XLQa64gvpSQZEU+Zf67D09fHiCLSF4740RcaVFpbFfhehDwfjuKHDlNTUp3O
+         MF2lPkjMKvFoqKLlqEGDoojHpBZ8eAJYOSmb1vNRms3B/s4gAl/6P2UzyH9akXdOTzLO
+         DFscIA+ThIQXmhxgy6iCsz5u/vLzjdNLUcbLuL+X+NHQR9wnCRGJz3bT3tTVqE/V0gbm
+         ou/w==
+X-Gm-Message-State: AOJu0YzknMUfmgoumwunTap6+JIU3dzmIV2ZJi/c5560ZsPQTZjDXncf
+	tRFbbX7S6BJK/4wUN3Vum6jgN1+tlBY6mEafR9TCERKR9sC9
+X-Google-Smtp-Source: AGHT+IHDWbVpcRZW17s+E9mZT2p3NLImbd1EcjPq+4ECelqP51WUu/Fg5z00UTleUxVPQ3pE/XOUb6xGMgZ4y7h8sYPMfUlG8x9+
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231023093153.6748-1-xingxing.luo@unisoc.com>
+X-Received: by 2002:a05:6870:30d:b0:1e1:3367:1429 with SMTP id
+ m13-20020a056870030d00b001e133671429mr2675836oaf.10.1698512705435; Sat, 28
+ Oct 2023 10:05:05 -0700 (PDT)
+Date: Sat, 28 Oct 2023 10:05:05 -0700
+In-Reply-To: <0000000000003ba9f506013b0aed@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000743d980608c9ce33@google.com>
+Subject: Re: [syzbot] [ntfs3?] INFO: task hung in ntfs_read_folio (2)
+From: syzbot <syzbot+913093197c71922e8375@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, 
+	clang-built-linux@googlegroups.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Xingxing,
+syzbot suspects this issue was fixed by commit:
 
-kernel test robot noticed the following build errors:
+commit bfbe5b31caa74ab97f1784fe9ade5f45e0d3de91
+Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Date:   Fri Jun 30 12:22:53 2023 +0000
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.6-rc7 next-20231027]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    fs/ntfs3: fix deadlock in mark_as_free_ex
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xingxing-Luo/usb-musb-Check-requset-buf-before-use-to-avoid-crash-issue/20231023-173938
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20231023093153.6748-1-xingxing.luo%40unisoc.com
-patch subject: [PATCH] usb: musb: Check requset->buf before use to avoid crash issue
-config: arm-davinci_all_defconfig (https://download.01.org/0day-ci/archive/20231028/202310282331.d4wx1Z6b-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231028/202310282331.d4wx1Z6b-lkp@intel.com/reproduce)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14006f67680000
+start commit:   bfa3037d8280 Merge tag 'fuse-update-6.5' of git://git.kern..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a4507c291b5ab5d4
+dashboard link: https://syzkaller.appspot.com/bug?extid=913093197c71922e8375
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b8869ea80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149e6072a80000
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310282331.d4wx1Z6b-lkp@intel.com/
+If the result looks correct, please mark the issue as fixed by replying with:
 
-All errors (new ones prefixed by >>):
+#syz fix: fs/ntfs3: fix deadlock in mark_as_free_ex
 
->> drivers/usb/musb/musb_gadget_ep0.c:534:7: error: use of undeclared identifier 'requset'; did you mean 'request'?
-     534 |         if (!requset->buf) {
-         |              ^~~~~~~
-         |              request
-   drivers/usb/musb/musb_gadget_ep0.c:521:22: note: 'request' declared here
-     521 |         struct usb_request      *request;
-         |                                  ^
-   1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PINCTRL_SINGLE
-   Depends on [n]: PINCTRL [=n] && OF [=y] && HAS_IOMEM [=y]
-   Selected by [y]:
-   - ARCH_DAVINCI [=y] && ARCH_MULTI_V5 [=y] && CPU_LITTLE_ENDIAN [=y]
-
-
-vim +534 drivers/usb/musb/musb_gadget_ep0.c
-
-   510	
-   511	/*
-   512	 * transmitting to the host (IN), this code might be called from IRQ
-   513	 * and from kernel thread.
-   514	 *
-   515	 * Context:  caller holds controller lock
-   516	 */
-   517	static void ep0_txstate(struct musb *musb)
-   518	{
-   519		void __iomem		*regs = musb->control_ep->regs;
-   520		struct musb_request	*req = next_ep0_request(musb);
-   521		struct usb_request	*request;
-   522		u16			csr = MUSB_CSR0_TXPKTRDY;
-   523		u8			*fifo_src;
-   524		u8			fifo_count;
-   525	
-   526		if (!req) {
-   527			/* WARN_ON(1); */
-   528			musb_dbg(musb, "odd; csr0 %04x", musb_readw(regs, MUSB_CSR0));
-   529			return;
-   530		}
-   531	
-   532		request = &req->request;
-   533	
- > 534		if (!requset->buf) {
-   535			musb_dbg(musb, "request->buf is NULL");
-   536			return;
-   537		}
-   538	
-   539		/* load the data */
-   540		fifo_src = (u8 *) request->buf + request->actual;
-   541		fifo_count = min((unsigned) MUSB_EP0_FIFOSIZE,
-   542			request->length - request->actual);
-   543		musb_write_fifo(&musb->endpoints[0], fifo_count, fifo_src);
-   544		request->actual += fifo_count;
-   545	
-   546		/* update the flags */
-   547		if (fifo_count < MUSB_MAX_END0_PACKET
-   548				|| (request->actual == request->length
-   549					&& !request->zero)) {
-   550			musb->ep0_state = MUSB_EP0_STAGE_STATUSOUT;
-   551			csr |= MUSB_CSR0_P_DATAEND;
-   552		} else
-   553			request = NULL;
-   554	
-   555		/* report completions as soon as the fifo's loaded; there's no
-   556		 * win in waiting till this last packet gets acked.  (other than
-   557		 * very precise fault reporting, needed by USB TMC; possible with
-   558		 * this hardware, but not usable from portable gadget drivers.)
-   559		 */
-   560		if (request) {
-   561			musb->ackpend = csr;
-   562			musb_g_ep0_giveback(musb, request);
-   563			if (!musb->ackpend)
-   564				return;
-   565			musb->ackpend = 0;
-   566		}
-   567	
-   568		/* send it out, triggering a "txpktrdy cleared" irq */
-   569		musb_ep_select(musb->mregs, 0);
-   570		musb_writew(regs, MUSB_CSR0, csr);
-   571	}
-   572	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
