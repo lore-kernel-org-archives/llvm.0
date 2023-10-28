@@ -1,92 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720B638F89;
-	Fri, 27 Oct 2023 16:54:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11A67F5
+	for <llvm@lists.linux.dev>; Sat, 28 Oct 2023 03:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RZBfKnMP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358FEC433C8;
-	Fri, 27 Oct 2023 16:54:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698425677;
-	bh=/miI3Jk5Lw4dQlveXHkuOwWSER+qZkWRM6gODkNYp+0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=RZBfKnMP9qhCgwoepEs4Ln3AguyEI+fA1qkhPgKMV1MLx5/hrkGIzZ/qbDM30s/Dv
-	 BMFRJ9N2HFlbxSa/3fgoeKKNcf5gLzXQfmFu8jX2pgy+DSQe56LGhZWQb/5Zyn9baW
-	 LL1eBphv9X5ncRHqbe40SdsOPp0/9Z5D2xbeURn8QhT07Q9L0ZAPA2Fc4LJC9+qToD
-	 lE7IOlaWGrPcSF+bNwv67KwaGR4IuQ0Oqo/C5rvUKpJJVudjSs5GoHcsIXnw5zbKU9
-	 VbQpDeep6glP4y5/HGBHEvYy8NtSPMQKhWg2WxwXA7yjZkl/xrswc+8LWonRNd7jJa
-	 vD3fZtt5/cGcg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 27 Oct 2023 09:54:25 -0700
-Subject: [PATCH] ASoC: codecs: aw88399: Fix -Wuninitialized in
- aw_dev_set_vcalb()
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="go1rVYz+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1698465087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Waz9y5HsgMRFyx09ynsDe+Tn9HxAJFWpH+81Dg+Ojzc=;
+	b=go1rVYz+8nFn85pvwsLzoiXH6b90tU9nQjnlzky9VIdn1VR3srt+sE+YzEst9cBjgCpGNR
+	BgVIqZQhwj0jSmlrERQTMQqBtdsHJ1Na8wLQWCHQ4RjHaFw2XObtiFoZTGtqIh4VFcd4l3
+	fNSYT3TCIkHvaSLaW8allGu/dI80s7E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-674-A-r98_q7NJulXuT_FDbIgQ-1; Fri, 27 Oct 2023 23:51:23 -0400
+X-MC-Unique: A-r98_q7NJulXuT_FDbIgQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 49E4780D721
+	for <llvm@lists.linux.dev>; Sat, 28 Oct 2023 03:51:23 +0000 (UTC)
+Received: from [172.64.15.15] (unknown [10.30.32.48])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 320562026D4C;
+	Sat, 28 Oct 2023 03:51:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 230): Test report for master
+ (6.6.0-rc7, mainline.kernel.org-clang, 888cf78c)
+Date: Sat, 28 Oct 2023 03:51:23 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <81348.123102723512300327@us-mta-674.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231027-asoc-aw88399-fix-wuninitialized-v1-1-b1044493e4cd@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAEDrO2UC/x2NwQ6CMBAFf4XsmU2gFWz5FeNhhS2+xBTTohgJ/
- 27jcZLJzE5ZEzTTUO2U9I2MJRZo64rGu8RZGVNhMo2xbWPOLHkZWTbnrPcc8OHtFRGxQh746sS
- 9vXXdKbggXqhUnkmL9T9crsfxA0lzDm5xAAAA
-To: broonie@kernel.org, wangweidong.a@awinic.com
-Cc: lgirdwood@gmail.com, ndesaulniers@google.com, trix@redhat.com, 
- alsa-devel@alsa-project.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1647; i=nathan@kernel.org;
- h=from:subject:message-id; bh=/miI3Jk5Lw4dQlveXHkuOwWSER+qZkWRM6gODkNYp+0=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDKnWr33m/Hz4jz8nbWpLQUcOozOT3sI94rpb2cI/xcwv7
- zS85HCso5SFQYyDQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzkCxvDLyYHVs2Z7xbenKC7
- dF3B5Wcth7zOMPWkJpbJebyrEw4Kfsvwi5l1G4t/zsxjD1ctEI2/XKZo4sM64c62V//T45LMQ27
- asgEA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: quoted-printable
 
-Clang warns (or errors with CONFIG_WERROR=y):
+Hi, we tested your kernel and here are the results:
 
-  sound/soc/codecs/aw88399.c:441:18: error: variable 'vsense_select' is uninitialized when used here [-Werror,-Wuninitialized]
-    441 |         vsense_select = vsense_select & (~AW88399_VDSEL_MASK);
-        |                         ^~~~~~~~~~~~~
-  sound/soc/codecs/aw88399.c:431:28: note: initialize the variable 'vsense_select' to silence this warning
-    431 |         unsigned int vsense_select, vsense_value;
-        |                                   ^
-        |                                    = 0
-  1 error generated.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-This clearly should have been using the value received from
-regmap_read(). Use the correct variable to resolve the warning.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1952
-Fixes: 8ade6cc7e261 ("ASoC: codecs: Add aw88399 amplifier driver")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- sound/soc/codecs/aw88399.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Kernel information:
+    Commit message: Merge tag 'iommu-fix-v6.6-rc7' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/joro/iommu
 
-diff --git a/sound/soc/codecs/aw88399.c b/sound/soc/codecs/aw88399.c
-index ce30bc7cdea9..47fe38d0def5 100644
---- a/sound/soc/codecs/aw88399.c
-+++ b/sound/soc/codecs/aw88399.c
-@@ -438,7 +438,7 @@ static int aw_dev_set_vcalb(struct aw88399 *aw88399)
- 	if (ret)
- 		return ret;
- 
--	vsense_select = vsense_select & (~AW88399_VDSEL_MASK);
-+	vsense_select = vsense_value & (~AW88399_VDSEL_MASK);
- 
- 	ret = aw88399_dev_get_icalk(aw88399, &icalk);
- 	if (ret) {
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/111722
 
----
-base-commit: 60781d2d5899d6fc5fd173c1bcffaaec39643e17
-change-id: 20231027-asoc-aw88399-fix-wuninitialized-63b554f8fa9a
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
