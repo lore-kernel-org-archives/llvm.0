@@ -1,223 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D932F81E;
-	Sun, 29 Oct 2023 12:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3DFB67F;
+	Sun, 29 Oct 2023 17:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OvaW1wEF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698584105; x=1730120105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uuVOo2cSJbl54SVJTPcZzZIDzT0I0Vfu2pQz5kAivK4=;
-  b=OvaW1wEFyO3tXDKvT+BRUYuLeRS5bIVER5pHsUahk66Ul4yh0vmTunTK
-   mBjdBkm88ZMW7i8duEnYYbtLzajlmHXIV1M1ydYnnv8aIuw4USGmu7Cmq
-   u/+HiqNFqpvrjEICxsULzmvXfyIgt9CrXXY1LgnNgg1oKn3R7yzff42h1
-   sSR5hjD0/pxiD1uhqB/k6JEMA6X4bjTtdwBXhOWqqq6M0KuOWabvqHOD8
-   osmm7XO/nms3HJ+v6AL4VdkWvEFRZ3egaYO3Me7FCXp1hX8rWr/U731rF
-   rFbkdmlvBvo6QUBhErYHFeK1q2UYbngN1jc2xdti9mc59cNn9T7PqdW0N
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="378324098"
-X-IronPort-AV: E=Sophos;i="6.03,261,1694761200"; 
-   d="scan'208";a="378324098"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2023 05:55:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,261,1694761200"; 
-   d="scan'208";a="1278485"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 29 Oct 2023 05:54:46 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qx5Jh-000CZ7-2E;
-	Sun, 29 Oct 2023 12:54:57 +0000
-Date: Sun, 29 Oct 2023 20:54:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Coco Li <lixiaoyan@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Mubashir Adnan Qureshi <mubashirq@google.com>,
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-	Jonathan Corbet <corbet@lwn.net>, David Ahern <dsahern@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Chao Wu <wwchao@google.com>,
-	Wei Wang <weiwan@google.com>, Pradeep Nemavat <pnemavat@google.com>,
-	Coco Li <lixiaoyan@google.com>
-Subject: Re: [PATCH v5 net-next 3/5] netns-ipv4: reorganize netns_ipv4 fast
- path variables
-Message-ID: <202310292036.So7PkmBh-lkp@intel.com>
-References: <20231029075244.2612089-4-lixiaoyan@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2hYC96y"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-507b9408c61so5115888e87.0;
+        Sun, 29 Oct 2023 10:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698598861; x=1699203661; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ehjbeH+jxTChtsEDDNVmACmNRPnSY/WOnY7rPP35b9Y=;
+        b=e2hYC96yd1EFVHvep7cjMduqkLVR531ZVYJPGdfi0+oC5qyoxImY+HjljhVBIqqtgR
+         mrGacUpL2NTueYFrblrEjMsUJSHaGoB6LlnEf6f8LRpefuhDMwYnFVfNW5+wIKzL2XEb
+         TF7wM5Ih30c1crSApmCZoENkl674VYguufFceBQuIuRC2KYO3hIJA9fIp9RbrpWtZlU2
+         EE8MvUD2sskl1YQKVlIqRyC4x2SGOFwuOD3EXUqgYAZFG23+26qOWAYU4JypIs67Jxyg
+         8C1y2JLHeLXKK3QEIAnQVXTIxgPPHIn7ze/Qvp3hzruDto3gJQa9ioQ/mNDY9wFXDP6M
+         wVRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698598861; x=1699203661;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ehjbeH+jxTChtsEDDNVmACmNRPnSY/WOnY7rPP35b9Y=;
+        b=l8OIr2pU2vnN4pDI+wFID0k8Ic/Y0oUO+3/683oKUt9ah3rWRPuadffTXzEfTboJFD
+         r8wsOk0JUJrCAQipy1p/0ggenbdg9pXnRFuPPrhl6i8343jz0Xc7oFn6n0qzFh0CLCuC
+         aUGTY7JvJ8c6Zx0ogXPeiZ6Aofuu7TUZQT4fkVonSP0OvFou7jvjKUMMeB5Pi5t0DJ+U
+         kah2/gbEhP31YrvgfhEQ7r2OYGcaanXdUlRFOGbEAtKWL6NijoLywPzjmsM83EtgOZe5
+         8O4LoFFtOYZrnL00COqmcmlhQlhmSkfRXTmamIW/SgIpyOPBJtARs+Dj5BLSa+lYsMWd
+         hmqQ==
+X-Gm-Message-State: AOJu0YwRX2/uybum2WKdQvanwLSt4We0cdnCD85JZliM1hdMDTNypEe7
+	zQcdNCpBcPUvMuvy0QzY9FgwYvLwAPylAI3hdA==
+X-Google-Smtp-Source: AGHT+IFKCpOGLZM3vnrbaQNLC02/9n872COebcZttUxqu3qsZgdz3ReGjJKaiOKOb1YwcsyY+uu298DRgw3zKzReggA=
+X-Received: by 2002:a05:6512:159f:b0:507:ce49:81bd with SMTP id
+ bp31-20020a056512159f00b00507ce4981bdmr6417655lfb.61.1698598860373; Sun, 29
+ Oct 2023 10:01:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231029075244.2612089-4-lixiaoyan@google.com>
+References: <20231026160100.195099-6-brgerst@gmail.com> <202310290927.2MuJJdu9-lkp@intel.com>
+ <CAMzpN2iUrfnuGQ9eFTr=NTeC6KSUPC37Qji5_g5MWejmXnXO3A@mail.gmail.com>
+In-Reply-To: <CAMzpN2iUrfnuGQ9eFTr=NTeC6KSUPC37Qji5_g5MWejmXnXO3A@mail.gmail.com>
+From: Brian Gerst <brgerst@gmail.com>
+Date: Sun, 29 Oct 2023 13:00:49 -0400
+Message-ID: <CAMzpN2jbA=ZCbbFq=gyVAtKBr4kyYcNPLpWaEcAhEAN2J0wwTw@mail.gmail.com>
+Subject: Re: [PATCH v2 05/11] x86/stackprotector/64: Convert stack protector
+ to normal percpu variable
+To: kernel test robot <lkp@intel.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Ingo Molnar <mingo@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Coco,
+On Sun, Oct 29, 2023 at 2:56=E2=80=AFAM Brian Gerst <brgerst@gmail.com> wro=
+te:
+>
+> On Sat, Oct 28, 2023 at 9:26=E2=80=AFPM kernel test robot <lkp@intel.com>=
+ wrote:
+> >
+> > Hi Brian,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on tip/master]
+> > [also build test ERROR on next-20231027]
+> > [cannot apply to tip/x86/core dennis-percpu/for-next linus/master tip/a=
+uto-latest v6.6-rc7]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Gerst/x86-=
+stackprotector-32-Remove-stack-protector-test-script/20231027-000533
+> > base:   tip/master
+> > patch link:    https://lore.kernel.org/r/20231026160100.195099-6-brgers=
+t%40gmail.com
+> > patch subject: [PATCH v2 05/11] x86/stackprotector/64: Convert stack pr=
+otector to normal percpu variable
+> > config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/2=
+0231029/202310290927.2MuJJdu9-lkp@intel.com/config)
+> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.gi=
+t ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20231029/202310290927.2MuJJdu9-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202310290927.2MuJJdu9-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> Unsupported relocation type: unknown type rel type name (42)
+>
+> Clang is generating a new relocation type (R_X86_64_REX_GOTPCRELX)
+> that the relocs tool doesn't know about.  This is supposed to allow
+>         movq    __stack_chk_guard@GOTPCREL(%rip), %rax
+>         movq    %gs:(%rax), %rax
+> to be relaxed to
+>         leaq    __stack_chk_guard(%rip), %rax
+>         movq    %gs:(%rax), %rax
+>
+> But why is clang doing this instead of what GCC does?
+>         movq    %gs:__stack_chk_guard(%rip), %rax
 
-kernel test robot noticed the following build errors:
+Digging a bit deeper, there also appears to be differences in how the
+linkers behave with this new relocation:
 
-[auto build test ERROR on net-next/main]
+make CC=3Dclang LD=3Dld:
+ffffffff81002838:       48 c7 c0 c0 5c 42 83    mov    $0xffffffff83425cc0,=
+%rax
+                        ffffffff8100283b: R_X86_64_32S  __stack_chk_guard
+ffffffff8100283f:       65 48 8b 00             mov    %gs:(%rax),%rax
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Coco-Li/Documentations-Analyze-heavily-used-Networking-related-structs/20231029-172902
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20231029075244.2612089-4-lixiaoyan%40google.com
-patch subject: [PATCH v5 net-next 3/5] netns-ipv4: reorganize netns_ipv4 fast path variables
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231029/202310292036.So7PkmBh-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231029/202310292036.So7PkmBh-lkp@intel.com/reproduce)
+make CC=3Dclang LD=3Dld.lld:
+ffffffff81002838:       48 8d 05 81 34 42 02    lea
+0x2423481(%rip),%rax        # ffffffff83425cc0 <__stack_chk_guard>
+                        ffffffff8100283b: R_X86_64_REX_GOTPCRELX
+ __stack_chk_guard-0x4
+ffffffff8100283f:       65 48 8b 00             mov    %gs:(%rax),%rax
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310292036.So7PkmBh-lkp@intel.com/
+The LLVM linker keeps the R_X86_64_REX_GOTPCRELX even after performing
+the relaxation.  It should be R_X86_64_32S based on it changing to an
+LEA instruction.  The GNU linker changes it to R_X86_64_32S and a MOV
+immediate.
 
-All errors (new ones prefixed by >>):
+So I think there are two issues here.  1) clang is producing code
+referencing the GOT for stack protector accesses, despite -fno-PIE on
+the command line and no other GOT references, and 2) ld.lld is using
+the wrong relocation type after the relaxation step is performed.
 
-   In file included from net/core/net_namespace.c:5:
-   In file included from include/linux/rtnetlink.h:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/core/net_namespace.c:5:
-   In file included from include/linux/rtnetlink.h:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/core/net_namespace.c:5:
-   In file included from include/linux/rtnetlink.h:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> net/core/net_namespace.c:1127:2: error: expected expression
-    1127 |         / TXRX readonly hotpath cache lines */
-         |         ^
->> net/core/net_namespace.c:1127:4: error: use of undeclared identifier 'TXRX'
-    1127 |         / TXRX readonly hotpath cache lines */
-         |           ^
-   12 warnings and 2 errors generated.
+I think the quick fix here is to teach the relocs tool about this new
+relocation.  It should be able to be safely ignored since it's
+PC-relative.  The code clang produces is functionally correct,
+although not optimal.
 
-
-vim +1127 net/core/net_namespace.c
-
-  1101	
-  1102	static void __init netns_ipv4_struct_check(void)
-  1103	{
-  1104		/* TX readonly hotpath cache lines */
-  1105		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1106					      sysctl_tcp_early_retrans);
-  1107		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1108					      sysctl_tcp_tso_win_divisor);
-  1109		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1110					      sysctl_tcp_tso_rtt_log);
-  1111		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1112					      sysctl_tcp_autocorking);
-  1113		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1114					      sysctl_tcp_min_snd_mss);
-  1115		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1116					      sysctl_tcp_notsent_lowat);
-  1117		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1118					      sysctl_tcp_limit_output_bytes);
-  1119		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1120					      sysctl_tcp_min_rtt_wlen);
-  1121		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1122					      sysctl_tcp_wmem);
-  1123		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
-  1124					      sysctl_ip_fwd_use_pmtu);
-  1125		CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4_read_tx, 33);
-  1126	
-> 1127		/ TXRX readonly hotpath cache lines */
-  1128		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_txrx,
-  1129					      sysctl_tcp_moderate_rcvbuf);
-  1130		CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4_read_txrx, 1);
-  1131	
-  1132		/* RX readonly hotpath cache line */
-  1133		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
-  1134					      sysctl_ip_early_demux);
-  1135		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
-  1136					      sysctl_tcp_early_demux);
-  1137		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
-  1138					      sysctl_tcp_reordering);
-  1139		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
-  1140					      sysctl_tcp_rmem);
-  1141		CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4_read_rx, 18);
-  1142	}
-  1143	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Brian Gerst
