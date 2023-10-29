@@ -1,53 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9955C3C13;
-	Sun, 29 Oct 2023 10:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D932F81E;
+	Sun, 29 Oct 2023 12:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zr4udAaV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OvaW1wEF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698573962; x=1730109962;
+  t=1698584105; x=1730120105;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=22IFjif+Zaay2bxS/UIgYdVCPDzNfUS2BDcTun2d/kY=;
-  b=Zr4udAaVNbRXV+ITeqdZAWIL020ELJ5WcdrS+Bu/nAQZ3OzjJPDkvyvO
-   76zOxK4xhAUYlBTf+xT8Ux31zxqphlpgv5dpTh411z1hmnhDfIQwP3WS+
-   40xIbulkWLbDVuAjxisvw+vbkbdLiaX3q9hDB9IHpwrmWe90emesA3fUr
-   T3j2lpT7oG0Kaih5ZDhxOnJ25br9lB2gl0DKvBn/NYqHYe2SCp5zAQSln
-   4K30jFLvvD5Zzx+QwSWsz/ZBaKg0Z+9p4I2DrHIW/3rk0LRC7YaJm477f
-   Z//w6/Q49Pmzwa0GT3uxwYvs8QIwRy9ZjWMlixyXM/yKxpmRDE61FB7Wm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="6573435"
+  bh=uuVOo2cSJbl54SVJTPcZzZIDzT0I0Vfu2pQz5kAivK4=;
+  b=OvaW1wEFyO3tXDKvT+BRUYuLeRS5bIVER5pHsUahk66Ul4yh0vmTunTK
+   mBjdBkm88ZMW7i8duEnYYbtLzajlmHXIV1M1ydYnnv8aIuw4USGmu7Cmq
+   u/+HiqNFqpvrjEICxsULzmvXfyIgt9CrXXY1LgnNgg1oKn3R7yzff42h1
+   sSR5hjD0/pxiD1uhqB/k6JEMA6X4bjTtdwBXhOWqqq6M0KuOWabvqHOD8
+   osmm7XO/nms3HJ+v6AL4VdkWvEFRZ3egaYO3Me7FCXp1hX8rWr/U731rF
+   rFbkdmlvBvo6QUBhErYHFeK1q2UYbngN1jc2xdti9mc59cNn9T7PqdW0N
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="378324098"
 X-IronPort-AV: E=Sophos;i="6.03,261,1694761200"; 
-   d="scan'208";a="6573435"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2023 03:06:01 -0700
+   d="scan'208";a="378324098"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2023 05:55:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="753534148"
 X-IronPort-AV: E=Sophos;i="6.03,261,1694761200"; 
-   d="scan'208";a="753534148"
+   d="scan'208";a="1278485"
 Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Oct 2023 03:05:56 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 29 Oct 2023 05:54:46 -0700
 Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qx2g6-000CTl-18;
-	Sun, 29 Oct 2023 10:05:54 +0000
-Date: Sun, 29 Oct 2023 18:05:14 +0800
+	id 1qx5Jh-000CZ7-2E;
+	Sun, 29 Oct 2023 12:54:57 +0000
+Date: Sun, 29 Oct 2023 20:54:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Woodhouse <dwmw2@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	linux-kernel <linux-kernel@vger.kernel.org>
+To: Coco Li <lixiaoyan@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Mubashir Adnan Qureshi <mubashirq@google.com>,
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+	Jonathan Corbet <corbet@lwn.net>, David Ahern <dsahern@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v2] lockdep: add lockdep_cleanup_dead_cpu()
-Message-ID: <202310291748.ld6JE1m3-lkp@intel.com>
-References: <635fa006e8f3816b4a36b964d6281f0d8efa789b.camel@infradead.org>
+	netdev@vger.kernel.org, Chao Wu <wwchao@google.com>,
+	Wei Wang <weiwan@google.com>, Pradeep Nemavat <pnemavat@google.com>,
+	Coco Li <lixiaoyan@google.com>
+Subject: Re: [PATCH v5 net-next 3/5] netns-ipv4: reorganize netns_ipv4 fast
+ path variables
+Message-ID: <202310292036.So7PkmBh-lkp@intel.com>
+References: <20231029075244.2612089-4-lixiaoyan@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,44 +59,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <635fa006e8f3816b4a36b964d6281f0d8efa789b.camel@infradead.org>
+In-Reply-To: <20231029075244.2612089-4-lixiaoyan@google.com>
 
-Hi David,
+Hi Coco,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on tip/smp/core]
-[also build test WARNING on tip/locking/core linus/master v6.6-rc7 next-20231027]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Woodhouse/lockdep-add-lockdep_cleanup_dead_cpu/20231029-032722
-base:   tip/smp/core
-patch link:    https://lore.kernel.org/r/635fa006e8f3816b4a36b964d6281f0d8efa789b.camel%40infradead.org
-patch subject: [PATCH v2] lockdep: add lockdep_cleanup_dead_cpu()
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231029/202310291748.ld6JE1m3-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Coco-Li/Documentations-Analyze-heavily-used-Networking-related-structs/20231029-172902
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231029075244.2612089-4-lixiaoyan%40google.com
+patch subject: [PATCH v5 net-next 3/5] netns-ipv4: reorganize netns_ipv4 fast path variables
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231029/202310292036.So7PkmBh-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231029/202310291748.ld6JE1m3-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231029/202310292036.So7PkmBh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310291748.ld6JE1m3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310292036.So7PkmBh-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:5:
-   In file included from include/linux/rcupdate.h:26:
->> include/linux/irqflags.h:36:19: warning: declaration of 'struct task_struct' will not be visible outside of this function [-Wvisibility]
-      36 |                                               struct task_struct *idle) {}
-         |                                                      ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
+   In file included from net/core/net_namespace.c:5:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -109,11 +104,13 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
          |                                                   ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
+   In file included from net/core/net_namespace.c:5:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -126,11 +123,13 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
          |                                                   ^
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
+   In file included from net/core/net_namespace.c:5:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -164,172 +163,60 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      735 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
-   13 warnings generated.
---
-   In file included from arch/um/kernel/reboot.c:6:
-   In file included from include/linux/sched/signal.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:26:
->> include/linux/irqflags.h:36:19: warning: declaration of 'struct task_struct' will not be visible outside of this function [-Wvisibility]
-      36 |                                               struct task_struct *idle) {}
-         |                                                      ^
-   arch/um/kernel/reboot.c:45:6: warning: no previous prototype for function 'machine_restart' [-Wmissing-prototypes]
-      45 | void machine_restart(char * __unused)
-         |      ^
-   arch/um/kernel/reboot.c:45:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      45 | void machine_restart(char * __unused)
-         | ^
-         | static 
-   arch/um/kernel/reboot.c:51:6: warning: no previous prototype for function 'machine_power_off' [-Wmissing-prototypes]
-      51 | void machine_power_off(void)
-         |      ^
-   arch/um/kernel/reboot.c:51:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      51 | void machine_power_off(void)
-         | ^
-         | static 
-   arch/um/kernel/reboot.c:57:6: warning: no previous prototype for function 'machine_halt' [-Wmissing-prototypes]
-      57 | void machine_halt(void)
-         |      ^
-   arch/um/kernel/reboot.c:57:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      57 | void machine_halt(void)
-         | ^
-         | static 
-   4 warnings generated.
---
-   In file included from arch/um/kernel/early_printk.c:7:
-   In file included from include/linux/console.h:19:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:26:
->> include/linux/irqflags.h:36:19: warning: declaration of 'struct task_struct' will not be visible outside of this function [-Wvisibility]
-      36 |                                               struct task_struct *idle) {}
-         |                                                      ^
-   1 warning generated.
---
-   In file included from kernel/irq_work.c:12:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:5:
-   In file included from include/linux/rcupdate.h:26:
->> include/linux/irqflags.h:36:19: warning: declaration of 'struct task_struct' will not be visible outside of this function [-Wvisibility]
-      36 |                                               struct task_struct *idle) {}
-         |                                                      ^
-   In file included from kernel/irq_work.c:14:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/irq_work.c:14:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/irq_work.c:14:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   kernel/irq_work.c:72:13: warning: no previous prototype for function 'arch_irq_work_raise' [-Wmissing-prototypes]
-      72 | void __weak arch_irq_work_raise(void)
-         |             ^
-   kernel/irq_work.c:72:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      72 | void __weak arch_irq_work_raise(void)
-         | ^
-         | static 
-   14 warnings generated.
---
-   In file included from lib/maple_tree.c:54:
-   In file included from include/linux/maple_tree.h:12:
-   In file included from include/linux/rcupdate.h:26:
->> include/linux/irqflags.h:36:19: warning: declaration of 'struct task_struct' will not be visible outside of this function [-Wvisibility]
-      36 |                                               struct task_struct *idle) {}
-         |                                                      ^
-   lib/maple_tree.c:331:21: warning: unused function 'mte_set_full' [-Wunused-function]
-     331 | static inline void *mte_set_full(const struct maple_enode *node)
-         |                     ^
-   lib/maple_tree.c:336:21: warning: unused function 'mte_clear_full' [-Wunused-function]
-     336 | static inline void *mte_clear_full(const struct maple_enode *node)
-         |                     ^
-   lib/maple_tree.c:341:20: warning: unused function 'mte_has_null' [-Wunused-function]
-     341 | static inline bool mte_has_null(const struct maple_enode *node)
-         |                    ^
-   lib/maple_tree.c:672:29: warning: unused function 'mas_pivot' [-Wunused-function]
-     672 | static inline unsigned long mas_pivot(struct ma_state *mas, unsigned char piv)
-         |                             ^
-   lib/maple_tree.c:4319:20: warning: stack frame size (1064) exceeds limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    4319 | static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-         |                    ^
-   6 warnings generated.
+>> net/core/net_namespace.c:1127:2: error: expected expression
+    1127 |         / TXRX readonly hotpath cache lines */
+         |         ^
+>> net/core/net_namespace.c:1127:4: error: use of undeclared identifier 'TXRX'
+    1127 |         / TXRX readonly hotpath cache lines */
+         |           ^
+   12 warnings and 2 errors generated.
 
 
-vim +36 include/linux/irqflags.h
+vim +1127 net/core/net_namespace.c
 
-    19	
-    20	/* Currently lockdep_softirqs_on/off is used only by lockdep */
-    21	#ifdef CONFIG_PROVE_LOCKING
-    22	  extern void lockdep_softirqs_on(unsigned long ip);
-    23	  extern void lockdep_softirqs_off(unsigned long ip);
-    24	  extern void lockdep_hardirqs_on_prepare(void);
-    25	  extern void lockdep_hardirqs_on(unsigned long ip);
-    26	  extern void lockdep_hardirqs_off(unsigned long ip);
-    27	  extern void lockdep_cleanup_dead_cpu(unsigned int cpu,
-    28					       struct task_struct *idle);
-    29	#else
-    30	  static inline void lockdep_softirqs_on(unsigned long ip) { }
-    31	  static inline void lockdep_softirqs_off(unsigned long ip) { }
-    32	  static inline void lockdep_hardirqs_on_prepare(void) { }
-    33	  static inline void lockdep_hardirqs_on(unsigned long ip) { }
-    34	  static inline void lockdep_hardirqs_off(unsigned long ip) { }
-    35	  static inline void lockdep_cleanup_dead_cpu(unsigned int cpu,
-  > 36						      struct task_struct *idle) {}
-    37	#endif
-    38	
+  1101	
+  1102	static void __init netns_ipv4_struct_check(void)
+  1103	{
+  1104		/* TX readonly hotpath cache lines */
+  1105		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1106					      sysctl_tcp_early_retrans);
+  1107		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1108					      sysctl_tcp_tso_win_divisor);
+  1109		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1110					      sysctl_tcp_tso_rtt_log);
+  1111		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1112					      sysctl_tcp_autocorking);
+  1113		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1114					      sysctl_tcp_min_snd_mss);
+  1115		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1116					      sysctl_tcp_notsent_lowat);
+  1117		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1118					      sysctl_tcp_limit_output_bytes);
+  1119		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1120					      sysctl_tcp_min_rtt_wlen);
+  1121		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1122					      sysctl_tcp_wmem);
+  1123		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_tx,
+  1124					      sysctl_ip_fwd_use_pmtu);
+  1125		CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4_read_tx, 33);
+  1126	
+> 1127		/ TXRX readonly hotpath cache lines */
+  1128		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_txrx,
+  1129					      sysctl_tcp_moderate_rcvbuf);
+  1130		CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4_read_txrx, 1);
+  1131	
+  1132		/* RX readonly hotpath cache line */
+  1133		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
+  1134					      sysctl_ip_early_demux);
+  1135		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
+  1136					      sysctl_tcp_early_demux);
+  1137		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
+  1138					      sysctl_tcp_reordering);
+  1139		CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ipv4_read_rx,
+  1140					      sysctl_tcp_rmem);
+  1141		CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4_read_rx, 18);
+  1142	}
+  1143	
 
 -- 
 0-DAY CI Kernel Test Service
