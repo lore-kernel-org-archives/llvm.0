@@ -1,149 +1,186 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-oi1-f205.google.com (mail-oi1-f205.google.com [209.85.167.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3DFB67F;
-	Sun, 29 Oct 2023 17:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2hYC96y"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-507b9408c61so5115888e87.0;
-        Sun, 29 Oct 2023 10:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698598861; x=1699203661; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ehjbeH+jxTChtsEDDNVmACmNRPnSY/WOnY7rPP35b9Y=;
-        b=e2hYC96yd1EFVHvep7cjMduqkLVR531ZVYJPGdfi0+oC5qyoxImY+HjljhVBIqqtgR
-         mrGacUpL2NTueYFrblrEjMsUJSHaGoB6LlnEf6f8LRpefuhDMwYnFVfNW5+wIKzL2XEb
-         TF7wM5Ih30c1crSApmCZoENkl674VYguufFceBQuIuRC2KYO3hIJA9fIp9RbrpWtZlU2
-         EE8MvUD2sskl1YQKVlIqRyC4x2SGOFwuOD3EXUqgYAZFG23+26qOWAYU4JypIs67Jxyg
-         8C1y2JLHeLXKK3QEIAnQVXTIxgPPHIn7ze/Qvp3hzruDto3gJQa9ioQ/mNDY9wFXDP6M
-         wVRg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B149ADDB4
+	for <llvm@lists.linux.dev>; Sun, 29 Oct 2023 17:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by mail-oi1-f205.google.com with SMTP id 5614622812f47-3b2f3015ce6so5498060b6e.3
+        for <llvm@lists.linux.dev>; Sun, 29 Oct 2023 10:09:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698598861; x=1699203661;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ehjbeH+jxTChtsEDDNVmACmNRPnSY/WOnY7rPP35b9Y=;
-        b=l8OIr2pU2vnN4pDI+wFID0k8Ic/Y0oUO+3/683oKUt9ah3rWRPuadffTXzEfTboJFD
-         r8wsOk0JUJrCAQipy1p/0ggenbdg9pXnRFuPPrhl6i8343jz0Xc7oFn6n0qzFh0CLCuC
-         aUGTY7JvJ8c6Zx0ogXPeiZ6Aofuu7TUZQT4fkVonSP0OvFou7jvjKUMMeB5Pi5t0DJ+U
-         kah2/gbEhP31YrvgfhEQ7r2OYGcaanXdUlRFOGbEAtKWL6NijoLywPzjmsM83EtgOZe5
-         8O4LoFFtOYZrnL00COqmcmlhQlhmSkfRXTmamIW/SgIpyOPBJtARs+Dj5BLSa+lYsMWd
-         hmqQ==
-X-Gm-Message-State: AOJu0YwRX2/uybum2WKdQvanwLSt4We0cdnCD85JZliM1hdMDTNypEe7
-	zQcdNCpBcPUvMuvy0QzY9FgwYvLwAPylAI3hdA==
-X-Google-Smtp-Source: AGHT+IFKCpOGLZM3vnrbaQNLC02/9n872COebcZttUxqu3qsZgdz3ReGjJKaiOKOb1YwcsyY+uu298DRgw3zKzReggA=
-X-Received: by 2002:a05:6512:159f:b0:507:ce49:81bd with SMTP id
- bp31-20020a056512159f00b00507ce4981bdmr6417655lfb.61.1698598860373; Sun, 29
- Oct 2023 10:01:00 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698599359; x=1699204159;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KBd380BSFeRmOvvgknUVVzcx8jV5Amc7bE8eqUKou/M=;
+        b=SDYR68SW/iuPmh8Lsr3xGyxnl1dWVppGeVbPXSBaLVdZs3IL/dLb+M4phnmlGdMbuQ
+         n5puhZnR6Q149J2Gt/8vtQ0+8yNr41uyqRRhcSxu7tuA7SmN4ppgvav4bf45xrnSCr2a
+         InZZ+ndgFMqlOU+IZKMW0mvysvsmNatPTbJadTJ0WDjRGg4yMu8SE+qYUwVSeZDzQHJI
+         WPyPJPanb6LCH+UUco7wBhZrRIuovXStDUmloC77sGxvJUwgkPBnk0odR37GnOc792Xy
+         fIYoA8aXOgDks5rfqFWoPCnponFkP8DWEE22vxtaf3C0wu/qc5kJbhy6OATQHQL5HoVW
+         1qBA==
+X-Gm-Message-State: AOJu0YxoMvqet0bXhW4y9o9yVLfRetUsVfDF/XYyQkUsfcjVQT8LCziC
+	8x5ff8yBGWjvSeiaH2iw6VkcZgxZhgb0EBY8U5OtZLrdZcTg
+X-Google-Smtp-Source: AGHT+IH31aGS3RdFZoJwmzguI3F7ZUKzYll6NwAMp46Oy+cHu9lROISeea2c5ts2TQ+7pxjB7s67Edx9fvc64sksmN4FhbiFDgCg
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231026160100.195099-6-brgerst@gmail.com> <202310290927.2MuJJdu9-lkp@intel.com>
- <CAMzpN2iUrfnuGQ9eFTr=NTeC6KSUPC37Qji5_g5MWejmXnXO3A@mail.gmail.com>
-In-Reply-To: <CAMzpN2iUrfnuGQ9eFTr=NTeC6KSUPC37Qji5_g5MWejmXnXO3A@mail.gmail.com>
-From: Brian Gerst <brgerst@gmail.com>
-Date: Sun, 29 Oct 2023 13:00:49 -0400
-Message-ID: <CAMzpN2jbA=ZCbbFq=gyVAtKBr4kyYcNPLpWaEcAhEAN2J0wwTw@mail.gmail.com>
-Subject: Re: [PATCH v2 05/11] x86/stackprotector/64: Convert stack protector
- to normal percpu variable
-To: kernel test robot <lkp@intel.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Ingo Molnar <mingo@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>
+X-Received: by 2002:a05:6808:1882:b0:3b2:e2a4:693f with SMTP id
+ bi2-20020a056808188200b003b2e2a4693fmr3114067oib.6.1698599358844; Sun, 29 Oct
+ 2023 10:09:18 -0700 (PDT)
+Date: Sun, 29 Oct 2023 10:09:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006655c10608ddfb6d@google.com>
+Subject: [syzbot] [mm?] general protection fault in __hugetlb_zap_begin
+From: syzbot <syzbot+ec9435c038e451be48ff@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
+	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	riel@surriel.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 29, 2023 at 2:56=E2=80=AFAM Brian Gerst <brgerst@gmail.com> wro=
-te:
->
-> On Sat, Oct 28, 2023 at 9:26=E2=80=AFPM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > Hi Brian,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on tip/master]
-> > [also build test ERROR on next-20231027]
-> > [cannot apply to tip/x86/core dennis-percpu/for-next linus/master tip/a=
-uto-latest v6.6-rc7]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Gerst/x86-=
-stackprotector-32-Remove-stack-protector-test-script/20231027-000533
-> > base:   tip/master
-> > patch link:    https://lore.kernel.org/r/20231026160100.195099-6-brgers=
-t%40gmail.com
-> > patch subject: [PATCH v2 05/11] x86/stackprotector/64: Convert stack pr=
-otector to normal percpu variable
-> > config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/2=
-0231029/202310290927.2MuJJdu9-lkp@intel.com/config)
-> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.gi=
-t ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20231029/202310290927.2MuJJdu9-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202310290927.2MuJJdu9-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> Unsupported relocation type: unknown type rel type name (42)
->
-> Clang is generating a new relocation type (R_X86_64_REX_GOTPCRELX)
-> that the relocs tool doesn't know about.  This is supposed to allow
->         movq    __stack_chk_guard@GOTPCREL(%rip), %rax
->         movq    %gs:(%rax), %rax
-> to be relaxed to
->         leaq    __stack_chk_guard(%rip), %rax
->         movq    %gs:(%rax), %rax
->
-> But why is clang doing this instead of what GCC does?
->         movq    %gs:__stack_chk_guard(%rip), %rax
+Hello,
 
-Digging a bit deeper, there also appears to be differences in how the
-linkers behave with this new relocation:
+syzbot found the following issue on:
 
-make CC=3Dclang LD=3Dld:
-ffffffff81002838:       48 c7 c0 c0 5c 42 83    mov    $0xffffffff83425cc0,=
-%rax
-                        ffffffff8100283b: R_X86_64_32S  __stack_chk_guard
-ffffffff8100283f:       65 48 8b 00             mov    %gs:(%rax),%rax
+HEAD commit:    3a568e3a961b Merge tag 'soc-fixes-6.7-3' of git://git.kern..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=159d9cdd680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=174a257c5ae6b4fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=ec9435c038e451be48ff
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e433eb680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16808d35680000
 
-make CC=3Dclang LD=3Dld.lld:
-ffffffff81002838:       48 8d 05 81 34 42 02    lea
-0x2423481(%rip),%rax        # ffffffff83425cc0 <__stack_chk_guard>
-                        ffffffff8100283b: R_X86_64_REX_GOTPCRELX
- __stack_chk_guard-0x4
-ffffffff8100283f:       65 48 8b 00             mov    %gs:(%rax),%rax
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/70fcba190275/disk-3a568e3a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/65a6a954dd61/vmlinux-3a568e3a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e4d7963284af/bzImage-3a568e3a.xz
 
-The LLVM linker keeps the R_X86_64_REX_GOTPCRELX even after performing
-the relaxation.  It should be R_X86_64_32S based on it changing to an
-LEA instruction.  The GNU linker changes it to R_X86_64_32S and a MOV
-immediate.
+The issue was bisected to:
 
-So I think there are two issues here.  1) clang is producing code
-referencing the GOT for stack protector accesses, despite -fno-PIE on
-the command line and no other GOT references, and 2) ld.lld is using
-the wrong relocation type after the relaxation step is performed.
+commit bf4916922c60f43efaa329744b3eef539aa6a2b2
+Author: Rik van Riel <riel@surriel.com>
+Date:   Fri Oct 6 03:59:07 2023 +0000
 
-I think the quick fix here is to teach the relocs tool about this new
-relocation.  It should be able to be safely ignored since it's
-PC-relative.  The code clang produces is functionally correct,
-although not optimal.
+    hugetlbfs: extend hugetlb_vma_lock to private VMAs
 
-Brian Gerst
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17d92743680000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14392743680000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10392743680000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ec9435c038e451be48ff@syzkaller.appspotmail.com
+Fixes: bf4916922c60 ("hugetlbfs: extend hugetlb_vma_lock to private VMAs")
+
+general protection fault, probably for non-canonical address 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
+CPU: 1 PID: 5048 Comm: syz-executor261 Not tainted 6.6.0-rc7-syzkaller-00123-g3a568e3a961b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/09/2023
+RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5004
+Code: 85 75 18 00 00 83 3d fd 93 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c 8c b2 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 24 c0 7b 00 48 8b 94 24 80 00 00
+RSP: 0018:ffffc90003abf440 EFLAGS: 00010006
+RAX: 000000000000001d RBX: 1ffff92000757eac RCX: 0000000000000000
+RDX: 00000000000000e8 RSI: 0000000000000000 RDI: 00000000000000e8
+RBP: ffffc90003abf708 R08: dffffc0000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffffbfff1d32d6e R12: 0000000000000000
+R13: 0000000000000001 R14: 0000000000000000 R15: ffff88807b34bb80
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbcd77db0d0 CR3: 0000000029b05000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5753
+ down_write+0x3a/0x50 kernel/locking/rwsem.c:1573
+ __hugetlb_zap_begin+0x2e0/0x380 mm/hugetlb.c:5447
+ hugetlb_zap_begin include/linux/hugetlb.h:258 [inline]
+ unmap_vmas+0x364/0x5c0 mm/memory.c:1733
+ exit_mmap+0x297/0xc50 mm/mmap.c:3230
+ __mmput+0x115/0x3c0 kernel/fork.c:1349
+ exit_mm+0x21f/0x300 kernel/exit.c:567
+ do_exit+0x9af/0x2650 kernel/exit.c:861
+ __do_sys_exit kernel/exit.c:991 [inline]
+ __se_sys_exit kernel/exit.c:989 [inline]
+ __x64_sys_exit+0x40/0x40 kernel/exit.c:989
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbcd7764af9
+Code: Unable to access opcode bytes at 0x7fbcd7764acf.
+RSP: 002b:00007ffe3ee5cb58 EFLAGS: 00000246
+ ORIG_RAX: 000000000000003c
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fbcd7764af9
+RDX: 00007fbcd779e433 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000011f97 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe3ee5cc7c
+R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5004
+Code: 85 75 18 00 00 83 3d fd 93 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c 8c b2 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 24 c0 7b 00 48 8b 94 24 80 00 00
+RSP: 0018:ffffc90003abf440 EFLAGS: 00010006
+
+RAX: 000000000000001d RBX: 1ffff92000757eac RCX: 0000000000000000
+RDX: 00000000000000e8 RSI: 0000000000000000 RDI: 00000000000000e8
+RBP: ffffc90003abf708 R08: dffffc0000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffffbfff1d32d6e R12: 0000000000000000
+R13: 0000000000000001 R14: 0000000000000000 R15: ffff88807b34bb80
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbcd77db0d0 CR3: 0000000029b05000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	85 75 18             	test   %esi,0x18(%rbp)
+   3:	00 00                	add    %al,(%rax)
+   5:	83 3d fd 93 2c 0d 00 	cmpl   $0x0,0xd2c93fd(%rip)        # 0xd2c9409
+   c:	48 89 9c 24 10 01 00 	mov    %rbx,0x110(%rsp)
+  13:	00
+  14:	0f 84 f8 0f 00 00    	je     0x1012
+  1a:	83 3d 5c 8c b2 0b 00 	cmpl   $0x0,0xbb28c5c(%rip)        # 0xbb28c7d
+  21:	74 34                	je     0x57
+  23:	48 89 d0             	mov    %rdx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 00 00       	cmpb   $0x0,(%rax,%r8,1) <-- trapping instruction
+  2f:	74 1a                	je     0x4b
+  31:	48 89 d7             	mov    %rdx,%rdi
+  34:	e8 24 c0 7b 00       	call   0x7bc05d
+  39:	48                   	rex.W
+  3a:	8b                   	.byte 0x8b
+  3b:	94                   	xchg   %eax,%esp
+  3c:	24 80                	and    $0x80,%al
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
