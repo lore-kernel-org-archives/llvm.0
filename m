@@ -1,186 +1,282 @@
-Received: from mail-oi1-f205.google.com (mail-oi1-f205.google.com [209.85.167.205])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B149ADDB4
-	for <llvm@lists.linux.dev>; Sun, 29 Oct 2023 17:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by mail-oi1-f205.google.com with SMTP id 5614622812f47-3b2f3015ce6so5498060b6e.3
-        for <llvm@lists.linux.dev>; Sun, 29 Oct 2023 10:09:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036CCDF56
+	for <llvm@lists.linux.dev>; Sun, 29 Oct 2023 18:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BxhFfzOv"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-53eeb28e8e5so5901a12.1
+        for <llvm@lists.linux.dev>; Sun, 29 Oct 2023 11:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698602418; x=1699207218; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=482JqFOCZJXsR7YDf+i4ExLqqy3uVi8ZcfTRWfqy2eI=;
+        b=BxhFfzOvvoQ/+Mr8g89Zby9EYu3ciDyrBbNrYa1ismcTLlw+yavOSS7r4awm7rTx2d
+         YgGPVxsDZLcygvHA/43DbA6Sl00izGWyJ2AVJq5EAPTcR8TbfibNoH3FPBBdtJc827vx
+         phcCBjbws5U0Y6lToK4IcU+15Xwyk3Lx/lETHwnEwMLrz0ooGufDtkXm6Luc/BM7hduA
+         ifJN3Ll2Kj9+H2mei2kTRwXNvzQe1+c1IlYmeWO2o/NSRXyxbHoBj9+mtCFwo360g0m8
+         dcHDDiOkN3/9J7SEuC5b4AxUb/06A9S8V+sAlZrqDCqzzS0JSgZrDq+g2KroV0BCYffQ
+         KMBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698599359; x=1699204159;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KBd380BSFeRmOvvgknUVVzcx8jV5Amc7bE8eqUKou/M=;
-        b=SDYR68SW/iuPmh8Lsr3xGyxnl1dWVppGeVbPXSBaLVdZs3IL/dLb+M4phnmlGdMbuQ
-         n5puhZnR6Q149J2Gt/8vtQ0+8yNr41uyqRRhcSxu7tuA7SmN4ppgvav4bf45xrnSCr2a
-         InZZ+ndgFMqlOU+IZKMW0mvysvsmNatPTbJadTJ0WDjRGg4yMu8SE+qYUwVSeZDzQHJI
-         WPyPJPanb6LCH+UUco7wBhZrRIuovXStDUmloC77sGxvJUwgkPBnk0odR37GnOc792Xy
-         fIYoA8aXOgDks5rfqFWoPCnponFkP8DWEE22vxtaf3C0wu/qc5kJbhy6OATQHQL5HoVW
-         1qBA==
-X-Gm-Message-State: AOJu0YxoMvqet0bXhW4y9o9yVLfRetUsVfDF/XYyQkUsfcjVQT8LCziC
-	8x5ff8yBGWjvSeiaH2iw6VkcZgxZhgb0EBY8U5OtZLrdZcTg
-X-Google-Smtp-Source: AGHT+IH31aGS3RdFZoJwmzguI3F7ZUKzYll6NwAMp46Oy+cHu9lROISeea2c5ts2TQ+7pxjB7s67Edx9fvc64sksmN4FhbiFDgCg
+        d=1e100.net; s=20230601; t=1698602418; x=1699207218;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=482JqFOCZJXsR7YDf+i4ExLqqy3uVi8ZcfTRWfqy2eI=;
+        b=EkhsVwSFE4qK6zmIts0XLCuYvbcdIcA4G/fbFrJMnciQmwJoR8vjTY2RpEQsmvwNJg
+         O9FWUrMpLiLe0XPQPc72P7/rrvAS6qi+lnqa9DgeCYDk5AXDOIlJyPN8JIvfvJSrIbHX
+         u4s58g+bhRYuAzuqBMaOmpxbw5Ew0q6NZUKlMYlO2vEk22uzpIjtoFlTM8QCHlVqalf6
+         GNB6joAMy9DhpjAM4g0NY01dN7TMLDSIxx8HMX1Tt3gPG2VIxRpuj0q84cAdJ8FW8REs
+         giDFbO5GILA5+6AIvkRWwrxmwh3CCpWHEIgvzrLsHQLWdqhlghw5LLtNVbBEbgfuiFUD
+         wIwg==
+X-Gm-Message-State: AOJu0Yxl07BYDLtb+6UvvHloLGKU5x4ngCxcYGkU9OsrFOXEvCrsxaVg
+	LXTp9Ul6qyGKitEErhUxbqy766y7hrtSKRyiCSjOaw==
+X-Google-Smtp-Source: AGHT+IGELW6X60QP6gMIxf9l2rNayckFAtxeBkgpyHRyRdzoeI3GZkw6iH8Vry/wQk27OsiVAaJ79W5CqI050GCN92Y=
+X-Received: by 2002:a05:6402:529a:b0:542:ee28:71c7 with SMTP id
+ en26-20020a056402529a00b00542ee2871c7mr35155edb.1.1698602418085; Sun, 29 Oct
+ 2023 11:00:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1882:b0:3b2:e2a4:693f with SMTP id
- bi2-20020a056808188200b003b2e2a4693fmr3114067oib.6.1698599358844; Sun, 29 Oct
- 2023 10:09:18 -0700 (PDT)
-Date: Sun, 29 Oct 2023 10:09:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006655c10608ddfb6d@google.com>
-Subject: [syzbot] [mm?] general protection fault in __hugetlb_zap_begin
-From: syzbot <syzbot+ec9435c038e451be48ff@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	riel@surriel.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
+References: <20231029075244.2612089-4-lixiaoyan@google.com> <202310292036.So7PkmBh-lkp@intel.com>
+In-Reply-To: <202310292036.So7PkmBh-lkp@intel.com>
+From: Coco Li <lixiaoyan@google.com>
+Date: Sun, 29 Oct 2023 11:00:06 -0700
+Message-ID: <CADjXwjhdOW3sNSFTZEF45C33w3=N57U0ACbrapotR4Pf048new@mail.gmail.com>
+Subject: Re: [PATCH v5 net-next 3/5] netns-ipv4: reorganize netns_ipv4 fast
+ path variables
+To: kernel test robot <lkp@intel.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Mubashir Adnan Qureshi <mubashirq@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, 
+	David Ahern <dsahern@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, 
+	Chao Wu <wwchao@google.com>, Wei Wang <weiwan@google.com>, 
+	Pradeep Nemavat <pnemavat@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Sorry about this, I will fix it soon.
 
-syzbot found the following issue on:
-
-HEAD commit:    3a568e3a961b Merge tag 'soc-fixes-6.7-3' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=159d9cdd680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=174a257c5ae6b4fd
-dashboard link: https://syzkaller.appspot.com/bug?extid=ec9435c038e451be48ff
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e433eb680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16808d35680000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/70fcba190275/disk-3a568e3a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/65a6a954dd61/vmlinux-3a568e3a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e4d7963284af/bzImage-3a568e3a.xz
-
-The issue was bisected to:
-
-commit bf4916922c60f43efaa329744b3eef539aa6a2b2
-Author: Rik van Riel <riel@surriel.com>
-Date:   Fri Oct 6 03:59:07 2023 +0000
-
-    hugetlbfs: extend hugetlb_vma_lock to private VMAs
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17d92743680000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14392743680000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10392743680000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ec9435c038e451be48ff@syzkaller.appspotmail.com
-Fixes: bf4916922c60 ("hugetlbfs: extend hugetlb_vma_lock to private VMAs")
-
-general protection fault, probably for non-canonical address 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
-CPU: 1 PID: 5048 Comm: syz-executor261 Not tainted 6.6.0-rc7-syzkaller-00123-g3a568e3a961b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/09/2023
-RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5004
-Code: 85 75 18 00 00 83 3d fd 93 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c 8c b2 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 24 c0 7b 00 48 8b 94 24 80 00 00
-RSP: 0018:ffffc90003abf440 EFLAGS: 00010006
-RAX: 000000000000001d RBX: 1ffff92000757eac RCX: 0000000000000000
-RDX: 00000000000000e8 RSI: 0000000000000000 RDI: 00000000000000e8
-RBP: ffffc90003abf708 R08: dffffc0000000000 R09: 0000000000000000
-R10: dffffc0000000000 R11: fffffbfff1d32d6e R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000000 R15: ffff88807b34bb80
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbcd77db0d0 CR3: 0000000029b05000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5753
- down_write+0x3a/0x50 kernel/locking/rwsem.c:1573
- __hugetlb_zap_begin+0x2e0/0x380 mm/hugetlb.c:5447
- hugetlb_zap_begin include/linux/hugetlb.h:258 [inline]
- unmap_vmas+0x364/0x5c0 mm/memory.c:1733
- exit_mmap+0x297/0xc50 mm/mmap.c:3230
- __mmput+0x115/0x3c0 kernel/fork.c:1349
- exit_mm+0x21f/0x300 kernel/exit.c:567
- do_exit+0x9af/0x2650 kernel/exit.c:861
- __do_sys_exit kernel/exit.c:991 [inline]
- __se_sys_exit kernel/exit.c:989 [inline]
- __x64_sys_exit+0x40/0x40 kernel/exit.c:989
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbcd7764af9
-Code: Unable to access opcode bytes at 0x7fbcd7764acf.
-RSP: 002b:00007ffe3ee5cb58 EFLAGS: 00000246
- ORIG_RAX: 000000000000003c
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fbcd7764af9
-RDX: 00007fbcd779e433 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000011f97 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe3ee5cc7c
-R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5004
-Code: 85 75 18 00 00 83 3d fd 93 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c 8c b2 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 24 c0 7b 00 48 8b 94 24 80 00 00
-RSP: 0018:ffffc90003abf440 EFLAGS: 00010006
-
-RAX: 000000000000001d RBX: 1ffff92000757eac RCX: 0000000000000000
-RDX: 00000000000000e8 RSI: 0000000000000000 RDI: 00000000000000e8
-RBP: ffffc90003abf708 R08: dffffc0000000000 R09: 0000000000000000
-R10: dffffc0000000000 R11: fffffbfff1d32d6e R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000000 R15: ffff88807b34bb80
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbcd77db0d0 CR3: 0000000029b05000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	85 75 18             	test   %esi,0x18(%rbp)
-   3:	00 00                	add    %al,(%rax)
-   5:	83 3d fd 93 2c 0d 00 	cmpl   $0x0,0xd2c93fd(%rip)        # 0xd2c9409
-   c:	48 89 9c 24 10 01 00 	mov    %rbx,0x110(%rsp)
-  13:	00
-  14:	0f 84 f8 0f 00 00    	je     0x1012
-  1a:	83 3d 5c 8c b2 0b 00 	cmpl   $0x0,0xbb28c5c(%rip)        # 0xbb28c7d
-  21:	74 34                	je     0x57
-  23:	48 89 d0             	mov    %rdx,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 00 00       	cmpb   $0x0,(%rax,%r8,1) <-- trapping instruction
-  2f:	74 1a                	je     0x4b
-  31:	48 89 d7             	mov    %rdx,%rdi
-  34:	e8 24 c0 7b 00       	call   0x7bc05d
-  39:	48                   	rex.W
-  3a:	8b                   	.byte 0x8b
-  3b:	94                   	xchg   %eax,%esp
-  3c:	24 80                	and    $0x80,%al
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+On Sun, Oct 29, 2023 at 5:55=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Coco,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on net-next/main]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Coco-Li/Documentat=
+ions-Analyze-heavily-used-Networking-related-structs/20231029-172902
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20231029075244.2612089-4-lixiaoy=
+an%40google.com
+> patch subject: [PATCH v5 net-next 3/5] netns-ipv4: reorganize netns_ipv4 =
+fast path variables
+> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231029/=
+202310292036.So7PkmBh-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
+4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20231029/202310292036.So7PkmBh-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202310292036.So7PkmBh-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from net/core/net_namespace.c:5:
+>    In file included from include/linux/rtnetlink.h:7:
+>    In file included from include/linux/netdevice.h:38:
+>    In file included from include/net/net_namespace.h:43:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from arch/um/include/asm/hardirq.h:5:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/um/include/asm/io.h:24:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      547 |         val =3D __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      560 |         val =3D __le16_to_cpu((__le16 __force)__raw_readw(PCI_=
+IOBASE + addr));
+>          |                                                         ~~~~~~=
+~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded fro=
+m macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>          |                                                   ^
+>    In file included from net/core/net_namespace.c:5:
+>    In file included from include/linux/rtnetlink.h:7:
+>    In file included from include/linux/netdevice.h:38:
+>    In file included from include/net/net_namespace.h:43:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from arch/um/include/asm/hardirq.h:5:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/um/include/asm/io.h:24:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      573 |         val =3D __le32_to_cpu((__le32 __force)__raw_readl(PCI_=
+IOBASE + addr));
+>          |                                                         ~~~~~~=
+~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded fro=
+m macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>          |                                                   ^
+>    In file included from net/core/net_namespace.c:5:
+>    In file included from include/linux/rtnetlink.h:7:
+>    In file included from include/linux/netdevice.h:38:
+>    In file included from include/net/net_namespace.h:43:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from arch/um/include/asm/hardirq.h:5:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/um/include/asm/io.h:24:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBA=
+SE + addr);
+>          |                                                       ~~~~~~~~=
+~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBA=
+SE + addr);
+>          |                                                       ~~~~~~~~=
+~~ ^
+>    include/asm-generic/io.h:692:20: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      692 |         readsb(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:700:20: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      700 |         readsw(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:708:20: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      708 |         readsl(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:717:21: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      717 |         writesb(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:726:21: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      726 |         writesw(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:735:21: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      735 |         writesl(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+> >> net/core/net_namespace.c:1127:2: error: expected expression
+>     1127 |         / TXRX readonly hotpath cache lines */
+>          |         ^
+> >> net/core/net_namespace.c:1127:4: error: use of undeclared identifier '=
+TXRX'
+>     1127 |         / TXRX readonly hotpath cache lines */
+>          |           ^
+>    12 warnings and 2 errors generated.
+>
+>
+> vim +1127 net/core/net_namespace.c
+>
+>   1101
+>   1102  static void __init netns_ipv4_struct_check(void)
+>   1103  {
+>   1104          /* TX readonly hotpath cache lines */
+>   1105          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1106                                        sysctl_tcp_early_retrans);
+>   1107          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1108                                        sysctl_tcp_tso_win_divisor)=
+;
+>   1109          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1110                                        sysctl_tcp_tso_rtt_log);
+>   1111          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1112                                        sysctl_tcp_autocorking);
+>   1113          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1114                                        sysctl_tcp_min_snd_mss);
+>   1115          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1116                                        sysctl_tcp_notsent_lowat);
+>   1117          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1118                                        sysctl_tcp_limit_output_byt=
+es);
+>   1119          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1120                                        sysctl_tcp_min_rtt_wlen);
+>   1121          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1122                                        sysctl_tcp_wmem);
+>   1123          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_tx,
+>   1124                                        sysctl_ip_fwd_use_pmtu);
+>   1125          CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4=
+_read_tx, 33);
+>   1126
+> > 1127          / TXRX readonly hotpath cache lines */
+>   1128          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_txrx,
+>   1129                                        sysctl_tcp_moderate_rcvbuf)=
+;
+>   1130          CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4=
+_read_txrx, 1);
+>   1131
+>   1132          /* RX readonly hotpath cache line */
+>   1133          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_rx,
+>   1134                                        sysctl_ip_early_demux);
+>   1135          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_rx,
+>   1136                                        sysctl_tcp_early_demux);
+>   1137          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_rx,
+>   1138                                        sysctl_tcp_reordering);
+>   1139          CACHELINE_ASSERT_GROUP_MEMBER(struct netns_ipv4, netns_ip=
+v4_read_rx,
+>   1140                                        sysctl_tcp_rmem);
+>   1141          CACHELINE_ASSERT_GROUP_SIZE(struct netns_ipv4, netns_ipv4=
+_read_rx, 18);
+>   1142  }
+>   1143
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
