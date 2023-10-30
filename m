@@ -1,153 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5027EE;
-	Mon, 30 Oct 2023 02:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CABE806
+	for <llvm@lists.linux.dev>; Mon, 30 Oct 2023 02:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fup9sgZb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698631631; x=1730167631;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dbVY1ThUDo1weBPv8bgLKEZ7vpAIM1jDmAicjkFa74o=;
-  b=fup9sgZbIaxQSo6CXPfyi+zIUFKuhGND9ibgbBJszWJj9kH+90n+Y73V
-   GA+0Ueb2q6Q2F9wqPbNJiLgMcescsRcFmqU+cJQAhHQQpuIH1tXnOQ5Z4
-   c6tG8QiPBrwHn2iLo3NzfuHW/Byx6AO+9wNfxWw8JTzkzwAhZqM0cBh0i
-   QpUmmHgHICLs4bMiN41sq2AtbtDV6mHrZSaG0wT24OIDDptSQ3RR9bluc
-   CBd/xrTOvi9fjsW1esPcS1htsoRu5cgNRR/PMHML8CL6BBiL9/fHq1l/q
-   tOlqeWhbU064lAZs7A+9ojd3Es2cbN/S/vOuYj3t7VYLnKPWeSxEgDLx/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="387812925"
-X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
-   d="scan'208";a="387812925"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2023 19:07:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="876978077"
-X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
-   d="scan'208";a="876978077"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Oct 2023 19:07:07 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qxHgH-000Cyp-2D;
-	Mon, 30 Oct 2023 02:07:05 +0000
-Date: Mon, 30 Oct 2023 10:06:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Aleksa Savic <savicaleksa83@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Add driver for Gigabyte AORUS Waterforce AIO
- coolers
-Message-ID: <202310300959.8NLKyQDJ-lkp@intel.com>
-References: <20231020130212.8919-1-savicaleksa83@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GQMAZcsm"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39U1RMe5023458
+	for <llvm@lists.linux.dev>; Mon, 30 Oct 2023 02:10:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date : to :
+ cc : from : subject : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=nWTaFq/DaVh+5rMqAIzegYHyaP1rawAC/pDehTtUjAY=;
+ b=GQMAZcsmLhNXlRy9TxnjnJMHIxf3fMBhg5UDqTomrfj/SjxzyySabYRJLGHQhN+7Sdi1
+ aWCFgvYNVWLHmL4l8mhb1tiC43LuTVQkn3mLgzjDtjJPufwOUKytrK6EjChjt62MJXF1
+ OQOkziI4sKu1RAKNUjHoznzTNV4KGraHimFj55GY8dlZqG/oE3dP7uiVbcoLZ3+6ntk0
+ dpBUnpdsWSQz4sq4T+W51csNqEzQNXt5T7FccIsZwXlQfr6txx76XSA9WjSq43CiatUS
+ 6kyooHmD8cjFkQ3TWDYGGQXXuLZm7i1xOqpijAlov9FnUY3s8rELKMVFurI+5fhB0mlS hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u22u9gm74-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <llvm@lists.linux.dev>; Mon, 30 Oct 2023 02:10:56 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39U1tvsQ018542
+	for <llvm@lists.linux.dev>; Mon, 30 Oct 2023 02:10:55 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u22u9gm6r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Oct 2023 02:10:55 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39U1PcfJ000598;
+	Mon, 30 Oct 2023 02:10:55 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3u1cmspc7r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Oct 2023 02:10:55 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39U2Arkh45154666
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Oct 2023 02:10:53 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4E5232004B;
+	Mon, 30 Oct 2023 02:10:53 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D178920043;
+	Mon, 30 Oct 2023 02:10:52 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 30 Oct 2023 02:10:52 +0000 (GMT)
+Received: from [10.61.2.107] (haven.au.ibm.com [9.192.254.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 74710600E0;
+	Mon, 30 Oct 2023 13:10:49 +1100 (AEDT)
+Message-ID: <1c90b45a-f35b-48ea-972d-019b0004a91c@linux.ibm.com>
+Date: Mon, 30 Oct 2023 13:10:48 +1100
+User-Agent: Mozilla Thunderbird
+X-Mozilla-News-Host: news://nntp.lore.kernel.org:119
+Content-Language: en-US, en-AU
+To: llvm@lists.linux.dev
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+From: Benjamin Gray <bgray@linux.ibm.com>
+Subject: Prototype Assembly support for Clangd
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Yfpd7TcQS-fACk2y_MCt6JHMV-bxZLY7
+X-Proofpoint-ORIG-GUID: BjYG6C1lavDDJwAtT7nz_ZJbJTtboGSz
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231020130212.8919-1-savicaleksa83@gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-30_01,2023-10-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 clxscore=1011 spamscore=0
+ suspectscore=0 mlxlogscore=609 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310300015
 
-Hi Aleksa,
+A while ago I mentioned working on adding Assembly support to Clangd. I 
+finally got some time to iron out the obvious bugs, and have announced 
+it here as a discussion.
 
-kernel test robot noticed the following build warnings:
+https://github.com/clangd/clangd/discussions/1805
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.6-rc7 next-20231027]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+(direct repo link https://github.com/BenjaminGrayNp1/llvm-project)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Savic/hwmon-Add-driver-for-Gigabyte-AORUS-Waterforce-AIO-coolers/20231020-210452
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20231020130212.8919-1-savicaleksa83%40gmail.com
-patch subject: [PATCH] hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231030/202310300959.8NLKyQDJ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231030/202310300959.8NLKyQDJ-lkp@intel.com/reproduce)
+It's of particular interest to kernel developers I imagine, given the 
+large amount of Assembly using preprocessor macros.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310300959.8NLKyQDJ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/gigabyte_waterforce.c:130:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     130 |                 if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/gigabyte_waterforce.c:155:7: note: uninitialized use occurs here
-     155 |                 if (ret < 0)
-         |                     ^~~
-   drivers/hwmon/gigabyte_waterforce.c:130:3: note: remove the 'if' if its condition is always false
-     130 |                 if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     131 |                         /* Data is up to date */
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     132 |                         goto unlock_and_return;
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     133 |                 }
-         | ~~~~~~~~~~~~~~~~~
-   drivers/hwmon/gigabyte_waterforce.c:127:9: note: initialize the variable 'ret' to silence this warning
-     127 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-
-vim +130 drivers/hwmon/gigabyte_waterforce.c
-
-   124	
-   125	static int waterforce_get_status(struct waterforce_data *priv)
-   126	{
-   127		int ret;
-   128	
-   129		if (!mutex_lock_interruptible(&priv->status_report_request_mutex)) {
- > 130			if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
-   131				/* Data is up to date */
-   132				goto unlock_and_return;
-   133			}
-   134	
-   135			/*
-   136			 * Disable raw event parsing for a moment to safely reinitialize the
-   137			 * completion. Reinit is done because hidraw could have triggered
-   138			 * the raw event parsing and marked the priv->status_report_received
-   139			 * completion as done.
-   140			 */
-   141			spin_lock_bh(&priv->status_report_request_lock);
-   142			reinit_completion(&priv->status_report_received);
-   143			spin_unlock_bh(&priv->status_report_request_lock);
-   144	
-   145			/* Send command for getting status */
-   146			ret = waterforce_write_expanded(priv, get_status_cmd, GET_STATUS_CMD_LENGTH);
-   147			if (ret < 0)
-   148				return ret;
-   149	
-   150			if (wait_for_completion_interruptible_timeout
-   151			    (&priv->status_report_received, msecs_to_jiffies(STATUS_VALIDITY)) <= 0)
-   152				ret = -ENODATA;
-   153	unlock_and_return:
-   154			mutex_unlock(&priv->status_report_request_mutex);
-   155			if (ret < 0)
-   156				return ret;
-   157		} else {
-   158			return -ENODATA;
-   159		}
-   160	
-   161		return 0;
-   162	}
-   163	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I probably won't add any more features for now, unless there's interest 
+in adapting it up for upstream. I will try to keep this fork 
+synchronized with upstream though, so I'll fix merge issues as much as 
+possible.
