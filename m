@@ -1,99 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E7CF515;
-	Mon, 30 Oct 2023 12:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D0DDF71
+	for <llvm@lists.linux.dev>; Mon, 30 Oct 2023 12:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gqnb6XLa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698669804; x=1730205804;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bltexQ4p+A0qUItQQg7Sl7q9dPxn9AAh4vQFsQSEsOQ=;
-  b=gqnb6XLaUkU+zia5ZovPmdl8r1ARc+tkcRbZDlpNQmSfyTUB+GytzB+Q
-   SNP4Kf/3HLO+lYHc4e6T1y6YclTQgA5dlsR9DIjUGGFRP/zQoWUMkdG+U
-   eZ8IyczYtHM5/6bstWSp9qobGWbsWzqG36SGyNFTk1r07lax3LuXmK+3W
-   3RNqMmYWE6wIZRpZFIGFB8U38mPe1jO0Lg942ZBpvvdjrmVyKqI+IDcfc
-   nK9lg8Ia4l36yX611Va3HrEedfaM6DHjnzGpA5q78aHNDW1waSKdSX9CP
-   8QV2DFBKiq17nuHNTP+6dk9t4HfBJs7da0R2JvV2RPDUw9NSbXpCTluYz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="378434327"
-X-IronPort-AV: E=Sophos;i="6.03,263,1694761200"; 
-   d="scan'208";a="378434327"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 05:43:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="789445598"
-X-IronPort-AV: E=Sophos;i="6.03,263,1694761200"; 
-   d="scan'208";a="789445598"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Oct 2023 05:43:18 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qxRbw-000DGk-16;
-	Mon, 30 Oct 2023 12:43:16 +0000
-Date: Mon, 30 Oct 2023 20:42:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@linaro.org>
-Subject: [linux-next:master 9417/16121]
- drivers/hwtracing/coresight/coresight-etm4x-core.c:1183:24: warning: result
- of comparison of constant 256 with expression of type 'u8' (aka 'unsigned
- char') is always false
-Message-ID: <202310302043.as36UFED-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E/aP8eU7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1698670277;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eEeRWjZ7S6Q/l28FL9VSEeDDu6uwQYkuPv0v2yQ19T0=;
+	b=E/aP8eU7xSWXk4593o58e0st9CRSgmOpCshNvOf95EakKAzmAO4DX0qNKnbTCen7qFSCXp
+	W1nQRrAw8WhoaZsY9ROF/pPXwDPdohgghb9chww/kkKXxdUnZazqTCiIRENxvNLKyJZyNy
+	scgiDD7bLg6qTGMaJHquV1e2AOKT1oo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-473-P972lH08MWCaT4Dakf8xXQ-1; Mon, 30 Oct 2023 08:51:14 -0400
+X-MC-Unique: P972lH08MWCaT4Dakf8xXQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2911A8724A9
+	for <llvm@lists.linux.dev>; Mon, 30 Oct 2023 12:51:14 +0000 (UTC)
+Received: from [172.64.13.10] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 007CFC1596D;
+	Mon, 30 Oct 2023 12:51:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 14 of 230): Test report for master
+ (6.6.0, mainline.kernel.org-clang, ffc25326)
+Date: Mon, 30 Oct 2023 12:51:13 -0000
+To: xiawu@redhat.com, llvm@lists.linux.dev, bhe@redhat.com, yiyan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <39431.123103008511400524@us-mta-473.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   c503e3eec382ac708ee7adf874add37b77c5d312
-commit: 0f55b43dedcdae2b871f0fec59d8c672e62ff5de [9417/16121] coresight: etm: Override TRCIDR3.CCITMIN on errata affected cpus
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231030/202310302043.as36UFED-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231030/202310302043.as36UFED-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310302043.as36UFED-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwtracing/coresight/coresight-etm4x-core.c:1183:24: warning: result of comparison of constant 256 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-    1183 |                 if (drvdata->ccitmin == 256)
-         |                     ~~~~~~~~~~~~~~~~ ^  ~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +1183 drivers/hwtracing/coresight/coresight-etm4x-core.c
+Kernel information:
+    Commit message: Linux 6.6
 
-  1172	
-  1173	static void etm4_fixup_wrong_ccitmin(struct etmv4_drvdata *drvdata)
-  1174	{
-  1175		/*
-  1176		 * Erratum affected cpus will read 256 as the minimum
-  1177		 * instruction trace cycle counting threshold whereas
-  1178		 * the correct value should be 4 instead. Override the
-  1179		 * recorded value for 'drvdata->ccitmin' to workaround
-  1180		 * this problem.
-  1181		 */
-  1182		if (is_midr_in_range_list(read_cpuid_id(), etm_wrong_ccitmin_cpus)) {
-> 1183			if (drvdata->ccitmin == 256)
-  1184				drvdata->ccitmin = 4;
-  1185		}
-  1186	}
-  1187	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/111864
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10108555
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                 ppc64le - kdump - sysrq-c
+                  x86_64 - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
