@@ -1,89 +1,98 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927DF20332
-	for <llvm@lists.linux.dev>; Tue, 31 Oct 2023 20:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4EC2231F;
+	Tue, 31 Oct 2023 20:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YCnRgIy2"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5b1ff96d5b9so32477607b3.1
-        for <llvm@lists.linux.dev>; Tue, 31 Oct 2023 13:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698783631; x=1699388431; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TIpaUvpPt/FXbzm5nKCXxMF++9wEyj/NimmkMOXmsLo=;
-        b=YCnRgIy2w3vwc/eZNYzqQKgv5Iy6pc4jI49op9omT9FUr4RPcM85CURwEZ1uKNucVB
-         nErOhVoeTv5GelEIMevrJtrMThqlne0ZynTkhML6OOTFDJz6wJduRy2T8AtFsW4k/W4y
-         Qp0+uOf87HnpJBS+Y817Al2cVb6K3Itz6J4UAidNdoaB5nVCU89OCAJOlFf+ruGz0IZM
-         3v2CmBPQzrZnZrayLNhhJgvqzNSswhBbc6UKZ16GoIk0XMsHDZeqZlWVMun+bvbE1mR3
-         updtGiFKAFpuEMFjH+VzqY6dK+PDap5QKuLGil4DeHo1xSQV21mHMH5L2J0w76ycGqw3
-         2pEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698783631; x=1699388431;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TIpaUvpPt/FXbzm5nKCXxMF++9wEyj/NimmkMOXmsLo=;
-        b=P34K+c4ZdsijtL+DST9SUOaLdg61ujUyd2Y0VI3fVs4mPOLwMdmOtE4JHx6R01V323
-         MrMftTvzGuAxjVp5gy59IT1S/ZnCSniDVeCy1O3uAzysm2GpOBw8+wuArymEYVcySt0z
-         Dg0LZrdWccQEslP/sMOt0SvBMHuobKZmUKmbSiaUzq80f7wXdqSycNP1rp3k7XItd6cp
-         v/XSFuQ2YAU3juDEMHaCXGWXq2Icmvx+qu5EO76v4Xg8UxmemeMA6CDmmkNFQUTPaqBh
-         VBUU16nD/Gr63xLg0/qs8S2EzD/Wo7oeOIcRig5l62zY4u6o77jrX2vp6p3V05Rfh65n
-         VWzQ==
-X-Gm-Message-State: AOJu0YxFGZ3WTbfEpJGIIgu2PBzZvP58i/isnDnJdv/74Js4Lw6/eNEn
-	ykvNa59Fwlbns/IOvorFleumgUURP2Jb
-X-Google-Smtp-Source: AGHT+IGLO+nOjD62+HLAfpYoCH9Rz2qtqF+wmxh11MaslROEb45vmSU864vwQzq+PEmwctuPBAUQaj3vRvU1
-X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
- (user=mmaurer job=sendgmr) by 2002:a05:6902:4c8:b0:d9a:54e7:e910 with SMTP id
- v8-20020a05690204c800b00d9a54e7e910mr278979ybs.4.1698783631471; Tue, 31 Oct
- 2023 13:20:31 -0700 (PDT)
-Date: Tue, 31 Oct 2023 20:19:44 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s5sH2Uci"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC330C433C7;
+	Tue, 31 Oct 2023 20:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698783833;
+	bh=kWiaXu3zrQZh2hYqfEmW4X7fxyTTU9Vm8/7Xl0jbDBA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=s5sH2Uci1k2u4vWV23OrrzgnwwQKx+y5oaE0RpqzJ6Twf7lV29B/bkx2x9CbcHhgn
+	 Hfd01CAIq4EtfvIWkc1Z1uGI+U2bw5mIEmczPNeG9ThqFF59TgRArd+ZG48aTt/xQO
+	 8YhKl5stfQntyVPcWA/n+sG96SC7KQ+v4r6KyyjP65sVayY4vxc7OtPoNZZG33e5Rq
+	 seCYRCmchOws3UuX2GEynHkpSlssIUm2Xt5uwMQyf8S/Ad1tvFFudq5lDlcboCi0+T
+	 YEbawG7N7XeSujIVQIduOldpcybF3VriG1dlAyZU6iS+kx1M2qvC6MmTR7NSgZBFbt
+	 Eex9Tbeiqjthg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 31 Oct 2023 13:23:35 -0700
+Subject: [PATCH net] tcp: Fix -Wc23-extensions in tcp_options_write()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-Message-ID: <20231031201945.1412345-1-mmaurer@google.com>
-Subject: [PATCH] rust: Ignore preserve-most functions
-From: Matthew Maurer <mmaurer@google.com>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: Matthew Maurer <mmaurer@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231031-tcp-ao-fix-label-in-compound-statement-warning-v1-1-c9731d115f17@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAEdiQWUC/x2NywqDMBAAf0X23AWjxZr+SvGwJlu7oJuQpA8Q/
+ 73B4xxmZofMSTjDvdkh8UeyBK1gLg24F+nCKL4ydG3Xm7Y3WFxECviUH64084qi6MIWw1s95kK
+ FN9aCX0oquiDPfnDW3sarHaFGY+KqnsMHKBeYjuMPgHtvwIUAAAA=
+To: edumazet@google.com, davem@davemloft.net, dsahern@kernel.org, 
+ kuba@kernel.org, pabeni@redhat.com
+Cc: ndesaulniers@google.com, trix@redhat.com, 0x7f454c46@gmail.com, 
+ fruggeri@arista.com, noureddine@arista.com, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1514; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=kWiaXu3zrQZh2hYqfEmW4X7fxyTTU9Vm8/7Xl0jbDBA=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKmOSREXvu1tr+8+bHVSuOeh38onXBunXjs4y4cn7rHcg
+ Za26s9POkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBErl9gZNh04/vrW5sNPmfM
+ aXzGUKT2ZEVGzo5L0ccv7ubqSViXlHqUkWGt9YUSyxlBEl+f7VFIuhPVxS8b+8PzTKPVTYYTk//
+ lC/ADAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Neither bindgen nor Rust know about the preserve-most calling
-convention, and Clang describes it as unstable. Since we aren't using
-functions with this calling convention from Rust, blocklist them.
+Clang warns (or errors with CONFIG_WERROR=y) when CONFIG_TCP_AO is set:
 
-These functions are only added to the build when list hardening is
-enabled, which is likely why others didn't notice this yet.
+  net/ipv4/tcp_output.c:663:2: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
+    663 |         }
+        |         ^
+  1 error generated.
 
-Signed-off-by: Matthew Maurer <mmaurer@google.com>
+On earlier releases (such as clang-11, the current minimum supported
+version for building the kernel) that do not support C23, this was a
+hard error unconditionally:
+
+  net/ipv4/tcp_output.c:663:2: error: expected statement
+          }
+          ^
+  1 error generated.
+
+Add a semicolon after the label to create an empty statement, which
+resolves the warning or error for all compilers.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1953
+Fixes: 1e03d32bea8e ("net/tcp: Add TCP-AO sign to outgoing packets")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- rust/bindgen_parameters | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/ipv4/tcp_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/rust/bindgen_parameters b/rust/bindgen_parameters
-index 552d9a85925b..8d9f82d350b8 100644
---- a/rust/bindgen_parameters
-+++ b/rust/bindgen_parameters
-@@ -20,3 +20,7 @@
- 
- # `seccomp`'s comment gets understood as a doctest
- --no-doc-comments
-+
-+# These functions use the __preserve_most calling convention, which neither bindgen
-+# nor Rust currently understand, and which Clang currently declares to be unstable.
-+--blocklist-function __list_.*_report
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index f558c054cf6e..6064895daece 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -658,7 +658,7 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+ 			memset(ptr, TCPOPT_NOP, sizeof(*ptr));
+ 			ptr++;
+ 		}
+-out_ao:
++out_ao:;
+ #endif
+ 	}
+ 	if (unlikely(opts->mss)) {
+
+---
+base-commit: 55c900477f5b3897d9038446f72a281cae0efd86
+change-id: 20231031-tcp-ao-fix-label-in-compound-statement-warning-ebd6c9978498
+
+Best regards,
 -- 
-2.42.0.820.g83a721a137-goog
+Nathan Chancellor <nathan@kernel.org>
 
