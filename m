@@ -1,39 +1,39 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9699B11CA6
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02290125BA
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FWJ28olF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wr4NbuDs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698843677;
+	s=mimecast20190719; t=1698845477;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=OCTp2xql6WJT20ADorxwCGAiR0+ZNneq3CxL6CyArl4=;
-	b=FWJ28olFOpP0iPgJ2cFuaHtAXcoILqCHTeyzzQg+D2Ku0Kv3OgIXDp3QucTkWy1cJiCKz0
-	TOAWRuRZwIuyeVY/8upeAjS4F0xJ1uumwjEP4QFi2fRfOGiBpWZQz3/sOh/McGHm+gUe1n
-	kNhYkK0wDIQoCRMT6Nri7wQtH+zPCm8=
+	bh=GoA/sFfqKSFuYII2dRnZq7q5UUdQacSaIoiXeVlNv80=;
+	b=Wr4NbuDshQPrIY011OvKAqjlxY04u0rrXw75aX7PdJO+D50auKPTuLqDsOpghCKNzxpd5+
+	uemZntiHm7mPzL46Yi/UiaT0gVWxNjqf7na5rRx4+bRrDYyauiJZSTp8Cqzrs/0pSps894
+	tzkxzNyGP7Oh6qnR7Sv5YMUW15Nv9lI=
 Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-202-wvE0EKYiOVqGAIukrkLnEw-1; Wed,
- 01 Nov 2023 09:01:14 -0400
-X-MC-Unique: wvE0EKYiOVqGAIukrkLnEw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-660-V_yJXdPcPLaWPzGyQYDMcQ-1; Wed,
+ 01 Nov 2023 09:31:15 -0400
+X-MC-Unique: V_yJXdPcPLaWPzGyQYDMcQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 902C62810D52
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:01:14 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12D6F3C0C487
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:31:15 +0000 (UTC)
 Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 77F1510F52;
-	Wed,  1 Nov 2023 13:01:14 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0092A25C0;
+	Wed,  1 Nov 2023 13:31:14 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, 59fff63c)
-Date: Wed, 01 Nov 2023 13:01:14 -0000
+ (6.6.0, mainline.kernel.org-clang, 8bc9e651)
+Date: Wed, 01 Nov 2023 13:31:14 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -41,8 +41,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <44816.123110109011402773@us-mta-202.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <97491.123110109311502238@us-mta-660.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -58,27 +58,15 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'platform-drivers-x86-v6.7-1' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+    Commit message: Merge tag 'devicetree-for-6.7' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/robh/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/112418
+    https://datawarehouse.cki-project.org/kcidb/checkouts/112422
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                  x86_64 - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
         Issue: [upstream] stress-ng: avc denial on secretmemory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1752
@@ -86,6 +74,12 @@ l-tests/-/issues/1752
                  aarch64 - stress: stress-ng - memory
                    s390x - stress: stress-ng - memory
                   x86_64 - stress: stress-ng - memory
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                 ppc64le - kdump - sysrq-c
+                  x86_64 - kdump - sysrq-c
         Issue: xfstests generic/245: cannot overwrite File exists
             URL: https://www.spinics.net/lists/fstests/msg23667.html
             Affected tests:
@@ -99,6 +93,7 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
 e of undeclared identifier 'NF_NAT_MANIP_SRC'
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -106,18 +101,24 @@ l-tests/-/issues/1418
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Firmware test suite: Failed to clone git git://kernel.ubuntu=
-.com/hwe/fwts.git branch V21.02.00 repository
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/878
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
         Issue: kdump-cki: Failed to update kernel options when running kdum=
 p service
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1766
             Affected tests:
                    s390x - kdump - sysrq-c
+        Issue: Firmware test suite: Failed to clone git git://kernel.ubuntu=
+.com/hwe/fwts.git branch V21.02.00 repository
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/878
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
 
