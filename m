@@ -1,93 +1,144 @@
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E17101EC
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 14:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=shelob.surriel.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from imladris.home.surriel.com ([10.0.13.28] helo=imladris.surriel.com)
-	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <riel@shelob.surriel.com>)
-	id 1qyCCL-00084w-04;
-	Wed, 01 Nov 2023 10:27:57 -0400
-Message-ID: <3382634358afa9b95dc4f6db8a53a136d4b9e9cb.camel@surriel.com>
-Subject: Re: [PATCH] mm/hugetlb: fix null ptr defer in hugetlb_vma_lock_write
-From: Rik van Riel <riel@surriel.com>
-To: Edward Adam Davis <eadavis@qq.com>, 
-	syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com
-Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org,  llvm@lists.linux.dev, mike.kravetz@oracle.com,
- muchun.song@linux.dev,  nathan@kernel.org, ndesaulniers@google.com,
- syzkaller-bugs@googlegroups.com,  trix@redhat.com
-Date: Wed, 01 Nov 2023 10:27:56 -0400
-In-Reply-To: <tencent_2A675773C6D47370E36A4966A3BA2444F705@qq.com>
-References: <00000000000078d1e00608d7878b@google.com>
-	 <tencent_2A675773C6D47370E36A4966A3BA2444F705@qq.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB38B12B60
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 14:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dki/YcgL"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-9936b3d0286so1058021666b.0
+        for <llvm@lists.linux.dev>; Wed, 01 Nov 2023 07:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698849731; x=1699454531; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0GTAZsxjOiJ7tn38oVMXFJSU+JCWK7RkZ77c/9PSTME=;
+        b=dki/YcgLCHdQ30Sg9QwL501CbYQTA/HvQjvBZEFaQq4j7oN1ZGDifTLT7D/SeBW+mN
+         phKB946Um6Iea5uifxjyvDGKZGh/DeAN4k3c5r7GkrgZrHQL4CjtsFz5VebIx9xBEQON
+         lToKbDJK+YCAcPc7LCWow8a5+Pp6IRjfj1tp6rnCA48vL1HWD3wWoRVjCy7NW6/uzDpw
+         ksxMcONjT5Ba5MzK3/6o4sAyfsn2InhEWSYr388UihIg/xw8pvSwTSE7GXpKo1aU12lx
+         UfWcDk1TyylZ3QStXg3eV5t2j0PHQqMZngHVFUrRdy1epfJuzGGer+qqxj3dZkeoaDbi
+         BpPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698849731; x=1699454531;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0GTAZsxjOiJ7tn38oVMXFJSU+JCWK7RkZ77c/9PSTME=;
+        b=U0oS6CGyY4cSaNqopodG3yYJvRbqNN1H44Q4sKHZrGfPhMQGadXraqGkkzEHP6fS2I
+         f9Dk1ojQPHmm3yK8l8/rUT8WnN+k7D9TrJWtKNQ7hyfVTm6bvZi+cRpLiZTMzM5AXlzs
+         qJtqm6TjVkLyRiu9DAK/dfgIsayWx6R9tiQMmBDxl1sy25S3h0vdiYSL64MGzIqYTxEc
+         /1F2NS0g1ZAPltGauZSjTMeslO0FcH8ZWkm8x1RX2ti/cOBUd+TOqF7dO++VeZIPEvYi
+         GLYAwPkJ8ilqhOsauXH1JIpvxqoDpaRi+jqv80f0QIcg/J6DwB28S9VHLKoGDZCiD1QU
+         dM/w==
+X-Gm-Message-State: AOJu0YzvN36MRIDIksV6+aSrSadGKMKjJm1VI0aOf9gAtmBZ/FL/tsjP
+	Rdukp/MaUUXLdzugkKNPzjjGSChT1q6oX8F3TSU=
+X-Google-Smtp-Source: AGHT+IGiBeURkstBQf+ITa3lsDyFq35rvHmkQLgrmlKK7B3dDps3v5aWZ1vOwp/fXS3yx+vzqHrSFQ==
+X-Received: by 2002:a17:907:3ea8:b0:9ae:829e:d930 with SMTP id hs40-20020a1709073ea800b009ae829ed930mr2088297ejc.9.1698849730935;
+        Wed, 01 Nov 2023 07:42:10 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id ec20-20020a170906b6d400b009c751e41ebasm6764ejb.141.2023.11.01.07.42.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Nov 2023 07:42:10 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Wed, 1 Nov 2023 14:42:09 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1310397379.52558.1698849730427@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v6.6-rc1-17-g1c6fdbd8f246: Failure on arm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Sender: riel@surriel.com
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_52557_806662001.1698849729603"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-mainline-allmodconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-On Wed, 2023-11-01 at 14:36 +0800, Edward Adam Davis wrote:
-> When obtaining resv_map from vma, it is necessary to simultaneously
-> determine
-> the flag HPAGE_RESV_OWNER of vm_private_data.
-> Only when they are met simultaneously, resv_map is valid.
->=20
-> Reported-and-tested-by:
-> syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com
-> Fixes: bf4916922c60 ("hugetlbfs: extend hugetlb_vma_lock to private
-> VMAs")
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> ---
-> =C2=A0include/linux/hugetlb.h | 4 +++-
-> =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 47d25a5e1933..1a3ec1aee1a3 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -1265,9 +1265,11 @@ static inline bool __vma_shareable_lock(struct
-> vm_area_struct *vma)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return (vma->vm_flags & V=
-M_MAYSHARE) && vma->vm_private_data;
-> =C2=A0}
-> =C2=A0
-> +#define HPAGE_RESV_OWNER=C2=A0=C2=A0=C2=A0 (1UL << 0)
-> =C2=A0static inline bool __vma_private_lock(struct vm_area_struct *vma)
-> =C2=A0{
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return (!(vma->vm_flags & VM_M=
-AYSHARE)) && vma-
-> >vm_private_data;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return (!(vma->vm_flags & VM_M=
-AYSHARE)) && vma-
-> >vm_private_data &&=20
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0((unsigned long)vma->vm_private_data &
-> HPAGE_RESV_OWNER);
-> =C2=A0}
+------=_Part_52557_806662001.1698849729603
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This could be cleaned up a bit by moving the HPAGE_RESV_OWNER
-definition (and its friends) into hugetlb.h, as well as the
-is_vma_resv_set() helper function.
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-Then __vma_private_lock() can just call is_vma_resv_set(),
-and open coding a duplicate of the same code.
+In CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig after:
 
-Not having duplicates of the code will make it much harder
-to "miss a spot" with future changes.
+  | commit v6.6-rc1-17-g1c6fdbd8f246
+  | Author: Kent Overstreet <kent.overstreet@gmail.com>
+  | Date:   Thu Mar 16 22:18:50 2017 -0800
+  | 
+  |     bcachefs: Initial commit
+  |     
+  |     Initially forked from drivers/md/bcache, bcachefs is a new copy-on-write
+  |     filesystem with every feature you could possibly want.
+  |     
+  |     Website: https://bcachefs.org
+  |     
+  | ... 1 lines of the commit log omitted.
 
-I am still struggling to find a place where we might leave
-HPAGE_RESV_OWNER behind on a pointer that is otherwise NULL,
-but if your tests show this fixes the issue, I'm all for it :)
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+23730
+# First few build errors in logs:
 
---=20
-All Rights Reversed.
+# 00:23:16 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:23:17 fs/bcachefs/alloc.c:332:9: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+# 00:23:17 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/alloc.o] Error 1
+# 00:23:29 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:23:30 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/bset.o] Error 1
+# 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:23:33 fs/bcachefs/btree_cache.c:67:9: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:23:33 fs/bcachefs/btree_cache.c:120:2: error: array index 0 is past the end of the array (that has type '__u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
+# 00:23:33 fs/bcachefs/btree_cache.c:201:6: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+32815
+# linux build successful:
+all
+# linux boot successful:
+boot
+
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmodconfig-build/110/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmodconfig-build/109/artifact/artifacts
+
+Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a/tcwg_kernel/llvm-master-arm-mainline-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://git.linaro.org/kernel-org/linux.git/commit/?id=1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a
+
+Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1015
+
+List of configurations that regressed due to this commit :
+* tcwg_kernel
+** llvm-master-arm-mainline-allmodconfig
+*** Failure
+*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a/tcwg_kernel/llvm-master-arm-mainline-allmodconfig/details.txt
+*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmodconfig-build/110/
+------=_Part_52557_806662001.1698849729603--
