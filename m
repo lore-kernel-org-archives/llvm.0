@@ -1,142 +1,93 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02290125BA
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wr4NbuDs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698845477;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GoA/sFfqKSFuYII2dRnZq7q5UUdQacSaIoiXeVlNv80=;
-	b=Wr4NbuDshQPrIY011OvKAqjlxY04u0rrXw75aX7PdJO+D50auKPTuLqDsOpghCKNzxpd5+
-	uemZntiHm7mPzL46Yi/UiaT0gVWxNjqf7na5rRx4+bRrDYyauiJZSTp8Cqzrs/0pSps894
-	tzkxzNyGP7Oh6qnR7Sv5YMUW15Nv9lI=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-660-V_yJXdPcPLaWPzGyQYDMcQ-1; Wed,
- 01 Nov 2023 09:31:15 -0400
-X-MC-Unique: V_yJXdPcPLaWPzGyQYDMcQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12D6F3C0C487
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:31:15 +0000 (UTC)
-Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0092A25C0;
-	Wed,  1 Nov 2023 13:31:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, 8bc9e651)
-Date: Wed, 01 Nov 2023 13:31:14 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E17101EC
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 14:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=shelob.surriel.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from imladris.home.surriel.com ([10.0.13.28] helo=imladris.surriel.com)
+	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <riel@shelob.surriel.com>)
+	id 1qyCCL-00084w-04;
+	Wed, 01 Nov 2023 10:27:57 -0400
+Message-ID: <3382634358afa9b95dc4f6db8a53a136d4b9e9cb.camel@surriel.com>
+Subject: Re: [PATCH] mm/hugetlb: fix null ptr defer in hugetlb_vma_lock_write
+From: Rik van Riel <riel@surriel.com>
+To: Edward Adam Davis <eadavis@qq.com>, 
+	syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com
+Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org,  llvm@lists.linux.dev, mike.kravetz@oracle.com,
+ muchun.song@linux.dev,  nathan@kernel.org, ndesaulniers@google.com,
+ syzkaller-bugs@googlegroups.com,  trix@redhat.com
+Date: Wed, 01 Nov 2023 10:27:56 -0400
+In-Reply-To: <tencent_2A675773C6D47370E36A4966A3BA2444F705@qq.com>
+References: <00000000000078d1e00608d7878b@google.com>
+	 <tencent_2A675773C6D47370E36A4966A3BA2444F705@qq.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
-Message-Id: <97491.123110109311502238@us-mta-660.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Sender: riel@surriel.com
 
-Hi, we tested your kernel and here are the results:
+On Wed, 2023-11-01 at 14:36 +0800, Edward Adam Davis wrote:
+> When obtaining resv_map from vma, it is necessary to simultaneously
+> determine
+> the flag HPAGE_RESV_OWNER of vm_private_data.
+> Only when they are met simultaneously, resv_map is valid.
+>=20
+> Reported-and-tested-by:
+> syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com
+> Fixes: bf4916922c60 ("hugetlbfs: extend hugetlb_vma_lock to private
+> VMAs")
+> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> ---
+> =C2=A0include/linux/hugetlb.h | 4 +++-
+> =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 47d25a5e1933..1a3ec1aee1a3 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -1265,9 +1265,11 @@ static inline bool __vma_shareable_lock(struct
+> vm_area_struct *vma)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return (vma->vm_flags & V=
+M_MAYSHARE) && vma->vm_private_data;
+> =C2=A0}
+> =C2=A0
+> +#define HPAGE_RESV_OWNER=C2=A0=C2=A0=C2=A0 (1UL << 0)
+> =C2=A0static inline bool __vma_private_lock(struct vm_area_struct *vma)
+> =C2=A0{
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return (!(vma->vm_flags & VM_M=
+AYSHARE)) && vma-
+> >vm_private_data;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return (!(vma->vm_flags & VM_M=
+AYSHARE)) && vma-
+> >vm_private_data &&=20
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0((unsigned long)vma->vm_private_data &
+> HPAGE_RESV_OWNER);
+> =C2=A0}
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+This could be cleaned up a bit by moving the HPAGE_RESV_OWNER
+definition (and its friends) into hugetlb.h, as well as the
+is_vma_resv_set() helper function.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Then __vma_private_lock() can just call is_vma_resv_set(),
+and open coding a duplicate of the same code.
 
-Kernel information:
-    Commit message: Merge tag 'devicetree-for-6.7' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/robh/linux
+Not having duplicates of the code will make it much harder
+to "miss a spot" with future changes.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/112422
+I am still struggling to find a place where we might leave
+HPAGE_RESV_OWNER behind on a pointer that is otherwise NULL,
+but if your tests show this fixes the issue, I'm all for it :)
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                  x86_64 - kdump - sysrq-c
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kdump-cki: Failed to update kernel options when running kdum=
-p service
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1766
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: Firmware test suite: Failed to clone git git://kernel.ubuntu=
-.com/hwe/fwts.git branch V21.02.00 repository
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/878
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+All Rights Reversed.
