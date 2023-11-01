@@ -1,275 +1,279 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9469C18023;
-	Wed,  1 Nov 2023 18:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=Oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B68168B0
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 18:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="hI9fZjHH";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="IOyYU1hH"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A1Hilgb006462;
-	Wed, 1 Nov 2023 18:10:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=BqPqh/DJw6n+BVQ1aLGp2fQcOhAokJ10PfnsVHYwWlA=;
- b=hI9fZjHHxkcOgX/ixzTYdkq3npOk0la3bRdci8+MAu4/3kJR0qK3o7mC/Uu0dEm1B+fZ
- 9cop7IPFroYImCa8GIG1YWJexObLShd53KU7Z1+oMqScKiWmnq+MXFtOMzrrNFSCjIuu
- 1Rs/YFAXbQB8BL+2IYxPANMsqO+q7g6p53EOL3ab6Pq8gIUTKnHbSfwYy8AFyKVLREFr
- 8rGDUTSMmD/mOdlZGdZoLNF+qvNaE9fEnNA+heafMitTjUERK1B6HqXI1JtXmBZJY+lM
- CFu8duuq11g5rcVcLDTNdnWwcoT1K1cmHegcAyPPtbqGTw3yGYtuLQWZVbxk94sVgdVC Vg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3u0t6b7wse-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 01 Nov 2023 18:10:23 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3A1HKNfY020069;
-	Wed, 1 Nov 2023 18:10:22 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3u0rr7f953-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 01 Nov 2023 18:10:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D+r4aOLrBtUNXLG+j5b3eV2XEoolSHRfJtlvVCNucIWKVtLhGKV5kbR48IAy6UJK93ebVTEYkhRnghjQI0cNg7APlMEBRbgYo8UYIVBLhHTX8VzBjjZBfQqLQbz2qt8rRdplOiI6wyLKNoOOiUpZVWzbVzz/KG0RnCoQNLvncTs/zHv06t23z+o49aJEbs9IA9jrbMQ0sl6FWcoMc5WhSkemfegNh0Ct9SSWl37xa+2rc3pT/gxcOaGoYAhKPAjDIupDg6LBWzc0PL18B1gte7eGs95NiZL2/8C8tGLSEnP8Qlk/RCmOd3x0R2eXJlPDGJ1kscVontFOE3Vp99GeQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BqPqh/DJw6n+BVQ1aLGp2fQcOhAokJ10PfnsVHYwWlA=;
- b=UDjyXhRvB4vHUi2J0vLSBQznzD4MECjhttoFH0uxJJ9B3CL7mdzQAyZDQ3KFv4w3XDujlL2jxyMYlA7MebZRvjDZQbjpvZ0ZaQMR4BidaCfIQozfQ1YbeyZS1lYh1QR8IaPc89WxkY+14LmxhfbOkyLBwBdrGlQnqATKiGmcoDYz2w9xSQvDD+PwI4YX0b/DMfs+KXY9Ukzsj3uwhkheTWkuJT/CH9gkqYKnZ2OlmrrD+ZEzeqsDI+afCJCod93gIbbN3sHhigzswrIr1tcK+9tbQvRq1csqgcJebgICipUn6zbGtCYkX6Zy3TLpMpaqpSnwr/k3SwFTdSEDlBP0Sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XdTQtcpv"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4084de32db5so929175e9.0
+        for <llvm@lists.linux.dev>; Wed, 01 Nov 2023 11:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BqPqh/DJw6n+BVQ1aLGp2fQcOhAokJ10PfnsVHYwWlA=;
- b=IOyYU1hHvFvUeNTUp1NUFWtdPJJ4xWuGp9/NCLZx4yUpNFQHt56sgSBMYKCjeCklTRwJxDJPHVlkOi/eT6Yu0Dw2j1wrBruIYuEsxgThA04KADSncziQsqCkaJbRsvDKa8ftUdfgD1EtZzU5To+Fi2UC1TGSL/sj7jS7gQvhHG8=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by IA1PR10MB6899.namprd10.prod.outlook.com (2603:10b6:208:421::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.44; Wed, 1 Nov
- 2023 18:10:19 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::8979:3e3f:c3e0:8dfa]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::8979:3e3f:c3e0:8dfa%4]) with mapi id 15.20.6907.025; Wed, 1 Nov 2023
- 18:10:19 +0000
-Date: Wed, 1 Nov 2023 14:10:17 -0400
-From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [vbabka:slub-percpu-caches-v3r0 5/6] lib/maple_tree.c:5524:20:
- error: use of undeclared identifier 'MA_STATE_PREALLOC'
-Message-ID: <20231101181017.neolf35sfitd2z4w@revolver>
-References: <202311010201.ktEJKmQ5-lkp@intel.com>
-Content-Type: multipart/mixed; boundary="wvhi4t7qq2wtv3me"
-Content-Disposition: inline
-In-Reply-To: <202311010201.ktEJKmQ5-lkp@intel.com>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT4P288CA0057.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d2::14) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        d=google.com; s=20230601; t=1698862981; x=1699467781; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q0JUcDMKCp6UaJEgSwy37RwBZzUyMCPTfpmmTNlGciQ=;
+        b=XdTQtcpv9Sec9sK+vDUYfzoiYt2DkBXBOpq2pR5pgloyqAU8e+Shv3VcduLl0nHfLG
+         t1+UlD549CjJtFtnLeg2eUgjOqIOVFnyCjTFpQzVH2jWymzpZldmxqUIEV8xKxcjGPPs
+         HYRP1jat1//7ReBsZfQAEJsVxiDN4CudEnwYEyzfKDLCsowbNsV0cRZqS0DcR5ZKB3X7
+         Kq7bnPo4CwxcyRLOlYMmm/eO98fzByAI+v2SVm081o23gs8LdR+t3cVk9bQAatEp20Dh
+         jQjXpA/ftAmDPYxhcb35pfhLS11x+TZ01zk0HC/xdRcSdmfYkW0/gNSAiHBOeFUFpiYM
+         nX1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698862981; x=1699467781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q0JUcDMKCp6UaJEgSwy37RwBZzUyMCPTfpmmTNlGciQ=;
+        b=V0Vs7OxMMrcjbvjdKMmROzRLBN2HvsckWqEUKDVSt5hqjVdLCdhgllqhAsVAa3qpGg
+         VrykthpIHdSYEnmV/BCDCh834nw8qRjV/ZMMSiMMdwQ4avuAQsWRUAKOZcFAirxMnBiw
+         ffe4MXB/j2IkpI7iodhx0+8ZIsyxZqwnrxz6PqPRQmcG0kNg1bhfWo6eDvXd0STslgQq
+         xuwiCKG5OjczdHnpyJYHD0UNb5dTEz95+pKFCWXaT3KSUbtFCTU+hJEAzzvjxCRwJao4
+         H4kFs9Qp0m58vknJ2QJHflwz5GsbPB/xWp2ty/caDS3wmEgrv538dua7kZYe0VAn4J33
+         Msrg==
+X-Gm-Message-State: AOJu0YzIVdEaWIlLKi9iqUQeHMSFeIvR6c+hyolwdQAK6hZTEa/pTXch
+	JIcWrfQn1iLwPpenxH30hHcQox7Sr0AmOXvUf6IaTw==
+X-Google-Smtp-Source: AGHT+IEwIVXTWjMN8zIeAQdD9GM/XSkn9ANwmo7TYpqAO9rWjlzR2CSsXRqlMxbbHG96nKoSHYCQb28rDo7i3uQHaGc=
+X-Received: by 2002:a05:600c:46ce:b0:409:4e8f:4b27 with SMTP id
+ q14-20020a05600c46ce00b004094e8f4b27mr5201528wmo.33.1698862980839; Wed, 01
+ Nov 2023 11:23:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|IA1PR10MB6899:EE_
-X-MS-Office365-Filtering-Correlation-Id: f82e8c96-92b9-45f9-3058-08dbdb05cecc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	oW8xmQ4me0MTOiHo8XsNOxK5ohaBLdE+2ST1rnQ91aoPFlJOOngnu3SKd0TWr2ty/nq73Y2RiYi5Ka/XPlTaYzAUEGKrIEREHblLsVuvwP64zuJG9kghO6TmBmWtYClXyTkecgHD1ql7m2gWoA74myKO5V2OrHKflcDkvkCfsX6GuJQ3fscGH3zflt5Y3fFjqPJhMsAgoBdIrwfUesyC18Oh0X6ujx/xbeyZ2LSVo2s8TjyBAi+71mBnldbQnSaHN+dF/tsG1GFcDDXpFztyOW1gecm4kiU/TRe1mOiFD24IdPYSdsUJQ+mMfxQXRx/6u9/clxUwfnBYtRHWtmlB5uKg1uEdVQF9yNdONDSKPXsC46qkhOfMzfV4F09K2p0j2tW+IUEg2xpycAa4Uj+r9htBkGQm7FnAgRcGn8GlY6Tf2gJ8BCgP805c6wh9MyBONIA0DpcryCJ99P9BYzf84Klju4A2/Yif9TU/QHwF1WFHNqm0oSGIYBp9ATbdiBJWevvYYpl+1ZjChp1AratGq4oQSFxpgBFZ+Hc/d1G4oR5SGOv1lmk/CayZKa2dKXvZXy0oRsk2ewc9tX0JclgpU1SMYRDs5iFUbuZCqwLsTRJx3qqaxyPzS/aPUWXo1W9PWmnGUgL6zb5rVLsAGoVC1Q==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(376002)(136003)(39860400002)(396003)(346002)(230922051799003)(186009)(451199024)(1800799009)(64100799003)(38100700002)(44144004)(9686003)(66946007)(6506007)(66476007)(478600001)(966005)(86362001)(66556008)(33716001)(1076003)(83380400001)(2906002)(8936002)(26005)(235185007)(6916009)(6512007)(41300700001)(316002)(8676002)(5660300002)(4326008)(6486002)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?bLeG0woq4JVn6oz6i2iBgS8Ckj4oLFipW2m5LRXTiEDKKVPXymXqLrfMIWd3?=
- =?us-ascii?Q?9WS2lyOaqCh+wG1w1JIs77mc8e9M5biF5NFSSyVFyhFe66LitnMJX/CZzNE3?=
- =?us-ascii?Q?yRV/LwWXzTbpIrsXnRywM1hXliRdI1zI4hWaa+1nedM7bEHYdEv2iT4Azcm/?=
- =?us-ascii?Q?4GPT2qj+PTtrJmz85HIT6xl4uKh8afkOtdJn1yccTqguoxywsxrauIGxyVxb?=
- =?us-ascii?Q?GMNH5t6+Vla3sfd7MggEyAoM058OJDK8SKmEe6FcRMeGC5lCOQkpbswbBGg4?=
- =?us-ascii?Q?5i96RKF73ZM5+0aBGm84kwPORSICEPsEgY0lR7WyzuEAjY+WNQhN5mWWwzgd?=
- =?us-ascii?Q?4VufmHM7eeAIwiU84pYebT5iHdx3wK5AxKWLCmvwPJIRSgXBrRxiFfywfL0N?=
- =?us-ascii?Q?CONt59em02Yr/FW6MDx3eXw5rTbRZZtYMTw64Lc6BKYtYQywaloG2vaDeEkj?=
- =?us-ascii?Q?+MZcm4mMz2fN/ZibvZlap5nNhWPB82l7lSLuiTggw4YPp/L75PMk8ynZB4ZX?=
- =?us-ascii?Q?OuNdPk6UZhz2aVXmdXNQLecmJK703LlOCeJAu1WHdkFc1uiOvYEiqWDYrC8t?=
- =?us-ascii?Q?KhkxT3ecOCVpsK0JfS+IDH5WQ0ykU6NxpQEkUsrkUz3R6Y57aJ+d7NP7pnBF?=
- =?us-ascii?Q?3prkERaknElRWz/rPkPeAcuVCc5fFun0QLEqYCEoBTyr1P2N3kS940Glnhrp?=
- =?us-ascii?Q?CZc6p2ZfG38zpMBeBiTkW1XQ1EQkctQ1irOCfPqdz4SLN6JMxPuISuawfpCL?=
- =?us-ascii?Q?hT2gZsIxNzMRNMFgUICzBo4YFgtfDN2kFJtPu7Y0vAiWGvn0eF082PSNPgDP?=
- =?us-ascii?Q?E3otvHwEj//hbVSSZT/L2OWO6ARSbX91ikTapQG2/rGSzqD7riFFEq46AoKv?=
- =?us-ascii?Q?AweqilHOFsDEM1/XhbezAKY0ilDhyQZVEz1KFZOFq1EbiGArJWIEvClJ/fRY?=
- =?us-ascii?Q?QHRSrUhtnQVAUmstXHISc+DSgbbyRHrEFnB5CQQrJ0tEGI6h5CbsvrcJZeZY?=
- =?us-ascii?Q?rZhm+O+HIHaYeaMAJinH4a5QboRASST2lmwb8Mf7kfVOic6imbHPvnjELNlx?=
- =?us-ascii?Q?yCWoTo+Sp/w8KIX9mAr2VlYU4xnCSboNIXA5p2S08ICX5lFIt5ah+/A0+mZh?=
- =?us-ascii?Q?ePLHbNOIHZo/lKgmWRA3epvfEg42pwN2rqaclfzhoUZ/DrPRXOW8I7iVD0CW?=
- =?us-ascii?Q?NWv/Na46B2LAlCZCXpUKp8kkaLAmQIi5xA3YAh4JIsweo3Uco3opSWW/NhCR?=
- =?us-ascii?Q?aId3/hfL4YJUFPeeNZhRhMVEIZfiI/BUxzPxzWSvvCXpkkF8tWroa37awrH5?=
- =?us-ascii?Q?V9TFr6519NVWGsS7BuaFiYgnO+Ob4eSXqTSNcZOrAApvRpfUVbuz6ufiFaFF?=
- =?us-ascii?Q?WgFAWJS4b84nZxxxeUHeM8UJSNvMuqLu2azIQqzP4SYuRzrmLSvyXijUwurc?=
- =?us-ascii?Q?k3dqJhQK1gNSEMozTk854CBZ80tjJEgXD2Dxhl3MdkDUfUy5liq0u6iJkT4c?=
- =?us-ascii?Q?gkbESAjBEjhOB3Hux6UQkncfL7LY3E7fwl+LvfjBTw5FcKbMXoEOk5+ACduV?=
- =?us-ascii?Q?rcIi9zNFPndFKrHkkCU0jc8IgpYnjvor/m0ZRmnIxvG6vfZjy9A/N9Xnc55F?=
- =?us-ascii?Q?fQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	6yxh/J5aNCYWTs1GV9kqa9k2QbbAqzZMazn+fXpKAIhrmzqOCwPLEZiDlyG52D8aeum5c17TeYZsL2Z1eF1qlzo5LLrrCrb1SZp+vMsl4aOGdRBr948nXZQwZPwc+vu6KtjRJkvuesv+KFUw+8ZBGSmght2rC5PMA7zWakDGknK1CSUKuqNNvOAnYqbJSaSo1UK0D/89iskSQOFjo9jhI74pwICyjyEeJJZ0O8FMReQMt+gqCS3G665ZKsDBCnR80jOcZQAa3+KO4dmg2VlZ8yGVe3sn9sSMj+uSu3+/CC9bhEJJGGK6kpN/oNsdDGmWl5Milus7HbdDq0xHx/s14DU5yIKpmC4/AI5CH+NpRq5on8+K6lG7ocHgfot8dF3/Ewmdo9+oj4P3DmB939oj6wfC08YioCpgxgnqLBlHSYtcG+jYlcThPVBVhejvaE5VzLIwmQDoqR3X0k/6CRGgucTWaLer5toIXwe1RX+q1zBJqcLVndUeKNOMTNezd1ahlp4b5xNx3B4Gv0Cuo/GrwVs6ht5FEF/omfjL8gXn8V/DK6f0DV2Zuvsy33xqrNrqP/gUeLLjJQK1axIopa5DaPML8psC+NmxYCVyeTaSWYODFLSNBf2emaCoSQKqu9Qj62Qm/9kVcBSHbBM1kKQ2Ld+GVsnBRKl6fQGsYHH5YJ9yz5gd8W7r+TBGocKGSxdJRwFv36JM0FFNm1EcTp50ycKXpFxydysjfn+56tSq+apUbxf8wYxUpeAI7D3BX4wCYNqj0gqJVHsVrzCmVZ83BHgUpgchByo2olOkKESmJqvpeybWXSesFzLSQsAO7hQ6
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f82e8c96-92b9-45f9-3058-08dbdb05cecc
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2023 18:10:19.6142
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K7KKyYipCerWAr5JHMdLRkmlWywfydNSA0H6J3vc9MOBGtHbBugBhsfs+dJIiPBiUY8DyAIPfnYNVS+gWgXy8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6899
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-01_16,2023-11-01_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
- spamscore=0 phishscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310240000
- definitions=main-2311010137
-X-Proofpoint-GUID: XkJBb2CESbK_KG0OyV36KC0ipmrG8mjN
-X-Proofpoint-ORIG-GUID: XkJBb2CESbK_KG0OyV36KC0ipmrG8mjN
-
---wvhi4t7qq2wtv3me
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-* kernel test robot <lkp@intel.com> [231031 14:37]:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-percpu-caches-v3r0
-> head:   dd3fcb0bdf513439374345254f4894675bc88e68
-> commit: bb07edc43f9f1a6119fa114f52d14df3f87e3241 [5/6] maple_tree: Remove MA_STATE_PREALLOC
-> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231101/202311010201.ktEJKmQ5-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231101/202311010201.ktEJKmQ5-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202311010201.ktEJKmQ5-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> lib/maple_tree.c:5524:20: error: use of undeclared identifier 'MA_STATE_PREALLOC'
->     5524 |         mas->mas_flags |= MA_STATE_PREALLOC;
->          |                           ^
-
-Ah, this line was added between revisions of your patch set.  Please
-find the attached updated patch.
-
-Thanks,
-Liam
-
---wvhi4t7qq2wtv3me
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-maple_tree-Remove-MA_STATE_PREALLOC.patch"
+References: <1310397379.52558.1698849730427@jenkins.jenkins>
+ <CAKwvOdmomdYWFxZO+61kFN9soaxiOGAr8dM_G80HSufJa=XGdQ@mail.gmail.com>
+ <20231101172208.GA1368360@dev-arch.thelio-3990X> <F802D6D3-CB3A-43AC-99EF-1220585F49D8@linaro.org>
+In-Reply-To: <F802D6D3-CB3A-43AC-99EF-1220585F49D8@linaro.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 1 Nov 2023 11:22:46 -0700
+Message-ID: <CAKwvOdn0F4SzeT0bSFHUD1QKsT=fkqfUBbsq+q1r_3Y7o9kHLg@mail.gmail.com>
+Subject: Re: [Linaro-TCWG-CI] v6.6-rc1-17-g1c6fdbd8f246: Failure on arm
+To: Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Linaro Toolchain Working Group <linaro-toolchain@lists.linaro.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-From af838134b03fb25b664b118fa15f01c78e68d91a Mon Sep 17 00:00:00 2001
-From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Date: Tue, 8 Aug 2023 14:54:27 -0400
-Subject: [PATCH 1/2] maple_tree: Remove MA_STATE_PREALLOC
+On Wed, Nov 1, 2023 at 11:02=E2=80=AFAM Maxim Kuvyrkov
+<maxim.kuvyrkov@linaro.org> wrote:
+>
+> Hi Nick,
+> Hi Nathan,
+>
+> I don't see mistakes from CI here.  Are you using tip-of-trunk LLVM?
+>
+> This report was generated for LLVM revision llvmorg-18-init-10263-g1abd8d=
+1a8d96 and linux revision v6.6-rc1-17-g1c6fdbd8f246 .  The build log with e=
+rrors is at [1].
+>
+> It seems that a later commit in Linux kernel fixed some of the errors in =
+[1], but still with the current linux.git:master 2 errors remain (see [2]):
+>
+> 00:28:15 fs/bcachefs/chardev.c:655:6: error: stack frame size (1032) exce=
+eds limit (1024) in 'bch2_fs_ioctl' [-Werror,-Wframe-larger-than]
+> 00:28:15   655 | long bch2_fs_ioctl(struct bch_fs *c, unsigned cmd, void =
+__user *arg)
+> 00:28:15       |      ^
+> 00:28:15 1 error generated.
+> 00:28:15 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/chardev.o]=
+ Error 1
+> 00:29:39 fs/bcachefs/fs-common.c:356:5: error: stack frame size (1128) ex=
+ceeds limit (1024) in 'bch2_rename_trans' [-Werror,-Wframe-larger-than]
+> 00:29:39   356 | int bch2_rename_trans(struct btree_trans *trans,
+> 00:29:39       |     ^
+> 00:29:39 1 error generated.
 
-MA_SATE_PREALLOC was added to catch any writes that try to allocate when
-the maple state is being used in preallocation mode.  This can safely be
-removed in favour of the percpu array of nodes.
+These are different warnings in different object files than from the
+initial report.
 
-Note that mas_expected_entries() still expects no allocations during
-operation and so MA_STATE_BULK can be used in place of preallocations
-for this case, which is primarily used for forking.
+Maybe bisection started due to those, but didn't notice different
+warnings going further back, because of -Werror, and reported the
+initial commit that was problematic (even if the warnings differed and
+were since fixed).
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- lib/maple_tree.c | 20 ++++++--------------
- 1 file changed, 6 insertions(+), 14 deletions(-)
+>
+> These errors are near-misses, so if you are using a different LLVM revisi=
+on, they can disappear.
+>
+> [1] https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmo=
+dconfig-build/110/artifact/artifacts/06-build_linux/console.log.xz
+>
+> [2] https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmo=
+dconfig-build/111/artifact/artifacts/06-build_linux/console.log.xz
+>
+> --
+> Maxim Kuvyrkov
+> https://www.linaro.org
+>
+> > On Nov 1, 2023, at 21:22, Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > On Wed, Nov 01, 2023 at 08:54:26AM -0700, Nick Desaulniers wrote:
+> >> On Wed, Nov 1, 2023 at 7:42=E2=80=AFAM <ci_notify@linaro.org> wrote:
+> >>>
+> >>> Dear contributor, our automatic CI has detected problems related to y=
+our patch(es).  Please find some details below.  If you have any questions,=
+ please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera=
+'s #linaro-tcwg channel, or ping your favourite Linaro toolchain developer =
+on the usual project channel.
+> >>>
+> >>> In CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig after:
+> >>
+> >> ok, so ARCH=3Darm allmodconfig on mainline...
+> >>
+> >>>
+> >>>  | commit v6.6-rc1-17-g1c6fdbd8f246
+> >>>  | Author: Kent Overstreet <kent.overstreet@gmail.com>
+> >>>  | Date:   Thu Mar 16 22:18:50 2017 -0800
+> >>>  |
+> >>>  |     bcachefs: Initial commit
+> >>>  |
+> >>>  |     Initially forked from drivers/md/bcache, bcachefs is a new cop=
+y-on-write
+> >>>  |     filesystem with every feature you could possibly want.
+> >>>  |
+> >>>  |     Website: https://bcachefs.org
+> >>>  |
+> >>>  | ... 1 lines of the commit log omitted.
+> >>>
+> >>> Results changed to
+> >>> # reset_artifacts:
+> >>> -10
+> >>> # build_abe binutils:
+> >>> -9
+> >>> # build_kernel_llvm:
+> >>> -5
+> >>> # build_abe qemu:
+> >>> -2
+> >>> # linux_n_obj:
+> >>> 23730
+> >>> # First few build errors in logs:
+> >>>
+> >>> # 00:23:16 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is p=
+ast the end of the array (that has type 'const __u64[0]' (aka 'const unsign=
+ed long long[0]')) [-Werror,-Warray-bounds]
+> >>> # 00:23:17 fs/bcachefs/alloc.c:332:9: error: call to undeclared funct=
+ion 'COUNT_ARGS'; ISO C99 and later do not support implicit function declar=
+ations [-Wimplicit-function-declaration]
+> >>
+> >> ^
+> >> $ file fs/bcachefs/alloc.c
+> >> fs/bcachefs/alloc.c: cannot open `fs/bcachefs/alloc.c' (No such file
+> >> or directory)
+> >>
+> >>> # 00:23:17 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/allo=
+c.o] Error 1
+> >>> # 00:23:29 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is p=
+ast the end of the array (that has type 'const __u64[0]' (aka 'const unsign=
+ed long long[0]')) [-Werror,-Warray-bounds]
+> >>> # 00:23:30 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/bset=
+.o] Error 1
+> >>
+> >> ^
+> >> $ make LLVM=3D1 ARCH=3Darm allmodconfig fs/bcachefs/bset.o
+> >>  CC [M]  fs/bcachefs/bset.o
+> >> $
+> >>
+> >>> # 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is p=
+ast the end of the array (that has type 'const __u64[0]' (aka 'const unsign=
+ed long long[0]')) [-Werror,-Warray-bounds]
+> >>> # 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is p=
+ast the end of the array (that has type 'const __u64[0]' (aka 'const unsign=
+ed long long[0]')) [-Werror,-Warray-bounds]
+> >>> # 00:23:33 fs/bcachefs/btree_cache.c:67:9: error: array index 0 is pa=
+st the end of the array (that has type 'const __u64[0]' (aka 'const unsigne=
+d long long[0]')) [-Werror,-Warray-bounds]
+> >>> # 00:23:33 fs/bcachefs/btree_cache.c:120:2: error: array index 0 is p=
+ast the end of the array (that has type '__u64[0]' (aka 'unsigned long long=
+[0]')) [-Werror,-Warray-bounds]
+> >>> # 00:23:33 fs/bcachefs/btree_cache.c:201:6: error: array index 0 is p=
+ast the end of the array (that has type 'const __u64[0]' (aka 'const unsign=
+ed long long[0]')) [-Werror,-Warray-bounds]
+> >>
+> >> $ make LLVM=3D1 ARCH=3Darm allmodconfig fs/bcachefs/btree_cache.o
+> >>  CC [M]  fs/bcachefs/btree_cache.o
+> >> $
+> >>
+> >> ... what's up with this report?
+> >
+> > I cannot tell exactly from the information in this report but I suspect
+> > ARCH=3Darm allmodconfig is broken in mainline for other reasons (perhap=
+s
+> > https://github.com/ClangBuiltLinux/linux/issues/1953?) and in trying to
+> > uncover that breakage in an automated fashion, it hit this build
+> > breakage and the bisect inadvertently switched to tracking down this
+> > already fixed set of warnings. I think this particular issue is resolve=
+d
+> > by Kent's recent array bounds fixes commit:
+> >
+> > https://git.kernel.org/linus/5cfd69775eb5460ef78bb5034a37eb0dc52ab65d
+> >
+> > Cheers,
+> > Nathan
+> >
+> >>>
+> >>> From
+> >>> # reset_artifacts:
+> >>> -10
+> >>> # build_abe binutils:
+> >>> -9
+> >>> # build_kernel_llvm:
+> >>> -5
+> >>> # build_abe qemu:
+> >>> -2
+> >>> # linux_n_obj:
+> >>> 32815
+> >>> # linux build successful:
+> >>> all
+> >>> # linux boot successful:
+> >>> boot
+> >>>
+> >>> The configuration of this build is:
+> >>> CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig
+> >>>
+> >>> -----------------8<--------------------------8<----------------------=
+----8<--------------------------
+> >>> The information below can be used to reproduce a debug environment:
+> >>>
+> >>> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-=
+arm-mainline-allmodconfig-build/110/artifact/artifacts
+> >>> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-=
+arm-mainline-allmodconfig-build/109/artifact/artifacts
+> >>>
+> >>> Reproduce last good and first bad builds: https://git-us.linaro.org/t=
+oolchain/ci/interesting-commits.git/plain/linux/sha1/1c6fdbd8f2465ddfb73a01=
+ec620cbf3d14044e1a/tcwg_kernel/llvm-master-arm-mainline-allmodconfig/reprod=
+uction_instructions.txt
+> >>>
+> >>> Full commit : https://git.linaro.org/kernel-org/linux.git/commit/?id=
+=3D1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a
+> >>>
+> >>> Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1=
+015
+> >>>
+> >>> List of configurations that regressed due to this commit :
+> >>> * tcwg_kernel
+> >>> ** llvm-master-arm-mainline-allmodconfig
+> >>> *** Failure
+> >>> *** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/pl=
+ain/linux/sha1/1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a/tcwg_kernel/llvm-ma=
+ster-arm-mainline-allmodconfig/details.txt
+> >>> *** https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-a=
+llmodconfig-build/110/
+> >>
+> >>
+> >>
+> >> --
+> >> Thanks,
+> >> ~Nick Desaulniers
+>
+>
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 124e837b3153..81f4a4f45751 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -68,11 +68,9 @@
-  * Maple state flags
-  * * MA_STATE_BULK		- Bulk insert mode
-  * * MA_STATE_REBALANCE		- Indicate a rebalance during bulk insert
-- * * MA_STATE_PREALLOC		- Preallocated nodes, WARN_ON allocation
-  */
- #define MA_STATE_BULK		1
- #define MA_STATE_REBALANCE	2
--#define MA_STATE_PREALLOC	4
-=20
- #define ma_parent_ptr(x) ((struct maple_pnode *)(x))
- #define mas_tree_parent(x) ((unsigned long)(x->tree) | MA_ROOT_PARENT)
-@@ -1263,11 +1261,8 @@ static inline void mas_alloc_nodes(struct ma_state *=
-mas, gfp_t gfp)
- 		return;
-=20
- 	mas_set_alloc_req(mas, 0);
--	if (mas->mas_flags & MA_STATE_PREALLOC) {
--		if (allocated)
--			return;
--		WARN_ON(!allocated);
--	}
-+	if (mas->mas_flags & MA_STATE_BULK)
-+		return;
-=20
- 	if (!allocated || mas->alloc->node_count =3D=3D MAPLE_ALLOC_SLOTS) {
- 		node =3D (struct maple_alloc *)mt_alloc_one(gfp);
-@@ -5526,7 +5521,6 @@ int mas_preallocate(struct ma_state *mas, void *entry=
-, gfp_t gfp)
- 	/* node store, slot store needs one node */
- ask_now:
- 	mas_node_count_gfp(mas, request, gfp);
--	mas->mas_flags |=3D MA_STATE_PREALLOC;
- 	if (likely(!mas_is_err(mas)))
- 		return 0;
-=20
-@@ -5569,7 +5563,7 @@ void mas_destroy(struct ma_state *mas)
-=20
- 		mas->mas_flags &=3D ~MA_STATE_REBALANCE;
- 	}
--	mas->mas_flags &=3D ~(MA_STATE_BULK|MA_STATE_PREALLOC);
-+	mas->mas_flags &=3D ~MA_STATE_BULK;
-=20
- 	total =3D mas_allocated(mas);
- 	while (total) {
-@@ -5618,9 +5612,6 @@ int mas_expected_entries(struct ma_state *mas, unsign=
-ed long nr_entries)
- 	 * of nodes during the operation.
- 	 */
-=20
--	/* Optimize splitting for bulk insert in-order */
--	mas->mas_flags |=3D MA_STATE_BULK;
--
- 	/*
- 	 * Avoid overflow, assume a gap between each entry and a trailing null.
- 	 * If this is wrong, it just means allocation can happen during
-@@ -5637,8 +5628,9 @@ int mas_expected_entries(struct ma_state *mas, unsign=
-ed long nr_entries)
- 	/* Add working room for split (2 nodes) + new parents */
- 	mas_node_count_gfp(mas, nr_nodes + 3, GFP_KERNEL);
-=20
--	/* Detect if allocations run out */
--	mas->mas_flags |=3D MA_STATE_PREALLOC;
-+	/* Optimize splitting for bulk insert in-order */
-+	mas->mas_flags |=3D MA_STATE_BULK;
-+
-=20
- 	if (!mas_is_err(mas))
- 		return 0;
+
 --=20
-2.40.1
-
-
---wvhi4t7qq2wtv3me--
+Thanks,
+~Nick Desaulniers
