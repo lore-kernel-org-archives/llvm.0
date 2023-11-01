@@ -1,252 +1,200 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A87CA73;
-	Wed,  1 Nov 2023 15:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7D814A8A
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 15:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dz8JZcPQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698853513; x=1730389513;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0uD79xch+yhiRL277ZQ02UoFmVoZX8XE900MgWoHMgQ=;
-  b=Dz8JZcPQuTmuxWsjUh3k5rs/5IcUABwxYGlJFbzVMjdQV4Ua2Z6N9uIO
-   R2ex54xgVuOXAXyIzh5FV2eil87jMgzpc4YaiKhfSVLb26Ugv7lHOR7D3
-   0xxGnIEEQut4IJleb//41Cw+w6LOdvfx4UZqG3Ai7v5yCIpI+lvgSiIwA
-   bmafLjzp8ShfI/dmF/iWDn6JSO6KAIVjgzidhozgGkcGVDDxMcz9E4IhN
-   c3/iQsC+JPGm4ugO64gDbr5sXC/vA6QZxaOxFcWU/E1t58cDV5m5Y3EzO
-   kNBjHYX0k4Tu4/AReiX/b6hrtfY6TBqWnq7C9ph9Yr9CDUPqtH24QSZkn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="385694830"
-X-IronPort-AV: E=Sophos;i="6.03,268,1694761200"; 
-   d="scan'208";a="385694830"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 08:45:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="790136244"
-X-IronPort-AV: E=Sophos;i="6.03,268,1694761200"; 
-   d="scan'208";a="790136244"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Nov 2023 08:45:07 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qyDOz-0000rE-0z;
-	Wed, 01 Nov 2023 15:45:05 +0000
-Date: Wed, 1 Nov 2023 23:44:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Rokosov <ddrokosov@salutedevices.com>, rostedt@goodmis.org,
-	mhiramat@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-	roman.gushchin@linux.dev, shakeelb@google.com,
-	muchun.song@linux.dev, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel@sberdevices.ru, rockosov@gmail.com, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, Dmitry Rokosov <ddrokosov@salutedevices.com>
-Subject: Re: [PATCH v1 2/2] mm: memcg: introduce new event to trace
- shrink_memcg
-Message-ID: <202311012319.7ULVSdyR-lkp@intel.com>
-References: <20231101102837.25205-3-ddrokosov@salutedevices.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rl+oxToe"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2c59a4dd14cso96217051fa.2
+        for <llvm@lists.linux.dev>; Wed, 01 Nov 2023 08:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698854078; x=1699458878; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cxpLhJ0zp+a9DVvh6xhHV0sFg67pwiRTGsIwUbqzpnE=;
+        b=Rl+oxToeVNuxGK/xg19b69l+Lk62aX+E5PGaeEShJRM9j5NnXZyg6uHstdC0Q60gNW
+         xhdUKUF+h0bRvHJxhzUGzFodoR5ZIiftQ5n1z5bcFprH9a15C8GarP4MkeqeDv37202s
+         VpGFsdsmc4vv5CLb/W4/TOrxGsm6I1tkSfeaEy1/j6xpaI0lyojVcmKb8PW/zCKwOOYE
+         DA+2bb1Tc9pa8G4D9uMXMXVWjZ0+CHp7G/Y09WWTnzT3n1oIu0CUs/cqV8OonEfGGrPf
+         xymTSwwcGHX+Hl00piPIvFjdzSDOd8yE/cwXUY8b/tSWl/58Qfy0kR83/fK8w/BX/DM3
+         V0Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698854078; x=1699458878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cxpLhJ0zp+a9DVvh6xhHV0sFg67pwiRTGsIwUbqzpnE=;
+        b=O+5VsjO/CCV77xAzmlO7GRHHWtTqZbxhTDJdBoFk0KwLYAljKQ5B3ugDNZe1nAI+/F
+         TXky+nUfMZy05+Cq8RUD4guFhPiKHw1oHpxEUMPq8uokjIjzLD9/jhWbiBAHlhkXFVIo
+         2usToRVSCn188opJB2zC1lJOJv+zBAZ1ikAlCVxxG6fOua3TZDbqYogYdco2XUJdqh3n
+         SPoLSZJ7c9GzqTFoBLWb1oblUiZMn+rc9NgVNoS8dtNYH7xtihSdJm1EuS39UPU7by+e
+         xVqbyvrJwnY1GfMPX4+Pk+WvsiBn0iw6WkYc1KhBGX9ZxU+e3qh+aWyt8+XmE2b3lgin
+         4Mbg==
+X-Gm-Message-State: AOJu0Yxmrd+HXD4FoWAG4dTThqF/UD1sXxXkxKLz0wdHeCFnb1snh50C
+	0tgTPxkOa1IiphLl8FlQ3TID+LUgQZVcYiltYS03mw==
+X-Google-Smtp-Source: AGHT+IGiHnt00fYkQkO7qF1acI7ITnNWFug72r7xBpxWXPyoQtiIb9rgvA2hABMA6B+4hTlLHJUTO8pzXABOQ97FsTI=
+X-Received: by 2002:a2e:9909:0:b0:2c5:137d:6baa with SMTP id
+ v9-20020a2e9909000000b002c5137d6baamr12485544lji.14.1698854077548; Wed, 01
+ Nov 2023 08:54:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231101102837.25205-3-ddrokosov@salutedevices.com>
+References: <1310397379.52558.1698849730427@jenkins.jenkins>
+In-Reply-To: <1310397379.52558.1698849730427@jenkins.jenkins>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 1 Nov 2023 08:54:26 -0700
+Message-ID: <CAKwvOdmomdYWFxZO+61kFN9soaxiOGAr8dM_G80HSufJa=XGdQ@mail.gmail.com>
+Subject: Re: [Linaro-TCWG-CI] v6.6-rc1-17-g1c6fdbd8f246: Failure on arm
+To: linaro-toolchain@lists.linaro.org, Nathan Chancellor <nathan@kernel.org>, 
+	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
+Cc: llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dmitry,
+On Wed, Nov 1, 2023 at 7:42=E2=80=AFAM <ci_notify@linaro.org> wrote:
+>
+> Dear contributor, our automatic CI has detected problems related to your =
+patch(es).  Please find some details below.  If you have any questions, ple=
+ase follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #=
+linaro-tcwg channel, or ping your favourite Linaro toolchain developer on t=
+he usual project channel.
+>
+> In CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig after:
 
-kernel test robot noticed the following build errors:
+ok, so ARCH=3Darm allmodconfig on mainline...
 
-[auto build test ERROR on akpm-mm/mm-everything]
+>
+>   | commit v6.6-rc1-17-g1c6fdbd8f246
+>   | Author: Kent Overstreet <kent.overstreet@gmail.com>
+>   | Date:   Thu Mar 16 22:18:50 2017 -0800
+>   |
+>   |     bcachefs: Initial commit
+>   |
+>   |     Initially forked from drivers/md/bcache, bcachefs is a new copy-o=
+n-write
+>   |     filesystem with every feature you could possibly want.
+>   |
+>   |     Website: https://bcachefs.org
+>   |
+>   | ... 1 lines of the commit log omitted.
+>
+> Results changed to
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 23730
+> # First few build errors in logs:
+>
+> # 00:23:16 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past =
+the end of the array (that has type 'const __u64[0]' (aka 'const unsigned l=
+ong long[0]')) [-Werror,-Warray-bounds]
+> # 00:23:17 fs/bcachefs/alloc.c:332:9: error: call to undeclared function =
+'COUNT_ARGS'; ISO C99 and later do not support implicit function declaratio=
+ns [-Wimplicit-function-declaration]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Rokosov/mm-memcg-print-out-cgroup-name-in-the-memcg-tracepoints/20231101-183040
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231101102837.25205-3-ddrokosov%40salutedevices.com
-patch subject: [PATCH v1 2/2] mm: memcg: introduce new event to trace shrink_memcg
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20231101/202311012319.7ULVSdyR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231101/202311012319.7ULVSdyR-lkp@intel.com/reproduce)
+^
+$ file fs/bcachefs/alloc.c
+fs/bcachefs/alloc.c: cannot open `fs/bcachefs/alloc.c' (No such file
+or directory)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311012319.7ULVSdyR-lkp@intel.com/
+> # 00:23:17 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/alloc.o]=
+ Error 1
+> # 00:23:29 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past =
+the end of the array (that has type 'const __u64[0]' (aka 'const unsigned l=
+ong long[0]')) [-Werror,-Warray-bounds]
+> # 00:23:30 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/bset.o] =
+Error 1
 
-All errors (new ones prefixed by >>):
+^
+$ make LLVM=3D1 ARCH=3Darm allmodconfig fs/bcachefs/bset.o
+  CC [M]  fs/bcachefs/bset.o
+$
 
-   In file included from mm/vmscan.c:19:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from mm/vmscan.c:19:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from mm/vmscan.c:19:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> mm/vmscan.c:5811:3: error: implicit declaration of function 'trace_mm_vmscan_memcg_shrink_begin' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   trace_mm_vmscan_memcg_shrink_begin(memcg,
-                   ^
-   mm/vmscan.c:5811:3: note: did you mean 'trace_mm_vmscan_lru_shrink_active'?
-   include/trace/events/vmscan.h:467:1: note: 'trace_mm_vmscan_lru_shrink_active' declared here
-   TRACE_EVENT(mm_vmscan_lru_shrink_active,
-   ^
-   include/linux/tracepoint.h:566:2: note: expanded from macro 'TRACE_EVENT'
-           DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-           ^
-   include/linux/tracepoint.h:432:2: note: expanded from macro 'DECLARE_TRACE'
-           __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
-           ^
-   include/linux/tracepoint.h:355:21: note: expanded from macro '__DECLARE_TRACE'
-           static inline void trace_##name(proto)                          \
-                              ^
-   <scratch space>:33:1: note: expanded from here
-   trace_mm_vmscan_lru_shrink_active
-   ^
->> mm/vmscan.c:5845:3: error: implicit declaration of function 'trace_mm_vmscan_memcg_shrink_end' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   trace_mm_vmscan_memcg_shrink_end(memcg,
-                   ^
-   mm/vmscan.c:5845:3: note: did you mean 'trace_mm_vmscan_memcg_shrink_begin'?
-   mm/vmscan.c:5811:3: note: 'trace_mm_vmscan_memcg_shrink_begin' declared here
-                   trace_mm_vmscan_memcg_shrink_begin(memcg,
-                   ^
-   12 warnings and 2 errors generated.
+> # 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past =
+the end of the array (that has type 'const __u64[0]' (aka 'const unsigned l=
+ong long[0]')) [-Werror,-Warray-bounds]
+> # 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past =
+the end of the array (that has type 'const __u64[0]' (aka 'const unsigned l=
+ong long[0]')) [-Werror,-Warray-bounds]
+> # 00:23:33 fs/bcachefs/btree_cache.c:67:9: error: array index 0 is past t=
+he end of the array (that has type 'const __u64[0]' (aka 'const unsigned lo=
+ng long[0]')) [-Werror,-Warray-bounds]
+> # 00:23:33 fs/bcachefs/btree_cache.c:120:2: error: array index 0 is past =
+the end of the array (that has type '__u64[0]' (aka 'unsigned long long[0]'=
+)) [-Werror,-Warray-bounds]
+> # 00:23:33 fs/bcachefs/btree_cache.c:201:6: error: array index 0 is past =
+the end of the array (that has type 'const __u64[0]' (aka 'const unsigned l=
+ong long[0]')) [-Werror,-Warray-bounds]
+
+$ make LLVM=3D1 ARCH=3Darm allmodconfig fs/bcachefs/btree_cache.o
+  CC [M]  fs/bcachefs/btree_cache.o
+$
+
+... what's up with this report?
+
+>
+> From
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 32815
+> # linux build successful:
+> all
+> # linux boot successful:
+> boot
+>
+> The configuration of this build is:
+> CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig
+>
+> -----------------8<--------------------------8<--------------------------=
+8<--------------------------
+> The information below can be used to reproduce a debug environment:
+>
+> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-=
+mainline-allmodconfig-build/110/artifact/artifacts
+> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-=
+mainline-allmodconfig-build/109/artifact/artifacts
+>
+> Reproduce last good and first bad builds: https://git-us.linaro.org/toolc=
+hain/ci/interesting-commits.git/plain/linux/sha1/1c6fdbd8f2465ddfb73a01ec62=
+0cbf3d14044e1a/tcwg_kernel/llvm-master-arm-mainline-allmodconfig/reproducti=
+on_instructions.txt
+>
+> Full commit : https://git.linaro.org/kernel-org/linux.git/commit/?id=3D1c=
+6fdbd8f2465ddfb73a01ec620cbf3d14044e1a
+>
+> Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1015
+>
+> List of configurations that regressed due to this commit :
+> * tcwg_kernel
+> ** llvm-master-arm-mainline-allmodconfig
+> *** Failure
+> *** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/=
+linux/sha1/1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a/tcwg_kernel/llvm-master=
+-arm-mainline-allmodconfig/details.txt
+> *** https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmo=
+dconfig-build/110/
 
 
-vim +/trace_mm_vmscan_memcg_shrink_begin +5811 mm/vmscan.c
 
-  5791	
-  5792	static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
-  5793	{
-  5794		struct mem_cgroup *target_memcg = sc->target_mem_cgroup;
-  5795		struct mem_cgroup *memcg;
-  5796	
-  5797		memcg = mem_cgroup_iter(target_memcg, NULL, NULL);
-  5798		do {
-  5799			struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
-  5800			unsigned long reclaimed;
-  5801			unsigned long scanned;
-  5802	
-  5803			/*
-  5804			 * This loop can become CPU-bound when target memcgs
-  5805			 * aren't eligible for reclaim - either because they
-  5806			 * don't have any reclaimable pages, or because their
-  5807			 * memory is explicitly protected. Avoid soft lockups.
-  5808			 */
-  5809			cond_resched();
-  5810	
-> 5811			trace_mm_vmscan_memcg_shrink_begin(memcg,
-  5812							   sc->order,
-  5813							   sc->gfp_mask);
-  5814	
-  5815			mem_cgroup_calculate_protection(target_memcg, memcg);
-  5816	
-  5817			if (mem_cgroup_below_min(target_memcg, memcg)) {
-  5818				/*
-  5819				 * Hard protection.
-  5820				 * If there is no reclaimable memory, OOM.
-  5821				 */
-  5822				continue;
-  5823			} else if (mem_cgroup_below_low(target_memcg, memcg)) {
-  5824				/*
-  5825				 * Soft protection.
-  5826				 * Respect the protection only as long as
-  5827				 * there is an unprotected supply
-  5828				 * of reclaimable memory from other cgroups.
-  5829				 */
-  5830				if (!sc->memcg_low_reclaim) {
-  5831					sc->memcg_low_skipped = 1;
-  5832					continue;
-  5833				}
-  5834				memcg_memory_event(memcg, MEMCG_LOW);
-  5835			}
-  5836	
-  5837			reclaimed = sc->nr_reclaimed;
-  5838			scanned = sc->nr_scanned;
-  5839	
-  5840			shrink_lruvec(lruvec, sc);
-  5841	
-  5842			shrink_slab(sc->gfp_mask, pgdat->node_id, memcg,
-  5843				    sc->priority);
-  5844	
-> 5845			trace_mm_vmscan_memcg_shrink_end(memcg,
-  5846							 sc->nr_reclaimed - reclaimed);
-  5847	
-  5848			/* Record the group's reclaim efficiency */
-  5849			if (!sc->proactive)
-  5850				vmpressure(sc->gfp_mask, memcg, false,
-  5851					   sc->nr_scanned - scanned,
-  5852					   sc->nr_reclaimed - reclaimed);
-  5853	
-  5854		} while ((memcg = mem_cgroup_iter(target_memcg, memcg, NULL)));
-  5855	}
-  5856	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
