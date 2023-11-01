@@ -1,92 +1,141 @@
-Received: from xmbg7.mail.qq.com (xmbg7.mail.qq.com [101.226.139.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A969210959
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 10:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9699B11CA6
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="ofa3NVzX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1698836150; bh=zxqHnohc3QyJrgxGAuUHLvaz9znCZcodlirDuVlrNpM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ofa3NVzXzs3crsQxdMJ2dHJOHmIK19JCNs4cS3B8agEZmZ7ghmPOra0sh5mxcvdR7
-	 ZQYmZniBfQ4rJcDGyqUgF05l6mXP/zHDMbXqkGSfB0adpjMu6xGnYTw+zXKQBclH1U
-	 /6WOkmpewqoRD2vrfN7eaaz8eFnK5e3t01qcQ6YE=
-Received: from pek-lxu-l1.wrs.com ([111.198.228.56])
-	by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-	id 91B9DCF2; Wed, 01 Nov 2023 14:36:27 +0800
-X-QQ-mid: xmsmtpt1698820587tde3qiqyj
-Message-ID: <tencent_2A675773C6D47370E36A4966A3BA2444F705@qq.com>
-X-QQ-XMAILINFO: OQhZ3T0tjf0a+b8I3cORjzHL+H/8FU8R7w8dJCyK3z2URSWah7YLo9RJnN4/WI
-	 syAzRfBv810nwruBwejekSLAQjoJc3QYkMW0DRB4hiAwPdcyryXuoDUdXNHvxyWfasUkzoPZPNNt
-	 ugL+xHvYNQ+XrpdgR7zybZNVHk98jxaK7RUqcUSI1aeG6R11IpOrXzALy7A+imeWf194F7d1isgV
-	 31rnFam1/ZO+sxbAGWMR3GJA7ddJ2uNkhBbXjVQN2/qAdVTmEl0t7Cao+R+Kw2f8jMHLHUhk86ym
-	 tuH3EhyISbRQLOOq2xq0kUggpU8qPxoPWqHsY9doCFOraZbIeaa3nI+GNV3DnkJQcrVrDcYO1+nP
-	 7iEU7A5EuTX4UbmCNuoR9Yzmhjz0sXG6wvKnPfogXHK3LPOOafmPPeYSUlAGtmKKEYRJY+E5bwWt
-	 HSmdredtQ5UdNLa8+uRtFzikZeT8eHxZXL93ynjfALbNTtZItNzZc7/ek9tXYGyOMhhB4MIj6phz
-	 DsKH96ZjoVqhqfkVQ2IzjTd+//YFBqL1ABZg5CzRWoj/3CG9Nv815TM6kLS/h6kAwrgfUQYl9s94
-	 oujGAs/d155okzcB8IH0wiZAf0+pYWLshsDruHtbHbPnuQ/hV2pd6L2Ifj5FglZWIhdP2tCcp41w
-	 zO7tqkFfLTUT1/j6LFn2SUEHOk/4jPkcG+uKG36ZbYi852dshCMOLiTBWD9wDJjodD45s6aH68ds
-	 WsTLv6F1VEfxWgJvlL4kVaVUnoqEWaErwoH3Rr1nZ3VIZlU64tZDbpSkmhXD21gzmvxxWWOkph/1
-	 EE6MhfEekSIJlZ/AA91XOgvkq9drc4AZnsAQNl2EPxnEYyRVgeNP/W6YmXPtDqZBGl9WIs47YJ6E
-	 s+i+zawRYQx3d7xHw11R48cggonCj51LS3oI0EwXsQBgN9Wo/bRrzP0TVnvwNV4g==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com
-Cc: akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	llvm@lists.linux.dev,
-	mike.kravetz@oracle.com,
-	muchun.song@linux.dev,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	riel@surriel.com,
-	syzkaller-bugs@googlegroups.com,
-	trix@redhat.com
-Subject: [PATCH] mm/hugetlb: fix null ptr defer in hugetlb_vma_lock_write
-Date: Wed,  1 Nov 2023 14:36:28 +0800
-X-OQ-MSGID: <20231101063627.3545950-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <00000000000078d1e00608d7878b@google.com>
-References: <00000000000078d1e00608d7878b@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FWJ28olF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1698843677;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OCTp2xql6WJT20ADorxwCGAiR0+ZNneq3CxL6CyArl4=;
+	b=FWJ28olFOpP0iPgJ2cFuaHtAXcoILqCHTeyzzQg+D2Ku0Kv3OgIXDp3QucTkWy1cJiCKz0
+	TOAWRuRZwIuyeVY/8upeAjS4F0xJ1uumwjEP4QFi2fRfOGiBpWZQz3/sOh/McGHm+gUe1n
+	kNhYkK0wDIQoCRMT6Nri7wQtH+zPCm8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-202-wvE0EKYiOVqGAIukrkLnEw-1; Wed,
+ 01 Nov 2023 09:01:14 -0400
+X-MC-Unique: wvE0EKYiOVqGAIukrkLnEw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 902C62810D52
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 13:01:14 +0000 (UTC)
+Received: from [172.64.13.10] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 77F1510F52;
+	Wed,  1 Nov 2023 13:01:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 230): Test report for master
+ (6.6.0, mainline.kernel.org-clang, 59fff63c)
+Date: Wed, 01 Nov 2023 13:01:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <44816.123110109011402773@us-mta-202.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-When obtaining resv_map from vma, it is necessary to simultaneously determine
-the flag HPAGE_RESV_OWNER of vm_private_data.
-Only when they are met simultaneously, resv_map is valid.
+Hi, we tested your kernel and here are the results:
 
-Reported-and-tested-by: syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com
-Fixes: bf4916922c60 ("hugetlbfs: extend hugetlb_vma_lock to private VMAs")
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- include/linux/hugetlb.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 47d25a5e1933..1a3ec1aee1a3 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -1265,9 +1265,11 @@ static inline bool __vma_shareable_lock(struct vm_area_struct *vma)
- 	return (vma->vm_flags & VM_MAYSHARE) && vma->vm_private_data;
- }
- 
-+#define HPAGE_RESV_OWNER    (1UL << 0)
- static inline bool __vma_private_lock(struct vm_area_struct *vma)
- {
--	return (!(vma->vm_flags & VM_MAYSHARE)) && vma->vm_private_data;
-+	return (!(vma->vm_flags & VM_MAYSHARE)) && vma->vm_private_data && 
-+		((unsigned long)vma->vm_private_data & HPAGE_RESV_OWNER);
- }
- 
- /*
--- 
-2.25.1
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'platform-drivers-x86-v6.7-1' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/112418
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                 ppc64le - kdump - sysrq-c
+                  x86_64 - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Firmware test suite: Failed to clone git git://kernel.ubuntu=
+.com/hwe/fwts.git branch V21.02.00 repository
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/878
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kdump-cki: Failed to update kernel options when running kdum=
+p service
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1766
+            Affected tests:
+                   s390x - kdump - sysrq-c
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
