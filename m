@@ -1,183 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF2310A09
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 17:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B09D15E82
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 17:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Worq+ZHw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B81C433C8;
-	Wed,  1 Nov 2023 17:07:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBDWjR+K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F51C433C8;
+	Wed,  1 Nov 2023 17:22:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698858465;
-	bh=BTFB91K5ra51OBY3zyZlQS2HSSk11fNszJgkuWJT6cc=;
+	s=k20201202; t=1698859330;
+	bh=brHv5tko/OORSsW5TTvuP0YFzFcqW9N4Y+nKs8AXnBk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Worq+ZHwfxgH12Hs6WCuba9oIWGDRjULWAmmc6dE6Wu+bXNGV0nT55LkRO1zLbUVY
-	 XRwNhJ/C/iotTs8ddj5m/l6ApSMe5+CKUfmXOX7mb8WA3cXLioEPnseuGdJ7gNe+Xp
-	 BZHfSVbdJ5Yg01o1qHTwwF8W8VJh2HyU2tA6ppWpzE8AuLdUAnIGNU/RYhxixmSUhP
-	 2ad4K/qX/4AoJBW40etCg6oWv+Ryq9Cmx/DFMyMlkoZP4kGciCuTX+FQVOehW+zBNy
-	 yGvO0SFlzpEtNOhYP5NI7It0Nz7AKt++ovbWw0/2q+e4XXPoKwCaC/zSXkdzIQaFgc
-	 8R3NDbGSwoYwg==
-Date: Wed, 1 Nov 2023 10:07:43 -0700
+	b=vBDWjR+KCY7w9fboGcsUwELTpX9Mu39kAUgNJPCsZAirjLWI+CTJbwJw2949cy5lN
+	 Vc1nHuTcAt+orFA7om/iJtPfsSFOg1/Fq+wlJc90xBabPFrr+4r8Qt6v9AOCfahphG
+	 5UT89/NIQoSfAmYBPJXb4M3gNeW1b8HrP3BMF/TMRxu4sFupU71FB45XkAU/fBqsfm
+	 g0g/1CntnzWOLsP0tgfImuaM1bXYWnDn8MKE5P24U08YsOl0hhGl4xLhbogs80Zwdj
+	 56ch00wUPPYnO5/ZCaEPuWUAiV0zknKppNt6w0R1X9SiXbXGr9UIAIxjbuDBzQxOJW
+	 1+mt1NUYbbKug==
+Date: Wed, 1 Nov 2023 10:22:08 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: linux-bcachefs@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 6/6] bcachefs: rebalance_work
-Message-ID: <20231101170743.GA1159015@dev-arch.thelio-3990X>
-References: <20231024191414.2157874-1-kent.overstreet@linux.dev>
- <20231024191414.2157874-7-kent.overstreet@linux.dev>
- <20231101170255.GA1158461@dev-arch.thelio-3990X>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: linaro-toolchain@lists.linaro.org,
+	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>, llvm@lists.linux.dev
+Subject: Re: [Linaro-TCWG-CI] v6.6-rc1-17-g1c6fdbd8f246: Failure on arm
+Message-ID: <20231101172208.GA1368360@dev-arch.thelio-3990X>
+References: <1310397379.52558.1698849730427@jenkins.jenkins>
+ <CAKwvOdmomdYWFxZO+61kFN9soaxiOGAr8dM_G80HSufJa=XGdQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231101170255.GA1158461@dev-arch.thelio-3990X>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdmomdYWFxZO+61kFN9soaxiOGAr8dM_G80HSufJa=XGdQ@mail.gmail.com>
 
-On Wed, Nov 01, 2023 at 10:02:55AM -0700, Nathan Chancellor wrote:
-> Hi Kent,
+On Wed, Nov 01, 2023 at 08:54:26AM -0700, Nick Desaulniers wrote:
+> On Wed, Nov 1, 2023 at 7:42 AM <ci_notify@linaro.org> wrote:
+> >
+> > Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+> >
+> > In CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig after:
 > 
-> On Tue, Oct 24, 2023 at 03:14:11PM -0400, Kent Overstreet wrote:
-> > This adds a new btree, rebalance_work, to eliminate scanning required
-> > for finding extents that need work done on them in the background - i.e.
-> > for the background_target and background_compression options.
-> > 
-> > rebalance_work is a bitset btree, where a KEY_TYPE_set corresponds to an
-> > extent in the extents or reflink btree at the same pos.
-> > 
-> > A new extent field is added, bch_extent_rebalance, which indicates that
-> > this extent has work that needs to be done in the background - and which
-> > options to use. This allows per-inode options to be propagated to
-> > indirect extents - at least in some circumstances. In this patch,
-> > changing IO options on a file will not propagate the new options to
-> > indirect extents pointed to by that file.
-> > 
-> > Updating (setting/clearing) the rebalance_work btree is done by the
-> > extent trigger, which looks at the bch_extent_rebalance field.
-> > 
-> > Scanning is still requrired after changing IO path options - either just
-> > for a given inode, or for the whole filesystem. We indicate that
-> > scanning is required by adding a KEY_TYPE_cookie key to the
-> > rebalance_work btree: the cookie counter is so that we can detect that
-> > scanning is still required when an option has been flipped mid-way
-> > through an existing scan.
-> > 
-> > Future possible work:
-> >  - Propagate options to indirect extents when being changed
-> >  - Add other IO path options - nr_replicas, ec, to rebalance_work so
-> >    they can be applied in the background when they change
-> >  - Add a counter, for bcachefs fs usage output, showing the pending
-> >    amount of rebalance work: we'll probably want to do this after the
-> >    disk space accounting rewrite (moving it to a new btree)
-> > 
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> ok, so ARCH=arm allmodconfig on mainline...
 > 
-> <snip>
+> >
+> >   | commit v6.6-rc1-17-g1c6fdbd8f246
+> >   | Author: Kent Overstreet <kent.overstreet@gmail.com>
+> >   | Date:   Thu Mar 16 22:18:50 2017 -0800
+> >   |
+> >   |     bcachefs: Initial commit
+> >   |
+> >   |     Initially forked from drivers/md/bcache, bcachefs is a new copy-on-write
+> >   |     filesystem with every feature you could possibly want.
+> >   |
+> >   |     Website: https://bcachefs.org
+> >   |
+> >   | ... 1 lines of the commit log omitted.
+> >
+> > Results changed to
+> > # reset_artifacts:
+> > -10
+> > # build_abe binutils:
+> > -9
+> > # build_kernel_llvm:
+> > -5
+> > # build_abe qemu:
+> > -2
+> > # linux_n_obj:
+> > 23730
+> > # First few build errors in logs:
+> >
+> > # 00:23:16 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+> > # 00:23:17 fs/bcachefs/alloc.c:332:9: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
 > 
-> > diff --git a/fs/bcachefs/reflink.c b/fs/bcachefs/reflink.c
-> > index 540c78cd4b0c..dbbdf1955f76 100644
-> > --- a/fs/bcachefs/reflink.c
-> > +++ b/fs/bcachefs/reflink.c
-> > @@ -7,6 +7,7 @@
-> >  #include "inode.h"
-> >  #include "io_misc.h"
-> >  #include "io_write.h"
-> > +#include "rebalance.h"
-> >  #include "reflink.h"
-> >  #include "subvolume.h"
-> >  #include "super-io.h"
-> > @@ -252,6 +253,7 @@ s64 bch2_remap_range(struct bch_fs *c,
-> >  	struct bpos dst_start = POS(dst_inum.inum, dst_offset);
-> >  	struct bpos src_start = POS(src_inum.inum, src_offset);
-> >  	struct bpos dst_end = dst_start, src_end = src_start;
-> > +	struct bch_io_opts opts;
-> >  	struct bpos src_want;
-> >  	u64 dst_done;
-> >  	u32 dst_snapshot, src_snapshot;
-> > @@ -269,6 +271,10 @@ s64 bch2_remap_range(struct bch_fs *c,
-> >  	bch2_bkey_buf_init(&new_src);
-> >  	trans = bch2_trans_get(c);
-> >  
-> > +	ret = bch2_inum_opts_get(trans, src_inum, &opts);
-> > +	if (ret)
-> > +		goto err;
-> > +
+> ^
+> $ file fs/bcachefs/alloc.c
+> fs/bcachefs/alloc.c: cannot open `fs/bcachefs/alloc.c' (No such file
+> or directory)
 > 
-> Not sure if this has been reported or fixed yet but this appears to
-> introduce a valid clang warning:
+> > # 00:23:17 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/alloc.o] Error 1
+> > # 00:23:29 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+> > # 00:23:30 make[4]: *** [scripts/Makefile.build:243: fs/bcachefs/bset.o] Error 1
 > 
->   fs/bcachefs/reflink.c:275:6: error: variable 'dst_done' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->     275 |         if (ret)
->         |             ^~~
->   fs/bcachefs/reflink.c:405:9: note: uninitialized use occurs here
->     405 |         return dst_done ?: ret ?: ret2;
->         |                ^~~~~~~~
->   fs/bcachefs/reflink.c:275:2: note: remove the 'if' if its condition is always false
->     275 |         if (ret)
->         |         ^~~~~~~~
->     276 |                 goto err;
->         |                 ~~~~~~~~
->   fs/bcachefs/reflink.c:258:14: note: initialize the variable 'dst_done' to silence this warning
->     258 |         u64 dst_done;
->         |                     ^
->         |                      = 0
->   1 error generated.
+> ^
+> $ make LLVM=1 ARCH=arm allmodconfig fs/bcachefs/bset.o
+>   CC [M]  fs/bcachefs/bset.o
+> $
 > 
-> I tried to reason my way through a patch but I am a little lost, hence
-> just the report :)
+> > # 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+> > # 00:23:33 fs/bcachefs/btree_cache.h:45:43: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+> > # 00:23:33 fs/bcachefs/btree_cache.c:67:9: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+> > # 00:23:33 fs/bcachefs/btree_cache.c:120:2: error: array index 0 is past the end of the array (that has type '__u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
+> > # 00:23:33 fs/bcachefs/btree_cache.c:201:6: error: array index 0 is past the end of the array (that has type 'const __u64[0]' (aka 'const unsigned long long[0]')) [-Werror,-Warray-bounds]
+> 
+> $ make LLVM=1 ARCH=arm allmodconfig fs/bcachefs/btree_cache.o
+>   CC [M]  fs/bcachefs/btree_cache.o
+> $
+> 
+> ... what's up with this report?
 
-Actually, it just seems like dst_done should be explicitly zero
-initialized, so that ret is used as the return value. Don't know why I
-was as confused as I was :) would you like a formal patch or to just
-squash it in?
+I cannot tell exactly from the information in this report but I suspect
+ARCH=arm allmodconfig is broken in mainline for other reasons (perhaps
+https://github.com/ClangBuiltLinux/linux/issues/1953?) and in trying to
+uncover that breakage in an automated fashion, it hit this build
+breakage and the bisect inadvertently switched to tracking down this
+already fixed set of warnings. I think this particular issue is resolved
+by Kent's recent array bounds fixes commit:
 
-diff --git a/fs/bcachefs/reflink.c b/fs/bcachefs/reflink.c
-index eb31df605c2e..6e1bfe9feb59 100644
---- a/fs/bcachefs/reflink.c
-+++ b/fs/bcachefs/reflink.c
-@@ -255,7 +255,7 @@ s64 bch2_remap_range(struct bch_fs *c,
- 	struct bpos dst_end = dst_start, src_end = src_start;
- 	struct bch_io_opts opts;
- 	struct bpos src_want;
--	u64 dst_done;
-+	u64 dst_done = 0;
- 	u32 dst_snapshot, src_snapshot;
- 	int ret = 0, ret2 = 0;
- 
+https://git.kernel.org/linus/5cfd69775eb5460ef78bb5034a37eb0dc52ab65d
 
-> >  	bch2_trans_iter_init(trans, &src_iter, BTREE_ID_extents, src_start,
-> >  			     BTREE_ITER_INTENT);
-> >  	bch2_trans_iter_init(trans, &dst_iter, BTREE_ID_extents, dst_start,
-> > @@ -352,10 +358,13 @@ s64 bch2_remap_range(struct bch_fs *c,
-> >  				min(src_k.k->p.offset - src_want.offset,
-> >  				    dst_end.offset - dst_iter.pos.offset));
-> >  
-> > -		ret = bch2_extent_update(trans, dst_inum, &dst_iter,
-> > -					 new_dst.k, &disk_res,
-> > -					 new_i_size, i_sectors_delta,
-> > -					 true);
-> > +		ret =   bch2_bkey_set_needs_rebalance(c, new_dst.k,
-> > +					opts.background_target,
-> > +					opts.background_compression) ?:
-> > +			bch2_extent_update(trans, dst_inum, &dst_iter,
-> > +					new_dst.k, &disk_res,
-> > +					new_i_size, i_sectors_delta,
-> > +					true);
-> >  		bch2_disk_reservation_put(c, &disk_res);
-> >  	}
-> >  	bch2_trans_iter_exit(trans, &dst_iter);
-> > @@ -386,7 +395,7 @@ s64 bch2_remap_range(struct bch_fs *c,
-> >  
-> >  		bch2_trans_iter_exit(trans, &inode_iter);
-> >  	} while (bch2_err_matches(ret2, BCH_ERR_transaction_restart));
-> > -
-> > +err:
-> >  	bch2_trans_put(trans);
-> >  	bch2_bkey_buf_exit(&new_src, c);
-> >  	bch2_bkey_buf_exit(&new_dst, c);
+Cheers,
+Nathan
+
+> >
+> > From
+> > # reset_artifacts:
+> > -10
+> > # build_abe binutils:
+> > -9
+> > # build_kernel_llvm:
+> > -5
+> > # build_abe qemu:
+> > -2
+> > # linux_n_obj:
+> > 32815
+> > # linux build successful:
+> > all
+> > # linux boot successful:
+> > boot
+> >
+> > The configuration of this build is:
+> > CI config tcwg_kernel/llvm-master-arm-mainline-allmodconfig
+> >
+> > -----------------8<--------------------------8<--------------------------8<--------------------------
+> > The information below can be used to reproduce a debug environment:
+> >
+> > Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmodconfig-build/110/artifact/artifacts
+> > Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmodconfig-build/109/artifact/artifacts
+> >
+> > Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a/tcwg_kernel/llvm-master-arm-mainline-allmodconfig/reproduction_instructions.txt
+> >
+> > Full commit : https://git.linaro.org/kernel-org/linux.git/commit/?id=1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a
+> >
+> > Latest bug report status : https://linaro.atlassian.net/browse/LLVM-1015
+> >
+> > List of configurations that regressed due to this commit :
+> > * tcwg_kernel
+> > ** llvm-master-arm-mainline-allmodconfig
+> > *** Failure
+> > *** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a/tcwg_kernel/llvm-master-arm-mainline-allmodconfig/details.txt
+> > *** https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allmodconfig-build/110/
 > 
-> Cheers,
-> Nathan
 > 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
