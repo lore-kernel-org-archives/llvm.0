@@ -1,147 +1,77 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179135680
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 09:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83914D26B
+	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 10:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HoTZfG5F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698831676;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bE6V6j+wQYWX243VyhS4tVpdkT44Z5fukmhYiZZsa18=;
-	b=HoTZfG5F/IwkhcFydDDkOsrefJFH1FAM+suZfP+opy82TDbyFBDB3WMYoKxJGfXq0htDuA
-	IIxo9/hrRhDy1aPIZ3/whl2u6pYAt5LYyBgNydSPjpuB+gbLs9fgdeYw+aeVhLrvLNJiTg
-	iqqxF0yckRBP7hVcHG7knbvjvCVWn2I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-SEbzl58ZPvy0PdLsw0Fu5A-1; Wed, 01 Nov 2023 05:41:14 -0400
-X-MC-Unique: SEbzl58ZPvy0PdLsw0Fu5A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7F2381B6EC
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 09:41:14 +0000 (UTC)
-Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 973CBC12912;
-	Wed,  1 Nov 2023 09:41:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 10 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, ad1871ad)
-Date: Wed, 01 Nov 2023 09:41:14 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g3DrfCGU"
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-7b6043d0bbeso2042513241.1
+        for <llvm@lists.linux.dev>; Wed, 01 Nov 2023 03:20:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698834033; x=1699438833; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oz6VSHMner62jDzigXvDmGikA8eTXSz2/q7goADHTxs=;
+        b=g3DrfCGUnuBeGweMV7WNVsQKrvfgHtIQdskMPLiuwkGK2pPF1+mNg7AXTicY/HmshT
+         Ayl5bWWQSzVWvtSZIy+nWJnj/zFX7CW9fN2/VQO/wqOjAa3jJygSerGZs2yhrO0dKBbV
+         OQrczLnXcnHoxxuenxd4SYmoGvj7/xsg7JG5ZqmP24JrdVSCDZGCqpKd9ENQvqUBVrBh
+         ANnBde3jZOxyaoFlExxD1/Ty4dKi2WGtJf13YnCYjm0NZ99IjfOdmF75gQw3ZUIZESO1
+         BqbvpIX2A2wj9CnBLS4EzqrqEsX9uI4uuJixbdEqDXOjx7VMLlg9JtGhu9PKTgbJzGwz
+         J13Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698834033; x=1699438833;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Oz6VSHMner62jDzigXvDmGikA8eTXSz2/q7goADHTxs=;
+        b=RON0+wWBkGqAV9RCqTtKZKOHrRnaQAXNoh4Fh0PLGPeHOFqYpt8pLEztaPxQaAkTgL
+         5IgLW+acclwdMm+Zns2cgkKWMI2XE6h0alj8xXp+EwrU0o1ADpzjhaaEYzwK/7nBAIuv
+         Jbacxlbf70rAnu4bqY3b1ZbopgnI1Ay9K3a/Ae8ZYUj/WHsth2SmSHb37d9dxXj2Cato
+         Kv9UTiWMIwpRIwIzxn8KAV9dbqDIOd+cmAK59WmKhcQrM/O5chMPfXsTDTzBo3zDjcqo
+         YkfDgnfyOvJrEaKmvHOI1h41GQANwTHuXxgx3jACaxOkqBD9yCu7BtP6/fPe8iMbqNyY
+         K+Sw==
+X-Gm-Message-State: AOJu0YyyvFoGMmhYQ5rr19tC/B6lDzaeP/HEPwKdjcd7lKwvn+XLwKak
+	ozYDrwJT0BAov8nB5wVx7WBeFmERZYc2ApAmv3vPdw==
+X-Google-Smtp-Source: AGHT+IHdsVmFFMJ9OQqgYB/RwOFuXkwU/9iXlbSEOFRRZoUtRdN6idmJL2hW80l6eDsFQldYkXn4iC8CPPcau9py4/0=
+X-Received: by 2002:a67:c38f:0:b0:452:4e56:5e19 with SMTP id
+ s15-20020a67c38f000000b004524e565e19mr9811075vsj.13.1698834033149; Wed, 01
+ Nov 2023 03:20:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <32803.123110105411401085@us-mta-664.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20231031201945.1412345-1-mmaurer@google.com>
+In-Reply-To: <20231031201945.1412345-1-mmaurer@google.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Wed, 1 Nov 2023 11:20:22 +0100
+Message-ID: <CAH5fLggk=YEtB798S+vWHV8J6GZ39rXYcvVnm1apt_BOZvAooA@mail.gmail.com>
+Subject: Re: [PATCH] rust: Ignore preserve-most functions
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Tue, Oct 31, 2023 at 9:20=E2=80=AFPM Matthew Maurer <mmaurer@google.com>=
+ wrote:
+>
+> Neither bindgen nor Rust know about the preserve-most calling
+> convention, and Clang describes it as unstable. Since we aren't using
+> functions with this calling convention from Rust, blocklist them.
+>
+> These functions are only added to the build when list hardening is
+> enabled, which is likely why others didn't notice this yet.
+>
+> Signed-off-by: Matthew Maurer <mmaurer@google.com>
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'pm-6.7-rc1' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/rafael/linux-pm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/112406
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [BUG]: amdgpu: soft lockup - RIP: 0010:find_kallsyms_symbol+=
-0x284/0x2b0
-            URL: https://lore.kernel.org/all/3a931379-42f3-ec4f-36c1-bd267d=
-d396b1@alu.unizg.hr/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                  x86_64 - kdump - sysrq-c
-        Issue: Firmware test suite: Failed to clone git git://kernel.ubuntu=
-.com/hwe/fwts.git branch V21.02.00 repository
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/878
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump-cki: Failed to update kernel options when running kdum=
-p service
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1766
-            Affected tests:
-                   s390x - kdump - sysrq-c
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
