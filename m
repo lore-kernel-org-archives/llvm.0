@@ -1,202 +1,136 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF1214A99
-	for <llvm@lists.linux.dev>; Wed,  1 Nov 2023 21:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFACD10E7
+	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 00:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hwEpURac"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-408c6ec1fd1so8885e9.1
-        for <llvm@lists.linux.dev>; Wed, 01 Nov 2023 14:21:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="cC5Uu6py"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1ea4a3d0a44so262483fac.1
+        for <llvm@lists.linux.dev>; Wed, 01 Nov 2023 17:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698873677; x=1699478477; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f/fgQN3OiJHDfVP9Qm+7+ddepIqX7bLr4xuUu++WmEw=;
-        b=hwEpURacGJDUDYgG47LKe8nyX2OXM8DbJk39qO8HQyIcAI2IGysYjTmoSvbM/hqCiK
-         XCXDG5wStH5C/aXGmAWRzd6eI54OFNeVw/aM1PElD3P2YmBKG7MOjVr5t+Lummq/XqCs
-         /LfDoJ9JGyYZRGI8oLjsxNokWxosXmLtV/lxXD+W6I25zgjeQUZsOPjRNqZpxF/y71UW
-         ABcJrA0DBWPwTrQxQ0SHm0JHqUnURtIKhdc3BcYpdgKjb7lNHh9jaXAZTPeVrmujPPFd
-         hmJ7SFOoWGqckfyYzydFcGM/NLvlbKLCYzOVgcX09r5ehOw1x4jKAAUBd2fD4yYQcbGF
-         q7Mw==
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1698885671; x=1699490471; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PAmpgjdK8hmw86qRod49rM//sCJ8Bz8+YBV91rFwGG4=;
+        b=cC5Uu6pyHI3eA2hX+kMjdRZv9LXDsKgAJZxc4pYfJA+rK2lN1UeMv5OT8h1Vv23BED
+         M9dqgP0PAAxDLqusn9iMLFYUJBSelMBiqcjGUBiZ+b3CFxvv1pkEN/scFDVuyNY9rjiY
+         mChWkqlqCHdzEnPVi2gpviyuC8spAQ8kz80UJ5G33kBpeKRsGjB1cX2Dqmtva59TGdeC
+         gbHMGnaTjQyJY0pVJxiSqhuu0TobClpakNr/UUp7qXrDbzCgojtdsPq/oGs7XWv0pQHK
+         MbzGFcf+YyXErzGBzxwYAZ0tPITDxGiARehyqoh5koctrpex+k/L5cOQahXvUa5T5xQN
+         P0/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698873677; x=1699478477;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f/fgQN3OiJHDfVP9Qm+7+ddepIqX7bLr4xuUu++WmEw=;
-        b=SvEcaSyvaUEm7yBFwqb7o6WmS+a9k2XsAawNssDhF0rgGITLCMFCygRP1B+qZS3sRQ
-         V0bhL9b7tKxSO6g/8jjkKHTfCvCVt5h91xsR7SGBjo76QWAwrXSbZO/n6HBGSlh0br9h
-         zvGrEYEQgKGiytWn6ixhRsQrFXVCdBH92hA0KOMQ9YYMX3YhOcibzZolfORFFtvtEyyE
-         eev7pJfNRHEmrhyagxTvNp4wQ2fils9bcutLmFogKp4FEfjJLRSDd0vumqU/Ud0ihSxd
-         ERYpAj4u7vkbYxNlyCYf15OEnoMdLNB6+a8NwSlbBczwWkgmdigdDvanIleOfuI+la44
-         ouGg==
-X-Gm-Message-State: AOJu0YwIYYhSj6+QJs0/yCntN/uh/aWa2zRrYJRTxTRFuT4WH1zFMSlA
-	sxlTwyG1E7i0g7rp9yy5pb7iJ2YZIJeprxmdIygM6g==
-X-Google-Smtp-Source: AGHT+IErwiBtm/Iq7gh7Pimz2BlqwC73ys4XaTwiWhe4e9HbmDAvvbGZDCCNxxgIROWS+6kblfzTCh9GPcxBXEqbkXI=
-X-Received: by 2002:a05:600c:78a:b0:408:3727:92c5 with SMTP id
- z10-20020a05600c078a00b00408372792c5mr267073wmo.2.1698873676580; Wed, 01 Nov
- 2023 14:21:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698885671; x=1699490471;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PAmpgjdK8hmw86qRod49rM//sCJ8Bz8+YBV91rFwGG4=;
+        b=KD/kLl1O5Cf0b73jNmNROGe585kroCgd01UFzZDOnkfpax+iotOFUwTLESlUYzRGiQ
+         Ca/OrMJAlD5To5UDVoX++qhPO4l4uYpoNK0kahuxiEb3w5i7nSGpdWgVBYCYENXXzBzR
+         idX+UDjJKFCX1DmqQE0I/XLnfnyTgODLPR6bHJh6iWKgUNNvfyDGdp7jvhjyRp49vcgv
+         0fg0rd32arDs+eDjf5Hn5zqMkDRbyMhm6iGYWs+lnICDCHngc5Wv1rV/z5WQKgeBlOzK
+         4eTAKMV4ewKicVq3tHLj/bwCa9cZQYbE+mXInLtu+6bi2b3/2vxzHcHNCuevzX3lENPy
+         DQwg==
+X-Gm-Message-State: AOJu0YyVjxCeAdaTH1Hsd0qL1QECsv8zI2OVIMTvdULYbmb/YlSvdG+g
+	4niYwqNbb23QYfvIHiCdQ77TYg==
+X-Google-Smtp-Source: AGHT+IFFaftpgSzJhJuGLJNG/sHeW9v22Ui/IWzm0dd7hWk1pkaNfdav4oOzey1zsg3meE6Ku8MPMQ==
+X-Received: by 2002:a05:6871:528e:b0:1ea:6883:9a01 with SMTP id hu14-20020a056871528e00b001ea68839a01mr24276948oac.32.1698885670962;
+        Wed, 01 Nov 2023 17:41:10 -0700 (PDT)
+Received: from localhost ([12.44.203.122])
+        by smtp.gmail.com with ESMTPSA id s15-20020a63b40f000000b00588e8421fa8sm308240pgf.84.2023.11.01.17.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Nov 2023 17:41:10 -0700 (PDT)
+Date: Wed, 01 Nov 2023 17:41:10 -0700 (PDT)
+X-Google-Original-Date: Wed, 01 Nov 2023 17:31:33 PDT (-0700)
+Subject:     Re: [PATCH net] tcp: Fix -Wc23-extensions in tcp_options_write()
+In-Reply-To: <20231031-tcp-ao-fix-label-in-compound-statement-warning-v1-1-c9731d115f17@kernel.org>
+CC: edumazet@google.com, davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
+  pabeni@redhat.com, ndesaulniers@google.com, trix@redhat.com, 0x7f454c46@gmail.com,
+  fruggeri@arista.com, noureddine@arista.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev, patches@lists.linux.dev, nathan@kernel.org
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: nathan@kernel.org
+Message-ID: <mhng-df0ad8f4-f79c-427c-9798-8682fca4f516@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20231026160100.195099-6-brgerst@gmail.com> <202310290927.2MuJJdu9-lkp@intel.com>
- <CAMzpN2iUrfnuGQ9eFTr=NTeC6KSUPC37Qji5_g5MWejmXnXO3A@mail.gmail.com>
- <CAMzpN2jbA=ZCbbFq=gyVAtKBr4kyYcNPLpWaEcAhEAN2J0wwTw@mail.gmail.com>
- <CAKwvOd=+MEv9aQAS91KT-Ov3N8f8XRPE3WTEwvJyom=PTCmUeQ@mail.gmail.com> <CAMzpN2iF9-AdEcpkGOVooAn_6XTYaOb6gM+GYqy2SOc0S+dRqQ@mail.gmail.com>
-In-Reply-To: <CAMzpN2iF9-AdEcpkGOVooAn_6XTYaOb6gM+GYqy2SOc0S+dRqQ@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Wed, 1 Nov 2023 14:21:02 -0700
-Message-ID: <CAFP8O3+vA_+nGH1e27czWC0EbxCoNpQOu9wFxEDEgqbdkoL1VA@mail.gmail.com>
-Subject: Re: [PATCH v2 05/11] x86/stackprotector/64: Convert stack protector
- to normal percpu variable
-To: Brian Gerst <brgerst@gmail.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org, 
-	x86@kernel.org, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 30, 2023 at 10:19=E2=80=AFAM Brian Gerst <brgerst@gmail.com> wr=
-ote:
+On Tue, 31 Oct 2023 13:23:35 PDT (-0700), nathan@kernel.org wrote:
+> Clang warns (or errors with CONFIG_WERROR=y) when CONFIG_TCP_AO is set:
 >
-> On Mon, Oct 30, 2023 at 11:24=E2=80=AFAM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Sun, Oct 29, 2023 at 10:01=E2=80=AFAM Brian Gerst <brgerst@gmail.com=
-> wrote:
-> > >
-> > > On Sun, Oct 29, 2023 at 2:56=E2=80=AFAM Brian Gerst <brgerst@gmail.co=
-m> wrote:
-> > > >
-> > > > On Sat, Oct 28, 2023 at 9:26=E2=80=AFPM kernel test robot <lkp@inte=
-l.com> wrote:
-> > > > >
-> > > > > Hi Brian,
-> > > > >
-> > > > > kernel test robot noticed the following build errors:
-> > > > >
-> > > > > [auto build test ERROR on tip/master]
-> > > > > [also build test ERROR on next-20231027]
-> > > > > [cannot apply to tip/x86/core dennis-percpu/for-next linus/master=
- tip/auto-latest v6.6-rc7]
-> > > > > [If your patch is applied to the wrong git tree, kindly drop us a=
- note.
-> > > > > And when submitting patch, we suggest to use '--base' as document=
-ed in
-> > > > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > > > >
-> > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Gers=
-t/x86-stackprotector-32-Remove-stack-protector-test-script/20231027-000533
-> > > > > base:   tip/master
-> > > > > patch link:    https://lore.kernel.org/r/20231026160100.195099-6-=
-brgerst%40gmail.com
-> > > > > patch subject: [PATCH v2 05/11] x86/stackprotector/64: Convert st=
-ack protector to normal percpu variable
-> > > > > config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/arc=
-hive/20231029/202310290927.2MuJJdu9-lkp@intel.com/config)
-> > > > > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-proj=
-ect.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> > > > > reproduce (this is a W=3D1 build): (https://download.01.org/0day-=
-ci/archive/20231029/202310290927.2MuJJdu9-lkp@intel.com/reproduce)
-> > > > >
-> > > > > If you fix the issue in a separate patch/commit (i.e. not just a =
-new version of
-> > > > > the same patch/commit), kindly add following tags
-> > > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202310290927.2MuJ=
-Jdu9-lkp@intel.com/
-> > > > >
-> > > > > All errors (new ones prefixed by >>):
-> > > > >
-> > > > > >> Unsupported relocation type: unknown type rel type name (42)
-> > > >
-> > > > Clang is generating a new relocation type (R_X86_64_REX_GOTPCRELX)
-> > > > that the relocs tool doesn't know about.  This is supposed to allow
-> > > >         movq    __stack_chk_guard@GOTPCREL(%rip), %rax
-> > > >         movq    %gs:(%rax), %rax
-> > > > to be relaxed to
-> > > >         leaq    __stack_chk_guard(%rip), %rax
-> > > >         movq    %gs:(%rax), %rax
-> > > >
-> > > > But why is clang doing this instead of what GCC does?
-> > > >         movq    %gs:__stack_chk_guard(%rip), %rax
-
-https://github.com/llvm/llvm-project/issues/60116 has some discussions
-on this topic.
-
-clang-16 -fno-pic -fstack-protector -mstack-protector-guard-reg=3Dgs
--mstack-protector-guard-symbol=3D__stack_chk_guard
-uses a GOT-generating relocation for __stack_chk_guard. This avoids a
-copy relocation for userspace but the kernel seems to really want an
-absolute relocation,
-so https://reviews.llvm.org/D150841 (milestone: clang 17) has implemented i=
-t.
-
-> If an `R_X86_64_32` relocation is used and `__stack_chk_guard` is defined=
- by a shared object, copy relocation. We will need an ELF hack called [copy=
- relocation](https://maskray.me/blog/2021-01-09-copy-relocations-canonical-=
-plt-entries-and-protected).
-
-> > > Digging a bit deeper, there also appears to be differences in how the
-> > > linkers behave with this new relocation:
-> > >
-> > > make CC=3Dclang LD=3Dld:
-> > > ffffffff81002838:       48 c7 c0 c0 5c 42 83    mov    $0xffffffff834=
-25cc0,%rax
-> > >                         ffffffff8100283b: R_X86_64_32S  __stack_chk_g=
-uard
-> > > ffffffff8100283f:       65 48 8b 00             mov    %gs:(%rax),%ra=
-x
-> > >
-> > > make CC=3Dclang LD=3Dld.lld:
-> > > ffffffff81002838:       48 8d 05 81 34 42 02    lea
-> > > 0x2423481(%rip),%rax        # ffffffff83425cc0 <__stack_chk_guard>
-> > >                         ffffffff8100283b: R_X86_64_REX_GOTPCRELX
-> > >  __stack_chk_guard-0x4
-> > > ffffffff8100283f:       65 48 8b 00             mov    %gs:(%rax),%ra=
-x
-> > >
-> > > The LLVM linker keeps the R_X86_64_REX_GOTPCRELX even after performin=
-g
-> > > the relaxation.  It should be R_X86_64_32S based on it changing to an
-> > > LEA instruction.  The GNU linker changes it to R_X86_64_32S and a MOV
-> > > immediate.
+>   net/ipv4/tcp_output.c:663:2: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
+>     663 |         }
+>         |         ^
+>   1 error generated.
 >
-> Correction:  It should be R_X86_64_PC32 for the LEA instruction.
+> On earlier releases (such as clang-11, the current minimum supported
+> version for building the kernel) that do not support C23, this was a
+> hard error unconditionally:
 >
-> Brian Gerst
-
-Whether --emit-relocs converts the original relocation type is debatable.
-I have some comments on a similar topic on RISC-V:
-https://sourceware.org/bugzilla/show_bug.cgi?id=3D30844#c6
-
-> So it seems that ppc performed conversion can all be described by existin=
-g relocation types, which is nice.
+>   net/ipv4/tcp_output.c:663:2: error: expected statement
+>           }
+>           ^
+>   1 error generated.
 >
-> However, I do not know whether the property will hold for all current and=
- future RISC-V relaxation schemes.
+> Add a semicolon after the label to create an empty statement, which
+> resolves the warning or error for all compilers.
 >
-> When investigating relocation overflow pressure for x86-64 small code mod=
-el, I have found that preserving the original relocation type gives me more=
- information: I can tell how
-many R_X86_64_PC32/R_X86_64_GOTPCRELX/R_X86_64_REX_GOTPCRELX are
-problematic. If they are converted to R_X86_64_PC32/R_X86_64_32, I'd
-lose some information.
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1953
+> Fixes: 1e03d32bea8e ("net/tcp: Add TCP-AO sign to outgoing packets")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  net/ipv4/tcp_output.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Perhaps whether the --emit-relocs uses the original relocation type or th=
-e transformed relocation type , does not matter for the majority of use cas=
-es. E.g. Linux kernel's objtool, seems to perform a sanity check on relocat=
-ions. It just needs to know the categories of relocations, e.g. absolute/PC=
--relative, not the exact type.
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index f558c054cf6e..6064895daece 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -658,7 +658,7 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+>  			memset(ptr, TCPOPT_NOP, sizeof(*ptr));
+>  			ptr++;
+>  		}
+> -out_ao:
+> +out_ao:;
+>  #endif
+>  	}
+>  	if (unlikely(opts->mss)) {
+>
+> ---
+> base-commit: 55c900477f5b3897d9038446f72a281cae0efd86
+> change-id: 20231031-tcp-ao-fix-label-in-compound-statement-warning-ebd6c9978498
+>
+> Best regards,
 
+This gives me a
 
+linux/net/ipv4/tcp_output.c:663:2: error: expected statement
+        }
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+on GCC for me.  So I think something like
+
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index f558c054cf6e..ca09763acaa8 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -659,6 +659,11 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+ 			ptr++;
+ 		}
+ out_ao:
++	/*
++	 * Labels at the end of compound statements are a C23 feature, so
++	 * introduce a block to avoid a warning/error on strict toolchains.
++	 */
++	{}
+ #endif
+ 	}
+ 	if (unlikely(opts->mss)) {
+
+should do it (though it's still build testing...)
