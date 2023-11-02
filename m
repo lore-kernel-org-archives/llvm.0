@@ -1,266 +1,164 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D13168AF
-	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 12:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C7F18E17
+	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 12:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FPUQNteK"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1cc411be7e5so73775ad.1
-        for <llvm@lists.linux.dev>; Thu, 02 Nov 2023 05:15:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ENsA1eyN"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40839807e82so5594695e9.0
+        for <llvm@lists.linux.dev>; Thu, 02 Nov 2023 05:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698927324; x=1699532124; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BLtki7Tvhg3cfynKI8VTWZvTXZqgVOp4BvlKQ89Tgq8=;
-        b=FPUQNteKrHUGb4CCEkGtq240JZJkc1LN/v21De0FP9gWSHje19+3ujBsQMZWn7Xx1e
-         ZW/5Zzsgtu34aqk6DAZ0A5H3upHirabq+dNeSY6cw5397VwpuEWxeneTHiQvL0mAlZHq
-         EF4ztbBSGCzwygC3kIPBE3BwDSCKaVlFI22pQG6/ffi0OV0GYouxuWyM/VSY93hm1SgT
-         Zrb3hqBbBoh0b/VgP+JdzFUV9VkiDTcVXz+qWArFDWkihnfUhi5O49cjUCiWrwfa6pQw
-         r2kkGdSMHXYVDWSf9LFQ0zpQlDWyWiEamzG7Ph7T7xH2BWXeae+QEw06zYqA0uFo6aMM
-         iNjg==
+        d=gmail.com; s=20230601; t=1698928244; x=1699533044; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8ZqG4eXApU2XHK/8xC8VON8f1IHU1prc7SAhVA2sCKE=;
+        b=ENsA1eyNMAye7LPW2SA0ty3CdSJhWp3F/vFteH+SDFFdyINFawQsfpl6OYN2aAqIOQ
+         c+dCX1e8z5BjdlKXs45LTpGS889yFtZae1IcuOIoBqUmLci/A56VTWuufmzEMcvdwVC+
+         ReEtvb1J+QlxZ6O+W0N8RFH3zF+9uOTF3oXG00Ard7p7/MtmjP2ltg2mGFHsBCYc477s
+         zrlFMQFYppZs2XIUCOqD583ol0DwWeClm2oo27UVA8gbFWE/x8XDJCNA9UddfWjNSKHI
+         YMafQLVq7sUx8rE/+/QXLC7p6BMcoc7wMDa5y89++jOHrIKcNl2Wz3PXGzkK14H9I+Nj
+         qUmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698927324; x=1699532124;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BLtki7Tvhg3cfynKI8VTWZvTXZqgVOp4BvlKQ89Tgq8=;
-        b=EeBfnYTy00PbNSeMXZGBSnOoYYi+lpHQfX0b+Vu+XvxKW7xMWJGTkJToxt4jtl7PrA
-         p4GYTFtAm2RpklZaAynLH5uJFsZxQqcZHj81DHuk84I+VdBfJ2ZMkEI6Lg+hYtD8CoPx
-         nMw6w2BuJJuxc0hDFMAJD5dwrp4j+/VcVRxl6Qn2OzsW3V321wnJlNHET1XvJo0+DiYq
-         1uNhuVLVHQPwd4CDF4Vz0lh5i3Q0LR70aQsj/Kcv6DtDqPx9aEh3UEYNhXBVnENUCoxt
-         wscwulBC/1UO/Vz4vNf2hdtrNKj2sk9cRdFwaWcAo5y8x49hgX1aTrKLYcr27lSkUOzd
-         MVSw==
-X-Gm-Message-State: AOJu0YwIHE8F51aCdTVuntOSp0KqYtSdplFHto+CTXNsekUXjcinEwfg
-	aaHQG3tyC/xRHU3GCz9t4tI/6SLTtYjpDDF/Lz9U/g==
-X-Google-Smtp-Source: AGHT+IGwx2rPuQQagIfl/7Tfoni/vWt4ouxXSpYmUpUnYMQOYasHa7WI2v13oUvPw5v+Me6ibxgqoaXuJZQNUf3jy+0=
-X-Received: by 2002:a17:902:c254:b0:1bc:8e52:575b with SMTP id
- 20-20020a170902c25400b001bc8e52575bmr106919plg.6.1698927323440; Thu, 02 Nov
- 2023 05:15:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698928244; x=1699533044;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ZqG4eXApU2XHK/8xC8VON8f1IHU1prc7SAhVA2sCKE=;
+        b=EyhiurQbFOo6GGHX3/udjwv9QXdq0/tw1FeUXA9iil7ZkeV465zz3Ih39cjatBgkHw
+         Vo76yv4ob54odmIU4VCJ6EYTRyNER2leiBZByFwljjOhi4JxAj6fseI/cfijUy2uW7Q3
+         wiOLBAusa0LTlC83Gf445FBBq/P0xOnzImxSPeeww3MErziJgNe9cqqtID86gwH18fv1
+         Gjl5f2eLCZ21Xt6YT7Y+F9E4YkYLU0c+B81JsE2d6CXdLfEHH8deGV6WQA/SShFlQ5cc
+         yCQnsaKBvi+wUlihl8+bqDqrflFyPiYldj90DsH0cC6RHBxEWStElhNFoHb2Yo8N4to6
+         b6gA==
+X-Gm-Message-State: AOJu0Yxb3veiKKox1NNldPEmFz/CihV2JjhaEAz7AfFjW84RR5zwnzyx
+	KKUdnvDkRu2eOAz/bMWSh4Q=
+X-Google-Smtp-Source: AGHT+IF1JMuTcXHQV9/CxVeYbs66Idurde2ayMH9TFHtm2fwrzB74rfAHR3+dnuRM7ZrKFmvRxuQ3w==
+X-Received: by 2002:a05:600c:2214:b0:408:33ba:569a with SMTP id z20-20020a05600c221400b0040833ba569amr6627963wml.8.1698928243923;
+        Thu, 02 Nov 2023 05:30:43 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id fm15-20020a05600c0c0f00b003fee6e170f9sm2768435wmb.45.2023.11.02.05.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Nov 2023 05:30:43 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 2 Nov 2023 13:30:41 +0100
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
+	Anders Roxell <anders.roxell@linaro.org>, llvm@lists.linux.dev,
+	Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH v2] tools/build: Add clang cross-compilation flags to
+ feature detection
+Message-ID: <ZUOWcXDpCOzxbFW0@krava>
+References: <20231102103252.247147-1-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <00000000000078d1e00608d7878b@google.com> <bce5df0508221ab30a1fb121a219034631abedf5.camel@surriel.com>
-In-Reply-To: <bce5df0508221ab30a1fb121a219034631abedf5.camel@surriel.com>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Thu, 2 Nov 2023 13:15:11 +0100
-Message-ID: <CANp29Y6TXkZzRLCFWRMQ6ORSz+hK5qQ2DaF7esNsLnZ0c2BcMA@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] general protection fault in hugetlb_vma_lock_write
-To: Rik van Riel <riel@surriel.com>
-Cc: syzbot <syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com>, 
-	akpm@linux-foundation.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	llvm@lists.linux.dev, mike.kravetz@oracle.com, muchun.song@linux.dev, 
-	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231102103252.247147-1-bjorn@kernel.org>
 
-On Tue, Oct 31, 2023 at 7:39=E2=80=AFPM Rik van Riel <riel@surriel.com> wro=
-te:
->
-> On Sun, 2023-10-29 at 02:27 -0700, syzbot wrote:
-> >
-> > commit bf4916922c60f43efaa329744b3eef539aa6a2b2
-> > Author: Rik van Riel <riel@surriel.com>
-> > Date:   Fri Oct 6 03:59:07 2023 +0000
-> >
-> >     hugetlbfs: extend hugetlb_vma_lock to private VMAs
-> >
->
-> I've been trying to reproduce the issue here, but the test
-> case has been running for 4+ hours now on a KVM guest, with
-> KASAN and CONFIG_PROVE_LOCKING enabled. No crashes yet.
+On Thu, Nov 02, 2023 at 11:32:52AM +0100, Björn Töpel wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
+> 
+> When a tool cross-build has LLVM=1 set, the clang cross-compilation
+> flags are not passed to the feature detection build system. This
+> results in the host's features are detected instead of the targets.
+> 
+> E.g, triggering a cross-build of bpftool:
+> 
+>   cd tools/bpf/bpftool
+>   make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- LLVM=1
+> 
+> would report the host's, and not the target's features.
+> 
+> Correct the issue by passing the CLANG_CROSS_FLAGS variable to the
+> feature detection makefile.
+> 
+> Fixes: cebdb7374577 ("tools: Help cross-building with clang")
+> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 
-FWIW you may also try to use the syzbot-built kernel shared via the
-"Downloadable assets" section[1]. I've just run the C repro against it
-and it crashed immediately.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-[   66.222816][ T5095] general protection fault, probably for
-non-canonical address 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
-[   66.227224][ T5095] KASAN: null-ptr-deref in range
-[0x00000000000000e8-0x00000000000000ef]
-[   66.230109][ T5095] CPU: 0 PID: 5095 Comm: repro Not tainted
-6.6.0-rc7-syzkaller-00142-g888cf78c29e2 #0
+jirka
 
-[1] Here are the instructions with commands to copy-paste:
-https://github.com/google/syzkaller/blob/master/docs/syzbot_assets.md
-
---=20
-Aleksandr
-
->
-> I'll try adapting the config file from syzkaller so the
-> resulting kernel boots here, but this is not looking like
-> an easy reproducer so far...
->
-> The crash is also confusing me somewhat, because it looks
-> like hugetlb_vma_lock_write() is passing a nonsense (very small
-> value) resv_map->rw_sema pointer down to down_write, but the
-> code has some protection against that:
->
-> static inline bool __vma_private_lock(struct vm_area_struct *vma)
-> {
->         return (!(vma->vm_flags & VM_MAYSHARE)) && vma-
-> >vm_private_data;
-> }
->
-> void hugetlb_vma_lock_write(struct vm_area_struct *vma)
-> {
->         if (__vma_shareable_lock(vma)) {
->                 struct hugetlb_vma_lock *vma_lock =3D vma-
-> >vm_private_data;
->
->                 down_write(&vma_lock->rw_sema);
->         } else if (__vma_private_lock(vma)) {
->                 struct resv_map *resv_map =3D vma_resv_map(vma);
->
->                 down_write(&resv_map->rw_sema);
->         }
-> }
->
-> At fork time, vma->vm_private_data gets cleared in the child
-> process for MAP_PRIVATE hugetlb VMAs.
->
-> I do not see anything that would leave behind a tiny, but
-> non-zero value in that pointer.
->
-> I'll keep poking at this, but I don't know if it will
-> reproduce here.
->
-> > general protection fault, probably for non-canonical address
-> > 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
-> > KASAN: null-ptr-deref in range [0x00000000000000e8-
-> > 0x00000000000000ef]
-> > CPU: 0 PID: 5048 Comm: syz-executor139 Not tainted 6.6.0-rc7-
-> > syzkaller-00142-g888cf78c29e2 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine,
-> > BIOS Google 10/09/2023
-> > RIP: 0010:__lock_acquire+0x109/0x5de0 kernel/locking/lockdep.c:5004
-> > Code: 45 85 c9 0f 84 cc 0e 00 00 44 8b 05 c1 1e 42 0b 45 85 c0 0f 84
-> > be 0d 00 00 48 ba 00 00 00 00 00 fc ff df 4c 89 d1 48 c1 e9 03 <80>
-> > 3c 11 00 0f 85 e8 40 00 00 49 81 3a a0 d9 5f 90 0f 84 96 0d 00
-> > RSP: 0018:ffffc90003aa7798 EFLAGS: 00010016
-> >
-> > RAX: ffff88807a0b9dc0 RBX: 1ffff92000754f23 RCX: 000000000000001d
-> > RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 00000000000000e8
-> > RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-> > R10: 00000000000000e8 R11: 0000000000000000 R12: 0000000000000000
-> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > FS:  0000000000000000(0000) GS:ffff8880b9800000(0000)
-> > knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000000020000280 CR3: 00000000758bf000 CR4: 0000000000350ef0
-> > Call Trace:
-> >  <TASK>
-> >  lock_acquire kernel/locking/lockdep.c:5753 [inline]
-> >  lock_acquire+0x1ae/0x510 kernel/locking/lockdep.c:5718
-> >  down_write+0x93/0x200 kernel/locking/rwsem.c:1573
-> >  hugetlb_vma_lock_write mm/hugetlb.c:300 [inline]
-> >  hugetlb_vma_lock_write+0xae/0x100 mm/hugetlb.c:291
-> >  __hugetlb_zap_begin+0x1e9/0x2b0 mm/hugetlb.c:5447
-> >  hugetlb_zap_begin include/linux/hugetlb.h:258 [inline]
-> >  unmap_vmas+0x2f4/0x470 mm/memory.c:1733
-> >  exit_mmap+0x1ad/0xa60 mm/mmap.c:3230
-> >  __mmput+0x12a/0x4d0 kernel/fork.c:1349
-> >  mmput+0x62/0x70 kernel/fork.c:1371
-> >  exit_mm kernel/exit.c:567 [inline]
-> >  do_exit+0x9ad/0x2a20 kernel/exit.c:861
-> >  __do_sys_exit kernel/exit.c:991 [inline]
-> >  __se_sys_exit kernel/exit.c:989 [inline]
-> >  __x64_sys_exit+0x42/0x50 kernel/exit.c:989
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7ff2b7a78ab9
-> > Code: Unable to access opcode bytes at 0x7ff2b7a78a8f.
-> > RSP: 002b:00007fff926ea6b8 EFLAGS: 00000246 ORIG_RAX:
-> > 000000000000003c
-> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff2b7a78ab9
-> > RDX: 00007ff2b7ab23f3 RSI: 0000000000000000 RDI: 0000000000000000
-> > RBP: 000000000000cfda R08: 0000000000000000 R09: 0000000000000006
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff926ea6cc
-> > R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
-> >  </TASK>
-> > Modules linked in:
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:__lock_acquire+0x109/0x5de0 kernel/locking/lockdep.c:5004
-> > Code: 45 85 c9 0f 84 cc 0e 00 00 44 8b 05 c1 1e 42 0b 45 85 c0 0f 84
-> > be 0d 00 00 48 ba 00 00 00 00 00 fc ff df 4c 89 d1 48 c1 e9 03 <80>
-> > 3c 11 00 0f 85 e8 40 00 00 49 81 3a a0 d9 5f 90 0f 84 96 0d 00
-> > RSP: 0018:ffffc90003aa7798 EFLAGS: 00010016
-> > RAX: ffff88807a0b9dc0 RBX: 1ffff92000754f23 RCX: 000000000000001d
-> > RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 00000000000000e8
-> > RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-> > R10: 00000000000000e8 R11: 0000000000000000 R12: 0000000000000000
-> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > FS:  0000000000000000(0000) GS:ffff8880b9800000(0000)
-> > knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000000020000280 CR3: 00000000758bf000 CR4: 0000000000350ef0
-> > ----------------
-> > Code disassembly (best guess):
-> >    0:   45 85 c9                test   %r9d,%r9d
-> >    3:   0f 84 cc 0e 00 00       je     0xed5
-> >    9:   44 8b 05 c1 1e 42 0b    mov    0xb421ec1(%rip),%r8d        #
-> > 0xb421ed1
-> >   10:   45 85 c0                test   %r8d,%r8d
-> >   13:   0f 84 be 0d 00 00       je     0xdd7
-> >   19:   48 ba 00 00 00 00 00    movabs $0xdffffc0000000000,%rdx
-> >   20:   fc ff df
-> >   23:   4c 89 d1                mov    %r10,%rcx
-> >   26:   48 c1 e9 03             shr    $0x3,%rcx
-> > * 2a:   80 3c 11 00             cmpb   $0x0,(%rcx,%rdx,1) <--
-> > trapping instruction
-> >   2e:   0f 85 e8 40 00 00       jne    0x411c
-> >   34:   49 81 3a a0 d9 5f 90    cmpq   $0xffffffff905fd9a0,(%r10)
-> >   3b:   0f                      .byte 0xf
-> >   3c:   84                      .byte 0x84
-> >   3d:   96                      xchg   %eax,%esi
-> >   3e:   0d                      .byte 0xd
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > For information about bisection process see:
-> > https://goo.gl/tpsmEJ#bisection
-> >
-> > If the bug is already fixed, let syzbot know by replying with:
-> > #syz fix: exact-commit-title
-> >
-> > If you want syzbot to run the reproducer, reply with:
-> > #syz test: git://repo/address.git branch-or-commit-hash
-> > If you attach or paste a git patch, syzbot will apply it before
-> > testing.
-> >
-> > If you want to overwrite bug's subsystems, reply with:
-> > #syz set subsystems: new-subsystem
-> > (See the list of subsystem names on the web dashboard)
-> >
-> > If the bug is a duplicate of another bug, reply with:
-> > #syz dup: exact-subject-of-another-report
-> >
-> > If you want to undo deduplication, reply with:
-> > #syz undup
-> >
->
-> --
-> All Rights Reversed.
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/bce5df0508221ab30a1fb121a219034631abedf5.camel%40surriel.c=
-om.
+> ---
+>  tools/build/Makefile.feature |  2 +-
+>  tools/build/feature/Makefile | 12 ++++++------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+> index 934e2777a2db..25b009a6c05f 100644
+> --- a/tools/build/Makefile.feature
+> +++ b/tools/build/Makefile.feature
+> @@ -8,7 +8,7 @@ endif
+>  
+>  feature_check = $(eval $(feature_check_code))
+>  define feature_check_code
+> -  feature-$(1) := $(shell $(MAKE) OUTPUT=$(OUTPUT_FEATURES) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" CXXFLAGS="$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS="$(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir) $(OUTPUT_FEATURES)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
+> +  feature-$(1) := $(shell $(MAKE) OUTPUT=$(OUTPUT_FEATURES) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" CXXFLAGS="$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS="$(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" CLANG_CROSS_FLAGS="$(CLANG_CROSS_FLAGS)" -C $(feature_dir) $(OUTPUT_FEATURES)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
+>  endef
+>  
+>  feature_set = $(eval $(feature_set_code))
+> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> index dad79ede4e0a..c4458345e564 100644
+> --- a/tools/build/feature/Makefile
+> +++ b/tools/build/feature/Makefile
+> @@ -84,12 +84,12 @@ PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+>  
+>  all: $(FILES)
+>  
+> -__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.c,$(@F)) $(LDFLAGS)
+> +__BUILD = $(CC) $(CFLAGS) $(CLANG_CROSS_FLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.c,$(@F)) $(LDFLAGS)
+>    BUILD = $(__BUILD) > $(@:.bin=.make.output) 2>&1
+>    BUILD_BFD = $(BUILD) -DPACKAGE='"perf"' -lbfd -ldl
+>    BUILD_ALL = $(BUILD) -fstack-protector-all -O2 -D_FORTIFY_SOURCE=2 -ldw -lelf -lnuma -lelf -lslang $(FLAGS_PERL_EMBED) $(FLAGS_PYTHON_EMBED) -DPACKAGE='"perf"' -lbfd -ldl -lz -llzma -lzstd -lcap
+>  
+> -__BUILDXX = $(CXX) $(CXXFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.cpp,$(@F)) $(LDFLAGS)
+> +__BUILDXX = $(CXX) $(CXXFLAGS) $(CLANG_CROSS_FLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.cpp,$(@F)) $(LDFLAGS)
+>    BUILDXX = $(__BUILDXX) > $(@:.bin=.make.output) 2>&1
+>  
+>  ###############################
+> @@ -259,10 +259,10 @@ $(OUTPUT)test-reallocarray.bin:
+>  	$(BUILD)
+>  
+>  $(OUTPUT)test-libbfd-liberty.bin:
+> -	$(CC) $(CFLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty
+> +	$(CC) $(CFLAGS) $(CLANG_CROSS_FLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty
+>  
+>  $(OUTPUT)test-libbfd-liberty-z.bin:
+> -	$(CC) $(CFLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty -lz
+> +	$(CC) $(CFLAGS) $(CLANG_CROSS_FLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty -lz
+>  
+>  $(OUTPUT)test-cplus-demangle.bin:
+>  	$(BUILD) -liberty
+> @@ -283,10 +283,10 @@ $(OUTPUT)test-libbabeltrace.bin:
+>  	$(BUILD) # -lbabeltrace provided by $(FEATURE_CHECK_LDFLAGS-libbabeltrace)
+>  
+>  $(OUTPUT)test-compile-32.bin:
+> -	$(CC) -m32 -o $@ test-compile.c
+> +	$(CC) $(CLANG_CROSS_FLAGS) -m32 -o $@ test-compile.c
+>  
+>  $(OUTPUT)test-compile-x32.bin:
+> -	$(CC) -mx32 -o $@ test-compile.c
+> +	$(CC) $(CLANG_CROSS_FLAGS) -mx32 -o $@ test-compile.c
+>  
+>  $(OUTPUT)test-zlib.bin:
+>  	$(BUILD) -lz
+> 
+> base-commit: 21e80f3841c01aeaf32d7aee7bbc87b3db1aa0c6
+> -- 
+> 2.40.1
+> 
