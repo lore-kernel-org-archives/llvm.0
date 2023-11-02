@@ -1,104 +1,266 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6851915483
-	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 11:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D13168AF
+	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 12:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="USCyJZST"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698925862;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BXvh0HaN7chqLYewNa2LL+UKTHm+C7BuJqCkmXwm+hI=;
-	b=USCyJZSTDBCXDiq5yT9cLdzjZZnMPqg/SIWV8fo7pZCEiuowbR3Ysylz625DvPIBZN1rzr
-	sydkyZjOsC4qEZpkuQ7Indg5HsTWAgaXd3KHt2bHP2OaDjTDA+BPqZuq6kKKxfFjHtUhf0
-	uw7OGWiGk3epPAALvs1uE9t9BGAYr9M=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-192-Ks2KDxgOPLqPeAHaFZs-ow-1; Thu, 02 Nov 2023 07:51:00 -0400
-X-MC-Unique: Ks2KDxgOPLqPeAHaFZs-ow-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1cc1682607eso7139505ad.1
-        for <llvm@lists.linux.dev>; Thu, 02 Nov 2023 04:51:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FPUQNteK"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1cc411be7e5so73775ad.1
+        for <llvm@lists.linux.dev>; Thu, 02 Nov 2023 05:15:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698927324; x=1699532124; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BLtki7Tvhg3cfynKI8VTWZvTXZqgVOp4BvlKQ89Tgq8=;
+        b=FPUQNteKrHUGb4CCEkGtq240JZJkc1LN/v21De0FP9gWSHje19+3ujBsQMZWn7Xx1e
+         ZW/5Zzsgtu34aqk6DAZ0A5H3upHirabq+dNeSY6cw5397VwpuEWxeneTHiQvL0mAlZHq
+         EF4ztbBSGCzwygC3kIPBE3BwDSCKaVlFI22pQG6/ffi0OV0GYouxuWyM/VSY93hm1SgT
+         Zrb3hqBbBoh0b/VgP+JdzFUV9VkiDTcVXz+qWArFDWkihnfUhi5O49cjUCiWrwfa6pQw
+         r2kkGdSMHXYVDWSf9LFQ0zpQlDWyWiEamzG7Ph7T7xH2BWXeae+QEw06zYqA0uFo6aMM
+         iNjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698925860; x=1699530660;
+        d=1e100.net; s=20230601; t=1698927324; x=1699532124;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BXvh0HaN7chqLYewNa2LL+UKTHm+C7BuJqCkmXwm+hI=;
-        b=B+NHJoRtsuF/NjXdo8P5/rvQCiME1xdCyx1xtpW7RiARdMn6Gpmh0N63BPowVnadpv
-         OLM+4c4Dc9Gm10ayGa950O+wdZcon3Gv2t4uYls4EJRZ2zu58EbCZ0aGqkjoDCzLUdVp
-         jI2ZNy2iAt2DglCeLZJbRFmYLvws1rI1XKJd54776gkkzvC9any/YwSl0e7gafGDmUZH
-         l/fQJ9hWqk/6u35TqA7TQDh2F8Ccn/dyDuh/EW7C2BEbLQwjKLTdKb7WV2uH+xkhKOao
-         mPhHegEWmnGL2sVT3CgmCho2w09byEMEBhDnZqQyH6LyuBXE9aAoejlyR+BHEPWqbvRi
-         ezVg==
-X-Gm-Message-State: AOJu0YwTBAjRMj/6S1FDVJNkSx/H+o4uXMcJgzRyKvE5OlJgvQm4XLjv
-	USh8MmiWywUchd5P6y46fqNd1/S37rhSlOUs3+6x5TyNhZomuwfcmC7mN1+GTp159kjnXIogzf3
-	VMMON59Hrr38oEAJNfi7n0cE1bhY7PA==
-X-Received: by 2002:a17:902:ec91:b0:1cc:54fb:60f9 with SMTP id x17-20020a170902ec9100b001cc54fb60f9mr10689019plg.37.1698925859916;
-        Thu, 02 Nov 2023 04:50:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFeDlGc9ZGH6KLUUs2Oy1+WEmNgkUJb5lFfrVvtguyJjyCi7rE9YZlkZPXYJTVtaydPfwGnkT4uiclyiO5PhFc=
-X-Received: by 2002:a17:902:ec91:b0:1cc:54fb:60f9 with SMTP id
- x17-20020a170902ec9100b001cc54fb60f9mr10689005plg.37.1698925859679; Thu, 02
- Nov 2023 04:50:59 -0700 (PDT)
+        bh=BLtki7Tvhg3cfynKI8VTWZvTXZqgVOp4BvlKQ89Tgq8=;
+        b=EeBfnYTy00PbNSeMXZGBSnOoYYi+lpHQfX0b+Vu+XvxKW7xMWJGTkJToxt4jtl7PrA
+         p4GYTFtAm2RpklZaAynLH5uJFsZxQqcZHj81DHuk84I+VdBfJ2ZMkEI6Lg+hYtD8CoPx
+         nMw6w2BuJJuxc0hDFMAJD5dwrp4j+/VcVRxl6Qn2OzsW3V321wnJlNHET1XvJo0+DiYq
+         1uNhuVLVHQPwd4CDF4Vz0lh5i3Q0LR70aQsj/Kcv6DtDqPx9aEh3UEYNhXBVnENUCoxt
+         wscwulBC/1UO/Vz4vNf2hdtrNKj2sk9cRdFwaWcAo5y8x49hgX1aTrKLYcr27lSkUOzd
+         MVSw==
+X-Gm-Message-State: AOJu0YwIHE8F51aCdTVuntOSp0KqYtSdplFHto+CTXNsekUXjcinEwfg
+	aaHQG3tyC/xRHU3GCz9t4tI/6SLTtYjpDDF/Lz9U/g==
+X-Google-Smtp-Source: AGHT+IGwx2rPuQQagIfl/7Tfoni/vWt4ouxXSpYmUpUnYMQOYasHa7WI2v13oUvPw5v+Me6ibxgqoaXuJZQNUf3jy+0=
+X-Received: by 2002:a17:902:c254:b0:1bc:8e52:575b with SMTP id
+ 20-20020a170902c25400b001bc8e52575bmr106919plg.6.1698927323440; Thu, 02 Nov
+ 2023 05:15:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231102015141.1355762-1-suhui@nfschina.com>
-In-Reply-To: <20231102015141.1355762-1-suhui@nfschina.com>
-From: Andreas Gruenbacher <agruenba@redhat.com>
-Date: Thu, 2 Nov 2023 12:50:47 +0100
-Message-ID: <CAHc6FU5H-Ju9129Xr3RGA6DePDL58tQ7nOkSJXdig4gJc1w+WA@mail.gmail.com>
-Subject: Re: [PATCH] gfs2: remove dead code in __acquires
-To: Su Hui <suhui@nfschina.com>
-Cc: rpeterso@redhat.com, nathan@kernel.org, ndesaulniers@google.com, 
-	trix@redhat.com, gfs2@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+References: <00000000000078d1e00608d7878b@google.com> <bce5df0508221ab30a1fb121a219034631abedf5.camel@surriel.com>
+In-Reply-To: <bce5df0508221ab30a1fb121a219034631abedf5.camel@surriel.com>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Thu, 2 Nov 2023 13:15:11 +0100
+Message-ID: <CANp29Y6TXkZzRLCFWRMQ6ORSz+hK5qQ2DaF7esNsLnZ0c2BcMA@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] general protection fault in hugetlb_vma_lock_write
+To: Rik van Riel <riel@surriel.com>
+Cc: syzbot <syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com>, 
+	akpm@linux-foundation.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	llvm@lists.linux.dev, mike.kravetz@oracle.com, muchun.song@linux.dev, 
+	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 2, 2023 at 2:54=E2=80=AFAM Su Hui <suhui@nfschina.com> wrote:
+On Tue, Oct 31, 2023 at 7:39=E2=80=AFPM Rik van Riel <riel@surriel.com> wro=
+te:
 >
-> clang static analyzer complains that value stored to 'gh' is never read.
-> The code of this line is useless after commit 0b93bac2271e
-> ("gfs2: Remove LM_FLAG_PRIORITY flag"). Remove this code to save space.
+> On Sun, 2023-10-29 at 02:27 -0700, syzbot wrote:
+> >
+> > commit bf4916922c60f43efaa329744b3eef539aa6a2b2
+> > Author: Rik van Riel <riel@surriel.com>
+> > Date:   Fri Oct 6 03:59:07 2023 +0000
+> >
+> >     hugetlbfs: extend hugetlb_vma_lock to private VMAs
+> >
 >
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
->  fs/gfs2/glock.c | 1 -
->  1 file changed, 1 deletion(-)
+> I've been trying to reproduce the issue here, but the test
+> case has been running for 4+ hours now on a KVM guest, with
+> KASAN and CONFIG_PROVE_LOCKING enabled. No crashes yet.
+
+FWIW you may also try to use the syzbot-built kernel shared via the
+"Downloadable assets" section[1]. I've just run the C repro against it
+and it crashed immediately.
+
+[   66.222816][ T5095] general protection fault, probably for
+non-canonical address 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
+[   66.227224][ T5095] KASAN: null-ptr-deref in range
+[0x00000000000000e8-0x00000000000000ef]
+[   66.230109][ T5095] CPU: 0 PID: 5095 Comm: repro Not tainted
+6.6.0-rc7-syzkaller-00142-g888cf78c29e2 #0
+
+[1] Here are the instructions with commands to copy-paste:
+https://github.com/google/syzkaller/blob/master/docs/syzbot_assets.md
+
+--=20
+Aleksandr
+
 >
-> diff --git a/fs/gfs2/glock.c b/fs/gfs2/glock.c
-> index 3772a5d9e85c..347f8a020c82 100644
-> --- a/fs/gfs2/glock.c
-> +++ b/fs/gfs2/glock.c
-> @@ -1524,7 +1524,6 @@ __acquires(&gl->gl_lockref.lock)
->                 return;
+> I'll try adapting the config file from syzkaller so the
+> resulting kernel boots here, but this is not looking like
+> an easy reproducer so far...
+>
+> The crash is also confusing me somewhat, because it looks
+> like hugetlb_vma_lock_write() is passing a nonsense (very small
+> value) resv_map->rw_sema pointer down to down_write, but the
+> code has some protection against that:
+>
+> static inline bool __vma_private_lock(struct vm_area_struct *vma)
+> {
+>         return (!(vma->vm_flags & VM_MAYSHARE)) && vma-
+> >vm_private_data;
+> }
+>
+> void hugetlb_vma_lock_write(struct vm_area_struct *vma)
+> {
+>         if (__vma_shareable_lock(vma)) {
+>                 struct hugetlb_vma_lock *vma_lock =3D vma-
+> >vm_private_data;
+>
+>                 down_write(&vma_lock->rw_sema);
+>         } else if (__vma_private_lock(vma)) {
+>                 struct resv_map *resv_map =3D vma_resv_map(vma);
+>
+>                 down_write(&resv_map->rw_sema);
 >         }
->         list_add_tail(&gh->gh_list, insert_pt);
-> -       gh =3D list_first_entry(&gl->gl_holders, struct gfs2_holder, gh_l=
-ist);
->         spin_unlock(&gl->gl_lockref.lock);
->         if (sdp->sd_lockstruct.ls_ops->lm_cancel)
->                 sdp->sd_lockstruct.ls_ops->lm_cancel(gl);
-> --
-> 2.30.2
+> }
 >
-
-Thanks, I'll add this.
-
-(The subject "gfs2: remove dead code in __acquires" is misleading
-because the function this is in is called add_to_queue(); __acquires
-is just an annotation.)
-
-Andreas
-
+> At fork time, vma->vm_private_data gets cleared in the child
+> process for MAP_PRIVATE hugetlb VMAs.
+>
+> I do not see anything that would leave behind a tiny, but
+> non-zero value in that pointer.
+>
+> I'll keep poking at this, but I don't know if it will
+> reproduce here.
+>
+> > general protection fault, probably for non-canonical address
+> > 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
+> > KASAN: null-ptr-deref in range [0x00000000000000e8-
+> > 0x00000000000000ef]
+> > CPU: 0 PID: 5048 Comm: syz-executor139 Not tainted 6.6.0-rc7-
+> > syzkaller-00142-g888cf78c29e2 #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine,
+> > BIOS Google 10/09/2023
+> > RIP: 0010:__lock_acquire+0x109/0x5de0 kernel/locking/lockdep.c:5004
+> > Code: 45 85 c9 0f 84 cc 0e 00 00 44 8b 05 c1 1e 42 0b 45 85 c0 0f 84
+> > be 0d 00 00 48 ba 00 00 00 00 00 fc ff df 4c 89 d1 48 c1 e9 03 <80>
+> > 3c 11 00 0f 85 e8 40 00 00 49 81 3a a0 d9 5f 90 0f 84 96 0d 00
+> > RSP: 0018:ffffc90003aa7798 EFLAGS: 00010016
+> >
+> > RAX: ffff88807a0b9dc0 RBX: 1ffff92000754f23 RCX: 000000000000001d
+> > RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 00000000000000e8
+> > RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+> > R10: 00000000000000e8 R11: 0000000000000000 R12: 0000000000000000
+> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > FS:  0000000000000000(0000) GS:ffff8880b9800000(0000)
+> > knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000000020000280 CR3: 00000000758bf000 CR4: 0000000000350ef0
+> > Call Trace:
+> >  <TASK>
+> >  lock_acquire kernel/locking/lockdep.c:5753 [inline]
+> >  lock_acquire+0x1ae/0x510 kernel/locking/lockdep.c:5718
+> >  down_write+0x93/0x200 kernel/locking/rwsem.c:1573
+> >  hugetlb_vma_lock_write mm/hugetlb.c:300 [inline]
+> >  hugetlb_vma_lock_write+0xae/0x100 mm/hugetlb.c:291
+> >  __hugetlb_zap_begin+0x1e9/0x2b0 mm/hugetlb.c:5447
+> >  hugetlb_zap_begin include/linux/hugetlb.h:258 [inline]
+> >  unmap_vmas+0x2f4/0x470 mm/memory.c:1733
+> >  exit_mmap+0x1ad/0xa60 mm/mmap.c:3230
+> >  __mmput+0x12a/0x4d0 kernel/fork.c:1349
+> >  mmput+0x62/0x70 kernel/fork.c:1371
+> >  exit_mm kernel/exit.c:567 [inline]
+> >  do_exit+0x9ad/0x2a20 kernel/exit.c:861
+> >  __do_sys_exit kernel/exit.c:991 [inline]
+> >  __se_sys_exit kernel/exit.c:989 [inline]
+> >  __x64_sys_exit+0x42/0x50 kernel/exit.c:989
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7ff2b7a78ab9
+> > Code: Unable to access opcode bytes at 0x7ff2b7a78a8f.
+> > RSP: 002b:00007fff926ea6b8 EFLAGS: 00000246 ORIG_RAX:
+> > 000000000000003c
+> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff2b7a78ab9
+> > RDX: 00007ff2b7ab23f3 RSI: 0000000000000000 RDI: 0000000000000000
+> > RBP: 000000000000cfda R08: 0000000000000000 R09: 0000000000000006
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff926ea6cc
+> > R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
+> >  </TASK>
+> > Modules linked in:
+> > ---[ end trace 0000000000000000 ]---
+> > RIP: 0010:__lock_acquire+0x109/0x5de0 kernel/locking/lockdep.c:5004
+> > Code: 45 85 c9 0f 84 cc 0e 00 00 44 8b 05 c1 1e 42 0b 45 85 c0 0f 84
+> > be 0d 00 00 48 ba 00 00 00 00 00 fc ff df 4c 89 d1 48 c1 e9 03 <80>
+> > 3c 11 00 0f 85 e8 40 00 00 49 81 3a a0 d9 5f 90 0f 84 96 0d 00
+> > RSP: 0018:ffffc90003aa7798 EFLAGS: 00010016
+> > RAX: ffff88807a0b9dc0 RBX: 1ffff92000754f23 RCX: 000000000000001d
+> > RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 00000000000000e8
+> > RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+> > R10: 00000000000000e8 R11: 0000000000000000 R12: 0000000000000000
+> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > FS:  0000000000000000(0000) GS:ffff8880b9800000(0000)
+> > knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000000020000280 CR3: 00000000758bf000 CR4: 0000000000350ef0
+> > ----------------
+> > Code disassembly (best guess):
+> >    0:   45 85 c9                test   %r9d,%r9d
+> >    3:   0f 84 cc 0e 00 00       je     0xed5
+> >    9:   44 8b 05 c1 1e 42 0b    mov    0xb421ec1(%rip),%r8d        #
+> > 0xb421ed1
+> >   10:   45 85 c0                test   %r8d,%r8d
+> >   13:   0f 84 be 0d 00 00       je     0xdd7
+> >   19:   48 ba 00 00 00 00 00    movabs $0xdffffc0000000000,%rdx
+> >   20:   fc ff df
+> >   23:   4c 89 d1                mov    %r10,%rcx
+> >   26:   48 c1 e9 03             shr    $0x3,%rcx
+> > * 2a:   80 3c 11 00             cmpb   $0x0,(%rcx,%rdx,1) <--
+> > trapping instruction
+> >   2e:   0f 85 e8 40 00 00       jne    0x411c
+> >   34:   49 81 3a a0 d9 5f 90    cmpq   $0xffffffff905fd9a0,(%r10)
+> >   3b:   0f                      .byte 0xf
+> >   3c:   84                      .byte 0x84
+> >   3d:   96                      xchg   %eax,%esi
+> >   3e:   0d                      .byte 0xd
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > For information about bisection process see:
+> > https://goo.gl/tpsmEJ#bisection
+> >
+> > If the bug is already fixed, let syzbot know by replying with:
+> > #syz fix: exact-commit-title
+> >
+> > If you want syzbot to run the reproducer, reply with:
+> > #syz test: git://repo/address.git branch-or-commit-hash
+> > If you attach or paste a git patch, syzbot will apply it before
+> > testing.
+> >
+> > If you want to overwrite bug's subsystems, reply with:
+> > #syz set subsystems: new-subsystem
+> > (See the list of subsystem names on the web dashboard)
+> >
+> > If the bug is a duplicate of another bug, reply with:
+> > #syz dup: exact-subject-of-another-report
+> >
+> > If you want to undo deduplication, reply with:
+> > #syz undup
+> >
+>
+> --
+> All Rights Reversed.
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/bce5df0508221ab30a1fb121a219034631abedf5.camel%40surriel.c=
+om.
