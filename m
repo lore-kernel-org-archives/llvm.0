@@ -1,362 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A75219F6
-	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 20:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E5E219F6
+	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 20:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W4qPEPI5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698956484;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+R2T6g+zLeE0RfCewDJZsCipqE26ybnWuqtgkLu8AQw=;
-	b=W4qPEPI5Ay0KhowiFabcjH36FEmufjZZIQDAzl83b9rXEHS8kLff4BSE/Yqx44V5qpKL7E
-	orC1le747dDjP0N3zRW5rCAN4bWlcbx06UDXNzJc6skeIF5jwNiXCPM1eKB+Ahodt0rW3A
-	rh6oyIKX9acLe9HhiYnzLXivAGPadNQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-219-gPBcQobBMPiN0su3W2c6Kg-1; Thu, 02 Nov 2023 16:21:22 -0400
-X-MC-Unique: gPBcQobBMPiN0su3W2c6Kg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7BE0E814084
-	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 20:21:22 +0000 (UTC)
-Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 605151121308;
-	Thu,  2 Nov 2023 20:21:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 7 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, 21e80f38)
-Date: Thu, 02 Nov 2023 20:21:22 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="V+Fqv1x6"
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5842a94feb2so712142eaf.0
+        for <llvm@lists.linux.dev>; Thu, 02 Nov 2023 13:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1698956635; x=1699561435; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZYxqorYTLyNgH4Ys5lNUekyUrwpkE+NAoR9Xx/kQ8MQ=;
+        b=V+Fqv1x6OfCPePJLEzGlXazH6iXYqoOiXxmdsMXzwcVenXkv1HzqP1nMnC0PKLuDVY
+         8EMwUHzxYjEuI76cDEWa9yRkftehszwxkWzwnjxEVX75IG3KMWz9YFD/iY5KYARwxm+u
+         NBg+1FKxxYOCtmcGglomRS0u37eXgPOERgEyJM6nas80MUZFsHDB5DJRmG/CkftP8TgK
+         t+YVqPcPewSKtAlxZGuHufOoo3zKZBNVpQc1mfQ9sILc/+iM3E8/rB29tgXYFGZEuPWz
+         Q5EWuruz+EnL6LysqWp2e9TaFc8y/RtwVbhbasXLPK6vv8hZczcR3GcHTAKqPPXN8XuM
+         Gw3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698956635; x=1699561435;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZYxqorYTLyNgH4Ys5lNUekyUrwpkE+NAoR9Xx/kQ8MQ=;
+        b=P3OTwS7fFIo2h4QTi84/8XSUdyISzQ+CC2MfI5qvhqNxR5T2qu4qUg+jOTmKEBVd0h
+         Aoh/U3GxR7OpnnVqszYaDlIZd5sX3rMkbA3cCY4nzWpsQvnTx9GG03F/P8ZT1DdEYr3N
+         r8t18s8JKwl0I0WUjN57fzVkx8PzmJL0avARioM6mcNswElC24eoUMZbNO/AlMl7LGED
+         gw9Qf9SZw/edOp/4seD+CQ0M6mboOCeJOGJY7LRJ2gVShqqKxQoUZpGg0Zqpd2TyLzLz
+         vceAc05OAQUozFrkg6fV8RVyy7S9LFwNFtc5Si/x2rfQGIlm7ah62hOlArq4Fgtn8upa
+         7D3w==
+X-Gm-Message-State: AOJu0YzvMNYRjJRen2jZp4pSoYJD7YCA5/e+1FbnoIYIlChhVHjdRDPm
+	v3bOiInYs0SaNtxyW6XA7r4FvA==
+X-Google-Smtp-Source: AGHT+IHvjzSJSgbbFHJHFSPQEfHZb0G1dwFxE6QUSYdRHcKUimuPg3oA0e89k53MrVMNkydfp+r/RA==
+X-Received: by 2002:a4a:b487:0:b0:581:ff09:62e4 with SMTP id b7-20020a4ab487000000b00581ff0962e4mr19252180ooo.2.1698956635428;
+        Thu, 02 Nov 2023 13:23:55 -0700 (PDT)
+Received: from localhost ([192.184.165.199])
+        by smtp.gmail.com with ESMTPSA id 64-20020a4a0943000000b0057b43a25deasm52070ooa.3.2023.11.02.13.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Nov 2023 13:23:54 -0700 (PDT)
+Date: Thu, 02 Nov 2023 13:23:54 -0700 (PDT)
+X-Google-Original-Date: Thu, 02 Nov 2023 13:23:51 PDT (-0700)
+Subject:     Re: [PATCH net] tcp: Fix -Wc23-extensions in tcp_options_write()
+In-Reply-To: <mhng-41e9fb36-f703-461e-b585-9e8dd5984714@palmer-ri-x1c9a>
+CC: edumazet@google.com, davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
+  pabeni@redhat.com, ndesaulniers@google.com, trix@redhat.com, 0x7f454c46@gmail.com,
+  fruggeri@arista.com, noureddine@arista.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev, patches@lists.linux.dev
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: nathan@kernel.org
+Message-ID: <mhng-7500e386-1e83-4303-a1ee-cd2d5688e73e@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <72223.123110216212201003@us-mta-219.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On Wed, 01 Nov 2023 18:42:10 PDT (-0700), Palmer Dabbelt wrote:
+> On Wed, 01 Nov 2023 18:07:23 PDT (-0700), nathan@kernel.org wrote:
+>> On Wed, Nov 01, 2023 at 05:41:10PM -0700, Palmer Dabbelt wrote:
+>>> On Tue, 31 Oct 2023 13:23:35 PDT (-0700), nathan@kernel.org wrote:
+>>> > Clang warns (or errors with CONFIG_WERROR=y) when CONFIG_TCP_AO is set:
+>>> >
+>>> >   net/ipv4/tcp_output.c:663:2: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
+>>> >     663 |         }
+>>> >         |         ^
+>>> >   1 error generated.
+>>> >
+>>> > On earlier releases (such as clang-11, the current minimum supported
+>>> > version for building the kernel) that do not support C23, this was a
+>>> > hard error unconditionally:
+>>> >
+>>> >   net/ipv4/tcp_output.c:663:2: error: expected statement
+>>> >           }
+>>> >           ^
+>>> >   1 error generated.
+>>> >
+>>> > Add a semicolon after the label to create an empty statement, which
+>>> > resolves the warning or error for all compilers.
+>>> >
+>>> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1953
+>>> > Fixes: 1e03d32bea8e ("net/tcp: Add TCP-AO sign to outgoing packets")
+>>> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>>> > ---
+>>> >  net/ipv4/tcp_output.c | 2 +-
+>>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>>> >
+>>> > diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+>>> > index f558c054cf6e..6064895daece 100644
+>>> > --- a/net/ipv4/tcp_output.c
+>>> > +++ b/net/ipv4/tcp_output.c
+>>> > @@ -658,7 +658,7 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+>>> >  			memset(ptr, TCPOPT_NOP, sizeof(*ptr));
+>>> >  			ptr++;
+>>> >  		}
+>>> > -out_ao:
+>>> > +out_ao:;
+>>> >  #endif
+>>> >  	}
+>>> >  	if (unlikely(opts->mss)) {
+>>> >
+>>> > ---
+>>> > base-commit: 55c900477f5b3897d9038446f72a281cae0efd86
+>>> > change-id: 20231031-tcp-ao-fix-label-in-compound-statement-warning-ebd6c9978498
+>>> >
+>>> > Best regards,
+>>>
+>>> This gives me a
+>>>
+>>> linux/net/ipv4/tcp_output.c:663:2: error: expected statement
+>>>        }
+>>>
+>>> on GCC for me.
+>>
+>> What GCC version?
+>
+> 12.1, though I can't get a smaller reproducer so I'm going to roll back
+> to your change and double-check.  Might take a bit...
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Looks like there was just some bug in my test scripts and the original 
+patch wasn't actually picked up for all the configs.  It's working now, 
+so
 
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Kernel information:
-    Commit message: Merge tag 'modules-6.7-rc1' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/mcgrof/linux
+Sorry for the confusion!
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/112656
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10160360
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10160361
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10160542
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10160543
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/031
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-          x86_64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10160417
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10160418
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>> I cannot reproduce that error with my patch applied. I tested mainline
+>> at commit deefd5024f07 ("Merge tag 'vfio-v6.7-rc1' of
+>> https://github.com/awilliam/linux-vfio") using GCC 6 from kernel.org and
+>> I can reproduce a similar failure with ARCH=x86_64 allyesconfig:
+>>
+>>   net/ipv4/tcp_output.c: In function 'tcp_options_write':
+>>   net/ipv4/tcp_output.c:661:1: error: label at end of compound statement
+>>    out_ao:
+>>    ^~~~~~
+>>
+>> With this change applied, the error disappears for GCC 6 and GCC 13
+>> continues to build without error. I can try the other supported versions
+>> later, I just did an older and newer one for a quick test.
+>>
+>>> So I think something like
+>>>
+>>> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+>>> index f558c054cf6e..ca09763acaa8 100644
+>>> --- a/net/ipv4/tcp_output.c
+>>> +++ b/net/ipv4/tcp_output.c
+>>> @@ -659,6 +659,11 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+>>> 			ptr++;
+>>> 		}
+>>> out_ao:
+>>> +	/*
+>>> +	 * Labels at the end of compound statements are a C23 feature, so
+>>> +	 * introduce a block to avoid a warning/error on strict toolchains.
+>>> +	 */
+>>> +	{}
+>>> #endif
+>>> 	}
+>>> 	if (unlikely(opts->mss)) {
+>>>
+>>> should do it (though it's still build testing...)
+>>
+>> I am not opposed to this once we understand what versions are affected
+>> by this so that we have some timeline of removing this workaround.
+>>
+>> Cheers,
+>> Nathan
