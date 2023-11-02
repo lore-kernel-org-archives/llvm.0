@@ -1,161 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBC13C16;
-	Thu,  2 Nov 2023 15:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F338B1CF9C;
+	Thu,  2 Nov 2023 15:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qdf8tKnB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3647FC433C7;
-	Thu,  2 Nov 2023 15:43:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698939797;
-	bh=fmWkFw792BH84PRGV1BX0heQWqrdPlVNLaz2U+olMxA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Qdf8tKnBk4lJRHSoNIR4vekMZEgbi3Cx+tzkmk3iij3FBMMO7jrhJkl1UOi0Uu73p
-	 u0nL75qceUwh/jjsXnsGCoLABvvrbxZsHPNRrdOzj3VxUlC0rXNG6TQVzhierjw32k
-	 FYkcF9pV42NzzOicEkOqSJIWQv4KCmYd5h466LY07ZbaEDR7DbtHiTBz61RlCYYPkC
-	 tiH7o4x3B+EZQM3PTuIDhkMMSGD32cuQjoJIwxCYMnz+1w6fswqmMbF0XGyV/LkX6F
-	 VBejvYTjGldZNGEGCLr/32mugLUNNJURM8lfexuOn06gtOsTMI2jYaPSJLk+AMWMR5
-	 1UGWWHQE72UtQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 02 Nov 2023 08:43:02 -0700
-Subject: [PATCH v2] LoongArch: Mark __percpu functions as always inline
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cJ386WLd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698940031; x=1730476031;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HNI3x3MYh/j6wySXSOikcO/9VddS9p/hNBuGdysRtcM=;
+  b=cJ386WLdq5WalHQHFqIYIaZg1Hw+lukzq7bvNcSqWXpQLgz9t9B3lCQT
+   +sRSGO6okiUkNlB4geE4ATPQ5sp2tZIHE741WIwXJSY3ykymoNQTw2sTn
+   +aNG51yr31Vf9ag481EVJPUhlMIwlWGaBO6uhq63jW3HwtddJ3uEvZITG
+   uyYtn6hLaUhIULQhnU50BRliEbYINiF354Fw/zghP5Yc9EAkSOYgG4FVD
+   fXGHsEuZHji/HkLcvWZdQFvMrLMK/g9Iv7Ukpev9ga6oK0ZDPzaqklTss
+   KLbhLP1AYUamC/Rvjzr2RbQ5TTXSlLyTAYrdr1OkKJTToitDtOvUNqFUb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="368950279"
+X-IronPort-AV: E=Sophos;i="6.03,271,1694761200"; 
+   d="scan'208";a="368950279"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 08:46:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="711186730"
+X-IronPort-AV: E=Sophos;i="6.03,271,1694761200"; 
+   d="scan'208";a="711186730"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Nov 2023 08:46:39 -0700
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qyZu1-0001b6-0v;
+	Thu, 02 Nov 2023 15:46:37 +0000
+Date: Thu, 2 Nov 2023 23:46:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: lib/maple_tree.c:4327:20: warning: stack frame size (1112) exceeds
+ limit (1024) in 'mas_wr_modify'
+Message-ID: <202311022317.B3t8ONbL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231102-loongarch-always-inline-percpu-ops-v2-1-31c51959a5c0@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAIXDQ2UC/5WNQQ7CIBAAv2I4u6aLibSe/IfpAXFpNxIgi1abp
- n8X+wOPM4eZRRUSpqLOu0UJTVw4xQp6v1NutHEg4HtlpRt9RGwQQkpxsOJGsOFt5wIcA0eCTOL
- yC1Iu4LwxDk/YGvSqhrKQ5882ufaVRy7PJPP2nPBn/8pPCAi31mvqrEGju8uDJFI4JBlUv67rF
- 4wAASXVAAAA
-To: chenhuacai@kernel.org, kernel@xen0n.name
-Cc: ndesaulniers@google.com, trix@redhat.com, jiaxun.yang@flygoat.com, 
- loongarch@lists.linux.dev, llvm@lists.linux.dev, patches@lists.linux.dev, 
- stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4824; i=nathan@kernel.org;
- h=from:subject:message-id; bh=fmWkFw792BH84PRGV1BX0heQWqrdPlVNLaz2U+olMxA=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDKnOh6e+/3jg4MvoxhcRaeaKWZOmvs1WXfTrrVr4chmLf
- CPe2cHHOkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBE7p1jZNjUa8W5Z7p60IZ9
- nmt0w5XaGlyetiTe5qwu1arr7LqwSJ6RYZ7y19o7+rnf1NdJifftrvidNuUjw8cLHikKf99sWLN
- 9JSsA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A recent change to the optimization pipeline in LLVM reveals some
-fragility around the inlining of LoongArch's __percpu functions, which
-manifests as a BUILD_BUG() failure:
+Hi Liam,
 
-  In file included from kernel/sched/build_policy.c:17:
-  In file included from include/linux/sched/cputime.h:5:
-  In file included from include/linux/sched/signal.h:5:
-  In file included from include/linux/rculist.h:11:
-  In file included from include/linux/rcupdate.h:26:
-  In file included from include/linux/irqflags.h:18:
-  arch/loongarch/include/asm/percpu.h:97:3: error: call to '__compiletime_assert_51' declared with 'error' attribute: BUILD_BUG failed
-     97 |                 BUILD_BUG();
-        |                 ^
-  include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-     59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-        |                     ^
-  include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-     39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-        |                                     ^
-  include/linux/compiler_types.h:425:2: note: expanded from macro 'compiletime_assert'
-    425 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-        |         ^
-  include/linux/compiler_types.h:413:2: note: expanded from macro '_compiletime_assert'
-    413 |         __compiletime_assert(condition, msg, prefix, suffix)
-        |         ^
-  include/linux/compiler_types.h:406:4: note: expanded from macro '__compiletime_assert'
-    406 |                         prefix ## suffix();                             \
-        |                         ^
-  <scratch space>:86:1: note: expanded from here
-     86 | __compiletime_assert_51
-        | ^
-  1 error generated.
+FYI, the error/warning still remains.
 
-If these functions are not inlined (which the compiler is free to do
-even with functions marked with the standard 'inline' keyword), the
-BUILD_BUG() in the default case cannot be eliminated since the compiler
-cannot prove it is never used, resulting in a build failure due to the
-error attribute.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   21e80f3841c01aeaf32d7aee7bbc87b3db1aa0c6
+commit: 54a611b605901c7d5d05b6b8f5d04a6ceb0962aa Maple Tree: add new data structure
+date:   1 year, 1 month ago
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231102/202311022317.B3t8ONbL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231102/202311022317.B3t8ONbL-lkp@intel.com/reproduce)
 
-Mark these functions as __always_inline to guarantee inlining so that
-the BUILD_BUG() only triggers when the default case genuinely cannot be
-eliminated due to an unexpected size.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311022317.B3t8ONbL-lkp@intel.com/
 
-Cc:  <stable@vger.kernel.org>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1955
-Fixes: 46859ac8af52 ("LoongArch: Add multi-processor (SMP) support")
-Link: https://github.com/llvm/llvm-project/commit/1a2e77cf9e11dbf56b5720c607313a566eebb16e
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Change 'inline' to __always_inline for all functions that contain
-  BUILD_BUG() (Huacai)
-- Notate that 'inline' does not guarantee inlining in the commit message
-  to further clarify the change to __always_inline.
-- Link to v1: https://lore.kernel.org/r/20231101-loongarch-always-inline-percpu-ops-v1-1-b8f2e9a71729@kernel.org
----
- arch/loongarch/include/asm/percpu.h | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
-index b9f567e66016..313852fba845 100644
---- a/arch/loongarch/include/asm/percpu.h
-+++ b/arch/loongarch/include/asm/percpu.h
-@@ -32,7 +32,7 @@ static inline void set_my_cpu_offset(unsigned long off)
- #define __my_cpu_offset __my_cpu_offset
- 
- #define PERCPU_OP(op, asm_op, c_op)					\
--static inline unsigned long __percpu_##op(void *ptr,			\
-+static __always_inline unsigned long __percpu_##op(void *ptr,		\
- 			unsigned long val, int size)			\
- {									\
- 	unsigned long ret;						\
-@@ -63,7 +63,7 @@ PERCPU_OP(and, and, &)
- PERCPU_OP(or, or, |)
- #undef PERCPU_OP
- 
--static inline unsigned long __percpu_read(void *ptr, int size)
-+static __always_inline unsigned long __percpu_read(void *ptr, int size)
- {
- 	unsigned long ret;
- 
-@@ -100,7 +100,8 @@ static inline unsigned long __percpu_read(void *ptr, int size)
- 	return ret;
- }
- 
--static inline void __percpu_write(void *ptr, unsigned long val, int size)
-+static __always_inline void __percpu_write(void *ptr, unsigned long val,
-+					   int size)
- {
- 	switch (size) {
- 	case 1:
-@@ -132,8 +133,8 @@ static inline void __percpu_write(void *ptr, unsigned long val, int size)
- 	}
- }
- 
--static inline unsigned long __percpu_xchg(void *ptr, unsigned long val,
--						int size)
-+static __always_inline unsigned long __percpu_xchg(void *ptr, unsigned long val,
-+						   int size)
- {
- 	switch (size) {
- 	case 1:
+   lib/maple_tree.c:330:20: warning: unused function 'mte_set_full' [-Wunused-function]
+     330 | static inline void mte_set_full(const struct maple_enode *node)
+         |                    ^
+   lib/maple_tree.c:335:20: warning: unused function 'mte_clear_full' [-Wunused-function]
+     335 | static inline void mte_clear_full(const struct maple_enode *node)
+         |                    ^
+   lib/maple_tree.c:3958:19: warning: stack frame size (1032) exceeds limit (1024) in 'mas_wr_spanning_store' [-Wframe-larger-than]
+    3958 | static inline int mas_wr_spanning_store(struct ma_wr_state *wr_mas)
+         |                   ^
+>> lib/maple_tree.c:4327:20: warning: stack frame size (1112) exceeds limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    4327 | static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
+         |                    ^
+   4 warnings generated.
 
----
-base-commit: 278be83601dd1725d4732241f066d528e160a39d
-change-id: 20231101-loongarch-always-inline-percpu-ops-cf77c161871f
 
-Best regards,
+vim +/mas_wr_modify +4327 lib/maple_tree.c
+
+  4326	
+> 4327	static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
+  4328	{
+  4329		unsigned char node_slots;
+  4330		unsigned char node_size;
+  4331		struct ma_state *mas = wr_mas->mas;
+  4332	
+  4333		/* Direct replacement */
+  4334		if (wr_mas->r_min == mas->index && wr_mas->r_max == mas->last) {
+  4335			rcu_assign_pointer(wr_mas->slots[mas->offset], wr_mas->entry);
+  4336			if (!!wr_mas->entry ^ !!wr_mas->content)
+  4337				mas_update_gap(mas);
+  4338			return;
+  4339		}
+  4340	
+  4341		/* Attempt to append */
+  4342		node_slots = mt_slots[wr_mas->type];
+  4343		node_size = wr_mas->node_end - wr_mas->offset_end + mas->offset + 2;
+  4344		if (mas->max == ULONG_MAX)
+  4345			node_size++;
+  4346	
+  4347		/* slot and node store will not fit, go to the slow path */
+  4348		if (unlikely(node_size >= node_slots))
+  4349			goto slow_path;
+  4350	
+  4351		if (wr_mas->entry && (wr_mas->node_end < node_slots - 1) &&
+  4352		    (mas->offset == wr_mas->node_end) && mas_wr_append(wr_mas)) {
+  4353			if (!wr_mas->content || !wr_mas->entry)
+  4354				mas_update_gap(mas);
+  4355			return;
+  4356		}
+  4357	
+  4358		if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
+  4359			return;
+  4360		else if (mas_wr_node_store(wr_mas))
+  4361			return;
+  4362	
+  4363		if (mas_is_err(mas))
+  4364			return;
+  4365	
+  4366	slow_path:
+  4367		mas_wr_bnode(wr_mas);
+  4368	}
+  4369	
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
