@@ -1,368 +1,161 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A5F1CAA7
-	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 15:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBC13C16;
+	Thu,  2 Nov 2023 15:43:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fae+h1tQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698939092;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tg7swCTVgatlDhFOOnZeMPiblohfI0wjSYU4Q536D8k=;
-	b=fae+h1tQPZ5MirQaLUXYZNUEHK9yWEcF5UDQ3ED9Hf1LCbDkrfLsNpjVu2Ipq3ONu8FjKG
-	rMhp/7cf7YzZ9UQ+2/ZINtdgeA10TZ6/5tJwHv3+b1nQJY4tgWr8/2sIBpzB3hA6vB1O1/
-	4JKcF0axYvEiEGcQyteqUKdHJea9aOk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-452-7bITcguBOoWECjK1OWm_fw-1; Thu, 02 Nov 2023 11:31:28 -0400
-X-MC-Unique: 7bITcguBOoWECjK1OWm_fw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BE5C811E94
-	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 15:31:28 +0000 (UTC)
-Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 45EA940C6EBF;
-	Thu,  2 Nov 2023 15:31:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
- mainline.kernel.org-clang, babe3939)
-Date: Thu, 02 Nov 2023 15:31:28 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qdf8tKnB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3647FC433C7;
+	Thu,  2 Nov 2023 15:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698939797;
+	bh=fmWkFw792BH84PRGV1BX0heQWqrdPlVNLaz2U+olMxA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Qdf8tKnBk4lJRHSoNIR4vekMZEgbi3Cx+tzkmk3iij3FBMMO7jrhJkl1UOi0Uu73p
+	 u0nL75qceUwh/jjsXnsGCoLABvvrbxZsHPNRrdOzj3VxUlC0rXNG6TQVzhierjw32k
+	 FYkcF9pV42NzzOicEkOqSJIWQv4KCmYd5h466LY07ZbaEDR7DbtHiTBz61RlCYYPkC
+	 tiH7o4x3B+EZQM3PTuIDhkMMSGD32cuQjoJIwxCYMnz+1w6fswqmMbF0XGyV/LkX6F
+	 VBejvYTjGldZNGEGCLr/32mugLUNNJURM8lfexuOn06gtOsTMI2jYaPSJLk+AMWMR5
+	 1UGWWHQE72UtQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 02 Nov 2023 08:43:02 -0700
+Subject: [PATCH v2] LoongArch: Mark __percpu functions as always inline
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <25727.123110211312801550@us-mta-452.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231102-loongarch-always-inline-percpu-ops-v2-1-31c51959a5c0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIXDQ2UC/5WNQQ7CIBAAv2I4u6aLibSe/IfpAXFpNxIgi1abp
+ n8X+wOPM4eZRRUSpqLOu0UJTVw4xQp6v1NutHEg4HtlpRt9RGwQQkpxsOJGsOFt5wIcA0eCTOL
+ yC1Iu4LwxDk/YGvSqhrKQ5882ufaVRy7PJPP2nPBn/8pPCAi31mvqrEGju8uDJFI4JBlUv67rF
+ 4wAASXVAAAA
+To: chenhuacai@kernel.org, kernel@xen0n.name
+Cc: ndesaulniers@google.com, trix@redhat.com, jiaxun.yang@flygoat.com, 
+ loongarch@lists.linux.dev, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4824; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=fmWkFw792BH84PRGV1BX0heQWqrdPlVNLaz2U+olMxA=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKnOh6e+/3jg4MvoxhcRaeaKWZOmvs1WXfTrrVr4chmLf
+ CPe2cHHOkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBE7p1jZNjUa8W5Z7p60IZ9
+ nmt0w5XaGlyetiTe5qwu1arr7LqwSJ6RYZ7y19o7+rnf1NdJifftrvidNuUjw8cLHikKf99sWLN
+ 9JSsA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+A recent change to the optimization pipeline in LLVM reveals some
+fragility around the inlining of LoongArch's __percpu functions, which
+manifests as a BUILD_BUG() failure:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+  In file included from kernel/sched/build_policy.c:17:
+  In file included from include/linux/sched/cputime.h:5:
+  In file included from include/linux/sched/signal.h:5:
+  In file included from include/linux/rculist.h:11:
+  In file included from include/linux/rcupdate.h:26:
+  In file included from include/linux/irqflags.h:18:
+  arch/loongarch/include/asm/percpu.h:97:3: error: call to '__compiletime_assert_51' declared with 'error' attribute: BUILD_BUG failed
+     97 |                 BUILD_BUG();
+        |                 ^
+  include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
+     59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+        |                     ^
+  include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+     39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+        |                                     ^
+  include/linux/compiler_types.h:425:2: note: expanded from macro 'compiletime_assert'
+    425 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+        |         ^
+  include/linux/compiler_types.h:413:2: note: expanded from macro '_compiletime_assert'
+    413 |         __compiletime_assert(condition, msg, prefix, suffix)
+        |         ^
+  include/linux/compiler_types.h:406:4: note: expanded from macro '__compiletime_assert'
+    406 |                         prefix ## suffix();                             \
+        |                         ^
+  <scratch space>:86:1: note: expanded from here
+     86 | __compiletime_assert_51
+        | ^
+  1 error generated.
 
+If these functions are not inlined (which the compiler is free to do
+even with functions marked with the standard 'inline' keyword), the
+BUILD_BUG() in the default case cannot be eliminated since the compiler
+cannot prove it is never used, resulting in a build failure due to the
+error attribute.
 
-Kernel information:
-    Commit message: Merge tag 'docs-6.7' of git://git.lwn.net/linux
+Mark these functions as __always_inline to guarantee inlining so that
+the BUILD_BUG() only triggers when the default case genuinely cannot be
+eliminated due to an unexpected size.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/112637
+Cc:  <stable@vger.kernel.org>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1955
+Fixes: 46859ac8af52 ("LoongArch: Add multi-processor (SMP) support")
+Link: https://github.com/llvm/llvm-project/commit/1a2e77cf9e11dbf56b5720c607313a566eebb16e
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Changes in v2:
+- Change 'inline' to __always_inline for all functions that contain
+  BUILD_BUG() (Huacai)
+- Notate that 'inline' does not guarantee inlining in the commit message
+  to further clarify the change to __always_inline.
+- Link to v1: https://lore.kernel.org/r/20231101-loongarch-always-inline-percpu-ops-v1-1-b8f2e9a71729@kernel.org
+---
+ arch/loongarch/include/asm/percpu.h | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10157546
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10157547
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10157441
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10157442
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/031
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-          x86_64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10157485
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10157486
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
+diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
+index b9f567e66016..313852fba845 100644
+--- a/arch/loongarch/include/asm/percpu.h
++++ b/arch/loongarch/include/asm/percpu.h
+@@ -32,7 +32,7 @@ static inline void set_my_cpu_offset(unsigned long off)
+ #define __my_cpu_offset __my_cpu_offset
+ 
+ #define PERCPU_OP(op, asm_op, c_op)					\
+-static inline unsigned long __percpu_##op(void *ptr,			\
++static __always_inline unsigned long __percpu_##op(void *ptr,		\
+ 			unsigned long val, int size)			\
+ {									\
+ 	unsigned long ret;						\
+@@ -63,7 +63,7 @@ PERCPU_OP(and, and, &)
+ PERCPU_OP(or, or, |)
+ #undef PERCPU_OP
+ 
+-static inline unsigned long __percpu_read(void *ptr, int size)
++static __always_inline unsigned long __percpu_read(void *ptr, int size)
+ {
+ 	unsigned long ret;
+ 
+@@ -100,7 +100,8 @@ static inline unsigned long __percpu_read(void *ptr, int size)
+ 	return ret;
+ }
+ 
+-static inline void __percpu_write(void *ptr, unsigned long val, int size)
++static __always_inline void __percpu_write(void *ptr, unsigned long val,
++					   int size)
+ {
+ 	switch (size) {
+ 	case 1:
+@@ -132,8 +133,8 @@ static inline void __percpu_write(void *ptr, unsigned long val, int size)
+ 	}
+ }
+ 
+-static inline unsigned long __percpu_xchg(void *ptr, unsigned long val,
+-						int size)
++static __always_inline unsigned long __percpu_xchg(void *ptr, unsigned long val,
++						   int size)
+ {
+ 	switch (size) {
+ 	case 1:
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+---
+base-commit: 278be83601dd1725d4732241f066d528e160a39d
+change-id: 20231101-loongarch-always-inline-percpu-ops-cf77c161871f
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
