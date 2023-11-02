@@ -1,166 +1,368 @@
-Received: from mail-ot1-f77.google.com (mail-ot1-f77.google.com [209.85.210.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176D3171B5
-	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 15:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by mail-ot1-f77.google.com with SMTP id 46e09a7af769-6ce0c99f117so1275021a34.2
-        for <llvm@lists.linux.dev>; Thu, 02 Nov 2023 08:26:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698938788; x=1699543588;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=36jTIk8RNWrAuIMJmC5HqYBs4sdtGNKnTTHc+A6SXu8=;
-        b=pgmHbRB4hAZK1igy/RWjATnxmBkbka2I65ZoPqaJgYNOL61Gsl2MI66iB7gpl5wZP4
-         luGxZF55xkO5LWM3BsVdJjjpq0H9toYi51VlUgtsf6Ga5pRnzbhBOHEgXJFCkk34IT2W
-         5NDr6dh3NFBm4ul4SfBreIvjXL/Hs+tiTE1uIyTBUN9SnNTt0SePO01hxR8LHd6QCwCc
-         wIuCI15tTkH0ntnb9aycgCOHqvozMkJCA7zuiShxOY4XjdKqD/QjgWZVCvXfJ7rhrBqr
-         0/GaLJsJIPSIERxZ+Zd4no0eMsYReSdo+1x2Qr16v0CMqGsT+vnzmANrT5wdG25iqS3Z
-         fv+A==
-X-Gm-Message-State: AOJu0YzN5vhroaNHgI76400aoxeGQSnU6cklCZOTJS5Nm59Whze7fTq9
-	uP+CGqKuY0JT0HhTqBilV/gZL6cLDPel0uJjuQ0btkUiBavX
-X-Google-Smtp-Source: AGHT+IEWlYNHZ8FBPDPfTtKasOoO9DDEe2aMzCjLNuY/eunbWx/0Dx23U9vkHQAGwGrZmEfOiGN4XMP/wdHHKYAgSp9iDYgca8ce
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A5F1CAA7
+	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 15:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fae+h1tQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1698939092;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tg7swCTVgatlDhFOOnZeMPiblohfI0wjSYU4Q536D8k=;
+	b=fae+h1tQPZ5MirQaLUXYZNUEHK9yWEcF5UDQ3ED9Hf1LCbDkrfLsNpjVu2Ipq3ONu8FjKG
+	rMhp/7cf7YzZ9UQ+2/ZINtdgeA10TZ6/5tJwHv3+b1nQJY4tgWr8/2sIBpzB3hA6vB1O1/
+	4JKcF0axYvEiEGcQyteqUKdHJea9aOk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-452-7bITcguBOoWECjK1OWm_fw-1; Thu, 02 Nov 2023 11:31:28 -0400
+X-MC-Unique: 7bITcguBOoWECjK1OWm_fw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BE5C811E94
+	for <llvm@lists.linux.dev>; Thu,  2 Nov 2023 15:31:28 +0000 (UTC)
+Received: from [172.64.13.10] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 45EA940C6EBF;
+	Thu,  2 Nov 2023 15:31:28 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
+ mainline.kernel.org-clang, babe3939)
+Date: Thu, 02 Nov 2023 15:31:28 -0000
+To: llvm@lists.linux.dev, yizhan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a9d:6197:0:b0:6cd:f9b7:dadf with SMTP id
- g23-20020a9d6197000000b006cdf9b7dadfmr5320954otk.2.1698938788231; Thu, 02 Nov
- 2023 08:26:28 -0700 (PDT)
-Date: Thu, 02 Nov 2023 08:26:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f7bf4906092d02cb@google.com>
-Subject: [syzbot] [mm?] general protection fault in hugetlb_vma_lock_read
-From: syzbot <syzbot+93e7c679006f0d4e6105@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <25727.123110211312801550@us-mta-452.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi, we tested your kernel and here are the results:
 
-syzbot found the following issue on:
-
-HEAD commit:    babe393974de Merge tag 'docs-6.7' of git://git.lwn.net/linux
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=176e7813680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=34994593e74fdcfe
-dashboard link: https://syzkaller.appspot.com/bug?extid=93e7c679006f0d4e6105
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/81ff19e40c77/disk-babe3939.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a92e6d2d9507/vmlinux-babe3939.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/afd2bad18cfc/bzImage-babe3939.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+93e7c679006f0d4e6105@syzkaller.appspotmail.com
-
-netlink: 12 bytes leftover after parsing attributes in process `syz-executor.1'.
-general protection fault, probably for non-canonical address 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
-CPU: 1 PID: 15736 Comm: syz-executor.1 Not tainted 6.6.0-syzkaller-10265-gbabe393974de #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/09/2023
-RIP: 0010:__lock_acquire+0x109/0x5de0 kernel/locking/lockdep.c:5004
-Code: 45 85 c9 0f 84 cc 0e 00 00 44 8b 05 21 dc 81 0b 45 85 c0 0f 84 be 0d 00 00 48 ba 00 00 00 00 00 fc ff df 4c 89 d1 48 c1 e9 03 <80> 3c 11 00 0f 85 e8 40 00 00 49 81 3a e0 09 b3 90 0f 84 96 0d 00
-RSP: 0018:ffffc90003387378 EFLAGS: 00010006
-RAX: ffff88801d5e9dc0 RBX: 1ffff92000670e9f RCX: 000000000000001d
-RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 00000000000000e8
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-R10: 00000000000000e8 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000001
-FS:  00007f07477fc6c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000b80 CR3: 000000006a8b7000 CR4: 00000000003506f0
-Call Trace:
- <TASK>
- lock_acquire kernel/locking/lockdep.c:5753 [inline]
- lock_acquire+0x1ae/0x510 kernel/locking/lockdep.c:5718
- down_read+0x9c/0x470 kernel/locking/rwsem.c:1526
- hugetlb_vma_lock_read mm/hugetlb.c:274 [inline]
- hugetlb_vma_lock_read+0xae/0x100 mm/hugetlb.c:265
- hugetlb_follow_page_mask+0x156/0xf20 mm/hugetlb.c:6500
- follow_page_mask+0x49e/0xda0 mm/gup.c:824
- __get_user_pages+0x366/0x1480 mm/gup.c:1237
- __get_user_pages_locked mm/gup.c:1504 [inline]
- __gup_longterm_locked+0x755/0x2570 mm/gup.c:2198
- pin_user_pages_remote+0xee/0x140 mm/gup.c:3346
- process_vm_rw_single_vec mm/process_vm_access.c:105 [inline]
- process_vm_rw_core.constprop.0+0x43d/0xa10 mm/process_vm_access.c:215
- process_vm_rw+0x2ff/0x360 mm/process_vm_access.c:283
- __do_sys_process_vm_writev mm/process_vm_access.c:303 [inline]
- __se_sys_process_vm_writev mm/process_vm_access.c:298 [inline]
- __x64_sys_process_vm_writev+0xe2/0x1b0 mm/process_vm_access.c:298
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x3f/0x110 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7f0746a7cae9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f07477fc0c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000137
-RAX: ffffffffffffffda RBX: 00007f0746b9bf80 RCX: 00007f0746a7cae9
-RDX: 0000000000000001 RSI: 0000000020000b80 RDI: 0000000000001d1b
-RBP: 00007f0746ac847a R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000020000f80 R11: 0000000000000246 R12: 0000000000000000
-R13: 000000000000000b R14: 00007f0746b9bf80 R15: 00007f0746cbfa48
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__lock_acquire+0x109/0x5de0 kernel/locking/lockdep.c:5004
-Code: 45 85 c9 0f 84 cc 0e 00 00 44 8b 05 21 dc 81 0b 45 85 c0 0f 84 be 0d 00 00 48 ba 00 00 00 00 00 fc ff df 4c 89 d1 48 c1 e9 03 <80> 3c 11 00 0f 85 e8 40 00 00 49 81 3a e0 09 b3 90 0f 84 96 0d 00
-RSP: 0018:ffffc90003387378 EFLAGS: 00010006
-RAX: ffff88801d5e9dc0 RBX: 1ffff92000670e9f RCX: 000000000000001d
-RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 00000000000000e8
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-R10: 00000000000000e8 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000001
-FS:  00007f07477fc6c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000b80 CR3: 000000006a8b7000 CR4: 00000000003506f0
-----------------
-Code disassembly (best guess):
-   0:	45 85 c9             	test   %r9d,%r9d
-   3:	0f 84 cc 0e 00 00    	je     0xed5
-   9:	44 8b 05 21 dc 81 0b 	mov    0xb81dc21(%rip),%r8d        # 0xb81dc31
-  10:	45 85 c0             	test   %r8d,%r8d
-  13:	0f 84 be 0d 00 00    	je     0xdd7
-  19:	48 ba 00 00 00 00 00 	movabs $0xdffffc0000000000,%rdx
-  20:	fc ff df
-  23:	4c 89 d1             	mov    %r10,%rcx
-  26:	48 c1 e9 03          	shr    $0x3,%rcx
-* 2a:	80 3c 11 00          	cmpb   $0x0,(%rcx,%rdx,1) <-- trapping instruction
-  2e:	0f 85 e8 40 00 00    	jne    0x411c
-  34:	49 81 3a e0 09 b3 90 	cmpq   $0xffffffff90b309e0,(%r10)
-  3b:	0f                   	.byte 0xf
-  3c:	84                   	.byte 0x84
-  3d:	96                   	xchg   %eax,%esi
-  3e:	0d                   	.byte 0xd
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Kernel information:
+    Commit message: Merge tag 'docs-6.7' of git://git.lwn.net/linux
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/112637
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10157546
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+         aarch64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10157547
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10157441
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10157442
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/031
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+          x86_64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10157485
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10157486
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
 
-If you want to undo deduplication, reply with:
-#syz undup
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
