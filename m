@@ -1,140 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F338B1CF9C;
-	Thu,  2 Nov 2023 15:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1B41DDCC;
+	Thu,  2 Nov 2023 16:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cJ386WLd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698940031; x=1730476031;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HNI3x3MYh/j6wySXSOikcO/9VddS9p/hNBuGdysRtcM=;
-  b=cJ386WLdq5WalHQHFqIYIaZg1Hw+lukzq7bvNcSqWXpQLgz9t9B3lCQT
-   +sRSGO6okiUkNlB4geE4ATPQ5sp2tZIHE741WIwXJSY3ykymoNQTw2sTn
-   +aNG51yr31Vf9ag481EVJPUhlMIwlWGaBO6uhq63jW3HwtddJ3uEvZITG
-   uyYtn6hLaUhIULQhnU50BRliEbYINiF354Fw/zghP5Yc9EAkSOYgG4FVD
-   fXGHsEuZHji/HkLcvWZdQFvMrLMK/g9Iv7Ukpev9ga6oK0ZDPzaqklTss
-   KLbhLP1AYUamC/Rvjzr2RbQ5TTXSlLyTAYrdr1OkKJTToitDtOvUNqFUb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="368950279"
-X-IronPort-AV: E=Sophos;i="6.03,271,1694761200"; 
-   d="scan'208";a="368950279"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 08:46:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="711186730"
-X-IronPort-AV: E=Sophos;i="6.03,271,1694761200"; 
-   d="scan'208";a="711186730"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Nov 2023 08:46:39 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qyZu1-0001b6-0v;
-	Thu, 02 Nov 2023 15:46:37 +0000
-Date: Thu, 2 Nov 2023 23:46:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: lib/maple_tree.c:4327:20: warning: stack frame size (1112) exceeds
- limit (1024) in 'mas_wr_modify'
-Message-ID: <202311022317.B3t8ONbL-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mva+y3X4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2127C433CA;
+	Thu,  2 Nov 2023 16:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698942305;
+	bh=ZP/kIBCdvT4zzHe9YkNWVQ0ufjZVnXPWplIffBkOZoU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=mva+y3X476vfa8R9Ay7i+hgpOKdcBcnT38YLWatpi/J8z8Z6sPJZsOtffdqm7TfpG
+	 VRuccAfqXOOUW5HLNq/PDoDaIH9jezPF/Qrjze+v/BtdTwA6ug9URafaxvMWtlHok6
+	 s00AoYSmXQmmr/XCNSgDOPYumIUd1DaV0TiI5gH6T+DYbG50NpuLzr+dWfmINnt8Tw
+	 VYY3T4Z6fUsewqp3Ov5l3g3EVsO4Atjw9MocsBie8EjEf4fFQwPyiYWFY8QtUOAbVp
+	 4fBqiMhkSexrR4dxZLHOKHFaK0T+d89HUEknPkspkOg6CQy2koq5v7dc6hPEUAoDlY
+	 g0JHHZqIrez0g==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 02 Nov 2023 09:24:53 -0700
+Subject: [PATCH] drm/amd/display: Increase frame warning limit for clang in
+ dml2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231102-amdgpu-dml2-increase-frame-size-warning-for-clang-v1-1-6eb157352931@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFTNQ2UC/x3NSwrDMAwA0asErSuIHejvKqUL1ZZdQawEmbQlI
+ XeP6XI2bzaobMIV7t0Gxh+pMmkLd+ogvEkzo8TW4Hs/ONd7pBLzvGAso0fRYEyVMRkVxior45d
+ MRTOmyTCMTcBwG17RxzNdLw6aOxsn+f2fj+e+H2ns4L+DAAAA
+To: harry.wentland@amd.com, sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com, 
+ alexander.deucher@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com
+Cc: ndesaulniers@google.com, trix@redhat.com, amd-gfx@lists.freedesktop.org, 
+ dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3010; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ZP/kIBCdvT4zzHe9YkNWVQ0ufjZVnXPWplIffBkOZoU=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKnOZxOE5a7O1RNk3ayX/IjH2VpChG1W37WPdUsva134J
+ bep79PpjlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCR0hiGv9Jd7iE/9zJdrvsU
+ L3/8f5hZQVXfqbU/bjyftcxv83NBqZsM//3PJT6qUm/167ww8/p3VffuTYYm+5ui1ikLfqyrUt1
+ 0mgsA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Liam,
+When building ARCH=x86_64 allmodconfig with clang, which have sanitizers
+enabled, there is a warning about a large stack frame.
 
-FYI, the error/warning still remains.
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6265:13: error: stack frame size (2520) exceeds limit (2048) in 'dml_prefetch_check' [-Werror,-Wframe-larger-than]
+   6265 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+        |             ^
+  1 error generated.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   21e80f3841c01aeaf32d7aee7bbc87b3db1aa0c6
-commit: 54a611b605901c7d5d05b6b8f5d04a6ceb0962aa Maple Tree: add new data structure
-date:   1 year, 1 month ago
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231102/202311022317.B3t8ONbL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231102/202311022317.B3t8ONbL-lkp@intel.com/reproduce)
+Notably, GCC 13.2.0 does not do too much of a better job, as it is right
+at the current limit of 2048:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311022317.B3t8ONbL-lkp@intel.com/
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_prefetch_check':
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6705:1: error: the frame size of 2048 bytes is larger than 1800 bytes [-Werror=frame-larger-than=]
+   6705 | }
+        | ^
 
-All warnings (new ones prefixed by >>):
+In the past, these warnings have been avoided by reducing the number of
+parameters to various functions so that not as many arguments need to be
+passed on the stack. However, these patches take a good amount of effort
+to write despite being mechanical due to code structure and complexity
+and they are never carried forward to new generations of the code so
+that effort has to be expended every new hardware generation, which
+becomes harder to justify as time goes on.
 
-   lib/maple_tree.c:330:20: warning: unused function 'mte_set_full' [-Wunused-function]
-     330 | static inline void mte_set_full(const struct maple_enode *node)
-         |                    ^
-   lib/maple_tree.c:335:20: warning: unused function 'mte_clear_full' [-Wunused-function]
-     335 | static inline void mte_clear_full(const struct maple_enode *node)
-         |                    ^
-   lib/maple_tree.c:3958:19: warning: stack frame size (1032) exceeds limit (1024) in 'mas_wr_spanning_store' [-Wframe-larger-than]
-    3958 | static inline int mas_wr_spanning_store(struct ma_wr_state *wr_mas)
-         |                   ^
->> lib/maple_tree.c:4327:20: warning: stack frame size (1112) exceeds limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    4327 | static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-         |                    ^
-   4 warnings generated.
+There is some effort to improve clang's code generation but that may
+take some time between code review, shifting priorities, and release
+cycles. To avoid having a noticeable or lengthy breakage in
+all{mod,yes}config, which are easy testing targets that have -Werror
+enabled, increase the limit for clang by 50% so that cases of extremely
+poor code generation can still be caught while not breaking the majority
+of builds. When clang's code generation improves, the limit increase can
+be restricted to older clang versions.
 
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+If there is another DRM pull before 6.7-rc1, it would be much
+appreciated if this could make that so that other trees are not
+potentially broken by this. If not, no worries, as it was my fault for
+not sending this sooner.
+---
+ drivers/gpu/drm/amd/display/dc/dml2/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-vim +/mas_wr_modify +4327 lib/maple_tree.c
+diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+index 70ae5eba624e..dff8237c0999 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+@@ -60,7 +60,7 @@ endif
+ endif
+ 
+ ifneq ($(CONFIG_FRAME_WARN),0)
+-frame_warn_flag := -Wframe-larger-than=2048
++frame_warn_flag := -Wframe-larger-than=$(if $(CONFIG_CC_IS_CLANG),3072,2048)
+ endif
+ 
+ CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_core.o := $(dml2_ccflags) $(frame_warn_flag)
 
-  4326	
-> 4327	static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-  4328	{
-  4329		unsigned char node_slots;
-  4330		unsigned char node_size;
-  4331		struct ma_state *mas = wr_mas->mas;
-  4332	
-  4333		/* Direct replacement */
-  4334		if (wr_mas->r_min == mas->index && wr_mas->r_max == mas->last) {
-  4335			rcu_assign_pointer(wr_mas->slots[mas->offset], wr_mas->entry);
-  4336			if (!!wr_mas->entry ^ !!wr_mas->content)
-  4337				mas_update_gap(mas);
-  4338			return;
-  4339		}
-  4340	
-  4341		/* Attempt to append */
-  4342		node_slots = mt_slots[wr_mas->type];
-  4343		node_size = wr_mas->node_end - wr_mas->offset_end + mas->offset + 2;
-  4344		if (mas->max == ULONG_MAX)
-  4345			node_size++;
-  4346	
-  4347		/* slot and node store will not fit, go to the slow path */
-  4348		if (unlikely(node_size >= node_slots))
-  4349			goto slow_path;
-  4350	
-  4351		if (wr_mas->entry && (wr_mas->node_end < node_slots - 1) &&
-  4352		    (mas->offset == wr_mas->node_end) && mas_wr_append(wr_mas)) {
-  4353			if (!wr_mas->content || !wr_mas->entry)
-  4354				mas_update_gap(mas);
-  4355			return;
-  4356		}
-  4357	
-  4358		if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
-  4359			return;
-  4360		else if (mas_wr_node_store(wr_mas))
-  4361			return;
-  4362	
-  4363		if (mas_is_err(mas))
-  4364			return;
-  4365	
-  4366	slow_path:
-  4367		mas_wr_bnode(wr_mas);
-  4368	}
-  4369	
+---
+base-commit: 21e80f3841c01aeaf32d7aee7bbc87b3db1aa0c6
+change-id: 20231102-amdgpu-dml2-increase-frame-size-warning-for-clang-c93bd2d6a871
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
