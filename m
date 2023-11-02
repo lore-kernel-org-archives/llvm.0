@@ -1,226 +1,188 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C0B1DFCC;
-	Thu,  2 Nov 2023 17:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD951DFE8;
+	Thu,  2 Nov 2023 17:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aY6TakfT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698945476; x=1730481476;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MWipMJE00I35wm9mvKmO5f27TXal4/HduGfx97+LPFY=;
-  b=aY6TakfTIXuUkVJnGaI3TztyDqpRMkspqbv4laX/eIgYMNmUMgaac8ag
-   yWu0MLoT0Mc4mdxtEtrWyjTywEvml7FADOkd+nC4AR89A+STGuLjTVN7Q
-   5jqqeWLFLDdioaLtl4lWit0uhTUxYi+qXQl2niEnnqgj8cyiCsWJX4Lq2
-   75zpzyzRo1QrgSNs56UrEC0CWRh8npjQzlsFz+Edy9rAApx2mt28KNXk0
-   oyrYlKZK+nWs5BkE0qZC4kPJsrKYXbuTQzHMSgFU4JY0MGlA6jWFqArPt
-   YEVaEkv3aHpuZeAPHywhzxIPFVuJB/5qtHT8ca7+Zk1aGI3bgBUzb9zNJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="379160530"
-X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="379160530"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 10:17:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="754863198"
-X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="754863198"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 02 Nov 2023 10:17:47 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qybKD-0001hk-1q;
-	Thu, 02 Nov 2023 17:17:45 +0000
-Date: Fri, 3 Nov 2023 01:16:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li Zhijian <lizhijian@fujitsu.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 3/4] mm/vmstat: rename pgdemote_* to pgdemote_dst_*
- and add pgdemote_src_*
-Message-ID: <202311030137.Vu2ki6zm-lkp@intel.com>
-References: <20231102025648.1285477-4-lizhijian@fujitsu.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQQ8a30R"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1eb39505ba4so754965fac.0;
+        Thu, 02 Nov 2023 10:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698945708; x=1699550508; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Rp/uBT2MTcYjjVBYbc90vM3yxKBzr1d8jsLpQy8gp0=;
+        b=JQQ8a30RUaWn0E3A+wfXZbVkP/JCHVLhIowrNCp7/+C/2SzHbcqbw1+Q7b7sbaGVBG
+         p9Sx+WJ8SI75pp4QuchsxhACfDVCzfs76vk2/33EF8z5y6H8bwxkirV4HlTxOUFw2okD
+         Ag7/D8F4+DEA4jzpJyzP2VTyitYYlPcQOMWBT72Xe54ZYOtmN/h116NIuy39h8P57YBr
+         j4purJ2PsFrY9wL0T0KJmORgeqnzGkKiIUAfy8q27ao0wN6XmrVrTq9mDO4TaUXaR6so
+         fN0D+IKdxXibA/UD4Oez+uxhvxsepeK7oHbSO0+LtgbZ+2eyg3EEBIIxNm/6UwAHOiVa
+         d7QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698945708; x=1699550508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3Rp/uBT2MTcYjjVBYbc90vM3yxKBzr1d8jsLpQy8gp0=;
+        b=jn5pjsb9VzlWDDUaTFUFmKTTyLPQzyWPQjTDSIXe70S520jjd+ArmrET10vp3JsZVA
+         BYjWRiEF1HGn5+tRn/GhQk+xAkwhN1LCZsLFBUzwS5OwRTTh17boWkvrvSszPoeYEwzb
+         ebaZjysby7qVptbqEg328T2CEaPcLwrd4G6gKHIZdzYTtUIL+vAKD37qfR1jyduXQzEp
+         jMkDzcuDG8Horr5FOuQaPoAIOIo3upToX5+yC2BDHem/ygAZUDQlikcvoLqt+EzYte2n
+         90naGAk5yQTvVy14JHAM9L62MNhwAO7QREzdk54k8Yu0bRma2FWrBpML7EV96tIRDsmC
+         cpkg==
+X-Gm-Message-State: AOJu0Yy8r5jLCaEst90CU/F0Ce8RzxNqbRC5UgV5mVqmE0voJ7FMpewI
+	iKmFxBMqO/W3mg0D5HKFGseiOCPAhILNXMQVAmw=
+X-Google-Smtp-Source: AGHT+IGwkwESGNioZcGP2BYE2/zKNi9YzUdubxg5EfxngkzrELmqWDCxtqHlprEDaYa4rZqREAaw2h3caVJpneZf7kk=
+X-Received: by 2002:a05:6871:620b:b0:1ea:8b10:2438 with SMTP id
+ rd11-20020a056871620b00b001ea8b102438mr19876616oab.50.1698945708554; Thu, 02
+ Nov 2023 10:21:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231102025648.1285477-4-lizhijian@fujitsu.com>
+References: <20231102-amdgpu-dml2-increase-frame-size-warning-for-clang-v1-1-6eb157352931@kernel.org>
+ <bb3b74c8-8ab5-472c-84c1-8aa0d8bfa3b8@amd.com> <20231102171237.GA1184739@dev-arch.thelio-3990X>
+In-Reply-To: <20231102171237.GA1184739@dev-arch.thelio-3990X>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Thu, 2 Nov 2023 13:21:36 -0400
+Message-ID: <CADnq5_OvQYq6i78v0=MB4eQjN_secd+DQ5zf7KnM4n1pxHvVdg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: Increase frame warning limit for clang
+ in dml2
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Hamza Mahfooz <hamza.mahfooz@amd.com>, ndesaulniers@google.com, llvm@lists.linux.dev, 
+	sunpeng.li@amd.com, trix@redhat.com, Xinhui.Pan@amd.com, 
+	Rodrigo.Siqueira@amd.com, patches@lists.linux.dev, 
+	dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org, 
+	alexander.deucher@amd.com, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Li,
+On Thu, Nov 2, 2023 at 1:12=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Thu, Nov 02, 2023 at 12:59:00PM -0400, Hamza Mahfooz wrote:
+> > On 11/2/23 12:24, Nathan Chancellor wrote:
+> > > When building ARCH=3Dx86_64 allmodconfig with clang, which have sanit=
+izers
+> > > enabled, there is a warning about a large stack frame.
+> > >
+> > >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:=
+6265:13: error: stack frame size (2520) exceeds limit (2048) in 'dml_prefet=
+ch_check' [-Werror,-Wframe-larger-than]
+> > >     6265 | static void dml_prefetch_check(struct display_mode_lib_st =
+*mode_lib)
+> > >          |             ^
+> > >    1 error generated.
+> > >
+> > > Notably, GCC 13.2.0 does not do too much of a better job, as it is ri=
+ght
+> > > at the current limit of 2048:
+> > >
+> > >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:=
+ In function 'dml_prefetch_check':
+> > >    drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:=
+6705:1: error: the frame size of 2048 bytes is larger than 1800 bytes [-Wer=
+ror=3Dframe-larger-than=3D]
+> > >     6705 | }
+> > >          | ^
+> > >
+> > > In the past, these warnings have been avoided by reducing the number =
+of
+> > > parameters to various functions so that not as many arguments need to=
+ be
+> > > passed on the stack. However, these patches take a good amount of eff=
+ort
+> > > to write despite being mechanical due to code structure and complexit=
+y
+> > > and they are never carried forward to new generations of the code so
+> > > that effort has to be expended every new hardware generation, which
+> > > becomes harder to justify as time goes on.
+> > >
+> > > There is some effort to improve clang's code generation but that may
+> > > take some time between code review, shifting priorities, and release
+> > > cycles. To avoid having a noticeable or lengthy breakage in
+> > > all{mod,yes}config, which are easy testing targets that have -Werror
+> > > enabled, increase the limit for clang by 50% so that cases of extreme=
+ly
+> > > poor code generation can still be caught while not breaking the major=
+ity
+> > > of builds. When clang's code generation improves, the limit increase =
+can
+> > > be restricted to older clang versions.
+> > >
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > > If there is another DRM pull before 6.7-rc1, it would be much
+> > > appreciated if this could make that so that other trees are not
+> > > potentially broken by this. If not, no worries, as it was my fault fo=
+r
+> > > not sending this sooner.
+> > > ---
+> > >   drivers/gpu/drm/amd/display/dc/dml2/Makefile | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/g=
+pu/drm/amd/display/dc/dml2/Makefile
+> > > index 70ae5eba624e..dff8237c0999 100644
+> > > --- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> > > +++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> > > @@ -60,7 +60,7 @@ endif
+> > >   endif
+> > >   ifneq ($(CONFIG_FRAME_WARN),0)
+> > > -frame_warn_flag :=3D -Wframe-larger-than=3D2048
+> > > +frame_warn_flag :=3D -Wframe-larger-than=3D$(if $(CONFIG_CC_IS_CLANG=
+),3072,2048)
+> >
+> > I would prefer checking for `CONFIG_KASAN || CONFIG_KCSAN` instead
+> > since the stack usage shouldn't change much if both of those are disabl=
+ed.
+>
+> So something like this? Or were you talking about replacing the clang
+> check entirely with the KASAN/KCSAN check?
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+I think replacing the clang check entirely.  A similar issue was just
+reported on different GCC versions:
+https://lists.freedesktop.org/archives/amd-gfx/2023-November/100725.html
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.6 next-20231102]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Alex
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhijian/mm-vmstat-Move-pgdemote_-to-per-node-stats/20231102-135849
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20231102025648.1285477-4-lizhijian%40fujitsu.com
-patch subject: [PATCH RFC 3/4] mm/vmstat: rename pgdemote_* to pgdemote_dst_* and add pgdemote_src_*
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231103/202311030137.Vu2ki6zm-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231103/202311030137.Vu2ki6zm-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311030137.Vu2ki6zm-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/vmscan.c:19:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/vmscan.c:19:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/vmscan.c:19:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> mm/vmscan.c:1114:4: error: use of undeclared identifier 'PGDEMOTE_SRC_DIRECT'
-    1114 |                         PGDEMOTE_SRC_DIRECT - PGDEMOTE_SRC_KSWAPD);
-         |                         ^
->> mm/vmscan.c:1114:26: error: use of undeclared identifier 'PGDEMOTE_SRC_KSWAPD'
-    1114 |                         PGDEMOTE_SRC_DIRECT - PGDEMOTE_SRC_KSWAPD);
-         |                                               ^
->> mm/vmscan.c:1118:4: error: use of undeclared identifier 'PGDEMOTE_SRC_KHUGEPAGED'
-    1118 |                         PGDEMOTE_SRC_KHUGEPAGED - PGDEMOTE_SRC_KSWAPD);
-         |                         ^
-   mm/vmscan.c:1118:30: error: use of undeclared identifier 'PGDEMOTE_SRC_KSWAPD'
-    1118 |                         PGDEMOTE_SRC_KHUGEPAGED - PGDEMOTE_SRC_KSWAPD);
-         |                                                   ^
-   mm/vmscan.c:1121:15: error: use of undeclared identifier 'PGDEMOTE_SRC_DIRECT'
-    1121 |         BUILD_BUG_ON(PGDEMOTE_SRC_DIRECT - PGDEMOTE_SRC_KSWAPD !=
-         |                      ^
-   mm/vmscan.c:1121:37: error: use of undeclared identifier 'PGDEMOTE_SRC_KSWAPD'
-    1121 |         BUILD_BUG_ON(PGDEMOTE_SRC_DIRECT - PGDEMOTE_SRC_KSWAPD !=
-         |                                            ^
->> mm/vmscan.c:1122:4: error: use of undeclared identifier 'PGDEMOTE_DST_DIRECT'
-    1122 |                         PGDEMOTE_DST_DIRECT - PGDEMOTE_DST_KSWAPD);
-         |                         ^
->> mm/vmscan.c:1122:26: error: use of undeclared identifier 'PGDEMOTE_DST_KSWAPD'
-    1122 |                         PGDEMOTE_DST_DIRECT - PGDEMOTE_DST_KSWAPD);
-         |                                               ^
-   mm/vmscan.c:1123:15: error: use of undeclared identifier 'PGDEMOTE_SRC_KHUGEPAGED'
-    1123 |         BUILD_BUG_ON(PGDEMOTE_SRC_KHUGEPAGED - PGDEMOTE_SRC_KSWAPD !=
-         |                      ^
-   mm/vmscan.c:1123:41: error: use of undeclared identifier 'PGDEMOTE_SRC_KSWAPD'
-    1123 |         BUILD_BUG_ON(PGDEMOTE_SRC_KHUGEPAGED - PGDEMOTE_SRC_KSWAPD !=
-         |                                                ^
->> mm/vmscan.c:1124:4: error: use of undeclared identifier 'PGDEMOTE_DST_KHUGEPAGED'
-    1124 |                         PGDEMOTE_DST_KHUGEPAGED - PGDEMOTE_DST_KSWAPD);
-         |                         ^
-   mm/vmscan.c:1124:30: error: use of undeclared identifier 'PGDEMOTE_DST_KSWAPD'
-    1124 |                         PGDEMOTE_DST_KHUGEPAGED - PGDEMOTE_DST_KSWAPD);
-         |                                                   ^
-   mm/vmscan.c:1687:7: error: use of undeclared identifier 'PGDEMOTE_SRC_KSWAPD'
-    1687 |                     PGDEMOTE_SRC_KSWAPD + reclaimer_offset(), nr_succeeded);
-         |                     ^
-   mm/vmscan.c:1689:7: error: use of undeclared identifier 'PGDEMOTE_DST_KSWAPD'
-    1689 |                     PGDEMOTE_DST_KSWAPD + reclaimer_offset(), nr_succeeded);
-         |                     ^
-   12 warnings and 14 errors generated.
-
-
-vim +/PGDEMOTE_SRC_DIRECT +1114 mm/vmscan.c
-
-  1110	
-  1111	static int reclaimer_offset(void)
-  1112	{
-  1113		BUILD_BUG_ON(PGSTEAL_DIRECT - PGSTEAL_KSWAPD !=
-> 1114				PGDEMOTE_SRC_DIRECT - PGDEMOTE_SRC_KSWAPD);
-  1115		BUILD_BUG_ON(PGSTEAL_DIRECT - PGSTEAL_KSWAPD !=
-  1116				PGSCAN_DIRECT - PGSCAN_KSWAPD);
-  1117		BUILD_BUG_ON(PGSTEAL_KHUGEPAGED - PGSTEAL_KSWAPD !=
-> 1118				PGDEMOTE_SRC_KHUGEPAGED - PGDEMOTE_SRC_KSWAPD);
-  1119		BUILD_BUG_ON(PGSTEAL_KHUGEPAGED - PGSTEAL_KSWAPD !=
-  1120				PGSCAN_KHUGEPAGED - PGSCAN_KSWAPD);
-> 1121		BUILD_BUG_ON(PGDEMOTE_SRC_DIRECT - PGDEMOTE_SRC_KSWAPD !=
-> 1122				PGDEMOTE_DST_DIRECT - PGDEMOTE_DST_KSWAPD);
-  1123		BUILD_BUG_ON(PGDEMOTE_SRC_KHUGEPAGED - PGDEMOTE_SRC_KSWAPD !=
-> 1124				PGDEMOTE_DST_KHUGEPAGED - PGDEMOTE_DST_KSWAPD);
-  1125	
-  1126	
-  1127		if (current_is_kswapd())
-  1128			return 0;
-  1129		if (current_is_khugepaged())
-  1130			return PGSTEAL_KHUGEPAGED - PGSTEAL_KSWAPD;
-  1131		return PGSTEAL_DIRECT - PGSTEAL_KSWAPD;
-  1132	}
-  1133	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/d=
+rm/amd/display/dc/dml2/Makefile
+> index 70ae5eba624e..0fc1b13295eb 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> @@ -60,8 +60,12 @@ endif
+>  endif
+>
+>  ifneq ($(CONFIG_FRAME_WARN),0)
+> +ifeq ($(CONFIG_CC_IS_CLANG)$(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),yy=
+)
+> +frame_warn_flag :=3D -Wframe-larger-than=3D3072
+> +else
+>  frame_warn_flag :=3D -Wframe-larger-than=3D2048
+>  endif
+> +endif
+>
+>  CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_core.o :=3D $(dml2_ccflags) $(=
+frame_warn_flag)
+>  CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_util.o :=3D $(dml2_ccflags)
+>
+> > >   endif
+> > >   CFLAGS_$(AMDDALPATH)/dc/dml2/display_mode_core.o :=3D $(dml2_ccflag=
+s) $(frame_warn_flag)
+> > >
+> > > ---
+> > > base-commit: 21e80f3841c01aeaf32d7aee7bbc87b3db1aa0c6
+> > > change-id: 20231102-amdgpu-dml2-increase-frame-size-warning-for-clang=
+-c93bd2d6a871
+> > >
+> > > Best regards,
+> > --
+> > Hamza
+> >
