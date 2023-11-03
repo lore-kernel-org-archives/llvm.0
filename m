@@ -1,94 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0B423760
-	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 21:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C701F60A
+	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 22:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GKqOtFA6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699047066;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Hztl1TmIM86a6eqYSajpuC0wFwwLVsH8fPDZU0j4qbM=;
-	b=GKqOtFA6qQ0PanlL6Z6I+IxOt61n/zvbhfYw7z97UCtGywHbWjF2vG/pgMfXZBhtFcw2F1
-	Clu+pPwiXC+D3dd3HOwSesteK0CWIMzL/9maYLdFoGooUHY5cyPq5BPGWTwdUSkfKY5LDi
-	zA7gG89UmdONpb28D2t2ktGUHsTBb3Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-135-wShKJoMROuKpsIVnaz94KA-1; Fri, 03 Nov 2023 17:31:05 -0400
-X-MC-Unique: wShKJoMROuKpsIVnaz94KA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAC05101A52D
-	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 21:31:04 +0000 (UTC)
-Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B6078492BFA;
-	Fri,  3 Nov 2023 21:31:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
- mainline.kernel.org-clang, e392ea4d)
-Date: Fri, 03 Nov 2023 21:31:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NcY/tuVY"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-32ddfb38c02so1516136f8f.3
+        for <llvm@lists.linux.dev>; Fri, 03 Nov 2023 15:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699050858; x=1699655658; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jYVsvvgW5thJ6ZQ5SF5XrsYvCMjIlh4IARL3HZdCcJs=;
+        b=NcY/tuVY4m22kVuM+lBjCOP7fn0aCHzXABDyGhvY02HoPyMNFW90/rQuoOD9nCqTPe
+         2JQakdClQtrXWixb7vWNCRr7Nd7Wy3VBwd6sQ2j/Rq5RF162gSrakxNJPKZW3WGhJmto
+         Zu60ZNO6bbly62DHlRlnuaxu5QsY+36YVnvX53vLDY733psogsXzGZDhTrtox7kjL8yj
+         yu4+K89ll1RbI3st7zpESxttdBnzHnzunD8xVKaAt0W/JHBmw33oUj1nugP7Yel6Nm0r
+         ina9zmEIfBI459xbmBGVp9YXd8Af1EBtx9jI1l9NREXwwG+y5s4IXV1r2iT763deix4H
+         iQww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699050858; x=1699655658;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jYVsvvgW5thJ6ZQ5SF5XrsYvCMjIlh4IARL3HZdCcJs=;
+        b=YSAD/OkgGqGCnEuXo6ucFVazd3ml5g6FgI0Uj942rSJ0THOBPnaPnSH3Gv0Egk9xWb
+         8q7zQpi7/0jcLm7Bt8jEq9ezgBLipzT60gRWH/1RtFZyXaTMsmsOAQVrFqQO7zUr5pSZ
+         Xo8hOaTm3Fsys7emNmeeL+gfiUwn5VxrGx8di36Dwi/Qt1NSY4Hfwf8reevxjq0nuDBs
+         Idny325zMXmkM2kdLh2B6W3ihHty9Th5kKzIgWUpabVW//LGAkxWga1vty9PPFdAIvX8
+         gvUIVWMIyZLoaA2GJ9whWL7r4w7KNQuSSoPUkzB3omWgfo5zF6QTl7jY/WXXNU8lABHx
+         rUQw==
+X-Gm-Message-State: AOJu0Yw2EJi1IHQqHbjD15hOol0YBFWCOWfpM01nm/ZdDe9KAk69ZuGM
+	hWjLHYVogzIAoMS2mrMH/RaLNvm67GR8Jdn5zFgssZllQkLb1cQgMCI=
+X-Google-Smtp-Source: AGHT+IGvsZkTB0eUSNkkjXUBvaCB8kniPYlTKWNhzuV/Lw1uA+ARdcybrOnE6l14mWCfMQm7B4eqrQW+Pv10nvFGn5I=
+X-Received: by 2002:a5d:4147:0:b0:32d:a335:e33d with SMTP id
+ c7-20020a5d4147000000b0032da335e33dmr14951163wrq.58.1699050857955; Fri, 03
+ Nov 2023 15:34:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <62956.123110317310500165@us-mta-135.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 3 Nov 2023 15:34:03 -0700
+Message-ID: <CAKwvOdmOpXr4=Eoeis0ngU2QPTejWTGmm99bLkFEyBPPW7TD6g@mail.gmail.com>
+Subject: minimal soak time in -next leads to breakages in mainline
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Thorsten Leemhuis <regressions@leemhuis.info>, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Linus,
+Do you have any kind of policy or guidance to developers to avoid
+sending PRs to mainline for features that didn't spend a certain
+amount of time soaking in -next?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Not having any soak time in -next was an issue for bcachefs, and gave
+us time to clean it up before it landed (mostly, I think), which was
+appreciated.  So spending 0 days in -next is obviously problematic.
 
+What if a large feature hits -next for 1 day then gets merged into
+mainline the next day?  2 days?  3? Where do we draw the line?
 
-Kernel information:
-    Commit message: Merge tag 's390-6.7-1' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/s390/linux
+Asking because our CI is red at the moment due to this (large patch in
+-next for 1 day before PR sent and now mainline is red).  I don't
+think the specifics are important, since this will continue to happen
+unless there's clearly stated cultural guidance from the top.  Any
+chance we can get a quote we can link people to in the future?  Or is
+this something for us to expect to keep happening each merge window?
+Is there a way to detect or enforce that PRs don't contain literally
+days old commits?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/113062
+The merge window is always an interesting time for us; another issue
+this cycle is fixes not getting sent along in the same PR (sometimes
+the fix even gets picked up by a different tree; in that case the fix
+and the problem then race to you in PRs; eventually things get fixed,
+but until then the CI is red).
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/42320=
-8
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/42320=
-9
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/42321=
-1
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/423212
+Another common pain point is even if we spot the issue ASAP and send a
+fix, folks go on vacation, and patches don't get picked up with the
+urgency we'd like (for obvious things like "the build is broken
+because -Werror").
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+I'd be curious to know your thoughts on the above.  Have a good weekend.
+-- 
+Thanks,
+~Nick Desaulniers
