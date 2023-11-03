@@ -1,222 +1,1413 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF66EA2
-	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 04:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FF37E
+	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 06:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bvu/vPTL";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="nz0XeKFo"
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A2NOHV0007300;
-	Fri, 3 Nov 2023 04:31:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2023-03-30;
- bh=nGloLzmFrb/QVrfKz/deW610MoURXAGq/qn5wXpPXtk=;
- b=bvu/vPTLIWfX0Ven2zLV5I7SAvnw4ZlQw/+4wI/KMZj3a71qnoCAjbNIHlcFqVxUsTnd
- romaHdOIdNGFVAQWUU/lmAuB7B9iJmqvqeGuBxRvp1CnW4Vv54hY3zAHVDvxu/v9Di5P
- OeISu8IA651OwLjGoE+BeautW/hgqdkXnLtwcrSV1jLGJ/AQZPIDMZWP8+k4ixuVzXau
- TynoOkxixf1bW7p0uNY9FQCzwHfiNr42ziFUtglRNmTlPX+79FhNRjcVRBPedPsJDg1t
- jagzYoaKSt+KhzQgOmmI875gtOy5+CrR0fHVC6oj3AnVene43lkzSyaJwF2IBO4b30c2 5g== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3u0tbdu9u4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 03 Nov 2023 04:31:10 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3A33Rui6009214;
-	Fri, 3 Nov 2023 04:31:09 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3u14x9d7e5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 03 Nov 2023 04:31:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ThAahPBTRBmSdtLzTJ03epCzkclhcN3L+NRppDa2JrRB+N7jxmATbmfHGkrmi9oxFRgI6psDHo2Yk1DZ6TSTrdKM3pcQFa3Qdrw09x5wG//jiPcwsUhRtN+UX0cbJmAueH1/e4OGG6N53JBTw+qTFDc5HjO9yMEpKRdvmtoSkYcHoML1TVMWrOXmhgu9jhuGFl7TqIDp6suEzxkc8t9urowdmrlgSDvp3POCHsX94viE5BpaPsNpe0VYET8o1EpdzqYpP95PrRCUa/F4jR/hzp8jt3nr1GyU9v5Si+3TXkDYS1Uukpa2kDEr63Tb8x+KsOYFHbsrp0CmlaQNS+HVow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jHBZk9rsCmdQ8hcTpL/FQg3+UtkOSDgmLJMxYRhFIW8=;
- b=kADgxP2e/w0dZ9PkkG402BeyKwdS3sBfXJ7mMiJsh3Jbu1aAn0cwrOPy7PkoBrWc4bcLBYyZjwZORYYBmILhcC4z4BGLN2NLrxg1anf2yyikWWZgF3Lq9GZ801TsvKW0Dh3E3iZiP6HEJTfdeE+rgNwAx1SdWSK6VC6SgSBZ9mCLtFqGrxdt9/Lsi8GQgJfFiIGM/6eDPUQRjAwha6byE6utVeDXSP4T8ISStqIBFqT0pylbk5O4uP87rtSFF+79el0YjSQJ05A3fNxiU4WrtRu0zexuaP12WIMxXQ0Y2A5inn7MsXvuab6DwFCF6A7Zwu5qhLATNM1Bhffy5GdBMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="JNnDf35+"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1cc330e8f58so14525435ad.3
+        for <llvm@lists.linux.dev>; Thu, 02 Nov 2023 23:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jHBZk9rsCmdQ8hcTpL/FQg3+UtkOSDgmLJMxYRhFIW8=;
- b=nz0XeKFoEa/zW0TC3sHWpPlkrRhRnEidVKgD7UJcwVSHRXx2hPvv/zW5X9xR882ImbU3TBAiYKefYf8hNw9wEEKQnabq72VCaZvri64lBA8X+A4qu3a83SNo1x71YKP9eRHZh32/zGeTT12LO8y1rq89OlB3NYicn1IJmfL0Nqo=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SA1PR10MB6518.namprd10.prod.outlook.com (2603:10b6:806:2b4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Fri, 3 Nov
- 2023 04:31:07 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::517b:c692:6b20:19c0]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::517b:c692:6b20:19c0%6]) with mapi id 15.20.6954.021; Fri, 3 Nov 2023
- 04:31:07 +0000
-Date: Thu, 2 Nov 2023 21:31:04 -0700
-From: Mike Kravetz <mike.kravetz@oracle.com>
-To: Rik van Riel <riel@surriel.com>
-Cc: Edward Adam Davis <eadavis@qq.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
-        muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [PATCH] mm/hugetlb: fix null ptr defer in hugetlb_vma_lock_write
-Message-ID: <20231103043104.GA245368@monkey>
-References: <3382634358afa9b95dc4f6db8a53a136d4b9e9cb.camel@surriel.com>
- <tencent_164A247533766D667C3D873798968236C409@qq.com>
- <20231103022426.GA3531@monkey>
- <20231103023737.GC3531@monkey>
- <48ec0dd17f048541dd83f7ed7cb29dac91d8c607.camel@surriel.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <48ec0dd17f048541dd83f7ed7cb29dac91d8c607.camel@surriel.com>
-X-ClientProxiedBy: MW4PR03CA0156.namprd03.prod.outlook.com
- (2603:10b6:303:8d::11) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1698994556; x=1699599356; darn=lists.linux.dev;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/v5ZfQMB6sMC51JxgjEVKk7lkodz4aMga39tFHfJ9Qw=;
+        b=JNnDf35+jQhHzy0aONPiCFaW1HclFUb23iEdeJHyp/RipK5Rmu7/gopt8KOGMtULZG
+         bNE1PzElzUOVqDAAYZ5ZNFv/+vwHXH+XSJwzoXERugnRnfUKy5yK5oe6d1jvysWZsN0m
+         h1pJeszzB2iqdzhFAVa9zaxgaxor6zV0/k/mEc7xfLk/f/hlvZEQ+lfcf97dhxVY8L6C
+         j/ms3XVzyZQeUe9nE9CXk9bM90XOy/2a5X8iat2x8CnK/84QrFUWv14rYrggnRfBAo+O
+         HWFU/pjQz36nlOwbWHTqDFz0jmKPeScCrpKu56yYLu1A7CPHQcd2qVlBvUuNSKXKnhKR
+         L9tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698994556; x=1699599356;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/v5ZfQMB6sMC51JxgjEVKk7lkodz4aMga39tFHfJ9Qw=;
+        b=Dx943kOBX0aEHP4oNui2rSaE+PpV+JUgzjWcBhTh2vYyMSLPxJ2bXcY2qib8wBsIY/
+         /m0nZ4LBuSI6h4s7h/6FqedPM+CUVLVLCMhsF+NwRopNLQ0MbQ5g8fT60BHLMwnCDPpZ
+         ZdL6OtgTu6+i2l2DAYDs44ySQgimznp/rHhyJGmX86lIvmPdQ8LLr/ROvx5fvcq1K9BF
+         rzNOjliwEAYRNl7LQ7RCjZ6oIHz014Zf6VQHR+1HVCbaDKfXYtfoa0hKdV5BK5A2/HIV
+         xWPXWasaRegW9FQuRyQmpbCbFkvjYmutuwKycQbifJf2FuLymkqftwuYNH+0kmhDW+gv
+         L2jw==
+X-Gm-Message-State: AOJu0YwcIQxSSBB6qGQNNIQ/5ApMQ6p32YFnV7+DTm/cmhEXUCu4SwlO
+	32w1OI96QKn34BY6LYQIRAXonOLOvMq9EEeei6a1Cw==
+X-Google-Smtp-Source: AGHT+IHmJf9cMfkhOBR7Nx6k8R3sF1uibympnOu2tzKbDQES1qtHFgW7sG7PycBfrKyvWdo3keDxmg==
+X-Received: by 2002:a17:902:dac9:b0:1cc:5612:85 with SMTP id q9-20020a170902dac900b001cc56120085mr14382329plx.45.1698994555027;
+        Thu, 02 Nov 2023 23:55:55 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id ja21-20020a170902efd500b001bdeedd8579sm722351plb.252.2023.11.02.23.55.53
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Nov 2023 23:55:53 -0700 (PDT)
+Message-ID: <65449979.170a0220.1c9b7.1c09@mx.google.com>
+Date: Thu, 02 Nov 2023 23:55:53 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SA1PR10MB6518:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4674855-6834-4ebe-bf24-08dbdc25b237
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	TrRNNKdo02o8wGUkwyPG73XSVU/hhAA5myjIJ3ybw9+HRjzU8xQnTpre9caoePSZhbM8moj/iYy1oL0ys1HEgI18c7ywtH/3JkNTZLi2ejxeTNagoIWwTuYr9VHcjhnZoG9fMyWWJ2JbU9bhViukBQr/VlKVHsj5QXKsUNahOoH3FEFvYitP6RU6c6t2jlY2p1CXgtnyvRLF64BRAEs8miD8xODO5ZM5AFuzAUMeHlQs8is6P5Gq3SGwRbcXpWnEihqbhNYwhLJSulC05mHzLERscsIPm3KDnEVUTEQCbxWV/gTQyWq6MVu3G4S4CDMCNO84liuYti9R2Nu0pLiFizvFy09KyVFycN9tC69c6SImQD5TId0UfM7ajlYRu+5NHdorsA8o3pe0BUYWm7TO6IJm4JzvlqW7X0KU7yY/OuHnYINxUl5tXz7AGyZGdVjKw8eF9lNdI/zx8u7bI8LRoNjgC9yPDuGxqgImcaXeN18lCRuNs95Y+7WCB7IoQMnGFZdz6ySaz9H9DpTcfvpR1UCnGXU1ZUOFPHiqI9euZoDbDk9tSJGfxtUx+3+lYIiy
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(396003)(39860400002)(376002)(136003)(346002)(366004)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(86362001)(33716001)(33656002)(53546011)(6512007)(6506007)(9686003)(44832011)(1076003)(66476007)(66556008)(6666004)(6916009)(316002)(83380400001)(41300700001)(26005)(7416002)(5660300002)(66946007)(6486002)(478600001)(2906002)(38100700002)(8676002)(4326008)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?iso-8859-1?Q?nF9zQIsk0fosl8eIwDsX9q5OMpTAxc3YDCOigBq+YWfLxnREAu8SYi8DYi?=
- =?iso-8859-1?Q?BO/Igohqy72D1hTO6YRdkJ10wi3TwfzAxUGeKIr3/A3FHlQlhk3s6ahMQ4?=
- =?iso-8859-1?Q?iKFHNBzXjmuDbd4aJLVQjQ8Be5+e34BqZS6W55zrrsJQvf+7uD182OyYGI?=
- =?iso-8859-1?Q?Nan2H1gfFUi5pZkmFnQfHyH6XfFTh9pXm3GkwDEy+FuUap1SFF35eCvT8U?=
- =?iso-8859-1?Q?7lHad5ARmSJWQbYnCQ8xbwf0G7Te7Z3qtqs2p+LJfRPFIxCoN4BltbsjZU?=
- =?iso-8859-1?Q?xUgebWAqac+mJr7/ZYcmTmEBxHWQji+T01tsf9gPMJbXDRzqBRy+jW51MN?=
- =?iso-8859-1?Q?5pF0v6AMTeHylkal8sm/sTbhHlsRF8StFZxHJ4HAce5GcgX6q0S/tMMGK2?=
- =?iso-8859-1?Q?obIKL3gOqY7+IAXjCYdEKgyXlqbACN3jDQ5aEGfsNjsYIDpAPRr3GJ2gvz?=
- =?iso-8859-1?Q?jKjgL+TVxFDjgKh02pWG2QHy7P+T7D+dBbBaSzuWFdUr8xfmyOLZOWKXXw?=
- =?iso-8859-1?Q?rueF/eRC7I7q2DQxf3d2wnT53B0li+gUCwn4GPl79eaSWBnMsYMDpmuPe3?=
- =?iso-8859-1?Q?eUqTPAvsGd9ew8LQCLUuujt1LrMAy3WItBpS00qPvI+qhIZkpTQVFvnq9y?=
- =?iso-8859-1?Q?aDWSB2LSwTjGQITP5G/XXb9VCJlWDxjnJZbe4cRYbe5iBOkGASCKrk/InW?=
- =?iso-8859-1?Q?K/hT3VI37DoXW9BeE508iLOQaq8wxUf+CRIQXxsVn3xyPoGg/lHl6JcAgV?=
- =?iso-8859-1?Q?+nFN6oarV4jO22yS7tPjKq5ibd0Lx1kZGALgtgVnJq8DV1iICI7nwvFRuL?=
- =?iso-8859-1?Q?XNtcAtY5xzjhZ03LoEFLnIy9rjW/py6EU5gv+VqzXQQoYYtafuBjCIAQgm?=
- =?iso-8859-1?Q?lNNB8xguHCyYNEiqhxzrCr7M+hvtEkjqVJOs0MZpAxaScQSjFpoCaI9HkB?=
- =?iso-8859-1?Q?OOcoHkfpg09s9odzrmffa+EZbJjyx1Pd95+ewMVLeVg7XnQwFWWpCum72n?=
- =?iso-8859-1?Q?oWh0AzZghccyvkPz2ZWHJNiablPcL0zZFywcqUEhwqfW8upBVNYoSSC1T8?=
- =?iso-8859-1?Q?0ovAEI/29K3iixoKlBgaOkQU0xnNxuJt954s0of0fR5IFi9Nu5UbGxcgbd?=
- =?iso-8859-1?Q?TkWIiqx91PYSzkGmsVE/sf5fbhOC7E/X9AIaw+bK9IZdvC/de52GIWiwJm?=
- =?iso-8859-1?Q?ckSN7A7wb0X62osrUgcZ9pI/MSSEHHDAvRT3XhvqcEEu6taR2CL33JCBIR?=
- =?iso-8859-1?Q?Efxty53UDmN1WAwXBr6vcWV+jiaaDzXLCYqzTfycPzt/wlLwQm8I18Jc2l?=
- =?iso-8859-1?Q?rWET+WLYMpI+/E5KI3+w8EWrr9woOhSiQOnOEicBNaE5fEBudc6s2sHeKw?=
- =?iso-8859-1?Q?KF0uQ9rT5fUrckMsw6/JEMR5dVFq7kn3XXL3PP8WyEk6pRQWzTcjoAiEKA?=
- =?iso-8859-1?Q?SD4GXglicG8OMrAZ7TblWmzH9M78ARHUszYa41DjkX3KSurPNED7AoHoYA?=
- =?iso-8859-1?Q?3fIOyAs51HbRdvPRuR/uO4wOLDxs9sH//P4RCI5GoyyTypaOnbYU4MLWgL?=
- =?iso-8859-1?Q?/WwT/t77VxePga4CcokKXN/sK8YC36qrJWnuPWLtnWyXb3DhvNaylbm9d+?=
- =?iso-8859-1?Q?6TYBN3YWszt0C7l9A1zscd5rgxX8HHJcTO?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	=?iso-8859-1?Q?NgTz9/gF+PasL8B6q8TJoFbF3t3v/46LDbegMxaZZl8QuTpp7JJ1XMuc40?=
- =?iso-8859-1?Q?G5Y3xDNVYZb6YhbDpLghUjbsilTmGaF00+yI+MQ9O5WlKQq3+wK/MZNZpS?=
- =?iso-8859-1?Q?DrxKiiInFkaBqH2h6xoG9QGz0RuhIlHVtQwdlTnDulZdsP9mBHzloh3upW?=
- =?iso-8859-1?Q?2AsTlhCRS5z3PxpQmZUZwh++VYX+5q8z3EuqUMXE03hJL4+rbUOlxcmiOo?=
- =?iso-8859-1?Q?kDqgT1y1yvSHRPy30/e6kw3A4hEAGSkWZ7doa4QbgNLf445CAukK/kFQgL?=
- =?iso-8859-1?Q?VxjW3iBHN8I2r4w3K1NK1DAQTT70nR0yDEINj7TDw80BER7vCQYOdguLwi?=
- =?iso-8859-1?Q?NxG6S2yLBU0kzcBCwK1luU+O52El8IcWPFo/RlE+Y+h/xNW+xXpY91u098?=
- =?iso-8859-1?Q?u0QPbSAk/qmiIWjnlUMNn48JMAVgtJunL9GMOvnqg/7H9YbWLb57gq2IX6?=
- =?iso-8859-1?Q?k1tKpJWQeeKOpXk7RemmWvFUh8YUYGmtlnmovO1UbG0tBbNt2MlqsOJ94j?=
- =?iso-8859-1?Q?761qINzI+Z/lNNrNXgu+BUOf7Tfm6tExGpy6tt7I/QMRAGBqAsh/Dsw8Ae?=
- =?iso-8859-1?Q?aYorBmegZZl8KhFcOTSuujkmXSp7KnzfnuuDPJz5hoRR9OHUZInt1tfFww?=
- =?iso-8859-1?Q?c/laqH9v5Z8tFJqaGv4FWpoG/51r8Hih4ItS0sctCQ8MMoT95bSAoKpRKK?=
- =?iso-8859-1?Q?2n2GOPbH2/nL/VMIz3NhafJOOpZtp8C+6HTmq2294Td/RxYwTE8VCRD0VE?=
- =?iso-8859-1?Q?30byd/7U/kK0PE6gLFZXLaemOHyN1n9B1cv6vz31MceW7T6sibDB3C067f?=
- =?iso-8859-1?Q?SPZ6qv8VFaocK5UO/wM7CMocF5uSDbf1Icqj1cPDI9m7SUd2fz6yUFJ5eR?=
- =?iso-8859-1?Q?/fvk0uAOI1R/Hv54Aor9yk9Vl5+jWYvNG6XauBgRoTTqvsjUfEMa+7/+af?=
- =?iso-8859-1?Q?B2ShlIk7KKMBGeFVSMcPXaQIeHCASJrL+8WGIC4KbLLkocBLKlPqwza7+b?=
- =?iso-8859-1?Q?nLU+JUSFVsI0ozzTFZBXkpfjss8Doj5oGGrLVcIcbd1xArNU+IKyAUWs3w?=
- =?iso-8859-1?Q?IoYBhJdMwxwp8a7Zn+x5IR+ne8pAewfi3+SaPEmkfyh8oIWy8wzLYeIasD?=
- =?iso-8859-1?Q?lPVbt15toLGwzHpbTD2O45uafLQOb6sKcG4jirsuIBYICp53S1ghelZr9y?=
- =?iso-8859-1?Q?G896x39b6fcp6bmBlaAq7kuJPMsXedZVVI0=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4674855-6834-4ebe-bf24-08dbdc25b237
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2023 04:31:06.6086
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ep6h8fAl51Xlgk+j1+EZKCxiyz6BJFKHDQU9EJaQOMdmfGY3fe0kdK3RaNmvm0GyTqXBtrD9Hvh8yK8mEh4DLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6518
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-03_03,2023-11-02_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=860 bulkscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310240000
- definitions=main-2311030036
-X-Proofpoint-GUID: Qa8la11WekuoMo1nkJVRVd8wb6vCj_Uf
-X-Proofpoint-ORIG-GUID: Qa8la11WekuoMo1nkJVRVd8wb6vCj_Uf
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20231103
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 192 builds: 17 failed, 175 passed, 18 errors,
+ 65 warnings (next-20231103)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On 11/02/23 23:15, Rik van Riel wrote:
-> On Thu, 2023-11-02 at 19:37 -0700, Mike Kravetz wrote:
-> > On 11/02/23 19:24, Mike Kravetz wrote:
-> > That qualification '(with resv_map)' caught my attention originally,
-> > and
-> > I thought about it again while looking into this.  We now cover the
-> > common
-> > cases, but there are still quite a few cases where resv_map is NULL
-> > for
-> > private mappings.  In such cases, the race between MADV_DONTNEED and
-> > page
-> > fault still exists.  Is that a concern?
-> 
-> Honestly, I'm not sure. In hugetlb_dup_vma_private, which is
-> called at fork time, we have this comment:
-> 
->          * - For MAP_PRIVATE mappings, this is the reserve map which
-> does
->          *   not apply to children.  Faults generated by the children
-> are
->          *   not guaranteed to succeed, even if read-only.
-> 
-> That suggests we already have no guarantee of faults
-> succeeding after fork.
+next/master build: 192 builds: 17 failed, 175 passed, 18 errors, 65 warning=
+s (next-20231103)
 
-Right!
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20231103/
 
-> 
-> > 
-> > With a bit more work we 'could' make sure every hugetlb vma has a
-> > lock
-> > to participate in this scheme.
-> > 
-> > Any thhoughts?
-> 
-> We can certainly close the race between MADV_DONTNEED
-> and page faults for MAP_PRIVATE mappings in child processes,
-> but that does not guarantee that we actually have hugetlb
-> pages for those processes.
-> 
-> In short, I'm not sure :)
+Tree: next
+Branch: master
+Git Describe: next-20231103
+Git Commit: e27090b1413ff236ca1aec26d6b022149115de2c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-I sort of remember something Dave Hansen added years ago to help a customer
-allocating LOTs of hugetlb pages dynamically.  I seem to recall that this
-was to get better numa locality.  As a result, they did not use reservations.
+Build Failures Detected:
 
-I guess it sticks with me because it was/is a real example of a customer
-choosing NOT to use reservations.  
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-I don't have any evidence that this is common.  My thought is to leave
-it as is until someone complains.
--- 
-Mike Kravetz
+arm:
+    rpc_defconfig: (gcc-10) FAIL
+
+riscv:
+    allnoconfig: (clang-17) FAIL
+    defconfig: (clang-17) FAIL
+    nommu_k210_defconfig: (clang-17) FAIL
+    nommu_k210_sdcard_defconfig: (clang-17) FAIL
+    nommu_virt_defconfig: (clang-17) FAIL
+    rv32_defconfig: (clang-17) FAIL
+    allnoconfig: (gcc-10) FAIL
+    defconfig: (gcc-10) FAIL
+    defconfig+debug: (gcc-10) FAIL
+    defconfig+kselftest: (gcc-10) FAIL
+    nommu_k210_defconfig: (gcc-10) FAIL
+    nommu_k210_sdcard_defconfig: (gcc-10) FAIL
+    nommu_virt_defconfig: (gcc-10) FAIL
+    rv32_defconfig: (gcc-10) FAIL
+    tinyconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
+
+arm64:
+    defconfig (gcc-10): 2 warnings
+    defconfig (clang-17): 2 warnings
+    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 2 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 2 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-17): 2 warnings
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-10): 2 warnings
+    defconfig+arm64-chromebook (gcc-10): 2 warnings
+    defconfig+arm64-chromebook+kselftest (gcc-10): 2 warnings
+    defconfig+arm64-chromebook+videodec (gcc-10): 2 warnings
+    defconfig+debug (gcc-10): 2 warnings
+    defconfig+kselftest (gcc-10): 2 warnings
+    defconfig+videodec (gcc-10): 2 warnings
+
+arm:
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+    i386_defconfig (clang-17): 2 warnings
+    i386_defconfig (gcc-10): 2 warnings
+    i386_defconfig+debug (gcc-10): 2 warnings
+    i386_defconfig+kselftest (gcc-10): 2 warnings
+
+mips:
+
+riscv:
+    allnoconfig (gcc-10): 1 error
+    allnoconfig (clang-17): 1 error
+    defconfig (clang-17): 1 error
+    defconfig (gcc-10): 1 error
+    defconfig+debug (gcc-10): 1 error
+    defconfig+kselftest (gcc-10): 1 error
+    nommu_k210_defconfig (gcc-10): 1 error
+    nommu_k210_defconfig (clang-17): 1 error
+    nommu_k210_sdcard_defconfig (clang-17): 1 error
+    nommu_k210_sdcard_defconfig (gcc-10): 1 error
+    nommu_virt_defconfig (gcc-10): 1 error
+    nommu_virt_defconfig (clang-17): 1 error
+    rv32_defconfig (clang-17): 1 error
+    rv32_defconfig (gcc-10): 1 error
+    tinyconfig (gcc-10): 1 error
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+    x86_64_defconfig (clang-17): 2 warnings
+    x86_64_defconfig (rustc-1.73): 2 warnings
+    x86_64_defconfig (gcc-10): 2 warnings
+    x86_64_defconfig+debug (gcc-10): 2 warnings
+    x86_64_defconfig+kselftest (rustc-1.73): 3 warnings
+    x86_64_defconfig+kselftest (gcc-10): 2 warnings
+    x86_64_defconfig+rust (rustc-1.73): 2 warnings
+    x86_64_defconfig+rust-samples (rustc-1.73): 2 warnings
+    x86_64_defconfig+x86-board (gcc-10): 2 warnings
+    x86_64_defconfig+x86-board+kselftest (gcc-10): 2 warnings
+
+Errors summary:
+
+    9    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for=
+ =E2=80=98check_unaligned_access=E2=80=99
+    6    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for=
+ 'check_unaligned_access'
+    1    fs/proc/task_mmu.c:2099:21: error: 'HPAGE_SIZE' undeclared (first =
+use in this function); did you mean 'PAGE_SIZE'?
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    54   WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL=
+ used for init symbol. Remove __init or EXPORT_SYMBOL.
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x14c599
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for 'che=
+ck_unaligned_access'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for 'che=
+ck_unaligned_access'
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section m=
+ismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warn=
+ings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    fs/proc/task_mmu.c:2099:21: error: 'HPAGE_SIZE' undeclared (first use i=
+n this function); did you mean 'PAGE_SIZE'?
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for 'che=
+ck_unaligned_access'
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for 'che=
+ck_unaligned_access'
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warn=
+ings, 0 section mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for 'che=
+ck_unaligned_access'
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for 'che=
+ck_unaligned_access'
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    arch/riscv/kernel/cpufeature.c:562:6: error: conflicting types for =E2=
+=80=98check_unaligned_access=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors, 2 warnings,=
+ 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x14c599
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors, 2 warn=
+ings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors=
+, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-board (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-board+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 err=
+ors, 2 warnings, 0 section mismatches
+
+Warnings:
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+    WARNING: modpost: vmlinux: acpi_parse_entries_array: EXPORT_SYMBOL used=
+ for init symbol. Remove __init or EXPORT_SYMBOL.
+
+---
+For more info write to <info@kernelci.org>
