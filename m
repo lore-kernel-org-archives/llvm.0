@@ -1,46 +1,35 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83075FBF4;
-	Fri,  3 Nov 2023 16:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14931DFC0;
+	Fri,  3 Nov 2023 16:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F3ThOKA9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699027961; x=1730563961;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZFPUVGYiRXqy1STh5WayMMM+wboc1W84vO3jLI/P4jg=;
-  b=F3ThOKA9Myd1IpdSL8t98pg+QWMCuZWlK+GqIl+TTm8xYQfxxImx7ZCp
-   OQc4TJepnq0Npuvywnrx5gOWmWzjQ7e2oHafdaMIR5GSTKlce5sLxnbSn
-   rlhieAwnAUgHNQ6VA3og/KnOtxUsVIzD7m0p0d4ufBKw/xN3TtVA56VPi
-   6I+8rdJBVKzhjKSORCPcIhlyssPRPrJMDtcal5T6CuSztNiSN3FD6qXAh
-   HApZ4YFt+h3z0cE/W4iSgse367Tlg7S4AFwSDe98UdtIq5sURcKnES4oF
-   FuCIxs1Kewi1ojVkhu4/cD0A8hcpbOXY8RuUdLtAvDrASVkO/+zuPEwWt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="392856662"
-X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="392856662"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 09:12:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="935147756"
-X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="935147756"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 Nov 2023 09:12:39 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qywmj-0002gC-13;
-	Fri, 03 Nov 2023 16:12:37 +0000
-Date: Sat, 4 Nov 2023 00:12:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jirislaby:devel 15/79] drivers/tty/tty_io.c:1152:5: error:
- conflicting types for 'tty_send_xchar'
-Message-ID: <202311040030.jTV6rmft-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="joWmgmH1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B241C433C7;
+	Fri,  3 Nov 2023 16:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699030395;
+	bh=yAGnEZ1ePwa03Pod66Nx3M1cyUgoNh1w3/xnLR0bJ0A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=joWmgmH1ttEcNufjFhn0haJZpB42lvkpWWAXBpSfwo+KgKn9ECWFLGSzf/cmYiY1b
+	 tNdH/LAa8ikuZRW201blqNkMlPE7+2oxTmlpgkjUBZhTekcdBp+gO5JBEL+RwDRgKS
+	 FovKNizCmz9T6z9YQ0kWx5kyUctf0mRUVnf9fFjIs3PjuAhfRd5L+2TLQUCGVzNGE6
+	 fC3+idYgLxQX6swSQwGiTceZ3rr6g80E+Snh2q52GZRdeJvoKj6LuL4A1D1dLQr5sQ
+	 vxwV5WJLhdbWnCMSf0JdXykkrOcH4C1ek8Qi1lVz9QvZhWeCqytqZPw6S2hjBI/KGj
+	 8umck03UyNkZw==
+Date: Fri, 3 Nov 2023 09:53:12 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: edumazet@google.com, davem@davemloft.net, dsahern@kernel.org,
+	kuba@kernel.org, pabeni@redhat.com, ndesaulniers@google.com,
+	trix@redhat.com, 0x7f454c46@gmail.com, fruggeri@arista.com,
+	noureddine@arista.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH net] tcp: Fix -Wc23-extensions in tcp_options_write()
+Message-ID: <20231103165312.GA3670349@dev-arch.thelio-3990X>
+References: <20231031-tcp-ao-fix-label-in-compound-statement-warning-v1-1-c9731d115f17@kernel.org>
+ <ZUStrQCqBjBBB6dc@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,138 +38,126 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZUStrQCqBjBBB6dc@infradead.org>
 
-Hi Jiri,
+Hi Christoph,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+On Fri, Nov 03, 2023 at 01:22:05AM -0700, Christoph Hellwig wrote:
+> On Tue, Oct 31, 2023 at 01:23:35PM -0700, Nathan Chancellor wrote:
+> > Clang warns (or errors with CONFIG_WERROR=y) when CONFIG_TCP_AO is set:
+> > 
+> >   net/ipv4/tcp_output.c:663:2: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
+> >     663 |         }
+> >         |         ^
+> >   1 error generated.
+> > 
+> > On earlier releases (such as clang-11, the current minimum supported
+> > version for building the kernel) that do not support C23, this was a
+> > hard error unconditionally:
+> > 
+> >   net/ipv4/tcp_output.c:663:2: error: expected statement
+> >           }
+> >           ^
+> >   1 error generated.
+> > 
+> > Add a semicolon after the label to create an empty statement, which
+> > resolves the warning or error for all compilers.
+> 
+> Can you please just split the A0 handlig into a separate helper, which
+> shuld make the whole thing a lot cleaner?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   0c245952ee3106fad8a2fd3198a8e5c324e90992
-commit: 44f1bce172713e922fd4fe273ad8d29e1a3e9321 [15/79] tty: make tty_operations::send_xchar accept u8 char
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231104/202311040030.jTV6rmft-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231104/202311040030.jTV6rmft-lkp@intel.com/reproduce)
+Is something like this (I think I got all the pointer manipulation
+correct...) what you had in mind? I am happy to send that as a v2 if the
+netdev folks would prefer it over this small change (along with some
+guidance about the function name, if it should be something different).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311040030.jTV6rmft-lkp@intel.com/
+Cheers,
+Nathan
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/tty/tty_io.c:75:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/tty/tty_io.c:75:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/tty/tty_io.c:75:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/tty/tty_io.c:1152:5: error: conflicting types for 'tty_send_xchar'
-    1152 | int tty_send_xchar(struct tty_struct *tty, u8 ch)
-         |     ^
-   include/linux/tty.h:413:5: note: previous declaration is here
-     413 | int tty_send_xchar(struct tty_struct *tty, char ch);
-         |     ^
-   12 warnings and 1 error generated.
-
-
-vim +/tty_send_xchar +1152 drivers/tty/tty_io.c
-
-  1142	
-  1143	/**
-  1144	 * tty_send_xchar - send priority character
-  1145	 * @tty: the tty to send to
-  1146	 * @ch: xchar to send
-  1147	 *
-  1148	 * Send a high priority character to the tty even if stopped.
-  1149	 *
-  1150	 * Locking: none for xchar method, write ordering for write method.
-  1151	 */
-> 1152	int tty_send_xchar(struct tty_struct *tty, u8 ch)
-  1153	{
-  1154		bool was_stopped = tty->flow.stopped;
-  1155	
-  1156		if (tty->ops->send_xchar) {
-  1157			down_read(&tty->termios_rwsem);
-  1158			tty->ops->send_xchar(tty, ch);
-  1159			up_read(&tty->termios_rwsem);
-  1160			return 0;
-  1161		}
-  1162	
-  1163		if (tty_write_lock(tty, false) < 0)
-  1164			return -ERESTARTSYS;
-  1165	
-  1166		down_read(&tty->termios_rwsem);
-  1167		if (was_stopped)
-  1168			start_tty(tty);
-  1169		tty->ops->write(tty, &ch, 1);
-  1170		if (was_stopped)
-  1171			stop_tty(tty);
-  1172		up_read(&tty->termios_rwsem);
-  1173		tty_write_unlock(tty);
-  1174		return 0;
-  1175	}
-  1176	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index f558c054cf6e..6f2a5e3bb7b3 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -601,6 +601,43 @@ static void bpf_skops_write_hdr_opt(struct sock *sk, struct sk_buff *skb,
+ }
+ #endif
+ 
++static void process_tcp_ao_options(struct tcp_sock *tp,
++				   const struct tcp_request_sock *tcprsk,
++				   struct tcp_out_options *opts,
++				   struct tcp_key *key, __be32 **ptr)
++{
++#ifdef CONFIG_TCP_AO
++	u8 maclen = tcp_ao_maclen(key->ao_key);
++
++	if (tcprsk) {
++		u8 aolen = maclen + sizeof(struct tcp_ao_hdr);
++
++		*(*ptr)++ = htonl((TCPOPT_AO << 24) | (aolen << 16) |
++			          (tcprsk->ao_keyid << 8) |
++			          (tcprsk->ao_rcv_next));
++	} else {
++		struct tcp_ao_key *rnext_key;
++		struct tcp_ao_info *ao_info;
++
++		ao_info = rcu_dereference_check(tp->ao_info,
++			lockdep_sock_is_held(&tp->inet_conn.icsk_inet.sk));
++		rnext_key = READ_ONCE(ao_info->rnext_key);
++		if (WARN_ON_ONCE(!rnext_key))
++			return;
++		*(*ptr)++ = htonl((TCPOPT_AO << 24) |
++			          (tcp_ao_len(key->ao_key) << 16) |
++			          (key->ao_key->sndid << 8) |
++			          (rnext_key->rcvid));
++	}
++	opts->hash_location = (__u8 *)(*ptr);
++	*ptr += maclen / sizeof(**ptr);
++	if (unlikely(maclen % sizeof(**ptr))) {
++		memset(*ptr, TCPOPT_NOP, sizeof(**ptr));
++		(*ptr)++;
++	}
++#endif
++}
++
+ /* Write previously computed TCP options to the packet.
+  *
+  * Beware: Something in the Internet is very sensitive to the ordering of
+@@ -629,37 +666,7 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+ 		opts->hash_location = (__u8 *)ptr;
+ 		ptr += 4;
+ 	} else if (tcp_key_is_ao(key)) {
+-#ifdef CONFIG_TCP_AO
+-		u8 maclen = tcp_ao_maclen(key->ao_key);
+-
+-		if (tcprsk) {
+-			u8 aolen = maclen + sizeof(struct tcp_ao_hdr);
+-
+-			*ptr++ = htonl((TCPOPT_AO << 24) | (aolen << 16) |
+-				       (tcprsk->ao_keyid << 8) |
+-				       (tcprsk->ao_rcv_next));
+-		} else {
+-			struct tcp_ao_key *rnext_key;
+-			struct tcp_ao_info *ao_info;
+-
+-			ao_info = rcu_dereference_check(tp->ao_info,
+-				lockdep_sock_is_held(&tp->inet_conn.icsk_inet.sk));
+-			rnext_key = READ_ONCE(ao_info->rnext_key);
+-			if (WARN_ON_ONCE(!rnext_key))
+-				goto out_ao;
+-			*ptr++ = htonl((TCPOPT_AO << 24) |
+-				       (tcp_ao_len(key->ao_key) << 16) |
+-				       (key->ao_key->sndid << 8) |
+-				       (rnext_key->rcvid));
+-		}
+-		opts->hash_location = (__u8 *)ptr;
+-		ptr += maclen / sizeof(*ptr);
+-		if (unlikely(maclen % sizeof(*ptr))) {
+-			memset(ptr, TCPOPT_NOP, sizeof(*ptr));
+-			ptr++;
+-		}
+-out_ao:
+-#endif
++		process_tcp_ao_options(tp, tcprsk, opts, key, &ptr);
+ 	}
+ 	if (unlikely(opts->mss)) {
+ 		*ptr++ = htonl((TCPOPT_MSS << 24) |
