@@ -1,120 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949C61D699;
-	Fri,  3 Nov 2023 20:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920961D68E
+	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 21:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mqJrLnUo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699045102; x=1730581102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hop1hWSKNwWvUclqkUBX97GZojdbQij4g26CvbPbl/Q=;
-  b=mqJrLnUoSLqLlekcFrY5BEQ65g0Ep6gG3+mOdMtVyDgfmztJZ+QEnxJp
-   zERVqpmn8Mkww6uKwWDCRLZHw62eYG+S7K3mwrmoC0PYzUjMEDvhyd8Gs
-   BbIndXgKsz7PJKy33xoubxHBVg+B4Vs7vvaZxdChzAa5S7aBN50bWvHYb
-   J+iPR0cO7M5pDIoOw4U0ExzlN1ndHkXOIOdvsBgKMXT2Fxp4JQuJS4yT+
-   zjL6PbIvQ90fDhvZSwdcUuHZ7zaogce7I+3MYbH16sHrLtruC9CJew2lO
-   1YFmHbM07NZQi8zmrYJKhjb9kBKQpGfBS/ZzolqnPrSNGGUhkW8srSlTa
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="7651631"
-X-IronPort-AV: E=Sophos;i="6.03,275,1694761200"; 
-   d="scan'208";a="7651631"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 13:58:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="852380256"
-X-IronPort-AV: E=Sophos;i="6.03,275,1694761200"; 
-   d="scan'208";a="852380256"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Nov 2023 13:58:19 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qz1FA-0002vw-28;
-	Fri, 03 Nov 2023 20:58:16 +0000
-Date: Sat, 4 Nov 2023 04:57:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Aring <aahringo@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 1/2] refcount: introduce generic lockptr funcs
-Message-ID: <202311040410.y4UjYFn9-lkp@intel.com>
-References: <20231103161635.1902667-1-aahringo@redhat.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZU05c13R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699045263;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=29sg2bxG4h/lZi/1JAy62ZBijmK94rFh08R7kiBqL+k=;
+	b=ZU05c13RIQOY8Rubu9nl/X0XEL6VYfTLscfEq8qpBnv5K2QPZjtI1w6xWs6M6NBi0qeKE0
+	GsUDV+MrjDq7akzBIExAIdx/bf+CaimPJN8xaNgwAEwURgXLVPuiaUIvexhkMqJYvZHB+5
+	Kmz9DyKVbAc4/z6R6RaWf18/KrHmfx4=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-245-6B_f7gnOMIW3fGKBOtsOMA-1; Fri,
+ 03 Nov 2023 17:01:02 -0400
+X-MC-Unique: 6B_f7gnOMIW3fGKBOtsOMA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E23A7380662F
+	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 21:01:01 +0000 (UTC)
+Received: from [172.64.13.10] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CC7B91C060BE;
+	Fri,  3 Nov 2023 21:01:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
+ mainline.kernel.org-clang, 6bdfe2d8)
+Date: Fri, 03 Nov 2023 21:01:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231103161635.1902667-1-aahringo@redhat.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <18979.123110317010200343@us-mta-245.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexander,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.6 next-20231103]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Aring/kref-introduce-kref_put_lockptr-and-use-lockptr/20231104-002152
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231103161635.1902667-1-aahringo%40redhat.com
-patch subject: [RFC 1/2] refcount: introduce generic lockptr funcs
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231104/202311040410.y4UjYFn9-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231104/202311040410.y4UjYFn9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311040410.y4UjYFn9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> lib/refcount.c:183:6: warning: no previous prototype for function 'lockptr_lock_irqsave' [-Wmissing-prototypes]
-     183 | void lockptr_lock_irqsave(void *lockptr)
-         |      ^
-   lib/refcount.c:183:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     183 | void lockptr_lock_irqsave(void *lockptr)
-         | ^
-         | static 
->> lib/refcount.c:191:6: warning: no previous prototype for function 'lockptr_unlock_irqsave' [-Wmissing-prototypes]
-     191 | void lockptr_unlock_irqsave(void *lockptr)
-         |      ^
-   lib/refcount.c:191:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     191 | void lockptr_unlock_irqsave(void *lockptr)
-         | ^
-         | static 
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/lockptr_lock_irqsave +183 lib/refcount.c
+Kernel information:
+    Commit message: Merge tag 'apparmor-pr-2023-11-03' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/jj/linux-apparmor
 
-   182	
- > 183	void lockptr_lock_irqsave(void *lockptr)
-   184	{
-   185		struct lockptr_irqsave_data *d = lockptr;
-   186	
-   187		spin_lock_irqsave(d->lockptr, *d->flags);
-   188	}
-   189	EXPORT_SYMBOL(lockptr_lock_irqsave);
-   190	
- > 191	void lockptr_unlock_irqsave(void *lockptr)
-   192	{
-   193		struct lockptr_irqsave_data *d = lockptr;
-   194	
-   195		spin_unlock_irqrestore(d->lockptr, *d->flags);
-   196	}
-   197	EXPORT_SYMBOL(lockptr_unlock_irqsave);
-   198	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/113057
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/42319=
+0
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/42319=
+1
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/42319=
+3
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/423194
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
