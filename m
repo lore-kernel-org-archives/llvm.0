@@ -1,99 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E392010FB;
-	Fri,  3 Nov 2023 01:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A911101
+	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 01:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sy7pKn90"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698974834; x=1730510834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rAVRVGoSW1gaNLa3HGP7wGv0TFn7bvX3kinNnymKM0c=;
-  b=Sy7pKn90KzCcTumD30kaNf5ErEbh3uvZm70GTPvitiqt+9V+gPET7dCI
-   BBbYMtnY7/rcA4aFr8WyuwaDYFpX8Le1QwQ99gRbotkLw8qWtfsuENq/u
-   h8TigbudSxj7btoKP9vSLb92drLcOPdJK6Ykf2PC1dZpivJwIw9gByoQN
-   vkFh1zfp86Q52CprulzHCe2nl2L9/qC4BATUzoJfU5S1kVyTCC3mZFeJE
-   +iiZri9VpW4UKCNuuFuWt3yF0OA2PbBpeWVEphsHyg8JWtypeGE6cCB2R
-   hC2HpcULlQ0WsUbtR9EOMRP/xvU3EzXKsPPHGUK84/W1b7terIplmrPKb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="391726692"
-X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="391726692"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 18:27:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="905180659"
-X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="905180659"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Nov 2023 18:27:01 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qyixf-00025j-1S;
-	Fri, 03 Nov 2023 01:26:59 +0000
-Date: Fri, 3 Nov 2023 09:26:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Edward Adam Davis <eadavis@qq.com>, riel@surriel.com
-Cc: oe-kbuild-all@lists.linux.dev, akpm@linux-foundation.org,
-	eadavis@qq.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, mike.kravetz@oracle.com,
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzbot+6ada951e7c0f7bc8a71e@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [PATCH] mm/hugetlb: fix null ptr defer in hugetlb_vma_lock_write
-Message-ID: <202311030935.4AHgxdxU-lkp@intel.com>
-References: <tencent_164A247533766D667C3D873798968236C409@qq.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UhvBksmH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1698976281;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yZ3DQ9oqSWyEsRZJfVMDgodKuLbUiTqPEasbY6GQv9M=;
+	b=UhvBksmHw6hIl9Ekcb9elXp6VuEWyh1SfJmPjJUxeQqrNJSg5IFq1LzzgdeKoFj99oeVIc
+	CdFYA8UrKufxMPqwfQvNfrWPgowQPDRuvMPS+CjReRXXwEBnRwtuUUu+NQ6PUGPWh1233s
+	HZUyLHFofzxc+fUuGwmwez7v83YckmI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-609-8pUVJ31FMV-FS6qRr51blg-1; Thu, 02 Nov 2023 21:51:01 -0400
+X-MC-Unique: 8pUVJ31FMV-FS6qRr51blg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C81F101A53B
+	for <llvm@lists.linux.dev>; Fri,  3 Nov 2023 01:51:01 +0000 (UTC)
+Received: from [172.64.13.10] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2AB5C1C060BA;
+	Fri,  3 Nov 2023 01:51:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
+ mainline.kernel.org-clang, 431f1051)
+Date: Fri, 03 Nov 2023 01:51:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_164A247533766D667C3D873798968236C409@qq.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <94530.123110221510101987@us-mta-609.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Edward,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/mm-hugetlb-fix-null-ptr-defer-in-hugetlb_vma_lock_write/20231103-003152
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/tencent_164A247533766D667C3D873798968236C409%40qq.com
-patch subject: [PATCH] mm/hugetlb: fix null ptr defer in hugetlb_vma_lock_write
-config: loongarch-randconfig-002-20231103 (https://download.01.org/0day-ci/archive/20231103/202311030935.4AHgxdxU-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231103/202311030935.4AHgxdxU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311030935.4AHgxdxU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/migrate.h:8,
-                    from include/linux/balloon_compaction.h:41,
-                    from drivers/virtio/virtio_balloon.c:16:
->> include/linux/hugetlb.h:182:12: warning: 'is_vma_resv_set' used but never defined
-     182 | static int is_vma_resv_set(struct vm_area_struct *vma, unsigned long flag);
-         |            ^~~~~~~~~~~~~~~
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/is_vma_resv_set +182 include/linux/hugetlb.h
+Kernel information:
+    Commit message: Merge tag 'leds-next-6.7' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/lee/leds
 
-   179	
-   180	extern int sysctl_hugetlb_shm_group;
-   181	extern struct list_head huge_boot_pages;
- > 182	static int is_vma_resv_set(struct vm_area_struct *vma, unsigned long flag);
-   183	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/112854
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/42264=
+7
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/42264=
+8
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/42265=
+0
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/422651
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
