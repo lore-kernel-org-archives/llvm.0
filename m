@@ -1,46 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E01C10E9;
-	Sun,  5 Nov 2023 03:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CA38BEB;
+	Sun,  5 Nov 2023 09:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lT9N6D1/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m6fE4wFv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699155538; x=1730691538;
+  t=1699174910; x=1730710910;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oQIT+hQtFpD/OGnZEV6LzfhDWbGgwr4Tzy3dd6PHMp0=;
-  b=lT9N6D1/gFlnrqU58uuPvn1hNvPo2e9c1tqoxFhJhWpEWracTX7+leoF
-   aH6lS6HKCWHRO2fDb7dVUxz+UzU/tT0LCo769EG6XtXGi+p5bK0yCA6NB
-   NzUFJRZUGsZiUOr4bEHT/d3Wz5QG3u2kyUPP2wLJeDRZMFMFWxzYODfLA
-   DSwwh/5k25UWBRZYhgKgGI3y6SduLwlu9g2FZg6eeVeIyq7PA+AzlfjYf
-   +YZ0yTjOCFpSeiMJEHWKL/yFwbIvdPaAdSIf/4hytfe2rmoWvqifx8ikF
-   FaaqAIGtP9dsPcyArCXwA/UF+WuUfYWCjoR5bVn86/+yIQKxgTtvgSBvT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10884"; a="369330654"
+  bh=bWD2ogEt6FZdT+MXKYtz57KplUYtedko+Wid2xsKznk=;
+  b=m6fE4wFv0AAmArlEJpQ94VXsZninjEcXia5PR8zMqhMahvWrAHG/P+9K
+   9d3vc/7V0RELzU3iAX4mTeMLu3KbSdoqasELjEAc/Q/iBfZ/Sf26QStsk
+   fbxaihEjWK7bfVQT57j+BnfE2Rwoj3/+VHXkdTnZpW25ZjV+J/3wyDJNY
+   ePIIuVTp3I2lKQ71iuJX+4GbDMjYRi5jJvXaxMnCkR/vqt5Fe6UygzqWt
+   dHSw4NfJgtMa9wazSbc6yLLKs3OEizQCf1uY3mnMOZKP4xy3HfLYI8Mrg
+   ldVsx3R3fEPzG3SKNrldMq1JUhU9HoKsXTjQfgZcQG/FWI9lFN39t9sOX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10884"; a="392001315"
 X-IronPort-AV: E=Sophos;i="6.03,278,1694761200"; 
-   d="scan'208";a="369330654"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2023 20:38:57 -0700
+   d="scan'208";a="392001315"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 01:01:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10884"; a="796986187"
+X-IronPort-AV: E=McAfee;i="6600,9927,10884"; a="755575703"
 X-IronPort-AV: E=Sophos;i="6.03,278,1694761200"; 
-   d="scan'208";a="796986187"
+   d="scan'208";a="755575703"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Nov 2023 20:38:56 -0700
+  by orsmga007.jf.intel.com with ESMTP; 05 Nov 2023 01:01:45 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qzTyP-0004zA-2K;
-	Sun, 05 Nov 2023 03:38:53 +0000
-Date: Sun, 5 Nov 2023 11:37:56 +0800
+	id 1qzZ0o-0005EO-2t;
+	Sun, 05 Nov 2023 09:01:42 +0000
+Date: Sun, 5 Nov 2023 17:01:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:iommu_fwspec 11/19] drivers/acpi/scan.c:1570:45: error:
- too many arguments to function call, expected 2, have 3
-Message-ID: <202311051143.ny1zHAgd-lkp@intel.com>
+To: Saleemkhan Jamadar <saleemkhan.jamadar@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/vcn_v4_0_5.c:957:12: warning: stack frame
+ size (2064) exceeds limit (2048) in 'vcn_v4_0_5_start'
+Message-ID: <202311051650.4hyYNRSK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,66 +52,215 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jgunthorpe/linux iommu_fwspec
-head:   a387bf414bfa3cc4e39cc07d1cfb257a13081c8e
-commit: 82d63e7b3a55983a4ff9d4633c4f1f233f3e8853 [11/19] acpi: Do not use dev->iommu within acpi_iommu_configure()
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231105/202311051143.ny1zHAgd-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231105/202311051143.ny1zHAgd-lkp@intel.com/reproduce)
+Hi Saleemkhan,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aea6bf908d730b01bd264a8821159db9463c111c
+commit: 547aad32edac17a3ec4989d8aad2426d0cbeb590 drm/amdgpu: add VCN4 ip block support
+date:   9 weeks ago
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20231105/202311051650.4hyYNRSK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231105/202311051650.4hyYNRSK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311051143.ny1zHAgd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311051650.4hyYNRSK-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/acpi/scan.c:1570:45: error: too many arguments to function call, expected 2, have 3
-           err = iort_iommu_configure_id(fwspec, dev, id_in);
-                 ~~~~~~~~~~~~~~~~~~~~~~~              ^~~~~
-   include/linux/acpi_iort.h:61:19: note: 'iort_iommu_configure_id' declared here
-   static inline int iort_iommu_configure_id(struct device *dev, const u32 *id_in)
-                     ^
-   1 error generated.
+>> drivers/gpu/drm/amd/amdgpu/vcn_v4_0_5.c:957:12: warning: stack frame size (2064) exceeds limit (2048) in 'vcn_v4_0_5_start' [-Wframe-larger-than]
+     957 | static int vcn_v4_0_5_start(struct amdgpu_device *adev)
+         |            ^
+   1 warning generated.
 
 
-vim +1570 drivers/acpi/scan.c
+vim +/vcn_v4_0_5_start +957 drivers/gpu/drm/amd/amdgpu/vcn_v4_0_5.c
 
-  1560	
-  1561	static int acpi_iommu_configure_id(struct device *dev, const u32 *id_in)
-  1562	{
-  1563		int err;
-  1564		struct iommu_fwspec *fwspec;
-  1565	
-  1566		fwspec = iommu_fwspec_alloc();
-  1567		if (IS_ERR(fwspec))
-  1568			return PTR_ERR(fwspec);
-  1569	
-> 1570		err = iort_iommu_configure_id(fwspec, dev, id_in);
-  1571		if (err == -ENODEV)
-  1572			err = viot_iommu_configure(fwspec, dev);
-  1573		if (err == -ENODEV || err == -EPROBE_DEFER)
-  1574			goto err_free;
-  1575		if (err)
-  1576			goto err_log;
-  1577	
-  1578		err = iommu_probe_device_fwspec(dev, fwspec);
-  1579		if (err) {
-  1580			/*
-  1581			 * Ownership for fwspec always passes into
-  1582			 * iommu_probe_device_fwspec()
-  1583			 */
-  1584			fwspec = NULL;
-  1585			goto err_log;
-  1586		}
-  1587	
-  1588	err_log:
-  1589		dev_dbg(dev, "Adding to IOMMU failed: %d\n", err);
-  1590	err_free:
-  1591		iommu_fwspec_dealloc(fwspec);
-  1592		return err;
-  1593	}
-  1594	
+   948	
+   949	
+   950	/**
+   951	 * vcn_v4_0_5_start - VCN start
+   952	 *
+   953	 * @adev: amdgpu_device pointer
+   954	 *
+   955	 * Start VCN block
+   956	 */
+ > 957	static int vcn_v4_0_5_start(struct amdgpu_device *adev)
+   958	{
+   959		volatile struct amdgpu_vcn4_fw_shared *fw_shared;
+   960		struct amdgpu_ring *ring;
+   961		uint32_t tmp;
+   962		int i, j, k, r;
+   963	
+   964		if (adev->pm.dpm_enabled)
+   965			amdgpu_dpm_enable_uvd(adev, true);
+   966	
+   967		for (i = 0; i < adev->vcn.num_vcn_inst; ++i) {
+   968			fw_shared = adev->vcn.inst[i].fw_shared.cpu_addr;
+   969	
+   970			if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
+   971				r = vcn_v4_0_5_start_dpg_mode(adev, i, adev->vcn.indirect_sram);
+   972				continue;
+   973			}
+   974	
+   975			/* disable VCN power gating */
+   976			vcn_v4_0_5_disable_static_power_gating(adev, i);
+   977	
+   978			/* set VCN status busy */
+   979			tmp = RREG32_SOC15(VCN, i, regUVD_STATUS) | UVD_STATUS__UVD_BUSY;
+   980			WREG32_SOC15(VCN, i, regUVD_STATUS, tmp);
+   981	
+   982			/*SW clock gating */
+   983			vcn_v4_0_5_disable_clock_gating(adev, i);
+   984	
+   985			/* enable VCPU clock */
+   986			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL),
+   987					UVD_VCPU_CNTL__CLK_EN_MASK, ~UVD_VCPU_CNTL__CLK_EN_MASK);
+   988	
+   989			/* disable master interrupt */
+   990			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_MASTINT_EN), 0,
+   991					~UVD_MASTINT_EN__VCPU_EN_MASK);
+   992	
+   993			/* enable LMI MC and UMC channels */
+   994			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_LMI_CTRL2), 0,
+   995					~UVD_LMI_CTRL2__STALL_ARB_UMC_MASK);
+   996	
+   997			tmp = RREG32_SOC15(VCN, i, regUVD_SOFT_RESET);
+   998			tmp &= ~UVD_SOFT_RESET__LMI_SOFT_RESET_MASK;
+   999			tmp &= ~UVD_SOFT_RESET__LMI_UMC_SOFT_RESET_MASK;
+  1000			WREG32_SOC15(VCN, i, regUVD_SOFT_RESET, tmp);
+  1001	
+  1002			/* setup regUVD_LMI_CTRL */
+  1003			tmp = RREG32_SOC15(VCN, i, regUVD_LMI_CTRL);
+  1004			WREG32_SOC15(VCN, i, regUVD_LMI_CTRL, tmp |
+  1005					UVD_LMI_CTRL__WRITE_CLEAN_TIMER_EN_MASK |
+  1006					UVD_LMI_CTRL__MASK_MC_URGENT_MASK |
+  1007					UVD_LMI_CTRL__DATA_COHERENCY_EN_MASK |
+  1008					UVD_LMI_CTRL__VCPU_DATA_COHERENCY_EN_MASK);
+  1009	
+  1010			/* setup regUVD_MPC_CNTL */
+  1011			tmp = RREG32_SOC15(VCN, i, regUVD_MPC_CNTL);
+  1012			tmp &= ~UVD_MPC_CNTL__REPLACEMENT_MODE_MASK;
+  1013			tmp |= 0x2 << UVD_MPC_CNTL__REPLACEMENT_MODE__SHIFT;
+  1014			WREG32_SOC15(VCN, i, regUVD_MPC_CNTL, tmp);
+  1015	
+  1016			/* setup UVD_MPC_SET_MUXA0 */
+  1017			WREG32_SOC15(VCN, i, regUVD_MPC_SET_MUXA0,
+  1018					((0x1 << UVD_MPC_SET_MUXA0__VARA_1__SHIFT) |
+  1019					 (0x2 << UVD_MPC_SET_MUXA0__VARA_2__SHIFT) |
+  1020					 (0x3 << UVD_MPC_SET_MUXA0__VARA_3__SHIFT) |
+  1021					 (0x4 << UVD_MPC_SET_MUXA0__VARA_4__SHIFT)));
+  1022	
+  1023			/* setup UVD_MPC_SET_MUXB0 */
+  1024			WREG32_SOC15(VCN, i, regUVD_MPC_SET_MUXB0,
+  1025					((0x1 << UVD_MPC_SET_MUXB0__VARB_1__SHIFT) |
+  1026					 (0x2 << UVD_MPC_SET_MUXB0__VARB_2__SHIFT) |
+  1027					 (0x3 << UVD_MPC_SET_MUXB0__VARB_3__SHIFT) |
+  1028					 (0x4 << UVD_MPC_SET_MUXB0__VARB_4__SHIFT)));
+  1029	
+  1030			/* setup UVD_MPC_SET_MUX */
+  1031			WREG32_SOC15(VCN, i, regUVD_MPC_SET_MUX,
+  1032					((0x0 << UVD_MPC_SET_MUX__SET_0__SHIFT) |
+  1033					 (0x1 << UVD_MPC_SET_MUX__SET_1__SHIFT) |
+  1034					 (0x2 << UVD_MPC_SET_MUX__SET_2__SHIFT)));
+  1035	
+  1036			vcn_v4_0_5_mc_resume(adev, i);
+  1037	
+  1038			/* VCN global tiling registers */
+  1039			WREG32_SOC15(VCN, i, regUVD_GFX10_ADDR_CONFIG,
+  1040					adev->gfx.config.gb_addr_config);
+  1041	
+  1042			/* unblock VCPU register access */
+  1043			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_RB_ARB_CTRL), 0,
+  1044					~UVD_RB_ARB_CTRL__VCPU_DIS_MASK);
+  1045	
+  1046			/* release VCPU reset to boot */
+  1047			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL), 0,
+  1048					~UVD_VCPU_CNTL__BLK_RST_MASK);
+  1049	
+  1050			for (j = 0; j < 10; ++j) {
+  1051				uint32_t status;
+  1052	
+  1053				for (k = 0; k < 100; ++k) {
+  1054					status = RREG32_SOC15(VCN, i, regUVD_STATUS);
+  1055					if (status & 2)
+  1056						break;
+  1057					mdelay(10);
+  1058					if (amdgpu_emu_mode == 1)
+  1059						msleep(1);
+  1060				}
+  1061	
+  1062				if (amdgpu_emu_mode == 1) {
+  1063					r = -1;
+  1064					if (status & 2) {
+  1065						r = 0;
+  1066						break;
+  1067					}
+  1068				} else {
+  1069					r = 0;
+  1070					if (status & 2)
+  1071						break;
+  1072	
+  1073					dev_err(adev->dev,
+  1074						"VCN[%d] is not responding, trying to reset VCPU!!!\n", i);
+  1075					WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL),
+  1076								UVD_VCPU_CNTL__BLK_RST_MASK,
+  1077								~UVD_VCPU_CNTL__BLK_RST_MASK);
+  1078					mdelay(10);
+  1079					WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL), 0,
+  1080							~UVD_VCPU_CNTL__BLK_RST_MASK);
+  1081	
+  1082					mdelay(10);
+  1083					r = -1;
+  1084				}
+  1085			}
+  1086	
+  1087			if (r) {
+  1088				dev_err(adev->dev, "VCN[%d] is not responding, giving up!!!\n", i);
+  1089				return r;
+  1090			}
+  1091	
+  1092			/* enable master interrupt */
+  1093			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_MASTINT_EN),
+  1094					UVD_MASTINT_EN__VCPU_EN_MASK,
+  1095					~UVD_MASTINT_EN__VCPU_EN_MASK);
+  1096	
+  1097			/* clear the busy bit of VCN_STATUS */
+  1098			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_STATUS), 0,
+  1099					~(2 << UVD_STATUS__VCPU_REPORT__SHIFT));
+  1100	
+  1101			ring = &adev->vcn.inst[i].ring_enc[0];
+  1102			WREG32_SOC15(VCN, i, regVCN_RB1_DB_CTRL,
+  1103					ring->doorbell_index << VCN_RB1_DB_CTRL__OFFSET__SHIFT |
+  1104					VCN_RB1_DB_CTRL__EN_MASK);
+  1105	
+  1106			WREG32_SOC15(VCN, i, regUVD_RB_BASE_LO, ring->gpu_addr);
+  1107			WREG32_SOC15(VCN, i, regUVD_RB_BASE_HI, upper_32_bits(ring->gpu_addr));
+  1108			WREG32_SOC15(VCN, i, regUVD_RB_SIZE, ring->ring_size / 4);
+  1109	
+  1110			tmp = RREG32_SOC15(VCN, i, regVCN_RB_ENABLE);
+  1111			tmp &= ~(VCN_RB_ENABLE__RB1_EN_MASK);
+  1112			WREG32_SOC15(VCN, i, regVCN_RB_ENABLE, tmp);
+  1113			fw_shared->sq.queue_mode |= FW_QUEUE_RING_RESET;
+  1114			WREG32_SOC15(VCN, i, regUVD_RB_RPTR, 0);
+  1115			WREG32_SOC15(VCN, i, regUVD_RB_WPTR, 0);
+  1116	
+  1117			tmp = RREG32_SOC15(VCN, i, regUVD_RB_RPTR);
+  1118			WREG32_SOC15(VCN, i, regUVD_RB_WPTR, tmp);
+  1119			ring->wptr = RREG32_SOC15(VCN, i, regUVD_RB_WPTR);
+  1120	
+  1121			tmp = RREG32_SOC15(VCN, i, regVCN_RB_ENABLE);
+  1122			tmp |= VCN_RB_ENABLE__RB1_EN_MASK;
+  1123			WREG32_SOC15(VCN, i, regVCN_RB_ENABLE, tmp);
+  1124			fw_shared->sq.queue_mode &= ~(FW_QUEUE_RING_RESET | FW_QUEUE_DPG_HOLD_OFF);
+  1125		}
+  1126	
+  1127		return 0;
+  1128	}
+  1129	
 
 -- 
 0-DAY CI Kernel Test Service
