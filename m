@@ -1,170 +1,165 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937DB8801
-	for <llvm@lists.linux.dev>; Sun,  5 Nov 2023 16:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF19A2D61C;
+	Sun,  5 Nov 2023 17:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bYxAclM9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699200067;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VZzt17Wh/gIjoSUSr05TH/I+8gHiLy7Q5w6xnstuFho=;
-	b=bYxAclM91V23IC4Kjn2kQFvCiUGqQHA1OiNDA5oQXPzFGpRc2BU6rcw9fBp6rZEvZ+EBx/
-	jT73S10UJtfjIS+c2AyJ6DuRuhklwZWng8Z87BtPIpMiXyYwCobUbPVHwTehYSXvCAFe3f
-	UykbDIJ3Np8K1wB5HL61lo7pweXS9z0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-629-p_at4enJMgqhdkQ0kPWcVg-1; Sun, 05 Nov 2023 11:01:04 -0500
-X-MC-Unique: p_at4enJMgqhdkQ0kPWcVg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9AE7985A58B
-	for <llvm@lists.linux.dev>; Sun,  5 Nov 2023 16:01:04 +0000 (UTC)
-Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7C5252166B26;
-	Sun,  5 Nov 2023 16:01:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 187 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, aea6bf90)
-Date: Sun, 05 Nov 2023 16:01:04 -0000
-To: yizhan@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UJ0OrGeM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699203824; x=1730739824;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8WrFVxaLHbY7bOXSRqVPJZ3QK1kaEC5icXCBaYVKMbY=;
+  b=UJ0OrGeMEYgzUwW9DdIldniGWMnoZOrQHPOnlhjx68+R+8yHz9lxe/fh
+   XfwtqGOT+AXADA/0l/e2CWWb12Q38FrLwbINJcxBNRL1oJTRKFC/oIP2K
+   yZ65cQz77tsek4P7wc9tx1Mosg1F/1QSuuvG7DrtNuKa7w3moPCQau5eZ
+   FvYOtiC/pqV6dVvLjtVOokG1T0sYBk2x7s6QdamQVuytnD9FnZKouKHfg
+   EAFm3vID/c8W9/ZkaBWcjJVrZeFvxTwxDxFoTseIb1XBLaMus9+BDZzmk
+   vREqy3NSsR671glelJcA3XHBDNMvhKx/73yGF5jSJhDhTKFqc1Cg0GZWL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="386333759"
+X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
+   d="scan'208";a="386333759"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 09:03:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="885694529"
+X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
+   d="scan'208";a="885694529"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 05 Nov 2023 09:03:42 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qzgXE-0005do-0v;
+	Sun, 05 Nov 2023 17:03:40 +0000
+Date: Mon, 6 Nov 2023 01:02:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:iov-kunit 1/10] lib/kunit_iov_iter.c:551:47: warning:
+ performing pointer arithmetic on a null pointer has undefined behavior
+Message-ID: <202311060012.RojaVmD7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
-Message-Id: <90151.123110511010400792@us-mta-629.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git iov-kunit
+head:   895a7ddefa3e00a497187cac3d4fb5e57d3059fe
+commit: 5af0b69fca117e1436df04951f0a0d917f614e15 [1/10] iov_iter: Fix some checkpatch complaints in kunit tests
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231106/202311060012.RojaVmD7-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311060012.RojaVmD7-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311060012.RojaVmD7-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'f2fs-for-6.7-rc1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/jaegeuk/f2fs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/113117
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10197100
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/031
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: blktests block/024 failed
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                   s390x - stress: stress-ng - memory
+>> lib/kunit_iov_iter.c:551:47: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           pagelist[i] = (void *)POISON_POINTER_DELTA + 0x5a;
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   lib/kunit_iov_iter.c:629:47: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           pagelist[i] = (void *)POISON_POINTER_DELTA + 0x5a;
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   lib/kunit_iov_iter.c:712:48: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                                   pagelist[i] = (void *)POISON_POINTER_DELTA + 0x5a;
+                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   3 warnings generated.
 
 
+vim +551 lib/kunit_iov_iter.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   521	
+   522	/*
+   523	 * Test the extraction of ITER_KVEC-type iterators.
+   524	 */
+   525	static void __init iov_kunit_extract_pages_kvec(struct kunit *test)
+   526	{
+   527		const struct kvec_test_range *pr;
+   528		struct iov_iter iter;
+   529		struct page **bpages, *pagelist[8], **pages = pagelist;
+   530		struct kvec kvec[8];
+   531		u8 *buffer;
+   532		ssize_t len;
+   533		size_t bufsize, size = 0, npages;
+   534		int i, from;
+   535	
+   536		bufsize = 0x100000;
+   537		npages = bufsize / PAGE_SIZE;
+   538	
+   539		buffer = iov_kunit_create_buffer(test, &bpages, npages);
+   540	
+   541		iov_kunit_load_kvec(test, &iter, READ, kvec, ARRAY_SIZE(kvec),
+   542				    buffer, bufsize, kvec_test_ranges);
+   543		size = iter.count;
+   544	
+   545		pr = kvec_test_ranges;
+   546		from = pr->from;
+   547		do {
+   548			size_t offset0 = LONG_MAX;
+   549	
+   550			for (i = 0; i < ARRAY_SIZE(pagelist); i++)
+ > 551				pagelist[i] = (void *)POISON_POINTER_DELTA + 0x5a;
+   552	
+   553			len = iov_iter_extract_pages(&iter, &pages, 100 * 1024,
+   554						     ARRAY_SIZE(pagelist), 0, &offset0);
+   555			KUNIT_EXPECT_GE(test, len, 0);
+   556			if (len < 0)
+   557				break;
+   558			KUNIT_EXPECT_GE(test, (ssize_t)offset0, 0);
+   559			KUNIT_EXPECT_LT(test, offset0, PAGE_SIZE);
+   560			KUNIT_EXPECT_LE(test, len, size);
+   561			KUNIT_EXPECT_EQ(test, iter.count, size - len);
+   562			size -= len;
+   563	
+   564			if (len == 0)
+   565				break;
+   566	
+   567			for (i = 0; i < ARRAY_SIZE(pagelist); i++) {
+   568				struct page *p;
+   569				ssize_t part = min_t(ssize_t, len, PAGE_SIZE - offset0);
+   570				int ix;
+   571	
+   572				KUNIT_ASSERT_GE(test, part, 0);
+   573				while (from == pr->to) {
+   574					pr++;
+   575					from = pr->from;
+   576					if (from < 0)
+   577						goto stop;
+   578				}
+   579				ix = from / PAGE_SIZE;
+   580				KUNIT_ASSERT_LT(test, ix, npages);
+   581				p = bpages[ix];
+   582				KUNIT_EXPECT_PTR_EQ(test, pagelist[i], p);
+   583				KUNIT_EXPECT_EQ(test, offset0, from % PAGE_SIZE);
+   584				from += part;
+   585				len -= part;
+   586				KUNIT_ASSERT_GE(test, len, 0);
+   587				if (len == 0)
+   588					break;
+   589				offset0 = 0;
+   590			}
+   591	
+   592			if (test->status == KUNIT_FAILURE)
+   593				break;
+   594		} while (iov_iter_count(&iter) > 0);
+   595	
+   596	stop:
+   597		KUNIT_EXPECT_EQ(test, size, 0);
+   598		KUNIT_EXPECT_EQ(test, iter.count, 0);
+   599		KUNIT_SUCCEED();
+   600	}
+   601	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
