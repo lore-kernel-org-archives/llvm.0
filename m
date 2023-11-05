@@ -1,47 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285B2B64F;
-	Sun,  5 Nov 2023 11:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633E3BA27;
+	Sun,  5 Nov 2023 12:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Aikaluv3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eyAtos5A"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699184557; x=1730720557;
+  t=1699185767; x=1730721767;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+dX/iZV55q7lbw3VJN/onDUW2tu1/vVyDH86TJCqVz0=;
-  b=Aikaluv3rRVrtcnqGrnhQQXC/QHBQfnjtWZ1DBGBVK9FIDuNvgY3pho+
-   Y6pRJks5rSoUskRzJlobwS8JsaYArAI563EztCK1Nz8PCjyNx9i7ZSrTv
-   AJndrqFLqmBRvD8NwJaTgbGj6NowMr5BOCq4IkzPUf7crsROcxdEY6uer
-   oLHGiBYRJnBWJ+bRN+Xd6UiNx+ktT3aZaYV9jSOzQFU1oOUbiRtizxCaf
-   y5ibHImxDHGiInnWr3vR4z5scsGr3TIyf/WBmQaRq+/j4uryZAPUoomPc
-   F9K/bJTaabRXSVFBSX/+9mFWgRYPJK/B0Ga3afcIF7rutvzoZy7ZYQ/jK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10884"; a="369347586"
+  bh=J4JwgJa5GNdZjFKBIAPG8n7Mh06Yyk1yBkXjMYRLJd4=;
+  b=eyAtos5AEpCO2z6UKBrwixb+mmPmk6NFVSXpAUHWtSiRIfAqVx8mM8eA
+   qshhHRXHA2P73WBEwBdOFy2L7YfD7y+j/ZfuK1ODXfQo8Sld6/sCe5b+u
+   IDmrVIOLjWNJ2QbPXlU38ZsZe73TWsKONLmam64WOB9THhNmKp7PDSrPi
+   Egk8vOBTVSaLExMVKvTKEL8+jM72YZ8C08lJXfZe18D23NXb1x885kF2m
+   LLjWNb0Ms/aQj6qZsfZ+snPz2wbIQ5v5Q8LrkwogVQ1wwA/wVFJtMhLHe
+   NLWr2uYh16eS3lFCh3KMj/NfvQlFOd3+Kq+OO+4tiszEWPm2eMrC7zXOO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10884"; a="420260461"
 X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="369347586"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 03:41:57 -0800
+   d="scan'208";a="420260461"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 04:02:46 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10884"; a="762047913"
 X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="762047913"
+   d="scan'208";a="9831066"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 05 Nov 2023 03:41:55 -0800
+  by orviesa001.jf.intel.com with ESMTP; 05 Nov 2023 04:02:44 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qzbVp-0005NI-0o;
-	Sun, 05 Nov 2023 11:41:53 +0000
-Date: Sun, 5 Nov 2023 19:41:36 +0800
+	id 1qzbpx-0005Od-33;
+	Sun, 05 Nov 2023 12:02:41 +0000
+Date: Sun, 5 Nov 2023 20:02:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Russell King <rmk+kernel@armlinux.org.uk>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm:cex7 76/79] drivers/net/phy/qsfp.c:1229:3: warning: misleading
- indentation; statement is not part of the previous 'if'
-Message-ID: <202311051950.gd99Mrfa-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Robin Murphy <robin.murphy@arm.com>, Hannes Reinecke <hare@suse.de>
+Subject: drivers/scsi/FlashPoint.c:1712:12: warning: stack frame size (2544)
+ exceeds limit (2048) in 'FlashPoint_HandleInterrupt'
+Message-ID: <202311051924.sPxeVYCL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,48 +52,112 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git cex7
-head:   279d4f83510a7ff8fc1b449ff43195057e5429dd
-commit: b7915b5f9ae73b600c44ce96346a0c246ea28ae3 [76/79] net: add qsfp support                              [*experimental*]
-config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20231105/202311051950.gd99Mrfa-lkp@intel.com/config)
+Hi Arnd,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1c41041124bd14dd6610da256a3da4e5b74ce6b1
+commit: 9f7c2232e131b1de2ee4abadfce5d8f010e223c6 scsi: BusLogic: Remove bus_to_virt()
+date:   1 year, 4 months ago
+config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20231105/202311051924.sPxeVYCL-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231105/202311051950.gd99Mrfa-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231105/202311051924.sPxeVYCL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311051950.gd99Mrfa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311051924.sPxeVYCL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/phy/qsfp.c:1229:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-    1229 |                 qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
-         |                 ^
-   drivers/net/phy/qsfp.c:1222:2: note: previous statement is here
-    1222 |         if (!qsfp->gpio_irq[GPIO_INTL])
-         |         ^
-   1 warning generated.
+   drivers/scsi/BusLogic.c:2201:6: warning: variable 'adapter_count' set but not used [-Wunused-but-set-variable]
+    2201 |         int adapter_count = 0, drvr_optindex = 0, probeindex;
+         |             ^
+   In file included from drivers/scsi/BusLogic.c:51:
+>> drivers/scsi/FlashPoint.c:1712:12: warning: stack frame size (2544) exceeds limit (2048) in 'FlashPoint_HandleInterrupt' [-Wframe-larger-than]
+    1712 | static int FlashPoint_HandleInterrupt(void *pcard)
+         |            ^
+   2 warnings generated.
 
 
-vim +/if +1229 drivers/net/phy/qsfp.c
+vim +/FlashPoint_HandleInterrupt +1712 drivers/scsi/FlashPoint.c
 
-  1215	
-  1216		if (qsfp->sm_dev_state == SFP_DEV_DETACHED) {
-  1217			qsfp_sm_ins_next(qsfp, SFP_MOD_WATTACH, 0);
-  1218			return;
-  1219		}
-  1220	
-  1221		// Start the poller if there is no interrupt support if not running
-  1222		if (!qsfp->gpio_irq[GPIO_INTL])
-  1223			queue_delayed_work(system_wq, &qsfp->poll, poll_jiffies);
-  1224	
-  1225	//	ret = sfp_module_insert(qsfp->sfp_bus, &id);
-  1226	//	if (ret < 0)
-  1227	//		qsfp_sm_ins_next(qsfp, SFP_MOD_ERROR, 0);
-  1228	//	else
-> 1229			qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
-  1230	}
-  1231	
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1702  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1703  /*---------------------------------------------------------------------
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1704   *
+d8b6b8bd8a99ee Alexey Dobriyan 2006-03-08  1705   * Function: FlashPoint_HandleInterrupt
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1706   *
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1707   * Description: This is our entry point when an interrupt is generated
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1708   *              by the card and the upper level driver passes it on to
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1709   *              us.
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1710   *
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1711   *---------------------------------------------------------------------*/
+391e2f25601e34 Khalid Aziz     2013-05-16 @1712  static int FlashPoint_HandleInterrupt(void *pcard)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1713  {
+69eb2ea4779336 Alexey Dobriyan 2006-03-08  1714  	struct sccb *currSCCB;
+db038cf86fc63d Alexey Dobriyan 2006-03-08  1715  	unsigned char thisCard, result, bm_status, bm_int_st;
+c823feeb33161c Alexey Dobriyan 2006-03-08  1716  	unsigned short hp_int;
+db038cf86fc63d Alexey Dobriyan 2006-03-08  1717  	unsigned char i, target;
+391e2f25601e34 Khalid Aziz     2013-05-16  1718  	struct sccb_card *pCurrCard = pcard;
+391e2f25601e34 Khalid Aziz     2013-05-16  1719  	u32 ioport;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1720  
+391e2f25601e34 Khalid Aziz     2013-05-16  1721  	thisCard = pCurrCard->cardIndex;
+391e2f25601e34 Khalid Aziz     2013-05-16  1722  	ioport = pCurrCard->ioPort;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1723  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1724  	MDISABLE_INT(ioport);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1725  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1726  	if ((bm_int_st = RD_HARPOON(ioport + hp_int_status)) & EXT_STATUS_ON)
+391e2f25601e34 Khalid Aziz     2013-05-16  1727  		bm_status = RD_HARPOON(ioport + hp_ext_status) &
+391e2f25601e34 Khalid Aziz     2013-05-16  1728  					(unsigned char)BAD_EXT_STATUS;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1729  	else
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1730  		bm_status = 0;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1731  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1732  	WR_HARPOON(ioport + hp_int_mask, (INT_CMD_COMPL | SCSI_INTERRUPT));
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1733  
+391e2f25601e34 Khalid Aziz     2013-05-16  1734  	while ((hp_int = RDW_HARPOON((ioport + hp_intstat)) &
+391e2f25601e34 Khalid Aziz     2013-05-16  1735  				FPT_default_intena) | bm_status) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1736  
+391e2f25601e34 Khalid Aziz     2013-05-16  1737  		currSCCB = pCurrCard->currentSCCB;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1738  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1739  		if (hp_int & (FIFO | TIMEOUT | RESET | SCAM_SEL) || bm_status) {
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1740  			result =
+391e2f25601e34 Khalid Aziz     2013-05-16  1741  			    FPT_SccbMgr_bad_isr(ioport, thisCard, pCurrCard,
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1742  						hp_int);
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1743  			WRW_HARPOON((ioport + hp_intstat),
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1744  				    (FIFO | TIMEOUT | RESET | SCAM_SEL));
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1745  			bm_status = 0;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1746  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1747  			if (result) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1748  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1749  				MENABLE_INT(ioport);
+5c1b85e209af41 Alexey Dobriyan 2006-03-08  1750  				return result;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1751  			}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1752  		}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1753  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1754  		else if (hp_int & ICMD_COMP) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1755  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1756  			if (!(hp_int & BUS_FREE)) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1757  				/* Wait for the BusFree before starting a new command.  We
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1758  				   must also check for being reselected since the BusFree
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1759  				   may not show up if another device reselects us in 1.5us or
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1760  				   less.  SRR Wednesday, 3/8/1995.
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1761  				 */
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1762  				while (!
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1763  				       (RDW_HARPOON((ioport + hp_intstat)) &
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1764  					(BUS_FREE | RSEL))) ;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1765  			}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1766  
+391e2f25601e34 Khalid Aziz     2013-05-16  1767  			if (pCurrCard->globalFlags & F_HOST_XFER_ACT)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1768  
+47b5d69c4aa753 James Bottomley 2005-04-24  1769  				FPT_phaseChkFifo(ioport, thisCard);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1770  
+
+:::::: The code at line 1712 was first introduced by commit
+:::::: 391e2f25601e34a7d7e5dc155e487bc58dffd8c6 [SCSI] BusLogic: Port driver to 64-bit.
+
+:::::: TO: Khalid Aziz <khalid.aziz@oracle.com>
+:::::: CC: James Bottomley <JBottomley@Parallels.com>
 
 -- 
 0-DAY CI Kernel Test Service
