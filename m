@@ -1,40 +1,40 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500FF15A6;
-	Sun,  5 Nov 2023 23:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E484619453;
+	Sun,  5 Nov 2023 23:29:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Odx5vCYQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UJzZjwOm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699226107; x=1730762107;
+  t=1699226961; x=1730762961;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NLvyoEtw/T4lswhya0GIpu6PjCWuUfVZ+IjEo1JoCYE=;
-  b=Odx5vCYQSdgDhDcH6dW87TsyhsgVHuw5oWlNfN6VcqvNBP/hdOWFVXGv
-   NqkEZWSe4Ochs4ABnd4ipPIkiQjUM+TCs2CTDiJ/0ETSwg4SF39SrY494
-   4BgPoobKCWMUj1XYa5bvB0nfJgW9eyC481vJbGKk1tyZxB3HcdMqyBz75
-   uxvnkEAdHuOtIxcFkthJ6C4vE7XFwmMKuCy/whlql/ARvJpdao0eZpWk+
-   UcQaG+GQ8wbwevytitB8XBOz3WDIMvCkKfxxDCOAD/6PyoD2hZduSz3Jz
-   F8oaTpNagmjZbuwseK6BK7bjHj79sDPEbkepofLbihtihEcv741fp4LYi
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="388999698"
+  bh=99Gl7Aj/kiTwUyJ22k7O3/ukVeWZF5+VCzHQbHp1ncU=;
+  b=UJzZjwOmfHElcIgaBk1N9V2QzZbuK8kIYBDB7ZUKVufynY/lCaz4ZBYZ
+   4L2xlyye7YMCgfEjWr5KC6Fn/fX5+G6F5fbWsl2dzB5K+nxxT8fHL1q9r
+   cZLS007NsRIQq+f9TWetOWuXpr/oiTKTUWbnlsoz0GSmgNrkbyIKVNcxZ
+   iV9xjk93FlYcKvz7I0QAUa1xfjLUyIEIVdJsDtHaNhO1q7LpK2RDMn4Fv
+   E4lh5NorcNab+xg7eLi5r57zjPnM2fFyonFBh8DNOptPy7mU1T9lloTWQ
+   loeR2gE0X8QDRDRgO/gyx3Xy9gF0HGQp9PJzTan0D6flOP9ygemHJzrh2
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="379576470"
 X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="388999698"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 15:15:06 -0800
+   d="scan'208";a="379576470"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 15:29:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="738634497"
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="762151312"
 X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="738634497"
+   d="scan'208";a="762151312"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Nov 2023 15:15:04 -0800
+  by orsmga002.jf.intel.com with ESMTP; 05 Nov 2023 15:29:19 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qzmKc-0005sS-0A;
-	Sun, 05 Nov 2023 23:15:02 +0000
-Date: Mon, 6 Nov 2023 07:13:50 +0800
+	id 1qzmYP-0005se-0g;
+	Sun, 05 Nov 2023 23:29:17 +0000
+Date: Mon, 6 Nov 2023 07:28:38 +0800
 From: kernel test robot <lkp@intel.com>
 To: Nathan Chancellor <natechancellor@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -43,7 +43,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 Subject: net/ceph/osdmap.c:1246:10: warning: result of comparison of constant
  4611686018427387891 with expression of type 'u32' (aka 'unsigned int') is
  always false
-Message-ID: <202311060731.8P11QmUf-lkp@intel.com>
+Message-ID: <202311060702.EjNPjAwj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,14 +57,14 @@ tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git maste
 head:   77fa2fbe87fc605c4bfa87dff87be9bfded0e9a3
 commit: afe956c577b2d5a3d9834e4424587c1ebcf90c4c kbuild: Enable -Wtautological-compare
 date:   3 years, 7 months ago
-config: x86_64-randconfig-012-20230909 (https://download.01.org/0day-ci/archive/20231106/202311060731.8P11QmUf-lkp@intel.com/config)
+config: x86_64-randconfig-012-20230909 (https://download.01.org/0day-ci/archive/20231106/202311060702.EjNPjAwj-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311060731.8P11QmUf-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311060702.EjNPjAwj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311060731.8P11QmUf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311060702.EjNPjAwj-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
