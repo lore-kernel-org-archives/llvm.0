@@ -1,52 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B51D17992;
-	Sun,  5 Nov 2023 22:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500FF15A6;
+	Sun,  5 Nov 2023 23:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="koYbtz03"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Odx5vCYQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699225132; x=1730761132;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IBnqEtOpVF3qUs7zi14zprYn6a0bv6FOzZ6a7h1nLOc=;
-  b=koYbtz03wmExGmq54dOPW/u2RulSIu5vvvX+KCn4QNkBKCys2htCG3HW
-   MN9nx9XzjrMtpkYT7S8rtb/U6QUa2F5h9c+1y1vi7xvPJ9+aqu8AToOkt
-   LKD+A0Hbve0/bCOpv5p0ZSUmwnOWW4BV2Q1Aw3fhZyu/O2EddSQgQHhzz
-   wTm0qDxXiIU2Slz+qrp6XyBuhUxlAbrK5cbyZmgGhsUJmMKS9dZ2AZ4Xa
-   zKt1v0ksr97xmy+XZONJ356JoQyW0vc/XDqHUJ+0RIgHOywpNd076n2ks
-   +l2i9MZV7X96wqHw8nqCsz2hNaKuHCKRncMF0tzNkmsnqXddvcLNfwLgS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="388064927"
+  t=1699226107; x=1730762107;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NLvyoEtw/T4lswhya0GIpu6PjCWuUfVZ+IjEo1JoCYE=;
+  b=Odx5vCYQSdgDhDcH6dW87TsyhsgVHuw5oWlNfN6VcqvNBP/hdOWFVXGv
+   NqkEZWSe4Ochs4ABnd4ipPIkiQjUM+TCs2CTDiJ/0ETSwg4SF39SrY494
+   4BgPoobKCWMUj1XYa5bvB0nfJgW9eyC481vJbGKk1tyZxB3HcdMqyBz75
+   uxvnkEAdHuOtIxcFkthJ6C4vE7XFwmMKuCy/whlql/ARvJpdao0eZpWk+
+   UcQaG+GQ8wbwevytitB8XBOz3WDIMvCkKfxxDCOAD/6PyoD2hZduSz3Jz
+   F8oaTpNagmjZbuwseK6BK7bjHj79sDPEbkepofLbihtihEcv741fp4LYi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="388999698"
 X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="388064927"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 14:58:49 -0800
+   d="scan'208";a="388999698"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 15:15:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="1093600479"
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="738634497"
 X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="1093600479"
+   d="scan'208";a="738634497"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Nov 2023 14:58:48 -0800
+  by orsmga006.jf.intel.com with ESMTP; 05 Nov 2023 15:15:04 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qzm4s-0005rY-10;
-	Sun, 05 Nov 2023 22:58:46 +0000
-Date: Mon, 6 Nov 2023 06:57:01 +0800
+	id 1qzmKc-0005sS-0A;
+	Sun, 05 Nov 2023 23:15:02 +0000
+Date: Mon, 6 Nov 2023 07:13:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Justin Lai <justinlai0215@realtek.com>, kuba@kernel.org
+To: Nathan Chancellor <natechancellor@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	andrew@lunn.ch, pkshih@realtek.com, larry.chiu@realtek.com,
-	Justin Lai <justinlai0215@realtek.com>
-Subject: Re: [PATCH net-next v10 12/13] net:ethernet:realtek: Update the
- Makefile and Kconfig in the realtek folder
-Message-ID: <202311060633.814zKJdK-lkp@intel.com>
-References: <20231102154505.940783-13-justinlai0215@realtek.com>
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: net/ceph/osdmap.c:1246:10: warning: result of comparison of constant
+ 4611686018427387891 with expression of type 'u32' (aka 'unsigned int') is
+ always false
+Message-ID: <202311060731.8P11QmUf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,40 +52,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231102154505.940783-13-justinlai0215@realtek.com>
 
-Hi Justin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Justin-Lai/net-ethernet-realtek-rtase-Add-pci-table-supported-in-this-module/20231103-032946
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20231102154505.940783-13-justinlai0215%40realtek.com
-patch subject: [PATCH net-next v10 12/13] net:ethernet:realtek: Update the Makefile and Kconfig in the realtek folder
-config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20231106/202311060633.814zKJdK-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311060633.814zKJdK-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   77fa2fbe87fc605c4bfa87dff87be9bfded0e9a3
+commit: afe956c577b2d5a3d9834e4424587c1ebcf90c4c kbuild: Enable -Wtautological-compare
+date:   3 years, 7 months ago
+config: x86_64-randconfig-012-20230909 (https://download.01.org/0day-ci/archive/20231106/202311060731.8P11QmUf-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311060731.8P11QmUf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311060633.814zKJdK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311060731.8P11QmUf-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/realtek/rtase/rtase_main.c:68:10: fatal error: 'net/page_pool.h' file not found
-      68 | #include <net/page_pool.h>
-         |          ^~~~~~~~~~~~~~~~~
-   1 error generated.
+   net/ceph/osdmap.c:176:6: warning: no previous prototype for function 'clear_choose_args' [-Wmissing-prototypes]
+   void clear_choose_args(struct crush_map *c)
+        ^
+   net/ceph/osdmap.c:176:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void clear_choose_args(struct crush_map *c)
+   ^
+   static 
+>> net/ceph/osdmap.c:1246:10: warning: result of comparison of constant 4611686018427387891 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
+               ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ceph/osdmap.c:1429:10: warning: result of comparison of constant 2305843009213693945 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
+               ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+>> drivers/block/rbd.c:6190:17: warning: result of comparison of constant 2305843009213693948 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (snap_count > (SIZE_MAX - sizeof (struct ceph_snap_context))
+               ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +68 drivers/net/ethernet/realtek/rtase/rtase_main.c
+vim +1246 net/ceph/osdmap.c
 
-db2657d0fa3a98 Justin Lai 2023-11-02 @68  #include <net/page_pool.h>
-db2657d0fa3a98 Justin Lai 2023-11-02  69  #include <net/pkt_cls.h>
-db2657d0fa3a98 Justin Lai 2023-11-02  70  
+10db634e2083a2 Ilya Dryomov 2014-03-21  1236  
+a303bb0e58345f Ilya Dryomov 2017-06-21  1237  static struct ceph_pg_mapping *__decode_pg_temp(void **p, void *end,
+a303bb0e58345f Ilya Dryomov 2017-06-21  1238  						bool incremental)
+a303bb0e58345f Ilya Dryomov 2017-06-21  1239  {
+a303bb0e58345f Ilya Dryomov 2017-06-21  1240  	struct ceph_pg_mapping *pg;
+a303bb0e58345f Ilya Dryomov 2017-06-21  1241  	u32 len, i;
+a303bb0e58345f Ilya Dryomov 2017-06-21  1242  
+a303bb0e58345f Ilya Dryomov 2017-06-21  1243  	ceph_decode_32_safe(p, end, len, e_inval);
+a303bb0e58345f Ilya Dryomov 2017-06-21  1244  	if (len == 0 && incremental)
+a303bb0e58345f Ilya Dryomov 2017-06-21  1245  		return NULL;	/* new_pg_temp: [] to remove */
+a303bb0e58345f Ilya Dryomov 2017-06-21 @1246  	if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
+a303bb0e58345f Ilya Dryomov 2017-06-21  1247  		return ERR_PTR(-EINVAL);
+a303bb0e58345f Ilya Dryomov 2017-06-21  1248  
+a303bb0e58345f Ilya Dryomov 2017-06-21  1249  	ceph_decode_need(p, end, len * sizeof(u32), e_inval);
+a303bb0e58345f Ilya Dryomov 2017-06-21  1250  	pg = alloc_pg_mapping(len * sizeof(u32));
+10db634e2083a2 Ilya Dryomov 2014-03-21  1251  	if (!pg)
+a303bb0e58345f Ilya Dryomov 2017-06-21  1252  		return ERR_PTR(-ENOMEM);
+10db634e2083a2 Ilya Dryomov 2014-03-21  1253  
+35a935d75d51ab Ilya Dryomov 2014-03-21  1254  	pg->pg_temp.len = len;
+10db634e2083a2 Ilya Dryomov 2014-03-21  1255  	for (i = 0; i < len; i++)
+35a935d75d51ab Ilya Dryomov 2014-03-21  1256  		pg->pg_temp.osds[i] = ceph_decode_32(p);
+10db634e2083a2 Ilya Dryomov 2014-03-21  1257  
+a303bb0e58345f Ilya Dryomov 2017-06-21  1258  	return pg;
+10db634e2083a2 Ilya Dryomov 2014-03-21  1259  
+10db634e2083a2 Ilya Dryomov 2014-03-21  1260  e_inval:
+a303bb0e58345f Ilya Dryomov 2017-06-21  1261  	return ERR_PTR(-EINVAL);
+10db634e2083a2 Ilya Dryomov 2014-03-21  1262  }
+10db634e2083a2 Ilya Dryomov 2014-03-21  1263  
+
+:::::: The code at line 1246 was first introduced by commit
+:::::: a303bb0e58345fe9f7ab2f82b90266f2b5036058 libceph: introduce and switch to decode_pg_mapping()
+
+:::::: TO: Ilya Dryomov <idryomov@gmail.com>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
