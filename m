@@ -1,149 +1,188 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFC933CF;
-	Mon,  6 Nov 2023 21:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63A02E639;
+	Mon,  6 Nov 2023 21:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J9LQuial"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699305228; x=1730841228;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tbKByqfuyURCHPp+0iRLoLExVfyExuPe8MltNNHCMcM=;
-  b=J9LQuialDNAbHlh7EZHijuXmdiycygxnxCXUs00bYCE6tNWMGSJWwvYA
-   wavO4KWr49lQiuT6t9s2Vb/i271TkGWGeVWnh3c3Uq0p1YmSal4JkPDFB
-   rCtPBS8kJJfQ4O76efyIDxecRWRYMvJ5sDomlpyr1STb57wRFCpZNe+eT
-   9W7b4ui9q+A5a85K/KTnH2GpL+uQKX9DZPeSVj/NbwTa8nBlqTg5426aH
-   zxte/U9voYhUosX5cNnd1AE2/IagR+bfZR4TC741vBAu9DLBFa761+jTw
-   K8nsan69vNATKy7koVUN4stFvyQ+XD5AWDcrSQDh9RhZ8VQ18OwfIYX06
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="379763327"
-X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
-   d="scan'208";a="379763327"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2023 13:13:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="712327288"
-X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
-   d="scan'208";a="712327288"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Nov 2023 13:13:16 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r06uH-0006jY-2v;
-	Mon, 06 Nov 2023 21:13:13 +0000
-Date: Tue, 7 Nov 2023 05:11:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nitesh Shetty <nj.shetty@samsung.com>, Jens Axboe <axboe@kernel.dk>,
-	Jonathan Corbet <corbet@lwn.net>, Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>, dm-devel@lists.linux.dev,
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-	nitheshshetty@gmail.com, anuj1072538@gmail.com,
-	gost.dev@samsung.com, mcgrof@kernel.org,
-	Nitesh Shetty <nj.shetty@samsung.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	Anuj Gupta <anuj20.g@samsung.com>,
-	Vincent Fu <vincent.fu@samsung.com>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v17 12/12] null_blk: add support for copy offload
-Message-ID: <202311070508.mIPbaEHa-lkp@intel.com>
-References: <20231019110147.31672-13-nj.shetty@samsung.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F74yB8bJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6639CC433C8;
+	Mon,  6 Nov 2023 21:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699305269;
+	bh=yOk149MnqQ38qeZeV/4etw3iKo3CYD5n8FeZGzh/eFc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=F74yB8bJbDjRxQPrWVBp0rcIBA/1CoKPsUPx+XDnqKASkuUkdBYoh37c6UvH0cKhX
+	 wIxHDWgXtlPaGXOi2W+s/3s/ethyy+T8dEhuh+3qTBw41Ih6QVQRtAjnj2XKSjEY3v
+	 28EGdOEvc/f2W/zne9ZsmlPve6sIp/pDj7j79xv0CgxoQMQekl7+fUewO2yBJ0EmnJ
+	 qmShe+edLqsf1VPBmi7+UaDKjkj8NT+By+yBgfSQYVbL/ksvsb97pYZRYyDbtZWlyz
+	 DtLWQV/7wgITaX6YSQPJVjbAOFvL1oYPinGSTkqfFCxqBKYm3mkcWEKo42hx2iKgGv
+	 BS/6AeS9E4u9Q==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 06 Nov 2023 14:14:16 -0700
+Subject: [PATCH net v3] tcp: Fix -Wc23-extensions in tcp_options_write()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231019110147.31672-13-nj.shetty@samsung.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231106-tcp-ao-fix-label-in-compound-statement-warning-v3-1-b54a64602a85@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACdXSWUC/52OQQ6CMBBFr2K6dgwDCNSV9zAuShmgEaakragh3
+ N2GjXGpyz8/895fhCdnyIvTbhGOZuON5Riy/U7oXnFHYJqYRZqkGSYZQtATKAutecKgahrAMGg
+ 7TvbODfigAo3EAR7KseEOqG4KLWVZ5bISETo5iq+b8CKYgrjGY298sO61jZhxq/71zQgIWpYZN
+ ojHFsvzjRzTcLCu21xz+uFjUvzMTyNfIrVtQVjklf7ir+v6BkvB94tSAQAA
+To: edumazet@google.com, davem@davemloft.net, dsahern@kernel.org, 
+ kuba@kernel.org, pabeni@redhat.com
+Cc: ndesaulniers@google.com, trix@redhat.com, 0x7f454c46@gmail.com, 
+ noureddine@arista.com, hch@infradead.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4778; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=yOk149MnqQ38qeZeV/4etw3iKo3CYD5n8FeZGzh/eFc=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDKme4SaXfJoX3r0VsrR01445f1buSnbn39V4u66r97CQ1
+ Z/WybukOkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEXhoyMrRMdQr09N8oPO8f
+ j/P1DmaWLyskL7e/VMz67PNJdY7P/LsM/2wEWY5F8B9kWFs2qVvhvo/T68KqtuoNuzdnub/7lHO
+ sgxUA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Nitesh,
+Clang warns (or errors with CONFIG_WERROR=y) when CONFIG_TCP_AO is set:
 
-kernel test robot noticed the following build warnings:
+  net/ipv4/tcp_output.c:663:2: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
+    663 |         }
+        |         ^
+  1 error generated.
 
-[auto build test WARNING on 213f891525c222e8ed145ce1ce7ae1f47921cb9c]
+On earlier releases (such as clang-11, the current minimum supported
+version for building the kernel) that do not support C23, this was a
+hard error unconditionally:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nitesh-Shetty/block-Introduce-queue-limits-and-sysfs-for-copy-offload-support/20231019-200658
-base:   213f891525c222e8ed145ce1ce7ae1f47921cb9c
-patch link:    https://lore.kernel.org/r/20231019110147.31672-13-nj.shetty%40samsung.com
-patch subject: [PATCH v17 12/12] null_blk: add support for copy offload
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231107/202311070508.mIPbaEHa-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231107/202311070508.mIPbaEHa-lkp@intel.com/reproduce)
+  net/ipv4/tcp_output.c:663:2: error: expected statement
+          }
+          ^
+  1 error generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311070508.mIPbaEHa-lkp@intel.com/
+While adding a semicolon after the label would resolve this, it is more
+in line with the kernel as a whole to refactor this block into a
+standalone function, which means the goto a label construct can just be
+replaced with a return statement. Do so to resolve the warning.
 
-All warnings (new ones prefixed by >>):
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1953
+Fixes: 1e03d32bea8e ("net/tcp: Add TCP-AO sign to outgoing packets")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Changes in v3:
+- Don't use a pointer to a pointer for ptr parameter to avoid the extra
+  indirection in process_tcp_ao_options(), just return the modified ptr
+  value back to the caller (Eric)
+- Link to v2: https://lore.kernel.org/r/20231106-tcp-ao-fix-label-in-compound-statement-warning-v2-1-91eff6e1648c@kernel.org
 
-   In file included from drivers/block/null_blk/main.c:15:
-   In file included from drivers/block/null_blk/trace.h:104:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:237:
->> drivers/block/null_blk/trace.h:94:34: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                             __entry->dst, __entry->src, __entry->len)
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/trace/stages/stage3_trace_output.h:6:17: note: expanded from macro '__entry'
-   #define __entry field
-                   ^
-   include/trace/stages/stage3_trace_output.h:9:43: note: expanded from macro 'TP_printk'
-   #define TP_printk(fmt, args...) fmt "\n", args
-                                   ~~~       ^
-   include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:107:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^~~~
-   include/trace/trace_events.h:203:27: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_event_printf(iter, print);                                \
-                                    ^~~~~
-   1 warning generated.
+Changes in v2:
+- Break out problematic block into its own function so that goto can be
+  replaced with a simple return, instead of the simple semicolon
+  approach of v1 (Christoph)
+- Link to v1: https://lore.kernel.org/r/20231031-tcp-ao-fix-label-in-compound-statement-warning-v1-1-c9731d115f17@kernel.org
+---
+ net/ipv4/tcp_output.c | 70 ++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 39 insertions(+), 31 deletions(-)
 
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 0d8dd5b7e2e5..eb13a55d660c 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -601,6 +601,44 @@ static void bpf_skops_write_hdr_opt(struct sock *sk, struct sk_buff *skb,
+ }
+ #endif
+ 
++static __be32 *process_tcp_ao_options(struct tcp_sock *tp,
++				      const struct tcp_request_sock *tcprsk,
++				      struct tcp_out_options *opts,
++				      struct tcp_key *key, __be32 *ptr)
++{
++#ifdef CONFIG_TCP_AO
++	u8 maclen = tcp_ao_maclen(key->ao_key);
++
++	if (tcprsk) {
++		u8 aolen = maclen + sizeof(struct tcp_ao_hdr);
++
++		*ptr++ = htonl((TCPOPT_AO << 24) | (aolen << 16) |
++			       (tcprsk->ao_keyid << 8) |
++			       (tcprsk->ao_rcv_next));
++	} else {
++		struct tcp_ao_key *rnext_key;
++		struct tcp_ao_info *ao_info;
++
++		ao_info = rcu_dereference_check(tp->ao_info,
++			lockdep_sock_is_held(&tp->inet_conn.icsk_inet.sk));
++		rnext_key = READ_ONCE(ao_info->rnext_key);
++		if (WARN_ON_ONCE(!rnext_key))
++			return ptr;
++		*ptr++ = htonl((TCPOPT_AO << 24) |
++			       (tcp_ao_len(key->ao_key) << 16) |
++			       (key->ao_key->sndid << 8) |
++			       (rnext_key->rcvid));
++	}
++	opts->hash_location = (__u8 *)ptr;
++	ptr += maclen / sizeof(*ptr);
++	if (unlikely(maclen % sizeof(*ptr))) {
++		memset(ptr, TCPOPT_NOP, sizeof(*ptr));
++		ptr++;
++	}
++#endif
++	return ptr;
++}
++
+ /* Write previously computed TCP options to the packet.
+  *
+  * Beware: Something in the Internet is very sensitive to the ordering of
+@@ -629,37 +667,7 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+ 		opts->hash_location = (__u8 *)ptr;
+ 		ptr += 4;
+ 	} else if (tcp_key_is_ao(key)) {
+-#ifdef CONFIG_TCP_AO
+-		u8 maclen = tcp_ao_maclen(key->ao_key);
+-
+-		if (tcprsk) {
+-			u8 aolen = maclen + sizeof(struct tcp_ao_hdr);
+-
+-			*ptr++ = htonl((TCPOPT_AO << 24) | (aolen << 16) |
+-				       (tcprsk->ao_keyid << 8) |
+-				       (tcprsk->ao_rcv_next));
+-		} else {
+-			struct tcp_ao_key *rnext_key;
+-			struct tcp_ao_info *ao_info;
+-
+-			ao_info = rcu_dereference_check(tp->ao_info,
+-				lockdep_sock_is_held(&tp->inet_conn.icsk_inet.sk));
+-			rnext_key = READ_ONCE(ao_info->rnext_key);
+-			if (WARN_ON_ONCE(!rnext_key))
+-				goto out_ao;
+-			*ptr++ = htonl((TCPOPT_AO << 24) |
+-				       (tcp_ao_len(key->ao_key) << 16) |
+-				       (key->ao_key->sndid << 8) |
+-				       (rnext_key->rcvid));
+-		}
+-		opts->hash_location = (__u8 *)ptr;
+-		ptr += maclen / sizeof(*ptr);
+-		if (unlikely(maclen % sizeof(*ptr))) {
+-			memset(ptr, TCPOPT_NOP, sizeof(*ptr));
+-			ptr++;
+-		}
+-out_ao:
+-#endif
++		ptr = process_tcp_ao_options(tp, tcprsk, opts, key, ptr);
+ 	}
+ 	if (unlikely(opts->mss)) {
+ 		*ptr++ = htonl((TCPOPT_MSS << 24) |
 
-vim +94 drivers/block/null_blk/trace.h
+---
+base-commit: c1ed833e0b3b7b9edc82b97b73b2a8a10ceab241
+change-id: 20231031-tcp-ao-fix-label-in-compound-statement-warning-ebd6c9978498
 
-    72	
-    73	TRACE_EVENT(nullb_copy_op,
-    74			TP_PROTO(struct request *req,
-    75				 sector_t dst, sector_t src, size_t len),
-    76			TP_ARGS(req, dst, src, len),
-    77			TP_STRUCT__entry(
-    78					 __array(char, disk, DISK_NAME_LEN)
-    79					 __field(enum req_op, op)
-    80					 __field(sector_t, dst)
-    81					 __field(sector_t, src)
-    82					 __field(size_t, len)
-    83			),
-    84			TP_fast_assign(
-    85				       __entry->op = req_op(req);
-    86				       __assign_disk_name(__entry->disk, req->q->disk);
-    87				       __entry->dst = dst;
-    88				       __entry->src = src;
-    89				       __entry->len = len;
-    90			),
-    91			TP_printk("%s req=%-15s: dst=%llu, src=%llu, len=%lu",
-    92				  __print_disk_name(__entry->disk),
-    93				  blk_op_str(__entry->op),
-  > 94				  __entry->dst, __entry->src, __entry->len)
-    95	);
-    96	#endif /* _TRACE_NULLB_H */
-    97	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
