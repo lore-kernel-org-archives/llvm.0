@@ -1,304 +1,369 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C40E2F3D;
-	Mon,  6 Nov 2023 05:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A90B661
+	for <llvm@lists.linux.dev>; Mon,  6 Nov 2023 06:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yyk4uwFJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699250302; x=1730786302;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q2ZmzQBpNtwpAvMD47i1PzF5TIpTO6N+xz9imvOpa4Q=;
-  b=Yyk4uwFJwWgxGZLZCU1xxhsg4Jepe8itA3NarbWAevAK+I4MsjzewlYx
-   T5MtZ21bmyXikHOBoosz+lrI8I4HJ4kGZ9DJJtx84TkoXZuOZ7d2gX9+J
-   UDwmd3hCUK/UhBCar6fldc5yo6ePtHX1x6659NlMY3OAiRyeqAkcFUPx2
-   Rj1+xA8Szm6dmBQ46KPbgyPi14xvwBDnsnJqZZ9GC0IsFV6V2Urc/QhVV
-   1Y/0vKmaSqOEYetrM848A6u5en2CRwC8UV6goJYii/kcE4ztsQocLQnFb
-   8nXxg4qYAkT+/dovOsl8Huhdh9fZH+iQyFO49vHQTx2LvmynahWFuFGg0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="369418560"
-X-IronPort-AV: E=Sophos;i="6.03,280,1694761200"; 
-   d="scan'208";a="369418560"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 21:58:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,280,1694761200"; 
-   d="scan'208";a="10347041"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Nov 2023 21:58:19 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qzscq-0006AK-2X;
-	Mon, 06 Nov 2023 05:58:16 +0000
-Date: Mon, 6 Nov 2023 13:57:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Petr Tesarik <petr.tesarik.ext@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: arch/powerpc/platforms/ps3/device-init.c:771:12: warning: stack
- frame size (2064) exceeds limit (2048) in 'ps3_probe_thread'
-Message-ID: <202311061349.D8RrGBz3-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UzRpAXQQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699251685;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6ipdl9Y9lmyHXRuO7kC+OKEx9U8DhBUZ0Xsk9Mnl+EI=;
+	b=UzRpAXQQWmUsLxJIStgfeuCAR8JLQCP4BOCELfdFD8eFJQe7M6uGSkQTlmrpGXcPU8Jk+S
+	Hm3RMJALI8fHezZz56HcvjEIYW4R9tjyrKRGZ3MDnEpaRe+xgX3Zj1kyqts7Y4hEWXf+Vj
+	KY9BbmUtQ3BJNKfrG3nf+2UYINIIQ7o=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-435-q7l9midnMSu1PRv20Valmw-1; Mon,
+ 06 Nov 2023 01:21:24 -0500
+X-MC-Unique: q7l9midnMSu1PRv20Valmw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 025763826D23
+	for <llvm@lists.linux.dev>; Mon,  6 Nov 2023 06:21:24 +0000 (UTC)
+Received: from [172.64.13.10] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DC5D025C0;
+	Mon,  6 Nov 2023 06:21:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
+ mainline.kernel.org-clang, 77fa2fbe)
+Date: Mon, 06 Nov 2023 06:21:23 -0000
+To: yizhan@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <72778.123110601212400162@us-mta-435.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   77fa2fbe87fc605c4bfa87dff87be9bfded0e9a3
-commit: 79636caad3618e2b38457f6e298c9b31ba82b489 swiotlb: if swiotlb is full, fall back to a transient memory pool
-date:   3 months ago
-config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20231106/202311061349.D8RrGBz3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311061349.D8RrGBz3-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311061349.D8RrGBz3-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/powerpc/platforms/ps3/device-init.c:948:6: warning: variable 'result' set but not used [-Wunused-but-set-variable]
-     948 |         int result;
-         |             ^
->> arch/powerpc/platforms/ps3/device-init.c:771:12: warning: stack frame size (2064) exceeds limit (2048) in 'ps3_probe_thread' [-Wframe-larger-than]
-     771 | static int ps3_probe_thread(void *data)
-         |            ^
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/ps3_probe_thread +771 arch/powerpc/platforms/ps3/device-init.c
+Kernel information:
+    Commit message: Merge tag 'for_linus' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/mst/vhost
 
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  760  
-ffbdd246478693 Geoff Levand           2007-06-16  761  /**
-ffbdd246478693 Geoff Levand           2007-06-16  762   * ps3_probe_thread - Background repository probing at system startup.
-ffbdd246478693 Geoff Levand           2007-06-16  763   *
-ffbdd246478693 Geoff Levand           2007-06-16  764   * This implementation only supports background probing on a single bus.
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  765   * It uses the hypervisor's storage device notification mechanism to wait until
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  766   * a storage device is ready.  The device notification mechanism uses a
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  767   * pseudo device to asynchronously notify the guest when storage devices become
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  768   * ready.  The notification device has a block size of 512 bytes.
-ffbdd246478693 Geoff Levand           2007-06-16  769   */
-ffbdd246478693 Geoff Levand           2007-06-16  770  
-ffbdd246478693 Geoff Levand           2007-06-16 @771  static int ps3_probe_thread(void *data)
-ffbdd246478693 Geoff Levand           2007-06-16  772  {
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  773  	struct ps3_notification_device dev;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  774  	int res;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  775  	unsigned int irq;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  776  	u64 lpar;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  777  	void *buf;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  778  	struct ps3_notify_cmd *notify_cmd;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  779  	struct ps3_notify_event *notify_event;
-ffbdd246478693 Geoff Levand           2007-06-16  780  
-ffbdd246478693 Geoff Levand           2007-06-16  781  	pr_debug(" -> %s:%u: kthread started\n", __func__, __LINE__);
-ffbdd246478693 Geoff Levand           2007-06-16  782  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  783  	buf = kzalloc(512, GFP_KERNEL);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  784  	if (!buf)
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  785  		return -ENOMEM;
-ffbdd246478693 Geoff Levand           2007-06-16  786  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  787  	lpar = ps3_mm_phys_to_lpar(__pa(buf));
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  788  	notify_cmd = buf;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  789  	notify_event = buf;
-ffbdd246478693 Geoff Levand           2007-06-16  790  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  791  	/* dummy system bus device */
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  792  	dev.sbd.bus_id = (u64)data;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  793  	dev.sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  794  	dev.sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
-ffbdd246478693 Geoff Levand           2007-06-16  795  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  796  	res = lv1_open_device(dev.sbd.bus_id, dev.sbd.dev_id, 0);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  797  	if (res) {
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  798  		pr_err("%s:%u: lv1_open_device failed %s\n", __func__,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  799  		       __LINE__, ps3_result(res));
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  800  		goto fail_free;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  801  	}
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  802  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  803  	res = ps3_sb_event_receive_port_setup(&dev.sbd, PS3_BINDING_CPU_ANY,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  804  					      &irq);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  805  	if (res) {
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  806  		pr_err("%s:%u: ps3_sb_event_receive_port_setup failed %d\n",
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  807  		       __func__, __LINE__, res);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  808  	       goto fail_close_device;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  809  	}
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  810  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  811  	spin_lock_init(&dev.lock);
-e21fee5368f46e Peter Zijlstra (Intel  2020-03-21  812) 	rcuwait_init(&dev.wait);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  813  
-a3a9f3b47d12b5 Yong Zhang             2011-10-21  814  	res = request_irq(irq, ps3_notification_interrupt, 0,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  815  			  "ps3_notification", &dev);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  816  	if (res) {
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  817  		pr_err("%s:%u: request_irq failed %d\n", __func__, __LINE__,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  818  		       res);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  819  		goto fail_sb_event_receive_port_destroy;
-ffbdd246478693 Geoff Levand           2007-06-16  820  	}
-ffbdd246478693 Geoff Levand           2007-06-16  821  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  822  	/* Setup and write the request for device notification. */
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  823  	notify_cmd->operation_code = 0; /* must be zero */
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  824  	notify_cmd->event_mask = 1UL << notify_region_probe;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  825  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  826  	res = ps3_notification_read_write(&dev, lpar, 1);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  827  	if (res)
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  828  		goto fail_free_irq;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  829  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  830  	/* Loop here processing the requested notification events. */
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  831  	do {
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  832  		try_to_freeze();
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  833  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  834  		memset(notify_event, 0, sizeof(*notify_event));
-ffbdd246478693 Geoff Levand           2007-06-16  835  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  836  		res = ps3_notification_read_write(&dev, lpar, 0);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  837  		if (res)
-ffbdd246478693 Geoff Levand           2007-06-16  838  			break;
-ffbdd246478693 Geoff Levand           2007-06-16  839  
-5c949070c7a591 Stephen Rothwell       2009-01-13  840  		pr_debug("%s:%u: notify event type 0x%llx bus id %llu dev id %llu"
-5c949070c7a591 Stephen Rothwell       2009-01-13  841  			 " type %llu port %llu\n", __func__, __LINE__,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  842  			 notify_event->event_type, notify_event->bus_id,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  843  			 notify_event->dev_id, notify_event->dev_type,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  844  			 notify_event->dev_port);
-ffbdd246478693 Geoff Levand           2007-06-16  845  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  846  		if (notify_event->event_type != notify_region_probe ||
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  847  		    notify_event->bus_id != dev.sbd.bus_id) {
-f2c2cbcc35d47f Joe Perches            2016-10-24  848  			pr_warn("%s:%u: bad notify_event: event %llu, dev_id %llu, dev_type %llu\n",
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  849  				__func__, __LINE__, notify_event->event_type,
-f2c2cbcc35d47f Joe Perches            2016-10-24  850  				notify_event->dev_id, notify_event->dev_type);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  851  			continue;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  852  		}
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  853  
-972b1f040c8698 Geert Uytterhoeven     2008-01-19  854  		ps3_find_and_add_device(dev.sbd.bus_id, notify_event->dev_id);
-ffbdd246478693 Geoff Levand           2007-06-16  855  
-ffbdd246478693 Geoff Levand           2007-06-16  856  	} while (!kthread_should_stop());
-ffbdd246478693 Geoff Levand           2007-06-16  857  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  858  fail_free_irq:
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  859  	free_irq(irq, &dev);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  860  fail_sb_event_receive_port_destroy:
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  861  	ps3_sb_event_receive_port_destroy(&dev.sbd, irq);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  862  fail_close_device:
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  863  	lv1_close_device(dev.sbd.bus_id, dev.sbd.dev_id);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  864  fail_free:
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  865  	kfree(buf);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  866  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  867  	probe_task = NULL;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  868  
-ffbdd246478693 Geoff Levand           2007-06-16  869  	pr_debug(" <- %s:%u: kthread finished\n", __func__, __LINE__);
-ffbdd246478693 Geoff Levand           2007-06-16  870  
-ffbdd246478693 Geoff Levand           2007-06-16  871  	return 0;
-ffbdd246478693 Geoff Levand           2007-06-16  872  }
-ffbdd246478693 Geoff Levand           2007-06-16  873  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  874  /**
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  875   * ps3_stop_probe_thread - Stops the background probe thread.
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  876   *
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  877   */
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  878  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  879  static int ps3_stop_probe_thread(struct notifier_block *nb, unsigned long code,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  880  				 void *data)
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  881  {
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  882  	if (probe_task)
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  883  		kthread_stop(probe_task);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  884  	return 0;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  885  }
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  886  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  887  static struct notifier_block nb = {
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  888  	.notifier_call = ps3_stop_probe_thread
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  889  };
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  890  
-ffbdd246478693 Geoff Levand           2007-06-16  891  /**
-ffbdd246478693 Geoff Levand           2007-06-16  892   * ps3_start_probe_thread - Starts the background probe thread.
-ffbdd246478693 Geoff Levand           2007-06-16  893   *
-ffbdd246478693 Geoff Levand           2007-06-16  894   */
-ffbdd246478693 Geoff Levand           2007-06-16  895  
-ffbdd246478693 Geoff Levand           2007-06-16  896  static int __init ps3_start_probe_thread(enum ps3_bus_type bus_type)
-ffbdd246478693 Geoff Levand           2007-06-16  897  {
-ffbdd246478693 Geoff Levand           2007-06-16  898  	int result;
-ffbdd246478693 Geoff Levand           2007-06-16  899  	struct task_struct *task;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  900  	struct ps3_repository_device repo;
-ffbdd246478693 Geoff Levand           2007-06-16  901  
-ffbdd246478693 Geoff Levand           2007-06-16  902  	pr_debug(" -> %s:%d\n", __func__, __LINE__);
-ffbdd246478693 Geoff Levand           2007-06-16  903  
-ffbdd246478693 Geoff Levand           2007-06-16  904  	memset(&repo, 0, sizeof(repo));
-ffbdd246478693 Geoff Levand           2007-06-16  905  
-ffbdd246478693 Geoff Levand           2007-06-16  906  	repo.bus_type = bus_type;
-ffbdd246478693 Geoff Levand           2007-06-16  907  
-ffbdd246478693 Geoff Levand           2007-06-16  908  	result = ps3_repository_find_bus(repo.bus_type, 0, &repo.bus_index);
-ffbdd246478693 Geoff Levand           2007-06-16  909  
-ffbdd246478693 Geoff Levand           2007-06-16  910  	if (result) {
-ffbdd246478693 Geoff Levand           2007-06-16  911  		printk(KERN_ERR "%s: Cannot find bus (%d)\n", __func__, result);
-ffbdd246478693 Geoff Levand           2007-06-16  912  		return -ENODEV;
-ffbdd246478693 Geoff Levand           2007-06-16  913  	}
-ffbdd246478693 Geoff Levand           2007-06-16  914  
-ffbdd246478693 Geoff Levand           2007-06-16  915  	result = ps3_repository_read_bus_id(repo.bus_index, &repo.bus_id);
-ffbdd246478693 Geoff Levand           2007-06-16  916  
-ffbdd246478693 Geoff Levand           2007-06-16  917  	if (result) {
-ffbdd246478693 Geoff Levand           2007-06-16  918  		printk(KERN_ERR "%s: read_bus_id failed %d\n", __func__,
-ffbdd246478693 Geoff Levand           2007-06-16  919  			result);
-ffbdd246478693 Geoff Levand           2007-06-16  920  		return -ENODEV;
-ffbdd246478693 Geoff Levand           2007-06-16  921  	}
-ffbdd246478693 Geoff Levand           2007-06-16  922  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  923  	task = kthread_run(ps3_probe_thread, (void *)repo.bus_id,
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  924  			   "ps3-probe-%u", bus_type);
-ffbdd246478693 Geoff Levand           2007-06-16  925  
-ffbdd246478693 Geoff Levand           2007-06-16  926  	if (IS_ERR(task)) {
-ffbdd246478693 Geoff Levand           2007-06-16  927  		result = PTR_ERR(task);
-ffbdd246478693 Geoff Levand           2007-06-16  928  		printk(KERN_ERR "%s: kthread_run failed %d\n", __func__,
-ffbdd246478693 Geoff Levand           2007-06-16  929  		       result);
-ffbdd246478693 Geoff Levand           2007-06-16  930  		return result;
-ffbdd246478693 Geoff Levand           2007-06-16  931  	}
-ffbdd246478693 Geoff Levand           2007-06-16  932  
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  933  	probe_task = task;
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  934  	register_reboot_notifier(&nb);
-b4cb2941f85599 Geert Uytterhoeven     2008-01-19  935  
-ffbdd246478693 Geoff Levand           2007-06-16  936  	pr_debug(" <- %s:%d\n", __func__, __LINE__);
-ffbdd246478693 Geoff Levand           2007-06-16  937  	return 0;
-ffbdd246478693 Geoff Levand           2007-06-16  938  }
-ffbdd246478693 Geoff Levand           2007-06-16  939  
-ffbdd246478693 Geoff Levand           2007-06-16  940  /**
-ffbdd246478693 Geoff Levand           2007-06-16  941   * ps3_register_devices - Probe the system and register devices found.
-ffbdd246478693 Geoff Levand           2007-06-16  942   *
-ffbdd246478693 Geoff Levand           2007-06-16  943   * A device_initcall() routine.
-ffbdd246478693 Geoff Levand           2007-06-16  944   */
-ffbdd246478693 Geoff Levand           2007-06-16  945  
-ffbdd246478693 Geoff Levand           2007-06-16  946  static int __init ps3_register_devices(void)
-ffbdd246478693 Geoff Levand           2007-06-16  947  {
-ffbdd246478693 Geoff Levand           2007-06-16 @948  	int result;
-ffbdd246478693 Geoff Levand           2007-06-16  949  
-ffbdd246478693 Geoff Levand           2007-06-16  950  	if (!firmware_has_feature(FW_FEATURE_PS3_LV1))
-ffbdd246478693 Geoff Levand           2007-06-16  951  		return -ENODEV;
-ffbdd246478693 Geoff Levand           2007-06-16  952  
-ffbdd246478693 Geoff Levand           2007-06-16  953  	pr_debug(" -> %s:%d\n", __func__, __LINE__);
-ffbdd246478693 Geoff Levand           2007-06-16  954  
-ffbdd246478693 Geoff Levand           2007-06-16  955  	/* ps3_repository_dump_bus_info(); */
-ffbdd246478693 Geoff Levand           2007-06-16  956  
-ffbdd246478693 Geoff Levand           2007-06-16  957  	result = ps3_start_probe_thread(PS3_BUS_TYPE_STORAGE);
-ffbdd246478693 Geoff Levand           2007-06-16  958  
-ffbdd246478693 Geoff Levand           2007-06-16  959  	ps3_register_vuart_devices();
-ffbdd246478693 Geoff Levand           2007-06-16  960  
-ffbdd246478693 Geoff Levand           2007-06-16  961  	ps3_register_graphics_devices();
-ffbdd246478693 Geoff Levand           2007-06-16  962  
-b163a256dac8ce Geert Uytterhoeven     2008-03-29  963  	ps3_repository_find_devices(PS3_BUS_TYPE_SB, ps3_setup_static_device);
-ffbdd246478693 Geoff Levand           2007-06-16  964  
-ffbdd246478693 Geoff Levand           2007-06-16  965  	ps3_register_sound_devices();
-ffbdd246478693 Geoff Levand           2007-06-16  966  
-ed7570022a42a6 Geoff Levand           2008-01-19  967  	ps3_register_lpm_devices();
-ed7570022a42a6 Geoff Levand           2008-01-19  968  
-cffb4add03b1fc Jim Paris              2009-01-06  969  	ps3_register_ramdisk_device();
-cffb4add03b1fc Jim Paris              2009-01-06  970  
-ffbdd246478693 Geoff Levand           2007-06-16  971  	pr_debug(" <- %s:%d\n", __func__, __LINE__);
-ffbdd246478693 Geoff Levand           2007-06-16  972  	return 0;
-ffbdd246478693 Geoff Levand           2007-06-16  973  }
-ffbdd246478693 Geoff Levand           2007-06-16  974  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/113161
 
-:::::: The code at line 771 was first introduced by commit
-:::::: ffbdd246478693673adcfe1c34b29714cf25dadd [POWERPC] PS3: Device registration routines.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10200988
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+         aarch64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10200989
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10201133
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10201134
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/031
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+          x86_64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10201045
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10201046
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
 
-:::::: TO: Geoff Levand <geoffrey.levand@am.sony.com>
-:::::: CC: Paul Mackerras <paulus@samba.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
