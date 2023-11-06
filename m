@@ -1,221 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD0C644;
-	Mon,  6 Nov 2023 00:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4B7630;
+	Mon,  6 Nov 2023 02:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P/2wjS6A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q2GJ1CZv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699231859; x=1730767859;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=CikHTYgksEt84QL3kzTwnMMe43Pw+TbTsfyCidbUn2c=;
-  b=P/2wjS6AI+D2Cd7H1LABAloUn8NNM3/mGll6ffztz5i01ICy70MRLGJf
-   91zyvhnw23UVitHgUjXkKk6yWMBgIYnn+8Nz0VBlYTjY0xwh3bPbQWbB4
-   Aat8aAIjwcqcCxBlVPmlTWg/LtzzSm9kmMqg/G9r++gypeIlu0Ow0pjp6
-   GYrt4L2r2o1jT7wWcjUPqbl7xi+4mIj8s3bhm0W+vFIAd1yo/fpgJMHT7
-   DBwXgXKAD8h/cNL9nMPJ22uc3q1KouAja74CuLSCUso5zWJvDJCptNQr5
-   48SeIP1LEbABz3XQaMmhtqnFK/elSL9WxVglOhGj+4zVj+g8+SS+a8/vJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="374220740"
-X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="374220740"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 16:50:58 -0800
+  t=1699237698; x=1730773698;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OYie6v46NDOXnoVxp//C1yTzNr+vpp5RK/WLWX0N5Ck=;
+  b=Q2GJ1CZvfURe39EL6eYpgOFrFC6L2YB8EtjD+ZPSGLblIfCVrIAdkgLg
+   anTOGhhpzg+IQjzq4WhSZD+L875U3RxXNwCv2W+BKZTgznjGuoEtnTwgf
+   OxW9fd7sFwDjBLCbdv1dYpFM1C1ZYR7rLqBSOhCifI5Qmr51RrLt//oMU
+   U+xC8UpBB05IM1VMWBgsDRWyvHzimdzPj8vKSUN9l7nueMeR+LZNPkDJz
+   QEi2UmawEOyzmrTIAiofDT7DbMxxF6yT2NQplbD8l9jO+Bh8oD6ef7soV
+   nBjg+4blPN9OZCc6YpIZ32+Ch0/XKOtAh6VsH9KEm28MFO4s4B1c3mtoJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="7828272"
+X-IronPort-AV: E=Sophos;i="6.03,280,1694761200"; 
+   d="scan'208";a="7828272"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 18:28:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="935642817"
-X-IronPort-AV: E=Sophos;i="6.03,279,1694761200"; 
-   d="scan'208";a="935642817"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Nov 2023 16:50:58 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Sun, 5 Nov 2023 16:50:57 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Sun, 5 Nov 2023 16:50:57 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Sun, 5 Nov 2023 16:50:57 -0800
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Sun, 5 Nov 2023 16:50:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RTJHp2TIG/bDo5EMH5KHQtK+UYVU1aZLXUoAH/tE7R7X2kBOQMLRy8d6OikjHoX1lDXZfRvK+z9Ntp8DHmp68zv8eMROxFu9UU6hvUrYd4V4w4KRiy8gTd+KtNABv7gaL4BlDCBIkrR/lA3IkliDfQZHbF8OM587MnrEo3DEJ2tdg7VH6/DO9yCSm+e2TOoNYvsZjOCwmYUSlDx8TfScd0eUkxUjWatWSTKARIQ+ngsS8fsJlTlCRCJjnT5pURmjULJ0h1WBRyHA16yUfvd+SZgQXMLT8HIDRjf7qfK3Df7mE7XDlW4geugWGPkadFtAQFMdsvqWrElv2CMcdjcTGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m0N/TzBnEd1AGzSbM0g61CfsdNMCHQ2yJh72xJL7e1E=;
- b=kxLvknh9YEeBHkXt8H38M7Z9r07mbxA+6Pe/PI0ClZbBRMNtI45dnsr3WpBVNo6hxOIAYl5qHLO2+g/EtYKtugfzTYdzBdO86YE5E6y2n3Ab16ouSABcTEdpQbYcI7JL32Xcx9nlQrpBNfnBVRz4u6PK4GHdXv64VHgK7I2cMajfQSyqFQhKRUwj62xncXcBnSdRtGBp+QKZLVQujkfLrHJmByD0g63lMzuq+R+5DrshcpJY2UTlYWSqtcNCZtTVdYETrtaCvW8DWGUQA6ckph6j118byFhkOhWvu/l3IXXmuw3/EksIG64u8lX0Z6kxMcYSOFkyrLhqWxHmB13RGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN6PR11MB3006.namprd11.prod.outlook.com (2603:10b6:805:d1::24)
- by DM4PR11MB8228.namprd11.prod.outlook.com (2603:10b6:8:180::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Mon, 6 Nov
- 2023 00:50:49 +0000
-Received: from SN6PR11MB3006.namprd11.prod.outlook.com
- ([fe80::7f2d:3448:d474:f74e]) by SN6PR11MB3006.namprd11.prod.outlook.com
- ([fe80::7f2d:3448:d474:f74e%5]) with mapi id 15.20.6954.028; Mon, 6 Nov 2023
- 00:50:48 +0000
-Date: Mon, 6 Nov 2023 08:50:38 +0800
-From: Philip Li <philip.li@intel.com>
-To: kernel test robot <lkp@intel.com>
-CC: Nathan Chancellor <natechancellor@gmail.com>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>, "Masahiro
- Yamada" <masahiroy@kernel.org>
-Subject: Re: net/ceph/osdmap.c:1246:10: warning: result of comparison of
- constant 4611686018427387891 with expression of type 'u32' (aka 'unsigned
- int') is always false
-Message-ID: <ZUg4XjqlRwd/SyPq@rli9-mobl>
-References: <202311060731.8P11QmUf-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202311060731.8P11QmUf-lkp@intel.com>
-X-ClientProxiedBy: SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15)
- To SN6PR11MB3006.namprd11.prod.outlook.com (2603:10b6:805:d1::24)
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="905913972"
+X-IronPort-AV: E=Sophos;i="6.03,280,1694761200"; 
+   d="scan'208";a="905913972"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Nov 2023 18:27:53 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qzpLD-00061G-16;
+	Mon, 06 Nov 2023 02:27:51 +0000
+Date: Mon, 6 Nov 2023 10:26:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:bits/080-wifi 13/35]
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1998:6: warning:
+ variable 'address' is used uninitialized whenever 'if' condition is false
+Message-ID: <202311061004.NbdeF1wR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3006:EE_|DM4PR11MB8228:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3aaa5c59-ea6b-4f88-3262-08dbde626971
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sR58ys+sL2Io+bToSxfpikpBD2BcEiYTilScUw5VQ++RRtOEzdI9sgFtDHGPt4Szy3ZjR3sNXP8fJe2qDqMIOYDjim/dWkijOWOwVTN8B5KWUsE5SlAVBiVUu1OPRfSeC5s/sqEmRWIdDmUiqrhh5G6fzBvJKCx4erMEj0a0m0c0H3m0tGzU7gR4pilzRdLMwOjjonIK3p/7I/C6EPgY97uh8HOlLdiJiHKq7e50EL1gY5N1b2AV+Fi0P9zSTb9l4bUP9VUBu6fjKUAkQn6J5NBKKX4KHSrCKWvUzDq6lKbU/gc7UQq/xN5VfLAAIvMxsFfs+Cmf5iN1U3p69WovIDh7i6o1SSdoTzk3aMNkNwRg7r38VbqQitMV73saE91omNonE9YobuTxBfC+RFHEeA0bmiaaH0q+owPOCV8Le3TngObWBPwY3JK84OhYsfhm+0SynDJ9vo1IuFxopAzEuIspz2Op3mL84EwdDUQOiOPRml6BuA7jFnAkJsny6ViTnIkpqU5nsqsCXOeCV8RDkmK21fVc32l6Pz+OBtbibdL6x+U98++YgAPD75E+uU27K1AaoWGZJbU6km1cjC0jyP24WGt+q+DICCh2ZtNvCWmLjIVR+Z/3nD4A3slQXL1WSlDrDXD/4A4oLevxZeVZvg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3006.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(136003)(376002)(346002)(366004)(39860400002)(396003)(230922051799003)(230173577357003)(230273577357003)(64100799003)(186009)(1800799009)(451199024)(33716001)(8936002)(83380400001)(8676002)(6862004)(4326008)(26005)(66476007)(66556008)(66946007)(54906003)(316002)(6636002)(5660300002)(2906002)(44832011)(41300700001)(478600001)(9686003)(6512007)(966005)(6486002)(6666004)(6506007)(82960400001)(86362001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X6+ueN+MhR2OY0sIsZv3PKb7Wm93ZSyK/IPgQN6mQNeattTG9gu4hvz2spWc?=
- =?us-ascii?Q?vOENXf4X6UWKM0WWUaZUlwyQEG3tEaEmqWcDA8y3bkTI92WzyiBW9De7YPL3?=
- =?us-ascii?Q?pjpp9TDvbp5GW/z/N3hrn26kkE7FVPxc0y64rUJZClI0G4QPJ96fLlkypcEw?=
- =?us-ascii?Q?HkE89iZthowUSO8fOMMKe6zE/5AZuFqNcn4R0FBlmZF69MZpWpyje5FdIjFS?=
- =?us-ascii?Q?P47qJDNy7dEwbETJ+KFydaNb16A93Gx7IQxXoEtqZ/zib7ay2ZWTIgHqUfLh?=
- =?us-ascii?Q?q67DDVt99snhA/Xm/xzp3u5C2gh9UObb18a03Epr37R9/ELkP4k5wRGxg15N?=
- =?us-ascii?Q?4yrxZCku3U4tXXHzzD7LuOL/NFU4jr1eWgKB634DqKnjDTfF/pYyD6WCi6I/?=
- =?us-ascii?Q?+D3+8KcVhYqOY1b+mfnuY4wpeJPzK2pz5kjAmTzZ3kMD/C/9+R/SBcT4wxMK?=
- =?us-ascii?Q?THI31QMDVjNs0o+L9U02y4suDg/Ppe136vaxuVGXpf9PJBqAyEo2GYLSg0nE?=
- =?us-ascii?Q?IaIkQzvnSYLCv+Faa4X0ajz2XACJoklbj8TuB1JCpoGnGDQPNWPxrUuvfO+e?=
- =?us-ascii?Q?z3/a2bPVpXCDPwMQ9WHu7KWXpomPsyLIZHq7Y5+EXAbmJDG4vWvR0B6qNYGb?=
- =?us-ascii?Q?jzkop2OBn9ugalpVte99DDi8GCDOcNnlTar2K827+1Ked5ew54G8ScXJKsfw?=
- =?us-ascii?Q?nyiI08k6eqgNa/CPhj2MZ9n2LJI714fuDBwNvwhOMCFNYw6ppK2kzavFaUOP?=
- =?us-ascii?Q?SYpRzBGjVhjN6XGBrmlzP8q0q/EHUYuoa9EbcNUQ6+AUJGX1emEm+Z/ain+e?=
- =?us-ascii?Q?fYbMTlQwfShULWmxgj3bwHlZJVSYelbvtSKg9cFE8t0eJUGNpXhSM74feVTe?=
- =?us-ascii?Q?zhwijPhiC+GBkr3lasGBX6t5ZL0LEiZjtnRQxp5Ma/EWqtsQ3EZRFBVtgBJ1?=
- =?us-ascii?Q?y3G+lT7NVV3F1yrue8Z4AJ64dCybe5AR0fEOU1Shnf1HUf66Bwdj8FX3kIrJ?=
- =?us-ascii?Q?5q9dXYdhpi6mxrZC1d7MK23Ekelr84GKTLvLsaayZBskzFw9PobO7LUlIFyT?=
- =?us-ascii?Q?Qu6vwdL00WlUpuNrFQE/9CdjUmvnfYC3DD0Dxam7vYUDe4/w33biE3yn/Xt1?=
- =?us-ascii?Q?3nhVxgrW3w/8pfYcV/QLEeroJrZsjrCOoax0DbZKWj+ajAiUSIu31eovkrNF?=
- =?us-ascii?Q?Wy4+V2ti5oJMb0tUqv0MUpaO9d5gJ+ZeUKVJEa2cRsNh9J1DqOvchvMaz//5?=
- =?us-ascii?Q?z57psNfZuigEVvNiaUGQZz+2w4FVmp0/Me7PfpnQAdfFxDYUOXDlErE0WwWO?=
- =?us-ascii?Q?/In6M5SqnEPlssvOPlMwQqu+wiGWntaUDjG2EYTvhlwCvEu+kUwGe0FK/vSJ?=
- =?us-ascii?Q?uui0ptA1rVKaOFm2B7VxJB2ocOcmEf5m2tJsCvtNAeoHz3NHvr34bbXmvj18?=
- =?us-ascii?Q?54rLwR1BKOK6KhgocuTs9QTOIxaBabiHlmANH1z3r7/owRuUgdix9jrUv/a4?=
- =?us-ascii?Q?L46pLyzECiJiOvHFIH2Fwp49Aobk/yxFWYCNkLsVAUPPBAuvnxwYlMuZkaNp?=
- =?us-ascii?Q?teLznMVkqocqRiXVZcvPEEQ0TaWNsr63PJ8KjMSp?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3aaa5c59-ea6b-4f88-3262-08dbde626971
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3006.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 00:50:47.7388
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WfCgqe/bP/d2At3YHxhkRJitrPiKsLyKlK+5DTG3BLfFDZbtfl8XCWBsZ8HEMCnKvjzJURoH3M0AMZpm3REZFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB8228
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 06, 2023 at 07:13:50AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   77fa2fbe87fc605c4bfa87dff87be9bfded0e9a3
-> commit: afe956c577b2d5a3d9834e4424587c1ebcf90c4c kbuild: Enable -Wtautological-compare
-> date:   3 years, 7 months ago
-> config: x86_64-randconfig-012-20230909 (https://download.01.org/0day-ci/archive/20231106/202311060731.8P11QmUf-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311060731.8P11QmUf-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202311060731.8P11QmUf-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
+tree:   https://github.com/AsahiLinux/linux bits/080-wifi
+head:   fc17dc4d1d5bd0baeb8f84a3d9876c17b9f78461
+commit: 9ec7838a91c508bba18a68f0f524379549d33db5 [13/35] wifi: brcmfmac: Add support for firmware signatures
+config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20231106/202311061004.NbdeF1wR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311061004.NbdeF1wR-lkp@intel.com/reproduce)
 
-Sorry for wrong report, kindly ignore this, it bisects to wrong commit that is
-not the real cause.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311061004.NbdeF1wR-lkp@intel.com/
 
-> 
->    net/ceph/osdmap.c:176:6: warning: no previous prototype for function 'clear_choose_args' [-Wmissing-prototypes]
->    void clear_choose_args(struct crush_map *c)
->         ^
->    net/ceph/osdmap.c:176:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void clear_choose_args(struct crush_map *c)
->    ^
->    static 
-> >> net/ceph/osdmap.c:1246:10: warning: result of comparison of constant 4611686018427387891 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
->            if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
->                ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    net/ceph/osdmap.c:1429:10: warning: result of comparison of constant 2305843009213693945 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
->            if (len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
->                ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    3 warnings generated.
-> --
-> >> drivers/block/rbd.c:6190:17: warning: result of comparison of constant 2305843009213693948 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
->            if (snap_count > (SIZE_MAX - sizeof (struct ceph_snap_context))
->                ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 warning generated.
-> 
-> 
-> vim +1246 net/ceph/osdmap.c
-> 
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1236  
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1237  static struct ceph_pg_mapping *__decode_pg_temp(void **p, void *end,
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1238  						bool incremental)
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1239  {
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1240  	struct ceph_pg_mapping *pg;
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1241  	u32 len, i;
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1242  
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1243  	ceph_decode_32_safe(p, end, len, e_inval);
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1244  	if (len == 0 && incremental)
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1245  		return NULL;	/* new_pg_temp: [] to remove */
-> a303bb0e58345f Ilya Dryomov 2017-06-21 @1246  	if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1247  		return ERR_PTR(-EINVAL);
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1248  
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1249  	ceph_decode_need(p, end, len * sizeof(u32), e_inval);
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1250  	pg = alloc_pg_mapping(len * sizeof(u32));
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1251  	if (!pg)
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1252  		return ERR_PTR(-ENOMEM);
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1253  
-> 35a935d75d51ab Ilya Dryomov 2014-03-21  1254  	pg->pg_temp.len = len;
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1255  	for (i = 0; i < len; i++)
-> 35a935d75d51ab Ilya Dryomov 2014-03-21  1256  		pg->pg_temp.osds[i] = ceph_decode_32(p);
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1257  
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1258  	return pg;
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1259  
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1260  e_inval:
-> a303bb0e58345f Ilya Dryomov 2017-06-21  1261  	return ERR_PTR(-EINVAL);
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1262  }
-> 10db634e2083a2 Ilya Dryomov 2014-03-21  1263  
-> 
-> :::::: The code at line 1246 was first introduced by commit
-> :::::: a303bb0e58345fe9f7ab2f82b90266f2b5036058 libceph: introduce and switch to decode_pg_mapping()
-> 
-> :::::: TO: Ilya Dryomov <idryomov@gmail.com>
-> :::::: CC: Ilya Dryomov <idryomov@gmail.com>
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1998:6: warning: variable 'address' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1998 |         if (nvram) {
+         |             ^~~~~
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:2020:8: note: uninitialized use occurs here
+    2020 |                   0, address - devinfo->fw_size - devinfo->ci->rambase);
+         |                      ^~~~~~~
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1998:2: note: remove the 'if' if its condition is always true
+    1998 |         if (nvram) {
+         |         ^~~~~~~~~~~
+    1999 |                 brcmf_dbg(PCIE, "Download NVRAM %s\n", devinfo->nvram_name);
+    2000 |                 address = devinfo->ci->rambase + devinfo->ci->ramsize -
+    2001 |                           nvram_len;
+    2002 |                 memcpy_toio(devinfo->tcm + address, nvram, nvram_len);
+    2003 |                 brcmf_fw_nvram_free(nvram);
+    2004 | 
+    2005 |                 err = brcmf_pcie_populate_footers(devinfo, &address, fwsig);
+    2006 |                 if (err)
+    2007 |                         brcmf_err(bus, "failed to populate firmware footers err=%d\n", err);
+    2008 |         } else {
+         |          ~~~~~~~
+    2009 |                 brcmf_dbg(PCIE, "No matching NVRAM file found %s\n",
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2010 |                           devinfo->nvram_name);
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2011 |         }
+         | ~~~~~~~~~
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1977:13: note: initialize the variable 'address' to silence this warning
+    1977 |         u32 address;
+         |                    ^
+         |                     = 0
+   1 warning generated.
+
+
+vim +1998 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1966  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1967  static int brcmf_pcie_download_fw_nvram(struct brcmf_pciedev_info *devinfo,
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  1968  					const struct firmware *fw,
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  1969  					const struct firmware *fwsig,
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  1970  					void *nvram, u32 nvram_len)
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1971  {
+8602e62441aba2 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-06  1972  	struct brcmf_bus *bus = dev_get_drvdata(&devinfo->pdev->dev);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1973  	u32 sharedram_addr;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1974  	u32 sharedram_addr_written;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1975  	u32 loop_counter;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1976  	int err;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1977  	u32 address;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1978  	u32 resetintr;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1979  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1980  	brcmf_dbg(PCIE, "Halt ARM.\n");
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1981  	err = brcmf_pcie_enter_download_state(devinfo);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1982  	if (err)
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1983  		return err;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1984  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1985  	brcmf_dbg(PCIE, "Download FW %s\n", devinfo->fw_name);
+9466987f246758 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2022-02-01  1986  	memcpy_toio(devinfo->tcm + devinfo->ci->rambase,
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1987  		    (void *)fw->data, fw->size);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1988  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1989  	resetintr = get_unaligned_le32(fw->data);
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  1990  	devinfo->fw_size = fw->size;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1991  	release_firmware(fw);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1992  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1993  	/* reset last 4 bytes of RAM address. to be used for shared
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1994  	 * area. This identifies when FW is running
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1995  	 */
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1996  	brcmf_pcie_write_ram32(devinfo, devinfo->ci->ramsize - 4, 0);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1997  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30 @1998  	if (nvram) {
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  1999  		brcmf_dbg(PCIE, "Download NVRAM %s\n", devinfo->nvram_name);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2000  		address = devinfo->ci->rambase + devinfo->ci->ramsize -
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2001  			  nvram_len;
+9466987f246758 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2022-02-01  2002  		memcpy_toio(devinfo->tcm + address, nvram, nvram_len);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2003  		brcmf_fw_nvram_free(nvram);
+91918ce88d9fef drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-02-14  2004  
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2005  		err = brcmf_pcie_populate_footers(devinfo, &address, fwsig);
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2006  		if (err)
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2007  			brcmf_err(bus, "failed to populate firmware footers err=%d\n", err);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2008  	} else {
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2009  		brcmf_dbg(PCIE, "No matching NVRAM file found %s\n",
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2010  			  devinfo->nvram_name);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2011  	}
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2012  
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2013  	release_firmware(fwsig);
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2014  
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2015  	/* Clear free TCM. This isn't really necessary, but it
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2016  	 * makes debugging memory dumps a lot easier since we
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2017  	 * don't get a bunch of junk filling up the free space.
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2018  	 */
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2019  	memset_io(devinfo->tcm + devinfo->ci->rambase + devinfo->fw_size,
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2020  		  0, address - devinfo->fw_size - devinfo->ci->rambase);
+9ec7838a91c508 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Hector Martin  2023-10-03  2021  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2022  	sharedram_addr_written = brcmf_pcie_read_ram32(devinfo,
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2023  						       devinfo->ci->ramsize -
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2024  						       4);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2025  	brcmf_dbg(PCIE, "Bring ARM in running state\n");
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2026  	err = brcmf_pcie_exit_download_state(devinfo, resetintr);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2027  	if (err)
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2028  		return err;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2029  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2030  	brcmf_dbg(PCIE, "Wait for FW init\n");
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2031  	sharedram_addr = sharedram_addr_written;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2032  	loop_counter = BRCMF_PCIE_FW_UP_TIMEOUT / 50;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2033  	while ((sharedram_addr == sharedram_addr_written) && (loop_counter)) {
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2034  		msleep(50);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2035  		sharedram_addr = brcmf_pcie_read_ram32(devinfo,
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2036  						       devinfo->ci->ramsize -
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2037  						       4);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2038  		loop_counter--;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2039  	}
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2040  	if (sharedram_addr == sharedram_addr_written) {
+8602e62441aba2 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-06  2041  		brcmf_err(bus, "FW failed to initialize\n");
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2042  		return -ENODEV;
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2043  	}
+e0a8ef4d7b4315 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-20  2044  	if (sharedram_addr < devinfo->ci->rambase ||
+e0a8ef4d7b4315 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-20  2045  	    sharedram_addr >= devinfo->ci->rambase + devinfo->ci->ramsize) {
+e0a8ef4d7b4315 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-20  2046  		brcmf_err(bus, "Invalid shared RAM address 0x%08x\n",
+e0a8ef4d7b4315 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-20  2047  			  sharedram_addr);
+e0a8ef4d7b4315 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-20  2048  		return -ENODEV;
+e0a8ef4d7b4315 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c Rafał Miłecki  2019-02-20  2049  	}
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2050  	brcmf_dbg(PCIE, "Shared RAM addr: 0x%08x\n", sharedram_addr);
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2051  
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2052  	return (brcmf_pcie_init_share_ram_info(devinfo, sharedram_addr));
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2053  }
+9e37f045d5e7f3 drivers/net/wireless/brcm80211/brcmfmac/pcie.c          Hante Meuleman 2014-07-30  2054  
+
+:::::: The code at line 1998 was first introduced by commit
+:::::: 9e37f045d5e7f33450515f237c2f6f6bfee137dd brcmfmac: Adding PCIe bus layer support.
+
+:::::: TO: Hante Meuleman <meuleman@broadcom.com>
+:::::: CC: John W. Linville <linville@tuxdriver.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
