@@ -1,38 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725CB651
-	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623C029422
+	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:07:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3hhLqVE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8ACAC433CB;
-	Tue,  7 Nov 2023 12:07:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJwE9g/H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F1FC433C8;
+	Tue,  7 Nov 2023 12:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699358845;
-	bh=PRcKEfrDmfEZMYzlayV0vY7Jb6LNenowCohlfa6ojHg=;
+	s=k20201202; t=1699358870;
+	bh=6gwu+odNl+aqXisUwCqknnGvlBvMjl2uK0UlmaVeAC4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=m3hhLqVEZHtlliICXE0HpSs0brlt9Qv/KBFL8aObQF5CiQ94YMnhPFr6V7nUc+NyX
-	 VbWL/NPZt7PEtAftqPoQwvGk5jLCzKjdIJdmvGBxQITeYKGy+fdht1jfenDt0Q4mKx
-	 mgxxYBsWy5DHQ9xBXFB4gxGwRcnxbde4qjRuuM2ApJnfYQo+ReO6eiVaZUtyjz8YxH
-	 bNMDz8Bc2JBrK60tkXE0IXiK/d3wvgGeY31rmuc6U7RSwuYgYUB9a0/eKaj/xsXybj
-	 GBWrbnEcSAlKtQQ19NKXMZdNUPwCqHZGP2GVS9sTDE6yN4AD6ZshmPc7WKZm4fB4EJ
-	 Yeugg96wHHlSQ==
+	b=ZJwE9g/HIPygxZg50mV5Fqq6cOy+Bx0G4J+uABsZwZelt+euU1n9YP4Fk504FCjsK
+	 cqJ1MpLn0IHrJ2rha63NhQmRwA/Eh4MHDIgPP1z4UQG6FAGSD95MHPF8Uf+yt3rh87
+	 jYuRPUGrRb6SqXlMq7XNPYMzoXFxzMdRZS5273LBQPxlkP4uldDWNIiuGbTzQ4/C0V
+	 mOiD5BsnP7ivniQZD8YeK56MoEV3xY3Rp7ilrb/18x1uVeM9ltp3Fasqn4fbgNE2IK
+	 u+aBy66XQCbuVfecyojJ0A4Hox6pC0vA56g88dceT8xAxod4xcWZii4bkTcKqf8GNp
+	 jVX0LQGSUsIeA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Dmitry Antipov <dmantipov@yandex.ru>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Kalle Valo <quic_kvalo@quicinc.com>,
+	Felix Fietkau <nbd@nbd.name>,
 	Sasha Levin <sashal@kernel.org>,
+	lorenzo@kernel.org,
+	ryder.lee@mediatek.com,
 	kvalo@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	ath10k@lists.infradead.org,
+	shayne.chen@mediatek.com,
+	chui-hao.chiu@mediatek.com,
+	howard-yh.hsu@mediatek.com,
+	rany_hany@riseup.net,
 	linux-wireless@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 09/31] wifi: ath10k: fix clang-specific fortify warning
-Date: Tue,  7 Nov 2023 07:05:56 -0500
-Message-ID: <20231107120704.3756327-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 14/31] wifi: mt76: fix clang-specific fortify warnings
+Date: Tue,  7 Nov 2023 07:06:01 -0500
+Message-ID: <20231107120704.3756327-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231107120704.3756327-1-sashal@kernel.org>
 References: <20231107120704.3756327-1-sashal@kernel.org>
@@ -49,13 +57,13 @@ Content-Transfer-Encoding: 8bit
 
 From: Dmitry Antipov <dmantipov@yandex.ru>
 
-[ Upstream commit cb4c132ebfeac5962f7258ffc831caa0c4dada1a ]
+[ Upstream commit 03f0e11da7fb26db4f27e6b83a223512db9f7ca5 ]
 
 When compiling with clang 16.0.6 and CONFIG_FORTIFY_SOURCE=y, I've
 noticed the following (somewhat confusing due to absence of an actual
 source code location):
 
-In file included from drivers/net/wireless/ath/ath10k/debug.c:8:
+In file included from drivers/net/wireless/mediatek/mt76/mt792x_core.c:4:
 In file included from ./include/linux/module.h:13:
 In file included from ./include/linux/stat.h:19:
 In file included from ./include/linux/time.h:60:
@@ -73,32 +81,89 @@ declared with 'warning' attribute: detected read beyond size of field (2nd
 parameter); maybe use struct_group()? [-Wattribute-warning]
                         __read_overflow2_field(q_size_field, size);
 
-The compiler actually complains on 'ath10k_debug_get_et_strings()' where
-fortification logic inteprets call to 'memcpy()' as an attempt to copy
-the whole 'ath10k_gstrings_stats' array from it's first member and so
-issues an overread warning. This warning may be silenced by passing
-an address of the whole array and not the first member to 'memcpy()'.
+In file included from drivers/net/wireless/mediatek/mt76/mt7915/main.c:4:
+In file included from ./include/linux/etherdevice.h:20:
+In file included from ./include/linux/if_ether.h:19:
+In file included from ./include/linux/skbuff.h:15:
+In file included from ./include/linux/time.h:60:
+In file included from ./include/linux/time32.h:13:
+In file included from ./include/linux/timex.h:67:
+In file included from ./arch/x86/include/asm/timex.h:5:
+In file included from ./arch/x86/include/asm/processor.h:23:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:254:
+./include/linux/fortify-string.h:592:4: warning: call to '__read_overflow2_field'
+declared with 'warning' attribute: detected read beyond size of field (2nd
+parameter); maybe use struct_group()? [-Wattribute-warning]
+                        __read_overflow2_field(q_size_field, size);
+
+In file included from drivers/net/wireless/mediatek/mt76/mt7996/main.c:6:
+In file included from drivers/net/wireless/mediatek/mt76/mt7996/mt7996.h:9:
+In file included from ./include/linux/interrupt.h:8:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:254:
+./include/linux/fortify-string.h:592:4: warning: call to '__read_overflow2_field'
+declared with 'warning' attribute: detected read beyond size of field (2nd
+parameter); maybe use struct_group()? [-Wattribute-warning]
+                        __read_overflow2_field(q_size_field, size);
+
+The compiler actually complains on 'mt7915_get_et_strings()',
+'mt792x_get_et_strings()' and 'mt7996_get_et_strings()' due to the same
+reason: fortification logic inteprets call to 'memcpy()' as an attempt
+to copy the whole array from its first member and so issues an overread
+warning. These warnings may be silenced by passing an address of the whole
+array and not the first member to 'memcpy()'.
 
 Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
-Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230829093652.234537-1-dmantipov@yandex.ru
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/mediatek/mt76/mt7915/main.c | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt792x_core.c | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt7996/main.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/debug.c b/drivers/net/wireless/ath/ath10k/debug.c
-index f9518e1c99039..fe89bc61e5317 100644
---- a/drivers/net/wireless/ath/ath10k/debug.c
-+++ b/drivers/net/wireless/ath/ath10k/debug.c
-@@ -1140,7 +1140,7 @@ void ath10k_debug_get_et_strings(struct ieee80211_hw *hw,
- 				 u32 sset, u8 *data)
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/main.c b/drivers/net/wireless/mediatek/mt76/mt7915/main.c
+index 8ebbf186fab23..53348dd80c3b3 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/main.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/main.c
+@@ -1386,7 +1386,7 @@ void mt7915_get_et_strings(struct ieee80211_hw *hw,
+ 	if (sset != ETH_SS_STATS)
+ 		return;
+ 
+-	memcpy(data, *mt7915_gstrings_stats, sizeof(mt7915_gstrings_stats));
++	memcpy(data, mt7915_gstrings_stats, sizeof(mt7915_gstrings_stats));
+ 	data += sizeof(mt7915_gstrings_stats);
+ 	page_pool_ethtool_stats_get_strings(data);
+ }
+diff --git a/drivers/net/wireless/mediatek/mt76/mt792x_core.c b/drivers/net/wireless/mediatek/mt76/mt792x_core.c
+index 46be7f996c7e1..81f316ddc1115 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt792x_core.c
++++ b/drivers/net/wireless/mediatek/mt76/mt792x_core.c
+@@ -358,7 +358,7 @@ void mt792x_get_et_strings(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 	if (sset != ETH_SS_STATS)
+ 		return;
+ 
+-	memcpy(data, *mt792x_gstrings_stats, sizeof(mt792x_gstrings_stats));
++	memcpy(data, mt792x_gstrings_stats, sizeof(mt792x_gstrings_stats));
+ 
+ 	data += sizeof(mt792x_gstrings_stats);
+ 	page_pool_ethtool_stats_get_strings(data);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7996/main.c b/drivers/net/wireless/mediatek/mt76/mt7996/main.c
+index c3a479dc3f533..2405ec1a663fe 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7996/main.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7996/main.c
+@@ -1192,7 +1192,7 @@ void mt7996_get_et_strings(struct ieee80211_hw *hw,
+ 			   u32 sset, u8 *data)
  {
  	if (sset == ETH_SS_STATS)
--		memcpy(data, *ath10k_gstrings_stats,
-+		memcpy(data, ath10k_gstrings_stats,
- 		       sizeof(ath10k_gstrings_stats));
+-		memcpy(data, *mt7996_gstrings_stats,
++		memcpy(data, mt7996_gstrings_stats,
+ 		       sizeof(mt7996_gstrings_stats));
  }
  
 -- 
