@@ -1,106 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B96A2F50A
-	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4A72D033;
+	Tue,  7 Nov 2023 16:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NPsd3O93"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D1FEC43395;
-	Tue,  7 Nov 2023 12:13:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699359223;
-	bh=2KCPMisBXDU4LoMU8mGqNJX9Y0yd8sOSrc0b5LukUqs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NPsd3O93UTCUeuXNW2hpxcPicWp1iij0OHHMdQRMdE7PKpmQ8Y1K1BJkEOzw922aC
-	 5gIZnA04cXTX7yoheftP67pU1EFaIK96LL8wpQA2LBp+E8Mq1K6rMRCN3UvXds75kh
-	 icucHJIqxGTgUByCn27eP4/dUChcsf+KsRN7Rp7Z4+ewUcc71shBj103nipcC9zSeV
-	 HnpEiNvgLHM8lebyV6GesxWvlkl58qm32x6wASogNtHZXoMSfrqhJLhX31k9Ib/hEw
-	 IrDzmp5prRSNQ+LGnoHA0s8MJnNAXb63Vf/vRjmQHs5PqeDtYFiZI1YkC90Vis7Kxd
-	 ZlrFjVlqpetLg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Dmitry Antipov <dmantipov@yandex.ru>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Kalle Valo <quic_kvalo@quicinc.com>,
-	Sasha Levin <sashal@kernel.org>,
-	kvalo@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	ath10k@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14 3/4] wifi: ath10k: fix clang-specific fortify warning
-Date: Tue,  7 Nov 2023 07:13:33 -0500
-Message-ID: <20231107121337.3759240-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231107121337.3759240-1-sashal@kernel.org>
-References: <20231107121337.3759240-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JWjYa/z6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699374043; x=1730910043;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Hw2qCxBrQJiAQyIyzHHq5HcDq/UIQibaW/G9vl3/hv8=;
+  b=JWjYa/z6v24CkjvvVy778YEz/QYVp+TLZn0JjwISIHcfSmi9wnonhMe6
+   XMIeT3WqLBH19DULsMB82SLfb7lTLaktpU1zQYBT6iJeg+38PD/vAle/7
+   5tycqJowY5vBsmiWZfx8jyoFTM4Dv9wQPejEamVPM5s7xJ9VezTGiIY7a
+   RL5LQ+cJSniHUiOD1lDIepHz4X8zmXMDWK0flFHyA/ZRA8e+0/DdYVKe1
+   kpeAubXXy1Fn8K8ZOfpvwJ0rPFXCVpCwx0/bAoG6U57ix2d0Qqq7P6Sp9
+   2eeQBX9En0ML570odFAWv/ENae0Cx24CigiCLrmAgTeu/X3Ptkm0pCdxH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="456028279"
+X-IronPort-AV: E=Sophos;i="6.03,284,1694761200"; 
+   d="scan'208";a="456028279"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2023 08:20:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="712614796"
+X-IronPort-AV: E=Sophos;i="6.03,284,1694761200"; 
+   d="scan'208";a="712614796"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Nov 2023 08:20:40 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r0Oog-0007Cx-0z;
+	Tue, 07 Nov 2023 16:20:38 +0000
+Date: Wed, 8 Nov 2023 00:19:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-xe@lists.freedesktop.org,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [drm-xe:drm-xe-next 1040/1907] drivers/gpu/drm/xe/xe_mmio.c:116:23:
+ warning: result of comparison of constant 4294967296 with expression of type
+ 'resource_size_t' (aka 'unsigned int') is always false
+Message-ID: <202311072341.c0UOmHni-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.328
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Dmitry Antipov <dmantipov@yandex.ru>
+tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+head:   17fc56818e8b2dd1311fa2b7716f3675db59bdb7
+commit: bb41d0e9124f04871d07ca1e3dd4963074ace841 [1040/1907] drm/xe/mmio: Use non-atomic writeq/readq variant for 32b
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231107/202311072341.c0UOmHni-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231107/202311072341.c0UOmHni-lkp@intel.com/reproduce)
 
-[ Upstream commit cb4c132ebfeac5962f7258ffc831caa0c4dada1a ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311072341.c0UOmHni-lkp@intel.com/
 
-When compiling with clang 16.0.6 and CONFIG_FORTIFY_SOURCE=y, I've
-noticed the following (somewhat confusing due to absence of an actual
-source code location):
+All warnings (new ones prefixed by >>):
 
-In file included from drivers/net/wireless/ath/ath10k/debug.c:8:
-In file included from ./include/linux/module.h:13:
-In file included from ./include/linux/stat.h:19:
-In file included from ./include/linux/time.h:60:
-In file included from ./include/linux/time32.h:13:
-In file included from ./include/linux/timex.h:67:
-In file included from ./arch/x86/include/asm/timex.h:5:
-In file included from ./arch/x86/include/asm/processor.h:23:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:254:
-./include/linux/fortify-string.h:592:4: warning: call to '__read_overflow2_field'
-declared with 'warning' attribute: detected read beyond size of field (2nd
-parameter); maybe use struct_group()? [-Wattribute-warning]
-                        __read_overflow2_field(q_size_field, size);
+>> drivers/gpu/drm/xe/xe_mmio.c:116:23: warning: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+                       root_res->start > 0x100000000ull)
+                       ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   1 warning generated.
 
-The compiler actually complains on 'ath10k_debug_get_et_strings()' where
-fortification logic inteprets call to 'memcpy()' as an attempt to copy
-the whole 'ath10k_gstrings_stats' array from it's first member and so
-issues an overread warning. This warning may be silenced by passing
-an address of the whole array and not the first member to 'memcpy()'.
 
-Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
-Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230829093652.234537-1-dmantipov@yandex.ru
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/wireless/ath/ath10k/debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+vim +116 drivers/gpu/drm/xe/xe_mmio.c
 
-diff --git a/drivers/net/wireless/ath/ath10k/debug.c b/drivers/net/wireless/ath/ath10k/debug.c
-index 22003895f8548..591d0b9c0be3c 100644
---- a/drivers/net/wireless/ath/ath10k/debug.c
-+++ b/drivers/net/wireless/ath/ath10k/debug.c
-@@ -1411,7 +1411,7 @@ void ath10k_debug_get_et_strings(struct ieee80211_hw *hw,
- 				 u32 sset, u8 *data)
- {
- 	if (sset == ETH_SS_STATS)
--		memcpy(data, *ath10k_gstrings_stats,
-+		memcpy(data, ath10k_gstrings_stats,
- 		       sizeof(ath10k_gstrings_stats));
- }
- 
+ea1dfd1fe8933f Matthew Brost 2023-03-30   71  
+ea1dfd1fe8933f Matthew Brost 2023-03-30   72  static int xe_resize_lmem_bar(struct xe_device *xe, resource_size_t lmem_size)
+ea1dfd1fe8933f Matthew Brost 2023-03-30   73  {
+ea1dfd1fe8933f Matthew Brost 2023-03-30   74  	struct pci_dev *pdev = to_pci_dev(xe->drm.dev);
+ea1dfd1fe8933f Matthew Brost 2023-03-30   75  	struct pci_bus *root = pdev->bus;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   76  	struct resource *root_res;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   77  	resource_size_t rebar_size;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   78  	resource_size_t current_size;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   79  	u32 pci_cmd;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   80  	int i;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   81  	int ret;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   82  	u64 force_lmem_bar_size = xe_force_lmem_bar_size;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   83  
+ea1dfd1fe8933f Matthew Brost 2023-03-30   84  	current_size = roundup_pow_of_two(pci_resource_len(pdev, GEN12_LMEM_BAR));
+ea1dfd1fe8933f Matthew Brost 2023-03-30   85  
+ea1dfd1fe8933f Matthew Brost 2023-03-30   86  	if (force_lmem_bar_size) {
+ea1dfd1fe8933f Matthew Brost 2023-03-30   87  		u32 bar_sizes;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   88  
+ea1dfd1fe8933f Matthew Brost 2023-03-30   89  		rebar_size = force_lmem_bar_size * (resource_size_t)SZ_1M;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   90  		bar_sizes = pci_rebar_get_possible_sizes(pdev, GEN12_LMEM_BAR);
+ea1dfd1fe8933f Matthew Brost 2023-03-30   91  
+ea1dfd1fe8933f Matthew Brost 2023-03-30   92  		if (rebar_size == current_size)
+ea1dfd1fe8933f Matthew Brost 2023-03-30   93  			return 0;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   94  
+ea1dfd1fe8933f Matthew Brost 2023-03-30   95  		if (!(bar_sizes & BIT(pci_rebar_bytes_to_size(rebar_size))) ||
+ea1dfd1fe8933f Matthew Brost 2023-03-30   96  		    rebar_size >= roundup_pow_of_two(lmem_size)) {
+ea1dfd1fe8933f Matthew Brost 2023-03-30   97  			rebar_size = lmem_size;
+ea1dfd1fe8933f Matthew Brost 2023-03-30   98  			drm_info(&xe->drm,
+ea1dfd1fe8933f Matthew Brost 2023-03-30   99  				 "Given bar size is not within supported size, setting it to default: %llu\n",
+ea1dfd1fe8933f Matthew Brost 2023-03-30  100  				 (u64)lmem_size >> 20);
+ea1dfd1fe8933f Matthew Brost 2023-03-30  101  		}
+ea1dfd1fe8933f Matthew Brost 2023-03-30  102  	} else {
+ea1dfd1fe8933f Matthew Brost 2023-03-30  103  		rebar_size = current_size;
+ea1dfd1fe8933f Matthew Brost 2023-03-30  104  
+ea1dfd1fe8933f Matthew Brost 2023-03-30  105  		if (rebar_size != roundup_pow_of_two(lmem_size))
+ea1dfd1fe8933f Matthew Brost 2023-03-30  106  			rebar_size = lmem_size;
+ea1dfd1fe8933f Matthew Brost 2023-03-30  107  		else
+ea1dfd1fe8933f Matthew Brost 2023-03-30  108  			return 0;
+ea1dfd1fe8933f Matthew Brost 2023-03-30  109  	}
+ea1dfd1fe8933f Matthew Brost 2023-03-30  110  
+ea1dfd1fe8933f Matthew Brost 2023-03-30  111  	while (root->parent)
+ea1dfd1fe8933f Matthew Brost 2023-03-30  112  		root = root->parent;
+ea1dfd1fe8933f Matthew Brost 2023-03-30  113  
+ea1dfd1fe8933f Matthew Brost 2023-03-30  114  	pci_bus_for_each_resource(root, root_res, i) {
+ea1dfd1fe8933f Matthew Brost 2023-03-30  115  		if (root_res && root_res->flags & (IORESOURCE_MEM | IORESOURCE_MEM_64) &&
+ea1dfd1fe8933f Matthew Brost 2023-03-30 @116  		    root_res->start > 0x100000000ull)
+ea1dfd1fe8933f Matthew Brost 2023-03-30  117  			break;
+ea1dfd1fe8933f Matthew Brost 2023-03-30  118  	}
+ea1dfd1fe8933f Matthew Brost 2023-03-30  119  
+ea1dfd1fe8933f Matthew Brost 2023-03-30  120  	if (!root_res) {
+ea1dfd1fe8933f Matthew Brost 2023-03-30  121  		drm_info(&xe->drm, "Can't resize LMEM BAR - platform support is missing\n");
+ea1dfd1fe8933f Matthew Brost 2023-03-30  122  		return -1;
+ea1dfd1fe8933f Matthew Brost 2023-03-30  123  	}
+ea1dfd1fe8933f Matthew Brost 2023-03-30  124  
+ea1dfd1fe8933f Matthew Brost 2023-03-30  125  	pci_read_config_dword(pdev, PCI_COMMAND, &pci_cmd);
+ea1dfd1fe8933f Matthew Brost 2023-03-30  126  	pci_write_config_dword(pdev, PCI_COMMAND, pci_cmd & ~PCI_COMMAND_MEMORY);
+ea1dfd1fe8933f Matthew Brost 2023-03-30  127  
+ea1dfd1fe8933f Matthew Brost 2023-03-30  128  	ret = _resize_bar(xe, GEN12_LMEM_BAR, rebar_size);
+ea1dfd1fe8933f Matthew Brost 2023-03-30  129  
+ea1dfd1fe8933f Matthew Brost 2023-03-30  130  	pci_assign_unassigned_bus_resources(pdev->bus);
+ea1dfd1fe8933f Matthew Brost 2023-03-30  131  	pci_write_config_dword(pdev, PCI_COMMAND, pci_cmd);
+ea1dfd1fe8933f Matthew Brost 2023-03-30  132  	return ret;
+ea1dfd1fe8933f Matthew Brost 2023-03-30  133  }
+ea1dfd1fe8933f Matthew Brost 2023-03-30  134  
+
+:::::: The code at line 116 was first introduced by commit
+:::::: ea1dfd1fe8933f85ee3a2b3d6ad6b378d5b1a468 drm/xe: Introduce a new DRM driver for Intel GPUs
+
+:::::: TO: Matthew Brost <matthew.brost@intel.com>
+:::::: CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
+
 -- 
-2.42.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
