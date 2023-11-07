@@ -1,41 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919872E3FE
-	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D62EAE3
+	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdzb2n0Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D61CC4339A;
-	Tue,  7 Nov 2023 12:12:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1J7z7CN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E90A4C433C8;
+	Tue,  7 Nov 2023 12:12:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699359160;
-	bh=jLypUU/0noopu0alttsui9gNIEEEjhC17JOSvYszyPs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gdzb2n0Y8H1THe8WP4+igpxpIJQRwGVJ9YT0/+dR26Eh1nkWxLVMXr+CuWSxWv7wD
-	 O/zlDRIulxJqgg0yB2IVSVfnrbf9JyF/h99NQ0h7vSXrq+mlbJ9Uo8/K8HQdUoyjWF
-	 rbkoVS2gVf+2qpWyA7WqaK+8wlOR53CuoQfKq8br/R84xxU4XbrLg4vi62kOitfU04
-	 4evZrZ9dlujYPDwYtrPjyt+7rE6eXo5D473YceB4QYugGXbrhC8xs4QfHk+WGHD0W7
-	 4oGO4YV8ohZq0vO1dpJ0qC6BTEtwSnBV82X+Tnyo2P/dotr2uySA9LbjtI+9s21Qbg
-	 FwM2e1xt1JiJw==
+	s=k20201202; t=1699359179;
+	bh=SA4MqRXfeCZ27vILU0vxZVJPz3JWKIrkpAV26srW7ls=;
+	h=From:To:Cc:Subject:Date:From;
+	b=G1J7z7CNdoInzcSSSUygADNINv/COrcWHi5QIE95rYvt70iSotiAPPeTu/bzXSKlz
+	 XnDvY9AKOmabnbkFMmhEXMI3ycCwm6dL/q1I5G0XVvE1gO1DLnBgWX+kRvE9lhB4Ci
+	 E+usjc1IxeRn18IvSuuv+i7RNc78N1mMs3VUrukuvKmjbuxON1SkVoNTY7aq4E+5Hf
+	 eTHNcsGIrjkTGSmIa+oHAyB13KCKgrYlvU79C+sOvd6lY5OGES9xtuYbfkUgKJSJnQ
+	 PAgw3VqiQ2Yd1FqYOldsM4TRF0oYI1YGO8lUFL25vnZljPZQHz7bLGYjuf9fFlKG3X
+	 ukEIahxvPpI+Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Dmitry Antipov <dmantipov@yandex.ru>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Kalle Valo <quic_kvalo@quicinc.com>,
+	Johannes Berg <johannes.berg@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	kvalo@kernel.org,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	ath10k@lists.infradead.org,
 	linux-wireless@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 05/11] wifi: ath10k: fix clang-specific fortify warning
-Date: Tue,  7 Nov 2023 07:12:20 -0500
-Message-ID: <20231107121230.3758617-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/9] wifi: mac80211_hwsim: fix clang-specific fortify warning
+Date: Tue,  7 Nov 2023 07:12:44 -0500
+Message-ID: <20231107121256.3758858-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231107121230.3758617-1-sashal@kernel.org>
-References: <20231107121230.3758617-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,24 +40,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.199
+X-stable-base: Linux 5.4.259
 Content-Transfer-Encoding: 8bit
 
 From: Dmitry Antipov <dmantipov@yandex.ru>
 
-[ Upstream commit cb4c132ebfeac5962f7258ffc831caa0c4dada1a ]
+[ Upstream commit cbaccdc42483c65016f1bae89128c08dc17cfb2a ]
 
 When compiling with clang 16.0.6 and CONFIG_FORTIFY_SOURCE=y, I've
 noticed the following (somewhat confusing due to absence of an actual
 source code location):
 
-In file included from drivers/net/wireless/ath/ath10k/debug.c:8:
-In file included from ./include/linux/module.h:13:
-In file included from ./include/linux/stat.h:19:
-In file included from ./include/linux/time.h:60:
-In file included from ./include/linux/time32.h:13:
-In file included from ./include/linux/timex.h:67:
-In file included from ./arch/x86/include/asm/timex.h:5:
+In file included from drivers/net/wireless/virtual/mac80211_hwsim.c:18:
+In file included from ./include/linux/slab.h:16:
+In file included from ./include/linux/gfp.h:7:
+In file included from ./include/linux/mmzone.h:8:
+In file included from ./include/linux/spinlock.h:56:
+In file included from ./include/linux/preempt.h:79:
+In file included from ./arch/x86/include/asm/preempt.h:9:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
 In file included from ./arch/x86/include/asm/processor.h:23:
 In file included from ./arch/x86/include/asm/msr.h:11:
 In file included from ./arch/x86/include/asm/cpumask.h:5:
@@ -73,32 +72,31 @@ declared with 'warning' attribute: detected read beyond size of field (2nd
 parameter); maybe use struct_group()? [-Wattribute-warning]
                         __read_overflow2_field(q_size_field, size);
 
-The compiler actually complains on 'ath10k_debug_get_et_strings()' where
-fortification logic inteprets call to 'memcpy()' as an attempt to copy
-the whole 'ath10k_gstrings_stats' array from it's first member and so
+The compiler actually complains on 'mac80211_hwsim_get_et_strings()' where
+fortification logic inteprets call to 'memcpy()' as an attempt to copy the
+whole 'mac80211_hwsim_gstrings_stats' array from its first member and so
 issues an overread warning. This warning may be silenced by passing
 an address of the whole array and not the first member to 'memcpy()'.
 
 Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
-Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230829093652.234537-1-dmantipov@yandex.ru
+Link: https://lore.kernel.org/r/20230829094140.234636-1-dmantipov@yandex.ru
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/debug.c | 2 +-
+ drivers/net/wireless/mac80211_hwsim.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/debug.c b/drivers/net/wireless/ath/ath10k/debug.c
-index e8250a6654338..ab737177a86bf 100644
---- a/drivers/net/wireless/ath/ath10k/debug.c
-+++ b/drivers/net/wireless/ath/ath10k/debug.c
-@@ -1139,7 +1139,7 @@ void ath10k_debug_get_et_strings(struct ieee80211_hw *hw,
- 				 u32 sset, u8 *data)
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index a21739b2f44e6..634e8c1e71cca 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -2323,7 +2323,7 @@ static void mac80211_hwsim_get_et_strings(struct ieee80211_hw *hw,
+ 					  u32 sset, u8 *data)
  {
  	if (sset == ETH_SS_STATS)
--		memcpy(data, *ath10k_gstrings_stats,
-+		memcpy(data, ath10k_gstrings_stats,
- 		       sizeof(ath10k_gstrings_stats));
+-		memcpy(data, *mac80211_hwsim_gstrings_stats,
++		memcpy(data, mac80211_hwsim_gstrings_stats,
+ 		       sizeof(mac80211_hwsim_gstrings_stats));
  }
  
 -- 
