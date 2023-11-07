@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44562E412
-	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969E22E412
+	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9tfXvIC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD8AC43142;
-	Tue,  7 Nov 2023 12:11:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SsMnTsHh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE74C433D9;
+	Tue,  7 Nov 2023 12:11:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699359080;
-	bh=5top1FmfPMRZ0vaystmmPbJ7NjaWcmt+GUGBH6iwvIk=;
+	s=k20201202; t=1699359082;
+	bh=fZ8SZG5vmFhRlN4d3KXnaNQOWgr9JnGTuPj2TqrYKxY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T9tfXvICQrQ7Ds01ajB8TQt/sFFdML7CvxNPHcLHrh0huJf1aa0Orge3d0aC/Eoqh
-	 VQEpgBZC5oF2dx0FWsd9plrKM3u3MYAi/ktcEzVrSdctbmri8dmgchh6SASd36XNxA
-	 82mpMVDrN8TrCx02y7TydnRjheF2WdG8L9Gab2gmYe4U3xyEhGFCFkZBeVLqEftjrm
-	 cLNDql/ng+Km4Xmo4nEY+syU1K2P75Mru6FT6dZQHxaym/54VRsSCIFGd/Hie+c8CY
-	 3AfO+jP4CBBsTZU9+XZmDTIb8JHuPC0Dlt8/Cq74nHwRkKCMvOK73a0sxb1dzVLTBU
-	 6UBfp3RNVbt7A==
+	b=SsMnTsHhi2DnOg54zn3e/Xbr3HVUmWaP3gMrqMNIv453pSBINsoZCJx/dKggVIxvc
+	 rsUVsZbmG8fg1lWb7stXMCbPvZyzjCM0Wy4qqKsy0QxX4dcLndoBYr0J80hKUqfhWC
+	 g/DHV6DB5/1IGFlCAAuNFen+kobNrayAe17y+X7dVYNJtGRbhysO5uQPxQJ5ADhSjo
+	 0e4zeS6y0+RmvjYKLH0sD0JE8pZlPYzTr1HmyULkLnmweeaFkfYoK7vSKaS/JXSOzh
+	 abt4d4sTcORpKXfZTEycufV6XzU4LOQe+3g+xD/0Vgz0vrA4lx2eKC7fUyp4XiHYER
+	 sC8iAKv+vcEqw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Dmitry Antipov <dmantipov@yandex.ru>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
 	Kalle Valo <quic_kvalo@quicinc.com>,
 	Sasha Levin <sashal@kernel.org>,
 	kvalo@kernel.org,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
+	ath10k@lists.infradead.org,
 	linux-wireless@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 06/18] wifi: ath9k: fix clang-specific fortify warnings
-Date: Tue,  7 Nov 2023 07:10:36 -0500
-Message-ID: <20231107121104.3757943-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 07/18] wifi: ath10k: fix clang-specific fortify warning
+Date: Tue,  7 Nov 2023 07:10:37 -0500
+Message-ID: <20231107121104.3757943-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231107121104.3757943-1-sashal@kernel.org>
 References: <20231107121104.3757943-1-sashal@kernel.org>
@@ -41,7 +42,6 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.61
@@ -49,35 +49,13 @@ Content-Transfer-Encoding: 8bit
 
 From: Dmitry Antipov <dmantipov@yandex.ru>
 
-[ Upstream commit 95f97fe0ac974467ab4da215985a32b2fdf48af0 ]
+[ Upstream commit cb4c132ebfeac5962f7258ffc831caa0c4dada1a ]
 
 When compiling with clang 16.0.6 and CONFIG_FORTIFY_SOURCE=y, I've
 noticed the following (somewhat confusing due to absence of an actual
 source code location):
 
-In file included from drivers/net/wireless/ath/ath9k/debug.c:17:
-In file included from ./include/linux/slab.h:16:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:56:
-In file included from ./include/linux/preempt.h:79:
-In file included from ./arch/x86/include/asm/preempt.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:23:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:254:
-./include/linux/fortify-string.h:592:4: warning: call to '__read_overflow2_field'
-declared with 'warning' attribute: detected read beyond size of field (2nd
-parameter); maybe use struct_group()? [-Wattribute-warning]
-                        __read_overflow2_field(q_size_field, size);
-
-In file included from drivers/net/wireless/ath/ath9k/htc_drv_debug.c:17:
-In file included from drivers/net/wireless/ath/ath9k/htc.h:20:
+In file included from drivers/net/wireless/ath/ath10k/debug.c:8:
 In file included from ./include/linux/module.h:13:
 In file included from ./include/linux/stat.h:19:
 In file included from ./include/linux/time.h:60:
@@ -95,47 +73,32 @@ declared with 'warning' attribute: detected read beyond size of field (2nd
 parameter); maybe use struct_group()? [-Wattribute-warning]
                         __read_overflow2_field(q_size_field, size);
 
-The compiler actually complains on 'ath9k_get_et_strings()' and
-'ath9k_htc_get_et_strings()' due to the same reason: fortification logic
-inteprets call to 'memcpy()' as an attempt to copy the whole array from
-it's first member and so issues an overread warning. These warnings may
-be silenced by passing an address of the whole array and not the first
-member to 'memcpy()'.
+The compiler actually complains on 'ath10k_debug_get_et_strings()' where
+fortification logic inteprets call to 'memcpy()' as an attempt to copy
+the whole 'ath10k_gstrings_stats' array from it's first member and so
+issues an overread warning. This warning may be silenced by passing
+an address of the whole array and not the first member to 'memcpy()'.
 
 Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230829093856.234584-1-dmantipov@yandex.ru
+Link: https://lore.kernel.org/r/20230829093652.234537-1-dmantipov@yandex.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/debug.c         | 2 +-
- drivers/net/wireless/ath/ath9k/htc_drv_debug.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/ath10k/debug.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/debug.c b/drivers/net/wireless/ath/ath9k/debug.c
-index fb7a2952d0ce8..d9bac1c343490 100644
---- a/drivers/net/wireless/ath/ath9k/debug.c
-+++ b/drivers/net/wireless/ath/ath9k/debug.c
-@@ -1333,7 +1333,7 @@ void ath9k_get_et_strings(struct ieee80211_hw *hw,
- 			  u32 sset, u8 *data)
+diff --git a/drivers/net/wireless/ath/ath10k/debug.c b/drivers/net/wireless/ath/ath10k/debug.c
+index c861e66ef6bc5..41f387e15dcd0 100644
+--- a/drivers/net/wireless/ath/ath10k/debug.c
++++ b/drivers/net/wireless/ath/ath10k/debug.c
+@@ -1139,7 +1139,7 @@ void ath10k_debug_get_et_strings(struct ieee80211_hw *hw,
+ 				 u32 sset, u8 *data)
  {
  	if (sset == ETH_SS_STATS)
--		memcpy(data, *ath9k_gstrings_stats,
-+		memcpy(data, ath9k_gstrings_stats,
- 		       sizeof(ath9k_gstrings_stats));
- }
- 
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_debug.c b/drivers/net/wireless/ath/ath9k/htc_drv_debug.c
-index c55aab01fff5d..e79bbcd3279af 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_debug.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_debug.c
-@@ -428,7 +428,7 @@ void ath9k_htc_get_et_strings(struct ieee80211_hw *hw,
- 			      u32 sset, u8 *data)
- {
- 	if (sset == ETH_SS_STATS)
--		memcpy(data, *ath9k_htc_gstrings_stats,
-+		memcpy(data, ath9k_htc_gstrings_stats,
- 		       sizeof(ath9k_htc_gstrings_stats));
+-		memcpy(data, *ath10k_gstrings_stats,
++		memcpy(data, ath10k_gstrings_stats,
+ 		       sizeof(ath10k_gstrings_stats));
  }
  
 -- 
