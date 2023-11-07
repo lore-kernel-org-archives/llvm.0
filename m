@@ -1,106 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88B23158C;
-	Tue,  7 Nov 2023 19:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E41374DD
+	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 21:00:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DfxNt4Pd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699384785; x=1730920785;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ey6mMZSS50+XcIbiBxZUVaica+lG7Ql2zmbRMzN42mo=;
-  b=DfxNt4Pd8EIjnW7QJ66m4vLyc72aDwS9eVhCWV0o38C0XCwY27os/cJy
-   W2i7uTFOjdR3l6LA7m5HGdI+1ZODHnTYRDlh8ZyixZscjiWDqtaLGDEO7
-   bxgx0Y4rH2Xc5RUVme4mP9YDozQ2ftv0hNOzOOjKIFlmb3hn9wOFEfVTf
-   YP7jsJDmvhAEzqMsaC4yGuJ3mSsBvwC0MpeBbv3ixbGCBSb0zfQK/j1bL
-   b07+xoIgbgpeSs2a6tp2yqRi+e7NMSCcSzqhtxrI9FqNUAYMTE7Y52OS4
-   qgeIgNYA9eW3t1Y4eFmWyJRMLEe0yzZpsVn8511nZXX3bPNcJta75WVjE
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="392469678"
-X-IronPort-AV: E=Sophos;i="6.03,284,1694761200"; 
-   d="scan'208";a="392469678"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2023 11:19:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="906519722"
-X-IronPort-AV: E=Sophos;i="6.03,284,1694761200"; 
-   d="scan'208";a="906519722"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Nov 2023 11:19:42 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r0Rbw-0007LU-1v;
-	Tue, 07 Nov 2023 19:19:40 +0000
-Date: Wed, 8 Nov 2023 03:18:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: dslab@lzu.edu.cn, jaegeuk@kernel.org, chao@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org, Yang Hubin <yanghb2019@lzu.edu.cn>
-Subject: Re: [PATCH] f2fs: the name of a struct is wrong in a comment.
-Message-ID: <202311080247.0hkA0mLH-lkp@intel.com>
-References: <20231106121418.3675-1-dslab@lzu.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBxQ5bAB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 903CDC433C7;
+	Tue,  7 Nov 2023 21:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699390808;
+	bh=LarIf6JBeHjPIH1r2xen7IJx+ARqZUkJ5J7Gxn4B/lE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rBxQ5bABLQTCBix7Ka06a2C5R6TyRqXRoUflQKl6rVneKCp4SDSkfyOYI5OqrTHr5
+	 VGko1ipUJyLSbvzJ2xZLmtt33f6+HS+VTb40L685erl32vfuz2ZEp9b6B/lTholrsf
+	 hFUNSHnJ8ZD9KjPIROrLdC8aeibxhFylqaKpFkbZi2tB4I186XorlaOjj9VUj/iAo/
+	 TlkaZTWYWAFVpZozkYeZunhIR0D3oG69+r1PKYwTREx2mW9QFg71k0BginE2jEQO5d
+	 HVMX50Ev+r5kP1YhmVca3XNMEa/O5zMB8Uk/oauxTKGdMqAyHw7k0k0WQK8Bc7Eskj
+	 qwM4bOWIyB3NA==
+Date: Tue, 7 Nov 2023 14:00:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Yoann Congal <yoann.congal@smile.fr>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+	Brandon Maier <brandon.maier@collins.com>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v5] kconfig: avoid an infinite loop in
+ oldconfig/syncconfig
+Message-ID: <20231107210004.GA2065849@dev-arch.thelio-3990X>
+References: <20231104222715.3967791-1-yoann.congal@smile.fr>
+ <CAK7LNAS6J5Nh8nOUHbaf123yd1Z-1q--FvB1ok8GQcoNorAROw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231106121418.3675-1-dslab@lzu.edu.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNAS6J5Nh8nOUHbaf123yd1Z-1q--FvB1ok8GQcoNorAROw@mail.gmail.com>
 
-Hi,
+On Sun, Nov 05, 2023 at 04:55:57PM +0900, Masahiro Yamada wrote:
+> On Sun, Nov 5, 2023 at 7:27 AM Yoann Congal <yoann.congal@smile.fr> wrote:
+> >
+> > Exit on error when asking for value and reading stdin returns an error
+> > (mainly if it has reached EOF or is closed).
+> >
+> > This infinite loop happens in particular for hex/int configs without an
+> > explicit default value.
+> >
+> > Previously, this case would loop:
+> > * oldconfig prompts for the value but stdin has reached EOF
+> > * It gets the global default value : an empty string
+> > * This is not a valid hex/int value so it prompts again, hence the
+> >   infinite loop.
+> >
+> > This case happens with a configuration like this (a hex config without a
+> > valid default value):
+> >   config TEST_KCONFIG
+> >        hex "Test KConfig"
+> >        # default 0x0
+> >
+> > And using:
+> >   make oldconfig < /dev/null
+> >
+> > This was discovered when working on Yocto bug[0] on a downstream
+> > kconfig user (U-boot)
+> >
+> > [0]: https://bugzilla.yoctoproject.org/show_bug.cgi?id=14136
+> >
+> > CC: Brandon Maier <brandon.maier@collins.com>
+> > Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
+> 
+> Applied to linux-kbuild.
+> Thanks.
 
-kernel test robot noticed the following build errors:
+For what it's worth, this change breaks our continuous integration [1]
+because tuxmake explicitly uses /dev/null as stdin to make for
+non-interactive commands (I think it does this as basically the
+equivalent of "yes '' | make" in Python), so the error will always
+occur.
 
-[auto build test ERROR on jaegeuk-f2fs/dev-test]
-[also build test ERROR on jaegeuk-f2fs/dev linus/master v6.6 next-20231107]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Before:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/dslab-lzu-edu-cn/f2fs-the-name-of-a-struct-is-wrong-in-a-comment/20231106-201822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-patch link:    https://lore.kernel.org/r/20231106121418.3675-1-dslab%40lzu.edu.cn
-patch subject: [PATCH] f2fs: the name of a struct is wrong in a comment.
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231108/202311080247.0hkA0mLH-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231108/202311080247.0hkA0mLH-lkp@intel.com/reproduce)
+$ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311080247.0hkA0mLH-lkp@intel.com/
+# Same as 'make < /dev/null' but still
+$ python3 -c "import subprocess; subprocess.run(['make', '-j128'], stdin=subprocess.DEVNULL)"
+  SYNC    include/config/auto.conf
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTCC  scripts/kconfig/confdata.o
+  HOSTCC  scripts/kconfig/expr.o
+  LEX     scripts/kconfig/lexer.lex.c
+  YACC    scripts/kconfig/parser.tab.[ch]
+  HOSTCC  scripts/kconfig/menu.o
+  HOSTCC  scripts/kconfig/preprocess.o
+  HOSTCC  scripts/kconfig/symbol.o
+  HOSTCC  scripts/kconfig/util.o
+  HOSTCC  scripts/kconfig/lexer.lex.o
+  HOSTCC  scripts/kconfig/parser.tab.o
+  HOSTLD  scripts/kconfig/conf
+*
+* Restart config...
+*
+...
+Error in reading or end of file.
 
-All errors (new ones prefixed by >>):
+  GEN     arch/x86/include/generated/asm/orc_hash.h
+  WRAP    arch/x86/include/generated/uapi/asm/bpf_perf_event.h
+  WRAP    arch/x86/include/generated/uapi/asm/errno.h
+...
 
-   In file included from fs/f2fs/dir.c:10:
->> include/linux/f2fs_fs.h:501:16: error: expected ']'
-           __u8 reserved[NAT_JOURNAL_RESERVED];
-                         ^
-   include/linux/f2fs_fs.h:474:38: note: expanded from macro 'NAT_JOURNAL_RESERVED'
-                                   sizeof(struct nat_journal_entry))SIT_JOURNA
-                                                                    ^
-   include/linux/f2fs_fs.h:501:15: note: to match this '['
-           __u8 reserved[NAT_JOURNAL_RESERVED];
-                        ^
-   1 error generated.
+After:
 
+$ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config
 
-vim +501 include/linux/f2fs_fs.h
+$ python3 -c "import subprocess; subprocess.run(['make', '-j128'], stdin=subprocess.DEVNULL)"
+  SYNC    include/config/auto.conf
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTCC  scripts/kconfig/confdata.o
+  HOSTCC  scripts/kconfig/expr.o
+  LEX     scripts/kconfig/lexer.lex.c
+  YACC    scripts/kconfig/parser.tab.[ch]
+  HOSTCC  scripts/kconfig/menu.o
+  HOSTCC  scripts/kconfig/preprocess.o
+  HOSTCC  scripts/kconfig/symbol.o
+  HOSTCC  scripts/kconfig/util.o
+  HOSTCC  scripts/kconfig/lexer.lex.o
+  HOSTCC  scripts/kconfig/parser.tab.o
+  HOSTLD  scripts/kconfig/conf
+*
+* Restart config...
+*
+...
+Error in reading or end of file.
+make[3]: *** [scripts/kconfig/Makefile:77: syncconfig] Error 1
+...
 
-dd31866b0d55c9 Jaegeuk Kim 2012-11-02  498  
-dd31866b0d55c9 Jaegeuk Kim 2012-11-02  499  struct nat_journal {
-dd31866b0d55c9 Jaegeuk Kim 2012-11-02  500  	struct nat_journal_entry entries[NAT_JOURNAL_ENTRIES];
-dd31866b0d55c9 Jaegeuk Kim 2012-11-02 @501  	__u8 reserved[NAT_JOURNAL_RESERVED];
-dd31866b0d55c9 Jaegeuk Kim 2012-11-02  502  } __packed;
-dd31866b0d55c9 Jaegeuk Kim 2012-11-02  503  
+We have been doing this for some time and never run across an infinite
+loop in syncconfig. Can this be improved?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1]: https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/6784349581
+
+Cheers,
+Nathan
+
+> > ---
+> > v4->v5:
+> >  * Switched to Masahiro Yamada's suggested code.
+> > v3->v4:
+> >  * Added Brandon Maier's "Tested-by". Thanks!
+> > v2->v3:
+> >  * Simplify the patch by fusing comments of :
+> >    * Masahiro Yamada : Exit as soon as reading stdin hits an error
+> >    * Randy Dunlap : Display the name of the currently read symbol
+> > v1->v2:
+> >  * Improve coding style
+> >  * Put more info in the commit message
+> > ---
+> >  scripts/kconfig/conf.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/kconfig/conf.c b/scripts/kconfig/conf.c
+> > index 33d19e419908..62de1fbaff97 100644
+> > --- a/scripts/kconfig/conf.c
+> > +++ b/scripts/kconfig/conf.c
+> > @@ -76,8 +76,10 @@ static void strip(char *str)
+> >  /* Helper function to facilitate fgets() by Jean Sacren. */
+> >  static void xfgets(char *str, int size, FILE *in)
+> >  {
+> > -       if (!fgets(str, size, in))
+> > +       if (!fgets(str, size, in)) {
+> >                 fprintf(stderr, "\nError in reading or end of file.\n");
+> > +               exit(1);
+> > +       }
+> >
+> >         if (!tty_stdio)
+> >                 printf("%s", str);
+> > --
+> > 2.30.2
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
