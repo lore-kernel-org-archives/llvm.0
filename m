@@ -1,41 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF362DF98
-	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DEB2DF9A
+	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PlUG4vlE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 877F0C433C7;
-	Tue,  7 Nov 2023 12:09:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrBupYsh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EDC7C433C7;
+	Tue,  7 Nov 2023 12:11:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699358982;
-	bh=PRcKEfrDmfEZMYzlayV0vY7Jb6LNenowCohlfa6ojHg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PlUG4vlEK/2xn2uayc+UImggOPqsXEpTqy5VqWK6DolcJ/Ooec2X4xZBFvqeD92jv
-	 Nv9aZzFH86+R8qxOsGpt3qgohAYDTJ+Wul0aV2wKHlIsVoHp+f2wfQ/9vb71lUWq3a
-	 6Jeg5Rv0QPVi6mN/xu0UVDgRr4/f8SWw2cLlmpXIs5yB6xZ5717JCcfCMJKQ4q+3Sa
-	 Q9n6/n/617N/RgEcFmqe3nepjdQAIivm2/VRYEOuIMTF8R7kph3/ZPnWpJFzbCG9+x
-	 cxXp85EdQr6iVJKNYUjS7XcdW5xc/gKZXK++OmiKJ+1DFIuFB4kwaXpxpK13//XCPJ
-	 n78wXBMHoBp8w==
+	s=k20201202; t=1699359067;
+	bh=h+HWbq1F2NPW0nxN2+Um1YD2SAa9d2WPjiFNzz39+dU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XrBupYsh6IlA8OS2V40h3xAvHROdYytW8TsqGUoNBY0WhIouqdP1MLuVkXfDieTZ7
+	 9ciJBN3j95fF2a42/+XsJ3Sn0vwkNeqVvcWnq1As7iPQU7s/O7GC2cXjMXBLhxRClw
+	 n4GuZ3vOrdxlADrwslbUiBk3rUP+8aBx/7ezJsXU1LZOqdJVK3/tCarFm9tktjBSub
+	 mwmdrQVV4REp5xdDn8bRTpEGAhs+9NKW91Yb51tEb3GSxUX8J0HgwK09ZkEQImyczH
+	 D4yTjnv9FFLA4mkVFd8F5voXtzHgx9hzQt7yxKShs7NzXl0EtGOpnbNLp/PRRxnNrF
+	 dRb0MBIypZznQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Dmitry Antipov <dmantipov@yandex.ru>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Kalle Valo <quic_kvalo@quicinc.com>,
+	Kalle Valo <kvalo@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	kvalo@kernel.org,
+	srini.raju@purelifi.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	ath10k@lists.infradead.org,
 	linux-wireless@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.5 09/30] wifi: ath10k: fix clang-specific fortify warning
-Date: Tue,  7 Nov 2023 07:08:24 -0500
-Message-ID: <20231107120922.3757126-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 01/18] wifi: plfxlc: fix clang-specific fortify warning
+Date: Tue,  7 Nov 2023 07:10:31 -0500
+Message-ID: <20231107121104.3757943-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231107120922.3757126-1-sashal@kernel.org>
-References: <20231107120922.3757126-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,20 +40,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.10
+X-stable-base: Linux 6.1.61
 Content-Transfer-Encoding: 8bit
 
 From: Dmitry Antipov <dmantipov@yandex.ru>
 
-[ Upstream commit cb4c132ebfeac5962f7258ffc831caa0c4dada1a ]
+[ Upstream commit a763e92c78615ea838f5b9a841398b1d4adb968e ]
 
 When compiling with clang 16.0.6 and CONFIG_FORTIFY_SOURCE=y, I've
 noticed the following (somewhat confusing due to absence of an actual
 source code location):
 
-In file included from drivers/net/wireless/ath/ath10k/debug.c:8:
-In file included from ./include/linux/module.h:13:
-In file included from ./include/linux/stat.h:19:
+In file included from drivers/net/wireless/purelifi/plfxlc/mac.c:6:
+In file included from ./include/linux/netdevice.h:24:
+In file included from ./include/linux/timer.h:6:
+In file included from ./include/linux/ktime.h:24:
 In file included from ./include/linux/time.h:60:
 In file included from ./include/linux/time32.h:13:
 In file included from ./include/linux/timex.h:67:
@@ -73,34 +70,33 @@ declared with 'warning' attribute: detected read beyond size of field (2nd
 parameter); maybe use struct_group()? [-Wattribute-warning]
                         __read_overflow2_field(q_size_field, size);
 
-The compiler actually complains on 'ath10k_debug_get_et_strings()' where
+The compiler actually complains on 'plfxlc_get_et_strings()' where
 fortification logic inteprets call to 'memcpy()' as an attempt to copy
-the whole 'ath10k_gstrings_stats' array from it's first member and so
-issues an overread warning. This warning may be silenced by passing
-an address of the whole array and not the first member to 'memcpy()'.
+the whole 'et_strings' array from its first member and so issues an
+overread warning. This warning may be silenced by passing an address
+of the whole array and not the first member to 'memcpy()'.
 
 Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
-Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230829093652.234537-1-dmantipov@yandex.ru
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20230829094541.234751-1-dmantipov@yandex.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/debug.c | 2 +-
+ drivers/net/wireless/purelifi/plfxlc/mac.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/debug.c b/drivers/net/wireless/ath/ath10k/debug.c
-index f9518e1c99039..fe89bc61e5317 100644
---- a/drivers/net/wireless/ath/ath10k/debug.c
-+++ b/drivers/net/wireless/ath/ath10k/debug.c
-@@ -1140,7 +1140,7 @@ void ath10k_debug_get_et_strings(struct ieee80211_hw *hw,
- 				 u32 sset, u8 *data)
+diff --git a/drivers/net/wireless/purelifi/plfxlc/mac.c b/drivers/net/wireless/purelifi/plfxlc/mac.c
+index d3cdffbded693..87a4ff888ddd4 100644
+--- a/drivers/net/wireless/purelifi/plfxlc/mac.c
++++ b/drivers/net/wireless/purelifi/plfxlc/mac.c
+@@ -666,7 +666,7 @@ static void plfxlc_get_et_strings(struct ieee80211_hw *hw,
+ 				  u32 sset, u8 *data)
  {
  	if (sset == ETH_SS_STATS)
--		memcpy(data, *ath10k_gstrings_stats,
-+		memcpy(data, ath10k_gstrings_stats,
- 		       sizeof(ath10k_gstrings_stats));
+-		memcpy(data, *et_strings, sizeof(et_strings));
++		memcpy(data, et_strings, sizeof(et_strings));
  }
  
+ static void plfxlc_get_et_stats(struct ieee80211_hw *hw,
 -- 
 2.42.0
 
