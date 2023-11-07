@@ -1,125 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC1138B;
-	Tue,  7 Nov 2023 04:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T3UcmJiP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699332081; x=1730868081;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bXV69DM5TVXRswvmT9mbk5ng8CYNmjBatfhjCKuhupU=;
-  b=T3UcmJiPoQHQAl5buxKIuYA4Mp0WP+2Liw5zOOis0LgInRLFlOE8OXUm
-   QMh/5imdydH+7anC0TNjE0Kc9u8Jcii1cLI5JJxMyAtmqky+tcwqQ4zSi
-   /p+IHxvgGbRUvY7LgQHT4Uue6/VrUQQVuaM04SdKQzfHo/iQLP3taqf0H
-   qaLjrlAiil291f27hESF3AdNvjV1B3jXtO2NbteLbvUCSjFUC3jlUss1j
-   x4GH1zIs45fuFiB/y7+4h1IdlEVMBf1qV9xRHfdGDBX3EDDkY/y2J52Ci
-   9ygOS6ovJREYBhMzoVSROfzX5QJaSP1Om1hDuKBVQgMNFF/oiSD9e5lob
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="389236400"
-X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
-   d="scan'208";a="389236400"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2023 20:41:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="832945509"
-X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
-   d="scan'208";a="832945509"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Nov 2023 20:41:17 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r0Dtr-0006vs-0v;
-	Tue, 07 Nov 2023 04:41:15 +0000
-Date: Tue, 7 Nov 2023 12:40:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	dri-devel@lists.freedesktop.org, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Dongwon Kim <dongwon.kim@intel.com>,
-	Junxiao Chang <junxiao.chang@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v2 1/3] mm/gup: Introduce pin_user_pages_fd() for pinning
- shmem/hugetlbfs file pages (v2)
-Message-ID: <202311071223.ZeoRZg33-lkp@intel.com>
-References: <20231106061541.507116-2-vivek.kasireddy@intel.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450CD111A4
+	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 09:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EADCDFEC;
+	Tue,  7 Nov 2023 01:38:17 -0800 (PST)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 041713F703;
+	Tue,  7 Nov 2023 01:37:30 -0800 (PST)
+Message-ID: <47e3d265-e48e-238f-7528-b0eb4c250cb1@arm.com>
+Date: Tue, 7 Nov 2023 09:37:32 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231106061541.507116-2-vivek.kasireddy@intel.com>
-
-Hi Vivek,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vivek-Kasireddy/mm-gup-Introduce-pin_user_pages_fd-for-pinning-shmem-hugetlbfs-file-pages-v2/20231106-141954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231106061541.507116-2-vivek.kasireddy%40intel.com
-patch subject: [PATCH v2 1/3] mm/gup: Introduce pin_user_pages_fd() for pinning shmem/hugetlbfs file pages (v2)
-config: mips-maltaup_defconfig (https://download.01.org/0day-ci/archive/20231107/202311071223.ZeoRZg33-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231107/202311071223.ZeoRZg33-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311071223.ZeoRZg33-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/gup.c:3419:9: error: call to undeclared function 'hugetlb_add_to_page_cache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3419 |                 err = hugetlb_add_to_page_cache(folio, file->f_mapping, idx);
-         |                       ^
-   1 error generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] perf test: Add option to change objdump binary
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>
+Cc: linux-perf-users@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Yang Jihong <yangjihong1@huawei.com>,
+ Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev
+ <atrajeev@linux.vnet.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20231103113501.490012-1-james.clark@arm.com>
+ <CAP-5=fWazX_q1W8HN7ErrRMB2bx5sz3x1V=+XqY7Hxx0jR0p9w@mail.gmail.com>
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <CAP-5=fWazX_q1W8HN7ErrRMB2bx5sz3x1V=+XqY7Hxx0jR0p9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +/hugetlb_add_to_page_cache +3419 mm/gup.c
 
-  3403	
-  3404	static struct page *alloc_file_page(struct file *file, pgoff_t idx)
-  3405	{
-  3406		struct page *page = ERR_PTR(-ENOMEM);
-  3407		struct folio *folio;
-  3408		int err;
-  3409	
-  3410		if (shmem_file(file))
-  3411			return shmem_read_mapping_page(file->f_mapping, idx);
-  3412	
-  3413		folio = alloc_hugetlb_folio_nodemask(hstate_file(file),
-  3414						     NUMA_NO_NODE,
-  3415						     NULL,
-  3416						     GFP_USER);
-  3417		if (folio && folio_try_get(folio)) {
-  3418			page = &folio->page;
-> 3419			err = hugetlb_add_to_page_cache(folio, file->f_mapping, idx);
-  3420			if (err) {
-  3421				folio_put(folio);
-  3422				free_huge_folio(folio);
-  3423				page = ERR_PTR(err);
-  3424			}
-  3425		}
-  3426	
-  3427		return page;
-  3428	}
-  3429	
+On 03/11/2023 15:41, Ian Rogers wrote:
+> On Fri, Nov 3, 2023 at 4:35 AM James Clark <james.clark@arm.com> wrote:
+>>
+>> All of the other Perf subcommands that use objdump have an option to
+>> specify the binary, so add the same option to perf test.
+>>
+>> This is useful if you have built the kernel with a different toolchain
+>> to the system one, where the system objdump may fail to disassemble
+>> vmlinux.
+>>
+>> Now this can be fixed with something like this:
+>>
+>>    $ perf test --objdump llvm-objdump "object code reading"
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+> 
+> There is also "perf config" for things like this.
+> 
+> Reviewed-by: Ian Rogers <irogers@google.com>
+> 
+> Thanks,
+> Ian
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+That seems a bit better for this use case so I added it in V2.
+
+Thanks for the review.
+
+James
