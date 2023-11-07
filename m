@@ -1,109 +1,194 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCEB2E658
-	for <llvm@lists.linux.dev>; Mon,  6 Nov 2023 21:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81656126;
+	Tue,  7 Nov 2023 03:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="dxSn97Ic"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-40806e4106dso30524595e9.1
-        for <llvm@lists.linux.dev>; Mon, 06 Nov 2023 13:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1699307299; x=1699912099; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=az7ExxO94n7Tzege6R79RlIuC0dJHugUw3dOV0fKG+I=;
-        b=dxSn97IcA83oueRyS9PO6tPxOgDb5Z8DUK0D5Fwivx3ktv/MTp9jqlVTV1ZGGJWt75
-         RBLTyFuAFsrpapALalJDtquBDHe949xnRfn3RP9ZBD1lWAYSpJhfqUyRi9YigXintdzs
-         RkL+lELx0vBbbaFZjpX6IxtH5ObIbCedpiZqGi5ojo5oP9s93qM8+6AxrQQj3qCwdH1Q
-         mRXdEaGG6eeSyM9AMR5Zfxo0AMza/ZheuIj3Uw6nkRnN9+YWDdToRGw6sV3epNzedKv7
-         On7OoJwigbLUc4202tCzAMgH2xl68njpUwk1Jzgm2sZQ8yiQXgPQDZ61uo3sKA8uZBKH
-         938w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699307299; x=1699912099;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=az7ExxO94n7Tzege6R79RlIuC0dJHugUw3dOV0fKG+I=;
-        b=oBHc6U8MU6T/lqQJ/4XNNR5dPnkvU9aF+jy8Hhpzw4VIotMnPHWhq0OxcupgRjbzbp
-         nJ7WTd0OsEZNeGVNROVUlSefsiPKkfW9h6HeaGvh1lV+niKAnwB0AjxyXX2JluXDpEZw
-         5itHlwOKhWgzoC86BnUgyCpzZuEtbPUhO21SIbrwwhdmD/R/vohPcdpLOoGOYSDMFh2Y
-         jHl4q59T7j9g7lleLCQNofZooMpOtj++7IG7pv0wYuNVT0410Ck2yJdoDlBfuIbs7vh3
-         myhFRLWEza7nVtSj0M8ZAa1w3n02DXojlOyL7Pcl+3pHDcfPP7UhRGOebSjpCKJaCBow
-         F0cw==
-X-Gm-Message-State: AOJu0YxapFSiHK2XT8Cg8l4g0LM7HQxluXL8XXz6HkPxd9oXteu4yFOa
-	U8kLDIUAxt8OwZQH4XWLWuQiuA==
-X-Google-Smtp-Source: AGHT+IEF4p80QoTLDD4KV3JQ2AnS0F8rRoHPd1/kCN+tYAzVUsjYELpEmJ4GHmO0V+YDLmjBPSTWBw==
-X-Received: by 2002:a05:600c:2483:b0:407:73fc:6818 with SMTP id 3-20020a05600c248300b0040773fc6818mr1095597wms.2.1699307299346;
-        Mon, 06 Nov 2023 13:48:19 -0800 (PST)
-Received: from [10.83.37.178] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id u3-20020adfed43000000b003140f47224csm617514wro.15.2023.11.06.13.48.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Nov 2023 13:48:18 -0800 (PST)
-Message-ID: <7be96bfd-7e79-4b13-87fa-0e3d06ead30b@arista.com>
-Date: Mon, 6 Nov 2023 21:48:11 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RbxHWWZl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699328056; x=1730864056;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dHRLiDownStx5s36gC5p8cL07CF6Lv06KgLGUQMtKfU=;
+  b=RbxHWWZl11QyZ8s0gHjXF6Ea1/V8kqmwoXE7Z2CUeg9cPlzuhxYbtX1J
+   1M4ob5gPfs1eeiQHSqoRvpBMFuw6Xsz/HXEfhN7ERQGNiFtwVRpFfT2OZ
+   x7rKaMtWoC1fLmdElgdvOGeDoGtwMV7sh2ZYA/dhOAZEqV60DehVmAaYN
+   TxOi7tktuyvAEntT87vsXsr+nhdXFIDa7+a1WjJO9C3VHhaTK0c/IEymM
+   mDLWiQvI30yCdE3/RsSEUfKsD6bkGyK1KmVRqtPshgT1RsHM2wmGEZvuy
+   OZ3pMvO2aFZVsLMYpjQXh4MKv/cjDj+SdTZC4V0JFDLvyx9EqjcqqYrOh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="386594649"
+X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
+   d="scan'208";a="386594649"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2023 19:34:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="936001874"
+X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
+   d="scan'208";a="936001874"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 06 Nov 2023 19:34:11 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r0Cqu-0006vA-39;
+	Tue, 07 Nov 2023 03:34:08 +0000
+Date: Tue, 7 Nov 2023 11:33:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	dri-devel@lists.freedesktop.org, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Mike Kravetz <mike.kravetz@oracle.com>,
+	Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dongwon Kim <dongwon.kim@intel.com>,
+	Junxiao Chang <junxiao.chang@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v2 1/3] mm/gup: Introduce pin_user_pages_fd() for pinning
+ shmem/hugetlbfs file pages (v2)
+Message-ID: <202311071110.ZGF6P4zc-lkp@intel.com>
+References: <20231106061541.507116-2-vivek.kasireddy@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3] tcp: Fix -Wc23-extensions in tcp_options_write()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, trix@redhat.com, noureddine@arista.com,
- hch@infradead.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev, edumazet@google.com,
- davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com
-References: <20231106-tcp-ao-fix-label-in-compound-statement-warning-v3-1-b54a64602a85@kernel.org>
- <a8cc305d-0ab8-4ff7-b11a-94f51f33ec92@arista.com>
- <20231106213408.GA1841794@dev-arch.thelio-3990X>
-From: Dmitry Safonov <dima@arista.com>
-In-Reply-To: <20231106213408.GA1841794@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231106061541.507116-2-vivek.kasireddy@intel.com>
 
-On 11/6/23 21:34, Nathan Chancellor wrote:
-> On Mon, Nov 06, 2023 at 09:26:48PM +0000, Dmitry Safonov wrote:
->> Seems like exactly the fix that my git testing tree had, with an
->> exception to naming the helper tcp_ao_options_write().
-> 
-> Heh, not sure why I never considered that as an option... I am guessing
-> it does not matter enough for a v4 at this point but I could send a
-> net-next change later to update it if you so desire!
+Hi Vivek,
 
-It doesn't matter really, not worth another patch :-)
+kernel test robot noticed the following build errors:
 
->> But then I found* your patch-v1 and decided not to send an alternative
->> patch.
->>
->> Thanks for fixing this,
-> 
-> Thanks for taking a look!
-> 
->> Reviewed-by: Dmitry Safonov <dima@arista.com>
->>
->> *had to fix my Gmail lkml filter to label not only emails with cc/to my
->> name, but also the raw email address (usually, I got them to/cc "Dmitry
->> Safonov", but this one didn't have the name and got lost in the lkml pile).
-> 
-> Sorry about that, b4 used to have some interesting behavior around names
-> at one point (don't remember the details at the moment) and just using
-> emails avoided those issues. Maybe I should go back to names and emails
-> to see if I notice any problems again.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-No worries, should be fixed now. I preferred previously filtering by
-full name, rather than email address as I send patches from both work
-and home emails, but also sometimes people send patches/questions to
-emails from the companies I previously worked for, regardless .mailmap
-entries.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vivek-Kasireddy/mm-gup-Introduce-pin_user_pages_fd-for-pinning-shmem-hugetlbfs-file-pages-v2/20231106-141954
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20231106061541.507116-2-vivek.kasireddy%40intel.com
+patch subject: [PATCH v2 1/3] mm/gup: Introduce pin_user_pages_fd() for pinning shmem/hugetlbfs file pages (v2)
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20231107/202311071110.ZGF6P4zc-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231107/202311071110.ZGF6P4zc-lkp@intel.com/reproduce)
 
-Probably, they look for author in lkml/mail archive, rather than use git
-to get the current/proper email address.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311071110.ZGF6P4zc-lkp@intel.com/
 
-Thanks,
-             Dmitry
+All errors (new ones prefixed by >>):
 
+   In file included from mm/gup.c:9:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from mm/gup.c:9:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from mm/gup.c:9:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> mm/gup.c:3419:9: error: implicit declaration of function 'hugetlb_add_to_page_cache' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   err = hugetlb_add_to_page_cache(folio, file->f_mapping, idx);
+                         ^
+   12 warnings and 1 error generated.
+
+
+vim +/hugetlb_add_to_page_cache +3419 mm/gup.c
+
+  3403	
+  3404	static struct page *alloc_file_page(struct file *file, pgoff_t idx)
+  3405	{
+  3406		struct page *page = ERR_PTR(-ENOMEM);
+  3407		struct folio *folio;
+  3408		int err;
+  3409	
+  3410		if (shmem_file(file))
+  3411			return shmem_read_mapping_page(file->f_mapping, idx);
+  3412	
+  3413		folio = alloc_hugetlb_folio_nodemask(hstate_file(file),
+  3414						     NUMA_NO_NODE,
+  3415						     NULL,
+  3416						     GFP_USER);
+  3417		if (folio && folio_try_get(folio)) {
+  3418			page = &folio->page;
+> 3419			err = hugetlb_add_to_page_cache(folio, file->f_mapping, idx);
+  3420			if (err) {
+  3421				folio_put(folio);
+  3422				free_huge_folio(folio);
+  3423				page = ERR_PTR(err);
+  3424			}
+  3425		}
+  3426	
+  3427		return page;
+  3428	}
+  3429	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
