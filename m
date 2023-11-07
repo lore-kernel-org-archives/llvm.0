@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4E3651
-	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65920651
+	for <llvm@lists.linux.dev>; Tue,  7 Nov 2023 12:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxQmY/dL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD6CC433C7;
-	Tue,  7 Nov 2023 12:07:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLWXh4Ct"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA9EFC433CA;
+	Tue,  7 Nov 2023 12:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699358830;
-	bh=WzjOfl4G7iqfVsYGBDMuxwOuVMog8QXiZKYQIfKxusU=;
+	s=k20201202; t=1699358842;
+	bh=2reg47psDXTY8h8BcqnE/3wl0uFfvugAdjPj/GA3lDY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dxQmY/dLUdJltsHtKH3ZagxhEO5POUxDQlGojDgakWO0ZV1aIx68iq93zV5AJr1bN
-	 r/sy5pzewbuchTJ5R5JZlAE5HY4L5vhEFnIVuFUP+5bK0+Rs7LgA4Rn5VRVP4bd+lv
-	 9/rTJiBj5QLkIRqNmXQkjW4Fp1YMJfxQ/sJmwa9mbQhctkj1/Y2nxvOlScr4R376my
-	 BVIyasLNq0hsZgpEJ02oLxShjxRwCj4uIcduos7yj0kySfnk/ls+EcX14RDiYzfFi5
-	 ao/bMZGAPn+6b3tp6m2RZwGN4j5esGus4weHor6VtkcEgH8WnTB3/d8piw+rplhJY7
-	 waDPUnGCmVjsg==
+	b=kLWXh4CtinxYntMxw9dHvlGU2e5Ht0fQ3qpp7jO5U6gpZZHQSW4ja4+Gpck9bGH2F
+	 yFLA2pQipeQiOd7LHL99wbP9Ll+26AWQo0ysy5TxRNAdPpUvSmaKvunR+aZ2YB/tb/
+	 /csKf3+rL27RDaWRkTphjK2nwTp5N4TxasCBme8kTEhfZCdNNkPIghS4ZhdaXFJ0/i
+	 +0dbk0hcvNtND7zkvjZUhhtA3BjjqdgTRqsFnv5JSkd1gu6rVWPbUemFskpGAxYbk8
+	 TiyPCpEyilf38U0JeIKUZ5HrY+UE/MZW7SPxzv/p7yV+Y+tS9Bm10NYWrnj0cQACM5
+	 ySPEg8bUqDCOA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Dmitry Antipov <dmantipov@yandex.ru>,
-	Johannes Berg <johannes.berg@intel.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	Kalle Valo <quic_kvalo@quicinc.com>,
 	Sasha Levin <sashal@kernel.org>,
-	johannes@sipsolutions.net,
 	kvalo@kernel.org,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
 	linux-wireless@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 03/31] wifi: mac80211_hwsim: fix clang-specific fortify warning
-Date: Tue,  7 Nov 2023 07:05:50 -0500
-Message-ID: <20231107120704.3756327-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 07/31] wifi: ath9k: fix clang-specific fortify warnings
+Date: Tue,  7 Nov 2023 07:05:54 -0500
+Message-ID: <20231107120704.3756327-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231107120704.3756327-1-sashal@kernel.org>
 References: <20231107120704.3756327-1-sashal@kernel.org>
@@ -41,6 +41,7 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6
@@ -48,13 +49,13 @@ Content-Transfer-Encoding: 8bit
 
 From: Dmitry Antipov <dmantipov@yandex.ru>
 
-[ Upstream commit cbaccdc42483c65016f1bae89128c08dc17cfb2a ]
+[ Upstream commit 95f97fe0ac974467ab4da215985a32b2fdf48af0 ]
 
 When compiling with clang 16.0.6 and CONFIG_FORTIFY_SOURCE=y, I've
 noticed the following (somewhat confusing due to absence of an actual
 source code location):
 
-In file included from drivers/net/wireless/virtual/mac80211_hwsim.c:18:
+In file included from drivers/net/wireless/ath/ath9k/debug.c:17:
 In file included from ./include/linux/slab.h:16:
 In file included from ./include/linux/gfp.h:7:
 In file included from ./include/linux/mmzone.h:8:
@@ -75,31 +76,66 @@ declared with 'warning' attribute: detected read beyond size of field (2nd
 parameter); maybe use struct_group()? [-Wattribute-warning]
                         __read_overflow2_field(q_size_field, size);
 
-The compiler actually complains on 'mac80211_hwsim_get_et_strings()' where
-fortification logic inteprets call to 'memcpy()' as an attempt to copy the
-whole 'mac80211_hwsim_gstrings_stats' array from its first member and so
-issues an overread warning. This warning may be silenced by passing
-an address of the whole array and not the first member to 'memcpy()'.
+In file included from drivers/net/wireless/ath/ath9k/htc_drv_debug.c:17:
+In file included from drivers/net/wireless/ath/ath9k/htc.h:20:
+In file included from ./include/linux/module.h:13:
+In file included from ./include/linux/stat.h:19:
+In file included from ./include/linux/time.h:60:
+In file included from ./include/linux/time32.h:13:
+In file included from ./include/linux/timex.h:67:
+In file included from ./arch/x86/include/asm/timex.h:5:
+In file included from ./arch/x86/include/asm/processor.h:23:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:254:
+./include/linux/fortify-string.h:592:4: warning: call to '__read_overflow2_field'
+declared with 'warning' attribute: detected read beyond size of field (2nd
+parameter); maybe use struct_group()? [-Wattribute-warning]
+                        __read_overflow2_field(q_size_field, size);
+
+The compiler actually complains on 'ath9k_get_et_strings()' and
+'ath9k_htc_get_et_strings()' due to the same reason: fortification logic
+inteprets call to 'memcpy()' as an attempt to copy the whole array from
+it's first member and so issues an overread warning. These warnings may
+be silenced by passing an address of the whole array and not the first
+member to 'memcpy()'.
 
 Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
-Link: https://lore.kernel.org/r/20230829094140.234636-1-dmantipov@yandex.ru
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20230829093856.234584-1-dmantipov@yandex.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/virtual/mac80211_hwsim.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath9k/debug.c         | 2 +-
+ drivers/net/wireless/ath/ath9k/htc_drv_debug.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/virtual/mac80211_hwsim.c b/drivers/net/wireless/virtual/mac80211_hwsim.c
-index 1f524030b186e..f5a0880da3fcc 100644
---- a/drivers/net/wireless/virtual/mac80211_hwsim.c
-+++ b/drivers/net/wireless/virtual/mac80211_hwsim.c
-@@ -3170,7 +3170,7 @@ static void mac80211_hwsim_get_et_strings(struct ieee80211_hw *hw,
- 					  u32 sset, u8 *data)
+diff --git a/drivers/net/wireless/ath/ath9k/debug.c b/drivers/net/wireless/ath/ath9k/debug.c
+index 9bc57c5a89bfe..a0376a6787b8d 100644
+--- a/drivers/net/wireless/ath/ath9k/debug.c
++++ b/drivers/net/wireless/ath/ath9k/debug.c
+@@ -1293,7 +1293,7 @@ void ath9k_get_et_strings(struct ieee80211_hw *hw,
+ 			  u32 sset, u8 *data)
  {
  	if (sset == ETH_SS_STATS)
--		memcpy(data, *mac80211_hwsim_gstrings_stats,
-+		memcpy(data, mac80211_hwsim_gstrings_stats,
- 		       sizeof(mac80211_hwsim_gstrings_stats));
+-		memcpy(data, *ath9k_gstrings_stats,
++		memcpy(data, ath9k_gstrings_stats,
+ 		       sizeof(ath9k_gstrings_stats));
+ }
+ 
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_debug.c b/drivers/net/wireless/ath/ath9k/htc_drv_debug.c
+index c549ff3abcdc4..278ddc713fdc2 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_debug.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_debug.c
+@@ -423,7 +423,7 @@ void ath9k_htc_get_et_strings(struct ieee80211_hw *hw,
+ 			      u32 sset, u8 *data)
+ {
+ 	if (sset == ETH_SS_STATS)
+-		memcpy(data, *ath9k_htc_gstrings_stats,
++		memcpy(data, ath9k_htc_gstrings_stats,
+ 		       sizeof(ath9k_htc_gstrings_stats));
  }
  
 -- 
