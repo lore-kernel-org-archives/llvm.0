@@ -1,135 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A414532C6E;
-	Wed,  8 Nov 2023 20:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5GZIqba"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA02DC433C7;
-	Wed,  8 Nov 2023 20:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699476817;
-	bh=6JWbBZqYDO6yw606UAdW8xdCE2uRc3uEJ22h/aCDuUw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b5GZIqbaFQkCQ+Fx5reT0LpqdzS2naeFnrGHOQs5NkKZB1/bub+pnHqr22KR92fcD
-	 kPD90iQwOpdSikd+FuwLqmWrzMpPBAUqddzooYvZ5xBfDFb0BO/OWmTatEdERQcBIJ
-	 13ebeYEpL6qVegE8GElmEKmHsrY1BTaxgRsd86iFEliw2YWpSNO8BzAtaX16ZIODYb
-	 aLZ+Q5qpQsRQ2zbHtmiOahrpbbNjGZ/qez1QndGji33l+gtnk3M3A3UlqIcjjsvfAl
-	 sb2kL2n2gbLqgcU3iputr9d2O4yilQdsTTgeuegSd00iVHCh0mBDVqZg7YPOIU0ZkX
-	 my++q/drDtiMw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 95A0240094; Wed,  8 Nov 2023 17:53:34 -0300 (-03)
-Date: Wed, 8 Nov 2023 17:53:34 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: James Clark <james.clark@arm.com>
-Cc: linux-perf-users@vger.kernel.org, irogers@google.com,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Yonghong Song <yhs@fb.com>,
-	Fangrui Song <maskray@google.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] perf test: Add support for setting objdump binary
- via perf config
-Message-ID: <ZUv1TgveArYdvTsl@kernel.org>
-References: <20231106151051.129440-1-james.clark@arm.com>
- <20231106151051.129440-3-james.clark@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF936315B6
+	for <llvm@lists.linux.dev>; Wed,  8 Nov 2023 21:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r0peu-0003B3-BA; Wed, 08 Nov 2023 22:00:20 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r0pet-007cR6-12; Wed, 08 Nov 2023 22:00:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r0pes-00FSwl-Ni; Wed, 08 Nov 2023 22:00:18 +0100
+Date: Wed, 8 Nov 2023 22:00:18 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-fbdev@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Helge Deller <deller@gmx.de>, llvm@lists.linux.dev,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	dri-devel@lists.freedesktop.org,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, kernel@pengutronix.de,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 02/22] fb: atmel_lcdfb: Stop using platform_driver_probe()
+Message-ID: <20231108210018.ayo5b3afggmt6wfc@pengutronix.de>
+References: <20231107091740.3924258-1-u.kleine-koenig@pengutronix.de>
+ <20231107091740.3924258-3-u.kleine-koenig@pengutronix.de>
+ <20231108184805.GA1579138@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7uvy3c4ehr5gy3xk"
 Content-Disposition: inline
-In-Reply-To: <20231106151051.129440-3-james.clark@arm.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20231108184805.GA1579138@dev-arch.thelio-3990X>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-Em Mon, Nov 06, 2023 at 03:10:49PM +0000, James Clark escreveu:
-> Add a perf config variable that does the same thing as "perf test
-> --objdump <x>".
-> 
-> Also update the man page.
 
-That is ok, if one wants to change objdump just for testing, as a
-followup improvement it may be interesting to allow that for the other
-tools that have --objdump as well as to add this as a global option,
-that affects all tools, no?
+--7uvy3c4ehr5gy3xk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Anyway, applied both patches.
+Hello,
 
-- Arnaldo
- 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  tools/perf/Documentation/perf-config.txt |  4 ++++
->  tools/perf/tests/builtin-test.c          | 12 ++++++++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-> index 0b4e79dbd3f6..16398babd1ef 100644
-> --- a/tools/perf/Documentation/perf-config.txt
-> +++ b/tools/perf/Documentation/perf-config.txt
-> @@ -722,6 +722,10 @@ session-<NAME>.*::
->  		Defines new record session for daemon. The value is record's
->  		command line without the 'record' keyword.
->  
-> +test.*::
-> +
-> +	test.objdump::
-> +		objdump binary to use for disassembly and annotations.
->  
->  SEE ALSO
->  --------
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> index a8d17dd50588..113e92119e1d 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -14,6 +14,7 @@
->  #include <sys/wait.h>
->  #include <sys/stat.h>
->  #include "builtin.h"
-> +#include "config.h"
->  #include "hist.h"
->  #include "intlist.h"
->  #include "tests.h"
-> @@ -514,6 +515,15 @@ static int run_workload(const char *work, int argc, const char **argv)
->  	return -1;
+On Wed, Nov 08, 2023 at 11:48:05AM -0700, Nathan Chancellor wrote:
+> diff --git a/drivers/video/fbdev/atmel_lcdfb.c b/drivers/video/fbdev/atme=
+l_lcdfb.c
+> index 88c75ae7d315..9e391e5eaf9d 100644
+> --- a/drivers/video/fbdev/atmel_lcdfb.c
+> +++ b/drivers/video/fbdev/atmel_lcdfb.c
+> @@ -220,7 +220,7 @@ static inline void atmel_lcdfb_power_control(struct a=
+tmel_lcdfb_info *sinfo, int
+>  	}
 >  }
->  
-> +static int perf_test__config(const char *var, const char *value,
-> +			     void *data __maybe_unused)
-> +{
-> +	if (!strcmp(var, "test.objdump"))
-> +		test_objdump_path = value;
-> +
-> +	return 0;
-> +}
-> +
->  int cmd_test(int argc, const char **argv)
+> =20
+> -static const struct fb_fix_screeninfo atmel_lcdfb_fix __initconst =3D {
+> +static const struct fb_fix_screeninfo atmel_lcdfb_fix =3D {
+>  	.type		=3D FB_TYPE_PACKED_PIXELS,
+>  	.visual		=3D FB_VISUAL_TRUECOLOR,
+>  	.xpanstep	=3D 0,
+
+I wonder if this was broken already before my patch. atmel_lcdfb_probe()
+does
+
+	info->fix =3D atmel_lcdfb_fix;
+=09
+and unless I miss something (this is well possible) that is used e.g. in
+atmel_lcdfb_set_par() -> atmel_lcdfb_update_dma(). So atmel_lcdfb_fix
+should better not live in .init memory?! Someone with more knowledge
+about fbdev might want to take a look and decide if this justifies a
+separate fix that should then be backported to stable, too?!
+
+> @@ -841,7 +841,7 @@ static void atmel_lcdfb_task(struct work_struct *work)
+>  	atmel_lcdfb_reset(sinfo);
+>  }
+> =20
+> -static int __init atmel_lcdfb_init_fbinfo(struct atmel_lcdfb_info *sinfo)
+> +static int atmel_lcdfb_init_fbinfo(struct atmel_lcdfb_info *sinfo)
 >  {
->  	const char *test_usage[] = {
-> @@ -541,6 +551,8 @@ int cmd_test(int argc, const char **argv)
->          if (ret < 0)
->                  return ret;
->  
-> +	perf_config(perf_test__config, NULL);
-> +
->  	/* Unbuffered output */
->  	setvbuf(stdout, NULL, _IONBF, 0);
->  
-> -- 
-> 2.34.1
-> 
+>  	struct fb_info *info =3D sinfo->info;
+>  	int ret =3D 0;
 
--- 
+This is only a problem since my patch.
 
-- Arnaldo
+Thanks for your report and patch.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7uvy3c4ehr5gy3xk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVL9uEACgkQj4D7WH0S
+/k6QTwgAs3hz+9I2oyuLS4W5VyOEl5j+eqdh9r/RyhxT6WsofBp25JPOJRzS0m8D
+/SIJjXGkYYbF93ME9qUnoU1dtI8O76SUHGEIuRDR8Rnc9LqEmdOQTcxVo5scJ5Sp
+aWmp6gMksOi4j83xA+mejp/pi8APLuyAJtARNxF9D7r7tg4ivzHKynfD3IsPM3Zx
++qr2IW6loeSW8fn8BO2bw84+50RDYFH78QwBbSLZw+Fr4zZOlTWfaR2V+mJahzRV
+6CQl+gMvIiz+Nn26tlfBVoNP+G+5uhdkjb1hjhK8vAlGxLEvMxEGbI7xJ+gX2bnD
+xJMQJKwYCc6r5vJvKXa73T3bGu2YTQ==
+=9Asl
+-----END PGP SIGNATURE-----
+
+--7uvy3c4ehr5gy3xk--
