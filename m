@@ -1,121 +1,223 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AACBDDD1;
-	Wed,  8 Nov 2023 08:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985F4DF47;
+	Wed,  8 Nov 2023 09:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="Ntcd/X7T"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1699432214;
-	bh=e/7Coa7s3rCuVMbGWfCBQAE65gFvaoqlhzpw77Swr2k=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Ntcd/X7ToM8F2Mxx6dMLj5YtpzS7sA9lai5sKI5gCc3DB0MmEh1jGStI6EHDjkQpq
-	 TtSeRsClDHej/Ho9pMfOyDTsfjmO9NMApMIi0JWWraGlZTJtKZVFrd10AKfTBk1A6k
-	 mCsbjPKYT8CageUraqppGFXb6hV+FIu6IjPBrb4s=
-Received: from [192.168.124.15] (unknown [113.140.11.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id D5CE166A03;
-	Wed,  8 Nov 2023 03:30:09 -0500 (EST)
-Message-ID: <d32d8a26dcd75a840727cdb50546b621d34d326b.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: Disable module from accessing external data
- directly
-From: Xi Ruoyao <xry111@xry111.site>
-To: WANG Rui <wangrui@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org, 
- loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev,  loongson-kernel@lists.loongnix.cn, Fangrui Song
- <maskray@google.com>
-Date: Wed, 08 Nov 2023 16:30:05 +0800
-In-Reply-To: <20231108040447.288870-1-wangrui@loongson.cn>
-References: <20231108040447.288870-1-wangrui@loongson.cn>
-Autocrypt: addr=xry111@xry111.site; prefer-encrypt=mutual;
- keydata=mDMEYnkdPhYJKwYBBAHaRw8BAQdAsY+HvJs3EVKpwIu2gN89cQT/pnrbQtlvd6Yfq7egugi0HlhpIFJ1b3lhbyA8eHJ5MTExQHhyeTExMS5zaXRlPoiTBBMWCgA7FiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQrKrSDhnnEOPHFgD8D9vUToTd1MF5bng9uPJq5y3DfpcxDp+LD3joA3U2TmwA/jZtN9xLH7CGDHeClKZK/ZYELotWfJsqRcthOIGjsdAPuDgEYnkdPhIKKwYBBAGXVQEFAQEHQG+HnNiPZseiBkzYBHwq/nN638o0NPwgYwH70wlKMZhRAwEIB4h4BBgWCgAgFiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwwACgkQrKrSDhnnEOPjXgD/euD64cxwqDIqckUaisT3VCst11RcnO5iRHm6meNIwj0BALLmWplyi7beKrOlqKfuZtCLbiAPywGfCNg8LOTt4iMD
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cc7opdWs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699435468; x=1730971468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+ozbvOh9QgkXzArne3BozOuyXZ3IFbp01ExHHqvSLCA=;
+  b=cc7opdWsNWHPE/O9IXseVUck8BcrGvw4xDpuOrf+1I7wUDLHuzbH8ydM
+   Ri0WBrgWpLPxgb0HqAk6FOee4qPrf53UcDB7sJDFeIU1wPny4gQpOXlcO
+   OddxQxvv3ZSly7eL6jIYa+xYELst12Ocin0G+KJzqM3DhIwgl9UKtqwGN
+   P/N5vEAsPyaqokTp60jpW7pqODVQgDi+iBnrXPuyDGgg7u6YtnC6+b3D1
+   Kc0MMwel8Adx3G1rjDkXExehOk/6TJ+xYGGzbiYYSi5ePzuTVTGVr59E9
+   QY9feuNzbs1wBuYVibrHGLKhENjZskq7c8pyKRrLnBmGGhY3NKTvJ/jo6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="389534234"
+X-IronPort-AV: E=Sophos;i="6.03,285,1694761200"; 
+   d="scan'208";a="389534234"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 01:24:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="880142456"
+X-IronPort-AV: E=Sophos;i="6.03,285,1694761200"; 
+   d="scan'208";a="880142456"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Nov 2023 01:24:25 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r0enP-0007qe-1V;
+	Wed, 08 Nov 2023 09:24:23 +0000
+Date: Wed, 8 Nov 2023 17:24:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yuanjun Gong <ruc_gongyuanjun@163.com>, tyreld@linux.ibm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+	npiggin@gmail.com, Yuanjun Gong <ruc_gongyuanjun@163.com>
+Subject: Re: [PATCH v2 1/1] powerpc: fix a memory leak
+Message-ID: <202311081645.j68Cla77-lkp@intel.com>
+References: <20230915020559.3396566-1-ruc_gongyuanjun@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230915020559.3396566-1-ruc_gongyuanjun@163.com>
 
-On Wed, 2023-11-08 at 12:04 +0800, WANG Rui wrote:
-> When compiling module with GCC, the option `-mdirect-extern-access` is
-> disabled by default. The Clang option `-fdirect-access-external-data`
-> is enabled by default, so it needs to be explicitly disabled.
+Hi Yuanjun,
 
-I'm wondering why it's enabled by default.
+kernel test robot noticed the following build errors:
 
-For this simple test case:
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.6 next-20231108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-extern char **environ;
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuanjun-Gong/powerpc-fix-a-memory-leak/20230915-100832
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230915020559.3396566-1-ruc_gongyuanjun%40163.com
+patch subject: [PATCH v2 1/1] powerpc: fix a memory leak
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20231108/202311081645.j68Cla77-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231108/202311081645.j68Cla77-lkp@intel.com/reproduce)
 
-int main()
-{
-  __builtin_printf("%10s\n", environ[0]);
-}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311081645.j68Cla77-lkp@intel.com/
 
-With Clang 17.0.4 and "clang t1.c -S -O2", it compiles to:
+All errors (new ones prefixed by >>):
 
-main:
-	addi.d	$sp, $sp, -16
-	st.d	$ra, $sp, 8
-	pcalau12i	$a0, %got_pc_hi20(environ)
-	ld.d	$a0, $a0, %got_pc_lo12(environ)
-	ld.d	$a0, $a0, 0
-	ld.d	$a1, $a0, 0
-	pcalau12i	$a0, %pc_hi20(.L.str)
-	addi.d	$a0, $a0, %pc_lo12(.L.str)
-	bl	%plt(printf)
-	move	$a0, $zero
-	ld.d	$ra, $sp, 8
-	addi.d	$sp, $sp, 16
-	ret
+>> arch/powerpc/platforms/powernv/vas.c:105:15: error: expected ';' after expression
+     105 |                 rc = -ENODEV
+         |                             ^
+         |                             ;
+   1 error generated.
 
-So GOT is used for accessing the external variable environ.  With "clang
-t1.c -S -O2 -fdirect-access-external-data", we get:
 
-main:
-	addi.d	$sp, $sp, -16
-	st.d	$ra, $sp, 8
-	pcalau12i	$a0, %pc_hi20(environ)
-	addi.d	$a0, $a0, %pc_lo12(environ)
-	ld.d	$a0, $a0, 0
-	ld.d	$a1, $a0, 0
-	pcalau12i	$a0, %pc_hi20(.L.str)
-	addi.d	$a0, $a0, %pc_lo12(.L.str)
-	bl	%plt(printf)
-	move	$a0, $zero
-	ld.d	$ra, $sp, 8
-	addi.d	$sp, $sp, 16
-	ret
+vim +105 arch/powerpc/platforms/powernv/vas.c
 
-then the linked binary triggers a SIGBUS.  Ideally this should be
-detected by the linker at link time, but currently the BFD linker fails
-to detect this error (FWIW this flaw is caused by a really nasty method
-for the medium code model implementation).  So to me -fno-direct-access-
-external-data is the default.  I also grepped for -fdirect-access-
-external-data in the kernel building system but I've not found any
-match.=20
+    49	
+    50	static int init_vas_instance(struct platform_device *pdev)
+    51	{
+    52		struct device_node *dn = pdev->dev.of_node;
+    53		struct vas_instance *vinst;
+    54		struct xive_irq_data *xd;
+    55		uint32_t chipid, hwirq;
+    56		struct resource *res;
+    57		int rc, cpu, vasid;
+    58	
+    59		rc = of_property_read_u32(dn, "ibm,vas-id", &vasid);
+    60		if (rc) {
+    61			pr_err("No ibm,vas-id property for %s?\n", pdev->name);
+    62			return -ENODEV;
+    63		}
+    64	
+    65		rc = of_property_read_u32(dn, "ibm,chip-id", &chipid);
+    66		if (rc) {
+    67			pr_err("No ibm,chip-id property for %s?\n", pdev->name);
+    68			return -ENODEV;
+    69		}
+    70	
+    71		if (pdev->num_resources != 4) {
+    72			pr_err("Unexpected DT configuration for [%s, %d]\n",
+    73					pdev->name, vasid);
+    74			return -ENODEV;
+    75		}
+    76	
+    77		vinst = kzalloc(sizeof(*vinst), GFP_KERNEL);
+    78		if (!vinst)
+    79			return -ENOMEM;
+    80	
+    81		vinst->name = kasprintf(GFP_KERNEL, "vas-%d", vasid);
+    82		if (!vinst->name) {
+    83			kfree(vinst);
+    84			return -ENOMEM;
+    85		}
+    86	
+    87		INIT_LIST_HEAD(&vinst->node);
+    88		ida_init(&vinst->ida);
+    89		mutex_init(&vinst->mutex);
+    90		vinst->vas_id = vasid;
+    91		vinst->pdev = pdev;
+    92	
+    93		res = &pdev->resource[0];
+    94		vinst->hvwc_bar_start = res->start;
+    95	
+    96		res = &pdev->resource[1];
+    97		vinst->uwc_bar_start = res->start;
+    98	
+    99		res = &pdev->resource[2];
+   100		vinst->paste_base_addr = res->start;
+   101	
+   102		res = &pdev->resource[3];
+   103		if (res->end > 62) {
+   104			pr_err("Bad 'paste_win_id_shift' in DT, %llx\n", res->end);
+ > 105			rc = -ENODEV
+   106			goto free_vinst;
+   107		}
+   108	
+   109		vinst->paste_win_id_shift = 63 - res->end;
+   110	
+   111		hwirq = xive_native_alloc_irq_on_chip(chipid);
+   112		if (!hwirq) {
+   113			pr_err("Inst%d: Unable to allocate global irq for chip %d\n",
+   114					vinst->vas_id, chipid);
+   115			rc = -ENOENT;
+   116			goto free_vinst;
+   117		}
+   118	
+   119		vinst->virq = irq_create_mapping(NULL, hwirq);
+   120		if (!vinst->virq) {
+   121			pr_err("Inst%d: Unable to map global irq %d\n",
+   122					vinst->vas_id, hwirq);
+   123			rc = -EINVAL;
+   124			goto free_vinst;
+   125		}
+   126	
+   127		xd = irq_get_handler_data(vinst->virq);
+   128		if (!xd) {
+   129			pr_err("Inst%d: Invalid virq %d\n",
+   130					vinst->vas_id, vinst->virq);
+   131			rc = -EINVAL;
+   132			goto free_vinst;
+   133		}
+   134	
+   135		vinst->irq_port = xd->trig_page;
+   136		pr_devel("Initialized instance [%s, %d] paste_base 0x%llx paste_win_id_shift 0x%llx IRQ %d Port 0x%llx\n",
+   137				pdev->name, vasid, vinst->paste_base_addr,
+   138				vinst->paste_win_id_shift, vinst->virq,
+   139				vinst->irq_port);
+   140	
+   141		for_each_possible_cpu(cpu) {
+   142			if (cpu_to_chip_id(cpu) == of_get_ibm_chip_id(dn))
+   143				per_cpu(cpu_vas_id, cpu) = vasid;
+   144		}
+   145	
+   146		mutex_lock(&vas_mutex);
+   147		list_add(&vinst->node, &vas_instances);
+   148		mutex_unlock(&vas_mutex);
+   149	
+   150		spin_lock_init(&vinst->fault_lock);
+   151		/*
+   152		 * IRQ and fault handling setup is needed only for user space
+   153		 * send windows.
+   154		 */
+   155		if (vinst->virq) {
+   156			rc = vas_irq_fault_window_setup(vinst);
+   157			/*
+   158			 * Fault window is used only for user space send windows.
+   159			 * So if vinst->virq is NULL, tx_win_open returns -ENODEV
+   160			 * for user space.
+   161			 */
+   162			if (rc)
+   163				vinst->virq = 0;
+   164		}
+   165	
+   166		vas_instance_init_dbgdir(vinst);
+   167	
+   168		dev_set_drvdata(&pdev->dev, vinst);
+   169	
+   170		return 0;
+   171	
+   172	free_vinst:
+   173		kfree(vinst->name);
+   174		kfree(vinst);
+   175		return rc;
+   176	
 
-Are you using a different version of Clang, or maybe Clang has some
-configuration-time option to make -fdirect-access-external-data the
-default?
-
-Note that to translate a TU for a normal (dynamically-linked user-space)
-executable on LoongArch Linux, -fdirect-access-external-data should not
-be used (because copy relocation is now considered a bad idea and we'll
-not support it for a new architecture).  Fangrui?
-
--fdirect-access-external-data can be used in KBUILD_CFLAGS_KERNEL for
-avoiding GOT in the main kernel image, OTOH.
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
