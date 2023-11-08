@@ -1,124 +1,130 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF936315B6
-	for <llvm@lists.linux.dev>; Wed,  8 Nov 2023 21:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r0peu-0003B3-BA; Wed, 08 Nov 2023 22:00:20 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r0pet-007cR6-12; Wed, 08 Nov 2023 22:00:19 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r0pes-00FSwl-Ni; Wed, 08 Nov 2023 22:00:18 +0100
-Date: Wed, 8 Nov 2023 22:00:18 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-fbdev@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Helge Deller <deller@gmx.de>, llvm@lists.linux.dev,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	dri-devel@lists.freedesktop.org,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, kernel@pengutronix.de,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 02/22] fb: atmel_lcdfb: Stop using platform_driver_probe()
-Message-ID: <20231108210018.ayo5b3afggmt6wfc@pengutronix.de>
-References: <20231107091740.3924258-1-u.kleine-koenig@pengutronix.de>
- <20231107091740.3924258-3-u.kleine-koenig@pengutronix.de>
- <20231108184805.GA1579138@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCC1374D5;
+	Wed,  8 Nov 2023 21:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nPbQ2L6O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD49C433C9;
+	Wed,  8 Nov 2023 21:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699477841;
+	bh=4V4gwYzW6WrEDZYZ4cGclrG2pSCRVMcxcKoOTJdlYiw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nPbQ2L6OVN3Ugh1UvF/H67QH7+FycLOWs+ctKmBklhhpSfhBqyuEFwYzWWjMKtQQo
+	 Tzl44I0vyemwrrjjUFb4WBeyJlEIYkjHrr9ftY1+w2vYFANt2rtBY+6wLI7SXBBN0V
+	 6d6naAvdvhub7WNzYSzwn+42X8cfXuMFdrK4E6ukABCncwLaxMng+aSGeAIVHwzu9A
+	 arfzO5BLqIft0lbRAnaAD9BF96qMbyvkI3cJtBvbVQ3H7s109BundsBBz0eA2N0IRB
+	 iQ7oUNRgltKt1HgdxfflWfEMO38hR4YxwMOvtFFVlWzdLj/QoSUnwQ1Q9SMu2gs9N4
+	 yFz7kOQtx8ogg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 2260B40094; Wed,  8 Nov 2023 18:10:39 -0300 (-03)
+Date: Wed, 8 Nov 2023 18:10:39 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: James Clark <james.clark@arm.com>
+Cc: linux-perf-users@vger.kernel.org, irogers@google.com,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Yonghong Song <yhs@fb.com>,
+	Fangrui Song <maskray@google.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] perf test: Add support for setting objdump binary
+ via perf config
+Message-ID: <ZUv5T0moQara4CId@kernel.org>
+References: <20231106151051.129440-1-james.clark@arm.com>
+ <20231106151051.129440-3-james.clark@arm.com>
+ <ZUv1TgveArYdvTsl@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7uvy3c4ehr5gy3xk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231108184805.GA1579138@dev-arch.thelio-3990X>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+In-Reply-To: <ZUv1TgveArYdvTsl@kernel.org>
+X-Url: http://acmel.wordpress.com
 
+Em Wed, Nov 08, 2023 at 05:53:34PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Nov 06, 2023 at 03:10:49PM +0000, James Clark escreveu:
+> > Add a perf config variable that does the same thing as "perf test
+> > --objdump <x>".
+> > 
+> > Also update the man page.
+> 
+> That is ok, if one wants to change objdump just for testing, as a
+> followup improvement it may be interesting to allow that for the other
+> tools that have --objdump as well as to add this as a global option,
+> that affects all tools, no?
+> 
+> Anyway, applied both patches.
 
---7uvy3c4ehr5gy3xk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+And added this to the last one:
 
-Hello,
+Committer testing:
 
-On Wed, Nov 08, 2023 at 11:48:05AM -0700, Nathan Chancellor wrote:
-> diff --git a/drivers/video/fbdev/atmel_lcdfb.c b/drivers/video/fbdev/atme=
-l_lcdfb.c
-> index 88c75ae7d315..9e391e5eaf9d 100644
-> --- a/drivers/video/fbdev/atmel_lcdfb.c
-> +++ b/drivers/video/fbdev/atmel_lcdfb.c
-> @@ -220,7 +220,7 @@ static inline void atmel_lcdfb_power_control(struct a=
-tmel_lcdfb_info *sinfo, int
->  	}
->  }
-> =20
-> -static const struct fb_fix_screeninfo atmel_lcdfb_fix __initconst =3D {
-> +static const struct fb_fix_screeninfo atmel_lcdfb_fix =3D {
->  	.type		=3D FB_TYPE_PACKED_PIXELS,
->  	.visual		=3D FB_VISUAL_TRUECOLOR,
->  	.xpanstep	=3D 0,
+  # perf config test.objdump
+  # perf test "object code reading"
+   26: Object code reading                                             : Ok
+  # perf config test.objdump=blah
+  # perf config test.objdump
+  test.objdump=blah
+  # perf test "object code reading"
+   26: Object code reading                                             : FAILED!
+  # perf test -v "object code reading"
+   26: Object code reading                                             :
+  --- start ---
+  test child forked, pid 600599
+  Looking at the vmlinux_path (8 entries long)
+  Using /proc/kcore for kernel data
+  Using /proc/kallsyms for symbols
+  Parsing event 'cycles'
+  Using CPUID AuthenticAMD-25-21-0
+  mmap size 528384B
+  Reading object code for memory address: 0x4d9a02
+  File is: /home/acme/bin/perf
+  On file address is: 0xd9a02
+  Objdump command is: blah -z -d --start-address=0x4d9a02 --stop-address=0x4d9a82 /home/acme/bin/perf
+  objdump read too few bytes: 128
+  Bytes read differ from those read by objdump
+  buf1 (dso):
+  0x48 0x85 0xff 0x74 0x29 0xe8 0x94 0xdf 0x07 0x00 0x8b 0x73 0x1c 0x48 0x8b 0x43 
+  0x08 0xeb 0xa5 0x0f 0x1f 0x00 0x48 0x8b 0x45 0xe8 0x64 0x48 0x2b 0x04 0x25 0x28 
+  0x00 0x00 0x00 0x75 0x0f 0x48 0x8b 0x5d 0xf8 0xc9 0xc3 0x0f 0x1f 0x00 0x48 0x8b 
+  0x43 0x08 0xeb 0x84 0xe8 0xc5 0x3e 0xf3 0xff 0x0f 0x1f 0x44 0x00 0x00 0x55 0x48 
+  0x89 0xe5 0x41 0x56 0x41 0x55 0x49 0x89 0xd5 0x41 0x54 0x49 0x89 0xfc 0x53 0x48 
+  0x89 0xf3 0x48 0x83 0xec 0x30 0x48 0x8b 0x7e 0x20 0x64 0x48 0x8b 0x04 0x25 0x28 
+  0x00 0x00 0x00 0x48 0x89 0x45 0xd8 0x31 0xc0 0x48 0x89 0x75 0xb0 0x48 0xc7 0x45 
+  0xb8 0x00 0x00 0x00 0x00 0x48 0xc7 0x45 0xc0 0x00 0x00 0x00 0x00 0xe8 0xad 0xfa 
+  
+  buf2 (objdump):
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
+  
+  test child finished with -1
+  ---- end ----
+  Object code reading: FAILED!
+  # perf config test.objdump=/usr/bin/objdump
+  # perf config test.objdump
+  test.objdump=/usr/bin/objdump
+  # perf test "object code reading"
+   26: Object code reading                                             : Ok
+  #
 
-I wonder if this was broken already before my patch. atmel_lcdfb_probe()
-does
-
-	info->fix =3D atmel_lcdfb_fix;
-=09
-and unless I miss something (this is well possible) that is used e.g. in
-atmel_lcdfb_set_par() -> atmel_lcdfb_update_dma(). So atmel_lcdfb_fix
-should better not live in .init memory?! Someone with more knowledge
-about fbdev might want to take a look and decide if this justifies a
-separate fix that should then be backported to stable, too?!
-
-> @@ -841,7 +841,7 @@ static void atmel_lcdfb_task(struct work_struct *work)
->  	atmel_lcdfb_reset(sinfo);
->  }
-> =20
-> -static int __init atmel_lcdfb_init_fbinfo(struct atmel_lcdfb_info *sinfo)
-> +static int atmel_lcdfb_init_fbinfo(struct atmel_lcdfb_info *sinfo)
->  {
->  	struct fb_info *info =3D sinfo->info;
->  	int ret =3D 0;
-
-This is only a problem since my patch.
-
-Thanks for your report and patch.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7uvy3c4ehr5gy3xk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVL9uEACgkQj4D7WH0S
-/k6QTwgAs3hz+9I2oyuLS4W5VyOEl5j+eqdh9r/RyhxT6WsofBp25JPOJRzS0m8D
-/SIJjXGkYYbF93ME9qUnoU1dtI8O76SUHGEIuRDR8Rnc9LqEmdOQTcxVo5scJ5Sp
-aWmp6gMksOi4j83xA+mejp/pi8APLuyAJtARNxF9D7r7tg4ivzHKynfD3IsPM3Zx
-+qr2IW6loeSW8fn8BO2bw84+50RDYFH78QwBbSLZw+Fr4zZOlTWfaR2V+mJahzRV
-6CQl+gMvIiz+Nn26tlfBVoNP+G+5uhdkjb1hjhK8vAlGxLEvMxEGbI7xJ+gX2bnD
-xJMQJKwYCc6r5vJvKXa73T3bGu2YTQ==
-=9Asl
------END PGP SIGNATURE-----
-
---7uvy3c4ehr5gy3xk--
+Signed-off-by: James Clark <james.clark@arm.com>
+Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
