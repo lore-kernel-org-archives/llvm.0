@@ -1,49 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D71920B1B;
-	Thu,  9 Nov 2023 18:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9377620B1B;
+	Thu,  9 Nov 2023 19:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mihay44y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A9CmKn4U"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699555830; x=1731091830;
+  t=1699556890; x=1731092890;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=2Z4qGI1HHgsyoHU13b0J59WH/c4N5Ztnuu67puAJx0g=;
-  b=mihay44y8J64SpqenT5xBvpuAwW/JpJVI3L1ZMIpfde8fWZMXRZRvdmc
-   dM+nV3M6sgKh+EEucQ/wji1B5TId6bGMAuDicIQr1lNA4bizWO5LlfsF1
-   gLx3YF8pcvswxnXTHsEQZjMi/T2pffIFkem62R6YMM9MNi5R2qupVBlgU
-   n5io174ZS9P1tQ8Sx5Wm6KGin4XjVQl59sG8fhHADalrjwNfq3QZJzK7L
-   w7p2gYzvKIRiarsuTtpktCFEl2OdvBeLIvETGWznVJzoNcRqVENHLoPIY
-   W/09dPTDguea0Hlnxx/o5jtyIgunyV7f6AN9sWlq9GYVlsAFhVJnsfpN8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="375094087"
+  bh=yWTDA5OQls8cfbWPj5y2WOfn1M/AtsguX3V9MSRj6DU=;
+  b=A9CmKn4U/f6//grFq48YWQp8dBg8jE4NZJONNIosyCLm7Ba5X0BEiICG
+   6cvGKthN4u2e2aEB3eYLm5OQx/UEVLMoAoqp2dqA179pO2QjYWuufJF+K
+   RUg8I+T9loc3KouyVyfc2fgp+qrKcxj0nitllGVqO0kiA4UEgwKH3o/W1
+   LuRmamRYJJTHiHZA35RhS9GQANwhUx+PYIzFGtU7PhU6X2lkzZ9UAd4o0
+   Wg8rk1GKzykKp8Gl2NLkTZtjvwuy6SHCX3I1I4+Q1pDx50E7vQg5xxUNp
+   roNoNPjjn4ePBiNJEGUInYwJaMnJEpdhnWn5dF7t4Wk5mCfr/9Nou7JWQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="8710198"
 X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
-   d="scan'208";a="375094087"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 10:50:29 -0800
+   d="scan'208";a="8710198"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 11:08:09 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="792639156"
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="713415352"
 X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
-   d="scan'208";a="792639156"
+   d="scan'208";a="713415352"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Nov 2023 10:50:27 -0800
+  by orsmga003.jf.intel.com with ESMTP; 09 Nov 2023 11:08:03 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r1A6j-000936-07;
-	Thu, 09 Nov 2023 18:50:25 +0000
-Date: Fri, 10 Nov 2023 02:49:17 +0800
+	id 1r1ANk-00094f-2i;
+	Thu, 09 Nov 2023 19:08:00 +0000
+Date: Fri, 10 Nov 2023 03:07:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Omkar Wagle <ov.wagle@gmail.com>, hughd@google.com
+To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, Omkar Wagle <ov.wagle@gmail.com>
-Subject: Re: [PATCH] MM: shmem: Remove code sytle warnings
-Message-ID: <202311100217.l1zmB8In-lkp@intel.com>
-References: <20231109062228.10227-1-ov.wagle@gmail.com>
+	kernel_team@skhynix.com, akpm@linux-foundation.org,
+	ying.huang@intel.com, namit@vmware.com, xhao@linux.alibaba.com,
+	mgorman@techsingularity.net, hughd@google.com, willy@infradead.org,
+	david@redhat.com, peterz@infradead.org, luto@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com
+Subject: Re: [v4 2/3] mm: Defer TLB flush by keeping both src and dst folios
+ at migration
+Message-ID: <202311100211.UAqu6dj7-lkp@intel.com>
+References: <20231109045908.54996-3-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,133 +58,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231109062228.10227-1-ov.wagle@gmail.com>
+In-Reply-To: <20231109045908.54996-3-byungchul@sk.com>
 
-Hi Omkar,
+Hi Byungchul,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master next-20231109]
-[cannot apply to v6.6]
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on tip/x86/core tip/x86/mm v6.6]
+[cannot apply to akpm-mm/mm-everything linus/master next-20231109]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Omkar-Wagle/MM-shmem-Remove-code-sytle-warnings/20231109-163742
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231109062228.10227-1-ov.wagle%40gmail.com
-patch subject: [PATCH] MM: shmem: Remove code sytle warnings
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231110/202311100217.l1zmB8In-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/mm-rmap-Recognize-read-only-TLB-entries-during-batched-TLB-flush/20231109-163706
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20231109045908.54996-3-byungchul%40sk.com
+patch subject: [v4 2/3] mm: Defer TLB flush by keeping both src and dst folios at migration
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231110/202311100211.UAqu6dj7-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311100217.l1zmB8In-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311100211.UAqu6dj7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311100217.l1zmB8In-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311100211.UAqu6dj7-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/shmem.c:29:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/shmem.c:29:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/shmem.c:29:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> mm/shmem.c:4310:19: error: too few arguments provided to function-like macro invocation
-    4310 |                                 L1_CACHE_BYTES), GFP_KERNEL);
-         |                                               ^
-   include/linux/minmax.h:169:9: note: macro 'max_t' defined here
-     169 | #define max_t(type, x, y)       __careful_cmp(max, (type)(x), (type)(y))
-         |         ^
->> mm/shmem.c:4309:19: error: use of undeclared identifier 'max_t'
-    4309 |         sbinfo = kzalloc(max_t((int)sizeof(struct shmem_sb_info),
-         |                          ^
-   12 warnings and 2 errors generated.
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:5:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+>> include/linux/mm_types.h:1416:35: error: field has incomplete type 'struct arch_tlbflush_unmap_batch'
+    1416 |         struct arch_tlbflush_unmap_batch arch;
+         |                                          ^
+   include/linux/mm_types.h:1416:9: note: forward declaration of 'struct arch_tlbflush_unmap_batch'
+    1416 |         struct arch_tlbflush_unmap_batch arch;
+         |                ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   arch/x86/um/shared/sysdep/kernel-offsets.h:9:6: warning: no previous prototype for function 'foo' [-Wmissing-prototypes]
+       9 | void foo(void)
+         |      ^
+   arch/x86/um/shared/sysdep/kernel-offsets.h:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+       9 | void foo(void)
+         | ^
+         | static 
+   1 warning and 1 error generated.
+   make[3]: *** [scripts/Makefile.build:116: arch/um/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1202: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:234: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:234: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +4310 mm/shmem.c
+vim +1416 include/linux/mm_types.h
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16  4300  
-f32356261d44d5 David Howells   2019-03-25  4301  static int shmem_fill_super(struct super_block *sb, struct fs_context *fc)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  4302  {
-f32356261d44d5 David Howells   2019-03-25  4303  	struct shmem_options *ctx = fc->fs_private;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  4304  	struct inode *inode;
-0edd73b33426df Hugh Dickins    2005-06-21  4305  	struct shmem_sb_info *sbinfo;
-71480663b751de Carlos Maiolino 2023-07-25  4306  	int error = -ENOMEM;
-680d794babebc7 Andrew Morton   2008-02-08  4307  
-680d794babebc7 Andrew Morton   2008-02-08  4308  	/* Round up to L1_CACHE_BYTES to resist false sharing */
-1c6e8dc111cb86 Omkar Wagle     2023-11-08 @4309  	sbinfo = kzalloc(max_t((int)sizeof(struct shmem_sb_info),
-680d794babebc7 Andrew Morton   2008-02-08 @4310  				L1_CACHE_BYTES), GFP_KERNEL);
-680d794babebc7 Andrew Morton   2008-02-08  4311  	if (!sbinfo)
-71480663b751de Carlos Maiolino 2023-07-25  4312  		return error;
-680d794babebc7 Andrew Morton   2008-02-08  4313  
-680d794babebc7 Andrew Morton   2008-02-08  4314  	sb->s_fs_info = sbinfo;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  4315  
+  1401	
+  1402	struct migrc_req {
+  1403		/*
+  1404		 * folios pending for TLB flush
+  1405		 */
+  1406		struct list_head folios;
+  1407	
+  1408		/*
+  1409		 * for hanging to the associated numa node
+  1410		 */
+  1411		struct llist_node llnode;
+  1412	
+  1413		/*
+  1414		 * architecture specific data for batched TLB flush
+  1415		 */
+> 1416		struct arch_tlbflush_unmap_batch arch;
 
 -- 
 0-DAY CI Kernel Test Service
