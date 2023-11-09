@@ -1,49 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FE41DDF2;
-	Thu,  9 Nov 2023 16:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D71920B1B;
+	Thu,  9 Nov 2023 18:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XVKfYxmb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035A4C433C8;
-	Thu,  9 Nov 2023 16:14:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699546476;
-	bh=H5gRNhBAojyGz06n4nyUjlE+Ck3M94YyNimHQhe4wK4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XVKfYxmbDwtVvUxGpJMuZJjv4ORhmYur2uarLSbeBoyiCBt2Auo0DEzF5Uyp2mNcE
-	 FGC0OvDqkm/k4/Zxsr0R6X1M76+2+WX6R46GjeNmom0QWQioEIfsoKjv5amzQrKOpB
-	 FzSv1hrw+u+4Yz+d+Suja/cuZNeUEBDMMWU89otDpwEXFKHOuO1+JZ5cwd0oa6hHvk
-	 2e3GUEGim23OhhnaXh7mO/SGuaL2KfKoeiJmmKn+UGOKPMy3381ZwAAro8VhvgQrFR
-	 DLqs72x0xVumhq0CIV/oKxzv1+EvCRvjrZXY8QgjGbeGGDquGJ1IQAhsO2fshaxBzw
-	 k7FOFrlPPtAJw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 653D840094; Thu,  9 Nov 2023 13:14:33 -0300 (-03)
-Date: Thu, 9 Nov 2023 13:14:33 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: James Clark <james.clark@arm.com>
-Cc: linux-perf-users@vger.kernel.org, irogers@google.com,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Yonghong Song <yhs@fb.com>,
-	Fangrui Song <maskray@google.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] perf test: Add support for setting objdump binary
- via perf config
-Message-ID: <ZU0FaXoGf/HcLBlb@kernel.org>
-References: <20231106151051.129440-1-james.clark@arm.com>
- <20231106151051.129440-3-james.clark@arm.com>
- <ZUv1TgveArYdvTsl@kernel.org>
- <2e0fb2d4-1410-6a7e-902d-8249a9ea523a@arm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mihay44y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699555830; x=1731091830;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2Z4qGI1HHgsyoHU13b0J59WH/c4N5Ztnuu67puAJx0g=;
+  b=mihay44y8J64SpqenT5xBvpuAwW/JpJVI3L1ZMIpfde8fWZMXRZRvdmc
+   dM+nV3M6sgKh+EEucQ/wji1B5TId6bGMAuDicIQr1lNA4bizWO5LlfsF1
+   gLx3YF8pcvswxnXTHsEQZjMi/T2pffIFkem62R6YMM9MNi5R2qupVBlgU
+   n5io174ZS9P1tQ8Sx5Wm6KGin4XjVQl59sG8fhHADalrjwNfq3QZJzK7L
+   w7p2gYzvKIRiarsuTtpktCFEl2OdvBeLIvETGWznVJzoNcRqVENHLoPIY
+   W/09dPTDguea0Hlnxx/o5jtyIgunyV7f6AN9sWlq9GYVlsAFhVJnsfpN8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="375094087"
+X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
+   d="scan'208";a="375094087"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 10:50:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="792639156"
+X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
+   d="scan'208";a="792639156"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 09 Nov 2023 10:50:27 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r1A6j-000936-07;
+	Thu, 09 Nov 2023 18:50:25 +0000
+Date: Fri, 10 Nov 2023 02:49:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Omkar Wagle <ov.wagle@gmail.com>, hughd@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	akpm@linux-foundation.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, Omkar Wagle <ov.wagle@gmail.com>
+Subject: Re: [PATCH] MM: shmem: Remove code sytle warnings
+Message-ID: <202311100217.l1zmB8In-lkp@intel.com>
+References: <20231109062228.10227-1-ov.wagle@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,109 +52,134 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2e0fb2d4-1410-6a7e-902d-8249a9ea523a@arm.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20231109062228.10227-1-ov.wagle@gmail.com>
 
-Em Thu, Nov 09, 2023 at 10:26:34AM +0000, James Clark escreveu:
-> 
-> 
-> On 08/11/2023 20:53, Arnaldo Carvalho de Melo wrote:
-> > Em Mon, Nov 06, 2023 at 03:10:49PM +0000, James Clark escreveu:
-> >> Add a perf config variable that does the same thing as "perf test
-> >> --objdump <x>".
-> >>
-> >> Also update the man page.
-> > 
-> > That is ok, if one wants to change objdump just for testing, as a
-> > followup improvement it may be interesting to allow that for the other
-> > tools that have --objdump as well as to add this as a global option,
-> > that affects all tools, no?
-> 
-> For the tools they already all share annotate.objdump in the config. Do
-> you mean that the tests could share the same config instead?
+Hi Omkar,
 
-Probably.
- 
-> Maybe I could have used annotate.objdump for the tests, but it was used
-> in a slightly different way, and I thought it would be easier for people
-> to find if it started with "test."
+kernel test robot noticed the following build errors:
 
-Well, we can have both, with "test." overriding "annotate."?
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master next-20231109]
+[cannot apply to v6.6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Anyway, I applied this patch locally, now trying to fix some unrelated
-problem that is making 'perf test' fail so that I can push
-perf-tools-next publicly.
+url:    https://github.com/intel-lab-lkp/linux/commits/Omkar-Wagle/MM-shmem-Remove-code-sytle-warnings/20231109-163742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20231109062228.10227-1-ov.wagle%40gmail.com
+patch subject: [PATCH] MM: shmem: Remove code sytle warnings
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231110/202311100217.l1zmB8In-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311100217.l1zmB8In-lkp@intel.com/reproduce)
 
-- Arnaldo
- 
-> > 
-> > Anyway, applied both patches.
-> > 
-> > - Arnaldo
-> >  
-> >> Signed-off-by: James Clark <james.clark@arm.com>
-> >> ---
-> >>  tools/perf/Documentation/perf-config.txt |  4 ++++
-> >>  tools/perf/tests/builtin-test.c          | 12 ++++++++++++
-> >>  2 files changed, 16 insertions(+)
-> >>
-> >> diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-> >> index 0b4e79dbd3f6..16398babd1ef 100644
-> >> --- a/tools/perf/Documentation/perf-config.txt
-> >> +++ b/tools/perf/Documentation/perf-config.txt
-> >> @@ -722,6 +722,10 @@ session-<NAME>.*::
-> >>  		Defines new record session for daemon. The value is record's
-> >>  		command line without the 'record' keyword.
-> >>  
-> >> +test.*::
-> >> +
-> >> +	test.objdump::
-> >> +		objdump binary to use for disassembly and annotations.
-> >>  
-> >>  SEE ALSO
-> >>  --------
-> >> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> >> index a8d17dd50588..113e92119e1d 100644
-> >> --- a/tools/perf/tests/builtin-test.c
-> >> +++ b/tools/perf/tests/builtin-test.c
-> >> @@ -14,6 +14,7 @@
-> >>  #include <sys/wait.h>
-> >>  #include <sys/stat.h>
-> >>  #include "builtin.h"
-> >> +#include "config.h"
-> >>  #include "hist.h"
-> >>  #include "intlist.h"
-> >>  #include "tests.h"
-> >> @@ -514,6 +515,15 @@ static int run_workload(const char *work, int argc, const char **argv)
-> >>  	return -1;
-> >>  }
-> >>  
-> >> +static int perf_test__config(const char *var, const char *value,
-> >> +			     void *data __maybe_unused)
-> >> +{
-> >> +	if (!strcmp(var, "test.objdump"))
-> >> +		test_objdump_path = value;
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >>  int cmd_test(int argc, const char **argv)
-> >>  {
-> >>  	const char *test_usage[] = {
-> >> @@ -541,6 +551,8 @@ int cmd_test(int argc, const char **argv)
-> >>          if (ret < 0)
-> >>                  return ret;
-> >>  
-> >> +	perf_config(perf_test__config, NULL);
-> >> +
-> >>  	/* Unbuffered output */
-> >>  	setvbuf(stdout, NULL, _IONBF, 0);
-> >>  
-> >> -- 
-> >> 2.34.1
-> >>
-> > 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311100217.l1zmB8In-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/shmem.c:29:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/shmem.c:29:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/shmem.c:29:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> mm/shmem.c:4310:19: error: too few arguments provided to function-like macro invocation
+    4310 |                                 L1_CACHE_BYTES), GFP_KERNEL);
+         |                                               ^
+   include/linux/minmax.h:169:9: note: macro 'max_t' defined here
+     169 | #define max_t(type, x, y)       __careful_cmp(max, (type)(x), (type)(y))
+         |         ^
+>> mm/shmem.c:4309:19: error: use of undeclared identifier 'max_t'
+    4309 |         sbinfo = kzalloc(max_t((int)sizeof(struct shmem_sb_info),
+         |                          ^
+   12 warnings and 2 errors generated.
+
+
+vim +4310 mm/shmem.c
+
+^1da177e4c3f41 Linus Torvalds  2005-04-16  4300  
+f32356261d44d5 David Howells   2019-03-25  4301  static int shmem_fill_super(struct super_block *sb, struct fs_context *fc)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  4302  {
+f32356261d44d5 David Howells   2019-03-25  4303  	struct shmem_options *ctx = fc->fs_private;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  4304  	struct inode *inode;
+0edd73b33426df Hugh Dickins    2005-06-21  4305  	struct shmem_sb_info *sbinfo;
+71480663b751de Carlos Maiolino 2023-07-25  4306  	int error = -ENOMEM;
+680d794babebc7 Andrew Morton   2008-02-08  4307  
+680d794babebc7 Andrew Morton   2008-02-08  4308  	/* Round up to L1_CACHE_BYTES to resist false sharing */
+1c6e8dc111cb86 Omkar Wagle     2023-11-08 @4309  	sbinfo = kzalloc(max_t((int)sizeof(struct shmem_sb_info),
+680d794babebc7 Andrew Morton   2008-02-08 @4310  				L1_CACHE_BYTES), GFP_KERNEL);
+680d794babebc7 Andrew Morton   2008-02-08  4311  	if (!sbinfo)
+71480663b751de Carlos Maiolino 2023-07-25  4312  		return error;
+680d794babebc7 Andrew Morton   2008-02-08  4313  
+680d794babebc7 Andrew Morton   2008-02-08  4314  	sb->s_fs_info = sbinfo;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  4315  
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
