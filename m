@@ -1,50 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCD136AFC;
-	Thu,  9 Nov 2023 19:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E767E19442;
+	Thu,  9 Nov 2023 20:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UxA4MdhV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z5fQ/g5o"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699558287; x=1731094287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hH9nlVUGJLwdmbsNU0RXFWcoFRP5ACZ+JtBNhRW+Xjk=;
-  b=UxA4MdhVUZaBDnr4Nx/n6yxuwqwbfccIB44SIDaaHaptYttv9JedyVZk
-   JBsVmZnFKMF/XzhXPvFhIMUDzDaimzaTXnl5LzGTf4PgdZjkTocaESDVg
-   0h8vC4jA6z3xgZSNKbYFbEovDbZpz/oPn9z/dk5Qw8yVSl45roPLHVV5g
-   47VI11qT1B8cyRTLMapQSjUgWddoMvCkSFcBKYjZhCgZnCx/UCoif+Y3M
-   8F0SdK9oDxhRzDa4aV/bOen04YEeLOhAiCKfjki4TfzoTsU5Uw9sdqjAE
-   z8Gblbo9CmZ/m4Lb+iEu9PcN9Ugr1UCpHwjvZdxolFQ0Zz/BN2rhxsGLK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="392935569"
+  t=1699562427; x=1731098427;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=08R0N3Cz/o1T5RYd8NPRVEkP0v1ogVorHIkLagRbIQg=;
+  b=Z5fQ/g5oee70azDrc67VhmQ/n/pO3Cr82abL88vJC3rwyGy+50bwS3Tw
+   V1gTNxYmtS0ZYmknSHlDxJZTRthVLHK/f8dCeu/+LhrkJZY5jzHnguKZD
+   AxWgiwMo8gV+M1zg7LkaEL51tOYGCR4ht09dBIQawOEsrX1nRlZGkU63y
+   M32q9m0HL0n/18KzbsOhhIDeULP9bsE1n4ydWjdfDyHnVz6IQnsC9Z2YM
+   FCocQ59gBmm0sNW2stT/q4P3c2xhVO6kZItY6iYOeffesVK5WV/VbYCEK
+   kJlX7p/tbRmPI9cdaDpAPGK2nmQPxhj+oekFQpNr7ulL+EAyAY3QFZGmQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="387232411"
 X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
-   d="scan'208";a="392935569"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 11:31:24 -0800
+   d="scan'208";a="387232411"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 12:40:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="887122267"
 X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
-   d="scan'208";a="887122267"
+   d="scan'208";a="11660783"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 09 Nov 2023 11:31:21 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 09 Nov 2023 12:40:25 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r1AkJ-00095S-0k;
-	Thu, 09 Nov 2023 19:31:19 +0000
-Date: Fri, 10 Nov 2023 03:30:38 +0800
+	id 1r1Bp8-00098E-3C;
+	Thu, 09 Nov 2023 20:40:22 +0000
+Date: Fri, 10 Nov 2023 04:38:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-	Ed Tsai <ed.tsai@mediatek.com>, Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH V2 2/2] block: try to make aligned bio in case of big
- chunk IO
-Message-ID: <202311100354.HYfqOQ7o-lkp@intel.com>
-References: <20231109082827.2276696-3-ming.lei@redhat.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:sframe 5/10] arch/x86/events/core.c:2856:6: warning: no
+ previous prototype for function '__perf_callchain_user'
+Message-ID: <202311100457.J76Vb8Yp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,103 +48,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231109082827.2276696-3-ming.lei@redhat.com>
 
-Hi Ming,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on linus/master v6.6 next-20231109]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/block-don-t-call-into-iov_iter_revert-if-nothing-is-left/20231109-190100
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20231109082827.2276696-3-ming.lei%40redhat.com
-patch subject: [PATCH V2 2/2] block: try to make aligned bio in case of big chunk IO
-config: arm-davinci_all_defconfig (https://download.01.org/0day-ci/archive/20231110/202311100354.HYfqOQ7o-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311100354.HYfqOQ7o-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git sframe
+head:   ec004e900e02c9c85cf8c89d4c26d4168a6c5d18
+commit: f19cd074272c3fd160c2d637cc0f65cfffad1e81 [5/10] perf/x86: Add HAVE_PERF_CALLCHAIN_DEFERRED
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231110/202311100457.J76Vb8Yp-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311100457.J76Vb8Yp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311100354.HYfqOQ7o-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311100457.J76Vb8Yp-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> block/bio.c:1228:21: warning: variable 'size' is uninitialized when used here [-Wuninitialized]
-    1228 |                 return UINT_MAX - size;
-         |                                   ^~~~
-   block/bio.c:1221:19: note: initialize the variable 'size' to silence this warning
-    1221 |         unsigned int size, predicted_space, max_bytes;
-         |                          ^
-         |                           = 0
+>> arch/x86/events/core.c:2856:6: warning: no previous prototype for function '__perf_callchain_user' [-Wmissing-prototypes]
+   void __perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+        ^
+   arch/x86/events/core.c:2856:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+   ^
+   static 
    1 warning generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PINCTRL_SINGLE
-   Depends on [n]: PINCTRL [=n] && OF [=y] && HAS_IOMEM [=y]
-   Selected by [y]:
-   - ARCH_DAVINCI [=y] && ARCH_MULTI_V5 [=y] && CPU_LITTLE_ENDIAN [=y]
 
+vim +/__perf_callchain_user +2856 arch/x86/events/core.c
 
-vim +/size +1228 block/bio.c
-
-  1212	
-  1213	/*
-  1214	 * Figure out max_size hint of iov_iter_extract_pages() for minimizing
-  1215	 * bio & iov iter revert so that bio can be aligned with max io size.
-  1216	 */
-  1217	static unsigned int bio_get_buffer_size_hint(const struct bio *bio,
-  1218			unsigned int left)
-  1219	{
-  1220		unsigned int nr_bvecs = bio->bi_max_vecs - bio->bi_vcnt;
-  1221		unsigned int size, predicted_space, max_bytes;
-  1222		unsigned int space = nr_bvecs << PAGE_SHIFT;
-  1223		unsigned int align_deviation;
-  1224	
-  1225		/* If we have enough space really, just try to get all pages */
-  1226		if (!bio->bi_bdev || nr_bvecs >= (bio->bi_max_vecs / 4) ||
-  1227				!bio->bi_vcnt || left <= space)
-> 1228			return UINT_MAX - size;
-  1229	
-  1230		max_bytes = bdev_max_io_bytes(bio->bi_bdev);
-  1231		size = bio->bi_iter.bi_size;
-  1232	
-  1233		/*
-  1234		 * One bvec can hold physically continuous page frames with
-  1235		 * multipage bvec and bytes in these pages can be pretty big, so
-  1236		 * predict the available space by averaging bytes on all bvecs
-  1237		 */
-  1238		predicted_space = size * nr_bvecs / bio->bi_vcnt;
-  1239		/*
-  1240		 * If predicted space is bigger than max io bytes and at least two
-  1241		 * vectors left, ask for all pages
-  1242		 */
-  1243		if (predicted_space > max_bytes && nr_bvecs > 2)
-  1244			return UINT_MAX - size;
-  1245	
-  1246		/*
-  1247		 * This bio is close to be full, and stop to add pages if it is
-  1248		 * basically aligned, otherwise just get & add pages if the bio
-  1249		 * can be kept as aligned, so that we can minimize bio & iov iter
-  1250		 * revert
-  1251		 */
-  1252		align_deviation = max_t(unsigned int, 16U * 1024, max_bytes / 16);
-  1253		if ((size & (max_bytes - 1)) > align_deviation) {
-  1254			unsigned aligned_bytes = max_bytes - (size & (max_bytes - 1));
-  1255	
-  1256			/* try to keep bio aligned if we have enough data and space */
-  1257			if (aligned_bytes <= left && aligned_bytes <= predicted_space)
-  1258				return aligned_bytes;
-  1259		}
-  1260	
-  1261		return 0;
-  1262	}
-  1263	
+  2855	
+> 2856	void __perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+  2857				   struct pt_regs *regs, bool atomic)
+  2858	{
+  2859		struct stack_frame frame;
+  2860		const struct stack_frame __user *fp;
+  2861	
+  2862		if (perf_guest_state()) {
+  2863			/* TODO: We don't support guest os callchain now */
+  2864			return;
+  2865		}
+  2866	
+  2867		/*
+  2868		 * We don't know what to do with VM86 stacks.. ignore them for now.
+  2869		 */
+  2870		if (regs->flags & (X86_VM_MASK | PERF_EFLAGS_VM))
+  2871			return;
+  2872	
+  2873		fp = (void __user *)regs->bp;
+  2874	
+  2875		perf_callchain_store(entry, regs->ip);
+  2876	
+  2877		if (atomic && !nmi_uaccess_okay())
+  2878			return;
+  2879	
+  2880		if (atomic)
+  2881			pagefault_disable();
+  2882	
+  2883		if (__perf_callchain_user32(regs, entry))
+  2884			goto done;
+  2885	
+  2886		while (entry->nr < entry->max_stack) {
+  2887			if (!valid_user_frame(fp, sizeof(frame)))
+  2888				break;
+  2889	
+  2890			if (__get_user(frame.next_frame, &fp->next_frame))
+  2891				break;
+  2892			if (__get_user(frame.return_address, &fp->return_address))
+  2893				break;
+  2894	
+  2895			perf_callchain_store(entry, frame.return_address);
+  2896			fp = (void __user *)frame.next_frame;
+  2897		}
+  2898	done:
+  2899		if (atomic)
+  2900			pagefault_enable();
+  2901	}
+  2902	
 
 -- 
 0-DAY CI Kernel Test Service
