@@ -1,115 +1,134 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477B318E1E
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 10:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="P0L/6kDf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1699525364; x=1731061364;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9JII0Lo4jHn5XxlrRzhOZU1i/JijstHf9Qrl/JNuDKw=;
-  b=P0L/6kDfZexjZmhxyuxcyGxpudptaW03Ol5xGrfVF3N9O31kDfdymd4s
-   uzLw2x7iHVCyn9uNGlWv/QLBP4wHBqNEHi01aeyBySfUinjvYaVsUwaOg
-   UuV4zUQ06t56P8FmMQ4edyU3MGtg8W3GZeAHJOi/qJuIf3QM3dLj0IdP1
-   0bnUTIGIVGEFtg1cP9/2mhhVP1/q7/6kalZFN8fPwU4z6Ik7NPaKd5p/t
-   GLCPKQFM3Y2a8zNOSkRWiKoWpV/kd926BPZVuPSrehSbR5vpovFa0D+D9
-   3MoeFNu+d9isGDki657JkTQOK4wrN0xVr7NHFjidR7aCp588JBH4sKZQt
-   w==;
-X-CSE-ConnectionGUID: Gk3+QKqkR3aW4bGUef3s3g==
-X-CSE-MsgGUID: b9bulL1OTQ6rbKDqb6bpZA==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
-   d="scan'208";a="12067718"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Nov 2023 03:21:36 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Nov 2023 03:21:19 -0700
-Received: from [10.171.248.61] (10.10.85.11) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 9 Nov 2023 03:21:16 -0700
-Message-ID: <58473927-563f-4615-b422-497366c9e429@microchip.com>
-Date: Thu, 9 Nov 2023 11:20:45 +0100
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4B918E1E
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 10:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A675A12FC;
+	Thu,  9 Nov 2023 02:27:24 -0800 (PST)
+Received: from [10.1.36.59] (e127643.arm.com [10.1.36.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BC923F703;
+	Thu,  9 Nov 2023 02:26:36 -0800 (PST)
+Message-ID: <2e0fb2d4-1410-6a7e-902d-8249a9ea523a@arm.com>
+Date: Thu, 9 Nov 2023 10:26:34 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/22] fb: atmel_lcdfb: Stop using platform_driver_probe()
-To: Helge Deller <deller@gmx.de>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
-	<u.kleine-koenig@pengutronix.de>, Nathan Chancellor <nathan@kernel.org>
-CC: <linux-fbdev@vger.kernel.org>, <llvm@lists.linux.dev>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, <dri-devel@lists.freedesktop.org>, Claudiu
- Beznea <claudiu.beznea@tuxon.dev>, <kernel@pengutronix.de>,
-	<linux-arm-kernel@lists.infradead.org>
-References: <20231107091740.3924258-1-u.kleine-koenig@pengutronix.de>
- <20231107091740.3924258-3-u.kleine-koenig@pengutronix.de>
- <20231108184805.GA1579138@dev-arch.thelio-3990X>
- <20231108210018.ayo5b3afggmt6wfc@pengutronix.de>
- <24c4cc36-d14b-40cc-ad8d-dea029cf1845@gmx.de>
- <20231108215220.3iw5sydxad32gufj@pengutronix.de>
- <656080fb-7d10-47ec-bdeb-a099ceee99bf@gmx.de>
- <20231109062459.5hk7vb54t4iy5kp6@pengutronix.de>
- <57de52b3-201b-4599-83ba-b0a7cc8db350@gmx.de>
-Content-Language: en-US, fr-FR
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <57de52b3-201b-4599-83ba-b0a7cc8db350@gmx.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2 2/2] perf test: Add support for setting objdump binary
+ via perf config
+Content-Language: en-US
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: linux-perf-users@vger.kernel.org, irogers@google.com,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Yonghong Song <yhs@fb.com>, Fangrui Song <maskray@google.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Yang Jihong <yangjihong1@huawei.com>,
+ Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Ravi Bangoria <ravi.bangoria@amd.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20231106151051.129440-1-james.clark@arm.com>
+ <20231106151051.129440-3-james.clark@arm.com> <ZUv1TgveArYdvTsl@kernel.org>
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <ZUv1TgveArYdvTsl@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 09/11/2023 at 10:55, Helge Deller wrote:
-> On 11/9/23 07:24, Uwe Kleine-König wrote:
->> Hello,
+
+
+On 08/11/2023 20:53, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Nov 06, 2023 at 03:10:49PM +0000, James Clark escreveu:
+>> Add a perf config variable that does the same thing as "perf test
+>> --objdump <x>".
 >>
->> On Wed, Nov 08, 2023 at 10:57:00PM +0100, Helge Deller wrote:
->>> On 11/8/23 22:52, Uwe Kleine-König wrote:
->>>> But info and so info->fix live longer than the probe function, don't
->>>> they?
->>>
->>> Yes, they do.
->>> But AFAICS info->fix contains a *copy* of the initial atmel_lcdfb_fix struct
->>> (and not a pointer to it). So that should be ok.
+>> Also update the man page.
+> 
+> That is ok, if one wants to change objdump just for testing, as a
+> followup improvement it may be interesting to allow that for the other
+> tools that have --objdump as well as to add this as a global option,
+> that affects all tools, no?
+
+For the tools they already all share annotate.objdump in the config. Do
+you mean that the tests could share the same config instead?
+
+Maybe I could have used annotate.objdump for the tests, but it was used
+in a slightly different way, and I thought it would be easier for people
+to find if it started with "test."
+
+> 
+> Anyway, applied both patches.
+> 
+> - Arnaldo
+>  
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  tools/perf/Documentation/perf-config.txt |  4 ++++
+>>  tools/perf/tests/builtin-test.c          | 12 ++++++++++++
+>>  2 files changed, 16 insertions(+)
 >>
->> If you say so that's good. I grepped a bit around and didn't find a
->> place where a copy is made. But that's probably me and I'll consider the
->> case closed.
+>> diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
+>> index 0b4e79dbd3f6..16398babd1ef 100644
+>> --- a/tools/perf/Documentation/perf-config.txt
+>> +++ b/tools/perf/Documentation/perf-config.txt
+>> @@ -722,6 +722,10 @@ session-<NAME>.*::
+>>  		Defines new record session for daemon. The value is record's
+>>  		command line without the 'record' keyword.
+>>  
+>> +test.*::
+>> +
+>> +	test.objdump::
+>> +		objdump binary to use for disassembly and annotations.
+>>  
+>>  SEE ALSO
+>>  --------
+>> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+>> index a8d17dd50588..113e92119e1d 100644
+>> --- a/tools/perf/tests/builtin-test.c
+>> +++ b/tools/perf/tests/builtin-test.c
+>> @@ -14,6 +14,7 @@
+>>  #include <sys/wait.h>
+>>  #include <sys/stat.h>
+>>  #include "builtin.h"
+>> +#include "config.h"
+>>  #include "hist.h"
+>>  #include "intlist.h"
+>>  #include "tests.h"
+>> @@ -514,6 +515,15 @@ static int run_workload(const char *work, int argc, const char **argv)
+>>  	return -1;
+>>  }
+>>  
+>> +static int perf_test__config(const char *var, const char *value,
+>> +			     void *data __maybe_unused)
+>> +{
+>> +	if (!strcmp(var, "test.objdump"))
+>> +		test_objdump_path = value;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  int cmd_test(int argc, const char **argv)
+>>  {
+>>  	const char *test_usage[] = {
+>> @@ -541,6 +551,8 @@ int cmd_test(int argc, const char **argv)
+>>          if (ret < 0)
+>>                  return ret;
+>>  
+>> +	perf_config(perf_test__config, NULL);
+>> +
+>>  	/* Unbuffered output */
+>>  	setvbuf(stdout, NULL, _IONBF, 0);
+>>  
+>> -- 
+>> 2.34.1
+>>
 > 
-> It's not directly obvious, but the copy happens in the line you pointed
-> out previously.
-> 
-> In include/linux/fb.h:
-> 
-> struct fb_info {
-> ...
->           struct fb_var_screeninfo var;   /* Current var */
->           struct fb_fix_screeninfo fix;   /* Current fix */
-> 
-> so, "fb_info.fix" is a struct, and not a pointer.
-> 
-> In drivers/video/fbdev/atmel_lcdfb.c:
-> static int atmel_lcdfb_probe(struct platform_device *pdev)
-> {
-> ...
->           info->fix = atmel_lcdfb_fix;  //  (line 1065)
-> 
-> this becomes effectively a:
->          memcpy(&info->fix, &atmel_lcdfb_fix, sizeof(struct fb_fix_screeninfo));
-> 
-> so, the compiler copies the "__initconst" data over to the info->fix struct.
-
-Helge, Uwe and Nathan,
-
-Thanks a lot for making this move, patch and detailed explanation.
-
-Best regards,
-   Nicolas
