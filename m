@@ -1,163 +1,181 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EF4374E6
-	for <llvm@lists.linux.dev>; Wed,  8 Nov 2023 21:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3517A611F
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 04:26:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="obO2YV31"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1699480621; x=1700085421; i=deller@gmx.de;
-	bh=EVvbtdVKyoT9YNrbY1q9L/NNpUZnGYUgpxHahx3DLNY=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=obO2YV31W2JkFZm1ODzFP0n4uKVLM+HQyjAUbrWEJyN2vJalnH84e9Q0M5pfX3ER
-	 IUkMVXNGAABa1Qqgzi0UL9+f8IUG97Lj2RWeC3H2RhdkrqM/a4T1dVyCqIsb34EBq
-	 k9efmrYFCI5yUylj7CclBbay8A+YbeUQsvY1n7EiFf4FsOwoQPFBJgkkumprsn8Uu
-	 AsByqVEMFE1Nz8L4CIwEVluwEe22g+zZu01aUqkir3W3ywyOc7iPGcvXY9sxtjZ8A
-	 UnO6c4BQZTE0CeevMwr/TUBhatANwQhIDnxwlPUcNHj4xg27d+jbQK7CjZplrs8Td
-	 aRhomhSlMYPMux560w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.158.7]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVeI2-1qr2uv1HPQ-00RW48; Wed, 08
- Nov 2023 22:57:01 +0100
-Message-ID: <656080fb-7d10-47ec-bdeb-a099ceee99bf@gmx.de>
-Date: Wed, 8 Nov 2023 22:57:00 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2CZ2TTr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB73C433CC
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 04:26:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699504014;
+	bh=fYQ8cjKX+19C1ihpDV96mhTpvzL7G65cypI0SSFKxGw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j2CZ2TTrhO1fN0g5hgbqiKYkiAChrvPzbRi0YXwmLxeJ85FkuLLZXsvWx67JMKycP
+	 nZcjh2r9FD3kaoAHvI+SLnyzcoHAm5mXLJV75PfQDgzq0ayGLS50EnX50ymi3ltSNv
+	 WlM7C2tuLfk1Yq8syDyxY+EAoNnyFMdT/8K3dv8vgutniLt+VcWEbo9WYIRVfv37FP
+	 AqanfMFmxRiIbIl15n5chg/ETDNGvTkvk4TuGEt6vOCE4KlN93cWwp9vcrAnzf7cNH
+	 T7CCZL2M/06KNcPl9/sJr9q+4SztmKBtM9pN9yUp1pHCF6OsUdjD/18ZMWTfxmS2An
+	 5vmqPyiNBCPQw==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1f0f94a08a0so252516fac.2
+        for <llvm@lists.linux.dev>; Wed, 08 Nov 2023 20:26:54 -0800 (PST)
+X-Gm-Message-State: AOJu0Yy7dS1I1PkXgBO9oKCttQ0BtqQqNGTXYJ0EtNNr1otyh+UeainA
+	MSVIP0U7KrLYREILrSmkZyVLACBFN2qlHl+Z/FA=
+X-Google-Smtp-Source: AGHT+IH8ctNVx9dH7eRJZUdvO7bLpKn+oyNzQkQPB6hniLZVGLKtruPtho9VRjW/UrUxb5JWngllKNeyw+bzhVQX4Uc=
+X-Received: by 2002:a05:6870:6586:b0:1f0:aff:333c with SMTP id
+ fp6-20020a056870658600b001f00aff333cmr4924051oab.46.1699504013905; Wed, 08
+ Nov 2023 20:26:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/22] fb: atmel_lcdfb: Stop using platform_driver_probe()
-Content-Language: en-US
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-fbdev@vger.kernel.org,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, llvm@lists.linux.dev,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, dri-devel@lists.freedesktop.org,
- Nicolas Ferre <nicolas.ferre@microchip.com>, kernel@pengutronix.de,
- linux-arm-kernel@lists.infradead.org
-References: <20231107091740.3924258-1-u.kleine-koenig@pengutronix.de>
- <20231107091740.3924258-3-u.kleine-koenig@pengutronix.de>
- <20231108184805.GA1579138@dev-arch.thelio-3990X>
- <20231108210018.ayo5b3afggmt6wfc@pengutronix.de>
- <24c4cc36-d14b-40cc-ad8d-dea029cf1845@gmx.de>
- <20231108215220.3iw5sydxad32gufj@pengutronix.de>
-From: Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
-In-Reply-To: <20231108215220.3iw5sydxad32gufj@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20231104222715.3967791-1-yoann.congal@smile.fr>
+ <CAK7LNAS6J5Nh8nOUHbaf123yd1Z-1q--FvB1ok8GQcoNorAROw@mail.gmail.com> <20231107210004.GA2065849@dev-arch.thelio-3990X>
+In-Reply-To: <20231107210004.GA2065849@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 9 Nov 2023 06:26:16 +0200
+X-Gmail-Original-Message-ID: <CAK7LNARpJ9huseh-Ro9v8W_tabMof9cuUZO43gi-hfEnXG4FYA@mail.gmail.com>
+Message-ID: <CAK7LNARpJ9huseh-Ro9v8W_tabMof9cuUZO43gi-hfEnXG4FYA@mail.gmail.com>
+Subject: Re: [PATCH v5] kconfig: avoid an infinite loop in oldconfig/syncconfig
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Yoann Congal <yoann.congal@smile.fr>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>, 
+	Brandon Maier <brandon.maier@collins.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:sTnk1ongcvSCbBrFk4GvLn+XnR9xivqmx8vhXNolrr6BTrX+Jwl
- 5Z4UFUe+Bz2VGvh+TJS5ImK8RJ9fEBUM59W9UEDNkyqoFFqRsts09CD0WIpeZctqUhdtPSG
- GhaUN1A33noortZGbTzOogdG9XYDcfFrJ0npF5nKU/aZMLP3cPNG62QXZqchrFiUtx40W6J
- Zvtz7gRotqItrCAgpgv8g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:XtvJNR+EDQQ=;16MzEAJdfkDGW1Ay83gsdE1oydy
- 9tMp17B4cXRVKdJI+d2kTa4oJP5/oF1JVikIsskUU5h2SbUKIGeCs6NMEm3+EG+mrbzG/UCkV
- cSZI+eWVIystNYrmM7GeNic8IwMGEWYDUcGa+IVnsneIs8WDjDAz6oax7yZCKcjFzbO6WjWYN
- J+pzUf1z9GD3prU1/Xz32y4iVzOcPf5zTVy6yEpur7trFPJ3rslv4g9ceFKCyKDSpNPzw/WJi
- TkmFw3X4YeksGoRW4x5yirue6nDOGYzqld+59ONoNEsl+uLrDv7FyM1fdvuaM90sqxa4u9KIf
- NpQIw8yb0JX2I/Gb2+zAQvKUThlVT89p4owTFjQHPDNhw1OsyO5pFJQJinHFJUjg3iCeHYV5K
- LhQfIYYhpQ6PC2z08MY1Vmf5KPWACRzn6H7TzunMzuxt7qFZBbakAV3KfPwqcxAxpPpeV+xib
- yj2Hqkbl6VuUgf0Oz+wstU2otCSlLYbClP6MhWT6pHRw25ibaVeLFWYd/vfHs69CwMMHFfplg
- tGyewweAaOOoGhPBej2Lp7PMdJfLBmi9xfOoP5N0ltMollffaLU9A8vyycMUpPAuIZ3/7Iu4b
- s+FQKPLhXUv69xffh0I0QyFaMzcdw0G8+63IqoMLyEcdgBn8ITLFBnK5NbaM5bXdIgtuEfQmG
- PK6iXcS1v8zJv6X+aWFVDgHHhadUJsTwXB/0NQo1N3fYzY8/0VzEBLriVUiIM0JK8TV/4iREn
- ku/KLFMxXJAt86xcAEFbK8ZILuOF/WC14OGl+mULq8p3BpxZyZ8PmnaX+wGVFhmYxmV4QbNrb
- mAD8RETxYAUGXwpckjA/z5ZaT8etPM6mTsgYiPKkHCJlb+Iy9or03ibfamwEDw+ZmuUzst8g/
- s35rE/sHo3199E80+3LTNR4kwQ8XM+oxjJ+asY7ITjm6bXlSgphg9o3UScXoXT9J4RwaP+8aR
- uVffqw==
 
-On 11/8/23 22:52, Uwe Kleine-K=C3=B6nig wrote:
-> On Wed, Nov 08, 2023 at 10:24:09PM +0100, Helge Deller wrote:
->> On 11/8/23 22:00, Uwe Kleine-K=C3=B6nig wrote:
->>> On Wed, Nov 08, 2023 at 11:48:05AM -0700, Nathan Chancellor wrote:
->>>> diff --git a/drivers/video/fbdev/atmel_lcdfb.c b/drivers/video/fbdev/=
-atmel_lcdfb.c
->>>> index 88c75ae7d315..9e391e5eaf9d 100644
->>>> --- a/drivers/video/fbdev/atmel_lcdfb.c
->>>> +++ b/drivers/video/fbdev/atmel_lcdfb.c
->>>> @@ -220,7 +220,7 @@ static inline void atmel_lcdfb_power_control(stru=
-ct atmel_lcdfb_info *sinfo, int
->>>>    	}
->>>>    }
->>>>
->>>> -static const struct fb_fix_screeninfo atmel_lcdfb_fix __initconst =
-=3D {
->>>> +static const struct fb_fix_screeninfo atmel_lcdfb_fix =3D {
->>>>    	.type		=3D FB_TYPE_PACKED_PIXELS,
->>>>    	.visual		=3D FB_VISUAL_TRUECOLOR,
->>>>    	.xpanstep	=3D 0,
->>>
->>> I wonder if this was broken already before my patch. atmel_lcdfb_probe=
-()
->>> does
->>>
->>> 	info->fix =3D atmel_lcdfb_fix;
->>>
->>> and unless I miss something (this is well possible) that is used e.g. =
-in
->>> atmel_lcdfb_set_par() -> atmel_lcdfb_update_dma(). So atmel_lcdfb_fix
->>> should better not live in .init memory?! Someone with more knowledge
->>> about fbdev might want to take a look and decide if this justifies a
->>> separate fix that should then be backported to stable, too?!
->>
->> I don't think a backport this is necessary.
->> The "__initconst" atmel_lcdfb_fix struct was only copied in the
->> "__init" atmel_lcdfb_probe() function.
->> So, both were dropped at the same time in older kernels.
+On Tue, Nov 7, 2023 at 11:00=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> But info and so info->fix live longer than the probe function, don't
-> they?
+> On Sun, Nov 05, 2023 at 04:55:57PM +0900, Masahiro Yamada wrote:
+> > On Sun, Nov 5, 2023 at 7:27=E2=80=AFAM Yoann Congal <yoann.congal@smile=
+.fr> wrote:
+> > >
+> > > Exit on error when asking for value and reading stdin returns an erro=
+r
+> > > (mainly if it has reached EOF or is closed).
+> > >
+> > > This infinite loop happens in particular for hex/int configs without =
+an
+> > > explicit default value.
+> > >
+> > > Previously, this case would loop:
+> > > * oldconfig prompts for the value but stdin has reached EOF
+> > > * It gets the global default value : an empty string
+> > > * This is not a valid hex/int value so it prompts again, hence the
+> > >   infinite loop.
+> > >
+> > > This case happens with a configuration like this (a hex config withou=
+t a
+> > > valid default value):
+> > >   config TEST_KCONFIG
+> > >        hex "Test KConfig"
+> > >        # default 0x0
+> > >
+> > > And using:
+> > >   make oldconfig < /dev/null
+> > >
+> > > This was discovered when working on Yocto bug[0] on a downstream
+> > > kconfig user (U-boot)
+> > >
+> > > [0]: https://bugzilla.yoctoproject.org/show_bug.cgi?id=3D14136
+> > >
+> > > CC: Brandon Maier <brandon.maier@collins.com>
+> > > Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
+> >
+> > Applied to linux-kbuild.
+> > Thanks.
+>
+> For what it's worth, this change breaks our continuous integration [1]
+> because tuxmake explicitly uses /dev/null as stdin to make for
+> non-interactive commands (I think it does this as basically the
+> equivalent of "yes '' | make" in Python), so the error will always
+> occur.
+>
+> Before:
+>
+> $ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/pac=
+kages/linux/-/raw/main/config
+>
+> # Same as 'make < /dev/null' but still
+> $ python3 -c "import subprocess; subprocess.run(['make', '-j128'], stdin=
+=3Dsubprocess.DEVNULL)"
+>   SYNC    include/config/auto.conf
+>   HOSTCC  scripts/basic/fixdep
+>   HOSTCC  scripts/kconfig/conf.o
+>   HOSTCC  scripts/kconfig/confdata.o
+>   HOSTCC  scripts/kconfig/expr.o
+>   LEX     scripts/kconfig/lexer.lex.c
+>   YACC    scripts/kconfig/parser.tab.[ch]
+>   HOSTCC  scripts/kconfig/menu.o
+>   HOSTCC  scripts/kconfig/preprocess.o
+>   HOSTCC  scripts/kconfig/symbol.o
+>   HOSTCC  scripts/kconfig/util.o
+>   HOSTCC  scripts/kconfig/lexer.lex.o
+>   HOSTCC  scripts/kconfig/parser.tab.o
+>   HOSTLD  scripts/kconfig/conf
+> *
+> * Restart config...
+> *
+> ...
+> Error in reading or end of file.
+>
+>   GEN     arch/x86/include/generated/asm/orc_hash.h
+>   WRAP    arch/x86/include/generated/uapi/asm/bpf_perf_event.h
+>   WRAP    arch/x86/include/generated/uapi/asm/errno.h
+> ...
+>
+> After:
+>
+> $ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/pac=
+kages/linux/-/raw/main/config
+>
+> $ python3 -c "import subprocess; subprocess.run(['make', '-j128'], stdin=
+=3Dsubprocess.DEVNULL)"
+>   SYNC    include/config/auto.conf
+>   HOSTCC  scripts/basic/fixdep
+>   HOSTCC  scripts/kconfig/conf.o
+>   HOSTCC  scripts/kconfig/confdata.o
+>   HOSTCC  scripts/kconfig/expr.o
+>   LEX     scripts/kconfig/lexer.lex.c
+>   YACC    scripts/kconfig/parser.tab.[ch]
+>   HOSTCC  scripts/kconfig/menu.o
+>   HOSTCC  scripts/kconfig/preprocess.o
+>   HOSTCC  scripts/kconfig/symbol.o
+>   HOSTCC  scripts/kconfig/util.o
+>   HOSTCC  scripts/kconfig/lexer.lex.o
+>   HOSTCC  scripts/kconfig/parser.tab.o
+>   HOSTLD  scripts/kconfig/conf
+> *
+> * Restart config...
+> *
+> ...
+> Error in reading or end of file.
+> make[3]: *** [scripts/kconfig/Makefile:77: syncconfig] Error 1
+> ...
+>
+> We have been doing this for some time and never run across an infinite
+> loop in syncconfig. Can this be improved?
 
-Yes, they do.
-But AFAICS info->fix contains a *copy* of the initial atmel_lcdfb_fix stru=
-ct
-(and not a pointer to it). So that should be ok.
 
-Helge
+
+In Linux, most int/hex entries have a default,
+hence there is no practical issue.
+
+I will drop this for now.
+
+I will send an alternative solution.
+
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
