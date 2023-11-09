@@ -1,180 +1,160 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD6319444
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 11:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FE41DDF2;
+	Thu,  9 Nov 2023 16:14:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NJkyPN/2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699528286;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=l57unHk3DQpUYyMUYNrfm4cT0sq6IzfIb3YXSgOAaRw=;
-	b=NJkyPN/27kRSc+5I8VuQyQkDyeXsCGqA0aF4LwSVXE60iPsGv2G84FkDLTSWBJQJQgpuVb
-	GFnM9Um/aNTN8aZ6l23W+7fOm6rLCSIYliHT7y5DqIjjr2oOL5diP52s7JhxtzKiSuvJYw
-	QlSzbtNGWqSSN86TqZmwra3DDhhW4pg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-LGYj5Pe4MAO4hkoALlja1A-1; Thu, 09 Nov 2023 06:11:24 -0500
-X-MC-Unique: LGYj5Pe4MAO4hkoALlja1A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61321101A53B
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 11:11:24 +0000 (UTC)
-Received: from [172.64.13.27] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 459631121306;
-	Thu,  9 Nov 2023 11:11:24 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, 34f76326)
-Date: Thu, 09 Nov 2023 11:11:24 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XVKfYxmb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035A4C433C8;
+	Thu,  9 Nov 2023 16:14:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699546476;
+	bh=H5gRNhBAojyGz06n4nyUjlE+Ck3M94YyNimHQhe4wK4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XVKfYxmbDwtVvUxGpJMuZJjv4ORhmYur2uarLSbeBoyiCBt2Auo0DEzF5Uyp2mNcE
+	 FGC0OvDqkm/k4/Zxsr0R6X1M76+2+WX6R46GjeNmom0QWQioEIfsoKjv5amzQrKOpB
+	 FzSv1hrw+u+4Yz+d+Suja/cuZNeUEBDMMWU89otDpwEXFKHOuO1+JZ5cwd0oa6hHvk
+	 2e3GUEGim23OhhnaXh7mO/SGuaL2KfKoeiJmmKn+UGOKPMy3381ZwAAro8VhvgQrFR
+	 DLqs72x0xVumhq0CIV/oKxzv1+EvCRvjrZXY8QgjGbeGGDquGJ1IQAhsO2fshaxBzw
+	 k7FOFrlPPtAJw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 653D840094; Thu,  9 Nov 2023 13:14:33 -0300 (-03)
+Date: Thu, 9 Nov 2023 13:14:33 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: James Clark <james.clark@arm.com>
+Cc: linux-perf-users@vger.kernel.org, irogers@google.com,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Yonghong Song <yhs@fb.com>,
+	Fangrui Song <maskray@google.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] perf test: Add support for setting objdump binary
+ via perf config
+Message-ID: <ZU0FaXoGf/HcLBlb@kernel.org>
+References: <20231106151051.129440-1-james.clark@arm.com>
+ <20231106151051.129440-3-james.clark@arm.com>
+ <ZUv1TgveArYdvTsl@kernel.org>
+ <2e0fb2d4-1410-6a7e-902d-8249a9ea523a@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <60907.123110906112400761@us-mta-646.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e0fb2d4-1410-6a7e-902d-8249a9ea523a@arm.com>
+X-Url: http://acmel.wordpress.com
 
-Hi, we tested your kernel and here are the results:
+Em Thu, Nov 09, 2023 at 10:26:34AM +0000, James Clark escreveu:
+> 
+> 
+> On 08/11/2023 20:53, Arnaldo Carvalho de Melo wrote:
+> > Em Mon, Nov 06, 2023 at 03:10:49PM +0000, James Clark escreveu:
+> >> Add a perf config variable that does the same thing as "perf test
+> >> --objdump <x>".
+> >>
+> >> Also update the man page.
+> > 
+> > That is ok, if one wants to change objdump just for testing, as a
+> > followup improvement it may be interesting to allow that for the other
+> > tools that have --objdump as well as to add this as a global option,
+> > that affects all tools, no?
+> 
+> For the tools they already all share annotate.objdump in the config. Do
+> you mean that the tests could share the same config instead?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Probably.
+ 
+> Maybe I could have used annotate.objdump for the tests, but it was used
+> in a slightly different way, and I thought it would be easier for people
+> to find if it started with "test."
 
+Well, we can have both, with "test." overriding "annotate."?
 
-Kernel information:
-    Commit message: Merge tag 'xfs-6.7-merge-2' of git://git.kernel.org/pub=
-/scm/fs/xfs/xfs-linux
+Anyway, I applied this patch locally, now trying to fix some unrelated
+problem that is making 'perf test' fail so that I can push
+perf-tools-next publicly.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/113934
+- Arnaldo
+ 
+> > 
+> > Anyway, applied both patches.
+> > 
+> > - Arnaldo
+> >  
+> >> Signed-off-by: James Clark <james.clark@arm.com>
+> >> ---
+> >>  tools/perf/Documentation/perf-config.txt |  4 ++++
+> >>  tools/perf/tests/builtin-test.c          | 12 ++++++++++++
+> >>  2 files changed, 16 insertions(+)
+> >>
+> >> diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
+> >> index 0b4e79dbd3f6..16398babd1ef 100644
+> >> --- a/tools/perf/Documentation/perf-config.txt
+> >> +++ b/tools/perf/Documentation/perf-config.txt
+> >> @@ -722,6 +722,10 @@ session-<NAME>.*::
+> >>  		Defines new record session for daemon. The value is record's
+> >>  		command line without the 'record' keyword.
+> >>  
+> >> +test.*::
+> >> +
+> >> +	test.objdump::
+> >> +		objdump binary to use for disassembly and annotations.
+> >>  
+> >>  SEE ALSO
+> >>  --------
+> >> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> >> index a8d17dd50588..113e92119e1d 100644
+> >> --- a/tools/perf/tests/builtin-test.c
+> >> +++ b/tools/perf/tests/builtin-test.c
+> >> @@ -14,6 +14,7 @@
+> >>  #include <sys/wait.h>
+> >>  #include <sys/stat.h>
+> >>  #include "builtin.h"
+> >> +#include "config.h"
+> >>  #include "hist.h"
+> >>  #include "intlist.h"
+> >>  #include "tests.h"
+> >> @@ -514,6 +515,15 @@ static int run_workload(const char *work, int argc, const char **argv)
+> >>  	return -1;
+> >>  }
+> >>  
+> >> +static int perf_test__config(const char *var, const char *value,
+> >> +			     void *data __maybe_unused)
+> >> +{
+> >> +	if (!strcmp(var, "test.objdump"))
+> >> +		test_objdump_path = value;
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >>  int cmd_test(int argc, const char **argv)
+> >>  {
+> >>  	const char *test_usage[] = {
+> >> @@ -541,6 +551,8 @@ int cmd_test(int argc, const char **argv)
+> >>          if (ret < 0)
+> >>                  return ret;
+> >>  
+> >> +	perf_config(perf_test__config, NULL);
+> >> +
+> >>  	/* Unbuffered output */
+> >>  	setvbuf(stdout, NULL, _IONBF, 0);
+> >>  
+> >> -- 
+> >> 2.34.1
+> >>
+> > 
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10253858
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10253749
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-          x86_64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10253915
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10253789
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10253792
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+-- 
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
-            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
-XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+- Arnaldo
