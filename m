@@ -1,142 +1,160 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681A513AC2;
-	Thu,  9 Nov 2023 09:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA2C13AC6
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 09:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZT9JNwsO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699523213; x=1731059213;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ip+CQU2PiDpNSq4YwNpQlS7L41kfKCfH4bP+hTrn7Po=;
-  b=ZT9JNwsO25UT32vAqXaB6mmumDOJWuX+ctI3oL+1a51KnRl+um6nHP5q
-   0CV9s8TWJf35D7S3FvfLR8QHkBPaiVd4GFagFXw5xCJecO/Xft58DvJse
-   T5QYkWTsTiLk/eY4P6GHI9rmTFEOheqAoQyUBfemiUsVMAKJntPwGWLe6
-   XLsFoKMJ1gLVxOch0Xs8b/htlPaaOmmWCw+L9ho5Flbw160TULVaoNGGz
-   f8O9mV0XMYSHool7X2T5pNCtuYstDpwldVjVySqGkRRVfta5HQpvQrCaT
-   Sduw6p+wYDpoUbTPUgGNSR215WtyrQLj/PhJE6ZWCXoZapiA/uy/5/jhP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="11503994"
-X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
-   d="scan'208";a="11503994"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 01:46:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="798282364"
-X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
-   d="scan'208";a="798282364"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Nov 2023 01:46:43 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r11cW-0008d1-3D;
-	Thu, 09 Nov 2023 09:46:41 +0000
-Date: Thu, 9 Nov 2023 17:46:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kbuild@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Greg Ungerer <gerg@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Geoff Levand <geoff@infradead.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH 15/22] arch: vdso: consolidate gettime prototypes
-Message-ID: <202311091740.g315K93o-lkp@intel.com>
-References: <20231108125843.3806765-16-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="iTtYqGXS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1699523743; x=1700128543; i=deller@gmx.de;
+	bh=vUqnvmBLbmPO07rKTSSDzYUB9oaQg16NwADPKRRp82I=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=iTtYqGXSeWefw4Tc//Ae1B2jS1wBKaxI7JeH8aJRpER4ek/STsB3A0U06bZhbWXe
+	 tKI3prmmZaV5tn9b1S1Qdj9gPUKn2eXrKjieN1/O+xXgQ05562Mx1wJpxKPiRowPr
+	 1kPEcqnjhBN38jiaW/qZgOVe6DsU3NZFb3Ux8A4MmnSkh/t8bRELbcqJajY4nC77Q
+	 YAzU+ABqgJY6Ma05wmNEfSp2Wsjby3W50guOYwqfDIZqwF5ZmVwKUPHkxcypfxFGr
+	 FDg2WkbbE/MbGfO/yF1wQ7gUDeDOTB5nFtwvXgKxc/TPsEnncbX+7KfJTIj4fH5zA
+	 TeuH9Klkt+a+q0Ui9Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [10.8.0.6] ([78.94.87.245]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuUnK-1rJ6qL1FVC-00rZp2; Thu, 09
+ Nov 2023 10:55:43 +0100
+Message-ID: <57de52b3-201b-4599-83ba-b0a7cc8db350@gmx.de>
+Date: Thu, 9 Nov 2023 10:55:41 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231108125843.3806765-16-arnd@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/22] fb: atmel_lcdfb: Stop using platform_driver_probe()
+Content-Language: en-US
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: linux-fbdev@vger.kernel.org, llvm@lists.linux.dev,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ dri-devel@lists.freedesktop.org, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Nathan Chancellor <nathan@kernel.org>, kernel@pengutronix.de,
+ linux-arm-kernel@lists.infradead.org,
+ Nicolas Ferre <nicolas.ferre@microchip.com>
+References: <20231107091740.3924258-1-u.kleine-koenig@pengutronix.de>
+ <20231107091740.3924258-3-u.kleine-koenig@pengutronix.de>
+ <20231108184805.GA1579138@dev-arch.thelio-3990X>
+ <20231108210018.ayo5b3afggmt6wfc@pengutronix.de>
+ <24c4cc36-d14b-40cc-ad8d-dea029cf1845@gmx.de>
+ <20231108215220.3iw5sydxad32gufj@pengutronix.de>
+ <656080fb-7d10-47ec-bdeb-a099ceee99bf@gmx.de>
+ <20231109062459.5hk7vb54t4iy5kp6@pengutronix.de>
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+In-Reply-To: <20231109062459.5hk7vb54t4iy5kp6@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:12SYzm+nIGZqkibPWpIpz0W5J4JgE7co5KbkrIj35bgP0zHuD+J
+ xqG2u2m5tQFuqeFy20iqdwak9IwOBzKsdE6645x4w0GBgTO7ptKYd7JN7xHVny2KbpbreTG
+ xoMeUgg9BTGK5+9HO5O+v/DxHsRNPzHocnpFKPH2PKK0owPQoAh8wxNAvGLRsYHpBJCNTNP
+ kMWp8FXFgDxTR7XNsGTbQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ssORnVKhfz0=;x38W/iw9Ld58J/d4xwnQEnKBt+c
+ dVyFSDNg6UCEKlow8lvToyhvGzEEC8fWSReXhqvFB6+LoAeLxaSu2i6BxpryEd4biroCraZ1M
+ 9ymKBGKbzrv6XXcHdp732L9zemcU1neVXuHHUQR5m6lN1qBN7XHL1wBvpb4HISiaiX4UB7w5Y
+ +O+Qv+fv0XY4Y6wk+kqSM6KFUfPmBA7oB2bs29kaPJOv41bv3+WBIe9BVvJYoo2nBZrQb3Sy7
+ xLAJzc/EThYZBlQQWauS77gZnI6xW5we5C5zBBwlw8DyVnqdzcO3Zmmx2eT7Wt7VyfXYYvido
+ 4iDkhxO0S5zM+zKvsrhyA3Dlu5HhcB1o/o25IuCFpO6Amg+BH+JRFyzeK1WieXevioVSucR9y
+ p3BTlMIWi6r1lwS2YUF0nC36vUjRrD+kJY7vpnfFs+Et9JV9pFUQFJdrm/6+TDXoYXeuwK2t0
+ XTAb7hkEANcvJLZeFXQks1QfD3pkoKd7Qr+CqZRS3PZm1wgXUvETPL1ajllB9d7IxEFqTdRdi
+ W7LxGd0dhPZBcioKg/4//YA+F0x1JeZNSYLXscTO46em13IOJEiQQ8Aycpjf6tD5M+IDtNMKc
+ DocbCmJRnZ2TLyxNcMnmVrpfHKHOsfmIJHN9mpM8SRNy4OQwQR/2LfLQVoCzuYzEMY7p8KMnh
+ GbLF06j0mbdUnTHK/voEX7kIZ5vjem8O8XH3fgxjQqAxo6NcCHrBPVvw+qGlQEOBNzT3n5oMZ
+ y96Gw3DOpdln+IO8tE34UebU5h1I2AuUQjFrAPO4wY6EJb05WrxHBl/quYSu5+qblMsR6Bc49
+ sMe/Nk0jy8wOClcgRK6IhhfoX7FoE7/D9nzgNfRdUTFLonxYuT0e3RvPJbPFgt3IBkjSo+lly
+ eEEjaPcwCdBIvgLqnR01BPGwPT5dU7emyKTiibL8IOO0/ydieIjwMXkZ6H0NC6cFcR6hqkOLD
+ P+PJ3k21MyT+KKHz7KHa/9oAlr0=
 
-Hi Arnd,
+On 11/9/23 07:24, Uwe Kleine-K=C3=B6nig wrote:
+> Hello,
+>
+> On Wed, Nov 08, 2023 at 10:57:00PM +0100, Helge Deller wrote:
+>> On 11/8/23 22:52, Uwe Kleine-K=C3=B6nig wrote:
+>>> But info and so info->fix live longer than the probe function, don't
+>>> they?
+>>
+>> Yes, they do.
+>> But AFAICS info->fix contains a *copy* of the initial atmel_lcdfb_fix s=
+truct
+>> (and not a pointer to it). So that should be ok.
+>
+> If you say so that's good. I grepped a bit around and didn't find a
+> place where a copy is made. But that's probably me and I'll consider the
+> case closed.
 
-kernel test robot noticed the following build errors:
+It's not directly obvious, but the copy happens in the line you pointed
+out previously.
 
-[auto build test ERROR on linus/master]
-[cannot apply to v6.6 next-20231109]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+In include/linux/fb.h:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/ida-make-ida_dump-static/20231109-005742
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231108125843.3806765-16-arnd%40kernel.org
-patch subject: [PATCH 15/22] arch: vdso: consolidate gettime prototypes
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231109/202311091740.g315K93o-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231109/202311091740.g315K93o-lkp@intel.com/reproduce)
+struct fb_info {
+...
+         struct fb_var_screeninfo var;   /* Current var */
+         struct fb_fix_screeninfo fix;   /* Current fix */
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311091740.g315K93o-lkp@intel.com/
+so, "fb_info.fix" is a struct, and not a pointer.
 
-All errors (new ones prefixed by >>):
+In drivers/video/fbdev/atmel_lcdfb.c:
+static int atmel_lcdfb_probe(struct platform_device *pdev)
+{
+...
+         info->fix =3D atmel_lcdfb_fix;  //  (line 1065)
 
->> arch/x86/um/vdso/um_vdso.c:17:5: error: conflicting types for '__vdso_clock_gettime'
-      17 | int __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec *ts)
-         |     ^
-   include/vdso/gettime.h:16:5: note: previous declaration is here
-      16 | int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts);
-         |     ^
-   arch/x86/um/vdso/um_vdso.c:58:1: warning: no previous prototype for function '__vdso_getcpu' [-Wmissing-prototypes]
-      58 | __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
-         | ^
-   arch/x86/um/vdso/um_vdso.c:57:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      57 | long
-         | ^
-         | static 
-   1 warning and 1 error generated.
+this becomes effectively a:
+	memcpy(&info->fix, &atmel_lcdfb_fix, sizeof(struct fb_fix_screeninfo));
 
+so, the compiler copies the "__initconst" data over to the info->fix struc=
+t.
 
-vim +/__vdso_clock_gettime +17 arch/x86/um/vdso/um_vdso.c
-
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  16  
-82210fc778982d arch/x86/um/vdso/um_vdso.c        Arnd Bergmann      2019-10-27 @17  int __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec *ts)
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  18  {
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  19  	long ret;
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  20  
-5541992e512de8 arch/x86/um/vdso/um_vdso.c        Ammar Faizi        2022-12-24  21  	asm("syscall"
-5541992e512de8 arch/x86/um/vdso/um_vdso.c        Ammar Faizi        2022-12-24  22  		: "=a" (ret)
-5541992e512de8 arch/x86/um/vdso/um_vdso.c        Ammar Faizi        2022-12-24  23  		: "0" (__NR_clock_gettime), "D" (clock), "S" (ts)
-5541992e512de8 arch/x86/um/vdso/um_vdso.c        Ammar Faizi        2022-12-24  24  		: "rcx", "r11", "memory");
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  25  
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  26  	return ret;
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  27  }
-82210fc778982d arch/x86/um/vdso/um_vdso.c        Arnd Bergmann      2019-10-27  28  int clock_gettime(clockid_t, struct __kernel_old_timespec *)
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  29  	__attribute__((weak, alias("__vdso_clock_gettime")));
-f1c2bb8b9964ed arch/um/sys-x86_64/vdso/um_vdso.c Richard Weinberger 2011-07-25  30  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Helge
