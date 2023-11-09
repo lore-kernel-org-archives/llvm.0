@@ -1,40 +1,40 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D65810784
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 08:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF48107A7
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 08:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SJ6zRD4g"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wa2+PoF3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699517485;
+	s=mimecast20190719; t=1699518078;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=LeQk5FzT2eKevnD7ebOhM+7o6tEc4Q68kYjyKqKRyOE=;
-	b=SJ6zRD4gw33EjqnDKQkBi7YFuB9KVpB7zMYSFnEJ2o2O0taff4wTe/r8lY24/k8s540m+M
-	dqn8mPy3wLf9CHUV3WmS0h8w696M6T2XQwMrtRIYaFtqvMrH1n4Tg14LdXB+pWFOmYv82v
-	GBTeLXlhQr0WWgVHGebCrSJcWH9rdec=
+	bh=C+lmDaEDGYLR9+NtNCpUSiETlGKST2ZIZeQIYTtcWAs=;
+	b=Wa2+PoF3lqPXsIFrTifpsZO1ezbJCTaabCUOkYhOCqfgIdpv30LYFYEdhbiJMLUZ5fCV4B
+	M6RxQmYu3Dd5Mo8a5DvMm2FyZ3SVja6xAennUfHvAP2oF6NfHmPUg6xr27ZD+BYTLfpOJW
+	A133uu+e1MGXfQONooRdYXUdDTO5bn8=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-390-GHOJzf8kOYmgwHH5clXxFw-1; Thu, 09 Nov 2023 03:11:24 -0500
-X-MC-Unique: GHOJzf8kOYmgwHH5clXxFw-1
+ us-mta-247-GdJfN9vQOYqn3cT9qOa0dw-1; Thu, 09 Nov 2023 03:21:16 -0500
+X-MC-Unique: GdJfN9vQOYqn3cT9qOa0dw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C78C5101A54C
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 08:11:23 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9336985A5BD
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 08:21:16 +0000 (UTC)
 Received: from [172.64.13.27] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A855B2026D68;
-	Thu,  9 Nov 2023 08:11:23 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7AA362026D68;
+	Thu,  9 Nov 2023 08:21:16 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
- mainline.kernel.org-clang, 6bc986ab)
-Date: Thu, 09 Nov 2023 08:11:23 -0000
-To: yizhan@redhat.com, llvm@lists.linux.dev
+ mainline.kernel.org-clang, 90450a06)
+Date: Thu, 09 Nov 2023 08:21:16 -0000
+To: yizhan@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,7 +42,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <65042.123110903112400237@us-mta-390.us.mimecast.lan>
+Message-Id: <75395.123110903211600749@us-mta-247.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -57,17 +57,17 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'nfs-for-6.7-1' of git://git.linux-nfs.org/pr=
-ojects/trondmy/linux-nfs
+    Commit message: Merge tag 'rcu-fixes-v6.7' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/frederic/linux-dynticks
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/113937
+    https://datawarehouse.cki-project.org/kcidb/checkouts/113900
 
 One or more kernel tests failed:
     Unrecognized or new issues:
          aarch64 - Storage - blktests - blk
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10254150
+10250423
                    Non-passing subtests:
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/041
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/042
@@ -76,7 +76,7 @@ One or more kernel tests failed:
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/045
          aarch64 - Storage - blktests - nvme-tcp
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10254151
+10250424
                    Non-passing subtests:
                        =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
 tcp/tests/nvme/003
@@ -144,7 +144,7 @@ tcp/tests/nvme/047
 tcp/tests/nvme/048
            s390x - Storage - blktests - blk
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10254008
+10250477
                    Non-passing subtests:
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/041
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/042
@@ -153,7 +153,7 @@ tcp/tests/nvme/048
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/045
            s390x - Storage - blktests - nvme-tcp
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10254009
+10250478
                    Non-passing subtests:
                        =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
 tcp/tests/nvme/003
@@ -223,7 +223,7 @@ tcp/tests/nvme/047
 tcp/tests/nvme/048
           x86_64 - Storage - blktests - blk
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10254089
+10250362
                    Non-passing subtests:
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/041
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/042
@@ -232,7 +232,7 @@ tcp/tests/nvme/048
                        =E2=9D=8C FAIL storage/blktests/tests/nvme/045
           x86_64 - Storage - blktests - nvme-tcp
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10254090
+10250363
                    Non-passing subtests:
                        =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
 tcp/tests/nvme/003
@@ -298,22 +298,20 @@ tcp/tests/nvme/045
 tcp/tests/nvme/047
                        =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
 tcp/tests/nvme/048
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10250321
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10250324
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
         Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
 g dependency detected
             URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
@@ -340,12 +338,25 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
         Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
 ': No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1544
             Affected tests:
                  aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
 
