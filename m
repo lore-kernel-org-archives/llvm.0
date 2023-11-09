@@ -1,181 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3517A611F
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 04:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2CZ2TTr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB73C433CC
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 04:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699504014;
-	bh=fYQ8cjKX+19C1ihpDV96mhTpvzL7G65cypI0SSFKxGw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=j2CZ2TTrhO1fN0g5hgbqiKYkiAChrvPzbRi0YXwmLxeJ85FkuLLZXsvWx67JMKycP
-	 nZcjh2r9FD3kaoAHvI+SLnyzcoHAm5mXLJV75PfQDgzq0ayGLS50EnX50ymi3ltSNv
-	 WlM7C2tuLfk1Yq8syDyxY+EAoNnyFMdT/8K3dv8vgutniLt+VcWEbo9WYIRVfv37FP
-	 AqanfMFmxRiIbIl15n5chg/ETDNGvTkvk4TuGEt6vOCE4KlN93cWwp9vcrAnzf7cNH
-	 T7CCZL2M/06KNcPl9/sJr9q+4SztmKBtM9pN9yUp1pHCF6OsUdjD/18ZMWTfxmS2An
-	 5vmqPyiNBCPQw==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1f0f94a08a0so252516fac.2
-        for <llvm@lists.linux.dev>; Wed, 08 Nov 2023 20:26:54 -0800 (PST)
-X-Gm-Message-State: AOJu0Yy7dS1I1PkXgBO9oKCttQ0BtqQqNGTXYJ0EtNNr1otyh+UeainA
-	MSVIP0U7KrLYREILrSmkZyVLACBFN2qlHl+Z/FA=
-X-Google-Smtp-Source: AGHT+IH8ctNVx9dH7eRJZUdvO7bLpKn+oyNzQkQPB6hniLZVGLKtruPtho9VRjW/UrUxb5JWngllKNeyw+bzhVQX4Uc=
-X-Received: by 2002:a05:6870:6586:b0:1f0:aff:333c with SMTP id
- fp6-20020a056870658600b001f00aff333cmr4924051oab.46.1699504013905; Wed, 08
- Nov 2023 20:26:53 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97106D506
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 06:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r0yTN-0002rd-EG; Thu, 09 Nov 2023 07:25:01 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r0yTL-007iId-Va; Thu, 09 Nov 2023 07:24:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r0yTL-00Flau-M4; Thu, 09 Nov 2023 07:24:59 +0100
+Date: Thu, 9 Nov 2023 07:24:59 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Helge Deller <deller@gmx.de>
+Cc: linux-fbdev@vger.kernel.org, llvm@lists.linux.dev,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	dri-devel@lists.freedesktop.org,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Nathan Chancellor <nathan@kernel.org>, kernel@pengutronix.de,
+	linux-arm-kernel@lists.infradead.org,
+	Nicolas Ferre <nicolas.ferre@microchip.com>
+Subject: Re: [PATCH 02/22] fb: atmel_lcdfb: Stop using platform_driver_probe()
+Message-ID: <20231109062459.5hk7vb54t4iy5kp6@pengutronix.de>
+References: <20231107091740.3924258-1-u.kleine-koenig@pengutronix.de>
+ <20231107091740.3924258-3-u.kleine-koenig@pengutronix.de>
+ <20231108184805.GA1579138@dev-arch.thelio-3990X>
+ <20231108210018.ayo5b3afggmt6wfc@pengutronix.de>
+ <24c4cc36-d14b-40cc-ad8d-dea029cf1845@gmx.de>
+ <20231108215220.3iw5sydxad32gufj@pengutronix.de>
+ <656080fb-7d10-47ec-bdeb-a099ceee99bf@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231104222715.3967791-1-yoann.congal@smile.fr>
- <CAK7LNAS6J5Nh8nOUHbaf123yd1Z-1q--FvB1ok8GQcoNorAROw@mail.gmail.com> <20231107210004.GA2065849@dev-arch.thelio-3990X>
-In-Reply-To: <20231107210004.GA2065849@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 9 Nov 2023 06:26:16 +0200
-X-Gmail-Original-Message-ID: <CAK7LNARpJ9huseh-Ro9v8W_tabMof9cuUZO43gi-hfEnXG4FYA@mail.gmail.com>
-Message-ID: <CAK7LNARpJ9huseh-Ro9v8W_tabMof9cuUZO43gi-hfEnXG4FYA@mail.gmail.com>
-Subject: Re: [PATCH v5] kconfig: avoid an infinite loop in oldconfig/syncconfig
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Yoann Congal <yoann.congal@smile.fr>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>, 
-	Brandon Maier <brandon.maier@collins.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3kqb4iadfxwx3nek"
+Content-Disposition: inline
+In-Reply-To: <656080fb-7d10-47ec-bdeb-a099ceee99bf@gmx.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
+
+
+--3kqb4iadfxwx3nek
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 7, 2023 at 11:00=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Sun, Nov 05, 2023 at 04:55:57PM +0900, Masahiro Yamada wrote:
-> > On Sun, Nov 5, 2023 at 7:27=E2=80=AFAM Yoann Congal <yoann.congal@smile=
-.fr> wrote:
-> > >
-> > > Exit on error when asking for value and reading stdin returns an erro=
-r
-> > > (mainly if it has reached EOF or is closed).
-> > >
-> > > This infinite loop happens in particular for hex/int configs without =
-an
-> > > explicit default value.
-> > >
-> > > Previously, this case would loop:
-> > > * oldconfig prompts for the value but stdin has reached EOF
-> > > * It gets the global default value : an empty string
-> > > * This is not a valid hex/int value so it prompts again, hence the
-> > >   infinite loop.
-> > >
-> > > This case happens with a configuration like this (a hex config withou=
-t a
-> > > valid default value):
-> > >   config TEST_KCONFIG
-> > >        hex "Test KConfig"
-> > >        # default 0x0
-> > >
-> > > And using:
-> > >   make oldconfig < /dev/null
-> > >
-> > > This was discovered when working on Yocto bug[0] on a downstream
-> > > kconfig user (U-boot)
-> > >
-> > > [0]: https://bugzilla.yoctoproject.org/show_bug.cgi?id=3D14136
-> > >
-> > > CC: Brandon Maier <brandon.maier@collins.com>
-> > > Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
-> >
-> > Applied to linux-kbuild.
-> > Thanks.
->
-> For what it's worth, this change breaks our continuous integration [1]
-> because tuxmake explicitly uses /dev/null as stdin to make for
-> non-interactive commands (I think it does this as basically the
-> equivalent of "yes '' | make" in Python), so the error will always
-> occur.
->
-> Before:
->
-> $ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/pac=
-kages/linux/-/raw/main/config
->
-> # Same as 'make < /dev/null' but still
-> $ python3 -c "import subprocess; subprocess.run(['make', '-j128'], stdin=
-=3Dsubprocess.DEVNULL)"
->   SYNC    include/config/auto.conf
->   HOSTCC  scripts/basic/fixdep
->   HOSTCC  scripts/kconfig/conf.o
->   HOSTCC  scripts/kconfig/confdata.o
->   HOSTCC  scripts/kconfig/expr.o
->   LEX     scripts/kconfig/lexer.lex.c
->   YACC    scripts/kconfig/parser.tab.[ch]
->   HOSTCC  scripts/kconfig/menu.o
->   HOSTCC  scripts/kconfig/preprocess.o
->   HOSTCC  scripts/kconfig/symbol.o
->   HOSTCC  scripts/kconfig/util.o
->   HOSTCC  scripts/kconfig/lexer.lex.o
->   HOSTCC  scripts/kconfig/parser.tab.o
->   HOSTLD  scripts/kconfig/conf
-> *
-> * Restart config...
-> *
-> ...
-> Error in reading or end of file.
->
->   GEN     arch/x86/include/generated/asm/orc_hash.h
->   WRAP    arch/x86/include/generated/uapi/asm/bpf_perf_event.h
->   WRAP    arch/x86/include/generated/uapi/asm/errno.h
-> ...
->
-> After:
->
-> $ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/pac=
-kages/linux/-/raw/main/config
->
-> $ python3 -c "import subprocess; subprocess.run(['make', '-j128'], stdin=
-=3Dsubprocess.DEVNULL)"
->   SYNC    include/config/auto.conf
->   HOSTCC  scripts/basic/fixdep
->   HOSTCC  scripts/kconfig/conf.o
->   HOSTCC  scripts/kconfig/confdata.o
->   HOSTCC  scripts/kconfig/expr.o
->   LEX     scripts/kconfig/lexer.lex.c
->   YACC    scripts/kconfig/parser.tab.[ch]
->   HOSTCC  scripts/kconfig/menu.o
->   HOSTCC  scripts/kconfig/preprocess.o
->   HOSTCC  scripts/kconfig/symbol.o
->   HOSTCC  scripts/kconfig/util.o
->   HOSTCC  scripts/kconfig/lexer.lex.o
->   HOSTCC  scripts/kconfig/parser.tab.o
->   HOSTLD  scripts/kconfig/conf
-> *
-> * Restart config...
-> *
-> ...
-> Error in reading or end of file.
-> make[3]: *** [scripts/kconfig/Makefile:77: syncconfig] Error 1
-> ...
->
-> We have been doing this for some time and never run across an infinite
-> loop in syncconfig. Can this be improved?
+Hello,
 
+On Wed, Nov 08, 2023 at 10:57:00PM +0100, Helge Deller wrote:
+> On 11/8/23 22:52, Uwe Kleine-K=F6nig wrote:
+> > But info and so info->fix live longer than the probe function, don't
+> > they?
+>=20
+> Yes, they do.
+> But AFAICS info->fix contains a *copy* of the initial atmel_lcdfb_fix str=
+uct
+> (and not a pointer to it). So that should be ok.
 
+If you say so that's good. I grepped a bit around and didn't find a
+place where a copy is made. But that's probably me and I'll consider the
+case closed.
 
-In Linux, most int/hex entries have a default,
-hence there is no practical issue.
+Thanks
+Uwe
 
-I will drop this for now.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-I will send an alternative solution.
+--3kqb4iadfxwx3nek
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVMezoACgkQj4D7WH0S
+/k7q/wgArxm2BvyCentus6W2LMuLfhOlRWssY41U6crdkW2BAR8S85WMcflzm8x8
+LJvcizkBfw+flQR/w4UHHmEqq/r3ITBa7AYlD/tYbwATihPQZtCLgmIf5OT/D8ur
+RqhcnzFkdj6tHccaOLBQuLJ6lin946/ghokktbTDOwRbhJKxkV3uI8seepdGVg5Z
+soUjFq8Da82cXiqeuEnHPUFizigl/RhMHmjeDA+nbA8A3TQYLXNMyKAZBzi2JQZs
+lQsDlI5yatfWPOwRjA2H9PckJgNvysrcgqU2pVaxwXKx/cQur7GP8EnnCuJAma/k
+n3hhvc6Fu/qozs6Tz1asn3kh10mj6w==
+=bkJX
+-----END PGP SIGNATURE-----
 
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+--3kqb4iadfxwx3nek--
