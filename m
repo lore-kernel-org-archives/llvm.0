@@ -1,129 +1,180 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6F8199BD
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 10:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r12Kx-0000sw-OX; Thu, 09 Nov 2023 11:32:35 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r12Kw-007krC-OJ; Thu, 09 Nov 2023 11:32:34 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r12Kw-00Fs38-Eu; Thu, 09 Nov 2023 11:32:34 +0100
-Date: Thu, 9 Nov 2023 11:32:34 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Helge Deller <deller@gmx.de>
-Cc: linux-fbdev@vger.kernel.org, llvm@lists.linux.dev,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	dri-devel@lists.freedesktop.org,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Nathan Chancellor <nathan@kernel.org>, kernel@pengutronix.de,
-	linux-arm-kernel@lists.infradead.org,
-	Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: Re: [PATCH 02/22] fb: atmel_lcdfb: Stop using platform_driver_probe()
-Message-ID: <20231109103234.rknpmepbhpukwbtd@pengutronix.de>
-References: <20231107091740.3924258-1-u.kleine-koenig@pengutronix.de>
- <20231107091740.3924258-3-u.kleine-koenig@pengutronix.de>
- <20231108184805.GA1579138@dev-arch.thelio-3990X>
- <20231108210018.ayo5b3afggmt6wfc@pengutronix.de>
- <24c4cc36-d14b-40cc-ad8d-dea029cf1845@gmx.de>
- <20231108215220.3iw5sydxad32gufj@pengutronix.de>
- <656080fb-7d10-47ec-bdeb-a099ceee99bf@gmx.de>
- <20231109062459.5hk7vb54t4iy5kp6@pengutronix.de>
- <57de52b3-201b-4599-83ba-b0a7cc8db350@gmx.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD6319444
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 11:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NJkyPN/2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699528286;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=l57unHk3DQpUYyMUYNrfm4cT0sq6IzfIb3YXSgOAaRw=;
+	b=NJkyPN/27kRSc+5I8VuQyQkDyeXsCGqA0aF4LwSVXE60iPsGv2G84FkDLTSWBJQJQgpuVb
+	GFnM9Um/aNTN8aZ6l23W+7fOm6rLCSIYliHT7y5DqIjjr2oOL5diP52s7JhxtzKiSuvJYw
+	QlSzbtNGWqSSN86TqZmwra3DDhhW4pg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-646-LGYj5Pe4MAO4hkoALlja1A-1; Thu, 09 Nov 2023 06:11:24 -0500
+X-MC-Unique: LGYj5Pe4MAO4hkoALlja1A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61321101A53B
+	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 11:11:24 +0000 (UTC)
+Received: from [172.64.13.27] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 459631121306;
+	Thu,  9 Nov 2023 11:11:24 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 230): Test report for master
+ (6.6.0, mainline.kernel.org-clang, 34f76326)
+Date: Thu, 09 Nov 2023 11:11:24 -0000
+To: llvm@lists.linux.dev, yizhan@redhat.com, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wf3egznunlkkf5m2"
-Content-Disposition: inline
-In-Reply-To: <57de52b3-201b-4599-83ba-b0a7cc8db350@gmx.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
-
-
---wf3egznunlkkf5m2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <60907.123110906112400761@us-mta-646.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hello Helge,
+Hi, we tested your kernel and here are the results:
 
-On Thu, Nov 09, 2023 at 10:55:41AM +0100, Helge Deller wrote:
-> On 11/9/23 07:24, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > On Wed, Nov 08, 2023 at 10:57:00PM +0100, Helge Deller wrote:
-> > > On 11/8/23 22:52, Uwe Kleine-K=F6nig wrote:
-> > > > But info and so info->fix live longer than the probe function, don't
-> > > > they?
-> > >=20
-> > > Yes, they do.
-> > > But AFAICS info->fix contains a *copy* of the initial atmel_lcdfb_fix=
- struct
-> > > (and not a pointer to it). So that should be ok.
-> >=20
-> > If you say so that's good. I grepped a bit around and didn't find a
-> > place where a copy is made. But that's probably me and I'll consider the
-> > case closed.
->=20
-> It's not directly obvious, but the copy happens in the line you pointed
-> out previously.
->=20
-> In include/linux/fb.h:
->=20
-> struct fb_info {
-> ...
->         struct fb_var_screeninfo var;   /* Current var */
->         struct fb_fix_screeninfo fix;   /* Current fix */
->=20
-> so, "fb_info.fix" is a struct, and not a pointer.
->=20
-> In drivers/video/fbdev/atmel_lcdfb.c:
-> static int atmel_lcdfb_probe(struct platform_device *pdev)
-> {
-> ...
->         info->fix =3D atmel_lcdfb_fix;  //  (line 1065)
->=20
-> this becomes effectively a:
-> 	memcpy(&info->fix, &atmel_lcdfb_fix, sizeof(struct fb_fix_screeninfo));
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Ah right. Thanks for that hint. I didn't spot this and grepped for
-memcpy and memdup.
 
-Uwe
+Kernel information:
+    Commit message: Merge tag 'xfs-6.7-merge-2' of git://git.kernel.org/pub=
+/scm/fs/xfs/xfs-linux
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/113934
 
---wf3egznunlkkf5m2
-Content-Type: application/pgp-signature; name="signature.asc"
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10253858
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10253749
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+          x86_64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10253915
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10253789
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10253792
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
------BEGIN PGP SIGNATURE-----
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVMtUEACgkQj4D7WH0S
-/k45ewf+J2jgFy/NvgT6l7mXVl3BEWScvV8ubxVEjQCY6zI70o8IwWNTMEmy+omu
-7GKpwQmBs/rhqVu4h8BWwrSwo2uc/ImVUxyd6HJdPSeI/WCnjwKYjLMIP5gurZWP
-8qiA6lLFVWm9iDYQIbYFNUDN0UJGT3/bmKggHmqS0jlads15d8HrmE1Oyi2Detdf
-MhOOpSXsfrQE84VMOL+fTw3wM40YwWFz9hDjyNKXRk0T341RQc+fhQNVDlWTVL+D
-s8DOV1ror6AQ4xPs1l2s4vYPDC3mQ+MFx26/Ael9YTo9P2j7LNn7+Kbx0PNSrxOx
-xGjic2PgrU7FSAUel5PDERXITTruzw==
-=jg83
------END PGP SIGNATURE-----
 
---wf3egznunlkkf5m2--
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
