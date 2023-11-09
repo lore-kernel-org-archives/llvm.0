@@ -1,380 +1,183 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF48107A7
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 08:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF0410A33;
+	Thu,  9 Nov 2023 09:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wa2+PoF3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699518078;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=C+lmDaEDGYLR9+NtNCpUSiETlGKST2ZIZeQIYTtcWAs=;
-	b=Wa2+PoF3lqPXsIFrTifpsZO1ezbJCTaabCUOkYhOCqfgIdpv30LYFYEdhbiJMLUZ5fCV4B
-	M6RxQmYu3Dd5Mo8a5DvMm2FyZ3SVja6xAennUfHvAP2oF6NfHmPUg6xr27ZD+BYTLfpOJW
-	A133uu+e1MGXfQONooRdYXUdDTO5bn8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-247-GdJfN9vQOYqn3cT9qOa0dw-1; Thu, 09 Nov 2023 03:21:16 -0500
-X-MC-Unique: GdJfN9vQOYqn3cT9qOa0dw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9336985A5BD
-	for <llvm@lists.linux.dev>; Thu,  9 Nov 2023 08:21:16 +0000 (UTC)
-Received: from [172.64.13.27] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7AA362026D68;
-	Thu,  9 Nov 2023 08:21:16 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.6.0,
- mainline.kernel.org-clang, 90450a06)
-Date: Thu, 09 Nov 2023 08:21:16 -0000
-To: yizhan@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FREdehzE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699521246; x=1731057246;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GS8dbLhC+m1/CpSugFOf9ABa4muzjNydMqJPnmvrbiE=;
+  b=FREdehzEdLmizhvtP29rvdfDOOPr5kBxJWFD/egrCq/JZmpHbG+AxSiS
+   0TfvWUBJ/JvKc8VcXLhPqGH8CfCokLrsfmBgf6ICAM92gjY4uoyOqO842
+   iDM8Oueb+aNMpcZPth1vyi5mAU1sqOLqADO055fDx9ywndcmtwMnNnkGg
+   vp9LWwCVi7tOo0V+IvfdHSeTmsdgfRhE6e5Nkk1bvwved10Lg6t+AQefP
+   bPZc5z4ROED+KETQZ/ibXcdk6EkqX8UkQiT1Nw2kYpjboWiW3Cr/eoo32
+   W233xMuzXQsbBZCsr49BlzQctKZzSwN/Fcm+aa1wN9bG7El1LgbbR452f
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="454251092"
+X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
+   d="scan'208";a="454251092"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 01:14:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="880535126"
+X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
+   d="scan'208";a="880535126"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Nov 2023 01:14:03 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r116v-0008br-1I;
+	Thu, 09 Nov 2023 09:14:01 +0000
+Date: Thu, 9 Nov 2023 17:13:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [rafael-pm:acpi-mipi-disco-img 5/7]
+ drivers/acpi/mipi-disco-img.c:537:6: warning: format specifies type 'int'
+ but the argument has type 'unsigned long'
+Message-ID: <202311091629.3jyzqiV7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <75395.123110903211600749@us-mta-247.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-mipi-disco-img
+head:   54d87fab9fb060ff0489886ca0fdb101f6a3c03f
+commit: a5dbdbb2bfb28643b71d23f75205845cb23af965 [5/7] ACPI: scan: Extract MIPI DisCo for Imaging data into swnodes
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231109/202311091629.3jyzqiV7-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231109/202311091629.3jyzqiV7-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311091629.3jyzqiV7-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'rcu-fixes-v6.7' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/frederic/linux-dynticks
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/113900
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250423
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250424
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250477
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250478
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/031
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-          x86_64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250362
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
-                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250363
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/014
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/015
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/041
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/042
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/043
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/044
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/045
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250321
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10250324
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/acpi/mipi-disco-img.c:537:6: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                                    ret * BITS_PER_TYPE(u8), num_lanes + 1);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/acpi.h:1216:47: note: expanded from macro 'acpi_handle_info'
+           acpi_handle_printk(KERN_INFO, handle, fmt, ##__VA_ARGS__)
+                                                 ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
+vim +537 drivers/acpi/mipi-disco-img.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   481	
+   482	static void init_csi2_port(struct acpi_device *adev,
+   483				   struct acpi_device_software_nodes *swnodes,
+   484				   struct acpi_device_software_node_port *port,
+   485				   struct fwnode_handle *port_fwnode,
+   486				   unsigned int port_index)
+   487	{
+   488		unsigned int ep_prop_index = ACPI_DEVICE_SWNODE_EP_CLOCK_LANES;
+   489		acpi_handle handle = acpi_device_handle(adev);
+   490		u8 val[ACPI_DEVICE_CSI2_DATA_LANES];
+   491		int num_lanes = 0;
+   492		int ret;
+   493	
+   494		if (GRAPH_PORT_NAME(port->port_name, port->port_nr))
+   495			return;
+   496	
+   497		swnodes->nodes[ACPI_DEVICE_SWNODE_PORT(port_index)] =
+   498				SOFTWARE_NODE(port->port_name, port->port_props,
+   499					      &swnodes->nodes[ACPI_DEVICE_SWNODE_ROOT]);
+   500	
+   501		ret = fwnode_property_read_u8(port_fwnode, "mipi-img-clock-lane", val);
+   502		if (!ret)
+   503			port->ep_props[NEXT_PROPERTY(ep_prop_index, EP_CLOCK_LANES)] =
+   504				PROPERTY_ENTRY_U32("clock-lanes", val[0]);
+   505	
+   506		ret = fwnode_property_count_u8(port_fwnode, "mipi-img-data-lanes");
+   507		if (ret > 0) {
+   508			num_lanes = ret;
+   509	
+   510			if (num_lanes > ACPI_DEVICE_CSI2_DATA_LANES) {
+   511				acpi_handle_info(handle, "Too many data lanes: %u\n",
+   512						 num_lanes);
+   513				num_lanes = ACPI_DEVICE_CSI2_DATA_LANES;
+   514			}
+   515	
+   516			ret = fwnode_property_read_u8_array(port_fwnode,
+   517							    "mipi-img-data-lanes",
+   518							    val, num_lanes);
+   519			if (!ret) {
+   520				unsigned int i;
+   521	
+   522				for (i = 0; i < num_lanes; i++)
+   523					port->data_lanes[i] = val[i];
+   524	
+   525				port->ep_props[NEXT_PROPERTY(ep_prop_index, EP_DATA_LANES)] =
+   526					PROPERTY_ENTRY_U32_ARRAY_LEN("data-lanes",
+   527								     port->data_lanes,
+   528								     num_lanes);
+   529			}
+   530		}
+   531	
+   532		ret = fwnode_property_count_u8(port_fwnode, "mipi-img-lane-polarities");
+   533		if (ret < 0) {
+   534			acpi_handle_debug(handle, "Lane polarity bytes missing\n");
+   535		} else if (ret * BITS_PER_TYPE(u8) < num_lanes + 1) {
+   536			acpi_handle_info(handle, "Too few lane polarity bytes (%d vs. %d)\n",
+ > 537					 ret * BITS_PER_TYPE(u8), num_lanes + 1);
+   538		} else {
+   539			unsigned long mask = 0;
+   540			int byte_count = ret;
+   541			unsigned int i;
+   542	
+   543			/*
+   544			 * The total number of lanes is ACPI_DEVICE_CSI2_DATA_LANES + 1
+   545			 * (data lanes + clock lane).  It is not expected to ever be
+   546			 * greater than the number of bits in an unsigned long
+   547			 * variable, but ensure that this is the case.
+   548			 */
+   549			BUILD_BUG_ON(BITS_PER_TYPE(unsigned long) <= ACPI_DEVICE_CSI2_DATA_LANES);
+   550	
+   551			if (byte_count > sizeof(mask)) {
+   552				acpi_handle_info(handle, "Too many lane polarities: %d\n",
+   553						 byte_count);
+   554				byte_count = sizeof(mask);
+   555			}
+   556			fwnode_property_read_u8_array(port_fwnode, "mipi-img-lane-polarities",
+   557						      val, byte_count);
+   558	
+   559			for (i = 0; i < byte_count; i++)
+   560				mask |= (unsigned long)val[i] << BITS_PER_TYPE(u8) * i;
+   561	
+   562			for (i = 0; i <= num_lanes; i++)
+   563				port->lane_polarities[i] = test_bit(i, &mask);
+   564	
+   565			port->ep_props[NEXT_PROPERTY(ep_prop_index, EP_LANE_POLARITIES)] =
+   566					PROPERTY_ENTRY_U32_ARRAY_LEN("lane-polarities",
+   567								     port->lane_polarities,
+   568								     num_lanes + 1);
+   569		}
+   570	
+   571		swnodes->nodes[ACPI_DEVICE_SWNODE_EP(port_index)] =
+   572			SOFTWARE_NODE("endpoint@0", swnodes->ports[port_index].ep_props,
+   573				      &swnodes->nodes[ACPI_DEVICE_SWNODE_PORT(port_index)]);
+   574	
+   575		if (port->crs_csi2_local)
+   576			init_csi2_port_local(adev, port, port_fwnode, ep_prop_index);
+   577	}
+   578	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
