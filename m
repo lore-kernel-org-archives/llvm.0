@@ -1,196 +1,143 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0CB63A8;
-	Fri, 10 Nov 2023 06:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SRTKn1lQVzfb9S;
-	Fri, 10 Nov 2023 14:23:41 +0800 (CST)
-Received: from [10.174.176.88] (10.174.176.88) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Fri, 10 Nov 2023 14:23:51 +0800
-Message-ID: <95e79046-f148-4ac2-8fd6-1379a78e744b@huawei.com>
-Date: Fri, 10 Nov 2023 14:23:51 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFF41096C;
+	Fri, 10 Nov 2023 09:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lsoLL6te"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699607850; x=1731143850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0OaHHlwLItjCt3c5YKtM0WKbl6EAt2dHV4q+Vl4Xx3o=;
+  b=lsoLL6tefeOOacmGgP8QkW7W2rpqD4kwEtkBEJUUhBgIri62WyB3HpFc
+   t5qYEXV0wa0qgO66w4Vudyd/ajw8yDIV85/Xf08bLlT1IH8oTzdSDxUCB
+   Op5GrpvxNDocWRI5zGiXCTLGOIiXN8j62rNiJEMjKbq2ZkAmHvvf/lLOT
+   qUxzwUzjJsWl57B0nMC4Y/71X6Z/Kx5XIZNvLljrKX9z70fpfVSC4UhKA
+   owspbt3e3q0wpEava1e7dQsxTD1FSaNFRvG5Qon1X0zALVFJIwRupZoqz
+   egeSrEKxAO49+DNYybD7M4rtZTKyxWS9Xlf4jzJqfTCrkOaKKbG2tnU2x
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="394064243"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="394064243"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 01:17:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="854347489"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="854347489"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Nov 2023 01:17:24 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r1Ndi-0009WM-1t;
+	Fri, 10 Nov 2023 09:17:22 +0000
+Date: Fri, 10 Nov 2023 17:16:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jyan Chou <jyanchou@realtek.com>, ulf.hansson@linaro.org,
+	adrian.hunter@intel.com, jh80.chung@samsung.com,
+	riteshh@codeaurora.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	conor+dt@kernel.org, asutoshd@codeaurora.org,
+	p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	arnd@arndb.de, briannorris@chromium.org, doug@schmorgal.com,
+	tonyhuang.sunplus@gmail.com, abel.vesa@linaro.org,
+	william.qiu@starfivetech.com, jyanchou@realtek.com
+Subject: Re: [PATCH V6][1/4] mmc: solve DMA boundary limitation of CQHCI
+ driver
+Message-ID: <202311101711.FFnMF7iH-lkp@intel.com>
+References: <20231109082043.27147-2-jyanchou@realtek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next V2] proc: support file->f_pos checking in mem_lseek
-To: kernel test robot <lkp@intel.com>, <viro@zeniv.linux.org.uk>,
-	<brauner@kernel.org>, <akpm@linux-foundation.org>, <oleg@redhat.com>,
-	<jlayton@kernel.org>, <dchinner@redhat.com>, <cyphar@cyphar.com>,
-	<shr@devkernel.io>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<yangerkun@huawei.com>
-References: <20231109102658.2075547-1-wozizhi@huawei.com>
- <202311101239.ihy4cKpf-lkp@intel.com>
-From: Zizhi Wo <wozizhi@huawei.com>
-In-Reply-To: <202311101239.ihy4cKpf-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.88]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500020.china.huawei.com (7.185.36.49)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231109082043.27147-2-jyanchou@realtek.com>
 
-I have missed fallthrough, and will fix it in V3.
+Hi Jyan,
 
-Thanks,
-Zizhi Wo
+kernel test robot noticed the following build errors:
 
-在 2023/11/10 12:34, kernel test robot 写道:
-> Hi WoZ1zh1,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on next-20231108]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/WoZ1zh1/proc-support-file-f_pos-checking-in-mem_lseek/20231109-103353
-> base:   next-20231108
-> patch link:    https://lore.kernel.org/r/20231109102658.2075547-1-wozizhi%40huawei.com
-> patch subject: [PATCH -next V2] proc: support file->f_pos checking in mem_lseek
-> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231110/202311101239.ihy4cKpf-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311101239.ihy4cKpf-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202311101239.ihy4cKpf-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->     In file included from fs/proc/base.c:68:
->     In file included from include/linux/swap.h:9:
->     In file included from include/linux/memcontrol.h:13:
->     In file included from include/linux/cgroup.h:26:
->     In file included from include/linux/kernel_stat.h:9:
->     In file included from include/linux/interrupt.h:11:
->     In file included from include/linux/hardirq.h:11:
->     In file included from arch/um/include/asm/hardirq.h:5:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/um/include/asm/io.h:24:
->     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       547 |         val = __raw_readb(PCI_IOBASE + addr);
->           |                           ~~~~~~~~~~ ^
->     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->           |                                                         ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->        37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->           |                                                   ^
->     In file included from fs/proc/base.c:68:
->     In file included from include/linux/swap.h:9:
->     In file included from include/linux/memcontrol.h:13:
->     In file included from include/linux/cgroup.h:26:
->     In file included from include/linux/kernel_stat.h:9:
->     In file included from include/linux/interrupt.h:11:
->     In file included from include/linux/hardirq.h:11:
->     In file included from arch/um/include/asm/hardirq.h:5:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/um/include/asm/io.h:24:
->     include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->           |                                                         ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->        35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->           |                                                   ^
->     In file included from fs/proc/base.c:68:
->     In file included from include/linux/swap.h:9:
->     In file included from include/linux/memcontrol.h:13:
->     In file included from include/linux/cgroup.h:26:
->     In file included from include/linux/kernel_stat.h:9:
->     In file included from include/linux/interrupt.h:11:
->     In file included from include/linux/hardirq.h:11:
->     In file included from arch/um/include/asm/hardirq.h:5:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/um/include/asm/io.h:24:
->     include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       584 |         __raw_writeb(value, PCI_IOBASE + addr);
->           |                             ~~~~~~~~~~ ^
->     include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->           |                                                       ~~~~~~~~~~ ^
->     include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->           |                                                       ~~~~~~~~~~ ^
->     include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       692 |         readsb(PCI_IOBASE + addr, buffer, count);
->           |                ~~~~~~~~~~ ^
->     include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       700 |         readsw(PCI_IOBASE + addr, buffer, count);
->           |                ~~~~~~~~~~ ^
->     include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       708 |         readsl(PCI_IOBASE + addr, buffer, count);
->           |                ~~~~~~~~~~ ^
->     include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       717 |         writesb(PCI_IOBASE + addr, buffer, count);
->           |                 ~~~~~~~~~~ ^
->     include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       726 |         writesw(PCI_IOBASE + addr, buffer, count);
->           |                 ~~~~~~~~~~ ^
->     include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       735 |         writesl(PCI_IOBASE + addr, buffer, count);
->           |                 ~~~~~~~~~~ ^
->>> fs/proc/base.c:912:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
->       912 |         case SEEK_SET:
->           |         ^
->     fs/proc/base.c:912:2: note: insert '__attribute__((fallthrough));' to silence this warning
->       912 |         case SEEK_SET:
->           |         ^
->           |         __attribute__((fallthrough));
->     fs/proc/base.c:912:2: note: insert 'break;' to avoid fall-through
->       912 |         case SEEK_SET:
->           |         ^
->           |         break;
->     13 warnings generated.
-> 
-> 
-> vim +912 fs/proc/base.c
-> 
->     903	
->     904	loff_t mem_lseek(struct file *file, loff_t offset, int orig)
->     905	{
->     906		loff_t ret = 0;
->     907	
->     908		spin_lock(&file->f_lock);
->     909		switch (orig) {
->     910		case SEEK_CUR:
->     911			offset += file->f_pos;
->   > 912		case SEEK_SET:
->     913			/* to avoid userland mistaking f_pos=-9 as -EBADF=-9 */
->     914			if ((unsigned long long)offset >= -MAX_ERRNO)
->     915				ret = -EOVERFLOW;
->     916			break;
->     917		default:
->     918			ret = -EINVAL;
->     919		}
->     920		if (!ret) {
->     921			if (offset < 0 && !(unsigned_offsets(file))) {
->     922				ret = -EINVAL;
->     923			} else {
->     924				file->f_pos = offset;
->     925				ret = file->f_pos;
->     926				force_successful_syscall_return();
->     927			}
->     928		}
->     929	
->     930		spin_unlock(&file->f_lock);
->     931		return ret;
->     932	}
->     933	
-> 
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.6 next-20231110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jyan-Chou/mmc-solve-DMA-boundary-limitation-of-CQHCI-driver/20231109-190435
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231109082043.27147-2-jyanchou%40realtek.com
+patch subject: [PATCH V6][1/4] mmc: solve DMA boundary limitation of CQHCI driver
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231110/202311101711.FFnMF7iH-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311101711.FFnMF7iH-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311101711.FFnMF7iH-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mmc/host/cqhci-core.c:519:20: error: no member named 'setup_tran_desc' in 'struct cqhci_host_ops'
+           if (cq_host->ops->setup_tran_desc) {
+               ~~~~~~~~~~~~  ^
+   drivers/mmc/host/cqhci-core.c:520:17: error: no member named 'setup_tran_desc' in 'struct cqhci_host_ops'
+                   cq_host->ops->setup_tran_desc(data, cq_host, desc, sg_count);
+                   ~~~~~~~~~~~~  ^
+   2 errors generated.
+
+
+vim +519 drivers/mmc/host/cqhci-core.c
+
+   498	
+   499	static int cqhci_prep_tran_desc(struct mmc_request *mrq,
+   500					struct cqhci_host *cq_host, int tag)
+   501	{
+   502		struct mmc_data *data = mrq->data;
+   503		int i, sg_count, len;
+   504		bool end = false;
+   505		bool dma64 = cq_host->dma64;
+   506		dma_addr_t addr;
+   507		u8 *desc;
+   508		struct scatterlist *sg;
+   509	
+   510		sg_count = cqhci_dma_map(mrq->host, mrq);
+   511		if (sg_count < 0) {
+   512			pr_err("%s: %s: unable to map sg lists, %d\n",
+   513					mmc_hostname(mrq->host), __func__, sg_count);
+   514			return sg_count;
+   515		}
+   516	
+   517		desc = get_trans_desc(cq_host, tag);
+   518	
+ > 519		if (cq_host->ops->setup_tran_desc) {
+   520			cq_host->ops->setup_tran_desc(data, cq_host, desc, sg_count);
+   521			return 0;
+   522		}
+   523	
+   524		for_each_sg(data->sg, sg, sg_count, i) {
+   525			addr = sg_dma_address(sg);
+   526			len = sg_dma_len(sg);
+   527	
+   528			if ((i+1) == sg_count)
+   529				end = true;
+   530			cqhci_set_tran_desc(desc, addr, len, end, dma64);
+   531			desc += cq_host->trans_desc_len;
+   532		}
+   533	
+   534		return 0;
+   535	}
+   536	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
