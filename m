@@ -1,125 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567962BD01;
-	Fri, 10 Nov 2023 19:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F94A3B789
+	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 20:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xz+yaS3N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699643880; x=1731179880;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+ODdoguqhk0VjSYZVSvbWKkA4/MmGgIY12jmGr3aijw=;
-  b=Xz+yaS3NRKolCoE63yInEHEAC0wnS1/EaJEpMpW4AItk1cR4+nQagYXQ
-   kTDfSWwWrkHSV+JfUGOMVqR+M9Hr4EfqKxi7A7/+ibIRxR5m/Fu8vLM6d
-   Zrx50AMNXaR4gwj48qOptfL4lu+jwvrvRgn3tLM5CCOrn/0oXJmGJachA
-   yJyZ1alhod+rCy3b4MEBGC1BFfpxywa117VM6iJ1ZyByzYYWTBowvhs0E
-   2blTpRGipypAUHM7Va8k0Aabhqabu26Jtq2JlBtn9y4eRtECE8pLmcrcA
-   SyoArjX5PV7fmvp4VcNZlpaMF0WwmtkjR6bKRaghYQjxAyZhdY9SLvWQ3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="370427952"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="370427952"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 11:17:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="767398419"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="767398419"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Nov 2023 11:17:54 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r1X0q-0009qY-1e;
-	Fri, 10 Nov 2023 19:17:52 +0000
-Date: Sat, 11 Nov 2023 03:15:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net 4/7] net/sched: taprio: get corrected value of
- cycle_time and interval
-Message-ID: <202311110208.GT4trtEk-lkp@intel.com>
-References: <20231107112023.676016-5-faizal.abdul.rahim@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OG/X/TJ6"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-d9ab7badadeso3131268276.1
+        for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 12:08:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699646918; x=1700251718; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4YunHZgtb5nkD4PkAgnIRkW9gO+ZcmaQMUyBJXXvNgg=;
+        b=OG/X/TJ6CHjDCuPNPUUPP/nc5W8Z879X5f60t73aRi+VnsXETL2hAo8aWv4vayL3wx
+         /ajeqpmX+rRI1ttQuMeSyS0wP1D8d4234uhXzRSagiu2lYK8ZEORrcGPFs924dt9vF90
+         mQUu3ssZq9SKpHBfgj9RrNKDwjEY7pDnJZCqoNixgbBhAuGqHdnPO/HiPmiIvApyBQ8k
+         RuYSdvNRTBYU/kZAxQCO8RQIN0lJoqcCJKXnpIdb1iV+8KEPvDAXfU68+4z5g2SuCEwb
+         3anUzR1Ug0U9nuI3DLA05yl6FSXEcUnIR14H9COaZ46yaZmziZpezOp0IIfs0rNoSXm5
+         nhnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699646918; x=1700251718;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4YunHZgtb5nkD4PkAgnIRkW9gO+ZcmaQMUyBJXXvNgg=;
+        b=BPITekdA0Mif5AmG/YaHywtjMhr3hY3ifEKU1zabHgzdhPdCANMjPkCTxI7ijfm1CD
+         YqJ4IMSkSmSN6DdseGpX8sDsGt7sDzC71EJp/Q4B8SXuhWljlsuZNhEW2eOz5GaOL/KW
+         Ya51W0KnIuwVwEdwE5Ig2AtVLx4zs8GibczL2O5Vk0q9yl+qYBnGCtR7ZxL41er8cp4p
+         55F5Lj4m798d3R4MA+jx/xNr+wEdUgMv4NbvpdNWhDcmvivcpXBNue55+0vYwg4sLE8+
+         W5gyJNYJMe5KMybe2gvCHGXO9Zs3laMmqnAEl6g1/J0bLY5CSG0rbo4NEbR2B+y2vyaY
+         yzTA==
+X-Gm-Message-State: AOJu0Yw4IoqUO8uTe6Yx7Wfuw3EkEBf3o8dzhR9HANKh2RxtGZduCJ6Q
+	4c9lwsIkT0XpC6skJ7VKexqVSCwTpJpfQg==
+X-Google-Smtp-Source: AGHT+IHpA8elPSDmxOHqJghOs6XywJyufpnZHYdeTgE8gm6TvPMzYUyvszmAZYiKI4lKiyHTNGpdXhSKe/S/Cw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:d849:0:b0:d9a:f3dc:7d18 with SMTP id
+ p70-20020a25d849000000b00d9af3dc7d18mr3271ybg.13.1699646918475; Fri, 10 Nov
+ 2023 12:08:38 -0800 (PST)
+Date: Sat, 11 Nov 2023 04:08:26 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231107112023.676016-5-faizal.abdul.rahim@linux.intel.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
+Message-ID: <20231110200830.1832556-1-davidgow@google.com>
+Subject: [PATCH 1/3] kunit: Add a macro to wrap a deferred action function
+From: David Gow <davidgow@google.com>
+To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, dlatypov@google.com, 
+	Maxime Ripard <mripard@kernel.org>, Arthur Grillo <arthurgrillo@riseup.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Gow <davidgow@google.com>, 
+	"=?UTF-8?q?Ma=C3=ADra=20Canal?=" <mairacanal@riseup.net>, Sami Tolvanen <samitolvanen@google.com>, 
+	kunit-dev@googlegroups.com, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Benjamin Berg <benjamin.berg@intel.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
+	linux-kernel@vger.kernel.org, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Faizal,
+KUnit's deferred action API accepts a void(*)(void *) function pointer
+which is called when the test is exited. However, we very frequently
+want to use existing functions which accept a single pointer, but which
+may not be of type void*. While this is probably dodgy enough to be on
+the wrong side of the C standard, it's been often used for similar
+callbacks, and gcc's -Wcast-function-type seems to ignore cases where
+the only difference is the type of the argument, assuming it's
+compatible (i.e., they're both pointers to data).
 
-kernel test robot noticed the following build warnings:
+However, clang 16 has introduced -Wcast-function-type-strict, which no
+longer permits any deviation in function pointer type. This seems to be
+because it'd break CFI, which validates the type of function calls.
 
-[auto build test WARNING on net/main]
+This rather ruins our attempts to cast functions to defer them, and
+leaves us with a few options. The one we've chosen is to implement a
+macro which will generate a wrapper function which accepts a void*, and
+casts the argument to the appropriate type.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Faizal-Rahim/net-sched-taprio-fix-too-early-schedules-switching/20231107-192843
-base:   net/main
-patch link:    https://lore.kernel.org/r/20231107112023.676016-5-faizal.abdul.rahim%40linux.intel.com
-patch subject: [PATCH v2 net 4/7] net/sched: taprio: get corrected value of cycle_time and interval
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231111/202311110208.GT4trtEk-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311110208.GT4trtEk-lkp@intel.com/reproduce)
+For example, if you were trying to wrap:
+void foo_close(struct foo *handle);
+you could use:
+KUNIT_DEFINE_ACTION_WRAPPER(kunit_action_foo_close,
+			    foo_close,
+			    struct foo *);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311110208.GT4trtEk-lkp@intel.com/
+This would create a new kunit_action_foo_close() function, of type
+kunit_action_t, which could be passed into kunit_add_action() and
+similar functions.
 
-All warnings (new ones prefixed by >>):
+In addition to defining this macro, update KUnit and its tests to use
+it.
 
->> net/sched/sch_taprio.c:227:5: warning: no previous prototype for function 'get_interval' [-Wmissing-prototypes]
-     227 | u32 get_interval(const struct sched_entry *entry,
-         |     ^
-   net/sched/sch_taprio.c:227:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     227 | u32 get_interval(const struct sched_entry *entry,
-         | ^
-         | static 
->> net/sched/sch_taprio.c:236:5: warning: no previous prototype for function 'get_cycle_time' [-Wmissing-prototypes]
-     236 | s64 get_cycle_time(const struct sched_gate_list *oper)
-         |     ^
-   net/sched/sch_taprio.c:236:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     236 | s64 get_cycle_time(const struct sched_gate_list *oper)
-         | ^
-         | static 
-   2 warnings generated.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
+This is a follow-up to the RFC here:
+https://lore.kernel.org/linux-kselftest/20230915050125.3609689-1-davidgow@google.com/
 
-vim +/get_interval +227 net/sched/sch_taprio.c
+There's no difference in the macro implementation, just an update to the
+KUnit tests to use it. This version is intended to complement:
+https://lore.kernel.org/all/20231106172557.2963-1-rf@opensource.cirrus.com/
 
-   226	
- > 227	u32 get_interval(const struct sched_entry *entry,
-   228			 const struct sched_gate_list *oper)
-   229	{
-   230		if (entry->correction_active)
-   231			return entry->interval + oper->cycle_time_correction;
-   232		else
-   233			return entry->interval;
-   234	}
-   235	
- > 236	s64 get_cycle_time(const struct sched_gate_list *oper)
-   237	{
-   238		if (cycle_corr_active(oper->cycle_time_correction))
-   239			return oper->cycle_time + oper->cycle_time_correction;
-   240		else
-   241			return oper->cycle_time;
-   242	}
-   243	
+There are also two follow-up patches in the series to use this macro in
+various DRM tests.
 
+Hopefully this will solve any CFI issues that show up with KUnit.
+
+Thanks,
+-- David
+
+---
+ include/kunit/resource.h | 9 +++++++++
+ lib/kunit/kunit-test.c   | 5 +----
+ lib/kunit/test.c         | 6 ++++--
+ 3 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+index c7383e90f5c9..4110e13970dc 100644
+--- a/include/kunit/resource.h
++++ b/include/kunit/resource.h
+@@ -390,6 +390,15 @@ void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
+ /* A 'deferred action' function to be used with kunit_add_action. */
+ typedef void (kunit_action_t)(void *);
+ 
++/* We can't cast function pointers to kunit_action_t if CFI is enabled. */
++#define KUNIT_DEFINE_ACTION_WRAPPER(wrapper, orig, arg_type) \
++	static void wrapper(void *in) \
++	{ \
++		arg_type arg = (arg_type)in; \
++		orig(arg); \
++	}
++
++
+ /**
+  * kunit_add_action() - Call a function when the test ends.
+  * @test: Test case to associate the action with.
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index de2113a58fa0..ee6927c60979 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -538,10 +538,7 @@ static struct kunit_suite kunit_resource_test_suite = {
+ #if IS_BUILTIN(CONFIG_KUNIT_TEST)
+ 
+ /* This avoids a cast warning if kfree() is passed direct to kunit_add_action(). */
+-static void kfree_wrapper(void *p)
+-{
+-	kfree(p);
+-}
++KUNIT_DEFINE_ACTION_WRAPPER(kfree_wrapper, kfree, const void *);
+ 
+ static void kunit_log_test(struct kunit *test)
+ {
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index f2eb71f1a66c..0308865194bb 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -772,6 +772,8 @@ static struct notifier_block kunit_mod_nb = {
+ };
+ #endif
+ 
++KUNIT_DEFINE_ACTION_WRAPPER(kfree_action_wrapper, kfree, const void *)
++
+ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
+ {
+ 	void *data;
+@@ -781,7 +783,7 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
+ 	if (!data)
+ 		return NULL;
+ 
+-	if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree, data) != 0)
++	if (kunit_add_action_or_reset(test, kfree_action_wrapper, data) != 0)
+ 		return NULL;
+ 
+ 	return data;
+@@ -793,7 +795,7 @@ void kunit_kfree(struct kunit *test, const void *ptr)
+ 	if (!ptr)
+ 		return;
+ 
+-	kunit_release_action(test, (kunit_action_t *)kfree, (void *)ptr);
++	kunit_release_action(test, kfree_action_wrapper, (void *)ptr);
+ }
+ EXPORT_SYMBOL_GPL(kunit_kfree);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0.869.gea05f2083d-goog
+
