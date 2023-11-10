@@ -1,116 +1,184 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1373620323
-	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 20:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2884A3D391;
+	Fri, 10 Nov 2023 22:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dw8pjKCV"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-da07b5e6f75so2849247276.0
-        for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 12:08:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699646927; x=1700251727; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IAkJ89LUqtxG0K+MSJnco+XQD27u+TKLaVoOcPh4bOc=;
-        b=Dw8pjKCV1Rab3I9zJrnrsXdSmc8SXxy5bQhV5xVuI+/KkRgkexd2/RBYQKB9zjENJy
-         TfgI1tCG1xK+0z0eMUMgNevE53RPvHAi5CAIIwcTlrVcBTbEWeGC06uXK575KZGQp8rL
-         QpOJJGjWc5oV2yTT6gEUd3iMGsS9wU443pI9IU4xSzYiZTXbewIyutFB8t3sba5FZR0Q
-         ukPLemAugOtD0PyO3lOZh4R5N/YrqhxtlzYPRYrc5x++Gkbd8qO1yN79PxUies/cO0DE
-         IfJfJycv2+GVbVqse+Lj6eDlfECDuJMWk2fdYtLg46imC2JJTZkQy3nEDveuaBa9dEWi
-         RX2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699646927; x=1700251727;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IAkJ89LUqtxG0K+MSJnco+XQD27u+TKLaVoOcPh4bOc=;
-        b=j1dbM4OBDpNci7Riz/ZYHeaJy6SxcO/qAIjSFQW3kPRqfJ+3VoZ8Q5I5l0FdRELdfe
-         sPfecM0c0ouYhLB9znVZ+CpPemD0CKSEzpV2iJzfhn33iDZCM7ySHzwo8gMgeCnEPIaz
-         2wdRP1ZGScwC7PKuOrfFXdgW44R2F4IrLMXT/qC6mkmFjmwbYbAUVNgZHm1ZgLNX9k6a
-         sVh/IW7hbSTskerZ0rtgvoNR7ZkiPIJA9CevIxE2FTXxW+oDcIO6Tg93E0Cy+yGzNRak
-         h6epGtVmhws8mKPLMtrPRl9/VPfMoxI21JSPA6oUOe9nf0mb3n1fPHaRZ7OEbQYQIgrG
-         2o2Q==
-X-Gm-Message-State: AOJu0Yxbuul1ELdx78/oS4J9PNEJ/Jbw+S9eAQ84ByxK9eXMWlKMVRO6
-	8yKkkyAHZEsQWkaP0Fw8cjWddzN9UhVw8w==
-X-Google-Smtp-Source: AGHT+IG2qICxw/Ih6W1d00Yw7wl6gZh00iMH2vxhyvW4HtVTUR9T6SIeeV3AzuFmY7j3gx/bERyrecNPMvP5+g==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:18d:b0:d89:42d7:e72d with SMTP
- id t13-20020a056902018d00b00d8942d7e72dmr141489ybh.3.1699646927074; Fri, 10
- Nov 2023 12:08:47 -0800 (PST)
-Date: Sat, 11 Nov 2023 04:08:28 +0800
-In-Reply-To: <20231110200830.1832556-1-davidgow@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MObwuKNR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699655740; x=1731191740;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hXVnzmw9r4mN0cI/H/aHH6CxAwEn9AjGj9KvVVTJb0Q=;
+  b=MObwuKNRPH+T13Z5GMj8X06+4ldZ2lkv7R4nAEW5YSaeB/uIkMeoWXFE
+   E7yx62kq4O3nttjjPOWex2gDvZKp3J24exsivOZVX0d5/WPJSk41Vg9M7
+   0X7JQRLYlLCKAA6UQLv49XNK65CFGhyaTUwPDhBZ2JvnA7aCybXl7M0Au
+   t0r8dS1toykIRYRBAgB6vaAZQvlo1fJHjK54leRPR0nKZ6doNjfxJ0zh7
+   Z6vYfaZ48TauY0c/hdW9OAKNjcF5bSs2ctfwJvsCMaDJWorM5Xp3yL6XU
+   pbYVNkuptyVF6dXSGzBpOexQvxIU6U3ePqDjAMGIhoY3dRKXx9WEKcypl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="370442495"
+X-IronPort-AV: E=Sophos;i="6.03,293,1694761200"; 
+   d="scan'208";a="370442495"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 14:35:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="834239973"
+X-IronPort-AV: E=Sophos;i="6.03,293,1694761200"; 
+   d="scan'208";a="834239973"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Nov 2023 14:35:37 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r1a6B-0009z4-11;
+	Fri, 10 Nov 2023 22:35:35 +0000
+Date: Sat, 11 Nov 2023 06:35:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: York Jasper Niebuhr <yjnworkstation@gmail.com>,
+	akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	York Jasper Niebuhr <yjnworkstation@gmail.com>
+Subject: Re: [PATCH] mm: exitz syscall
+Message-ID: <202311110615.TXNCRihT-lkp@intel.com>
+References: <20231110184720.39780-1-yjnworkstation@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20231110200830.1832556-1-davidgow@google.com>
-X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Message-ID: <20231110200830.1832556-3-davidgow@google.com>
-Subject: [PATCH 3/3] drm/vc4: tests: Use KUNIT_DEFINE_ACTION_WRAPPER
-From: David Gow <davidgow@google.com>
-To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, dlatypov@google.com, 
-	Maxime Ripard <mripard@kernel.org>, Arthur Grillo <arthurgrillo@riseup.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: David Gow <davidgow@google.com>, 
-	"=?UTF-8?q?Ma=C3=ADra=20Canal?=" <mairacanal@riseup.net>, Sami Tolvanen <samitolvanen@google.com>, 
-	kunit-dev@googlegroups.com, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Benjamin Berg <benjamin.berg@intel.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
-	linux-kernel@vger.kernel.org, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231110184720.39780-1-yjnworkstation@gmail.com>
 
-In order to pass functions to kunit_add_action(), they need to be of the
-kunit_action_t type. While casting the function pointer can work, it
-will break control-flow integrity.
+Hi York,
 
-vc4_mock already defines such a wrapper for drm_dev_unregister(), but it
-involves less boilerplate to use the new macro, so replace the manual
-implementation.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+[auto build test WARNING on 8728c14129df7a6e29188a2e737b4774fb200953]
 
-This patch should be a no-op, just moving to use a standard macro to
-implement these wrappers rather than hand-coding them.
+url:    https://github.com/intel-lab-lkp/linux/commits/York-Jasper-Niebuhr/mm-exitz-syscall/20231111-031729
+base:   8728c14129df7a6e29188a2e737b4774fb200953
+patch link:    https://lore.kernel.org/r/20231110184720.39780-1-yjnworkstation%40gmail.com
+patch subject: [PATCH] mm: exitz syscall
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231111/202311110615.TXNCRihT-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311110615.TXNCRihT-lkp@intel.com/reproduce)
 
-Let me know if you'd prefer to take these in separately via the drm
-trees, or if you're okay with having this whole series go via
-kselftest/kunit.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311110615.TXNCRihT-lkp@intel.com/
 
-Cheers,
--- David
+All warnings (new ones prefixed by >>):
 
----
- drivers/gpu/drm/vc4/tests/vc4_mock.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+   In file included from kernel/exitz.c:4:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/exitz.c:4:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/exitz.c:4:
+   In file included from include/linux/syscalls.h:90:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> kernel/exitz.c:73:6: warning: no previous prototype for function 'exit_memz' [-Wmissing-prototypes]
+      73 | void exit_memz(void)
+         |      ^
+   kernel/exitz.c:73:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      73 | void exit_memz(void)
+         | ^
+         | static 
+   13 warnings generated.
 
-diff --git a/drivers/gpu/drm/vc4/tests/vc4_mock.c b/drivers/gpu/drm/vc4/tests/vc4_mock.c
-index 63ca46f4cb35..becb3dbaa548 100644
---- a/drivers/gpu/drm/vc4/tests/vc4_mock.c
-+++ b/drivers/gpu/drm/vc4/tests/vc4_mock.c
-@@ -153,12 +153,9 @@ static int __build_mock(struct kunit *test, struct drm_device *drm,
- 	return 0;
- }
- 
--static void kunit_action_drm_dev_unregister(void *ptr)
--{
--	struct drm_device *drm = ptr;
--
--	drm_dev_unregister(drm);
--}
-+KUNIT_DEFINE_ACTION_WRAPPER(kunit_action_drm_dev_unregister,
-+			    drm_dev_unregister,
-+			    struct drm_device *);
- 
- static struct vc4_dev *__mock_device(struct kunit *test, bool is_vc5)
- {
+
+vim +/exit_memz +73 kernel/exitz.c
+
+    69	
+    70	/*
+    71	 * Overwrite any memory associated to current process with zeros.
+    72	 */
+  > 73	void exit_memz(void)
+    74	{
+    75		if (!(current->ezflags & EZ_MEM))
+    76			return;
+    77	
+    78		struct vm_area_struct *vma;
+    79	
+    80		VMA_ITERATOR(vmi, current->mm, 0);
+    81	
+    82		for_each_vma(vmi, vma) {
+    83			memz_range(vma->vm_start, vma->vm_end);
+    84		}
+    85	}
+    86	
+
 -- 
-2.42.0.869.gea05f2083d-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
