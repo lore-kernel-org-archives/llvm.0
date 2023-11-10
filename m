@@ -1,153 +1,125 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7B81DFC8
-	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 16:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567962BD01;
+	Fri, 10 Nov 2023 19:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WGM7qcHf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699633300;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nbn1NW6f4b9hZp0MkXwpktJPjW9fC15GpALetxlNYhU=;
-	b=WGM7qcHfUO6A8K5artsZcOa5jv7CvMuWaYb+H/rZbPGfJpr5JWbzzl2GeZZIQ70Mm1xPlC
-	jA/i5vbg44KtCmjYfIovxuhAeBZy6h1egL214izZ0dXLW+HzABgcBlBL005iLY0QsAZNBg
-	3HQ4Up8qwpGjtRYj8VKLmHsV0Lm0AgQ=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-101-kjYSDo4PNe2neqSfoAKZcg-1; Fri,
- 10 Nov 2023 11:21:34 -0500
-X-MC-Unique: kjYSDo4PNe2neqSfoAKZcg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F281F29ABA13
-	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 16:21:33 +0000 (UTC)
-Received: from [172.64.13.27] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DB729C1596F;
-	Fri, 10 Nov 2023 16:21:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.6.0,
- mainline.kernel.org-clang, 89cdf9d5)
-Date: Fri, 10 Nov 2023 16:21:33 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xz+yaS3N"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699643880; x=1731179880;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+ODdoguqhk0VjSYZVSvbWKkA4/MmGgIY12jmGr3aijw=;
+  b=Xz+yaS3NRKolCoE63yInEHEAC0wnS1/EaJEpMpW4AItk1cR4+nQagYXQ
+   kTDfSWwWrkHSV+JfUGOMVqR+M9Hr4EfqKxi7A7/+ibIRxR5m/Fu8vLM6d
+   Zrx50AMNXaR4gwj48qOptfL4lu+jwvrvRgn3tLM5CCOrn/0oXJmGJachA
+   yJyZ1alhod+rCy3b4MEBGC1BFfpxywa117VM6iJ1ZyByzYYWTBowvhs0E
+   2blTpRGipypAUHM7Va8k0Aabhqabu26Jtq2JlBtn9y4eRtECE8pLmcrcA
+   SyoArjX5PV7fmvp4VcNZlpaMF0WwmtkjR6bKRaghYQjxAyZhdY9SLvWQ3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="370427952"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="370427952"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 11:17:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="767398419"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="767398419"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Nov 2023 11:17:54 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r1X0q-0009qY-1e;
+	Fri, 10 Nov 2023 19:17:52 +0000
+Date: Sat, 11 Nov 2023 03:15:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net 4/7] net/sched: taprio: get corrected value of
+ cycle_time and interval
+Message-ID: <202311110208.GT4trtEk-lkp@intel.com>
+References: <20231107112023.676016-5-faizal.abdul.rahim@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <51087.123111011213400555@us-mta-101.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231107112023.676016-5-faizal.abdul.rahim@linux.intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Faizal,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on net/main]
 
-Kernel information:
-    Commit message: Merge tag 'net-6.7-rc1' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
+url:    https://github.com/intel-lab-lkp/linux/commits/Faizal-Rahim/net-sched-taprio-fix-too-early-schedules-switching/20231107-192843
+base:   net/main
+patch link:    https://lore.kernel.org/r/20231107112023.676016-5-faizal.abdul.rahim%40linux.intel.com
+patch subject: [PATCH v2 net 4/7] net/sched: taprio: get corrected value of cycle_time and interval
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231111/202311110208.GT4trtEk-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311110208.GT4trtEk-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/114171
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311110208.GT4trtEk-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
-            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
-XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+All warnings (new ones prefixed by >>):
+
+>> net/sched/sch_taprio.c:227:5: warning: no previous prototype for function 'get_interval' [-Wmissing-prototypes]
+     227 | u32 get_interval(const struct sched_entry *entry,
+         |     ^
+   net/sched/sch_taprio.c:227:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     227 | u32 get_interval(const struct sched_entry *entry,
+         | ^
+         | static 
+>> net/sched/sch_taprio.c:236:5: warning: no previous prototype for function 'get_cycle_time' [-Wmissing-prototypes]
+     236 | s64 get_cycle_time(const struct sched_gate_list *oper)
+         |     ^
+   net/sched/sch_taprio.c:236:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     236 | s64 get_cycle_time(const struct sched_gate_list *oper)
+         | ^
+         | static 
+   2 warnings generated.
 
 
+vim +/get_interval +227 net/sched/sch_taprio.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   226	
+ > 227	u32 get_interval(const struct sched_entry *entry,
+   228			 const struct sched_gate_list *oper)
+   229	{
+   230		if (entry->correction_active)
+   231			return entry->interval + oper->cycle_time_correction;
+   232		else
+   233			return entry->interval;
+   234	}
+   235	
+ > 236	s64 get_cycle_time(const struct sched_gate_list *oper)
+   237	{
+   238		if (cycle_corr_active(oper->cycle_time_correction))
+   239			return oper->cycle_time + oper->cycle_time_correction;
+   240		else
+   241			return oper->cycle_time;
+   242	}
+   243	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
