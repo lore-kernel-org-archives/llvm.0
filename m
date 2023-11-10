@@ -1,80 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61071DA58;
-	Fri, 10 Nov 2023 16:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7B81DFC8
+	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 16:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m5bbJOCA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699632774; x=1731168774;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=2FiCiaCEIwYAaJU4ujZ1sI+d9HiqkjfYakXKQithpxA=;
-  b=m5bbJOCA1dOTdfH1nUrBcO/0ZbyBHaLknewtql4Ux07xtn8576O+KoxC
-   0bgC5tx7u4fy6eG+LbA5/luMqB8Ze4wj3djLlQn5flKkCgOS/xogmtBWM
-   03FM8uqmopFAPe95StEurA9ZtNmW4gJVU5nzYn2fjBf9CbMc9K52ECIbX
-   L4s7I896kSIL6NY6o0Kma0noxg7kvEpjldKevE/bzycGad2+A+KD3D0AL
-   L0ypcHusNbBBGTTL7wNf0XDM9sG8pYbw3aYJChT0E5DC9wIkF7whotHW0
-   ZmN0bKZpbZj9gfrCAmFYiV0OSMoC5wxpuTi3SkCXhOebKl3NmUqJSRFK/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="369533656"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="369533656"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 08:12:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="713671676"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="713671676"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Nov 2023 08:12:51 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r1U7l-0009iW-19;
-	Fri, 10 Nov 2023 16:12:49 +0000
-Date: Sat, 11 Nov 2023 00:12:04 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: amd_spi_host_transfer() falls through
- to next function amd_spi_max_transfer_size()
-Message-ID: <202311110005.jFzk03aZ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WGM7qcHf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699633300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nbn1NW6f4b9hZp0MkXwpktJPjW9fC15GpALetxlNYhU=;
+	b=WGM7qcHfUO6A8K5artsZcOa5jv7CvMuWaYb+H/rZbPGfJpr5JWbzzl2GeZZIQ70Mm1xPlC
+	jA/i5vbg44KtCmjYfIovxuhAeBZy6h1egL214izZ0dXLW+HzABgcBlBL005iLY0QsAZNBg
+	3HQ4Up8qwpGjtRYj8VKLmHsV0Lm0AgQ=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-101-kjYSDo4PNe2neqSfoAKZcg-1; Fri,
+ 10 Nov 2023 11:21:34 -0500
+X-MC-Unique: kjYSDo4PNe2neqSfoAKZcg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F281F29ABA13
+	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 16:21:33 +0000 (UTC)
+Received: from [172.64.13.27] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DB729C1596F;
+	Fri, 10 Nov 2023 16:21:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.6.0,
+ mainline.kernel.org-clang, 89cdf9d5)
+Date: Fri, 10 Nov 2023 16:21:33 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <51087.123111011213400555@us-mta-101.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Yang Yingliang <yangyingliang@huawei.com>
-CC: Mark Brown <broonie@kernel.org>
+Hi, we tested your kernel and here are the results:
 
-Hi Yang,
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   89cdf9d556016a54ff6ddd62324aa5ec790c05cc
-commit: e9759d403baaeda9ea4d61d64c3151e214561217 spi: amd: switch to use modern name
-date:   3 months ago
-config: x86_64-randconfig-011-20230912 (https://download.01.org/0day-ci/archive/20231111/202311110005.jFzk03aZ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311110005.jFzk03aZ-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'net-6.7-rc1' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311110005.jFzk03aZ-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/114171
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
-   vmlinux.o: warning: objtool: ibt_selftest+0xf: sibling call from callable instruction with modified stack frame
->> vmlinux.o: warning: objtool: amd_spi_host_transfer() falls through to next function amd_spi_max_transfer_size()
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
