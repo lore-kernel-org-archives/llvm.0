@@ -1,161 +1,196 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA1C2F50
-	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 06:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Efj3888/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699596092;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ocAaGFDPNdPpONoK8aEd9Nm9yvs6k+3zKd+QaCgKJYc=;
-	b=Efj3888/xzA1IXeFClZxcqO+ym4r+bCNJCicuYrcP6fkIwBxwIe6tdxOwoRRPypXUy141+
-	Y4pwaZZDWvwsK5k1j03U/bsl4QhlmpgvAbAQkmWZhahL+mn6Zs8+nNJu2AxycgtH9eQiTD
-	55LZr8WqQkdoHOwuQKk/RW1g4H4jhFU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-628-D-QV665kMKuF90Hi5c39Pg-1; Fri, 10 Nov 2023 01:01:30 -0500
-X-MC-Unique: D-QV665kMKuF90Hi5c39Pg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1EF1185A782
-	for <llvm@lists.linux.dev>; Fri, 10 Nov 2023 06:01:29 +0000 (UTC)
-Received: from [172.64.13.27] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C4272492BFA;
-	Fri, 10 Nov 2023 06:01:29 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, 4bbdb725)
-Date: Fri, 10 Nov 2023 06:01:29 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0CB63A8;
+	Fri, 10 Nov 2023 06:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SRTKn1lQVzfb9S;
+	Fri, 10 Nov 2023 14:23:41 +0800 (CST)
+Received: from [10.174.176.88] (10.174.176.88) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Fri, 10 Nov 2023 14:23:51 +0800
+Message-ID: <95e79046-f148-4ac2-8fd6-1379a78e744b@huawei.com>
+Date: Fri, 10 Nov 2023 14:23:51 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <90304.123111001013000232@us-mta-628.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next V2] proc: support file->f_pos checking in mem_lseek
+To: kernel test robot <lkp@intel.com>, <viro@zeniv.linux.org.uk>,
+	<brauner@kernel.org>, <akpm@linux-foundation.org>, <oleg@redhat.com>,
+	<jlayton@kernel.org>, <dchinner@redhat.com>, <cyphar@cyphar.com>,
+	<shr@devkernel.io>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<yangerkun@huawei.com>
+References: <20231109102658.2075547-1-wozizhi@huawei.com>
+ <202311101239.ihy4cKpf-lkp@intel.com>
+From: Zizhi Wo <wozizhi@huawei.com>
+In-Reply-To: <202311101239.ihy4cKpf-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.88]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500020.china.huawei.com (7.185.36.49)
+X-CFilter-Loop: Reflected
 
-Hi, we tested your kernel and here are the results:
+I have missed fallthrough, and will fix it in V3.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thanks,
+Zizhi Wo
 
-
-Kernel information:
-    Commit message: Merge tag 'iommu-updates-v6.7' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/joro/iommu
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/114157
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10269946
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10269962
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
-            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
-XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+在 2023/11/10 12:34, kernel test robot 写道:
+> Hi WoZ1zh1,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on next-20231108]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/WoZ1zh1/proc-support-file-f_pos-checking-in-mem_lseek/20231109-103353
+> base:   next-20231108
+> patch link:    https://lore.kernel.org/r/20231109102658.2075547-1-wozizhi%40huawei.com
+> patch subject: [PATCH -next V2] proc: support file->f_pos checking in mem_lseek
+> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20231110/202311101239.ihy4cKpf-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231110/202311101239.ihy4cKpf-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202311101239.ihy4cKpf-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     In file included from fs/proc/base.c:68:
+>     In file included from include/linux/swap.h:9:
+>     In file included from include/linux/memcontrol.h:13:
+>     In file included from include/linux/cgroup.h:26:
+>     In file included from include/linux/kernel_stat.h:9:
+>     In file included from include/linux/interrupt.h:11:
+>     In file included from include/linux/hardirq.h:11:
+>     In file included from arch/um/include/asm/hardirq.h:5:
+>     In file included from include/asm-generic/hardirq.h:17:
+>     In file included from include/linux/irq.h:20:
+>     In file included from include/linux/io.h:13:
+>     In file included from arch/um/include/asm/io.h:24:
+>     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       547 |         val = __raw_readb(PCI_IOBASE + addr);
+>           |                           ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>           |                                                         ~~~~~~~~~~ ^
+>     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+>        37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>           |                                                   ^
+>     In file included from fs/proc/base.c:68:
+>     In file included from include/linux/swap.h:9:
+>     In file included from include/linux/memcontrol.h:13:
+>     In file included from include/linux/cgroup.h:26:
+>     In file included from include/linux/kernel_stat.h:9:
+>     In file included from include/linux/interrupt.h:11:
+>     In file included from include/linux/hardirq.h:11:
+>     In file included from arch/um/include/asm/hardirq.h:5:
+>     In file included from include/asm-generic/hardirq.h:17:
+>     In file included from include/linux/irq.h:20:
+>     In file included from include/linux/io.h:13:
+>     In file included from arch/um/include/asm/io.h:24:
+>     include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>           |                                                         ~~~~~~~~~~ ^
+>     include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+>        35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>           |                                                   ^
+>     In file included from fs/proc/base.c:68:
+>     In file included from include/linux/swap.h:9:
+>     In file included from include/linux/memcontrol.h:13:
+>     In file included from include/linux/cgroup.h:26:
+>     In file included from include/linux/kernel_stat.h:9:
+>     In file included from include/linux/interrupt.h:11:
+>     In file included from include/linux/hardirq.h:11:
+>     In file included from arch/um/include/asm/hardirq.h:5:
+>     In file included from include/asm-generic/hardirq.h:17:
+>     In file included from include/linux/irq.h:20:
+>     In file included from include/linux/io.h:13:
+>     In file included from arch/um/include/asm/io.h:24:
+>     include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>           |                             ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>           |                                                       ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>           |                                                       ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       692 |         readsb(PCI_IOBASE + addr, buffer, count);
+>           |                ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       700 |         readsw(PCI_IOBASE + addr, buffer, count);
+>           |                ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       708 |         readsl(PCI_IOBASE + addr, buffer, count);
+>           |                ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       717 |         writesb(PCI_IOBASE + addr, buffer, count);
+>           |                 ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       726 |         writesw(PCI_IOBASE + addr, buffer, count);
+>           |                 ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       735 |         writesl(PCI_IOBASE + addr, buffer, count);
+>           |                 ~~~~~~~~~~ ^
+>>> fs/proc/base.c:912:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+>       912 |         case SEEK_SET:
+>           |         ^
+>     fs/proc/base.c:912:2: note: insert '__attribute__((fallthrough));' to silence this warning
+>       912 |         case SEEK_SET:
+>           |         ^
+>           |         __attribute__((fallthrough));
+>     fs/proc/base.c:912:2: note: insert 'break;' to avoid fall-through
+>       912 |         case SEEK_SET:
+>           |         ^
+>           |         break;
+>     13 warnings generated.
+> 
+> 
+> vim +912 fs/proc/base.c
+> 
+>     903	
+>     904	loff_t mem_lseek(struct file *file, loff_t offset, int orig)
+>     905	{
+>     906		loff_t ret = 0;
+>     907	
+>     908		spin_lock(&file->f_lock);
+>     909		switch (orig) {
+>     910		case SEEK_CUR:
+>     911			offset += file->f_pos;
+>   > 912		case SEEK_SET:
+>     913			/* to avoid userland mistaking f_pos=-9 as -EBADF=-9 */
+>     914			if ((unsigned long long)offset >= -MAX_ERRNO)
+>     915				ret = -EOVERFLOW;
+>     916			break;
+>     917		default:
+>     918			ret = -EINVAL;
+>     919		}
+>     920		if (!ret) {
+>     921			if (offset < 0 && !(unsigned_offsets(file))) {
+>     922				ret = -EINVAL;
+>     923			} else {
+>     924				file->f_pos = offset;
+>     925				ret = file->f_pos;
+>     926				force_successful_syscall_return();
+>     927			}
+>     928		}
+>     929	
+>     930		spin_unlock(&file->f_lock);
+>     931		return ret;
+>     932	}
+>     933	
+> 
