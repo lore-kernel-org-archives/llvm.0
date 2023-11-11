@@ -1,46 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7701FCA;
-	Sat, 11 Nov 2023 01:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83973539C;
+	Sat, 11 Nov 2023 03:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ik6WtVcs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AOPVxStz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699665421; x=1731201421;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sb1WCA2Ae2Gj9WKwp7mKDMLUrw6QfAk5tph/bVyArMg=;
-  b=ik6WtVcslot8uFeFFYzE9UgNI5Iv4ocCC35zGWo8hdOnfulMdigweJWz
-   BUboX6bSPopEC0GOP0Z5OpPlD7kIxJY6A3gTMS0l6fJvW75Dy4meXu9vX
-   f4qwM4WmgXRX/C0W9rvTZwQRs9oyIzke51YJEMhYfODf1HI7LPjyzZvhM
-   Rg4NywVsu8xZKoF4nQHJ38bUkEhCnSVarquICu8x/YZfBX5uOTsbOtD4T
-   lYsWFDQiF6AJlEj7Kud3yOJSNLkEKhmXCdRV7I5bR9Cnwhivpq88KrOXN
-   UlbGa7ZepFnmQa1kKClxR0mZRqW5NASRCnB7cfGoq7rw3GXJZK4hWN+2d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="370451459"
-X-IronPort-AV: E=Sophos;i="6.03,293,1694761200"; 
-   d="scan'208";a="370451459"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 17:16:57 -0800
+  t=1699672840; x=1731208840;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ARkRUyOLAIpmhjp2siRoxLvSfsSs3MBz/hMYy9pew/w=;
+  b=AOPVxStzq3WLv8dklIznsqvANgMNRoeoe/egCa3ClRsLuMEVgLMQs/Jj
+   e+4T7c3uEDQK4cF1aXzK7gRUVHruqks0BVQFCXCvHXf3kDOdxAkcS/sx5
+   5J1FL/6jau0pHgcZoYdKLpDiAOSnMtEDBLDZS9V6ECGKKPhczDYUUYCLU
+   4jMiIG8md9RTD8b/H0EeqTVOwhWwVEyfOFtEHWzjOkf9jLSgFM6DsvvnE
+   Lrnr1eGLjkFaGzfLr/X/5lTPG7NsFfi+i3C2enwcFoHWyGghM8tRseg2Y
+   lFxdZSqVP2jDWxs3LMu77kl3tCwPyLwW1VLvgF3KARmSudjKWSV1JZvzW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="375286637"
+X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
+   d="scan'208";a="375286637"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 19:20:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="887464271"
-X-IronPort-AV: E=Sophos;i="6.03,293,1694761200"; 
-   d="scan'208";a="887464271"
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="792980847"
+X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
+   d="scan'208";a="792980847"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Nov 2023 17:16:55 -0800
+  by orsmga008.jf.intel.com with ESMTP; 10 Nov 2023 19:20:37 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r1ccH-000A76-1p;
-	Sat, 11 Nov 2023 01:16:53 +0000
-Date: Sat, 11 Nov 2023 09:15:55 +0800
+	id 1r1eXy-000AAc-2V;
+	Sat, 11 Nov 2023 03:20:34 +0000
+Date: Sat, 11 Nov 2023 11:19:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arnd-playground:more-default-warnings 46/47] <inline asm>:1:9:
- error: invalid operand for instruction
-Message-ID: <202311110923.n6lzs1yU-lkp@intel.com>
+To: Petr Mladek <pmladek@suse.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Nicolai Stange <nstange@suse.de>, live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
+Subject: Re: [POC 1/7] livepatch: Add callbacks for introducing and removing
+ states
+Message-ID: <202311111107.avVIpRi2-lkp@intel.com>
+References: <20231110170428.6664-2-pmladek@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,157 +55,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231110170428.6664-2-pmladek@suse.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git more-default-warnings
-head:   b86302da264f77971112b4be0b16eeb591026cbc
-commit: f2c322da2c1e69b480bfab2b8f703bb115cc0fa5 [46/47] x86: asm/swab.h warning
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20231111/202311110923.n6lzs1yU-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311110923.n6lzs1yU-lkp@intel.com/reproduce)
+Hi Petr,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master v6.6 next-20231110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Mladek/livepatch-Add-callbacks-for-introducing-and-removing-states/20231111-014906
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20231110170428.6664-2-pmladek%40suse.com
+patch subject: [POC 1/7] livepatch: Add callbacks for introducing and removing states
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231111/202311111107.avVIpRi2-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311111107.avVIpRi2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311110923.n6lzs1yU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311111107.avVIpRi2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/block/nbd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/block/nbd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/block/nbd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> <inline asm>:1:9: error: invalid operand for instruction
-           bswapl %ax
-                  ^
->> <inline asm>:1:9: error: invalid operand for instruction
-           bswapl %dx
-                  ^
-   In file included from drivers/block/nbd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:6:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:79:
-   In file included from ./arch/um/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:27:
-   In file included from include/linux/bitops.h:68:
-   In file included from arch/x86/include/asm/bitops.h:436:
-   In file included from include/asm-generic/bitops/le.h:6:
-   In file included from arch/x86/include/uapi/asm/byteorder.h:5:
-   In file included from include/linux/byteorder/little_endian.h:5:
-   In file included from include/uapi/linux/byteorder/little_endian.h:14:
-   In file included from include/linux/swab.h:5:
-   In file included from include/uapi/linux/swab.h:8:
-   arch/x86/include/uapi/asm/swab.h:10:6: error: invalid operand for instruction
-           asm("bswapl %w0" : "=r" (val) : "0" (val));
-               ^
-   <inline asm>:1:9: note: instantiated into assembly here
-           bswapl %r15w
-                  ^~~~~
-   In file included from drivers/block/nbd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:6:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:79:
-   In file included from ./arch/um/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:27:
-   In file included from include/linux/bitops.h:68:
-   In file included from arch/x86/include/asm/bitops.h:436:
-   In file included from include/asm-generic/bitops/le.h:6:
-   In file included from arch/x86/include/uapi/asm/byteorder.h:5:
-   In file included from include/linux/byteorder/little_endian.h:5:
-   In file included from include/uapi/linux/byteorder/little_endian.h:14:
-   In file included from include/linux/swab.h:5:
-   In file included from include/uapi/linux/swab.h:8:
-   arch/x86/include/uapi/asm/swab.h:10:6: error: invalid operand for instruction
-           asm("bswapl %w0" : "=r" (val) : "0" (val));
-               ^
-   <inline asm>:1:9: note: instantiated into assembly here
-           bswapl %ax
-                  ^~~
-   12 warnings and 4 errors generated.
+>> kernel/livepatch/state.c:121:6: warning: no previous prototype for function 'is_state_in_other_patches' [-Wmissing-prototypes]
+   bool is_state_in_other_patches(struct klp_patch *patch, struct klp_state *state)
+        ^
+   kernel/livepatch/state.c:121:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool is_state_in_other_patches(struct klp_patch *patch, struct klp_state *state)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/is_state_in_other_patches +121 kernel/livepatch/state.c
+
+   120	
+ > 121	bool is_state_in_other_patches(struct klp_patch *patch, struct klp_state *state)
+   122	{
+   123		struct klp_patch *old_patch;
+   124		struct klp_state *old_state;
+   125	
+   126		klp_for_each_patch(old_patch) {
+   127			if (old_patch == patch)
+   128				continue;
+   129	
+   130			klp_for_each_state(old_patch, old_state) {
+   131				if (old_state->id == state->id)
+   132					return true;
+   133			}
+   134		}
+   135	
+   136		return false;
+   137	}
+   138	
 
 -- 
 0-DAY CI Kernel Test Service
