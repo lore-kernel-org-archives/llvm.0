@@ -1,57 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A897F;
-	Sat, 11 Nov 2023 10:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9065912B7D;
+	Sat, 11 Nov 2023 11:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G/7AFJnh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMN9fsyb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699699285; x=1731235285;
+  t=1699700688; x=1731236688;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yDgF8fRMeA3utzT1N//rBGwE20ulKHntUEzKVUCPbnU=;
-  b=G/7AFJnh69xdrRicGTJKuADo1fv8bkTSUiiTach0yrvgqavPR1oR6V7Y
-   6v9ALgaZnVS8GA/WpHOsRlOj4/0QrasJz2ld4LFyoqU5Z2ZrhFxkjjrrL
-   WNfvb19z/vu4Yt1IK57WzKDNx4vEKu4JmnXVdJkLO/1/Spw+cZqqOHs1+
-   mH1qalv/5lv9jsnPfbaOKWIpkKsWsyV9Zje6GFxRVaeu5uttU0Hv9niZ5
-   utNYeq4Bjav+68aUXyNQYf94Nd/nDPhFCKiYzzqrw4PDF5+nsVK7qReNz
-   N11ppo/6vgTcWA/lUaRjTT2DS3GHld321k21owcJKXjF1dPOScZovh36W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="394171546"
+  bh=dKsMwuafOZwoy0GmZuR9O/Rq8lZfnlbj8aei6lxUmuI=;
+  b=SMN9fsybQC2toaJzF9DC8PzYGyPpH3PMs4b3Z2Bxo7qG64VbpN0NWbNU
+   8IbaX15wiNfXCQubT0S2/VrScHxGj6EPB+KvuDTWBo+SLXF8JzmEx6Udr
+   Jw6AD4YYZgcUG8ixJ9yJzcIQqPRb3G8heBF2SlHy8APhBdcdT+kiD0XR4
+   MBubB2triQld9UZhwG+Ktkq41Kioc6gJ1h6VBY7BAofJZVTx/p7gV5khy
+   MFoOsJ/KbpILkVrmo014EPW5fYqCOQc6o/9EOE7LXPZQT/b9JPHT9/Ekp
+   /qwBGYcN6u1p7mF+vRDMm4bW9UboDo22PFwtmjDccfIFq4hJjvMhMwAfN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="369601040"
 X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
-   d="scan'208";a="394171546"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2023 02:41:24 -0800
+   d="scan'208";a="369601040"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2023 03:04:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="1095355185"
 X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
-   d="scan'208";a="1095355185"
+   d="scan'208";a="12050365"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Nov 2023 02:41:18 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 11 Nov 2023 03:04:42 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r1lQS-000ANh-2o;
-	Sat, 11 Nov 2023 10:41:16 +0000
-Date: Sat, 11 Nov 2023 18:41:06 +0800
+	id 1r1ln5-000AOI-2p;
+	Sat, 11 Nov 2023 11:04:39 +0000
+Date: Sat, 11 Nov 2023 19:03:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ross Philipson <ross.philipson@oracle.com>,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-	kexec@lists.infradead.org, linux-efi@vger.kernel.org
+To: Min Li <lnimi@hotmail.com>, richardcochran@gmail.com, lee@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ross.philipson@oracle.com, dpsmith@apertussolutions.com,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-	ardb@kernel.org, mjg59@srcf.ucam.org,
-	James.Bottomley@hansenpartnership.com, luto@amacapital.net,
-	nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
-	trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v7 09/13] x86: Secure Launch SMP bringup support
-Message-ID: <202311111806.sbmcWUN1-lkp@intel.com>
-References: <20231110222751.219836-10-ross.philipson@oracle.com>
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	Min Li <min.li.xe@renesas.com>
+Subject: Re: [PATCH net-next v2 1/1] ptp: clockmatrix: support 32-bit address
+ space
+Message-ID: <202311111829.GoGXlH8b-lkp@intel.com>
+References: <MW5PR03MB6932A4AAD4F612B45E9F6856A0AFA@MW5PR03MB6932.namprd03.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,127 +52,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231110222751.219836-10-ross.philipson@oracle.com>
+In-Reply-To: <MW5PR03MB6932A4AAD4F612B45E9F6856A0AFA@MW5PR03MB6932.namprd03.prod.outlook.com>
 
-Hi Ross,
+Hi Min,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on tip/x86/core]
-[also build test WARNING on herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.6 next-20231110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ross-Philipson/x86-boot-Place-kernel_info-at-a-fixed-offset/20231111-063453
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20231110222751.219836-10-ross.philipson%40oracle.com
-patch subject: [PATCH v7 09/13] x86: Secure Launch SMP bringup support
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231111/202311111806.sbmcWUN1-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311111806.sbmcWUN1-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/ptp-clockmatrix-support-32-bit-address-space/20231110-044554
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/MW5PR03MB6932A4AAD4F612B45E9F6856A0AFA%40MW5PR03MB6932.namprd03.prod.outlook.com
+patch subject: [PATCH net-next v2 1/1] ptp: clockmatrix: support 32-bit address space
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231111/202311111829.GoGXlH8b-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311111829.GoGXlH8b-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311111806.sbmcWUN1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311111829.GoGXlH8b-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/smpboot.c:1097:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (slaunch_is_txt_launch())
-               ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/smpboot.c:1107:6: note: uninitialized use occurs here
-           if (ret)
-               ^~~
-   arch/x86/kernel/smpboot.c:1097:2: note: remove the 'if' if its condition is always false
-           if (slaunch_is_txt_launch())
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/smpboot.c:1046:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+>> drivers/ptp/ptp_clockmatrix.c:1257:50: warning: implicit conversion from 'int' to 'u16' (aka 'unsigned short') changes value from 537972560 to 53072 [-Wconstant-conversion]
+    1257 |         u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
+         |             ~~~~~~~                                     ^~~~~~~
+   include/linux/mfd/idt8a340_reg.h:454:43: note: expanded from macro 'SCRATCH'
+     454 | #define SCRATCH                           0x2010cf50
+         |                                           ^~~~~~~~~~
+   include/linux/mfd/idt8a340_reg.h:673:55: note: expanded from macro 'IDTCM_FW_REG'
+     673 | #define IDTCM_FW_REG(FW, VER, REG)      (((FW) < (VER)) ? (REG) : (REG##_##VER))
+         |                                                            ^~~
+   drivers/ptp/ptp_clockmatrix.c:1257:16: warning: implicit conversion from 'int' to 'u16' (aka 'unsigned short') changes value from 537972556 to 53068 [-Wconstant-conversion]
+    1257 |         u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
+         |             ~~~~~~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mfd/idt8a340_reg.h:673:63: note: expanded from macro 'IDTCM_FW_REG'
+     673 | #define IDTCM_FW_REG(FW, VER, REG)      (((FW) < (VER)) ? (REG) : (REG##_##VER))
+         |                                                                    ^~~~~~~~~~~
+   <scratch space>:144:1: note: expanded from here
+     144 | SCRATCH_V520
+         | ^~~~~~~~~~~~
+   include/linux/mfd/idt8a340_reg.h:455:43: note: expanded from macro 'SCRATCH_V520'
+     455 | #define SCRATCH_V520                      0x2010cf4c
+         |                                           ^~~~~~~~~~
+   2 warnings generated.
 
 
-vim +1097 arch/x86/kernel/smpboot.c
+vim +1257 drivers/ptp/ptp_clockmatrix.c
 
-  1036	
-  1037	/*
-  1038	 * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
-  1039	 * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
-  1040	 * Returns zero if startup was successfully sent, else error code from
-  1041	 * ->wakeup_secondary_cpu.
-  1042	 */
-  1043	static int do_boot_cpu(u32 apicid, int cpu, struct task_struct *idle)
-  1044	{
-  1045		unsigned long start_ip = real_mode_header->trampoline_start;
-  1046		int ret;
-  1047	
-  1048	#ifdef CONFIG_X86_64
-  1049		/* If 64-bit wakeup method exists, use the 64-bit mode trampoline IP */
-  1050		if (apic->wakeup_secondary_cpu_64)
-  1051			start_ip = real_mode_header->trampoline_start64;
-  1052	#endif
-  1053		idle->thread.sp = (unsigned long)task_pt_regs(idle);
-  1054		initial_code = (unsigned long)start_secondary;
-  1055	
-  1056		if (IS_ENABLED(CONFIG_X86_32)) {
-  1057			early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
-  1058			initial_stack  = idle->thread.sp;
-  1059		} else if (!(smpboot_control & STARTUP_PARALLEL_MASK)) {
-  1060			smpboot_control = cpu;
-  1061		}
-  1062	
-  1063		/* Enable the espfix hack for this CPU */
-  1064		init_espfix_ap(cpu);
-  1065	
-  1066		/* So we see what's up */
-  1067		announce_cpu(cpu, apicid);
-  1068	
-  1069		/*
-  1070		 * This grunge runs the startup process for
-  1071		 * the targeted processor.
-  1072		 */
-  1073		if (x86_platform.legacy.warm_reset) {
-  1074	
-  1075			pr_debug("Setting warm reset code and vector.\n");
-  1076	
-  1077			smpboot_setup_warm_reset_vector(start_ip);
-  1078			/*
-  1079			 * Be paranoid about clearing APIC errors.
-  1080			*/
-  1081			if (APIC_INTEGRATED(boot_cpu_apic_version)) {
-  1082				apic_write(APIC_ESR, 0);
-  1083				apic_read(APIC_ESR);
-  1084			}
-  1085		}
-  1086	
-  1087		smp_mb();
-  1088	
-  1089		/*
-  1090		 * Wake up a CPU in difference cases:
-  1091		 * - Intel TXT DRTM launch uses its own method to wake the APs
-  1092		 * - Use a method from the APIC driver if one defined, with wakeup
-  1093		 *   straight to 64-bit mode preferred over wakeup to RM.
-  1094		 * Otherwise,
-  1095		 * - Use an INIT boot APIC message
-  1096		 */
-> 1097		if (slaunch_is_txt_launch())
-  1098			slaunch_wakeup_cpu_from_txt(cpu, apicid);
-  1099		else if (apic->wakeup_secondary_cpu_64)
-  1100			ret = apic->wakeup_secondary_cpu_64(apicid, start_ip);
-  1101		else if (apic->wakeup_secondary_cpu)
-  1102			ret = apic->wakeup_secondary_cpu(apicid, start_ip);
-  1103		else
-  1104			ret = wakeup_secondary_cpu_via_init(apicid, start_ip);
-  1105	
-  1106		/* If the wakeup mechanism failed, cleanup the warm reset vector */
-  1107		if (ret)
-  1108			arch_cpuhp_cleanup_kick_cpu(cpu);
-  1109		return ret;
-  1110	}
-  1111	
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1253  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1254  static int idtcm_load_firmware(struct idtcm *idtcm,
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1255  			       struct device *dev)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1256  {
+794c3dffacc166 Min Li        2021-09-13 @1257  	u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
+7ea5fda2b1325e Min Li        2020-07-28  1258  	char fname[128] = FW_FILENAME;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1259  	const struct firmware *fw;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1260  	struct idtcm_fwrc *rec;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1261  	u32 regaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1262  	int err;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1263  	s32 len;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1264  	u8 val;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1265  	u8 loaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1266  
+7ea5fda2b1325e Min Li        2020-07-28  1267  	if (firmware) /* module parameter */
+7ea5fda2b1325e Min Li        2020-07-28  1268  		snprintf(fname, sizeof(fname), "%s", firmware);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1269  
+930dfa56315517 Min Li        2021-09-24  1270  	dev_info(idtcm->dev, "requesting firmware '%s'", fname);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1271  
+7ea5fda2b1325e Min Li        2020-07-28  1272  	err = request_firmware(&fw, fname, dev);
+7ea5fda2b1325e Min Li        2020-07-28  1273  	if (err) {
+930dfa56315517 Min Li        2021-09-24  1274  		dev_err(idtcm->dev,
+1c49d3e947783b Vincent Cheng 2021-02-17  1275  			"Failed at line %d in %s!", __LINE__, __func__);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1276  		return err;
+7ea5fda2b1325e Min Li        2020-07-28  1277  	}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1278  
+930dfa56315517 Min Li        2021-09-24  1279  	dev_dbg(idtcm->dev, "firmware size %zu bytes", fw->size);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1280  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1281  	rec = (struct idtcm_fwrc *) fw->data;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1282  
+794c3dffacc166 Min Li        2021-09-13  1283  	if (contains_full_configuration(idtcm, fw))
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1284  		idtcm_state_machine_reset(idtcm);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1285  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1286  	for (len = fw->size; len > 0; len -= sizeof(*rec)) {
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1287  		if (rec->reserved) {
+930dfa56315517 Min Li        2021-09-24  1288  			dev_err(idtcm->dev,
+1c49d3e947783b Vincent Cheng 2021-02-17  1289  				"bad firmware, reserved field non-zero");
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1290  			err = -EINVAL;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1291  		} else {
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1292  			regaddr = rec->hiaddr << 8;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1293  			regaddr |= rec->loaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1294  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1295  			val = rec->value;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1296  			loaddr = rec->loaddr;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1297  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1298  			rec++;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1299  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1300  			err = check_and_set_masks(idtcm, regaddr, val);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1301  		}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1302  
+7ea5fda2b1325e Min Li        2020-07-28  1303  		if (err != -EINVAL) {
+7ea5fda2b1325e Min Li        2020-07-28  1304  			err = 0;
+7ea5fda2b1325e Min Li        2020-07-28  1305  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1306  			/* Top (status registers) and bottom are read-only */
+9fe9b9792d7236 Min Li        2023-11-09  1307  			if (regaddr < SCSR_ADDR(GPIO_USER_CONTROL) || regaddr >= scratch)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1308  				continue;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1309  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1310  			/* Page size 128, last 4 bytes of page skipped */
+77fdb168a3e2a6 Vincent Cheng 2021-02-17  1311  			if ((loaddr > 0x7b && loaddr <= 0x7f) || loaddr > 0xfb)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1312  				continue;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1313  
+9fe9b9792d7236 Min Li        2023-11-09  1314  			err = idtcm_write(idtcm, SCSR_BASE, regaddr, &val, sizeof(val));
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1315  		}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1316  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1317  		if (err)
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1318  			goto out;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1319  	}
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1320  
+7ea5fda2b1325e Min Li        2020-07-28  1321  	display_pll_and_masks(idtcm);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1322  
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1323  out:
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1324  	release_firmware(fw);
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1325  	return err;
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1326  }
+3a6ba7dc779935 Vincent Cheng 2019-10-31  1327  
 
 -- 
 0-DAY CI Kernel Test Service
