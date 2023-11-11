@@ -1,39 +1,39 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0A612B78
-	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 11:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFF414A84
+	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 13:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Isj7FXw0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LJW7d9Dl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699701081;
+	s=mimecast20190719; t=1699708889;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=R/RzoBcmfRGeZG+60VNUCIzaqybTl+snmatUPr+zA7A=;
-	b=Isj7FXw0NxgUqFT2LqpDofGFC2hr54IfuHTQgQe32EqMIhrgYtm1AVUq8VzeKtcYtvE8q/
-	i1E/z3D/Xsa9uiX/H/ph4H35tdH497c/F1fIkwpmPTqhvsxlI/AWsRBl832S5YquirXvG2
-	nPrYPDQIF9g5P9VH+LXlCDFQFgcNaoY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-690-kHdVHfXYNvmN5tPlOekZ1w-1; Sat,
- 11 Nov 2023 06:11:19 -0500
-X-MC-Unique: kHdVHfXYNvmN5tPlOekZ1w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	bh=TOv70iFfS7s16Ebg6D+hOZ1crKPBkbHBfM67Ym87Zhw=;
+	b=LJW7d9Dl2UfxFtNYZTzl0BTqDZBS1pk6d8CpcLaCEO6CW0aKep7iqkodKaoU/ulnTZqdXu
+	ByQzkCobzgezhL1X7Oc7dEN1XefXFVjC07U4NuKJ3zU6jahAbn5Yxvug86VxD7PMYvpepS
+	NRGLVM0XDxyDIbRbC/KDqAELo5MKWI0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-377-lPis-tv1NTqlutzN18on7w-1; Sat, 11 Nov 2023 08:21:28 -0500
+X-MC-Unique: lPis-tv1NTqlutzN18on7w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7672429AA38A
-	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 11:11:19 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F3DEA811E7D
+	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 13:21:27 +0000 (UTC)
 Received: from [172.64.13.27] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6202B1121306;
-	Sat, 11 Nov 2023 11:11:19 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DE1D8C1596F;
+	Sat, 11 Nov 2023 13:21:27 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4pyF?= PASS (MISSED 10 of 230): Test report for master
- (6.6.0, mainline.kernel.org-clang, ac347a06)
-Date: Sat, 11 Nov 2023 11:11:19 -0000
+ (6.6.0, mainline.kernel.org-clang, 18553507)
+Date: Sat, 11 Nov 2023 13:21:27 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -41,8 +41,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <79248.123111106111900975@us-mta-690.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <21991.123111108212800111@us-mta-377.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -58,15 +58,21 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/arm64/linux
+    Commit message: Merge tag 'fbdev-for-6.7-rc1' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/deller/linux-fbdev
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/114307
+    https://datawarehouse.cki-project.org/kcidb/checkouts/114322
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
         Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
 g dependency detected
             URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
@@ -108,6 +114,11 @@ XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
             Affected tests:
                  aarch64 - Storage - blktests - nvme-tcp
                   x86_64 - Storage - blktests - nvme-tcp
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
         Issue: [upstream] stress-ng: avc denial on secretmemory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1752
@@ -120,12 +131,6 @@ l-tests/-/issues/1752
 l-tests/-/issues/1544
             Affected tests:
                  aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
 
 
 
