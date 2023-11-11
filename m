@@ -1,182 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9065912B7D;
-	Sat, 11 Nov 2023 11:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0A612B78
+	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 11:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMN9fsyb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699700688; x=1731236688;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dKsMwuafOZwoy0GmZuR9O/Rq8lZfnlbj8aei6lxUmuI=;
-  b=SMN9fsybQC2toaJzF9DC8PzYGyPpH3PMs4b3Z2Bxo7qG64VbpN0NWbNU
-   8IbaX15wiNfXCQubT0S2/VrScHxGj6EPB+KvuDTWBo+SLXF8JzmEx6Udr
-   Jw6AD4YYZgcUG8ixJ9yJzcIQqPRb3G8heBF2SlHy8APhBdcdT+kiD0XR4
-   MBubB2triQld9UZhwG+Ktkq41Kioc6gJ1h6VBY7BAofJZVTx/p7gV5khy
-   MFoOsJ/KbpILkVrmo014EPW5fYqCOQc6o/9EOE7LXPZQT/b9JPHT9/Ekp
-   /qwBGYcN6u1p7mF+vRDMm4bW9UboDo22PFwtmjDccfIFq4hJjvMhMwAfN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="369601040"
-X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
-   d="scan'208";a="369601040"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2023 03:04:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
-   d="scan'208";a="12050365"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 11 Nov 2023 03:04:42 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r1ln5-000AOI-2p;
-	Sat, 11 Nov 2023 11:04:39 +0000
-Date: Sat, 11 Nov 2023 19:03:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Min Li <lnimi@hotmail.com>, richardcochran@gmail.com, lee@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Min Li <min.li.xe@renesas.com>
-Subject: Re: [PATCH net-next v2 1/1] ptp: clockmatrix: support 32-bit address
- space
-Message-ID: <202311111829.GoGXlH8b-lkp@intel.com>
-References: <MW5PR03MB6932A4AAD4F612B45E9F6856A0AFA@MW5PR03MB6932.namprd03.prod.outlook.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Isj7FXw0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699701081;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=R/RzoBcmfRGeZG+60VNUCIzaqybTl+snmatUPr+zA7A=;
+	b=Isj7FXw0NxgUqFT2LqpDofGFC2hr54IfuHTQgQe32EqMIhrgYtm1AVUq8VzeKtcYtvE8q/
+	i1E/z3D/Xsa9uiX/H/ph4H35tdH497c/F1fIkwpmPTqhvsxlI/AWsRBl832S5YquirXvG2
+	nPrYPDQIF9g5P9VH+LXlCDFQFgcNaoY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-690-kHdVHfXYNvmN5tPlOekZ1w-1; Sat,
+ 11 Nov 2023 06:11:19 -0500
+X-MC-Unique: kHdVHfXYNvmN5tPlOekZ1w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7672429AA38A
+	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 11:11:19 +0000 (UTC)
+Received: from [172.64.13.27] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6202B1121306;
+	Sat, 11 Nov 2023 11:11:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 10 of 230): Test report for master
+ (6.6.0, mainline.kernel.org-clang, ac347a06)
+Date: Sat, 11 Nov 2023 11:11:19 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MW5PR03MB6932A4AAD4F612B45E9F6856A0AFA@MW5PR03MB6932.namprd03.prod.outlook.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <79248.123111106111900975@us-mta-690.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Min,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on net-next/main]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/ptp-clockmatrix-support-32-bit-address-space/20231110-044554
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/MW5PR03MB6932A4AAD4F612B45E9F6856A0AFA%40MW5PR03MB6932.namprd03.prod.outlook.com
-patch subject: [PATCH net-next v2 1/1] ptp: clockmatrix: support 32-bit address space
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231111/202311111829.GoGXlH8b-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311111829.GoGXlH8b-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311111829.GoGXlH8b-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/114307
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
->> drivers/ptp/ptp_clockmatrix.c:1257:50: warning: implicit conversion from 'int' to 'u16' (aka 'unsigned short') changes value from 537972560 to 53072 [-Wconstant-conversion]
-    1257 |         u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
-         |             ~~~~~~~                                     ^~~~~~~
-   include/linux/mfd/idt8a340_reg.h:454:43: note: expanded from macro 'SCRATCH'
-     454 | #define SCRATCH                           0x2010cf50
-         |                                           ^~~~~~~~~~
-   include/linux/mfd/idt8a340_reg.h:673:55: note: expanded from macro 'IDTCM_FW_REG'
-     673 | #define IDTCM_FW_REG(FW, VER, REG)      (((FW) < (VER)) ? (REG) : (REG##_##VER))
-         |                                                            ^~~
-   drivers/ptp/ptp_clockmatrix.c:1257:16: warning: implicit conversion from 'int' to 'u16' (aka 'unsigned short') changes value from 537972556 to 53068 [-Wconstant-conversion]
-    1257 |         u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
-         |             ~~~~~~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/idt8a340_reg.h:673:63: note: expanded from macro 'IDTCM_FW_REG'
-     673 | #define IDTCM_FW_REG(FW, VER, REG)      (((FW) < (VER)) ? (REG) : (REG##_##VER))
-         |                                                                    ^~~~~~~~~~~
-   <scratch space>:144:1: note: expanded from here
-     144 | SCRATCH_V520
-         | ^~~~~~~~~~~~
-   include/linux/mfd/idt8a340_reg.h:455:43: note: expanded from macro 'SCRATCH_V520'
-     455 | #define SCRATCH_V520                      0x2010cf4c
-         |                                           ^~~~~~~~~~
-   2 warnings generated.
 
 
-vim +1257 drivers/ptp/ptp_clockmatrix.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1253  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1254  static int idtcm_load_firmware(struct idtcm *idtcm,
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1255  			       struct device *dev)
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1256  {
-794c3dffacc166 Min Li        2021-09-13 @1257  	u16 scratch = IDTCM_FW_REG(idtcm->fw_ver, V520, SCRATCH);
-7ea5fda2b1325e Min Li        2020-07-28  1258  	char fname[128] = FW_FILENAME;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1259  	const struct firmware *fw;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1260  	struct idtcm_fwrc *rec;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1261  	u32 regaddr;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1262  	int err;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1263  	s32 len;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1264  	u8 val;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1265  	u8 loaddr;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1266  
-7ea5fda2b1325e Min Li        2020-07-28  1267  	if (firmware) /* module parameter */
-7ea5fda2b1325e Min Li        2020-07-28  1268  		snprintf(fname, sizeof(fname), "%s", firmware);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1269  
-930dfa56315517 Min Li        2021-09-24  1270  	dev_info(idtcm->dev, "requesting firmware '%s'", fname);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1271  
-7ea5fda2b1325e Min Li        2020-07-28  1272  	err = request_firmware(&fw, fname, dev);
-7ea5fda2b1325e Min Li        2020-07-28  1273  	if (err) {
-930dfa56315517 Min Li        2021-09-24  1274  		dev_err(idtcm->dev,
-1c49d3e947783b Vincent Cheng 2021-02-17  1275  			"Failed at line %d in %s!", __LINE__, __func__);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1276  		return err;
-7ea5fda2b1325e Min Li        2020-07-28  1277  	}
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1278  
-930dfa56315517 Min Li        2021-09-24  1279  	dev_dbg(idtcm->dev, "firmware size %zu bytes", fw->size);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1280  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1281  	rec = (struct idtcm_fwrc *) fw->data;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1282  
-794c3dffacc166 Min Li        2021-09-13  1283  	if (contains_full_configuration(idtcm, fw))
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1284  		idtcm_state_machine_reset(idtcm);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1285  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1286  	for (len = fw->size; len > 0; len -= sizeof(*rec)) {
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1287  		if (rec->reserved) {
-930dfa56315517 Min Li        2021-09-24  1288  			dev_err(idtcm->dev,
-1c49d3e947783b Vincent Cheng 2021-02-17  1289  				"bad firmware, reserved field non-zero");
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1290  			err = -EINVAL;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1291  		} else {
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1292  			regaddr = rec->hiaddr << 8;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1293  			regaddr |= rec->loaddr;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1294  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1295  			val = rec->value;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1296  			loaddr = rec->loaddr;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1297  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1298  			rec++;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1299  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1300  			err = check_and_set_masks(idtcm, regaddr, val);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1301  		}
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1302  
-7ea5fda2b1325e Min Li        2020-07-28  1303  		if (err != -EINVAL) {
-7ea5fda2b1325e Min Li        2020-07-28  1304  			err = 0;
-7ea5fda2b1325e Min Li        2020-07-28  1305  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1306  			/* Top (status registers) and bottom are read-only */
-9fe9b9792d7236 Min Li        2023-11-09  1307  			if (regaddr < SCSR_ADDR(GPIO_USER_CONTROL) || regaddr >= scratch)
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1308  				continue;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1309  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1310  			/* Page size 128, last 4 bytes of page skipped */
-77fdb168a3e2a6 Vincent Cheng 2021-02-17  1311  			if ((loaddr > 0x7b && loaddr <= 0x7f) || loaddr > 0xfb)
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1312  				continue;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1313  
-9fe9b9792d7236 Min Li        2023-11-09  1314  			err = idtcm_write(idtcm, SCSR_BASE, regaddr, &val, sizeof(val));
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1315  		}
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1316  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1317  		if (err)
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1318  			goto out;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1319  	}
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1320  
-7ea5fda2b1325e Min Li        2020-07-28  1321  	display_pll_and_masks(idtcm);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1322  
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1323  out:
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1324  	release_firmware(fw);
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1325  	return err;
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1326  }
-3a6ba7dc779935 Vincent Cheng 2019-10-31  1327  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
