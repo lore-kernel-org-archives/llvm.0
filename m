@@ -1,153 +1,187 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD7910A29
-	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 09:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A897F;
+	Sat, 11 Nov 2023 10:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T7HxAVnp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699695691;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=98dg6r90dA83O8Q2OwCgtnysFTCW0FiH2iQVteQna3Y=;
-	b=T7HxAVnpdKVMIwXTERVwflBu85x8VtiUOSGG7YLwAZkIHmmFO084PFZJjO9MDQHBpwKNKY
-	dd06fvSWQ38j2KDUgO3HA/rGqtblSejueXkdZhyM43jwnO02Jv1PyvVKenfuPjwbdvlRJe
-	SkC3Jv6KWTCdlEkUWeZNesUk3HYEGy8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-256-JsRosGCHMRmrhUOVn2FyLw-1; Sat, 11 Nov 2023 04:41:29 -0500
-X-MC-Unique: JsRosGCHMRmrhUOVn2FyLw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0E3A80B633
-	for <llvm@lists.linux.dev>; Sat, 11 Nov 2023 09:41:29 +0000 (UTC)
-Received: from [172.64.13.27] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8EDF3502A;
-	Sat, 11 Nov 2023 09:41:29 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.6.0,
- mainline.kernel.org-clang, e1d809b3)
-Date: Sat, 11 Nov 2023 09:41:29 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G/7AFJnh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699699285; x=1731235285;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yDgF8fRMeA3utzT1N//rBGwE20ulKHntUEzKVUCPbnU=;
+  b=G/7AFJnh69xdrRicGTJKuADo1fv8bkTSUiiTach0yrvgqavPR1oR6V7Y
+   6v9ALgaZnVS8GA/WpHOsRlOj4/0QrasJz2ld4LFyoqU5Z2ZrhFxkjjrrL
+   WNfvb19z/vu4Yt1IK57WzKDNx4vEKu4JmnXVdJkLO/1/Spw+cZqqOHs1+
+   mH1qalv/5lv9jsnPfbaOKWIpkKsWsyV9Zje6GFxRVaeu5uttU0Hv9niZ5
+   utNYeq4Bjav+68aUXyNQYf94Nd/nDPhFCKiYzzqrw4PDF5+nsVK7qReNz
+   N11ppo/6vgTcWA/lUaRjTT2DS3GHld321k21owcJKXjF1dPOScZovh36W
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="394171546"
+X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
+   d="scan'208";a="394171546"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2023 02:41:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="1095355185"
+X-IronPort-AV: E=Sophos;i="6.03,294,1694761200"; 
+   d="scan'208";a="1095355185"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Nov 2023 02:41:18 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r1lQS-000ANh-2o;
+	Sat, 11 Nov 2023 10:41:16 +0000
+Date: Sat, 11 Nov 2023 18:41:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ross Philipson <ross.philipson@oracle.com>,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+	kexec@lists.infradead.org, linux-efi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ross.philipson@oracle.com, dpsmith@apertussolutions.com,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+	ardb@kernel.org, mjg59@srcf.ucam.org,
+	James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+	nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+	trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v7 09/13] x86: Secure Launch SMP bringup support
+Message-ID: <202311111806.sbmcWUN1-lkp@intel.com>
+References: <20231110222751.219836-10-ross.philipson@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <97364.123111104412900139@us-mta-256.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231110222751.219836-10-ross.philipson@oracle.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Ross,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.6 next-20231110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'sound-fix-6.7-rc1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/tiwai/sound
+url:    https://github.com/intel-lab-lkp/linux/commits/Ross-Philipson/x86-boot-Place-kernel_info-at-a-fixed-offset/20231111-063453
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20231110222751.219836-10-ross.philipson%40oracle.com
+patch subject: [PATCH v7 09/13] x86: Secure Launch SMP bringup support
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231111/202311111806.sbmcWUN1-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311111806.sbmcWUN1-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/114303
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311111806.sbmcWUN1-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
-            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
-XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/smpboot.c:1097:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (slaunch_is_txt_launch())
+               ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/smpboot.c:1107:6: note: uninitialized use occurs here
+           if (ret)
+               ^~~
+   arch/x86/kernel/smpboot.c:1097:2: note: remove the 'if' if its condition is always false
+           if (slaunch_is_txt_launch())
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/smpboot.c:1046:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
+vim +1097 arch/x86/kernel/smpboot.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1036	
+  1037	/*
+  1038	 * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
+  1039	 * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
+  1040	 * Returns zero if startup was successfully sent, else error code from
+  1041	 * ->wakeup_secondary_cpu.
+  1042	 */
+  1043	static int do_boot_cpu(u32 apicid, int cpu, struct task_struct *idle)
+  1044	{
+  1045		unsigned long start_ip = real_mode_header->trampoline_start;
+  1046		int ret;
+  1047	
+  1048	#ifdef CONFIG_X86_64
+  1049		/* If 64-bit wakeup method exists, use the 64-bit mode trampoline IP */
+  1050		if (apic->wakeup_secondary_cpu_64)
+  1051			start_ip = real_mode_header->trampoline_start64;
+  1052	#endif
+  1053		idle->thread.sp = (unsigned long)task_pt_regs(idle);
+  1054		initial_code = (unsigned long)start_secondary;
+  1055	
+  1056		if (IS_ENABLED(CONFIG_X86_32)) {
+  1057			early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
+  1058			initial_stack  = idle->thread.sp;
+  1059		} else if (!(smpboot_control & STARTUP_PARALLEL_MASK)) {
+  1060			smpboot_control = cpu;
+  1061		}
+  1062	
+  1063		/* Enable the espfix hack for this CPU */
+  1064		init_espfix_ap(cpu);
+  1065	
+  1066		/* So we see what's up */
+  1067		announce_cpu(cpu, apicid);
+  1068	
+  1069		/*
+  1070		 * This grunge runs the startup process for
+  1071		 * the targeted processor.
+  1072		 */
+  1073		if (x86_platform.legacy.warm_reset) {
+  1074	
+  1075			pr_debug("Setting warm reset code and vector.\n");
+  1076	
+  1077			smpboot_setup_warm_reset_vector(start_ip);
+  1078			/*
+  1079			 * Be paranoid about clearing APIC errors.
+  1080			*/
+  1081			if (APIC_INTEGRATED(boot_cpu_apic_version)) {
+  1082				apic_write(APIC_ESR, 0);
+  1083				apic_read(APIC_ESR);
+  1084			}
+  1085		}
+  1086	
+  1087		smp_mb();
+  1088	
+  1089		/*
+  1090		 * Wake up a CPU in difference cases:
+  1091		 * - Intel TXT DRTM launch uses its own method to wake the APs
+  1092		 * - Use a method from the APIC driver if one defined, with wakeup
+  1093		 *   straight to 64-bit mode preferred over wakeup to RM.
+  1094		 * Otherwise,
+  1095		 * - Use an INIT boot APIC message
+  1096		 */
+> 1097		if (slaunch_is_txt_launch())
+  1098			slaunch_wakeup_cpu_from_txt(cpu, apicid);
+  1099		else if (apic->wakeup_secondary_cpu_64)
+  1100			ret = apic->wakeup_secondary_cpu_64(apicid, start_ip);
+  1101		else if (apic->wakeup_secondary_cpu)
+  1102			ret = apic->wakeup_secondary_cpu(apicid, start_ip);
+  1103		else
+  1104			ret = wakeup_secondary_cpu_via_init(apicid, start_ip);
+  1105	
+  1106		/* If the wakeup mechanism failed, cleanup the warm reset vector */
+  1107		if (ret)
+  1108			arch_cpuhp_cleanup_kick_cpu(cpu);
+  1109		return ret;
+  1110	}
+  1111	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
