@@ -1,51 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9AC79CF;
-	Sun, 12 Nov 2023 11:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6867461;
+	Sun, 12 Nov 2023 14:42:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jjWFAlEi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FZRhTDNW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699788150; x=1731324150;
+  t=1699800154; x=1731336154;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YumjCao4NfDMti/9onGh5cRCBZAETxJB4XFxJqLYREk=;
-  b=jjWFAlEiCGENKmPilTn2H7b0R5lrrUZ9qrGy/PXhCRyt3r35Mw/QdfUl
-   drqorBgoZ460WO7braL5r0WMBjGNBrPea96jLNFagBcLmvR0t6skNRGN4
-   hGQetG6HQ4E+SdWaKohzILcMk5CQz22Z6e80inZKe65a2ojXFWK7e7Cym
-   SOaApX1fFLsIANmrskeLiZG4rcLyDv8PDZWEz0irImMkFdsp6krSyRH6M
-   PUesDaMfm+ty34cag7GtsNvNb0w/szaPe05sFKBCNnXjrMA/wxMmFHbR9
-   6iubolk13nxuazaHIuPDopFVBZLGo9kDAulkmowRiluS/3IlwwNzqz18V
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="476548233"
+  bh=He2tsisvNal/rPlNHC59npYlS3mXk8AFx4LjcgHkzI8=;
+  b=FZRhTDNWZaS45LAPmYxpwUA4y9mGUczXkubSQOy5dUZjpn91v7klihXI
+   7dLCYcItLKOXxUZs4OIozVSZWDKy5BM3ZVnQNfakNW7QqLLnaKSWzCWfF
+   1jUuARhML2fgXjj2cBZL7PtQCMBxEeIFxv0A2vgaYgBgYfSutsK42izGh
+   5zd13KyruFuSHbx3yx+yfewi7wG/LkHD5LMxb00ZTuTYhQQ0quR47z1TM
+   pZtMkZ2OlRE+1k2A9swCiYUAwuRbuqwoE3u999IEJPdxARjNJJ9RArv3u
+   tE6HzK5VTmrcZpH+W/D/chgAtkmhDmLwbHk1IOea/Lm4vy161TWyPc12j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="369660516"
 X-IronPort-AV: E=Sophos;i="6.03,297,1694761200"; 
-   d="scan'208";a="476548233"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 03:22:29 -0800
+   d="scan'208";a="369660516"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 06:42:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="1095518711"
+X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="793223767"
 X-IronPort-AV: E=Sophos;i="6.03,297,1694761200"; 
-   d="scan'208";a="1095518711"
+   d="scan'208";a="793223767"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Nov 2023 03:22:26 -0800
+  by orsmga008.jf.intel.com with ESMTP; 12 Nov 2023 06:42:29 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r28Xn-000B74-2t;
-	Sun, 12 Nov 2023 11:22:23 +0000
-Date: Sun, 12 Nov 2023 19:21:54 +0800
+	id 1r2BfO-000BCo-1K;
+	Sun, 12 Nov 2023 14:42:26 +0000
+Date: Sun, 12 Nov 2023 22:41:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yuxi Wang <wyx137120466@gmail.com>, pavel@ucw.cz, lee@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, Yuxi.Wang@monolithicpower.com
+To: Javier Martinez Canillas <javierm@redhat.com>,
+	Andrew Worsley <amworsley@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] leds: add mp3326 driver
-Message-ID: <202311121908.Kyj8FdWx-lkp@intel.com>
-References: <20231108032921.3134115-3-wyx137120466@gmail.com>
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:DRM DRIVER FOR FIRMWARE FRAMEBUFFERS" <dri-devel@lists.freedesktop.org>,
+	Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH] of/platform: Disable sysfb if a simple-framebuffer node
+ is
+Message-ID: <202311122208.2emZJrfT-lkp@intel.com>
+References: <87a5rj9s37.fsf@minerva.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,149 +56,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231108032921.3134115-3-wyx137120466@gmail.com>
+In-Reply-To: <87a5rj9s37.fsf@minerva.mail-host-address-is-not-set>
 
-Hi Yuxi,
+Hi Javier,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on lee-leds/for-leds-next]
-[also build test WARNING on robh/for-next pavel-leds/for-next linus/master v6.6 next-20231110]
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.6 next-20231110]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yuxi-Wang/dt-bindings-leds-add-mps-mp3326-LED/20231108-113235
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20231108032921.3134115-3-wyx137120466%40gmail.com
-patch subject: [PATCH 2/2] leds: add mp3326 driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231112/202311121908.Kyj8FdWx-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/of-platform-Disable-sysfb-if-a-simple-framebuffer-node-is/20231112-183751
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/87a5rj9s37.fsf%40minerva.mail-host-address-is-not-set
+patch subject: [PATCH] of/platform: Disable sysfb if a simple-framebuffer node is
+config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20231112/202311122208.2emZJrfT-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231112/202311121908.Kyj8FdWx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231112/202311122208.2emZJrfT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311121908.Kyj8FdWx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311122208.2emZJrfT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/leds/leds-mp3326.c:490:9: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-     490 |                         info[i].color_index = color;
-         |                              ^
-   drivers/leds/leds-mp3326.c:449:7: note: initialize the variable 'i' to silence this warning
-     449 |         int i;
-         |              ^
-         |               = 0
-   drivers/leds/leds-mp3326.c:546:37: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-     546 |                 ret = mp3326_add_led(chip, child, i);
-         |                                                   ^
-   drivers/leds/leds-mp3326.c:542:7: note: initialize the variable 'i' to silence this warning
-     542 |         int i;
-         |              ^
-         |               = 0
-   2 warnings generated.
+>> drivers/of/platform.c:635:4: error: call to undeclared function 'sysfb_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     635 |                         sysfb_disable();
+         |                         ^
+   1 error generated.
 
 
-vim +/i +490 drivers/leds/leds-mp3326.c
+vim +/sysfb_disable +635 drivers/of/platform.c
 
-   440	
-   441	static int mp3326_add_led(struct mp3326 *chip, struct device_node *np, int index)
-   442	{
-   443		struct mp3326_led *led = &chip->leds[index];
-   444		struct mc_subled *info;
-   445		struct device_node *child;
-   446		struct led_classdev *cdev;
-   447		struct led_init_data init_data = {};
-   448		int ret;
-   449		int i;
-   450		int count;
-   451		u32 color = 0;
-   452		u32 reg = 0;
-   453	
-   454		ret = of_property_read_u32(np, "color", &color);
-   455		if (ret) {
-   456			dev_err(&chip->client->dev, "Miss color in the node\n");
-   457			return ret;
-   458		}
-   459		led->private_data = chip;
-   460		if (color == LED_COLOR_ID_RGB) {
-   461			count = of_get_child_count(np);
-   462			if (count != 3) {
-   463				dev_err(&chip->client->dev, "RGB must have three node.\n");
-   464				return -EINVAL;
-   465			}
-   466	
-   467			info = devm_kcalloc(&chip->client->dev, 3, sizeof(*info), GFP_KERNEL);
-   468			if (!info)
-   469				return -ENOMEM;
-   470	
-   471			for_each_available_child_of_node(np, child) {
-   472				ret = of_property_read_u32(child, "reg", &reg);
-   473				if (ret || reg > MAX_CHANNEL) {
-   474					dev_err(&chip->client->dev,
-   475					"reg must less or equal than %d\n", MAX_CHANNEL);
-   476					return -EINVAL;
-   477				}
-   478	
-   479				ret = of_property_read_u32(child, "color", &color);
-   480				if (ret) {
-   481					dev_err(&chip->client->dev, "color must have value\n");
-   482					return ret;
-   483				}
-   484	
-   485				if (color > 3 || !color) {
-   486					dev_err(&chip->client->dev,
-   487					"color must be Red, Green and Blue. The color is %d\n", color);
-   488					return ret;
-   489				}
- > 490				info[i].color_index = color;
-   491				info[i].channel = reg - 1;
-   492				info[i].brightness = 0;
-   493				i++;
-   494			}
-   495	
-   496			led->subled_info = info;
-   497			led->num_colors = 3;
-   498			cdev = &led->cdev;
-   499			cdev->max_brightness = MAX_BRIGHTNESS;
-   500			cdev->brightness_set_blocking = led_brightness_set;
-   501			cdev->groups = led_sysfs_groups;
-   502			init_data.fwnode = &np->fwnode;
-   503	
-   504			ret = devm_led_classdev_register_ext(&chip->client->dev, &led->cdev, &init_data);
-   505	
-   506			if (ret) {
-   507				dev_err(&chip->client->dev, "Unable register multicolor:%s\n", cdev->name);
-   508				return ret;
-   509			}
-   510		} else {
-   511			ret = of_property_read_u32(np, "reg", &reg);
-   512			if (ret || reg > MAX_CHANNEL) {
-   513				dev_err(&chip->client->dev,
-   514				"reg must less or equal than %d\n", MAX_CHANNEL);
-   515				return -EINVAL;
-   516			}
-   517			info = devm_kcalloc(&chip->client->dev, 1, sizeof(*info), GFP_KERNEL);
-   518			led->num_colors = 1;
-   519			info[i].color_index = LED_COLOR_ID_WHITE;
-   520			info[i].channel = reg - 1;
-   521			info[i].brightness = 0;
-   522			led->subled_info = info;
-   523			cdev = &led->cdev;
-   524			cdev->max_brightness = MAX_BRIGHTNESS;
-   525			cdev->brightness_set_blocking = led_brightness_set;
-   526			cdev->groups = led_sysfs_groups;
-   527			init_data.fwnode = &np->fwnode;
-   528			ret = devm_led_classdev_register_ext(&chip->client->dev, &led->cdev, &init_data);
-   529			if (ret) {
-   530				dev_err(&chip->client->dev, "Unable register led:%s\n", cdev->name);
-   531				return ret;
-   532			}
-   533		}
-   534		return ret;
-   535	}
-   536	
+   545	
+   546	static int __init of_platform_default_populate_init(void)
+   547	{
+   548		struct device_node *node;
+   549	
+   550		device_links_supplier_sync_state_pause();
+   551	
+   552		if (!of_have_populated_dt())
+   553			return -ENODEV;
+   554	
+   555		if (IS_ENABLED(CONFIG_PPC)) {
+   556			struct device_node *boot_display = NULL;
+   557			struct platform_device *dev;
+   558			int display_number = 0;
+   559			int ret;
+   560	
+   561			/* Check if we have a MacOS display without a node spec */
+   562			if (of_property_present(of_chosen, "linux,bootx-noscreen")) {
+   563				/*
+   564				 * The old code tried to work out which node was the MacOS
+   565				 * display based on the address. I'm dropping that since the
+   566				 * lack of a node spec only happens with old BootX versions
+   567				 * (users can update) and with this code, they'll still get
+   568				 * a display (just not the palette hacks).
+   569				 */
+   570				dev = platform_device_alloc("bootx-noscreen", 0);
+   571				if (WARN_ON(!dev))
+   572					return -ENOMEM;
+   573				ret = platform_device_add(dev);
+   574				if (WARN_ON(ret)) {
+   575					platform_device_put(dev);
+   576					return ret;
+   577				}
+   578			}
+   579	
+   580			/*
+   581			 * For OF framebuffers, first create the device for the boot display,
+   582			 * then for the other framebuffers. Only fail for the boot display;
+   583			 * ignore errors for the rest.
+   584			 */
+   585			for_each_node_by_type(node, "display") {
+   586				if (!of_get_property(node, "linux,opened", NULL) ||
+   587				    !of_get_property(node, "linux,boot-display", NULL))
+   588					continue;
+   589				dev = of_platform_device_create(node, "of-display", NULL);
+   590				of_node_put(node);
+   591				if (WARN_ON(!dev))
+   592					return -ENOMEM;
+   593				boot_display = node;
+   594				display_number++;
+   595				break;
+   596			}
+   597			for_each_node_by_type(node, "display") {
+   598				char buf[14];
+   599				const char *of_display_format = "of-display.%d";
+   600	
+   601				if (!of_get_property(node, "linux,opened", NULL) || node == boot_display)
+   602					continue;
+   603				ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
+   604				if (ret < sizeof(buf))
+   605					of_platform_device_create(node, buf, NULL);
+   606			}
+   607	
+   608		} else {
+   609			/*
+   610			 * Handle certain compatibles explicitly, since we don't want to create
+   611			 * platform_devices for every node in /reserved-memory with a
+   612			 * "compatible",
+   613			 */
+   614			for_each_matching_node(node, reserved_mem_matches)
+   615				of_platform_device_create(node, NULL, NULL);
+   616	
+   617			node = of_find_node_by_path("/firmware");
+   618			if (node) {
+   619				of_platform_populate(node, NULL, NULL, NULL);
+   620				of_node_put(node);
+   621			}
+   622	
+   623			node = of_get_compatible_child(of_chosen, "simple-framebuffer");
+   624			if (node) {
+   625				/*
+   626				 * Since a "simple-framebuffer" device is already added
+   627				 * here, disable the Generic System Framebuffers (sysfb)
+   628				 * to prevent it from registering another device for the
+   629				 * system framebuffer later (e.g: using the screen_info
+   630				 * data that may had been filled as well).
+   631				 *
+   632				 * This can happen for example on DT systems that do EFI
+   633				 * booting and may provide a GOP table to the EFI stub.
+   634				 */
+ > 635				sysfb_disable();
+   636				of_platform_device_create(node, NULL, NULL);
+   637				of_node_put(node);
+   638			}
+   639	
+   640			/* Populate everything else. */
+   641			of_platform_default_populate(NULL, NULL, NULL);
+   642		}
+   643	
+   644		return 0;
+   645	}
+   646	arch_initcall_sync(of_platform_default_populate_init);
+   647	
 
 -- 
 0-DAY CI Kernel Test Service
