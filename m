@@ -1,200 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6867461;
-	Sun, 12 Nov 2023 14:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4894712B8D
+	for <llvm@lists.linux.dev>; Sun, 12 Nov 2023 15:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FZRhTDNW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699800154; x=1731336154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=He2tsisvNal/rPlNHC59npYlS3mXk8AFx4LjcgHkzI8=;
-  b=FZRhTDNWZaS45LAPmYxpwUA4y9mGUczXkubSQOy5dUZjpn91v7klihXI
-   7dLCYcItLKOXxUZs4OIozVSZWDKy5BM3ZVnQNfakNW7QqLLnaKSWzCWfF
-   1jUuARhML2fgXjj2cBZL7PtQCMBxEeIFxv0A2vgaYgBgYfSutsK42izGh
-   5zd13KyruFuSHbx3yx+yfewi7wG/LkHD5LMxb00ZTuTYhQQ0quR47z1TM
-   pZtMkZ2OlRE+1k2A9swCiYUAwuRbuqwoE3u999IEJPdxARjNJJ9RArv3u
-   tE6HzK5VTmrcZpH+W/D/chgAtkmhDmLwbHk1IOea/Lm4vy161TWyPc12j
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="369660516"
-X-IronPort-AV: E=Sophos;i="6.03,297,1694761200"; 
-   d="scan'208";a="369660516"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 06:42:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="793223767"
-X-IronPort-AV: E=Sophos;i="6.03,297,1694761200"; 
-   d="scan'208";a="793223767"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Nov 2023 06:42:29 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r2BfO-000BCo-1K;
-	Sun, 12 Nov 2023 14:42:26 +0000
-Date: Sun, 12 Nov 2023 22:41:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Javier Martinez Canillas <javierm@redhat.com>,
-	Andrew Worsley <amworsley@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:DRM DRIVER FOR FIRMWARE FRAMEBUFFERS" <dri-devel@lists.freedesktop.org>,
-	Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH] of/platform: Disable sysfb if a simple-framebuffer node
- is
-Message-ID: <202311122208.2emZJrfT-lkp@intel.com>
-References: <87a5rj9s37.fsf@minerva.mail-host-address-is-not-set>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KRO+t/Ud"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699801297;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8MAWgp1eBO48LE52PsEIgtXt6vAbwwSlbdBbbQlyS2o=;
+	b=KRO+t/UduzUnl2q2V8TwMS9BeLmEzto6zOPK4Xd1hHw4uuBbX1yoaCSe8Py+bTTkuuKXh4
+	QLlN+snsY/HDZkKXEMOmrNI+Y8UvB3ZI+5+O5FdCUstm4F+Acn+MYfnRlv3MgCASTMsWUx
+	SUMZSLHZl4pwiBCM+kgWO/mA5Sa9+Q8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-583-8L0Y3ViCM8al_YMpZSJOWQ-1; Sun, 12 Nov 2023 10:01:33 -0500
+X-MC-Unique: 8L0Y3ViCM8al_YMpZSJOWQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31D5580D72E
+	for <llvm@lists.linux.dev>; Sun, 12 Nov 2023 15:01:33 +0000 (UTC)
+Received: from [172.64.13.27] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1AD4E1C060AE;
+	Sun, 12 Nov 2023 15:01:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.6.0,
+ mainline.kernel.org-clang, 1b907d05)
+Date: Sun, 12 Nov 2023 15:01:33 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a5rj9s37.fsf@minerva.mail-host-address-is-not-set>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <65235.123111210013300912@us-mta-583.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Javier,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.6 next-20231110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/of-platform-Disable-sysfb-if-a-simple-framebuffer-node-is/20231112-183751
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/87a5rj9s37.fsf%40minerva.mail-host-address-is-not-set
-patch subject: [PATCH] of/platform: Disable sysfb if a simple-framebuffer node is
-config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20231112/202311122208.2emZJrfT-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231112/202311122208.2emZJrfT-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag '6.7-rc-smb3-client-fixes-part2' of git://git=
+.samba.org/sfrench/cifs-2.6
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311122208.2emZJrfT-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/114395
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
->> drivers/of/platform.c:635:4: error: call to undeclared function 'sysfb_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     635 |                         sysfb_disable();
-         |                         ^
-   1 error generated.
 
 
-vim +/sysfb_disable +635 drivers/of/platform.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   545	
-   546	static int __init of_platform_default_populate_init(void)
-   547	{
-   548		struct device_node *node;
-   549	
-   550		device_links_supplier_sync_state_pause();
-   551	
-   552		if (!of_have_populated_dt())
-   553			return -ENODEV;
-   554	
-   555		if (IS_ENABLED(CONFIG_PPC)) {
-   556			struct device_node *boot_display = NULL;
-   557			struct platform_device *dev;
-   558			int display_number = 0;
-   559			int ret;
-   560	
-   561			/* Check if we have a MacOS display without a node spec */
-   562			if (of_property_present(of_chosen, "linux,bootx-noscreen")) {
-   563				/*
-   564				 * The old code tried to work out which node was the MacOS
-   565				 * display based on the address. I'm dropping that since the
-   566				 * lack of a node spec only happens with old BootX versions
-   567				 * (users can update) and with this code, they'll still get
-   568				 * a display (just not the palette hacks).
-   569				 */
-   570				dev = platform_device_alloc("bootx-noscreen", 0);
-   571				if (WARN_ON(!dev))
-   572					return -ENOMEM;
-   573				ret = platform_device_add(dev);
-   574				if (WARN_ON(ret)) {
-   575					platform_device_put(dev);
-   576					return ret;
-   577				}
-   578			}
-   579	
-   580			/*
-   581			 * For OF framebuffers, first create the device for the boot display,
-   582			 * then for the other framebuffers. Only fail for the boot display;
-   583			 * ignore errors for the rest.
-   584			 */
-   585			for_each_node_by_type(node, "display") {
-   586				if (!of_get_property(node, "linux,opened", NULL) ||
-   587				    !of_get_property(node, "linux,boot-display", NULL))
-   588					continue;
-   589				dev = of_platform_device_create(node, "of-display", NULL);
-   590				of_node_put(node);
-   591				if (WARN_ON(!dev))
-   592					return -ENOMEM;
-   593				boot_display = node;
-   594				display_number++;
-   595				break;
-   596			}
-   597			for_each_node_by_type(node, "display") {
-   598				char buf[14];
-   599				const char *of_display_format = "of-display.%d";
-   600	
-   601				if (!of_get_property(node, "linux,opened", NULL) || node == boot_display)
-   602					continue;
-   603				ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
-   604				if (ret < sizeof(buf))
-   605					of_platform_device_create(node, buf, NULL);
-   606			}
-   607	
-   608		} else {
-   609			/*
-   610			 * Handle certain compatibles explicitly, since we don't want to create
-   611			 * platform_devices for every node in /reserved-memory with a
-   612			 * "compatible",
-   613			 */
-   614			for_each_matching_node(node, reserved_mem_matches)
-   615				of_platform_device_create(node, NULL, NULL);
-   616	
-   617			node = of_find_node_by_path("/firmware");
-   618			if (node) {
-   619				of_platform_populate(node, NULL, NULL, NULL);
-   620				of_node_put(node);
-   621			}
-   622	
-   623			node = of_get_compatible_child(of_chosen, "simple-framebuffer");
-   624			if (node) {
-   625				/*
-   626				 * Since a "simple-framebuffer" device is already added
-   627				 * here, disable the Generic System Framebuffers (sysfb)
-   628				 * to prevent it from registering another device for the
-   629				 * system framebuffer later (e.g: using the screen_info
-   630				 * data that may had been filled as well).
-   631				 *
-   632				 * This can happen for example on DT systems that do EFI
-   633				 * booting and may provide a GOP table to the EFI stub.
-   634				 */
- > 635				sysfb_disable();
-   636				of_platform_device_create(node, NULL, NULL);
-   637				of_node_put(node);
-   638			}
-   639	
-   640			/* Populate everything else. */
-   641			of_platform_default_populate(NULL, NULL, NULL);
-   642		}
-   643	
-   644		return 0;
-   645	}
-   646	arch_initcall_sync(of_platform_default_populate_init);
-   647	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
