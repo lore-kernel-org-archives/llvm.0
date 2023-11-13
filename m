@@ -1,168 +1,165 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BB91CFAC
-	for <llvm@lists.linux.dev>; Mon, 13 Nov 2023 11:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2CC1E524
+	for <llvm@lists.linux.dev>; Mon, 13 Nov 2023 13:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KoFJmEIq"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5842ea6f4d5so2826333eaf.2
-        for <llvm@lists.linux.dev>; Mon, 13 Nov 2023 03:50:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699876218; x=1700481018; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jJv19RflNFLxseNOK5bYIxlZ6toHV0s8aNrsbjGGC8I=;
-        b=KoFJmEIqqofvuSHypFvWo3K5JY1StVK3BDxi92NsMDMIAYVAqKP6ER+URWmO0CwvsB
-         EMhqtgI1+8TETxqR1izpOldqB8cckJkSWGjMCoLtJVPC2UGBoS0KSyGmnykmgkjViTt5
-         SLLOPNu4nngoWAK0M4WQ/GUe8ZkKq6n23beQ9/rUiuklmpesHlupAXMdGPpp9SZqRbYl
-         AJRBuUIpcKVhQW4OoXgvWpALAIUXM3apZdbeVR+8/AuoyZeu1/kyIWndhESMZzrgZWfG
-         WxenSnzQYIx5hdmPrihaM+zYy874dubIaCaTHvCdRqZHmXvKpNy3WB+uf01+xXnXdbYe
-         oUmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699876218; x=1700481018;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jJv19RflNFLxseNOK5bYIxlZ6toHV0s8aNrsbjGGC8I=;
-        b=daRgbiQRmORdBnNxrx+/bvvwcJGw9Q2XYcXOdf53ekm3I1O9VvxocXelN8mgLyJ1uV
-         KGjBkm7bQgMrAQK5dmJWSTh6+jsyQgSoT1U22Byhui1JtTlqOqUFyvNWmCgcbI5CZmav
-         MIUOumJOjd2XZ2l/AdJCOfVat+Al/v7hoG3jO2OzEbrvle6dVMh991yCPrD4PP0wb75I
-         OIikBU2o9G+CluKl+kJx8tXHq1VN9Dia7nuua6Wdibqk4LhbkvbLBtSK+cJkOKwcTG3P
-         1qkfH9S986BpAjnYvzT3PfWt4/kxskBbSZw554fmJCAKh41kNTNawyw8lSyu7LfBu/u3
-         UUPg==
-X-Gm-Message-State: AOJu0Yw3lhB7obwlq45S53bTdSsya3lnMKZQVty4VALUR/Wc4V9GT8ax
-	PY2chbpyBChT7824rmObXSFPC1RYvA5cyCYUHLU=
-X-Google-Smtp-Source: AGHT+IHaQW9yVbQqvx8mz5VCkHHc0JZhxCp8WU54TkZGAVf4bej+T4u3NgXQXZs44zjHw7w8THD6Hy4r+Qb7KBGoOzY=
-X-Received: by 2002:a4a:d2d9:0:b0:589:d576:b9fd with SMTP id
- j25-20020a4ad2d9000000b00589d576b9fdmr6546119oos.5.1699876218207; Mon, 13 Nov
- 2023 03:50:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fIuqAiLU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699881398;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=F3e5rgyo6Db/gQiM3qnY4j6VDfJnFB69RzXaD0Z5Dt4=;
+	b=fIuqAiLUdMa0N++vkGFdxASxoTbUA5m6g6J2lbxZPm3H499kbL8AqyWPuqtRmVoPdJIIlq
+	Bs0nsKFpOaxnQDdMecUddhA+Rtvbc1+TgqqV6G6kR9EdGDLpB9zkZwCYhYaASAQopRYd3L
+	n2YA11efF59mVe+h4J3Lfgjf8sgKi7U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-355-3h3UsEyhMymbbBco00uFKw-1; Mon, 13 Nov 2023 08:16:36 -0500
+X-MC-Unique: 3h3UsEyhMymbbBco00uFKw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A791185A783
+	for <llvm@lists.linux.dev>; Mon, 13 Nov 2023 13:16:36 +0000 (UTC)
+Received: from [172.64.11.39] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 443011C060B5;
+	Mon, 13 Nov 2023 13:16:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc1,
+ mainline.kernel.org-clang, b85ea95d)
+Date: Mon, 13 Nov 2023 13:16:36 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231101071421.29462-1-xingxing.luo@unisoc.com> <2023110105-saggy-gladiator-b3b0@gregkh>
-In-Reply-To: <2023110105-saggy-gladiator-b3b0@gregkh>
-From: xingxing luo <xingxing0070.luo@gmail.com>
-Date: Mon, 13 Nov 2023 19:50:06 +0800
-Message-ID: <CANnj+8TVhUgHp9SWK9zftL4J+JHfRS1GUZm4+7z4o95nB2_OyQ@mail.gmail.com>
-Subject: Re: [PATCH V2] usb: musb: Check requset->buf before use to avoid
- crash issue
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Xingxing Luo <xingxing.luo@unisoc.com>, b-liu@ti.com, keescook@chromium.org, 
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, Zhiyong.Liu@unisoc.com, 
-	Cixi.Geng1@unisoc.com, Orson.Zhai@unisoc.com, zhang.lyra@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <71590.123111308163600587@us-mta-355.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 1, 2023 at 3:31=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
- wrote:
->
-> On Wed, Nov 01, 2023 at 03:14:21PM +0800, Xingxing Luo wrote:
-> > When connecting USB to PC, there is a very low probability of kernel
-> > crash. The reason is that in ep0_txstate(), the buf member of struct
-> > usb_request used may be a null pointer. Therefore, it needs to
-> > determine whether it is null before using it.
-> >
-> > [ 4888.071462][T597@C0] Call trace:
-> > [ 4888.071467][T597@C0]  musb_default_write_fifo+0xa0/0x1ac [musb_hdrc]
-> > [ 4888.087190][T597@C0]  musb_write_fifo+0x3c/0x90 [musb_hdrc]
-> > [ 4888.099826][T597@C0]  ep0_txstate+0x78/0x218 [musb_hdrc]
-> > [ 4888.153918][T597@C0]  musb_g_ep0_irq+0x3c4/0xe10 [musb_hdrc]
-> > [ 4888.159663][T597@C0]  musb_interrupt+0xab4/0xf1c [musb_hdrc]
-> > [ 4888.165391][T597@C0]  sprd_musb_interrupt+0x1e4/0x484 [musb_sprd]
-> > [ 4888.171447][T597@C0]  __handle_irq_event_percpu+0xd8/0x2f8
-> > [ 4888.176901][T597@C0]  handle_irq_event+0x70/0xe4
-> > [ 4888.181487][T597@C0]  handle_fasteoi_irq+0x15c/0x230
-> > [ 4888.186420][T597@C0]  handle_domain_irq+0x88/0xfc
-> > [ 4888.191090][T597@C0]  gic_handle_irq+0x60/0x138
-> > [ 4888.195591][T597@C0]  call_on_irq_stack+0x40/0x70
-> > [ 4888.200263][T597@C0]  do_interrupt_handler+0x50/0xac
-> > [ 4888.205196][T597@C0]  el1_interrupt+0x34/0x64
-> > [ 4888.209524][T597@C0]  el1h_64_irq_handler+0x1c/0x2c
-> > [ 4888.214370][T597@C0]  el1h_64_irq+0x7c/0x80
-> > [ 4888.218525][T597@C0]  __check_heap_object+0x1ac/0x1fc
-> > [ 4888.223544][T597@C0]  __check_object_size+0x10c/0x20c
-> > [ 4888.228563][T597@C0]  simple_copy_to_iter+0x40/0x74
-> > [ 4888.233410][T597@C0]  __skb_datagram_iter+0xa0/0x310
-> > [ 4888.238343][T597@C0]  skb_copy_datagram_iter+0x44/0x110
-> > [ 4888.243535][T597@C0]  netlink_recvmsg+0xdc/0x364
-> > [ 4888.248123][T597@C0]  ____sys_recvmsg.llvm.16749613423860851707+0x35=
-8/0x6c0
-> > [ 4888.255045][T597@C0]  ___sys_recvmsg+0xe0/0x1dc
-> > [ 4888.259544][T597@C0]  __arm64_sys_recvmsg+0xc4/0x10c
-> > [ 4888.264478][T597@C0]  invoke_syscall+0x6c/0x15c
-> > [ 4888.268976][T597@C0]  el0_svc_common.llvm.12373701176611417606+0xd4/=
-0x120
-> > [ 4888.275726][T597@C0]  do_el0_svc+0x34/0xac
-> > [ 4888.279795][T597@C0]  el0_svc+0x28/0x90
-> > [ 4888.283603][T597@C0]  el0t_64_sync_handler+0x88/0xec
-> > [ 4888.288548][T597@C0]  el0t_64_sync+0x1b4/0x1b8
-> > [ 4888.292956][T597@C0] Code: 540002c3 53027ea8 aa1303e9 71000508 (b840=
-452a)
-> > [ 4888.299789][T597@C0] ---[ end trace 14a301b7253e83cc ]---
-> >
-> > Fixes: 550a7375fe72 ("USB: Add MUSB and TUSB support")
-> > Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
-> > ---
-> > v1 -> v2: - Fixed a spelling error
-> >           - Add the fixed commit id
-> >
-> >  drivers/usb/musb/musb_gadget_ep0.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/usb/musb/musb_gadget_ep0.c b/drivers/usb/musb/musb=
-_gadget_ep0.c
-> > index 6d7336727388..19eb7a5e1fdc 100644
-> > --- a/drivers/usb/musb/musb_gadget_ep0.c
-> > +++ b/drivers/usb/musb/musb_gadget_ep0.c
-> > @@ -531,6 +531,11 @@ static void ep0_txstate(struct musb *musb)
-> >
-> >       request =3D &req->request;
-> >
-> > +     if (!request->buf) {
-> > +             musb_dbg(musb, "request->buf is NULL");
->
-> Why is this debug line needed?
->
-> > +             return;
->
-> Shouldn't we be reporting an error here somehow?
->
+Hi, we tested your kernel and here are the results:
 
-This is a good suggestion, I will add it in the next version.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> And why has this issue never been seen before in this driver?  This is a
-> very old driver, with millions, if not billions, of working systems with
-> it.  What caused this to suddenly start happening?
->
+Tested-by: CKI Project <cki-project@redhat.com>
 
-This problem occurs in a special scenario and is also a very
-low-probability problem.
-When our machine is used as a device and connected to the computer, due to =
-some
-unknown reason, the USB cable is not pulled out, but the USB driver is
-notified to
-pull out. Out, the gadget is processing the unbind process. When the
-execution is
-completed, request->buf is released and points to NULL. At the same
-time, since the
-USB is not physically disconnected at this time, the USB will receive
-an interrupt and
-use ep0 for control transmission. The request->buf of ep0 used at this
-time has been
-used in the gadget unbind process. It is released and points to NULL,
-thus using a null
-pointer, causing the kernel to crash. Therefore, we think it would be
-better to determine
-whether it is null before using request->buf.
+Kernel information:
+    Commit message: Linux 6.7-rc1
 
-> thanks,
->
-> greg k-h
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/114434
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
