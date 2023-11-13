@@ -1,165 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2CC1E524
-	for <llvm@lists.linux.dev>; Mon, 13 Nov 2023 13:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B69E224C9;
+	Mon, 13 Nov 2023 17:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fIuqAiLU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699881398;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F3e5rgyo6Db/gQiM3qnY4j6VDfJnFB69RzXaD0Z5Dt4=;
-	b=fIuqAiLUdMa0N++vkGFdxASxoTbUA5m6g6J2lbxZPm3H499kbL8AqyWPuqtRmVoPdJIIlq
-	Bs0nsKFpOaxnQDdMecUddhA+Rtvbc1+TgqqV6G6kR9EdGDLpB9zkZwCYhYaASAQopRYd3L
-	n2YA11efF59mVe+h4J3Lfgjf8sgKi7U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-355-3h3UsEyhMymbbBco00uFKw-1; Mon, 13 Nov 2023 08:16:36 -0500
-X-MC-Unique: 3h3UsEyhMymbbBco00uFKw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A791185A783
-	for <llvm@lists.linux.dev>; Mon, 13 Nov 2023 13:16:36 +0000 (UTC)
-Received: from [172.64.11.39] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 443011C060B5;
-	Mon, 13 Nov 2023 13:16:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc1,
- mainline.kernel.org-clang, b85ea95d)
-Date: Mon, 13 Nov 2023 13:16:36 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="c7Fr9WWm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FE5C433C7;
+	Mon, 13 Nov 2023 17:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1699895407;
+	bh=eqHMpQjhzX+WcTQDLIe2boEljF6lPYLs8dmLBLyT6Nw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=c7Fr9WWmMXEb+kC9ynvrMqHKBPKopBNtpnYOmPPZ5MjYyWeULJS4vHzr0qHRBJ5/0
+	 QpxhqwMOybrvefiip/Dh0TLxqKUi5k7pUnVA9jutrWauFwcuBTq+tagS4Z85101Q94
+	 tCTd5AVEX0pgRybBLkpWx5YcAM+/vz16sAF2WdrE=
+Date: Mon, 13 Nov 2023 09:10:06 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Linux Memory Management List
+ <linux-mm@kvack.org>, Hannes Reinecke <hare@suse.de>, Luis Chamberlain
+ <mcgrof@kernel.org>, Pankaj Raghav <p.raghav@samsung.com>,
+ linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] buffer: Fix grow_buffers() for block size >
+ PAGE_SIZE
+Message-Id: <20231113091006.f9d4de1aaf7ed2f8beef07fb@linux-foundation.org>
+In-Reply-To: <202311121240.AN8GbAbe-lkp@intel.com>
+References: <20231109210608.2252323-4-willy@infradead.org>
+	<202311121240.AN8GbAbe-lkp@intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <71590.123111308163600587@us-mta-355.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On Sun, 12 Nov 2023 12:52:00 +0800 kernel test robot <lkp@intel.com> wrote:
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+> Hi Matthew,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> [also build test ERROR on linus/master next-20231110]
+> [cannot apply to v6.6]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/buffer-Return-bool-from-grow_dev_folio/20231110-051651
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20231109210608.2252323-4-willy%40infradead.org
+> patch subject: [PATCH v2 3/7] buffer: Fix grow_buffers() for block size > PAGE_SIZE
+> config: hexagon-comet_defconfig (https://download.01.org/0day-ci/archive/20231112/202311121240.AN8GbAbe-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231112/202311121240.AN8GbAbe-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202311121240.AN8GbAbe-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: __muloti4
+>    >>> referenced by buffer.c
+>    >>>               fs/buffer.o:(bdev_getblk) in archive vmlinux.a
+>    >>> referenced by buffer.c
+>    >>>               fs/buffer.o:(bdev_getblk) in archive vmlinux.a
+> 
 
-Tested-by: CKI Project <cki-project@redhat.com>
+What a peculiar compiler.
 
-Kernel information:
-    Commit message: Linux 6.7-rc1
+I assume this fixes?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/114434
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
-            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
-XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+--- a/fs/buffer.c~buffer-fix-grow_buffers-for-block-size-page_size-fix
++++ a/fs/buffer.c
+@@ -1099,7 +1099,7 @@ static bool grow_buffers(struct block_de
+ 	}
+ 
+ 	/* Create a folio with the proper size buffers */
+-	return grow_dev_folio(bdev, block, pos / PAGE_SIZE, size, gfp);
++	return grow_dev_folio(bdev, block, pos >> PAGE_SHIFT, size, gfp);
+ }
+ 
+ static struct buffer_head *
+_
 
