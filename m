@@ -1,146 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E202E35EE0;
-	Tue, 14 Nov 2023 20:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3727E35EE5
+	for <llvm@lists.linux.dev>; Tue, 14 Nov 2023 20:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D/5DpUtX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A3BC433C8;
-	Tue, 14 Nov 2023 20:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699992058;
-	bh=ANs+VJoyEuUhOuZN7nC/BappPROTapJrbUv37+MySGk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D/5DpUtXVZbLEd5Lmo+ddDRITgpY+Nd+eAf9ggjovl3ePly0ZhDiK/vgdQYVnyBld
-	 p3/+Xvu4Fo7fsuKAHrHMZctCK3UxMykJ3QYs+tSZ9G3O2AvbIUwMERjLHk8m8e2J0A
-	 CkFYUoVVaIRV2GrzUPWnpB1dQ7DD/hQRZGF8G5RRRfqsfVSpPlmJ7oVMPfRLJxKg0y
-	 hXWYQbYrXVU6KAjPRdtTelZ5OUrzS6bBwDmTnEe2zimhT+MbeFsj9ZiOO1Q85El8Hr
-	 Iux7CugKytHynlHBpNG2tMdy4VAX3SfEp9WCf5UY0Z26ihWbwdQhqQiMFyCIqSwuqg
-	 JJ5qtSHpbSn9g==
-Date: Tue, 14 Nov 2023 13:00:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jay Buddhabhatti <jay.buddhabhatti@amd.com>, michal.simek@amd.com,
-	gregkh@linuxfoundation.org, tanmay.shah@amd.com,
-	mathieu.poirier@linaro.org, nava.kishore.manne@amd.com,
-	ben.levinsky@amd.com, sai.krishna.potthuri@amd.com, marex@denx.de,
-	robh@kernel.org, ruanjinjie@huawei.com, arnd@arndb.de,
-	shubhrajyoti.datta@amd.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Izhar Ameer Shaikh <izhar.ameer.shaikh@amd.com>
-Subject: Re: [PATCH v4 1/5] firmware: xilinx: Update firmware call interface
- to support additional args
-Message-ID: <20231114200056.GA3377479@dev-arch.thelio-3990X>
-References: <20231109070021.16291-2-jay.buddhabhatti@amd.com>
- <202311111439.Hxd4wZ6x-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pLjyVUp1"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-32df66c691dso3558831f8f.3
+        for <llvm@lists.linux.dev>; Tue, 14 Nov 2023 12:07:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699992462; x=1700597262; darn=lists.linux.dev;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pYXixEKEIJ+1GuvafPDgFdCXIOFGQROEQrMVaOpRSJo=;
+        b=pLjyVUp1XKN7Kr5xx/8f84auQyBR7e/y7MaM+MX+vQCHH+rPGzl6Hh82au/xM1OTc1
+         80mRlmtqymPxfuvYkDOJVlv4TcAD1AB/QecuJxeFC6f/jsWNzDBGbG3j1RVj3USMw9HE
+         2BuS+2UOpuXDQDiop8GZrCeBQI3QusA8osMbjgXmjmaP08fPm2mkf6X2No0muND1kYnf
+         Z1jlhqoByl1/RdMoAIIKbiWotghToauPq6KFgOVwhLGY9yh1i2jbkEPihboTlJK8K8Is
+         yQPk4XjmJnnw9DdSOl97aQ9TSzsjJY1GwAmQdtufluX3ngVVcpb1ElyjmAnsOhEEHDG6
+         OmQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699992462; x=1700597262;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pYXixEKEIJ+1GuvafPDgFdCXIOFGQROEQrMVaOpRSJo=;
+        b=c02b3iQn27vkrW80NgKYUMB4rQOPFj5JyEvs1JhSFB9lL1Ur2QLlEfBJ2Poz1k2qMf
+         c7jJLLtGiVZ2ZvUOXZXsrJVAC14mDYNkXO/xGoTrU5zeC3lbIwa7/1ZGYdaAWTP0cEYc
+         rQfJiC7VmUjcEeVsmJjv7U+fiDttSlhquR86EhFTGCeai15pjPOwXW3ra+T2ledqQiEb
+         C64HM0L33g8QCg6Mg2ngMNfM8npHzUbhZatNZViWUnNgr2BHTtoO3I3a3NFDm+5hp3Yy
+         Dv5RmPZEjTyzs6Ez9oUCmxWNz2FTAHDDqa9nYKYP7uFFaufwm4lfl39hmtiWmioPDn9c
+         qJbg==
+X-Gm-Message-State: AOJu0YxAIsMeFN9BBHqsEFurIqeD/J3UUf0m8HkUOT7ojTiNd8RVjOfN
+	j8pNcZJnEy37b5Clc80LQTawgVdz9l8CUXee/TyUKPQT6BHh5xJEe2bDig==
+X-Google-Smtp-Source: AGHT+IE9D2eXRzaZsIEEdwmRAiGttxp6tEm7YtXyO2Dk6sIShDX1FY2m6gM/gPtt8AJC8fg4oU1Ls9isjAnZTv8BY0I=
+X-Received: by 2002:a5d:6c61:0:b0:32d:8819:4620 with SMTP id
+ r1-20020a5d6c61000000b0032d88194620mr8209862wrz.14.1699992461997; Tue, 14 Nov
+ 2023 12:07:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202311111439.Hxd4wZ6x-lkp@intel.com>
+References: <CAKwvOdmvAcnjmTiAoeUFF0yDU=Pf5jRYRwxDU=5x2-Fhocbpxg@mail.gmail.com>
+In-Reply-To: <CAKwvOdmvAcnjmTiAoeUFF0yDU=Pf5jRYRwxDU=5x2-Fhocbpxg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 14 Nov 2023 15:07:30 -0500
+Message-ID: <CAKwvOdkZt=JBdqDXfUv8_RwQzkijtEf1EVsYGPxkZtok38vnFA@mail.gmail.com>
+Subject: Re: removing github group priveledges
+To: clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 11, 2023 at 02:47:06PM +0800, kernel test robot wrote:
-> Hi Jay,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on driver-core/driver-core-testing]
-> [also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.6 next-20231110]
-> [cannot apply to xilinx-xlnx/master]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jay-Buddhabhatti/firmware-xilinx-Update-firmware-call-interface-to-support-additional-args/20231109-191827
-> base:   driver-core/driver-core-testing
-> patch link:    https://lore.kernel.org/r/20231109070021.16291-2-jay.buddhabhatti%40amd.com
-> patch subject: [PATCH v4 1/5] firmware: xilinx: Update firmware call interface to support additional args
-> config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231111/202311111439.Hxd4wZ6x-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231111/202311111439.Hxd4wZ6x-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202311111439.Hxd4wZ6x-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/firmware/xilinx/zynqmp.c:139:21: warning: passing an object that undergoes default argument promotion to 'va_start' has undefined behavior [-Wvarargs]
->      139 |         va_start(arg_list, num_args);
->          |                            ^
->    drivers/firmware/xilinx/zynqmp.c:129:57: note: parameter of type 'u8' (aka 'unsigned char') is declared here
->      129 | static noinline int do_fw_call_smc(u32 *ret_payload, u8 num_args, ...)
->          |                                                         ^
->    drivers/firmware/xilinx/zynqmp.c:179:21: warning: passing an object that undergoes default argument promotion to 'va_start' has undefined behavior [-Wvarargs]
->      179 |         va_start(arg_list, num_args);
->          |                            ^
->    drivers/firmware/xilinx/zynqmp.c:169:57: note: parameter of type 'u8' (aka 'unsigned char') is declared here
->      169 | static noinline int do_fw_call_hvc(u32 *ret_payload, u8 num_args, ...)
->          |                                                         ^
->    drivers/firmware/xilinx/zynqmp.c:349:21: warning: passing an object that undergoes default argument promotion to 'va_start' has undefined behavior [-Wvarargs]
->      349 |         va_start(arg_list, num_args);
->          |                            ^
->    drivers/firmware/xilinx/zynqmp.c:335:61: note: parameter of type 'u8' (aka 'unsigned char') is declared here
->      335 | int zynqmp_pm_invoke_fn(u32 pm_api_id, u32 *ret_payload, u8 num_args, ...)
->          |                                                             ^
->    3 warnings generated.
+On Sun, Nov 12, 2023 at 4:49=E2=80=AFPM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Hello,
+> As https://github.com/orgs/ClangBuiltLinux/people has grown, it no
+> longer makes sense to have so many admins.
+>
+> I'll be converting less active members to admins.  Please speak up if
+> you have a good reason why you need to remain an admin.
 
-FWIW, this is saying that num_args should be 'int' or 'unsigned int',
-see commit be24b37e22c2 ("KEYS: trusted: fix -Wvarags warning") for
-another instance of this problem.
-
-Cheers,
-Nathan
-
-> vim +/va_start +139 drivers/firmware/xilinx/zynqmp.c
-> 
->    119	
->    120	/**
->    121	 * do_fw_call_smc() - Call system-level platform management layer (SMC)
->    122	 * @num_args:		Number of variable arguments should be <= 8
->    123	 * @ret_payload:	Returned value array
->    124	 *
->    125	 * Invoke platform management function via SMC call (no hypervisor present).
->    126	 *
->    127	 * Return: Returns status, either success or error+reason
->    128	 */
->    129	static noinline int do_fw_call_smc(u32 *ret_payload, u8 num_args, ...)
->    130	{
->    131		struct arm_smccc_res res;
->    132		u64 args[8] = {0};
->    133		va_list arg_list;
->    134		u8 i;
->    135	
->    136		if (num_args > 8)
->    137			return -EINVAL;
->    138	
->  > 139		va_start(arg_list, num_args);
->    140	
->    141		for (i = 0; i < num_args; i++)
->    142			args[i] = va_arg(arg_list, u64);
->    143	
->    144		va_end(arg_list);
->    145	
->    146		arm_smccc_smc(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], &res);
->    147	
->    148		if (ret_payload) {
->    149			ret_payload[0] = lower_32_bits(res.a0);
->    150			ret_payload[1] = upper_32_bits(res.a0);
->    151			ret_payload[2] = lower_32_bits(res.a1);
->    152			ret_payload[3] = upper_32_bits(res.a1);
->    153		}
->    154	
->    155		return zynqmp_pm_ret_code((enum pm_ret_status)res.a0);
->    156	}
->    157	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
+I've now converted most folks to members.  Happy to make changes back
+if necessary; just speak up.
+--=20
+Thanks,
+~Nick Desaulniers
