@@ -1,39 +1,39 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93B418026
-	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 13:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700391A592
+	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 13:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fBC7tsgH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eDMKf4MT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700055084;
+	s=mimecast20190719; t=1700055130;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=TB4UrcFenZZKswol8AbBOJBF/S7vAe7+sFzKROv+at4=;
-	b=fBC7tsgHCM9xsoUZPy096qt11vurfra2lIMqmuvefvG1MKec6wWw9eAP/7SgWZwdJVfijR
-	oZQkYXr0UFAV+4h96c6y3emvoBPc4YMbpIaaMQcmMNeiJXmDuZmMnihlhtt7UQD/OraWRV
-	0IILYk9Q16UZLNrrEtya780YZH2D2Wk=
+	bh=gZgjkR3CVn/aUWvSHjSI+HyyjNgSTRF6ypQzXzf6+JQ=;
+	b=eDMKf4MTtT/zun2v1fwThzBCLOWY7IELbtE64AZ2F+Up/qDbJHmv+eYXlwfDvJgXF1V3xu
+	D6w2kXdO01NqiLWoUhlTuwe5+d2f+PBK5zZBc+pIqNjgpwa1dFB935Y5W/pNWPaDzaUmv8
+	IMG8j/TP5C8l9iUlPCrwvXECNPnb+F0=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-116-s34M2LoUPWK4n1OXE5hhZw-1; Wed, 15 Nov 2023 08:31:22 -0500
-X-MC-Unique: s34M2LoUPWK4n1OXE5hhZw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-331-Hl4iRVWfNFyI60RSK1N6Ng-1; Wed, 15 Nov 2023 08:32:09 -0500
+X-MC-Unique: Hl4iRVWfNFyI60RSK1N6Ng-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EFF2C185A783
-	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 13:31:21 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE135857C20
+	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 13:32:08 +0000 (UTC)
 Received: from [172.64.4.47] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DA70540C6EB9;
-	Wed, 15 Nov 2023 13:31:21 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BBEDB2026D4C;
+	Wed, 15 Nov 2023 13:32:08 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc1,
- mainline.kernel.org-clang, c42d9eee)
-Date: Wed, 15 Nov 2023 13:31:21 -0000
+ mainline.kernel.org-clang, 86d11b0e)
+Date: Wed, 15 Nov 2023 13:32:08 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -41,8 +41,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <03005.123111508312200695@us-mta-116.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <13524.123111508320900281@us-mta-331.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -58,11 +58,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'hardening-v6.7-rc2' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/kees/linux
+    Commit message: Merge tag 'zstd-linus-v6.7-rc2' of https://github.com/t=
+errelln/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/114857
+    https://datawarehouse.cki-project.org/kcidb/checkouts/114853
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -85,6 +85,14 @@ XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
                  aarch64 - Storage - blktests - nvme-tcp
                    s390x - Storage - blktests - nvme-tcp
                   x86_64 - Storage - blktests - nvme-tcp
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
         Issue: [upstream] stress-ng: avc denial on secretmemory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1752
@@ -99,6 +107,13 @@ l-tests/-/issues/1752
                   x86_64 - xfstests - cifsv3.11
                   x86_64 (debug) - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
 g dependency detected
             URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
@@ -111,25 +126,12 @@ l-tests/-/issues/1418
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1267
             Affected tests:
                  ppc64le - selinux-policy: serge-testsuite
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
         Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
 ': No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
