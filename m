@@ -1,114 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A4E3BB49;
-	Wed, 15 Nov 2023 19:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3644121C;
+	Wed, 15 Nov 2023 19:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VRbCJ7Kz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700076329; x=1731612329;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=McKOscbZvZRsoTCCO+6I+3OL4SrPfiFuJ0fDjAUvUJk=;
-  b=VRbCJ7KzxwC89S2jriUS+RHbikJXtmrptri8YN6LJyE3oU9H6yQ026PU
-   H0e48evWNDdI6SXnXwDMQIoNvF8VQgIbJOS4TrekGR3zAQLHB5ccJ8XUA
-   PXYjuguIcOjJOlnK8tU8yyDxLbgC8HfS3IBam9xPtt+dyTZ8XezG0ViY4
-   fntXuGwdlHA/GN1AglTux3sJ/N1H3yBAwxNCjgtFfX0NrJcvB2rSOOwpX
-   jISqzNw+jUqlODCbgtZ/+sJYWikjXXsXcJJnslLF+rEH9ezztgq+r3+Bw
-   zocMGXj8vxGfR4kTSBT7OYgW3dB2Uk2B069PdsopQLI37W42x8StwrvVD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="457434773"
-X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="457434773"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 11:24:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="831028204"
-X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="831028204"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Nov 2023 11:24:53 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r3LVK-0000kk-2d;
-	Wed, 15 Nov 2023 19:24:50 +0000
-Date: Thu, 16 Nov 2023 03:23:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, Robert Richter <rric@kernel.org>
-Subject: Re: [PATCH v1 2/3] EDAC, pnd2: Apply bit macros and helpers where it
- makes sense
-Message-ID: <202311160352.PfYDQfkU-lkp@intel.com>
-References: <20231115154940.664664-2-andriy.shevchenko@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SdovYrpw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A3C4C433C7;
+	Wed, 15 Nov 2023 19:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1700076857;
+	bh=2TKgKqpermnSBfoojWtpHr/18cPHZBHJtiEBwC8MUDA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=SdovYrpwDxFcT67yL2bVpxtc7uKYGqU3kxqxh+I/sSGggneusofLC32R3zx53VGKL
+	 C27pKWSdWGR4iaQpB7oenQK+HNDuio/20sS++mB3nKIyLo3fzn9Xf3h3MRaca0dAQo
+	 PaxYNz1lugAeBzd9XusFDt8ffkuSmAJEyxMM4gfs=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	llvm@lists.linux.dev,
+	Ming Wang <wangming01@loongson.cn>,
+	Tom Rix <trix@redhat.com>,
+	bpf@vger.kernel.org,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.5 427/550] perf mem-events: Avoid uninitialized read
+Date: Wed, 15 Nov 2023 14:16:51 -0500
+Message-ID: <20231115191630.366920613@linuxfoundation.org>
+X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20231115191600.708733204@linuxfoundation.org>
+References: <20231115191600.708733204@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231115154940.664664-2-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Andy,
+6.5-stable review patch.  If anyone has any objections, please let me know.
 
-kernel test robot noticed the following build warnings:
+------------------
 
-[auto build test WARNING on ras/edac-for-next]
-[also build test WARNING on linus/master v6.7-rc1 next-20231115]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+From: Ian Rogers <irogers@google.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/EDAC-pnd2-Apply-bit-macros-and-helpers-where-it-makes-sense/20231115-235225
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-patch link:    https://lore.kernel.org/r/20231115154940.664664-2-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 2/3] EDAC, pnd2: Apply bit macros and helpers where it makes sense
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231116/202311160352.PfYDQfkU-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311160352.PfYDQfkU-lkp@intel.com/reproduce)
+[ Upstream commit 85f73c377b2ac9988a204b119aebb33ca5c60083 ]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311160352.PfYDQfkU-lkp@intel.com/
+pmu should be initialized to NULL before perf_pmus__scan loop. Fix and
+shrink the scope of pmu at the same time. Issue detected by clang-tidy.
 
-All warnings (new ones prefixed by >>):
+Fixes: 5752c20f3787 ("perf mem: Scan all PMUs instead of just core ones")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Ravi Bangoria <ravi.bangoria@amd.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Yang Jihong <yangjihong1@huawei.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: llvm@lists.linux.dev
+Cc: Ming Wang <wangming01@loongson.cn>
+Cc: Tom Rix <trix@redhat.com>
+Cc: bpf@vger.kernel.org
+Link: https://lore.kernel.org/r/20231009183920.200859-10-irogers@google.com
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/mem-events.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->> drivers/edac/pnd2_edac.c:1069:3: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   ret += check_channel(i);
-                   ^~~
-   drivers/edac/pnd2_edac.c:1065:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/ret +1069 drivers/edac/pnd2_edac.c
-
-5c71ad17f97e84d Tony Luck       2017-03-09  1061  
-5c71ad17f97e84d Tony Luck       2017-03-09  1062  static int apl_check_ecc_active(void)
-5c71ad17f97e84d Tony Luck       2017-03-09  1063  {
-f29c26c5b4c5b02 Andy Shevchenko 2023-11-15  1064  	unsigned int i;
-f29c26c5b4c5b02 Andy Shevchenko 2023-11-15  1065  	int ret;
-5c71ad17f97e84d Tony Luck       2017-03-09  1066  
-5c71ad17f97e84d Tony Luck       2017-03-09  1067  	/* Check dramtype and ECC mode for each present DIMM */
-f29c26c5b4c5b02 Andy Shevchenko 2023-11-15  1068  	for_each_set_bit(i, &chan_mask, APL_NUM_CHANNELS)
-5c71ad17f97e84d Tony Luck       2017-03-09 @1069  		ret += check_channel(i);
-f29c26c5b4c5b02 Andy Shevchenko 2023-11-15  1070  
-5c71ad17f97e84d Tony Luck       2017-03-09  1071  	return ret ? -EINVAL : 0;
-5c71ad17f97e84d Tony Luck       2017-03-09  1072  }
-5c71ad17f97e84d Tony Luck       2017-03-09  1073  
-
+diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+index 39ffe8ceb3809..954b235e12e51 100644
+--- a/tools/perf/util/mem-events.c
++++ b/tools/perf/util/mem-events.c
+@@ -185,7 +185,6 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
+ {
+ 	int i = *argv_nr, k = 0;
+ 	struct perf_mem_event *e;
+-	struct perf_pmu *pmu;
+ 
+ 	for (int j = 0; j < PERF_MEM_EVENTS__MAX; j++) {
+ 		e = perf_mem_events__ptr(j);
+@@ -202,6 +201,8 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
+ 			rec_argv[i++] = "-e";
+ 			rec_argv[i++] = perf_mem_events__name(j, NULL);
+ 		} else {
++			struct perf_pmu *pmu = NULL;
++
+ 			if (!e->supported) {
+ 				perf_mem_events__print_unsupport_hybrid(e, j);
+ 				return -1;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
+
+
