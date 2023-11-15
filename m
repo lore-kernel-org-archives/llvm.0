@@ -1,92 +1,213 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE7D2E62E
-	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 16:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B88A2837A;
+	Wed, 15 Nov 2023 17:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a850aYS/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DEOX/y0k"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700065679; x=1731601679;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XSWLyJxFTqyYvobQOApnn9qgzueYzqYkv2eVyB9iQuM=;
-  b=a850aYS/7BjwXIP2ZfpiGUBI5zWrreMQZslbuIiDPPY5PcAlyQYjL25w
-   e4/CA4taU2bR/GRW5lzBirPM+/XLmFt+8UEuwkoVxglyQ4zb3OLNUCjuu
-   0ON3s32tv/PnhBXQCtWj63CnbQTs6h+tD4mTVu1KP1Bm9oVPMbrM8Vf8S
-   DhhiaMlRQ246Wi75MapVryzhu3bT8rEXSkGEqtOuBPjeH4wPRGx5t3EKI
-   ePti2FQYnizjbpZoYm4PZgi2KV6q8rqTQZJnIxW95rllXYdJ8icNmImTK
-   Tc87961HJIcSDPb17UKCrbRXWwdmALYbbVG2Cr2jIT8Kr8FvzZ8xXmd7c
+  t=1700068242; x=1731604242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qgux1RxgmOdTrZ+XM5YJR3vYYmq5dU/OrRR/xq6hqUc=;
+  b=DEOX/y0k3CXwbMlX5VjtsnUKm0qk3JQRXcx4ds5r/xBlEYpq/egFJQw5
+   QAod4Tth3sQudCGs9BVW1bfYXjZQubf764yU5CuSy1FeLeIIFatiV1AIc
+   qaAV2eXcqXNC3zJFa0adyBia3CiKrLmaeomX6Zoi+QsA3plgmaOcgxQOj
+   aYmtdJ6+xiDZOJpJDSyyWnGBmbQ8Iimu5lS5XScM8hcIWenwLgn5V5olY
+   v3SOqjZfSHMzAbhvg8JyPaR5/xLfP5BDEMCd4lqgf8g/D2pLDH7Qh+S9M
+   Op1Nik3+koDjnU08dv9eFupwbzu8zP0Z4GfrKG+3muiQiEq2siZ4sWkYc
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="370252754"
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="375955663"
 X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="370252754"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 08:27:58 -0800
+   d="scan'208";a="375955663"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 09:10:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="855690652"
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="1012339208"
 X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="855690652"
-Received: from ipaliych-mobl2.amr.corp.intel.com (HELO [10.212.183.137]) ([10.212.183.137])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 08:27:56 -0800
-Message-ID: <3e461bb5-fa6b-4729-8ff5-ccc1d2887066@linux.intel.com>
-Date: Wed, 15 Nov 2023 08:44:16 -0600
+   d="scan'208";a="1012339208"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Nov 2023 09:10:02 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r3JOo-0000dw-0k;
+	Wed, 15 Nov 2023 17:09:58 +0000
+Date: Thu, 16 Nov 2023 01:09:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+	Matt Roper <matthew.d.roper@intel.com>,
+	Alan Previn <alan.previn.teres.alexis@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: Re: [PATCH] drm/i915/gsc: Mark internal GSC engine with reserved
+ uabi class
+Message-ID: <202311160136.EtOH3ghf-lkp@intel.com>
+References: <20231115110216.267138-1-tvrtko.ursulin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] soundwire: amd: add an error code check in
- amd_sdw_clock_stop_exit
-To: Su Hui <suhui@nfschina.com>, vkoul@kernel.org,
- yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, nathan@kernel.org,
- ndesaulniers@google.com, trix@redhat.com,
- Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Cc: alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-References: <20231115095407.1059704-1-suhui@nfschina.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20231115095407.1059704-1-suhui@nfschina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231115110216.267138-1-tvrtko.ursulin@linux.intel.com>
+
+Hi Tvrtko,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-intel/for-linux-next-fixes]
+[also build test WARNING on drm-tip/drm-tip drm/drm-next drm-exynos/exynos-drm-next drm-misc/drm-misc-next linus/master v6.7-rc1 next-20231115]
+[cannot apply to drm-intel/for-linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tvrtko-Ursulin/drm-i915-gsc-Mark-internal-GSC-engine-with-reserved-uabi-class/20231115-190507
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
+patch link:    https://lore.kernel.org/r/20231115110216.267138-1-tvrtko.ursulin%40linux.intel.com
+patch subject: [PATCH] drm/i915/gsc: Mark internal GSC engine with reserved uabi class
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231116/202311160136.EtOH3ghf-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311160136.EtOH3ghf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311160136.EtOH3ghf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/gt/intel_engine_user.c:225:26: warning: result of comparison of constant -1 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
+                   if (engine->uabi_class == I915_NO_UABI_CLASS) {
+                       ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_engine_user.c:243:26: warning: result of comparison of constant -1 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
+                   if (engine->uabi_class == I915_NO_UABI_CLASS)
+                       ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
+vim +225 drivers/gpu/drm/i915/gt/intel_engine_user.c
 
-On 11/15/23 03:54, Su Hui wrote:
-> Clang static analyzer complains that value stored to 'ret' is never read.
-> Add an error code check and print an error message if 'readl_poll_timeout'
-> failed.
-> 
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
->  drivers/soundwire/amd_manager.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
-> index 3a99f6dcdfaf..f391b541f4b7 100644
-> --- a/drivers/soundwire/amd_manager.c
-> +++ b/drivers/soundwire/amd_manager.c
-> @@ -1029,6 +1029,10 @@ static int amd_sdw_clock_stop_exit(struct amd_sdw_manager *amd_manager)
->  		ret = readl_poll_timeout(amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL, val,
->  					 (val & AMD_SDW_CLK_RESUME_DONE), ACP_DELAY_US,
->  					 AMD_SDW_TIMEOUT);
-> +		if (ret)
-> +			dev_err(amd_manager->dev, "%s: timed out: %pe\n", __func__,
-> +				ERR_PTR(ret));
+   203	
+   204	void intel_engines_driver_register(struct drm_i915_private *i915)
+   205	{
+   206		u16 name_instance, other_instance = 0;
+   207		struct legacy_ring ring = {};
+   208		struct list_head *it, *next;
+   209		struct rb_node **p, *prev;
+   210		LIST_HEAD(engines);
+   211	
+   212		sort_engines(i915, &engines);
+   213	
+   214		prev = NULL;
+   215		p = &i915->uabi_engines.rb_node;
+   216		list_for_each_safe(it, next, &engines) {
+   217			struct intel_engine_cs *engine =
+   218				container_of(it, typeof(*engine), uabi_list);
+   219	
+   220			if (intel_gt_has_unrecoverable_error(engine->gt))
+   221				continue; /* ignore incomplete engines */
+   222	
+   223			GEM_BUG_ON(engine->class >= ARRAY_SIZE(uabi_classes));
+   224			engine->uabi_class = uabi_classes[engine->class];
+ > 225			if (engine->uabi_class == I915_NO_UABI_CLASS) {
+   226				name_instance = other_instance++;
+   227			} else {
+   228				GEM_BUG_ON(engine->uabi_class >=
+   229					   ARRAY_SIZE(i915->engine_uabi_class_count));
+   230				name_instance =
+   231					i915->engine_uabi_class_count[engine->uabi_class]++;
+   232			}
+   233			engine->uabi_instance = name_instance;
+   234	
+   235			/*
+   236			 * Replace the internal name with the final user and log facing
+   237			 * name.
+   238			 */
+   239			engine_rename(engine,
+   240				      intel_engine_class_repr(engine->class),
+   241				      name_instance);
+   242	
+   243			if (engine->uabi_class == I915_NO_UABI_CLASS)
+   244				continue;
+   245	
+   246			rb_link_node(&engine->uabi_node, prev, p);
+   247			rb_insert_color(&engine->uabi_node, &i915->uabi_engines);
+   248	
+   249			GEM_BUG_ON(intel_engine_lookup_user(i915,
+   250							    engine->uabi_class,
+   251							    engine->uabi_instance) != engine);
+   252	
+   253			/* Fix up the mapping to match default execbuf::user_map[] */
+   254			add_legacy_ring(&ring, engine);
+   255	
+   256			prev = &engine->uabi_node;
+   257			p = &prev->rb_right;
+   258		}
+   259	
+   260		if (IS_ENABLED(CONFIG_DRM_I915_SELFTESTS) &&
+   261		    IS_ENABLED(CONFIG_DRM_I915_DEBUG_GEM)) {
+   262			struct intel_engine_cs *engine;
+   263			unsigned int isolation;
+   264			int class, inst;
+   265			int errors = 0;
+   266	
+   267			for (class = 0; class < ARRAY_SIZE(i915->engine_uabi_class_count); class++) {
+   268				for (inst = 0; inst < i915->engine_uabi_class_count[class]; inst++) {
+   269					engine = intel_engine_lookup_user(i915,
+   270									  class, inst);
+   271					if (!engine) {
+   272						pr_err("UABI engine not found for { class:%d, instance:%d }\n",
+   273						       class, inst);
+   274						errors++;
+   275						continue;
+   276					}
+   277	
+   278					if (engine->uabi_class != class ||
+   279					    engine->uabi_instance != inst) {
+   280						pr_err("Wrong UABI engine:%s { class:%d, instance:%d } found for { class:%d, instance:%d }\n",
+   281						       engine->name,
+   282						       engine->uabi_class,
+   283						       engine->uabi_instance,
+   284						       class, inst);
+   285						errors++;
+   286						continue;
+   287					}
+   288				}
+   289			}
+   290	
+   291			/*
+   292			 * Make sure that classes with multiple engine instances all
+   293			 * share the same basic configuration.
+   294			 */
+   295			isolation = intel_engines_has_context_isolation(i915);
+   296			for_each_uabi_engine(engine, i915) {
+   297				unsigned int bit = BIT(engine->uabi_class);
+   298				unsigned int expected = engine->default_state ? bit : 0;
+   299	
+   300				if ((isolation & bit) != expected) {
+   301					pr_err("mismatching default context state for class %d on engine %s\n",
+   302					       engine->uabi_class, engine->name);
+   303					errors++;
+   304				}
+   305			}
+   306	
+   307			if (drm_WARN(&i915->drm, errors,
+   308				     "Invalid UABI engine mapping found"))
+   309				i915->uabi_engines = RB_ROOT;
+   310		}
+   311	
+   312		set_scheduler_caps(i915);
+   313	}
+   314	
 
-Is this really the desired behavior?
-
-This patch fixes the static analysis issue by logging the error code,
-but does it make sense to continue resuming here and trying to exit from
-the clock stop mode?
-
-At this point a bus reset might be a more relevant behavior...
-
->  		if (val & AMD_SDW_CLK_RESUME_DONE) {
->  			writel(0, amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
->  			ret = sdw_bus_exit_clk_stop(&amd_manager->bus);
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
