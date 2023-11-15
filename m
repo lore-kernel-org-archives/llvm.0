@@ -1,32 +1,29 @@
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 4E98D53B2
-	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 08:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 6A2796AB3
+	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 09:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id B57E860230185;
-	Wed, 15 Nov 2023 16:58:22 +0800 (CST)
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id E98BC602582C0;
+	Wed, 15 Nov 2023 17:23:53 +0800 (CST)
 X-MD-Sfrom: suhui@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From: Su Hui <suhui@nfschina.com>
-To: s.nawrocki@samsung.com,
-	mchehab@kernel.org,
-	krzysztof.kozlowski@linaro.org,
-	alim.akhtar@samsung.com,
+To: kvalo@kernel.org,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
 	trix@redhat.com
 Cc: Su Hui <suhui@nfschina.com>,
-	linux-media@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
+	briannorris@chromium.org,
+	lukas@wunner.de,
+	linux-wireless@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	kernel-janitors@vger.kernel.org
-Subject: [PATCH] media: platform: exynos4-is: return callee's error code rather than -ENXIO
-Date: Wed, 15 Nov 2023 16:57:54 +0800
-Message-Id: <20231115085753.1027348-1-suhui@nfschina.com>
+Subject: [PATCH] mwifiex: remove some useless code
+Date: Wed, 15 Nov 2023 17:23:29 +0800
+Message-Id: <20231115092328.1048103-1-suhui@nfschina.com>
 X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,27 +33,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clang static analyzer complains that value stored to 'ret' is never read.
-Return the callee's error code to fix this.
+Clang static analyzer complains that value stored to 'priv' is never read.
+'priv' is useless, so remove it to save space.
 
 Signed-off-by: Su Hui <suhui@nfschina.com>
 ---
- drivers/media/platform/samsung/exynos4-is/fimc-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/marvell/mwifiex/cmdevt.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-core.c b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-index 97908778e1c8..0be687b01ce5 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-@@ -814,7 +814,7 @@ static int fimc_clk_get(struct fimc_dev *fimc)
- 	fimc_clk_put(fimc);
- 	dev_err(&fimc->pdev->dev, "failed to get clock: %s\n",
- 		fimc_clocks[i]);
--	return -ENXIO;
-+	return ret;
- }
+diff --git a/drivers/net/wireless/marvell/mwifiex/cmdevt.c b/drivers/net/wireless/marvell/mwifiex/cmdevt.c
+index 3756aa247e77..9eff29a25544 100644
+--- a/drivers/net/wireless/marvell/mwifiex/cmdevt.c
++++ b/drivers/net/wireless/marvell/mwifiex/cmdevt.c
+@@ -1244,8 +1244,6 @@ mwifiex_process_sleep_confirm_resp(struct mwifiex_adapter *adapter,
+ 				   u8 *pbuf, u32 upld_len)
+ {
+ 	struct host_cmd_ds_command *cmd = (struct host_cmd_ds_command *) pbuf;
+-	struct mwifiex_private *priv =
+-		mwifiex_get_priv(adapter, MWIFIEX_BSS_ROLE_ANY);
+ 	uint16_t result = le16_to_cpu(cmd->result);
+ 	uint16_t command = le16_to_cpu(cmd->command);
+ 	uint16_t seq_num = le16_to_cpu(cmd->seq_num);
+@@ -1260,12 +1258,6 @@ mwifiex_process_sleep_confirm_resp(struct mwifiex_adapter *adapter,
+ 		    "cmd: CMD_RESP: 0x%x, result %d, len %d, seqno 0x%x\n",
+ 		    command, result, le16_to_cpu(cmd->size), seq_num);
  
- #ifdef CONFIG_PM
+-	/* Get BSS number and corresponding priv */
+-	priv = mwifiex_get_priv_by_id(adapter, HostCmd_GET_BSS_NO(seq_num),
+-				      HostCmd_GET_BSS_TYPE(seq_num));
+-	if (!priv)
+-		priv = mwifiex_get_priv(adapter, MWIFIEX_BSS_ROLE_ANY);
+-
+ 	/* Update sequence number */
+ 	seq_num = HostCmd_GET_SEQ_NO(seq_num);
+ 	/* Clear RET_BIT from HostCmd */
 -- 
 2.30.2
 
