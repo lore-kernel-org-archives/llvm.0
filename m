@@ -1,102 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E60839FCA;
-	Wed, 15 Nov 2023 15:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53007433C4;
+	Wed, 15 Nov 2023 15:50:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BfMRUrAk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700062151; x=1731598151;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JbigwBrughK1HrVAdmTEZJCVpTmiWAiYfLaWLhvOPOY=;
-  b=BfMRUrAk4WETJZOAmK8rOWj9WvtMAqNZzpCPp/PXs4lf/CLIigK+TLp6
-   9atpKUMpJtC6OFWZS4ifBMi1JAG28iRA7LsPLc+FhZXFRt27R3iTNudQD
-   E6fLuP6V1PDYOGt7XwbvzRwdcgbdbWYJTaX4+DOYwCzXaDUK3NIbnzAzp
-   Bh8grbyczrPxTISw3WvrnIyGTW4ikVJMBq64m9Z/cmfwmlbVPdK39Mdwb
-   dQb+I86E9GaHSX2NUP3imJENicg47m4+Gso9edT3m4OUBy4jg1QgJLWgX
-   VbshlC/CEZRvIdyWvEvo2v8Yr+Lkx8Zr6tJJlSlqahNZRfbIp2/YeqvK+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="12444184"
-X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="12444184"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 07:24:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="830978622"
-X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="830978622"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Nov 2023 07:24:22 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r3HkZ-0000SS-10;
-	Wed, 15 Nov 2023 15:24:19 +0000
-Date: Wed, 15 Nov 2023 23:23:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yicong Yang <yangyicong@huawei.com>, catalin.marinas@arm.com,
-	will@kernel.org, sudeep.holla@arm.com,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dietmar.eggemann@arm.com, gregkh@linuxfoundation.org,
-	rafael@kernel.org, jonathan.cameron@huawei.com,
-	prime.zeng@hisilicon.com, linuxarm@huawei.com,
-	yangyicong@hisilicon.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] arch_topology: Support basic SMT control for the
- driver
-Message-ID: <202311152356.OWWDpFRB-lkp@intel.com>
-References: <20231114040110.54590-2-yangyicong@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fMot+BPS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69AEAC433C7;
+	Wed, 15 Nov 2023 15:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700063443;
+	bh=AxRQ9Y/RrzRtP29GRL6CccyXYunQ633DeTBzGsCyGQw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fMot+BPSYUpgf34K5i4JQ4ytk8SMMk5K04pNrSisd4s52Sgg3qskLmpuuaxeqgnRP
+	 avc6wU1wKa0XdWVGrLU8iWAPY0EjnnZythPnnuWVEYCGYdqPbHF3o8ow8W8Qiwl+Iw
+	 gNkYj9UY/fVTbP4J8CHROmI2LBIvrLHbpqOOBVHtwDNAgG/ofmLka5ea9J7pQP1Wuf
+	 OJauXAq4mew6jupJKgFp8jlZWqJkyRgzWmMCmnADYqyu39eNtK0e+TXn3h2cYz/q4s
+	 8m59XLl/PZ8VUtx+RFs1KHwRrpaS7XJCd7I8/bEV9vDzuZy+ZALLQV6N7j2uxKykNE
+	 bNvNb6MI7HmzQ==
+Date: Wed, 15 Nov 2023 16:50:41 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: David Gow <davidgow@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Rae Moar <rmoar@google.com>, dlatypov@google.com, Arthur Grillo <arthurgrillo@riseup.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>, 
+	Sami Tolvanen <samitolvanen@google.com>, kunit-dev@googlegroups.com, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Benjamin Berg <benjamin.berg@intel.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
+	linux-kernel@vger.kernel.org, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 2/3] drm/tests: Use KUNIT_DEFINE_ACTION_WRAPPER()
+Message-ID: <6gfqtuhscq2z2obvx3xh6ve4kj5hrqniyegfywldtx2vowdp5z@ikix547w3vff>
+References: <20231110200830.1832556-1-davidgow@google.com>
+ <20231110200830.1832556-2-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="n3zmtdttqoymp72e"
+Content-Disposition: inline
+In-Reply-To: <20231110200830.1832556-2-davidgow@google.com>
+
+
+--n3zmtdttqoymp72e
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231114040110.54590-2-yangyicong@huawei.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yicong,
+Hi David,
 
-kernel test robot noticed the following build warnings:
+On Sat, Nov 11, 2023 at 04:08:27AM +0800, David Gow wrote:
+> In order to pass functions to kunit_add_action(), they need to be of the
+> kunit_action_t type. While casting the function pointer can work, it
+> will break control-flow integrity.
+>=20
+> drm_kunit_helpers already defines wrappers, but we now have a macro
+> which does this automatically. Using this greatly reduces the
+> boilerplate needed.
+>=20
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>=20
+> This patch should be a no-op, just moving to use a standard macro to
+> implement these wrappers rather than hand-coding them.
+>=20
+> Let me know if you'd prefer to take these in separately via the drm
+> trees, or if you're okay with having this whole series go via
+> kselftest/kunit.
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus arm/for-next kvmarm/next soc/for-next linus/master arm/fixes v6.7-rc1 next-20231115]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You can merge it through your tree with
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yicong-Yang/arch_topology-Support-basic-SMT-control-for-the-driver/20231114-120544
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20231114040110.54590-2-yangyicong%40huawei.com
-patch subject: [PATCH v3 1/4] arch_topology: Support basic SMT control for the driver
-config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20231115/202311152356.OWWDpFRB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231115/202311152356.OWWDpFRB-lkp@intel.com/reproduce)
+Acked-by: Maxime Ripard <mripard@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311152356.OWWDpFRB-lkp@intel.com/
+For the patches 2 and 3
 
-All warnings (new ones prefixed by >>):
+Maxime
 
->> drivers/base/arch_topology.c:32:12: warning: unused variable 'topology_smt_num_threads' [-Wunused-variable]
-      32 | static int topology_smt_num_threads = 1;
-         |            ^
-   1 warning generated.
+--n3zmtdttqoymp72e
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-vim +/topology_smt_num_threads +32 drivers/base/arch_topology.c
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZVTo0QAKCRDj7w1vZxhR
+xQeXAP9Cc0Xaqj0i9btSv7+sdwGcJtBfv0nHvQIAVwKgmgijaAEA+a3M3Ed+B0yC
+CAa0ilav0pfJVeTj5jGOnK+886mpQw4=
+=9flX
+-----END PGP SIGNATURE-----
 
-    30	
-    31	/* Maximum threads number per-Core */
-  > 32	static int topology_smt_num_threads = 1;
-    33	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--n3zmtdttqoymp72e--
