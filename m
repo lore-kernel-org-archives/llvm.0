@@ -1,53 +1,56 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708E418030
-	for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 21:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F1317C9;
+	Thu, 16 Nov 2023 02:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AbWyie3k"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1cc3bb4c307so1465175ad.0
-        for <llvm@lists.linux.dev>; Wed, 15 Nov 2023 13:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1700083611; x=1700688411; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YPVyRrN1uRZs7Wz4idyzDBpkXVrVgQKZvwp5LF85yFM=;
-        b=AbWyie3ktB7hKtTQVAL5p1w2fLB5PM6laXy4qCIn6IjUPW/S/6pO4F9CLiJqQEQACK
-         qPJIYLAZFkvCJNvAWYAcOH7WzMyjL/kYVWnA59GxFgbRO2T0rKPBv9IK6DspFGEaNICS
-         OsqgBT71jeopo2+5K0sUOhomeaEl1Sbei31bA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700083611; x=1700688411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YPVyRrN1uRZs7Wz4idyzDBpkXVrVgQKZvwp5LF85yFM=;
-        b=vYR9N1Jcxr5eenay6f16s/89udUXbf4Gwl8NWfDp+zkmi6iho/d44DvMP5lHo35/Vq
-         mhk1PnjH8GDYl8O7v3Rp2cgZlATRFeLzIrYeB3/K9xQPVk8qc6ouE1rYa3vCegx3vp/l
-         o8MNuuI87YC8is0QhcOWjDefA7zYYTuVzR+m0oJo5JRT77z2H5ufGLMYvt9BcQMgaGbD
-         ZcqWtOKIkENiSeFjYUskv9g61Yewb380Dp42pgfoDtmk95MYW5bEDnuVPd+67BgBOZ0e
-         VmV6zZMZ6PSA64mLOGTHf+NbVX87s/M8cTllZvDO7OGSGoo6X+4OVlKO9CZ4fnOuUMuX
-         PGew==
-X-Gm-Message-State: AOJu0YxCDXUV312WtQ0XqRArNdbA3Q/sUBqGN1sY6mZre3LOiXLlLrh4
-	DG5Jz36/CJ4O2E/aUluIUDPMkcZsYnq7E7w9ndY=
-X-Google-Smtp-Source: AGHT+IFRKVgCfEa6Z+5pQ2Y0fxgccYlOkaOEmT5jf2DSAM02NTazA4S/MQNc/T6ApIjdrff/U85aKA==
-X-Received: by 2002:a17:902:6b03:b0:1cc:40a4:9179 with SMTP id o3-20020a1709026b0300b001cc40a49179mr5793617plk.34.1700083610553;
-        Wed, 15 Nov 2023 13:26:50 -0800 (PST)
-Received: from localhost ([2620:15c:9d:2:ff48:d9fc:165e:3caa])
-        by smtp.gmail.com with UTF8SMTPSA id a13-20020a170902b58d00b001c61acd5bd2sm7808729pls.112.2023.11.15.13.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Nov 2023 13:26:50 -0800 (PST)
-Date: Wed, 15 Nov 2023 13:26:48 -0800
-From: Brian Norris <briannorris@chromium.org>
-To: Su Hui <suhui@nfschina.com>
-Cc: kvalo@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-	trix@redhat.com, lukas@wunner.de, linux-wireless@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] mwifiex: remove some useless code
-Message-ID: <ZVU3mGzR_759WYAW@google.com>
-References: <20231115092328.1048103-1-suhui@nfschina.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZY+f6HeC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700100679; x=1731636679;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hhlyXxGrC/E9zAEp+Y8MQVMk7XkRKYj0CGW6kL41jyg=;
+  b=ZY+f6HeCtk8a9/Wgw7ADIwrzUrgqKvrh+Y3fUqaWhlpBaruTtyk/IT97
+   6ZGbT2GWlTjl+S4yLmc5INj3y6wVEPVMbivdsOF3MyekFllYGqR22Tb4S
+   M/3Vb17N5L3atItKE4ZaXCjw02amnXDGjmM0cT6veWzViscXGV5uEYbD6
+   7p+ebUUE0FOZjo9UaSHXrJlgJdZ0A2MyRGS6SXGIOBP2R1+wpZrDhG+/T
+   lgY3UXGvDJjGS/xsKZUuC5btTdOGfSwdH0vJDYWPh2kglGRpRjGkFQjJG
+   73ruuxkUqm7whF3/aoXgr1pGn0luRDSG/vp0Z8XGbhvyOv3GJ651dE/TN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="371181330"
+X-IronPort-AV: E=Sophos;i="6.03,306,1694761200"; 
+   d="scan'208";a="371181330"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 18:11:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="1096629973"
+X-IronPort-AV: E=Sophos;i="6.03,306,1694761200"; 
+   d="scan'208";a="1096629973"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Nov 2023 18:11:11 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r3RqH-00017W-3B;
+	Thu, 16 Nov 2023 02:10:57 +0000
+Date: Thu, 16 Nov 2023 10:09:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aurelien Aptel <aaptel@nvidia.com>, linux-nvme@lists.infradead.org,
+	netdev@vger.kernel.org, sagi@grimberg.me, hch@lst.de,
+	kbusch@kernel.org, axboe@fb.com, chaitanyak@nvidia.com,
+	davem@davemloft.net, kuba@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Boris Pismenny <borisp@nvidia.com>, aaptel@nvidia.com,
+	aurelien.aptel@gmail.com, smalin@nvidia.com, malin1024@gmail.com,
+	ogerlitz@nvidia.com, yorayz@nvidia.com, galshalom@nvidia.com,
+	mgurtovoy@nvidia.com, edumazet@google.com, pabeni@redhat.com,
+	dsahern@kernel.org, ast@kernel.org, jacob.e.keller@intel.com
+Subject: Re: [PATCH v19 01/20] net: Introduce direct data placement tcp
+ offload
+Message-ID: <202311161023.IHztbwM3-lkp@intel.com>
+References: <20231114124255.765473-2-aaptel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,15 +59,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231115092328.1048103-1-suhui@nfschina.com>
+In-Reply-To: <20231114124255.765473-2-aaptel@nvidia.com>
 
-On Wed, Nov 15, 2023 at 05:23:29PM +0800, Su Hui wrote:
-> Clang static analyzer complains that value stored to 'priv' is never read.
-> 'priv' is useless, so remove it to save space.
-> 
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
->  drivers/net/wireless/marvell/mwifiex/cmdevt.c | 8 --------
->  1 file changed, 8 deletions(-)
+Hi Aurelien,
 
-Acked-by: Brian Norris <briannorris@chromium.org>
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net/main]
+[also build test WARNING on net-next/main linus/master v6.7-rc1 next-20231115]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aurelien-Aptel/net-Introduce-direct-data-placement-tcp-offload/20231114-205106
+base:   net/main
+patch link:    https://lore.kernel.org/r/20231114124255.765473-2-aaptel%40nvidia.com
+patch subject: [PATCH v19 01/20] net: Introduce direct data placement tcp offload
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231116/202311161023.IHztbwM3-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311161023.IHztbwM3-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311161023.IHztbwM3-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/core/skbuff.c:79:
+>> include/net/ulp_ddp.h:317:6: warning: no previous prototype for function 'ulp_ddp_is_cap_active' [-Wmissing-prototypes]
+   bool ulp_ddp_is_cap_active(struct net_device *netdev, int cap_bit_nr)
+        ^
+   include/net/ulp_ddp.h:317:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool ulp_ddp_is_cap_active(struct net_device *netdev, int cap_bit_nr)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/ulp_ddp_is_cap_active +317 include/net/ulp_ddp.h
+
+   316	
+ > 317	bool ulp_ddp_is_cap_active(struct net_device *netdev, int cap_bit_nr)
+   318	{
+   319		return false;
+   320	}
+   321	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
