@@ -1,54 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FC528E10;
-	Thu, 16 Nov 2023 11:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BF87F9;
+	Thu, 16 Nov 2023 12:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HffKf7+6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DpNI+v4R"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700133896; x=1731669896;
+  t=1700138439; x=1731674439;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RcibIPyqvevz21yLUfyD0tCzd/eLvTgUwY03gPK7X50=;
-  b=HffKf7+6Lp0sipoIzZuNH6u/L8UmZg8CLL1fvoNLCwqVgC0jdPWb/F51
-   Dc4YtN59/ffh+7Cx1+ag/jkUPDQPmlmxdxO1L1XnO+oaH97DMtf3L8mJX
-   NN3zDRizQiTHOy6/dv5MvfCSxOh2SGdzrB5ErMsVjAupc0nPK8lvTQXri
-   ur+moWylt/TPGZjblud0/mxg1jYsbjvNLAVk4rD0CNOKjo8UsDPbIbflu
-   PW6DtGyOiImeva8S06QSrvtcdQyL3jhbtLHa4+ZRGLSJHiC7ldHmwFhC/
-   ga141vBLtSJ1WHErv0irKR3kQhaZXAUc/JlkTL3+Bm+6I2t7kall47bHZ
+  bh=1Z5TS4Nv7+T4Z6ZJkovmRnh5FDW2ciMMmsmcQw9bghQ=;
+  b=DpNI+v4RW4aatM6Uh+74Jq9edt2rxu/6vVH2InxyZC0mNzKt16fH07tW
+   o746EbTGvyg6Ab6sCtV482KgTALaRQFFv2/smAxt78dlykmG1mOKBff6/
+   aI6TQwnzg9DKV6dkh1qQqe7UeDbG9lIkGMUhc6zrF/zFqrNSlCU6iwNwZ
+   BYqmFQn2fwbbThKG6YJEbvb0Ty4g65THX9/51wJNTQyclONxz6ZkRAyQD
+   cOcUXhTJfqxFSLucheGB/NYtdHQrl1dgyQbhLTexMKNJChWmOVHVaSb+4
+   A/dOJyKOIgwJbH6NhdNHXxq/LbNLvRfcvzS9WldtHCJyT0HrciamcEiKN
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="371251420"
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="4207904"
 X-IronPort-AV: E=Sophos;i="6.04,308,1695711600"; 
-   d="scan'208";a="371251420"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 03:24:55 -0800
+   d="scan'208";a="4207904"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 04:40:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="1096760190"
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="855991109"
 X-IronPort-AV: E=Sophos;i="6.04,308,1695711600"; 
-   d="scan'208";a="1096760190"
+   d="scan'208";a="855991109"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2023 03:24:52 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Nov 2023 04:40:34 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r3aUM-0001bD-2V;
-	Thu, 16 Nov 2023 11:24:50 +0000
-Date: Thu, 16 Nov 2023 19:23:53 +0800
+	id 1r3bfb-0001eh-2p;
+	Thu, 16 Nov 2023 12:40:31 +0000
+Date: Thu, 16 Nov 2023 20:39:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ian Kent <raven@themaw.net>, Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>
+To: Coco Li <lixiaoyan@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Mubashir Adnan Qureshi <mubashirq@google.com>,
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+	Jonathan Corbet <corbet@lwn.net>, David Ahern <dsahern@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bill O'Donnell <billodo@redhat.com>,
-	Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	autofs mailing list <autofs@vger.kernel.org>,
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-	Ian Kent <raven@themaw.net>,
-	syzbot+662f87a8ef490f45fa64@syzkaller.appspotmail.com
-Subject: Re: [PATCH] autofs: add: new_inode check in autofs_fill_super()
-Message-ID: <202311161909.KHau6jEj-lkp@intel.com>
-References: <20231116000746.7359-1-raven@themaw.net>
+	netdev@vger.kernel.org, Chao Wu <wwchao@google.com>,
+	Wei Wang <weiwan@google.com>, Pradeep Nemavat <pnemavat@google.com>,
+	Coco Li <lixiaoyan@google.com>
+Subject: Re: [PATCH v7 net-next 4/5] net-device: reorganize net_device fast
+ path variables
+Message-ID: <202311162002.m26ObVLU-lkp@intel.com>
+References: <20231113233301.1020992-5-lixiaoyan@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,120 +60,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231116000746.7359-1-raven@themaw.net>
+In-Reply-To: <20231113233301.1020992-5-lixiaoyan@google.com>
 
-Hi Ian,
+Hi Coco,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on linus/master v6.7-rc1 next-20231116]
-[cannot apply to vfs-idmapping/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ian-Kent/autofs-add-new_inode-check-in-autofs_fill_super/20231116-081017
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20231116000746.7359-1-raven%40themaw.net
-patch subject: [PATCH] autofs: add: new_inode check in autofs_fill_super()
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231116/202311161909.KHau6jEj-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311161909.KHau6jEj-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Coco-Li/Documentations-Analyze-heavily-used-Networking-related-structs/20231114-073648
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231113233301.1020992-5-lixiaoyan%40google.com
+patch subject: [PATCH v7 net-next 4/5] net-device: reorganize net_device fast path variables
+config: powerpc-mpc8313_rdb_defconfig (https://download.01.org/0day-ci/archive/20231116/202311162002.m26ObVLU-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311162002.m26ObVLU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311161909.KHau6jEj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311162002.m26ObVLU-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   fs/autofs/inode.c:330:8: error: expected identifier
-                   goto -ENOMEM;
-                        ^
->> fs/autofs/inode.c:330:8: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-   fs/autofs/inode.c:329:2: note: previous statement is here
-           if (!ino)
-           ^
-   fs/autofs/inode.c:349:4: error: use of undeclared identifier 'ret'
-                           ret = invalf(fc, "Could not find process group %d",
-                           ^
-   fs/autofs/inode.c:351:11: error: use of undeclared identifier 'ret'
-                           return ret;
-                                  ^
->> fs/autofs/inode.c:330:8: warning: expression result unused [-Wunused-value]
-                   goto -ENOMEM;
-                        ^~~~~~~
-   2 warnings and 3 errors generated.
+   net/core/dev.c:4079:1: warning: unused function 'sch_handle_ingress' [-Wunused-function]
+    4079 | sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
+         | ^
+   net/core/dev.c:4086:1: warning: unused function 'sch_handle_egress' [-Wunused-function]
+    4086 | sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
+         | ^
+   net/core/dev.c:5296:19: warning: unused function 'nf_ingress' [-Wunused-function]
+    5296 | static inline int nf_ingress(struct sk_buff *skb, struct packet_type **pt_prev,
+         |                   ^
+>> net/core/dev.c:11547:2: error: call to '__compiletime_assert_971' declared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct net_device, __cacheline_group_end__net_device_read_txrx) - offsetofend(struct net_device, __cacheline_group_begin__net_device_read_txrx) > 24
+    11547 |         CACHELINE_ASSERT_GROUP_SIZE(struct net_device, net_device_read_txrx, 24);
+          |         ^
+   include/linux/cache.h:108:2: note: expanded from macro 'CACHELINE_ASSERT_GROUP_SIZE'
+     108 |         BUILD_BUG_ON(offsetof(TYPE, __cacheline_group_end__##GROUP) - \
+         |         ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
+     416 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:11:1: note: expanded from here
+      11 | __compiletime_assert_971
+         | ^
+   3 warnings and 1 error generated.
 
 
-vim +/if +330 fs/autofs/inode.c
+vim +11547 net/core/dev.c
 
-   306	
-   307	static int autofs_fill_super(struct super_block *s, struct fs_context *fc)
-   308	{
-   309		struct autofs_fs_context *ctx = fc->fs_private;
-   310		struct autofs_sb_info *sbi = s->s_fs_info;
-   311		struct inode *root_inode;
-   312		struct dentry *root;
-   313		struct autofs_info *ino;
-   314	
-   315		pr_debug("starting up, sbi = %p\n", sbi);
-   316	
-   317		sbi->sb = s;
-   318		s->s_blocksize = 1024;
-   319		s->s_blocksize_bits = 10;
-   320		s->s_magic = AUTOFS_SUPER_MAGIC;
-   321		s->s_op = &autofs_sops;
-   322		s->s_d_op = &autofs_dentry_operations;
-   323		s->s_time_gran = 1;
-   324	
-   325		/*
-   326		 * Get the root inode and dentry, but defer checking for errors.
-   327		 */
-   328		ino = autofs_new_ino(sbi);
-   329		if (!ino)
- > 330			goto -ENOMEM;
-   331	
-   332		root_inode = autofs_get_inode(s, S_IFDIR | 0755);
-   333		if (root_inode) {
-   334			root_inode->i_uid = ctx->uid;
-   335			root_inode->i_gid = ctx->gid;
-   336			root_inode->i_fop = &autofs_root_operations;
-   337			root_inode->i_op = &autofs_dir_inode_operations;
-   338		}
-   339		s->s_root = d_make_root(root_inode);
-   340		if (unlikely(!s->s_root)) {
-   341			autofs_free_ino(ino);
-   342			return -ENOMEM;
-   343		}
-   344		s->s_root->d_fsdata = ino;
-   345	
-   346		if (ctx->pgrp_set) {
-   347			sbi->oz_pgrp = find_get_pid(ctx->pgrp);
-   348			if (!sbi->oz_pgrp) {
-   349				ret = invalf(fc, "Could not find process group %d",
-   350					     ctx->pgrp);
-   351				return ret;
-   352			}
-   353		} else {
-   354			sbi->oz_pgrp = get_task_pid(current, PIDTYPE_PGID);
-   355		}
-   356	
-   357		if (autofs_type_trigger(sbi->type))
-   358			/* s->s_root won't be contended so there's little to
-   359			 * be gained by not taking the d_lock when setting
-   360			 * d_flags, even when a lot mounts are being done.
-   361			 */
-   362			managed_dentry_set_managed(s->s_root);
-   363	
-   364		pr_debug("pipe fd = %d, pgrp = %u\n",
-   365			 sbi->pipefd, pid_nr(sbi->oz_pgrp));
-   366	
-   367		sbi->flags &= ~AUTOFS_SBI_CATATONIC;
-   368		return 0;
-   369	}
-   370	
+ 11515	
+ 11516	static void __init net_dev_struct_check(void)
+ 11517	{
+ 11518		/* TX read-mostly hotpath */
+ 11519		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, priv_flags);
+ 11520		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, netdev_ops);
+ 11521		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, header_ops);
+ 11522		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, _tx);
+ 11523		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, real_num_tx_queues);
+ 11524		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, gso_max_size);
+ 11525		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, gso_ipv4_max_size);
+ 11526		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, gso_max_segs);
+ 11527		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, num_tc);
+ 11528		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, mtu);
+ 11529		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, needed_headroom);
+ 11530		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, tc_to_txq);
+ 11531	#ifdef CONFIG_XPS
+ 11532		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, xps_maps);
+ 11533	#endif
+ 11534	#ifdef CONFIG_NETFILTER_EGRESS
+ 11535		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, nf_hooks_egress);
+ 11536	#endif
+ 11537	#ifdef CONFIG_NET_XGRESS
+ 11538		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_tx, tcx_egress);
+ 11539	#endif
+ 11540		CACHELINE_ASSERT_GROUP_SIZE(struct net_device, net_device_read_tx, 152);
+ 11541	
+ 11542		/* TXRX read-mostly hotpath */
+ 11543		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_txrx, flags);
+ 11544		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_txrx, hard_header_len);
+ 11545		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_txrx, features);
+ 11546		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_txrx, ip6_ptr);
+ 11547		CACHELINE_ASSERT_GROUP_SIZE(struct net_device, net_device_read_txrx, 24);
+ 11548	
+ 11549		/* RX read-mostly hotpath */
+ 11550		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, ptype_specific);
+ 11551		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, ifindex);
+ 11552		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, real_num_rx_queues);
+ 11553		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, _rx);
+ 11554		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, gro_flush_timeout);
+ 11555		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, napi_defer_hard_irqs);
+ 11556		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, gro_max_size);
+ 11557		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, gro_ipv4_max_size);
+ 11558		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, rx_handler);
+ 11559		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, rx_handler_data);
+ 11560		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, nd_net);
+ 11561	#ifdef CONFIG_NETPOLL
+ 11562		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, npinfo);
+ 11563	#endif
+ 11564	#ifdef CONFIG_NET_XGRESS
+ 11565		CACHELINE_ASSERT_GROUP_MEMBER(struct net_device, net_device_read_rx, tcx_ingress);
+ 11566	#endif
+ 11567		CACHELINE_ASSERT_GROUP_SIZE(struct net_device, net_device_read_rx, 96);
+ 11568	}
+ 11569	
 
 -- 
 0-DAY CI Kernel Test Service
