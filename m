@@ -1,128 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775D929423
-	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 19:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C34E545
+	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 19:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ndesaulniers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wcl/zIVY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700249031; x=1731785031;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Bn+u+P5GODO6qvJWbb/a1VxD8akP6RMrDigcWx4W55Y=;
-  b=Wcl/zIVYB0fBqhTE00OHbVxWc7+vDN7/4yfQ0zImqFKUZe0ItEEGj/ns
-   4utii6BUT8RTeOJMKrk8uzDligmG3YTd2dXA52asXmljEps75Umn78gor
-   okUlibdt99nzeKkx5GBR38c/72Ifqij33R80dQEKA9cuTIylgKMW7U1VT
-   9yDt256+lYCW94qk+9jQSSiIkLumlfLTirABaxxomJcDE/CgePSIa5sKI
-   xZPkNVI1ooSI9VvdDkcBTQvDekpmc8asJAAFCpbxn5vKjeAuu/1TQWUNq
-   2US5kbgESwcLze3jHooI0fCIHLT/1TbRaL403J+gPaZTKLMGONltBWr3f
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="381744235"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="381744235"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 11:23:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="800579600"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="800579600"
-Received: from phelpsmi-mobl2.amr.corp.intel.com (HELO [10.212.139.180]) ([10.212.139.180])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 11:23:50 -0800
-Message-ID: <daba8825-9c81-4a82-9a7b-a6ea3e2c5537@intel.com>
-Date: Fri, 17 Nov 2023 11:23:47 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EwmdE9/O"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-da2b87dd614so3100910276.2
+        for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 11:24:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700249045; x=1700853845; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HSTC7ZIhM+0E3YkZ4H2RZYaJJgTVqQ3IlDSCu47AzCU=;
+        b=EwmdE9/OBA2wYLdD9VxeFLy7jI8KrQnMKl5GznBtMw5Q8UQ5meOepPttcCNqibOYda
+         NT1pKtCinCUQStb1oDXHOpn6r7G80gpuRJsbet5joS7GCWAkj7wSGKPvt8GHeUYw0tfh
+         Jfy17RD0jfLQzdQgeSIYYpzYp7r4DlZYbPuZBEzVo++n6f2zsxtkIbiU0BL5jXtx4v3q
+         PCUkAqZE3UNARmaXSKpibQwDPcDdQFODbeJeDHiBXKb3CAtaGY9zRS+PmJcTYpOEKnXc
+         WMRrvvmWDgBuakVLrJi6jOTBf5eXAESjbgC18OQPbqvVbFWvOXNILn/oZaa9zwcVyVF7
+         h+Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700249045; x=1700853845;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HSTC7ZIhM+0E3YkZ4H2RZYaJJgTVqQ3IlDSCu47AzCU=;
+        b=Q3yGF8G9ZJFRIOq5t/dzPPnU0g19pTeVxG2cD4FXgGZNv2HBNnsgw21n+jLJd++0Su
+         0ckyRZlELnqLtULoMqNg3udWuH9Cj606zS4b4GInJP65zmVywFkKa0+rEKbrp47lQrd9
+         0EjfSL3tDbKf+HezVWfPBN5tRYlFc6yIRBCEjXdbJnDyrCeMJxSjqd8YHcIn3Km/fPWf
+         LjtublpeJnjzazipR8vUA4P278ub4XCgbT2wvGBmMhfU9xlIPNTuYqbBoZR5p+opkqZ3
+         4M/4IEty2LNtHc8DBkqdaY3iJnHwKieKyilg1twi4cFEgO71pvUUnCpvWoFGUN3586Sv
+         I2CA==
+X-Gm-Message-State: AOJu0YzI+GBBvjw/sJxZzDQYX2RJep02L5dRsPAOJuEKDn16WM9cYgnZ
+	I1b3Yg9Xy0p0CloByqrwuGc2ByVb5lhfxyV8ct0=
+X-Google-Smtp-Source: AGHT+IF5ejdZ1RJrFSKBwDFrAUrVQQyZZ2P+eh4NOyuZHdmvdsPLA+z6m9r5fxOFPVoeQ9q7OoWN5o2siXIJJlF6AfQ=
+X-Received: from ndesaulniers2.svl.corp.google.com ([2620:15c:2d3:205:a112:7ca7:75f7:b362])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:6902:104:b0:daf:bf50:ff66 with
+ SMTP id o4-20020a056902010400b00dafbf50ff66mr8516ybh.13.1700249045028; Fri,
+ 17 Nov 2023 11:24:05 -0800 (PST)
+Date: Fri, 17 Nov 2023 11:24:02 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
-Content-Language: en-US
-To: Sidharth Telang <sidtelang@google.com>, marcorr@google.com
-Cc: acdunlap@google.com, ak@linux.intel.com, alpergun@google.com,
- ben-linux@fluff.org, bp@alien8.de, dave.hansen@linux.intel.com,
- hpa@zytor.com, jacobhxu@google.com, kirill.shutemov@linux.intel.com,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, mingo@redhat.com,
- nathan@kernel.org, ndesaulniers@google.com, pgonda@google.com,
- sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
- tglx@linutronix.de, thomas.lendacky@amd.com, trix@redhat.com, x86@kernel.org
-References: <CAA03e5Gb0BDn-e7Th8JPQqrX-EmFW3kGeiKfuFvwEzKe6xRadg@mail.gmail.com>
- <20231117181458.2260258-1-sidtelang@google.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20231117181458.2260258-1-sidtelang@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIANK9V2UC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2NDQ0Nz3dzEzLwSIE4tKta1sEhNTDZJNjAySTRUAuooKEpNy6wAmxYdW1s LAKDfkHFdAAAA
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700249043; l=3212;
+ i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
+ bh=TJDc5k+AKhiQs6dI7oAGZ36HBYs5k33/muh2oeVUkG8=; b=KiNZlZN38egnPaIXbHlMC4o7eK/WY9b8im52Pymwi+jqpS1ynwZWkTtOOEDrikp8NnAv46gXk
+ LkeOJFFtiA2DSuiqyRPsNZRUYnPZu6e9QRpncsHp1BnIx/pd3mC7cVH
+X-Mailer: b4 0.12.3
+Message-ID: <20231117-maintainers-v1-1-85f2a7422ed9@google.com>
+Subject: [PATCH] MAINTAINERS: refresh LLVM support
+From: ndesaulniers@google.com
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Tom Rix <trix@redhat.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On 11/17/23 10:14, Sidharth Telang wrote:
->> Is this blocked on an item? There seems to be consensus that this
->> patch fixes a bug and is taking the right high-level approach (i.e.,
->> change the guest code to avoid triggering a sequence that isn't
->> supported under CVM exception-based emulation). Without something like
->> this, we weren't able to build the kernel w/ CLANG when it is
->> configured to run under SEV-ES.
-> 
->> We sent out two versions of the patch. One that does the mov directly
->> [1] and a second that calls readl [2]. Is one of these two patches
->> acceptable? Or do we need to follow up on something?
->>
->> [1] https://lore.kernel.org/lkml/0D6A1E49-F21B-42AA-BBBF-13BFC308BB1E@zytor.com/T/
->> [2] https://lore.kernel.org/all/20220812183501.3555820-1-acdunlap@google.com/
-> 
-> Signal-boosting this thread: is this blocked on any item?
+As discussed at the ClangBuiltLinux '23 meetup (co-located with Linux Plumbers
+Conf '23), I'll be taking a step back from kernel work to focus on my growing
+family and helping Google figure out its libc story. So I think it's time to
+formally hand over the reigns to my co-maintainer Nathan.
 
-Yes, it's blocked on you sending a well-described patch.
+As such, remove myself from reviewer for:
+- CLANG CONTROL FLOW INTEGRITY SUPPORT
+- COMPILER ATTRIBUTES
+- KERNEL BUILD
 
-You sent out two patches which both received a lot of discussion and
-induced a lot of confusion.  Can you please take all the knowledge from
-this thread and send a third patch that has a proper changelog
-incorporating all that knowledge?
+For CLANG/LLVM BUILD SUPPORT I'm bumping myself down from maintainer to
+reviewer, adding Bill and Justin, and removing Tom (Tom and I confirmed this
+via private email; thanks for the work done Tom, ++beers_owed).
 
-Which approach should that patch have?  Whatever one is as close to what
-native_apic_mem_write() does as possible.
+It has been my pleasure to work with everyone to improve the toolchain
+portability of the Linux kernel, and to help bring LLVM to the table as a
+competitor. The work here is not done.  I have a few last LLVM patches in the
+works to improve stack usage of clang which has been our longest standing open
+issue (getting "rm" inline asm constraints to DTRT is part of that). But
+looking back I'm incredibly proud of where we are to today relative to where we
+were when we started the ClangBuiltLinux journey, and am confident that the
+team and processes we have put in place will continue to be successful. I
+continue to believe that a rising tide will lift all boats.
+
+I identify first and foremost as a Linux kernel developer, and an LLVM dev
+second. May it be a cold day in hell when that changes.
+
+Wake me when you need me.
+
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ MAINTAINERS | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 482d428472e7..1e6692697167 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5076,7 +5076,6 @@ CLANG CONTROL FLOW INTEGRITY SUPPORT
+ M:	Sami Tolvanen <samitolvanen@google.com>
+ M:	Kees Cook <keescook@chromium.org>
+ R:	Nathan Chancellor <nathan@kernel.org>
+-R:	Nick Desaulniers <ndesaulniers@google.com>
+ L:	llvm@lists.linux.dev
+ S:	Supported
+ B:	https://github.com/ClangBuiltLinux/linux/issues
+@@ -5091,8 +5090,9 @@ F:	.clang-format
+ 
+ CLANG/LLVM BUILD SUPPORT
+ M:	Nathan Chancellor <nathan@kernel.org>
+-M:	Nick Desaulniers <ndesaulniers@google.com>
+-R:	Tom Rix <trix@redhat.com>
++R:	Nick Desaulniers <ndesaulniers@google.com>
++R:	Bill Wendling <morbo@google.com>
++R:	Justin Stitt <justinstitt@google.com>
+ L:	llvm@lists.linux.dev
+ S:	Supported
+ W:	https://clangbuiltlinux.github.io/
+@@ -5242,7 +5242,6 @@ F:	drivers/platform/x86/compal-laptop.c
+ 
+ COMPILER ATTRIBUTES
+ M:	Miguel Ojeda <ojeda@kernel.org>
+-R:	Nick Desaulniers <ndesaulniers@google.com>
+ S:	Maintained
+ F:	include/linux/compiler_attributes.h
+ 
+@@ -11516,7 +11515,6 @@ F:	fs/autofs/
+ KERNEL BUILD + files below scripts/ (unless maintained elsewhere)
+ M:	Masahiro Yamada <masahiroy@kernel.org>
+ R:	Nathan Chancellor <nathan@kernel.org>
+-R:	Nick Desaulniers <ndesaulniers@google.com>
+ R:	Nicolas Schier <nicolas@fjasle.eu>
+ L:	linux-kbuild@vger.kernel.org
+ S:	Maintained
+
+---
+base-commit: 6bc40e44f1ddef16a787f3501b97f1fff909177c
+change-id: 20231117-maintainers-88eac4c024a1
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
+
