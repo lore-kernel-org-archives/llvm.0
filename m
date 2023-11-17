@@ -1,183 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB74433B3;
-	Fri, 17 Nov 2023 18:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A5741A81
+	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 18:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidtelang.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TyPtRLGH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700244864; x=1731780864;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ak/qyDh8KxPCYfBsG+uj8tlB3hidZzbgTQrrCKymJ8o=;
-  b=TyPtRLGHIG5wBdGZq6JyUKKnNbeCisv/OENWbGMo01HIg3bObtpv11CI
-   8TuqQHczrPOyTqvuiAu3CDT3RQKrgTO7ljmoNsDYX40Sdk6gCJ8bWK2du
-   gnq0IrUh5R8jgNIxK3CJ7GqerQQ6ZXKOs6OiZ+3gPxT9NZgW4RwYLNDfz
-   W5QKZmQr3KHJUlWx0Yx5GGXFYQ0pn9oRUrD+aCsPA/Qm59SGM4WmuJvCw
-   rvEveX87gtoDG8g3WOfMl8oagD39p/dpLwUsJYKzOvtbij0gtG1WrZVWp
-   FQaNjHKhnOkmpdU2gwhL9sxWYRMloHb4SPlcLzBECCu6FA6YtLmx14r+e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="12896398"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="12896398"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 10:14:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="1012995103"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="1012995103"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Nov 2023 10:14:20 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r43Lr-00031r-1Z;
-	Fri, 17 Nov 2023 18:14:17 +0000
-Date: Sat, 18 Nov 2023 02:13:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anshul Dalal <anshulusr@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anshul Dalal <anshulusr@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Jonathan Cameron <jic23@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v2 2/2] iio: light: driver for Lite-On ltr390
-Message-ID: <202311180127.eL4Rof8A-lkp@intel.com>
-References: <20231117074554.700970-2-anshulusr@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tpWxnaiT"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5c59fa94f72so25735577b3.2
+        for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 10:14:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700244898; x=1700849698; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+fbLTFjANqYgwgt64Svgj7yz/+GXWm87q5kHEmh7RHQ=;
+        b=tpWxnaiTpQdAYQBBIDWt07ciUBX8FPdvDow08t2xTV5g6EBlXs/6jTkpWK6Xp4GI8r
+         jtFUnomj/Q5TwCv/Bg6MDciyuRk0thgnTQVisrwTMX52fooAJBWc0ObR7nzoXOCPgstb
+         EhWdFlhLhn5FGNawZibIpUB8xN/bA85nM8mfzJ3+xAc0/dvMUuru1jarbdc17xfKKpi7
+         eNtiG1Tc6kiOq9NEfrfcMffFd46YY/6huY18v0NxG83nJKhXu57eJ9A/Rk71IvdJ509A
+         gvMW/LmgRYhZCnYsYtOWF9s/fglEky6bA2P9cLtLD1krYd2+t2hDYjs0UMMN9ltlI8jL
+         DIeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700244898; x=1700849698;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+fbLTFjANqYgwgt64Svgj7yz/+GXWm87q5kHEmh7RHQ=;
+        b=LKCKyxYpSaXV+mibX4Wm2h3j81GXmXxSCsTzF+2wBfrTPLtlzzIJbrxzmv47YBflX0
+         JG4l6FC0JhXaO3LLyPH/sgsnSbUFiNX0YmYmihkWXa5pibVV1f85QepzmKDS/Z1ov11N
+         c3lX24rfQQWRormf0E2i1e/Us+MJKbI6u6YQg5WXMpO4ZaAOWjCuQ2zKJEN9/IsFmYAF
+         rvXWVPQyCRvo2+50+iMCNquhC3vkZJh0Wnn3iEPX+AG7zcof4mYD6NBs3wS/aYSA84FY
+         lq70cl48E8jwmEgwzijhB+9OT81PvLAEeU4fRhchp15//bzte+hC61ihrrp0MF4Dhnj6
+         hYlA==
+X-Gm-Message-State: AOJu0YyLaF9GqWgbIy00094mXiOzaLCXOy/m92nQ7QcIYUVX7G3NOufH
+	iJwl0SunQp/TRAXDofxKXi5EloVp7v0X998=
+X-Google-Smtp-Source: AGHT+IEE+IIx7KMHZPN9vdQjcuy3teOmitlUWHKVwlM0G1+hdGFPfVjvcVb0+yiLXwEizmypJME+tSYRJanyIsw=
+X-Received: from sidtelang2.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:1b8a])
+ (user=sidtelang job=sendgmr) by 2002:a81:d512:0:b0:57a:118a:f31 with SMTP id
+ i18-20020a81d512000000b0057a118a0f31mr11293ywj.7.1700244898771; Fri, 17 Nov
+ 2023 10:14:58 -0800 (PST)
+Date: Fri, 17 Nov 2023 18:14:57 +0000
+In-Reply-To: <CAA03e5Gb0BDn-e7Th8JPQqrX-EmFW3kGeiKfuFvwEzKe6xRadg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231117074554.700970-2-anshulusr@gmail.com>
+Mime-Version: 1.0
+References: <CAA03e5Gb0BDn-e7Th8JPQqrX-EmFW3kGeiKfuFvwEzKe6xRadg@mail.gmail.com>
+X-Mailer: git-send-email 2.43.0.rc0.421.g78406f8d94-goog
+Message-ID: <20231117181458.2260258-1-sidtelang@google.com>
+Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
+From: Sidharth Telang <sidtelang@google.com>
+To: marcorr@google.com
+Cc: acdunlap@google.com, ak@linux.intel.com, alpergun@google.com, 
+	ben-linux@fluff.org, bp@alien8.de, dave.hansen@intel.com, 
+	dave.hansen@linux.intel.com, hpa@zytor.com, jacobhxu@google.com, 
+	kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, mingo@redhat.com, nathan@kernel.org, 
+	ndesaulniers@google.com, pgonda@google.com, 
+	sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com, 
+	tglx@linutronix.de, thomas.lendacky@amd.com, trix@redhat.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Anshul,
+> Is this blocked on an item? There seems to be consensus that this
+> patch fixes a bug and is taking the right high-level approach (i.e.,
+> change the guest code to avoid triggering a sequence that isn't
+> supported under CVM exception-based emulation). Without something like
+> this, we weren't able to build the kernel w/ CLANG when it is
+> configured to run under SEV-ES.
 
-kernel test robot noticed the following build errors:
+> We sent out two versions of the patch. One that does the mov directly
+> [1] and a second that calls readl [2]. Is one of these two patches
+> acceptable? Or do we need to follow up on something?
+> 
+> [1] https://lore.kernel.org/lkml/0D6A1E49-F21B-42AA-BBBF-13BFC308BB1E@zytor.com/T/
+> [2] https://lore.kernel.org/all/20220812183501.3555820-1-acdunlap@google.com/
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on robh/for-next linus/master v6.7-rc1 next-20231117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signal-boosting this thread: is this blocked on any item?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshul-Dalal/iio-light-driver-for-Lite-On-ltr390/20231117-154922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20231117074554.700970-2-anshulusr%40gmail.com
-patch subject: [PATCH v2 2/2] iio: light: driver for Lite-On ltr390
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20231118/202311180127.eL4Rof8A-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231118/202311180127.eL4Rof8A-lkp@intel.com/reproduce)
+We are still running into this issue (SEV-ES guest unexpectedly requests
+termination minutes after booting) and applying this patch seems to fix it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311180127.eL4Rof8A-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/iio/light/ltr390.c:23:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/iio/light/ltr390.c:23:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/iio/light/ltr390.c:23:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/iio/light/ltr390.c:217:25: error: use of undeclared identifier 'ltr390_id_table'; did you mean 'ltr390_of_table'?
-     217 | MODULE_DEVICE_TABLE(of, ltr390_id_table);
-         |                         ^~~~~~~~~~~~~~~
-         |                         ltr390_of_table
-   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
-     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |               ^
-   drivers/iio/light/ltr390.c:213:34: note: 'ltr390_of_table' declared here
-     213 | static const struct of_device_id ltr390_of_table[] = {
-         |                                  ^
-   6 warnings and 1 error generated.
-
-
-vim +217 drivers/iio/light/ltr390.c
-
-   212	
-   213	static const struct of_device_id ltr390_of_table[] = {
-   214		{ .compatible = "liteon,ltr390"},
-   215		{ /* Sentinel */ }
-   216	};
- > 217	MODULE_DEVICE_TABLE(of, ltr390_id_table);
-   218	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Sid
