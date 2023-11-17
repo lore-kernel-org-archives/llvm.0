@@ -1,52 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FA232C8A;
-	Fri, 17 Nov 2023 16:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB74433B3;
+	Fri, 17 Nov 2023 18:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KXH4otYD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TyPtRLGH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700237679; x=1731773679;
+  t=1700244864; x=1731780864;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NI2VBdU0kL7e3DDwI2MC3cO07kHxp55zQbUgUsZ/B9s=;
-  b=KXH4otYD/hMammtSdMtcUJ4PwkDpWZCoyFqtvWzpxedCyz90s077E6ML
-   u5ZxPZDkCOX/SdmLPGcx8IRYka4gfCAXGrOEn+G8yeu0gI9HlTCYIijY1
-   zJychABN9n3B5+u58NFGptDP9WG4mzlVTVV1UPHd8nSOu05tJIMZ+PG9n
-   e01zHEm0eIUH6KMiX1GDVF4W5hciE5AjmbdGC1IMiWDkabFIvKP3ROsFv
-   M8SRtAGV5GAuvl9MA99jU8yL3frDQLW9Jy/w/0HNoculowWxatzVOn/4I
-   CVeXbHGrb+Rl4tVU8B5UUi59m6+pGyKoAZrsAFyf7i5THfNM7NlaAzkXz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="388472639"
+  bh=ak/qyDh8KxPCYfBsG+uj8tlB3hidZzbgTQrrCKymJ8o=;
+  b=TyPtRLGHIG5wBdGZq6JyUKKnNbeCisv/OENWbGMo01HIg3bObtpv11CI
+   8TuqQHczrPOyTqvuiAu3CDT3RQKrgTO7ljmoNsDYX40Sdk6gCJ8bWK2du
+   gnq0IrUh5R8jgNIxK3CJ7GqerQQ6ZXKOs6OiZ+3gPxT9NZgW4RwYLNDfz
+   W5QKZmQr3KHJUlWx0Yx5GGXFYQ0pn9oRUrD+aCsPA/Qm59SGM4WmuJvCw
+   rvEveX87gtoDG8g3WOfMl8oagD39p/dpLwUsJYKzOvtbij0gtG1WrZVWp
+   FQaNjHKhnOkmpdU2gwhL9sxWYRMloHb4SPlcLzBECCu6FA6YtLmx14r+e
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="12896398"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="388472639"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 08:14:21 -0800
+   d="scan'208";a="12896398"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 10:14:23 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="1012995103"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="7055238"
+   d="scan'208";a="1012995103"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 17 Nov 2023 08:14:19 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 17 Nov 2023 10:14:20 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r41U0-0002vD-2k;
-	Fri, 17 Nov 2023 16:14:16 +0000
-Date: Sat, 18 Nov 2023 00:13:27 +0800
+	id 1r43Lr-00031r-1Z;
+	Fri, 17 Nov 2023 18:14:17 +0000
+Date: Sat, 18 Nov 2023 02:13:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>
+To: Anshul Dalal <anshulusr@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	linux-media@vger.kernel.org,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH v4 2/2] media: i2c: Add driver for OmniVision OV64A40
-Message-ID: <202311180044.xY99kUW9-lkp@intel.com>
-References: <20231115141507.37572-3-jacopo.mondi@ideasonboard.com>
+	Anshul Dalal <anshulusr@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Jonathan Cameron <jic23@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2 2/2] iio: light: driver for Lite-On ltr390
+Message-ID: <202311180127.eL4Rof8A-lkp@intel.com>
+References: <20231117074554.700970-2-anshulusr@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,30 +59,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231115141507.37572-3-jacopo.mondi@ideasonboard.com>
+In-Reply-To: <20231117074554.700970-2-anshulusr@gmail.com>
 
-Hi Jacopo,
+Hi Anshul,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 61ab89c1916219ccbeca9f6cefb1680212de8d1c]
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on robh/for-next linus/master v6.7-rc1 next-20231117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacopo-Mondi/media-dt-bindings-Add-OmniVision-OV64A40/20231115-221906
-base:   61ab89c1916219ccbeca9f6cefb1680212de8d1c
-patch link:    https://lore.kernel.org/r/20231115141507.37572-3-jacopo.mondi%40ideasonboard.com
-patch subject: [PATCH v4 2/2] media: i2c: Add driver for OmniVision OV64A40
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20231118/202311180044.xY99kUW9-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Anshul-Dalal/iio-light-driver-for-Lite-On-ltr390/20231117-154922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20231117074554.700970-2-anshulusr%40gmail.com
+patch subject: [PATCH v2 2/2] iio: light: driver for Lite-On ltr390
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20231118/202311180127.eL4Rof8A-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231118/202311180044.xY99kUW9-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231118/202311180127.eL4Rof8A-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311180044.xY99kUW9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311180127.eL4Rof8A-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/media/i2c/ov64a40.c:12:
+   In file included from drivers/iio/light/ltr390.c:23:
    In file included from include/linux/i2c.h:19:
    In file included from include/linux/regulator/consumer.h:35:
    In file included from include/linux/suspend.h:5:
@@ -102,7 +110,7 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
          |                                                   ^
-   In file included from drivers/media/i2c/ov64a40.c:12:
+   In file included from drivers/iio/light/ltr390.c:23:
    In file included from include/linux/i2c.h:19:
    In file included from include/linux/regulator/consumer.h:35:
    In file included from include/linux/suspend.h:5:
@@ -123,7 +131,7 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
          |                                                   ^
-   In file included from drivers/media/i2c/ov64a40.c:12:
+   In file included from drivers/iio/light/ltr390.c:23:
    In file included from include/linux/i2c.h:19:
    In file included from include/linux/regulator/consumer.h:35:
    In file included from include/linux/suspend.h:5:
@@ -147,20 +155,28 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
->> drivers/media/i2c/ov64a40.c:119:18: warning: unused variable 'ov64a40_link_freq_menu' [-Wunused-const-variable]
-     119 | static const s64 ov64a40_link_freq_menu[] = {
-         |                  ^
-   7 warnings generated.
+>> drivers/iio/light/ltr390.c:217:25: error: use of undeclared identifier 'ltr390_id_table'; did you mean 'ltr390_of_table'?
+     217 | MODULE_DEVICE_TABLE(of, ltr390_id_table);
+         |                         ^~~~~~~~~~~~~~~
+         |                         ltr390_of_table
+   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
+     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
+         |               ^
+   drivers/iio/light/ltr390.c:213:34: note: 'ltr390_of_table' declared here
+     213 | static const struct of_device_id ltr390_of_table[] = {
+         |                                  ^
+   6 warnings and 1 error generated.
 
 
-vim +/ov64a40_link_freq_menu +119 drivers/media/i2c/ov64a40.c
+vim +217 drivers/iio/light/ltr390.c
 
-   118	
- > 119	static const s64 ov64a40_link_freq_menu[] = {
-   120		OV64A40_LINK_FREQ_456M,
-   121		OV64A40_LINK_FREQ_360M
-   122	};
-   123	
+   212	
+   213	static const struct of_device_id ltr390_of_table[] = {
+   214		{ .compatible = "liteon,ltr390"},
+   215		{ /* Sentinel */ }
+   216	};
+ > 217	MODULE_DEVICE_TABLE(of, ltr390_id_table);
+   218	
 
 -- 
 0-DAY CI Kernel Test Service
