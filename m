@@ -1,85 +1,103 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A5741A81
-	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 18:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidtelang.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130DB3457E
+	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 18:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tpWxnaiT"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5c59fa94f72so25735577b3.2
-        for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 10:14:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="LKKQPppi"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1cc5fa0e4d5so20068385ad.0
+        for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 10:57:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700244898; x=1700849698; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fbLTFjANqYgwgt64Svgj7yz/+GXWm87q5kHEmh7RHQ=;
-        b=tpWxnaiTpQdAYQBBIDWt07ciUBX8FPdvDow08t2xTV5g6EBlXs/6jTkpWK6Xp4GI8r
-         jtFUnomj/Q5TwCv/Bg6MDciyuRk0thgnTQVisrwTMX52fooAJBWc0ObR7nzoXOCPgstb
-         EhWdFlhLhn5FGNawZibIpUB8xN/bA85nM8mfzJ3+xAc0/dvMUuru1jarbdc17xfKKpi7
-         eNtiG1Tc6kiOq9NEfrfcMffFd46YY/6huY18v0NxG83nJKhXu57eJ9A/Rk71IvdJ509A
-         gvMW/LmgRYhZCnYsYtOWF9s/fglEky6bA2P9cLtLD1krYd2+t2hDYjs0UMMN9ltlI8jL
-         DIeQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700247440; x=1700852240; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fW6308wA70VS87+E3o3wGRpIiX2Yqcpq2KYslJTEbcg=;
+        b=LKKQPppi2/OclU8Yc2mwdlt2lWqQdVPuy6gblj/EYUALpZ1CsIEMFUSGly+Mr8jL8E
+         GhhZGvkuHLOqZWEVG362ucNF0O5qwwVMI/uE25fPcP4utWp6IjgTlF22ZbE1Vh9gopCH
+         V4Zr/c2UmMu6mef0kbiYqbMtMcvddTGLeYnb0s1prrVeIvMaBJt9teLy1rveu1Mlx2Xd
+         VXEnfOaNpKiOzhGwG9dweeYW5M4DblKGxP6gOoiAAqpyKuR5xdUIq++V/v0TR/BuRsST
+         AKF8a9uMYT9DXHTfR44PggWFzz98FbjamyWpeRazb8ODmxq7k/F4TYm3/9RVxfGag1OR
+         aoVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700244898; x=1700849698;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fbLTFjANqYgwgt64Svgj7yz/+GXWm87q5kHEmh7RHQ=;
-        b=LKCKyxYpSaXV+mibX4Wm2h3j81GXmXxSCsTzF+2wBfrTPLtlzzIJbrxzmv47YBflX0
-         JG4l6FC0JhXaO3LLyPH/sgsnSbUFiNX0YmYmihkWXa5pibVV1f85QepzmKDS/Z1ov11N
-         c3lX24rfQQWRormf0E2i1e/Us+MJKbI6u6YQg5WXMpO4ZaAOWjCuQ2zKJEN9/IsFmYAF
-         rvXWVPQyCRvo2+50+iMCNquhC3vkZJh0Wnn3iEPX+AG7zcof4mYD6NBs3wS/aYSA84FY
-         lq70cl48E8jwmEgwzijhB+9OT81PvLAEeU4fRhchp15//bzte+hC61ihrrp0MF4Dhnj6
-         hYlA==
-X-Gm-Message-State: AOJu0YyLaF9GqWgbIy00094mXiOzaLCXOy/m92nQ7QcIYUVX7G3NOufH
-	iJwl0SunQp/TRAXDofxKXi5EloVp7v0X998=
-X-Google-Smtp-Source: AGHT+IEE+IIx7KMHZPN9vdQjcuy3teOmitlUWHKVwlM0G1+hdGFPfVjvcVb0+yiLXwEizmypJME+tSYRJanyIsw=
-X-Received: from sidtelang2.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:1b8a])
- (user=sidtelang job=sendgmr) by 2002:a81:d512:0:b0:57a:118a:f31 with SMTP id
- i18-20020a81d512000000b0057a118a0f31mr11293ywj.7.1700244898771; Fri, 17 Nov
- 2023 10:14:58 -0800 (PST)
-Date: Fri, 17 Nov 2023 18:14:57 +0000
-In-Reply-To: <CAA03e5Gb0BDn-e7Th8JPQqrX-EmFW3kGeiKfuFvwEzKe6xRadg@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1700247440; x=1700852240;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fW6308wA70VS87+E3o3wGRpIiX2Yqcpq2KYslJTEbcg=;
+        b=MZl1ndj92EPHjzWOo24R3BGZZEr8NCx/SQuNtVc8jSXeF/ENR+yiydN3z6Xs9Daes5
+         vCpX379DK6+Hqas61JH01DJoacDa4/epCgqJt+kxtU1bQHZ2qPTj6NQU4fCXAFFTXKrB
+         fIALl8AR5z8mlSu3Mq7toz06pTprKIi00bjQCxqjbp6qBO66PAgg3Dn8uKMyAsT5s6g/
+         PdEFW95jS94ay49L/Q/iQso3ZR7fFlmcG5PGpW/B4eKvT4mZaHsMgDgR+A6ycPjCgU33
+         n19qevnirAGYoC48+6a+h1bkfsr+NO0qoOU/a+Dy7K5d1bTCiuwpZy9kKAa1y46sFcuj
+         D7cQ==
+X-Gm-Message-State: AOJu0YwuF5+K8lh2OY6XMTE/nq+Z7s2qOXEtDJlUFAyqyxV5VYak/rn2
+	1daviB5b6YBxSl1Vi06Gj3cWJg==
+X-Google-Smtp-Source: AGHT+IFlQXHxTYyap15dGpZg51V8uPaQR4Cvd/FPwpEGVHdEHUzqvcw2KIXNqfb5kgJ+/8bjTQUCVw==
+X-Received: by 2002:a17:902:9a84:b0:1cc:4559:f5 with SMTP id w4-20020a1709029a8400b001cc455900f5mr475440plp.14.1700247440159;
+        Fri, 17 Nov 2023 10:57:20 -0800 (PST)
+Received: from x1 ([2601:1c2:1800:f680:813c:f3fa:3586:5465])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170902ed9300b001cc40912649sm1695814plj.304.2023.11.17.10.57.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Nov 2023 10:57:19 -0800 (PST)
+Date: Fri, 17 Nov 2023 10:57:18 -0800
+From: Drew Fustini <dfustini@baylibre.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: adrian.hunter@intel.com, ulf.hansson@linaro.org,
+	linux-mmc@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] mmc: sdhci-of-dwcmshc: Use logical OR instead of bitwise
+ OR in dwcmshc_probe()
+Message-ID: <ZVe3jvuERZgkq0BB@x1>
+References: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <CAA03e5Gb0BDn-e7Th8JPQqrX-EmFW3kGeiKfuFvwEzKe6xRadg@mail.gmail.com>
-X-Mailer: git-send-email 2.43.0.rc0.421.g78406f8d94-goog
-Message-ID: <20231117181458.2260258-1-sidtelang@google.com>
-Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
-From: Sidharth Telang <sidtelang@google.com>
-To: marcorr@google.com
-Cc: acdunlap@google.com, ak@linux.intel.com, alpergun@google.com, 
-	ben-linux@fluff.org, bp@alien8.de, dave.hansen@intel.com, 
-	dave.hansen@linux.intel.com, hpa@zytor.com, jacobhxu@google.com, 
-	kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, mingo@redhat.com, nathan@kernel.org, 
-	ndesaulniers@google.com, pgonda@google.com, 
-	sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com, 
-	tglx@linutronix.de, thomas.lendacky@amd.com, trix@redhat.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
 
-> Is this blocked on an item? There seems to be consensus that this
-> patch fixes a bug and is taking the right high-level approach (i.e.,
-> change the guest code to avoid triggering a sequence that isn't
-> supported under CVM exception-based emulation). Without something like
-> this, we weren't able to build the kernel w/ CLANG when it is
-> configured to run under SEV-ES.
-
-> We sent out two versions of the patch. One that does the mov directly
-> [1] and a second that calls readl [2]. Is one of these two patches
-> acceptable? Or do we need to follow up on something?
+On Thu, Nov 16, 2023 at 06:46:00PM -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y):
 > 
-> [1] https://lore.kernel.org/lkml/0D6A1E49-F21B-42AA-BBBF-13BFC308BB1E@zytor.com/T/
-> [2] https://lore.kernel.org/all/20220812183501.3555820-1-acdunlap@google.com/
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+>     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
+>         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
+>         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>         |                                                                        ||
+>     875 |                     (device_property_read_bool(dev, "mmc-hs400-1_8v")))
+>         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+>     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
+>         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>         |                                                                      ||
+>     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
+>         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
+>   2 errors generated.
+> 
+> There is little reason for this if statement to use bitwise ORs, as the
+> short circuiting of logical OR does not need to be avoided in this
+> context; it would be wasteful to call device_property_read_bool() three
+> times if the first two calls returned true. Switch to logical OR to fix
+> the warning.
+> 
+> While in the area, the parentheses around the calls to
+> device_property_read_bool() are not necessary and make the if statement
+> harder to read, so remove them.
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1960
+> Fixes: aff35fbc7830 ("mmc: sdhci-of-dwcmshc: Add support for T-Head TH1520")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Signal-boosting this thread: is this blocked on any item?
+Tested-by: Drew Fustini <dfustini@baylibre.com>
 
-We are still running into this issue (SEV-ES guest unexpectedly requests
-termination minutes after booting) and applying this patch seems to fix it.
+Thanks for fixing this. I'll add clang to my testing going forward.
 
-Thanks,
-Sid
+Drew
