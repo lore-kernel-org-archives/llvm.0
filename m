@@ -1,103 +1,128 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130DB3457E
-	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 18:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775D929423
+	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 19:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="LKKQPppi"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1cc5fa0e4d5so20068385ad.0
-        for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 10:57:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700247440; x=1700852240; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fW6308wA70VS87+E3o3wGRpIiX2Yqcpq2KYslJTEbcg=;
-        b=LKKQPppi2/OclU8Yc2mwdlt2lWqQdVPuy6gblj/EYUALpZ1CsIEMFUSGly+Mr8jL8E
-         GhhZGvkuHLOqZWEVG362ucNF0O5qwwVMI/uE25fPcP4utWp6IjgTlF22ZbE1Vh9gopCH
-         V4Zr/c2UmMu6mef0kbiYqbMtMcvddTGLeYnb0s1prrVeIvMaBJt9teLy1rveu1Mlx2Xd
-         VXEnfOaNpKiOzhGwG9dweeYW5M4DblKGxP6gOoiAAqpyKuR5xdUIq++V/v0TR/BuRsST
-         AKF8a9uMYT9DXHTfR44PggWFzz98FbjamyWpeRazb8ODmxq7k/F4TYm3/9RVxfGag1OR
-         aoVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700247440; x=1700852240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fW6308wA70VS87+E3o3wGRpIiX2Yqcpq2KYslJTEbcg=;
-        b=MZl1ndj92EPHjzWOo24R3BGZZEr8NCx/SQuNtVc8jSXeF/ENR+yiydN3z6Xs9Daes5
-         vCpX379DK6+Hqas61JH01DJoacDa4/epCgqJt+kxtU1bQHZ2qPTj6NQU4fCXAFFTXKrB
-         fIALl8AR5z8mlSu3Mq7toz06pTprKIi00bjQCxqjbp6qBO66PAgg3Dn8uKMyAsT5s6g/
-         PdEFW95jS94ay49L/Q/iQso3ZR7fFlmcG5PGpW/B4eKvT4mZaHsMgDgR+A6ycPjCgU33
-         n19qevnirAGYoC48+6a+h1bkfsr+NO0qoOU/a+Dy7K5d1bTCiuwpZy9kKAa1y46sFcuj
-         D7cQ==
-X-Gm-Message-State: AOJu0YwuF5+K8lh2OY6XMTE/nq+Z7s2qOXEtDJlUFAyqyxV5VYak/rn2
-	1daviB5b6YBxSl1Vi06Gj3cWJg==
-X-Google-Smtp-Source: AGHT+IFlQXHxTYyap15dGpZg51V8uPaQR4Cvd/FPwpEGVHdEHUzqvcw2KIXNqfb5kgJ+/8bjTQUCVw==
-X-Received: by 2002:a17:902:9a84:b0:1cc:4559:f5 with SMTP id w4-20020a1709029a8400b001cc455900f5mr475440plp.14.1700247440159;
-        Fri, 17 Nov 2023 10:57:20 -0800 (PST)
-Received: from x1 ([2601:1c2:1800:f680:813c:f3fa:3586:5465])
-        by smtp.gmail.com with ESMTPSA id e19-20020a170902ed9300b001cc40912649sm1695814plj.304.2023.11.17.10.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Nov 2023 10:57:19 -0800 (PST)
-Date: Fri, 17 Nov 2023 10:57:18 -0800
-From: Drew Fustini <dfustini@baylibre.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: adrian.hunter@intel.com, ulf.hansson@linaro.org,
-	linux-mmc@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] mmc: sdhci-of-dwcmshc: Use logical OR instead of bitwise
- OR in dwcmshc_probe()
-Message-ID: <ZVe3jvuERZgkq0BB@x1>
-References: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wcl/zIVY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700249031; x=1731785031;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Bn+u+P5GODO6qvJWbb/a1VxD8akP6RMrDigcWx4W55Y=;
+  b=Wcl/zIVYB0fBqhTE00OHbVxWc7+vDN7/4yfQ0zImqFKUZe0ItEEGj/ns
+   4utii6BUT8RTeOJMKrk8uzDligmG3YTd2dXA52asXmljEps75Umn78gor
+   okUlibdt99nzeKkx5GBR38c/72Ifqij33R80dQEKA9cuTIylgKMW7U1VT
+   9yDt256+lYCW94qk+9jQSSiIkLumlfLTirABaxxomJcDE/CgePSIa5sKI
+   xZPkNVI1ooSI9VvdDkcBTQvDekpmc8asJAAFCpbxn5vKjeAuu/1TQWUNq
+   2US5kbgESwcLze3jHooI0fCIHLT/1TbRaL403J+gPaZTKLMGONltBWr3f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="381744235"
+X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
+   d="scan'208";a="381744235"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 11:23:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="800579600"
+X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
+   d="scan'208";a="800579600"
+Received: from phelpsmi-mobl2.amr.corp.intel.com (HELO [10.212.139.180]) ([10.212.139.180])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 11:23:50 -0800
+Message-ID: <daba8825-9c81-4a82-9a7b-a6ea3e2c5537@intel.com>
+Date: Fri, 17 Nov 2023 11:23:47 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
+Content-Language: en-US
+To: Sidharth Telang <sidtelang@google.com>, marcorr@google.com
+Cc: acdunlap@google.com, ak@linux.intel.com, alpergun@google.com,
+ ben-linux@fluff.org, bp@alien8.de, dave.hansen@linux.intel.com,
+ hpa@zytor.com, jacobhxu@google.com, kirill.shutemov@linux.intel.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, mingo@redhat.com,
+ nathan@kernel.org, ndesaulniers@google.com, pgonda@google.com,
+ sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+ tglx@linutronix.de, thomas.lendacky@amd.com, trix@redhat.com, x86@kernel.org
+References: <CAA03e5Gb0BDn-e7Th8JPQqrX-EmFW3kGeiKfuFvwEzKe6xRadg@mail.gmail.com>
+ <20231117181458.2260258-1-sidtelang@google.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20231117181458.2260258-1-sidtelang@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 16, 2023 at 06:46:00PM -0700, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y):
+On 11/17/23 10:14, Sidharth Telang wrote:
+>> Is this blocked on an item? There seems to be consensus that this
+>> patch fixes a bug and is taking the right high-level approach (i.e.,
+>> change the guest code to avoid triggering a sequence that isn't
+>> supported under CVM exception-based emulation). Without something like
+>> this, we weren't able to build the kernel w/ CLANG when it is
+>> configured to run under SEV-ES.
 > 
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
->     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
->         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
->         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                                                                        ||
->     875 |                     (device_property_read_bool(dev, "mmc-hs400-1_8v")))
->         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
->     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
->         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                                                                      ||
->     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
->         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
->   2 errors generated.
+>> We sent out two versions of the patch. One that does the mov directly
+>> [1] and a second that calls readl [2]. Is one of these two patches
+>> acceptable? Or do we need to follow up on something?
+>>
+>> [1] https://lore.kernel.org/lkml/0D6A1E49-F21B-42AA-BBBF-13BFC308BB1E@zytor.com/T/
+>> [2] https://lore.kernel.org/all/20220812183501.3555820-1-acdunlap@google.com/
 > 
-> There is little reason for this if statement to use bitwise ORs, as the
-> short circuiting of logical OR does not need to be avoided in this
-> context; it would be wasteful to call device_property_read_bool() three
-> times if the first two calls returned true. Switch to logical OR to fix
-> the warning.
-> 
-> While in the area, the parentheses around the calls to
-> device_property_read_bool() are not necessary and make the if statement
-> harder to read, so remove them.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1960
-> Fixes: aff35fbc7830 ("mmc: sdhci-of-dwcmshc: Add support for T-Head TH1520")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Signal-boosting this thread: is this blocked on any item?
 
-Tested-by: Drew Fustini <dfustini@baylibre.com>
+Yes, it's blocked on you sending a well-described patch.
 
-Thanks for fixing this. I'll add clang to my testing going forward.
+You sent out two patches which both received a lot of discussion and
+induced a lot of confusion.  Can you please take all the knowledge from
+this thread and send a third patch that has a proper changelog
+incorporating all that knowledge?
 
-Drew
+Which approach should that patch have?  Whatever one is as close to what
+native_apic_mem_write() does as possible.
