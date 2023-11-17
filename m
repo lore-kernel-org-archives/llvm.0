@@ -1,192 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6A5469E;
-	Fri, 17 Nov 2023 03:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5502D278;
+	Fri, 17 Nov 2023 05:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kNAYK4qd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JPmtshJI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700190144; x=1731726144;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dTIvbztNE02xURyGCuAlcnK0wiR6wDPs1JX/xf5VRDU=;
-  b=kNAYK4qdj2WjAF1eoaNkxj2cXKsJ7RsJcCxy9k/6vFoGUWgz9c17czI9
-   wNZ78gTlcrHWV8iKx6XOSO21BP0x/kr0m6ZsHcOoAcItlBZ/8qH94H45d
-   OGiOuVrV+9BDoYFoBAjfFtic/DUlNrkPbHufKkshGGAuF8IIy1dhvgcLS
-   m46FrMvLXWm3w+zYT3PMSshIWeTMUst1MR+BydkyvDebOEFJ15Q+qR8bl
-   GMo+bcCOwuO7AgIdkI8Wd5jbb357hIHzpDviM3pHmTTT7VC/rGq+NIzU7
-   rzp+XT6gzyaZ3DqmaZN/BS8luX18W4JwelNEAi7yrcRgwguLCfI6q3IZO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="395151817"
-X-IronPort-AV: E=Sophos;i="6.04,205,1695711600"; 
-   d="scan'208";a="395151817"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 19:02:23 -0800
+  t=1700200686; x=1731736686;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=764IZoVQhx16LgTa6GgD/tKF6hSla9ceQN/OG1Ayc6I=;
+  b=JPmtshJIQp5cFuh3ldnQUJuWgxKQpcksrRIl919urOBE17I92AoXOhXn
+   FZYv9RikWPa/sEPh6Cxcm3Z2Z9MS7ausHDrAx40PQetvaKB0mcqjKaeon
+   5feGaSzAHHKCynsJ1sZzynyCiVqnnADmarFmZlarceY9kMNKIRdlraoIX
+   fLvsN38XioMln/TpyZWsPYOpHZPJjdjwqDie6PnMCpmeqaNkWUrzt6E9x
+   ySiSRp+pe+mnFc23u1YZE0VbR02FjvKdowOriWbvs7obDqTbc6Ojs4/VL
+   oX7F2JVJffo8O4h7wzgB0A7Mxuott1Zw6erhz6rsGimD6BMlfjJWo6DYF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="376290965"
+X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
+   d="scan'208";a="376290965"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 21:58:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="1096978503"
-X-IronPort-AV: E=Sophos;i="6.04,205,1695711600"; 
-   d="scan'208";a="1096978503"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2023 19:02:21 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r3p7b-0002JH-1Z;
-	Fri, 17 Nov 2023 03:02:19 +0000
-Date: Fri, 17 Nov 2023 11:02:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Drew Fustini <dfustini@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [linux-next:master 1554/1745]
- drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: warning: use of bitwise '|' with
- boolean operands
-Message-ID: <202311171015.WiPtQrdU-lkp@intel.com>
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="883015200"
+X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
+   d="scan'208";a="883015200"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.39.65])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 21:58:04 -0800
+Message-ID: <aa9039ca-69a5-4dca-8205-0b17782c7319@intel.com>
+Date: Fri, 17 Nov 2023 07:58:00 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mmc: sdhci-of-dwcmshc: Use logical OR instead of bitwise
+ OR in dwcmshc_probe()
+To: Nathan Chancellor <nathan@kernel.org>, ulf.hansson@linaro.org
+Cc: dfustini@baylibre.com, linux-mmc@vger.kernel.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev
+References: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f31817cbcf48d191faee7cebfb59197d2048cd64
-commit: aff35fbc7830510ef7cbcf8e32a041a55de3dc51 [1554/1745] mmc: sdhci-of-dwcmshc: Add support for T-Head TH1520
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231117/202311171015.WiPtQrdU-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231117/202311171015.WiPtQrdU-lkp@intel.com/reproduce)
+On 17/11/23 03:46, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y):
+> 
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+>     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
+>         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
+>         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>         |                                                                        ||
+>     875 |                     (device_property_read_bool(dev, "mmc-hs400-1_8v")))
+>         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+>     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
+>         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>         |                                                                      ||
+>     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
+>         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
+>   2 errors generated.
+> 
+> There is little reason for this if statement to use bitwise ORs, as the
+> short circuiting of logical OR does not need to be avoided in this
+> context; it would be wasteful to call device_property_read_bool() three
+> times if the first two calls returned true. Switch to logical OR to fix
+> the warning.
+> 
+> While in the area, the parentheses around the calls to
+> device_property_read_bool() are not necessary and make the if statement
+> harder to read, so remove them.
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1960
+> Fixes: aff35fbc7830 ("mmc: sdhci-of-dwcmshc: Add support for T-Head TH1520")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311171015.WiPtQrdU-lkp@intel.com/
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-All warnings (new ones prefixed by >>):
+> ---
+>  drivers/mmc/host/sdhci-of-dwcmshc.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> index 0eb72544c09e..a1f57af6acfb 100644
+> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
+> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> @@ -870,9 +870,9 @@ static int dwcmshc_probe(struct platform_device *pdev)
+>  	if (pltfm_data == &sdhci_dwcmshc_th1520_pdata) {
+>  		priv->delay_line = PHY_SDCLKDL_DC_DEFAULT;
+>  
+> -		if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
+> -		    (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
+> -		    (device_property_read_bool(dev, "mmc-hs400-1_8v")))
+> +		if (device_property_read_bool(dev, "mmc-ddr-1_8v") ||
+> +		    device_property_read_bool(dev, "mmc-hs200-1_8v") ||
+> +		    device_property_read_bool(dev, "mmc-hs400-1_8v"))
+>  			priv->flags |= FLAG_IO_FIXED_1V8;
+>  		else
+>  			priv->flags &= ~FLAG_IO_FIXED_1V8;
+> 
+> ---
+> base-commit: 3f00051234f02d0d9d1f63b9a334d0fd4c65b6ca
+> change-id: 20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-bf8fed73b5bb
+> 
+> Best regards,
 
->> drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                   if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
->> drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                   if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                                        ||
-   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
-   2 warnings generated.
-
-
-vim +873 drivers/mmc/host/sdhci-of-dwcmshc.c
-
-   789	
-   790	static int dwcmshc_probe(struct platform_device *pdev)
-   791	{
-   792		struct device *dev = &pdev->dev;
-   793		struct sdhci_pltfm_host *pltfm_host;
-   794		struct sdhci_host *host;
-   795		struct dwcmshc_priv *priv;
-   796		struct rk35xx_priv *rk_priv = NULL;
-   797		const struct sdhci_pltfm_data *pltfm_data;
-   798		int err;
-   799		u32 extra;
-   800	
-   801		pltfm_data = device_get_match_data(&pdev->dev);
-   802		if (!pltfm_data) {
-   803			dev_err(&pdev->dev, "Error: No device match data found\n");
-   804			return -ENODEV;
-   805		}
-   806	
-   807		host = sdhci_pltfm_init(pdev, pltfm_data,
-   808					sizeof(struct dwcmshc_priv));
-   809		if (IS_ERR(host))
-   810			return PTR_ERR(host);
-   811	
-   812		/*
-   813		 * extra adma table cnt for cross 128M boundary handling.
-   814		 */
-   815		extra = DIV_ROUND_UP_ULL(dma_get_required_mask(dev), SZ_128M);
-   816		if (extra > SDHCI_MAX_SEGS)
-   817			extra = SDHCI_MAX_SEGS;
-   818		host->adma_table_cnt += extra;
-   819	
-   820		pltfm_host = sdhci_priv(host);
-   821		priv = sdhci_pltfm_priv(pltfm_host);
-   822	
-   823		if (dev->of_node) {
-   824			pltfm_host->clk = devm_clk_get(dev, "core");
-   825			if (IS_ERR(pltfm_host->clk)) {
-   826				err = PTR_ERR(pltfm_host->clk);
-   827				dev_err(dev, "failed to get core clk: %d\n", err);
-   828				goto free_pltfm;
-   829			}
-   830			err = clk_prepare_enable(pltfm_host->clk);
-   831			if (err)
-   832				goto free_pltfm;
-   833	
-   834			priv->bus_clk = devm_clk_get(dev, "bus");
-   835			if (!IS_ERR(priv->bus_clk))
-   836				clk_prepare_enable(priv->bus_clk);
-   837		}
-   838	
-   839		err = mmc_of_parse(host->mmc);
-   840		if (err)
-   841			goto err_clk;
-   842	
-   843		sdhci_get_of_property(pdev);
-   844	
-   845		priv->vendor_specific_area1 =
-   846			sdhci_readl(host, DWCMSHC_P_VENDOR_AREA1) & DWCMSHC_AREA1_MASK;
-   847	
-   848		host->mmc_host_ops.request = dwcmshc_request;
-   849		host->mmc_host_ops.hs400_enhanced_strobe = dwcmshc_hs400_enhanced_strobe;
-   850	
-   851		if (pltfm_data == &sdhci_dwcmshc_rk35xx_pdata) {
-   852			rk_priv = devm_kzalloc(&pdev->dev, sizeof(struct rk35xx_priv), GFP_KERNEL);
-   853			if (!rk_priv) {
-   854				err = -ENOMEM;
-   855				goto err_clk;
-   856			}
-   857	
-   858			if (of_device_is_compatible(pdev->dev.of_node, "rockchip,rk3588-dwcmshc"))
-   859				rk_priv->devtype = DWCMSHC_RK3588;
-   860			else
-   861				rk_priv->devtype = DWCMSHC_RK3568;
-   862	
-   863			priv->priv = rk_priv;
-   864	
-   865			err = dwcmshc_rk35xx_init(host, priv);
-   866			if (err)
-   867				goto err_clk;
-   868		}
-   869	
-   870		if (pltfm_data == &sdhci_dwcmshc_th1520_pdata) {
-   871			priv->delay_line = PHY_SDCLKDL_DC_DEFAULT;
-   872	
- > 873			if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
-   874			    (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
-   875			    (device_property_read_bool(dev, "mmc-hs400-1_8v")))
-   876				priv->flags |= FLAG_IO_FIXED_1V8;
-   877			else
-   878				priv->flags &= ~FLAG_IO_FIXED_1V8;
-   879	
-   880			/*
-   881			 * start_signal_voltage_switch() will try 3.3V first
-   882			 * then 1.8V. Use SDHCI_SIGNALING_180 rather than
-   883			 * SDHCI_SIGNALING_330 to avoid setting voltage to 3.3V
-   884			 * in sdhci_start_signal_voltage_switch().
-   885			 */
-   886			if (priv->flags & FLAG_IO_FIXED_1V8) {
-   887				host->flags &= ~SDHCI_SIGNALING_330;
-   888				host->flags |=  SDHCI_SIGNALING_180;
-   889			}
-   890	
-   891			sdhci_enable_v4_mode(host);
-   892		}
-   893	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
