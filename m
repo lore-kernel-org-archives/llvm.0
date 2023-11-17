@@ -1,121 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5502D278;
-	Fri, 17 Nov 2023 05:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11328FBEB
+	for <llvm@lists.linux.dev>; Fri, 17 Nov 2023 09:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JPmtshJI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700200686; x=1731736686;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=764IZoVQhx16LgTa6GgD/tKF6hSla9ceQN/OG1Ayc6I=;
-  b=JPmtshJIQp5cFuh3ldnQUJuWgxKQpcksrRIl919urOBE17I92AoXOhXn
-   FZYv9RikWPa/sEPh6Cxcm3Z2Z9MS7ausHDrAx40PQetvaKB0mcqjKaeon
-   5feGaSzAHHKCynsJ1sZzynyCiVqnnADmarFmZlarceY9kMNKIRdlraoIX
-   fLvsN38XioMln/TpyZWsPYOpHZPJjdjwqDie6PnMCpmeqaNkWUrzt6E9x
-   ySiSRp+pe+mnFc23u1YZE0VbR02FjvKdowOriWbvs7obDqTbc6Ojs4/VL
-   oX7F2JVJffo8O4h7wzgB0A7Mxuott1Zw6erhz6rsGimD6BMlfjJWo6DYF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="376290965"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="376290965"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 21:58:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="883015200"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="883015200"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.39.65])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 21:58:04 -0800
-Message-ID: <aa9039ca-69a5-4dca-8205-0b17782c7319@intel.com>
-Date: Fri, 17 Nov 2023 07:58:00 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K4YI/fND"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700212492;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=THEmzVaHiZNeIcTvImwINSr7vb3xKiQAOUmNcyEPO1U=;
+	b=K4YI/fNDoAHdcFGTvxSkUqQF5+HN5Kzy7HNJ7o13Up/dPtfwulFrdUAdwU2BT4TOHImA9w
+	ACzX6ci2xMVJ/TQG0zbIhzBqEFZtssj/zfkD6zciSpPxyEOZjWsfdbTNdofB7mUe7ycJ75
+	Sl3SEn2f33cvbPkhZWxN42wMVm6vJFk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-124-hjMHbHTxMrW87-VsMRHqXw-1; Fri, 17 Nov 2023 04:14:51 -0500
+X-MC-Unique: hjMHbHTxMrW87-VsMRHqXw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69AC2185A780;
+	Fri, 17 Nov 2023 09:14:50 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.24])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id B3EB92166B2A;
+	Fri, 17 Nov 2023 09:14:49 +0000 (UTC)
+Date: Fri, 17 Nov 2023 17:14:45 +0800
+From: Baoquan He <bhe@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, kexec@lists.infradead.org,
+	x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-parisc@vger.kernel.org
+Subject: Re: [PATCH 2/7] kexec_file: print out debugging message if required
+Message-ID: <ZVcvBft/T3cbRBWr@MiWiFi-R3L-srv>
+References: <20231114153253.241262-3-bhe@redhat.com>
+ <202311160431.BXPc7NO9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mmc: sdhci-of-dwcmshc: Use logical OR instead of bitwise
- OR in dwcmshc_probe()
-To: Nathan Chancellor <nathan@kernel.org>, ulf.hansson@linaro.org
-Cc: dfustini@baylibre.com, linux-mmc@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev
-References: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-v1-1-7e1a7f4ccaab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202311160431.BXPc7NO9-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
-On 17/11/23 03:46, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y):
-> 
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
->     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
->         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
->         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                                                                        ||
->     875 |                     (device_property_read_bool(dev, "mmc-hs400-1_8v")))
->         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
->     873 |                 if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
->         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                                                                      ||
->     874 |                     (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
->         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/mmc/host/sdhci-of-dwcmshc.c:873:7: note: cast one or both operands to int to silence this warning
->   2 errors generated.
-> 
-> There is little reason for this if statement to use bitwise ORs, as the
-> short circuiting of logical OR does not need to be avoided in this
-> context; it would be wasteful to call device_property_read_bool() three
-> times if the first two calls returned true. Switch to logical OR to fix
-> the warning.
-> 
-> While in the area, the parentheses around the calls to
-> device_property_read_bool() are not necessary and make the if statement
-> harder to read, so remove them.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1960
-> Fixes: aff35fbc7830 ("mmc: sdhci-of-dwcmshc: Add support for T-Head TH1520")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi,
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+On 11/16/23 at 05:04am, kernel test robot wrote:
+> Hi Baoquan,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on arm64/for-next/core]
+> [also build test ERROR on tip/x86/core powerpc/next powerpc/fixes linus/master v6.7-rc1 next-20231115]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/kexec_file-add-kexec_file-flag-to-control-debug-printing/20231114-234003
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+> patch link:    https://lore.kernel.org/r/20231114153253.241262-3-bhe%40redhat.com
+> patch subject: [PATCH 2/7] kexec_file: print out debugging message if required
+> config: hexagon-comet_defconfig (https://download.01.org/0day-ci/archive/20231116/202311160431.BXPc7NO9-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311160431.BXPc7NO9-lkp@intel.com/reproduce)
+> 
 
-> ---
->  drivers/mmc/host/sdhci-of-dwcmshc.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> index 0eb72544c09e..a1f57af6acfb 100644
-> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> @@ -870,9 +870,9 @@ static int dwcmshc_probe(struct platform_device *pdev)
->  	if (pltfm_data == &sdhci_dwcmshc_th1520_pdata) {
->  		priv->delay_line = PHY_SDCLKDL_DC_DEFAULT;
->  
-> -		if ((device_property_read_bool(dev, "mmc-ddr-1_8v")) |
-> -		    (device_property_read_bool(dev, "mmc-hs200-1_8v")) |
-> -		    (device_property_read_bool(dev, "mmc-hs400-1_8v")))
-> +		if (device_property_read_bool(dev, "mmc-ddr-1_8v") ||
-> +		    device_property_read_bool(dev, "mmc-hs200-1_8v") ||
-> +		    device_property_read_bool(dev, "mmc-hs400-1_8v"))
->  			priv->flags |= FLAG_IO_FIXED_1V8;
->  		else
->  			priv->flags &= ~FLAG_IO_FIXED_1V8;
-> 
-> ---
-> base-commit: 3f00051234f02d0d9d1f63b9a334d0fd4c65b6ca
-> change-id: 20231116-sdhci-of-dwcmshc-fix-wbitwise-instead-of-logical-bf8fed73b5bb
-> 
-> Best regards,
+Thanks for reporting.
+
+I met below failure when following the steps of provided reproducer.
+Could anyone help check what's wrong with that?
+
+[root@~ linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+Compiler will be installed in /root/0day
+lftpget -c https://cdn.kernel.org/pub/tools/llvm/files/
+get1: /pub/tools/llvm/files/: files/: Is a directory
+Failed to download https://cdn.kernel.org/pub/tools/llvm/files/
+clang crosstool install failed
+Install clang compiler failed
+setup_crosstool failed
+
+Thanks
+Baoquan
 
