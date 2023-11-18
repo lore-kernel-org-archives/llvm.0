@@ -1,57 +1,31 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0B843163;
-	Fri, 17 Nov 2023 23:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4915D360
+	for <llvm@lists.linux.dev>; Sat, 18 Nov 2023 00:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B2Y/xK2j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700262210; x=1731798210;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+XCnGx03/DyrJDe1LWGEXv7UDgbMq4ECQ+rRhQMq61k=;
-  b=B2Y/xK2jJT6PLSHG7VRQLqa8DfM2AI+GsibE6OGNwtqyDmB6Z0ApogaX
-   Xj86svc+Z6icdp8zI3LND2ekt0GEbWqzHxOh6BYqoeF7SOGpMCOcgQtn9
-   iscPCEokUxMi7d3WWZwLkkswlBpsQuoT4n6SzgItid5lD1XN5Hxd6F80s
-   paTX/CvFLqsUV7ZYZH0kBupb+s2YbKhtbCDG/AQ23PE4If62xNG4pJ+3I
-   FS0k1HD080NINcDCJYcGuAEyLYM1Gk2+BSPcHL+Q+/5bAu3Gy6R6fsoze
-   ijmch+EqwDJYuiQwaCmNzJ1DjEZg7Jq1JRm98UsIABrkTiQMNMVWtOjL+
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="477597422"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="477597422"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 15:03:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="889384114"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="889384114"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 17 Nov 2023 15:03:22 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r47rr-0003GP-2g;
-	Fri, 17 Nov 2023 23:03:19 +0000
-Date: Sat, 18 Nov 2023 07:03:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ronald Monthero <debug.penguin32@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, richard@nod.at,
-	vigneshr@ti.com, heiko@sntech.de,
-	martin.blumenstingl@googlemail.com, paul@crapouillou.net,
-	robh@kernel.org, u.kleine-koenig@pengutronix.de,
-	debug.penguin32@gmail.com, AVKrasnov@sberdevices.ru,
-	r.czerwinski@pengutronix.de, andriy.shevchenko@linux.intel.com,
-	jaimeliao.tw@gmail.com, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Subject: Re: [PATCH] mtd:nand: Increment IFC_TIMEOUT_MSECS for nand
- controller response
-Message-ID: <202311180630.FuB77L6v-lkp@intel.com>
-References: <20231113131634.614467-1-debug.penguin32@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xXjCFVkR"
+Date: Fri, 17 Nov 2023 19:12:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1700266331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=5FVAKS5ltDgwPPIwb1Ip7xIFoajwjgcDs/TVLxkTdJY=;
+	b=xXjCFVkRNap66GBbD/LeH89AQgjonxYpKajFJisJzSUKXRGNFA4kkfdopbw8RcIW6PuWAD
+	3mEOYox8t+O7WCc6HliJtQw+vcbrWZRspq47JiAozCF+gHT2yB+d23bvV2QiCi3ecR/02g
+	fTfCk8Zu0vGJvXL4leRDiGXH9OkRkSU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: llvm@lists.linux.dev
+Cc: Kees Cook <keescook@chromium.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: CFI support for type punning?
+Message-ID: <20231118001208.narka6bl3axdpflf@moria.home.lan>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,130 +34,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231113131634.614467-1-debug.penguin32@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Ronald,
+I received the following report
 
-kernel test robot noticed the following build warnings:
+[  228.366640] bcachefs (loop0): mounting version 1.3: rebalance_work
+[  228.366652] bcachefs (loop0): initializing new filesystem
+[  228.366910] bcachefs (loop0): going read-write
+[  228.367619] CFI failure at process_scheduled_works+0x273/0x4a0 (target: btree_update_set_nodes_written+0x0/0x50; expected type: 0xb86001b6 
+[  228.367645] WARNING: CPU: 3 PID: 11 at process_scheduled_works (kernel/workqueue.c:2630 kernel/workqueue.c:2703) 
+[  228.367653] CPU: 3 PID: 11 Comm: kworker/u48:0 Tainted: G                T  6.7.0-rc1+ #1
+[  228.367660] Hardware name: Micro-Star International Co., Ltd. MS-7D25/PRO Z690-A DDR4(MS-7D25), BIOS Dasharo (coreboot+UEFI) v1.1.1 02/22/2023
+[  228.367663] Workqueue: btree_update btree_update_set_nodes_written
+[  228.367671] RIP: 0010:process_scheduled_works (kernel/workqueue.c:2630 kernel/workqueue.c:2703) 
+[ 228.367679] Code: 24 fc 00 49 ff 87 98 00 00 00 4c 89 ef e8 e5 3e 77 01 0f 1f 44 00 00 4c 8b 5b 18 4c 89 f7 41 ba 4a fe 9f 47 45 03 53 f1 74 02 <0f> 0b 41 ff d3 0f 1f 00 48 8b 53 18 0f 1f 44 00 00 49 ff 87 a0 00
+All code
+========
 
-[auto build test WARNING on mtd/nand/next]
-[also build test WARNING on linus/master v6.7-rc1 next-20231117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Code starting with the faulting instruction
+===========================================
+[  228.367683] RSP: 0018:ffffc90000093e58 EFLAGS: 00010213
+[  228.367688] RAX: 0000000000000000 RBX: ffff88810018a900 RCX: ffff88815082c605
+[  228.367692] RDX: ffff888100216428 RSI: 0000000000000000 RDI: ffff88810d41e000
+[  228.367694] RBP: ffff888140bddcb0 R08: 0000000000000000 R09: 0000000000000000
+[  228.367697] R10: 000000003c094208 R11: ffffffff8814ea20 R12: ffff88810d41e008
+[  228.367699] R13: ffff888100216400 R14: ffff88810d41e000 R15: ffff88815082c600
+[  228.367702] FS:  0000000000000000(0000) GS:ffff88888f380000(0000) knlGS:0000000000000000
+[  228.367706] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  228.367709] CR2: 00007f884730dff0 CR3: 000000014088c000 CR4: 0000000000b50ef0
+[  228.367713] Call Trace:
+[  228.367716]  <TASK>
+[  228.367719] ? __warn (kernel/panic.c:236 kernel/panic.c:677) 
+[  228.367726] ? process_scheduled_works (kernel/workqueue.c:2630 kernel/workqueue.c:2703) 
+[  228.367733] ? report_cfi_failure (kernel/cfi.c:22) 
+[  228.367740] ? handle_cfi_failure (arch/x86/kernel/cfi.c:80) 
+[  228.367746] ? __cfi_btree_update_set_nodes_written (fs/bcachefs/btree_update_interior.c:786) 
+[  228.367753] ? handle_bug (arch/x86/kernel/traps.c:238) 
+[  228.367760] ? exc_invalid_op (arch/x86/kernel/traps.c:258) 
+[  228.367766] ? asm_exc_invalid_op (./arch/x86/include/asm/idtentry.h:568) 
+[  228.367772] ? __cfi_btree_update_set_nodes_written (fs/bcachefs/btree_update_interior.c:786) 
+[  228.367778] ? process_scheduled_works (kernel/workqueue.c:2630 kernel/workqueue.c:2703) 
+[  228.367784] ? process_scheduled_works (./arch/x86/include/asm/jump_label.h:27 ./include/linux/jump_label.h:207 ./include/trace/events/workqueue.h:82 kernel/workqueue.c:2629 kernel/workqueue.c:2703) 
+[  228.367790] worker_thread (./include/linux/list.h:373 kernel/workqueue.c:841 kernel/workqueue.c:2785) 
+[  228.367796] ? __cfi_worker_thread (kernel/workqueue.c:2730) 
+[  228.367802] kthread (kernel/kthread.c:388) 
+[  228.367809] ? __cfi_kthread (kernel/kthread.c:341) 
+[  228.367816] ret_from_fork (arch/x86/kernel/process.c:147) 
+[  228.367820] ? __cfi_kthread (kernel/kthread.c:341) 
+[  228.367826] ret_from_fork_asm (arch/x86/entry/entry_64.S:250) 
+[  228.367831]  </TASK>
+[  228.367833] ---[ end trace 0000000000000000 ]---
+[  228.368179] bcachefs (loop0): initializing freespace
+[  228.369347] CFI failure at process_scheduled_works+0x273/0x4a0 (target: bch2_journal_write+0x0/0x1040; expected type: 0xb86001b6 
+[  228.369370] WARNING: CPU: 19 PID: 496 at process_scheduled_works (kernel/workqueue.c:2630 kernel/workqueue.c:2703) 
+[  228.369380] CPU: 19 PID: 496 Comm: kworker/19:1H Tainted: P                T  6.7.0-rc1+ #1
+[  228.369388] Hardware name: Micro-Star International Co., Ltd. MS-7D25/PRO Z690-A DDR4(MS-7D25), BIOS Dasharo (coreboot+UEFI) v1.1.1 02/22/2023
+[  228.369391] Workqueue: bcachefs_io bch2_journal_write
+[  228.369400] RIP: 0010:process_scheduled_works (kernel/workqueue.c:2630 kernel/workqueue.c:2703) 
+[ 228.369408] Code: 24 fc 00 49 ff 87 98 00 00 00 4c 89 ef e8 e5 3e 77 01 0f 1f 44 00 00 4c 8b 5b 18 4c 89 f7 41 ba 4a fe 9f 47 45 03 53 f1 74 02 <0f> 0b 41 ff d3 0f 1f 00 48 8b 53 18 0f 1f 44 00 00 49 ff 87 a0 00
+All code
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ronald-Monthero/mtd-nand-Increment-IFC_TIMEOUT_MSECS-for-nand-controller-response/20231113-212730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20231113131634.614467-1-debug.penguin32%40gmail.com
-patch subject: [PATCH] mtd:nand: Increment IFC_TIMEOUT_MSECS for nand controller response
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20231118/202311180630.FuB77L6v-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231118/202311180630.FuB77L6v-lkp@intel.com/reproduce)
+which indicates that bcache and bcachefs are both broken with CFI
+enabled; closures (lib/closure.c, include/linux/closure.h) do type
+punning with passing a void (closure_fn)(struct closure *) to the
+workqueue code, which calls it as a void (workqueue_fn)(struct
+work_struct *). That is, we're considering the closure to be the same as
+the embedded/unioned work_struct, as far as the workqueue code is
+considered.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311180630.FuB77L6v-lkp@intel.com/
+Is there any way to tell the CFI code about this kind of type punning,
+or would it be possible to add support for this?
 
-All warnings (new ones prefixed by >>):
+The alternatives I'm looking at aren't terribly palatable; we'd either
+have to increase the size of struct closure with another function
+pointer (and another indirect function call on every use); or we'd have
+to patch the workqueue code and add a flag (Tejun won't like that), or
+I'll have to convert every closure function to take a work_struct arg -
+with a resulting decrease in clarity of types.
 
-   In file included from drivers/mtd/nand/raw/nand_base.c:40:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/mtd/nand/raw/nand_base.c:40:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/mtd/nand/raw/nand_base.c:40:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/mtd/nand/raw/nand_base.c:368:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-     368 |                 pr_info("nand_chip->options indicates NAND_BROKEN_XD %d\n",
-         |                                                                      ~~
-         |                                                                      %lu
-     369 |                         (chip->options & NAND_BROKEN_XD));
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:528:34: note: expanded from macro 'pr_info'
-     528 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   7 warnings generated.
-
-
-vim +368 drivers/mtd/nand/raw/nand_base.c
-
-   352	
-   353	/**
-   354	 * nand_check_wp - [GENERIC] check if the chip is write protected
-   355	 * @chip: NAND chip object
-   356	 *
-   357	 * Check, if the device is write protected. The function expects, that the
-   358	 * device is already selected.
-   359	 */
-   360	static int nand_check_wp(struct nand_chip *chip)
-   361	{
-   362		u8 status;
-   363		int ret;
-   364	
-   365		/* Broken xD cards report WP despite being writable */
-   366		if (chip->options & NAND_BROKEN_XD) {
-   367			pr_info("nand_chip->options indicates NAND_BROKEN_XD %d\n",
- > 368				(chip->options & NAND_BROKEN_XD));
-   369			return 0;
-   370		}
-   371	
-   372		/* Check the WP bit */
-   373		ret = nand_status_op(chip, &status);
-   374		if (ret)
-   375			return ret;
-   376	
-   377		return status & NAND_STATUS_WP ? 0 : 1;
-   378	}
-   379	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Kent
