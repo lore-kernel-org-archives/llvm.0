@@ -1,102 +1,136 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F80D101D0
-	for <llvm@lists.linux.dev>; Sat, 18 Nov 2023 19:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB191E508
+	for <llvm@lists.linux.dev>; Sat, 18 Nov 2023 20:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b5yR52FX"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-54366bb1c02so4297a12.1
-        for <llvm@lists.linux.dev>; Sat, 18 Nov 2023 11:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700334414; x=1700939214; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BX7PzfZyMqtOcztCqDIQ3igdby7s7mhmSg6YX3x3/1g=;
-        b=b5yR52FX0wCrtDY3rokLBEnesBrDM3TiXODaWnS/roENFYJl2fJHzNBGPhCkoq7vXY
-         PIxFVwB8ei9sYV27p/zPZhZC16xCVwvqSY5k9r0G972lCvcqvzP+XGKnvmjZu5rOd+K1
-         ckL4iS8l6N1MLEO+p5bZNeRfLqs4sfS5Y6Kw/2OK9rfNkf5VLJ4C5/WRewb1Qi/PWLJz
-         HCuM/pR2ahCKOGMduxZJiR12iCFMt95T6odXvPNdxosy+tJFVJtw3NoGZJfJMOrvWH6D
-         4Fhdhxcs5QYDS3C47vFU9R/6vOqUN+5r7yvaJY0iLjC5lbGIA16E1Vwv4PCjaKlO7GwY
-         7tTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700334414; x=1700939214;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BX7PzfZyMqtOcztCqDIQ3igdby7s7mhmSg6YX3x3/1g=;
-        b=Jujl2tGhJMjzV5b8+k8dIsAY0YcbV7BIrDbrrlpbT7Cb71rDrEpFSHpFOYT3rMdUR+
-         /vbtiFPrjyljl2p3Etk0uPaN3RH8Q7dDyM0hQoB5beVtEmh8dG5m4WmF3zkMfuLOWah/
-         D62OTJvln/tZOn287qpcDVRUCS/MvcyUC3FLSUPJskySkPD9AW/9guqkrltYoRFLOJA4
-         GYfc1UPY3Z/1N8drHoHYbDNiFhhpXDOWXFsutVKosuZPfUyDq0Aha8MRRFUV2a7nagRT
-         H8GQjCFH3+o1UyIM/vQLSYsruWnHl1LhpITaLNEFn0H95rCs+uRIOclyTMahqDysK3mY
-         OkUA==
-X-Gm-Message-State: AOJu0YxWBZsexl4JceJzTNnRteOyA5HQmgQG9yr0tUdza6a5agmg5TJq
-	jQHj+R8JXEVcdLsekNxhaNziWtD+puD7/ZOWG7rN
-X-Google-Smtp-Source: AGHT+IE+ySdOFa6ErrSdvsWW7KQSBH8g/N1u2mWL8+Nn6TPxiB77nMMZ3Dtk7AmGRGZyP5s5Us2Nmlsmyr4xdkN5Q94=
-X-Received: by 2002:a05:6402:514f:b0:545:94c:862e with SMTP id
- n15-20020a056402514f00b00545094c862emr109260edd.2.1700334414224; Sat, 18 Nov
- 2023 11:06:54 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OZ0/kaPW"
+Date: Sat, 18 Nov 2023 15:27:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1700339257;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VA30AOH1S8X59z5+gH9XMH61G4JTpYZi9MtnJjii/po=;
+	b=OZ0/kaPWfBNmsOcQqEX9CdotDT6zOpq+OIO096PNU5sWp6uWppuOegAry3so+qFKSGIxF7
+	bi9S8b6gS1jydeqKJujpTw7Ii2z+GSvxcLxvSUdX1lGY2wmvgQkI0ifKRbSarlLJdhA7T4
+	Ngy9Fj/vKxYR+Q/X0bNgjSVCjq4pLqM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: CFI support for type punning?
+Message-ID: <20231118202733.cmbpcpbu6zxdemq6@moria.home.lan>
+References: <20231118001208.narka6bl3axdpflf@moria.home.lan>
+ <202311171936.A19E992@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231117-maintainers-v1-1-85f2a7422ed9@google.com> <8243E862-CFC1-4658-B07E-9FB87E34E12B@kernel.org>
-In-Reply-To: <8243E862-CFC1-4658-B07E-9FB87E34E12B@kernel.org>
-From: Bill Wendling <morbo@google.com>
-Date: Sat, 18 Nov 2023 11:06:37 -0800
-Message-ID: <CAGG=3QUishWF-bApJM5ppGPaZJNaHQjSxSB=NFRYpkmC59THbw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: refresh LLVM support
-To: Kees Cook <kees@kernel.org>
-Cc: ndesaulniers@google.com, Kees Cook <keescook@chromium.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Justin Stitt <justinstitt@google.com>, Tom Rix <trix@redhat.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202311171936.A19E992@keescook>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Nov 17, 2023 at 2:53=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
->
->
->
-> On November 17, 2023 11:24:02 AM PST, ndesaulniers@google.com wrote:
-> >I'll be taking a step back from kernel work
->
-> NAK ;)
->
-I was going to do that too. :-)
+On Fri, Nov 17, 2023 at 09:07:06PM -0800, Kees Cook wrote:
+> There is no type punning support, though a neighboring idea has been
+> proposed to define separate groups of the same prototypes (e.g. so one
+> work_struct user can't call another work_struct user's callbacks). But
+> that's all future work.
 
-> >to focus on my growing
-> >family and helping Google figure out its libc story.
->
-> These are both big challenges, worthy of your attention. :)
->
-> >For CLANG/LLVM BUILD SUPPORT I'm bumping myself down from maintainer to
-> >reviewer, adding Bill and Justin, and removing Tom (Tom and I confirmed =
-this
-> >via private email; thanks for the work done Tom, ++beers_owed).
->
-> Thanks Tom, and glad to have Bill and Justin stepping up!
->
-> >Wake me when you need me.
->
-> As the prophecy has foretold!
->
-> >Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> We'll just report all issues as LTS kernel bugs and use the MAINTAINERS e=
-ntries from there. ;) We'll miss you, but you won't be far!
->
-> Good hunting,
->
-> -Kees
->
-> --
-> Kees Cook
+There was a proposal for making container_of() typesafe awhile back (I
+forget who came up with it - Matthew, maybe?). Related?
+
+> 
+> > The alternatives I'm looking at aren't terribly palatable; we'd either
+> > have to increase the size of struct closure with another function
+> > pointer (and another indirect function call on every use); or we'd have
+> > to patch the workqueue code and add a flag (Tejun won't like that), or
+> > I'll have to convert every closure function to take a work_struct arg -
+> > with a resulting decrease in clarity of types.
+> 
+> I think the reason the existing compiler warnings we have in place for
+> this didn't warn was because there was no explicit casting; it was all
+> hiding in an intentionally overlapped union. :)
+
+;)
+
+> struct closure {
+>         union {
+>                 struct {
+>                         struct workqueue_struct *wq;
+>                         struct closure_syncer   *s;
+>                         struct llist_node       list;
+>                         closure_fn              *fn;
+>                 };
+>                 struct work_struct      work;
+>         };
+> 
+> ...
+>         BUILD_BUG_ON(offsetof(struct closure, fn)
+>                      != offsetof(struct work_struct, func));
+> 
+> It seems the assignment used "fn", and the WORK_INIT used its internal
+> func for the call. No casting needed. :)
+> 
+> The good news is that closure.h _is_ using the common code pattern for
+> these kinds of things (container_of() to find the wrapping struct),
+> but it's using "struct closure" instead of "struct work_struct", which
+> is what you concluded as well.
+> 
+> Part of the work we did over the last few years now was fixing cases
+> like this (where the wrapping function was being passed instead of
+> the work_struct), and it just needed a few localized refactorings
+> that Coccinelle seemed to handle well. I don't think it should be too
+> disruptive here either.
+> 
+> static void journal_write_done(struct closure *cl)
+> {
+>         struct journal *j = container_of(cl, struct journal, io);
+> 
+> Would, I think, become:
+> 
+> static void journal_write_done(struct work_struct *ws)
+> {
+> 	struct closure *cl = container_of(ws, struct work_struct, work);
+>         struct journal *j = container_of(cl, struct journal, io);
+
+The thing I don't like about this change is that closure fns are
+significantly semantically different from a normal workqueue function -
+a closure fn runs with a refcount held on the closure that it's
+responsible for releasing either via continue_at() or closure_return().
+
+> Usually these kinds of changes resulted in no binary differences (as
+> expected). I do agree, though, the ergonomics are a little weird to
+> expose the internals of closure.h. I've seen other APIs paper over this
+> in their own special ways. For example, maybe something like this:
+> 
+> #define CLOSURE_CALLBACK(name)		\
+> 	static void name(struct work_struct *ws)
+> 
+> #define closure_type(type, member, name)	\
+> 	type *name = container_of(ws, struct work_struct, member.work)
+> 
+> CLOSURE_CALLBACK(journal_write_done)
+> {
+> 	closure_type(struct journal, io, j);
+
+Yeah, I think this works.
+
+> And another, which was quite painful, was the struct timer_list work in
+> 2018, which touched something like 1000 files. :|
+> https://outflux.net/blog/archives/2018/02/05/security-things-in-linux-v4-15/#v4.15-timer_list
+
+Thanks for the links :)
+
+Related to the timer list change - back when I was active in the block
+layer I was contemplating getting rid of bi_private, in favour of
+container_of(). I wonder if that's something we could start nudging
+people to do, less pointer chasing is always good :)
