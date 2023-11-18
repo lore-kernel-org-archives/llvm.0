@@ -1,33 +1,49 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB191E508
-	for <llvm@lists.linux.dev>; Sat, 18 Nov 2023 20:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042FC6FA0;
+	Sat, 18 Nov 2023 23:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OZ0/kaPW"
-Date: Sat, 18 Nov 2023 15:27:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1700339257;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VA30AOH1S8X59z5+gH9XMH61G4JTpYZi9MtnJjii/po=;
-	b=OZ0/kaPWfBNmsOcQqEX9CdotDT6zOpq+OIO096PNU5sWp6uWppuOegAry3so+qFKSGIxF7
-	bi9S8b6gS1jydeqKJujpTw7Ii2z+GSvxcLxvSUdX1lGY2wmvgQkI0ifKRbSarlLJdhA7T4
-	Ngy9Fj/vKxYR+Q/X0bNgjSVCjq4pLqM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Subject: Re: CFI support for type punning?
-Message-ID: <20231118202733.cmbpcpbu6zxdemq6@moria.home.lan>
-References: <20231118001208.narka6bl3axdpflf@moria.home.lan>
- <202311171936.A19E992@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpnrEy44"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700350891; x=1731886891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7GaA30VVy3TnzrQ3lsYbX9fMaj5n7eqRdnGe9El6YD4=;
+  b=bpnrEy44dPQugrQGtUvmYCTwyH24mEE/lOue1cw8X/ni1XYotFoO0vAu
+   vYLbsvznRhniaHvSbcjOWeeOcDy615qZEJZEQOVOY57CmQGN9lAVRK/4Y
+   tbtc151FgaXMwARTqjB3OB+okuCIglFSNf3qIw2rX4Mo7EsHipwFyQTkq
+   Nw9TtP8o7RP7FV0woZn22q2zJuAm5ljxXNIQxt4UK6iJosajQnLwMW102
+   /xLgRsq9qCwsrL5iSVCYvfogrBn3QzJZMCN0ktlAnNjN5/pgTXXt/2zbz
+   AdUmVRs8413aSDFUrP+ckhvuneolPLhGXg374HWAslbPoxB8jxt8pc2vu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="13012545"
+X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
+   d="scan'208";a="13012545"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 15:41:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="939464390"
+X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
+   d="scan'208";a="939464390"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 18 Nov 2023 15:41:27 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r4UwH-0004RT-28;
+	Sat, 18 Nov 2023 23:41:25 +0000
+Date: Sun, 19 Nov 2023 07:41:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Imre Deak <imre.deak@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [Intel-gfx] [PATCH v2 03/11] drm/dp_mst: Add kunit tests for
+ drm_dp_get_vc_payload_bw()
+Message-ID: <202311190743.K2U2VXVT-lkp@intel.com>
+References: <20231116131841.1588781-4-imre.deak@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,101 +52,124 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202311171936.A19E992@keescook>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20231116131841.1588781-4-imre.deak@intel.com>
 
-On Fri, Nov 17, 2023 at 09:07:06PM -0800, Kees Cook wrote:
-> There is no type punning support, though a neighboring idea has been
-> proposed to define separate groups of the same prototypes (e.g. so one
-> work_struct user can't call another work_struct user's callbacks). But
-> that's all future work.
+Hi Imre,
 
-There was a proposal for making container_of() typesafe awhile back (I
-forget who came up with it - Matthew, maybe?). Related?
+kernel test robot noticed the following build warnings:
 
-> 
-> > The alternatives I'm looking at aren't terribly palatable; we'd either
-> > have to increase the size of struct closure with another function
-> > pointer (and another indirect function call on every use); or we'd have
-> > to patch the workqueue code and add a flag (Tejun won't like that), or
-> > I'll have to convert every closure function to take a work_struct arg -
-> > with a resulting decrease in clarity of types.
-> 
-> I think the reason the existing compiler warnings we have in place for
-> this didn't warn was because there was no explicit casting; it was all
-> hiding in an intentionally overlapped union. :)
+[auto build test WARNING on drm-tip/drm-tip]
 
-;)
+url:    https://github.com/intel-lab-lkp/linux/commits/Imre-Deak/drm-dp_mst-Store-the-MST-PBN-divider-value-in-fixed-point-format/20231116-212936
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20231116131841.1588781-4-imre.deak%40intel.com
+patch subject: [Intel-gfx] [PATCH v2 03/11] drm/dp_mst: Add kunit tests for drm_dp_get_vc_payload_bw()
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20231119/202311190743.K2U2VXVT-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311190743.K2U2VXVT-lkp@intel.com/reproduce)
 
-> struct closure {
->         union {
->                 struct {
->                         struct workqueue_struct *wq;
->                         struct closure_syncer   *s;
->                         struct llist_node       list;
->                         closure_fn              *fn;
->                 };
->                 struct work_struct      work;
->         };
-> 
-> ...
->         BUILD_BUG_ON(offsetof(struct closure, fn)
->                      != offsetof(struct work_struct, func));
-> 
-> It seems the assignment used "fn", and the WORK_INIT used its internal
-> func for the call. No casting needed. :)
-> 
-> The good news is that closure.h _is_ using the common code pattern for
-> these kinds of things (container_of() to find the wrapping struct),
-> but it's using "struct closure" instead of "struct work_struct", which
-> is what you concluded as well.
-> 
-> Part of the work we did over the last few years now was fixing cases
-> like this (where the wrapping function was being passed instead of
-> the work_struct), and it just needed a few localized refactorings
-> that Coccinelle seemed to handle well. I don't think it should be too
-> disruptive here either.
-> 
-> static void journal_write_done(struct closure *cl)
-> {
->         struct journal *j = container_of(cl, struct journal, io);
-> 
-> Would, I think, become:
-> 
-> static void journal_write_done(struct work_struct *ws)
-> {
-> 	struct closure *cl = container_of(ws, struct work_struct, work);
->         struct journal *j = container_of(cl, struct journal, io);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311190743.K2U2VXVT-lkp@intel.com/
 
-The thing I don't like about this change is that closure fns are
-significantly semantically different from a normal workqueue function -
-a closure fn runs with a refcount held on the closure that it's
-responsible for releasing either via continue_at() or closure_return().
+All warnings (new ones prefixed by >>):
 
-> Usually these kinds of changes resulted in no binary differences (as
-> expected). I do agree, though, the ergonomics are a little weird to
-> expose the internals of closure.h. I've seen other APIs paper over this
-> in their own special ways. For example, maybe something like this:
-> 
-> #define CLOSURE_CALLBACK(name)		\
-> 	static void name(struct work_struct *ws)
-> 
-> #define closure_type(type, member, name)	\
-> 	type *name = container_of(ws, struct work_struct, member.work)
-> 
-> CLOSURE_CALLBACK(journal_write_done)
-> {
-> 	closure_type(struct journal, io, j);
+   In file included from drivers/gpu/drm/tests/drm_dp_mst_helper_test.c:10:
+   In file included from include/drm/display/drm_dp_mst_helper.h:26:
+   In file included from include/drm/display/drm_dp_helper.h:27:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/tests/drm_dp_mst_helper_test.c:10:
+   In file included from include/drm/display/drm_dp_mst_helper.h:26:
+   In file included from include/drm/display/drm_dp_helper.h:27:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/tests/drm_dp_mst_helper_test.c:10:
+   In file included from include/drm/display/drm_dp_mst_helper.h:26:
+   In file included from include/drm/display/drm_dp_helper.h:27:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/gpu/drm/tests/drm_dp_mst_helper_test.c:197:13: warning: stack frame size (1664) exceeds limit (1024) in 'drm_test_dp_mst_calc_pbn_div' [-Wframe-larger-than]
+     197 | static void drm_test_dp_mst_calc_pbn_div(struct kunit *test)
+         |             ^
+   7 warnings generated.
 
-Yeah, I think this works.
 
-> And another, which was quite painful, was the struct timer_list work in
-> 2018, which touched something like 1000 files. :|
-> https://outflux.net/blog/archives/2018/02/05/security-things-in-linux-v4-15/#v4.15-timer_list
+vim +/drm_test_dp_mst_calc_pbn_div +197 drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
 
-Thanks for the links :)
+   196	
+ > 197	static void drm_test_dp_mst_calc_pbn_div(struct kunit *test)
+   198	{
+   199		const struct drm_dp_mst_calc_pbn_div_test *params = test->param_value;
+   200		/* mgr->dev is only needed by drm_dbg_kms(), but it's not called for the test cases. */
+   201		struct drm_dp_mst_topology_mgr mgr = {};
+   202	
+   203		KUNIT_EXPECT_EQ(test, drm_dp_get_vc_payload_bw(&mgr, params->link_rate, params->lane_count).full,
+   204				params->expected.full);
+   205	}
+   206	
 
-Related to the timer list change - back when I was active in the block
-layer I was contemplating getting rid of bi_private, in favour of
-container_of(). I wonder if that's something we could start nudging
-people to do, less pointer chasing is always good :)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
