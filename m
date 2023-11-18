@@ -1,172 +1,160 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31D6D2F0;
-	Sat, 18 Nov 2023 08:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A652E101E9
+	for <llvm@lists.linux.dev>; Sat, 18 Nov 2023 09:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AChrXqwC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700297050; x=1731833050;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4PAq8AXIKGxSKrr0aKgQv8Mci6H7jVHiPzq47htjhEk=;
-  b=AChrXqwC4YjcdWWh+ZClxEo2W/qdXO95t0VZnvWfNz4/asB515U87bIG
-   z9Cj81mP7SU/ysBv+hy6xmBR9codCuY/Gcatb78TpH+K0DnbmLGVNG6Bq
-   2wTisIcgT/wxWdpSL65fy2ngdXk7IZPwkRm8OcYSbyx/gjO2i/PdqAt33
-   ksBGw6jZiPgj+mYDRKCTmSkbBeESBFSWGmY7/eBrLCr3E46FiFzCrvlkh
-   gx4JD5xnJ1dQRn/EMBZeyh5YRBvo91mnoXOs4jEUrxSuetJ6Tti92ATVM
-   IDBMS+/LbZVNRk9/qS2J3Cs/+pwdHMXH7fZDvuwC7N374d39LQyysGIuM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="381803247"
-X-IronPort-AV: E=Sophos;i="6.04,207,1695711600"; 
-   d="scan'208";a="381803247"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 00:44:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,207,1695711600"; 
-   d="scan'208";a="13704331"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 18 Nov 2023 00:44:08 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r4Gvt-0003ht-1n;
-	Sat, 18 Nov 2023 08:44:05 +0000
-Date: Sat, 18 Nov 2023 16:42:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 5/7] media: ov8858: Use pm_runtime_get_if_active(),
- put usage_count correctly
-Message-ID: <202311181620.Oz3Uibrc-lkp@intel.com>
-References: <20231117111433.1561669-6-sakari.ailus@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PNGrt9Ga"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700298684;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RZ955MxG/p+Kp761u7gTY3+v6OXWgrZjzQzrhgOEYYE=;
+	b=PNGrt9GaGOB3vtZTlw2LM0o1l4a6i3uUz84hpCyQfYC9ePlgfuVKGHpsLo00KlP1SWMdHs
+	Xb32QdrGona5n+XRKB8bRqI/GytMwwl9r4WjiogqVpXL81RI9l1azOJbJ2rqLBm5+qJfY5
+	FynFRN/DLVG1ddElzZYuC5qauB3zRNc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-436-BYKTZ6fbODavAZ684zne9w-1; Sat,
+ 18 Nov 2023 04:11:22 -0500
+X-MC-Unique: BYKTZ6fbODavAZ684zne9w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78C9D3C0BE52
+	for <llvm@lists.linux.dev>; Sat, 18 Nov 2023 09:11:22 +0000 (UTC)
+Received: from [172.64.4.47] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 63109493113;
+	Sat, 18 Nov 2023 09:11:22 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc1,
+ mainline.kernel.org-clang, ffd75bc7)
+Date: Sat, 18 Nov 2023 09:11:22 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231117111433.1561669-6-sakari.ailus@linux.intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <20296.123111804112200292@us-mta-436.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sakari,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on 3e238417254bfdcc23fe207780b59cbb08656762]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/pm-runtime-Simplify-pm_runtime_get_if_active-usage/20231117-191654
-base:   3e238417254bfdcc23fe207780b59cbb08656762
-patch link:    https://lore.kernel.org/r/20231117111433.1561669-6-sakari.ailus%40linux.intel.com
-patch subject: [PATCH v2 5/7] media: ov8858: Use pm_runtime_get_if_active(), put usage_count correctly
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231118/202311181620.Oz3Uibrc-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231118/202311181620.Oz3Uibrc-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'block-6.7-2023-11-17' of git://git.kernel.dk=
+/linux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311181620.Oz3Uibrc-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/115428
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
 
->> drivers/media/i2c/ov8858.c:1606:3: error: call to undeclared function 'pm_runtime_mark_busy_autosusp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   pm_runtime_mark_busy_autosusp(&client->dev);
-                   ^
-   drivers/media/i2c/ov8858.c:1606:3: note: did you mean 'pm_runtime_put_mark_busy_autosusp'?
-   include/linux/pm_runtime.h:508:19: note: 'pm_runtime_put_mark_busy_autosusp' declared here
-   static inline int pm_runtime_put_mark_busy_autosusp(struct device *dev)
-                     ^
-   1 error generated.
 
 
-vim +/pm_runtime_mark_busy_autosusp +1606 drivers/media/i2c/ov8858.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-  1530	
-  1531	static int ov8858_set_ctrl(struct v4l2_ctrl *ctrl)
-  1532	{
-  1533		struct ov8858 *ov8858 = container_of(ctrl->handler,
-  1534						     struct ov8858, ctrl_handler);
-  1535	
-  1536		struct i2c_client *client = v4l2_get_subdevdata(&ov8858->subdev);
-  1537		struct v4l2_mbus_framefmt *format;
-  1538		struct v4l2_subdev_state *state;
-  1539		u16 digi_gain;
-  1540		s64 max_exp;
-  1541		int ret, pm_status;
-  1542	
-  1543		/*
-  1544		 * The control handler and the subdev state use the same mutex and the
-  1545		 * mutex is guaranteed to be locked:
-  1546		 * - by the core when s_ctrl is called int the VIDIOC_S_CTRL call path
-  1547		 * - by the driver when s_ctrl is called in the s_stream(1) call path
-  1548		 */
-  1549		state = v4l2_subdev_get_locked_active_state(&ov8858->subdev);
-  1550		format = v4l2_subdev_get_pad_format(&ov8858->subdev, state, 0);
-  1551	
-  1552		/* Propagate change of current control to all related controls */
-  1553		switch (ctrl->id) {
-  1554		case V4L2_CID_VBLANK:
-  1555			/* Update max exposure while meeting expected vblanking */
-  1556			max_exp = format->height + ctrl->val - OV8858_EXPOSURE_MARGIN;
-  1557			__v4l2_ctrl_modify_range(ov8858->exposure,
-  1558						 ov8858->exposure->minimum, max_exp,
-  1559						 ov8858->exposure->step,
-  1560						 ov8858->exposure->default_value);
-  1561			break;
-  1562		}
-  1563	
-  1564		pm_status = pm_runtime_get_if_active(&client->dev);
-  1565		if (!pm_status)
-  1566			return 0;
-  1567	
-  1568		switch (ctrl->id) {
-  1569		case V4L2_CID_EXPOSURE:
-  1570			/* 4 least significant bits of exposure are fractional part */
-  1571			ret = ov8858_write(ov8858, OV8858_REG_LONG_EXPO,
-  1572					   ctrl->val << 4, NULL);
-  1573			break;
-  1574		case V4L2_CID_ANALOGUE_GAIN:
-  1575			ret = ov8858_write(ov8858, OV8858_REG_LONG_GAIN,
-  1576					   ctrl->val, NULL);
-  1577			break;
-  1578		case V4L2_CID_DIGITAL_GAIN:
-  1579			/*
-  1580			 * Digital gain is assembled as:
-  1581			 * 0x350a[7:0] = dgain[13:6]
-  1582			 * 0x350b[5:0] = dgain[5:0]
-  1583			 * Reassemble the control value to write it in one go.
-  1584			 */
-  1585			digi_gain = (ctrl->val & OV8858_LONG_DIGIGAIN_L_MASK)
-  1586				  | ((ctrl->val & OV8858_LONG_DIGIGAIN_H_MASK) <<
-  1587				      OV8858_LONG_DIGIGAIN_H_SHIFT);
-  1588			ret = ov8858_write(ov8858, OV8858_REG_LONG_DIGIGAIN,
-  1589					   digi_gain, NULL);
-  1590			break;
-  1591		case V4L2_CID_VBLANK:
-  1592			ret = ov8858_write(ov8858, OV8858_REG_VTS,
-  1593					   ctrl->val + format->height, NULL);
-  1594			break;
-  1595		case V4L2_CID_TEST_PATTERN:
-  1596			ret = ov8858_enable_test_pattern(ov8858, ctrl->val);
-  1597			break;
-  1598		default:
-  1599			ret = -EINVAL;
-  1600			dev_warn(&client->dev, "%s Unhandled id: 0x%x\n",
-  1601				 __func__, ctrl->id);
-  1602			break;
-  1603		}
-  1604	
-  1605		if (pm_status > 0)
-> 1606			pm_runtime_mark_busy_autosusp(&client->dev);
-  1607	
-  1608		return ret;
-  1609	}
-  1610	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
