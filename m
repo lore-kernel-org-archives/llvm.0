@@ -1,50 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE0053BF;
-	Sun, 19 Nov 2023 09:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDF25694;
+	Sun, 19 Nov 2023 09:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ool2pFgo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ma46X6/R"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700385266; x=1731921266;
+  t=1700385329; x=1731921329;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/wJMprHo/hGCSPGEmhrRtWjfvwHBT5y37td5BtCsHGI=;
-  b=Ool2pFgolzm/EeliG3k0JKKKSatNtVL6ehK9IBGO8qGB8lKUAjPHXLiz
-   3Bmx0L8brlN0SVnU+qfzuG9c8uIm+zFHDQ3r6bgJu5MJfxALZguWLNMBP
-   9jvqwQ/fvpqz+mqtVy+Lt1Oz1H6gbeBcauzmQVkUm7Yzr5f5/prtmdPRH
-   CV8eR+w3ykAyfINlFDlDprZ/Ers2dqJDR8Ucnj/sQ6DqRbUU/8iXKfXAa
-   f0APk126aPhOfmVlXOMfGSUiQa84aaz8rJO6eSZAyYb086rTXJgGpX96M
-   JjM2WUOFFVBN/kDSpqM6XhNhS2By8Vzm4AkmORaiN9SFWpr1pTMVKqQrG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="4644091"
+  bh=PK09L4R2wMWUbs7WomjFPOsAbLEt3FQGecm+ypGXp5Q=;
+  b=Ma46X6/REFxbJULKxG2rBK/33UA39ABbhssbwjBr7NQ4FZxDrh5wMTw+
+   ay4ni0eJqvga17h5/0WFFnhEySJf6gwEdIyg0XXK01PN2AL6pJnOP0mqA
+   y03Ydl3vDv2PQ2L2gwcf5OP9PwY5j9pz9cJrefzuEIc678VBqUv9hCIN3
+   VPQ6LwcVuT/rsrwsnEuJHg1qV/ZsANdQfYBkdi4ISk1pDwSIv21zHLsz+
+   /4Yg3ydV4hL6KTHCuRyqbTQa1QyZkaehmmyiDaBnS7Yk+CW1Ewgwtj5s9
+   aOMZs6dM5ksdQDdw4WI6M7petIjUM9JvfY3FM1KLLoR8/2rO9L8iTEY30
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="376519697"
 X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
-   d="scan'208";a="4644091"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 01:14:26 -0800
+   d="scan'208";a="376519697"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 01:15:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="800864598"
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="1013324273"
 X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
-   d="scan'208";a="800864598"
+   d="scan'208";a="1013324273"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 19 Nov 2023 01:14:22 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 19 Nov 2023 01:15:27 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r4dsi-0004tL-1t;
-	Sun, 19 Nov 2023 09:14:20 +0000
-Date: Sun, 19 Nov 2023 17:13:48 +0800
+	id 1r4dtl-0004tf-1x;
+	Sun, 19 Nov 2023 09:15:25 +0000
+Date: Sun, 19 Nov 2023 17:14:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>
-Subject: drivers/firmware/qcom/qcom_scm.c:1652:34: warning: unused variable
- 'qcom_scm_qseecom_allowlist'
-Message-ID: <202311191654.S4wlVUrz-lkp@intel.com>
+To: Alexey Gladkov <legion@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [legion:patchset/meminfo/v2.1 1/1] mm/memcontrol.c:4147:43: error:
+ use of undeclared identifier 'NR_SWAPCACHE'
+Message-ID: <202311191747.MQDEUNJY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,105 +50,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   037266a5f7239ead1530266f7d7af153d2a867fa
-commit: bdac188ec3c71800dd8419620224ee74ef37732a firmware: qcom: move Qualcomm code into its own directory
-date:   4 weeks ago
-config: s390-randconfig-002-20231119 (https://download.01.org/0day-ci/archive/20231119/202311191654.S4wlVUrz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191654.S4wlVUrz-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/legion/linux.git patchset/meminfo/v2.1
+head:   cc6200454eb83b4e846d90f08e6db172946d5301
+commit: cc6200454eb83b4e846d90f08e6db172946d5301 [1/1] proc: Implement /proc/self/meminfo
+config: x86_64-randconfig-003-20231119 (https://download.01.org/0day-ci/archive/20231119/202311191747.MQDEUNJY-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191747.MQDEUNJY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311191654.S4wlVUrz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311191747.MQDEUNJY-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/firmware/qcom/qcom_scm.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/firmware/qcom/qcom_scm.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/firmware/qcom/qcom_scm.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/firmware/qcom/qcom_scm.c:1652:34: warning: unused variable 'qcom_scm_qseecom_allowlist' [-Wunused-const-variable]
-    1652 | static const struct of_device_id qcom_scm_qseecom_allowlist[] = {
-         |                                  ^
-   13 warnings generated.
+>> mm/memcontrol.c:4147:43: error: use of undeclared identifier 'NR_SWAPCACHE'
+           mi->swapcached = memcg_page_state(memcg, NR_SWAPCACHE);
+                                                    ^
+   1 error generated.
 
 
-vim +/qcom_scm_qseecom_allowlist +1652 drivers/firmware/qcom/qcom_scm.c
+vim +/NR_SWAPCACHE +4147 mm/memcontrol.c
 
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1647  
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1648  /*
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1649   * We do not yet support re-entrant calls via the qseecom interface. To prevent
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1650   + any potential issues with this, only allow validated machines for now.
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1651   */
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27 @1652  static const struct of_device_id qcom_scm_qseecom_allowlist[] = {
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1653  	{ .compatible = "lenovo,thinkpad-x13s", },
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1654  	{ }
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1655  };
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1656  
-
-:::::: The code at line 1652 was first introduced by commit
-:::::: 00b1248606ba3979ccae30ed11df8cdc1a84245a firmware: qcom_scm: Add support for Qualcomm Secure Execution Environment SCM interface
-
-:::::: TO: Maximilian Luz <luzmaximilian@gmail.com>
-:::::: CC: Bjorn Andersson <andersson@kernel.org>
+  4130	
+  4131	void mem_fill_meminfo(struct meminfo *mi, struct task_struct *task)
+  4132	{
+  4133		struct cgroup_subsys_state *memcg_css = task_css(task, memory_cgrp_id);
+  4134		struct mem_cgroup *memcg = mem_cgroup_from_css(memcg_css);
+  4135		int nid;
+  4136	
+  4137		memset(&mi->pages, 0, sizeof(mi->pages));
+  4138	
+  4139		mem_cgroup_si_meminfo(&mi->si, task);
+  4140	
+  4141		for_each_online_node(nid)
+  4142			mem_cgroup_nr_pages(memcg, nid, mi->pages);
+  4143	
+  4144		mi->slab_reclaimable = memcg_page_state(memcg, NR_SLAB_RECLAIMABLE_B);
+  4145		mi->slab_unreclaimable = memcg_page_state(memcg, NR_SLAB_UNRECLAIMABLE_B);
+  4146		mi->cached = memcg_page_state(memcg, NR_FILE_PAGES);
+> 4147		mi->swapcached = memcg_page_state(memcg, NR_SWAPCACHE);
+  4148		mi->anon_pages = memcg_page_state(memcg, NR_ANON_MAPPED);
+  4149		mi->mapped = memcg_page_state(memcg, NR_FILE_MAPPED);
+  4150		mi->nr_pagetable = memcg_page_state(memcg, NR_PAGETABLE);
+  4151		mi->nr_secpagetable = memcg_page_state(memcg, NR_SECONDARY_PAGETABLE);
+  4152		mi->dirty_pages = memcg_page_state(memcg, NR_FILE_DIRTY);
+  4153		mi->writeback_pages = memcg_page_state(memcg, NR_WRITEBACK);
+  4154	}
+  4155	
 
 -- 
 0-DAY CI Kernel Test Service
