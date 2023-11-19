@@ -1,178 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA4714291
-	for <llvm@lists.linux.dev>; Sun, 19 Nov 2023 17:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0D611CAF;
+	Sun, 19 Nov 2023 19:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oyJwNfDV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DA6C433C9
-	for <llvm@lists.linux.dev>; Sun, 19 Nov 2023 17:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700414276;
-	bh=qgUfLOgelbMc6flXfkjLtNvBseINngZV+K1eSORMcbc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oyJwNfDVTXizH9L+lOoza8KJcdrKTrD/aHf5pCLWHMzLFAq6iz09dK2zywxnNw2ZO
-	 p/8Nuif4qoOORzOi4AqVzEYrBRVUyqh1/4PEBjibqQWIZo3BrteBtfpL6Vx3j7I/V1
-	 KFUl8AMq9FSTMRxR4wfn3f/6f49GRHUQ9HThAqpC2dvkPESQZtNfUHVuSbIBtdT/MB
-	 sbN/vEtRvkoZ3kdYyegHPLDcl4BIDZBXGcqFCTQuphvBN2p/nRu9lhAL6jAa1xLz6l
-	 lm/1BXJpmxXEEUX8vxkwMQQBBQJcSr7JQbM20ewExHfdRBxU2hc0ys/DAiROrpF+dq
-	 1nmQwJKaRjmJg==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1ef36a04931so2272079fac.2
-        for <llvm@lists.linux.dev>; Sun, 19 Nov 2023 09:17:56 -0800 (PST)
-X-Gm-Message-State: AOJu0YzDc1pVkLo3VfYRcjtstdj3q08ppsZfseSA4uaVIRGVh7y8iks6
-	U+4ISmHPGMZKK4dW5mbi7w5nTQYODDQUYJc9HLQ=
-X-Google-Smtp-Source: AGHT+IGresuODcdKPUVMYz4R8pbdwnP0Cl4tbiTb4qndqjL5iqiqHqY/XLGpjSPqVJs72qw+A9ATfVWpFFH2IZ3BJvM=
-X-Received: by 2002:a05:6870:2b0b:b0:1e9:c2bd:f2e9 with SMTP id
- ld11-20020a0568702b0b00b001e9c2bdf2e9mr6310654oab.25.1700414276250; Sun, 19
- Nov 2023 09:17:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iyfB4LFt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700422213; x=1731958213;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qFxr+/4CMEPIRZML3/Xa1WsTsz984n64GblEadV2PaY=;
+  b=iyfB4LFt3qv51sGXTtSiOHJYozbnUtiTke7QSQoVEebObXiGuJUypRSd
+   x1iuFFkDJa/xBj01Ziq3L88wy2aIpuEPBENor3wyB+se5MOuMj73Vursv
+   zMRWL1jKb++uME9cMmdBG7QMBROONotvtR5Lz61y5t6lbK6zEriZonmy0
+   v+jGpaQz2bA7FxuArMhqSrmb3NcmhPfLWnm0gmFGWyosfjHARFn/ILiWC
+   UG/dgsteIpk5OucVqK3W5+Rh7n9RjSoQBgGCbxZLd1UPVybMN3jlr2pMF
+   BwMR6GJ+X8nVCi9ikbaYf8lntyjKyMTvnRDhdPNgUtsRpZN6qHcYUA+Sm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="13071992"
+X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
+   d="scan'208";a="13071992"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 11:30:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="939608785"
+X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
+   d="scan'208";a="939608785"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 19 Nov 2023 11:30:10 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r4nUd-0005To-2k;
+	Sun, 19 Nov 2023 19:30:07 +0000
+Date: Mon, 20 Nov 2023 03:29:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kmo@daterainc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: fs/bcachefs/fsck.c:434:12: warning: stack frame size (1040) exceeds
+ limit (1024) in 'reattach_inode'
+Message-ID: <202311200325.hyLM4Sx8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231117-maintainers-v1-1-85f2a7422ed9@google.com>
-In-Reply-To: <20231117-maintainers-v1-1-85f2a7422ed9@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 20 Nov 2023 02:17:20 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARAvH=tWpsXJ640y04Ju8UbPmDze_NC6ax1EKK4Xy73fw@mail.gmail.com>
-Message-ID: <CAK7LNARAvH=tWpsXJ640y04Ju8UbPmDze_NC6ax1EKK4Xy73fw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: refresh LLVM support
-To: ndesaulniers@google.com
-Cc: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Tom Rix <trix@redhat.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nick.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   037266a5f7239ead1530266f7d7af153d2a867fa
+commit: a8b3a677e786fa869d220a6a78b5532a36dc2f4d bcachefs: Nocow support
+date:   4 weeks ago
+config: arm-randconfig-002-20231120 (https://download.01.org/0day-ci/archive/20231120/202311200325.hyLM4Sx8-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200325.hyLM4Sx8-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311200325.hyLM4Sx8-lkp@intel.com/
 
-On Sat, Nov 18, 2023 at 4:24=E2=80=AFAM <ndesaulniers@google.com> wrote:
->
-> As discussed at the ClangBuiltLinux '23 meetup (co-located with Linux Plu=
-mbers
-> Conf '23), I'll be taking a step back from kernel work to focus on my gro=
-wing
-> family and helping Google figure out its libc story. So I think it's time=
- to
-> formally hand over the reigns to my co-maintainer Nathan.
->
-> As such, remove myself from reviewer for:
-> - CLANG CONTROL FLOW INTEGRITY SUPPORT
-> - COMPILER ATTRIBUTES
-> - KERNEL BUILD
->
-> For CLANG/LLVM BUILD SUPPORT I'm bumping myself down from maintainer to
-> reviewer, adding Bill and Justin, and removing Tom (Tom and I confirmed t=
-his
-> via private email; thanks for the work done Tom, ++beers_owed).
->
-> It has been my pleasure to work with everyone to improve the toolchain
-> portability of the Linux kernel, and to help bring LLVM to the table as a
-> competitor. The work here is not done.  I have a few last LLVM patches in=
- the
-> works to improve stack usage of clang which has been our longest standing=
- open
-> issue (getting "rm" inline asm constraints to DTRT is part of that). But
-> looking back I'm incredibly proud of where we are to today relative to wh=
-ere we
-> were when we started the ClangBuiltLinux journey, and am confident that t=
-he
-> team and processes we have put in place will continue to be successful. I
-> continue to believe that a rising tide will lift all boats.
->
-> I identify first and foremost as a Linux kernel developer, and an LLVM de=
-v
-> second. May it be a cold day in hell when that changes.
->
-> Wake me when you need me.
->
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/bcachefs/fsck.c:5:
+   In file included from fs/bcachefs/btree_update.h:5:
+   fs/bcachefs/btree_iter.h:248:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
+   static inline int btree_trans_restart_nounlock(struct btree_trans *trans, int err)
+          ^
+   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
+   #define inline inline __gnu_inline __inline_maybe_unused notrace
+                  ^
+   In file included from fs/bcachefs/fsck.c:5:
+   In file included from fs/bcachefs/btree_update.h:5:
+   fs/bcachefs/btree_iter.h:258:8: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
+   static inline int btree_trans_restart(struct btree_trans *trans, int err)
+          ^
+   include/linux/compiler_types.h:215:16: note: expanded from macro 'inline'
+   #define inline inline __gnu_inline __inline_maybe_unused notrace
+                  ^
+   fs/bcachefs/fsck.c:1001:12: warning: stack frame size (1104) exceeds limit (1024) in 'check_inodes' [-Wframe-larger-than]
+   static int check_inodes(struct bch_fs *c, bool full)
+              ^
+   fs/bcachefs/fsck.c:1672:12: warning: stack frame size (1192) exceeds limit (1024) in 'check_dirents' [-Wframe-larger-than]
+   static int check_dirents(struct bch_fs *c)
+              ^
+>> fs/bcachefs/fsck.c:434:12: warning: stack frame size (1040) exceeds limit (1024) in 'reattach_inode' [-Wframe-larger-than]
+   static int reattach_inode(struct btree_trans *trans,
+              ^
+   5 warnings generated.
 
 
+vim +/reattach_inode +434 fs/bcachefs/fsck.c
 
+285b181ad460bb Kent Overstreet 2021-10-28  433  
+285b181ad460bb Kent Overstreet 2021-10-28 @434  static int reattach_inode(struct btree_trans *trans,
+285b181ad460bb Kent Overstreet 2021-10-28  435  			  struct bch_inode_unpacked *inode,
+285b181ad460bb Kent Overstreet 2021-10-28  436  			  u32 inode_snapshot)
+285b181ad460bb Kent Overstreet 2021-10-28  437  {
+e68914ca849fa5 Kent Overstreet 2022-07-13  438  	int ret = commit_do(trans, NULL, NULL,
+285b181ad460bb Kent Overstreet 2021-10-28  439  				  BTREE_INSERT_LAZY_RW|
+285b181ad460bb Kent Overstreet 2021-10-28  440  				  BTREE_INSERT_NOFAIL,
+285b181ad460bb Kent Overstreet 2021-10-28  441  			__reattach_inode(trans, inode, inode_snapshot));
+58686a259ed28f Kent Overstreet 2021-04-19  442  	if (ret) {
+d4bf5eecd78a90 Kent Overstreet 2022-07-18  443  		bch_err(trans->c, "error reattaching inode %llu: %s",
+d4bf5eecd78a90 Kent Overstreet 2022-07-18  444  			inode->bi_inum, bch2_err_str(ret));
+58686a259ed28f Kent Overstreet 2021-04-19  445  		return ret;
+58686a259ed28f Kent Overstreet 2021-04-19  446  	}
+58686a259ed28f Kent Overstreet 2021-04-19  447  
+285b181ad460bb Kent Overstreet 2021-10-28  448  	return ret;
+58686a259ed28f Kent Overstreet 2021-04-19  449  }
+58686a259ed28f Kent Overstreet 2021-04-19  450  
 
-It's unfortunate, but I understand that there are moments in
-a long life when tough decisions must be made.
-I truly admire your leadership and contributions.
+:::::: The code at line 434 was first introduced by commit
+:::::: 285b181ad460bb240041a9ca7935f9e884040405 bcachefs: Improve transaction restart handling in fsck code
 
-I hope you'll stay connected with the community, even with less
-time pressure.
-Perhaps, when your time permits, you might consider returning
-and taking on a role again. Some day.
+:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
-
-
-(The patch was addressed to Kees, so I will not touch it.
-I think he will pick it up.)
-
-
-Masahiro
-
-
-
-
-
-
-
-> ---
->  MAINTAINERS | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 482d428472e7..1e6692697167 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5076,7 +5076,6 @@ CLANG CONTROL FLOW INTEGRITY SUPPORT
->  M:     Sami Tolvanen <samitolvanen@google.com>
->  M:     Kees Cook <keescook@chromium.org>
->  R:     Nathan Chancellor <nathan@kernel.org>
-> -R:     Nick Desaulniers <ndesaulniers@google.com>
->  L:     llvm@lists.linux.dev
->  S:     Supported
->  B:     https://github.com/ClangBuiltLinux/linux/issues
-> @@ -5091,8 +5090,9 @@ F:        .clang-format
->
->  CLANG/LLVM BUILD SUPPORT
->  M:     Nathan Chancellor <nathan@kernel.org>
-> -M:     Nick Desaulniers <ndesaulniers@google.com>
-> -R:     Tom Rix <trix@redhat.com>
-> +R:     Nick Desaulniers <ndesaulniers@google.com>
-> +R:     Bill Wendling <morbo@google.com>
-> +R:     Justin Stitt <justinstitt@google.com>
->  L:     llvm@lists.linux.dev
->  S:     Supported
->  W:     https://clangbuiltlinux.github.io/
-> @@ -5242,7 +5242,6 @@ F:        drivers/platform/x86/compal-laptop.c
->
->  COMPILER ATTRIBUTES
->  M:     Miguel Ojeda <ojeda@kernel.org>
-> -R:     Nick Desaulniers <ndesaulniers@google.com>
->  S:     Maintained
->  F:     include/linux/compiler_attributes.h
->
-> @@ -11516,7 +11515,6 @@ F:      fs/autofs/
->  KERNEL BUILD + files below scripts/ (unless maintained elsewhere)
->  M:     Masahiro Yamada <masahiroy@kernel.org>
->  R:     Nathan Chancellor <nathan@kernel.org>
-> -R:     Nick Desaulniers <ndesaulniers@google.com>
->  R:     Nicolas Schier <nicolas@fjasle.eu>
->  L:     linux-kbuild@vger.kernel.org
->  S:     Maintained
->
-> ---
-> base-commit: 6bc40e44f1ddef16a787f3501b97f1fff909177c
-> change-id: 20231117-maintainers-88eac4c024a1
->
-> Best regards,
-> --
-> Nick Desaulniers <ndesaulniers@google.com>
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
