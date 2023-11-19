@@ -1,47 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E20814F70;
-	Sun, 19 Nov 2023 21:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631CD1865E;
+	Sun, 19 Nov 2023 21:34:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cJU7KDHX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ekuyDyMf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700428410; x=1731964410;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=riqWet8HXfDIQZJfEAm0iYiv/8/UpinCTdXsnwJuh3w=;
-  b=cJU7KDHXT5g3xIZEzvYMx5qdNSSag9WF8n17eMO8zont+4zBv/ZBSab0
-   thawx9DzkAOt7Bi8Zjkn1yqol3OcTLfb3OdKGP7P9BQjbKTkWO0MZq88G
-   zNricGupqiaGoTJe7jyxsy1dbOCEIHn9N+RS6mY5gYcxTqIL7oXaNe63w
-   sY4zPGDrhKsV/LYq6Qa7d0QU1wIkyXgPq7x83c71MBZk/d8TKMl20Awyj
-   zNZzFp1A/mYiIb0g2ZqXWe740Jy8fVb32FAdTSGMbWCg6s8gW1PAZetGs
-   1sk/SlPy8Gxw4Y1p0eP0kM81vhJPvDEi6kLRXJyi654/E+ND1CPFbwpAu
+  t=1700429690; x=1731965690;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0FQuRX+DSACk6JIpCUgripNiB3hRlwHE7sRwkTVn4tg=;
+  b=ekuyDyMfu5vF7e9V2cY/qOpKKAHPqsifk9FrxaLcAtSxSPy0bnD6sJhP
+   qCQx/0Gda2MznIiWFvU/iqFqxYHQWsAQHvm1n7grZ9lGVAjSAK0BYhhzm
+   tXsvSu2pyfSlw6gGj099xoCcDDw8uWYnVovRBvF1mykwWsBxBRdJGRFyr
+   8qZLtGcnQr0V6SVdH+FP3qhguydAFQyXSK4Buv56UCvo+vHc7t1oJ1kH4
+   P6aK9BeRkixttSozz+zOdO/BqZlvH9UZh/XGcrEXZy+P+M99iozJ4hD+v
+   ZIXw17JkQ5mvG3RZTo/98+kozF9drFN37lEMOxDghBOu9NOcRCoE+uz/n
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="4694605"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="371702061"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="4694605"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 13:13:29 -0800
+   d="scan'208";a="371702061"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 13:34:48 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="759641616"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="909920498"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="759641616"
+   d="scan'208";a="909920498"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 19 Nov 2023 13:13:27 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 19 Nov 2023 13:34:45 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r4p6a-0005YF-2m;
-	Sun, 19 Nov 2023 21:13:24 +0000
-Date: Mon, 20 Nov 2023 05:12:47 +0800
+	id 1r4pRD-0005Zh-2B;
+	Sun, 19 Nov 2023 21:34:43 +0000
+Date: Mon, 20 Nov 2023 05:34:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/140-pci 10/15]
- drivers/pci/controller/pcie-apple.c:468:19: error: implicit declaration of
- function 'FIELD_PREP' is invalid in C99
-Message-ID: <202311200511.EremhnPW-lkp@intel.com>
+To: Saeed Mahameed <saeed@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Leon Romanovsky <leonro@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+	Leonid Bloch <lbloch@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
+	Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+	Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: [PATCH v2 5/5] misc: mlx5ctl: Add umem reg/unreg ioctl
+Message-ID: <202311200506.qHEeLcQq-lkp@intel.com>
+References: <20231119092450.164996-6-saeed@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,82 +56,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231119092450.164996-6-saeed@kernel.org>
 
-tree:   https://github.com/AsahiLinux/linux bits/140-pci
-head:   58cab72f915e70990f9e2c9836b7cb6e79a9db35
-commit: bc47733313473d25b60a7f875cf6f806d62a641d [10/15] PCIE: apple: Add T602x PCIe support
-config: powerpc-randconfig-001-20231120 (https://download.01.org/0day-ci/archive/20231120/202311200511.EremhnPW-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200511.EremhnPW-lkp@intel.com/reproduce)
+Hi Saeed,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on rdma/for-next linus/master v6.7-rc1 next-20231117]
+[cannot apply to char-misc/char-misc-next char-misc/char-misc-linus soc/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Saeed-Mahameed/misc-mlx5ctl-Add-mlx5ctl-misc-driver/20231119-215311
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20231119092450.164996-6-saeed%40kernel.org
+patch subject: [PATCH v2 5/5] misc: mlx5ctl: Add umem reg/unreg ioctl
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231120/202311200506.qHEeLcQq-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200506.qHEeLcQq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311200511.EremhnPW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311200506.qHEeLcQq-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/pcie-apple.c:468:19: error: implicit declaration of function 'FIELD_PREP' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
-                                          ^
+>> drivers/misc/mlx5ctl/umem.c:79:21: error: call to undeclared function 'pages_to_mb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      79 |         if (npages == 0 || pages_to_mb(npages) > MLX5CTL_UMEM_MAX_MB)
+         |                            ^
    1 error generated.
 
 
-vim +/FIELD_PREP +468 drivers/pci/controller/pcie-apple.c
+vim +/pages_to_mb +79 drivers/misc/mlx5ctl/umem.c
 
-   430	
-   431	static int apple_pcie_port_setup_irq(struct apple_pcie_port *port)
-   432	{
-   433		struct fwnode_handle *fwnode = &port->np->fwnode;
-   434		struct apple_pcie *pcie = port->pcie;
-   435		unsigned int irq;
-   436	
-   437		/* FIXME: consider moving each interrupt under each port */
-   438		irq = irq_of_parse_and_map(to_of_node(dev_fwnode(port->pcie->dev)),
-   439					   port->idx);
-   440		if (!irq)
-   441			return -ENXIO;
-   442	
-   443		port->domain = irq_domain_create_linear(fwnode, 32,
-   444							&apple_port_irq_domain_ops,
-   445							port);
-   446		if (!port->domain)
-   447			return -ENOMEM;
-   448	
-   449		/* Disable all interrupts */
-   450		writel_relaxed(~0, port->base + PORT_INTMSK);
-   451		writel_relaxed(~0, port->base + PORT_INTSTAT);
-   452		writel_relaxed(~0, port->base + PORT_LINKCMDSTS);
-   453	
-   454		irq_set_chained_handler_and_data(irq, apple_port_irq_handler, port);
-   455	
-   456		/* Configure MSI base address */
-   457		BUG_ON(upper_32_bits(DOORBELL_ADDR));
-   458		writel_relaxed(lower_32_bits(DOORBELL_ADDR),
-   459			       port->base + pcie->hw->port_msiaddr);
-   460		if (pcie->hw->port_msiaddr_hi)
-   461			writel_relaxed(0, port->base + pcie->hw->port_msiaddr_hi);
-   462	
-   463		/* Enable MSIs, shared between all ports */
-   464		if (pcie->hw->port_msimap) {
-   465			int i;
-   466	
-   467			for (i = 0; i < pcie->nvecs; i++) {
- > 468				writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
-   469					       PORT_MSIMAP_ENABLE,
-   470					       port->base + pcie->hw->port_msimap + 4 * i);
-   471			}
-   472	
-   473			writel_relaxed(PORT_MSICFG_EN, port->base + PORT_MSICFG);
-   474		} else {
-   475			writel_relaxed(0, port->base + PORT_MSIBASE);
-   476			writel_relaxed((ilog2(pcie->nvecs) << PORT_MSICFG_L2MSINUM_SHIFT) |
-   477				PORT_MSICFG_EN, port->base + PORT_MSICFG);
-   478		}
-   479	
-   480		return 0;
-   481	}
-   482	
+    60	
+    61	static struct mlx5ctl_umem *mlx5ctl_umem_pin(struct mlx5ctl_umem_db *umem_db,
+    62						     unsigned long addr, size_t size)
+    63	{
+    64		size_t npages = umem_num_pages(addr, size);
+    65		struct mlx5_core_dev *mdev = umem_db->mdev;
+    66		unsigned long endaddr = addr + size;
+    67		struct mlx5ctl_umem *umem;
+    68		struct page **page_list;
+    69		int err = -EINVAL;
+    70		int pinned = 0;
+    71	
+    72		dev_dbg(mdev->device, "%s: addr %p size %zu npages %zu\n",
+    73			__func__, (void __user *)addr, size, npages);
+    74	
+    75		/* Avoid integer overflow */
+    76		if (endaddr < addr || PAGE_ALIGN(endaddr) < endaddr)
+    77			return ERR_PTR(-EINVAL);
+    78	
+  > 79		if (npages == 0 || pages_to_mb(npages) > MLX5CTL_UMEM_MAX_MB)
+    80			return ERR_PTR(-EINVAL);
+    81	
+    82		page_list = kvmalloc_array(npages, sizeof(struct page *), GFP_KERNEL_ACCOUNT);
+    83		if (!page_list)
+    84			return ERR_PTR(-ENOMEM);
+    85	
+    86		umem = kzalloc(sizeof(*umem), GFP_KERNEL_ACCOUNT);
+    87		if (!umem) {
+    88			kvfree(page_list);
+    89			return ERR_PTR(-ENOMEM);
+    90		}
+    91	
+    92		umem->addr = addr;
+    93		umem->size = size;
+    94		umem->offset = addr & ~PAGE_MASK;
+    95		umem->npages = npages;
+    96	
+    97		umem->page_list = page_list;
+    98		umem->source_mm = current->mm;
+    99		umem->source_task = current->group_leader;
+   100		get_task_struct(current->group_leader);
+   101		umem->source_user = get_uid(current_user());
+   102	
+   103		/* mm and RLIMIT_MEMLOCK user task accounting similar to what is
+   104		 * being done in iopt_alloc_pages() and do_update_pinned()
+   105		 * for IOPT_PAGES_ACCOUNT_USER @drivers/iommu/iommufd/pages.c
+   106		 */
+   107		mmgrab(umem->source_mm);
+   108	
+   109		pinned = pin_user_pages_fast(addr, npages, FOLL_WRITE, page_list);
+   110		if (pinned != npages) {
+   111			dev_dbg(mdev->device, "pin_user_pages_fast failed %d\n", pinned);
+   112			err = pinned < 0 ? pinned : -ENOMEM;
+   113			goto pin_failed;
+   114		}
+   115	
+   116		err = inc_user_locked_vm(umem, npages);
+   117		if (err)
+   118			goto pin_failed;
+   119	
+   120		atomic64_add(npages, &umem->source_mm->pinned_vm);
+   121	
+   122		err = sg_alloc_table_from_pages(&umem->sgt, page_list, npages, 0,
+   123						npages << PAGE_SHIFT, GFP_KERNEL_ACCOUNT);
+   124		if (err) {
+   125			dev_dbg(mdev->device, "sg_alloc_table failed: %d\n", err);
+   126			goto sgt_failed;
+   127		}
+   128	
+   129		dev_dbg(mdev->device, "\tsgt: size %zu npages %zu sgt.nents (%d)\n",
+   130			size, npages, umem->sgt.nents);
+   131	
+   132		err = dma_map_sgtable(mdev->device, &umem->sgt, DMA_BIDIRECTIONAL, 0);
+   133		if (err) {
+   134			dev_dbg(mdev->device, "dma_map_sgtable failed: %d\n", err);
+   135			goto dma_failed;
+   136		}
+   137	
+   138		dev_dbg(mdev->device, "\tsgt: dma_nents %d\n", umem->sgt.nents);
+   139		return umem;
+   140	
+   141	dma_failed:
+   142	sgt_failed:
+   143		sg_free_table(&umem->sgt);
+   144		atomic64_sub(npages, &umem->source_mm->pinned_vm);
+   145		dec_user_locked_vm(umem, npages);
+   146	pin_failed:
+   147		if (pinned > 0)
+   148			unpin_user_pages(page_list, pinned);
+   149		mmdrop(umem->source_mm);
+   150		free_uid(umem->source_user);
+   151		put_task_struct(umem->source_task);
+   152	
+   153		kfree(umem);
+   154		kvfree(page_list);
+   155		return ERR_PTR(err);
+   156	}
+   157	
 
 -- 
 0-DAY CI Kernel Test Service
