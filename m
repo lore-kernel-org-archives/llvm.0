@@ -1,207 +1,140 @@
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9210B7477;
-	Sun, 19 Nov 2023 10:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=themaw.net
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=themaw.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBE55679;
+	Sun, 19 Nov 2023 11:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=themaw.net header.i=@themaw.net header.b="j4uQs60l";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LPX2aj4c"
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id 99DCD320090B;
-	Sun, 19 Nov 2023 05:23:52 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Sun, 19 Nov 2023 05:23:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1700389432; x=1700475832; bh=vLP7CS3hWF8TwbCJyhaj4FZ2G7iGG7Hui2j
-	FMmmwK8g=; b=j4uQs60l0zMpMfS3qEPNTEQqwjJ7ZLq/IAyYtjCvka7C2g1EDq6
-	FZfWAE/VqiZ5x69XI4WxlZNZextAPyYWgWr/XF81q1AQVyjstdcwO4irq67zRQV4
-	/VfEJf6uvLMHUO33ehrYXLMj8sHnde/dELOzElaFLndzhx6++f2+jvuDJJBN4Vr4
-	HcJJa+vPoMF0xtda7xkv1p926FjcVAKmVhtbL8aIYS4Y81ukZHDDIt/e5mYMpgWo
-	g1ApCTnU4+5fl1w9zz0vNLhrOGeVe2vD4ktLkuGxdSLHXaHrb38GgyHOnTB+KobB
-	B8kS3Gmtz+x+TgfH4WTVHqZQB6pvBqQDFoA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1700389432; x=1700475832; bh=vLP7CS3hWF8TwbCJyhaj4FZ2G7iGG7Hui2j
-	FMmmwK8g=; b=LPX2aj4cUM/qmhxv1OgVAJjEXlsnxJPYsDcd9bUo1aGdfcj/nvh
-	1llILe/43VSF5U3UVyQ9lSQemSEWlgvRwzQ3WZdN+kIAwJoTbZnb5vYTTFLC2GwL
-	GzVGCquxE7uPNHLaEMCQaHvQzRY5Ts1Pa3VGG6CwWn0wWp6YCf4ATA3POGiYaZ6K
-	x0MzwDZdx0uMg9/cgUPe/2Y3ZcuLhqEmDLOahRW0tA4lr9LrQ2WldFJYlpW2eTGh
-	MfLH1utxibCUS++vuGy5cSZMMkPt4OXSJbas3LO7D1ohePqCovu0ya6BGHi0bz2U
-	VbceYRdAmLaeCKU8tYfgkMkyBofOY0Dt7UA==
-X-ME-Sender: <xms:N-JZZWSGgrMGtku0KuMGrl9OpCO0kjEwOCeeOPz-zQ7UMogc2v9dzQ>
-    <xme:N-JZZbwsd5eYaxRsnJ5x-_XjVoV5gWXnuYjpaR1OzZQhQbG95hGJDZwCsHgpIFSPR
-    KEqZuuSCieR>
-X-ME-Received: <xmr:N-JZZT1Mn8wej9ahcSUy6NeGk_WinxoWV3aRXYEVHKpAje-HjmmNtEvnuJ3snvr0mu6FEwEk5bbFdROMV7jB_mRtR484L3w9YdySNtnHytygLdiqw1eDlDWt>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeggedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfhffuvfevfhgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
-    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
-    epvddvudfhkeelheefueefleffgfffffefleejheduvdeutdekleevheekieefteegnecu
-    ffhomhgrihhnpehgihhtqdhstghmrdgtohhmpdhgihhthhhusgdrtghomhdpkhgvrhhnvg
-    hlrdhorhhgpddtuddrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
-    mhgrihhlfhhrohhmpehrrghvvghnsehthhgvmhgrfidrnhgvth
-X-ME-Proxy: <xmx:N-JZZSCwcbExj6Q352Tpfke95PkKQO-pfVFEMqY79O6S_SoSfcAWjA>
-    <xmx:N-JZZfiBaAs-vYc4wgOA07scQBHcbwyxe4AkC3XE5qb2RVBA5tg_-Q>
-    <xmx:N-JZZerCyiHoCRWkiHyFGqSz9UP7pFZe9SzMVJEORkO53418B5RomQ>
-    <xmx:OOJZZfhdNRtWpwvuhiWA9MRrB0z1up52J565-3vJjSvtE7ghi-wVbw>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 19 Nov 2023 05:23:47 -0500 (EST)
-Message-ID: <9ad32b90-b03b-f493-14fb-ce31a1409774@themaw.net>
-Date: Sun, 19 Nov 2023 18:23:44 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X6m0PWVD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700392364; x=1731928364;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l6MB7KR6Wqu2v79BBJpxIM6CND7+cD3U13FwZlh4YFU=;
+  b=X6m0PWVDLhkbRuM3U2CSB76y42cxK8lwbr1DyEpRryEAIN9xaAQA9kSJ
+   Gj1NzlHWZMyXCu/p7+tB7zOyNzMOUbeGCG8AIILEkRKj8C6c+9u8ua78o
+   7PtrHBA8vHEwO0i3b45kHmbfA8pjQnS0FBrGBLyskoHRSTU3epPEUPOE0
+   DbvayQEByVdeqG23Oul10GyDlguNF8RIPnV/htEwUpswLELJjE122Oq+B
+   OSm8hlVeH2hnrwi7QCD2eyvgQfR/7gJ4aAXly5tWt6K4I6XtdKhdVxgxD
+   O6XU2ASPo9d2YHYDIawfmPcfyDn2ZC4H9IlP3PlJHvLJIUPWlg0YB1/gE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="376523981"
+X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
+   d="scan'208";a="376523981"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 03:12:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="769628656"
+X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
+   d="scan'208";a="769628656"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 19 Nov 2023 03:12:39 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r4fjB-00051h-08;
+	Sun, 19 Nov 2023 11:12:37 +0000
+Date: Sun, 19 Nov 2023 19:11:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chen Wang <unicornxw@gmail.com>, aou@eecs.berkeley.edu,
+	chao.wei@sophgo.com, conor@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+	palmer@dabbelt.com, paul.walmsley@sifive.com,
+	richardcochran@gmail.com, robh+dt@kernel.org, sboyd@kernel.org,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	haijiao.liu@sophgo.com, xiaoguang.xing@sophgo.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chen Wang <unicorn_wang@outlook.com>
+Subject: Re: [PATCH 4/5] clk: sophgo: Add SG2042 clock generator driver
+Message-ID: <202311191920.5xIUxW5n-lkp@intel.com>
+References: <1000e8d546514973364478271564356352a46ed5.1699879741.git.unicorn_wang@outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-From: Ian Kent <raven@themaw.net>
-Subject: [PATCH] autofs: add: new_inode check in autofs_fill_super()
-To: kernel test robot <lkp@intel.com>, Al Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Bill O'Donnell <billodo@redhat.com>,
- Kernel Mailing List <linux-kernel@vger.kernel.org>,
- autofs mailing list <autofs@vger.kernel.org>,
- linux-fsdevel <linux-fsdevel@vger.kernel.org>,
- syzbot+662f87a8ef490f45fa64@syzkaller.appspotmail.com
-References: <20231116000746.7359-1-raven@themaw.net>
- <202311161909.KHau6jEj-lkp@intel.com>
-Content-Language: en-US
-In-Reply-To: <202311161909.KHau6jEj-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1000e8d546514973364478271564356352a46ed5.1699879741.git.unicorn_wang@outlook.com>
 
-On 16/11/23 19:23, kernel test robot wrote:
-> Hi Ian,
->
-> kernel test robot noticed the following build warnings:
+Hi Chen,
 
-Crikey, how did this compile ... I think I need to just send a replacement
+kernel test robot noticed the following build warnings:
 
-patch.
+[auto build test WARNING on b85ea95d086471afb4ad062012a4d73cd328fa86]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Wang/dt-bindings-clock-sophgo-Add-SG2042-clock-definitions/20231113-212401
+base:   b85ea95d086471afb4ad062012a4d73cd328fa86
+patch link:    https://lore.kernel.org/r/1000e8d546514973364478271564356352a46ed5.1699879741.git.unicorn_wang%40outlook.com
+patch subject: [PATCH 4/5] clk: sophgo: Add SG2042 clock generator driver
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231119/202311191920.5xIUxW5n-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191920.5xIUxW5n-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311191920.5xIUxW5n-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/sophgo/clk-sophgo-sg2042.c:217:44: warning: overflow in expression; result is -1094967296 with type 'long' [-Winteger-overflow]
+     217 |                         if (foutvco < PLL_FREQ_MIN || foutvco > PLL_FREQ_MAX
+         |                                                                 ^
+   drivers/clk/sophgo/clk-sophgo-sg2042.c:25:28: note: expanded from macro 'PLL_FREQ_MAX'
+      25 | #define PLL_FREQ_MAX (3200 * MHZ)
+         |                            ^
+   1 warning generated.
 
 
-Ian
+vim +/long +217 drivers/clk/sophgo/clk-sophgo-sg2042.c
 
-> [auto build test WARNING on brauner-vfs/vfs.all]
-> [also build test WARNING on linus/master v6.7-rc1 next-20231116]
-> [cannot apply to vfs-idmapping/for-next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:https://github.com/intel-lab-lkp/linux/commits/Ian-Kent/autofs-add-new_inode-check-in-autofs_fill_super/20231116-081017
-> base:https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git  vfs.all
-> patch link:https://lore.kernel.org/r/20231116000746.7359-1-raven%40themaw.net
-> patch subject: [PATCH] autofs: add: new_inode check in autofs_fill_super()
-> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231116/202311161909.KHau6jEj-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git  ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311161909.KHau6jEj-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot<lkp@intel.com>
-> | Closes:https://lore.kernel.org/oe-kbuild-all/202311161909.KHau6jEj-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->     fs/autofs/inode.c:330:8: error: expected identifier
->                     goto -ENOMEM;
->                          ^
->>> fs/autofs/inode.c:330:8: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
->     fs/autofs/inode.c:329:2: note: previous statement is here
->             if (!ino)
->             ^
->     fs/autofs/inode.c:349:4: error: use of undeclared identifier 'ret'
->                             ret = invalf(fc, "Could not find process group %d",
->                             ^
->     fs/autofs/inode.c:351:11: error: use of undeclared identifier 'ret'
->                             return ret;
->                                    ^
->>> fs/autofs/inode.c:330:8: warning: expression result unused [-Wunused-value]
->                     goto -ENOMEM;
->                          ^~~~~~~
->     2 warnings and 3 errors generated.
->
->
-> vim +/if +330 fs/autofs/inode.c
->
->     306	
->     307	static int autofs_fill_super(struct super_block *s, struct fs_context *fc)
->     308	{
->     309		struct autofs_fs_context *ctx = fc->fs_private;
->     310		struct autofs_sb_info *sbi = s->s_fs_info;
->     311		struct inode *root_inode;
->     312		struct dentry *root;
->     313		struct autofs_info *ino;
->     314	
->     315		pr_debug("starting up, sbi = %p\n", sbi);
->     316	
->     317		sbi->sb = s;
->     318		s->s_blocksize = 1024;
->     319		s->s_blocksize_bits = 10;
->     320		s->s_magic = AUTOFS_SUPER_MAGIC;
->     321		s->s_op = &autofs_sops;
->     322		s->s_d_op = &autofs_dentry_operations;
->     323		s->s_time_gran = 1;
->     324	
->     325		/*
->     326		 * Get the root inode and dentry, but defer checking for errors.
->     327		 */
->     328		ino = autofs_new_ino(sbi);
->     329		if (!ino)
->   > 330			goto -ENOMEM;
->     331	
->     332		root_inode = autofs_get_inode(s, S_IFDIR | 0755);
->     333		if (root_inode) {
->     334			root_inode->i_uid = ctx->uid;
->     335			root_inode->i_gid = ctx->gid;
->     336			root_inode->i_fop = &autofs_root_operations;
->     337			root_inode->i_op = &autofs_dir_inode_operations;
->     338		}
->     339		s->s_root = d_make_root(root_inode);
->     340		if (unlikely(!s->s_root)) {
->     341			autofs_free_ino(ino);
->     342			return -ENOMEM;
->     343		}
->     344		s->s_root->d_fsdata = ino;
->     345	
->     346		if (ctx->pgrp_set) {
->     347			sbi->oz_pgrp = find_get_pid(ctx->pgrp);
->     348			if (!sbi->oz_pgrp) {
->     349				ret = invalf(fc, "Could not find process group %d",
->     350					     ctx->pgrp);
->     351				return ret;
->     352			}
->     353		} else {
->     354			sbi->oz_pgrp = get_task_pid(current, PIDTYPE_PGID);
->     355		}
->     356	
->     357		if (autofs_type_trigger(sbi->type))
->     358			/* s->s_root won't be contended so there's little to
->     359			 * be gained by not taking the d_lock when setting
->     360			 * d_flags, even when a lot mounts are being done.
->     361			 */
->     362			managed_dentry_set_managed(s->s_root);
->     363	
->     364		pr_debug("pipe fd = %d, pgrp = %u\n",
->     365			 sbi->pipefd, pid_nr(sbi->oz_pgrp));
->     366	
->     367		sbi->flags &= ~AUTOFS_SBI_CATATONIC;
->     368		return 0;
->     369	}
->     370	
->
+   201	
+   202	static int __sg2042_get_pll_ctl_setting(
+   203		struct sg2042_pll_ctrl *best,
+   204		unsigned long req_rate,
+   205		unsigned long parent_rate)
+   206	{
+   207		int ret;
+   208		unsigned int fbdiv, refdiv, fref, postdiv1, postdiv2;
+   209		unsigned long tmp = 0, foutvco;
+   210	
+   211		fref = parent_rate;
+   212	
+   213		for (refdiv = REFDIV_MIN; refdiv < REFDIV_MAX + 1; refdiv++) {
+   214			for (fbdiv = FBDIV_MIN; fbdiv < FBDIV_MAX + 1; fbdiv++) {
+   215				foutvco = fref * fbdiv / refdiv;
+   216				/* check fpostdiv pfd */
+ > 217				if (foutvco < PLL_FREQ_MIN || foutvco > PLL_FREQ_MAX
+   218						|| (fref / refdiv) < 10)
+   219					continue;
+   220	
+   221				ret = __sg2042_pll_get_postdiv_1_2(req_rate, fref, fbdiv,
+   222						refdiv, &postdiv1, &postdiv2);
+   223				if (ret)
+   224					continue;
+   225	
+   226				tmp = foutvco / (postdiv1 * postdiv2);
+   227				if (abs_diff(tmp, req_rate) < abs_diff(best->freq, req_rate)) {
+   228					best->freq = tmp;
+   229					best->refdiv = refdiv;
+   230					best->fbdiv = fbdiv;
+   231					best->postdiv1 = postdiv1;
+   232					best->postdiv2 = postdiv2;
+   233					if (tmp == req_rate)
+   234						return 0;
+   235				}
+   236				continue;
+   237			}
+   238		}
+   239	
+   240		return 0;
+   241	}
+   242	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
